@@ -1,46 +1,54 @@
 {
-  "name": "vite-web-extension",
-  "displayName": "Web Extension Boilerplate",
-  "version": "1.1.0",
-  "description": "A simple chrome extension template with Vite, React, TypeScript and Tailwind CSS.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/JohnBra/web-extension.git"
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "nodemon"
-  },
-  "type": "module",
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "vite-plugin-css-injected-by-js": "^3.1.1",
-    "webextension-polyfill": "^0.10.0"
-  },
-  "devDependencies": {
-    "@types/chrome": "^0.0.237",
-    "@types/node": "^18.11.18",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@types/webextension-polyfill": "^0.10.0",
-    "@typescript-eslint/eslint-plugin": "^5.49.0",
-    "@typescript-eslint/parser": "^5.49.0",
-    "@vitejs/plugin-react-swc": "^3.0.1",
-    "autoprefixer": "^10.4.13",
-    "eslint": "^8.32.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "fs-extra": "^11.1.0",
-    "nodemon": "^2.0.20",
-    "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.4"
-  }
+	"name": "youtube-enhancer",
+	"displayName": "YouTube Enhancer",
+	"version": "1.0.0",
+	"description": "YouTube Enhancer is a simple extension that adds some useful features to YouTube.",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/VampireChicken12/youtube-enhancer.git"
+	},
+	"scripts": {
+		"build": "vite build",
+		"dev": "nodemon",
+		"format": "prettier --write .",
+		"lint": "eslint --fix"
+	},
+	"type": "module",
+	"dependencies": {
+		"@formkit/auto-animate": "^0.7.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"vite-plugin-css-injected-by-js": "^3.1.1",
+		"webextension-polyfill": "^0.10.0"
+	},
+	"devDependencies": {
+		"@thedutchcoder/postcss-rem-to-px": "^0.0.2",
+		"@total-typescript/ts-reset": "^0.4.2",
+		"@types/chrome": "^0.0.237",
+		"@types/node": "^18.11.18",
+		"@types/react": "^18.0.27",
+		"@types/react-dom": "^18.0.10",
+		"@types/webextension-polyfill": "^0.10.0",
+		"@types/youtube-player": "^5.5.7",
+		"@typescript-eslint/eslint-plugin": "^5.49.0",
+		"@typescript-eslint/parser": "^5.49.0",
+		"@vitejs/plugin-react-swc": "^3.0.1",
+		"autoprefixer": "^10.4.13",
+		"eslint": "^8.32.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.32.1",
+		"eslint-plugin-react-hooks": "^4.3.0",
+		"fs-extra": "^11.1.0",
+		"nodemon": "^2.0.20",
+		"postcss": "^8.4.21",
+		"prettier": "^2.8.8",
+		"tailwindcss": "^3.2.4",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.9.4",
+		"vite": "^4.0.4"
+	}
 }

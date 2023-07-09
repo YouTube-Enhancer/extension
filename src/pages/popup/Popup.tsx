@@ -1,24 +1,95 @@
-import React from 'react';
-import logo from '@assets/img/logo.svg';
+import Loader from "@/src/components/Loader";
+import Settings from "@/src/components/Settings/Settings";
+import { configuration, configurationWithDefaults } from "@/src/types";
+import React, { useEffect, useState } from "react";
 
 export default function Popup(): JSX.Element {
-  return (
-    <div className="absolute top-0 left-0 right-0 bottom-0 text-center h-full p-3 bg-gray-800">
-      <header className="flex flex-col items-center justify-center text-white">
-        <img src={logo} className="h-36 pointer-events-none animate-spin-slow" alt="logo" />
-        <p>
-          Edit <code>src/pages/popup/Popup.jsx</code> and save to reload.
-        </p>
-        <a
-          className="text-blue-400"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React!
-        </a>
-        <p>Popup styled with TailwindCSS!</p>
-      </header>
-    </div>
-  );
+	const [settings, setSettings] = useState<configuration | undefined>(undefined);
+	const [selectedColor, setSelectedColor] = useState<string | undefined>();
+	const [selectedDisplayType, setSelectedDisplayType] = useState<string | undefined>();
+	const [selectedDisplayPosition, setSelectedDisplayPosition] = useState<string | undefined>();
+	const [selectedPlayerQuality, setSelectedPlayerQuality] = useState<string | undefined>();
+
+	useEffect(() => {
+		const fetchSettings = () => {
+			chrome.storage.local.get((settings) => {
+				setSettings({ ...settings } as configuration);
+				setSelectedColor(settings.osd_display_color);
+				setSelectedDisplayType(settings.osd_display_type);
+				setSelectedDisplayPosition(settings.osd_display_position);
+				setSelectedPlayerQuality(settings.player_quality);
+			});
+		};
+
+		fetchSettings();
+	}, []);
+
+	useEffect(() => {
+		const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+			if (areaName === "local") {
+				Object.keys(changes as Partial<configuration>).forEach((key) => {
+					const {
+						[key]: { newValue, oldValue }
+					} = changes;
+					if (oldValue === newValue) return;
+					switch (key) {
+						case "osd_display_color":
+							setSelectedColor(newValue);
+							break;
+						case "osd_display_type":
+							setSelectedDisplayType(newValue);
+							break;
+						case "osd_display_position":
+							setSelectedDisplayPosition(newValue);
+							break;
+						case "player_quality":
+							setSelectedPlayerQuality(newValue);
+							break;
+					}
+					setSettings((prevSettings) => {
+						if (prevSettings) {
+							return { ...prevSettings, [key]: newValue };
+						}
+						return undefined;
+					});
+				});
+			}
+		};
+
+		chrome.storage.onChanged.addListener(handleStorageChange);
+		chrome.runtime.onSuspend.addListener(() => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		});
+		return () => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		};
+	}, []);
+
+	const defaultOptions = Object.keys(localStorage as unknown as configurationWithDefaults)
+		.filter((key) => key.endsWith("_default"))
+		.reduce(
+			(options, key) => ({
+				...options,
+				[key.replace("_default", "")]: localStorage[key]
+			}),
+			{}
+		) as configuration;
+	if (!settings) {
+		return <Loader />;
+	}
+	return (
+		<Settings
+			settings={settings}
+			setSettings={setSettings}
+			defaultSettings={defaultOptions}
+			selectedColor={selectedColor}
+			setSelectedColor={setSelectedColor}
+			selectedDisplayType={selectedDisplayType}
+			setSelectedDisplayType={setSelectedDisplayType}
+			selectedDisplayPosition={selectedDisplayPosition}
+			setSelectedDisplayPosition={setSelectedDisplayPosition}
+			selectedPlayerQuality={selectedPlayerQuality}
+			setSelectedPlayerQuality={setSelectedPlayerQuality}
+		/>
+	);
 }

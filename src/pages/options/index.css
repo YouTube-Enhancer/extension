@@ -1,0 +1,16 @@
+html > body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-y: scroll;
+}
+body {
+	width: 90%;
+	min-width: 400px;
+	max-width: 640px;
+	margin: 32px auto !important;
+}
+html > body > div#__root > div {
+	margin: auto;
+}
