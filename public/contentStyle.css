@@ -1,0 +1,53 @@
+.yte-button-tooltip {
+	font-size: 13px !important;
+	font-weight: 500 !important;
+	line-height: 15px !important;
+	position: fixed !important;
+	padding: 5px 9px;
+	transform: translate(-50%, -150%) !important;
+	pointer-events: none !important;
+	color: #eee !important;
+	border-radius: 2px !important;
+	background-color: rgba(28, 28, 28, 0.9) !important;
+	text-shadow: 0 0 2px rgb(0, 0, 0, 0.5) !important;
+}
+
+body.no-scroll .yte-button-tooltip {
+	font-size: 20px !important;
+	line-height: 22px !important;
+	padding: 8px 9px !important;
+	transform: translate(-50%, -75%) !important;
+}
+.maximized_chapter {
+	width: 100% !important;
+}
+.maximized_video {
+	width: 100vw !important;
+	height: 100vh !important;
+	left: 0 !important;
+	top: 0 !important;
+	object-fit: contain !important;
+	background: black !important;
+}
+.maximized_video_container {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	z-index: 2020 !important;
+}
+.maximized_controls {
+	width: 97vw !important;
+	right: 12px !important;
+}
+.yte-maximize-player-button {
+	opacity: 0.9;
+	display: inline-block;
+	width: 48px;
+	padding: 0 2px;
+	-webkit-transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
+	-o-transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
+	transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
+	overflow: hidden;
+}

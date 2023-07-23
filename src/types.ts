@@ -18,18 +18,26 @@ export type YoutubePlayerQualityLevel =
 	| "hd2880"
 	| "highres"
 	| "auto";
-
+export type YouTubePlayerSpeedRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
 export type configuration = {
 	enable_scroll_wheel_volume_control: boolean;
 	enable_remember_last_volume: boolean;
 	enable_automatically_set_quality: boolean;
+	enable_forced_playback_speed: boolean;
+	enable_volume_boost: boolean;
+	enable_screenshot_button: boolean;
+	enable_maximize_player_button: boolean;
+	screenshot_save_as: "file" | "clipboard";
+	screenshot_format: "png" | "jpeg" | "webp";
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_type: OnScreenDisplayType;
 	osd_display_position: OnScreenDisplayPosition;
 	osd_display_opacity: number;
 	volume_adjustment_steps: number;
+	volume_boost_amount: number;
 	remembered_volume?: number;
 	player_quality?: YoutubePlayerQualityLevel;
+	player_speed?: YouTubePlayerSpeedRate;
 };
 export type configurationKeys = keyof configuration;
 type AppendUnderscoreDefault<T> = T extends configurationKeys ? `${T}_default` : never;
@@ -50,6 +58,31 @@ export type SetVolumeData = {
 	type: "setVolume";
 	volume?: number;
 };
-export type MessageTypes = OptionsData["type"] | SetVolumeData["type"];
-export type MessageData<T extends MessageTypes> = BaseData<T> & (OptionsData | SetVolumeData);
+export type VolumeBoostChangeData = {
+	type: "volumeBoostChange";
+	volumeBoostEnabled: boolean;
+	volumeBoostAmount: number;
+};
+export type PlayerSpeedChangeData = {
+	type: "playerSpeedChange";
+	playerSpeed?: YouTubePlayerSpeedRate;
+	enableForcedPlaybackSpeed: boolean;
+};
+export type ScreenshotButtonChangeData = {
+	type: "screenshotButtonChange";
+	screenshotButtonEnabled: boolean;
+};
+export type MaximizePlayerButtonChangeData = {
+	type: "maximizePlayerButtonChange";
+	maximizePlayerButtonEnabled: boolean;
+};
+export type MessageTypes =
+	| OptionsData["type"]
+	| SetVolumeData["type"]
+	| VolumeBoostChangeData["type"]
+	| PlayerSpeedChangeData["type"]
+	| ScreenshotButtonChangeData["type"]
+	| MaximizePlayerButtonChangeData["type"];
+export type MessageData<T extends MessageTypes> = BaseData<T> &
+	(OptionsData | SetVolumeData | VolumeBoostChangeData | PlayerSpeedChangeData | ScreenshotButtonChangeData | MaximizePlayerButtonChangeData);
 export type AllMessageData = MessageData<MessageTypes>;

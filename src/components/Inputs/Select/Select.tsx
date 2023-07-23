@@ -1,15 +1,15 @@
 import { useComponentVisible } from "@/hooks";
 import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
-import Arrow from "./Arrow";
+import Arrow from "../Number/Arrow";
 
-interface CustomOptionProps {
+interface OptionProps {
 	value: string;
 	id?: string;
 	className?: string;
 	children: React.ReactNode;
 }
 
-const CustomOption: React.FC<CustomOptionProps> = ({ value, children }) => {
+const Option: React.FC<OptionProps> = ({ value, children }) => {
 	return (
 		<div className={`flex items-center ${value === "light" ? "text-gray-900" : "text-gray-100"}`}>
 			<div className={`rounded-full h-4 w-4 mr-2 bg-[${value}]`}></div>
@@ -18,36 +18,37 @@ const CustomOption: React.FC<CustomOptionProps> = ({ value, children }) => {
 	);
 };
 
-export type CustomSelectOption = {
+export type SelectOption = {
 	value: string;
 	label: string;
-	element?: React.ReactElement<CustomOptionProps>;
+	element?: React.ReactElement<OptionProps>;
 };
 
-interface CustomSelectProps {
+interface SelectProps {
 	id?: string;
 	className?: string;
-	options: CustomSelectOption[];
+	options: SelectOption[];
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
 	label: string;
 	selectedOption: string | undefined;
 	setSelectedOption: Dispatch<SetStateAction<string | undefined>>;
+	disabled: boolean;
 }
 
-const CustomSelect: React.FC<CustomSelectProps> = ({ onChange, options, className, id, selectedOption, label, setSelectedOption }) => {
+const Select: React.FC<SelectProps> = ({ onChange, options, className, id, selectedOption, label, setSelectedOption, disabled }) => {
 	const {
-		ref: customSelectRef,
-		isComponentVisible: isCustomSelectVisible,
-		setIsComponentVisible: setIsCustomSelectVisible
+		ref: selectRef,
+		isComponentVisible: isSelectVisible,
+		setIsComponentVisible: setIsSelectVisible
 	} = useComponentVisible<HTMLDivElement>(false);
 
 	const toggleSelect = () => {
-		setIsCustomSelectVisible(!isCustomSelectVisible);
+		setIsSelectVisible(!isSelectVisible);
 	};
 
 	const handleOptionSelect = (option: string) => {
 		setSelectedOption(option);
-		setIsCustomSelectVisible(false);
+		setIsSelectVisible(false);
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
@@ -55,7 +56,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ onChange, options, classNam
 		<div
 			className={`relative flex flex-row${className ? ` ${className}` : ""} mb-2 gap-4 flex-row items-baseline justify-between`}
 			id={id}
-			ref={customSelectRef}
+			ref={selectRef}
 		>
 			<label htmlFor={id}>{label}</label>
 			<div className="relative inline-block">
@@ -64,24 +65,49 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ onChange, options, classNam
 					className="border border-gray-300 bg-white text-black px-2 py-2 rounded-md flex items-center justify-between w-40 h-10 focus:outline-none dark:bg-[#23272a] dark:text-white dark:border-gray-700"
 					onClick={toggleSelect}
 					key={selectedOption}
+					disabled={disabled}
+					style={{
+						...(disabled ? { color: "#4b5563" } : {})
+					}}
 				>
 					{selectedOption ? (
 						options.find((option) => option.value === selectedOption)?.element ? (
 							<div className="flex items-center pr-4 justify-between w-full">
-								<span className="text-white">{options.find((option) => option.value === selectedOption)?.label}</span>
+								<span
+									className="text-white"
+									style={{
+										...(disabled ? { color: "#4b5563" } : {})
+									}}
+								>
+									{options.find((option) => option.value === selectedOption)?.label}
+								</span>
 								{options.find((option) => option.value === selectedOption)?.element}
 							</div>
 						) : (
 							<div className="flex items-center pr-2 justify-between w-full">
-								<span className="text-white">{options.find((option) => option.value === selectedOption)?.label}</span>
+								<span
+									className="text-white"
+									style={{
+										...(disabled ? { color: "#4b5563" } : {})
+									}}
+								>
+									{options.find((option) => option.value === selectedOption)?.label}
+								</span>
 							</div>
 						)
 					) : (
-						<span className="text-gray-500">Select an option</span>
+						<span
+							className="text-white"
+							style={{
+								...(disabled ? { color: "#4b5563" } : {})
+							}}
+						>
+							Select an option
+						</span>
 					)}
-					<Arrow rotation={isCustomSelectVisible ? "up" : "down"} />
+					<Arrow rotation={isSelectVisible ? "up" : "down"} />
 				</button>
-				{isCustomSelectVisible && (
+				{isSelectVisible && (
 					<div className="absolute z-10 mt-2 w-40 bg-white dark:bg-[#23272a] border border-gray-300 dark:border-gray-700 rounded-md shadow-lg">
 						{options.map((option, index) => (
 							<div
@@ -106,4 +132,4 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ onChange, options, classNam
 	);
 };
 
-export { CustomSelect, CustomOption };
+export { Option, Select };

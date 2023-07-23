@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 
-interface CustomCheckboxProps {
+interface CheckboxProps {
 	id?: string;
 	className?: string;
 	label: string;
@@ -9,7 +9,7 @@ interface CustomCheckboxProps {
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, checked, onChange, className, id, title }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, className, id, title }) => {
 	return (
 		<div className={`flex items-center${className ? ` ${className}` : ""} pb-1`} title={title}>
 			<input
@@ -26,4 +26,4 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, checked, onChang
 	);
 };
 
-export default CustomCheckbox;
+export default Checkbox;
