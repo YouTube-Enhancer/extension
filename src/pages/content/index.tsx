@@ -9,6 +9,7 @@ import {
 } from "@/src/types";
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
+// Testing signing from laptop
 type ListenerObject = { listenerType: string; element: Element; listener: EventListener };
 
 import { browserColorLog, chooseClosetQuality, clamp, round, toDivisible } from "../../utils/utilities";
