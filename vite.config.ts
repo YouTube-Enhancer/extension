@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import makeManifest from "./src/utils/plugins/make-manifest";
 import buildContentScript from "./src/utils/plugins/build-content-script";
 import { outputFolderName } from "./src/utils/constants";
-import { existsSync, rmdirSync } from "fs";
+import { existsSync, readdirSync, rmSync, statSync } from "fs";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");
@@ -15,13 +15,22 @@ const hooksDir = resolve(root, "hooks");
 const outDir = resolve(__dirname, outputFolderName);
 const publicDir = resolve(__dirname, "public");
 // Make a function to delete the output folder before building
-const deleteOutputFolder = () => {
-	if (existsSync(outDir)) {
-		rmdirSync(outDir, { recursive: true });
+const emptyOutputFolder = () => {
+	if (!existsSync(outDir)) return;
+	const files = readdirSync(outDir);
+	for (const file of files) {
+		if (file.endsWith(".zip")) continue;
+		const filePath = resolve(outDir, file);
+		const fileStat = statSync(filePath);
+		if (fileStat.isDirectory()) {
+			rmSync(filePath, { recursive: true });
+		} else {
+			rmSync(filePath);
+		}
 	}
 };
 export default function build() {
-	deleteOutputFolder();
+	emptyOutputFolder();
 	return defineConfig({
 		resolve: {
 			alias: {

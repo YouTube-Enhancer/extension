@@ -1,5 +1,8 @@
 {
 	"name": "youtube-enhancer",
+	"author": {
+		"name": "VampireChicken12"
+	},
 	"displayName": "YouTube Enhancer",
 	"version": "1.0.0",
 	"description": "YouTube Enhancer is a simple extension that adds some useful features to YouTube.",

@@ -290,12 +290,12 @@ input[type="button"].danger.ghost {
 
 /* neutral */
 input[type="button"].neutral {
-	border: 2px solid var(--neutral-transparent-20);
-	background: var(--neutral-transparent-20);
+	border: 2px solid var(--neutral-dark);
+	background: var(--neutral-dark);
 }
 
 input[type="button"].neutral.ghost {
-	border: 2px solid var(--neutral-transparent-20);
+	border: 2px solid var(--neutral-dark);
 	background: var(--neutral-lightest);
 	color: var(--foreground);
 }

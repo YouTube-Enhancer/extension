@@ -6,6 +6,7 @@ const manifest: Manifest.WebExtensionManifest = {
 	name: pkg.displayName,
 	version: pkg.version,
 	description: pkg.description,
+	author: pkg.author.name,
 	options_ui: {
 		page: "src/pages/options/index.html"
 	},
@@ -19,6 +20,8 @@ const manifest: Manifest.WebExtensionManifest = {
 	},
 	icons: {
 		"16": "/icons/icon_16.png",
+		"19": "/icons/icon_19.png",
+		"38": "/icons/icon_38.png",
 		"48": "/icons/icon_48.png",
 		"128": "/icons/icon_128.png"
 	},
