@@ -790,9 +790,9 @@ async function setPlayerSpeed(options?: { playerSpeed?: number; enableForcedPlay
 			: isShortsPage()
 			? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
 			: null;
-		const video = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
 		// If player element is not available, return
 		if (!playerContainer) return;
+		const video = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
 
 		// If setPlaybackRate method is not available in the player, return
 		if (!playerContainer.setPlaybackRate) return;
@@ -828,9 +828,14 @@ async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 		// If it's not a wheel event, return
 		if (!wheelEvent) return;
-
-		// Get the player container element from the event target
-		const { target: playerContainer } = event as unknown as { target: YouTubePlayerDiv };
+		// Get the player element
+		const playerContainer = isWatchPage()
+			? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+			: isShortsPage()
+			? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+			: null;
+		// If player element is not available, return
+		if (!playerContainer) return;
 
 		// Adjust the volume based on the scroll direction
 		const scrollDelta = getScrollDirection(wheelEvent.deltaY);
@@ -1065,6 +1070,7 @@ window.onload = function () {
 						maximizePlayer(maximizePlayerButton);
 					}
 				}
+				break;
 			}
 		}
 	});

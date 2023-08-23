@@ -19,6 +19,10 @@ export type YoutubePlayerQualityLevel =
 	| "highres"
 	| "auto";
 export type YouTubePlayerSpeedRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
+export type ScreenshotType = "file" | "clipboard";
+
+export type ScreenshotFormat = "png" | "jpeg" | "webp";
+
 export type configuration = {
 	enable_scroll_wheel_volume_control: boolean;
 	enable_remember_last_volume: boolean;
@@ -27,8 +31,8 @@ export type configuration = {
 	enable_volume_boost: boolean;
 	enable_screenshot_button: boolean;
 	enable_maximize_player_button: boolean;
-	screenshot_save_as: "file" | "clipboard";
-	screenshot_format: "png" | "jpeg" | "webp";
+	screenshot_save_as: ScreenshotType;
+	screenshot_format: ScreenshotFormat;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_type: OnScreenDisplayType;
 	osd_display_position: OnScreenDisplayPosition;
