@@ -1,135 +1,103 @@
-<div align="center">
-<img src="public/icon-128.png" alt="logo"/>
-<h1> Chrome Extension Boilerplate with<br/>React + Vite + TypeScript + TailwindCSS</h1>
-
-<h2>
-This is a side product of my Chrome Extension <a target="_blank" rel="noopener noreferrer" href="https://chrome.google.com/webstore/detail/supatabs/icbcnjlaegndjabnjbaeihnnmidbfigk">Supatabs</a>.
-Supatabs is a 🔥🔥 BLAZINGLY FAST 🔥🔥 free alternative to OneTab with support for chrome tab groups and searching through tabs.
-</h2>
-
-<h2>
-If you tend to have thousands of tabs open, are a OneTab user, or use any other tab manager 
-make sure to check it out <a target="_blank" rel="noopener noreferrer" href="https://chrome.google.com/webstore/detail/supatabs/icbcnjlaegndjabnjbaeihnnmidbfigk">here</a>!
-</h2>
-</div>
+# YouTube Enhancer Extension
 
 ## Table of Contents
 
-- [Intro](#intro)
-- [Why another boilerplate?](#why)
+- [Introduction](#introduction)
 - [Features](#features)
 - [Usage](#usage)
-  - [Setup](#setup)
-- [Tech Docs](#tech)
-- [Credit](#credit)
+- [Installation](#installation)
+- [Configuration Options](#configuration-options)
 - [Contributing](#contributing)
+- [License](#license)
 
-## Intro <a name="intro"></a>
+## Introduction
 
-This boilerplate is meant to be a quick start for creating chrome extensions using React, Typescript and Tailwind CSS.
+The YouTube Enhancer Extension, providing users with fine-grained control over how the extension interacts with YouTube. Users can adjust settings related to volume control, on-screen displays, video quality, playback speed, volume boost, and even take screenshots of videos.
 
-Built for:
+## Features
 
-> For improved DX and rapid building vite and nodemon are used.
+### 1. Miscellaneous Settings
 
-> Chrome does not accept manifest v2 extensions since Jan 2022, therefore this template uses manifest v3.
+- **Remember Last Volume:** This option remembers the last volume set and applies it to future videos.
 
-> Firefox + other browsers don't yet support manifest v3, so cross browser usage is not encouraged.
+- **Enable Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
 
-- Read more about Chrome manifest v2 support [here](https://developer.chrome.com/docs/extensions/mv2/).
-- Read more about Firefox Manifest v3 support [here](https://discourse.mozilla.org/t/manifest-v3/94564).
+### 2. Scroll Wheel Volume Control Settings
 
-As soon as Firefox supports manifest v3, support will be added in this repo as well.
+- **Enable Scroll Wheel Volume Control:** Allows users to use the scroll wheel to control the volume of the video they're watching.
 
-Oh by the way ... I also implemented a chrome local/sync storage hook for react, which works well with this
-template. [Check it out here](https://gist.github.com/JohnBra/c81451ea7bc9e77f8021beb4f198ab96).
+- **OSD Color:** Users can choose the color of the On-Screen Display (OSD) for volume control.
 
-## Why another boilerplate? <a name="why"></a>
+- **OSD Type:** Choose the type of OSD, including text, line, round, or no display.
 
-I have used webpack react boilerplates and found it too hard to configure.
+- **OSD Position:** Define where the OSD should be displayed on the screen (top left, top right, bottom left, bottom right, or center).
 
-Vite is actually mega easy to understand, which makes it easier to get into and to maintain for others.
+- **OSD Opacity:** Adjust the opacity of the OSD for better visibility.
 
-I couldn't find a boilerplate for React, TypeScript and Tailwind CSS. So here it is.
+- **Amount to Adjust Volume per Scroll:** Define how much the volume should change with each scroll.
 
-## Features <a name="features"></a>
+- **Time to Hide OSD:** Set the time delay before hiding the OSD.
 
-- [React 18](https://reactjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [ESLint](https://eslint.org/)
-- [Chrome Extension Manifest Version 3](https://developer.chrome.com/docs/extensions/mv3/intro/)
+- **Padding for OSD:** Define the amount of padding to add to the OSD (applies to corner OSD).
 
-## Usage <a name="usage"></a>
+### 3. Automatic Quality Settings
 
-### Setup <a name="setup"></a>
+- **Enable Automatically Set Quality:** Automatically sets the video quality to the chosen level.
 
-1. Clone this repository.
-2. Change `name` and `description` in package.json => **Auto synchronize with manifest**
-3. Run `yarn` or `npm i` (check your node version >= 16)
-4. Run `yarn dev` or `npm run dev`
-5. Load Extension on Chrome
-   1. Open - Chrome browser
-   2. Access - chrome://extensions
-   3. Check - Developer mode
-   4. Find - Load unpacked extension
-   5. Select - `dist` folder in this project (after dev or build)
-6. If you want to build in production, Just run `yarn build` or `npm run build`.
+- **Player Quality:** Choose the desired video quality for playback.
 
-### Customization
+### 4. Playback Speed Settings
 
-As the template has **all** of the potential Chrome extension pages implemented, you likely have to
-customize it to fit your needs.
+- **Enable Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
-E.g. you don't want the newtab page to activate whenever you open a new tab:
+- **Player Speed:** Define the playback speed for videos.
 
-1. remove the directory `newtab` and its contents in `src/pages`
-2. remove the `newtab` rollup input in the `vite.config.ts`
+### 5. Volume Boost Settings
 
-```ts
-//...
-build: {
-    outDir,
-    rollupOptions: {
-      input: {
-        devtools: resolve(pagesDir, 'devtools', 'index.html'),
-        panel: resolve(pagesDir, 'panel', 'index.html'),
-        background: resolve(pagesDir, 'background', 'index.ts'),
-        popup: resolve(pagesDir, 'popup', 'index.html'),
-        newtab: resolve(pagesDir, 'newtab', 'index.html'),  // <--- REMOVE THIS LINE
-        options: resolve(pagesDir, 'options', 'index.html'),
-      },
-      output: {
-        entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
-      },
-    },
-  },
-/...
-```
+- **Enable Volume Boost:** Boosts the volume of the video being watched.
 
-CSS files in the `src/pages/*` directories are not necessary. They are left in there in case you want
-to use it in combination with Tailwind CSS. **Feel free to delete them**.
+- **Volume Boost Amount (dB):** Specify the amount by which to boost the volume.
 
-Tailwind can be configured as usual in the `tailwind.config.cjs` file. See doc link below.
+### 6. Screenshot Settings
 
-Note:
-content script bundler is added in `./utils/plugins/build-content-script.ts` as a custom plugin.
-https://github.com/JohnBra/vite-web-extension/issues/8
+- **Enable Screenshot Button:** Adds a button to the player for taking screenshots of videos.
 
-# Tech Docs <a name="tech"></a>
+- **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
-- [Vite Plugin](https://vitejs.dev/guide/api-plugin.html)
-- [Chrome Extension with manifest 3](https://developer.chrome.com/docs/extensions/mv3/)
-- [Rollup](https://rollupjs.org/guide/en/)
-- [Rollup-plugin-chrome-extension](https://www.extend-chrome.dev/rollup-plugin)
-- [Tailwind CSS](https://tailwindcss.com/docs/configuration)
+- **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
 
-# Credit <a name="credit"></a>
+## Usage
 
-Heavily inspired by [Jonghakseo's vite chrome extension boilerplate](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite).
-It uses SASS instead of TailwindCSS if you want to check it out.
+To use the Settings component of the YouTube Enhancer Extension, follow these steps:
 
-# Contributing <a name="contributing"></a>
+1. Ensure that the YouTube Enhancer Extension is installed in your browser.
 
-Feel free to open PRs or raise issues!
+2. Access the settings page of the extension. This can usually be found in the extension settings within your browser.
+
+3. On the settings page, you will find a range of options to configure the extension's behavior. Each option is described in detail to help you make the best choices for your YouTube experience.
+
+4. Make your desired selections for each setting.
+
+5. Click the "Save" button to save your changes. If you wish to reset the settings to their default values, you can use the "Reset" button.
+
+6. Enjoy an enhanced YouTube experience with the settings configured to your preferences.
+
+## Installation
+
+To install the YouTube Enhancer Extension and access its Settings component, please refer to the official extension documentation for installation instructions.
+
+## Configuration Options
+
+The Settings component provides various configuration options, each tailored to specific aspects of the YouTube experience. Please refer to the "Features" section above for a detailed description of each option and how it affects your YouTube experience.
+
+## Contributing
+
+Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
+
+## License
+
+This component of the YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE).
+
+---
+
+This README provides an overview of the YouTube Enhancer Extension's Settings component, its features, and how to use it. Users can configure various aspects of their YouTube experience, making it more enjoyable and tailored to their preferences.
