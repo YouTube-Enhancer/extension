@@ -859,6 +859,8 @@ async function adjustVolumeOnScrollWheel(): Promise<void> {
 			displayColor: options.osd_display_color,
 			displayOpacity: options.osd_display_opacity,
 			playerContainer: playerContainer || null,
+			displayPadding: options.osd_display_padding,
+			displayHideTime: options.osd_display_hide_time,
 			volume: newVolume
 		});
 
@@ -1221,6 +1223,8 @@ function drawVolumeDisplay({
 	displayPosition,
 	displayColor,
 	displayOpacity,
+	displayPadding,
+	displayHideTime,
 	playerContainer,
 	volume
 }: {
@@ -1229,6 +1233,8 @@ function drawVolumeDisplay({
 	displayPosition: OnScreenDisplayPosition;
 	displayColor: OnScreenDisplayColor;
 	displayOpacity: number;
+	displayPadding: number;
+	displayHideTime: number;
 	playerContainer: YouTubePlayerDiv | null;
 }) {
 	volume = clamp(volume, 0, 100);
@@ -1237,16 +1243,16 @@ function drawVolumeDisplay({
 	const context = canvas.getContext("2d");
 
 	if (!context) {
-		console.error("Canvas not supported");
+		browserColorLog("Canvas not supported", "FgRed");
 		return;
 	}
 
 	// Set canvas dimensions based on player/container dimensions
 	if (!playerContainer) {
-		console.error("Player container not found");
+		browserColorLog("Player container not found", "FgRed");
 		return;
 	}
-
+	if (displayType === "no_display") return;
 	let { clientWidth: width, clientHeight: height } = playerContainer;
 	const originalWidth = width;
 	const originalHeight = height;
@@ -1267,28 +1273,30 @@ function drawVolumeDisplay({
 			console.error("Invalid display position");
 			return;
 	}
-
-	canvas.width = width;
-	canvas.height = height;
+	if (displayPadding > Math.max(width, height)) {
+		// Clamp displayPadding to max width and height
+		displayPadding = clamp(displayPadding, 0, Math.max(width, height));
+		browserColorLog(`Clamped display padding to ${displayPadding}`, "FgRed");
+	}
 
 	// Set canvas styles for positioning
 	canvas.style.position = "absolute";
 	switch (displayPosition) {
 		case "top_left":
-			canvas.style.top = "0";
-			canvas.style.left = "0";
+			canvas.style.top = `${displayPadding}px`;
+			canvas.style.left = `${displayPadding}px`;
 			break;
 		case "top_right":
-			canvas.style.top = "0";
-			canvas.style.right = "0";
+			canvas.style.top = `${displayPadding}px`;
+			canvas.style.right = `${displayPadding}px`;
 			break;
 		case "bottom_left":
-			canvas.style.bottom = "0";
-			canvas.style.left = "0";
+			canvas.style.bottom = `${displayPadding}px`;
+			canvas.style.left = `${displayPadding}px`;
 			break;
 		case "bottom_right":
-			canvas.style.bottom = "0";
-			canvas.style.right = "0";
+			canvas.style.bottom = `${displayPadding}px`;
+			canvas.style.right = `${displayPadding}px`;
 			break;
 		case "center":
 			canvas.style.top = "50%";
@@ -1299,6 +1307,39 @@ function drawVolumeDisplay({
 			console.error("Invalid display position");
 			return;
 	}
+	switch (displayType) {
+		case "text": {
+			const fontSize = Math.min(originalWidth, originalHeight) / 10;
+			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
+			const { width: textWidth } = context.measureText(`${round(volume)}`);
+			width = textWidth;
+			height = fontSize;
+			break;
+		}
+		case "line": {
+			const maxLineWidth = 100; // Maximum width of the volume line
+			const lineHeight = 5; // Height of the volume line
+			const lineWidth = Math.round(round(volume / 100, 2) * maxLineWidth);
+			width = lineWidth;
+			height = lineHeight;
+			break;
+		}
+		case "round": {
+			const lineWidth = 5;
+			const radius = Math.min(width, height, 75) / 2 - lineWidth; // Maximum radius based on canvas dimensions
+			const circleWidth = radius * 2 + lineWidth * 2;
+			width = circleWidth;
+			height = circleWidth;
+			break;
+		}
+		default:
+			console.error("Invalid display type");
+			return;
+	}
+
+	// Apply content dimensions to the canvas
+	canvas.width = width;
+	canvas.height = height;
 	canvas.style.zIndex = "2021";
 	canvas.style.pointerEvents = "none";
 
@@ -1308,9 +1349,6 @@ function drawVolumeDisplay({
 	context.globalAlpha = displayOpacity / 100;
 	// Draw volume representation based on display type
 	switch (displayType) {
-		case "no_display":
-			// Do nothing or display an empty screen
-			break;
 		case "text": {
 			const fontSize = Math.min(originalWidth, originalHeight) / 10;
 			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
@@ -1321,7 +1359,7 @@ function drawVolumeDisplay({
 		}
 		case "line": {
 			const maxLineWidth = 100; // Maximum width of the volume line
-			const lineHeight = 10; // Height of the volume line
+			const lineHeight = 5; // Height of the volume line
 			const lineWidth = Math.round(round(volume / 100, 2) * maxLineWidth);
 			const lineX = (width - lineWidth) / 2;
 			const lineY = (height - lineHeight) / 2;
@@ -1330,7 +1368,7 @@ function drawVolumeDisplay({
 			break;
 		}
 		case "round": {
-			const lineWidth = 4;
+			const lineWidth = 5;
 			const centerX = width / 2;
 			const centerY = height / 2;
 			const radius = Math.min(width, height, 75) / 2 - lineWidth; // Maximum radius based on canvas dimensions
@@ -1360,7 +1398,7 @@ function drawVolumeDisplay({
 	}
 	setTimeout(() => {
 		canvas.remove();
-	}, 750);
+	}, displayHideTime);
 }
 // #endregion Volume utility functions
 // #region Utility functions

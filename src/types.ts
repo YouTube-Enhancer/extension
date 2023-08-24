@@ -37,6 +37,8 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	osd_display_position: OnScreenDisplayPosition;
 	osd_display_opacity: number;
+	osd_display_hide_time: number;
+	osd_display_padding: number;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 	remembered_volume?: number;
