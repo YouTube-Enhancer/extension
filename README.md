@@ -1,18 +1,20 @@
 # YouTube Enhancer Extension
 
+The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience. This README provides an overview of the extension's features and how to make the most out of it.
+
 ## Table of Contents
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Usage](#usage)
 - [Installation](#installation)
-- [Configuration Options](#configuration-options)
+- [Configuration](#configuration)
+- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Introduction
 
-The YouTube Enhancer Extension, providing users with fine-grained control over how the extension interacts with YouTube. Users can adjust settings related to volume control, on-screen displays, video quality, playback speed, volume boost, and even take screenshots of videos.
+YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 
 ## Features
 
@@ -26,11 +28,11 @@ The YouTube Enhancer Extension, providing users with fine-grained control over h
 
 - **Enable Scroll Wheel Volume Control:** Allows users to use the scroll wheel to control the volume of the video they're watching.
 
-- **OSD Color:** Users can choose the color of the On-Screen Display (OSD) for volume control.
+- **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
 
-- **OSD Type:** Choose the type of OSD, including text, line, round, or no display.
+- **OSD Type:** Define the type of OSD, including text, line, round, or no display.
 
-- **OSD Position:** Define where the OSD should be displayed on the screen (top left, top right, bottom left, bottom right, or center).
+- **OSD Position:** Set where the OSD should be displayed on the screen (top left, top right, bottom left, bottom right, or center).
 
 - **OSD Opacity:** Adjust the opacity of the OSD for better visibility.
 
@@ -66,29 +68,35 @@ The YouTube Enhancer Extension, providing users with fine-grained control over h
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
 
-## Usage
-
-To use the Settings component of the YouTube Enhancer Extension, follow these steps:
-
-1. Ensure that the YouTube Enhancer Extension is installed in your browser.
-
-2. Access the settings page of the extension. This can usually be found in the extension settings within your browser.
-
-3. On the settings page, you will find a range of options to configure the extension's behavior. Each option is described in detail to help you make the best choices for your YouTube experience.
-
-4. Make your desired selections for each setting.
-
-5. Click the "Save" button to save your changes. If you wish to reset the settings to their default values, you can use the "Reset" button.
-
-6. Enjoy an enhanced YouTube experience with the settings configured to your preferences.
-
 ## Installation
 
-To install the YouTube Enhancer Extension and access its Settings component, please refer to the official extension documentation for installation instructions.
+To install the YouTube Enhancer Extension, follow these simple steps:
 
-## Configuration Options
+1. Enable developer mode
 
-The Settings component provides various configuration options, each tailored to specific aspects of the YouTube experience. Please refer to the "Features" section above for a detailed description of each option and how it affects your YouTube experience.
+2. Click "Load unpacked"
+
+3. Navigate to the dist folder and select it
+
+4. Once installed, the extension's icon will typically appear in your browser's toolbar.
+
+## Configuration
+
+The extension provides a range of configuration options to tailor your YouTube experience to your liking. Simply access the extension's settings page to customize its behavior.
+
+## Usage
+
+Using the YouTube Enhancer Extension is straightforward:
+
+1. Ensure the extension is installed and the icon is visible in your browser's toolbar.
+
+2. Click on the extension icon to access its features and settings.
+
+3. Configure the extension according to your preferences. Adjust settings related to volume control, on-screen displays, video quality, playback speed, volume boost, and more.
+
+4. Save your changes to apply them to your YouTube experience.
+
+5. Enjoy an enhanced YouTube experience with the extension's features working seamlessly in the background.
 
 ## Contributing
 
@@ -96,8 +104,4 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
 
 ## License
 
-This component of the YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE).
-
----
-
-This README provides an overview of the YouTube Enhancer Extension's Settings component, its features, and how to use it. Users can configure various aspects of their YouTube experience, making it more enjoyable and tailored to their preferences.
+The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
