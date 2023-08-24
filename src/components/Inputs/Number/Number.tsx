@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MutableRefObject, useRef } from "react";
+import React, { ChangeEvent, MutableRefObject, useRef, useEffect } from "react";
 import "./Number.css";
 import Arrow from "./Arrow";
 interface NumberInputProps {
@@ -13,9 +13,9 @@ interface NumberInputProps {
 	disabled: boolean;
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = 100, step = 1, onChange, className, id, label, disabled }) => {
+const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = undefined, step = 1, onChange, className, id, label, disabled }) => {
 	const inputElement: MutableRefObject<HTMLInputElement | null> = useRef(null);
-
+	const inputDiv: MutableRefObject<HTMLDivElement | null> = useRef(null);
 	const NumberPlus = () => {
 		if (inputElement.current) {
 			inputElement.current.stepUp();
@@ -38,8 +38,24 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = 100, st
 			onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 		}
 	};
+	useEffect(() => {
+		// TODO: get working in popup if possible
+		const mouseEnter = () => {
+			window.document.body.style.overflow = "hidden";
+		};
+		const mouseLeave = () => {
+			window.document.body.style.overflow = "auto";
+		};
+		inputDiv.current?.addEventListener("mouseenter", mouseEnter);
+		inputDiv.current?.addEventListener("mouseleave", mouseLeave);
+		return () => {
+			inputDiv.current?.removeEventListener("mouseenter", mouseEnter);
+			inputDiv.current?.removeEventListener("mouseleave", mouseLeave);
+		};
+	}, [inputDiv]);
+
 	return (
-		<div className={`${className ? `${className} ` : ""} relative flex mb-2 gap-4 items-baseline justify-between flex-row`}>
+		<div className={`${className ? `${className} ` : ""} relative flex mb-2 gap-4 items-baseline justify-between flex-row`} ref={inputDiv}>
 			<label htmlFor={id} className="mb-1">
 				{label}
 			</label>

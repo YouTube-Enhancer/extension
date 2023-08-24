@@ -294,6 +294,26 @@ export default function Settings({
 							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
 						/>
 					</div>
+					<div className="mx-2 mb-1" title="The amount of milliseconds to wait before hiding the OSD">
+						<NumberInput
+							id="osd_display_hide_time"
+							min={1}
+							value={settings.osd_display_hide_time}
+							onChange={setValueOption("osd_display_hide_time")}
+							label="Time to hide"
+							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						/>
+					</div>
+					<div className="mx-2 mb-1" title="The amount of padding to add to the OSD (in pixels, only applies to corner OSD)">
+						<NumberInput
+							id="osd_display_padding"
+							min={0}
+							value={settings.osd_display_padding}
+							onChange={setValueOption("osd_display_padding")}
+							label="Padding"
+							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						/>
+					</div>
 				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Automatic quality settings</legend>
@@ -391,7 +411,7 @@ export default function Settings({
 					</div>
 				</fieldset>
 
-				<div className="flex gap-1 m-2 sticky left-0 bottom-0">
+				<div className="flex gap-1 sticky left-0 bottom-0 p-2 bg-[#f5f5f5] dark:bg-[#181a1b]">
 					<input
 						type="button"
 						id="clear_data_button"
@@ -403,7 +423,7 @@ export default function Settings({
 					<input
 						type="button"
 						id="reset_button"
-						className="p-2 bg-[rgba(24,26,27,0.7)] dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
+						className="p-2 warning dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
 						style={{ marginLeft: "auto" }}
 						value="Reset"
 						title="Resets all settings to their defaults; save afterwards to preserve the changes"

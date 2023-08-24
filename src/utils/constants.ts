@@ -17,6 +17,8 @@ export const defaultConfiguration = {
 	osd_display_color: "white",
 	osd_display_type: "text",
 	osd_display_position: "center",
+	osd_display_hide_time: 750,
+	osd_display_padding: 5,
 	osd_display_opacity: 75,
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 1
