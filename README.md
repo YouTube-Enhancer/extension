@@ -6,7 +6,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 
 - [Introduction](#introduction)
 - [Features](#features)
-- [Installation](#installation)
+- [Building the Extension](#building-the-extension)
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -23,6 +23,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remember Last Volume:** This option remembers the last volume set and applies it to future videos.
 
 - **Enable Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
+
+- **Enable Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
 
 ### 2. Scroll Wheel Volume Control Settings
 
@@ -68,17 +70,32 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
 
-## Installation
+## Building the Extension
 
-To install the YouTube Enhancer Extension, follow these simple steps:
+To build the YouTube Enhancer extension, you can follow these steps:
 
-1. Enable developer mode
+1. **Install Dependencies:** First, ensure that you have Node.js installed on your system. Then, open your terminal and navigate to the project directory. Run the following command to install project dependencies:
 
-2. Click "Load unpacked"
+   ```bash
+   npm install
+   ```
 
-3. Navigate to the dist folder and select it
+2. **Build the Extension:** Once the dependencies are installed, you can build the extension using the following command:
 
-4. Once installed, the extension's icon will typically appear in your browser's toolbar.
+   ```bash
+   npm run build
+   ```
+
+   This command will bundle your extension's code and assets into a 'dist' directory.
+
+3. **Load the Extension:** After building, you can load the extension into your browser:
+
+   - **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
+   - **Brave:** Open Chrome and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
+
+4. **Test the Extension:** Your extension should now be loaded. Test it on YouTube to ensure it functions as expected.
+
+That's it! You've successfully built the YouTube Enhancer extension.
 
 ## Configuration
 
