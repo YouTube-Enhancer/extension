@@ -72,30 +72,62 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ## Building the Extension
 
-To build the YouTube Enhancer extension, you can follow these steps:
+To build the YouTube Enhancer extension from scratch, follow these steps. We'll start with installing the necessary dependencies:
 
-1. **Install Dependencies:** First, ensure that you have Node.js installed on your system. Then, open your terminal and navigate to the project directory. Run the following command to install project dependencies:
+### 1. Install Required Software
 
-   ```bash
-   npm install
-   ```
+Before you begin, ensure you have the following software installed on your system:
 
-2. **Build the Extension:** Once the dependencies are installed, you can build the extension using the following command:
+- **Node.js and npm:** If you don't have Node.js and npm (Node Package Manager) installed, you can download and install them from the official website: [Node.js Downloads](https://nodejs.org/en/download/).
 
-   ```bash
-   npm run build
-   ```
+- **Git:** If you don't have Git installed, download and install it from [Git Downloads](https://git-scm.com/downloads).
 
-   This command will bundle your extension's code and assets into a 'dist' directory.
+### 2. Clone the Repository
 
-3. **Load the Extension:** After building, you can load the extension into your browser:
+Next, open your terminal (command prompt or shell) and navigate to the directory where you want to store the YouTube Enhancer extension project. Run the following command to clone the repository:
+
+```bash
+git clone https://github.com/VampireChicken12/youtube-enhancer.git
+```
+
+### 3. Navigate to the Project Directory
+
+Change your working directory to the project folder:
+
+```bash
+cd youtube-enhancer
+```
+
+### 4. Install Project Dependencies
+
+Inside the project folder, run the following command to install the required dependencies:
+
+```bash
+npm install
+```
+
+### 5. Build the Extension
+
+After the installation is complete, build the extension using the following command:
+
+```bash
+npm run build
+```
+
+This command will bundle the extension's code and assets into a 'dist' directory.
+
+### 6. Load the Extension
+
+Now that you've built the extension, you can load it into your browser for testing:
 
    - **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
    - **Brave:** Open Chrome and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
 
-4. **Test the Extension:** Your extension should now be loaded. Test it on YouTube to ensure it functions as expected.
+### 7. Test the Extension
 
-That's it! You've successfully built the YouTube Enhancer extension.
+Your extension should now be loaded. Test it on YouTube to ensure it functions as expected.
+
+That's it! You've successfully built the YouTube Enhancer extension from scratch.
 
 ## Configuration
 
