@@ -158,7 +158,7 @@ async function promptUserToResumeVideo(timestamp: number) {
 	const prompt = document.getElementById("resume-prompt") ?? document.createElement("div");
 	// Check if the prompt progressbar already exists
 	const progressBar = document.getElementById("resume-prompt-progressbar") ?? document.createElement("div");
-	const progressBarDuration = 300;
+	const progressBarDuration = 15;
 	// Create a countdown timer
 	let countdown = progressBarDuration; // Countdown in seconds
 	const countdownInterval = setInterval(() => {
