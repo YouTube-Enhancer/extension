@@ -11,6 +11,7 @@ export const defaultConfiguration = {
 	enable_volume_boost: false,
 	enable_screenshot_button: false,
 	enable_maximize_player_button: false,
+	enable_video_history: false,
 	screenshot_save_as: "file",
 	screenshot_format: "png",
 	// Images
