@@ -31,6 +31,7 @@ export type configuration = {
 	enable_volume_boost: boolean;
 	enable_screenshot_button: boolean;
 	enable_maximize_player_button: boolean;
+	enable_video_history: boolean;
 	screenshot_save_as: ScreenshotType;
 	screenshot_format: ScreenshotFormat;
 	osd_display_color: OnScreenDisplayColor;
@@ -51,6 +52,13 @@ type AddUnderscoreDefault<T> = { [K in keyof T as AppendUnderscoreDefault<K>]: T
 export type configurationWithDefaults = configuration & AddUnderscoreDefault<configuration>;
 
 export type Source = "extension" | "content_script";
+export type VideoHistoryStatus = "watched" | "watching";
+export type VideoHistoryEntry = {
+	id: string;
+	timestamp: number;
+	status: VideoHistoryStatus;
+};
+export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
 
 export type BaseData<T extends MessageTypes> = {
 	source: Source;
@@ -82,13 +90,26 @@ export type MaximizePlayerButtonChangeData = {
 	type: "maximizePlayerButtonChange";
 	maximizePlayerButtonEnabled: boolean;
 };
+export type VideoHistoryChangeData = {
+	type: "videoHistoryChange";
+	videoHistoryEnabled: boolean;
+};
 export type MessageTypes =
 	| OptionsData["type"]
 	| SetVolumeData["type"]
 	| VolumeBoostChangeData["type"]
 	| PlayerSpeedChangeData["type"]
 	| ScreenshotButtonChangeData["type"]
-	| MaximizePlayerButtonChangeData["type"];
+	| MaximizePlayerButtonChangeData["type"]
+	| VideoHistoryChangeData["type"];
 export type MessageData<T extends MessageTypes> = BaseData<T> &
-	(OptionsData | SetVolumeData | VolumeBoostChangeData | PlayerSpeedChangeData | ScreenshotButtonChangeData | MaximizePlayerButtonChangeData);
+	(
+		| OptionsData
+		| SetVolumeData
+		| VolumeBoostChangeData
+		| PlayerSpeedChangeData
+		| ScreenshotButtonChangeData
+		| MaximizePlayerButtonChangeData
+		| VideoHistoryChangeData
+	);
 export type AllMessageData = MessageData<MessageTypes>;

@@ -180,6 +180,14 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 					maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
 				});
 			}
+		},
+		enable_video_history: () => {
+			if (Object.prototype.hasOwnProperty.call(castedChanges, "enable_video_history") && castedChanges.enable_video_history.newValue !== undefined) {
+				sendMessage("videoHistoryChange", {
+					source: "extension",
+					videoHistoryEnabled: castedChanges.enable_video_history.newValue
+				});
+			}
 		}
 	};
 	Object.entries(

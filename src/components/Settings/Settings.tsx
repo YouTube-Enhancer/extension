@@ -230,6 +230,18 @@ export default function Settings({
 							onChange={setCheckboxOption("enable_maximize_player_button")}
 						/>
 					</div>
+					<div
+						className="mx-2 mb-1"
+						title="Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
+					>
+						<Checkbox
+							id="enable_video_history"
+							title="Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
+							label="Enable video history"
+							checked={settings.enable_video_history.toString() === "true"}
+							onChange={setCheckboxOption("enable_video_history")}
+						/>
+					</div>
 				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Scroll wheel volume control settings</legend>
