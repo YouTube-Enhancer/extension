@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.0...v1.1.0) (2023-08-29)
+
+
+### Features
+
+* **testing release:** Testing auto release ([408f15e](https://github.com/VampireChicken12/youtube-enhancer/commit/408f15e1bf55007ce9d43ce0f3be51861182b625))
+
 # 1.0.0 (2023-08-29)
 
 
