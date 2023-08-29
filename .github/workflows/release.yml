@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Extension
+        run: npm run build
+        working-directory: ${{github.workspace}}
+
+      - name: Run Semantic Release
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: npx semantic-release
+      - name: Update package.json Version
+        run: |
+          # Install Semantic Release and extract the new version
+          new_version=$(npx semantic-release --dry-run | grep -oP 'The next release version is \K\d+\.\d+\.\d+')' > new_version.txt)
+
+          if [ -z "$new_version" ]; then
+          echo "Failed to extract the new version from Semantic Release output."
+          exit 1
+          fi
+
+          # Use npm version to update the package.json
+          npm version $new_version -m "chore(release): %s"
+
+          # Push the changes back to the repository
+          git push --follow-tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{github.workspace}}
