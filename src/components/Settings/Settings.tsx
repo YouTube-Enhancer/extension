@@ -450,8 +450,6 @@ export default function Settings({
 						onClick={saveOptions}
 					/>
 				</div>
-
-				{/* <!-- TODO: Animate --> */}
 				<div id="notifications" ref={parentRef}>
 					{notifications.map((notification, index) => (
 						<div

@@ -5,6 +5,7 @@ import makeManifest from "./src/utils/plugins/make-manifest";
 import buildContentScript from "./src/utils/plugins/build-content-script";
 import { outputFolderName } from "./src/utils/constants";
 import { existsSync, readdirSync, rmSync, statSync } from "fs";
+import makeReleaseZip from "./src/utils/plugins/make-release-zip";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");
@@ -42,7 +43,7 @@ export default function build() {
 				"@/hooks": hooksDir
 			}
 		},
-		plugins: [react(), makeManifest(), buildContentScript()],
+		plugins: [react(), makeManifest(), buildContentScript(), makeReleaseZip()],
 		publicDir,
 		build: {
 			outDir,
