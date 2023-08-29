@@ -8,7 +8,7 @@ module.exports = {
 			{
 				assets: [
 					{
-						path: "releases/youtube-enhancer-v${nextRelease.version}.zip",
+						path: "releases/youtube-enhancer-${nextRelease.gitTag}.zip",
 						label: "Release ${nextRelease.version}"
 					}
 				]
