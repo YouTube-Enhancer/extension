@@ -117,7 +117,7 @@ async function setupVideoHistory() {
 	if (!videoElement) return;
 
 	const { [videoId]: videoHistory } = getVideoHistory();
-	if (videoHistory) {
+	if (videoHistory && videoHistory.status === "watching" && videoHistory.timestamp > 0) {
 		promptUserToResumeVideo(videoHistory.timestamp);
 	}
 
@@ -143,8 +143,6 @@ async function setupVideoHistory() {
 	]);
 }
 async function promptUserToResumeVideo(timestamp: number) {
-	browserColorLog(`Timestamp at time of call: ${timestamp}`);
-
 	// Get the player container element
 	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
 
@@ -221,8 +219,6 @@ async function promptUserToResumeVideo(timestamp: number) {
 			// Hide the prompt and clear the countdown timer
 			clearInterval(countdownInterval);
 			prompt.style.display = "none";
-
-			browserColorLog(`Timestamp at time of resume: ${timestamp}`);
 			browserColorLog(`Resuming video`, "FgGreen");
 			playerContainer.seekTo(timestamp, true);
 		});
@@ -254,30 +250,19 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		if (!options) return;
 		const { screenshot_save_as, screenshot_format } = options;
 		const format = `image/${screenshot_format}`;
+
 		const dataUrl = canvas.toDataURL(format);
-		const [, base64Data] = dataUrl.split(",");
-		const byteCharacters = atob(base64Data);
-		const byteArrays = [];
 
-		for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-			const slice = byteCharacters.slice(offset, offset + 1024);
-			const byteNumbers = new Array(slice.length);
-			for (let i = 0; i < slice.length; i++) {
-				byteNumbers[i] = slice.charCodeAt(i);
-			}
-			const byteArray = new Uint8Array(byteNumbers);
-			byteArrays.push(byteArray);
-		}
-
-		const blob = new Blob(byteArrays, { type: format });
+		const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+		if (!blob) return;
 
 		switch (screenshot_save_as) {
 			case "clipboard": {
 				const screenshotTooltip = document.querySelector("div#yte-screenshot-tooltip");
 				if (screenshotTooltip) {
-					// TODO: figure out why copying more than one screenshot to the clipboard doesn't work (It currently overwrites the last screenshot in the clipboard)
-					// TODO: figure out why copying a screenshot to the clipboard doesn't work
-					navigator.clipboard.write([new ClipboardItem({ [format]: blob })]);
+					const clipboardImage = new ClipboardItem({ "image/png": blob });
+					navigator.clipboard.write([clipboardImage]);
+					navigator.clipboard.writeText(dataUrl);
 					screenshotTooltip.textContent = "Screenshot copied to clipboard";
 				}
 				break;
@@ -708,7 +693,7 @@ async function addMaximizePlayerButton(): Promise<void> {
 		}
 	}
 	function seekBarMouseEnterListener(event: MouseEvent) {
-		// TODO: get the seek preview to be in the correct place when the video is maximizedArse
+		// TODO: get the seek preview to be in the correct place when the video is maximized
 		const tooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
 		if (!tooltip) return;
 		// Get the video element
@@ -979,10 +964,6 @@ async function setPlayerSpeed(options?: { playerSpeed?: number; enableForcedPlay
 async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-
-	// Log the message indicating target nodes found
-	browserColorLog("Target nodes found", "FgMagenta");
-	console.log(`[YouTube Enhancer]`, ...containerSelectors);
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = async (event: Event) => {
