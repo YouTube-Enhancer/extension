@@ -6,38 +6,7 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.set-version.outputs.version }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Set Version
-        id: set-version
-        run: |
-          version=$(node -pe "require('./package.json').version")
-
-      - name: Build Extension
-        run: npm run build
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-artifact
-          path: releases/youtube-enhancer-v$(version).zip
-  release:
-    needs: build
+  build-and-release:
     runs-on: ubuntu-latest
     permissions: write-all
 
@@ -53,11 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: release-artifact
-          path: releases/
+      - name: Build Extension
+        run: npm run build
 
       - name: Run Semantic Release
         env:
