@@ -117,6 +117,7 @@ async function setupVideoHistory() {
 	if (!videoElement) return;
 
 	const { [videoId]: videoHistory } = getVideoHistory();
+	// TODO: Make prompt to resume not appear on video the user just started watching
 	if (videoHistory && videoHistory.status === "watching" && videoHistory.timestamp > 0) {
 		promptUserToResumeVideo(videoHistory.timestamp);
 	}
