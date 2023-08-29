@@ -514,7 +514,7 @@
     p-filter "^3.0.0"
     url-join "^5.0.0"
 
-"@semantic-release/npm@^10.0.2":
+"@semantic-release/npm@^10.0.2", "@semantic-release/npm@^10.0.5":
   version "10.0.5"
   resolved "https://registry.npmjs.org/@semantic-release/npm/-/npm-10.0.5.tgz"
   integrity sha512-cJnQ2M5pxJRwZEkb0A/+U3TG4UNmjrrLwV2PxJKljn5OPT0yJB8GzGgWbbKACayvxrT06YdTa4Amtq/piJcOIA==

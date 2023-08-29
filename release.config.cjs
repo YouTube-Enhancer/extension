@@ -3,13 +3,14 @@ module.exports = {
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
 		"@semantic-release/changelog",
+		"@semantic-release/npm",
 		[
 			"@semantic-release/github",
 			{
 				assets: [
 					{
-						path: "releases/youtube-enhancer-${nextRelease.gitTag}.zip",
-						label: "Release ${nextRelease.version}"
+						path: "releases/youtube-enhancer-v${nextRelease.version}.zip",
+						name: "youtube-enhancer-v${nextRelease.version}.zip"
 					}
 				]
 			}
