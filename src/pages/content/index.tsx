@@ -17,6 +17,7 @@ import { browserColorLog, chooseClosetQuality, clamp, round, toDivisible } from 
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
 // TODO: Fix double running of code from video reloading when page first loads
+
 type ListenerObject = { listenerType: string; element: Element; listener: EventListener };
 
 const alwaysShowProgressBar = async function () {
