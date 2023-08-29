@@ -20,7 +20,6 @@
 	"type": "module",
 	"dependencies": {
 		"@formkit/auto-animate": "^0.7.0",
-		"archiver": "^6.0.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"vite-plugin-css-injected-by-js": "^3.1.1",
@@ -42,6 +41,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.49.0",
 		"@typescript-eslint/parser": "^5.49.0",
 		"@vitejs/plugin-react-swc": "^3.0.1",
+		"archiver": "^6.0.0",
 		"autoprefixer": "^10.4.13",
 		"eslint": "^8.32.0",
 		"eslint-config-prettier": "^8.8.0",
