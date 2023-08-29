@@ -22,7 +22,36 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build Extension
+        run: npm run build
+        # Add any other build-related commands if necessary
+
       - name: Run Semantic Release
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: npx semantic-release
+
+      - name: Upload Extension ZIP to Release
+        id: upload-zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: extension-zip
+          path: releases/youtube-enhancer-v${{ steps.upload-version.outputs.version }}.zip
+
+      - name: Get Release ID
+        id: get-release-id
+        run: echo "::set-output name=release_id::$(curl -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' -s https://api.github.com/repos/${{ github.repository }}/releases/tags/v${{ steps.upload-version.outputs.version }} | jq -r '.id')"
+
+      - name: Download Extension ZIP
+        uses: actions/download-artifact@v2
+        with:
+          name: extension-zip
+          path: downloads
+
+      - name: Upload Extension ZIP to Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/zip" \
+            --data-binary "@downloads/youtube-enhancer-v${{ steps.upload-version.outputs.version }}.zip" \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/${{ steps.get-release-id.outputs.release_id }}/assets?name=youtube-enhancer-v${{ steps.upload-version.outputs.version }}.zip"
