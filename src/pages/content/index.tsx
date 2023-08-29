@@ -10,12 +10,15 @@ import {
 	YoutubePlayerQualityLabel,
 	YoutubePlayerQualityLevel
 } from "@/src/types";
+
+import { YoutubePlayerQualityLabels, YoutubePlayerQualityLevels } from "../../utils/constants";
+import { browserColorLog, chooseClosetQuality, clamp, round, toDivisible } from "../../utils/utilities";
+
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
 // TODO: Fix double running of code from video reloading when page first loads
 type ListenerObject = { listenerType: string; element: Element; listener: EventListener };
 
-import { browserColorLog, chooseClosetQuality, clamp, round, toDivisible } from "../../utils/utilities";
 const alwaysShowProgressBar = async function () {
 	const player = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
 	if (!player) return;
@@ -54,7 +57,6 @@ const alwaysShowProgressBar = async function () {
 	progressLoad += progressWidth;
 };
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
-import { YoutubePlayerQualityLabels, YoutubePlayerQualityLevels } from "../../utils/constants";
 const eventListeners = new Map<string, ListenerObject[]>();
 type Selector = string;
 type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
