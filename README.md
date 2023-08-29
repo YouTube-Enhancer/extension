@@ -120,8 +120,8 @@ This command will bundle the extension's code and assets into a 'dist' directory
 
 Now that you've built the extension, you can load it into your browser for testing:
 
-   - **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
-   - **Brave:** Open Chrome and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
+- **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
+- **Brave:** Open Chrome and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
 
 ### 7. Test the Extension
 
