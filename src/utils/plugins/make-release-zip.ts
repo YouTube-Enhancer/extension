@@ -1,10 +1,11 @@
+import archiver from "archiver";
 import * as fs from "fs";
 import * as path from "path";
-import colorLog from "../log";
-import pkg from "../../../package.json";
 import { PluginOption } from "vite";
-import archiver from "archiver";
+
+import pkg from "../../../package.json";
 import { outputFolderName } from "../constants";
+import colorLog from "../log";
 
 const { resolve } = path;
 
