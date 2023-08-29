@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.1.0...v1.2.0) (2023-08-29)
+
+
+### Features
+
+* **upload release zip:** hopefully this works ([510b2fe](https://github.com/VampireChicken12/youtube-enhancer/commit/510b2fe4d8dc0f119121d7adeb963a2d9e82084b))
+
 # [1.1.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.0...v1.1.0) (2023-08-29)
 
 
