@@ -33,8 +33,12 @@ jobs:
       - name: Update package.json Version
         run: |
           # Install Semantic Release and extract the new version
-          new_version=$(npx semantic-release --dry-run | grep -oP 'The next release version is \K\d+\.\d+\.\d+')' > new_version.txt)
-
+          semantic_release_output=$(npx semantic-release --dry-run)
+          no_new_version=$(semantic_release_output | grep -oP "There are no relevant changes, so no new version is released")
+          new_version=$(semantic_release_output | grep -oP 'The next release version is \K\d+\.\d+\.\d+')' > new_version.txt)
+          if [ -z "$no_new_version" ]; then
+          echo "No new version is released"
+          exit 1
           if [ -z "$new_version" ]; then
           echo "Failed to extract the new version from Semantic Release output."
           exit 1
