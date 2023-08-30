@@ -39,7 +39,7 @@ jobs:
 
           if [ -n "$no_new_version" ]; then
             echo "No new version is released"
-            exit 1
+            exit
           fi
 
           if [ -z "$new_version" ]; then
