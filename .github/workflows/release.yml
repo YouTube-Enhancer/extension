@@ -9,7 +9,7 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions: write-all
-
+    # TODO: update package json version then build then run semantic release
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
