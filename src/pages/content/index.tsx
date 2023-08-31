@@ -13,7 +13,82 @@ import {
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
 // TODO: Fix double running of code from video reloading when page first loads
-type ListenerObject = { listenerType: string; element: Element; listener: EventListener };
+
+// Centralized Event Manager
+type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
+
+interface EventListenerInfo<K extends keyof ElementEventMap> {
+	target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap];
+	eventName: K;
+	callback: EventCallback<K>;
+}
+
+type TargetedListeners<K extends keyof ElementEventMap> = Map<HTMLElementTagNameMap[keyof HTMLElementTagNameMap], EventListenerInfo<K>>;
+
+type EventManager = {
+	listeners: Map<string, TargetedListeners<keyof ElementEventMap>>;
+
+	addEventListener: <T extends keyof HTMLElementEventMap>(
+		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
+		eventName: T,
+		callback: EventCallback<keyof HTMLElementEventMap>,
+		featureName: string
+	) => void;
+
+	removeEventListener: <T extends keyof HTMLElementEventMap>(
+		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
+		eventName: T,
+		featureName: string
+	) => void;
+
+	removeEventListeners: (featureName: string) => void;
+
+	removeAllEventListeners: () => void;
+};
+
+const eventManager: EventManager = {
+	listeners: new Map(),
+
+	addEventListener: function (target, eventName, callback, featureName) {
+		const targetListeners = this.listeners.get(featureName) || new Map();
+		targetListeners.set(target, { eventName, callback });
+		this.listeners.set(featureName, targetListeners);
+		target.addEventListener(eventName, callback);
+	},
+
+	removeEventListener: function (target, eventName, featureName) {
+		const targetListeners = this.listeners.get(featureName);
+		if (targetListeners) {
+			const listenerInfo = targetListeners.get(target);
+			if (listenerInfo) {
+				target.removeEventListener(eventName, listenerInfo.callback);
+				targetListeners.delete(target);
+			}
+			if (targetListeners.size === 0) {
+				this.listeners.delete(featureName);
+			}
+		}
+	},
+
+	removeEventListeners: function (featureName) {
+		const targetListeners = this.listeners.get(featureName);
+		if (targetListeners) {
+			targetListeners.forEach(({ target, eventName, callback }) => {
+				target.removeEventListener(eventName, callback);
+			});
+			this.listeners.delete(featureName);
+		}
+	},
+
+	removeAllEventListeners: function () {
+		this.listeners.forEach((targetListeners) => {
+			targetListeners.forEach(({ target, eventName, callback }) => {
+				target.removeEventListener(eventName, callback);
+			});
+		});
+		this.listeners.clear();
+	}
+};
 
 import { browserColorLog, chooseClosetQuality, clamp, round, toDivisible } from "../../utils/utilities";
 const alwaysShowProgressBar = async function () {
@@ -55,7 +130,6 @@ const alwaysShowProgressBar = async function () {
 };
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
 import { YoutubePlayerQualityLabels, YoutubePlayerQualityLevels } from "../../utils/constants";
-const eventListeners = new Map<string, ListenerObject[]>();
 type Selector = string;
 type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 /**
@@ -135,12 +209,7 @@ async function setupVideoHistory() {
 			}
 		}
 	};
-	const existingVideoListeners = eventListeners.get("video") ?? [];
-	videoElement.addEventListener("timeupdate", videoPlayerTimeUpdateListener);
-	eventListeners.set("video", [
-		...existingVideoListeners,
-		{ element: videoElement, listener: videoPlayerTimeUpdateListener, listenerType: "timeupdate" }
-	]);
+	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }
 async function promptUserToResumeVideo(timestamp: number) {
 	// Get the player container element
@@ -214,14 +283,14 @@ async function promptUserToResumeVideo(timestamp: number) {
 		resumeButton.style.textAlign = "center";
 		resumeButton.style.verticalAlign = "middle";
 		resumeButton.style.transition = "all 0.5s ease-in-out";
-		// Resume button click event
-		resumeButton.addEventListener("click", () => {
+		const resumeButtonClickListener = () => {
 			// Hide the prompt and clear the countdown timer
 			clearInterval(countdownInterval);
 			prompt.style.display = "none";
 			browserColorLog(`Resuming video`, "FgGreen");
 			playerContainer.seekTo(timestamp, true);
-		});
+		};
+		eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 
 		prompt.appendChild(resumeButton);
 	}
@@ -359,19 +428,16 @@ async function addScreenshotButton(): Promise<void> {
 		tooltip.textContent = title ?? "Screenshot";
 		function mouseLeaveListener() {
 			tooltip.remove();
-			screenshotButton.removeEventListener("mouseleave", mouseLeaveListener);
+			eventManager.removeEventListener(screenshotButton, "mouseleave", "screenshotButton");
 		}
-		screenshotButton.addEventListener("mouseleave", mouseLeaveListener);
+		eventManager.addEventListener(screenshotButton, "mouseleave", mouseLeaveListener, "screenshotButton");
 		document.body.appendChild(tooltip);
 	}
-	// Add the screenshot button listener to the event listeners map
-	eventListeners.set("button", [{ element: screenshotButton, listener: screenshotButtonClickListener, listenerType: "button" }]);
-	// Add the screenshot button hover listener to the event listeners map
-	eventListeners.set("button", [{ element: screenshotButton, listener: screenshotButtonMouseOverListener, listenerType: "mouseover" }]);
+
 	// Append the screenshot button to before the volume control element
 	volumeControl.before(screenshotButton);
-	screenshotButton.addEventListener("click", screenshotButtonClickListener);
-	screenshotButton.addEventListener("mouseover", screenshotButtonMouseOverListener);
+	eventManager.addEventListener(screenshotButton, "click", screenshotButtonClickListener, "screenshotButton");
+	eventManager.addEventListener(screenshotButton, "mouseover", screenshotButtonMouseOverListener, "screenshotButton");
 }
 async function removeScreenshotButton(): Promise<void> {
 	// Try to get the existing screenshot button element
@@ -380,6 +446,7 @@ async function removeScreenshotButton(): Promise<void> {
 	if (!screenshotButton) return;
 	// Remove the screenshot button element
 	screenshotButton.remove();
+	eventManager.removeEventListeners("screenshotButton");
 }
 function makeMaximizeSVG(): SVGElement {
 	const maximizeSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -553,12 +620,7 @@ function setupVideoPlayerTimeUpdate() {
 	const videoPlayerTimeUpdateListener = () => {
 		updateProgressBarPositions();
 	};
-	const existingVideoListeners = eventListeners.get("video") ?? [];
-	videoElement.addEventListener("timeupdate", videoPlayerTimeUpdateListener);
-	eventListeners.set("video", [
-		...existingVideoListeners,
-		{ element: videoElement, listener: videoPlayerTimeUpdateListener, listenerType: "timeupdate" }
-	]);
+	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "maximizePlayerButton");
 }
 async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
@@ -611,29 +673,18 @@ async function addMaximizePlayerButton(): Promise<void> {
 		tooltip.textContent = title ?? "Maximize Player";
 		function mouseLeaveListener() {
 			tooltip.remove();
-			maximizePlayerButton.removeEventListener("mouseleave", mouseLeaveListener);
+			eventManager.addEventListener(maximizePlayerButton, "mouseleave", mouseLeaveListener, "maximizePlayerButton");
 		}
-		maximizePlayerButton.addEventListener("mouseleave", mouseLeaveListener);
+		eventManager.addEventListener(maximizePlayerButton, "mouseleave", mouseLeaveListener, "maximizePlayerButton");
 		document.body.appendChild(tooltip);
 	}
-	const existingButtonListeners = eventListeners.get("button") ?? [];
-	// Add the maximize player button listener to the event listeners map
-	eventListeners.set("button", [
-		...existingButtonListeners,
-		{ element: maximizePlayerButton, listener: maximizePlayerButtonClickListener, listenerType: "click" }
-	]);
-	// Add the maximize player button hover listener to the event listeners map
-	eventListeners.set("button", [
-		...existingButtonListeners,
-		{ element: maximizePlayerButton, listener: maximizePlayerButtonMouseOverListener, listenerType: "mouseover" }
-	]);
 	// Append the maximize player button to before the volume control element
 	sizeButton.before(maximizePlayerButton);
-	maximizePlayerButton.addEventListener("click", maximizePlayerButtonClickListener);
-	maximizePlayerButton.addEventListener("mouseover", maximizePlayerButtonMouseOverListener);
-	const pipElement = document.querySelector("button.ytp-pip-button");
-	const sizeElement = document.querySelector("button.ytp-size-button");
-	const miniPlayerElement = document.querySelector("button.ytp-miniplayer-button");
+	eventManager.addEventListener(maximizePlayerButton, "click", maximizePlayerButtonClickListener, "maximizePlayerButton");
+	eventManager.addEventListener(maximizePlayerButton, "mouseover", maximizePlayerButtonMouseOverListener, "maximizePlayerButton");
+	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
+	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
+	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
 	function otherElementClickListener() {
 		// Get the video element
 		const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
@@ -718,19 +769,13 @@ async function addMaximizePlayerButton(): Promise<void> {
 	}
 
 	if (pipElement) {
-		pipElement.addEventListener("click", otherElementClickListener);
-		eventListeners.set("button", [...existingButtonListeners, { element: pipElement, listener: otherElementClickListener, listenerType: "click" }]);
+		eventManager.addEventListener(pipElement, "click", otherElementClickListener, "maximizePlayerButton");
 	}
 	if (sizeElement) {
-		sizeElement.addEventListener("click", otherElementClickListener);
-		eventListeners.set("button", [...existingButtonListeners, { element: sizeElement, listener: otherElementClickListener, listenerType: "click" }]);
+		eventManager.addEventListener(sizeElement, "click", otherElementClickListener, "maximizePlayerButton");
 	}
 	if (miniPlayerElement) {
-		miniPlayerElement.addEventListener("click", otherElementClickListener);
-		eventListeners.set("button", [
-			...existingButtonListeners,
-			{ element: miniPlayerElement, listener: otherElementClickListener, listenerType: "click" }
-		]);
+		eventManager.addEventListener(miniPlayerElement, "click", otherElementClickListener, "maximizePlayerButton");
 	}
 	const typLeftButtons = [
 		...(document.querySelectorAll(
@@ -741,30 +786,22 @@ async function addMaximizePlayerButton(): Promise<void> {
 	const seekBarContainer = document.querySelector("div.ytp-chrome-bottom > div.ytp-progress-bar") as HTMLDivElement | null;
 	if (!seekBarContainer) return;
 	if (volumePanel) typLeftButtons.push(volumePanel);
-	const existingDivListeners = eventListeners.get("div");
-	seekBarContainer.addEventListener("mouseenter", seekBarMouseEnterListener);
-	eventListeners.set("div", [
-		...(existingDivListeners ?? []),
-		{ element: seekBarContainer, listener: seekBarMouseEnterListener as EventListener, listenerType: "mouseenter" }
-	]);
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore TODO: figure out the proper type for this
+	eventManager.addEventListener(seekBarContainer, "mouseenter", seekBarMouseEnterListener, "maximizePlayerButton");
+
 	const typRightButtons = document.querySelectorAll(
 		"div.ytp-chrome-controls > div.ytp-right-controls > :not(.yte-maximized-player-button)"
 	) as NodeListOf<HTMLButtonElement>;
 	typLeftButtons.forEach((button) => {
-		const existingButtonListeners = eventListeners.get("button") ?? [];
-		button.addEventListener("mouseenter", ytpLeftButtonMouseEnterListener);
-		eventListeners.set("button", [
-			...existingButtonListeners,
-			{ element: button, listener: ytpLeftButtonMouseEnterListener as EventListener, listenerType: "mouseenter" }
-		]);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore TODO: figure out the proper type for this
+		eventManager.addEventListener(button, "mouseenter", ytpLeftButtonMouseEnterListener, "maximizePlayerButton");
 	});
 	typRightButtons.forEach((button) => {
-		const existingButtonListeners = eventListeners.get("button") ?? [];
-		button.addEventListener("mouseenter", ytpRightButtonMouseEnterListener);
-		eventListeners.set("button", [
-			...(existingButtonListeners ?? []),
-			{ element: button, listener: ytpRightButtonMouseEnterListener as EventListener, listenerType: "mouseenter" }
-		]);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore TODO: figure out the proper type for this
+		eventManager.addEventListener(button, "mouseenter", ytpRightButtonMouseEnterListener, "maximizePlayerButton");
 	});
 }
 async function removeMaximizePlayerButton(): Promise<void> {
@@ -774,6 +811,7 @@ async function removeMaximizePlayerButton(): Promise<void> {
 	if (!maximizePlayerButton) return;
 	// Remove the maximize player button element
 	maximizePlayerButton.remove();
+	eventManager.removeEventListeners("maximizePlayerButton");
 }
 /**
  * Sets the remembered volume based on the options received from a specific message.
@@ -1123,8 +1161,8 @@ window.onload = function () {
 	volumeBoost();
 	adjustVolumeOnScrollWheel();
 	setupVideoHistory();
-	document.addEventListener("yt-navigate-finish", () => {
-		cleanUpListeners([...Object.values(eventListeners)], "all");
+	const enableFeatures = () => {
+		eventManager.removeAllEventListeners();
 		addScreenshotButton();
 		addMaximizePlayerButton();
 		setRememberedVolume();
@@ -1133,7 +1171,8 @@ window.onload = function () {
 		volumeBoost();
 		adjustVolumeOnScrollWheel();
 		setupVideoHistory();
-	});
+	};
+	document.addEventListener("yt-navigate-finish", enableFeatures);
 	/**
 	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 	 *
@@ -1228,7 +1267,7 @@ window.onload = function () {
 				if (videoHistoryEnabled) {
 					setupVideoHistory();
 				} else {
-					cleanUpListeners([...Object.values(eventListeners)], "video");
+					eventManager.removeEventListeners("videoHistory");
 				}
 				break;
 			}
@@ -1236,7 +1275,7 @@ window.onload = function () {
 	});
 };
 window.onbeforeunload = function () {
-	cleanUpListeners([...Object.values(eventListeners)], "all");
+	eventManager.removeAllEventListeners();
 	element.remove();
 };
 /**
@@ -1290,22 +1329,6 @@ function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 	});
 }
 // #region Listener functions
-
-/**
- * Clean up event listeners by removing them from the specified elements.
- *
- * @param {ListenerObject[]} listeners - The array of listener objects to clean up.
- * @param {("all" | Omit<string, "all">)} targetListenerType - The type of event listener to clean up.
- */
-async function cleanUpListeners(listeners: ListenerObject[], targetListenerType: "all" | Omit<string, "all">) {
-	for (const { element, listener, listenerType } of targetListenerType === "all"
-		? listeners
-		: listeners.filter(({ listenerType: type }) => type === targetListenerType)) {
-		// Remove the event listener from the element
-		element.removeEventListener(listenerType, listener);
-	}
-}
-
 /**
  * Set up event listeners for the specified element.
  *
@@ -1313,7 +1336,7 @@ async function cleanUpListeners(listeners: ListenerObject[], targetListenerType:
  * @param listener - The event listener function.
  */
 function setupListeners(selector: Selector, handleWheel: (event: Event) => void) {
-	const elements = document.querySelectorAll(selector);
+	const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
 	if (!elements.length) return browserColorLog(`No elements found with selector ${selector}`, "FgRed");
 	for (const element of elements) {
 		const mouseWheelListener = (e: Event) => {
@@ -1323,10 +1346,7 @@ function setupListeners(selector: Selector, handleWheel: (event: Event) => void)
 			e.stopImmediatePropagation();
 			handleWheel(e);
 		};
-		element.addEventListener("wheel", mouseWheelListener, { passive: false });
-		if (!eventListeners.has(selector)) eventListeners.set(selector, []);
-		const existingListeners = eventListeners.get(selector);
-		if (existingListeners) eventListeners.set(selector, [...existingListeners, { element, listener: mouseWheelListener, listenerType: "wheel" }]);
+		eventManager.addEventListener(element, "wheel", mouseWheelListener, "scrollWheelVolumeControl");
 	}
 }
 // #endregion Listener functions
