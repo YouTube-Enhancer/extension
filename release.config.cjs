@@ -20,6 +20,12 @@ module.exports = {
 				assets: ["CHANGELOG.md", "package.json", "package-lock.json"],
 				message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
 			}
+		],
+		[
+			"@semantic-release/exec",
+			{
+				successCmd: 'npm version ${nextRelease.version} -m "chore(release): ${nextRelease.version}"'
+			}
 		]
 	],
 	preset: "angular",
