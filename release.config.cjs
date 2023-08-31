@@ -24,7 +24,7 @@ module.exports = {
 		[
 			"@semantic-release/exec",
 			{
-				successCmd: 'npm version ${nextRelease.version} -m "chore(release): ${nextRelease.version}"'
+				verifyReleaseCmd: 'npm version ${nextRelease.version} -m "chore(release): ${nextRelease.version}";npm run build'
 			}
 		]
 	],
