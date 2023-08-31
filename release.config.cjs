@@ -24,7 +24,7 @@ module.exports = {
 		[
 			"@semantic-release/exec",
 			{
-				verifyReleaseCmd: 'npm version ${nextRelease.version} -m "chore(release): ${nextRelease.version}";npm run build'
+				verifyReleaseCmd: "node -e \"const packageJson = require('./package.json');packageJson.version=${nextRelease.version}\";npm run build"
 			}
 		]
 	],
