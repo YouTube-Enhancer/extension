@@ -9,7 +9,6 @@ jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions: write-all
-    # TODO: update package json version then build then run semantic release
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,14 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Extension
-        run: npm run build
-        working-directory: ${{github.workspace}}
-
-      - name: Run Semantic Release
-        env:
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: npx semantic-release
       - name: Update package.json Version
         run: |
           # Install Semantic Release and extract the new version
@@ -55,3 +46,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{github.workspace}}
+
+      - name: Build Extension
+        run: npm run build
+        working-directory: ${{github.workspace}}
+
+      - name: Run Semantic Release
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: npx semantic-release
