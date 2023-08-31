@@ -12,6 +12,7 @@ import {
 } from "@/src/types";
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
+// TODO: Fix double running of code from video reloading when page first loads
 
 // Centralized Event Manager
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
@@ -1152,7 +1153,14 @@ function sendMessage<T extends MessageTypes>(eventType: T, data: Omit<MessageDat
 }
 // #endregion Intercommunication functions
 window.onload = function () {
+	addScreenshotButton();
+	addMaximizePlayerButton();
 	setRememberedVolume();
+	setPlayerQuality();
+	setPlayerSpeed();
+	volumeBoost();
+	adjustVolumeOnScrollWheel();
+	setupVideoHistory();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners();
 		addScreenshotButton();
@@ -1164,7 +1172,7 @@ window.onload = function () {
 		adjustVolumeOnScrollWheel();
 		setupVideoHistory();
 	};
-	document.addEventListener("yt-player-updated", enableFeatures);
+	document.addEventListener("yt-navigate-finish", enableFeatures);
 	/**
 	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 	 *
