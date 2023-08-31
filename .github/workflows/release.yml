@@ -24,7 +24,7 @@ jobs:
       - name: Update package.json Version
         run: |
           # Install Semantic Release and extract the new version
-          semantic_release_output=$(npx semantic-release --dry-run 2>&1)
+          semantic_release_output=$(npx semantic-release --dry-run)
           semantic_release_exit_code=$?
           echo "Semantic Release exit code: $semantic_release_exit_code"
 
