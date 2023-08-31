@@ -23,6 +23,7 @@ jobs:
 
       - name: Update package.json Version
         run: |
+          set -x
           # Install Semantic Release and extract the new version
           semantic_release_output=$(npx semantic-release --dry-run)
           no_new_version=$(echo "$semantic_release_output" | grep -oP "There are no relevant changes, so no new version is released")
@@ -30,7 +31,7 @@ jobs:
 
           if [ -n "$no_new_version" ]; then
             echo "No new version is released"
-            exit
+            exit 0
           fi
 
           if [ -z "$new_version" ]; then
