@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-release:
@@ -20,8 +21,13 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run Semantic Release
-        env:
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Release on Main Branch
+        if: github.ref == 'refs/heads/main'
         run: npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release on Dev Branch
+        if: github.ref == 'refs/heads/dev'
+        run: npx semantic-release --no-publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

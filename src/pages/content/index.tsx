@@ -12,9 +12,9 @@ import {
 } from "@/src/types";
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
-// TODO: Fix double running of code from video reloading when page first loads
 
 // Centralized Event Manager
+type FeatureName = "videoHistory" | "screenshotButton" | "maximizePlayerButton" | "scrollWheelVolumeControl";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
 interface EventListenerInfo<K extends keyof ElementEventMap> {
@@ -32,60 +32,80 @@ type EventManager = {
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
 		eventName: T,
 		callback: EventCallback<keyof HTMLElementEventMap>,
-		featureName: string
+		featureName: FeatureName
 	) => void;
 
 	removeEventListener: <T extends keyof HTMLElementEventMap>(
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
 		eventName: T,
-		featureName: string
+		featureName: FeatureName
 	) => void;
 
-	removeEventListeners: (featureName: string) => void;
+	removeEventListeners: (featureName: FeatureName) => void;
 
 	removeAllEventListeners: () => void;
 };
 
 const eventManager: EventManager = {
+	// Map of feature names to a map of targets to
+	// event listener info objects
 	listeners: new Map(),
 
+	// Adds an event listener for the given target, eventName, and featureName
 	addEventListener: function (target, eventName, callback, featureName) {
+		// Get the map of target listeners for the given featureName
 		const targetListeners = this.listeners.get(featureName) || new Map();
-		targetListeners.set(target, { eventName, callback });
+		// Store the event listener info object in the map
+		targetListeners.set(target, { eventName, callback, target });
+		// Store the map of target listeners for the given featureName
 		this.listeners.set(featureName, targetListeners);
+		// Add the event listener to the target
 		target.addEventListener(eventName, callback);
 	},
 
+	// Removes the event listener for the given target, eventName, and featureName
 	removeEventListener: function (target, eventName, featureName) {
+		// Get the map of target listeners for the given featureName
 		const targetListeners = this.listeners.get(featureName);
 		if (targetListeners) {
+			// Get the event listener info object for the given target
 			const listenerInfo = targetListeners.get(target);
 			if (listenerInfo) {
+				// Remove the event listener from the target
 				target.removeEventListener(eventName, listenerInfo.callback);
+				// Remove the event listener info object from the map
 				targetListeners.delete(target);
 			}
 			if (targetListeners.size === 0) {
+				// Remove the map of target listeners from the map
 				this.listeners.delete(featureName);
 			}
 		}
 	},
 
+	// Removes all event listeners for the given featureName
 	removeEventListeners: function (featureName) {
+		// Get the map of target listeners for the given featureName
 		const targetListeners = this.listeners.get(featureName);
 		if (targetListeners) {
+			// Remove all event listeners from their targets
 			targetListeners.forEach(({ target, eventName, callback }) => {
 				target.removeEventListener(eventName, callback);
 			});
+			// Remove the map of target listeners from the map
 			this.listeners.delete(featureName);
 		}
 	},
 
+	// Removes all event listeners
 	removeAllEventListeners: function () {
+		// Remove all event listeners from all targets
 		this.listeners.forEach((targetListeners) => {
 			targetListeners.forEach(({ target, eventName, callback }) => {
 				target.removeEventListener(eventName, callback);
 			});
 		});
+		// Remove all maps of target listeners from the map
 		this.listeners.clear();
 	}
 };
@@ -252,6 +272,14 @@ async function promptUserToResumeVideo(timestamp: number) {
 		progressBar.style.borderBottomLeftRadius = "5px";
 		prompt.appendChild(progressBar);
 	}
+	const resumeButtonClickListener = () => {
+		// Hide the prompt and clear the countdown timer
+		clearInterval(countdownInterval);
+		prompt.style.display = "none";
+		browserColorLog(`Resuming video`, "FgGreen");
+		playerContainer.seekTo(timestamp, true);
+	};
+	const resumeButton = document.createElement("button") ?? document.getElementById("resume-prompt-button");
 	// Create the prompt element if it doesn't exist
 	if (!document.getElementById("resume-prompt")) {
 		prompt.id = "resume-prompt";
@@ -266,11 +294,8 @@ async function promptUserToResumeVideo(timestamp: number) {
 		prompt.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.2)";
 		prompt.style.zIndex = "25000";
 		document.body.appendChild(prompt);
-
-		// Create a resume button
-		const resumeButton = document.createElement("button");
+		resumeButton.id = "resume-prompt-button";
 		resumeButton.textContent = "Resume";
-
 		resumeButton.style.backgroundColor = "hsl(213, 80%, 50%)";
 		resumeButton.style.border = "transparent";
 		resumeButton.style.color = "white";
@@ -283,45 +308,45 @@ async function promptUserToResumeVideo(timestamp: number) {
 		resumeButton.style.textAlign = "center";
 		resumeButton.style.verticalAlign = "middle";
 		resumeButton.style.transition = "all 0.5s ease-in-out";
-		const resumeButtonClickListener = () => {
-			// Hide the prompt and clear the countdown timer
-			clearInterval(countdownInterval);
-			prompt.style.display = "none";
-			browserColorLog(`Resuming video`, "FgGreen");
-			playerContainer.seekTo(timestamp, true);
-		};
-		eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 
 		prompt.appendChild(resumeButton);
 	}
+	if (document.getElementById("resume-prompt-button")) {
+		eventManager.removeEventListener(resumeButton, "click", "videoHistory");
+	}
+	eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 
 	// Display the prompt
 	prompt.style.display = "block";
 }
 
 // #endregion Video History
-// TODO: make sure listeners are cleaned up properly before re adding them
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
 // #region Main functions
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
+		// Create a canvas element and get its context
 		const canvas = document.createElement("canvas");
 		const context = canvas.getContext("2d");
+
+		// Set the dimensions of the canvas to the video's dimensions
 		const { videoWidth, videoHeight } = videoElement;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
-		if (!context) return;
 
+		// Draw the video element onto the canvas
+		if (!context) return;
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
+		// Wait for the options message and get the format from it
 		const { options } = await waitForSpecificMessage("options", { source: "content_script" });
 		if (!options) return;
 		const { screenshot_save_as, screenshot_format } = options;
 		const format = `image/${screenshot_format}`;
 
+		// Get the data URL of the canvas and create a blob from it
 		const dataUrl = canvas.toDataURL(format);
-
 		const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
 		if (!blob) return;
 
@@ -595,7 +620,7 @@ function maximizePlayer(maximizePlayerButton: HTMLButtonElement) {
 		maximizePlayerButton.appendChild(makeMinimizeSVG());
 	}
 }
-
+// TODO: get played progress bar to be accurate when maximized from default view
 // TODO: Add event listener that updates scrubber position when maximize button is clicked
 function updateProgressBarPositions() {
 	const seekBar = document.querySelector("div.ytp-progress-bar") as HTMLDivElement | null;
@@ -744,7 +769,7 @@ async function addMaximizePlayerButton(): Promise<void> {
 		}
 	}
 	function seekBarMouseEnterListener(event: MouseEvent) {
-		// TODO: get the seek preview to be in the correct place when the video is maximized
+		// TODO: get the seek preview to be in the correct place when the video is maximized from default view
 		const tooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
 		if (!tooltip) return;
 		// Get the video element
@@ -1076,16 +1101,30 @@ async function volumeBoost() {
 		browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
 		window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 	} else {
-		window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-		const source = window.audioCtx.createMediaElementSource(player as unknown as HTMLMediaElement);
-		const gainNode = window.audioCtx.createGain();
-		source.connect(gainNode);
-		gainNode.connect(window.audioCtx.destination);
-		window.gainNode = gainNode;
-		browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
-		gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
+		try {
+			window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			const source = window.audioCtx.createMediaElementSource(player as unknown as HTMLMediaElement);
+			const gainNode = window.audioCtx.createGain();
+			source.connect(gainNode);
+			gainNode.connect(window.audioCtx.destination);
+			window.gainNode = gainNode;
+			browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
+			gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
+		} catch (error) {
+			browserColorLog(`Failed to set volume boost: ${formatError(error)}`, "FgRed");
+		}
 	}
 }
+function formatError(error: unknown) {
+	return error instanceof Error
+		? `\n${error.stack}\n\n${error.message}`
+		: error instanceof Object
+		? Object.hasOwnProperty.call(error, "toString") && typeof error.toString === "function"
+			? error.toString()
+			: "unknown error"
+		: "";
+}
+
 // #endregion Main functions
 // #region Intercommunication functions
 /**
@@ -1153,14 +1192,7 @@ function sendMessage<T extends MessageTypes>(eventType: T, data: Omit<MessageDat
 }
 // #endregion Intercommunication functions
 window.onload = function () {
-	addScreenshotButton();
-	addMaximizePlayerButton();
 	setRememberedVolume();
-	setPlayerQuality();
-	setPlayerSpeed();
-	volumeBoost();
-	adjustVolumeOnScrollWheel();
-	setupVideoHistory();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners();
 		addScreenshotButton();
@@ -1172,7 +1204,7 @@ window.onload = function () {
 		adjustVolumeOnScrollWheel();
 		setupVideoHistory();
 	};
-	document.addEventListener("yt-navigate-finish", enableFeatures);
+	document.addEventListener("yt-player-updated", enableFeatures);
 	/**
 	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 	 *
@@ -1586,10 +1618,14 @@ function drawVolumeDisplay({
  * @returns {string|null} The first section of the URL path, or null if not found.
  */
 function extractFirstSectionFromYouTubeURL(url: string): string | null {
+	// Parse the URL into its components
 	const urlObj = new URL(url);
 	const { pathname: path } = urlObj;
+
+	// Split the path into an array of sections
 	const sections = path.split("/").filter((section) => section !== "");
 
+	// Return the first section, or null if not found
 	if (sections.length > 0) {
 		return sections[0];
 	}
@@ -1608,16 +1644,7 @@ function isShortsPage() {
 // Error handling
 window.addEventListener("error", (event) => {
 	event.preventDefault();
-	browserColorLog(
-		event.error instanceof Error
-			? event.error.message
-			: event.error instanceof Object
-			? Object.hasOwnProperty.call(event.error, "toString") && typeof event.error.toString === "function"
-				? event.error.toString()
-				: "unknown error"
-			: "",
-		"FgRed"
-	);
+	browserColorLog(formatError(event.error), "FgRed");
 });
 window.addEventListener("unhandledrejection", (event) => {
 	event.preventDefault();
