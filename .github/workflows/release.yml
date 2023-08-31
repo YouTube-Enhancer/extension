@@ -25,18 +25,18 @@ jobs:
         run: |
           set -x
           # Install Semantic Release and extract the new version
-          semantic_release_output=$(npx semantic-release --dry-run)
-          no_new_version=$(echo "$semantic_release_output" | grep -oP "There are no relevant changes, so no new version is released")
+          semantic_release_output=$(npx semantic-release --dry-run 2>&1)
+          no_new_version=$(echo "$semantic_release_output" | grep -o "There are no relevant changes, so no new version is released")
           new_version=$(echo "$semantic_release_output" | grep -oP 'The next release version is \K\d+\.\d+\.\d+')
 
           if [ -n "$no_new_version" ]; then
-            echo "No new version is released"
-            exit 0
+              echo "No new version is released"
+              exit 0
           fi
 
           if [ -z "$new_version" ]; then
-            echo "Failed to extract the new version from Semantic Release output."
-            exit 1
+              echo "Failed to extract the new version from Semantic Release output."
+              exit 1
           fi
 
           # Use npm version to update the package.json
