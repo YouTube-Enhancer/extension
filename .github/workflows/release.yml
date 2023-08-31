@@ -25,9 +25,15 @@ jobs:
         run: |
           # Install Semantic Release and extract the new version
           semantic_release_output=$(npx semantic-release --dry-run 2>&1)
+          semantic_release_exit_code=$?
+          echo "Semantic Release exit code: $semantic_release_exit_code"
+
           no_new_version=$(echo "$semantic_release_output" | grep -o "There are no relevant changes, so no new version is released")
+          echo "Grep for 'no new version' exit code: $?"
+
           new_version=$(echo "$semantic_release_output" | grep -oP 'The next release version is \K\d+\.\d+\.\d+')
-          set -x
+          echo "Grep for 'The next release version' exit code: $?"
+
           if [ -n "$no_new_version" ]; then
               echo "No new version is released"
               exit 0
@@ -40,9 +46,23 @@ jobs:
 
           # Use npm version to update the package.json
           npm version $new_version -m "chore(release): %s"
+          npm_exit_code=$?
+          echo "npm version exit code: $npm_exit_code"
+
+          if [ $npm_exit_code -ne 0 ]; then
+              echo "npm version encountered an issue. Exiting."
+              exit 1
+          fi
 
           # Push the changes back to the repository
           git push --follow-tags
+          git_exit_code=$?
+          echo "Git push exit code: $git_exit_code"
+
+          if [ $git_exit_code -ne 0 ]; then
+              echo "Git push encountered an issue. Exiting."
+              exit 1
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{github.workspace}}
