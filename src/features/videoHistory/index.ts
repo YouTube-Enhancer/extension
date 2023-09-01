@@ -21,6 +21,7 @@ export default async function setupVideoHistory() {
 	if (!videoElement) return;
 
 	const { [videoId]: videoHistory } = getVideoHistory();
+	console.log(videoHistory);
 	if (videoHistory && videoHistory.status === "watching" && videoHistory.timestamp > 0) {
 		promptUserToResumeVideo(videoHistory.timestamp);
 	}
