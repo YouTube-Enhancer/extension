@@ -12,8 +12,6 @@ import setupVideoHistory from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
-// TODO: (High Priority) Refactor all the features code in separate folders under src/features/featureName/index.ts, src/features/featureName/utils.ts if needed. Then import the main functions to enable those features here
-// Centralized Event Manager
 
 const alwaysShowProgressBar = async function () {
 	const player = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
