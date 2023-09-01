@@ -13,6 +13,7 @@ export function updateVideoHistory(videoId: string, timestamp: number) {
 	const { [videoId]: videoHistoryItem } = history;
 	if (videoHistoryItem) {
 		videoHistoryItem.timestamp = timestamp;
+		videoHistoryItem.status = "watching";
 	}
 	window.localStorage.setItem("videoHistory", JSON.stringify(history));
 }
