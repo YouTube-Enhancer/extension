@@ -21,13 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      - name: Release on Main Branch
-        if: github.ref == 'refs/heads/main'
+      - name: Run Semantic Release
         run: npx semantic-release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Release on Dev Branch
-        if: github.ref == 'refs/heads/dev'
-        run: npx semantic-release --no-publish
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
