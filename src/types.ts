@@ -113,3 +113,6 @@ export type MessageData<T extends MessageTypes> = BaseData<T> &
 		| VideoHistoryChangeData
 	);
 export type AllMessageData = MessageData<MessageTypes>;
+import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
+export type Selector = string;
