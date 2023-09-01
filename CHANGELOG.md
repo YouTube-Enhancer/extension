@@ -1,3 +1,17 @@
+## [1.0.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.1...v1.0.2) (2023-09-01)
+
+
+### Bug Fixes
+
+* fix video history not ([1d59799](https://github.com/VampireChicken12/youtube-enhancer/commit/1d59799ce62344c1b78e7152dca5dd7c4704fbaf))
+
+## [1.0.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.0...v1.0.1) (2023-09-01)
+
+
+### Bug Fixes
+
+* **content/index.tsx:** Fix code running twice on page load ([44d8e4f](https://github.com/VampireChicken12/youtube-enhancer/commit/44d8e4fcb84f413af7fdc37a42097cf0779c60c4))
+
 # 1.0.0 (2023-08-29)
 
 

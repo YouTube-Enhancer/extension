@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - dev
 
 jobs:
   build-and-release:
@@ -20,12 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build Extension
-        run: npm run build
-        working-directory: ${{github.workspace}}
-
       - name: Run Semantic Release
-        env:
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: npx semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
