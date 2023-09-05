@@ -1,3 +1,3 @@
-import { Option, Select, type SelectOption } from "./Select";
+import { Option, Select } from "./Select";
 
-export { Option, Select, type SelectOption };
+export { Option, Select };
