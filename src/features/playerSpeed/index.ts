@@ -34,11 +34,11 @@ export default async function setPlayerSpeed(options?: { playerSpeed?: number; e
 		if (video) video.playbackRate = playerSpeed;
 	} else {
 		// Wait for the "options" message from the content script
-		const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-		// If options are not available, return
-		if (!options) return;
-
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		if (!optionsData) return;
+		const {
+			data: { options }
+		} = optionsData;
 		// Extract the necessary properties from the options object
 		const { player_speed, enable_forced_playback_speed } = options;
 

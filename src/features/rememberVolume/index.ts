@@ -9,11 +9,11 @@ import { waitForSpecificMessage, isWatchPage, isShortsPage, browserColorLog } fr
  */
 export default async function setRememberedVolume(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-	// If options are not available, return
-	if (!options) return;
-
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
 	// Extract the necessary properties from the options object
 	const { remembered_volume: rememberedVolume, enable_remember_last_volume: enableRememberVolume } = options;
 

@@ -1,4 +1,4 @@
-import { MessageData, MessageTypes, YouTubePlayerDiv } from "@/src/types";
+import { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 import { browserColorLog, formatError } from "@/utils/utilities";
 import eventManager from "@/utils/EventManager";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
@@ -86,24 +86,17 @@ window.onload = function () {
 		if (!stringifiedMessage) return;
 		let message;
 		try {
-			message = JSON.parse(stringifiedMessage) as MessageData<MessageTypes>;
+			message = JSON.parse(stringifiedMessage) as Messages["response"] | ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
 		} catch (error) {
 			console.error(error);
 			return;
 		}
 		if (!message) return;
-		if (
-			!(
-				["volumeBoostChange", "playerSpeedChange", "screenshotButtonChange", "maximizePlayerButtonChange", "videoHistoryChange"] as MessageTypes[]
-			).includes(message.type)
-		)
-			return;
-		message = message as MessageData<
-			"volumeBoostChange" | "playerSpeedChange" | "screenshotButtonChange" | "maximizePlayerButtonChange" | "videoHistoryChange"
-		>;
 		switch (message.type) {
 			case "volumeBoostChange": {
-				const { volumeBoostAmount, volumeBoostEnabled } = message;
+				const {
+					data: { volumeBoostAmount, volumeBoostEnabled }
+				} = message;
 				if (volumeBoostEnabled) {
 					if (window.audioCtx && window.gainNode) {
 						browserColorLog(`Setting volume boost to ${Math.pow(10, Number(volumeBoostAmount) / 20)}`, "FgMagenta");
@@ -120,7 +113,9 @@ window.onload = function () {
 				break;
 			}
 			case "playerSpeedChange": {
-				const { playerSpeed, enableForcedPlaybackSpeed } = message;
+				const {
+					data: { playerSpeed, enableForcedPlaybackSpeed }
+				} = message;
 				if (enableForcedPlaybackSpeed && playerSpeed) {
 					setPlayerSpeed({
 						enableForcedPlaybackSpeed,
@@ -135,7 +130,9 @@ window.onload = function () {
 				break;
 			}
 			case "screenshotButtonChange": {
-				const { screenshotButtonEnabled } = message;
+				const {
+					data: { screenshotButtonEnabled }
+				} = message;
 				if (screenshotButtonEnabled) {
 					addScreenshotButton();
 				} else {
@@ -144,7 +141,9 @@ window.onload = function () {
 				break;
 			}
 			case "maximizePlayerButtonChange": {
-				const { maximizePlayerButtonEnabled } = message;
+				const {
+					data: { maximizePlayerButtonEnabled }
+				} = message;
 				if (maximizePlayerButtonEnabled) {
 					addMaximizePlayerButton();
 				} else {
@@ -164,13 +163,18 @@ window.onload = function () {
 				break;
 			}
 			case "videoHistoryChange": {
-				const { videoHistoryEnabled } = message;
+				const {
+					data: { videoHistoryEnabled }
+				} = message;
 				if (videoHistoryEnabled) {
 					setupVideoHistory();
 				} else {
 					eventManager.removeEventListeners("videoHistory");
 				}
 				break;
+			}
+			default: {
+				return;
 			}
 		}
 	});
