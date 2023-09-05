@@ -1,6 +1,7 @@
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
-import { configuration, configurationWithDefaults } from "@/src/types";
+import { configuration } from "@/src/types";
+import { defaultConfiguration } from "@/src/utils/constants";
 import React, { useEffect, useState } from "react";
 
 export default function SettingsWrapper(): JSX.Element {
@@ -84,15 +85,7 @@ export default function SettingsWrapper(): JSX.Element {
 		};
 	}, []);
 
-	const defaultOptions = Object.keys(localStorage as unknown as configurationWithDefaults)
-		.filter((key) => key.endsWith("_default"))
-		.reduce(
-			(options, key) => ({
-				...options,
-				[key.replace("_default", "")]: localStorage[key]
-			}),
-			{}
-		) as configuration;
+	const defaultOptions = defaultConfiguration;
 	if (!settings) {
 		return <Loader />;
 	}
