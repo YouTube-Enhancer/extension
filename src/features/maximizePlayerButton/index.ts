@@ -5,11 +5,11 @@ import { makeMaximizeSVG, updateProgressBarPositions, setupVideoPlayerTimeUpdate
 
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-	// If options are not available, return
-	if (!options) return;
-
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
 	// Extract the necessary properties from the options object
 	const { enable_maximize_player_button: enableMaximizePlayerButton } = options;
 	// If the maximize player button option is disabled, return

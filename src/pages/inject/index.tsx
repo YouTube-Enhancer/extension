@@ -1,5 +1,6 @@
-import { configuration, configurationWithDefaults, MessageData, MessageTypes } from "@/src/types";
-import { parseReviver } from "@/src/utils/utilities";
+import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import { ContentSendOnlyMessageMappings, Messages, configuration } from "@/src/types";
+import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage } from "@/src/utils/utilities";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -8,11 +9,13 @@ import { parseReviver } from "@/src/utils/utilities";
 const script = document.createElement("script");
 script.src = chrome.runtime.getURL("src/pages/content/index.js");
 script.type = "text/javascript";
-
-const element = document.createElement("div");
-element.style.display = "none";
-element.id = "yte-message-from-extension";
-document.documentElement.appendChild(element);
+function initializeCommunicationElement() {
+	const element = document.createElement("div");
+	element.style.display = "none";
+	element.id = "yte-message-from-extension";
+	document.documentElement.appendChild(element);
+}
+initializeCommunicationElement();
 document.documentElement.appendChild(script);
 (async () => {
 	/**
@@ -22,29 +25,11 @@ document.documentElement.appendChild(script);
 	 */
 	const options: configuration = await new Promise((resolve) => {
 		chrome.storage?.local?.get((o) => {
-			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configurationWithDefaults);
+			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 		});
 	});
-	sendMessage("options", { options, source: "extension" });
+	sendExtensionMessage("options", "data_response", { options });
 })();
-/**
- * Sends a message to the youtube page.
- *
- * @template T - The type of the event.
- * @param {T} eventType - The type of the event.
- * @param {Omit<MessageData<T>, "type">} data - The data associated with the event.
- * @returns {void}
- */
-function sendMessage<T extends MessageTypes>(eventType: T, data: Omit<MessageData<T>, "type">) {
-	const message: Omit<MessageData<typeof eventType>, "type"> = {
-		type: eventType,
-		source: "extension",
-		...data
-	};
-	const stringifiedMessage = JSON.stringify(message);
-	element.textContent = stringifiedMessage;
-	document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
-}
 
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -58,7 +43,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 	if (!stringifiedMessage) return;
 	let message;
 	try {
-		message = JSON.parse(stringifiedMessage) as MessageData<MessageTypes>;
+		message = JSON.parse(stringifiedMessage) as Messages["request"] | ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
 	} catch (error) {
 		console.error(error);
 		return;
@@ -73,20 +58,48 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			 */
 			const options: configuration = await new Promise((resolve) => {
 				chrome.storage?.local?.get((o) => {
-					resolve(JSON.parse(JSON.stringify(o), parseReviver) as configurationWithDefaults);
+					resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 				});
 			});
-			sendMessage("options", { options, source: "extension" });
+			sendExtensionMessage("options", "data_response", { options });
 			break;
 		}
-
+		case "videoHistoryOne": {
+			const { data, action } = message;
+			if (!data) return;
+			switch (action) {
+				case "request_data": {
+					const { id } = data;
+					const videoHistory = getVideoHistory();
+					sendExtensionMessage("videoHistoryOne", "data_response", {
+						video_history_entry: videoHistory[id]
+					});
+					break;
+				}
+				case "send_data": {
+					const { video_history_entry } = data;
+					if (!video_history_entry) return;
+					const { id, timestamp, status } = video_history_entry;
+					setVideoHistory(id, timestamp, status);
+					break;
+				}
+			}
+			break;
+		}
+		case "videoHistoryAll": {
+			const videoHistory = getVideoHistory();
+			sendExtensionMessage("videoHistoryAll", "data_response", {
+				video_history_entries: videoHistory
+			});
+			break;
+		}
 		case "setVolume": {
 			/**
 			 * Sets the remembered volume in the local storage.
 			 *
 			 * @type {number}
 			 */
-			chrome.storage?.local?.set({ remembered_volume: message.volume });
+			chrome.storage?.local?.set({ remembered_volume: message.data.volume });
 			break;
 		}
 	}
@@ -114,7 +127,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 	};
 	const options: configuration = await new Promise((resolve) => {
 		chrome.storage?.local?.get((o) => {
-			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configurationWithDefaults);
+			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 		});
 	});
 	const keyActions: {
@@ -122,8 +135,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 	} = {
 		enable_volume_boost: () => {
 			if (Object.prototype.hasOwnProperty.call(castedChanges, "enable_volume_boost") && castedChanges.enable_volume_boost.newValue !== undefined) {
-				sendMessage("volumeBoostChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("volumeBoostChange", {
 					volumeBoostEnabled: castedChanges.enable_volume_boost.newValue,
 					volumeBoostAmount: options.volume_boost_amount
 				});
@@ -131,8 +143,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 		},
 		volume_boost_amount: () => {
 			if (Object.prototype.hasOwnProperty.call(castedChanges, "volume_boost_amount") && castedChanges.volume_boost_amount.newValue !== undefined) {
-				sendMessage("volumeBoostChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("volumeBoostChange", {
 					volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
 					volumeBoostEnabled: options.enable_volume_boost
 				});
@@ -143,8 +154,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 				Object.prototype.hasOwnProperty.call(castedChanges, "enable_forced_playback_speed") &&
 				castedChanges.enable_forced_playback_speed.newValue !== undefined
 			) {
-				sendMessage("playerSpeedChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("playerSpeedChange", {
 					enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,
 					playerSpeed: options.player_speed
 				});
@@ -152,8 +162,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 		},
 		player_speed: () => {
 			if (Object.prototype.hasOwnProperty.call(castedChanges, "player_speed") && castedChanges.player_speed?.newValue !== undefined) {
-				sendMessage("playerSpeedChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("playerSpeedChange", {
 					playerSpeed: castedChanges.player_speed.newValue,
 					enableForcedPlaybackSpeed: options.enable_forced_playback_speed
 				});
@@ -164,8 +173,7 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 				Object.prototype.hasOwnProperty.call(castedChanges, "enable_screenshot_button") &&
 				castedChanges.enable_screenshot_button.newValue !== undefined
 			) {
-				sendMessage("screenshotButtonChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("screenshotButtonChange", {
 					screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
 				});
 			}
@@ -175,16 +183,14 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 				Object.prototype.hasOwnProperty.call(castedChanges, "enable_maximize_player_button") &&
 				castedChanges.enable_maximize_player_button.newValue !== undefined
 			) {
-				sendMessage("maximizePlayerButtonChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("maximizePlayerButtonChange", {
 					maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
 				});
 			}
 		},
 		enable_video_history: () => {
 			if (Object.prototype.hasOwnProperty.call(castedChanges, "enable_video_history") && castedChanges.enable_video_history.newValue !== undefined) {
-				sendMessage("videoHistoryChange", {
-					source: "extension",
+				sendExtensionOnlyMessage("videoHistoryChange", {
 					videoHistoryEnabled: castedChanges.enable_video_history.newValue
 				});
 			}

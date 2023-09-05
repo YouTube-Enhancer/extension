@@ -1,5 +1,5 @@
 import { YouTubePlayerDiv } from "@/src/types";
-import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage, sendMessage } from "@/src/utils/utilities";
+import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage, sendContentOnlyMessage } from "@/src/utils/utilities";
 import { adjustVolume, getScrollDirection, setupScrollListeners, drawVolumeDisplay } from "./utils";
 
 /**
@@ -33,13 +33,15 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		const scrollDelta = getScrollDirection(wheelEvent.deltaY);
 
 		// Wait for the "options" message from the extension
-		const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-		// If options are not available, return
-		if (!options) return;
-
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		if (!optionsData) return;
+		const {
+			data: { options }
+		} = optionsData;
+		// Extract the necessary properties from the options object
+		const { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl } = options;
 		// If scroll wheel volume control is disabled, return
-		if (!options.enable_scroll_wheel_volume_control) return;
+		if (!enableScrollWheelVolumeControl) return;
 
 		// Adjust the volume based on the scroll direction and options
 		const { newVolume } = await adjustVolume(scrollDelta, options.volume_adjustment_steps);
@@ -57,7 +59,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		});
 
 		// Send a "setVolume" message to the content script
-		sendMessage("setVolume", { volume: newVolume, source: "content_script" });
+		sendContentOnlyMessage("setVolume", { volume: newVolume });
 	};
 
 	// Set up the scroll wheel event listeners on the specified container selectors

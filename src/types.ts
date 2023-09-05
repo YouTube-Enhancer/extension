@@ -1,3 +1,4 @@
+import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
@@ -47,11 +48,6 @@ export type configuration = {
 	player_speed?: YouTubePlayerSpeedRate;
 };
 export type configurationKeys = keyof configuration;
-type AppendUnderscoreDefault<T> = T extends configurationKeys ? `${T}_default` : never;
-type AddUnderscoreDefault<T> = { [K in keyof T as AppendUnderscoreDefault<K>]: T[K] };
-export type configurationWithDefaults = configuration & AddUnderscoreDefault<configuration>;
-
-export type Source = "extension" | "content_script";
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -59,60 +55,56 @@ export type VideoHistoryEntry = {
 	status: VideoHistoryStatus;
 };
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
+export type MessageAction = "send_data" | "request_data" | "data_response";
+export type MessageSource = "extension" | "content";
 
-export type BaseData<T extends MessageTypes> = {
-	source: Source;
-	type: T;
+export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
+	action: T;
+	source: S;
 };
-export type OptionsData = {
-	type: "options";
-	options?: configuration;
+export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = BaseMessage<T, S> & {
+	type: Type;
+	data: D;
 };
-export type SetVolumeData = {
-	type: "setVolume";
-	volume?: number;
+export type DataResponseMessage<Type extends string, D> = BaseMessage<"data_response", "extension"> & {
+	type: Type;
+	data: D;
 };
-export type VolumeBoostChangeData = {
-	type: "volumeBoostChange";
-	volumeBoostEnabled: boolean;
-	volumeBoostAmount: number;
+
+export type RequestDataMessage<Type extends string, D> = BaseMessage<"request_data", "content"> & {
+	type: Type;
+	data: D;
 };
-export type PlayerSpeedChangeData = {
-	type: "playerSpeedChange";
-	playerSpeed?: YouTubePlayerSpeedRate;
-	enableForcedPlaybackSpeed: boolean;
+export type ContentSendOnlyMessageMappings = {
+	setVolume: SendDataMessage<"send_data", "content", "setVolume", { volume: number }>;
 };
-export type ScreenshotButtonChangeData = {
-	type: "screenshotButtonChange";
-	screenshotButtonEnabled: boolean;
+export type ExtensionSendOnlyMessageMappings = {
+	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostAmount?: number }>;
+	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { playerSpeed?: YouTubePlayerSpeedRate; enableForcedPlaybackSpeed: boolean }>;
+	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
+	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 };
-export type MaximizePlayerButtonChangeData = {
-	type: "maximizePlayerButtonChange";
-	maximizePlayerButtonEnabled: boolean;
+export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
+	[K in keyof T]: Extract<T[K], { source: S }>;
 };
-export type VideoHistoryChangeData = {
-	type: "videoHistoryChange";
-	videoHistoryEnabled: boolean;
+export type MessageMappings = {
+	options: {
+		request: RequestDataMessage<"options", undefined>;
+		response: DataResponseMessage<"options", { options: configuration }>;
+	};
+	videoHistoryOne: {
+		request:
+			| RequestDataMessage<"videoHistoryOne", { id: string }>
+			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
+		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
+	};
+	videoHistoryAll: {
+		request: RequestDataMessage<"videoHistoryAll", undefined>;
+		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
+	};
 };
-export type MessageTypes =
-	| OptionsData["type"]
-	| SetVolumeData["type"]
-	| VolumeBoostChangeData["type"]
-	| PlayerSpeedChangeData["type"]
-	| ScreenshotButtonChangeData["type"]
-	| MaximizePlayerButtonChangeData["type"]
-	| VideoHistoryChangeData["type"];
-export type MessageData<T extends MessageTypes> = BaseData<T> &
-	(
-		| OptionsData
-		| SetVolumeData
-		| VolumeBoostChangeData
-		| PlayerSpeedChangeData
-		| ScreenshotButtonChangeData
-		| MaximizePlayerButtonChangeData
-		| VideoHistoryChangeData
-	);
-export type AllMessageData = MessageData<MessageTypes>;
-import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+export type Messages = MessageMappings[keyof MessageMappings];
+// TODO: refactor message types into Send, Receive, Change types
 export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 export type Selector = string;

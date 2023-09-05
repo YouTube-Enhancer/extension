@@ -17,7 +17,11 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
 		// Wait for the options message and get the format from it
-		const { options } = await waitForSpecificMessage("options", { source: "content_script" });
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		if (!optionsData) return;
+		const {
+			data: { options }
+		} = optionsData;
 		if (!options) return;
 		const { screenshot_save_as, screenshot_format } = options;
 		const format = `image/${screenshot_format}`;
@@ -52,11 +56,11 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 export async function addScreenshotButton(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-	// If options are not available, return
-	if (!options) return;
-
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
 	// Extract the necessary properties from the options object
 	const { enable_screenshot_button: enableScreenshotButton } = options;
 	// If the screenshot button option is disabled, return
