@@ -6,11 +6,7 @@ Object.keys(defaultConfiguration).forEach((option) => {
 		const { [option]: defaultValue } = defaultConfiguration;
 		localStorage[option] = defaultValue;
 	}
-	// Destructure `defaultConfiguration[option]` directly
-	const { [option]: defaultValue } = defaultConfiguration;
-	localStorage[`${option}_default`] = defaultValue;
 	chrome.storage.local.set({
-		[option]: localStorage[option],
-		[`${option}_default`]: localStorage[`${option}_default`]
+		[option]: localStorage[option]
 	});
 });
