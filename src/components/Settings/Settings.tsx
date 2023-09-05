@@ -4,8 +4,9 @@ import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { configuration, configurationKeys } from "@/src/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Checkbox, NumberInput, Select, SelectOption } from "../Inputs";
+import { settingsAreDefault } from "@/src/utils/utilities";
 
 export default function Settings({
 	settings,
@@ -44,20 +45,28 @@ export default function Settings({
 	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
 	defaultSettings: configuration;
 }) {
+	const [firstLoad, setFirstLoad] = useState(true);
 	const [parentRef] = useAutoAnimate({ duration: 300 });
 	const { notifications, addNotification, removeNotification } = useNotifications();
 	const setCheckboxOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
+			setFirstLoad(false);
 			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
 		};
 
 	const setValueOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			setFirstLoad(false);
 			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
 		};
 
+	useEffect(() => {
+		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
+			saveOptions();
+		}
+	}, [settings]);
 	function saveOptions() {
 		if (settings) {
 			if (settings.enable_automatically_set_quality && !settings.player_quality) {
@@ -72,19 +81,19 @@ export default function Settings({
 	}
 
 	function resetOptions() {
-		setSettings({ ...defaultSettings });
 		addNotification(
 			"info",
-			"All options have been reset to their default values. You can now save the changes you made or discard them by closing this page."
+			'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.',
+			"reset_settings"
 		);
 	}
 
 	function clearData() {
 		const userHasConfirmed = window.confirm("This will delete all extension data related to options. Continue?");
 		if (userHasConfirmed) {
-			localStorage.clear();
-			chrome.storage.local.clear();
-			window.location.reload();
+			Object.assign(localStorage, defaultSettings);
+			chrome.storage.local.set(defaultSettings);
+			addNotification("success", "All data has been deleted");
 		}
 	}
 	const colorOptions: SelectOption[] = [
@@ -432,23 +441,36 @@ export default function Settings({
 						title="Clears all data this extension has stored on your machine"
 						onClick={clearData}
 					/>
-					<input
-						type="button"
-						id="reset_button"
-						className="p-2 warning dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
-						style={{ marginLeft: "auto" }}
-						value="Reset"
-						title="Resets all settings to their defaults; save afterwards to preserve the changes"
-						onClick={resetOptions}
-					/>
-					<input
-						type="button"
-						id="save_button"
-						className="p-2 accent dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
-						value="Save"
-						title="Saves the current settings"
-						onClick={saveOptions}
-					/>
+					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
+						<input
+							type="button"
+							id="confirm_button"
+							className="p-2 danger dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
+							style={{ marginLeft: "auto" }}
+							value="Confirm"
+							title="Confirm setting reset"
+							onClick={() => {
+								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
+								if (notificationToRemove) {
+									removeNotification(notificationToRemove);
+								}
+								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volume: settings.remembered_volume }));
+								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volume: settings.remembered_volume }));
+
+								addNotification("success", "Options saved");
+							}}
+						/>
+					) : (
+						<input
+							type="button"
+							id="reset_button"
+							className="p-2 warning dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
+							style={{ marginLeft: "auto" }}
+							value="Reset"
+							title="Resets all settings to their defaults, Click the confirm button to save the changes"
+							onClick={resetOptions}
+						/>
+					)}
 				</div>
 				<div id="notifications" ref={parentRef}>
 					{notifications.map((notification, index) => (
@@ -466,10 +488,31 @@ export default function Settings({
 							} inverse`}
 							key={index}
 						>
-							{notification.message}
-							<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
-								&times;
-							</button>
+							{notification.action ? (
+								notification.action === "reset_settings" ? (
+									<>
+										{notification.message.split("\n").map((line, index) => (
+											<p key={index}>{line}</p>
+										))}
+										<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
+											&times;
+										</button>
+									</>
+								) : null
+							) : (
+								<>
+									{notification.message}
+									<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
+										&times;
+									</button>
+								</>
+							)}
+							<div
+								className="h-1 bg-[#0086ff] absolute left-0 bottom-0 rounded-b"
+								id={`${notification.type}_notification_${notification.message.split(/s /).join("_")}_progress_bar`}
+								style={{ width: `${notification.progress ?? 100}%` }}
+								key={index}
+							></div>
 						</div>
 					))}
 				</div>
