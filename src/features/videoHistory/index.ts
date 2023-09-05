@@ -1,14 +1,14 @@
 import { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/utils/EventManager";
-import { browserColorLog, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/utils/utilities";
-
-import { addToHistory, checkVideoStatus, getVideoHistory, markVideoAsWatched, updateVideoHistory } from "./utils";
+import { browserColorLog, isShortsPage, isWatchPage, sendContentMessage, waitForSpecificMessage } from "@/utils/utilities";
 
 export default async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
-	const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-	// If options are not available, return
-	if (!options) return;
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
 	const { enable_video_history: enableVideoHistory } = options;
 	if (!enableVideoHistory) return;
 	// Get the player container element
@@ -19,26 +19,26 @@ export default async function setupVideoHistory() {
 	if (!videoId) return;
 	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
 	if (!videoElement) return;
-
-	const { [videoId]: videoHistory } = getVideoHistory();
-	console.log(videoHistory);
-	if (videoHistory && videoHistory.status === "watching" && videoHistory.timestamp > 0) {
-		promptUserToResumeVideo(videoHistory.timestamp);
+	const videoHistoryOneData = await waitForSpecificMessage("videoHistoryOne", "request_data", "content", { id: videoId });
+	if (!videoHistoryOneData) return;
+	const {
+		data: { video_history_entry }
+	} = videoHistoryOneData;
+	// TODO: get this to only run when the video first loads
+	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
+		promptUserToResumeVideo(video_history_entry.timestamp);
 	}
 
 	const videoPlayerTimeUpdateListener = async () => {
 		const currentTime = await playerContainer.getCurrentTime();
 		const duration = await playerContainer.getDuration();
-		const videoStatus = checkVideoStatus(videoId);
-		if (Math.ceil(duration) === Math.ceil(currentTime)) {
-			markVideoAsWatched(videoId);
-		} else {
-			if (videoStatus === "unwatched") {
-				addToHistory(videoId, currentTime, "watching");
-			} else {
-				updateVideoHistory(videoId, currentTime);
+		sendContentMessage("videoHistoryOne", "send_data", {
+			video_history_entry: {
+				id: videoId,
+				status: Math.ceil(duration) === Math.ceil(currentTime) ? "watched" : "watching",
+				timestamp: currentTime
 			}
-		}
+		});
 	};
 	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }

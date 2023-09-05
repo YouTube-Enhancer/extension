@@ -337,5 +337,5 @@ input[type="button"] {
 
 #notifications > .notification {
 	border-radius: var(--border-radius-md);
-	padding: 8px 12px;
+	padding: 10px 14px;
 }

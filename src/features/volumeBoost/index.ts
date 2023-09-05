@@ -3,10 +3,11 @@ import { waitForSpecificMessage, browserColorLog, formatError } from "@/src/util
 
 export default async function volumeBoost() {
 	// Wait for the "options" message from the extension
-	const { options } = await waitForSpecificMessage("options", { source: "content_script" });
-
-	// If options are not available, return
-	if (!options) return;
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
 	const { volume_boost_amount, enable_volume_boost } = options;
 	// If volume boost option is disabled, return
 	if (!enable_volume_boost) return;
