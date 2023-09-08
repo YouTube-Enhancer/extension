@@ -1,10 +1,3 @@
-# [1.1.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.2...v1.1.0) (2023-09-08)
-
-
-### Features
-
-* **Settings.tsx:** add functionality has been added to automatically save settings ([1f6a3b3](https://github.com/VampireChicken12/youtube-enhancer/commit/1f6a3b30b3f3507d2ad3c7250b0732a850e121e2))
-
 # [1.1.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.2...v1.1.0) (2023-09-05)
 
 
