@@ -1,5 +1,5 @@
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import { ContentSendOnlyMessageMappings, Messages, configuration } from "@/src/types";
+import { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
 import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage } from "@/src/utils/utilities";
 
 /**
@@ -30,6 +30,12 @@ document.documentElement.appendChild(script);
 	});
 	sendExtensionMessage("options", "data_response", { options });
 })();
+window.onload = () => {
+	chrome.storage.onChanged.addListener(storageListeners);
+};
+window.onunload = () => {
+	chrome.storage.onChanged.removeListener(storageListeners);
+};
 
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -104,7 +110,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 		}
 	}
 });
-const storageListeners = async (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+const storageListeners = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
 	const changeKeys = Object.keys(
 		changes as {
@@ -117,12 +123,12 @@ const storageListeners = async (changes: { [key: string]: chrome.storage.Storage
 	if (!changeKeys.length) return;
 	storageChangeHandler(changes, areaName);
 };
-const storageChangeHandler = async (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
 	const castedChanges = changes as {
 		[K in keyof configuration]: {
 			oldValue: configuration[K] | undefined;
-			newValue: configuration[K] | undefined;
+			newValue: configuration[K];
 		};
 	};
 	const options: configuration = await new Promise((resolve) => {
@@ -134,81 +140,51 @@ const storageChangeHandler = async (changes: { [key: string]: chrome.storage.Sto
 		[K in keyof configuration]?: () => void;
 	} = {
 		enable_volume_boost: () => {
-			if (Object.prototype.hasOwnProperty.call(castedChanges, "enable_volume_boost") && castedChanges.enable_volume_boost.newValue !== undefined) {
-				sendExtensionOnlyMessage("volumeBoostChange", {
-					volumeBoostEnabled: castedChanges.enable_volume_boost.newValue,
-					volumeBoostAmount: options.volume_boost_amount
-				});
-			}
+			sendExtensionOnlyMessage("volumeBoostChange", {
+				volumeBoostEnabled: castedChanges.enable_volume_boost.newValue,
+				volumeBoostAmount: options.volume_boost_amount
+			});
 		},
 		volume_boost_amount: () => {
-			if (Object.prototype.hasOwnProperty.call(castedChanges, "volume_boost_amount") && castedChanges.volume_boost_amount.newValue !== undefined) {
-				sendExtensionOnlyMessage("volumeBoostChange", {
-					volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
-					volumeBoostEnabled: options.enable_volume_boost
-				});
-			}
+			sendExtensionOnlyMessage("volumeBoostChange", {
+				volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
+				volumeBoostEnabled: options.enable_volume_boost
+			});
 		},
 		enable_forced_playback_speed: () => {
-			if (
-				Object.prototype.hasOwnProperty.call(castedChanges, "enable_forced_playback_speed") &&
-				castedChanges.enable_forced_playback_speed.newValue !== undefined
-			) {
-				sendExtensionOnlyMessage("playerSpeedChange", {
-					enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,
-					playerSpeed: options.player_speed
-				});
-			}
+			sendExtensionOnlyMessage("playerSpeedChange", {
+				enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,
+				playerSpeed: options.player_speed
+			});
 		},
 		player_speed: () => {
-			if (Object.prototype.hasOwnProperty.call(castedChanges, "player_speed") && castedChanges.player_speed?.newValue !== undefined) {
-				sendExtensionOnlyMessage("playerSpeedChange", {
-					playerSpeed: castedChanges.player_speed.newValue,
-					enableForcedPlaybackSpeed: options.enable_forced_playback_speed
-				});
-			}
+			sendExtensionOnlyMessage("playerSpeedChange", {
+				playerSpeed: castedChanges.player_speed.newValue,
+				enableForcedPlaybackSpeed: options.enable_forced_playback_speed
+			});
 		},
 		enable_screenshot_button: () => {
-			if (
-				Object.prototype.hasOwnProperty.call(castedChanges, "enable_screenshot_button") &&
-				castedChanges.enable_screenshot_button.newValue !== undefined
-			) {
-				sendExtensionOnlyMessage("screenshotButtonChange", {
-					screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
-				});
-			}
+			sendExtensionOnlyMessage("screenshotButtonChange", {
+				screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
+			});
 		},
 		enable_maximize_player_button: () => {
-			if (
-				Object.prototype.hasOwnProperty.call(castedChanges, "enable_maximize_player_button") &&
-				castedChanges.enable_maximize_player_button.newValue !== undefined
-			) {
-				sendExtensionOnlyMessage("maximizePlayerButtonChange", {
-					maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
-				});
-			}
+			sendExtensionOnlyMessage("maximizePlayerButtonChange", {
+				maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
+			});
 		},
 		enable_video_history: () => {
-			if (Object.prototype.hasOwnProperty.call(castedChanges, "enable_video_history") && castedChanges.enable_video_history.newValue !== undefined) {
-				sendExtensionOnlyMessage("videoHistoryChange", {
-					videoHistoryEnabled: castedChanges.enable_video_history.newValue
-				});
-			}
+			sendExtensionOnlyMessage("videoHistoryChange", {
+				videoHistoryEnabled: castedChanges.enable_video_history.newValue
+			});
 		}
 	};
 	Object.entries(
 		changes as { [K in keyof configuration]?: { oldValue?: configuration[K] | undefined; newValue?: configuration[K] | undefined } }
 	).forEach(([key, change]) => {
-		if (Object.prototype.hasOwnProperty.call(keyActions, key)) {
+		if (Object.prototype.hasOwnProperty.call(keyActions, key) && change?.newValue !== undefined) {
 			if (!change) return;
 			keyActions[key]?.();
 		}
 	});
-};
-
-window.onload = () => {
-	chrome.storage.onChanged.addListener(storageListeners);
-};
-window.onunload = () => {
-	chrome.storage.onChanged.removeListener(storageListeners);
 };

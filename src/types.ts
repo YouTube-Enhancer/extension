@@ -44,8 +44,8 @@ export type configuration = {
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 	remembered_volume?: number;
-	player_quality?: YoutubePlayerQualityLevel;
-	player_speed?: YouTubePlayerSpeedRate;
+	player_quality: YoutubePlayerQualityLevel;
+	player_speed: YouTubePlayerSpeedRate;
 };
 export type configurationKeys = keyof configuration;
 export type VideoHistoryStatus = "watched" | "watching";
@@ -105,6 +105,6 @@ export type MessageMappings = {
 	};
 };
 export type Messages = MessageMappings[keyof MessageMappings];
-// TODO: refactor message types into Send, Receive, Change types
 export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 export type Selector = string;
+export type StorageChanges = { [key: string]: chrome.storage.StorageChange };

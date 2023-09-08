@@ -302,18 +302,12 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
  */
 function extractFirstSectionFromYouTubeURL(url: string): string | null {
 	// Parse the URL into its components
-	const urlObj = new URL(url);
-	const { pathname: path } = urlObj;
+	const { pathname: path } = new URL(url);
 
 	// Split the path into an array of sections
 	const sections = path.split("/").filter((section) => section !== "");
 
-	// Return the first section, or null if not found
-	if (sections.length > 0) {
-		return sections[0];
-	}
-
-	return null; // or any default value if desired
+	return sections.length > 0 ? sections[0] : null;
 }
 export function isWatchPage() {
 	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
