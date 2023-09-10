@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.1...v1.2.2) (2023-09-10)
+
+
+### Bug Fixes
+
+* number input on firefox ([6769f6e](https://github.com/VampireChicken12/youtube-enhancer/commit/6769f6e1bc4e3e8b78c762e09d8f3a0ce86362a2))
+
 ## [1.2.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.0...v1.2.1) (2023-09-10)
 
 
