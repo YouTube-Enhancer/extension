@@ -3,6 +3,7 @@ import { PluginOption, build } from "vite";
 import { resolve } from "path";
 import { outputFolderName } from "../constants";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import { GetInstalledBrowsers } from "get-installed-browsers";
 
 const packages: { [entryAlias: string]: string }[] = [
 	{
@@ -24,37 +25,40 @@ export default function buildContentScript(): PluginOption {
 	return {
 		name: "build-content",
 		async buildEnd() {
-			for (const _package of packages) {
-				await build({
-					resolve: {
-						alias: {
-							"@/src": root,
-							"@/assets": assetsDir,
-							"@/pages": pagesDir,
-							"@/components": componentsDir,
-							"@/utils": utilsDir,
-							"@/hooks": hooksDir
-						}
-					},
-					publicDir: false,
-					plugins: [cssInjectedByJsPlugin()],
-					build: {
-						outDir,
-						sourcemap: process.env.__DEV__ === "true",
-						emptyOutDir: false,
-						rollupOptions: {
-							input: _package,
-							output: {
-								entryFileNames: (chunk) => {
-									return `src/pages/${chunk.name}/index.js`;
+			const browsers = GetInstalledBrowsers();
+			for (const browser of browsers) {
+				for (const _package of packages) {
+					await build({
+						resolve: {
+							alias: {
+								"@/src": root,
+								"@/assets": assetsDir,
+								"@/pages": pagesDir,
+								"@/components": componentsDir,
+								"@/utils": utilsDir,
+								"@/hooks": hooksDir
+							}
+						},
+						publicDir: false,
+						plugins: [cssInjectedByJsPlugin()],
+						build: {
+							outDir: resolve(outDir, browser.name),
+							sourcemap: process.env.__DEV__ === "true",
+							emptyOutDir: false,
+							rollupOptions: {
+								input: _package,
+								output: {
+									entryFileNames: (chunk) => {
+										return `src/pages/${chunk.name}/index.js`;
+									}
 								}
 							}
-						}
-					},
-					configFile: false
-				});
+						},
+						configFile: false
+					});
+				}
+				colorLog(`Content code build successfully for ${browser.name}`, "success");
 			}
-			colorLog("Content code build successfully", "success");
 		}
 	};
 }
