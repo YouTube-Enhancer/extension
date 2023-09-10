@@ -1,4 +1,4 @@
-import React, { ChangeEvent, MutableRefObject, useRef, useEffect } from "react";
+import React, { ChangeEvent, MutableRefObject, useRef } from "react";
 import "./Number.css";
 import Arrow from "./Arrow";
 interface NumberInputProps {
@@ -38,21 +38,6 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = undefin
 			onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 		}
 	};
-	useEffect(() => {
-		// TODO: get working in popup if possible
-		const mouseEnter = () => {
-			window.document.body.style.overflow = "hidden";
-		};
-		const mouseLeave = () => {
-			window.document.body.style.overflow = "auto";
-		};
-		inputDiv.current?.addEventListener("mouseenter", mouseEnter);
-		inputDiv.current?.addEventListener("mouseleave", mouseLeave);
-		return () => {
-			inputDiv.current?.removeEventListener("mouseenter", mouseEnter);
-			inputDiv.current?.removeEventListener("mouseleave", mouseLeave);
-		};
-	}, [inputDiv]);
 
 	return (
 		<div className={`${className ? `${className} ` : ""} relative flex mb-2 gap-4 items-baseline justify-between flex-row`} ref={inputDiv}>
@@ -72,6 +57,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = undefin
 					step={step}
 					style={{
 						WebkitAppearance: "none",
+						MozAppearance: "textfield",
 						borderTopLeftRadius: "0.375rem",
 						borderBottomLeftRadius: "0.375rem",
 						...(disabled ? { color: "#4b5563" } : {})
