@@ -8,8 +8,8 @@ module.exports = {
 			{
 				assets: [
 					{
-						path: "releases/*.zip",
-						name: "youtube-enhancer-v${nextRelease.version}.zip"
+						path: "releases/**/*.zip",
+						label: "Multi-browser release zips"
 					}
 				]
 			}
