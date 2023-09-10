@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.1.0...v1.2.0) (2023-09-10)
+
+
+### Features
+
+* Add support for more browsers ([6057e4b](https://github.com/VampireChicken12/youtube-enhancer/commit/6057e4b81f66c3902163dfc50550395813bc7e1f))
+
 # [1.1.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.0.2...v1.1.0) (2023-09-05)
 
 
