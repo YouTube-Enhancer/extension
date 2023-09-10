@@ -2526,6 +2526,11 @@ get-caller-file@^2.0.5:
   resolved "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
   integrity sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
 
+get-installed-browsers@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/get-installed-browsers/-/get-installed-browsers-0.1.7.tgz"
+  integrity sha512-gxGDcxaOpA9QNk/REyILnXJVmYS9Se33HTfFN7u03Pxpkn9R/ogsYIFRwyzvc5fCoZ548RAzGk4YSF0xLM4BUw==
+
 get-intrinsic@^1.0.2, get-intrinsic@^1.1.1, get-intrinsic@^1.1.3, get-intrinsic@^1.2.0:
   version "1.2.1"
   resolved "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.2.1.tgz"
