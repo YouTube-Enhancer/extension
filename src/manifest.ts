@@ -61,7 +61,7 @@ const manifestV2: Manifest.WebExtensionManifest = {
 	background: {
 		scripts: ["src/pages/background/index.js"]
 	},
-	action: {
+	browser_action: {
 		default_popup: "src/pages/popup/index.html",
 		default_icon: "/icons/icon_48.png"
 	},
