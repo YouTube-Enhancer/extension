@@ -120,8 +120,13 @@ This command will bundle the extension's code and assets into a 'dist' directory
 
 Now that you've built the extension, you can load it into your browser for testing:
 
-- **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
-- **Brave:** Open Chrome and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist' directory.
+- **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+
+- **Microsoft Edge:** Open Edge and go to `edge://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+
+- **Brave:** Open Brave and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+
+- **Mozilla Firefox:** Open Firefox and go to `about:debugging#/runtime/this-firefox`. Click on 'Load Temporary Add-on' and select any file in the 'dist/Firefox" directory.
 
 ### 7. Test the Extension
 

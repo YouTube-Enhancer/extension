@@ -5,7 +5,9 @@ import makeManifest from "./src/utils/plugins/make-manifest";
 import buildContentScript from "./src/utils/plugins/build-content-script";
 import { outputFolderName } from "./src/utils/constants";
 import { existsSync, readdirSync, rmSync, statSync } from "fs";
-import makeReleaseZip from "./src/utils/plugins/make-release-zip";
+import makeReleaseZips from "./src/utils/plugins/make-release-zips";
+import copyPublic from "./src/utils/plugins/copy-public";
+import copyBuild from "./src/utils/plugins/copy-build";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");
@@ -14,8 +16,6 @@ const componentsDir = resolve(root, "components");
 const utilsDir = resolve(root, "utils");
 const hooksDir = resolve(root, "hooks");
 const outDir = resolve(__dirname, outputFolderName);
-const publicDir = resolve(__dirname, "public");
-// Make a function to delete the output folder before building
 const emptyOutputFolder = () => {
 	if (!existsSync(outDir)) return;
 	const files = readdirSync(outDir);
@@ -43,10 +43,9 @@ export default function build() {
 				"@/hooks": hooksDir
 			}
 		},
-		plugins: [react(), makeManifest(), buildContentScript(), makeReleaseZip()],
-		publicDir,
+		plugins: [react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		build: {
-			outDir,
+			outDir: resolve(outDir, "temp"),
 			sourcemap: process.env.__DEV__ === "true",
 			emptyOutDir: false,
 			rollupOptions: {
