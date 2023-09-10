@@ -8,7 +8,7 @@ module.exports = {
 			{
 				assets: [
 					{
-						path: "releases/**/*.zip"
+						path: "releases/*/*.zip"
 					}
 				]
 			}
