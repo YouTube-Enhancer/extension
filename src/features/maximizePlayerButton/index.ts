@@ -2,7 +2,7 @@ import { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 import { makeMaximizeSVG, updateProgressBarPositions, setupVideoPlayerTimeUpdate, maximizePlayer } from "./utils";
-
+// TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
