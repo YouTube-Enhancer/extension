@@ -130,6 +130,7 @@ export function drawVolumeDisplay({
 
 	// Set canvas styles for positioning
 	canvas.style.position = "absolute";
+
 	switch (displayPosition) {
 		case "top_left":
 			canvas.style.top = `${displayPadding}px`;
@@ -161,8 +162,8 @@ export function drawVolumeDisplay({
 			const fontSize = Math.min(originalWidth, originalHeight) / 10;
 			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
 			const { width: textWidth } = context.measureText(`${round(volume)}`);
-			width = textWidth;
-			height = fontSize;
+			width = textWidth + 4;
+			height = fontSize + 4;
 			break;
 		}
 		case "line": {
@@ -248,4 +249,26 @@ export function drawVolumeDisplay({
 	setTimeout(() => {
 		canvas.remove();
 	}, displayHideTime);
+	const topElement = document.querySelector(".player-controls > ytd-shorts-player-controls");
+	const bottomElement =
+		document.querySelector(
+			"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
+		) ?? document.querySelector(".ytp-chrome-bottom");
+	const topRect = topElement?.getBoundingClientRect();
+	const bottomRect = bottomElement?.getBoundingClientRect();
+	const paddingTop = topRect ? (isShortsPage() ? topRect.top / 2 : 0) : 0;
+	const paddingBottom = bottomRect ? Math.round((bottomRect.bottom - bottomRect.top) / (isShortsPage() ? 1.79 : 1)) : 0;
+	// TODO: dynamically add padding if the volume display is under the bottom or top element
+	switch (displayPosition) {
+		case "top_left":
+		case "top_right":
+			canvas.style.top = `${displayPadding + paddingTop}px`;
+			break;
+		case "bottom_left":
+		case "bottom_right":
+			canvas.style.bottom = `${displayPadding + paddingBottom}px`;
+			break;
+		default:
+			return;
+	}
 }
