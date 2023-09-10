@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 jobs:
   build-and-release:
@@ -25,3 +24,14 @@ jobs:
         run: npx semantic-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge changes from main into dev
+        run: |
+          # Switch to the dev branch
+          git checkout dev
+
+          # Merge changes from the main branch into dev
+          git merge main
+
+          # Push changes to the dev branch
+          git push origin dev
