@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.0...v1.2.1) (2023-09-10)
+
+
+### Bug Fixes
+
+* manifest v2 popup ([5b1ef90](https://github.com/VampireChicken12/youtube-enhancer/commit/5b1ef90532e0615e33cd82cfd2fe0d8d6ce24427))
+
 # [1.2.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.1.0...v1.2.0) (2023-09-10)
 
 
