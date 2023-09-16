@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.2...v1.3.0) (2023-09-16)
+
+
+### Features
+
+* Add more speeds to speed watch feature ([68f82d8](https://github.com/VampireChicken12/youtube-enhancer/commit/68f82d844f2128bfa6dd4497a0aea445e18ce643))
+
 ## [1.2.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.1...v1.2.2) (2023-09-10)
 
 
