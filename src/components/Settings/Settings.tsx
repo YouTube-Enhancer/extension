@@ -264,6 +264,7 @@ export default function Settings({
 			addNotification("success", "Settings exported successfully");
 		}
 	};
+	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		settings && (
 			<div className="w-fit h-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white">
@@ -446,7 +447,7 @@ export default function Settings({
 							id="player_speed"
 							onChange={setValueOption("player_speed")}
 							options={YouTubePlayerSpeedOptions}
-							selectedOption={selectedPlayerSpeed}
+							selectedOption={selectedPlayerSpeed?.toString()}
 							setSelectedOption={setSelectedPlayerSpeed}
 							label="Player speed"
 							disabled={settings.enable_forced_playback_speed.toString() !== "true"}
