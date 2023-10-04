@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.0...v1.4.1) (2023-10-04)
+
+
+### Bug Fixes
+
+* player speed setting not showing in select ([4590420](https://github.com/VampireChicken12/youtube-enhancer/commit/459042084c0c771e9e9324f83c8bf5effc292ebe))
+
 # [1.4.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.3.0...v1.4.0) (2023-10-04)
 
 
