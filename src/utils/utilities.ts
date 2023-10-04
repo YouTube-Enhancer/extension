@@ -387,3 +387,45 @@ export function settingsAreDefault(defaultSettings: Partial<configuration>, curr
 	// Check if the number of keys that match is the same as the total number of keys
 	return isStrictEqual(settingsTheSame.length)(commonKeys.length);
 }
+export function formatDateForFileName(date: Date): string {
+	const dateFormatOptions: Intl.DateTimeFormatOptions = {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit"
+	};
+
+	const timeFormatOptions: Intl.DateTimeFormatOptions = {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: false // Ensure 24-hour time format
+	};
+
+	// Get the user's locale
+	const userLocale = navigator.language || "en-GB";
+
+	const formattedDate = date.toLocaleDateString(userLocale, dateFormatOptions);
+	const formattedTime = date.toLocaleTimeString(userLocale, timeFormatOptions);
+
+	// Replace characters that can't be used in a filename
+	const sanitizedDate = formattedDate.replace(/[\/]/g, "-");
+	const sanitizedTime = formattedTime.replace(/[:]/g, "-");
+
+	return `${sanitizedDate}_${sanitizedTime}`;
+}
+export function parseStoredValue(value: string) {
+	try {
+		// Attempt to parse the value as JSON
+		const parsedValue = JSON.parse(value);
+
+		// Check if the parsed value is a boolean or a number
+		if (typeof parsedValue === "boolean" || typeof parsedValue === "number") {
+			return parsedValue; // Return the parsed value
+		}
+	} catch (error) {
+		// If parsing or type checking fails, return the original value as a string
+	}
+
+	// If parsing or type checking fails, return the original value as a string
+	return value;
+}
