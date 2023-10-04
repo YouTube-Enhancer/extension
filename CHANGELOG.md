@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.3.0...v1.4.0) (2023-10-04)
+
+
+### Features
+
+* Import/Export settings ([d4bc39f](https://github.com/VampireChicken12/youtube-enhancer/commit/d4bc39f443ead75203f196992f2798f631efd9bc))
+
 # [1.3.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.2.2...v1.3.0) (2023-09-16)
 
 
