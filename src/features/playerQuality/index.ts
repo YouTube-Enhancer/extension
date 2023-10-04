@@ -1,5 +1,10 @@
-import { YoutubePlayerQualityLabel, YoutubePlayerQualityLevel, YouTubePlayerDiv } from "@/src/types";
-import { YoutubePlayerQualityLabels, YoutubePlayerQualityLevels } from "@/src/utils/constants";
+import {
+	YoutubePlayerQualityLabel,
+	YoutubePlayerQualityLevel,
+	YouTubePlayerDiv,
+	youtubePlayerQualityLevel,
+	youtubePlayerQualityLabel
+} from "@/src/types";
 import { waitForSpecificMessage, isWatchPage, isShortsPage, chooseClosetQuality, browserColorLog } from "@/src/utils/utilities";
 
 /**
@@ -48,20 +53,20 @@ export default async function setPlayerQuality(): Promise<void> {
 		if (!availableQualityLevels.includes(playerQuality)) {
 			// Convert the available quality levels to their corresponding labels
 			const availableResolutions = availableQualityLevels.reduce(function (array, elem) {
-				if (YoutubePlayerQualityLabels[YoutubePlayerQualityLevels.indexOf(elem)]) {
-					array.push(YoutubePlayerQualityLabels[YoutubePlayerQualityLevels.indexOf(elem)]);
+				if (youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(elem)]) {
+					array.push(youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(elem)]);
 				}
 				return array;
 			}, [] as YoutubePlayerQualityLabel[]);
 
 			// Choose the closest quality level based on the available resolutions
-			playerQuality = chooseClosetQuality(YoutubePlayerQualityLabels[YoutubePlayerQualityLevels.indexOf(playerQuality)], availableResolutions);
+			playerQuality = chooseClosetQuality(youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(playerQuality)], availableResolutions);
 
 			// If the chosen quality level is not available, return
-			if (!YoutubePlayerQualityLevels.at(YoutubePlayerQualityLabels.indexOf(playerQuality))) return;
+			if (!youtubePlayerQualityLevel.at(youtubePlayerQualityLabel.indexOf(playerQuality))) return;
 
 			// Update the playerQuality variable
-			playerQuality = YoutubePlayerQualityLevels.at(YoutubePlayerQualityLabels.indexOf(playerQuality)) as YoutubePlayerQualityLevel;
+			playerQuality = youtubePlayerQualityLevel.at(youtubePlayerQualityLabel.indexOf(playerQuality)) as YoutubePlayerQualityLevel;
 		}
 
 		// Log the message indicating the player quality being set

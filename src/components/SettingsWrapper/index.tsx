@@ -2,6 +2,7 @@ import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
 import { configuration } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
+import { parseStoredValue } from "@/src/utils/utilities";
 import React, { useEffect, useState } from "react";
 
 export default function SettingsWrapper(): JSX.Element {
@@ -16,6 +17,9 @@ export default function SettingsWrapper(): JSX.Element {
 	useEffect(() => {
 		const fetchSettings = () => {
 			chrome.storage.local.get((settings) => {
+				for (const [key, value] of Object.entries(settings)) {
+					settings[key] = parseStoredValue(value);
+				}
 				setSettings({ ...settings } as configuration);
 				setSelectedColor(settings.osd_display_color);
 				setSelectedDisplayType(settings.osd_display_type);
