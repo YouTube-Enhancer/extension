@@ -1,29 +1,38 @@
+import z from "zod";
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-export type OnScreenDisplayColor = "red" | "green" | "blue" | "yellow" | "orange" | "purple" | "pink" | "white";
-export type OnScreenDisplayType = "no_display" | "text" | "line" | "round";
-export type OnScreenDisplayPosition = "top_left" | "top_right" | "bottom_left" | "bottom_right" | "center";
+export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
+export type OnScreenDisplayColor = (typeof onScreenDisplayColor)[number];
+export const onScreenDisplayType = ["no_display", "text", "line", "round"] as const;
+export type OnScreenDisplayType = (typeof onScreenDisplayType)[number];
+export const onScreenDisplayPosition = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
+export type OnScreenDisplayPosition = (typeof onScreenDisplayPosition)[number];
+export const youtubePlayerQualityLabel = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
+export type YoutubePlayerQualityLabel = (typeof youtubePlayerQualityLabel)[number];
+export const youtubePlayerQualityLevel = [
+	"tiny",
+	"small",
+	"medium",
+	"large",
+	"hd720",
+	"hd1080",
+	"hd1440",
+	"hd2160",
+	"hd2880",
+	"highres",
+	"auto"
+] as const;
+export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
+export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
+export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
+export type YouTubePlayerSpeedRate = (typeof youtubePlayerSpeedRate)[number] | (typeof youtubePlayerSpeedRateExtended)[number];
+export const screenshotType = ["file", "clipboard"] as const;
+export type ScreenshotType = (typeof screenshotType)[number];
+export const screenshotFormat = ["png", "jpg", "webp"] as const;
 
-export type YoutubePlayerQualityLabel = "144p" | "240p" | "360p" | "480p" | "720p" | "1080p" | "1440p" | "2160p" | "2880p" | "4320p" | "auto";
-export type YoutubePlayerQualityLevel =
-	| "tiny"
-	| "small"
-	| "medium"
-	| "large"
-	| "hd720"
-	| "hd1080"
-	| "hd1440"
-	| "hd2160"
-	| "hd2880"
-	| "highres"
-	| "auto";
-export type YouTubePlayerSpeedRateExpanded = 2.25 | 2.5 | 2.75 | 3 | 3.25 | 3.75 | 4;
-export type YouTubePlayerSpeedRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2 | YouTubePlayerSpeedRateExpanded;
-export type ScreenshotType = "file" | "clipboard";
-
-export type ScreenshotFormat = "png" | "jpeg" | "webp";
+export type ScreenshotFormat = (typeof screenshotFormat)[number];
 
 export type configuration = {
 	enable_scroll_wheel_volume_control: boolean;
@@ -109,3 +118,11 @@ export type Messages = MessageMappings[keyof MessageMappings];
 export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
+// Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
+export type TypeToZod<T> = {
+	[K in keyof T]: T[K] extends string | number | boolean | null | undefined
+		? undefined extends T[K]
+			? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+			: z.ZodType<T[K]>
+		: z.ZodObject<TypeToZod<T[K]>>;
+};

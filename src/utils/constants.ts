@@ -1,5 +1,13 @@
-import type { configuration } from "../types";
-
+import z from "zod";
+import type { TypeToZod, configuration } from "../types";
+import {
+	screenshotFormat,
+	screenshotType,
+	onScreenDisplayColor,
+	onScreenDisplayType,
+	onScreenDisplayPosition,
+	youtubePlayerQualityLevel
+} from "../types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	// Options
@@ -26,18 +34,29 @@ export const defaultConfiguration = {
 	player_quality: "auto",
 	player_speed: 1
 } satisfies configuration;
-export const YoutubePlayerQualityLabels = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
-export const YoutubePlayerQualityLevels = [
-	"tiny",
-	"small",
-	"medium",
-	"large",
-	"hd720",
-	"hd1080",
-	"hd1440",
-	"hd2160",
-	"hd2880",
-	"highres",
-	"auto"
-] as const;
-export const YoutubePlayerSpeedRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75, 4] as const;
+
+export const configurationSchemaProperties = {
+	enable_scroll_wheel_volume_control: z.boolean(),
+	enable_remember_last_volume: z.boolean(),
+	enable_automatically_set_quality: z.boolean(),
+	enable_forced_playback_speed: z.boolean(),
+	enable_volume_boost: z.boolean(),
+	enable_screenshot_button: z.boolean(),
+	enable_maximize_player_button: z.boolean(),
+	enable_video_history: z.boolean(),
+	screenshot_save_as: z.enum(screenshotType),
+	screenshot_format: z.enum(screenshotFormat),
+	osd_display_color: z.enum(onScreenDisplayColor),
+	osd_display_type: z.enum(onScreenDisplayType),
+	osd_display_position: z.enum(onScreenDisplayPosition),
+	osd_display_hide_time: z.number(),
+	osd_display_padding: z.number(),
+	osd_display_opacity: z.number().min(1).max(100),
+	volume_adjustment_steps: z.number().min(1).max(100),
+	volume_boost_amount: z.number(),
+	player_quality: z.enum(youtubePlayerQualityLevel),
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore Figure out this error
+	player_speed: z.number().min(0.25).max(4.0).step(0.25)
+} satisfies TypeToZod<configuration>;
+export const configurationSchema = z.object(configurationSchemaProperties);

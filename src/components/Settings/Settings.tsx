@@ -2,12 +2,14 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
 import { useNotifications } from "@/hooks";
-import { configuration, configurationKeys } from "@/src/types";
+import { configuration, configurationKeys, youtubePlayerSpeedRate } from "@/src/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Checkbox, NumberInput, Select, SelectOption } from "../Inputs";
 import { settingsAreDefault } from "@/src/utils/utilities";
-import { YoutubePlayerSpeedRates } from "@/src/utils/constants";
+import { configurationSchema } from "@/src/utils/constants";
+import { generateErrorMessage } from "zod-error";
+import { formatDateForFileName } from "../../utils/utilities";
 
 export default function Settings({
 	settings,
@@ -192,7 +194,7 @@ export default function Settings({
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
 	].reverse();
-	const YouTubePlayerSpeedOptions: SelectOption[] = YoutubePlayerSpeedRates.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
+	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
 	const ScreenshotFormatOptions: SelectOption[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -202,6 +204,66 @@ export default function Settings({
 		{ label: "File", value: "file" },
 		{ label: "Clipboard", value: "clipboard" }
 	];
+	// Import settings from a JSON file.
+	const importSettings = () => {
+		const input = document.createElement("input");
+		input.type = "file";
+		input.accept = ".json";
+
+		input.addEventListener("change", async (event) => {
+			const { target } = event;
+			if (!target) return;
+			const { files } = target as HTMLInputElement;
+			const file = files?.[0];
+			if (file) {
+				try {
+					const fileContents = await file.text();
+					const importedSettings = JSON.parse(fileContents);
+					// Validate the imported settings.
+					const result = configurationSchema.safeParse(importedSettings);
+					if (!result.success) {
+						const { error } = result;
+						const errorMessage = generateErrorMessage(error.errors);
+						window.alert(`Error importing settings. Please check the file format.\n${errorMessage}`);
+					} else {
+						const castSettings = importedSettings as configuration;
+						// Set the imported settings in your state.
+						setSettings({ ...castSettings });
+						Object.assign(localStorage, castSettings);
+						chrome.storage.local.set(castSettings);
+						// Show a success notification.
+						addNotification("success", "Settings imported successfully");
+					}
+				} catch (error) {
+					// Handle any import errors.
+					window.alert("Error importing settings. Please check the file format.");
+				}
+			}
+		});
+
+		// Trigger the file input dialog.
+		input.click();
+	};
+
+	// Export settings to a JSON file.
+	const exportSettings = () => {
+		if (settings) {
+			const timestamp = formatDateForFileName(new Date());
+			const filename = `youtube_enhancer_settings_${timestamp}.json`;
+			const settingsJSON = JSON.stringify(settings);
+
+			const blob = new Blob([settingsJSON], { type: "application/json" });
+			const url = URL.createObjectURL(blob);
+
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = filename;
+			a.click();
+
+			// Show a success notification.
+			addNotification("success", "Settings exported successfully");
+		}
+	};
 	return (
 		settings && (
 			<div className="w-fit h-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white">
@@ -210,7 +272,28 @@ export default function Settings({
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
-
+				<fieldset className="mx-1">
+					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Import/Export Settings</legend>
+					<div className="flex gap-1 p-2">
+						<input
+							type="button"
+							id="import_settings_button"
+							className="p-2 accent dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
+							value="Import Settings"
+							title="Import settings from a JSON file"
+							onClick={importSettings}
+						/>
+						<input
+							type="button"
+							id="export_settings_button"
+							className="p-2 accent dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
+							value="Export Settings"
+							title="Export current settings to a JSON file"
+							onClick={exportSettings}
+							style={{ marginLeft: "auto" }}
+						/>
+					</div>
+				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Miscellaneous settings</legend>
 					<div className="mx-2 mb-1" title="Remembers the last volume you set and applies it to future videos">
@@ -437,7 +520,7 @@ export default function Settings({
 						<input
 							type="button"
 							id="confirm_button"
-							className="p-2 danger dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
+							className="p-2 danger dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
 							style={{ marginLeft: "auto" }}
 							value="Confirm"
 							title="Confirm setting reset"
@@ -456,7 +539,7 @@ export default function Settings({
 						<input
 							type="button"
 							id="reset_button"
-							className="p-2 warning dark:hover:bg-[rgba(24,26,27,1)] text-sm sm:text-base md:text-lg"
+							className="p-2 warning dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
 							style={{ marginLeft: "auto" }}
 							value="Reset"
 							title="Resets all settings to their defaults, Click the confirm button to save the changes"
