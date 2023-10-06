@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.1...v1.4.2) (2023-10-06)
+
+
+### Bug Fixes
+
+* bug related to resume video prompt ([069c913](https://github.com/VampireChicken12/youtube-enhancer/commit/069c913a3b3abf88a2e45e9055e8e66745c5b065))
+
 ## [1.4.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.0...v1.4.1) (2023-10-04)
 
 
