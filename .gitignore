@@ -390,5 +390,3 @@ $RECYCLE.BIN/
 public/manifest.json
 
 releases/
-yarn.lock
-package-lock.json
