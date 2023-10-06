@@ -8,11 +8,12 @@ import setPlayerSpeed from "@/src/features/playerSpeed";
 import setRememberedVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
-import setupVideoHistory from "@/src/features/videoHistory";
+import { setupVideoHistory, promptUserToResumeVideo } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
 // TODO: Add remaining time feature
 // TODO: Add always show progressbar feature
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const alwaysShowProgressBar = async function () {
 	const player = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
 	if (!player) return;
@@ -72,6 +73,7 @@ window.onload = function () {
 		volumeBoost();
 		adjustVolumeOnScrollWheel();
 		setupVideoHistory();
+		promptUserToResumeVideo();
 	};
 	document.addEventListener("yt-player-updated", enableFeatures);
 	/**
