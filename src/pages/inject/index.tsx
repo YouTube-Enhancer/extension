@@ -1,6 +1,6 @@
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
-import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage } from "@/src/utils/utilities";
+import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage, parseStoredValue } from "@/src/utils/utilities";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -182,8 +182,13 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	Object.entries(
 		changes as { [K in keyof configuration]?: { oldValue?: configuration[K] | undefined; newValue?: configuration[K] | undefined } }
 	).forEach(([key, change]) => {
-		if (Object.prototype.hasOwnProperty.call(keyActions, key) && change?.newValue !== undefined) {
-			if (!change) return;
+		if (
+			change &&
+			Object.prototype.hasOwnProperty.call(keyActions, key) &&
+			change.newValue !== undefined &&
+			change.oldValue !== undefined &&
+			parseStoredValue(change.oldValue as string) !== parseStoredValue(change.newValue as string)
+		) {
 			keyActions[key]?.();
 		}
 	});
