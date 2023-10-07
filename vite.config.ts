@@ -46,7 +46,7 @@ export default function build() {
 		plugins: [react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		build: {
 			outDir: resolve(outDir, "temp"),
-			sourcemap: process.env.__DEV__ === "true",
+			sourcemap: process.env.__DEV__ === "true" ? "inline" : false,
 			emptyOutDir: false,
 			rollupOptions: {
 				input: {
