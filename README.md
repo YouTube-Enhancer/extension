@@ -1,22 +1,22 @@
-# YouTube Enhancer Extension
+# YouTube Enhancer Extension 🚀
 
-The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience. This README provides an overview of the extension's features and how to make the most out of it.
+The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience.
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Building the Extension](#building-the-extension)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Introduction](#🌟-introduction)
+- [Features](#🎛️-features)
+- [Building the Extension](#🛠️-building-the-extension)
+- [Configuration](#⚙-configuration)
+- [Usage](#🔧-usage)
+- [Contributing](#📝-contributing)
+- [License](#📜-license)
 
-## Introduction
+## 🌟 Introduction
 
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 
-## Features
+## 🎛️ Features
 
 ### 1. Miscellaneous Settings
 
@@ -30,7 +30,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ### 2. Scroll Wheel Volume Control Settings
 
-- **Enable Scroll Wheel Volume Control:** Allows users to use the scroll wheel to control the volume of the video they're watching.
+- **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
 
 - **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
 
@@ -42,7 +42,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Amount to Adjust Volume per Scroll:** Define how much the volume should change with each scroll.
 
-- **Time to Hide OSD:** Set the time delay before hiding the OSD.
+- **Time to Hide OSD:** Set the time delay before the OSD disappears.
 
 - **Padding for OSD:** Define the amount of padding to add to the OSD (applies to corner OSD).
 
@@ -72,7 +72,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
 
-## Building the Extension
+## 🛠️ Building the Extension
 
 To build the YouTube Enhancer extension from scratch, follow these steps. We'll start with installing the necessary dependencies:
 
@@ -136,11 +136,11 @@ Your extension should now be loaded. Test it on YouTube to ensure it functions a
 
 That's it! You've successfully built the YouTube Enhancer extension from scratch.
 
-## Configuration
+## ⚙ Configuration
 
 The extension provides a range of configuration options to tailor your YouTube experience to your liking. Simply access the extension's settings page to customize its behavior.
 
-## Usage
+## 🔧 Usage
 
 Using the YouTube Enhancer Extension is straightforward:
 
@@ -154,10 +154,10 @@ Using the YouTube Enhancer Extension is straightforward:
 
 5. Enjoy an enhanced YouTube experience with the extension's features working seamlessly in the background.
 
-## Contributing
+## 📝 Contributing
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
 
-## License
+## 📜 License
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
