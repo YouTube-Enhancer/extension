@@ -28,7 +28,7 @@ jobs:
       - name: Merge changes from main into dev
         run: |
           # Switch to the dev branch
-          git checkout -f dev
+          git checkout dev
 
           # Merge changes from the main branch into dev
           git merge main
