@@ -177,6 +177,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: castedChanges.enable_video_history.newValue
 			});
+		},
+		enable_remaining_time: () => {
+			sendExtensionOnlyMessage("remainingTimeChange", {
+				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
+			});
 		}
 	};
 	Object.entries(

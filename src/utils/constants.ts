@@ -20,6 +20,7 @@ export const defaultConfiguration = {
 	enable_screenshot_button: false,
 	enable_maximize_player_button: false,
 	enable_video_history: false,
+	enable_remaining_time: false,
 	screenshot_save_as: "file",
 	screenshot_format: "png",
 	// Images
@@ -44,6 +45,7 @@ export const configurationSchema: ConfigurationToZodSchema<configuration> = z.ob
 	enable_screenshot_button: z.boolean(),
 	enable_maximize_player_button: z.boolean(),
 	enable_video_history: z.boolean(),
+	enable_remaining_time: z.boolean(),
 	screenshot_save_as: z.enum(screenshotType),
 	screenshot_format: z.enum(screenshotFormat),
 	osd_display_color: z.enum(onScreenDisplayColor),

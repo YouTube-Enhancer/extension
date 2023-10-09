@@ -10,7 +10,7 @@ import { addScreenshotButton, removeScreenshotButton } from "@/src/features/scre
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { setupVideoHistory, promptUserToResumeVideo } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
-// TODO: Add remaining time feature
+import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,6 +74,7 @@ window.onload = function () {
 		adjustVolumeOnScrollWheel();
 		setupVideoHistory();
 		promptUserToResumeVideo();
+		setupRemainingTime();
 	};
 	document.addEventListener("yt-player-updated", enableFeatures);
 	/**
@@ -172,6 +173,17 @@ window.onload = function () {
 					setupVideoHistory();
 				} else {
 					eventManager.removeEventListeners("videoHistory");
+				}
+				break;
+			}
+			case "remainingTimeChange": {
+				const {
+					data: { remainingTimeEnabled }
+				} = message;
+				if (remainingTimeEnabled) {
+					setupRemainingTime();
+				} else {
+					removeRemainingTimeDisplay();
 				}
 				break;
 			}
