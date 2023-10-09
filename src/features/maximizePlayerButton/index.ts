@@ -54,7 +54,6 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		tooltip.textContent = title ?? "Maximize Player";
 		function mouseLeaveListener() {
 			tooltip.remove();
-			eventManager.addEventListener(maximizePlayerButton, "mouseleave", mouseLeaveListener, "maximizePlayerButton");
 		}
 		eventManager.addEventListener(maximizePlayerButton, "mouseleave", mouseLeaveListener, "maximizePlayerButton");
 		document.body.appendChild(tooltip);

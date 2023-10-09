@@ -1,5 +1,5 @@
 import z from "zod";
-import type { TypeToZod, configuration } from "../types";
+import type { ConfigurationToZodSchema, configuration } from "../types";
 import {
 	screenshotFormat,
 	screenshotType,
@@ -20,6 +20,7 @@ export const defaultConfiguration = {
 	enable_screenshot_button: false,
 	enable_maximize_player_button: false,
 	enable_video_history: false,
+	enable_remaining_time: false,
 	screenshot_save_as: "file",
 	screenshot_format: "png",
 	// Images
@@ -35,7 +36,7 @@ export const defaultConfiguration = {
 	player_speed: 1
 } satisfies configuration;
 
-export const configurationSchemaProperties = {
+export const configurationSchema: ConfigurationToZodSchema<configuration> = z.object({
 	enable_scroll_wheel_volume_control: z.boolean(),
 	enable_remember_last_volume: z.boolean(),
 	enable_automatically_set_quality: z.boolean(),
@@ -44,6 +45,7 @@ export const configurationSchemaProperties = {
 	enable_screenshot_button: z.boolean(),
 	enable_maximize_player_button: z.boolean(),
 	enable_video_history: z.boolean(),
+	enable_remaining_time: z.boolean(),
 	screenshot_save_as: z.enum(screenshotType),
 	screenshot_format: z.enum(screenshotFormat),
 	osd_display_color: z.enum(onScreenDisplayColor),
@@ -55,8 +57,6 @@ export const configurationSchemaProperties = {
 	volume_adjustment_steps: z.number().min(1).max(100),
 	volume_boost_amount: z.number(),
 	player_quality: z.enum(youtubePlayerQualityLevel),
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore Figure out this error
-	player_speed: z.number().min(0.25).max(4.0).step(0.25)
-} satisfies TypeToZod<configuration>;
-export const configurationSchema = z.object(configurationSchemaProperties);
+	player_speed: z.number().min(0.25).max(4.0).step(0.25),
+	remembered_volume: z.number().optional()
+});

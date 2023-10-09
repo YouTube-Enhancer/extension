@@ -27,7 +27,7 @@ export const youtubePlayerQualityLevel = [
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
 export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
-export type YouTubePlayerSpeedRate = (typeof youtubePlayerSpeedRate)[number] | (typeof youtubePlayerSpeedRateExtended)[number];
+
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
 export const screenshotFormat = ["png", "jpg", "webp"] as const;
@@ -43,6 +43,7 @@ export type configuration = {
 	enable_screenshot_button: boolean;
 	enable_maximize_player_button: boolean;
 	enable_video_history: boolean;
+	enable_remaining_time: boolean;
 	screenshot_save_as: ScreenshotType;
 	screenshot_format: ScreenshotFormat;
 	osd_display_color: OnScreenDisplayColor;
@@ -55,7 +56,7 @@ export type configuration = {
 	volume_boost_amount: number;
 	remembered_volume?: number;
 	player_quality: YoutubePlayerQualityLevel;
-	player_speed: YouTubePlayerSpeedRate;
+	player_speed: number;
 };
 export type configurationKeys = keyof configuration;
 export type VideoHistoryStatus = "watched" | "watching";
@@ -90,10 +91,11 @@ export type ContentSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostAmount?: number }>;
-	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { playerSpeed?: YouTubePlayerSpeedRate; enableForcedPlaybackSpeed: boolean }>;
+	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { playerSpeed?: number; enableForcedPlaybackSpeed: boolean }>;
 	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
 	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
+	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -119,10 +121,13 @@ export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
-export type TypeToZod<T> = {
+type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends string | number | boolean | null | undefined
 		? undefined extends T[K]
 			? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
 			: z.ZodType<T[K]>
 		: z.ZodObject<TypeToZod<T[K]>>;
 };
+export type ConfigurationToZodSchema<T> = z.ZodObject<{
+	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+}>;
