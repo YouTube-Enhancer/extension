@@ -258,7 +258,6 @@ export function drawVolumeDisplay({
 	const bottomRect = bottomElement?.getBoundingClientRect();
 	const paddingTop = topRect ? (isShortsPage() ? topRect.top / 2 : 0) : 0;
 	const paddingBottom = bottomRect ? Math.round((bottomRect.bottom - bottomRect.top) / (isShortsPage() ? 1.79 : 1)) : 0;
-	// TODO: dynamically add padding if the volume display is under the bottom or top element
 	switch (displayPosition) {
 		case "top_left":
 		case "top_right":
