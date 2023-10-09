@@ -26,6 +26,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Enable Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
 
+- **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
+
 ### 2. Scroll Wheel Volume Control Settings
 
 - **Enable Scroll Wheel Volume Control:** Allows users to use the scroll wheel to control the volume of the video they're watching.
