@@ -43,7 +43,7 @@ export default function buildContentScript(): PluginOption {
 						plugins: [cssInjectedByJsPlugin()],
 						build: {
 							outDir: resolve(outDir, browser.name),
-							sourcemap: process.env.__DEV__ === "true",
+							sourcemap: process.env.__DEV__ === "true" ? "inline" : false,
 							emptyOutDir: false,
 							rollupOptions: {
 								input: _package,
