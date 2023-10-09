@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.2...v1.5.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* same event listener being added twice ([cedb9d3](https://github.com/VampireChicken12/youtube-enhancer/commit/cedb9d3506a41d84b38ebba9d16ef42c13c71958))
+
+
+### Features
+
+* Remaining time feature ([8eb062b](https://github.com/VampireChicken12/youtube-enhancer/commit/8eb062bae1e859b86ca01aa6dfc4cd1571bc137a))
+
 ## [1.4.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.1...v1.4.2) (2023-10-06)
 
 
