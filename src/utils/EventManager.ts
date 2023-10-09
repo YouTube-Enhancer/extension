@@ -1,4 +1,4 @@
-export type FeatureName = "videoHistory" | "screenshotButton" | "maximizePlayerButton" | "scrollWheelVolumeControl";
+export type FeatureName = "videoHistory" | "screenshotButton" | "maximizePlayerButton" | "scrollWheelVolumeControl" | "remainingTime";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
 export interface EventListenerInfo<K extends keyof ElementEventMap> {

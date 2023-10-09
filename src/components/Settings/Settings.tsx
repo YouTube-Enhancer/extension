@@ -327,6 +327,15 @@ export default function Settings({
 							onChange={setCheckboxOption("enable_video_history")}
 						/>
 					</div>
+					<div className="mx-2 mb-1" title="Shows the remaining time of the video you're watching">
+						<Checkbox
+							id="enable_remaining_time"
+							title="Shows the remaining time of the video you're watching"
+							label="Enable remaining time"
+							checked={settings.enable_remaining_time.toString() === "true"}
+							onChange={setCheckboxOption("enable_remaining_time")}
+						/>
+					</div>
 				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Scroll wheel volume control settings</legend>
