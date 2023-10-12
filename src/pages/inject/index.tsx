@@ -182,6 +182,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
 			});
+		},
+		enable_loop_button: () => {
+			sendExtensionOnlyMessage("loopButtonChange", {
+				loopButtonEnabled: castedChanges.enable_loop_button.newValue
+			});
 		}
 	};
 	Object.entries(

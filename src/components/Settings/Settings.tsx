@@ -338,6 +338,15 @@ export default function Settings({
 							onChange={setCheckboxOption("enable_remaining_time")}
 						/>
 					</div>
+					<div className="mx-2 mb-1" title="Adds a button to the player to loop the video you're watching">
+						<Checkbox
+							id="enable_loop_button"
+							title="Adds a button to the player to loop the video you're watching"
+							label="Enable loop button"
+							checked={settings.enable_loop_button.toString() === "true"}
+							onChange={setCheckboxOption("enable_loop_button")}
+						/>
+					</div>
 				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Scroll wheel volume control settings</legend>
