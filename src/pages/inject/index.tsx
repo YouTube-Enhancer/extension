@@ -1,5 +1,5 @@
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
 import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage, parseStoredValue } from "@/src/utils/utilities";
 
 /**
@@ -181,6 +181,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_remaining_time: () => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
+			});
+		},
+		enable_loop_button: () => {
+			sendExtensionOnlyMessage("loopButtonChange", {
+				loopButtonEnabled: castedChanges.enable_loop_button.newValue
 			});
 		}
 	};

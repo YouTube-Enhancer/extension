@@ -1,4 +1,4 @@
-import { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 import { isWatchPage, isShortsPage, browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
 /**
@@ -60,7 +60,9 @@ export default async function setPlayerSpeed(options?: { playerSpeed?: number; e
 
 		// If setPlaybackRate method is not available in the player, return
 		if (!playerContainer.setPlaybackRate) return;
-
+		const playerVideoData = await playerContainer.getVideoData();
+		// If the video is live return
+		if (playerVideoData.isLive) return;
 		// Log the message indicating the player speed being set
 		browserColorLog(`Setting player speed to ${player_speed}`, "FgMagenta");
 

@@ -2,10 +2,12 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
 import { useNotifications } from "@/hooks";
-import { configuration, configurationKeys, youtubePlayerSpeedRate } from "@/src/types";
+import type { configuration, configurationKeys } from "@/src/types";
+import { youtubePlayerSpeedRate } from "@/src/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Checkbox, NumberInput, Select, SelectOption } from "../Inputs";
+import React, { useEffect, useState } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Checkbox, NumberInput, Select, type SelectOption } from "../Inputs";
 import { settingsAreDefault } from "@/src/utils/utilities";
 import { configurationSchema } from "@/src/utils/constants";
 import { generateErrorMessage } from "zod-error";
@@ -334,6 +336,15 @@ export default function Settings({
 							label="Enable remaining time"
 							checked={settings.enable_remaining_time.toString() === "true"}
 							onChange={setCheckboxOption("enable_remaining_time")}
+						/>
+					</div>
+					<div className="mx-2 mb-1" title="Adds a button to the player to loop the video you're watching">
+						<Checkbox
+							id="enable_loop_button"
+							title="Adds a button to the player to loop the video you're watching"
+							label="Enable loop button"
+							checked={settings.enable_loop_button.toString() === "true"}
+							onChange={setCheckboxOption("enable_loop_button")}
 						/>
 					</div>
 				</fieldset>

@@ -39,7 +39,8 @@
 			}
 		],
 		"no-useless-escape": "off",
-		"no-empty": ["error", { "allowEmptyCatch": true }]
+		"no-empty": ["error", { "allowEmptyCatch": true }],
+		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"]
 	},
 	"globals": {
 		"chrome": "readonly"

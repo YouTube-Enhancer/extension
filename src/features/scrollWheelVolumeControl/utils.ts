@@ -1,4 +1,4 @@
-import { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/types";
+import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, isShortsPage, clamp, toDivisible, browserColorLog, round } from "@/src/utils/utilities";
 
@@ -163,7 +163,7 @@ export function drawVolumeDisplay({
 			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
 			const { width: textWidth } = context.measureText(`${round(volume)}`);
 			width = textWidth + 4;
-			height = fontSize + 4;
+			height = clamp(fontSize, 48, 72) + 4;
 			break;
 		}
 		case "line": {
@@ -250,14 +250,22 @@ export function drawVolumeDisplay({
 		canvas.remove();
 	}, displayHideTime);
 	const topElement = document.querySelector(".player-controls > ytd-shorts-player-controls");
-	const bottomElement =
+	const bottomElement: HTMLDivElement | null =
 		document.querySelector(
 			"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 		) ?? document.querySelector(".ytp-chrome-bottom");
 	const topRect = topElement?.getBoundingClientRect();
 	const bottomRect = bottomElement?.getBoundingClientRect();
+	const heightExcludingMarginPadding = bottomElement
+		? bottomElement.offsetHeight -
+		  (parseInt(getComputedStyle(bottomElement).marginTop, 10) +
+				parseInt(getComputedStyle(bottomElement).marginBottom, 10) +
+				parseInt(getComputedStyle(bottomElement).paddingTop, 10) +
+				parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
+		  10
+		: 0;
 	const paddingTop = topRect ? (isShortsPage() ? topRect.top / 2 : 0) : 0;
-	const paddingBottom = bottomRect ? Math.round((bottomRect.bottom - bottomRect.top) / (isShortsPage() ? 1.79 : 1)) : 0;
+	const paddingBottom = bottomRect ? (isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRect.bottom - bottomRect.top)) : 0;
 	switch (displayPosition) {
 		case "top_left":
 		case "top_right":
