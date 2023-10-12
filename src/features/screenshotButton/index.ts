@@ -1,5 +1,5 @@
 import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -116,34 +116,15 @@ export async function addScreenshotButton(): Promise<void> {
 			console.error(error);
 		}
 	}
-	function screenshotButtonMouseOverListener() {
-		// Create tooltip element
-		const tooltip = document.createElement("div");
-		const rect = screenshotButton.getBoundingClientRect();
-		tooltip.classList.add("yte-button-tooltip");
-		tooltip.classList.add("ytp-tooltip");
-		tooltip.classList.add("ytp-rounded-tooltip");
-		tooltip.classList.add("ytp-bottom");
-		tooltip.id = "yte-screenshot-tooltip";
-		tooltip.style.left = `${rect.left + rect.width / 2}px`;
-		tooltip.style.top = `${rect.top - 2}px`;
-		tooltip.style.zIndex = "2021";
-		const {
-			dataset: { title }
-		} = screenshotButton;
-		tooltip.textContent = title ?? "Screenshot";
-		function mouseLeaveListener() {
-			tooltip.remove();
-			eventManager.removeEventListener(screenshotButton, "mouseleave", "screenshotButton");
-		}
-		eventManager.addEventListener(screenshotButton, "mouseleave", mouseLeaveListener, "screenshotButton");
-		document.body.appendChild(tooltip);
-	}
-
 	// Append the screenshot button to before the volume control element
 	volumeControl.before(screenshotButton);
 	eventManager.addEventListener(screenshotButton, "click", screenshotButtonClickListener, "screenshotButton");
-	eventManager.addEventListener(screenshotButton, "mouseover", screenshotButtonMouseOverListener, "screenshotButton");
+	eventManager.addEventListener(
+		screenshotButton,
+		"mouseover",
+		createTooltip({ element: screenshotButton, featureName: "screenshotButton", id: "yte-screenshot-tooltip" }),
+		"screenshotButton"
+	);
 }
 export async function removeScreenshotButton(): Promise<void> {
 	// Try to get the existing screenshot button element

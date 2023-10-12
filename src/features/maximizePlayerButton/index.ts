@@ -1,6 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 import { makeMaximizeSVG, updateProgressBarPositions, setupVideoPlayerTimeUpdate, maximizePlayer } from "./utils";
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export async function addMaximizePlayerButton(): Promise<void> {
@@ -36,32 +36,19 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		updateProgressBarPositions();
 		setupVideoPlayerTimeUpdate();
 	}
-	function maximizePlayerButtonMouseOverListener() {
-		// Create tooltip element
-		const tooltip = document.createElement("div");
-		const rect = maximizePlayerButton.getBoundingClientRect();
-		tooltip.classList.add("yte-button-tooltip");
-		tooltip.classList.add("ytp-tooltip");
-		tooltip.classList.add("ytp-rounded-tooltip");
-		tooltip.classList.add("ytp-bottom");
-		tooltip.id = "yte-maximize-button-tooltip";
-		tooltip.style.left = `${rect.left + rect.width / 2}px`;
-		tooltip.style.top = `${rect.top - 2}px`;
-		tooltip.style.zIndex = "2021";
-		const {
-			dataset: { title }
-		} = maximizePlayerButton;
-		tooltip.textContent = title ?? "Maximize Player";
-		function mouseLeaveListener() {
-			tooltip.remove();
-		}
-		eventManager.addEventListener(maximizePlayerButton, "mouseleave", mouseLeaveListener, "maximizePlayerButton");
-		document.body.appendChild(tooltip);
-	}
 	// Append the maximize player button to before the volume control element
 	sizeButton.before(maximizePlayerButton);
 	eventManager.addEventListener(maximizePlayerButton, "click", maximizePlayerButtonClickListener, "maximizePlayerButton");
-	eventManager.addEventListener(maximizePlayerButton, "mouseover", maximizePlayerButtonMouseOverListener, "maximizePlayerButton");
+	eventManager.addEventListener(
+		maximizePlayerButton,
+		"mouseover",
+		createTooltip({
+			featureName: "maximizePlayerButton",
+			element: maximizePlayerButton,
+			id: "yte-maximize-player-button-tooltip"
+		}),
+		"maximizePlayerButton"
+	);
 	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
 	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
 	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");

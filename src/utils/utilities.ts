@@ -9,6 +9,7 @@ import type {
 	SendDataMessage,
 	YoutubePlayerQualityLabel
 } from "@/src/types";
+import { eventManager, type FeatureName } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
@@ -428,4 +429,29 @@ export function parseStoredValue(value: string) {
 
 	// If parsing or type checking fails, return the original value as a string
 	return value;
+}
+export function createTooltip({ element, text, id, featureName }: { text?: string; element: HTMLElement; id: string; featureName: FeatureName }) {
+	return () => {
+		// Create tooltip element
+		const tooltip = document.createElement("div");
+		const rect = element.getBoundingClientRect();
+		tooltip.classList.add("yte-button-tooltip");
+		tooltip.classList.add("ytp-tooltip");
+		tooltip.classList.add("ytp-rounded-tooltip");
+		tooltip.classList.add("ytp-bottom");
+		tooltip.id = id;
+		tooltip.style.left = `${rect.left + rect.width / 2}px`;
+		tooltip.style.top = `${rect.top - 2}px`;
+		tooltip.style.zIndex = "2021";
+		const {
+			dataset: { title }
+		} = element;
+		tooltip.textContent = text ?? title ?? "";
+		function mouseLeaveListener() {
+			tooltip.remove();
+			eventManager.removeEventListener(element, "mouseleave", featureName);
+		}
+		eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
+		document.body.appendChild(tooltip);
+	};
 }
