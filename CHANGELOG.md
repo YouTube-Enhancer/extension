@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.5.0...v1.6.0) (2023-10-12)
+
+
+### Bug Fixes
+
+* attempting to set player speed on live video ([ae774e3](https://github.com/VampireChicken12/youtube-enhancer/commit/ae774e3b72407fa09f1d568a7dd85f4b57753a70))
+* volume display bottom padding on shorts page ([295de3d](https://github.com/VampireChicken12/youtube-enhancer/commit/295de3dc7ff1a54090a38f51986575fac591df26))
+
+
+### Features
+
+* loop / repeat button added ([83b240e](https://github.com/VampireChicken12/youtube-enhancer/commit/83b240ea9dea30025cf7ce7750d9e4f8c851399e))
+
 # [1.5.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.4.2...v1.5.0) (2023-10-09)
 
 
