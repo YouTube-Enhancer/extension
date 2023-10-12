@@ -2,10 +2,12 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
 import { useNotifications } from "@/hooks";
-import { configuration, configurationKeys, youtubePlayerSpeedRate } from "@/src/types";
+import type { configuration, configurationKeys } from "@/src/types";
+import { youtubePlayerSpeedRate } from "@/src/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Checkbox, NumberInput, Select, SelectOption } from "../Inputs";
+import React, { useEffect, useState } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Checkbox, NumberInput, Select, type SelectOption } from "../Inputs";
 import { settingsAreDefault } from "@/src/utils/utilities";
 import { configurationSchema } from "@/src/utils/constants";
 import { generateErrorMessage } from "zod-error";

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import colorLog from "../log";
 import { GetInstalledBrowsers } from "get-installed-browsers";
-import { PluginOption } from "vite";
+import type { PluginOption } from "vite";
 import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync } from "fs";
 import { join } from "path";
 import { outputFolderName } from "../constants";

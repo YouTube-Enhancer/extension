@@ -1,4 +1,4 @@
-import { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 import { isWatchPage, isShortsPage, browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
 /**

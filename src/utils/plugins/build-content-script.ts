@@ -1,5 +1,6 @@
 import colorLog from "../log";
-import { PluginOption, build } from "vite";
+import { build } from "vite";
+import type { PluginOption } from "vite";
 import { resolve } from "path";
 import { outputFolderName } from "../constants";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";

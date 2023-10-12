@@ -1,4 +1,5 @@
-import React, { ChangeEvent, MutableRefObject, useRef } from "react";
+import React, { useRef } from "react";
+import type { ChangeEvent, MutableRefObject } from "react";
 import "./Number.css";
 import Arrow from "./Arrow";
 interface NumberInputProps {
