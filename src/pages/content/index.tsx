@@ -1,4 +1,4 @@
-import { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 import { browserColorLog, formatError } from "@/utils/utilities";
 import eventManager from "@/utils/EventManager";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";

@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useState, useEffect, useCallback, useRef } from "react";
-
+import { useState, useEffect, useCallback, useRef } from "react";
+import type { Dispatch, SetStateAction } from "react";
 export type StorageArea = "sync" | "local";
 
 // custom hook to set chrome local/sync storage

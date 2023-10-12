@@ -1,4 +1,4 @@
-import { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 let wasInTheatreMode = false;
 let setToTheatreMode = false;

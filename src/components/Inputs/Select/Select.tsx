@@ -1,5 +1,6 @@
 import { useComponentVisible } from "@/hooks";
-import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import Arrow from "../Number/Arrow";
 
 interface OptionProps {

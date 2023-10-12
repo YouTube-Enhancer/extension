@@ -3,7 +3,7 @@ import * as path from "path";
 import colorLog from "../log";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import { manifestV2, manifestV3 } from "../../manifest";
-import { PluginOption } from "vite";
+import type { PluginOption } from "vite";
 import { outputFolderName } from "../constants";
 
 const { resolve } = path;
