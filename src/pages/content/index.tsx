@@ -11,6 +11,7 @@ import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { setupVideoHistory, promptUserToResumeVideo } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
+import { addLoopButton } from "@/src/features/loopButton";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -65,6 +66,7 @@ window.onload = function () {
 	setRememberedVolume();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners();
+		addLoopButton();
 		addScreenshotButton();
 		addMaximizePlayerButton();
 		setRememberedVolume();
@@ -184,6 +186,21 @@ window.onload = function () {
 					setupRemainingTime();
 				} else {
 					removeRemainingTimeDisplay();
+				}
+				break;
+			}
+			case "loopButtonChange": {
+				const {
+					data: { loopButtonEnabled }
+				} = message;
+				if (loopButtonEnabled) {
+					const loopButton = document.querySelector("button.yte-loop-button") as HTMLButtonElement | null;
+					if (!loopButton) return;
+					loopButton.style.display = "block";
+				} else {
+					const loopButton = document.querySelector("button.yte-loop-button") as HTMLButtonElement | null;
+					if (!loopButton) return;
+					loopButton.style.display = "none";
 				}
 				break;
 			}

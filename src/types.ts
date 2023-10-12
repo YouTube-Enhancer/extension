@@ -44,6 +44,7 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_video_history: boolean;
 	enable_remaining_time: boolean;
+	enable_loop_button: boolean;
 	screenshot_save_as: ScreenshotType;
 	screenshot_format: ScreenshotFormat;
 	osd_display_color: OnScreenDisplayColor;
@@ -96,6 +97,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
+	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
