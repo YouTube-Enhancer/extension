@@ -63,6 +63,7 @@ export async function promptUserToResumeVideo() {
 				// Automatically hide the prompt when the countdown reaches 0
 				clearInterval(countdownInterval);
 				prompt.style.display = "none";
+				overlay.style.display = "none";
 			}
 		}, 1000);
 		if (!document.getElementById("resume-prompt-progress-bar")) {
