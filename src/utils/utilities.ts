@@ -430,28 +430,44 @@ export function parseStoredValue(value: string) {
 	// If parsing or type checking fails, return the original value as a string
 	return value;
 }
-export function createTooltip({ element, text, id, featureName }: { text?: string; element: HTMLElement; id: string; featureName: FeatureName }) {
-	return () => {
-		// Create tooltip element
-		const tooltip = document.createElement("div");
-		const rect = element.getBoundingClientRect();
-		tooltip.classList.add("yte-button-tooltip");
-		tooltip.classList.add("ytp-tooltip");
-		tooltip.classList.add("ytp-rounded-tooltip");
-		tooltip.classList.add("ytp-bottom");
-		tooltip.id = id;
-		tooltip.style.left = `${rect.left + rect.width / 2}px`;
-		tooltip.style.top = `${rect.top - 2}px`;
-		tooltip.style.zIndex = "2021";
-		const {
-			dataset: { title }
-		} = element;
-		tooltip.textContent = text ?? title ?? "";
-		function mouseLeaveListener() {
+export function createTooltip({ element, text, id, featureName }: { text?: string; element: HTMLElement; id: string; featureName: FeatureName }): {
+	listener: () => void;
+	remove: () => void;
+	update: () => void;
+} {
+	return {
+		listener: () => {
+			// Create tooltip element
+			const tooltip = document.createElement("div");
+			const rect = element.getBoundingClientRect();
+			tooltip.classList.add("yte-button-tooltip");
+			tooltip.classList.add("ytp-tooltip");
+			tooltip.classList.add("ytp-rounded-tooltip");
+			tooltip.classList.add("ytp-bottom");
+			tooltip.id = id;
+			tooltip.style.left = `${rect.left + rect.width / 2}px`;
+			tooltip.style.top = `${rect.top - 2}px`;
+			tooltip.style.zIndex = "99999";
+			const {
+				dataset: { title }
+			} = element;
+			tooltip.textContent = text ?? title ?? "";
+			function mouseLeaveListener() {
+				tooltip.remove();
+				eventManager.removeEventListener(element, "mouseleave", featureName);
+			}
+			eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
+			document.body.appendChild(tooltip);
+		},
+		remove: () => {
+			const tooltip = document.getElementById(id);
+			if (!tooltip) return;
 			tooltip.remove();
-			eventManager.removeEventListener(element, "mouseleave", featureName);
+		},
+		update: () => {
+			const tooltip = document.getElementById(id);
+			if (!tooltip) return;
+			tooltip.textContent = element.dataset.title ?? "";
 		}
-		eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
-		document.body.appendChild(tooltip);
 	};
 }
