@@ -8,18 +8,15 @@ async function loopButtonClickListener() {
 	if (!loopButton) return;
 	const loop = videoElement.hasAttribute("loop");
 	if (loop) {
+		loopButton.dataset.title = "Loop Off";
 		videoElement.removeAttribute("loop");
 	} else {
 		videoElement.setAttribute("loop", "");
+		loopButton.dataset.title = "Loop On";
 	}
 	const loopButtonSVG = loop ? makeLoopOffSVG() : makeLoopOnSVG();
 	loopButton.removeChild(loopButton.firstChild as Node);
 	loopButton.appendChild(loopButtonSVG);
-	if (loop) {
-		loopButton.dataset.title = "Loop Off";
-	} else {
-		loopButton.dataset.title = "Loop On";
-	}
 }
 export function makeLoopOnButton() {
 	const loopOnButton = document.createElement("button");
@@ -32,17 +29,21 @@ export function makeLoopOnButton() {
 	loopOnButton.style.justifyContent = "center";
 	const loopOnButtonSVG = makeLoopOnSVG();
 	loopOnButton.appendChild(loopOnButtonSVG);
-	eventManager.addEventListener(loopOnButton, "click", loopButtonClickListener, "loopButton");
+	const { listener: loopOnButtonMouseOverListener, update } = createTooltip({
+		element: loopOnButton,
+		id: "yte-loop-button-tooltip",
+		featureName: "loopButton"
+	});
 	eventManager.addEventListener(
 		loopOnButton,
-		"mouseover",
-		createTooltip({
-			element: loopOnButton,
-			id: "yte-loop-button-tooltip",
-			featureName: "loopButton"
-		}),
+		"click",
+		() => {
+			loopButtonClickListener();
+			update();
+		},
 		"loopButton"
 	);
+	eventManager.addEventListener(loopOnButton, "mouseover", loopOnButtonMouseOverListener, "loopButton");
 	return loopOnButton;
 }
 export function makeLoopOffButton() {
@@ -56,17 +57,21 @@ export function makeLoopOffButton() {
 	loopOffButton.style.justifyContent = "center";
 	const loopOffButtonSVG = makeLoopOffSVG();
 	loopOffButton.appendChild(loopOffButtonSVG);
-	eventManager.addEventListener(loopOffButton, "click", loopButtonClickListener, "loopButton");
+	const { listener: loopOffButtonListener, update } = createTooltip({
+		element: loopOffButton,
+		id: "yte-loop-button-tooltip",
+		featureName: "loopButton"
+	});
 	eventManager.addEventListener(
 		loopOffButton,
-		"mouseover",
-		createTooltip({
-			element: loopOffButton,
-			id: "yte-loop-button-tooltip",
-			featureName: "loopButton"
-		}),
+		"click",
+		() => {
+			loopButtonClickListener();
+			update();
+		},
 		"loopButton"
 	);
+	eventManager.addEventListener(loopOffButton, "mouseover", loopOffButtonListener, "loopButton");
 	return loopOffButton;
 }
 function makeLoopOnSVG(): SVGElement {
