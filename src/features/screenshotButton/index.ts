@@ -118,13 +118,21 @@ export async function addScreenshotButton(): Promise<void> {
 	}
 	// Append the screenshot button to before the volume control element
 	volumeControl.before(screenshotButton);
-	eventManager.addEventListener(screenshotButton, "click", screenshotButtonClickListener, "screenshotButton");
+	const { listener: screenshotButtonMouseOverListener, update } = createTooltip({
+		element: screenshotButton,
+		featureName: "screenshotButton",
+		id: "yte-screenshot-tooltip"
+	});
 	eventManager.addEventListener(
 		screenshotButton,
-		"mouseover",
-		createTooltip({ element: screenshotButton, featureName: "screenshotButton", id: "yte-screenshot-tooltip" }),
+		"click",
+		() => {
+			screenshotButtonClickListener();
+			update();
+		},
 		"screenshotButton"
 	);
+	eventManager.addEventListener(screenshotButton, "mouseover", screenshotButtonMouseOverListener, "screenshotButton");
 }
 export async function removeScreenshotButton(): Promise<void> {
 	// Try to get the existing screenshot button element

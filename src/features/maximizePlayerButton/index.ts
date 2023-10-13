@@ -38,17 +38,21 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	}
 	// Append the maximize player button to before the volume control element
 	sizeButton.before(maximizePlayerButton);
-	eventManager.addEventListener(maximizePlayerButton, "click", maximizePlayerButtonClickListener, "maximizePlayerButton");
+	const { listener: maximizePlayerButtonMouseOverListener, update } = createTooltip({
+		featureName: "maximizePlayerButton",
+		element: maximizePlayerButton,
+		id: "yte-maximize-player-button-tooltip"
+	});
 	eventManager.addEventListener(
 		maximizePlayerButton,
-		"mouseover",
-		createTooltip({
-			featureName: "maximizePlayerButton",
-			element: maximizePlayerButton,
-			id: "yte-maximize-player-button-tooltip"
-		}),
+		"click",
+		() => {
+			maximizePlayerButtonClickListener();
+			update();
+		},
 		"maximizePlayerButton"
 	);
+	eventManager.addEventListener(maximizePlayerButton, "mouseover", maximizePlayerButtonMouseOverListener, "maximizePlayerButton");
 	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
 	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
 	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
