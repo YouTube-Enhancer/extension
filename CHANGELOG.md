@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.6.0...v1.6.1) (2023-10-19)
+
+
+### Bug Fixes
+
+* forgot to hide overlay when time expires ([1c7d91a](https://github.com/VampireChicken12/youtube-enhancer/commit/1c7d91adfef3392e6bd42f205cae886a44e50aa9))
+* loop button not being added or removed. ([ac04a48](https://github.com/VampireChicken12/youtube-enhancer/commit/ac04a485f436b46e97f1ec400962b4605f84582a))
+
 # [1.6.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.5.0...v1.6.0) (2023-10-12)
 
 
