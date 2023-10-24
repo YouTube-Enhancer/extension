@@ -24,7 +24,7 @@ document.documentElement.appendChild(script);
 	 * @type {configuration}
 	 */
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage?.local?.get((o) => {
+		chrome.storage.local.get((o) => {
 			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 		});
 	});
@@ -63,7 +63,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			 * @type {configuration}
 			 */
 			const options: configuration = await new Promise((resolve) => {
-				chrome.storage?.local?.get((o) => {
+				chrome.storage.local.get((o) => {
 					resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 				});
 			});
@@ -99,13 +99,13 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			});
 			break;
 		}
-		case "setVolume": {
+		case "setRememberedVolume": {
 			/**
 			 * Sets the remembered volume in the local storage.
 			 *
 			 * @type {number}
 			 */
-			chrome.storage?.local?.set({ remembered_volume: message.data.volume });
+			chrome.storage.local.set({ remembered_volumes: { ...message.data } });
 			break;
 		}
 	}
@@ -132,7 +132,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		};
 	};
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage?.local?.get((o) => {
+		chrome.storage.local.get((o) => {
 			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
 		});
 	});

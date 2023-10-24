@@ -1,5 +1,6 @@
 import z from "zod";
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
@@ -55,9 +56,12 @@ export type configuration = {
 	osd_display_padding: number;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
-	remembered_volume?: number;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
+	remembered_volumes?: {
+		shortsPageVolume: number;
+		watchPageVolume: number;
+	};
 };
 export type configurationKeys = keyof configuration;
 export type VideoHistoryStatus = "watched" | "watching";
@@ -74,21 +78,27 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
 	source: S;
 };
-export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = BaseMessage<T, S> & {
-	type: Type;
-	data: D;
-};
-export type DataResponseMessage<Type extends string, D> = BaseMessage<"data_response", "extension"> & {
-	type: Type;
-	data: D;
-};
+export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = Prettify<
+	BaseMessage<T, S> & {
+		type: Type;
+		data: D;
+	}
+>;
+export type DataResponseMessage<Type extends string, D> = Prettify<
+	BaseMessage<"data_response", "extension"> & {
+		type: Type;
+		data: D;
+	}
+>;
 
-export type RequestDataMessage<Type extends string, D> = BaseMessage<"request_data", "content"> & {
-	type: Type;
-	data: D;
-};
+export type RequestDataMessage<Type extends string, D> = Prettify<
+	BaseMessage<"request_data", "content"> & {
+		type: Type;
+		data: D;
+	}
+>;
 export type ContentSendOnlyMessageMappings = {
-	setVolume: SendDataMessage<"send_data", "content", "setVolume", { volume: number }>;
+	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostAmount?: number }>;
@@ -102,7 +112,7 @@ export type ExtensionSendOnlyMessageMappings = {
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
 };
-export type MessageMappings = {
+export type MessageMappings = Prettify<{
 	options: {
 		request: RequestDataMessage<"options", undefined>;
 		response: DataResponseMessage<"options", { options: configuration }>;
@@ -117,7 +127,7 @@ export type MessageMappings = {
 		request: RequestDataMessage<"videoHistoryAll", undefined>;
 		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
 	};
-};
+}>;
 export type Messages = MessageMappings[keyof MessageMappings];
 export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
 export type Selector = string;
@@ -133,3 +143,6 @@ type TypeToZod<T> = {
 export type ConfigurationToZodSchema<T> = z.ZodObject<{
 	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
 }>;
+export type Prettify<T> = {
+	[K in keyof T]: T[K];
+};
