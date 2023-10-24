@@ -57,9 +57,13 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			displayHideTime: options.osd_display_hide_time,
 			volume: newVolume
 		});
-
-		// Send a "setVolume" message to the content script
-		sendContentOnlyMessage("setVolume", { volume: newVolume });
+		if (isWatchPage()) {
+			// Send a "setVolume" message to the content script
+			sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
+		} else if (isShortsPage()) {
+			// Send a "setVolume" message to the content script
+			sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
+		}
 	};
 
 	// Set up the scroll wheel event listeners on the specified container selectors
