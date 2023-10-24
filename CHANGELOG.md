@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.6.1...v1.7.0) (2023-10-24)
+
+
+### Bug Fixes
+
+* **Event Manager:** elements couldn't have multiple listeners ([51467ad](https://github.com/VampireChicken12/youtube-enhancer/commit/51467adfd0b035d96da745546351cdb692881fb0))
+
+
+### Features
+
+* **remembered volume:** Separate Shorts & Watch page remembered volume ([7b9cc3c](https://github.com/VampireChicken12/youtube-enhancer/commit/7b9cc3c90985d0988c2d882a698db18827740ef1))
+
 ## [1.6.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.6.0...v1.6.1) (2023-10-19)
 
 
