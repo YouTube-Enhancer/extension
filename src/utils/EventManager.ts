@@ -46,7 +46,6 @@ export const eventManager: EventManager = {
 
 	// Adds an event listener for the given target, eventName, and featureName
 	addEventListener: function (target, eventName, callback, featureName) {
-		this.removeEventListener(target, eventName, featureName);
 		// Get the map of target listeners for the given featureName
 		const targetListeners = this.listeners.get(featureName) || new Map();
 		// Store the event listener info object in the map
