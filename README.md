@@ -20,7 +20,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ### 1. Miscellaneous Settings
 
-- Remember Last Volume: This option remembers the last volume set for Shorts and the Watch page separately, applying the appropriate volume when you revisit each type of video content.
+- **Remember Last Volume:** This option remembers the last volume set for Shorts and the Watch page separately, applying the appropriate volume when you revisit each type of video content.
 
 - **Enable Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
 
