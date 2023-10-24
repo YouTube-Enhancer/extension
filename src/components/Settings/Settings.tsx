@@ -550,8 +550,8 @@ export default function Settings({
 								if (notificationToRemove) {
 									removeNotification(notificationToRemove);
 								}
-								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volume: settings.remembered_volume }));
-								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volume: settings.remembered_volume }));
+								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
+								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
 
 								addNotification("success", "Options saved");
 							}}

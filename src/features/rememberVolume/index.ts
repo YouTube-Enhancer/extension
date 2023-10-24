@@ -15,12 +15,13 @@ export default async function setRememberedVolume(): Promise<void> {
 		data: { options }
 	} = optionsData;
 	// Extract the necessary properties from the options object
-	const { remembered_volume: rememberedVolume, enable_remember_last_volume: enableRememberVolume } = options;
-
+	const { remembered_volumes: rememberedVolume, enable_remember_last_volume: enableRememberVolume } = options;
+	const IsWatchPage = isWatchPage();
+	const IsShortsPage = isShortsPage();
 	// Get the player container element
-	const playerContainer = isWatchPage()
+	const playerContainer = IsWatchPage
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
-		: isShortsPage()
+		: IsShortsPage
 		? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
 		: null;
 
@@ -30,11 +31,17 @@ export default async function setRememberedVolume(): Promise<void> {
 	// If setVolume method is not available in the player container, return
 	if (!playerContainer.setVolume) return;
 
-	// Log the message indicating whether the last volume is being restored or not
-	browserColorLog(`${enableRememberVolume ? "Restoring" : "Not restoring"} last volume ${rememberedVolume}`, "FgMagenta");
-
 	// If the remembered volume option is enabled, set the volume and draw the volume display
 	if (rememberedVolume && enableRememberVolume) {
-		await playerContainer.setVolume(rememberedVolume);
+		const { shortsPageVolume, watchPageVolume } = rememberedVolume ?? {};
+		if (IsWatchPage && watchPageVolume) {
+			// Log the message indicating whether the last volume is being restored or not
+			browserColorLog(`Restoring watch page volume to ${watchPageVolume}`, "FgMagenta");
+			await playerContainer.setVolume(watchPageVolume);
+		} else if (IsShortsPage && shortsPageVolume) {
+			// Log the message indicating whether the last volume is being restored or not
+			browserColorLog(`Restoring shorts page volume to ${shortsPageVolume}`, "FgMagenta");
+			await playerContainer.setVolume(shortsPageVolume);
+		}
 	}
 }
