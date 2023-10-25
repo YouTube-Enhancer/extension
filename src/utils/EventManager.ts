@@ -7,7 +7,8 @@ export type FeatureName =
 	| "volumeBoost"
 	| "playerSpeed"
 	| "playerQuality"
-	| "loopButton";
+	| "loopButton"
+	| "rememberVolume";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
 export interface EventListenerInfo<K extends keyof ElementEventMap> {
