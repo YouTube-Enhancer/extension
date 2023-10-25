@@ -11,6 +11,16 @@ import { adjustVolume, getScrollDirection, setupScrollListeners, drawVolumeDispl
  * @returns {Promise<void>} A promise that resolves once the volume adjustment is completed.
  */
 export default async function adjustVolumeOnScrollWheel(): Promise<void> {
+	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
+	// Extract the necessary properties from the options object
+	const { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl } = options;
+	// If scroll wheel volume control is disabled, return
+	if (!enableScrollWheelVolumeControl) return;
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 
@@ -31,17 +41,6 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 		// Adjust the volume based on the scroll direction
 		const scrollDelta = getScrollDirection(wheelEvent.deltaY);
-
-		// Wait for the "options" message from the extension
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-		if (!optionsData) return;
-		const {
-			data: { options }
-		} = optionsData;
-		// Extract the necessary properties from the options object
-		const { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl } = options;
-		// If scroll wheel volume control is disabled, return
-		if (!enableScrollWheelVolumeControl) return;
 
 		// Adjust the volume based on the scroll direction and options
 		const { newVolume } = await adjustVolume(scrollDelta, options.volume_adjustment_steps);
