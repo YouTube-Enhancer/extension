@@ -200,6 +200,17 @@ window.onload = function () {
 				}
 				break;
 			}
+			case "scrollWheelVolumeControlChange": {
+				const {
+					data: { scrollWheelVolumeControlEnabled }
+				} = message;
+				if (scrollWheelVolumeControlEnabled) {
+					adjustVolumeOnScrollWheel();
+				} else {
+					eventManager.removeEventListeners("scrollWheelVolumeControl");
+				}
+				break;
+			}
 			default: {
 				return;
 			}

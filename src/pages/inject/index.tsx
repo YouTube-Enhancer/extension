@@ -187,6 +187,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("loopButtonChange", {
 				loopButtonEnabled: castedChanges.enable_loop_button.newValue
 			});
+		},
+		enable_scroll_wheel_volume_control: () => {
+			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
+				scrollWheelVolumeControlEnabled: castedChanges.enable_scroll_wheel_volume_control.newValue
+			});
 		}
 	};
 	Object.entries(
