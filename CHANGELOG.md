@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.1...v1.7.2) (2023-10-25)
+
+
+### Bug Fixes
+
+* **remember volume:** remember volume used scroll wheel volume control ([d5b0833](https://github.com/VampireChicken12/youtube-enhancer/commit/d5b0833577df3704370f0ce71579bca712b2a16f))
+
 ## [1.7.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.0...v1.7.1) (2023-10-25)
 
 
