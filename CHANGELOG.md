@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.0...v1.7.1) (2023-10-25)
+
+
+### Bug Fixes
+
+* **scroll wheel volume control:** Fix not being able to scroll when over video ([230d07f](https://github.com/VampireChicken12/youtube-enhancer/commit/230d07f512f938f9e8c22ed527cc0c3594f99cba)), closes [#62](https://github.com/VampireChicken12/youtube-enhancer/issues/62)
+
 # [1.7.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.6.1...v1.7.0) (2023-10-24)
 
 
