@@ -1,37 +1,37 @@
-type ColorType = "success" | "info" | "error" | "warning" | keyof typeof COLORS;
-export function colorizeLog(message: string, type?: ColorType) {
-	let color: ColorType | string | typeof COLORS = type || "FgBlack";
+type ColorType = "success" | "info" | "error" | "warning" | keyof typeof TerminalColors;
+export function colorizeTerminalLog(message: string, type?: ColorType) {
+	let color: ColorType | string | typeof TerminalColors = type || "FgBlack";
 
 	switch (type) {
 		case "success":
-			({ ["FgGreen"]: color } = COLORS);
+			({ ["FgGreen"]: color } = TerminalColors);
 			break;
 		case "info":
-			({ ["FgBlue"]: color } = COLORS);
+			({ ["FgBlue"]: color } = TerminalColors);
 			break;
 		case "error":
-			({ ["FgRed"]: color } = COLORS);
+			({ ["FgRed"]: color } = TerminalColors);
 			break;
 		case "warning":
-			({ ["FgYellow"]: color } = COLORS);
+			({ ["FgYellow"]: color } = TerminalColors);
 			break;
 		default: {
-			if (typeof type === "string" && COLORS[type]) {
+			if (typeof type === "string" && TerminalColors[type]) {
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				({ [`${type}`]: color } = COLORS);
+				({ [`${type}`]: color } = TerminalColors);
 			}
 			break;
 		}
 	}
 
-	return `${color}${message}${COLORS.Reset}`;
+	return `${color}${message}${TerminalColors.Reset}`;
 }
-export default function colorLog(message: string, type?: ColorType) {
-	console.log(colorizeLog(`[YouTube Enhancer]`, "FgCyan"), colorizeLog(message, type));
+export default function terminalColorLog(message: string, type?: ColorType) {
+	console.log(colorizeTerminalLog(`[YouTube Enhancer]`, "FgCyan"), colorizeTerminalLog(message, type));
 }
 
-const COLORS = {
+const TerminalColors = {
 	Reset: "\x1b[0m",
 	Bright: "\x1b[1m",
 	Dim: "\x1b[2m",
