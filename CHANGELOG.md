@@ -1,3 +1,22 @@
+# [1.8.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.2...v1.8.0) (2023-10-25)
+
+
+### Features
+
+* Release artifacts SHA256 ([6a2bd2c](https://github.com/VampireChicken12/youtube-enhancer/commit/6a2bd2c1738bde29d4a50e317ce9d30d40cb27de)), closes [#65](https://github.com/VampireChicken12/youtube-enhancer/issues/65)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.8.0-Chrome.zip | e30bfec14e0af30d89121f7f48327908792384661381a42f5d58e13fdd088ad7 |
+| youtube-enhancer-v1.8.0-Chromium.zip | e30bfec14e0af30d89121f7f48327908792384661381a42f5d58e13fdd088ad7 |
+| youtube-enhancer-v1.8.0-Edge.zip | e30bfec14e0af30d89121f7f48327908792384661381a42f5d58e13fdd088ad7 |
+| youtube-enhancer-v1.8.0-Firefox.zip | 3bf64468d5a6c3459991481ff23ac7dd9e34d2c8ef1513dafa027f0f0f9cad0c |
+
 ## [1.7.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.1...v1.7.2) (2023-10-25)
 
 
