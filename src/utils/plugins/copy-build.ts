@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import colorLog from "../log";
+import terminalColorLog from "../log";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import type { PluginOption } from "vite";
 import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync } from "fs";
@@ -42,7 +42,7 @@ export default function copyBuild(): PluginOption {
 			}
 			for (const browser of browsers) {
 				copyDirectorySync(resolve(outDir, "temp"), resolve(outDir, browser.name));
-				colorLog(`Build copy complete: ${resolve(outDir, browser.name)}`, "success");
+				terminalColorLog(`Build copy complete: ${resolve(outDir, browser.name)}`, "success");
 			}
 			fs.rmSync(resolve(outDir, "temp"), { recursive: true });
 		}

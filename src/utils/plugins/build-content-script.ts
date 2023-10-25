@@ -1,11 +1,12 @@
-import colorLog from "../log";
-import { build } from "vite";
-import type { PluginOption } from "vite";
-import { resolve } from "path";
-import { outputFolderName } from "../constants";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { GetInstalledBrowsers } from "get-installed-browsers";
+import { resolve } from "path";
+import { build } from "vite";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
+import { outputFolderName } from "../constants";
+import terminalColorLog from "../log";
+
+import type { PluginOption } from "vite";
 const packages: { [entryAlias: string]: string }[] = [
 	{
 		content: resolve(__dirname, "../../../", "src/pages/content/index.tsx")
@@ -58,7 +59,7 @@ export default function buildContentScript(): PluginOption {
 						configFile: false
 					});
 				}
-				colorLog(`Content code build successfully for ${browser.name}`, "success");
+				terminalColorLog(`Content code build successfully for ${browser.name}`, "success");
 			}
 		}
 	};

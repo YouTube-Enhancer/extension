@@ -1,12 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
-import colorLog from "../log";
-import pkg from "../../../package.json";
-import type { PluginOption } from "vite";
 import archiver from "archiver";
-import { outputFolderName } from "../constants";
+import * as fs from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
+import * as path from "path";
 
+import pkg from "../../../package.json";
+import { outputFolderName } from "../constants";
+import terminalColorLog from "../log";
+
+import type { PluginOption } from "vite";
 const { resolve } = path;
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
@@ -36,7 +37,7 @@ export default function makeReleaseZips(): PluginOption {
 				releaseZip.directory(resolve(outDir, browser.name), false);
 
 				releaseZipStream.on("close", () => {
-					colorLog(`Release zip file created: ${releaseZipPath}`, "success");
+					terminalColorLog(`Release zip file created: ${releaseZipPath}`, "success");
 				});
 				releaseZip.finalize();
 			}

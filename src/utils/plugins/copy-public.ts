@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import colorLog from "../log";
+import terminalColorLog from "../log";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import type { PluginOption } from "vite";
 import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync } from "fs";
@@ -47,7 +47,7 @@ export default function copyPublic(): PluginOption {
 					fs.mkdirSync(resolve(outDir, browser.name));
 				}
 				copyDirectorySync(publicDir, resolve(outDir, browser.name));
-				colorLog(`Public directory copy complete: ${resolve(outDir, browser.name)}`, "success");
+				terminalColorLog(`Public directory copy complete: ${resolve(outDir, browser.name)}`, "success");
 			}
 		}
 	};

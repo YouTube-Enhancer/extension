@@ -49,7 +49,7 @@ export const chooseClosetQuality = (num: YoutubePlayerQualityLabel, arr: Youtube
 
 	return curr;
 };
-const COLORS = {
+const BrowserColors = {
 	Reset: "color: inherit; background-color: inherit;",
 	Bright: "font-weight: bold;",
 	Dim: "opacity: 0.6;",
@@ -75,7 +75,7 @@ const COLORS = {
 	BgWhite: "background-color: white; color: black;"
 } as const;
 
-type ColorType = "success" | "info" | "error" | "warning" | keyof typeof COLORS;
+type ColorType = "success" | "info" | "error" | "warning" | keyof typeof BrowserColors;
 /**
  * Colorize a log message based on the specified type.
  *
@@ -101,10 +101,10 @@ function colorizeLog(message: string, type?: ColorType): { message: string; styl
 			style = "color: yellow;";
 			break;
 		default: {
-			if (typeof type === "string" && COLORS[type]) {
+			if (typeof type === "string" && BrowserColors[type]) {
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				({ [`${type}`]: style } = COLORS);
+				({ [`${type}`]: style } = BrowserColors);
 			}
 			break;
 		}
@@ -112,7 +112,7 @@ function colorizeLog(message: string, type?: ColorType): { message: string; styl
 
 	return {
 		message: `%c${message}%c`,
-		styling: [style, COLORS.Reset]
+		styling: [style, BrowserColors.Reset]
 	};
 }
 /**
