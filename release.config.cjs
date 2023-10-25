@@ -24,7 +24,8 @@ module.exports = {
 			"@semantic-release/exec",
 			{
 				verifyReleaseCmd:
-					"node -e \"let packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));packageJson.version = '${nextRelease.version}';fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));\";npm run build"
+					"node -e \"let packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));packageJson.version = '${nextRelease.version}';fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));\";npm run build",
+				generateNotesCmd: "bash generateReleaseHashes.sh"
 			}
 		]
 	],
