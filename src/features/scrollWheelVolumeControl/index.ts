@@ -1,5 +1,5 @@
 import type { YouTubePlayerDiv } from "@/src/types";
-import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage, sendContentOnlyMessage } from "@/src/utils/utilities";
+import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage } from "@/src/utils/utilities";
 import { adjustVolume, getScrollDirection, setupScrollListeners, drawVolumeDisplay } from "./utils";
 
 /**
@@ -56,13 +56,6 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			displayHideTime: options.osd_display_hide_time,
 			volume: newVolume
 		});
-		if (isWatchPage()) {
-			// Send a "setVolume" message to the content script
-			sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
-		} else if (isShortsPage()) {
-			// Send a "setVolume" message to the content script
-			sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
-		}
 	};
 
 	// Set up the scroll wheel event listeners on the specified container selectors

@@ -192,6 +192,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
 				scrollWheelVolumeControlEnabled: castedChanges.enable_scroll_wheel_volume_control.newValue
 			});
+		},
+		enable_remember_last_volume: () => {
+			sendExtensionOnlyMessage("rememberVolumeChange", {
+				rememberVolumeEnabled: castedChanges.enable_remember_last_volume.newValue
+			});
 		}
 	};
 	Object.entries(
