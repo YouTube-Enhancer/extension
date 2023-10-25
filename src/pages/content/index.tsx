@@ -5,7 +5,7 @@ import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/featu
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import setPlayerQuality from "@/src/features/playerQuality";
 import setPlayerSpeed from "@/src/features/playerSpeed";
-import setRememberedVolume from "@/src/features/rememberVolume";
+import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { setupVideoHistory, promptUserToResumeVideo } from "@/src/features/videoHistory";
@@ -63,13 +63,13 @@ element.id = "yte-message-from-youtube";
 document.documentElement.appendChild(element);
 
 window.onload = function () {
-	setRememberedVolume();
+	enableRememberVolume();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners();
 		addLoopButton();
 		addScreenshotButton();
 		addMaximizePlayerButton();
-		setRememberedVolume();
+		enableRememberVolume();
 		setPlayerQuality();
 		setPlayerSpeed();
 		volumeBoost();
@@ -208,6 +208,17 @@ window.onload = function () {
 					adjustVolumeOnScrollWheel();
 				} else {
 					eventManager.removeEventListeners("scrollWheelVolumeControl");
+				}
+				break;
+			}
+			case "rememberVolumeChange": {
+				const {
+					data: { rememberVolumeEnabled }
+				} = message;
+				if (rememberVolumeEnabled) {
+					enableRememberVolume();
+				} else {
+					eventManager.removeEventListeners("rememberVolume");
 				}
 				break;
 			}
