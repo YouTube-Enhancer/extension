@@ -1,3 +1,3 @@
-import { Option, Select } from "./Select";
+import { Select } from "./Select";
 
-export { Option, Select };
+export { Select };

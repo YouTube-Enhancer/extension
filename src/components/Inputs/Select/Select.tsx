@@ -10,15 +10,6 @@ interface OptionProps {
 	children: React.ReactNode;
 }
 
-const Option: React.FC<OptionProps> = ({ value, children }) => {
-	return (
-		<div className={`flex items-center ${value === "light" ? "text-gray-900" : "text-gray-100"}`}>
-			<div className={`rounded-full h-4 w-4 mr-2 bg-[${value}]`}></div>
-			<span>{children}</span>
-		</div>
-	);
-};
-
 export type SelectOption = {
 	value: string;
 	label: string;
@@ -132,5 +123,4 @@ const Select: React.FC<SelectProps> = ({ onChange, options, className, id, selec
 		</div>
 	);
 };
-
-export { Option, Select };
+export { Select };
