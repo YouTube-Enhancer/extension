@@ -1,19 +1,16 @@
+import { cn } from "@/src/utils/utilities";
+
 type RotationDirection = "down" | "up" | "left" | "right";
 export default function Arrow({ rotation }: { rotation: RotationDirection }) {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			className={`h-4 w-4 transition-transform duration-300 transform ${
-				rotation === "down"
-					? "rotate-0"
-					: rotation === "up"
-					? "rotate-180"
-					: rotation === "left"
-					? "rotate-90"
-					: rotation === "right"
-					? "rotate-270"
-					: ""
-			}`}
+			className={cn("h-4 w-4 transition-transform duration-300 transform", {
+				"rotate-0": rotation === "down",
+				"rotate-90": rotation === "left",
+				"rotate-180": rotation === "up",
+				"rotate-270": rotation === "right"
+			})}
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke="currentColor"

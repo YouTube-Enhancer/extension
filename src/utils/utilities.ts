@@ -1,3 +1,5 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 import type {
 	configuration,
 	ContentSendOnlyMessageMappings,
@@ -470,4 +472,8 @@ export function createTooltip({ element, text, id, featureName }: { text?: strin
 			tooltip.textContent = element.dataset.title ?? "";
 		}
 	};
+}
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
 }

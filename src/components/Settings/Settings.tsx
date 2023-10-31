@@ -8,7 +8,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Checkbox, NumberInput, Select, type SelectOption } from "../Inputs";
-import { settingsAreDefault } from "@/src/utils/utilities";
+import { cn, settingsAreDefault } from "@/src/utils/utilities";
 import { configurationSchema } from "@/src/utils/constants";
 import { generateErrorMessage } from "zod-error";
 import { formatDateForFileName } from "../../utils/utilities";
@@ -105,42 +105,42 @@ export default function Settings({
 		{
 			value: "red",
 			label: "Red",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[red]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[red]")}></div>
 		},
 		{
 			value: "green",
 			label: "Green",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[green]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[green]")}></div>
 		},
 		{
 			value: "blue",
 			label: "Blue",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[blue]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[blue]")}></div>
 		},
 		{
 			value: "yellow",
 			label: "Yellow",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[yellow]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[yellow]")}></div>
 		},
 		{
 			value: "orange",
 			label: "Orange",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[orange]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[orange]")}></div>
 		},
 		{
 			value: "purple",
 			label: "Purple",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[purple]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[purple]")}></div>
 		},
 		{
 			value: "pink",
 			label: "Pink",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[pink]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[pink]")}></div>
 		},
 		{
 			value: "white",
 			label: "White",
-			element: <div className={`m-2 h-2 w-2 rounded-[50%] bg-[white]`}></div>
+			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[white]")}></div>
 		}
 	];
 	const OSD_DisplayTypeOptions: SelectOption[] = [
@@ -571,17 +571,12 @@ export default function Settings({
 				<div id="notifications" ref={parentRef}>
 					{notifications.map((notification, index) => (
 						<div
-							className={`relative notification ${
-								notification.type === "success"
-									? "bg-green-600"
-									: notification.type === "error"
-									? "bg-red-600"
-									: notification.type === "info"
-									? "bg-blue-600"
-									: notification.type === "warning"
-									? "bg-yellow-600"
-									: "bg-teal-600"
-							} inverse`}
+							className={cn("relative notification inverse bg-teal-600", {
+								"bg-green-600": notification.type === "success",
+								"bg-red-600": notification.type === "error",
+								"bg-blue-600": notification.type === "info",
+								"bg-yellow-600": notification.type === "warning"
+							})}
 							key={index}
 						>
 							{notification.action ? (
