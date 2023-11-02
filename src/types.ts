@@ -1,5 +1,6 @@
 import z from "zod";
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+import type { FeatureName } from "./utils/EventManager";
 
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -148,3 +149,7 @@ export type ConfigurationToZodSchema<T> = z.ZodObject<{
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
+export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
+export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
+export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
+export type WithId<S extends string> = `#${S}`;
