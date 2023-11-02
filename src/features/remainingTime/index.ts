@@ -14,7 +14,7 @@ async function playerTimeUpdateListener() {
 	if (!playerContainer) return;
 
 	// Get the video element
-	const videoElement = playerContainer.childNodes[0]?.childNodes[0] as HTMLVideoElement | null;
+	const videoElement = playerContainer.querySelector("video") as HTMLVideoElement | null;
 
 	// If video element is not available, return
 	if (!videoElement) return;
@@ -46,7 +46,7 @@ export async function setupRemainingTime() {
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// Get the video element
-	const videoElement = playerContainer.childNodes[0]?.childNodes[0] as HTMLVideoElement | null;
+	const videoElement = playerContainer.querySelector("video") as HTMLVideoElement | null;
 	// If video element is not available, return
 	if (!videoElement) return;
 	const remainingTime = await calculateRemainingTime({ videoElement, playerContainer });
