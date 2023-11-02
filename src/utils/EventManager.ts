@@ -8,7 +8,8 @@ export type FeatureName =
 	| "playerSpeed"
 	| "playerQuality"
 	| "loopButton"
-	| "rememberVolume";
+	| "rememberVolume"
+	| "featureMenu";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
 export interface EventListenerInfo<K extends keyof ElementEventMap> {
@@ -37,7 +38,7 @@ export type EventManager = {
 
 	removeEventListeners: (featureName: FeatureName) => void;
 
-	removeAllEventListeners: () => void;
+	removeAllEventListeners: (exclude?: FeatureName[]) => void;
 };
 
 export const eventManager: EventManager = {
@@ -92,15 +93,15 @@ export const eventManager: EventManager = {
 	},
 
 	// Removes all event listeners
-	removeAllEventListeners: function () {
-		// Remove all event listeners from all targets
-		this.listeners.forEach((targetListeners) => {
+	removeAllEventListeners: function (exclude) {
+		// Remove all event listeners from all targets excluding the given feature names
+		this.listeners.forEach((targetListeners, featureName) => {
+			if (exclude && exclude.includes(featureName)) return;
 			targetListeners.forEach(({ target, eventName, callback }) => {
 				target.removeEventListener(eventName, callback);
 			});
+			this.listeners.delete(featureName);
 		});
-		// Remove all maps of target listeners from the map
-		this.listeners.clear();
 	}
 };
 export default eventManager;

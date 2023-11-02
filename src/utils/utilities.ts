@@ -337,31 +337,12 @@ export function formatError(error: unknown) {
  */
 export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 	return new Promise((resolve) => {
-		setTimeout(() => {
-			browserColorLog("Waiting for target nodes", "FgMagenta");
-			const elementsMap = new Map<string, Element | null>();
-			const { length: selectorsCount } = selectors;
-			let resolvedCount = 0;
+		browserColorLog("Waiting for target nodes", "FgMagenta");
+		const elementsMap = new Map<string, Element | null>();
+		const { length: selectorsCount } = selectors;
+		let resolvedCount = 0;
 
-			const observer = new MutationObserver(() => {
-				selectors.forEach((selector) => {
-					const element = document.querySelector(selector);
-					elementsMap.set(selector, element);
-					if (!element) {
-						return;
-					}
-
-					resolvedCount++;
-					if (resolvedCount === selectorsCount) {
-						observer.disconnect();
-						const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
-						resolve(resolvedElements);
-					}
-				});
-			});
-
-			observer.observe(document, { childList: true, subtree: true });
-
+		const observer = new MutationObserver(() => {
 			selectors.forEach((selector) => {
 				const element = document.querySelector(selector);
 				elementsMap.set(selector, element);
@@ -376,7 +357,24 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 					resolve(resolvedElements);
 				}
 			});
-		}, 2_500);
+		});
+
+		observer.observe(document, { childList: true, subtree: true });
+
+		selectors.forEach((selector) => {
+			const element = document.querySelector(selector);
+			elementsMap.set(selector, element);
+			if (!element) {
+				return;
+			}
+
+			resolvedCount++;
+			if (resolvedCount === selectorsCount) {
+				observer.disconnect();
+				const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
+				resolve(resolvedElements);
+			}
+		});
 	});
 }
 export function settingsAreDefault(defaultSettings: Partial<configuration>, currentSettings: Partial<configuration>): boolean {
@@ -437,28 +435,38 @@ export function createTooltip({ element, text, id, featureName }: { text?: strin
 	remove: () => void;
 	update: () => void;
 } {
+	function makeTooltip() {
+		// Create tooltip element
+		const tooltip = document.createElement("div");
+		const rect = element.getBoundingClientRect();
+		tooltip.classList.add("yte-button-tooltip");
+		tooltip.classList.add("ytp-tooltip");
+		tooltip.classList.add("ytp-rounded-tooltip");
+		tooltip.classList.add("ytp-bottom");
+		tooltip.id = id;
+		tooltip.style.left = `${rect.left + rect.width / 2}px`;
+		tooltip.style.top = `${rect.top - 2}px`;
+		tooltip.style.zIndex = "99999";
+		const {
+			dataset: { title }
+		} = element;
+		tooltip.textContent = text ?? title ?? "";
+		function mouseLeaveListener() {
+			tooltip.remove();
+			eventManager.removeEventListener(element, "mouseleave", featureName);
+		}
+		eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
+		return tooltip;
+	}
 	return {
 		listener: () => {
-			// Create tooltip element
-			const tooltip = document.createElement("div");
-			const rect = element.getBoundingClientRect();
-			tooltip.classList.add("yte-button-tooltip");
-			tooltip.classList.add("ytp-tooltip");
-			tooltip.classList.add("ytp-rounded-tooltip");
-			tooltip.classList.add("ytp-bottom");
-			tooltip.id = id;
-			tooltip.style.left = `${rect.left + rect.width / 2}px`;
-			tooltip.style.top = `${rect.top - 2}px`;
-			tooltip.style.zIndex = "99999";
-			const {
-				dataset: { title }
-			} = element;
-			tooltip.textContent = text ?? title ?? "";
-			function mouseLeaveListener() {
+			const tooltipExists = document.getElementById(id) !== null;
+			if (tooltipExists) {
+				const tooltip = document.getElementById(id);
+				if (!tooltip) return;
 				tooltip.remove();
-				eventManager.removeEventListener(element, "mouseleave", featureName);
 			}
-			eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
+			const tooltip = makeTooltip();
 			document.body.appendChild(tooltip);
 		},
 		remove: () => {

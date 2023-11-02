@@ -9,19 +9,19 @@ export function makeMaximizeSVG(): SVGElement {
 	maximizeSVG.setAttributeNS(null, "width", "100%");
 	maximizeSVG.setAttributeNS(null, "fill", "none");
 	maximizeSVG.setAttributeNS(null, "stroke-width", "1.5");
-	maximizeSVG.setAttributeNS(null, "viewBox", "0 0 36 36");
+	maximizeSVG.setAttributeNS(null, "viewBox", "0 0 24 24");
 	const maximize_SVG_FirstPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
 	maximize_SVG_FirstPath.setAttributeNS(
 		null,
 		"d",
-		"M 26.171872,26.171876 H 9.8281282 V 9.8281241 H 26.171872 Z m -16.3437437,0 V 9.8281241 H 26.171872 V 26.171876 Z"
+		"M 21.283309,21.283314 H 2.7166914 V 2.7166868 H 21.283309 Z m -18.5666175,0 V 2.7166868 H 21.283309 V 21.283314 Z"
 	);
 	maximize_SVG_FirstPath.setAttributeNS(null, "stroke-linecap", "round");
 	maximize_SVG_FirstPath.setAttributeNS(null, "stroke-linejoin", "round");
 	maximize_SVG_FirstPath.style.strokeWidth = "1.5";
 	maximize_SVG_FirstPath.style.strokeLinejoin = "round";
 	const maximize_SVG_SecondPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	maximize_SVG_SecondPath.setAttributeNS(null, "d", "m 18,14.497768 v 7.004464 M 21.502231,18 h -7.004462");
+	maximize_SVG_SecondPath.setAttributeNS(null, "d", "M 12,8.0214379 V 15.978562 M 15.978561,12 H 8.0214389");
 	maximize_SVG_SecondPath.setAttributeNS(null, "stroke-linecap", "round");
 	maximize_SVG_SecondPath.setAttributeNS(null, "stroke-linejoin", "round");
 	maximize_SVG_SecondPath.style.strokeWidth = "1.5";
@@ -30,34 +30,8 @@ export function makeMaximizeSVG(): SVGElement {
 	maximizeSVG.appendChild(maximize_SVG_SecondPath);
 	return maximizeSVG;
 }
-export function makeMinimizeSVG(): SVGElement {
-	const minimizeSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	minimizeSVG.setAttributeNS(null, "stroke", "currentColor");
-	minimizeSVG.setAttributeNS(null, "height", "100%");
-	minimizeSVG.setAttributeNS(null, "width", "100%");
-	minimizeSVG.setAttributeNS(null, "fill", "none");
-	minimizeSVG.setAttributeNS(null, "stroke-width", "1.5");
-	minimizeSVG.setAttributeNS(null, "viewBox", "0 0 36 36");
-	const minimize_SVG_FirstPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	minimize_SVG_FirstPath.setAttributeNS(
-		null,
-		"d",
-		"M 26.171872,26.171876 H 9.8281282 V 9.8281241 H 26.171872 Z m -16.3437437,0 V 9.8281241 H 26.171872 V 26.171876 Z"
-	);
-	minimize_SVG_FirstPath.setAttributeNS(null, "stroke-linecap", "round");
-	minimize_SVG_FirstPath.setAttributeNS(null, "stroke-linejoin", "round");
-	minimize_SVG_FirstPath.style.strokeWidth = "1.5";
-	minimize_SVG_FirstPath.style.strokeLinejoin = "round";
-	const minimize_SVG_SecondPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	minimize_SVG_SecondPath.setAttributeNS(null, "d", "M 21.502231,18 H 14.497769");
-	minimize_SVG_SecondPath.setAttributeNS(null, "stroke-linecap", "round");
-	minimize_SVG_SecondPath.setAttributeNS(null, "stroke-linejoin", "round");
-	minimize_SVG_SecondPath.style.strokeWidth = "1.5";
-	minimize_SVG_SecondPath.style.strokeLinejoin = "round";
-	minimizeSVG.appendChild(minimize_SVG_FirstPath);
-	minimizeSVG.appendChild(minimize_SVG_SecondPath);
-	return minimizeSVG;
-} // TODO: get played progress bar to be accurate when maximized from default view
+
+// TODO: get played progress bar to be accurate when maximized from default view
 // TODO: Add event listener that updates scrubber position when maximize button is clicked
 export function updateProgressBarPositions() {
 	const seekBar = document.querySelector("div.ytp-progress-bar") as HTMLDivElement | null;
@@ -84,7 +58,7 @@ export function setupVideoPlayerTimeUpdate() {
 	};
 	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "maximizePlayerButton");
 }
-export function maximizePlayer(maximizePlayerButton: HTMLButtonElement) {
+export function maximizePlayer() {
 	// Get the video element
 	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
 	// If video element is not available, return
@@ -143,13 +117,10 @@ export function maximizePlayer(maximizePlayerButton: HTMLButtonElement) {
 		// 	sizeElement.dataset.titleNoTooltip = dataTitleNoTooltip;
 		// 	sizeElement.title = title;
 		// }
-
-		maximizePlayerButton.dataset.title = "Maximize Player";
+		document.body.style.overflow = "";
 		videoElement.classList.remove("maximized_video");
 		videoContainer.classList.remove("maximized_video_container");
 		controlsElement.classList.remove("maximized_controls");
-		maximizePlayerButton.removeChild(maximizePlayerButton.firstChild as Node);
-		maximizePlayerButton.appendChild(makeMaximizeSVG());
 	} else {
 		// sizeElement.click();
 
@@ -166,12 +137,9 @@ export function maximizePlayer(maximizePlayerButton: HTMLButtonElement) {
 		// 	sizeElement.dataset.titleNoTooltip = dataTitleNoTooltip;
 		// 	sizeElement.title = title;
 		// }
-
-		maximizePlayerButton.dataset.title = "Minimize Player";
+		document.body.style.overflow = "hidden";
 		videoElement.classList.add("maximized_video");
 		videoContainer.classList.add("maximized_video_container");
 		controlsElement.classList.add("maximized_controls");
-		maximizePlayerButton.removeChild(maximizePlayerButton.firstChild as Node);
-		maximizePlayerButton.appendChild(makeMinimizeSVG());
 	}
 }
