@@ -1,5 +1,7 @@
 import { waitForSpecificMessage } from "@/src/utils/utilities";
-import { makeLoopOffButton } from "./utils";
+import { loopButtonClickListener, makeLoopIcon } from "./utils";
+import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import eventManager from "@/src/utils/EventManager";
 
 export async function addLoopButton() {
 	// Wait for the "options" message from the content script
@@ -12,17 +14,22 @@ export async function addLoopButton() {
 	const { enable_loop_button } = options;
 	// If the loop button option is disabled, return
 	if (!enable_loop_button) return;
-	const loopButtonExists = document.querySelector("button#yte-loop-button") as HTMLButtonElement | null;
-	if (loopButtonExists) return;
 	// Get the volume control element
 	const volumeControl = document.querySelector("div.ytp-chrome-controls > div.ytp-left-controls > span.ytp-volume-area") as HTMLSpanElement | null;
 	// If volume control element is not available, return
 	if (!volumeControl) return;
-	const loopButton = makeLoopOffButton();
-	volumeControl.before(loopButton);
+	const videoElement = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
+	if (!videoElement) return;
+	const loopSVG = makeLoopIcon();
+	addFeatureItemToMenu({
+		icon: loopSVG,
+		label: `Loop`,
+		featureName: "loopButton",
+		listener: loopButtonClickListener,
+		isToggle: true
+	});
 }
 export function removeLoopButton() {
-	const loopButton = document.querySelector("button#yte-loop-button") as HTMLButtonElement | null;
-	if (!loopButton) return;
-	loopButton.remove();
+	removeFeatureItemFromMenu("loopButton");
+	eventManager.removeEventListeners("loopButton");
 }

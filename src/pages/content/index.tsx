@@ -1,17 +1,19 @@
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
-import { browserColorLog, formatError } from "@/utils/utilities";
-import eventManager from "@/utils/EventManager";
+import { enableFeatureMenu } from "@/src/features/featureMenu";
+import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import setPlayerQuality from "@/src/features/playerQuality";
 import setPlayerSpeed from "@/src/features/playerSpeed";
+import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
-import { setupVideoHistory, promptUserToResumeVideo } from "@/src/features/videoHistory";
+import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
-import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
-import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
+import eventManager from "@/utils/EventManager";
+import { browserColorLog, formatError } from "@/utils/utilities";
+
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,11 +66,12 @@ document.documentElement.appendChild(element);
 
 window.onload = function () {
 	enableRememberVolume();
+	enableFeatureMenu();
 	const enableFeatures = () => {
-		eventManager.removeAllEventListeners();
+		eventManager.removeAllEventListeners(["featureMenu"]);
 		addLoopButton();
-		addScreenshotButton();
 		addMaximizePlayerButton();
+		addScreenshotButton();
 		enableRememberVolume();
 		setPlayerQuality();
 		setPlayerSpeed();
@@ -162,7 +165,7 @@ window.onload = function () {
 					const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
 					if (!videoContainer) return;
 					if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
-						maximizePlayer(maximizePlayerButton);
+						maximizePlayer();
 					}
 				}
 				break;

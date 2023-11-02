@@ -1,7 +1,8 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
-import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
 import { makeMaximizeSVG, updateProgressBarPositions, setupVideoPlayerTimeUpdate, maximizePlayer } from "./utils";
+import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
@@ -14,45 +15,14 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	const { enable_maximize_player_button: enableMaximizePlayerButton } = options;
 	// If the maximize player button option is disabled, return
 	if (!enableMaximizePlayerButton) return;
-	const maximizePlayerButtonExists = document.querySelector("button.yte-maximize-player-button") as HTMLButtonElement | null;
-	// If maximize player button already exists, return
-	if (maximizePlayerButtonExists) return;
-	// Get the volume control element
-	const sizeButton = document.querySelector(
-		"div.ytp-chrome-controls > div.ytp-right-controls > button.ytp-button.ytp-size-button"
-	) as HTMLButtonElement | null;
-	// If volume control element is not available, return
-	if (!sizeButton) return;
-	// Create the maximize player button element
-	const maximizePlayerButton = document.createElement("button");
-	maximizePlayerButton.classList.add("ytp-button");
-	maximizePlayerButton.classList.add("yte-maximize-player-button");
-	maximizePlayerButton.dataset.title = "Maximize Player";
 	const maximizeSVG = makeMaximizeSVG();
-	maximizePlayerButton.appendChild(maximizeSVG);
 	// Add a click event listener to the maximize button
 	async function maximizePlayerButtonClickListener() {
-		maximizePlayer(maximizePlayerButton);
+		maximizePlayer();
 		updateProgressBarPositions();
 		setupVideoPlayerTimeUpdate();
 	}
-	// Append the maximize player button to before the volume control element
-	sizeButton.before(maximizePlayerButton);
-	const { listener: maximizePlayerButtonMouseOverListener, update } = createTooltip({
-		featureName: "maximizePlayerButton",
-		element: maximizePlayerButton,
-		id: "yte-maximize-player-button-tooltip"
-	});
-	eventManager.addEventListener(
-		maximizePlayerButton,
-		"click",
-		() => {
-			maximizePlayerButtonClickListener();
-			update();
-		},
-		"maximizePlayerButton"
-	);
-	eventManager.addEventListener(maximizePlayerButton, "mouseover", maximizePlayerButtonMouseOverListener, "maximizePlayerButton");
+
 	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
 	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
 	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
@@ -64,9 +34,19 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
 		if (!videoContainer) return;
 		if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
-			maximizePlayer(maximizePlayerButton);
+			const maximizePlayerMenuItem = getFeatureMenuItem("maximizePlayerButton");
+			if (!maximizePlayerMenuItem) return;
+			maximizePlayer();
+			maximizePlayerMenuItem.ariaChecked = "false";
 		}
 	}
+	addFeatureItemToMenu({
+		featureName: "maximizePlayerButton",
+		icon: maximizeSVG,
+		label: "Maximize Player",
+		listener: maximizePlayerButtonClickListener,
+		isToggle: true
+	});
 	function ytpLeftButtonMouseEnterListener(event: MouseEvent) {
 		const ytTooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
 		if (!ytTooltip) return;
@@ -176,11 +156,6 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	});
 }
 export async function removeMaximizePlayerButton(): Promise<void> {
-	// Try to get the existing maximize player button element
-	const maximizePlayerButton = document.querySelector("button.yte-maximize-player-button") as HTMLButtonElement | null;
-	// If maximize player button is not available, return
-	if (!maximizePlayerButton) return;
-	// Remove the maximize player button element
-	maximizePlayerButton.remove();
+	removeFeatureItemFromMenu("maximizePlayerButton");
 	eventManager.removeEventListeners("maximizePlayerButton");
 }
