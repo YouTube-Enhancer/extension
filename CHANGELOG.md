@@ -1,3 +1,27 @@
+# [1.9.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.8.0...v1.9.0) (2023-11-02)
+
+
+### Bug Fixes
+
+* Fix remaining time not updating due to bug ([b6be309](https://github.com/VampireChicken12/youtube-enhancer/commit/b6be309c50d33d5b52037b065eeb338fd8a9156e))
+
+
+### Features
+
+* Move buttons to 'Feature menu' ([2b730db](https://github.com/VampireChicken12/youtube-enhancer/commit/2b730dbef0c387d07ba43f4778ec925f4e8e2c00))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.9.0-Chrome.zip | 772cbae0adedb9704f2db251c5a82eb8ae045aed8c65e8e83bc00621691315c9 |
+| youtube-enhancer-v1.9.0-Chromium.zip | 772cbae0adedb9704f2db251c5a82eb8ae045aed8c65e8e83bc00621691315c9 |
+| youtube-enhancer-v1.9.0-Edge.zip | 772cbae0adedb9704f2db251c5a82eb8ae045aed8c65e8e83bc00621691315c9 |
+| youtube-enhancer-v1.9.0-Firefox.zip | 8013239b2b3e9db015effccb79268987e855a853d8fbb1a7132564afb4d2f0bd |
+
 # [1.8.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.7.2...v1.8.0) (2023-10-25)
 
 
