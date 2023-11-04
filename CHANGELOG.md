@@ -1,3 +1,27 @@
+# [1.10.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.9.0...v1.10.0) (2023-11-04)
+
+
+### Bug Fixes
+
+* Change default to false for two things ([c57ffe8](https://github.com/VampireChicken12/youtube-enhancer/commit/c57ffe85d999cc4412f0313ef020e52fca4b8ffe))
+
+
+### Features
+
+* Add option to hide the page scrollbar ([960ee57](https://github.com/VampireChicken12/youtube-enhancer/commit/960ee5760169bb45f050df628cad74a7bb553307))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.10.0-Chrome.zip | f6cbf7dfe26ae7f0dad537a814f399c195760cac55546341ca6ed7a42f1075d2 |
+| youtube-enhancer-v1.10.0-Chromium.zip | f6cbf7dfe26ae7f0dad537a814f399c195760cac55546341ca6ed7a42f1075d2 |
+| youtube-enhancer-v1.10.0-Edge.zip | f6cbf7dfe26ae7f0dad537a814f399c195760cac55546341ca6ed7a42f1075d2 |
+| youtube-enhancer-v1.10.0-Firefox.zip | d05ee0248bd604d20ce4d7100fe35f6a0231c9f870d8422c28441d353e497ba5 |
+
 # [1.9.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.8.0...v1.9.0) (2023-11-02)
 
 
