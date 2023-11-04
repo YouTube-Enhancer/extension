@@ -145,8 +145,8 @@ type TypeToZod<T> = {
 			: z.ZodType<T[K]>
 		: z.ZodObject<TypeToZod<T[K]>>;
 };
-export type ConfigurationToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+export type PartialConfigurationToZodSchema<T> = z.ZodObject<{
+	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
