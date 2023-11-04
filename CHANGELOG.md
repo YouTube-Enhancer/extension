@@ -1,3 +1,23 @@
+## [1.10.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.2...v1.10.3) (2023-11-04)
+
+
+### Bug Fixes
+
+* **Feature menu:** Navigating from home to watch page ([4495bd3](https://github.com/VampireChicken12/youtube-enhancer/commit/4495bd3d439ddf0af8d5852394b957f6907f770c))
+* importing settings from old version ([91afaca](https://github.com/VampireChicken12/youtube-enhancer/commit/91afacabbf4d418b8831db6fb1586c65a13b5ed1))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.10.3-Chrome.zip | 5e2e08cf11bcc15349ae41600f0b9e2dd578a5cb610693b230afff2878dec584 |
+| youtube-enhancer-v1.10.3-Chromium.zip | 5e2e08cf11bcc15349ae41600f0b9e2dd578a5cb610693b230afff2878dec584 |
+| youtube-enhancer-v1.10.3-Edge.zip | f2b19938323133ec9b80cc5184e2e5c6d8a1b89c4b1f8bb45f9458ebeb133a02 |
+| youtube-enhancer-v1.10.3-Firefox.zip | 182a307658882a0c4a185e01d616a4bb99ad289f94a467be36776313bb723d60 |
+
 ## [1.10.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.1...v1.10.2) (2023-11-04)
 
 
