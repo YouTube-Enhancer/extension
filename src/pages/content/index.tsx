@@ -68,10 +68,10 @@ document.documentElement.appendChild(element);
 
 window.onload = function () {
 	enableRememberVolume();
-	enableFeatureMenu();
 	enableHideScrollBar();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
+		enableFeatureMenu();
 		addLoopButton();
 		addMaximizePlayerButton();
 		addScreenshotButton();
