@@ -1,3 +1,22 @@
+## [1.10.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.0...v1.10.1) (2023-11-04)
+
+
+### Bug Fixes
+
+* Forgot to enable hide scrollbar on page load ([1d9b793](https://github.com/VampireChicken12/youtube-enhancer/commit/1d9b793c464237d508156c0b9dab45ad5614edcd))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.10.1-Chrome.zip | 2d2876fb9054243a920f983ffe3c399afae8cc1ac1b5f36ac6a6698e0140b653 |
+| youtube-enhancer-v1.10.1-Chromium.zip | 2d2876fb9054243a920f983ffe3c399afae8cc1ac1b5f36ac6a6698e0140b653 |
+| youtube-enhancer-v1.10.1-Edge.zip | 8e5798116a5dbed4e26d89f39ddb46dfeecac3c657d4417d6d0715d782495ea3 |
+| youtube-enhancer-v1.10.1-Firefox.zip | 5730614890d9b1ba8ad04af4cafd791a4c69eb3c82a3e5c06595acc089fc6e99 |
+
 # [1.10.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.9.0...v1.10.0) (2023-11-04)
 
 
