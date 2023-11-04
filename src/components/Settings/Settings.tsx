@@ -347,6 +347,15 @@ export default function Settings({
 							onChange={setCheckboxOption("enable_loop_button")}
 						/>
 					</div>
+					<div className="mx-2 mb-1" title="Hides the pages scrollbar">
+						<Checkbox
+							id="enable_hide_scrollbar"
+							title="Hides the pages scrollbar"
+							label="Enable hide scrollbar"
+							checked={settings.enable_hide_scrollbar.toString() === "true"}
+							onChange={setCheckboxOption("enable_hide_scrollbar")}
+						/>
+					</div>
 				</fieldset>
 				<fieldset className="mx-1">
 					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Scroll wheel volume control settings</legend>

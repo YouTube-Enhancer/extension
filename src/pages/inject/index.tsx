@@ -197,6 +197,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("rememberVolumeChange", {
 				rememberVolumeEnabled: castedChanges.enable_remember_last_volume.newValue
 			});
+		},
+		enable_hide_scrollbar: () => {
+			sendExtensionOnlyMessage("hideScrollBarChange", {
+				hideScrollBarEnabled: castedChanges.enable_hide_scrollbar.newValue
+			});
 		}
 	};
 	Object.entries(
