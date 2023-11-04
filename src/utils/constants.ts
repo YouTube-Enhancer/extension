@@ -1,5 +1,5 @@
 import z from "zod";
-import type { ConfigurationToZodSchema, configuration } from "../types";
+import type { PartialConfigurationToZodSchema, configuration } from "../types";
 import {
 	screenshotFormat,
 	screenshotType,
@@ -38,29 +38,29 @@ export const defaultConfiguration = {
 	player_speed: 1
 } satisfies configuration;
 
-export const configurationSchema: ConfigurationToZodSchema<configuration> = z.object({
-	enable_scroll_wheel_volume_control: z.boolean(),
-	enable_remember_last_volume: z.boolean(),
-	enable_automatically_set_quality: z.boolean(),
-	enable_forced_playback_speed: z.boolean(),
-	enable_volume_boost: z.boolean(),
-	enable_screenshot_button: z.boolean(),
-	enable_maximize_player_button: z.boolean(),
-	enable_video_history: z.boolean(),
-	enable_remaining_time: z.boolean(),
-	enable_loop_button: z.boolean(),
-	enable_hide_scrollbar: z.boolean(),
-	screenshot_save_as: z.enum(screenshotType),
-	screenshot_format: z.enum(screenshotFormat),
-	osd_display_color: z.enum(onScreenDisplayColor),
-	osd_display_type: z.enum(onScreenDisplayType),
-	osd_display_position: z.enum(onScreenDisplayPosition),
-	osd_display_hide_time: z.number(),
-	osd_display_padding: z.number(),
-	osd_display_opacity: z.number().min(1).max(100),
-	volume_adjustment_steps: z.number().min(1).max(100),
-	volume_boost_amount: z.number(),
-	player_quality: z.enum(youtubePlayerQualityLevel),
-	player_speed: z.number().min(0.25).max(4.0).step(0.25),
+export const configurationImportSchema: PartialConfigurationToZodSchema<configuration> = z.object({
+	enable_scroll_wheel_volume_control: z.boolean().optional(),
+	enable_remember_last_volume: z.boolean().optional(),
+	enable_automatically_set_quality: z.boolean().optional(),
+	enable_forced_playback_speed: z.boolean().optional(),
+	enable_volume_boost: z.boolean().optional(),
+	enable_screenshot_button: z.boolean().optional(),
+	enable_maximize_player_button: z.boolean().optional(),
+	enable_video_history: z.boolean().optional(),
+	enable_remaining_time: z.boolean().optional(),
+	enable_loop_button: z.boolean().optional(),
+	enable_hide_scrollbar: z.boolean().optional(),
+	screenshot_save_as: z.enum(screenshotType).optional(),
+	screenshot_format: z.enum(screenshotFormat).optional(),
+	osd_display_color: z.enum(onScreenDisplayColor).optional(),
+	osd_display_type: z.enum(onScreenDisplayType).optional(),
+	osd_display_position: z.enum(onScreenDisplayPosition).optional(),
+	osd_display_hide_time: z.number().optional(),
+	osd_display_padding: z.number().optional(),
+	osd_display_opacity: z.number().min(1).max(100).optional(),
+	volume_adjustment_steps: z.number().min(1).max(100).optional(),
+	volume_boost_amount: z.number().optional(),
+	player_quality: z.enum(youtubePlayerQualityLevel).optional(),
+	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	remembered_volume: z.number().optional()
 });

@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { Checkbox, NumberInput, Select, type SelectOption } from "../Inputs";
 import { cn, settingsAreDefault } from "@/src/utils/utilities";
-import { configurationSchema } from "@/src/utils/constants";
+import { configurationImportSchema } from "@/src/utils/constants";
 import { generateErrorMessage } from "zod-error";
 import { formatDateForFileName } from "../../utils/utilities";
 
@@ -222,7 +222,7 @@ export default function Settings({
 					const fileContents = await file.text();
 					const importedSettings = JSON.parse(fileContents);
 					// Validate the imported settings.
-					const result = configurationSchema.safeParse(importedSettings);
+					const result = configurationImportSchema.safeParse(importedSettings);
 					if (!result.success) {
 						const { error } = result;
 						const errorMessage = generateErrorMessage(error.errors);
@@ -304,7 +304,7 @@ export default function Settings({
 							id="enable_remember_last_volume"
 							title="Remembers the volume you were watching at and sets it as the volume when you open a new video"
 							label="Remember last volume"
-							checked={settings.enable_remember_last_volume.toString() === "true"}
+							checked={settings.enable_remember_last_volume?.toString() === "true"}
 							onChange={setCheckboxOption("enable_remember_last_volume")}
 						/>
 					</div>
@@ -313,7 +313,7 @@ export default function Settings({
 							id="enable_maximize_player_button"
 							title="Adds a button to the player to maximize the player"
 							label="Enable maximize player button"
-							checked={settings.enable_maximize_player_button.toString() === "true"}
+							checked={settings.enable_maximize_player_button?.toString() === "true"}
 							onChange={setCheckboxOption("enable_maximize_player_button")}
 						/>
 					</div>
@@ -325,7 +325,7 @@ export default function Settings({
 							id="enable_video_history"
 							title="Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
 							label="Enable video history"
-							checked={settings.enable_video_history.toString() === "true"}
+							checked={settings.enable_video_history?.toString() === "true"}
 							onChange={setCheckboxOption("enable_video_history")}
 						/>
 					</div>
@@ -334,7 +334,7 @@ export default function Settings({
 							id="enable_remaining_time"
 							title="Shows the remaining time of the video you're watching"
 							label="Enable remaining time"
-							checked={settings.enable_remaining_time.toString() === "true"}
+							checked={settings.enable_remaining_time?.toString() === "true"}
 							onChange={setCheckboxOption("enable_remaining_time")}
 						/>
 					</div>
@@ -343,7 +343,7 @@ export default function Settings({
 							id="enable_loop_button"
 							title="Adds a button to the player to loop the video you're watching"
 							label="Enable loop button"
-							checked={settings.enable_loop_button.toString() === "true"}
+							checked={settings.enable_loop_button?.toString() === "true"}
 							onChange={setCheckboxOption("enable_loop_button")}
 						/>
 					</div>
@@ -352,7 +352,7 @@ export default function Settings({
 							id="enable_hide_scrollbar"
 							title="Hides the pages scrollbar"
 							label="Enable hide scrollbar"
-							checked={settings.enable_hide_scrollbar.toString() === "true"}
+							checked={settings.enable_hide_scrollbar?.toString() === "true"}
 							onChange={setCheckboxOption("enable_hide_scrollbar")}
 						/>
 					</div>
@@ -363,7 +363,7 @@ export default function Settings({
 						id="enable_scroll_wheel_volume_control"
 						title="Lets you use the scroll wheel to control the volume of the video you're watching"
 						label="Enable scroll wheel volume control"
-						checked={settings.enable_scroll_wheel_volume_control.toString() === "true"}
+						checked={settings.enable_scroll_wheel_volume_control?.toString() === "true"}
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control")}
 					/>
 					<div className="mx-2 mb-1" title="The color of the On Screen Display">
@@ -447,7 +447,7 @@ export default function Settings({
 						id="enable_automatically_set_quality"
 						title="Automatically sets the quality of the video to the quality you choose below"
 						label="Enable auto set quality"
-						checked={settings.enable_automatically_set_quality.toString() === "true"}
+						checked={settings.enable_automatically_set_quality?.toString() === "true"}
 						onChange={setCheckboxOption("enable_automatically_set_quality")}
 					/>
 					<div className="mx-2 mb-1" title="The quality to set the video to">
@@ -468,7 +468,7 @@ export default function Settings({
 						id="enable_forced_playback_speed"
 						title="Forces the video to play at the speed you choose below"
 						label="Enable forced playback speed"
-						checked={settings.enable_forced_playback_speed.toString() === "true"}
+						checked={settings.enable_forced_playback_speed?.toString() === "true"}
 						onChange={setCheckboxOption("enable_forced_playback_speed")}
 					/>
 					<div className="mx-2 mb-1" title="The speed to set the video to">
@@ -489,7 +489,7 @@ export default function Settings({
 						id="enable_volume_boost"
 						title="Boosts the volume of the video you're watching"
 						label="Enable volume boost"
-						checked={settings.enable_volume_boost.toString() === "true"}
+						checked={settings.enable_volume_boost?.toString() === "true"}
 						onChange={setCheckboxOption("enable_volume_boost")}
 					/>
 					<div className="mx-2 mb-1" title="The amount to boost the volume by">
@@ -510,7 +510,7 @@ export default function Settings({
 						id="enable_screenshot_button"
 						title="Adds a button to the player to take a screenshot of the video"
 						label="Enable screenshot button"
-						checked={settings.enable_screenshot_button.toString() === "true"}
+						checked={settings.enable_screenshot_button?.toString() === "true"}
 						onChange={setCheckboxOption("enable_screenshot_button")}
 					/>
 					<div className="mx-2 mb-1" title="The screenshot save type">
