@@ -14,7 +14,8 @@ import eventManager from "@/utils/EventManager";
 import { browserColorLog, formatError } from "@/utils/utilities";
 
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
-import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar";
+import { enableHideScrollBar } from "@/src/features/hideScrollBar";
+import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,6 +69,7 @@ document.documentElement.appendChild(element);
 window.onload = function () {
 	enableRememberVolume();
 	enableFeatureMenu();
+	enableHideScrollBar();
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		addLoopButton();
