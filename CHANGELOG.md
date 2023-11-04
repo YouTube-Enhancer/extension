@@ -1,3 +1,22 @@
+## [1.10.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.1...v1.10.2) (2023-11-04)
+
+
+### Bug Fixes
+
+* fix typo ([0a1ce84](https://github.com/VampireChicken12/youtube-enhancer/commit/0a1ce84bab409b5c79a3c960558d2dc01c42af0a))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.10.2-Chrome.zip | d2d56ef621037076c030a8ada5c5f8187bce0f6c3fc1cb3f560403ab37b61fd8 |
+| youtube-enhancer-v1.10.2-Chromium.zip | d2d56ef621037076c030a8ada5c5f8187bce0f6c3fc1cb3f560403ab37b61fd8 |
+| youtube-enhancer-v1.10.2-Edge.zip | ee712cec1a330a8524f76a1bc7ace6c2f52bf8a2965b5c56019036daa3d2c7b5 |
+| youtube-enhancer-v1.10.2-Firefox.zip | a5c040ce5b64521704f7e1545f39a21b2d1bc8ffa5e94d8a93c876130a2d948a |
+
 ## [1.10.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.0...v1.10.1) (2023-11-04)
 
 
