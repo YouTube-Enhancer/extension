@@ -12,8 +12,8 @@ export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	// Options
 	// General
-	enable_scroll_wheel_volume_control: true,
-	enable_remember_last_volume: true,
+	enable_scroll_wheel_volume_control: false,
+	enable_remember_last_volume: false,
 	enable_automatically_set_quality: false,
 	enable_forced_playback_speed: false,
 	enable_volume_boost: false,
@@ -22,6 +22,7 @@ export const defaultConfiguration = {
 	enable_video_history: false,
 	enable_remaining_time: false,
 	enable_loop_button: false,
+	enable_hide_scrollbar: false,
 	screenshot_save_as: "file",
 	screenshot_format: "png",
 	// Images
@@ -48,6 +49,7 @@ export const configurationSchema: ConfigurationToZodSchema<configuration> = z.ob
 	enable_video_history: z.boolean(),
 	enable_remaining_time: z.boolean(),
 	enable_loop_button: z.boolean(),
+	enable_hide_scrollbar: z.boolean(),
 	screenshot_save_as: z.enum(screenshotType),
 	screenshot_format: z.enum(screenshotFormat),
 	osd_display_color: z.enum(onScreenDisplayColor),
