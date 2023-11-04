@@ -30,6 +30,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Enable Loop Button:** Adds a dedicated button to toggle the video player loop.
 
+- **Enable Hide Scrollbar:** Hides the pages scroll bar
+
 ### 2. Scroll Wheel Volume Control Settings
 
 - **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
