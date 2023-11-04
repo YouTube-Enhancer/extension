@@ -47,6 +47,7 @@ export type configuration = {
 	enable_video_history: boolean;
 	enable_remaining_time: boolean;
 	enable_loop_button: boolean;
+	enable_hide_scrollbar: boolean;
 	screenshot_save_as: ScreenshotType;
 	screenshot_format: ScreenshotFormat;
 	osd_display_color: OnScreenDisplayColor;
@@ -111,6 +112,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
+	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;

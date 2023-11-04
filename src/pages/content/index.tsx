@@ -14,6 +14,7 @@ import eventManager from "@/utils/EventManager";
 import { browserColorLog, formatError } from "@/utils/utilities";
 
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
+import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -222,6 +223,22 @@ window.onload = function () {
 					enableRememberVolume();
 				} else {
 					eventManager.removeEventListeners("rememberVolume");
+				}
+				break;
+			}
+			case "hideScrollBarChange": {
+				const scrollBarHidden = document.getElementById("yte-hide-scroll-bar") !== null;
+				const {
+					data: { hideScrollBarEnabled }
+				} = message;
+				if (hideScrollBarEnabled) {
+					if (!scrollBarHidden) {
+						hideScrollBar();
+					}
+				} else {
+					if (scrollBarHidden) {
+						showScrollBar();
+					}
 				}
 				break;
 			}
