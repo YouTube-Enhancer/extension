@@ -9,8 +9,8 @@ export async function enableHideScrollBar() {
 		data: { options }
 	} = optionsData;
 	// Extract the necessary properties from the options object
-	const { enable_hide_scroll_bar } = options;
+	const { enable_hide_scrollbar } = options;
 	// If the hide scroll bar option is disabled, return
-	if (!enable_hide_scroll_bar) return;
+	if (!enable_hide_scrollbar) return;
 	hideScrollBar();
 }
