@@ -1,7 +1,7 @@
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 import { loopButtonClickListener, makeLoopIcon } from "./utils";
-import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
-import eventManager from "@/src/utils/EventManager";
+import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 
 export async function addLoopButton() {
 	// Wait for the "options" message from the content script
@@ -28,6 +28,30 @@ export async function addLoopButton() {
 		listener: loopButtonClickListener,
 		isToggle: true
 	});
+	const loopChangedHandler = (mutationList: MutationRecord[]) => {
+		for (const mutation of mutationList) {
+			if (mutation.type === "attributes") {
+				const { attributeName, target } = mutation;
+				if (attributeName === "loop") {
+					const { loop } = target as HTMLVideoElement;
+					const featureName: FeatureName = "loopButton";
+					// Get the feature menu
+					const featureMenu = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
+					if (!featureMenu) return;
+
+					// Check if the feature item already exists in the menu
+					const featureExistsInMenu = featureMenu.querySelector(`#yte-feature-${featureName}`) as HTMLDivElement | null;
+					if (featureExistsInMenu) {
+						const menuItem = getFeatureMenuItem(featureName);
+						if (!menuItem) return;
+						menuItem.ariaChecked = loop ? "true" : "false";
+					}
+				}
+			}
+		}
+	};
+	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
+	loopChangeMutationObserver.observe(videoElement, { attributes: true, attributeFilter: ["loop"] });
 }
 export function removeLoopButton() {
 	removeFeatureItemFromMenu("loopButton");
