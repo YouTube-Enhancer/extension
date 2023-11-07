@@ -3,7 +3,7 @@ import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import setPlayerQuality from "@/src/features/playerQuality";
-import setPlayerSpeed from "@/src/features/playerSpeed";
+import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
@@ -76,6 +76,7 @@ window.onload = function () {
 		addMaximizePlayerButton();
 		addScreenshotButton();
 		enableRememberVolume();
+		setupPlaybackSpeedChangeListener();
 		setPlayerQuality();
 		setPlayerSpeed();
 		volumeBoost();
@@ -128,15 +129,9 @@ window.onload = function () {
 					data: { playerSpeed, enableForcedPlaybackSpeed }
 				} = message;
 				if (enableForcedPlaybackSpeed && playerSpeed) {
-					setPlayerSpeed({
-						enableForcedPlaybackSpeed,
-						playerSpeed: Number(playerSpeed)
-					});
-				} else {
-					setPlayerSpeed({
-						enableForcedPlaybackSpeed: false,
-						playerSpeed: 1
-					});
+					setPlayerSpeed(Number(playerSpeed));
+				} else if (!enableForcedPlaybackSpeed) {
+					restorePlayerSpeed();
 				}
 				break;
 			}
