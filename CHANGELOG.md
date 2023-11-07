@@ -1,3 +1,23 @@
+## [1.10.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.3...v1.10.4) (2023-11-07)
+
+
+### Bug Fixes
+
+* **loop button:** check box wouldn't check / uncheck ([043b1cc](https://github.com/VampireChicken12/youtube-enhancer/commit/043b1cc231e12a6415fdf0482af7cb1102054fe7))
+* **player speed:** Player speed is now restored to what it was. ([b765a14](https://github.com/VampireChicken12/youtube-enhancer/commit/b765a144b0031fa3d3bf446e2b9ea1c370d8a76c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.10.4-Chrome.zip | 18256854f0524ef92a0ad68fef2064c1b3865e52823de88718546b440ef0e2da |
+| youtube-enhancer-v1.10.4-Chromium.zip | 18256854f0524ef92a0ad68fef2064c1b3865e52823de88718546b440ef0e2da |
+| youtube-enhancer-v1.10.4-Edge.zip | 18256854f0524ef92a0ad68fef2064c1b3865e52823de88718546b440ef0e2da |
+| youtube-enhancer-v1.10.4-Firefox.zip | 4624cc66050c0fd8882ba587a516e19af0a1e6464bd3c7e542026e00f4326cbc |
+
 ## [1.10.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.2...v1.10.3) (2023-11-04)
 
 
