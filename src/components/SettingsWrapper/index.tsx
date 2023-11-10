@@ -1,5 +1,6 @@
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
+import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
 import type { configuration } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue } from "@/src/utils/utilities";
@@ -94,24 +95,26 @@ export default function SettingsWrapper(): JSX.Element {
 		return <Loader />;
 	}
 	return (
-		<Settings
-			settings={settings}
-			setSettings={setSettings}
-			defaultSettings={defaultOptions}
-			selectedColor={selectedColor}
-			setSelectedColor={setSelectedColor}
-			selectedDisplayType={selectedDisplayType}
-			setSelectedDisplayType={setSelectedDisplayType}
-			selectedDisplayPosition={selectedDisplayPosition}
-			setSelectedDisplayPosition={setSelectedDisplayPosition}
-			selectedPlayerQuality={selectedPlayerQuality}
-			setSelectedPlayerQuality={setSelectedPlayerQuality}
-			selectedPlayerSpeed={selectedPlayerSpeed}
-			setSelectedPlayerSpeed={setSelectedPlayerSpeed}
-			selectedScreenshotSaveAs={selectedScreenshotSaveAs}
-			setSelectedScreenshotSaveAs={setSelectedScreenshotSaveAs}
-			selectedScreenshotFormat={selectedScreenshotFormat}
-			setSelectedScreenshotFormat={setSelectedScreenshotFormat}
-		/>
+		<NotificationsProvider>
+			<Settings
+				settings={settings}
+				setSettings={setSettings}
+				defaultSettings={defaultOptions}
+				selectedColor={selectedColor}
+				setSelectedColor={setSelectedColor}
+				selectedDisplayType={selectedDisplayType}
+				setSelectedDisplayType={setSelectedDisplayType}
+				selectedDisplayPosition={selectedDisplayPosition}
+				setSelectedDisplayPosition={setSelectedDisplayPosition}
+				selectedPlayerQuality={selectedPlayerQuality}
+				setSelectedPlayerQuality={setSelectedPlayerQuality}
+				selectedPlayerSpeed={selectedPlayerSpeed}
+				setSelectedPlayerSpeed={setSelectedPlayerSpeed}
+				selectedScreenshotSaveAs={selectedScreenshotSaveAs}
+				setSelectedScreenshotSaveAs={setSelectedScreenshotSaveAs}
+				selectedScreenshotFormat={selectedScreenshotFormat}
+				setSelectedScreenshotFormat={setSelectedScreenshotFormat}
+			/>
+		</NotificationsProvider>
 	);
 }

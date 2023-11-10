@@ -1,6 +1,6 @@
 import React, { type ChangeEvent, useState } from "react";
 
-type SliderProps = {
+export type SliderProps = {
 	min: number;
 	max: number;
 	initialValue?: number;

@@ -1,18 +1,18 @@
 import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent } from "react";
 
-interface CheckboxProps {
+export type CheckboxProps = {
 	id?: string;
 	className?: string;
 	label: string;
 	checked: boolean;
 	title: string;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
 const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, className, id, title }) => {
 	return (
-		<div className={cn("flex items-center pb-1", className)} title={title}>
+		<div className={cn("flex items-center", className)} title={title}>
 			<input
 				type="checkbox"
 				id={id}
