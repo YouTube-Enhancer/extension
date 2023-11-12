@@ -162,6 +162,22 @@ Using the YouTube Enhancer Extension is straightforward:
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
 
+## Internationalization (i18n)
+
+### Crowdin Translation Project
+
+Our YouTube Enhancer extension supports multiple languages to provide a more inclusive experience for users around the world. We use Crowdin for managing translations.
+
+[![Crowdin](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
+
+### Contributing Translations
+
+We welcome contributions to improve translations and make the extension accessible to a wider audience. If you'd like to contribute translations or suggest improvements, follow these steps:
+
+1. Visit our [Crowdin project](https://crowdin.com/project/youtube-enhancer).
+2. Select your language and start translating.
+3. If your language is not listed, feel free to request its addition.
+
 ## 📜 License
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
