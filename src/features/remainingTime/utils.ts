@@ -19,7 +19,7 @@ export function formatTime(timeInSeconds: number) {
 
 		return acc;
 	}, []);
-	return ` (-${formattedUnits.length > 0 ? formattedUnits.join(":") : "0"})`;
+	return `${formattedUnits.length > 0 ? formattedUnits.join(":") : "0"}`;
 }
 export async function calculateRemainingTime({
 	videoElement,
@@ -39,5 +39,5 @@ export async function calculateRemainingTime({
 	const remainingTimeInSeconds = (duration - currentTime) / playbackRate;
 
 	// Format the remaining time
-	return formatTime(remainingTimeInSeconds);
+	return ` (-${formatTime(remainingTimeInSeconds)})`;
 }
