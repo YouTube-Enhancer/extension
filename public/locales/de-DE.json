@@ -5,7 +5,9 @@
 		"content": {
 			"features": {
 				"videoHistory": {
-					"resumePrompt": { "close": "Close" },
+					"resumePrompt": {
+						"close": "Close"
+					},
 					"resumeButton": "Resume"
 				},
 				"screenshotButton": {
@@ -91,16 +93,34 @@
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
 					"label": "Enable scroll wheel volume control"
 				},
-				"osdColor": { "title": "The color of the On Screen Display", "label": "OSD color" },
-				"osdType": { "title": "The type of On Screen Display", "label": "OSD type" },
-				"osdPosition": { "title": "The position of the On Screen Display", "label": "OSD position" },
+				"osdColor": {
+					"title": "The color of the On Screen Display",
+					"label": "OSD color"
+				},
+				"osdType": {
+					"title": "The type of On Screen Display",
+					"label": "OSD type"
+				},
+				"osdPosition": {
+					"title": "The position of the On Screen Display",
+					"label": "OSD position"
+				},
 				"osdOpacity": {
 					"title": "The opacity of the On Screen Display",
 					"label": "OSD opacity"
 				},
-				"osdVolumeAdjustmentSteps": { "title": "The amount to adjust volume per scroll", "label": "Amount to adjust" },
-				"osdHide": { "title": "The amount of milliseconds to wait before hiding the OSD", "label": "Time to hide" },
-				"osdPadding": { "title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)", "label": "Padding" },
+				"osdVolumeAdjustmentSteps": {
+					"title": "The amount to adjust volume per scroll",
+					"label": "Amount to adjust"
+				},
+				"osdHide": {
+					"title": "The amount of milliseconds to wait before hiding the OSD",
+					"label": "Time to hide"
+				},
+				"osdPadding": {
+					"title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)",
+					"label": "Padding"
+				},
 				"onScreenDisplay": {
 					"colors": {
 						"red": "Red",
