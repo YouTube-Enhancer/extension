@@ -1,5 +1,5 @@
 import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import { calculateRemainingTime } from "./utils";
 import eventManager from "@/src/utils/EventManager";
 async function playerTimeUpdateListener() {
@@ -49,6 +49,9 @@ export async function setupRemainingTime() {
 	const videoElement = playerContainer.querySelector("video") as HTMLVideoElement | null;
 	// If video element is not available, return
 	if (!videoElement) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	// If the video is live return
+	if (playerVideoData.isLive) return;
 	const remainingTime = await calculateRemainingTime({ videoElement, playerContainer });
 	const remainingTimeElementExists = document.querySelector("span#ytp-time-remaining") !== null;
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");

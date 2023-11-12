@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, isShortsPage, browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -102,6 +102,7 @@ export function setupPlaybackSpeedChangeListener() {
 		for (const mutation of mutationsList) {
 			if (mutation.type === "childList") {
 				const titleElement: HTMLSpanElement | null = document.querySelector("div.ytp-panel > div.ytp-panel-header > span.ytp-panel-title");
+				// TODO: fix this it relies on the language being English
 				if (titleElement && titleElement.textContent && titleElement.textContent.includes("Playback speed")) {
 					const menuItems: NodeListOf<HTMLDivElement> = document.querySelectorAll("div.ytp-panel-menu div.ytp-menuitem");
 					menuItems.forEach((node: HTMLDivElement) => {
