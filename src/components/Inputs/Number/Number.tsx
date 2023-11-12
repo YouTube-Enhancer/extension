@@ -4,7 +4,7 @@ import "./Number.css";
 import Arrow from "./Arrow";
 import { cn } from "@/src/utils/utilities";
 import type { ClassValue } from "clsx";
-interface NumberInputProps {
+export type NumberInputProps = {
 	id?: string;
 	className?: string;
 	label: string;
@@ -14,7 +14,7 @@ interface NumberInputProps {
 	step?: number;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	disabled: boolean;
-}
+};
 
 const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = undefined, step = 1, onChange, className, id, label, disabled }) => {
 	const inputElement: MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -50,7 +50,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ value, min = 0, max = undefin
 		"dark:text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	return (
-		<div className={cn("relative flex mb-2 gap-4 items-baseline justify-between flex-row", className)} ref={inputDiv}>
+		<div className={cn("relative flex gap-4 items-baseline justify-between flex-row", className)} ref={inputDiv}>
 			<label htmlFor={id} className="mb-1">
 				{label}
 			</label>
