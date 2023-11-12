@@ -1,40 +1,40 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "ja-JP",
+	"langName": "英語 (米国)",
 	"pages": {
 		"content": {
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "閉じる"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "再開"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
+					"label": "スクリーンショット"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "ループ"
 				},
 				"maximizePlayerButton": {
 					"label": "Maximize"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "機能メニュー"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "オプションを保存しました。"
 				},
 				"error": {
-					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
+					"playerQuality": "自動品質機能を有効にする場合は、プレーヤーの品質を選択する必要があります。"
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "すべてのオプションがデフォルト値にリセットされました。\n「確認」ボタンをクリックするか、このページを閉じるか、またはこの通知を無視して変更を保存できるようになりました。"
 				}
 			}
 		}
@@ -42,157 +42,157 @@
 	"settings": {
 		"sections": {
 			"importExportSettings": {
-				"title": "Import/Export Settings",
+				"title": "インポート/エクスポート設定",
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "設定のインポートエラー。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
+						"unknown": "設定のインポート中にエラーが発生しました。ファイル形式を確認してください。\n不明なエラーが発生しました。"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "設定が正常にインポートされました",
+					"title": "JSONファイルから設定をインポート",
+					"value": "インポート設定"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "設定を正常にエクスポートしました",
+					"title": "設定を JSON ファイルにエクスポート",
+					"value": "エクスポート設定"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "その他の設定",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume you were watching at and sets it as the volume when you open a new video",
-						"label": "Remember last volume"
+						"title": "再生中の音量を録音し、新しいビデオを開いたときに音量として設定します",
+						"label": "最後の音量を記憶する"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
-						"label": "Enable maximize player button"
+						"title": "ウィンドウサイズに合わせてビデオを塗りつぶします",
+						"label": "最大プレイヤーボタンを有効にする"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"title": "視聴中のビデオで中断した場所を追跡し、そのビデオが再び読み込まれたときに再開するかどうかを尋ねます",
+						"label": "動画履歴を有効にする"
 					},
 					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"title": "視聴中のビデオの残り時間を表示します",
+						"label": "残り時間を有効にする"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"title": "再生中のビデオを再生するためのボタンを追加します",
+						"label": "ループボタンを有効にする"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
+						"title": "スクロールバーのページを非表示",
 						"label": "Enable hide scrollbar"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
+				"title": "ホイール音量コントロールの設定をスクロール",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"title": "スクロールホイールを使用して、ビデオの音量を制御できます。",
+					"label": "スクロールホイールの音量調節を有効にする"
 				},
 				"osdColor": {
-					"title": "The color of the On Screen Display",
-					"label": "OSD color"
+					"title": "オンスクリーンディスプレイの色",
+					"label": "OSDの色"
 				},
 				"osdType": {
-					"title": "The type of On Screen Display",
-					"label": "OSD type"
+					"title": "画面表示の種類",
+					"label": "OSDタイプ"
 				},
 				"osdPosition": {
-					"title": "The position of the On Screen Display",
-					"label": "OSD position"
+					"title": "オンスクリーンディスプレイの位置",
+					"label": "OSD位置"
 				},
 				"osdOpacity": {
-					"title": "The opacity of the On Screen Display",
+					"title": "画面オンディスプレイの透明度",
 					"label": "OSD opacity"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "The amount to adjust volume per scroll",
-					"label": "Amount to adjust"
+					"title": "スクロールごとに音量を調整する量",
+					"label": "調整する金額"
 				},
 				"osdHide": {
-					"title": "The amount of milliseconds to wait before hiding the OSD",
-					"label": "Time to hide"
+					"title": "OSDを非表示にするまでの待機時間 (ミリ秒)",
+					"label": "非表示の時間"
 				},
 				"osdPadding": {
-					"title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)",
+					"title": "OSDに追加するパディングの量（ピクセル単位）はコーナーOSDにのみ適用されます",
 					"label": "Padding"
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "Red",
-						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
-						"orange": "Orange",
-						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
+						"red": "赤",
+						"green": "緑",
+						"blue": "青",
+						"yellow": "黄色",
+						"orange": "オレンジ",
+						"purple": "パープル",
+						"pink": "ピンク",
+						"white": "白"
 					},
 					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
+						"top_left": "上部左",
+						"top_right": "右",
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "中央揃え"
 					},
 					"type": {
-						"no_display": "No display",
-						"text": "Text",
-						"line": "Line",
-						"round": "Round"
+						"no_display": "ディスプレイがありません",
+						"text": "テキスト",
+						"line": "線",
+						"round": "ラウンド"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "自動画質設定",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"title": "選択したレベルに合わせてビデオ画質を自動的に調整します。",
+					"label": "自動品質調整を有効にする"
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "プレイヤーの品質",
+					"title": "動画を設定する品質"
 				}
 			},
 			"playbackSpeed": {
-				"title": "Playback speed settings",
+				"title": "再生速度の設定",
 				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Enable forced playback speed"
+					"title": "ビデオの速度を以下に設定します",
+					"label": "強制再生速度を有効にする"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "プレイヤーの速度",
+					"title": "動画を設定する速度"
 				}
 			},
 			"volumeBoost": {
-				"title": "Volume boost settings",
+				"title": "音量ブーストの設定",
 				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Enable volume boost"
+					"title": "見ているビデオの音量を増やします",
+					"label": "音量ブーストを有効にする"
 				},
 				"number": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "音量ブースト量 (dB)",
+					"title": "音量を上げる量"
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "スクリーンショットの設定",
 				"enable": {
-					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Enable screenshot button"
+					"title": "プレイヤーにビデオのスクリーンショットを撮るボタンを追加します",
+					"label": "スクリーンショットボタンを有効にする"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "スクリーンショットの保存タイプ",
+					"title": "スクリーンショット保存の種類"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "スクリーンショットの形式",
+					"title": "スクリーンショットを保存するフォーマット"
 				},
 				"format": {
 					"png": "PNG",
@@ -200,39 +200,39 @@
 					"webp": "WebP"
 				},
 				"saveAs": {
-					"file": "File",
+					"file": "ファイル",
 					"clipboard": "Clipboard"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "設定のリセットを確認",
+					"value": "確認する"
 				},
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "この拡張機能がマシンに保存されているすべてのデータを消去します",
+					"value": "データをクリア"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+					"title": "すべての設定をデフォルトにリセットします。確認ボタンをクリックして変更を保存します。",
 					"value": "Reset"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "言語",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "言語",
+					"title": "拡張機能に使用する言語"
 				}
 			}
 		},
 		"clearData": {
-			"confirmAlert": "This will delete all extension data related to options. Continue?",
-			"allDataDeleted": "All data has been deleted."
+			"confirmAlert": "オプションに関連するすべての拡張データを削除します。続行しますか？",
+			"allDataDeleted": "すべてのデータが削除されました。"
 		}
 	},
 	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"settingVolume": "音量ブーストを {{VOLUME_BOOST_AMOUNT}} に設定しました",
+		"resumingVideo": "{{VIDEO_TIME}} でビデオを再開しています"
 	}
 }
