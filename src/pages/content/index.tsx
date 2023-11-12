@@ -11,11 +11,13 @@ import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
 import eventManager from "@/utils/EventManager";
-import { browserColorLog, formatError } from "@/utils/utilities";
+import { browserColorLog, formatError, waitForSpecificMessage } from "@/utils/utilities";
 
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
+import { i18nService } from "@/src/i18n";
+import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,9 +68,10 @@ element.style.display = "none";
 element.id = "yte-message-from-youtube";
 document.documentElement.appendChild(element);
 
-window.onload = function () {
+window.onload = async function () {
 	enableRememberVolume();
 	enableHideScrollBar();
+
 	const enableFeatures = () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		enableFeatureMenu();
@@ -85,6 +88,13 @@ window.onload = function () {
 		promptUserToResumeVideo();
 		setupRemainingTime();
 	};
+	const response = await waitForSpecificMessage("language", "request_data", "content");
+	if (!response) return;
+	const {
+		data: { language }
+	} = response;
+	const i18nextInstance = await i18nService(language);
+	window.i18nextInstance = i18nextInstance;
 	document.addEventListener("yt-player-updated", enableFeatures);
 	/**
 	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -111,14 +121,24 @@ window.onload = function () {
 				} = message;
 				if (volumeBoostEnabled) {
 					if (window.audioCtx && window.gainNode) {
-						browserColorLog(`Setting volume boost to ${Math.pow(10, Number(volumeBoostAmount) / 20)}`, "FgMagenta");
+						browserColorLog(
+							i18nextInstance.t("messages.settingVolume", {
+								VOLUME_BOOST_AMOUNT: Math.pow(10, Number(volumeBoostAmount) / 20)
+							}),
+							"FgMagenta"
+						);
 						window.gainNode.gain.value = Math.pow(10, Number(volumeBoostAmount) / 20);
 					} else {
 						volumeBoost();
 					}
 				} else {
 					if (window.audioCtx && window.gainNode) {
-						browserColorLog(`Setting volume boost to 1x`, "FgMagenta");
+						browserColorLog(
+							i18nextInstance.t("messages.settingVolume", {
+								VOLUME_BOOST_AMOUNT: "1x"
+							}),
+							"FgMagenta"
+						);
 						window.gainNode.gain.value = 1;
 					}
 				}
@@ -237,6 +257,17 @@ window.onload = function () {
 						showScrollBar();
 					}
 				}
+				break;
+			}
+			case "languageChange": {
+				const {
+					data: { language }
+				} = message;
+				window.i18nextInstance = await i18nService(language);
+				updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
+				updateFeatureMenuItemLabel("screenshotButton", window.i18nextInstance.t("pages.content.features.screenshotButton.label"));
+				updateFeatureMenuItemLabel("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"));
+				updateFeatureMenuItemLabel("loopButton", window.i18nextInstance.t("pages.content.features.loopButton.label"));
 				break;
 			}
 			default: {

@@ -2,17 +2,66 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
 import { useNotifications } from "@/hooks";
-import type { configuration, configurationKeys } from "@/src/types";
-import { youtubePlayerSpeedRate } from "@/src/types";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { useEffect, useState } from "react";
+import type { configuration, configurationKeys } from "@/src/@types";
+import { youtubePlayerSpeedRate } from "@/src/@types";
+import React, { useEffect, useState, Suspense } from "react";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { Checkbox, NumberInput, Select, type SelectOption } from "../Inputs";
 import { cn, settingsAreDefault } from "@/src/utils/utilities";
 import { configurationImportSchema } from "@/src/utils/constants";
 import { generateErrorMessage } from "zod-error";
 import { formatDateForFileName } from "../../utils/utilities";
-
+import SettingsNotifications from "./components/SettingNotifications";
+import SettingSection from "./components/SettingSection";
+import SettingTitle from "./components/SettingTitle";
+import Setting from "./components/Setting";
+import type { SelectOption } from "../Inputs";
+import { availableLocales, type i18nInstanceType } from "@/src/i18n";
+import type EnUS from "public/locales/en-US.json";
+import Loader from "../Loader";
+async function getLanguageOptions() {
+	const languageOptions: SelectOption[] = [];
+	for (const locale of availableLocales) {
+		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
+		const localeData = (await response?.json()) as EnUS;
+		languageOptions.push({
+			value: locale,
+			label: (localeData as typeof EnUS).langName
+		});
+	}
+	return languageOptions;
+}
+function LanguageOptions({
+	setValueOption,
+	t,
+	selectedLanguage,
+	setSelectedLanguage
+}: {
+	t: i18nInstanceType["t"];
+	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+	selectedLanguage: string | undefined;
+	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
+}) {
+	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	useEffect(() => {
+		getLanguageOptions().then(setLanguageOptions);
+	}, []);
+	return (
+		<SettingSection>
+			<SettingTitle title={t("settings.sections.language.title")} />
+			<Setting
+				type="select"
+				id="language_select"
+				disabled={false}
+				title={t("settings.sections.language.select.title")}
+				label={t("settings.sections.language.select.label")}
+				onChange={setValueOption("language")}
+				options={languageOptions}
+				selectedOption={selectedLanguage}
+				setSelectedOption={setSelectedLanguage}
+			/>
+		</SettingSection>
+	);
+}
 export default function Settings({
 	settings,
 	setSettings,
@@ -30,7 +79,10 @@ export default function Settings({
 	setSelectedPlayerQuality,
 	selectedPlayerSpeed,
 	setSelectedPlayerSpeed,
-	defaultSettings
+	selectedLanguage,
+	setSelectedLanguage,
+	defaultSettings,
+	i18nInstance
 }: {
 	settings: configuration | undefined;
 	setSettings: Dispatch<SetStateAction<configuration | undefined>>;
@@ -48,11 +100,14 @@ export default function Settings({
 	setSelectedScreenshotSaveAs: Dispatch<SetStateAction<string | undefined>>;
 	selectedScreenshotFormat: string | undefined;
 	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
+	selectedLanguage: string | undefined;
+	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
 	defaultSettings: configuration;
+	i18nInstance: i18nInstanceType;
 }) {
 	const [firstLoad, setFirstLoad] = useState(true);
-	const [parentRef] = useAutoAnimate({ duration: 300 });
 	const { notifications, addNotification, removeNotification } = useNotifications();
+	const { t } = i18nInstance;
 	const setCheckboxOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
@@ -75,112 +130,123 @@ export default function Settings({
 	function saveOptions() {
 		if (settings) {
 			if (settings.enable_automatically_set_quality && !settings.player_quality) {
-				addNotification("error", "You must select a player quality if you want to enable the automatic quality feature.");
+				addNotification("error", t("pages.options.notifications.error.playerQuality"));
 				return;
 			}
 			Object.assign(localStorage, settings);
 			chrome.storage.local.set(settings);
 
-			addNotification("success", "Options saved");
+			addNotification("success", t("pages.options.notifications.success.saved"));
 		}
 	}
 
 	function resetOptions() {
-		addNotification(
-			"info",
-			'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.',
-			"reset_settings"
-		);
+		addNotification("info", t("pages.options.notifications.info.reset"), "reset_settings");
 	}
 
 	function clearData() {
-		const userHasConfirmed = window.confirm("This will delete all extension data related to options. Continue?");
+		const userHasConfirmed = window.confirm(t("settings.clearData.confirmAlert"));
 		if (userHasConfirmed) {
 			Object.assign(localStorage, defaultSettings);
 			chrome.storage.local.set(defaultSettings);
-			addNotification("success", "All data has been deleted");
+			addNotification("success", t("settings.clearData.allDataDeleted"));
 		}
 	}
+	const {
+		colors: { red, green, blue, orange, pink, white, purple, yellow },
+		position: { bottom_left, bottom_right, top_left, top_right, center },
+		type: { line, no_display, round, text }
+	} = t("settings.sections.scrollWheelVolumeControl.onScreenDisplay", {
+		returnObjects: true,
+		defaultValue: {}
+	});
+	const {
+		format: { jpeg, png, webp },
+		saveAs: { clipboard, file }
+	} = t("settings.sections.screenshotButton", {
+		returnObjects: true,
+		defaultValue: {}
+	});
 	const colorOptions: SelectOption[] = [
 		{
 			value: "red",
-			label: "Red",
+			label: red,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[red]")}></div>
 		},
 		{
 			value: "green",
-			label: "Green",
+			label: green,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[green]")}></div>
 		},
 		{
 			value: "blue",
-			label: "Blue",
+			label: blue,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[blue]")}></div>
 		},
 		{
 			value: "yellow",
-			label: "Yellow",
+			label: yellow,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[yellow]")}></div>
 		},
 		{
 			value: "orange",
-			label: "Orange",
+			label: orange,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[orange]")}></div>
 		},
 		{
 			value: "purple",
-			label: "Purple",
+			label: purple,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[purple]")}></div>
 		},
 		{
 			value: "pink",
-			label: "Pink",
+			label: pink,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[pink]")}></div>
 		},
 		{
 			value: "white",
-			label: "White",
+			label: white,
 			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[white]")}></div>
 		}
 	];
 	const OSD_DisplayTypeOptions: SelectOption[] = [
 		{
 			value: "no_display",
-			label: "No display"
+			label: no_display
 		},
 		{
 			value: "text",
-			label: "Text"
+			label: text
 		},
 		{
 			value: "line",
-			label: "Line"
+			label: line
 		},
 		{
 			value: "round",
-			label: "Round"
+			label: round
 		}
 	];
 	const OSD_PositionOptions: SelectOption[] = [
 		{
 			value: "top_left",
-			label: "Top left"
+			label: top_left
 		},
 		{
 			value: "top_right",
-			label: "Top right"
+			label: top_right
 		},
 		{
 			value: "bottom_left",
-			label: "Bottom left"
+			label: bottom_left
 		},
 		{
 			value: "bottom_right",
-			label: "Bottom right"
+			label: bottom_right
 		},
 		{
 			value: "center",
-			label: "Center"
+			label: center
 		}
 	];
 	const YouTubePlayerQualityOptions: SelectOption[] = [
@@ -198,14 +264,15 @@ export default function Settings({
 	].reverse();
 	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
 	const ScreenshotFormatOptions: SelectOption[] = [
-		{ label: "PNG", value: "png" },
-		{ label: "JPEG", value: "jpeg" },
-		{ label: "WEBP", value: "webp" }
+		{ label: png, value: "png" },
+		{ label: jpeg, value: "jpeg" },
+		{ label: webp, value: "webp" }
 	];
 	const ScreenshotSaveAsOptions: SelectOption[] = [
-		{ label: "File", value: "file" },
-		{ label: "Clipboard", value: "clipboard" }
+		{ label: file, value: "file" },
+		{ label: clipboard, value: "clipboard" }
 	];
+
 	// Import settings from a JSON file.
 	const importSettings = () => {
 		const input = document.createElement("input");
@@ -226,7 +293,11 @@ export default function Settings({
 					if (!result.success) {
 						const { error } = result;
 						const errorMessage = generateErrorMessage(error.errors);
-						window.alert(`Error importing settings. Please check the file format.\n${errorMessage}`);
+						window.alert(
+							t("settings.sections.importExportSettings.importButton.error.validation", {
+								ERROR_MESSAGE: errorMessage
+							})
+						);
 					} else {
 						const castSettings = importedSettings as configuration;
 						// Set the imported settings in your state.
@@ -234,11 +305,11 @@ export default function Settings({
 						Object.assign(localStorage, castSettings);
 						chrome.storage.local.set(castSettings);
 						// Show a success notification.
-						addNotification("success", "Settings imported successfully");
+						addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
 					}
 				} catch (error) {
 					// Handle any import errors.
-					window.alert("Error importing settings. Please check the file format.");
+					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 				}
 			}
 		});
@@ -263,7 +334,7 @@ export default function Settings({
 			a.click();
 
 			// Show a success notification.
-			addNotification("success", "Settings exported successfully");
+			addNotification("success", t("settings.sections.importExportSettings.exportButton.success"));
 		}
 	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
@@ -275,275 +346,278 @@ export default function Settings({
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Import/Export Settings</legend>
+				<Suspense fallback={<Loader />}>
+					<LanguageOptions
+						selectedLanguage={selectedLanguage}
+						setSelectedLanguage={setSelectedLanguage}
+						setValueOption={setValueOption}
+						t={i18nInstance.t}
+					/>
+				</Suspense>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.importExportSettings.title")} />
 					<div className="flex gap-1 p-2">
 						<input
 							type="button"
 							id="import_settings_button"
 							className="p-2 accent dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
-							value="Import Settings"
-							title="Import settings from a JSON file"
+							value={t("settings.sections.importExportSettings.importButton.value")}
+							title={t("settings.sections.importExportSettings.importButton.title")}
 							onClick={importSettings}
 						/>
 						<input
 							type="button"
 							id="export_settings_button"
 							className="p-2 accent dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
-							value="Export Settings"
-							title="Export current settings to a JSON file"
+							value={t("settings.sections.importExportSettings.exportButton.value")}
+							title={t("settings.sections.importExportSettings.exportButton.title")}
 							onClick={exportSettings}
 							style={{ marginLeft: "auto" }}
 						/>
 					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Miscellaneous settings</legend>
-					<div className="mx-2 mb-1" title="Remembers the last volume you set and applies it to future videos">
-						<Checkbox
-							id="enable_remember_last_volume"
-							title="Remembers the volume you were watching at and sets it as the volume when you open a new video"
-							label="Remember last volume"
-							checked={settings.enable_remember_last_volume?.toString() === "true"}
-							onChange={setCheckboxOption("enable_remember_last_volume")}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="Fills the video to the window size">
-						<Checkbox
-							id="enable_maximize_player_button"
-							title="Adds a button to the player to maximize the player"
-							label="Enable maximize player button"
-							checked={settings.enable_maximize_player_button?.toString() === "true"}
-							onChange={setCheckboxOption("enable_maximize_player_button")}
-						/>
-					</div>
-					<div
-						className="mx-2 mb-1"
-						title="Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
-					>
-						<Checkbox
-							id="enable_video_history"
-							title="Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
-							label="Enable video history"
-							checked={settings.enable_video_history?.toString() === "true"}
-							onChange={setCheckboxOption("enable_video_history")}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="Shows the remaining time of the video you're watching">
-						<Checkbox
-							id="enable_remaining_time"
-							title="Shows the remaining time of the video you're watching"
-							label="Enable remaining time"
-							checked={settings.enable_remaining_time?.toString() === "true"}
-							onChange={setCheckboxOption("enable_remaining_time")}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="Adds a button to the player to loop the video you're watching">
-						<Checkbox
-							id="enable_loop_button"
-							title="Adds a button to the player to loop the video you're watching"
-							label="Enable loop button"
-							checked={settings.enable_loop_button?.toString() === "true"}
-							onChange={setCheckboxOption("enable_loop_button")}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="Hides the pages scrollbar">
-						<Checkbox
-							id="enable_hide_scrollbar"
-							title="Hides the pages scrollbar"
-							label="Enable hide scrollbar"
-							checked={settings.enable_hide_scrollbar?.toString() === "true"}
-							onChange={setCheckboxOption("enable_hide_scrollbar")}
-						/>
-					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Scroll wheel volume control settings</legend>
-					<Checkbox
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
+					<Setting
+						type="checkbox"
+						id="enable_remember_last_volume"
+						title={t("settings.sections.miscellaneous.features.rememberLastVolume.title")}
+						label={t("settings.sections.miscellaneous.features.rememberLastVolume.label")}
+						checked={settings.enable_remember_last_volume?.toString() === "true"}
+						onChange={setCheckboxOption("enable_remember_last_volume")}
+					/>
+					<Setting
+						type="checkbox"
+						id="enable_maximize_player_button"
+						title={t("settings.sections.miscellaneous.features.maximizePlayerButton.title")}
+						label={t("settings.sections.miscellaneous.features.maximizePlayerButton.label")}
+						checked={settings.enable_maximize_player_button?.toString() === "true"}
+						onChange={setCheckboxOption("enable_maximize_player_button")}
+					/>
+					<Setting
+						type="checkbox"
+						id="enable_video_history"
+						title={t("settings.sections.miscellaneous.features.videoHistory.title")}
+						label={t("settings.sections.miscellaneous.features.videoHistory.label")}
+						checked={settings.enable_video_history?.toString() === "true"}
+						onChange={setCheckboxOption("enable_video_history")}
+					/>
+					<Setting
+						type="checkbox"
+						id="enable_remaining_time"
+						title={t("settings.sections.miscellaneous.features.remainingTime.title")}
+						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
+						checked={settings.enable_remaining_time?.toString() === "true"}
+						onChange={setCheckboxOption("enable_remaining_time")}
+					/>
+					<Setting
+						type="checkbox"
+						id="enable_loop_button"
+						title={t("settings.sections.miscellaneous.features.loopButton.title")}
+						label={t("settings.sections.miscellaneous.features.loopButton.label")}
+						checked={settings.enable_loop_button?.toString() === "true"}
+						onChange={setCheckboxOption("enable_loop_button")}
+					/>
+					<Setting
+						type="checkbox"
+						id="enable_hide_scrollbar"
+						title={t("settings.sections.miscellaneous.features.hideScrollbar.title")}
+						label={t("settings.sections.miscellaneous.features.hideScrollbar.label")}
+						checked={settings.enable_hide_scrollbar?.toString() === "true"}
+						onChange={setCheckboxOption("enable_hide_scrollbar")}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.scrollWheelVolumeControl.title")} />
+					<Setting
+						type="checkbox"
 						id="enable_scroll_wheel_volume_control"
-						title="Lets you use the scroll wheel to control the volume of the video you're watching"
-						label="Enable scroll wheel volume control"
+						title={t("settings.sections.scrollWheelVolumeControl.enable.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.enable.label")}
 						checked={settings.enable_scroll_wheel_volume_control?.toString() === "true"}
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control")}
 					/>
-					<div className="mx-2 mb-1" title="The color of the On Screen Display">
-						<Select
-							id="osd_color_select"
-							onChange={setValueOption("osd_display_color")}
-							options={colorOptions}
-							selectedOption={selectedColor}
-							setSelectedOption={setSelectedColor}
-							label="OSD color"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The type of On Screen Display">
-						<Select
-							id="osd_display_type"
-							onChange={setValueOption("osd_display_type")}
-							options={OSD_DisplayTypeOptions}
-							selectedOption={selectedDisplayType}
-							setSelectedOption={setSelectedDisplayType}
-							label="OSD type"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The position of the On Screen Display">
-						<Select
-							id="osd_display_position"
-							onChange={setValueOption("osd_display_position")}
-							options={OSD_PositionOptions}
-							selectedOption={selectedDisplayPosition}
-							setSelectedOption={setSelectedDisplayPosition}
-							label="OSD position"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The opacity of the On Screen Display">
-						<NumberInput
-							id="osd_display_opacity"
-							min={1}
-							max={100}
-							value={settings.osd_display_opacity}
-							onChange={setValueOption("osd_display_opacity")}
-							label="OSD opacity"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The amount to adjust volume per scroll">
-						<NumberInput
-							id="volume_adjustment_steps"
-							min={1}
-							value={settings.volume_adjustment_steps}
-							onChange={setValueOption("volume_adjustment_steps")}
-							label="Amount to adjust"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The amount of milliseconds to wait before hiding the OSD">
-						<NumberInput
-							id="osd_display_hide_time"
-							min={1}
-							value={settings.osd_display_hide_time}
-							onChange={setValueOption("osd_display_hide_time")}
-							label="Time to hide"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The amount of padding to add to the OSD (in pixels, only applies to corner OSD)">
-						<NumberInput
-							id="osd_display_padding"
-							min={0}
-							value={settings.osd_display_padding}
-							onChange={setValueOption("osd_display_padding")}
-							label="Padding"
-							disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						/>
-					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Automatic quality settings</legend>
-					<Checkbox
+					<Setting
+						type="select"
+						id="osd_color_select"
+						title={t("settings.sections.scrollWheelVolumeControl.osdColor.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdColor.label")}
+						onChange={setValueOption("osd_display_color")}
+						options={colorOptions}
+						selectedOption={selectedColor}
+						setSelectedOption={setSelectedColor}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="select"
+						id="osd_display_type"
+						title={t("settings.sections.scrollWheelVolumeControl.osdType.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdType.label")}
+						onChange={setValueOption("osd_display_type")}
+						options={OSD_DisplayTypeOptions}
+						selectedOption={selectedDisplayType}
+						setSelectedOption={setSelectedDisplayType}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="select"
+						id="osd_display_position"
+						title={t("settings.sections.scrollWheelVolumeControl.osdPosition.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdPosition.label")}
+						onChange={setValueOption("osd_display_position")}
+						options={OSD_PositionOptions}
+						selectedOption={selectedDisplayPosition}
+						setSelectedOption={setSelectedDisplayPosition}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="number"
+						id="osd_display_opacity"
+						title={t("settings.sections.scrollWheelVolumeControl.osdOpacity.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdOpacity.label")}
+						min={1}
+						max={100}
+						value={settings.osd_display_opacity}
+						onChange={setValueOption("osd_display_opacity")}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="number"
+						id="volume_adjustment_steps"
+						title={t("settings.sections.scrollWheelVolumeControl.osdVolumeAdjustmentSteps.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdVolumeAdjustmentSteps.label")}
+						min={1}
+						value={settings.volume_adjustment_steps}
+						onChange={setValueOption("volume_adjustment_steps")}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="number"
+						id="osd_display_hide_time"
+						title={t("settings.sections.scrollWheelVolumeControl.osdHide.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdHide.label")}
+						min={1}
+						value={settings.osd_display_hide_time}
+						onChange={setValueOption("osd_display_hide_time")}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+					<Setting
+						type="number"
+						id="osd_display_padding"
+						title={t("settings.sections.scrollWheelVolumeControl.osdPadding.title")}
+						label={t("settings.sections.scrollWheelVolumeControl.osdPadding.label")}
+						min={0}
+						value={settings.osd_display_padding}
+						onChange={setValueOption("osd_display_padding")}
+						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.automaticQuality.title")} />
+					<Setting
+						type="checkbox"
 						id="enable_automatically_set_quality"
-						title="Automatically sets the quality of the video to the quality you choose below"
-						label="Enable auto set quality"
+						title={t("settings.sections.automaticQuality.enable.title")}
+						label={t("settings.sections.automaticQuality.enable.label")}
 						checked={settings.enable_automatically_set_quality?.toString() === "true"}
 						onChange={setCheckboxOption("enable_automatically_set_quality")}
 					/>
-					<div className="mx-2 mb-1" title="The quality to set the video to">
-						<Select
-							id="player_quality"
-							onChange={setValueOption("player_quality")}
-							options={YouTubePlayerQualityOptions}
-							selectedOption={selectedPlayerQuality}
-							setSelectedOption={setSelectedPlayerQuality}
-							label="Player quality"
-							disabled={settings.enable_automatically_set_quality.toString() !== "true"}
-						/>
-					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Playback speed settings</legend>
-					<Checkbox
+					<Setting
+						type="select"
+						id="player_quality"
+						title={t("settings.sections.automaticQuality.select.title")}
+						label={t("settings.sections.automaticQuality.select.label")}
+						onChange={setValueOption("player_quality")}
+						options={YouTubePlayerQualityOptions}
+						selectedOption={selectedPlayerQuality}
+						setSelectedOption={setSelectedPlayerQuality}
+						disabled={settings.enable_automatically_set_quality.toString() !== "true"}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.playbackSpeed.title")} />
+					<Setting
+						type="checkbox"
 						id="enable_forced_playback_speed"
-						title="Forces the video to play at the speed you choose below"
-						label="Enable forced playback speed"
+						title={t("settings.sections.playbackSpeed.enable.title")}
+						label={t("settings.sections.playbackSpeed.enable.label")}
 						checked={settings.enable_forced_playback_speed?.toString() === "true"}
 						onChange={setCheckboxOption("enable_forced_playback_speed")}
 					/>
-					<div className="mx-2 mb-1" title="The speed to set the video to">
-						<Select
-							id="player_speed"
-							onChange={setValueOption("player_speed")}
-							options={YouTubePlayerSpeedOptions}
-							selectedOption={selectedPlayerSpeed?.toString()}
-							setSelectedOption={setSelectedPlayerSpeed}
-							label="Player speed"
-							disabled={settings.enable_forced_playback_speed.toString() !== "true"}
-						/>
-					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Volume boost settings</legend>
-					<Checkbox
+					<Setting
+						type="select"
+						id="player_speed"
+						title={t("settings.sections.playbackSpeed.select.title")}
+						label={t("settings.sections.playbackSpeed.select.label")}
+						onChange={setValueOption("player_speed")}
+						options={YouTubePlayerSpeedOptions}
+						selectedOption={selectedPlayerSpeed?.toString()}
+						setSelectedOption={setSelectedPlayerSpeed}
+						disabled={settings.enable_forced_playback_speed.toString() !== "true"}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.volumeBoost.title")} />
+					<Setting
+						type="checkbox"
 						id="enable_volume_boost"
-						title="Boosts the volume of the video you're watching"
-						label="Enable volume boost"
+						title={t("settings.sections.volumeBoost.enable.title")}
+						label={t("settings.sections.volumeBoost.enable.label")}
 						checked={settings.enable_volume_boost?.toString() === "true"}
 						onChange={setCheckboxOption("enable_volume_boost")}
 					/>
-					<div className="mx-2 mb-1" title="The amount to boost the volume by">
-						<NumberInput
-							id="volume_boost_amount"
-							min={1}
-							max={100}
-							value={settings.volume_boost_amount}
-							onChange={setValueOption("volume_boost_amount")}
-							label="Volume boost amount (dB)"
-							disabled={settings.enable_volume_boost.toString() !== "true"}
-						/>
-					</div>
-				</fieldset>
-				<fieldset className="mx-1">
-					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">Screenshot settings</legend>
-					<Checkbox
+					<Setting
+						type="number"
+						id="volume_boost_amount"
+						title={t("settings.sections.volumeBoost.number.title")}
+						label={t("settings.sections.volumeBoost.number.label")}
+						min={1}
+						max={100}
+						value={settings.volume_boost_amount}
+						onChange={setValueOption("volume_boost_amount")}
+						disabled={settings.enable_volume_boost.toString() !== "true"}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.screenshotButton.title")} />
+					<Setting
+						type="checkbox"
 						id="enable_screenshot_button"
-						title="Adds a button to the player to take a screenshot of the video"
-						label="Enable screenshot button"
+						title={t("settings.sections.screenshotButton.enable.title")}
+						label={t("settings.sections.screenshotButton.enable.label")}
 						checked={settings.enable_screenshot_button?.toString() === "true"}
 						onChange={setCheckboxOption("enable_screenshot_button")}
 					/>
-					<div className="mx-2 mb-1" title="The screenshot save type">
-						<Select
-							id="screenshot_save_as"
-							onChange={setValueOption("screenshot_save_as")}
-							options={ScreenshotSaveAsOptions}
-							selectedOption={selectedScreenshotSaveAs}
-							setSelectedOption={setSelectedScreenshotSaveAs}
-							label="Screenshot save type"
-							disabled={settings.enable_screenshot_button.toString() !== "true"}
-						/>
-					</div>
-					<div className="mx-2 mb-1" title="The format to save the screenshot in">
-						<Select
-							id="screenshot_format"
-							onChange={setValueOption("screenshot_format")}
-							options={ScreenshotFormatOptions}
-							selectedOption={selectedScreenshotFormat}
-							setSelectedOption={setSelectedScreenshotFormat}
-							label="Screenshot format"
-							disabled={settings.enable_screenshot_button.toString() !== "true"}
-						/>
-					</div>
-				</fieldset>
-
+					<Setting
+						type="select"
+						id="screenshot_save_as"
+						label={t("settings.sections.screenshotButton.selectSaveAs.label")}
+						title={t("settings.sections.screenshotButton.selectSaveAs.title")}
+						onChange={setValueOption("screenshot_save_as")}
+						options={ScreenshotSaveAsOptions}
+						selectedOption={selectedScreenshotSaveAs}
+						setSelectedOption={setSelectedScreenshotSaveAs}
+						disabled={settings.enable_screenshot_button.toString() !== "true"}
+					/>
+					<Setting
+						type="select"
+						id="screenshot_format"
+						label={t("settings.sections.screenshotButton.selectFormat.label")}
+						title={t("settings.sections.screenshotButton.selectFormat.title")}
+						onChange={setValueOption("screenshot_format")}
+						options={ScreenshotFormatOptions}
+						selectedOption={selectedScreenshotFormat}
+						setSelectedOption={setSelectedScreenshotFormat}
+						disabled={settings.enable_screenshot_button.toString() !== "true"}
+					/>
+				</SettingSection>
 				<div className="flex gap-1 sticky left-0 bottom-0 p-2 bg-[#f5f5f5] dark:bg-[#181a1b]">
 					<input
 						type="button"
 						id="clear_data_button"
 						className="p-2 danger dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
-						value="Clear Data"
-						title="Clears all data this extension has stored on your machine"
+						title={t("settings.sections.bottomButtons.clear.title")}
+						value={t("settings.sections.bottomButtons.clear.value")}
 						onClick={clearData}
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
@@ -552,8 +626,8 @@ export default function Settings({
 							id="confirm_button"
 							className="p-2 danger dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
 							style={{ marginLeft: "auto" }}
-							value="Confirm"
-							title="Confirm setting reset"
+							title={t("settings.sections.bottomButtons.confirm.title")}
+							value={t("settings.sections.bottomButtons.confirm.value")}
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
 								if (notificationToRemove) {
@@ -562,7 +636,7 @@ export default function Settings({
 								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
 								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
 
-								addNotification("success", "Options saved");
+								addNotification("success", t("pages.options.notifications.success.saved"));
 							}}
 						/>
 					) : (
@@ -571,51 +645,13 @@ export default function Settings({
 							id="reset_button"
 							className="p-2 warning dark:hover:bg-[rgba(24,26,27,0.5)] text-sm sm:text-base md:text-lg"
 							style={{ marginLeft: "auto" }}
-							value="Reset"
-							title="Resets all settings to their defaults, Click the confirm button to save the changes"
+							title={t("settings.sections.bottomButtons.reset.title")}
+							value={t("settings.sections.bottomButtons.reset.value")}
 							onClick={resetOptions}
 						/>
 					)}
 				</div>
-				<div id="notifications" ref={parentRef}>
-					{notifications.map((notification, index) => (
-						<div
-							className={cn("relative notification inverse bg-teal-600", {
-								"bg-green-600": notification.type === "success",
-								"bg-red-600": notification.type === "error",
-								"bg-blue-600": notification.type === "info",
-								"bg-yellow-600": notification.type === "warning"
-							})}
-							key={index}
-						>
-							{notification.action ? (
-								notification.action === "reset_settings" ? (
-									<>
-										{notification.message.split("\n").map((line, index) => (
-											<p key={index}>{line}</p>
-										))}
-										<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
-											&times;
-										</button>
-									</>
-								) : null
-							) : (
-								<>
-									{notification.message}
-									<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
-										&times;
-									</button>
-								</>
-							)}
-							<div
-								className="h-1 bg-[#0086ff] absolute left-0 bottom-0 rounded-b"
-								id={`${notification.type}_notification_${notification.message.split(/s /).join("_")}_progress_bar`}
-								style={{ width: `${notification.progress ?? 100}%` }}
-								key={index}
-							></div>
-						</div>
-					))}
-				</div>
+				<SettingsNotifications />
 			</div>
 		)
 	);

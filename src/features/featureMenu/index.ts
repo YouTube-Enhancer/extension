@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, isShortsPage, createTooltip } from "@/src/utils/utilities";
 
@@ -27,7 +27,7 @@ function createFeatureMenu() {
 	return featureMenu;
 }
 
-function createFeatureMenuButton() {
+async function createFeatureMenuButton() {
 	// Check if the feature menu already exists
 	const featureMenuExists = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
 	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
@@ -36,7 +36,7 @@ function createFeatureMenuButton() {
 	const featureMenuButton = document.createElement("button");
 	featureMenuButton.classList.add("ytp-button");
 	featureMenuButton.id = "yte-feature-menu-button";
-	featureMenuButton.dataset.title = "Feature menu";
+	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.label");
 	featureMenuButton.style.display = "none";
 	// Create the SVG icon for the button
 	const featureButtonSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");

@@ -2,7 +2,7 @@ import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/u
 
 import { setRememberedVolume, setupVolumeChangeListener } from "./utils";
 
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 /**
  * Sets the remembered volume based on the options received from a specific message.
  * It restores the last volume if the option is enabled.

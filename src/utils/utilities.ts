@@ -10,7 +10,7 @@ import type {
 	Selector,
 	SendDataMessage,
 	YoutubePlayerQualityLabel
-} from "@/src/types";
+} from "@/src/@types";
 import { eventManager, type FeatureName } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;

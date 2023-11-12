@@ -1,5 +1,6 @@
 import z from "zod";
-import type { PartialConfigurationToZodSchema, configuration } from "../types";
+import type { PartialConfigurationToZodSchema, configuration } from "../@types";
+import { availableLocales } from "../i18n/index";
 import {
 	screenshotFormat,
 	screenshotType,
@@ -7,7 +8,7 @@ import {
 	onScreenDisplayType,
 	onScreenDisplayPosition,
 	youtubePlayerQualityLevel
-} from "../types";
+} from "../@types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	// Options
@@ -35,7 +36,8 @@ export const defaultConfiguration = {
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 1,
 	player_quality: "auto",
-	player_speed: 1
+	player_speed: 1,
+	language: "en-US"
 } satisfies configuration;
 
 export const configurationImportSchema: PartialConfigurationToZodSchema<configuration> = z.object({
@@ -62,5 +64,6 @@ export const configurationImportSchema: PartialConfigurationToZodSchema<configur
 	volume_boost_amount: z.number().optional(),
 	player_quality: z.enum(youtubePlayerQualityLevel).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
-	remembered_volume: z.number().optional()
+	remembered_volume: z.number().optional(),
+	language: z.enum(availableLocales).optional()
 });

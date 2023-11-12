@@ -1,21 +1,12 @@
-import { useEffect, useState } from "react";
-import { isNotStrictEqual } from "../utils/utilities";
-type NotificationType = "error" | "success" | "info" | "warning";
+import { isNotStrictEqual } from "@/src/utils/utilities";
+import React, { useState, useEffect, type ReactElement } from "react";
+import { NotificationsContext, type NotificationsContextProps } from "./context";
+import type { NotificationType, NotificationAction, Notification } from "@/src/@types";
+type NotificationProviderProps = { children: ReactElement[] | ReactElement };
+export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
+	const [notifications, setNotifications] = useState<Notification[]>([]);
 
-type NotificationAction = "reset_settings" | undefined;
-
-type Notification = {
-	message: string;
-	type: NotificationType;
-	action: NotificationAction;
-	removeAfterMs?: number;
-	timestamp?: number;
-	progress?: number;
-};
-export const useNotifications = (initialNotifications?: Notification[]) => {
-	const [notifications, setNotifications] = useState<Notification[]>(initialNotifications ?? []);
-
-	function addNotification(type: NotificationType, message: string, action: NotificationAction = undefined) {
+	function addNotification(type: NotificationType, message: string, action?: NotificationAction) {
 		const existingNotification = notifications.find((n) => n.message === message && n.type === type);
 		if (existingNotification) {
 			removeNotification(existingNotification);
@@ -60,6 +51,6 @@ export const useNotifications = (initialNotifications?: Notification[]) => {
 
 		return () => clearInterval(interval);
 	}, []);
-
-	return { notifications, addNotification, removeNotification };
+	const contextValue = { addNotification, notifications, removeNotification } satisfies NotificationsContextProps;
+	return <NotificationsContext.Provider value={contextValue}>{children}</NotificationsContext.Provider>;
 };

@@ -29,5 +29,5 @@
 			"@/hooks/*": ["src/hooks/*"]
 		}
 	},
-	"include": ["src", "src/utils", "vite.config.ts"]
+	"include": ["src", "src/utils", "vite.config.ts", "public/locales"]
 }

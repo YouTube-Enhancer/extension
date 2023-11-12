@@ -18,16 +18,17 @@ export type SelectOption = {
 	element?: React.ReactElement<SelectOptionProps>;
 };
 
-interface SelectProps {
+export type SelectProps = {
 	id?: string;
 	className?: string;
 	options: SelectOption[];
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
+	title: string;
 	label: string;
 	selectedOption: string | undefined;
 	setSelectedOption: Dispatch<SetStateAction<string | undefined>>;
 	disabled: boolean;
-}
+};
 
 const Select: React.FC<SelectProps> = ({ onChange, options, className, id, selectedOption, label, setSelectedOption, disabled }) => {
 	const {
@@ -48,7 +49,7 @@ const Select: React.FC<SelectProps> = ({ onChange, options, className, id, selec
 
 	const disabledButtonClasses = { "text-[#4b5563]": disabled, "dark:text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
-		<div className={cn("relative flex mb-2 gap-4 flex-row items-baseline justify-between", className)} id={id} ref={selectRef}>
+		<div className={cn("relative flex gap-4 flex-row items-baseline justify-between", className)} id={id} ref={selectRef}>
 			<label htmlFor={id}>{label}</label>
 			<div className="relative inline-block">
 				<button
