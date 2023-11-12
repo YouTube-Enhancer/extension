@@ -1,5 +1,5 @@
 import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import { calculateRemainingTime } from "./utils";
 import eventManager from "@/src/utils/EventManager";
 async function playerTimeUpdateListener() {

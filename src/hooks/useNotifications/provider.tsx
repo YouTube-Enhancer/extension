@@ -1,7 +1,7 @@
 import { isNotStrictEqual } from "@/src/utils/utilities";
 import React, { useState, useEffect, type ReactElement } from "react";
 import { NotificationsContext, type NotificationsContextProps } from "./context";
-import type { NotificationType, NotificationAction, Notification } from "./types";
+import type { NotificationType, NotificationAction, Notification } from "@/src/@types";
 type NotificationProviderProps = { children: ReactElement[] | ReactElement };
 export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);

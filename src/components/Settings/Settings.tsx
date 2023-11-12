@@ -2,8 +2,8 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
 import { useNotifications } from "@/hooks";
-import type { configuration, configurationKeys } from "@/src/types";
-import { youtubePlayerSpeedRate } from "@/src/types";
+import type { configuration, configurationKeys } from "@/src/@types";
+import { youtubePlayerSpeedRate } from "@/src/@types";
 import React, { useEffect, useState } from "react";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { cn, settingsAreDefault } from "@/src/utils/utilities";

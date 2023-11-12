@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import { waitForSpecificMessage, browserColorLog, formatError } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {

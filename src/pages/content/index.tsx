@@ -13,7 +13,7 @@ import volumeBoost from "@/src/features/volumeBoost";
 import eventManager from "@/utils/EventManager";
 import { browserColorLog, formatError } from "@/utils/utilities";
 
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 // TODO: Add always show progressbar feature

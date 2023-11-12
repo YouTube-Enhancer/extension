@@ -1,5 +1,5 @@
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/@types";
 import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage, parseStoredValue } from "@/src/utils/utilities";
 
 /**

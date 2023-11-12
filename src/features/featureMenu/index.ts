@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, isShortsPage, createTooltip } from "@/src/utils/utilities";
 

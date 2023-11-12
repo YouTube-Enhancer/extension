@@ -1,5 +1,5 @@
 import z from "zod";
-import type { PartialConfigurationToZodSchema, configuration } from "../types";
+import type { PartialConfigurationToZodSchema, configuration } from "../@types";
 import {
 	screenshotFormat,
 	screenshotType,
@@ -7,7 +7,7 @@ import {
 	onScreenDisplayType,
 	onScreenDisplayPosition,
 	youtubePlayerQualityLevel
-} from "../types";
+} from "../@types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	// Options

@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage } from "@/src/utils/utilities";
 import { adjustVolume, getScrollDirection, setupScrollListeners, drawVolumeDisplay } from "./utils";
 

@@ -1,6 +1,6 @@
 import z from "zod";
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
-import type { FeatureName } from "./utils/EventManager";
+import type { FeatureName } from "../utils/EventManager";
 
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -155,3 +155,15 @@ export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
 export type WithId<S extends string> = `#${S}`;
+export type NotificationType = "error" | "success" | "info" | "warning";
+
+export type NotificationAction = "reset_settings" | undefined;
+
+export type Notification = {
+	message: string;
+	type: NotificationType;
+	action: NotificationAction;
+	removeAfterMs?: number;
+	timestamp?: number;
+	progress?: number;
+};
