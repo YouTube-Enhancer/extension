@@ -1,0 +1,238 @@
+{
+	"langCode": "pl-PL.pl-PL",
+	"langName": "Angielski",
+	"pages": {
+		"content": {
+			"features": {
+				"videoHistory": {
+					"resumePrompt": {
+						"close": "Zamknij"
+					},
+					"resumeButton": "Wznów"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "Zrzut ekranu skopiowany do schowka",
+					"label": "Zrzut ekranu"
+				},
+				"loopButton": {
+					"label": "Pętla"
+				},
+				"maximizePlayerButton": {
+					"label": "Maximize"
+				},
+				"featureMenu": {
+					"label": "Menu funkcji"
+				}
+			}
+		},
+		"options": {
+			"notifications": {
+				"success": {
+					"saved": "Opcje zapisane."
+				},
+				"error": {
+					"playerQuality": "Musisz wybrać jakość gracza, jeśli chcesz włączyć funkcję automatycznej jakości."
+				},
+				"info": {
+					"reset": "Wszystkie opcje zostały zresetowane do wartości domyślnych.\nMożesz teraz zapisać zmiany, klikając przycisk \"Potwierdź\" lub odrzucić je, zamykając tę stronę lub ignorując to powiadomienie."
+				}
+			}
+		}
+	},
+	"settings": {
+		"sections": {
+			"importExportSettings": {
+				"title": "Ustawienia importu/eksportowania",
+				"importButton": {
+					"error": {
+						"validation": "Błąd podczas importowania ustawień. Sprawdź format pliku.\n{{ERROR_MESSAGE}}",
+						"unknown": "Błąd podczas importowania ustawień. Sprawdź format pliku.\nWystąpił nieznany błąd."
+					},
+					"success": "Ustawienia zaimportowane pomyślnie",
+					"title": "Importuj ustawienia z pliku JSON",
+					"value": "Importuj ustawienia"
+				},
+				"exportButton": {
+					"success": "Ustawienia zostały pomyślnie wyeksportowane",
+					"title": "Eksportuj ustawienia do pliku JSON",
+					"value": "Eksportuj ustawienia"
+				}
+			},
+			"miscellaneous": {
+				"title": "Różne ustawienia",
+				"features": {
+					"rememberLastVolume": {
+						"title": "Pamiętaj głośność jaką oglądałeś i ustawia ją jako głośność podczas otwierania nowego filmu",
+						"label": "Zapamiętaj ostatnią głośność"
+					},
+					"maximizePlayerButton": {
+						"title": "Wypełnia rozmiar wideo do okna",
+						"label": "Włącz przycisk maksymalizacji odtwarzacza"
+					},
+					"videoHistory": {
+						"title": "Zachowuje śledzenie miejsca, w którym zostawiłeś na filmach, które oglądałeś i pyta czy chcesz wznowić po ponownym wczytaniu wideo",
+						"label": "Włącz historię filmów"
+					},
+					"remainingTime": {
+						"title": "Pokazuje pozostały czas oglądanego filmu",
+						"label": "Włącz pozostały czas"
+					},
+					"loopButton": {
+						"title": "Dodaje przycisk do odtwarzacza do pętli filmu, który oglądasz",
+						"label": "Włącz przycisk pętli"
+					},
+					"hideScrollbar": {
+						"title": "Ukryj pasek przewijania stron",
+						"label": "Enable hide scrollbar"
+					}
+				}
+			},
+			"scrollWheelVolumeControl": {
+				"title": "Ustawienia regulacji głośności koła",
+				"enable": {
+					"title": "Pozwala użyć kółka przewijania do kontrolowania głośności oglądanego filmu",
+					"label": "Włącz regulację głośności koła przewijania"
+				},
+				"osdColor": {
+					"title": "Kolor wyświetlacza na ekranie",
+					"label": "Kolor OSD"
+				},
+				"osdType": {
+					"title": "Typ wyświetlania na ekranie",
+					"label": "Typ OSD"
+				},
+				"osdPosition": {
+					"title": "Położenie ekranu włączonego",
+					"label": "Pozycja OSD"
+				},
+				"osdOpacity": {
+					"title": "Przezroczystość ekranu włączonego",
+					"label": "OSD opacity"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"title": "Kwota do dostosowania głośności na przewijanie",
+					"label": "Kwota do dostosowania"
+				},
+				"osdHide": {
+					"title": "Ilość milisekund oczekiwania przed ukryciem OSD",
+					"label": "Czas ukryć"
+				},
+				"osdPadding": {
+					"title": "Ilość wypełnienia do dodania do OSD (w pikselach, dotyczy tylko narożnika OSD)",
+					"label": "Padding"
+				},
+				"onScreenDisplay": {
+					"colors": {
+						"red": "Czerwony",
+						"green": "Zielony",
+						"blue": "Niebieski",
+						"yellow": "Żółty",
+						"orange": "Pomarańczowy",
+						"purple": "Fioletowy",
+						"pink": "Różowy",
+						"white": "Biały"
+					},
+					"position": {
+						"top_left": "Lewy górny",
+						"top_right": "Prawy górny róg",
+						"bottom_left": "Lewy dolny róg",
+						"bottom_right": "Prawy dolny róg",
+						"center": "Środkowy"
+					},
+					"type": {
+						"no_display": "Brak wyświetlacza",
+						"text": "Tekst",
+						"line": "Linia",
+						"round": "Runda"
+					}
+				}
+			},
+			"automaticQuality": {
+				"title": "Ustawienia jakości automatycznej",
+				"enable": {
+					"title": "Automatycznie dostosowuje jakość wideo do wybranego poziomu.",
+					"label": "Włącz automatyczną korektę jakości"
+				},
+				"select": {
+					"label": "Jakość gracza",
+					"title": "Jakość do ustawiania wideo"
+				}
+			},
+			"playbackSpeed": {
+				"title": "Ustawienia prędkości odtwarzania",
+				"enable": {
+					"title": "Ustawia prędkość wideo na to, co wybierzesz poniżej",
+					"label": "Włącz wymuszoną prędkość odtwarzania"
+				},
+				"select": {
+					"label": "Szybkość odtwarzacza",
+					"title": "Szybkość ustawiania filmu na"
+				}
+			},
+			"volumeBoost": {
+				"title": "Ustawienia podbicia głośności",
+				"enable": {
+					"title": "Zwiększa głośność oglądanego filmu",
+					"label": "Włącz zwiększenie głośności"
+				},
+				"number": {
+					"label": "Zwiększenie głośności (dB)",
+					"title": "Kwota zwiększenia głośności o"
+				}
+			},
+			"screenshotButton": {
+				"title": "Ustawienia zrzutu ekranu",
+				"enable": {
+					"title": "Dodaje przycisk do odtwarzacza aby zrobić zrzut ekranu wideo",
+					"label": "Włącz przycisk zrzutu ekranu"
+				},
+				"selectSaveAs": {
+					"label": "Typ zapisu zrzutu ekranu",
+					"title": "Typ zapisu zrzutu ekranu"
+				},
+				"selectFormat": {
+					"label": "Format zrzutu ekranu",
+					"title": "Format do zapisania zrzutu ekranu w"
+				},
+				"format": {
+					"png": "PNG",
+					"jpeg": "JPEG",
+					"webp": "WebP"
+				},
+				"saveAs": {
+					"file": "Plik",
+					"clipboard": "Schowek"
+				}
+			},
+			"bottomButtons": {
+				"confirm": {
+					"title": "Potwierdź resetowanie ustawień",
+					"value": "Potwierdź"
+				},
+				"clear": {
+					"title": "Czyści wszystkie dane przechowywane przez to rozszerzenie na twoim komputerze",
+					"value": "Wyczyść dane"
+				},
+				"reset": {
+					"title": "Resetuje wszystkie ustawienia do domyślnych, kliknij przycisk Potwierdź, aby zapisać zmiany",
+					"value": "Reset"
+				}
+			},
+			"language": {
+				"title": "Język",
+				"select": {
+					"label": "Język",
+					"title": "Język używany przy rozszerzeniu"
+				}
+			}
+		},
+		"clearData": {
+			"confirmAlert": "Spowoduje to usunięcie wszystkich danych rozszerzenia związanych z opcjami. Kontynuować?",
+			"allDataDeleted": "Wszystkie dane zostały usunięte."
+		}
+	},
+	"messages": {
+		"settingVolume": "Ustawianie zwiększenia głośności na {{VOLUME_BOOST_AMOUNT}}",
+		"resumingVideo": "Wznawianie filmu w {{VIDEO_TIME}}"
+	}
+}
