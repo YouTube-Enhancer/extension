@@ -1,3 +1,27 @@
+# [1.11.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.4...v1.11.0) (2023-11-12)
+
+
+### Bug Fixes
+
+* Remaining time was showing on live video ([c685db5](https://github.com/VampireChicken12/youtube-enhancer/commit/c685db5d56b9a4bebc3cd0cd5e8e6be6a6cbdcca))
+
+
+### Features
+
+* i18n support ([e27b401](https://github.com/VampireChicken12/youtube-enhancer/commit/e27b401b654fca68e8348af0a2828815e5615208))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.0-Chrome.zip | e784ff171e6fa863b23e522bba94cd2d0b4ef4dd8376f924d4aaae0496550aaf |
+| youtube-enhancer-v1.11.0-Chromium.zip | e784ff171e6fa863b23e522bba94cd2d0b4ef4dd8376f924d4aaae0496550aaf |
+| youtube-enhancer-v1.11.0-Edge.zip | e784ff171e6fa863b23e522bba94cd2d0b4ef4dd8376f924d4aaae0496550aaf |
+| youtube-enhancer-v1.11.0-Firefox.zip | 241b4f106e60f130e18c89633da435bccf787939770cea18e577fd7e50c957cc |
+
 ## [1.10.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.3...v1.10.4) (2023-11-07)
 
 
