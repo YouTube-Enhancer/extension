@@ -1,6 +1,6 @@
 import i18next, { createInstance, type Resource } from "i18next";
 import { waitForSpecificMessage } from "../utils/utilities";
-export const availableLocales = ["en-US", "es-ES"] as const;
+export const availableLocales = ["en-US", "es-ES", "de-DE"] as const;
 export type AvailableLocales = (typeof availableLocales)[number];
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
