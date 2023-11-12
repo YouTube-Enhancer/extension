@@ -1,3 +1,22 @@
+# [1.11.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.4...v1.11.0) (2023-11-12)
+
+
+### Features
+
+* i18n support ([9909876](https://github.com/VampireChicken12/youtube-enhancer/commit/9909876a61adce40d659cd9853a62dfe0267698a))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.0-Chrome.zip | d5345622dc8b24eeb635dd0a6ba6bdd920436f984ade0581e74d33eabd7f74df |
+| youtube-enhancer-v1.11.0-Chromium.zip | d5345622dc8b24eeb635dd0a6ba6bdd920436f984ade0581e74d33eabd7f74df |
+| youtube-enhancer-v1.11.0-Edge.zip | d5345622dc8b24eeb635dd0a6ba6bdd920436f984ade0581e74d33eabd7f74df |
+| youtube-enhancer-v1.11.0-Firefox.zip | 322ed449aad83684c3addd01a4ae297c2ac5e74478a3bb85103d928bbcfa5896 |
+
 ## [1.10.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.3...v1.10.4) (2023-11-07)
 
 
