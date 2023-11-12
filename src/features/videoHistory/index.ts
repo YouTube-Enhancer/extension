@@ -1,6 +1,7 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/@types";
 import eventManager from "@/utils/EventManager";
 import { browserColorLog, createTooltip, isShortsPage, isWatchPage, sendContentMessage, waitForSpecificMessage } from "@/utils/utilities";
+import { formatTime } from "../remainingTime/utils";
 
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
@@ -34,6 +35,15 @@ export async function setupVideoHistory() {
 	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }
 export async function promptUserToResumeVideo() {
+	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
+	const { enable_video_history: enableVideoHistory } = options;
+	if (!enableVideoHistory) return;
+
 	// Get the player container element
 	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
 
@@ -85,7 +95,7 @@ export async function promptUserToResumeVideo() {
 			clearInterval(countdownInterval);
 			prompt.style.display = "none";
 			overlay.style.display = "none";
-			browserColorLog(`Resuming video`, "FgGreen");
+			browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(video_history_entry.timestamp) }), "FgGreen");
 			playerContainer.seekTo(video_history_entry.timestamp, true);
 		};
 		const overlay = document.getElementById("resume-prompt-overlay") ?? document.createElement("div");
@@ -118,7 +128,7 @@ export async function promptUserToResumeVideo() {
 			closeButton.style.padding = "5px";
 			closeButton.style.cursor = "pointer";
 			closeButton.style.lineHeight = "1px";
-			closeButton.dataset.title = "Close";
+			closeButton.dataset.title = window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close");
 			const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
 				element: closeButton,
 				id: "yte-resume-prompt-close-button-tooltip",
@@ -141,7 +151,7 @@ export async function promptUserToResumeVideo() {
 			prompt.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.2)";
 			prompt.style.zIndex = "25000";
 			resumeButton.id = "resume-prompt-button";
-			resumeButton.textContent = "Resume";
+			resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
 			resumeButton.style.backgroundColor = "hsl(213, 80%, 50%)";
 			resumeButton.style.border = "transparent";
 			resumeButton.style.color = "white";

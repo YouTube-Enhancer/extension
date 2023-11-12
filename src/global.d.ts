@@ -1,3 +1,5 @@
+import type { i18nInstanceType } from "./i18n";
+
 declare module "*.svg" {
 	import React = require("react");
 	export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
@@ -50,6 +52,7 @@ declare global {
 		audioCtx: AudioContext;
 		webkitAudioContext: AudioContext;
 		gainNode: GainNode;
+		i18nextInstance: i18nInstanceType;
 	}
 }
 export {};

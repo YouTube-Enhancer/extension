@@ -1,4 +1,4 @@
-import type { VideoHistoryStatus, VideoHistoryStorage } from "@/src/types";
+import type { VideoHistoryStatus, VideoHistoryStorage } from "@/src/@types";
 export function getVideoHistory() {
 	return JSON.parse(window.localStorage.getItem("videoHistory") ?? "{}") as VideoHistoryStorage;
 }

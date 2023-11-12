@@ -1,5 +1,5 @@
-import { youtubePlayerQualityLevel, youtubePlayerQualityLabel } from "@/src/types";
-import type { YoutubePlayerQualityLabel, YoutubePlayerQualityLevel, YouTubePlayerDiv } from "@/src/types";
+import { youtubePlayerQualityLevel, youtubePlayerQualityLabel } from "@/src/@types";
+import type { YoutubePlayerQualityLabel, YoutubePlayerQualityLevel, YouTubePlayerDiv } from "@/src/@types";
 import { waitForSpecificMessage, isWatchPage, isShortsPage, chooseClosetQuality, browserColorLog } from "@/src/utils/utilities";
 
 /**

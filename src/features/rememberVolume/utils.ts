@@ -1,7 +1,7 @@
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import type { YouTubePlayerDiv, configuration } from "@/src/types";
+import type { YouTubePlayerDiv, configuration } from "@/src/@types";
 export async function setupVolumeChangeListener() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");

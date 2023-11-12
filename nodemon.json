@@ -2,8 +2,8 @@
 	"env": {
 		"__DEV__": "true"
 	},
-	"watch": ["src", "utils", "vite.config.ts", "public"],
-	"ext": "ts,tsx,css,html",
-	"ignore": ["src/**/*.spec.ts"],
-	"exec": "vite build"
+	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"],
+	"ext": "ts,tsx,css,html,json",
+	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts"],
+	"exec": "concurrently \"vite build\" -- \"ts-json-as-const public/locales/en-US.json\""
 }
