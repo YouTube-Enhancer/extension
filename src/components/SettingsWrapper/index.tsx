@@ -5,6 +5,7 @@ import type { configuration } from "@/src/@types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue } from "@/src/utils/utilities";
 import React, { useEffect, useState } from "react";
+import { i18nService, type i18nInstanceType, type AvailableLocales } from "@/src/i18n";
 
 export default function SettingsWrapper(): JSX.Element {
 	const [settings, setSettings] = useState<configuration | undefined>(undefined);
@@ -15,6 +16,8 @@ export default function SettingsWrapper(): JSX.Element {
 	const [selectedPlayerSpeed, setSelectedPlayerSpeed] = useState<string | undefined>();
 	const [selectedScreenshotSaveAs, setSelectedScreenshotSaveAs] = useState<string | undefined>();
 	const [selectedScreenshotFormat, setSelectedScreenshotFormat] = useState<string | undefined>();
+	const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
+	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	useEffect(() => {
 		const fetchSettings = () => {
 			chrome.storage.local.get((settings) => {
@@ -29,6 +32,7 @@ export default function SettingsWrapper(): JSX.Element {
 				setSelectedPlayerSpeed(settings.player_speed);
 				setSelectedScreenshotSaveAs(settings.screenshot_save_as);
 				setSelectedScreenshotFormat(settings.screenshot_format);
+				setSelectedLanguage(settings.language);
 			});
 		};
 
@@ -71,6 +75,9 @@ export default function SettingsWrapper(): JSX.Element {
 					case "screenshot_format":
 						setSelectedScreenshotFormat(newValue);
 						break;
+					case "language":
+						setSelectedLanguage(newValue);
+						break;
 				}
 				setSettings((prevSettings) => {
 					if (prevSettings) {
@@ -89,9 +96,14 @@ export default function SettingsWrapper(): JSX.Element {
 			chrome.storage.onChanged.removeListener(handleStorageChange);
 		};
 	}, []);
-
+	useEffect(() => {
+		(async () => {
+			const instance = await i18nService((selectedLanguage as AvailableLocales) ?? "en-US");
+			setI18nInstance(instance);
+		})();
+	}, [selectedLanguage]);
 	const defaultOptions = defaultConfiguration;
-	if (!settings) {
+	if (!settings || !i18nInstance || (i18nInstance && i18nInstance.isInitialized === false)) {
 		return <Loader />;
 	}
 	return (
@@ -114,6 +126,9 @@ export default function SettingsWrapper(): JSX.Element {
 				setSelectedScreenshotSaveAs={setSelectedScreenshotSaveAs}
 				selectedScreenshotFormat={selectedScreenshotFormat}
 				setSelectedScreenshotFormat={setSelectedScreenshotFormat}
+				selectedLanguage={selectedLanguage}
+				setSelectedLanguage={setSelectedLanguage}
+				i18nInstance={i18nInstance}
 			/>
 		</NotificationsProvider>
 	);

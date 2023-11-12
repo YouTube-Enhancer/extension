@@ -146,7 +146,32 @@ export async function removeFeatureItemFromMenu(featureName: FeatureName) {
 	// Adjust the height and width of the feature menu panel
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 }
-
+/**
+ * Updates the label for a feature item.
+ * @param featureName the name of the feature
+ * @param label the label to set
+ * @returns
+ */
+export async function updateFeatureMenuItemLabel(featureName: FeatureName, label: string) {
+	const featureMenuItemLabel = getFeatureMenuItemLabel(featureName);
+	if (!featureMenuItemLabel) return;
+	featureMenuItemLabel.textContent = label;
+}
+/**
+ *	Updates the title for the feature menu button.
+ * @param title the title to set
+ * @returns
+ */
+export async function updateFeatureMenuTitle(title: string) {
+	const featureMenuButton = document.querySelector("#yte-feature-menu-button") as HTMLButtonElement | null;
+	if (!featureMenuButton) return;
+	featureMenuButton.dataset.title = title;
+}
+/**
+ * Gets the IDs for a feature item.
+ * @param featureName the name of the feature
+ * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
+ */
 export function getFeatureIds(featureName: FeatureName): {
 	featureMenuItemIconId: FeatureMenuItemIconId;
 	featureMenuItemId: FeatureMenuItemId;

@@ -1,5 +1,6 @@
 import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
+import { availableLocales } from "./i18n";
 
 const manifestV3: Manifest.WebExtensionManifest = {
 	manifest_version: 3,
@@ -43,7 +44,8 @@ const manifestV3: Manifest.WebExtensionManifest = {
 				"/icons/icon_48.png",
 				"/icons/icon_16.png",
 				"src/pages/content/index.js",
-				"src/pages/inject/index.js"
+				"src/pages/inject/index.js",
+				...availableLocales.map((locale) => `/locales/${locale}.json`)
 			],
 			matches: ["https://www.youtube.com/*"]
 		}
@@ -87,7 +89,8 @@ const manifestV2: Manifest.WebExtensionManifest = {
 		"/icons/icon_48.png",
 		"/icons/icon_16.png",
 		"src/pages/content/index.js",
-		"src/pages/inject/index.js"
+		"src/pages/inject/index.js",
+		...availableLocales.map((locale) => `/locales/${locale}.json`)
 	]
 };
 
