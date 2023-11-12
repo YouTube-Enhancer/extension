@@ -1,3 +1,22 @@
+## [1.11.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.1...v1.11.2) (2023-11-12)
+
+
+### Bug Fixes
+
+* remove lang files that aren't translated ([8a8b78b](https://github.com/VampireChicken12/youtube-enhancer/commit/8a8b78b36b83131d4d15c00133ac28fdfd9338d2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.2-Chrome.zip | 87b714058ba040a391ae7260307e87971982217c65b9b274bdab9d54d8963271 |
+| youtube-enhancer-v1.11.2-Chromium.zip | 50b0e74056b914c109d0c27dd53d64a7c7e33f1dec99dfd66ccb034933116dae |
+| youtube-enhancer-v1.11.2-Edge.zip | 50b0e74056b914c109d0c27dd53d64a7c7e33f1dec99dfd66ccb034933116dae |
+| youtube-enhancer-v1.11.2-Firefox.zip | 3c7ecd3e1c0cfebca198c351011fe5c409f534f2b93986d07f7f6913aa3bafb4 |
+
 ## [1.11.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.0...v1.11.1) (2023-11-12)
 
 
