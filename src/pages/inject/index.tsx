@@ -1,6 +1,7 @@
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/@types";
 import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage, parseStoredValue } from "@/src/utils/utilities";
+import type { AvailableLocales } from "@/src/i18n";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -108,6 +109,23 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			chrome.storage.local.set({ remembered_volumes: { ...message.data } });
 			break;
 		}
+		case "extensionURL": {
+			sendExtensionMessage("extensionURL", "data_response", {
+				extensionURL: chrome.runtime.getURL("")
+			});
+			break;
+		}
+		case "language": {
+			const language = await new Promise<AvailableLocales>((resolve) => {
+				chrome.storage.local.get("language", (o) => {
+					resolve(o.language);
+				});
+			});
+			sendExtensionMessage("language", "data_response", {
+				language
+			});
+			break;
+		}
 	}
 });
 const storageListeners = async (changes: StorageChanges, areaName: string) => {
@@ -201,6 +219,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_hide_scrollbar: () => {
 			sendExtensionOnlyMessage("hideScrollBarChange", {
 				hideScrollBarEnabled: castedChanges.enable_hide_scrollbar.newValue
+			});
+		},
+		language: () => {
+			sendExtensionOnlyMessage("languageChange", {
+				language: castedChanges.language.newValue
 			});
 		}
 	};

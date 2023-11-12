@@ -39,7 +39,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 					const clipboardImage = new ClipboardItem({ "image/png": blob });
 					navigator.clipboard.write([clipboardImage]);
 					navigator.clipboard.writeText(dataUrl);
-					screenshotTooltip.textContent = "Screenshot copied to clipboard";
+					screenshotTooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
 				}
 				break;
 			}
@@ -66,7 +66,6 @@ export async function addScreenshotButton(): Promise<void> {
 	const { enable_screenshot_button: enableScreenshotButton } = options;
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;
-
 	// Add a click event listener to the screenshot button
 	async function screenshotButtonClickListener() {
 		// Get the video element
@@ -83,7 +82,7 @@ export async function addScreenshotButton(): Promise<void> {
 	addFeatureItemToMenu({
 		featureName: "screenshotButton",
 		icon: makeScreenshotIcon(),
-		label: "Screenshot",
+		label: window.i18nextInstance.t("pages.content.features.screenshotButton.label"),
 		listener: screenshotButtonClickListener
 	});
 }
