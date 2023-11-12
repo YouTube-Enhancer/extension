@@ -1,3 +1,22 @@
+## [1.11.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.0...v1.11.1) (2023-11-12)
+
+
+### Bug Fixes
+
+* video history ran on live video ([aac2edf](https://github.com/VampireChicken12/youtube-enhancer/commit/aac2edf1b9692d9d6b3d4a55a5515299cbc120ee))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.1-Chrome.zip | 3b0e758b0474e1b6ef66b18bd0cfac6bb8d07b854e63f208730ba6983c7f7425 |
+| youtube-enhancer-v1.11.1-Chromium.zip | 3b0e758b0474e1b6ef66b18bd0cfac6bb8d07b854e63f208730ba6983c7f7425 |
+| youtube-enhancer-v1.11.1-Edge.zip | 27b26b47b0c36e125c02ac64716bd83ee6101cab97c848baec29f5bf03b4474f |
+| youtube-enhancer-v1.11.1-Firefox.zip | 02ab2522494f7a0cae5924c1437a43812ee9c32d046abc9b29566ed1a82ae084 |
+
 # [1.11.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.10.4...v1.11.0) (2023-11-12)
 
 
