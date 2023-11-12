@@ -1,40 +1,40 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "cs-CZ",
+	"langName": "Čeština (USA)",
 	"pages": {
 		"content": {
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Zavřít"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "Pokračovat"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "Snímek obrazovky zkopírován do schránky",
+					"label": "Snímek obrazovky"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Smyčka"
 				},
 				"maximizePlayerButton": {
 					"label": "Maximize"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "Nabídka funkcí"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "Možnosti uloženy."
 				},
 				"error": {
-					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
+					"playerQuality": "Musíte vybrat kvalitu přehrávače, pokud chcete povolit funkci automatické kvality."
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Všechny možnosti byly resetovány na jejich výchozí hodnoty.\nNyní můžete uložit změny kliknutím na tlačítko \"Potvrdit\" nebo je zahodit zavřením této stránky nebo ignorováním tohoto oznámení."
 				}
 			}
 		}
@@ -42,157 +42,157 @@
 	"settings": {
 		"sections": {
 			"importExportSettings": {
-				"title": "Import/Export Settings",
+				"title": "Nastavení importu/exportu",
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "Chyba při importu nastavení. Zkontrolujte prosím formát souboru.\n{{ERROR_MESSAGE}}",
+						"unknown": "Chyba při importu nastavení. Zkontrolujte formát souboru.\nDošlo k neznámé chybě."
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Nastavení úspěšně importováno",
+					"title": "Importovat nastavení ze souboru JSON",
+					"value": "Importovat nastavení"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Nastavení úspěšně exportováno",
+					"title": "Exportovat nastavení do souboru JSON",
+					"value": "Nastavení exportu"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "Různá nastavení",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume you were watching at and sets it as the volume when you open a new video",
-						"label": "Remember last volume"
+						"title": "Pamatujte si hlasitost, na kterou jste sledovali, a nastavte ji jako hlasitost při otevření nového videa",
+						"label": "Zapamatovat poslední hlasitost"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
-						"label": "Enable maximize player button"
+						"title": "Vyplní video do velikosti okna",
+						"label": "Povolit tlačítko maximalizovat hráče"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"title": "Sleduje, kde jste skončili na videích, která jste sledovali, a ptá se, zda chcete pokračovat, až se video znovu načte",
+						"label": "Povolit historii videí"
 					},
 					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"title": "Zobrazí zbývající čas videa, které sledujete",
+						"label": "Povolit zbývající čas"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"title": "Přidá do přehrávače tlačítko pro smyčku videa, které sledujete",
+						"label": "Povolit tlačítko smyčky"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
+						"title": "Skryje posuvník stránek",
 						"label": "Enable hide scrollbar"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
+				"title": "Nastavení ovládání hlasitosti posunu kol",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"title": "Umožňuje použít kolečko pro ovládání hlasitosti videa, které sledujete",
+					"label": "Povolit ovládání hlasitosti kolečka"
 				},
 				"osdColor": {
-					"title": "The color of the On Screen Display",
-					"label": "OSD color"
+					"title": "Barva displeje na obrazovce",
+					"label": "OSD barva"
 				},
 				"osdType": {
-					"title": "The type of On Screen Display",
-					"label": "OSD type"
+					"title": "Typ displeje na obrazovce",
+					"label": "OSD typ"
 				},
 				"osdPosition": {
-					"title": "The position of the On Screen Display",
-					"label": "OSD position"
+					"title": "Poloha displeje na obrazovce",
+					"label": "OSD pozice"
 				},
 				"osdOpacity": {
-					"title": "The opacity of the On Screen Display",
+					"title": "Neprůhlednost displeje na obrazovce",
 					"label": "OSD opacity"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "The amount to adjust volume per scroll",
-					"label": "Amount to adjust"
+					"title": "Množství pro úpravu hlasitosti na posun",
+					"label": "Částka k úpravě"
 				},
 				"osdHide": {
-					"title": "The amount of milliseconds to wait before hiding the OSD",
-					"label": "Time to hide"
+					"title": "Počet milisekund počkat před skrytím OSD",
+					"label": "Čas na skrytí"
 				},
 				"osdPadding": {
-					"title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)",
+					"title": "Množství odsazení pro přidání do OSD (v pixelech, platí pouze pro rohové OSD)",
 					"label": "Padding"
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "Red",
-						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
-						"orange": "Orange",
-						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
+						"red": "Červená",
+						"green": "Zelená",
+						"blue": "Modrá",
+						"yellow": "Žlutá",
+						"orange": "Oranžová",
+						"purple": "Fialová",
+						"pink": "Růžová",
+						"white": "Bílý"
 					},
 					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
+						"top_left": "Vlevo nahoře",
+						"top_right": "Vpravo nahoře",
+						"bottom_left": "Vlevo dole",
+						"bottom_right": "Vpravo dole",
+						"center": "Střed"
 					},
 					"type": {
-						"no_display": "No display",
+						"no_display": "Žádné zobrazení",
 						"text": "Text",
-						"line": "Line",
-						"round": "Round"
+						"line": "Řádek",
+						"round": "Kolo"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "Automatické nastavení kvality",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"title": "Automaticky přizpůsobí kvalitu videa na vybranou úroveň.",
+					"label": "Povolit automatické úpravy kvality"
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "Kvalita přehrávače",
+					"title": "Kvalita pro nastavení videa na"
 				}
 			},
 			"playbackSpeed": {
-				"title": "Playback speed settings",
+				"title": "Nastavení rychlosti přehrávání",
 				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Enable forced playback speed"
+					"title": "Nastaví rychlost videa podle toho, co si vyberete níže",
+					"label": "Povolit vynucenou rychlost přehrávání"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Rychlost hráče",
+					"title": "Rychlost nastavení videa na"
 				}
 			},
 			"volumeBoost": {
-				"title": "Volume boost settings",
+				"title": "Nastavení zesílení hlasitosti",
 				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Enable volume boost"
+					"title": "Zvyšuje hlasitost videa, které sledujete",
+					"label": "Povolit zesílení hlasitosti"
 				},
 				"number": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Hodnota zvýšení hlasitosti (dB)",
+					"title": "Částka pro zvýšení hlasitosti o"
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "Nastavení snímku obrazovky",
 				"enable": {
-					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Enable screenshot button"
+					"title": "Přidá do přehrávače tlačítko pro pořízení snímku videa",
+					"label": "Povolit tlačítko snímku obrazovky"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "Typ snímku obrazovky",
+					"title": "Typ snímku obrazovky"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "Formát snímku obrazovky",
+					"title": "Formát pro uložení snímku obrazovky do"
 				},
 				"format": {
 					"png": "PNG",
@@ -200,39 +200,39 @@
 					"webp": "WebP"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "Soubor",
+					"clipboard": "Schránka"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "Potvrdit obnovení nastavení",
+					"value": "Potvrdit"
 				},
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "Vymaže všechna data, která toto rozšíření uložilo na vašem počítači",
+					"value": "Vymazat data"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+					"title": "Obnoví všechna nastavení na jejich výchozí nastavení, klikněte na tlačítko Potvrdit pro uložení změn",
 					"value": "Reset"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "Jazyk",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Jazyk",
+					"title": "Jazyk, který má být použit pro rozšíření"
 				}
 			}
 		},
 		"clearData": {
-			"confirmAlert": "This will delete all extension data related to options. Continue?",
-			"allDataDeleted": "All data has been deleted."
+			"confirmAlert": "Tímto smažete všechna data rozšíření týkající se možností. Pokračovat?",
+			"allDataDeleted": "Všechna data byla smazána."
 		}
 	},
 	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"settingVolume": "Nastavení zesílení hlasitosti na {{VOLUME_BOOST_AMOUNT}}",
+		"resumingVideo": "Obnovení videa na {{VIDEO_TIME}}"
 	}
 }
