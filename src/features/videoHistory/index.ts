@@ -16,6 +16,9 @@ export async function setupVideoHistory() {
 	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
 	// If player container is not available, return
 	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	// If the video is live return
+	if (playerVideoData.isLive) return;
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
 	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
