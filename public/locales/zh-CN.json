@@ -1,12 +1,12 @@
 {
 	"langCode": "zh-CN",
-	"langName": "简体中文",
+	"langName": "中文（简体)",
 	"pages": {
 		"content": {
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "关闭"
+						"close": "关"
 					},
 					"resumeButton": "恢复"
 				},
@@ -18,10 +18,10 @@
 					"label": "循环"
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "化最大"
 				},
 				"featureMenu": {
-					"label": "功能菜单"
+					"label": "功能单"
 				}
 			}
 		},
@@ -83,7 +83,7 @@
 					},
 					"hideScrollbar": {
 						"title": "隐藏页面滚动条",
-						"label": "Enable hide scrollbar"
+						"label": "启用隐藏滚动条"
 					}
 				}
 			},
