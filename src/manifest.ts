@@ -91,7 +91,13 @@ const manifestV2: Manifest.WebExtensionManifest = {
 		"src/pages/content/index.js",
 		"src/pages/inject/index.js",
 		...availableLocales.map((locale) => `/locales/${locale}.json`)
-	]
+	],
+	browser_specific_settings: {
+		gecko: {
+			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}",
+			strict_min_version: "48.0"
+		}
+	}
 };
 
 export { manifestV3, manifestV2 };
