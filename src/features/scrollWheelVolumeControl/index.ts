@@ -41,7 +41,12 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 		// Adjust the volume based on the scroll direction
 		const scrollDelta = getScrollDirection(wheelEvent.deltaY);
-
+		// Wait for the "options" message from the content script
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		if (!optionsData) return;
+		const {
+			data: { options }
+		} = optionsData;
 		// Adjust the volume based on the scroll direction and options
 		const { newVolume } = await adjustVolume(scrollDelta, options.volume_adjustment_steps);
 
