@@ -1,3 +1,22 @@
+## [1.11.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.2...v1.11.3) (2023-11-13)
+
+
+### Bug Fixes
+
+* scroll wheel volume control settings not updating ([6af585a](https://github.com/VampireChicken12/youtube-enhancer/commit/6af585a708d23059c262b8923451c3b9fd6d91df))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.3-Chrome.zip | f2ca9664735d0ac5468dc014103953938bdcdc7a67bbfe38e4849323e4d30a7a |
+| youtube-enhancer-v1.11.3-Chromium.zip | f2ca9664735d0ac5468dc014103953938bdcdc7a67bbfe38e4849323e4d30a7a |
+| youtube-enhancer-v1.11.3-Edge.zip | 75ffa5e74b39bb33dfd0cad188e24df2b147fde826b99539819e082a8a48e147 |
+| youtube-enhancer-v1.11.3-Firefox.zip | 08cb85d06d90f589f8724ef3a0852b207ba621030b9a471d1082644dd7ac413b |
+
 ## [1.11.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.1...v1.11.2) (2023-11-12)
 
 
