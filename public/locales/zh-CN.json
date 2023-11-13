@@ -119,25 +119,25 @@
 				},
 				"osdPadding": {
 					"title": "要添加到OSD的填充数量 (像素，仅适用于角OSD)",
-					"label": "Padding"
+					"label": "填充"
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "红色的",
-						"green": "Green",
+						"red": "红色",
+						"green": "绿色",
 						"blue": "蓝色",
 						"yellow": "黄色",
 						"orange": "橙色",
 						"purple": "紫色",
 						"pink": "粉色",
-						"white": "白色的"
+						"white": "白色"
 					},
 					"position": {
 						"top_left": "左上",
 						"top_right": "右上",
 						"bottom_left": "左下",
 						"bottom_right": "右下",
-						"center": "居中"
+						"center": "中间"
 					},
 					"type": {
 						"no_display": "没有显示",
@@ -196,7 +196,7 @@
 				},
 				"format": {
 					"png": "PNG",
-					"jpeg": "跳过",
+					"jpeg": "JPEG",
 					"webp": "WebP"
 				},
 				"saveAs": {
@@ -215,7 +215,7 @@
 				},
 				"reset": {
 					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
-					"value": "Reset"
+					"value": "重新开始"
 				}
 			},
 			"language": {
