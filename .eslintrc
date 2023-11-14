@@ -51,15 +51,21 @@
 		"no-useless-escape": "off",
 		"no-empty": ["error", { "allowEmptyCatch": true }],
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
-		"import/no-commonjs": "on",
-		"import/order": [
+		"import/no-commonjs": "error",
+		"import/first": ["error"],
+		"no-secrets/no-secrets": "error",
+		"prettier/prettier": [
 			"error",
 			{
-				"groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]
+				"useTabs": true,
+				"semi": true,
+				"trailingComma": "none",
+				"arrowParens": "always",
+				"printWidth": 150
 			}
 		],
-		"import/first": ["error"],
-		"no-secrets/no-secrets": "error"
+		"import/no-unresolved": "off",
+		"tailwindcss/no-custom-classname": "off"
 	},
 	"globals": {
 		"chrome": "readonly"
@@ -67,7 +73,7 @@
 	"ignorePatterns": ["watch.js", "dist/**"],
 	"overrides": [
 		{
-			"files": ["*.ts", "*.tsx", "*.js", "*.html"],
+			"files": ["*.ts", "*.tsx", "*.js"],
 			"parser": "@typescript-eslint/parser"
 		}
 	]
