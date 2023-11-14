@@ -1,3 +1,22 @@
+## [1.11.5](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.4...v1.11.5) (2023-11-14)
+
+
+### Bug Fixes
+
+* bump min version for firefox ([cea061e](https://github.com/VampireChicken12/youtube-enhancer/commit/cea061e336f6f5f079cd5275f93f6cc323813c72))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.5-Chrome.zip | d51e74a69aa24056c4ae4d35d91a7fe1a034c60630a41791877eda56726e212d |
+| youtube-enhancer-v1.11.5-Chromium.zip | ffedd63583a275e5b3e46f5d2960ab90ad249b350224317bef9b258b708f2920 |
+| youtube-enhancer-v1.11.5-Edge.zip | ffedd63583a275e5b3e46f5d2960ab90ad249b350224317bef9b258b708f2920 |
+| youtube-enhancer-v1.11.5-Firefox.zip | f6816bc101b23daff08c68d7055443ceaebaff88cb731444ef4747d148ad2f45 |
+
 ## [1.11.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.3...v1.11.4) (2023-11-14)
 
 
