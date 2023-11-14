@@ -31,12 +31,6 @@ document.documentElement.appendChild(script);
 	});
 	sendExtensionMessage("options", "data_response", { options });
 })();
-window.onload = () => {
-	chrome.storage.onChanged.addListener(storageListeners);
-};
-window.onunload = () => {
-	chrome.storage.onChanged.removeListener(storageListeners);
-};
 
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -125,6 +119,12 @@ document.addEventListener("yte-message-from-youtube", async () => {
 				language
 			});
 			break;
+		}
+		case "pageLoaded": {
+			chrome.storage.onChanged.addListener(storageListeners);
+			window.onunload = () => {
+				chrome.storage.onChanged.removeListener(storageListeners);
+			};
 		}
 	}
 });

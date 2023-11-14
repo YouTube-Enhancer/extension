@@ -11,7 +11,7 @@ import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
 import eventManager from "@/utils/EventManager";
-import { browserColorLog, formatError, waitForSpecificMessage } from "@/utils/utilities";
+import { browserColorLog, formatError, sendContentOnlyMessage, waitForSpecificMessage } from "@/utils/utilities";
 
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
@@ -275,6 +275,7 @@ window.onload = async function () {
 			}
 		}
 	});
+	sendContentOnlyMessage("pageLoaded", undefined);
 };
 window.onbeforeunload = function () {
 	eventManager.removeAllEventListeners();
