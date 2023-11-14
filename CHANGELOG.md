@@ -1,3 +1,23 @@
+## [1.11.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.3...v1.11.4) (2023-11-14)
+
+
+### Bug Fixes
+
+* change events not received on Firefox ([d21d326](https://github.com/VampireChicken12/youtube-enhancer/commit/d21d32661f05b00ed58137189bcb85969eabdc1a))
+* scrollbar was not hidden on firefox ([20bf270](https://github.com/VampireChicken12/youtube-enhancer/commit/20bf2700baa0e26acf4a3dd77b1f36360334ef2c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.4-Chrome.zip | 2957ae2db84633532dbb88f5e0390ed17f0574fa37888c69a69f53afd69d0bce |
+| youtube-enhancer-v1.11.4-Chromium.zip | 2957ae2db84633532dbb88f5e0390ed17f0574fa37888c69a69f53afd69d0bce |
+| youtube-enhancer-v1.11.4-Edge.zip | 2957ae2db84633532dbb88f5e0390ed17f0574fa37888c69a69f53afd69d0bce |
+| youtube-enhancer-v1.11.4-Firefox.zip | eb13251eea6abf379a466efcaba52fe15e9d839e0a2fde076ed1fcd3bdbce328 |
+
 ## [1.11.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.2...v1.11.3) (2023-11-13)
 
 
