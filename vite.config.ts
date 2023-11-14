@@ -1,13 +1,14 @@
 import react from "@vitejs/plugin-react-swc";
+import { existsSync, readdirSync, rmSync, statSync } from "fs";
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import makeManifest from "./src/utils/plugins/make-manifest";
-import buildContentScript from "./src/utils/plugins/build-content-script";
+
 import { outputFolderName } from "./src/utils/constants";
-import { existsSync, readdirSync, rmSync, statSync } from "fs";
-import makeReleaseZips from "./src/utils/plugins/make-release-zips";
-import copyPublic from "./src/utils/plugins/copy-public";
+import buildContentScript from "./src/utils/plugins/build-content-script";
 import copyBuild from "./src/utils/plugins/copy-build";
+import copyPublic from "./src/utils/plugins/copy-public";
+import makeManifest from "./src/utils/plugins/make-manifest";
+import makeReleaseZips from "./src/utils/plugins/make-release-zips";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");
@@ -33,32 +34,32 @@ const emptyOutputFolder = () => {
 export default function build() {
 	emptyOutputFolder();
 	return defineConfig({
-		resolve: {
-			alias: {
-				"@/src": root,
-				"@/assets": assetsDir,
-				"@/pages": pagesDir,
-				"@/components": componentsDir,
-				"@/utils": utilsDir,
-				"@/hooks": hooksDir
-			}
-		},
-		plugins: [react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		build: {
-			outDir: resolve(outDir, "temp"),
-			sourcemap: process.env.__DEV__ === "true" ? "inline" : false,
 			emptyOutDir: false,
+			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
 				input: {
 					background: resolve(pagesDir, "background", "index.ts"),
-					popup: resolve(pagesDir, "popup", "index.html"),
-					options: resolve(pagesDir, "options", "index.html")
+					options: resolve(pagesDir, "options", "index.html"),
+					popup: resolve(pagesDir, "popup", "index.html")
 				},
 				output: {
 					entryFileNames: (chunk) => {
 						return `src/pages/${chunk.name}/index.js`;
 					}
 				}
+			},
+			sourcemap: process.env.__DEV__ === "true" ? "inline" : false
+		},
+		plugins: [react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
+		resolve: {
+			alias: {
+				"@/assets": assetsDir,
+				"@/components": componentsDir,
+				"@/hooks": hooksDir,
+				"@/pages": pagesDir,
+				"@/src": root,
+				"@/utils": utilsDir
 			}
 		}
 	});

@@ -1,6 +1,8 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/utils/EventManager";
 import { browserColorLog, createTooltip, isShortsPage, isWatchPage, sendContentMessage, waitForSpecificMessage } from "@/utils/utilities";
+
 import { formatTime } from "../remainingTime/utils";
 
 export async function setupVideoHistory() {
@@ -134,8 +136,8 @@ export async function promptUserToResumeVideo() {
 			closeButton.dataset.title = window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close");
 			const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
 				element: closeButton,
-				id: "yte-resume-prompt-close-button-tooltip",
-				featureName: "videoHistory"
+				featureName: "videoHistory",
+				id: "yte-resume-prompt-close-button-tooltip"
 			});
 			eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
 			prompt.appendChild(closeButton);
