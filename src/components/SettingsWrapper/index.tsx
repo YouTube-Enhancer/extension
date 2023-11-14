@@ -1,11 +1,12 @@
+import type { configuration } from "@/src/@types";
+
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
 import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
-import type { configuration } from "@/src/@types";
+import { type AvailableLocales, type i18nInstanceType, i18nService } from "@/src/i18n";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue } from "@/src/utils/utilities";
 import React, { useEffect, useState } from "react";
-import { i18nService, type i18nInstanceType, type AvailableLocales } from "@/src/i18n";
 
 export default function SettingsWrapper(): JSX.Element {
 	const [settings, setSettings] = useState<configuration | undefined>(undefined);
@@ -44,8 +45,8 @@ export default function SettingsWrapper(): JSX.Element {
 			if (areaName !== "local") return;
 			const castedChanges = changes as {
 				[K in keyof configuration]: {
-					oldValue: configuration[K] | undefined;
 					newValue: configuration[K] | undefined;
+					oldValue: configuration[K] | undefined;
 				};
 			};
 			Object.keys(castedChanges).forEach((key) => {
@@ -109,26 +110,26 @@ export default function SettingsWrapper(): JSX.Element {
 	return (
 		<NotificationsProvider>
 			<Settings
-				settings={settings}
-				setSettings={setSettings}
 				defaultSettings={defaultOptions}
-				selectedColor={selectedColor}
-				setSelectedColor={setSelectedColor}
-				selectedDisplayType={selectedDisplayType}
-				setSelectedDisplayType={setSelectedDisplayType}
-				selectedDisplayPosition={selectedDisplayPosition}
-				setSelectedDisplayPosition={setSelectedDisplayPosition}
-				selectedPlayerQuality={selectedPlayerQuality}
-				setSelectedPlayerQuality={setSelectedPlayerQuality}
-				selectedPlayerSpeed={selectedPlayerSpeed}
-				setSelectedPlayerSpeed={setSelectedPlayerSpeed}
-				selectedScreenshotSaveAs={selectedScreenshotSaveAs}
-				setSelectedScreenshotSaveAs={setSelectedScreenshotSaveAs}
-				selectedScreenshotFormat={selectedScreenshotFormat}
-				setSelectedScreenshotFormat={setSelectedScreenshotFormat}
-				selectedLanguage={selectedLanguage}
-				setSelectedLanguage={setSelectedLanguage}
 				i18nInstance={i18nInstance}
+				selectedColor={selectedColor}
+				selectedDisplayPosition={selectedDisplayPosition}
+				selectedDisplayType={selectedDisplayType}
+				selectedLanguage={selectedLanguage}
+				selectedPlayerQuality={selectedPlayerQuality}
+				selectedPlayerSpeed={selectedPlayerSpeed}
+				selectedScreenshotFormat={selectedScreenshotFormat}
+				selectedScreenshotSaveAs={selectedScreenshotSaveAs}
+				setSelectedColor={setSelectedColor}
+				setSelectedDisplayPosition={setSelectedDisplayPosition}
+				setSelectedDisplayType={setSelectedDisplayType}
+				setSelectedLanguage={setSelectedLanguage}
+				setSelectedPlayerQuality={setSelectedPlayerQuality}
+				setSelectedPlayerSpeed={setSelectedPlayerSpeed}
+				setSelectedScreenshotFormat={setSelectedScreenshotFormat}
+				setSelectedScreenshotSaveAs={setSelectedScreenshotSaveAs}
+				setSettings={setSettings}
+				settings={settings}
 			/>
 		</NotificationsProvider>
 	);

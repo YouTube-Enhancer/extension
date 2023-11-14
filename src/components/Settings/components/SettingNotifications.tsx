@@ -10,9 +10,9 @@ export default function SettingsNotifications() {
 			{notifications.map((notification, index) => (
 				<div
 					className={cn("relative notification inverse bg-teal-600", {
+						"bg-blue-600": notification.type === "info",
 						"bg-green-600": notification.type === "success",
 						"bg-red-600": notification.type === "error",
-						"bg-blue-600": notification.type === "info",
 						"bg-yellow-600": notification.type === "warning"
 					})}
 					key={index}
@@ -23,7 +23,7 @@ export default function SettingsNotifications() {
 								{notification.message.split("\n").map((line, index) => (
 									<p key={index}>{line}</p>
 								))}
-								<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
+								<button className="absolute right-[5px] top-[-1px] text-base font-normal" onClick={() => removeNotification(notification)}>
 									&times;
 								</button>
 							</>
@@ -31,16 +31,16 @@ export default function SettingsNotifications() {
 					) : (
 						<>
 							{notification.message}
-							<button className="text-base font-normal absolute top-[-1px] right-[5px]" onClick={() => removeNotification(notification)}>
+							<button className="absolute right-[5px] top-[-1px] text-base font-normal" onClick={() => removeNotification(notification)}>
 								&times;
 							</button>
 						</>
 					)}
 					<div
-						className="h-1 bg-[#0086ff] absolute left-0 bottom-0 rounded-b"
+						className="absolute bottom-0 left-0 h-1 rounded-b bg-[#0086ff]"
 						id={`${notification.type}_notification_${notification.message.split(/s /).join("_")}_progress_bar`}
-						style={{ width: `${notification.progress ?? 100}%` }}
 						key={index}
+						style={{ width: `${notification.progress ?? 100}%` }}
 					></div>
 				</div>
 			))}

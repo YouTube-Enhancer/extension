@@ -17,5 +17,5 @@ export default function useComponentVisible<ElementType extends HTMLElementTagNa
 		};
 	}, []);
 
-	return { ref, isComponentVisible, setIsComponentVisible };
+	return { isComponentVisible, ref, setIsComponentVisible };
 }

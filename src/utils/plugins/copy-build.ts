@@ -1,11 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
-import terminalColorLog from "../log";
-import { GetInstalledBrowsers } from "get-installed-browsers";
 import type { PluginOption } from "vite";
-import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync } from "fs";
+
+import * as fs from "fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
+import { GetInstalledBrowsers } from "get-installed-browsers";
+import * as path from "path";
 import { join } from "path";
+
 import { outputFolderName } from "../constants";
+import terminalColorLog from "../log";
 function copyDirectorySync(sourceDir: string, targetDir: string) {
 	// Create the target directory if it doesn't exist
 	if (!existsSync(targetDir)) {
@@ -34,7 +36,6 @@ const { resolve } = path;
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 export default function copyBuild(): PluginOption {
 	return {
-		name: "copy-build",
 		closeBundle() {
 			const browsers = GetInstalledBrowsers();
 			if (!fs.existsSync(outDir)) {
@@ -45,6 +46,7 @@ export default function copyBuild(): PluginOption {
 				terminalColorLog(`Build copy complete: ${resolve(outDir, browser.name)}`, "success");
 			}
 			fs.rmSync(resolve(outDir, "temp"), { recursive: true });
-		}
+		},
+		name: "copy-build"
 	};
 }

@@ -1,4 +1,9 @@
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
+
 import { enableFeatureMenu } from "@/src/features/featureMenu";
+import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { enableHideScrollBar } from "@/src/features/hideScrollBar";
+import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
@@ -10,14 +15,9 @@ import { addScreenshotButton, removeScreenshotButton } from "@/src/features/scre
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost from "@/src/features/volumeBoost";
+import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
 import { browserColorLog, formatError, sendContentOnlyMessage, waitForSpecificMessage } from "@/utils/utilities";
-
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
-import { enableHideScrollBar } from "@/src/features/hideScrollBar";
-import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
-import { i18nService } from "@/src/i18n";
-import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 // TODO: Add always show progressbar feature
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -108,7 +108,7 @@ window.onload = async function () {
 		if (!stringifiedMessage) return;
 		let message;
 		try {
-			message = JSON.parse(stringifiedMessage) as Messages["response"] | ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
+			message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings] | Messages["response"];
 		} catch (error) {
 			console.error(error);
 			return;
@@ -146,7 +146,7 @@ window.onload = async function () {
 			}
 			case "playerSpeedChange": {
 				const {
-					data: { playerSpeed, enableForcedPlaybackSpeed }
+					data: { enableForcedPlaybackSpeed, playerSpeed }
 				} = message;
 				if (enableForcedPlaybackSpeed && playerSpeed) {
 					setPlayerSpeed(Number(playerSpeed));

@@ -3,7 +3,7 @@ import { type MutableRefObject, useEffect, useRef } from "react";
 export default function useOuterClick<ElementType extends HTMLElementTagNameMap[keyof HTMLElementTagNameMap]>(
 	callback: (...args: unknown[]) => unknown
 ) {
-	const callbackRef: MutableRefObject<undefined | ((...args: unknown[]) => unknown)> = useRef(); // initialize mutable ref, which stores callback
+	const callbackRef: MutableRefObject<((...args: unknown[]) => unknown) | undefined> = useRef(); // initialize mutable ref, which stores callback
 	const innerRef: MutableRefObject<ElementType | null> = useRef(null); // returned to client, who marks "border" element
 
 	// update cb on each render, so second useEffect has access to current value

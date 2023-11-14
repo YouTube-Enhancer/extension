@@ -1,5 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
-import { waitForSpecificMessage, browserColorLog, formatError } from "@/src/utils/utilities";
+
+import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {
 	// Wait for the "options" message from the extension
@@ -8,7 +9,7 @@ export default async function volumeBoost() {
 	const {
 		data: { options }
 	} = optionsData;
-	const { volume_boost_amount, enable_volume_boost } = options;
+	const { enable_volume_boost, volume_boost_amount } = options;
 	// If volume boost option is disabled, return
 	if (!enable_volume_boost) return;
 

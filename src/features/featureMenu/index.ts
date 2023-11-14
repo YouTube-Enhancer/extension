@@ -1,6 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, isShortsPage, createTooltip } from "@/src/utils/utilities";
+import { createTooltip, isShortsPage, isWatchPage } from "@/src/utils/utilities";
 
 function createFeatureMenu() {
 	// Create the feature menu div
@@ -63,9 +64,9 @@ function createFeatureMenuButton() {
 
 	// Create a tooltip for the feature menu button
 	const { listener: featureMenuButtonMouseOverListener, remove: removeFeatureMenuTooltip } = createTooltip({
+		element: featureMenuButton,
 		featureName: "featureMenu",
-		id: "yte-feature-menu-tooltip",
-		element: featureMenuButton
+		id: "yte-feature-menu-tooltip"
 	});
 
 	// Event listeners for showing and hiding the feature menu

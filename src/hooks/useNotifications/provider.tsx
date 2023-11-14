@@ -1,8 +1,10 @@
+import type { Notification, NotificationAction, NotificationType } from "@/src/@types";
+
 import { isNotStrictEqual } from "@/src/utils/utilities";
-import React, { useState, useEffect, type ReactElement } from "react";
+import React, { type ReactElement, useEffect, useState } from "react";
+
 import { NotificationsContext, type NotificationsContextProps } from "./context";
-import type { NotificationType, NotificationAction, Notification } from "@/src/@types";
-type NotificationProviderProps = { children: ReactElement[] | ReactElement };
+type NotificationProviderProps = { children: ReactElement | ReactElement[] };
 export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 
@@ -13,7 +15,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		}
 
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 10_000 : 3_000;
-		const notification = { message, type, action, timestamp: +new Date(), removeAfterMs: removeNotificationAfterMs } satisfies Notification;
+		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 
 		setNotifications((notifications) => [notification, ...notifications]);
 

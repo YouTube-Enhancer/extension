@@ -1,17 +1,19 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import type {
-	configuration,
 	ContentSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
-	Messages,
 	MessageSource,
+	Messages,
 	Selector,
 	SendDataMessage,
-	YoutubePlayerQualityLabel
+	YoutubePlayerQualityLabel,
+	configuration
 } from "@/src/@types";
-import { eventManager, type FeatureName } from "./EventManager";
+
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
@@ -52,32 +54,32 @@ export const chooseClosetQuality = (num: YoutubePlayerQualityLabel, arr: Youtube
 	return curr;
 };
 const BrowserColors = {
-	Reset: "color: inherit; background-color: inherit;",
+	BgBlack: "background-color: black; color: white;",
+	BgBlue: "background-color: blue; color: white;",
+	BgCyan: "background-color: cyan; color: black;",
+	BgGreen: "background-color: green; color: white;",
+	BgMagenta: "background-color: magenta; color: white;",
+	BgRed: "background-color: red; color: white;",
+	BgWhite: "background-color: white; color: black;",
+	BgYellow: "background-color: yellow; color: black;",
+	Blink: "animation: blink 1s infinite;",
 	Bright: "font-weight: bold;",
 	Dim: "opacity: 0.6;",
-	Underscore: "text-decoration: underline;",
-	Blink: "animation: blink 1s infinite;",
-	Reverse: "background-color: inherit; color: inherit;",
-	Hidden: "visibility: hidden;",
 	FgBlack: "color: black;",
-	FgRed: "color: red;",
-	FgGreen: "color: green;",
-	FgYellow: "color: yellow;",
 	FgBlue: "color: blue;",
-	FgMagenta: "color: magenta;",
 	FgCyan: "color: cyan;",
+	FgGreen: "color: green;",
+	FgMagenta: "color: magenta;",
+	FgRed: "color: red;",
 	FgWhite: "color: white;",
-	BgBlack: "background-color: black; color: white;",
-	BgRed: "background-color: red; color: white;",
-	BgGreen: "background-color: green; color: white;",
-	BgYellow: "background-color: yellow; color: black;",
-	BgBlue: "background-color: blue; color: white;",
-	BgMagenta: "background-color: magenta; color: white;",
-	BgCyan: "background-color: cyan; color: black;",
-	BgWhite: "background-color: white; color: black;"
+	FgYellow: "color: yellow;",
+	Hidden: "visibility: hidden;",
+	Reset: "color: inherit; background-color: inherit;",
+	Reverse: "background-color: inherit; color: inherit;",
+	Underscore: "text-decoration: underline;"
 } as const;
 
-type ColorType = "success" | "info" | "error" | "warning" | keyof typeof BrowserColors;
+type ColorType = "error" | "info" | "success" | "warning" | keyof typeof BrowserColors;
 /**
  * Colorize a log message based on the specified type.
  *
@@ -171,9 +173,9 @@ export function parseReviver(key: string, value: unknown) {
 export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMappings>(type: T, data: ContentSendOnlyMessageMappings[T]["data"]) {
 	const message: SendDataMessage<"send_data", "content", T, typeof data> = {
 		action: "send_data",
+		data,
 		source: "content",
-		type,
-		data
+		type
 	};
 	const element = document.getElementById("yte-message-from-youtube");
 	if (element) {
@@ -194,9 +196,9 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 ) {
 	const message: SendDataMessage<"send_data", "extension", T, typeof data> = {
 		action: "send_data",
+		data,
 		source: "extension",
-		type,
-		data
+		type
 	};
 	const element = document.getElementById("yte-message-from-extension");
 	if (element) {
@@ -220,9 +222,9 @@ export function sendExtensionMessage<T extends keyof MessageMappings, D>(
 ): Promise<void> {
 	const message = {
 		action,
+		data,
 		source: "extension",
-		type,
-		data
+		type
 	};
 	return new Promise((resolve) => {
 		const provider = document.getElementById("yte-message-from-extension");
@@ -247,9 +249,9 @@ export function sendContentMessage<T extends keyof MessageMappings, D>(
 ): Promise<void> {
 	const message = {
 		action,
+		data,
 		source: "content",
-		type,
-		data
+		type
 	};
 	return new Promise((resolve) => {
 		const provider = document.getElementById("yte-message-from-youtube");
@@ -276,9 +278,9 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 ): Promise<MessageMappings[T]["response"] | undefined> {
 	const message = {
 		action,
+		data,
 		source,
-		type,
-		data
+		type
 	};
 	return new Promise<MessageMappings[T]["response"] | undefined>((resolve) => {
 		document.addEventListener("yte-message-from-extension", () => {
@@ -303,7 +305,7 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
  * @param {string} url - The YouTube URL.
  * @returns {string|null} The first section of the URL path, or null if not found.
  */
-function extractFirstSectionFromYouTubeURL(url: string): string | null {
+function extractFirstSectionFromYouTubeURL(url: string): null | string {
 	// Parse the URL into its components
 	const { pathname: path } = new URL(url);
 
@@ -390,16 +392,16 @@ export function settingsAreDefault(defaultSettings: Partial<configuration>, curr
 }
 export function formatDateForFileName(date: Date): string {
 	const dateFormatOptions: Intl.DateTimeFormatOptions = {
-		year: "numeric",
+		day: "2-digit",
 		month: "2-digit",
-		day: "2-digit"
+		year: "numeric"
 	};
 
 	const timeFormatOptions: Intl.DateTimeFormatOptions = {
 		hour: "2-digit",
+		hour12: false, // Ensure 24-hour time format
 		minute: "2-digit",
-		second: "2-digit",
-		hour12: false // Ensure 24-hour time format
+		second: "2-digit"
 	};
 
 	// Get the user's locale
@@ -430,7 +432,7 @@ export function parseStoredValue(value: string) {
 	// If parsing or type checking fails, return the original value as a string
 	return value;
 }
-export function createTooltip({ element, text, id, featureName }: { text?: string; element: HTMLElement; id: string; featureName: FeatureName }): {
+export function createTooltip({ element, featureName, id, text }: { element: HTMLElement; featureName: FeatureName; id: string; text?: string }): {
 	listener: () => void;
 	remove: () => void;
 	update: () => void;

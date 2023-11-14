@@ -1,7 +1,8 @@
+import type { SelectOption } from "./Select/Select";
+
 import { Checkbox } from "./CheckBox";
 import { NumberInput } from "./Number";
 import { Select } from "./Select";
 import { Slider } from "./Slider";
-import type { SelectOption } from "./Select/Select";
 
-export { Checkbox, NumberInput, Slider, Select, type SelectOption };
+export { Checkbox, NumberInput, Select, type SelectOption, Slider };

@@ -1,4 +1,5 @@
-import i18next, { createInstance, type Resource } from "i18next";
+import i18next, { type Resource, createInstance } from "i18next";
+
 import { waitForSpecificMessage } from "../utils/utilities";
 export const availableLocales = ["en-US"] as const;
 export type AvailableLocales = (typeof availableLocales)[number];
@@ -30,14 +31,14 @@ export async function i18nService(locale: AvailableLocales) {
 		const instance = i18next.createInstance();
 		instance.init(
 			{
+				debug: true,
 				fallbackLng: "en-US",
 				interpolation: {
 					escapeValue: false
 				},
-				returnObjects: true,
 				lng: locale,
-				debug: true,
-				resources: resources as unknown as { [key: string]: Resource }
+				resources: resources as unknown as { [key: string]: Resource },
+				returnObjects: true
 			},
 			(err) => {
 				if (err) reject(err);

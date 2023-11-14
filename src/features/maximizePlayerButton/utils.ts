@@ -1,4 +1,5 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/src/utils/EventManager";
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
@@ -74,15 +75,15 @@ export function maximizePlayer() {
 	} = sizeElement;
 	if (!svgElement || !(svgElement instanceof SVGElement)) return;
 	const theaterModeVariables = {
-		pathD: "m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z",
-		dataTitleNoTooltip: "Theater mode",
 		ariaLabel: "Theater mode keyboard shortcut t",
+		dataTitleNoTooltip: "Theater mode",
+		pathD: "m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z",
 		title: "Theater mode (t)"
 	};
 	const defaultModeVariables = {
-		pathD: "m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z",
-		dataTitleNoTooltip: "Default view",
 		ariaLabel: "Default view keyboard shortcut t",
+		dataTitleNoTooltip: "Default view",
+		pathD: "m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z",
 		title: "Default view (t)"
 	};
 	const {

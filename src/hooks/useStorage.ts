@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from "react";
 import type { Dispatch, SetStateAction } from "react";
-export type StorageArea = "sync" | "local";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+
+export type StorageArea = "local" | "sync";
 
 // custom hook to set chrome local/sync storage
 // should also set a listener on this specific key
@@ -14,9 +16,12 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 	const [storedValue, setStoredValue] = useState<T>(initialValue);
 
 	useEffect(() => {
-		readStorage<T>(key, area).then((res) => {
-			if (res) setStoredValue(res);
-		});
+		readStorage<T>(key, area)
+			.then((res) => {
+				if (res) return setStoredValue(res);
+				return;
+			})
+			.catch((err) => console.error(err));
 
 		chrome.storage.onChanged.addListener((changes, namespace) => {
 			if (namespace === area && Object.hasOwnProperty.call(changes, key)) {
@@ -32,9 +37,12 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 		const newValue = value instanceof Function ? value(storedValue) : value;
 		// Save to storage
 		setStoredValue((prevState) => {
-			setStorage<T>(key, newValue, area).then((success) => {
-				if (!success) setStoredValue(prevState);
-			});
+			setStorage<T>(key, newValue, area)
+				.then((success) => {
+					if (!success) setStoredValue(prevState);
+					return;
+				})
+				.catch((error) => console.error(error));
 
 			return newValue;
 		});

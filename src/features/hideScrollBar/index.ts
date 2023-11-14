@@ -1,4 +1,5 @@
 import { waitForSpecificMessage } from "@/src/utils/utilities";
+
 import { hideScrollBar } from "./utils";
 
 export async function enableHideScrollBar() {

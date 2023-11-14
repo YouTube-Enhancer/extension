@@ -1,3 +1,5 @@
+import type { PluginOption } from "vite";
+
 import archiver from "archiver";
 import * as fs from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
@@ -6,8 +8,6 @@ import * as path from "path";
 import pkg from "../../../package.json";
 import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-
-import type { PluginOption } from "vite";
 const { resolve } = path;
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
@@ -15,8 +15,6 @@ const releaseDir = resolve(__dirname, "..", "..", "..", "releases");
 
 export default function makeReleaseZips(): PluginOption {
 	return {
-		name: "make-release-zips",
-
 		closeBundle() {
 			if (!fs.existsSync(releaseDir)) {
 				fs.mkdirSync(releaseDir);
@@ -41,6 +39,8 @@ export default function makeReleaseZips(): PluginOption {
 				});
 				releaseZip.finalize();
 			}
-		}
+		},
+
+		name: "make-release-zips"
 	};
 }

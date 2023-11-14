@@ -1,11 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
-import terminalColorLog from "../log";
-import { GetInstalledBrowsers } from "get-installed-browsers";
 import type { PluginOption } from "vite";
-import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync } from "fs";
+
+import * as fs from "fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
+import { GetInstalledBrowsers } from "get-installed-browsers";
+import * as path from "path";
 import { join } from "path";
+
 import { outputFolderName } from "../constants";
+import terminalColorLog from "../log";
 function copyDirectorySync(sourceDir: string, targetDir: string) {
 	// Create the target directory if it doesn't exist
 	if (!existsSync(targetDir)) {
@@ -36,7 +38,6 @@ const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 const publicDir = resolve(__dirname, "..", "..", "..", "public");
 export default function copyPublic(): PluginOption {
 	return {
-		name: "copy-public",
 		buildEnd() {
 			const browsers = GetInstalledBrowsers();
 			if (!fs.existsSync(outDir)) {
@@ -49,6 +50,7 @@ export default function copyPublic(): PluginOption {
 				copyDirectorySync(publicDir, resolve(outDir, browser.name));
 				terminalColorLog(`Public directory copy complete: ${resolve(outDir, browser.name)}`, "success");
 			}
-		}
+		},
+		name: "copy-public"
 	};
 }

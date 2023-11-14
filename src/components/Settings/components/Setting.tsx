@@ -1,59 +1,60 @@
-import { Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
 import type { NumberInputProps } from "../../Inputs/Number/Number";
 import type { SelectProps } from "../../Inputs/Select/Select";
 import type { SliderProps } from "../../Inputs/Slider/Slider";
+
+import { Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
 type SettingInputProps = {
 	title: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
 	| ({ type: "number" } & NumberInputProps)
-	| ({ type: "slider" } & SliderProps)
 	| ({ type: "select" } & SelectProps)
+	| ({ type: "slider" } & SliderProps)
 );
 function SettingInput(settingProps: SettingInputProps) {
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
-			const { checked, label, onChange, title, className, id } = settingProps;
-			return <Checkbox checked={checked} label={label} onChange={onChange} title={title} className={className} id={id} />;
+			const { checked, className, id, label, onChange, title } = settingProps;
+			return <Checkbox checked={checked} className={className} id={id} label={label} onChange={onChange} title={title} />;
 		}
 		case "number": {
-			const { value, min, max, step, onChange, className, id, label, disabled } = settingProps;
+			const { className, disabled, id, label, max, min, onChange, step, value } = settingProps;
 			return (
 				<NumberInput
-					disabled={disabled}
-					value={value}
-					min={min}
-					max={max}
-					step={step}
-					onChange={onChange}
-					label={label}
-					id={id}
 					className={className}
+					disabled={disabled}
+					id={id}
+					label={label}
+					max={max}
+					min={min}
+					onChange={onChange}
+					step={step}
+					value={value}
 				/>
 			);
 		}
 		case "select": {
-			const { disabled, label, title, onChange, options, selectedOption, setSelectedOption, className, id } = settingProps;
+			const { className, disabled, id, label, onChange, options, selectedOption, setSelectedOption, title } = settingProps;
 			return (
 				<Select
+					className={className}
 					disabled={disabled}
+					id={id}
 					label={label}
-					title={title}
 					onChange={onChange}
 					options={options}
 					selectedOption={selectedOption}
 					setSelectedOption={setSelectedOption}
-					className={className}
-					id={id}
+					title={title}
 				/>
 			);
 		}
 		case "slider": {
-			const { max, min, onChange, step, initialValue } = settingProps;
-			return <Slider max={max} min={min} onChange={onChange} step={step} initialValue={initialValue} />;
+			const { initialValue, max, min, onChange, step } = settingProps;
+			return <Slider initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
 		}
 	}
 }

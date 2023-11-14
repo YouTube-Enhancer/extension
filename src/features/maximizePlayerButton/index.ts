@@ -1,8 +1,10 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
-import { makeMaximizeSVG, updateProgressBarPositions, setupVideoPlayerTimeUpdate, maximizePlayer } from "./utils";
+
 import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { makeMaximizeSVG, maximizePlayer, setupVideoPlayerTimeUpdate, updateProgressBarPositions } from "./utils";
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
@@ -43,9 +45,9 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	addFeatureItemToMenu({
 		featureName: "maximizePlayerButton",
 		icon: maximizeSVG,
+		isToggle: true,
 		label: "Maximize Player",
-		listener: maximizePlayerButtonClickListener,
-		isToggle: true
+		listener: maximizePlayerButtonClickListener
 	});
 	function ytpLeftButtonMouseEnterListener(event: MouseEvent) {
 		const ytTooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;

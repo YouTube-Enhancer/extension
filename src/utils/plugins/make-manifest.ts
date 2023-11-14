@@ -1,3 +1,5 @@
+import type { PluginOption } from "vite";
+
 import * as fs from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import * as path from "path";
@@ -5,8 +7,6 @@ import * as path from "path";
 import { manifestV2, manifestV3 } from "../../manifest";
 import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-
-import type { PluginOption } from "vite";
 const { resolve } = path;
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
@@ -19,7 +19,6 @@ function writeManifest(version: 2 | 3, browserName: string) {
 }
 export default function makeManifest(): PluginOption {
 	return {
-		name: "make-manifest",
 		buildEnd() {
 			const browsers = GetInstalledBrowsers();
 			if (!fs.existsSync(outDir)) {
@@ -31,6 +30,7 @@ export default function makeManifest(): PluginOption {
 				}
 				writeManifest(browser.type === "chrome" ? 3 : 2, browser.name);
 			}
-		}
+		},
+		name: "make-manifest"
 	};
 }

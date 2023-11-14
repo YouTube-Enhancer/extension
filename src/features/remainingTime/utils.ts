@@ -22,11 +22,11 @@ export function formatTime(timeInSeconds: number) {
 	return `${formattedUnits.length > 0 ? formattedUnits.join(":") : "0"}`;
 }
 export async function calculateRemainingTime({
-	videoElement,
-	playerContainer
+	playerContainer,
+	videoElement
 }: {
-	videoElement: HTMLVideoElement;
 	playerContainer: YouTubePlayerDiv;
+	videoElement: HTMLVideoElement;
 }) {
 	// Get the player speed (playback rate)
 	const { playbackRate } = videoElement;
