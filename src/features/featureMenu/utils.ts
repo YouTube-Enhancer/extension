@@ -1,4 +1,5 @@
 import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/@types";
+
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
 /**
@@ -10,17 +11,17 @@ import { waitForAllElements } from "@/src/utils/utilities";
  * @param isToggle - (Optional) Indicates if the item is a toggle.
  */
 export async function addFeatureItemToMenu({
-	icon,
-	label,
-	listener,
 	featureName,
-	isToggle = false
+	icon,
+	isToggle = false,
+	label,
+	listener
 }: {
+	featureName: FeatureName;
 	icon: SVGElement;
+	isToggle?: boolean;
 	label: string;
 	listener: () => void;
-	featureName: FeatureName;
-	isToggle?: boolean;
 }) {
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);

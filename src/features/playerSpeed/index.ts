@@ -1,6 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, isShortsPage, browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
+import { browserColorLog, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 /**
  * Sets the player speed based on the given speed.
@@ -28,7 +29,7 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 		const {
 			data: { options }
 		} = optionsData;
-		({ player_speed: playerSpeed, enable_forced_playback_speed: enablePlayerSpeed } = options);
+		({ enable_forced_playback_speed: enablePlayerSpeed, player_speed: playerSpeed } = options);
 	} else if (typeof input === "number") {
 		playerSpeed = input;
 	}

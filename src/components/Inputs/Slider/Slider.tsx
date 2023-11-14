@@ -1,14 +1,14 @@
 import React, { type ChangeEvent, useState } from "react";
 
 export type SliderProps = {
-	min: number;
-	max: number;
 	initialValue?: number;
-	step: number;
+	max: number;
+	min: number;
 	onChange: (value: ChangeEvent<HTMLInputElement>) => void;
+	step: number;
 };
 
-const Slider: React.FC<SliderProps> = ({ min, max, step, initialValue, onChange }) => {
+const Slider: React.FC<SliderProps> = ({ initialValue, max, min, onChange, step }) => {
 	const [value, setValue] = useState(initialValue ?? 1);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,13 +20,13 @@ const Slider: React.FC<SliderProps> = ({ min, max, step, initialValue, onChange 
 	return (
 		<div className="flex items-center">
 			<input
-				type="range"
-				className="slider-thumb appearance-none w-full h-3 rounded bg-gray-300 outline-none"
-				min={min}
+				className="slider-thumb h-3 w-full appearance-none rounded bg-gray-300 outline-none"
 				max={max}
-				step={step}
-				value={value}
+				min={min}
 				onChange={handleChange}
+				step={step}
+				type="range"
+				value={value}
 			/>
 		</div>
 	);

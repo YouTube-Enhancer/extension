@@ -1,6 +1,8 @@
 import type { YouTubePlayerDiv } from "@/src/@types";
-import { waitForAllElements, isWatchPage, isShortsPage, waitForSpecificMessage } from "@/src/utils/utilities";
-import { adjustVolume, getScrollDirection, setupScrollListeners, drawVolumeDisplay } from "./utils";
+
+import { isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+
+import { adjustVolume, drawVolumeDisplay, getScrollDirection, setupScrollListeners } from "./utils";
 
 /**
  * Adjusts the volume on scroll wheel events.
@@ -52,13 +54,13 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 		// Update the volume display
 		drawVolumeDisplay({
-			displayType: options.osd_display_type,
-			displayPosition: options.osd_display_position,
 			displayColor: options.osd_display_color,
-			displayOpacity: options.osd_display_opacity,
-			playerContainer: playerContainer || null,
-			displayPadding: options.osd_display_padding,
 			displayHideTime: options.osd_display_hide_time,
+			displayOpacity: options.osd_display_opacity,
+			displayPadding: options.osd_display_padding,
+			displayPosition: options.osd_display_position,
+			displayType: options.osd_display_type,
+			playerContainer: playerContainer || null,
 			volume: newVolume
 		});
 	};
