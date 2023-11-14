@@ -5,6 +5,9 @@ export function hideScrollBar() {
 			width: 0px;
 			height: 0px;
 		}
+		html {
+			scrollbar-width: none;
+		}
 	`;
 	style.id = "yte-hide-scroll-bar";
 	document.head.appendChild(style);

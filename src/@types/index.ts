@@ -103,6 +103,7 @@ export type RequestDataMessage<Type extends string, D> = Prettify<
 >;
 export type ContentSendOnlyMessageMappings = {
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
+	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostAmount?: number }>;
