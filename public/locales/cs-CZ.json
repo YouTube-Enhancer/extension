@@ -42,7 +42,6 @@
 	"settings": {
 		"sections": {
 			"importExportSettings": {
-				"title": "Nastavení importu/exportu",
 				"importButton": {
 					"error": {
 						"validation": "Chyba při importu nastavení. Zkontrolujte prosím formát souboru.\n{{ERROR_MESSAGE}}",
