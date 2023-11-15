@@ -326,10 +326,10 @@ export function formatError(error: unknown) {
 	return error instanceof Error
 		? `\n${error.stack}\n\n${error.message}`
 		: error instanceof Object
-		? Object.hasOwnProperty.call(error, "toString") && typeof error.toString === "function"
-			? error.toString()
-			: "unknown error"
-		: "";
+		  ? Object.hasOwnProperty.call(error, "toString") && typeof error.toString === "function"
+				? error.toString()
+				: "unknown error"
+		  : "";
 }
 /**
  * Wait for all elements to appear in the document.

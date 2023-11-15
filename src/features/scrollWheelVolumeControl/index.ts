@@ -36,8 +36,8 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		const playerContainer = isWatchPage()
 			? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 			: isShortsPage()
-			? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-			: null;
+			  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+			  : null;
 		// If player element is not available, return
 		if (!playerContainer) return;
 
