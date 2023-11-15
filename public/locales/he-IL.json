@@ -42,7 +42,6 @@
 	"settings": {
 		"sections": {
 			"importExportSettings": {
-				"title": "Import/Export Settings",
 				"importButton": {
 					"error": {
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
