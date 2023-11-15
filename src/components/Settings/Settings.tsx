@@ -357,28 +357,6 @@ export default function Settings({
 					/>
 				</Suspense>
 				<SettingSection>
-					<SettingTitle title={t("settings.sections.importExportSettings.title")} />
-					<div className="flex gap-1 p-2">
-						<input
-							className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
-							id="import_settings_button"
-							onClick={importSettings}
-							title={t("settings.sections.importExportSettings.importButton.title")}
-							type="button"
-							value={t("settings.sections.importExportSettings.importButton.value")}
-						/>
-						<input
-							className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
-							id="export_settings_button"
-							onClick={exportSettings}
-							style={{ marginLeft: "auto" }}
-							title={t("settings.sections.importExportSettings.exportButton.title")}
-							type="button"
-							value={t("settings.sections.importExportSettings.exportButton.value")}
-						/>
-					</div>
-				</SettingSection>
-				<SettingSection>
 					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
 					<Setting
 						checked={settings.enable_remember_last_volume?.toString() === "true"}
@@ -613,7 +591,7 @@ export default function Settings({
 						type="select"
 					/>
 				</SettingSection>
-				<div className="sticky bottom-0 left-0 flex gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
+				<div className="sticky bottom-0 left-0 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="clear_data_button"
@@ -621,6 +599,22 @@ export default function Settings({
 						title={t("settings.sections.bottomButtons.clear.title")}
 						type="button"
 						value={t("settings.sections.bottomButtons.clear.value")}
+					/>
+					<input
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						id="import_settings_button"
+						onClick={importSettings}
+						title={t("settings.sections.importExportSettings.importButton.title")}
+						type="button"
+						value={t("settings.sections.importExportSettings.importButton.value")}
+					/>
+					<input
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						id="export_settings_button"
+						onClick={exportSettings}
+						title={t("settings.sections.importExportSettings.exportButton.title")}
+						type="button"
+						value={t("settings.sections.importExportSettings.exportButton.value")}
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
 						<input
@@ -636,7 +630,6 @@ export default function Settings({
 
 								addNotification("success", t("pages.options.notifications.success.saved"));
 							}}
-							style={{ marginLeft: "auto" }}
 							title={t("settings.sections.bottomButtons.confirm.title")}
 							type="button"
 							value={t("settings.sections.bottomButtons.confirm.value")}
@@ -646,7 +639,6 @@ export default function Settings({
 							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="reset_button"
 							onClick={resetOptions}
-							style={{ marginLeft: "auto" }}
 							title={t("settings.sections.bottomButtons.reset.title")}
 							type="button"
 							value={t("settings.sections.bottomButtons.reset.value")}
