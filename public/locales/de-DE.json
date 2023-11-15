@@ -6,35 +6,35 @@
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Schließen"
+						"close": "Close"
 					},
-					"resumeButton": "Fortsetzen"
+					"resumeButton": "Resume"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot in Zwischenablage kopiert",
+					"copiedToClipboard": "Screenshot copied to clipboard",
 					"label": "Screenshot"
 				},
 				"loopButton": {
-					"label": "Schleife"
+					"label": "Loop"
 				},
 				"maximizePlayerButton": {
 					"label": "Maximize"
 				},
 				"featureMenu": {
-					"label": "Merkmalsmenü"
+					"label": "Feature menu"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Optionen gespeichert."
+					"saved": "Options saved."
 				},
 				"error": {
-					"playerQuality": "Sie müssen eine Spielerqualität wählen, wenn Sie die automatische Qualitätsfunktion aktivieren möchten."
+					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
 				},
 				"info": {
-					"reset": "Alle Optionen wurden auf ihre Standardwerte zurückgesetzt.\nSie können die Änderungen jetzt speichern, indem Sie auf den \"Bestätigen\"-Button klicken oder diese verwerfen, indem Sie diese Seite schließen oder diese Benachrichtigung ignorieren."
+					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
 				}
 			}
 		}
@@ -44,154 +44,154 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\n{{ERROR_MESSAGE}}",
-						"unknown": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\nEin unbekannter Fehler ist aufgetreten."
+						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
+						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
 					},
-					"success": "Einstellungen erfolgreich importiert",
-					"title": "Einstellungen aus einer JSON-Datei importieren",
-					"value": "Import-Einstellungen"
+					"success": "Settings imported successfully",
+					"title": "Import settings from a JSON file",
+					"value": "Import Settings"
 				},
 				"exportButton": {
-					"success": "Einstellungen erfolgreich exportiert",
-					"title": "Einstellungen in eine JSON-Datei exportieren",
-					"value": "Export-Einstellungen"
+					"success": "Settings successfully exported",
+					"title": "Export settings to a JSON file",
+					"value": "Export Settings"
 				}
 			},
 			"miscellaneous": {
-				"title": "Verschiedene Einstellungen",
+				"title": "Miscellaneous settings",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Speichere die Lautstärke, die du beobachtet hast und setze sie als Lautstärke beim Öffnen eines neuen Videos",
-						"label": "Letzte Lautstärke merken"
+						"title": "Remembers the volume you were watching at and sets it as the volume when you open a new video",
+						"label": "Remember last volume"
 					},
 					"maximizePlayerButton": {
-						"title": "Füllt das Video in die Fenstergröße",
-						"label": "Maximale Player-Taste aktivieren"
+						"title": "Fills the video to the window size",
+						"label": "Enable maximize player button"
 					},
 					"videoHistory": {
-						"title": "Hält den Überblick darüber, wo du aufgehört hast, wenn du Videos anschaust und fragst, ob du fortfahren möchtest, wenn das Video erneut geladen wird",
-						"label": "Video-Verlauf aktivieren"
+						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
+						"label": "Enable video history"
 					},
 					"remainingTime": {
-						"title": "Zeigt die verbleibende Zeit des Videos, das du siehst",
-						"label": "Restzeit aktivieren"
+						"title": "Shows the remaining time of the video you're watching",
+						"label": "Enable remaining time"
 					},
 					"loopButton": {
-						"title": "Fügt dem Player einen Button hinzu, um das Video zu schleppen, das du siehst",
-						"label": "Schleifen-Button aktivieren"
+						"title": "Adds a button to the player to loop the video you're watching",
+						"label": "Enable loop button"
 					},
 					"hideScrollbar": {
-						"title": "Versteckt die Seitenscrollbar",
+						"title": "Hides the pages scrollbar",
 						"label": "Enable hide scrollbar"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Lautstärkeregelung des Scrollrades",
+				"title": "Scroll wheel volume control settings",
 				"enable": {
-					"title": "Lässt dich das Scrollrad verwenden, um die Lautstärke des Videos zu steuern, das du siehst",
-					"label": "Scrollrad Lautstärkeregelung aktivieren"
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
+					"label": "Enable scroll wheel volume control"
 				},
 				"osdColor": {
-					"title": "Die Farbe der Anzeige auf dem Bildschirm",
-					"label": "OSD-Farbe"
+					"title": "The color of the On Screen Display",
+					"label": "OSD color"
 				},
 				"osdType": {
-					"title": "Der Typ der Bildschirmdarstellung",
-					"label": "OSD Typ"
+					"title": "The type of On Screen Display",
+					"label": "OSD type"
 				},
 				"osdPosition": {
-					"title": "Die Position der Anzeige auf dem Bildschirm",
-					"label": "OSD-Position"
+					"title": "The position of the On Screen Display",
+					"label": "OSD position"
 				},
 				"osdOpacity": {
-					"title": "Die Deckkraft der Anzeige auf dem Bildschirm",
+					"title": "The opacity of the On Screen Display",
 					"label": "OSD opacity"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "Der Betrag für die Lautstärke pro Scroll",
-					"label": "Anpassungsbetrag"
+					"title": "The amount to adjust volume per scroll",
+					"label": "Amount to adjust"
 				},
 				"osdHide": {
-					"title": "Die Anzahl der Millisekunden, die gewartet werden sollen, bevor die OSD versteckt wird",
-					"label": "Zeit zum Ausblenden"
+					"title": "The amount of milliseconds to wait before hiding the OSD",
+					"label": "Time to hide"
 				},
 				"osdPadding": {
-					"title": "Die Menge der Füllung zur OSD (in Pixeln, nur für die Ecken OSD)",
+					"title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)",
 					"label": "Padding"
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "Rot",
-						"green": "Grün",
-						"blue": "Blau",
-						"yellow": "Gelb",
+						"red": "Red",
+						"green": "Green",
+						"blue": "Blue",
+						"yellow": "Yellow",
 						"orange": "Orange",
-						"purple": "Lila",
-						"pink": "Rosa",
-						"white": "Weiß"
+						"purple": "Purple",
+						"pink": "Pink",
+						"white": "White"
 					},
 					"position": {
-						"top_left": "Oben links",
-						"top_right": "Oben rechts",
-						"bottom_left": "Unten links",
-						"bottom_right": "Unten rechts",
-						"center": "Zentriert"
+						"top_left": "Top Left",
+						"top_right": "Top Right",
+						"bottom_left": "Bottom Left",
+						"bottom_right": "Bottom Right",
+						"center": "Center"
 					},
 					"type": {
-						"no_display": "Keine Anzeige",
+						"no_display": "No display",
 						"text": "Text",
-						"line": "Linie",
-						"round": "Runde"
+						"line": "Line",
+						"round": "Round"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatische Qualitätseinstellungen",
+				"title": "Automatic quality settings",
 				"enable": {
-					"title": "Die Videoqualität wird automatisch an die ausgewählte Ebene angepasst.",
-					"label": "Automatische Qualitätsanpassung aktivieren"
+					"title": "Automatically adjusts the video quality to the selected level.",
+					"label": "Enable automatic quality adjustment"
 				},
 				"select": {
-					"label": "Spielerqualität",
-					"title": "Die Qualität des Videos auf"
+					"label": "Player quality",
+					"title": "The quality to set the video to"
 				}
 			},
 			"playbackSpeed": {
-				"title": "Wiedergabegeschwindigkeit Einstellungen",
+				"title": "Playback speed settings",
 				"enable": {
-					"title": "Setzt die Videogeschwindigkeit auf das, was du unten wählst",
-					"label": "Erzwungene Wiedergabegeschwindigkeit aktivieren"
+					"title": "Sets the video speed to what you choose below",
+					"label": "Enable forced playback speed"
 				},
 				"select": {
-					"label": "Spielergeschwindigkeit",
-					"title": "Die Geschwindigkeit auf die das Video gesetzt wird"
+					"label": "Player speed",
+					"title": "The speed to set the video to"
 				}
 			},
 			"volumeBoost": {
-				"title": "Lautstärkeeinstellungen",
+				"title": "Volume boost settings",
 				"enable": {
-					"title": "Erhöht die Lautstärke des Videos, das du siehst",
-					"label": "Lautstärke-Boost aktivieren"
+					"title": "Boosts the volume of the video you're watching",
+					"label": "Enable volume boost"
 				},
 				"number": {
-					"label": "Volumen-Boost (dB)",
-					"title": "Der Betrag um das Volumen zu erhöhen um"
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot-Einstellungen",
+				"title": "Screenshot settings",
 				"enable": {
-					"title": "Fügt dem Player einen Button hinzu, um einen Screenshot des Videos zu machen",
-					"label": "Screenshot-Schaltfläche aktivieren"
+					"title": "Adds a button to the player to take a screenshot of the video",
+					"label": "Enable screenshot button"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot-Speicherart",
-					"title": "Der Screenshot-Speichertyp"
+					"label": "Screenshot save type",
+					"title": "The screenshot save type"
 				},
 				"selectFormat": {
-					"label": "Screenshot-Format",
-					"title": "Das Format zum Speichern des Screenshots"
+					"label": "Screenshot format",
+					"title": "The format to save the screenshot in"
 				},
 				"format": {
 					"png": "PNG",
@@ -199,39 +199,39 @@
 					"webp": "WebP"
 				},
 				"saveAs": {
-					"file": "Datei",
-					"clipboard": "Zwischenablage"
+					"file": "File",
+					"clipboard": "Clipboard"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
-					"title": "Einstellungen zurücksetzen",
-					"value": "Bestätigen"
+					"title": "Confirm setting reset",
+					"value": "Confirm"
 				},
 				"clear": {
-					"title": "Löscht alle Daten, die diese Erweiterung auf Ihrem Rechner gespeichert hat",
-					"value": "Daten löschen"
+					"title": "Clears all data this extension has stored on your machine",
+					"value": "Clear Data"
 				},
 				"reset": {
-					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
+					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
 					"value": "Reset"
 				}
 			},
 			"language": {
-				"title": "Sprache",
+				"title": "Language",
 				"select": {
-					"label": "Sprache",
-					"title": "Die Sprache für die Erweiterung"
+					"label": "Language",
+					"title": "The language to use for the extension"
 				}
 			}
 		},
 		"clearData": {
-			"confirmAlert": "Dies löscht alle Erweiterungsdaten zu Optionen. Fortfahren?",
-			"allDataDeleted": "Alle Daten wurden gelöscht."
+			"confirmAlert": "This will delete all extension data related to options. Continue?",
+			"allDataDeleted": "All data has been deleted."
 		}
 	},
 	"messages": {
-		"settingVolume": "Lautstärke-Boost wird auf {{VOLUME_BOOST_AMOUNT}} eingestellt",
-		"resumingVideo": "Video unter {{VIDEO_TIME}} fortsetzen"
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
+		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
 	}
 }
