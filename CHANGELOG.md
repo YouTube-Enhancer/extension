@@ -1,3 +1,22 @@
+## [1.11.6](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.5...v1.11.6) (2023-11-15)
+
+
+### Bug Fixes
+
+* remaining time not removed ([35d9e4a](https://github.com/VampireChicken12/youtube-enhancer/commit/35d9e4a0c8e3dca489e92f1a4017fb1b56440d35))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.6-Chrome.zip | 35404730152a7ddb08fc5cb37b970716a7daaa9f9b0d911159ee22bd24a45a88 |
+| youtube-enhancer-v1.11.6-Chromium.zip | e010032db390df6c22aae6bf38b63d7f88bf4a42bb39bb8a7bdd4f51a4465b66 |
+| youtube-enhancer-v1.11.6-Edge.zip | e010032db390df6c22aae6bf38b63d7f88bf4a42bb39bb8a7bdd4f51a4465b66 |
+| youtube-enhancer-v1.11.6-Firefox.zip | ff343d066be91dbff89504c8696c424bcc29a28c4997f2c7b93f49fea89be936 |
+
 ## [1.11.5](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.4...v1.11.5) (2023-11-14)
 
 ### Bug Fixes
