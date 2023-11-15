@@ -1,6 +1,6 @@
 import z from "zod";
 
-import type { PartialConfigurationToZodSchema, configuration } from "../@types";
+import type { TypeToPartialZodSchema, configuration } from "../@types";
 
 import {
 	onScreenDisplayColor,
@@ -42,7 +42,7 @@ export const defaultConfiguration = {
 	volume_boost_amount: 1
 } satisfies configuration;
 
-export const configurationImportSchema: PartialConfigurationToZodSchema<configuration> = z.object({
+export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
