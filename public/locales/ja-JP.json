@@ -1,4 +1,237 @@
 {
 	"langCode": "ja-JP",
-	"langName": "日本語"
+	"langName": "日本語",
+	"pages": {
+		"content": {
+			"features": {
+				"videoHistory": {
+					"resumePrompt": {
+						"close": "閉じる"
+					},
+					"resumeButton": "再開"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
+					"label": "スクリーンショット"
+				},
+				"loopButton": {
+					"label": "ループ"
+				},
+				"maximizePlayerButton": {
+					"label": "Maximize"
+				},
+				"featureMenu": {
+					"label": "機能メニュー"
+				}
+			}
+		},
+		"options": {
+			"notifications": {
+				"success": {
+					"saved": "オプションを保存しました。"
+				},
+				"error": {
+					"playerQuality": "自動品質機能を有効にする場合は、プレーヤーの品質を選択する必要があります。"
+				},
+				"info": {
+					"reset": "すべてのオプションがデフォルト値にリセットされました。\n「確認」ボタンをクリックするか、このページを閉じるか、またはこの通知を無視して変更を保存できるようになりました。"
+				}
+			}
+		}
+	},
+	"settings": {
+		"sections": {
+			"importExportSettings": {
+				"importButton": {
+					"error": {
+						"validation": "設定のインポートエラー。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
+						"unknown": "設定のインポート中にエラーが発生しました。ファイル形式を確認してください。\n不明なエラーが発生しました。"
+					},
+					"success": "設定が正常にインポートされました",
+					"title": "JSONファイルから設定をインポート",
+					"value": "インポート設定"
+				},
+				"exportButton": {
+					"success": "設定を正常にエクスポートしました",
+					"title": "設定を JSON ファイルにエクスポート",
+					"value": "エクスポート設定"
+				}
+			},
+			"miscellaneous": {
+				"title": "その他の設定",
+				"features": {
+					"rememberLastVolume": {
+						"title": "再生中の音量を録音し、新しいビデオを開いたときに音量として設定します",
+						"label": "最後の音量を記憶する"
+					},
+					"maximizePlayerButton": {
+						"title": "ウィンドウサイズに合わせてビデオを塗りつぶします",
+						"label": "最大プレイヤーボタンを有効にする"
+					},
+					"videoHistory": {
+						"title": "視聴中のビデオで中断した場所を追跡し、そのビデオが再び読み込まれたときに再開するかどうかを尋ねます",
+						"label": "動画履歴を有効にする"
+					},
+					"remainingTime": {
+						"title": "視聴中のビデオの残り時間を表示します",
+						"label": "残り時間を有効にする"
+					},
+					"loopButton": {
+						"title": "再生中のビデオを再生するためのボタンを追加します",
+						"label": "ループボタンを有効にする"
+					},
+					"hideScrollbar": {
+						"title": "スクロールバーのページを非表示",
+						"label": "Enable hide scrollbar"
+					}
+				}
+			},
+			"scrollWheelVolumeControl": {
+				"title": "ホイール音量コントロールの設定をスクロール",
+				"enable": {
+					"title": "スクロールホイールを使用して、ビデオの音量を制御できます。",
+					"label": "スクロールホイールの音量調節を有効にする"
+				},
+				"osdColor": {
+					"title": "オンスクリーンディスプレイの色",
+					"label": "OSDの色"
+				},
+				"osdType": {
+					"title": "画面表示の種類",
+					"label": "OSDタイプ"
+				},
+				"osdPosition": {
+					"title": "オンスクリーンディスプレイの位置",
+					"label": "OSD位置"
+				},
+				"osdOpacity": {
+					"title": "画面オンディスプレイの透明度",
+					"label": "OSD opacity"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"title": "スクロールごとに音量を調整する量",
+					"label": "調整する金額"
+				},
+				"osdHide": {
+					"title": "OSDを非表示にするまでの待機時間 (ミリ秒)",
+					"label": "非表示の時間"
+				},
+				"osdPadding": {
+					"title": "OSDに追加するパディングの量（ピクセル単位）はコーナーOSDにのみ適用されます",
+					"label": "Padding"
+				},
+				"onScreenDisplay": {
+					"colors": {
+						"red": "赤",
+						"green": "緑",
+						"blue": "青",
+						"yellow": "黄色",
+						"orange": "オレンジ",
+						"purple": "パープル",
+						"pink": "ピンク",
+						"white": "白"
+					},
+					"position": {
+						"top_left": "上部左",
+						"top_right": "右",
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "中央揃え"
+					},
+					"type": {
+						"no_display": "ディスプレイがありません",
+						"text": "テキスト",
+						"line": "線",
+						"round": "ラウンド"
+					}
+				}
+			},
+			"automaticQuality": {
+				"title": "自動画質設定",
+				"enable": {
+					"title": "選択したレベルに合わせてビデオ画質を自動的に調整します。",
+					"label": "自動品質調整を有効にする"
+				},
+				"select": {
+					"label": "プレイヤーの品質",
+					"title": "動画を設定する品質"
+				}
+			},
+			"playbackSpeed": {
+				"title": "再生速度の設定",
+				"enable": {
+					"title": "ビデオの速度を以下に設定します",
+					"label": "強制再生速度を有効にする"
+				},
+				"select": {
+					"label": "プレイヤーの速度",
+					"title": "動画を設定する速度"
+				}
+			},
+			"volumeBoost": {
+				"title": "音量ブーストの設定",
+				"enable": {
+					"title": "見ているビデオの音量を増やします",
+					"label": "音量ブーストを有効にする"
+				},
+				"number": {
+					"label": "音量ブースト量 (dB)",
+					"title": "音量を上げる量"
+				}
+			},
+			"screenshotButton": {
+				"title": "スクリーンショットの設定",
+				"enable": {
+					"title": "プレイヤーにビデオのスクリーンショットを撮るボタンを追加します",
+					"label": "スクリーンショットボタンを有効にする"
+				},
+				"selectSaveAs": {
+					"label": "スクリーンショットの保存タイプ",
+					"title": "スクリーンショット保存の種類"
+				},
+				"selectFormat": {
+					"label": "スクリーンショットの形式",
+					"title": "スクリーンショットを保存するフォーマット"
+				},
+				"format": {
+					"png": "PNG",
+					"jpeg": "JPEG",
+					"webp": "WebP"
+				},
+				"saveAs": {
+					"file": "ファイル",
+					"clipboard": "Clipboard"
+				}
+			},
+			"bottomButtons": {
+				"confirm": {
+					"title": "設定のリセットを確認",
+					"value": "確認する"
+				},
+				"clear": {
+					"title": "この拡張機能がマシンに保存されているすべてのデータを消去します",
+					"value": "データをクリア"
+				},
+				"reset": {
+					"title": "すべての設定をデフォルトにリセットします。確認ボタンをクリックして変更を保存します。",
+					"value": "Reset"
+				}
+			},
+			"language": {
+				"title": "言語",
+				"select": {
+					"label": "言語",
+					"title": "拡張機能に使用する言語"
+				}
+			}
+		},
+		"clearData": {
+			"confirmAlert": "オプションに関連するすべての拡張データを削除します。続行しますか？",
+			"allDataDeleted": "すべてのデータが削除されました。"
+		}
+	},
+	"messages": {
+		"settingVolume": "音量ブーストを {{VOLUME_BOOST_AMOUNT}} に設定しました",
+		"resumingVideo": "{{VIDEO_TIME}} でビデオを再開しています"
+	}
 }
