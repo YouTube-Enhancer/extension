@@ -42,7 +42,6 @@
 	"settings": {
 		"sections": {
 			"importExportSettings": {
-				"title": "Importer/Exporter les paramètres",
 				"importButton": {
 					"error": {
 						"validation": "Erreur lors de l'importation des paramètres. Veuillez vérifier le format du fichier.\n{{ERROR_MESSAGE}}",
