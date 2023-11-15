@@ -51,17 +51,19 @@
 		"no-useless-escape": "off",
 		"no-empty": ["error", { "allowEmptyCatch": true }],
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
-		"import/no-commonjs": "error",
 		"import/first": ["error"],
 		"no-secrets/no-secrets": "error",
 		"prettier/prettier": [
 			"error",
 			{
-				"useTabs": true,
-				"semi": true,
-				"trailingComma": "none",
 				"arrowParens": "always",
-				"printWidth": 150
+				"endOfLine": "lf",
+				"printWidth": 150,
+				"semi": true,
+				"singleQuote": false,
+				"tabWidth": 2,
+				"trailingComma": "none",
+				"useTabs": true
 			}
 		],
 		"import/no-unresolved": "off",
