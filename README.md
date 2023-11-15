@@ -5,6 +5,11 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 [![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc/)
 [![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&style=for-the-badge&logo=Github)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
 
+<br/>
+
+![Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total.svg)
+![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer.svg)
+
 ## Table of Contents
 
 - [Introduction](#🌟-introduction)
@@ -171,8 +176,6 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
 
 Our YouTube Enhancer extension supports multiple languages to provide a more inclusive experience for users around the world. We use Crowdin for managing translations.
 
-[![Crowdin](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
-
 ### Contributing Translations
 
 We welcome contributions to improve translations and make the extension accessible to a wider audience. If you'd like to contribute translations or suggest improvements, follow these steps:
@@ -184,3 +187,13 @@ We welcome contributions to improve translations and make the extension accessib
 ## 📜 License
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
+
+## 🌟 Star History
+
+<a href="https://star-history.com/#VampireChicken12/youtube-enhancer&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date" />
+  </picture>
+</a>
