@@ -19,8 +19,8 @@ export async function setupVolumeChangeListener() {
 	const playerContainer = IsWatchPage
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 		: IsShortsPage
-		? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-		: null;
+		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  : null;
 	if (!playerContainer) return;
 	const videoElement: HTMLVideoElement | null = playerContainer.querySelector("div > video");
 	if (!videoElement) return;

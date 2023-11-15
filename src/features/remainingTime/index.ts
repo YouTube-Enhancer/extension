@@ -55,6 +55,8 @@ export async function setupRemainingTime() {
 	const playerVideoData = await playerContainer.getVideoData();
 	const remainingTime = await calculateRemainingTime({ playerContainer, videoElement });
 	const remainingTimeElementExists = document.querySelector("span#ytp-time-remaining") !== null;
+	if (playerVideoData.isLive && !remainingTimeElementExists) return;
+
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");
 	// If the video is live return
 	if (playerVideoData.isLive && remainingTimeElementExists) {
