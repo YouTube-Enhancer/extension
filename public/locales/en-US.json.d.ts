@@ -67,7 +67,6 @@ interface EnUS {
 					title: "Import settings from a JSON file";
 					value: "Import Settings";
 				};
-				title: "Import/Export Settings";
 			};
 			language: {
 				select: { label: "Language"; title: "The language to use for the extension" };

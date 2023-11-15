@@ -11,4 +11,3 @@ updates:
       interval: "weekly"
     target-branch: "dev"
     versioning-strategy: "increase-if-necessary"
-
