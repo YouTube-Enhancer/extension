@@ -1,3 +1,23 @@
+## [1.11.8](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.7...v1.11.8) (2023-11-16)
+
+
+### Bug Fixes
+
+* Fix on screen display color visibility in settings ([95ad5e9](https://github.com/VampireChicken12/youtube-enhancer/commit/95ad5e9d4ced61c2b8301ba10f14c2d5401cc2d0))
+* Fix selected option text being white on light mode ([2781492](https://github.com/VampireChicken12/youtube-enhancer/commit/278149232e9fc34ef46bc9e9f56aa11fb24e9214))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.11.8-Chrome.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
+| youtube-enhancer-v1.11.8-Chromium.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
+| youtube-enhancer-v1.11.8-Edge.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
+| youtube-enhancer-v1.11.8-Firefox.zip | 10acae4d7e87dc4b55258a83d6f63c5c7ca8a25eadeae7e822ab78647f3940f6 |
+
 ## [1.11.7](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.6...v1.11.7) (2023-11-15)
 
 
