@@ -171,42 +171,42 @@ export default function Settings({
 	});
 	const colorOptions: SelectOption[] = [
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[red]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[red]")}></div>,
 			label: red,
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[green]")}></div>,
 			label: green,
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[blue]")}></div>,
 			label: blue,
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[yellow]")}></div>,
 			label: yellow,
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[orange]")}></div>,
 			label: orange,
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[purple]")}></div>,
 			label: purple,
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[pink]")}></div>,
 			label: pink,
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 h-2 w-2 rounded-[50%]", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[white]")}></div>,
 			label: white,
 			value: "white"
 		}
