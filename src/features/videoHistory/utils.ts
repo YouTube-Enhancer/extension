@@ -4,5 +4,5 @@ export function getVideoHistory() {
 }
 export function setVideoHistory(id: string, timestamp: number, status: VideoHistoryStatus) {
 	const history = getVideoHistory();
-	window.localStorage.setItem("videoHistory", JSON.stringify(Object.assign(history, { [id]: { id, timestamp, status } })));
+	window.localStorage.setItem("videoHistory", JSON.stringify(Object.assign(history, { [id]: { id, status, timestamp } })));
 }

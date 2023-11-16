@@ -1,8 +1,9 @@
+import type { YouTubePlayerDiv } from "@/src/@types";
+
 import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { setRememberedVolume, setupVolumeChangeListener } from "./utils";
 
-import type { YouTubePlayerDiv } from "@/src/@types";
 /**
  * Sets the remembered volume based on the options received from a specific message.
  * It restores the last volume if the option is enabled.
@@ -17,7 +18,7 @@ export default async function enableRememberVolume(): Promise<void> {
 		data: { options }
 	} = optionsData;
 	// Extract the necessary properties from the options object
-	const { remembered_volumes: rememberedVolumes, enable_remember_last_volume: enableRememberVolume } = options;
+	const { enable_remember_last_volume: enableRememberVolume, remembered_volumes: rememberedVolumes } = options;
 	// If the volume is not being remembered, return
 	if (!enableRememberVolume) return;
 	const IsWatchPage = isWatchPage();
@@ -26,8 +27,8 @@ export default async function enableRememberVolume(): Promise<void> {
 	const playerContainer = IsWatchPage
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 		: IsShortsPage
-		? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-		: null;
+		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  : null;
 
 	// If player container is not available, return
 	if (!playerContainer) return;

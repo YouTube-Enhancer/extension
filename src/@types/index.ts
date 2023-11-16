@@ -1,7 +1,9 @@
-import z from "zod";
 import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
-import type { FeatureName } from "../utils/EventManager";
+
+import z from "zod";
+
 import type { AvailableLocales } from "../i18n";
+import type { FeatureName } from "../utils/EventManager";
 
 /* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -38,45 +40,45 @@ export const screenshotFormat = ["png", "jpg", "webp"] as const;
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 
 export type configuration = {
-	enable_scroll_wheel_volume_control: boolean;
-	enable_remember_last_volume: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_forced_playback_speed: boolean;
-	enable_volume_boost: boolean;
-	enable_screenshot_button: boolean;
-	enable_maximize_player_button: boolean;
-	enable_video_history: boolean;
-	enable_remaining_time: boolean;
-	enable_loop_button: boolean;
 	enable_hide_scrollbar: boolean;
-	screenshot_save_as: ScreenshotType;
-	screenshot_format: ScreenshotFormat;
+	enable_loop_button: boolean;
+	enable_maximize_player_button: boolean;
+	enable_remaining_time: boolean;
+	enable_remember_last_volume: boolean;
+	enable_screenshot_button: boolean;
+	enable_scroll_wheel_volume_control: boolean;
+	enable_video_history: boolean;
+	enable_volume_boost: boolean;
+	language: AvailableLocales;
 	osd_display_color: OnScreenDisplayColor;
-	osd_display_type: OnScreenDisplayType;
-	osd_display_position: OnScreenDisplayPosition;
-	osd_display_opacity: number;
 	osd_display_hide_time: number;
+	osd_display_opacity: number;
 	osd_display_padding: number;
-	volume_adjustment_steps: number;
-	volume_boost_amount: number;
+	osd_display_position: OnScreenDisplayPosition;
+	osd_display_type: OnScreenDisplayType;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
 	remembered_volumes?: {
 		shortsPageVolume: number;
 		watchPageVolume: number;
 	};
-	language: AvailableLocales;
+	screenshot_format: ScreenshotFormat;
+	screenshot_save_as: ScreenshotType;
+	volume_adjustment_steps: number;
+	volume_boost_amount: number;
 };
 export type configurationKeys = keyof configuration;
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
-	timestamp: number;
 	status: VideoHistoryStatus;
+	timestamp: number;
 };
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
-export type MessageAction = "send_data" | "request_data" | "data_response";
-export type MessageSource = "extension" | "content";
+export type MessageAction = "data_response" | "request_data" | "send_data";
+export type MessageSource = "content" | "extension";
 
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
@@ -84,64 +86,65 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 };
 export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = Prettify<
 	BaseMessage<T, S> & {
-		type: Type;
 		data: D;
+		type: Type;
 	}
 >;
 export type DataResponseMessage<Type extends string, D> = Prettify<
 	BaseMessage<"data_response", "extension"> & {
-		type: Type;
 		data: D;
+		type: Type;
 	}
 >;
 
 export type RequestDataMessage<Type extends string, D> = Prettify<
 	BaseMessage<"request_data", "content"> & {
-		type: Type;
 		data: D;
+		type: Type;
 	}
 >;
 export type ContentSendOnlyMessageMappings = {
+	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
 };
 export type ExtensionSendOnlyMessageMappings = {
-	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostAmount?: number }>;
-	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { playerSpeed?: number; enableForcedPlaybackSpeed: boolean }>;
-	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
-	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
-	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
-	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
-	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
-	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
-	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
+	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
+	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
+	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
+	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
+	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
+	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
+	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
+	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostAmount?: number; volumeBoostEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
 };
 export type MessageMappings = Prettify<{
+	extensionURL: {
+		request: RequestDataMessage<"extensionURL", undefined>;
+		response: DataResponseMessage<"extensionURL", { extensionURL: string }>;
+	};
+	language: {
+		request: RequestDataMessage<"language", undefined>;
+		response: DataResponseMessage<"language", { language: AvailableLocales }>;
+	};
 	options: {
 		request: RequestDataMessage<"options", undefined>;
 		response: DataResponseMessage<"options", { options: configuration }>;
+	};
+	videoHistoryAll: {
+		request: RequestDataMessage<"videoHistoryAll", undefined>;
+		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
 	};
 	videoHistoryOne: {
 		request:
 			| RequestDataMessage<"videoHistoryOne", { id: string }>
 			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
-	};
-	videoHistoryAll: {
-		request: RequestDataMessage<"videoHistoryAll", undefined>;
-		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
-	};
-	language: {
-		request: RequestDataMessage<"language", undefined>;
-		response: DataResponseMessage<"language", { language: AvailableLocales }>;
-	};
-	extensionURL: {
-		request: RequestDataMessage<"extensionURL", undefined>;
-		response: DataResponseMessage<"extensionURL", { extensionURL: string }>;
 	};
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
@@ -150,13 +153,16 @@ export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends string | number | boolean | null | undefined
+	[K in keyof T]: T[K] extends boolean | null | number | string | undefined
 		? undefined extends T[K]
 			? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
 			: z.ZodType<T[K]>
 		: z.ZodObject<TypeToZod<T[K]>>;
 };
-export type PartialConfigurationToZodSchema<T> = z.ZodObject<{
+export type TypeToZodSchema<T> = z.ZodObject<{
+	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+}>;
+export type TypeToPartialZodSchema<T> = z.ZodObject<{
 	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
@@ -166,15 +172,15 @@ export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
 export type WithId<S extends string> = `#${S}`;
-export type NotificationType = "error" | "success" | "info" | "warning";
+export type NotificationType = "error" | "info" | "success" | "warning";
 
 export type NotificationAction = "reset_settings" | undefined;
 
 export type Notification = {
-	message: string;
-	type: NotificationType;
 	action: NotificationAction;
+	message: string;
+	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;
-	progress?: number;
+	type: NotificationType;
 };

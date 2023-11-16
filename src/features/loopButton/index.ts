@@ -1,7 +1,8 @@
-import { waitForSpecificMessage } from "@/src/utils/utilities";
-import { loopButtonClickListener, makeLoopIcon } from "./utils";
-import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
+
+import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { loopButtonClickListener, makeLoopIcon } from "./utils";
 
 export async function addLoopButton() {
 	// Wait for the "options" message from the content script
@@ -22,11 +23,11 @@ export async function addLoopButton() {
 	if (!videoElement) return;
 	const loopSVG = makeLoopIcon();
 	addFeatureItemToMenu({
-		icon: loopSVG,
-		label: `Loop`,
 		featureName: "loopButton",
-		listener: loopButtonClickListener,
-		isToggle: true
+		icon: loopSVG,
+		isToggle: true,
+		label: `Loop`,
+		listener: loopButtonClickListener
 	});
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
 		for (const mutation of mutationList) {
@@ -51,7 +52,7 @@ export async function addLoopButton() {
 		}
 	};
 	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
-	loopChangeMutationObserver.observe(videoElement, { attributes: true, attributeFilter: ["loop"] });
+	loopChangeMutationObserver.observe(videoElement, { attributeFilter: ["loop"], attributes: true });
 }
 export function removeLoopButton() {
 	removeFeatureItemFromMenu("loopButton");

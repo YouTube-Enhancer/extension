@@ -4,7 +4,17 @@
 		"es6": true,
 		"node": true
 	},
-	"extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:import/recommended",
+		"plugin:import/typescript",
+		"plugin:tailwindcss/recommended",
+		"plugin:prettier/recommended",
+		"plugin:promise/recommended",
+		"plugin:perfectionist/recommended-natural"
+	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaFeatures": {
@@ -13,7 +23,7 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
-	"plugins": ["react", "@typescript-eslint"],
+	"plugins": ["react", "@typescript-eslint", "no-secrets"],
 	"rules": {
 		"react/react-in-jsx-scope": "off",
 		"@typescript-eslint/no-unused-vars": ["error"],
@@ -40,10 +50,33 @@
 		],
 		"no-useless-escape": "off",
 		"no-empty": ["error", { "allowEmptyCatch": true }],
-		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"]
+		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+		"import/first": ["error"],
+		"no-secrets/no-secrets": "error",
+		"prettier/prettier": [
+			"error",
+			{
+				"arrowParens": "always",
+				"endOfLine": "lf",
+				"printWidth": 150,
+				"semi": true,
+				"singleQuote": false,
+				"tabWidth": 2,
+				"trailingComma": "none",
+				"useTabs": true
+			}
+		],
+		"import/no-unresolved": "off",
+		"tailwindcss/no-custom-classname": "off"
 	},
 	"globals": {
 		"chrome": "readonly"
 	},
-	"ignorePatterns": ["watch.js", "dist/**"]
+	"ignorePatterns": ["watch.js", "dist/**"],
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx", "*.js"],
+			"parser": "@typescript-eslint/parser"
+		}
+	]
 }

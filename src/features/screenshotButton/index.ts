@@ -1,5 +1,6 @@
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
+
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
@@ -9,7 +10,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		const context = canvas.getContext("2d");
 
 		// Set the dimensions of the canvas to the video's dimensions
-		const { videoWidth, videoHeight } = videoElement;
+		const { videoHeight, videoWidth } = videoElement;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
 
@@ -24,7 +25,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 			data: { options }
 		} = optionsData;
 		if (!options) return;
-		const { screenshot_save_as, screenshot_format } = options;
+		const { screenshot_format, screenshot_save_as } = options;
 		const format = `image/${screenshot_format}`;
 
 		// Get the data URL of the canvas and create a blob from it

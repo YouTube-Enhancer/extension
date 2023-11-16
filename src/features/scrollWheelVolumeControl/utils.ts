@@ -1,6 +1,7 @@
 import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/@types";
+
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, isShortsPage, clamp, toDivisible, browserColorLog, round } from "@/src/utils/utilities";
+import { browserColorLog, clamp, isShortsPage, isWatchPage, round, toDivisible } from "@/src/utils/utilities";
 
 /**
  * Get the scroll direction based on the deltaY value.
@@ -24,8 +25,8 @@ export function adjustVolume(scrollDelta: number, volumeStep: number): Promise<{
 			const playerContainer = isWatchPage()
 				? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 				: isShortsPage()
-				? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-				: null;
+				  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+				  : null;
 			if (!playerContainer) return;
 			if (!playerContainer.getVolume) return;
 			if (!playerContainer.setVolume) return;
@@ -68,23 +69,23 @@ export function setupScrollListeners(selector: Selector, handleWheel: (event: Ev
  * @param options - The options for the volume display.
  */
 export function drawVolumeDisplay({
-	displayType,
-	displayPosition,
 	displayColor,
+	displayHideTime,
 	displayOpacity,
 	displayPadding,
-	displayHideTime,
+	displayPosition,
+	displayType,
 	playerContainer,
 	volume
 }: {
-	volume: number;
-	displayType: OnScreenDisplayType;
-	displayPosition: OnScreenDisplayPosition;
 	displayColor: OnScreenDisplayColor;
+	displayHideTime: number;
 	displayOpacity: number;
 	displayPadding: number;
-	displayHideTime: number;
+	displayPosition: OnScreenDisplayPosition;
+	displayType: OnScreenDisplayType;
 	playerContainer: YouTubePlayerDiv | null;
+	volume: number;
 }) {
 	volume = clamp(volume, 0, 100);
 	const canvas = document.createElement("canvas");
@@ -102,7 +103,7 @@ export function drawVolumeDisplay({
 		return;
 	}
 	if (displayType === "no_display") return;
-	let { clientWidth: width, clientHeight: height } = playerContainer;
+	let { clientHeight: height, clientWidth: width } = playerContainer;
 	const originalWidth = width;
 	const originalHeight = height;
 	// Adjust canvas dimensions for different display positions

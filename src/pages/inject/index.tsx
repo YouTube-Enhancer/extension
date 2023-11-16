@@ -1,7 +1,8 @@
-import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/@types";
-import { parseReviver, sendExtensionOnlyMessage, sendExtensionMessage, parseStoredValue } from "@/src/utils/utilities";
 import type { AvailableLocales } from "@/src/i18n";
+
+import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import { parseReviver, parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -31,12 +32,6 @@ document.documentElement.appendChild(script);
 	});
 	sendExtensionMessage("options", "data_response", { options });
 })();
-window.onload = () => {
-	chrome.storage.onChanged.addListener(storageListeners);
-};
-window.onunload = () => {
-	chrome.storage.onChanged.removeListener(storageListeners);
-};
 
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -50,7 +45,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 	if (!stringifiedMessage) return;
 	let message;
 	try {
-		message = JSON.parse(stringifiedMessage) as Messages["request"] | ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
+		message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings] | Messages["request"];
 	} catch (error) {
 		console.error(error);
 		return;
@@ -72,7 +67,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			break;
 		}
 		case "videoHistoryOne": {
-			const { data, action } = message;
+			const { action, data } = message;
 			if (!data) return;
 			switch (action) {
 				case "request_data": {
@@ -86,7 +81,7 @@ document.addEventListener("yte-message-from-youtube", async () => {
 				case "send_data": {
 					const { video_history_entry } = data;
 					if (!video_history_entry) return;
-					const { id, timestamp, status } = video_history_entry;
+					const { id, status, timestamp } = video_history_entry;
 					setVideoHistory(id, timestamp, status);
 					break;
 				}
@@ -126,6 +121,12 @@ document.addEventListener("yte-message-from-youtube", async () => {
 			});
 			break;
 		}
+		case "pageLoaded": {
+			chrome.storage.onChanged.addListener(storageListeners);
+			window.onunload = () => {
+				chrome.storage.onChanged.removeListener(storageListeners);
+			};
+		}
 	}
 });
 const storageListeners = async (changes: StorageChanges, areaName: string) => {
@@ -133,8 +134,8 @@ const storageListeners = async (changes: StorageChanges, areaName: string) => {
 	const changeKeys = Object.keys(
 		changes as {
 			[K in keyof configuration]?: {
-				oldValue: configuration[K] | undefined;
 				newValue: configuration[K] | undefined;
+				oldValue: configuration[K] | undefined;
 			};
 		}
 	);
@@ -145,8 +146,8 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	if (areaName !== "local") return;
 	const castedChanges = changes as {
 		[K in keyof configuration]: {
-			oldValue: configuration[K] | undefined;
 			newValue: configuration[K];
+			oldValue: configuration[K] | undefined;
 		};
 	};
 	const options: configuration = await new Promise((resolve) => {
@@ -157,63 +158,10 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	const keyActions: {
 		[K in keyof configuration]?: () => void;
 	} = {
-		enable_volume_boost: () => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostEnabled: castedChanges.enable_volume_boost.newValue,
-				volumeBoostAmount: options.volume_boost_amount
-			});
-		},
-		volume_boost_amount: () => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
-				volumeBoostEnabled: options.enable_volume_boost
-			});
-		},
 		enable_forced_playback_speed: () => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,
 				playerSpeed: options.player_speed
-			});
-		},
-		player_speed: () => {
-			sendExtensionOnlyMessage("playerSpeedChange", {
-				playerSpeed: castedChanges.player_speed.newValue,
-				enableForcedPlaybackSpeed: options.enable_forced_playback_speed
-			});
-		},
-		enable_screenshot_button: () => {
-			sendExtensionOnlyMessage("screenshotButtonChange", {
-				screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
-			});
-		},
-		enable_maximize_player_button: () => {
-			sendExtensionOnlyMessage("maximizePlayerButtonChange", {
-				maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
-			});
-		},
-		enable_video_history: () => {
-			sendExtensionOnlyMessage("videoHistoryChange", {
-				videoHistoryEnabled: castedChanges.enable_video_history.newValue
-			});
-		},
-		enable_remaining_time: () => {
-			sendExtensionOnlyMessage("remainingTimeChange", {
-				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
-			});
-		},
-		enable_loop_button: () => {
-			sendExtensionOnlyMessage("loopButtonChange", {
-				loopButtonEnabled: castedChanges.enable_loop_button.newValue
-			});
-		},
-		enable_scroll_wheel_volume_control: () => {
-			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
-				scrollWheelVolumeControlEnabled: castedChanges.enable_scroll_wheel_volume_control.newValue
-			});
-		},
-		enable_remember_last_volume: () => {
-			sendExtensionOnlyMessage("rememberVolumeChange", {
-				rememberVolumeEnabled: castedChanges.enable_remember_last_volume.newValue
 			});
 		},
 		enable_hide_scrollbar: () => {
@@ -221,14 +169,67 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideScrollBarEnabled: castedChanges.enable_hide_scrollbar.newValue
 			});
 		},
+		enable_loop_button: () => {
+			sendExtensionOnlyMessage("loopButtonChange", {
+				loopButtonEnabled: castedChanges.enable_loop_button.newValue
+			});
+		},
+		enable_maximize_player_button: () => {
+			sendExtensionOnlyMessage("maximizePlayerButtonChange", {
+				maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
+			});
+		},
+		enable_remaining_time: () => {
+			sendExtensionOnlyMessage("remainingTimeChange", {
+				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
+			});
+		},
+		enable_remember_last_volume: () => {
+			sendExtensionOnlyMessage("rememberVolumeChange", {
+				rememberVolumeEnabled: castedChanges.enable_remember_last_volume.newValue
+			});
+		},
+		enable_screenshot_button: () => {
+			sendExtensionOnlyMessage("screenshotButtonChange", {
+				screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
+			});
+		},
+		enable_scroll_wheel_volume_control: () => {
+			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
+				scrollWheelVolumeControlEnabled: castedChanges.enable_scroll_wheel_volume_control.newValue
+			});
+		},
+		enable_video_history: () => {
+			sendExtensionOnlyMessage("videoHistoryChange", {
+				videoHistoryEnabled: castedChanges.enable_video_history.newValue
+			});
+		},
+		enable_volume_boost: () => {
+			sendExtensionOnlyMessage("volumeBoostChange", {
+				volumeBoostAmount: options.volume_boost_amount,
+				volumeBoostEnabled: castedChanges.enable_volume_boost.newValue
+			});
+		},
 		language: () => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: castedChanges.language.newValue
 			});
+		},
+		player_speed: () => {
+			sendExtensionOnlyMessage("playerSpeedChange", {
+				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
+				playerSpeed: castedChanges.player_speed.newValue
+			});
+		},
+		volume_boost_amount: () => {
+			sendExtensionOnlyMessage("volumeBoostChange", {
+				volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
+				volumeBoostEnabled: options.enable_volume_boost
+			});
 		}
 	};
 	Object.entries(
-		changes as { [K in keyof configuration]?: { oldValue?: configuration[K] | undefined; newValue?: configuration[K] | undefined } }
+		changes as { [K in keyof configuration]?: { newValue?: configuration[K] | undefined; oldValue?: configuration[K] | undefined } }
 	).forEach(([key, change]) => {
 		if (
 			change &&

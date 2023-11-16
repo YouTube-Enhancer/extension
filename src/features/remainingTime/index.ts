@@ -1,14 +1,17 @@
-import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 import type { YouTubePlayerDiv } from "@/src/@types";
-import { calculateRemainingTime } from "./utils";
+
 import eventManager from "@/src/utils/EventManager";
+import { isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+
+import { calculateRemainingTime } from "./utils";
+
 async function playerTimeUpdateListener() {
 	// Get the player element
 	const playerContainer = isWatchPage()
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 		: isShortsPage()
-		? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-		: null;
+		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  : null;
 
 	// If player element is not available, return
 	if (!playerContainer) return;
@@ -21,7 +24,7 @@ async function playerTimeUpdateListener() {
 	// Get the remaining time element
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining");
 	if (!remainingTimeElement) return;
-	const remainingTime = await calculateRemainingTime({ videoElement, playerContainer });
+	const remainingTime = await calculateRemainingTime({ playerContainer, videoElement });
 	remainingTimeElement.textContent = remainingTime;
 }
 export async function setupRemainingTime() {
@@ -41,8 +44,8 @@ export async function setupRemainingTime() {
 	const playerContainer = isWatchPage()
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
 		: isShortsPage()
-		? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-		: null;
+		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// Get the video element
@@ -50,11 +53,15 @@ export async function setupRemainingTime() {
 	// If video element is not available, return
 	if (!videoElement) return;
 	const playerVideoData = await playerContainer.getVideoData();
-	// If the video is live return
-	if (playerVideoData.isLive) return;
-	const remainingTime = await calculateRemainingTime({ videoElement, playerContainer });
+	const remainingTime = await calculateRemainingTime({ playerContainer, videoElement });
 	const remainingTimeElementExists = document.querySelector("span#ytp-time-remaining") !== null;
+	if (playerVideoData.isLive && !remainingTimeElementExists) return;
+
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");
+	// If the video is live return
+	if (playerVideoData.isLive && remainingTimeElementExists) {
+		remainingTimeElement.remove();
+	}
 	if (!remainingTimeElementExists) {
 		remainingTimeElement.id = "ytp-time-remaining";
 		remainingTimeElement.textContent = remainingTime;
