@@ -1,4 +1,4 @@
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/@types";
+import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, clamp, isShortsPage, isWatchPage, round, toDivisible } from "@/src/utils/utilities";

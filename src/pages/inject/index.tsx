@@ -1,5 +1,5 @@
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/@types";
 import type { AvailableLocales } from "@/src/i18n";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { parseReviver, parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
