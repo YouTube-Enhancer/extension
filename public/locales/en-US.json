@@ -173,11 +173,6 @@
 					"label": "Screenshot format",
 					"title": "The format to save the screenshot in"
 				},
-				"format": {
-					"png": "PNG",
-					"jpeg": "JPEG",
-					"webp": "WebP"
-				},
 				"saveAs": {
 					"file": "File",
 					"clipboard": "Clipboard"
