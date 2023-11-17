@@ -193,11 +193,6 @@
 					"label": "截图格式",
 					"title": "保存屏幕截图的格式"
 				},
-				"format": {
-					"png": "PNG",
-					"jpeg": "JPEG",
-					"webp": "WebP"
-				},
 				"saveAs": {
 					"file": "文件",
 					"clipboard": "剪切板"
