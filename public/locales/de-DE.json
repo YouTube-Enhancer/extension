@@ -129,7 +129,7 @@
 						"orange": "Orange",
 						"purple": "Lila",
 						"pink": "Rosa",
-						"white": "White"
+						"white": "Weiß"
 					},
 					"position": {
 						"top_left": "Top Left",
@@ -192,11 +192,6 @@
 				"selectFormat": {
 					"label": "Screenshot format",
 					"title": "The format to save the screenshot in"
-				},
-				"format": {
-					"png": "PNG",
-					"jpeg": "JPEG",
-					"webp": "WebP"
 				},
 				"saveAs": {
 					"file": "File",
