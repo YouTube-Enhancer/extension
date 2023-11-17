@@ -1,12 +1,12 @@
-import type { configuration, configurationKeys } from "@/src/@types";
+import type { configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { youtubePlayerSpeedRate } from "@/src/@types";
 import { availableLocales, type i18nInstanceType } from "@/src/i18n";
+import { youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema } from "@/src/utils/constants";
 import { cn, settingsAreDefault } from "@/src/utils/utilities";
 import React, { Suspense, useEffect, useState } from "react";
@@ -52,7 +52,7 @@ function LanguageOptions({
 			<SettingTitle title={t("settings.sections.language.title")} />
 			<Setting
 				disabled={false}
-				id="language_select"
+				id="language"
 				label={t("settings.sections.language.select.label")}
 				onChange={setValueOption("language")}
 				options={languageOptions}
@@ -163,7 +163,6 @@ export default function Settings({
 		returnObjects: true
 	});
 	const {
-		format: { jpeg, png, webp },
 		saveAs: { clipboard, file }
 	} = t("settings.sections.screenshotButton", {
 		defaultValue: {},
@@ -266,9 +265,9 @@ export default function Settings({
 	].reverse();
 	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
 	const ScreenshotFormatOptions: SelectOption[] = [
-		{ label: png, value: "png" },
-		{ label: jpeg, value: "jpeg" },
-		{ label: webp, value: "webp" }
+		{ label: "PNG", value: "png" },
+		{ label: "JPEG", value: "jpeg" },
+		{ label: "WebP", value: "webp" }
 	];
 	const ScreenshotSaveAsOptions: SelectOption[] = [
 		{ label: file, value: "file" },
@@ -419,7 +418,7 @@ export default function Settings({
 					/>
 					<Setting
 						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						id="osd_color_select"
+						id="osd_display_color"
 						label={t("settings.sections.scrollWheelVolumeControl.osdColor.label")}
 						onChange={setValueOption("osd_display_color")}
 						options={colorOptions}

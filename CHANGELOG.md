@@ -1,41 +1,33 @@
 ## [1.11.8](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.7...v1.11.8) (2023-11-16)
 
-
 ### Bug Fixes
 
-* Fix on screen display color visibility in settings ([95ad5e9](https://github.com/VampireChicken12/youtube-enhancer/commit/95ad5e9d4ced61c2b8301ba10f14c2d5401cc2d0))
-* Fix selected option text being white on light mode ([2781492](https://github.com/VampireChicken12/youtube-enhancer/commit/278149232e9fc34ef46bc9e9f56aa11fb24e9214))
-
-
-
-
+- Fix on screen display color visibility in settings ([95ad5e9](https://github.com/VampireChicken12/youtube-enhancer/commit/95ad5e9d4ced61c2b8301ba10f14c2d5401cc2d0))
+- Fix selected option text being white on light mode ([2781492](https://github.com/VampireChicken12/youtube-enhancer/commit/278149232e9fc34ef46bc9e9f56aa11fb24e9214))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.11.8-Chrome.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.11.8-Chrome.zip   | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
 | youtube-enhancer-v1.11.8-Chromium.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
-| youtube-enhancer-v1.11.8-Edge.zip | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
-| youtube-enhancer-v1.11.8-Firefox.zip | 10acae4d7e87dc4b55258a83d6f63c5c7ca8a25eadeae7e822ab78647f3940f6 |
+| youtube-enhancer-v1.11.8-Edge.zip     | 87600763560a4935b8369974d9757c3350f572019ada31d8ec5a79fcdfdcf7a6 |
+| youtube-enhancer-v1.11.8-Firefox.zip  | 10acae4d7e87dc4b55258a83d6f63c5c7ca8a25eadeae7e822ab78647f3940f6 |
 
 ## [1.11.7](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.6...v1.11.7) (2023-11-15)
 
-
 ### Bug Fixes
 
-* fix bug caused by previous bug fix ([68225b6](https://github.com/VampireChicken12/youtube-enhancer/commit/68225b685a4900200c0f3d045972e1b31ee80955))
-
-
-
-
+- fix bug caused by previous bug fix ([68225b6](https://github.com/VampireChicken12/youtube-enhancer/commit/68225b685a4900200c0f3d045972e1b31ee80955))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.11.7-Chrome.zip | 81372739f88cd91097ee422a48a32af264d3df510e2fa0d9c7a53133bdcb9184 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.11.7-Chrome.zip   | 81372739f88cd91097ee422a48a32af264d3df510e2fa0d9c7a53133bdcb9184 |
 | youtube-enhancer-v1.11.7-Chromium.zip | 81372739f88cd91097ee422a48a32af264d3df510e2fa0d9c7a53133bdcb9184 |
-| youtube-enhancer-v1.11.7-Edge.zip | 81372739f88cd91097ee422a48a32af264d3df510e2fa0d9c7a53133bdcb9184 |
-| youtube-enhancer-v1.11.7-Firefox.zip | 23b446cb33e9cbe052a7f823f3e32a3f0522d17c63fea9814fe3bd237a9ef49e |
+| youtube-enhancer-v1.11.7-Edge.zip     | 81372739f88cd91097ee422a48a32af264d3df510e2fa0d9c7a53133bdcb9184 |
+| youtube-enhancer-v1.11.7-Firefox.zip  | 23b446cb33e9cbe052a7f823f3e32a3f0522d17c63fea9814fe3bd237a9ef49e |
 
 ## [1.11.6](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.5...v1.11.6) (2023-11-15)
 

@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/@types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 

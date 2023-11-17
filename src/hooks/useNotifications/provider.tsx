@@ -1,4 +1,4 @@
-import type { Notification, NotificationAction, NotificationType } from "@/src/@types";
+import type { Notification, NotificationAction, NotificationType } from "@/src/types";
 
 import { isNotStrictEqual } from "@/src/utils/utilities";
 import React, { type ReactElement, useEffect, useState } from "react";

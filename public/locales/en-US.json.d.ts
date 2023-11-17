@@ -111,7 +111,6 @@ interface EnUS {
 					label: "Enable screenshot button";
 					title: "Adds a button to the player to take a screenshot of the video";
 				};
-				format: { jpeg: "JPEG"; png: "PNG"; webp: "WebP" };
 				saveAs: { clipboard: "Clipboard"; file: "File" };
 				selectFormat: { label: "Screenshot format"; title: "The format to save the screenshot in" };
 				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };

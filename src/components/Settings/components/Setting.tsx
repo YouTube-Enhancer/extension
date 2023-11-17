@@ -1,3 +1,5 @@
+import type { configuration } from "@/src/types";
+
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
 import type { NumberInputProps } from "../../Inputs/Number/Number";
 import type { SelectProps } from "../../Inputs/Select/Select";
@@ -6,6 +8,7 @@ import type { SliderProps } from "../../Inputs/Slider/Slider";
 import { Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
 type SettingInputProps = {
+	id: keyof configuration;
 	title: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)

@@ -1,7 +1,8 @@
 import z from "zod";
 
-import type { TypeToPartialZodSchema, configuration } from "../@types";
+import type { TypeToPartialZodSchema, configuration } from "../types";
 
+import { availableLocales } from "../i18n/index";
 import {
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
@@ -9,8 +10,7 @@ import {
 	screenshotFormat,
 	screenshotType,
 	youtubePlayerQualityLevel
-} from "../@types";
-import { availableLocales } from "../i18n/index";
+} from "../types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	// Options
