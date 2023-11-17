@@ -141,19 +141,25 @@ interface EnUS {
 					};
 					type: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
 				};
-				osdColor: { label: "OSD color"; title: "The color of the On Screen Display" };
+				osdColor: { label: "OSD Color"; title: "Select the color for the On-Screen Display" };
 				osdHide: {
-					label: "Time to hide";
-					title: "The amount of milliseconds to wait before hiding the OSD";
+					label: "Hide Delay";
+					title: "Specify the time, in milliseconds, before automatically hiding the OSD";
 				};
-				osdOpacity: { label: "OSD opacity"; title: "The opacity of the On Screen Display" };
+				osdOpacity: {
+					label: "OSD Opacity";
+					title: "Adjust the transparency of the On-Screen Display";
+				};
 				osdPadding: {
 					label: "Padding";
-					title: "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)";
+					title: "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.";
 				};
-				osdPosition: { label: "OSD position"; title: "The position of the On Screen Display" };
-				osdType: { label: "OSD type"; title: "The type of On Screen Display" };
-				osdVolumeAdjustmentSteps: { label: "Amount to adjust"; title: "The amount to adjust volume per scroll" };
+				osdPosition: { label: "OSD Position"; title: "Select the position of the On-Screen Display" };
+				osdType: { label: "OSD Type"; title: "Select the style of On-Screen Display" };
+				osdVolumeAdjustmentSteps: {
+					label: "Volume Change Per Scroll";
+					title: "Adjust the volume change per scroll";
+				};
 				title: "Scroll wheel volume control settings";
 			};
 			volumeBoost: {
