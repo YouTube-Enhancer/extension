@@ -1,4 +1,4 @@
-import type { configuration } from "@/src/@types";
+import type { configuration } from "@/src/types";
 
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";

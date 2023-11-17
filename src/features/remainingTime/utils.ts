@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/@types";
+import type { YouTubePlayerDiv } from "@/src/types";
 export function formatTime(timeInSeconds: number) {
 	timeInSeconds = Math.round(timeInSeconds);
 	const units: number[] = [

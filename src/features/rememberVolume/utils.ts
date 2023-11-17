@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv, configuration } from "@/src/@types";
+import type { YouTubePlayerDiv, configuration } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";

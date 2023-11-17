@@ -1,11 +1,9 @@
-import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z from "zod";
 
 import type { AvailableLocales } from "../i18n";
 import type { FeatureName } from "../utils/EventManager";
-
-/* eslint-disable no-mixed-spaces-and-tabs */
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
 export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
@@ -70,6 +68,7 @@ export type configuration = {
 	volume_boost_amount: number;
 };
 export type configurationKeys = keyof configuration;
+export type configurationId = configurationKeys;
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
