@@ -8,7 +8,7 @@
 					"resumePrompt": {
 						"close": "終了"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "レジューム"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
@@ -21,17 +21,17 @@
 					"label": "最大表示"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "フィーチャー・メニュー"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "選択がセーブしました"
 				},
 				"error": {
-					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
+					"playerQuality": "自動画質設定のプレイヤー質を選択してください。"
 				},
 				"info": {
 					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
@@ -47,25 +47,25 @@
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
 						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "設定がインポートをされました",
+					"title": "JSONファイルから設定がインポートする",
+					"value": "インポート設定"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "設定がエクスポートをされました",
+					"title": "JSONファイルで設定がエクスポートする",
+					"value": "エクスポート設定"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "他の設定",
 				"features": {
 					"rememberLastVolume": {
 						"title": "Remembers the volume you were watching at and sets it as the volume when you open a new video",
 						"label": "Remember last volume"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
+						"title": "動画をウィンドウ・サイズまで広がるする",
 						"label": "Enable maximize player button"
 					},
 					"videoHistory": {
@@ -94,19 +94,19 @@
 				},
 				"osdColor": {
 					"title": "The color of the On Screen Display",
-					"label": "OSD color"
+					"label": "OSDの色"
 				},
 				"osdType": {
 					"title": "The type of On Screen Display",
-					"label": "OSD type"
+					"label": "OSDの型"
 				},
 				"osdPosition": {
 					"title": "The position of the On Screen Display",
-					"label": "OSD position"
+					"label": "OSDの位置"
 				},
 				"osdOpacity": {
 					"title": "The opacity of the On Screen Display",
-					"label": "OSD opacity"
+					"label": "OSD不透明"
 				},
 				"osdVolumeAdjustmentSteps": {
 					"title": "The amount to adjust volume per scroll",
@@ -122,12 +122,12 @@
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "Red",
-						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
-						"orange": "Orange",
-						"purple": "Purple",
+						"red": "赤色",
+						"green": "緑色",
+						"blue": "青色",
+						"yellow": "黄色",
+						"orange": "橙色",
+						"purple": "紫色",
 						"pink": "Pink",
 						"white": "White"
 					},
@@ -140,14 +140,14 @@
 					},
 					"type": {
 						"no_display": "No display",
-						"text": "Text",
-						"line": "Line",
-						"round": "Round"
+						"text": "テキスト",
+						"line": "ライン",
+						"round": "丸い"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "自動画質設定",
 				"enable": {
 					"title": "Automatically adjusts the video quality to the selected level.",
 					"label": "Enable automatic quality adjustment"
