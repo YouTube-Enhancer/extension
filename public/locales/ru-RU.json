@@ -93,31 +93,31 @@
 					"label": "Enable scroll wheel volume control"
 				},
 				"osdColor": {
-					"title": "The color of the On Screen Display",
-					"label": "OSD color"
+					"title": "Select the color for the On-Screen Display",
+					"label": "OSD Color"
 				},
 				"osdType": {
-					"title": "The type of On Screen Display",
-					"label": "OSD type"
+					"title": "Select the style of On-Screen Display",
+					"label": "OSD Type"
 				},
 				"osdPosition": {
-					"title": "The position of the On Screen Display",
-					"label": "OSD position"
+					"title": "Select the position of the On-Screen Display",
+					"label": "OSD Position"
 				},
 				"osdOpacity": {
-					"title": "The opacity of the On Screen Display",
-					"label": "OSD opacity"
+					"title": "Adjust the transparency of the On-Screen Display",
+					"label": "OSD Opacity"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "The amount to adjust volume per scroll",
-					"label": "Amount to adjust"
+					"title": "Adjust the volume change per scroll",
+					"label": "Volume Change Per Scroll"
 				},
 				"osdHide": {
-					"title": "The amount of milliseconds to wait before hiding the OSD",
-					"label": "Time to hide"
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
+					"label": "Hide Delay"
 				},
 				"osdPadding": {
-					"title": "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)",
+					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
 					"label": "Padding"
 				},
 				"onScreenDisplay": {
