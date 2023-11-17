@@ -1,7 +1,6 @@
-import type { YouTubePlayerDiv, YoutubePlayerQualityLabel, YoutubePlayerQualityLevel } from "@/src/@types";
+import type { YouTubePlayerDiv, YoutubePlayerQualityLevel } from "@/src/types";
 
-import { youtubePlayerQualityLabel, youtubePlayerQualityLevel } from "@/src/@types";
-import { browserColorLog, chooseClosetQuality, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { browserColorLog, chooseClosestQuality, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 /**
  * Sets the player quality based on the options received from a specific message.
@@ -25,9 +24,6 @@ export default async function setPlayerQuality(): Promise<void> {
 	// If player quality is not specified, return
 	if (!player_quality) return;
 
-	// Initialize the playerQuality variable
-	let playerQuality: YoutubePlayerQualityLabel | YoutubePlayerQualityLevel = player_quality;
-
 	// Get the player element
 	const playerContainer = isWatchPage()
 		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
@@ -45,31 +41,14 @@ export default async function setPlayerQuality(): Promise<void> {
 	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 
 	// Check if the specified player quality is available
-	if (playerQuality && playerQuality !== "auto") {
-		if (!availableQualityLevels.includes(playerQuality)) {
-			// Convert the available quality levels to their corresponding labels
-			const availableResolutions = availableQualityLevels.reduce(function (array, elem) {
-				if (youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(elem)]) {
-					array.push(youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(elem)]);
-				}
-				return array;
-			}, [] as YoutubePlayerQualityLabel[]);
-
-			// Choose the closest quality level based on the available resolutions
-			playerQuality = chooseClosetQuality(youtubePlayerQualityLabel[youtubePlayerQualityLevel.indexOf(playerQuality)], availableResolutions);
-
-			// If the chosen quality level is not available, return
-			if (!youtubePlayerQualityLevel.at(youtubePlayerQualityLabel.indexOf(playerQuality))) return;
-
-			// Update the playerQuality variable
-			playerQuality = youtubePlayerQualityLevel.at(youtubePlayerQualityLabel.indexOf(playerQuality)) as YoutubePlayerQualityLevel;
-		}
-
+	if (player_quality && player_quality !== "auto") {
+		const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels);
+		if (!closestQuality) return;
 		// Log the message indicating the player quality being set
-		browserColorLog(`Setting player quality to ${playerQuality}`, "FgMagenta");
+		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
 
 		// Set the playback quality and update the default quality in the dataset
-		playerContainer.setPlaybackQualityRange(playerQuality);
-		playerContainer.dataset.defaultQuality = playerQuality;
+		playerContainer.setPlaybackQualityRange(closestQuality);
+		playerContainer.dataset.defaultQuality = closestQuality;
 	}
 }
