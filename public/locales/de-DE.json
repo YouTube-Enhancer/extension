@@ -124,11 +124,11 @@
 					"colors": {
 						"red": "Red",
 						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
+						"blue": "Blau",
+						"yellow": "Gelb",
 						"orange": "Orange",
-						"purple": "Purple",
-						"pink": "Pink",
+						"purple": "Lila",
+						"pink": "Rosa",
 						"white": "White"
 					},
 					"position": {
