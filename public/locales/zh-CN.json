@@ -93,31 +93,31 @@
 					"label": "启用滚轮音量控制"
 				},
 				"osdColor": {
-					"title": "屏幕显示颜色",
-					"label": "OSD 颜色"
+					"title": "Select the color for the On-Screen Display",
+					"label": "OSD Color"
 				},
 				"osdType": {
-					"title": "屏幕显示的类型",
-					"label": "OSD 类型"
+					"title": "Select the style of On-Screen Display",
+					"label": "OSD Type"
 				},
 				"osdPosition": {
-					"title": "屏幕显示位置",
-					"label": "OSD 位置"
+					"title": "Select the position of the On-Screen Display",
+					"label": "OSD Position"
 				},
 				"osdOpacity": {
-					"title": "屏幕显示的不透明度",
-					"label": "OSD opacity"
+					"title": "Adjust the transparency of the On-Screen Display",
+					"label": "OSD Opacity"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "每次滚动调整音量的金额",
-					"label": "调整金额"
+					"title": "Adjust the volume change per scroll",
+					"label": "Volume Change Per Scroll"
 				},
 				"osdHide": {
-					"title": "隐藏OSD前等待的毫秒数",
-					"label": "隐藏时间"
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
+					"label": "Hide Delay"
 				},
 				"osdPadding": {
-					"title": "要添加到OSD的填充数量 (像素，仅适用于角OSD)",
+					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
 					"label": "填充"
 				},
 				"onScreenDisplay": {
