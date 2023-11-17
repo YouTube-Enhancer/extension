@@ -6,19 +6,19 @@
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "終了"
 					},
 					"resumeButton": "Resume"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
+					"label": "スクリーンショット"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "ループ"
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "最大表示"
 				},
 				"featureMenu": {
 					"label": "Feature menu"
