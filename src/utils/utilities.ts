@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 import type {
 	ContentSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
@@ -6,13 +9,11 @@ import type {
 	Messages,
 	Selector,
 	SendDataMessage,
-	YoutubePlayerQualityLabel,
+	YoutubePlayerQualityLevel,
 	configuration
-} from "@/src/@types";
+} from "../types";
 
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
+import { youtubePlayerQualityLevel } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -34,25 +35,41 @@ export const round = (value: number, decimals = 0) => Number(`${Math.round(Numbe
 
 export const toDivisible = (value: number, divider: number): number => Math.ceil(value / divider) * divider;
 
-export const chooseClosetQuality = (num: YoutubePlayerQualityLabel, arr: YoutubePlayerQualityLabel[]): YoutubePlayerQualityLabel => {
-	const parsedNum = parseInt(num, 10);
-	let [curr] = arr;
-	let currDiff = Math.abs(parsedNum - parseInt(curr));
-
-	for (let i = 1; i < arr.length; i++) {
-		const label = arr.at(i);
-		if (!label) continue;
-		const parsedLabel = parseInt(label);
-		const diff = Math.abs(parsedNum - parsedLabel);
-
-		if (diff < currDiff) {
-			curr = label;
-			currDiff = diff;
-		}
+export function chooseClosestQuality(
+	selectedQuality: YoutubePlayerQualityLevel,
+	availableQualities: YoutubePlayerQualityLevel[]
+): YoutubePlayerQualityLevel | null {
+	// If there are no available qualities, return null
+	if (availableQualities.length === 0) {
+		return null;
 	}
 
-	return curr;
-};
+	// Find the index of the selected quality in the array
+	const selectedIndex = youtubePlayerQualityLevel.indexOf(selectedQuality);
+
+	// If the selected quality is not in the array, return null
+	if (selectedIndex === -1) {
+		return null;
+	}
+
+	// Find the available quality levels that are closest to the selected quality level
+	const closestQualities = availableQualities.reduce(
+		(acc, quality) => {
+			const qualityIndex = youtubePlayerQualityLevel.indexOf(quality);
+			if (qualityIndex !== -1) {
+				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality });
+			}
+			return acc;
+		},
+		[] as { difference: number; quality: YoutubePlayerQualityLevel }[]
+	);
+
+	// Sort the closest qualities by difference in ascending order
+	closestQualities.sort((a, b) => a.difference - b.difference);
+
+	// Return the quality level with the minimum difference
+	return closestQualities[0].quality;
+}
 const BrowserColors = {
 	BgBlack: "background-color: black; color: white;",
 	BgBlue: "background-color: blue; color: white;",
