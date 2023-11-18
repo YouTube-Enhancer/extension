@@ -18,8 +18,10 @@ export async function i18nService(locale: AvailableLocales) {
 		extensionURL = chrome.runtime.getURL("");
 	}
 	if (!availableLocales.includes(locale)) throw new Error(`The locale '${locale}' is not available`);
-	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => console.error(err));
-	const translations = (await response?.json()) as typeof import("../../public/locales/en-US.json");
+	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
+		throw new Error(err);
+	});
+	const translations = (await response.json()) as typeof import("../../public/locales/en-US.json");
 	const i18nextInstance = await new Promise<i18nInstanceType>((resolve, reject) => {
 		const resources: {
 			[k in AvailableLocales]?: {

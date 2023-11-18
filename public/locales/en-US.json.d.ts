@@ -89,7 +89,7 @@ interface EnUS {
 					};
 					rememberLastVolume: {
 						label: "Remember last volume";
-						title: "Remembers the volume you were watching at and sets it as the volume when you open a new video";
+						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
 					};
 					videoHistory: {
 						label: "Enable video history";

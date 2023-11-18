@@ -1,4 +1,4 @@
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/@types";
+import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
 import { enableFeatureMenu } from "@/src/features/featureMenu";
 import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
@@ -17,8 +17,25 @@ import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/video
 import volumeBoost from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
-import { browserColorLog, formatError, sendContentOnlyMessage, waitForSpecificMessage } from "@/utils/utilities";
+import {
+	browserColorLog,
+	formatError,
+	isShortsPage,
+	isWatchPage,
+	sendContentOnlyMessage,
+	waitForAllElements,
+	waitForSpecificMessage
+} from "@/utils/utilities";
 // TODO: Add always show progressbar feature
+
+/**
+ * Creates a hidden div element with a specific ID that can be used to receive messages from YouTube.
+ * The element is appended to the document's root element.
+ */
+const element = document.createElement("div");
+element.style.display = "none";
+element.id = "yte-message-from-youtube";
+document.documentElement.appendChild(element);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const alwaysShowProgressBar = async function () {
@@ -59,20 +76,13 @@ const alwaysShowProgressBar = async function () {
 	progressLoad += progressWidth;
 };
 
-/**
- * Creates a hidden div element with a specific ID that can be used to receive messages from YouTube.
- * The element is appended to the document's root element.
- */
-const element = document.createElement("div");
-element.style.display = "none";
-element.id = "yte-message-from-youtube";
-document.documentElement.appendChild(element);
-
-window.onload = async function () {
+window.addEventListener("DOMContentLoaded", async function () {
 	enableRememberVolume();
 	enableHideScrollBar();
 
-	const enableFeatures = () => {
+	const enableFeatures = async () => {
+		// Wait for the specified container selectors to be available on the page
+		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		enableFeatureMenu();
 		addLoopButton();
@@ -95,6 +105,7 @@ window.onload = async function () {
 	} = response;
 	const i18nextInstance = await i18nService(language);
 	window.i18nextInstance = i18nextInstance;
+	if (isWatchPage() || isShortsPage()) document.addEventListener("yt-navigate-finish", enableFeatures);
 	document.addEventListener("yt-player-updated", enableFeatures);
 	/**
 	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
@@ -276,7 +287,7 @@ window.onload = async function () {
 		}
 	});
 	sendContentOnlyMessage("pageLoaded", undefined);
-};
+});
 window.onbeforeunload = function () {
 	eventManager.removeAllEventListeners();
 	element.remove();
