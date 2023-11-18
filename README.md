@@ -12,13 +12,14 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 
 ## Table of Contents
 
-- [Introduction](#🌟-introduction)
-- [Features](#🎛️-features)
-- [Building the Extension](#🛠️-building-the-extension)
-- [Configuration](#⚙-configuration)
-- [Usage](#🔧-usage)
-- [Contributing](#📝-contributing)
-- [License](#📜-license)
+- [Introduction](#-introduction)
+- [Features](#%EF%B8%8F-features)
+- [Building the Extension](#%EF%B8%8F-building-the-extension)
+- [Configuration](#-configuration)
+- [Usage](#-usage)
+- [Contributing](#-contributing)
+- [Internationalization (i18n)](#-internationalization-i18n)
+- [License](#-license)
 
 ## 🌟 Introduction
 
@@ -170,7 +171,7 @@ Using the YouTube Enhancer Extension is straightforward:
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
 
-## Internationalization (i18n)
+## 🌐 Internationalization (i18n)
 
 ### Crowdin Translation Project
 
