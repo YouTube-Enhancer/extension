@@ -61,7 +61,7 @@
 				"title": "杂项设置",
 				"features": {
 					"rememberLastVolume": {
-						"title": "记住您正在观看的音量，并在您打开新视频时将其设置为音量",
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
 						"label": "记住最后一个音量"
 					},
 					"maximizePlayerButton": {
