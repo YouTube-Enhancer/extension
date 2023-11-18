@@ -6,12 +6,12 @@
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Cerrar"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "Reanudar"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
+					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
 					"label": "Screenshot"
 				},
 				"loopButton": {
@@ -123,13 +123,13 @@
 				"onScreenDisplay": {
 					"colors": {
 						"red": "Red",
-						"green": "Green",
+						"green": "Verde",
 						"blue": "Blue",
 						"yellow": "Yellow",
 						"orange": "Orange",
 						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
+						"pink": "Rosa",
+						"white": "Blanco"
 					},
 					"position": {
 						"top_left": "Top Left",
@@ -139,15 +139,15 @@
 						"center": "Center"
 					},
 					"type": {
-						"no_display": "No display",
-						"text": "Text",
+						"no_display": "No mostrar",
+						"text": "Texto",
 						"line": "Line",
 						"round": "Round"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "Ajustes de calidad automáticos",
 				"enable": {
 					"title": "Automatically adjusts the video quality to the selected level.",
 					"label": "Enable automatic quality adjustment"
@@ -209,14 +209,14 @@
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"value": "Reestablecer"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "Idioma",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Idioma",
+					"title": "El idioma a usar para la extensión"
 				}
 			}
 		},
