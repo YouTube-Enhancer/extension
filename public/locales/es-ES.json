@@ -149,11 +149,11 @@
 			"automaticQuality": {
 				"title": "Ajustes de calidad automáticos",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado.",
+					"label": "Habilitar ajuste automático de calidad"
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "Calidad del reproductor",
 					"title": "The quality to set the video to"
 				}
 			},
@@ -164,7 +164,7 @@
 					"label": "Enable forced playback speed"
 				},
 				"select": {
-					"label": "Player speed",
+					"label": "Velocidad del reproductor",
 					"title": "The speed to set the video to"
 				}
 			},
@@ -180,7 +180,7 @@
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "Ajustes de captura de pantalla",
 				"enable": {
 					"title": "Adds a button to the player to take a screenshot of the video",
 					"label": "Enable screenshot button"
@@ -194,14 +194,14 @@
 					"title": "The format to save the screenshot in"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "Archivo",
+					"clipboard": "Portapapeles"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
 					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"value": "Confirmar"
 				},
 				"clear": {
 					"title": "Clears all data this extension has stored on your machine",
@@ -227,6 +227,6 @@
 	},
 	"messages": {
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"resumingVideo": "Reanudando vídeo en {{VIDEO_TIME}}"
 	}
 }
