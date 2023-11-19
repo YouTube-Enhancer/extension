@@ -46,7 +46,7 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		featureName: "maximizePlayerButton",
 		icon: maximizeSVG,
 		isToggle: true,
-		label: "Maximize Player",
+		label: window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"),
 		listener: maximizePlayerButtonClickListener
 	});
 	function ytpLeftButtonMouseEnterListener(event: MouseEvent) {
