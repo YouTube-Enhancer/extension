@@ -1,4 +1,4 @@
-import type { configuration } from "@/src/@types";
+import type { configuration } from "@/src/types";
 
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
@@ -18,6 +18,7 @@ export default function SettingsWrapper(): JSX.Element {
 	const [selectedScreenshotSaveAs, setSelectedScreenshotSaveAs] = useState<string | undefined>();
 	const [selectedScreenshotFormat, setSelectedScreenshotFormat] = useState<string | undefined>();
 	const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
+	const [selectedModifierKey, setSelectedModifierKey] = useState<string | undefined>();
 	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	useEffect(() => {
 		const fetchSettings = () => {
@@ -25,15 +26,17 @@ export default function SettingsWrapper(): JSX.Element {
 				for (const [key, value] of Object.entries(settings)) {
 					settings[key] = parseStoredValue(value);
 				}
-				setSettings({ ...settings } as configuration);
-				setSelectedColor(settings.osd_display_color);
-				setSelectedDisplayType(settings.osd_display_type);
-				setSelectedDisplayPosition(settings.osd_display_position);
-				setSelectedPlayerQuality(settings.player_quality);
-				setSelectedPlayerSpeed(settings.player_speed);
-				setSelectedScreenshotSaveAs(settings.screenshot_save_as);
-				setSelectedScreenshotFormat(settings.screenshot_format);
-				setSelectedLanguage(settings.language);
+				const castedSettings = settings as configuration;
+				setSettings({ ...castedSettings });
+				setSelectedColor(castedSettings.osd_display_color);
+				setSelectedDisplayType(castedSettings.osd_display_type);
+				setSelectedDisplayPosition(castedSettings.osd_display_position);
+				setSelectedPlayerQuality(castedSettings.player_quality);
+				setSelectedPlayerSpeed(castedSettings.player_speed.toString());
+				setSelectedScreenshotSaveAs(castedSettings.screenshot_save_as);
+				setSelectedScreenshotFormat(castedSettings.screenshot_format);
+				setSelectedLanguage(castedSettings.language);
+				setSelectedModifierKey(castedSettings.scroll_wheel_volume_control_modifier_key);
 			});
 		};
 
@@ -116,6 +119,7 @@ export default function SettingsWrapper(): JSX.Element {
 				selectedDisplayPosition={selectedDisplayPosition}
 				selectedDisplayType={selectedDisplayType}
 				selectedLanguage={selectedLanguage}
+				selectedModifierKey={selectedModifierKey}
 				selectedPlayerQuality={selectedPlayerQuality}
 				selectedPlayerSpeed={selectedPlayerSpeed}
 				selectedScreenshotFormat={selectedScreenshotFormat}
@@ -124,6 +128,7 @@ export default function SettingsWrapper(): JSX.Element {
 				setSelectedDisplayPosition={setSelectedDisplayPosition}
 				setSelectedDisplayType={setSelectedDisplayType}
 				setSelectedLanguage={setSelectedLanguage}
+				setSelectedModifierKey={setSelectedModifierKey}
 				setSelectedPlayerQuality={setSelectedPlayerQuality}
 				setSelectedPlayerSpeed={setSelectedPlayerSpeed}
 				setSelectedScreenshotFormat={setSelectedScreenshotFormat}

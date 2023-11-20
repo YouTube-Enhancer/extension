@@ -74,6 +74,10 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticTheaterMode: {
+						label: "Enable automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
+					};
 					hideScrollbar: { label: "Enable hide scrollbar"; title: "Hides the pages scrollbar" };
 					loopButton: {
 						label: "Enable loop button";
@@ -89,7 +93,7 @@ interface EnUS {
 					};
 					rememberLastVolume: {
 						label: "Remember last volume";
-						title: "Remembers the volume you were watching at and sets it as the volume when you open a new video";
+						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
 					};
 					videoHistory: {
 						label: "Enable video history";
@@ -111,7 +115,6 @@ interface EnUS {
 					label: "Enable screenshot button";
 					title: "Adds a button to the player to take a screenshot of the video";
 				};
-				format: { jpeg: "JPEG"; png: "PNG"; webp: "WebP" };
 				saveAs: { clipboard: "Clipboard"; file: "File" };
 				selectFormat: { label: "Screenshot format"; title: "The format to save the screenshot in" };
 				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };
@@ -121,6 +124,15 @@ interface EnUS {
 				enable: {
 					label: "Enable scroll wheel volume control";
 					title: "Lets you use the scroll wheel to control the volume of the video you're watching";
+				};
+				modifierKey: {
+					enable: {
+						label: "Enable modifier key";
+						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
+					};
+					options: { altKey: "{{KEY}} key"; ctrlKey: "{{KEY}} key"; shiftKey: "{{KEY}} key" };
+					select: { label: "Modifier key"; title: "The modifier key to use" };
+					title: "Scroll Wheel Modifier Key";
 				};
 				onScreenDisplay: {
 					colors: {
@@ -142,19 +154,25 @@ interface EnUS {
 					};
 					type: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
 				};
-				osdColor: { label: "OSD color"; title: "The color of the On Screen Display" };
+				osdColor: { label: "OSD Color"; title: "Select the color for the On-Screen Display" };
 				osdHide: {
-					label: "Time to hide";
-					title: "The amount of milliseconds to wait before hiding the OSD";
+					label: "Hide Delay";
+					title: "Specify the time, in milliseconds, before automatically hiding the OSD";
 				};
-				osdOpacity: { label: "OSD opacity"; title: "The opacity of the On Screen Display" };
+				osdOpacity: {
+					label: "OSD Opacity";
+					title: "Adjust the transparency of the On-Screen Display";
+				};
 				osdPadding: {
 					label: "Padding";
-					title: "The amount of padding to add to the OSD (in pixels, only applies to corner OSD)";
+					title: "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.";
 				};
-				osdPosition: { label: "OSD position"; title: "The position of the On Screen Display" };
-				osdType: { label: "OSD type"; title: "The type of On Screen Display" };
-				osdVolumeAdjustmentSteps: { label: "Amount to adjust"; title: "The amount to adjust volume per scroll" };
+				osdPosition: { label: "OSD Position"; title: "Select the position of the On-Screen Display" };
+				osdType: { label: "OSD Type"; title: "Select the style of On-Screen Display" };
+				osdVolumeAdjustmentSteps: {
+					label: "Volume Change Per Scroll";
+					title: "Adjust the volume change per scroll";
+				};
 				title: "Scroll wheel volume control settings";
 			};
 			volumeBoost: {

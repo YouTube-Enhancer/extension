@@ -1,19 +1,20 @@
 import z from "zod";
 
-import type { TypeToPartialZodSchema, configuration } from "../@types";
+import type { TypeToPartialZodSchema, configuration } from "../types";
 
+import { availableLocales } from "../i18n/index";
 import {
+	modifierKey,
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
 	onScreenDisplayType,
 	screenshotFormat,
 	screenshotType,
 	youtubePlayerQualityLevel
-} from "../@types";
-import { availableLocales } from "../i18n/index";
+} from "../types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
-	// Options
+	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
 	enable_forced_playback_speed: false,
 	enable_hide_scrollbar: false,
@@ -22,12 +23,11 @@ export const defaultConfiguration = {
 	enable_remaining_time: false,
 	enable_remember_last_volume: false,
 	enable_screenshot_button: false,
-	// General
 	enable_scroll_wheel_volume_control: false,
+	enable_scroll_wheel_volume_control_modifier_key: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
 	language: "en-US",
-	// Images
 	osd_display_color: "white",
 	osd_display_hide_time: 750,
 	osd_display_opacity: 75,
@@ -38,11 +38,13 @@ export const defaultConfiguration = {
 	player_speed: 1,
 	screenshot_format: "png",
 	screenshot_save_as: "file",
+	scroll_wheel_volume_control_modifier_key: "ctrlKey",
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 1
 } satisfies configuration;
 
 export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
@@ -52,6 +54,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	enable_remember_last_volume: z.boolean().optional(),
 	enable_screenshot_button: z.boolean().optional(),
 	enable_scroll_wheel_volume_control: z.boolean().optional(),
+	enable_scroll_wheel_volume_control_modifier_key: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
 	language: z.enum(availableLocales).optional(),
@@ -66,6 +69,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	remembered_volume: z.number().optional(),
 	screenshot_format: z.enum(screenshotFormat).optional(),
 	screenshot_save_as: z.enum(screenshotType).optional(),
+	scroll_wheel_volume_control_modifier_key: z.enum(modifierKey).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional()
 });

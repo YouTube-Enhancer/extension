@@ -1,5 +1,5 @@
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/@types";
 import type { AvailableLocales } from "@/src/i18n";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { parseReviver, parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
@@ -158,6 +158,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	const keyActions: {
 		[K in keyof configuration]?: () => void;
 	} = {
+		enable_automatic_theater_mode: () => {
+			sendExtensionOnlyMessage("automaticTheaterModeChange", {
+				automaticTheaterModeEnabled: castedChanges.enable_automatic_theater_mode.newValue
+			});
+		},
 		enable_forced_playback_speed: () => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,

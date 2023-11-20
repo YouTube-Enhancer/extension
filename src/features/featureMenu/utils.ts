@@ -1,4 +1,4 @@
-import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/@types";
+import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";

@@ -12,13 +12,14 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 
 ## Table of Contents
 
-- [Introduction](#🌟-introduction)
-- [Features](#🎛️-features)
-- [Building the Extension](#🛠️-building-the-extension)
-- [Configuration](#⚙-configuration)
-- [Usage](#🔧-usage)
-- [Contributing](#📝-contributing)
-- [License](#📜-license)
+- [Introduction](#-introduction)
+- [Features](#%EF%B8%8F-features)
+- [Building the Extension](#%EF%B8%8F-building-the-extension)
+- [Configuration](#-configuration)
+- [Usage](#-usage)
+- [Contributing](#-contributing)
+- [Internationalization (i18n)](#-internationalization-i18n)
+- [License](#-license)
 
 ## 🌟 Introduction
 
@@ -40,9 +41,13 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Enable Hide Scrollbar:** Hides the pages scroll bar
 
+- **Enable Automatic Theater Mode:** Automatically enables theater mode when you load a video
+
 ### 2. Scroll Wheel Volume Control Settings
 
 - **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
+
+- **Scroll Wheel Volume Control Modifier Key**: Optionally, enable a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
 
 - **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
 
@@ -170,7 +175,7 @@ Using the YouTube Enhancer Extension is straightforward:
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
 
-## Internationalization (i18n)
+## 🌐 Internationalization (i18n)
 
 ### Crowdin Translation Project
 

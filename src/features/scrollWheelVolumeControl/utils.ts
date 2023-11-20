@@ -1,33 +1,23 @@
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/@types";
+import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, Selector, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, clamp, isShortsPage, isWatchPage, round, toDivisible } from "@/src/utils/utilities";
+import { browserColorLog, clamp, createStyledElement, isShortsPage, round, toDivisible } from "@/src/utils/utilities";
 
-/**
- * Get the scroll direction based on the deltaY value.
- *
- * @param deltaY - The deltaY value from the scroll event.
- * @returns The scroll direction: 1 for scrolling up, -1 for scrolling down.
- */
-export function getScrollDirection(deltaY: number): number {
-	return deltaY < 0 ? 1 : -1;
-}
 /**
  * Adjust the volume based on the scroll direction.
  *
+ * @param playerContainer - The player container element.
  * @param scrollDelta - The scroll direction.
  * @param adjustmentSteps - The volume adjustment steps.
  * @returns Promise that resolves with the new volume.
  */
-export function adjustVolume(scrollDelta: number, volumeStep: number): Promise<{ newVolume: number; oldVolume: number }> {
+export function adjustVolume(
+	playerContainer: YouTubePlayerDiv,
+	scrollDelta: number,
+	volumeStep: number
+): Promise<{ newVolume: number; oldVolume: number }> {
 	return new Promise((resolve) => {
 		(async () => {
-			const playerContainer = isWatchPage()
-				? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
-				: isShortsPage()
-				  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-				  : null;
-			if (!playerContainer) return;
 			if (!playerContainer.getVolume) return;
 			if (!playerContainer.setVolume) return;
 			if (!playerContainer.isMuted) return;
@@ -53,15 +43,34 @@ export function setupScrollListeners(selector: Selector, handleWheel: (event: Ev
 	const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
 	if (!elements.length) return browserColorLog(`No elements found with selector ${selector}`, "FgRed");
 	for (const element of elements) {
-		const mouseWheelListener = (e: Event) => {
-			if (element.clientHeight === 0) return;
-			e.preventDefault();
-			e.stopPropagation();
-			e.stopImmediatePropagation();
-			handleWheel(e);
-		};
-		eventManager.addEventListener(element, "wheel", mouseWheelListener, "scrollWheelVolumeControl");
+		eventManager.addEventListener(element, "wheel", handleWheel, "scrollWheelVolumeControl", { passive: false });
 	}
+}
+function calculateCanvasPosition(displayPosition: OnScreenDisplayPosition, displayPadding: number, paddingTop: number, paddingBottom: number) {
+	let styles: Partial<CSSStyleDeclaration> = {};
+
+	switch (displayPosition) {
+		case "top_left":
+			styles = { left: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
+			break;
+		case "top_right":
+			styles = { right: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
+			break;
+		case "bottom_left":
+			styles = { bottom: `${displayPadding + paddingBottom}px`, left: `${displayPadding}px` };
+			break;
+		case "bottom_right":
+			styles = { bottom: `${displayPadding + paddingBottom}px`, right: `${displayPadding}px` };
+			break;
+		case "center":
+			styles = { left: "50%", top: "50%", transform: "translate(-50%, -50%)" };
+			break;
+		default:
+			console.error("Invalid display position");
+			break;
+	}
+
+	return styles;
 }
 /**
  * Draw the volume display over the player.
@@ -88,15 +97,6 @@ export function drawVolumeDisplay({
 	volume: number;
 }) {
 	volume = clamp(volume, 0, 100);
-	const canvas = document.createElement("canvas");
-	canvas.id = "volume-display";
-	const context = canvas.getContext("2d");
-
-	if (!context) {
-		browserColorLog("Canvas not supported", "FgRed");
-		return;
-	}
-
 	// Set canvas dimensions based on player/container dimensions
 	if (!playerContainer) {
 		browserColorLog("Player container not found", "FgRed");
@@ -129,100 +129,77 @@ export function drawVolumeDisplay({
 		browserColorLog(`Clamped display padding to ${displayPadding}`, "FgRed");
 	}
 
-	// Set canvas styles for positioning
-	canvas.style.position = "absolute";
+	const bottomElement: HTMLDivElement | null =
+		document.querySelector(
+			"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
+		) ?? document.querySelector(".ytp-chrome-bottom");
+	const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
+	const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
+	const heightExcludingMarginPadding = bottomElement
+		? bottomElement.offsetHeight -
+		  (parseInt(getComputedStyle(bottomElement).marginTop, 10) +
+				parseInt(getComputedStyle(bottomElement).marginBottom, 10) +
+				parseInt(getComputedStyle(bottomElement).paddingTop, 10) +
+				parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
+		  10
+		: 0;
+	const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
+	const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
 
-	switch (displayPosition) {
-		case "top_left":
-			canvas.style.top = `${displayPadding}px`;
-			canvas.style.left = `${displayPadding}px`;
-			break;
-		case "top_right":
-			canvas.style.top = `${displayPadding}px`;
-			canvas.style.right = `${displayPadding}px`;
-			break;
-		case "bottom_left":
-			canvas.style.bottom = `${displayPadding}px`;
-			canvas.style.left = `${displayPadding}px`;
-			break;
-		case "bottom_right":
-			canvas.style.bottom = `${displayPadding}px`;
-			canvas.style.right = `${displayPadding}px`;
-			break;
-		case "center":
-			canvas.style.top = "50%";
-			canvas.style.left = "50%";
-			canvas.style.transform = "translate(-50%, -50%)";
-			break;
-		default:
-			console.error("Invalid display position");
-			return;
-	}
-	switch (displayType) {
-		case "text": {
-			const fontSize = Math.min(originalWidth, originalHeight) / 10;
-			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
-			const { width: textWidth } = context.measureText(`${round(volume)}`);
-			width = textWidth + 4;
-			height = clamp(fontSize, 48, 72) + 4;
-			break;
-		}
-		case "line": {
-			const maxLineWidth = 100; // Maximum width of the volume line
-			const lineHeight = 5; // Height of the volume line
-			const lineWidth = Math.round(round(volume / 100, 2) * maxLineWidth);
-			width = lineWidth;
-			height = lineHeight;
-			break;
-		}
-		case "round": {
-			const lineWidth = 5;
-			const radius = Math.min(width, height, 75) / 2 - lineWidth; // Maximum radius based on canvas dimensions
-			const circleWidth = radius * 2 + lineWidth * 2;
-			width = circleWidth;
-			height = circleWidth;
-			break;
-		}
-		default:
-			console.error("Invalid display type");
-			return;
+	const canvas = createStyledElement("volume-display", "canvas", {
+		pointerEvents: "none",
+		position: "absolute",
+		zIndex: "2021",
+		...calculateCanvasPosition(displayPosition, displayPadding, paddingTop, paddingBottom)
+	});
+	const context = canvas.getContext("2d");
+
+	if (!context) {
+		browserColorLog("Canvas not supported", "FgRed");
+		return;
 	}
 
-	// Apply content dimensions to the canvas
-	canvas.width = width;
-	canvas.height = height;
-	canvas.style.zIndex = "2021";
-	canvas.style.pointerEvents = "none";
-
-	// Clear canvas
-	context.clearRect(0, 0, width, height);
-	context.fillStyle = displayColor;
-	context.globalAlpha = displayOpacity / 100;
-	// Draw volume representation based on display type
 	switch (displayType) {
 		case "text": {
-			const fontSize = Math.min(originalWidth, originalHeight) / 10;
-			context.font = `${clamp(fontSize, 48, 72)}px bold Arial`;
+			const fontSize = clamp(Math.min(originalWidth, originalHeight) / 10, 48, 72);
+			canvas.width = fontSize + 4;
+			canvas.height = fontSize + 4;
+			// Clear canvas
+			context.clearRect(0, 0, canvas.width, canvas.height);
 			context.textAlign = "center";
 			context.textBaseline = "middle";
-			context.fillText(`${round(volume)}`, width / 2, height / 2);
+			context.fillStyle = displayColor;
+			context.globalAlpha = displayOpacity / 100;
+			context.font = `${fontSize}px bold Arial`;
+			context.fillText(`${round(volume)}`, canvas.width / 2, canvas.height / 2);
 			break;
 		}
 		case "line": {
 			const maxLineWidth = 100; // Maximum width of the volume line
 			const lineHeight = 5; // Height of the volume line
 			const lineWidth = Math.round(round(volume / 100, 2) * maxLineWidth);
-			const lineX = (width - lineWidth) / 2;
-			const lineY = (height - lineHeight) / 2;
+			canvas.width = lineWidth;
+			canvas.height = lineHeight;
+			// Clear canvas
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			const lineX = (canvas.width - lineWidth) / 2;
+			const lineY = (canvas.height - lineHeight) / 2;
+			context.fillStyle = displayColor;
+			context.globalAlpha = displayOpacity / 100;
 
 			context.fillRect(lineX, lineY, lineWidth, lineHeight);
 			break;
 		}
 		case "round": {
 			const lineWidth = 5;
-			const centerX = width / 2;
-			const centerY = height / 2;
 			const radius = Math.min(width, height, 75) / 2 - lineWidth; // Maximum radius based on canvas dimensions
+			const circleWidth = radius * 2 + lineWidth * 2;
+			canvas.width = circleWidth;
+			canvas.height = circleWidth;
+			// Clear canvas
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			const centerX = canvas.width / 2;
+			const centerY = canvas.height / 2;
 			const startAngle = Math.PI + Math.PI * round(volume / 100, 2); // Start angle based on volume
 			const endAngle = Math.PI - Math.PI * round(volume / 100, 2); // End angle based on volume
 			// Draw the volume arc as a circle at 100% volume
@@ -236,7 +213,7 @@ export function drawVolumeDisplay({
 		}
 		default:
 			console.error("Invalid display type");
-			break;
+			return;
 	}
 
 	// Append canvas to player container if it doesn't already exist
@@ -250,33 +227,4 @@ export function drawVolumeDisplay({
 	setTimeout(() => {
 		canvas.remove();
 	}, displayHideTime);
-	const topElement = document.querySelector(".player-controls > ytd-shorts-player-controls");
-	const bottomElement: HTMLDivElement | null =
-		document.querySelector(
-			"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
-		) ?? document.querySelector(".ytp-chrome-bottom");
-	const topRect = topElement?.getBoundingClientRect();
-	const bottomRect = bottomElement?.getBoundingClientRect();
-	const heightExcludingMarginPadding = bottomElement
-		? bottomElement.offsetHeight -
-		  (parseInt(getComputedStyle(bottomElement).marginTop, 10) +
-				parseInt(getComputedStyle(bottomElement).marginBottom, 10) +
-				parseInt(getComputedStyle(bottomElement).paddingTop, 10) +
-				parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
-		  10
-		: 0;
-	const paddingTop = topRect ? (isShortsPage() ? topRect.top / 2 : 0) : 0;
-	const paddingBottom = bottomRect ? (isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRect.bottom - bottomRect.top)) : 0;
-	switch (displayPosition) {
-		case "top_left":
-		case "top_right":
-			canvas.style.top = `${displayPadding + paddingTop}px`;
-			break;
-		case "bottom_left":
-		case "bottom_right":
-			canvas.style.bottom = `${displayPadding + paddingBottom}px`;
-			break;
-		default:
-			return;
-	}
 }

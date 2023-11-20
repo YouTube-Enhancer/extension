@@ -1,4 +1,4 @@
-import type { Notification, NotificationAction, NotificationType } from "@/src/@types";
+import type { Notification, NotificationAction, NotificationType } from "@/src/types";
 
 import { createContext } from "react";
 

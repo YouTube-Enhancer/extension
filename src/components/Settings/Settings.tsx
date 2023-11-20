@@ -1,12 +1,12 @@
-import type { configuration, configurationKeys } from "@/src/@types";
+import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { youtubePlayerSpeedRate } from "@/src/@types";
 import { availableLocales, type i18nInstanceType } from "@/src/i18n";
+import { youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema } from "@/src/utils/constants";
 import { cn, settingsAreDefault } from "@/src/utils/utilities";
 import React, { Suspense, useEffect, useState } from "react";
@@ -52,7 +52,7 @@ function LanguageOptions({
 			<SettingTitle title={t("settings.sections.language.title")} />
 			<Setting
 				disabled={false}
-				id="language_select"
+				id="language"
 				label={t("settings.sections.language.select.label")}
 				onChange={setValueOption("language")}
 				options={languageOptions}
@@ -71,6 +71,7 @@ export default function Settings({
 	selectedDisplayPosition,
 	selectedDisplayType,
 	selectedLanguage,
+	selectedModifierKey,
 	selectedPlayerQuality,
 	selectedPlayerSpeed,
 	selectedScreenshotFormat,
@@ -79,6 +80,7 @@ export default function Settings({
 	setSelectedDisplayPosition,
 	setSelectedDisplayType,
 	setSelectedLanguage,
+	setSelectedModifierKey,
 	setSelectedPlayerQuality,
 	setSelectedPlayerSpeed,
 	setSelectedScreenshotFormat,
@@ -92,6 +94,7 @@ export default function Settings({
 	selectedDisplayPosition: string | undefined;
 	selectedDisplayType: string | undefined;
 	selectedLanguage: string | undefined;
+	selectedModifierKey: string | undefined;
 	selectedPlayerQuality: string | undefined;
 	selectedPlayerSpeed: string | undefined;
 	selectedScreenshotFormat: string | undefined;
@@ -100,6 +103,7 @@ export default function Settings({
 	setSelectedDisplayPosition: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedDisplayType: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
+	setSelectedModifierKey: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedPlayerQuality: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedPlayerSpeed: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
@@ -163,12 +167,31 @@ export default function Settings({
 		returnObjects: true
 	});
 	const {
-		format: { jpeg, png, webp },
 		saveAs: { clipboard, file }
 	} = t("settings.sections.screenshotButton", {
 		defaultValue: {},
 		returnObjects: true
 	});
+	const scrollWheelVolumeControlModifierKeyOptions = [
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.altKey", {
+				KEY: "Alt"
+			}),
+			value: "altKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.ctrlKey", {
+				KEY: "Ctrl"
+			}),
+			value: "ctrlKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.shiftKey", {
+				KEY: "Shift"
+			}),
+			value: "shiftKey"
+		}
+	] as { label: string; value: ModifierKey }[] as SelectOption[];
 	const colorOptions: SelectOption[] = [
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[red]")}></div>,
@@ -266,9 +289,9 @@ export default function Settings({
 	].reverse();
 	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
 	const ScreenshotFormatOptions: SelectOption[] = [
-		{ label: png, value: "png" },
-		{ label: jpeg, value: "jpeg" },
-		{ label: webp, value: "webp" }
+		{ label: "PNG", value: "png" },
+		{ label: "JPEG", value: "jpeg" },
+		{ label: "WebP", value: "webp" }
 	];
 	const ScreenshotSaveAsOptions: SelectOption[] = [
 		{ label: file, value: "file" },
@@ -406,6 +429,14 @@ export default function Settings({
 						title={t("settings.sections.miscellaneous.features.hideScrollbar.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_automatic_theater_mode?.toString() === "true"}
+						id="enable_automatic_theater_mode"
+						label={t("settings.sections.miscellaneous.features.automaticTheaterMode.label")}
+						onChange={setCheckboxOption("enable_automatic_theater_mode")}
+						title={t("settings.sections.miscellaneous.features.automaticTheaterMode.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.scrollWheelVolumeControl.title")} />
@@ -418,8 +449,27 @@ export default function Settings({
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_scroll_wheel_volume_control_modifier_key?.toString() === "true"}
+						id="enable_scroll_wheel_volume_control_modifier_key"
+						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.label")}
+						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_modifier_key")}
+						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_scroll_wheel_volume_control_modifier_key.toString() !== "true"}
+						id="scroll_wheel_volume_control_modifier_key"
+						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.label")}
+						onChange={setValueOption("scroll_wheel_volume_control_modifier_key")}
+						options={scrollWheelVolumeControlModifierKeyOptions}
+						selectedOption={selectedModifierKey}
+						setSelectedOption={setSelectedModifierKey}
+						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.title")}
+						type="select"
+					/>
+					<Setting
 						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
-						id="osd_color_select"
+						id="osd_display_color"
 						label={t("settings.sections.scrollWheelVolumeControl.osdColor.label")}
 						onChange={setValueOption("osd_display_color")}
 						options={colorOptions}

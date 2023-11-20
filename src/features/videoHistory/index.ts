@@ -1,10 +1,17 @@
-import type { YouTubePlayerDiv } from "@/src/@types";
+import type { VideoHistoryEntry, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/utils/EventManager";
-import { browserColorLog, createTooltip, isShortsPage, isWatchPage, sendContentMessage, waitForSpecificMessage } from "@/utils/utilities";
+import {
+	browserColorLog,
+	createStyledElement,
+	createTooltip,
+	isShortsPage,
+	isWatchPage,
+	sendContentMessage,
+	waitForSpecificMessage
+} from "@/utils/utilities";
 
 import { formatTime } from "../remainingTime/utils";
-
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
@@ -23,7 +30,7 @@ export async function setupVideoHistory() {
 	if (playerVideoData.isLive) return;
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
-	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+	const videoElement = playerContainer.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
 	if (!videoElement) return;
 
 	const videoPlayerTimeUpdateListener = async () => {
@@ -63,126 +70,146 @@ export async function promptUserToResumeVideo() {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
-		// Check if the prompt element already exists
-		const prompt = document.getElementById("resume-prompt") ?? document.createElement("div");
-		// Check if the prompt progress bar already exists
-		const progressBar = document.getElementById("resume-prompt-progress-bar") ?? document.createElement("div");
-		const progressBarDuration = 15;
-		// Create a countdown timer
-		let countdown = 15; // Countdown in seconds
-		const countdownInterval = setInterval(() => {
+		createResumePrompt(video_history_entry, playerContainer);
+	}
+}
+// Utility function to check if an element exists
+const elementExists = (elementId: string) => !!document.getElementById(elementId);
+function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv) {
+	const progressBarId = "resume-prompt-progress-bar";
+	const overlayId = "resume-prompt-overlay";
+	const closeButtonId = "resume-prompt-close-button";
+	const resumeButtonId = "resume-prompt-button";
+	const promptId = "resume-prompt";
+	const progressBarDuration = 15;
+	let countdownInterval: NodeJS.Timeout | undefined;
+
+	const prompt = createStyledElement(promptId, "div", {
+		backgroundColor: "#181a1b",
+		borderRadius: "5px",
+		bottom: "10px",
+		boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+		left: "10px",
+		padding: "12px",
+		paddingBottom: "17px",
+		position: "fixed",
+		transition: "all 0.5s ease-in-out",
+		zIndex: "25000"
+	});
+	const progressBar = createStyledElement(progressBarId, "div", {
+		backgroundColor: "#007acc",
+		borderBottomLeftRadius: "5px",
+		borderBottomRightRadius: "5px",
+		bottom: "0",
+		height: "5px",
+		left: "0",
+		position: "absolute",
+		transition: "all 0.5s ease-in-out",
+		width: "100%",
+		zIndex: "1000"
+	});
+
+	const overlay = createStyledElement(overlayId, "div", {
+		backgroundColor: "rgba(0, 0, 0, 0.75)",
+		cursor: "pointer",
+		height: "100%",
+		left: "0",
+		position: "fixed",
+		top: "0",
+		width: "100%",
+		zIndex: "2500"
+	});
+
+	const closeButton = createStyledElement(closeButtonId, "button", {
+		backgroundColor: "transparent",
+		border: "0",
+		color: "#fff",
+		cursor: "pointer",
+		fontSize: "16px",
+		lineHeight: "1px",
+		padding: "5px",
+		position: "absolute",
+		right: "-2px",
+		top: "2px"
+	});
+	closeButton.textContent = "ₓ";
+
+	const resumeButton = createStyledElement(resumeButtonId, "button", {
+		backgroundColor: "hsl(213, 80%, 50%)",
+		border: "transparent",
+		borderRadius: "5px",
+		boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+		color: "white",
+		cursor: "pointer",
+		padding: "5px",
+		textAlign: "center",
+		transition: "all 0.5s ease-in-out",
+		verticalAlign: "middle"
+	});
+	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
+
+	function startCountdown() {
+		if (prompt) prompt.style.display = "block";
+		if (overlay) overlay.style.display = "block";
+		let countdown = progressBarDuration;
+		countdownInterval = setInterval(() => {
 			countdown--;
-			progressBar.style.width = `${(countdown / progressBarDuration) * 100}%`; // Update the progress bar
+			progressBar.style.width = `${(countdown / progressBarDuration) * 100}%`;
 
 			if (countdown <= 0) {
-				// Automatically hide the prompt when the countdown reaches 0
-				clearInterval(countdownInterval);
-				prompt.style.display = "none";
-				overlay.style.display = "none";
+				hidePrompt();
 			}
 		}, 1000);
-		if (!document.getElementById("resume-prompt-progress-bar")) {
-			progressBar.id = "resume-prompt-progress-bar";
-			progressBar.style.width = "100%";
-			progressBar.style.height = "5px"; // Height of the progress bar
-			progressBar.style.backgroundColor = "#007acc"; // Progress bar color
-			progressBar.style.position = "absolute";
-			progressBar.style.zIndex = "1000";
-			progressBar.style.left = "0"; // Place at the left of the prompt
-			progressBar.style.bottom = "0"; // Place at the bottom of the prompt
-			progressBar.style.transition = "all 0.5s ease-in-out";
-			progressBar.style.borderBottomRightRadius = "5px";
-			progressBar.style.borderBottomLeftRadius = "5px";
-			prompt.appendChild(progressBar);
-		}
-		const resumeButtonClickListener = () => {
-			// Hide the prompt and clear the countdown timer
-			clearInterval(countdownInterval);
-			prompt.style.display = "none";
-			overlay.style.display = "none";
-			browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(video_history_entry.timestamp) }), "FgGreen");
-			playerContainer.seekTo(video_history_entry.timestamp, true);
-		};
-		const overlay = document.getElementById("resume-prompt-overlay") ?? document.createElement("div");
-		const resumeButton = document.getElementById("resume-prompt-button") ?? document.createElement("button");
-		const closeButton = document.getElementById("resume-prompt-close-button") ?? document.createElement("button");
+	}
 
-		// Create the overlay if it doesn't exist
-		if (!document.getElementById("resume-prompt-overlay")) {
-			overlay.style.position = "fixed";
-			overlay.style.top = "0";
-			overlay.style.left = "0";
-			overlay.style.width = "100%";
-			overlay.style.height = "100%";
-			overlay.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
-			overlay.style.zIndex = "2500";
-			overlay.style.cursor = "pointer";
-			document.body.appendChild(overlay);
-		}
-		// Create the close button if it doesn't exist
-		if (!document.getElementById("resume-prompt-close-button")) {
-			closeButton.id = "resume-prompt-close-button";
-			closeButton.textContent = "ₓ";
-			closeButton.style.fontSize = "16px";
-			closeButton.style.position = "absolute";
-			closeButton.style.top = "2px";
-			closeButton.style.right = "-2px";
-			closeButton.style.backgroundColor = "transparent";
-			closeButton.style.color = "#fff";
-			closeButton.style.border = "0";
-			closeButton.style.padding = "5px";
-			closeButton.style.cursor = "pointer";
-			closeButton.style.lineHeight = "1px";
-			closeButton.dataset.title = window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close");
-			const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
-				element: closeButton,
-				featureName: "videoHistory",
-				id: "yte-resume-prompt-close-button-tooltip"
-			});
-			eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
-			prompt.appendChild(closeButton);
-		}
-		// Create the prompt element if it doesn't exist
-		if (!document.getElementById("resume-prompt")) {
-			prompt.id = "resume-prompt";
-			prompt.style.position = "fixed";
-			prompt.style.bottom = "10px";
-			prompt.style.left = "10px";
-			prompt.style.backgroundColor = "#181a1b";
-			prompt.style.padding = "12px";
-			prompt.style.paddingBottom = "17px";
-			prompt.style.transition = "all 0.5s ease-in-out";
-			prompt.style.borderRadius = "5px";
-			prompt.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.2)";
-			prompt.style.zIndex = "25000";
-			resumeButton.id = "resume-prompt-button";
-			resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
-			resumeButton.style.backgroundColor = "hsl(213, 80%, 50%)";
-			resumeButton.style.border = "transparent";
-			resumeButton.style.color = "white";
-			resumeButton.style.padding = "5px";
-			resumeButton.style.borderRadius = "5px";
-			resumeButton.style.boxShadow = "0px 0px 5px rgba(0, 0, 0, 0.2)";
-			resumeButton.style.cursor = "pointer";
-			resumeButton.style.textAlign = "center";
-			resumeButton.style.verticalAlign = "middle";
-			resumeButton.style.transition = "all 0.5s ease-in-out";
+	function hidePrompt() {
+		clearInterval(countdownInterval);
+		prompt.style.display = "none";
+		overlay.style.display = "none";
+	}
 
-			prompt.appendChild(resumeButton);
-			document.body.appendChild(prompt);
-		}
-		if (document.getElementById("resume-prompt-button")) {
-			eventManager.removeEventListener(resumeButton, "click", "videoHistory");
-		}
-		const closeListener = () => {
-			clearInterval(countdownInterval);
-			prompt.style.display = "none";
-			overlay.style.display = "none";
-		};
-		eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
-		eventManager.addEventListener(overlay, "click", closeListener, "videoHistory");
-		eventManager.addEventListener(closeButton, "click", closeListener, "videoHistory");
-		// Display the prompt
-		prompt.style.display = "block";
+	function resumeButtonClickListener() {
+		hidePrompt();
+		browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(videoHistoryEntry.timestamp) }), "FgGreen");
+		playerContainer.seekTo(videoHistoryEntry.timestamp, true);
+	}
+
+	if (!elementExists(progressBarId)) {
+		prompt.appendChild(progressBar);
+	}
+
+	if (!elementExists(overlayId)) {
+		document.body.appendChild(overlay);
+	}
+
+	if (!elementExists(closeButtonId)) {
+		const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
+			element: closeButton,
+			featureName: "videoHistory",
+			id: "yte-resume-prompt-close-button-tooltip",
+			text: window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close")
+		});
+		eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
+		prompt.appendChild(closeButton);
+	}
+
+	startCountdown();
+
+	if (elementExists(resumeButtonId)) {
+		eventManager.removeEventListener(resumeButton, "click", "videoHistory");
+	}
+
+	const closeListener = () => {
+		hidePrompt();
+	};
+
+	eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
+	eventManager.addEventListener(overlay, "click", closeListener, "videoHistory");
+	eventManager.addEventListener(closeButton, "click", closeListener, "videoHistory");
+
+	// Display the prompt
+	if (!elementExists(promptId)) {
+		document.body.appendChild(prompt);
+		prompt.appendChild(resumeButton);
 	}
 }
