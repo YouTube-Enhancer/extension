@@ -2,8 +2,13 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { adjustVolume, drawVolumeDisplay, getScrollDirection, setupScrollListeners } from "./utils";
+import { adjustVolume, drawVolumeDisplay, setupScrollListeners } from "./utils";
 
+function preventScroll(event: Event) {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	event.stopPropagation();
+}
 /**
  * Adjusts the volume on scroll wheel events.
  * It listens for scroll wheel events on specified container selectors,
@@ -28,10 +33,26 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = async (event: Event) => {
-		const wheelEvent = event as WheelEvent | undefined;
-
-		// If it's not a wheel event, return
-		if (!wheelEvent) return;
+		preventScroll(event);
+		// Wait for the "options" message from the content script
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		if (!optionsData) return;
+		const {
+			data: { options }
+		} = optionsData;
+		// Extract the necessary properties from the options object
+		const { enable_scroll_wheel_volume_control, enable_scroll_wheel_volume_control_modifier_key, scroll_wheel_volume_control_modifier_key } = options;
+		const wheelEvent = event as WheelEvent;
+		if (
+			!(
+				(enable_scroll_wheel_volume_control &&
+					enable_scroll_wheel_volume_control_modifier_key &&
+					scroll_wheel_volume_control_modifier_key &&
+					wheelEvent[scroll_wheel_volume_control_modifier_key]) ||
+				(enable_scroll_wheel_volume_control && !enable_scroll_wheel_volume_control_modifier_key)
+			)
+		)
+			return;
 		// Get the player element
 		const playerContainer = isWatchPage()
 			? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
@@ -42,15 +63,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		if (!playerContainer) return;
 
 		// Adjust the volume based on the scroll direction
-		const scrollDelta = getScrollDirection(wheelEvent.deltaY);
-		// Wait for the "options" message from the content script
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-		if (!optionsData) return;
-		const {
-			data: { options }
-		} = optionsData;
+		const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 		// Adjust the volume based on the scroll direction and options
-		const { newVolume } = await adjustVolume(scrollDelta, options.volume_adjustment_steps);
+		const { newVolume } = await adjustVolume(playerContainer, scrollDelta, options.volume_adjustment_steps);
 
 		// Update the volume display
 		drawVolumeDisplay({
@@ -60,7 +75,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			displayPadding: options.osd_display_padding,
 			displayPosition: options.osd_display_position,
 			displayType: options.osd_display_type,
-			playerContainer: playerContainer || null,
+			playerContainer: playerContainer,
 			volume: newVolume
 		});
 	};

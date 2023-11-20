@@ -121,6 +121,15 @@ interface EnUS {
 					label: "Enable scroll wheel volume control";
 					title: "Lets you use the scroll wheel to control the volume of the video you're watching";
 				};
+				modifierKey: {
+					enable: {
+						label: "Enable modifier key";
+						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
+					};
+					options: { altKey: "{{KEY}} key"; ctrlKey: "{{KEY}} key"; shiftKey: "{{KEY}} key" };
+					select: { label: "Modifier key"; title: "The modifier key to use" };
+					title: "Scroll Wheel Modifier Key";
+				};
 				onScreenDisplay: {
 					colors: {
 						blue: "Blue";

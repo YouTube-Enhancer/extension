@@ -26,7 +26,8 @@ export type EventManager = {
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
 		eventName: T,
 		callback: EventCallback<keyof HTMLElementEventMap>,
-		featureName: FeatureName
+		featureName: FeatureName,
+		options?: AddEventListenerOptions | boolean
 	) => void;
 
 	listeners: Map<string, TargetedListeners<keyof ElementEventMap>>;
@@ -45,7 +46,7 @@ export type EventManager = {
 export const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
 	// Adds an event listener for the given target, eventName, and featureName
-	addEventListener: function (target, eventName, callback, featureName) {
+	addEventListener: function (target, eventName, callback, featureName, options) {
 		// Get the map of target listeners for the given featureName
 		const targetListeners = this.listeners.get(featureName) || new Map();
 		// Store the event listener info object in the map
@@ -53,7 +54,7 @@ export const eventManager: EventManager = {
 		// Store the map of target listeners for the given featureName
 		this.listeners.set(featureName, targetListeners);
 		// Add the event listener to the target
-		target.addEventListener(eventName, callback);
+		target.addEventListener(eventName, callback, options);
 	},
 
 	// event listener info objects

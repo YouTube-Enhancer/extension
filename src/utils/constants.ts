@@ -4,6 +4,7 @@ import type { TypeToPartialZodSchema, configuration } from "../types";
 
 import { availableLocales } from "../i18n/index";
 import {
+	modifierKey,
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
 	onScreenDisplayType,
@@ -24,6 +25,7 @@ export const defaultConfiguration = {
 	enable_screenshot_button: false,
 	// General
 	enable_scroll_wheel_volume_control: false,
+	enable_scroll_wheel_volume_control_modifier_key: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
 	language: "en-US",
@@ -38,6 +40,7 @@ export const defaultConfiguration = {
 	player_speed: 1,
 	screenshot_format: "png",
 	screenshot_save_as: "file",
+	scroll_wheel_volume_control_modifier_key: "ctrlKey",
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 1
 } satisfies configuration;
@@ -52,6 +55,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	enable_remember_last_volume: z.boolean().optional(),
 	enable_screenshot_button: z.boolean().optional(),
 	enable_scroll_wheel_volume_control: z.boolean().optional(),
+	enable_scroll_wheel_volume_control_modifier_key: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
 	language: z.enum(availableLocales).optional(),
@@ -66,6 +70,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	remembered_volume: z.number().optional(),
 	screenshot_format: z.enum(screenshotFormat).optional(),
 	screenshot_save_as: z.enum(screenshotType).optional(),
+	scroll_wheel_volume_control_modifier_key: z.enum(modifierKey).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional()
 });
