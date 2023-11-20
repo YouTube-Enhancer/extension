@@ -57,7 +57,7 @@
 			"error",
 			{
 				"arrowParens": "always",
-				"endOfLine": "lf",
+				"endOfLine": "crlf",
 				"printWidth": 150,
 				"semi": true,
 				"singleQuote": false,

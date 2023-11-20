@@ -74,6 +74,10 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticTheaterMode: {
+						label: "Enable automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
+					};
 					hideScrollbar: { label: "Enable hide scrollbar"; title: "Hides the pages scrollbar" };
 					loopButton: {
 						label: "Enable loop button";
@@ -120,6 +124,15 @@ interface EnUS {
 				enable: {
 					label: "Enable scroll wheel volume control";
 					title: "Lets you use the scroll wheel to control the volume of the video you're watching";
+				};
+				modifierKey: {
+					enable: {
+						label: "Enable modifier key";
+						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
+					};
+					options: { altKey: "{{KEY}} key"; ctrlKey: "{{KEY}} key"; shiftKey: "{{KEY}} key" };
+					select: { label: "Modifier key"; title: "The modifier key to use" };
+					title: "Scroll Wheel Modifier Key";
 				};
 				onScreenDisplay: {
 					colors: {

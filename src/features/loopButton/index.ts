@@ -26,7 +26,7 @@ export async function addLoopButton() {
 		featureName: "loopButton",
 		icon: loopSVG,
 		isToggle: true,
-		label: `Loop`,
+		label: window.i18nextInstance.t("pages.content.features.loopButton.label"),
 		listener: loopButtonClickListener
 	});
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
