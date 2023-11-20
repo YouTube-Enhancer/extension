@@ -1,7 +1,7 @@
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -35,13 +35,26 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 		switch (screenshot_save_as) {
 			case "clipboard": {
-				const screenshotTooltip = document.querySelector("div#yte-screenshot-tooltip");
-				if (screenshotTooltip) {
-					const clipboardImage = new ClipboardItem({ "image/png": blob });
-					navigator.clipboard.write([clipboardImage]);
-					navigator.clipboard.writeText(dataUrl);
-					screenshotTooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
-				}
+				const tooltip = document.createElement("div");
+				const screenshotMenuItem = getFeatureMenuItem("screenshotButton");
+				if (!screenshotMenuItem) return;
+				const rect = screenshotMenuItem.getBoundingClientRect();
+				tooltip.classList.add("yte-button-tooltip");
+				tooltip.classList.add("ytp-tooltip");
+				tooltip.classList.add("ytp-rounded-tooltip");
+				tooltip.classList.add("ytp-bottom");
+				tooltip.id = "yte-screenshot-tooltip";
+				tooltip.style.left = `${rect.left + rect.width / 2}px`;
+				tooltip.style.top = `${rect.top - 2}px`;
+				tooltip.style.zIndex = "99999";
+				tooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
+				document.body.appendChild(tooltip);
+				const clipboardImage = new ClipboardItem({ "image/png": blob });
+				navigator.clipboard.write([clipboardImage]);
+				navigator.clipboard.writeText(dataUrl);
+				setTimeout(() => {
+					tooltip.remove();
+				}, 1200);
 				break;
 			}
 			case "file": {
