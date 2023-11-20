@@ -135,11 +135,7 @@
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
 						"label": "Enable modifier key"
 					},
-					"options": {
-						"altKey": "{{KEY}} key",
-						"ctrlKey": "{{KEY}} key",
-						"shiftKey": "{{KEY}} key"
-					},
+					"optionLabel": "{{KEY}} key",
 					"select": {
 						"label": "Modifier key",
 						"title": "The modifier key to use"
