@@ -174,19 +174,19 @@ export default function Settings({
 	});
 	const scrollWheelVolumeControlModifierKeyOptions = [
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.altKey", {
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
 				KEY: "Alt"
 			}),
 			value: "altKey"
 		},
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.ctrlKey", {
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
 				KEY: "Ctrl"
 			}),
 			value: "ctrlKey"
 		},
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.shiftKey", {
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
 				KEY: "Shift"
 			}),
 			value: "shiftKey"
