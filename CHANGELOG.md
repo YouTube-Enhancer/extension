@@ -1,3 +1,29 @@
+# [1.12.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.8...v1.12.0) (2023-11-20)
+
+
+### Bug Fixes
+
+* restore player speed relying on English ([12a80ea](https://github.com/VampireChicken12/youtube-enhancer/commit/12a80ea4a3c235ef160966cafe506b2b5c792711)), closes [#101](https://github.com/VampireChicken12/youtube-enhancer/issues/101)
+* screenshot tooltip wasn't appearing ([175ddf0](https://github.com/VampireChicken12/youtube-enhancer/commit/175ddf0661cfafbd46bf6b028711e9793f5378ed))
+
+
+### Features
+
+* automatic theater mode ([79d425e](https://github.com/VampireChicken12/youtube-enhancer/commit/79d425ebe8064a2fd1a11e02b5214ccdc51ff4ea)), closes [#100](https://github.com/VampireChicken12/youtube-enhancer/issues/100)
+* **scroll wheel volume control:** modifier key enables volume adjustment with scroll ([4a11654](https://github.com/VampireChicken12/youtube-enhancer/commit/4a11654bd8b2e89fa886750774b34b5a506eb517)), closes [#104](https://github.com/VampireChicken12/youtube-enhancer/issues/104) [#110](https://github.com/VampireChicken12/youtube-enhancer/issues/110)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.12.0-Chrome.zip | 66f45b48286ee2a426521c2151a10a565a68350aba0a4da380fcb7493023fb43 |
+| youtube-enhancer-v1.12.0-Chromium.zip | c9b34df55ab99cbc30b5350e77e4e30b7fae4be9b9bcf54f38cd980d24ba7d97 |
+| youtube-enhancer-v1.12.0-Edge.zip | c9b34df55ab99cbc30b5350e77e4e30b7fae4be9b9bcf54f38cd980d24ba7d97 |
+| youtube-enhancer-v1.12.0-Firefox.zip | f97916aef239961142585030cfd23e540dbcf5b91c104e574c57afee6d7196ab |
+
 ## [1.11.8](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.7...v1.11.8) (2023-11-16)
 
 ### Bug Fixes
