@@ -74,6 +74,10 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticTheaterMode: {
+						label: "Enable automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
+					};
 					hideScrollbar: { label: "Enable hide scrollbar"; title: "Hides the pages scrollbar" };
 					loopButton: {
 						label: "Enable loop button";

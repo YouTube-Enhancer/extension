@@ -1,5 +1,6 @@
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
+import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { enableFeatureMenu } from "@/src/features/featureMenu";
 import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
@@ -97,6 +98,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 		setupVideoHistory();
 		promptUserToResumeVideo();
 		setupRemainingTime();
+		automaticTheaterMode();
 	};
 	const response = await waitForSpecificMessage("language", "request_data", "content");
 	if (!response) return;
@@ -279,6 +281,23 @@ window.addEventListener("DOMContentLoaded", async function () {
 				updateFeatureMenuItemLabel("screenshotButton", window.i18nextInstance.t("pages.content.features.screenshotButton.label"));
 				updateFeatureMenuItemLabel("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"));
 				updateFeatureMenuItemLabel("loopButton", window.i18nextInstance.t("pages.content.features.loopButton.label"));
+				break;
+			}
+			case "automaticTheaterModeChange": {
+				// Get the player element
+				const playerContainer = isWatchPage()
+					? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+					: isShortsPage()
+					  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+					  : null;
+				// If player element is not available, return
+				if (!playerContainer) return;
+				// Get the size button
+				const sizeButton = document.querySelector("button.ytp-size-button") as HTMLButtonElement | null;
+				// If the size button is not available return
+				if (!sizeButton) return;
+				sizeButton.click();
+
 				break;
 			}
 			default: {

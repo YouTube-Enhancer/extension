@@ -81,6 +81,10 @@
 					"hideScrollbar": {
 						"title": "Hides the pages scrollbar",
 						"label": "Enable hide scrollbar"
+					},
+					"automaticTheaterMode": {
+						"title": "Automatically enables theater mode when you load a video",
+						"label": "Enable automatic theater mode"
 					}
 				}
 			},
