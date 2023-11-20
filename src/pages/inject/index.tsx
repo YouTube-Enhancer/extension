@@ -158,6 +158,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	const keyActions: {
 		[K in keyof configuration]?: () => void;
 	} = {
+		enable_automatic_theater_mode: () => {
+			sendExtensionOnlyMessage("automaticTheaterModeChange", {
+				automaticTheaterModeEnabled: castedChanges.enable_automatic_theater_mode.newValue
+			});
+		},
 		enable_forced_playback_speed: () => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,

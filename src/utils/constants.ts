@@ -14,7 +14,7 @@ import {
 } from "../types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
-	// Options
+	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
 	enable_forced_playback_speed: false,
 	enable_hide_scrollbar: false,
@@ -23,13 +23,11 @@ export const defaultConfiguration = {
 	enable_remaining_time: false,
 	enable_remember_last_volume: false,
 	enable_screenshot_button: false,
-	// General
 	enable_scroll_wheel_volume_control: false,
 	enable_scroll_wheel_volume_control_modifier_key: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
 	language: "en-US",
-	// Images
 	osd_display_color: "white",
 	osd_display_hide_time: 750,
 	osd_display_opacity: 75,
@@ -46,6 +44,7 @@ export const defaultConfiguration = {
 } satisfies configuration;
 
 export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),

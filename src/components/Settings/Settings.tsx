@@ -429,6 +429,14 @@ export default function Settings({
 						title={t("settings.sections.miscellaneous.features.hideScrollbar.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_automatic_theater_mode?.toString() === "true"}
+						id="enable_automatic_theater_mode"
+						label={t("settings.sections.miscellaneous.features.automaticTheaterMode.label")}
+						onChange={setCheckboxOption("enable_automatic_theater_mode")}
+						title={t("settings.sections.miscellaneous.features.automaticTheaterMode.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.scrollWheelVolumeControl.title")} />

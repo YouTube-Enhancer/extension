@@ -40,6 +40,7 @@ export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKey)[number];
 
 export type configuration = {
+	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_scrollbar: boolean;
@@ -111,6 +112,7 @@ export type ContentSendOnlyMessageMappings = {
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
 };
 export type ExtensionSendOnlyMessageMappings = {
+	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
