@@ -504,3 +504,15 @@ export function createTooltip({ element, featureName, id, text }: { element: HTM
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
+// Utility function to create and style an element
+export function createStyledElement<ID extends string, K extends keyof HTMLElementTagNameMap>(
+	elementId: ID,
+	elementType: K,
+	styles: Partial<CSSStyleDeclaration>
+): HTMLElementTagNameMap[K] {
+	const elementExists = document.getElementById(elementId) !== null;
+	const element = (elementExists ? document.getElementById(elementId) : document.createElement(elementType)) as HTMLElementTagNameMap[K];
+	if (!element.id) element.id = elementId;
+	Object.assign(element.style, styles);
+	return element;
+}
