@@ -45,6 +45,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
 
+- **Scroll Wheel Volume Control Modifier Key**: Optionally, enable a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
+
 - **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
 
 - **OSD Type:** Define the type of OSD, including text, line, round, or no display.

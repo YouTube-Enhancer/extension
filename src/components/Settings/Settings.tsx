@@ -1,4 +1,4 @@
-import type { configuration, configurationKeys } from "@/src/types";
+import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
@@ -71,6 +71,7 @@ export default function Settings({
 	selectedDisplayPosition,
 	selectedDisplayType,
 	selectedLanguage,
+	selectedModifierKey,
 	selectedPlayerQuality,
 	selectedPlayerSpeed,
 	selectedScreenshotFormat,
@@ -79,6 +80,7 @@ export default function Settings({
 	setSelectedDisplayPosition,
 	setSelectedDisplayType,
 	setSelectedLanguage,
+	setSelectedModifierKey,
 	setSelectedPlayerQuality,
 	setSelectedPlayerSpeed,
 	setSelectedScreenshotFormat,
@@ -92,6 +94,7 @@ export default function Settings({
 	selectedDisplayPosition: string | undefined;
 	selectedDisplayType: string | undefined;
 	selectedLanguage: string | undefined;
+	selectedModifierKey: string | undefined;
 	selectedPlayerQuality: string | undefined;
 	selectedPlayerSpeed: string | undefined;
 	selectedScreenshotFormat: string | undefined;
@@ -100,6 +103,7 @@ export default function Settings({
 	setSelectedDisplayPosition: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedDisplayType: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
+	setSelectedModifierKey: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedPlayerQuality: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedPlayerSpeed: Dispatch<SetStateAction<string | undefined>>;
 	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
@@ -168,6 +172,26 @@ export default function Settings({
 		defaultValue: {},
 		returnObjects: true
 	});
+	const scrollWheelVolumeControlModifierKeyOptions = [
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.altKey", {
+				KEY: "Alt"
+			}),
+			value: "altKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.ctrlKey", {
+				KEY: "Ctrl"
+			}),
+			value: "ctrlKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.options.shiftKey", {
+				KEY: "Shift"
+			}),
+			value: "shiftKey"
+		}
+	] as { label: string; value: ModifierKey }[] as SelectOption[];
 	const colorOptions: SelectOption[] = [
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[red]")}></div>,
@@ -415,6 +439,25 @@ export default function Settings({
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control")}
 						title={t("settings.sections.scrollWheelVolumeControl.enable.title")}
 						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_scroll_wheel_volume_control_modifier_key?.toString() === "true"}
+						id="enable_scroll_wheel_volume_control_modifier_key"
+						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.label")}
+						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_modifier_key")}
+						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_scroll_wheel_volume_control_modifier_key.toString() !== "true"}
+						id="scroll_wheel_volume_control_modifier_key"
+						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.label")}
+						onChange={setValueOption("scroll_wheel_volume_control_modifier_key")}
+						options={scrollWheelVolumeControlModifierKeyOptions}
+						selectedOption={selectedModifierKey}
+						setSelectedOption={setSelectedModifierKey}
+						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.title")}
+						type="select"
 					/>
 					<Setting
 						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}

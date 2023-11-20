@@ -36,6 +36,8 @@ export type ScreenshotType = (typeof screenshotType)[number];
 export const screenshotFormat = ["png", "jpg", "webp"] as const;
 
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
+export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
+export type ModifierKey = (typeof modifierKey)[number];
 
 export type configuration = {
 	enable_automatically_set_quality: boolean;
@@ -47,6 +49,7 @@ export type configuration = {
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
 	enable_scroll_wheel_volume_control: boolean;
+	enable_scroll_wheel_volume_control_modifier_key: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	language: AvailableLocales;
@@ -64,6 +67,7 @@ export type configuration = {
 	};
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
+	scroll_wheel_volume_control_modifier_key: ModifierKey;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 };
