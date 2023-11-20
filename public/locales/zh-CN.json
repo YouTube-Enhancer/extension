@@ -144,6 +144,22 @@
 						"line": "直线",
 						"round": "圆形"
 					}
+				},
+				"modifierKey": {
+					"title": "Scroll Wheel Modifier Key",
+					"enable": {
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
+						"label": "Enable modifier key"
+					},
+					"options": {
+						"altKey": "{{KEY}} key",
+						"ctrlKey": "{{KEY}} key",
+						"shiftKey": "{{KEY}} key"
+					},
+					"select": {
+						"label": "Modifier key",
+						"title": "The modifier key to use"
+					}
 				}
 			},
 			"automaticQuality": {
