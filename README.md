@@ -41,6 +41,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Enable Hide Scrollbar:** Hides the pages scroll bar
 
+- **Enable Automatic Theater Mode:** Automatically enables theater mode when you load a video
+
 ### 2. Scroll Wheel Volume Control Settings
 
 - **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
