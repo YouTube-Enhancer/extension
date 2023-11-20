@@ -83,6 +83,10 @@
 					"hideScrollbar": {
 						"title": "隐藏页面滚动条",
 						"label": "启用隐藏滚动条"
+					},
+					"automaticTheaterMode": {
+						"title": "Automatically enables theater mode when you load a video",
+						"label": "Enable automatic theater mode"
 					}
 				}
 			},
