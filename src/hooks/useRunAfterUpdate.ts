@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-type AnyFunction = (...args: any[]) => any;
+type AnyFunction = (...args: any[]) => void;
 export const useRunAfterUpdate = () => {
 	const handlersRef = useRef<AnyFunction[]>([]);
 

@@ -27,11 +27,11 @@ export async function addFeatureItemToMenu({
 	await waitForAllElements(["#yte-feature-menu"]);
 
 	// Get the feature menu
-	const featureMenu = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
+	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 	if (!featureMenu) return;
 
 	// Check if the feature item already exists in the menu
-	const featureExistsInMenu = featureMenu.querySelector(`#yte-feature-${featureName}`) as HTMLDivElement | null;
+	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#yte-feature-${featureName}`);
 	if (featureExistsInMenu) {
 		const menuItem = getFeatureMenuItem(featureName);
 		if (!menuItem) return;
@@ -49,7 +49,7 @@ export async function addFeatureItemToMenu({
 	}
 
 	// Get the feature menu panel
-	const featureMenuPanel = document.querySelector("#yte-panel-menu") as HTMLDivElement | null;
+	const featureMenuPanel = document.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
 
 	// Get the IDs for the feature item
@@ -105,7 +105,7 @@ export async function addFeatureItemToMenu({
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 	featureMenu.style.width = "fit-content";
 	// Show the feature menu button since an item has been added
-	const featureMenuButton = document.querySelector("#yte-feature-menu-button") as HTMLButtonElement | null;
+	const featureMenuButton = document.querySelector<HTMLDivElement>("#yte-feature-menu-button");
 	if (featureMenuButton) {
 		featureMenuButton.style.display = "initial";
 	}
@@ -114,18 +114,18 @@ export async function addFeatureItemToMenu({
  * Removes a feature item from the feature menu.
  * @param featureName - The name of the feature to remove.
  */
-export async function removeFeatureItemFromMenu(featureName: FeatureName) {
+export function removeFeatureItemFromMenu(featureName: FeatureName) {
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(featureName);
 	// Find the feature menu
-	const featureMenu = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
+	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 	if (!featureMenu) return;
 	// Find the feature menu panel
-	const featureMenuPanel = featureMenu.querySelector("#yte-panel-menu") as HTMLDivElement | null;
+	const featureMenuPanel = featureMenu.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
 
 	// Find the specific feature menu item
-	const featureMenuItem = featureMenuPanel.querySelector(`#${featureMenuItemId}`) as HTMLDivElement | null;
+	const featureMenuItem = featureMenuPanel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
 	if (!featureMenuItem) return;
 
 	// Remove the feature menu item
@@ -137,7 +137,7 @@ export async function removeFeatureItemFromMenu(featureName: FeatureName) {
 		featureMenu.style.display = "none";
 
 		// Find the feature menu button
-		const featureMenuButton = document.querySelector("#yte-feature-menu-button") as HTMLButtonElement | null;
+		const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
 		if (!featureMenuButton) return;
 
 		// Hide the feature menu button since the menu is empty
@@ -153,7 +153,7 @@ export async function removeFeatureItemFromMenu(featureName: FeatureName) {
  * @param label the label to set
  * @returns
  */
-export async function updateFeatureMenuItemLabel(featureName: FeatureName, label: string) {
+export function updateFeatureMenuItemLabel(featureName: FeatureName, label: string) {
 	const featureMenuItemLabel = getFeatureMenuItemLabel(featureName);
 	if (!featureMenuItemLabel) return;
 	featureMenuItemLabel.textContent = label;
@@ -163,8 +163,8 @@ export async function updateFeatureMenuItemLabel(featureName: FeatureName, label
  * @param title the title to set
  * @returns
  */
-export async function updateFeatureMenuTitle(title: string) {
-	const featureMenuButton = document.querySelector("#yte-feature-menu-button") as HTMLButtonElement | null;
+export function updateFeatureMenuTitle(title: string) {
+	const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
 	if (!featureMenuButton) return;
 	featureMenuButton.dataset.title = title;
 }

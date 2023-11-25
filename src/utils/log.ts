@@ -1,6 +1,7 @@
 type ColorType = "error" | "info" | "success" | "warning" | keyof typeof TerminalColors;
 export function colorizeTerminalLog(message: string, type?: ColorType) {
-	let color: ColorType | string | typeof TerminalColors = type || "FgBlack";
+	let color;
+	type ??= type || "FgBlack";
 
 	switch (type) {
 		case "success":

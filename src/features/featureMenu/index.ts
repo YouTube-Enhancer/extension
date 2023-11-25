@@ -1,28 +1,38 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createTooltip, isShortsPage, isWatchPage } from "@/src/utils/utilities";
+import { createStyledElement, createTooltip, isShortsPage, isWatchPage } from "@/src/utils/utilities";
 
 function createFeatureMenu() {
 	// Create the feature menu div
-	const featureMenu = document.createElement("div");
-	featureMenu.id = "yte-feature-menu";
-	featureMenu.style.display = "none";
-	featureMenu.classList.add("ytp-popup");
-	featureMenu.classList.add("ytp-settings-menu");
+	const featureMenu = createStyledElement({
+		classlist: ["ytp-popup", "ytp-settings-menu"],
+		elementId: "yte-feature-menu",
+		elementType: "div",
+		styles: {
+			display: "none"
+		}
+	});
 
 	// Create the feature menu panel
-	const featureMenuPanel = document.createElement("div");
-	featureMenuPanel.classList.add("ytp-panel");
-	featureMenuPanel.style.display = "contents";
+	const featureMenuPanel = createStyledElement({
+		classlist: ["ytp-panel"],
+		elementId: "yte-feature-menu-panel",
+		elementType: "div",
+		styles: {
+			display: "contents"
+		}
+	});
 
 	// Append the panel to the menu
 	featureMenu.appendChild(featureMenuPanel);
 
 	// Create the panel menu
-	const featureMenuPanelMenu = document.createElement("div");
-	featureMenuPanelMenu.classList.add("ytp-panel-menu");
-	featureMenuPanelMenu.id = "yte-panel-menu";
+	const featureMenuPanelMenu = createStyledElement({
+		classlist: ["ytp-panel-menu"],
+		elementId: "yte-panel-menu",
+		elementType: "div"
+	});
 	featureMenuPanel.appendChild(featureMenuPanelMenu);
 
 	return featureMenu;
@@ -30,15 +40,17 @@ function createFeatureMenu() {
 
 function createFeatureMenuButton() {
 	// Check if the feature menu already exists
-	const featureMenuExists = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
+	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
 	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
 
 	// Create the feature menu button
-	const featureMenuButton = document.createElement("button");
-	featureMenuButton.classList.add("ytp-button");
-	featureMenuButton.id = "yte-feature-menu-button";
+	const featureMenuButton = createStyledElement({
+		classlist: ["ytp-button"],
+		elementId: "yte-feature-menu-button",
+		elementType: "button",
+		styles: { display: "none" }
+	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.label");
-	featureMenuButton.style.display = "none";
 	// Create the SVG icon for the button
 	const featureButtonSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 	const featureButtonSVGPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -55,11 +67,11 @@ function createFeatureMenuButton() {
 	featureMenuButton.appendChild(featureButtonSVG);
 
 	// Get references to various elements and check their existence
-	const settingsButton = document.querySelector("button.ytp-settings-button") as HTMLButtonElement | null;
+	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
 	if (!playerContainer) return;
-	const bottomControls = document.querySelector("div.ytp-chrome-bottom") as HTMLDivElement | null;
+	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
 
 	// Create a tooltip for the feature menu button
@@ -128,7 +140,7 @@ function createFeatureMenuButton() {
 
 // Function to enable the feature menu
 export function enableFeatureMenu() {
-	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") as HTMLButtonElement | null;
+	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
 	if (featureMenuButtonExists) return;
 	createFeatureMenuButton();
 }

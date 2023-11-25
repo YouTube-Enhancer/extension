@@ -17,7 +17,7 @@ export function adjustVolume(
 	volumeStep: number
 ): Promise<{ newVolume: number; oldVolume: number }> {
 	return new Promise((resolve) => {
-		(async () => {
+		void (async () => {
 			if (!playerContainer.getVolume) return;
 			if (!playerContainer.setVolume) return;
 			if (!playerContainer.isMuted) return;
@@ -146,11 +146,15 @@ export function drawVolumeDisplay({
 	const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 	const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
 
-	const canvas = createStyledElement("volume-display", "canvas", {
-		pointerEvents: "none",
-		position: "absolute",
-		zIndex: "2021",
-		...calculateCanvasPosition(displayPosition, displayPadding, paddingTop, paddingBottom)
+	const canvas = createStyledElement({
+		elementId: "volume-display",
+		elementType: "canvas",
+		styles: {
+			pointerEvents: "none",
+			position: "absolute",
+			zIndex: "2021",
+			...calculateCanvasPosition(displayPosition, displayPadding, paddingTop, paddingBottom)
+		}
 	});
 	const context = canvas.getContext("2d");
 

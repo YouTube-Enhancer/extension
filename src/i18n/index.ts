@@ -1,4 +1,4 @@
-import i18next, { type Resource, createInstance } from "i18next";
+import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
 export const availableLocales = ["en-US"] as const;
@@ -19,7 +19,11 @@ export async function i18nService(locale: AvailableLocales) {
 	}
 	if (!availableLocales.includes(locale)) throw new Error(`The locale '${locale}' is not available`);
 	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
-		throw new Error(err);
+		if (err instanceof Error) {
+			throw err;
+		} else {
+			throw new Error("unknown error");
+		}
 	});
 	const translations = (await response.json()) as typeof import("../../public/locales/en-US.json");
 	const i18nextInstance = await new Promise<i18nInstanceType>((resolve, reject) => {
@@ -30,8 +34,8 @@ export async function i18nService(locale: AvailableLocales) {
 		} = {
 			[locale]: { translation: translations }
 		};
-		const instance = i18next.createInstance();
-		instance.init(
+		const instance = createInstance();
+		void instance.init(
 			{
 				debug: true,
 				fallbackLng: "en-US",

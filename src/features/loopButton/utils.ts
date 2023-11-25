@@ -1,7 +1,7 @@
 import { getFeatureMenuItem } from "../featureMenu/utils";
 
-export async function loopButtonClickListener() {
-	const videoElement = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
+export function loopButtonClickListener() {
+	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 	const loopMenuItem = getFeatureMenuItem("loopButton");
 	if (!loopMenuItem) return;

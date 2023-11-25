@@ -26,9 +26,9 @@ export default async function setPlayerQuality(): Promise<void> {
 
 	// Get the player element
 	const playerContainer = isWatchPage()
-		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage()
-		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		  : null;
 
 	// If player element is not available, return
@@ -48,7 +48,7 @@ export default async function setPlayerQuality(): Promise<void> {
 		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
 
 		// Set the playback quality and update the default quality in the dataset
-		playerContainer.setPlaybackQualityRange(closestQuality);
+		void playerContainer.setPlaybackQualityRange(closestQuality);
 		playerContainer.dataset.defaultQuality = closestQuality;
 	}
 }

@@ -7,7 +7,7 @@
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended",
-		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-type-checked",
 		"plugin:import/recommended",
 		"plugin:import/typescript",
 		"plugin:tailwindcss/recommended",
@@ -15,13 +15,16 @@
 		"plugin:promise/recommended",
 		"plugin:perfectionist/recommended-natural"
 	],
+	"root": true,
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaFeatures": {
 			"jsx": true
 		},
 		"ecmaVersion": "latest",
-		"sourceType": "module"
+		"sourceType": "module",
+		"project": "./tsconfig.json",
+		"tsconfigRootDir": "."
 	},
 	"plugins": ["react", "@typescript-eslint", "no-secrets"],
 	"rules": {
@@ -67,16 +70,27 @@
 			}
 		],
 		"import/no-unresolved": "off",
-		"tailwindcss/no-custom-classname": "off"
+		"tailwindcss/no-custom-classname": "off",
+		"tailwindcss/classnames-order": "error",
+		"@typescript-eslint/no-floating-promises": "error"
 	},
 	"globals": {
 		"chrome": "readonly"
 	},
-	"ignorePatterns": ["watch.js", "dist/**"],
+	"ignorePatterns": ["watch.js", "dist/**", "releases/**"],
 	"overrides": [
 		{
 			"files": ["*.ts", "*.tsx", "*.js"],
 			"parser": "@typescript-eslint/parser"
 		}
-	]
+	],
+	"settings": {
+		"tailwindcss": {
+			"callees": ["cn"],
+			"config": "./tailwind.config.ts"
+		},
+		"react": {
+			"version": "detect"
+		}
+	}
 }

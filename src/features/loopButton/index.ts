@@ -16,13 +16,13 @@ export async function addLoopButton() {
 	// If the loop button option is disabled, return
 	if (!enable_loop_button) return;
 	// Get the volume control element
-	const volumeControl = document.querySelector("div.ytp-chrome-controls > div.ytp-left-controls > span.ytp-volume-area") as HTMLSpanElement | null;
+	const volumeControl = document.querySelector<HTMLSpanElement>("div.ytp-chrome-controls > div.ytp-left-controls > span.ytp-volume-area");
 	// If volume control element is not available, return
 	if (!volumeControl) return;
-	const videoElement = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
+	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 	const loopSVG = makeLoopIcon();
-	addFeatureItemToMenu({
+	void addFeatureItemToMenu({
 		featureName: "loopButton",
 		icon: loopSVG,
 		isToggle: true,
@@ -37,11 +37,11 @@ export async function addLoopButton() {
 					const { loop } = target as HTMLVideoElement;
 					const featureName: FeatureName = "loopButton";
 					// Get the feature menu
-					const featureMenu = document.querySelector("#yte-feature-menu") as HTMLDivElement | null;
+					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 					if (!featureMenu) return;
 
 					// Check if the feature item already exists in the menu
-					const featureExistsInMenu = featureMenu.querySelector(`#yte-feature-${featureName}`) as HTMLDivElement | null;
+					const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#yte-feature-${featureName}`) !== null;
 					if (featureExistsInMenu) {
 						const menuItem = getFeatureMenuItem(featureName);
 						if (!menuItem) return;

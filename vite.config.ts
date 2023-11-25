@@ -25,12 +25,13 @@ const emptyOutputFolder = () => {
 		const filePath = resolve(outDir, file);
 		const fileStat = statSync(filePath);
 		if (fileStat.isDirectory()) {
-			rmSync(filePath, { recursive: true });
+			rmSync(filePath, { force: true, recursive: true });
 		} else {
-			rmSync(filePath);
+			rmSync(filePath, { force: true });
 		}
 	}
 };
+
 export default function build() {
 	emptyOutputFolder();
 	return defineConfig({

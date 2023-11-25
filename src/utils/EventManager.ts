@@ -14,24 +14,24 @@ export type FeatureName =
 	| "volumeBoost";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
-export interface EventListenerInfo<K extends keyof ElementEventMap> {
+export interface EventListenerInfo<K extends keyof HTMLElementEventMap> {
 	callback: EventCallback<K>;
 	eventName: K;
 	target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap];
 }
 
-export type TargetedListeners<K extends keyof ElementEventMap> = Map<HTMLElementTagNameMap[keyof HTMLElementTagNameMap], EventListenerInfo<K>>;
+export type TargetedListeners<K extends keyof HTMLElementEventMap> = Map<HTMLElementTagNameMap[keyof HTMLElementTagNameMap], EventListenerInfo<K>>;
 
 export type EventManager = {
-	addEventListener: <T extends keyof HTMLElementEventMap>(
+	addEventListener: <K extends keyof HTMLElementEventMap>(
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
-		eventName: T,
+		eventName: K,
 		callback: EventCallback<keyof HTMLElementEventMap>,
 		featureName: FeatureName,
 		options?: AddEventListenerOptions | boolean
 	) => void;
 
-	listeners: Map<string, TargetedListeners<keyof ElementEventMap>>;
+	listeners: Map<string, TargetedListeners<keyof HTMLElementEventMap>>;
 
 	removeAllEventListeners: (exclude?: FeatureName[]) => void;
 
@@ -49,7 +49,7 @@ export const eventManager: EventManager = {
 	// Adds an event listener for the given target, eventName, and featureName
 	addEventListener: function (target, eventName, callback, featureName, options) {
 		// Get the map of target listeners for the given featureName
-		const targetListeners = this.listeners.get(featureName) || new Map();
+		const targetListeners = this.listeners.get(featureName) || (new Map() as TargetedListeners<keyof HTMLElementEventMap>);
 		// Store the event listener info object in the map
 		targetListeners.set(target, { callback, eventName, target });
 		// Store the map of target listeners for the given featureName

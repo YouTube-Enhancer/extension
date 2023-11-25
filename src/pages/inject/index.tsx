@@ -1,8 +1,9 @@
 import type { AvailableLocales } from "@/src/i18n";
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration } from "@/src/types";
+import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration, configurationKeys } from "@/src/types";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import { parseReviver, parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
+import { defaultConfiguration } from "@/src/utils/constants";
+import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
 
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -19,18 +20,23 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
-(async () => {
+void (async () => {
 	/**
 	 * Retrieves the options from the local storage and sends them back to the youtube page.
 	 *
 	 * @type {configuration}
 	 */
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((o) => {
-			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
+		chrome.storage.local.get((settings) => {
+			const storedSettings: Partial<configuration> = (
+				Object.keys(settings)
+					.filter((key) => typeof key === "string")
+					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+			resolve(storedSettings as configuration);
 		});
 	});
-	sendExtensionMessage("options", "data_response", { options });
+	void void sendExtensionMessage("options", "data_response", { options });
 })();
 
 /**
@@ -38,98 +44,105 @@ document.documentElement.appendChild(script);
  *
  * @returns {void}
  */
-document.addEventListener("yte-message-from-youtube", async () => {
-	const provider = document.querySelector("#yte-message-from-youtube");
-	if (!provider) return;
-	const { textContent: stringifiedMessage } = provider;
-	if (!stringifiedMessage) return;
-	let message;
-	try {
-		message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings] | Messages["request"];
-	} catch (error) {
-		console.error(error);
-		return;
-	}
-	if (!message) return;
-	switch (message.type) {
-		case "options": {
-			/**
-			 * Retrieves the options from the local storage and sends them back to the youtube page.
-			 *
-			 * @type {configuration}
-			 */
-			const options: configuration = await new Promise((resolve) => {
-				chrome.storage.local.get((o) => {
-					resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
-				});
-			});
-			sendExtensionMessage("options", "data_response", { options });
-			break;
+document.addEventListener("yte-message-from-youtube", () => {
+	void (async () => {
+		const provider = document.querySelector("#yte-message-from-youtube");
+		if (!provider) return;
+		const { textContent: stringifiedMessage } = provider;
+		if (!stringifiedMessage) return;
+		let message;
+		try {
+			message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings] | Messages["request"];
+		} catch (error) {
+			console.error(error);
+			return;
 		}
-		case "videoHistoryOne": {
-			const { action, data } = message;
-			if (!data) return;
-			switch (action) {
-				case "request_data": {
-					const { id } = data;
-					const videoHistory = getVideoHistory();
-					sendExtensionMessage("videoHistoryOne", "data_response", {
-						video_history_entry: videoHistory[id]
+		if (!message) return;
+		switch (message.type) {
+			case "options": {
+				/**
+				 * Retrieves the options from the local storage and sends them back to the youtube page.
+				 *
+				 * @type {configuration}
+				 */
+				const options: configuration = await new Promise((resolve) => {
+					chrome.storage.local.get((settings) => {
+						const storedSettings: Partial<configuration> = (
+							Object.keys(settings)
+								.filter((key) => typeof key === "string")
+								.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+						).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+						resolve(storedSettings as configuration);
 					});
-					break;
-				}
-				case "send_data": {
-					const { video_history_entry } = data;
-					if (!video_history_entry) return;
-					const { id, status, timestamp } = video_history_entry;
-					setVideoHistory(id, timestamp, status);
-					break;
-				}
-			}
-			break;
-		}
-		case "videoHistoryAll": {
-			const videoHistory = getVideoHistory();
-			sendExtensionMessage("videoHistoryAll", "data_response", {
-				video_history_entries: videoHistory
-			});
-			break;
-		}
-		case "setRememberedVolume": {
-			/**
-			 * Sets the remembered volume in the local storage.
-			 *
-			 * @type {number}
-			 */
-			chrome.storage.local.set({ remembered_volumes: { ...message.data } });
-			break;
-		}
-		case "extensionURL": {
-			sendExtensionMessage("extensionURL", "data_response", {
-				extensionURL: chrome.runtime.getURL("")
-			});
-			break;
-		}
-		case "language": {
-			const language = await new Promise<AvailableLocales>((resolve) => {
-				chrome.storage.local.get("language", (o) => {
-					resolve(o.language);
 				});
-			});
-			sendExtensionMessage("language", "data_response", {
-				language
-			});
-			break;
+				void sendExtensionMessage("options", "data_response", { options });
+				break;
+			}
+			case "videoHistoryOne": {
+				const { action, data } = message;
+				if (!data) return;
+				switch (action) {
+					case "request_data": {
+						const { id } = data;
+						const videoHistory = getVideoHistory();
+						void sendExtensionMessage("videoHistoryOne", "data_response", {
+							video_history_entry: videoHistory[id]
+						});
+						break;
+					}
+					case "send_data": {
+						const { video_history_entry } = data;
+						if (!video_history_entry) return;
+						const { id, status, timestamp } = video_history_entry;
+						setVideoHistory(id, timestamp, status);
+						break;
+					}
+				}
+				break;
+			}
+			case "videoHistoryAll": {
+				const videoHistory = getVideoHistory();
+				void sendExtensionMessage("videoHistoryAll", "data_response", {
+					video_history_entries: videoHistory
+				});
+				break;
+			}
+			case "setRememberedVolume": {
+				/**
+				 * Sets the remembered volume in the local storage.
+				 *
+				 * @type {number}
+				 */
+				void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...message.data }) });
+				break;
+			}
+			case "extensionURL": {
+				void sendExtensionMessage("extensionURL", "data_response", {
+					extensionURL: chrome.runtime.getURL("")
+				});
+				break;
+			}
+			case "language": {
+				const language = await new Promise<AvailableLocales>((resolve) => {
+					chrome.storage.local.get("language", (o) => {
+						resolve(o.language as AvailableLocales);
+					});
+				});
+				void sendExtensionMessage("language", "data_response", {
+					language
+				});
+				break;
+			}
+			case "pageLoaded": {
+				chrome.storage.onChanged.addListener(storageListeners);
+				window.onunload = () => {
+					chrome.storage.onChanged.removeListener(storageListeners);
+				};
+			}
 		}
-		case "pageLoaded": {
-			chrome.storage.onChanged.addListener(storageListeners);
-			window.onunload = () => {
-				chrome.storage.onChanged.removeListener(storageListeners);
-			};
-		}
-	}
+	})();
 });
-const storageListeners = async (changes: StorageChanges, areaName: string) => {
+const storageListeners = (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
 	const changeKeys = Object.keys(
 		changes as {
@@ -140,7 +153,7 @@ const storageListeners = async (changes: StorageChanges, areaName: string) => {
 		}
 	);
 	if (!changeKeys.length) return;
-	storageChangeHandler(changes, areaName);
+	void storageChangeHandler(changes, areaName);
 };
 const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
@@ -151,8 +164,13 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		};
 	};
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((o) => {
-			resolve(JSON.parse(JSON.stringify(o), parseReviver) as configuration);
+		chrome.storage.local.get((settings) => {
+			const storedSettings: Partial<configuration> = (
+				Object.keys(settings)
+					.filter((key) => typeof key === "string")
+					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+			resolve(storedSettings as configuration);
 		});
 	});
 	const keyActions: {

@@ -35,9 +35,9 @@ export function makeMaximizeSVG(): SVGElement {
 // TODO: get played progress bar to be accurate when maximized from default view
 // TODO: Add event listener that updates scrubber position when maximize button is clicked
 export function updateProgressBarPositions() {
-	const seekBar = document.querySelector("div.ytp-progress-bar") as HTMLDivElement | null;
-	const scrubber = document.querySelector("div.ytp-scrubber-container") as HTMLDivElement | null;
-	const hoverProgress = document.querySelector("div.ytp-hover-progress") as HTMLDivElement | null;
+	const seekBar = document.querySelector<HTMLDivElement>("div.ytp-progress-bar");
+	const scrubber = document.querySelector<HTMLDivElement>("div.ytp-scrubber-container");
+	const hoverProgress = document.querySelector<HTMLDivElement>("div.ytp-hover-progress");
 	if (!seekBar) return;
 	if (!scrubber) return;
 	if (!hoverProgress) return;
@@ -52,7 +52,7 @@ export function updateProgressBarPositions() {
 	hoverProgress.style.left = `${scrubberPosition}px`;
 }
 export function setupVideoPlayerTimeUpdate() {
-	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
 	const videoPlayerTimeUpdateListener = () => {
 		updateProgressBarPositions();
@@ -61,14 +61,14 @@ export function setupVideoPlayerTimeUpdate() {
 }
 export function maximizePlayer() {
 	// Get the video element
-	const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	// If video element is not available, return
 	if (!videoElement) return;
-	const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+	const videoContainer = document.querySelector<YouTubePlayerDiv>("#movie_player");
 	if (!videoContainer) return;
-	const controlsElement = document.querySelector("div.ytp-chrome-bottom") as HTMLDivElement | null;
+	const controlsElement = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!controlsElement) return;
-	const sizeElement = document.querySelector("button.ytp-button.ytp-size-button") as HTMLButtonElement | null;
+	const sizeElement = document.querySelector("button.ytp-button.ytp-size-button");
 	if (!sizeElement) return;
 	const {
 		childNodes: [svgElement]

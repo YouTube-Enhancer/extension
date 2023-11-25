@@ -1,4 +1,13 @@
-import type { configuration } from "@/src/types";
+import type {
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType,
+	ScreenshotFormat,
+	ScreenshotType,
+	YoutubePlayerQualityLevel,
+	configuration,
+	configurationKeys
+} from "@/src/types";
 
 import Loader from "@/src/components/Loader";
 import Settings from "@/src/components/Settings/Settings";
@@ -7,7 +16,7 @@ import { type AvailableLocales, type i18nInstanceType, i18nService } from "@/src
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue } from "@/src/utils/utilities";
 import React, { useEffect, useState } from "react";
-
+// TODO: try to get rid of this SettingsWrapper component and just have the Settings Component
 export default function SettingsWrapper(): JSX.Element {
 	const [settings, setSettings] = useState<configuration | undefined>(undefined);
 	const [selectedColor, setSelectedColor] = useState<string | undefined>();
@@ -23,10 +32,12 @@ export default function SettingsWrapper(): JSX.Element {
 	useEffect(() => {
 		const fetchSettings = () => {
 			chrome.storage.local.get((settings) => {
-				for (const [key, value] of Object.entries(settings)) {
-					settings[key] = parseStoredValue(value);
-				}
-				const castedSettings = settings as configuration;
+				const storedSettings: Partial<configuration> = (
+					Object.keys(settings)
+						.filter((key) => typeof key === "string")
+						.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const castedSettings = storedSettings as configuration;
 				setSettings({ ...castedSettings });
 				setSelectedColor(castedSettings.osd_display_color);
 				setSelectedDisplayType(castedSettings.osd_display_type);
@@ -56,36 +67,38 @@ export default function SettingsWrapper(): JSX.Element {
 				const {
 					[key]: { newValue, oldValue }
 				} = changes;
-				if (oldValue === newValue) return;
+				const parsedNewValue = parseStoredValue(newValue as string);
+				const parsedOldValue = parseStoredValue(oldValue as string);
+				if (parsedNewValue === parsedOldValue) return;
 				switch (key) {
 					case "osd_display_color":
-						setSelectedColor(newValue);
+						setSelectedColor(parsedNewValue as OnScreenDisplayColor);
 						break;
 					case "osd_display_type":
-						setSelectedDisplayType(newValue);
+						setSelectedDisplayType(parsedNewValue as OnScreenDisplayType);
 						break;
 					case "osd_display_position":
-						setSelectedDisplayPosition(newValue);
+						setSelectedDisplayPosition(parsedNewValue as OnScreenDisplayPosition);
 						break;
 					case "player_quality":
-						setSelectedPlayerQuality(newValue);
+						setSelectedPlayerQuality(parsedNewValue as YoutubePlayerQualityLevel);
 						break;
 					case "player_speed":
-						setSelectedPlayerSpeed(newValue);
+						setSelectedPlayerSpeed(parsedNewValue as string);
 						break;
 					case "screenshot_save_as":
-						setSelectedScreenshotSaveAs(newValue);
+						setSelectedScreenshotSaveAs(parsedNewValue as ScreenshotType);
 						break;
 					case "screenshot_format":
-						setSelectedScreenshotFormat(newValue);
+						setSelectedScreenshotFormat(parsedNewValue as ScreenshotFormat);
 						break;
 					case "language":
-						setSelectedLanguage(newValue);
+						setSelectedLanguage(parsedNewValue as AvailableLocales);
 						break;
 				}
 				setSettings((prevSettings) => {
 					if (prevSettings) {
-						return { ...prevSettings, [key]: newValue };
+						return { ...prevSettings, [key]: parsedNewValue as configuration[typeof key] };
 					}
 					return undefined;
 				});
@@ -101,7 +114,7 @@ export default function SettingsWrapper(): JSX.Element {
 		};
 	}, []);
 	useEffect(() => {
-		(async () => {
+		void (async () => {
 			const instance = await i18nService((selectedLanguage as AvailableLocales) ?? "en-US");
 			setI18nInstance(instance);
 		})();
