@@ -30,9 +30,6 @@
 				"success": {
 					"saved": "選択がセーブしました"
 				},
-				"error": {
-					"playerQuality": "自動画質設定を可能するのためはプレイヤー質を選択してください。"
-				},
 				"info": {
 					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
 				}
