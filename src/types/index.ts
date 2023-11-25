@@ -38,7 +38,7 @@ export const screenshotFormat = ["png", "jpg", "webp"] as const;
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKey)[number];
-
+export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type configuration = {
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
@@ -62,10 +62,7 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
-	remembered_volumes: {
-		shortsPageVolume?: number;
-		watchPageVolume?: number;
-	};
+	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
 	scroll_wheel_volume_control_modifier_key: ModifierKey;
@@ -109,7 +106,7 @@ export type RequestDataMessage<Type extends string, D> = Prettify<
 >;
 export type ContentSendOnlyMessageMappings = {
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
-	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
+	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;

@@ -1,5 +1,5 @@
 import type { AvailableLocales } from "@/src/i18n";
-import type { ContentSendOnlyMessageMappings, Messages, StorageChanges, configuration, configurationKeys } from "@/src/types";
+import type { ContentSendOnlyMessageMappings, Messages, RememberedVolumes, StorageChanges, configuration, configurationKeys } from "@/src/types";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import { defaultConfiguration } from "@/src/utils/constants";
@@ -108,12 +108,9 @@ document.addEventListener("yte-message-from-youtube", () => {
 				break;
 			}
 			case "setRememberedVolume": {
-				/**
-				 * Sets the remembered volume in the local storage.
-				 *
-				 * @type {number}
-				 */
-				void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...message.data }) });
+				const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
+				const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
+				void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 				break;
 			}
 			case "extensionURL": {
