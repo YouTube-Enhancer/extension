@@ -10,9 +10,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 
 	function addNotification(type: NotificationType, message: string, action?: NotificationAction) {
 		const existingNotification = notifications.find((n) => n.message === message && n.type === type);
-		if (existingNotification) {
-			removeNotification(existingNotification);
-		}
+		if (existingNotification) return;
 
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 10_000 : 3_000;
 		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;

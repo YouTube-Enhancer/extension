@@ -39,13 +39,13 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	if (!enablePlayerSpeed) return;
 	// Get the player element
 	const playerContainer = isWatchPage()
-		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage()
-		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		  : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
-	const video = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
@@ -56,7 +56,7 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	browserColorLog(`Setting player speed to ${playerSpeed}`, "FgMagenta");
 
 	// Set the playback speed
-	playerContainer.setPlaybackRate(playerSpeed);
+	void playerContainer.setPlaybackRate(playerSpeed);
 	// Set the video playback speed
 	if (video) video.playbackRate = playerSpeed;
 }
@@ -68,11 +68,11 @@ export function restorePlayerSpeed() {
 	if (!playerSpeed) return;
 	// Get the player element
 	const playerContainer = isWatchPage()
-		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage()
-		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		  : null;
-	const video = document.querySelector("video.html5-main-video") as HTMLVideoElement | null;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// If setPlaybackRate method is not available in the player, return
@@ -81,7 +81,7 @@ export function restorePlayerSpeed() {
 	// Log the message indicating the player speed being set
 	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
 	// Set the playback speed
-	playerContainer.setPlaybackRate(Number(playerSpeed));
+	void playerContainer.setPlaybackRate(Number(playerSpeed));
 	// Set the video playback speed
 	video.playbackRate = Number(playerSpeed);
 }

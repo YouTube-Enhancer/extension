@@ -15,7 +15,7 @@ export async function automaticTheaterMode() {
 	if (!enable_automatic_theater_mode) return;
 	if (!isWatchPage()) return;
 	// Get the player element
-	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : null;
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const { width } = await playerContainer.getSize();
@@ -24,7 +24,7 @@ export async function automaticTheaterMode() {
 	} = document;
 	const isTheaterMode = width === clientWidth;
 	// Get the size button
-	const sizeButton = document.querySelector("button.ytp-size-button") as HTMLButtonElement | null;
+	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	// If the size button is not available return
 	if (!sizeButton) return;
 	if (!isTheaterMode) {

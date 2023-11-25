@@ -62,9 +62,9 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
-	remembered_volumes?: {
-		shortsPageVolume: number;
-		watchPageVolume: number;
+	remembered_volumes: {
+		shortsPageVolume?: number;
+		watchPageVolume?: number;
 	};
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
@@ -168,7 +168,7 @@ export type TypeToZodSchema<T> = z.ZodObject<{
 	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
 }>;
 export type TypeToPartialZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodOptionalType<z.ZodType<T[K]>>;
+	[K in keyof T]: T[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>> : z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];

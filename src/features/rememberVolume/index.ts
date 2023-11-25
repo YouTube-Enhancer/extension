@@ -25,9 +25,9 @@ export default async function enableRememberVolume(): Promise<void> {
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
 	const playerContainer = IsWatchPage
-		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: IsShortsPage
-		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		  : null;
 
 	// If player container is not available, return
@@ -35,12 +35,12 @@ export default async function enableRememberVolume(): Promise<void> {
 
 	// If setVolume method is not available in the player container, return
 	if (!playerContainer.setVolume) return;
-	setRememberedVolume({
+	void setRememberedVolume({
 		enableRememberVolume,
 		isShortsPage: IsShortsPage,
 		isWatchPage: IsWatchPage,
 		playerContainer,
 		rememberedVolumes
 	});
-	setupVolumeChangeListener();
+	void setupVolumeChangeListener();
 }
