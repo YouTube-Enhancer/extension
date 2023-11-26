@@ -42,7 +42,7 @@ export async function addMaximizePlayerButton(): Promise<void> {
 			maximizePlayerMenuItem.ariaChecked = "false";
 		}
 	}
-	void addFeatureItemToMenu({
+	await addFeatureItemToMenu({
 		featureName: "maximizePlayerButton",
 		icon: maximizeSVG,
 		isToggle: true,
