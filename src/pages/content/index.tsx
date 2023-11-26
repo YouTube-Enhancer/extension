@@ -15,7 +15,7 @@ import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost from "@/src/features/volumeBoost";
+import volumeBoost, { disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
 import {
@@ -135,30 +135,13 @@ window.addEventListener("DOMContentLoaded", function () {
 				switch (message.type) {
 					case "volumeBoostChange": {
 						const {
-							data: { volumeBoostAmount, volumeBoostEnabled }
+							data: { volumeBoostEnabled }
 						} = message;
 						if (volumeBoostEnabled) {
-							if (window.audioCtx && window.gainNode) {
-								browserColorLog(
-									i18nextInstance.t("messages.settingVolume", {
-										VOLUME_BOOST_AMOUNT: Math.pow(10, Number(volumeBoostAmount) / 20)
-									}),
-									"FgMagenta"
-								);
-								window.gainNode.gain.value = Math.pow(10, Number(volumeBoostAmount) / 20);
-							} else {
-								void volumeBoost();
-							}
+							await enableVolumeBoost();
 						} else {
-							if (window.audioCtx && window.gainNode) {
-								browserColorLog(
-									i18nextInstance.t("messages.settingVolume", {
-										VOLUME_BOOST_AMOUNT: "1x"
-									}),
-									"FgMagenta"
-								);
-								window.gainNode.gain.value = 1;
-							}
+							disableVolumeBoost();
+							removeVolumeBoostButton();
 						}
 						break;
 					}
