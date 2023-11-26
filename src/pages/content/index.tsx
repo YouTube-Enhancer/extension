@@ -282,7 +282,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						// If player element is not available, return
 						if (!playerContainer) return;
 						// Get the size button
-						const sizeButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
+						const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 						// If the size button is not available return
 						if (!sizeButton) return;
 						sizeButton.click();
