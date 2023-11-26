@@ -2,6 +2,14 @@ import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, 
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
+function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?: boolean) => void, isToggle: boolean) {
+	if (isToggle) {
+		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
+		listener(JSON.parse(menuItem.ariaChecked) as boolean);
+	} else {
+		listener();
+	}
+}
 /**
  * Adds a feature item to the feature menu.
  * @param icon - The SVG icon for the feature item.
@@ -21,7 +29,7 @@ export async function addFeatureItemToMenu({
 	icon: SVGElement;
 	isToggle?: boolean;
 	label: string;
-	listener: () => void;
+	listener: (checked?: boolean) => void;
 }) {
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
@@ -36,15 +44,7 @@ export async function addFeatureItemToMenu({
 		const menuItem = getFeatureMenuItem(featureName);
 		if (!menuItem) return;
 		eventManager.removeEventListener(menuItem, "click", featureName);
-		eventManager.addEventListener(
-			menuItem,
-			"click",
-			() => {
-				listener();
-				if (isToggle) menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
-			},
-			featureName
-		);
+		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 		return;
 	}
 
@@ -72,15 +72,7 @@ export async function addFeatureItemToMenu({
 	menuItemLabel.classList.add("ytp-menuitem-label");
 	menuItemLabel.textContent = label;
 	menuItemLabel.id = featureMenuItemLabelId;
-	eventManager.addEventListener(
-		menuItem,
-		"click",
-		() => {
-			listener();
-			if (isToggle) menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
-		},
-		featureName
-	);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	menuItem.appendChild(menuItemLabel);
 
 	// If it's a toggle item, create the toggle elements
