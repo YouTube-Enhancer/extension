@@ -1,3 +1,24 @@
+## [1.12.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.12.0...v1.12.1) (2023-11-26)
+
+
+### Bug Fixes
+
+* **remember volumes:** being exported as [object Object] ([418d3f9](https://github.com/VampireChicken12/youtube-enhancer/commit/418d3f9a245f10f8502f069ba6c250fac6d56798)), closes [#117](https://github.com/VampireChicken12/youtube-enhancer/issues/117)
+* same notification stacking up repeatedly ([c0b3168](https://github.com/VampireChicken12/youtube-enhancer/commit/c0b31685eb4df5da5022fe9481956c884615e24b))
+* **settings:** settings were saved infinitely ([38a8565](https://github.com/VampireChicken12/youtube-enhancer/commit/38a856556d9efcd3530ed197b86a333dccc36114))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.12.1-Chrome.zip | d83baf779d53311f4c0793e88b1326f3e0cb5291a3cc68ea115c41ce73684045 |
+| youtube-enhancer-v1.12.1-Chromium.zip | 3787550d047e2e3e2722840d376c1c6b5136f907a79c7e373e053a7558b75a6a |
+| youtube-enhancer-v1.12.1-Edge.zip | 3787550d047e2e3e2722840d376c1c6b5136f907a79c7e373e053a7558b75a6a |
+| youtube-enhancer-v1.12.1-Firefox.zip | c6717cfcfe435e309f0d6c186c5b2c777023f25d484927b3a7d11f3fd6f0d053 |
+
 # [1.12.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.11.8...v1.12.0) (2023-11-20)
 
 
