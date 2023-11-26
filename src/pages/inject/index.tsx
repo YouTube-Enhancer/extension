@@ -211,7 +211,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			});
 		},
 		enable_maximize_player_button: (newValue) => {
-			sendExtensionOnlyMessage("maximizePlayerButtonChange", {
+			sendExtensionOnlyMessage("maximizeButtonChange", {
 				maximizePlayerButtonEnabled: newValue
 			});
 		},

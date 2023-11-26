@@ -90,6 +90,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				enableFeatureMenu();
 				void addLoopButton();
 				void addMaximizePlayerButton();
+				void volumeBoost();
 				void addScreenshotButton();
 				void enableRememberVolume();
 				setupPlaybackSpeedChangeListener();
@@ -183,7 +184,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
-					case "maximizePlayerButtonChange": {
+					case "maximizeButtonChange": {
 						const {
 							data: { maximizePlayerButtonEnabled }
 						} = message;
