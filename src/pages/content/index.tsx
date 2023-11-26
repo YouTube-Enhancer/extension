@@ -98,8 +98,9 @@ window.addEventListener("DOMContentLoaded", function () {
 				void setPlayerSpeed();
 				void volumeBoost();
 				void adjustVolumeOnScrollWheel();
-				void setupVideoHistory();
-				void promptUserToResumeVideo();
+				void promptUserToResumeVideo(() => {
+					void setupVideoHistory();
+				});
 				void setupRemainingTime();
 				void automaticTheaterMode();
 			})();
