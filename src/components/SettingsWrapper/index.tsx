@@ -70,6 +70,14 @@ export default function SettingsWrapper(): JSX.Element {
 				const parsedNewValue = parseStoredValue(newValue as string);
 				const parsedOldValue = parseStoredValue(oldValue as string);
 				if (parsedNewValue === parsedOldValue) return;
+				if (
+					parsedOldValue !== null &&
+					parsedNewValue !== null &&
+					typeof parsedOldValue === "object" &&
+					typeof parsedNewValue === "object" &&
+					JSON.stringify(parsedNewValue) === JSON.stringify(parsedOldValue)
+				)
+					return;
 				switch (key) {
 					case "osd_display_color":
 						setSelectedColor(parsedNewValue as OnScreenDisplayColor);

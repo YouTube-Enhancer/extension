@@ -152,14 +152,12 @@ const storageListeners = (changes: StorageChanges, areaName: string) => {
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
 };
-const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
-	if (areaName !== "local") return;
-	const castedChanges = changes as {
-		[K in keyof configuration]: {
-			newValue: configuration[K];
-			oldValue: configuration[K] | undefined;
-		};
+const castStorageChanges = (changes: StorageChanges) => {
+	return Object.fromEntries(Object.entries(changes).map(([key, change]) => [key, change as { newValue?: unknown; oldValue?: unknown }])) as {
+		[K in keyof configuration]: { newValue?: string; oldValue?: string };
 	};
+};
+const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		chrome.storage.local.get((settings) => {
 			const storedSettings: Partial<configuration> = (
@@ -170,95 +168,109 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			resolve(storedSettings as configuration);
 		});
 	});
+
+	return options;
+};
+const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
+	return (
+		change?.newValue !== undefined &&
+		change?.oldValue !== undefined &&
+		parseStoredValue(change.oldValue as string) !== parseStoredValue(change.newValue as string)
+	);
+};
+const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
+	if (areaName !== "local") return;
+
+	// Convert changes to a typed object
+	const castedChanges = castStorageChanges(changes);
+
+	// Get the current configuration options from local storage
+	const options = await getStoredSettings();
 	const keyActions: {
-		[K in keyof configuration]?: () => void;
+		[K in keyof configuration]?: (newValue: configuration[K]) => void;
 	} = {
-		enable_automatic_theater_mode: () => {
+		enable_automatic_theater_mode: (newValue) => {
 			sendExtensionOnlyMessage("automaticTheaterModeChange", {
-				automaticTheaterModeEnabled: castedChanges.enable_automatic_theater_mode.newValue
+				automaticTheaterModeEnabled: newValue
 			});
 		},
-		enable_forced_playback_speed: () => {
+		enable_forced_playback_speed: (newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
-				enableForcedPlaybackSpeed: castedChanges.enable_forced_playback_speed.newValue,
+				enableForcedPlaybackSpeed: newValue,
 				playerSpeed: options.player_speed
 			});
 		},
-		enable_hide_scrollbar: () => {
+		enable_hide_scrollbar: (newValue) => {
 			sendExtensionOnlyMessage("hideScrollBarChange", {
-				hideScrollBarEnabled: castedChanges.enable_hide_scrollbar.newValue
+				hideScrollBarEnabled: newValue
 			});
 		},
-		enable_loop_button: () => {
+		enable_loop_button: (newValue) => {
 			sendExtensionOnlyMessage("loopButtonChange", {
-				loopButtonEnabled: castedChanges.enable_loop_button.newValue
+				loopButtonEnabled: newValue
 			});
 		},
-		enable_maximize_player_button: () => {
+		enable_maximize_player_button: (newValue) => {
 			sendExtensionOnlyMessage("maximizePlayerButtonChange", {
-				maximizePlayerButtonEnabled: castedChanges.enable_maximize_player_button.newValue
+				maximizePlayerButtonEnabled: newValue
 			});
 		},
-		enable_remaining_time: () => {
+		enable_remaining_time: (newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
-				remainingTimeEnabled: castedChanges.enable_remaining_time.newValue
+				remainingTimeEnabled: newValue
 			});
 		},
-		enable_remember_last_volume: () => {
+		enable_remember_last_volume: (newValue) => {
 			sendExtensionOnlyMessage("rememberVolumeChange", {
-				rememberVolumeEnabled: castedChanges.enable_remember_last_volume.newValue
+				rememberVolumeEnabled: newValue
 			});
 		},
-		enable_screenshot_button: () => {
+		enable_screenshot_button: (newValue) => {
 			sendExtensionOnlyMessage("screenshotButtonChange", {
-				screenshotButtonEnabled: castedChanges.enable_screenshot_button.newValue
+				screenshotButtonEnabled: newValue
 			});
 		},
-		enable_scroll_wheel_volume_control: () => {
+		enable_scroll_wheel_volume_control: (newValue) => {
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
-				scrollWheelVolumeControlEnabled: castedChanges.enable_scroll_wheel_volume_control.newValue
+				scrollWheelVolumeControlEnabled: newValue
 			});
 		},
-		enable_video_history: () => {
+		enable_video_history: (newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
-				videoHistoryEnabled: castedChanges.enable_video_history.newValue
+				videoHistoryEnabled: newValue
 			});
 		},
-		enable_volume_boost: () => {
+		enable_volume_boost: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
 				volumeBoostAmount: options.volume_boost_amount,
-				volumeBoostEnabled: castedChanges.enable_volume_boost.newValue
+				volumeBoostEnabled: newValue
 			});
 		},
-		language: () => {
+		language: (newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
-				language: castedChanges.language.newValue
+				language: newValue
 			});
 		},
-		player_speed: () => {
+		player_speed: (newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
-				playerSpeed: castedChanges.player_speed.newValue
+				playerSpeed: newValue
 			});
 		},
-		volume_boost_amount: () => {
+		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostAmount: castedChanges.volume_boost_amount.newValue,
+				volumeBoostAmount: newValue,
 				volumeBoostEnabled: options.enable_volume_boost
 			});
 		}
 	};
-	Object.entries(
-		changes as { [K in keyof configuration]?: { newValue?: configuration[K] | undefined; oldValue?: configuration[K] | undefined } }
-	).forEach(([key, change]) => {
-		if (
-			change &&
-			Object.prototype.hasOwnProperty.call(keyActions, key) &&
-			change.newValue !== undefined &&
-			change.oldValue !== undefined &&
-			parseStoredValue(change.oldValue as string) !== parseStoredValue(change.newValue as string)
-		) {
-			keyActions[key]?.();
+	Object.entries(castedChanges).forEach(([key, change]) => {
+		if (isValidChange(change)) {
+			if (!change.newValue) return;
+			const newValue = parseStoredValue(change.newValue) as configuration[typeof key];
+			const { [key]: handler } = keyActions;
+			if (!handler) return;
+			(handler as (newValue: configuration[typeof key]) => void)(newValue);
 		}
 	});
 };

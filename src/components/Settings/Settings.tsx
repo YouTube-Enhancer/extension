@@ -140,6 +140,9 @@ export default function Settings({
 				if (typeof settings[key] !== "string") {
 					localStorage.setItem(key, JSON.stringify(settings[key]));
 					void chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
+				} else {
+					localStorage.setItem(key, settings[key] as string);
+					void chrome.storage.local.set({ [key]: settings[key] as string });
 				}
 			}
 
@@ -158,6 +161,9 @@ export default function Settings({
 				if (typeof defaultSettings[key] !== "string") {
 					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
 					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
+				} else {
+					localStorage.setItem(key, defaultSettings[key] as string);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
 				}
 			}
 			addNotification("success", t("settings.clearData.allDataDeleted"));
@@ -335,6 +341,9 @@ export default function Settings({
 								if (typeof castSettings[key] !== "string") {
 									localStorage.setItem(key, JSON.stringify(castSettings[key]));
 									void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
+								} else {
+									localStorage.setItem(key, castSettings[key] as string);
+									void chrome.storage.local.set({ [key]: castSettings[key] as string });
 								}
 							}
 							// Show a success notification.
