@@ -160,27 +160,6 @@ export function browserColorLog(message: string, type?: ColorType) {
 	console.log(...groupMessages([prependLog, colorizedMessage]));
 }
 
-export function parseReviver(key: string, value: unknown) {
-	// Check if the value is a string
-	if (typeof value === "string") {
-		// Convert "true" or "false" to boolean
-		if (value === "true") {
-			return true;
-		} else if (value === "false") {
-			return false;
-		}
-
-		// Convert a string of a number to a number
-		const parsedNumber = parseFloat(value);
-		if (!isNaN(parsedNumber)) {
-			return parsedNumber;
-		}
-	}
-
-	// Return the value as is
-	return value;
-}
-
 /**
  * Sends a content send-only message.
  *
@@ -355,42 +334,80 @@ export function formatError(error: unknown) {
  * @returns Promise that resolves with an array of the matching elements.
  */
 export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
+	// Create a promise that will resolve when all of the target elements are found.
 	return new Promise((resolve) => {
+		// Log a message to the console to let the user know what's happening.
 		browserColorLog("Waiting for target nodes", "FgMagenta");
+
+		// Create a Map to store the elements as they are found.
 		const elementsMap = new Map<string, Element | null>();
+
+		// Get the number of selectors in the array so we know how many elements we are waiting for.
 		const { length: selectorsCount } = selectors;
+
+		// Create a counter for the number of elements that have been found.
 		let resolvedCount = 0;
 
+		// Create a MutationObserver to watch for changes in the DOM.
 		const observer = new MutationObserver(() => {
+			// Loop through each of the selectors.
 			selectors.forEach((selector) => {
+				// Get the element that matches the selector.
 				const element = document.querySelector(selector);
+
+				// Add the element to the Map.
 				elementsMap.set(selector, element);
+
+				// If the element is not found, return early.
 				if (!element) {
 					return;
 				}
 
+				// Increase the counter by 1.
 				resolvedCount++;
+
+				// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
 				if (resolvedCount === selectorsCount) {
+					// Disconnect the observer so it doesn't keep running.
 					observer.disconnect();
+
+					// Get an array of the resolved elements.
 					const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
+
+					// Resolve the promise with the array of resolved elements.
 					resolve(resolvedElements);
 				}
 			});
 		});
 
+		// Start listening for changes to the DOM.
 		observer.observe(document, { childList: true, subtree: true });
 
+		// Loop through each of the selectors.
 		selectors.forEach((selector) => {
+			// Get the element that matches the selector.
 			const element = document.querySelector(selector);
+
+			// Add the element to the Map.
 			elementsMap.set(selector, element);
+
+			// If the element is not found, return early.
 			if (!element) {
 				return;
 			}
 
+			// Increase the counter by 1.
 			resolvedCount++;
+
+			// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
 			if (resolvedCount === selectorsCount) {
+				// Disconnect the observer so it doesn't keep running.
 				observer.disconnect();
+
+				// Get an array of the resolved elements.
 				const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
+
+				// Resolve the promise with the array of resolved elements.
 				resolve(resolvedElements);
 			}
 		});
@@ -398,8 +415,8 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 }
 export function settingsAreDefault(defaultSettings: Partial<configuration>, currentSettings: Partial<configuration>): boolean {
 	// Get the keys of the default and current settings
-	const defaultKeys = Object.keys(defaultSettings) as Array<keyof configuration>;
-	const currentKeys = Object.keys(currentSettings) as Array<keyof configuration>;
+	const defaultKeys = Object.keys(defaultSettings);
+	const currentKeys = Object.keys(currentSettings);
 	// Calculate the intersection of keys between default and current settings
 	const commonKeys = defaultKeys.filter((key) => currentKeys.includes(key));
 	// Check that the values of the common keys are the same
@@ -437,15 +454,13 @@ export function parseStoredValue(value: string) {
 	try {
 		// Attempt to parse the value as JSON
 		const parsedValue = JSON.parse(value);
-
 		// Check if the parsed value is a boolean or a number
-		if (typeof parsedValue === "boolean" || typeof parsedValue === "number") {
+		if (typeof parsedValue === "boolean" || typeof parsedValue === "number" || typeof parsedValue === "object") {
 			return parsedValue; // Return the parsed value
 		}
 	} catch (error) {
 		// If parsing or type checking fails, return the original value as a string
 	}
-
 	// If parsing or type checking fails, return the original value as a string
 	return value;
 }
@@ -505,14 +520,29 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 // Utility function to create and style an element
-export function createStyledElement<ID extends string, K extends keyof HTMLElementTagNameMap>(
-	elementId: ID,
-	elementType: K,
-	styles: Partial<CSSStyleDeclaration>
-): HTMLElementTagNameMap[K] {
+export function createStyledElement<ID extends string, K extends keyof HTMLElementTagNameMap>({
+	classlist,
+	elementId,
+	elementType,
+	styles
+}: {
+	classlist?: string[];
+	elementId: ID;
+	elementType: K;
+	styles?: Partial<CSSStyleDeclaration>;
+}): HTMLElementTagNameMap[K] {
+	// Check if the element already exists
 	const elementExists = document.getElementById(elementId) !== null;
+	// If the element exists, use it, otherwise create a new element
 	const element = (elementExists ? document.getElementById(elementId) : document.createElement(elementType)) as HTMLElementTagNameMap[K];
+	// If the element was newly created, set its id
 	if (!element.id) element.id = elementId;
+	// Apply the styles to the element
 	Object.assign(element.style, styles);
+	if (classlist) {
+		// Add the classes to the element
+		element.classList.add(...classlist);
+	}
+	// Return the element
 	return element;
 }

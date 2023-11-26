@@ -7,9 +7,9 @@ import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
-import { configurationImportSchema } from "@/src/utils/constants";
-import { cn, settingsAreDefault } from "@/src/utils/utilities";
-import React, { Suspense, useEffect, useState } from "react";
+import { configurationImportSchema, defaultConfiguration } from "@/src/utils/constants";
+import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -26,7 +26,7 @@ async function getLanguageOptions() {
 		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
 		const localeData = (await response?.json()) as EnUS;
 		languageOptions.push({
-			label: (localeData as typeof EnUS).langName,
+			label: localeData.langName,
 			value: locale
 		});
 	}
@@ -114,6 +114,7 @@ export default function Settings({
 	const [firstLoad, setFirstLoad] = useState(true);
 	const { addNotification, notifications, removeNotification } = useNotifications();
 	const { t } = i18nInstance;
+	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const setCheckboxOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
@@ -135,12 +136,15 @@ export default function Settings({
 	}, [settings]);
 	function saveOptions() {
 		if (settings) {
-			if (settings.enable_automatically_set_quality && !settings.player_quality) {
-				addNotification("error", t("pages.options.notifications.error.playerQuality"));
-				return;
+			for (const key of Object.keys(settings)) {
+				if (typeof settings[key] !== "string") {
+					localStorage.setItem(key, JSON.stringify(settings[key]));
+					void chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
+				} else {
+					localStorage.setItem(key, settings[key] as string);
+					void chrome.storage.local.set({ [key]: settings[key] as string });
+				}
 			}
-			Object.assign(localStorage, settings);
-			chrome.storage.local.set(settings);
 
 			addNotification("success", t("pages.options.notifications.success.saved"));
 		}
@@ -153,8 +157,15 @@ export default function Settings({
 	function clearData() {
 		const userHasConfirmed = window.confirm(t("settings.clearData.confirmAlert"));
 		if (userHasConfirmed) {
-			Object.assign(localStorage, defaultSettings);
-			chrome.storage.local.set(defaultSettings);
+			for (const key of Object.keys(defaultSettings)) {
+				if (typeof defaultSettings[key] !== "string") {
+					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
+					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
+				} else {
+					localStorage.setItem(key, defaultSettings[key] as string);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
+				}
+			}
 			addNotification("success", t("settings.clearData.allDataDeleted"));
 		}
 	}
@@ -194,42 +205,42 @@ export default function Settings({
 	] as { label: string; value: ModifierKey }[] as SelectOption[];
 	const colorOptions: SelectOption[] = [
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[red]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: red,
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
 			label: green,
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
 			label: blue,
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
 			label: yellow,
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
 			label: orange,
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
 			label: purple,
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
 			label: pink,
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
 			label: white,
 			value: "white"
 		}
@@ -299,63 +310,86 @@ export default function Settings({
 	];
 
 	// Import settings from a JSON file.
-	const importSettings = () => {
-		const input = document.createElement("input");
-		input.type = "file";
-		input.accept = ".json";
+	function importSettings() {
+		if (settingsImportRef.current === null) return;
 
-		input.addEventListener("change", async (event) => {
-			const { target } = event;
-			if (!target) return;
-			const { files } = target as HTMLInputElement;
-			const file = files?.[0];
-			if (file) {
-				try {
-					const fileContents = await file.text();
-					const importedSettings = JSON.parse(fileContents);
-					// Validate the imported settings.
-					const result = configurationImportSchema.safeParse(importedSettings);
-					if (!result.success) {
-						const { error } = result;
-						const errorMessage = generateErrorMessage(error.errors);
-						window.alert(
-							t("settings.sections.importExportSettings.importButton.error.validation", {
-								ERROR_MESSAGE: errorMessage
-							})
-						);
-					} else {
-						const castSettings = importedSettings as configuration;
-						// Set the imported settings in your state.
-						setSettings({ ...castSettings });
-						Object.assign(localStorage, castSettings);
-						chrome.storage.local.set(castSettings);
-						// Show a success notification.
-						addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+		settingsImportRef.current.addEventListener("change", (event) => {
+			void (async () => {
+				const { target } = event;
+				if (!target) return;
+				const { files } = target as HTMLInputElement;
+				const file = files?.[0];
+				if (file) {
+					try {
+						const fileContents = await file.text();
+						const importedSettings = JSON.parse(fileContents);
+						// Validate the imported settings.
+						const result = configurationImportSchema.safeParse(importedSettings);
+						if (!result.success) {
+							const { error } = result;
+							const errorMessage = generateErrorMessage(error.errors);
+							window.alert(
+								t("settings.sections.importExportSettings.importButton.error.validation", {
+									ERROR_MESSAGE: errorMessage
+								})
+							);
+						} else {
+							const castSettings = importedSettings as configuration;
+							// Set the imported settings in your state.
+							setSettings({ ...castSettings });
+							for (const key of Object.keys(castSettings)) {
+								if (typeof castSettings[key] !== "string") {
+									localStorage.setItem(key, JSON.stringify(castSettings[key]));
+									void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
+								} else {
+									localStorage.setItem(key, castSettings[key] as string);
+									void chrome.storage.local.set({ [key]: castSettings[key] as string });
+								}
+							}
+							// Show a success notification.
+							addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+						}
+					} catch (error) {
+						// Handle any import errors.
+						window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 					}
-				} catch (error) {
-					// Handle any import errors.
-					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 				}
-			}
+				if (settingsImportRef.current) settingsImportRef.current.value = "";
+			})();
 		});
 
 		// Trigger the file input dialog.
-		input.click();
-	};
+		settingsImportRef.current.click();
+	}
 
 	// Export settings to a JSON file.
 	const exportSettings = () => {
 		if (settings) {
+			// Get the current settings
+			const exportableSettings: configuration = Object.keys(defaultConfiguration).reduce(
+				(acc, key) =>
+					Object.assign(acc, {
+						[key]: parseStoredValue(settings[key] as string)
+					}),
+				{} as configuration
+			);
+			// Get the current date and time, and format it for use in the filename.
 			const timestamp = formatDateForFileName(new Date());
+			// Create the filename.
 			const filename = `youtube_enhancer_settings_${timestamp}.json`;
-			const settingsJSON = JSON.stringify(settings);
+			// Convert the settings to JSON.
+			const settingsJSON = JSON.stringify(exportableSettings);
 
+			// Create a blob to hold the JSON.
 			const blob = new Blob([settingsJSON], { type: "application/json" });
+			// Get a URL for the blob.
 			const url = URL.createObjectURL(blob);
 
+			// Create a link to the blob.
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
+			// Click the link to download the file.
 			a.click();
 
 			// Show a success notification.
@@ -675,8 +709,14 @@ export default function Settings({
 								if (notificationToRemove) {
 									removeNotification(notificationToRemove);
 								}
-								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
-								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
+								localStorage.setItem("remembered_volumes", JSON.stringify(settings.remembered_volumes));
+								void chrome.storage.local.set({ remembered_volumes: JSON.stringify(settings.remembered_volumes) });
+								for (const key of Object.keys(defaultSettings)) {
+									if (typeof defaultSettings[key] !== "string") {
+										localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
+										void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
+									}
+								}
 
 								addNotification("success", t("pages.options.notifications.success.saved"));
 							}}
@@ -696,6 +736,7 @@ export default function Settings({
 					)}
 				</div>
 				<SettingsNotifications />
+				<input accept=".json" hidden={true} id="import_settings_input" ref={settingsImportRef} type="file" />
 			</div>
 		)
 	);

@@ -1,5 +1,3 @@
-import type { YouTubePlayerDiv } from "@/src/types";
-
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {
@@ -14,7 +12,7 @@ export default async function volumeBoost() {
 	if (!enable_volume_boost) return;
 
 	// Get the player element
-	const player = document.querySelector("video") as YouTubePlayerDiv | null;
+	const player = document.querySelector<HTMLMediaElement>("video");
 	// If player element is not available, return
 	if (!player) return;
 
@@ -27,7 +25,7 @@ export default async function volumeBoost() {
 	} else {
 		try {
 			window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-			const source = window.audioCtx.createMediaElementSource(player as unknown as HTMLMediaElement);
+			const source = window.audioCtx.createMediaElementSource(player);
 			const gainNode = window.audioCtx.createGain();
 			source.connect(gainNode);
 			gainNode.connect(window.audioCtx.destination);
