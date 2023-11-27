@@ -1,3 +1,22 @@
+## [1.13.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.13.0...v1.13.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* Settings page show on update when minor/major bump ([9354bd3](https://github.com/VampireChicken12/youtube-enhancer/commit/9354bd360c0e64087f97d40612dcd039e5b57f43))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.13.1-Chrome.zip | bcf4b42ddab66dba1e9fb4f2a1d39094b9681899a49d048cd521cfe4b41e8a99 |
+| youtube-enhancer-v1.13.1-Chromium.zip | 89889f865b700e91d7c1f541a9a9571a4b5b6f55eab5cf5c336a86e42fe31303 |
+| youtube-enhancer-v1.13.1-Edge.zip | 89889f865b700e91d7c1f541a9a9571a4b5b6f55eab5cf5c336a86e42fe31303 |
+| youtube-enhancer-v1.13.1-Firefox.zip | 13bf6b80db517f3e81494382c5dea6e016bb017617d378efb8a9a2f593f89815 |
+
 # [1.13.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.12.1...v1.13.0) (2023-11-27)
 
 
