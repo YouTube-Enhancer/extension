@@ -1,3 +1,28 @@
+# [1.13.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.12.1...v1.13.0) (2023-11-27)
+
+
+### Bug Fixes
+
+* **automatic theater mode:** toggling automatic theater mode would pause/play ([9df7c7f](https://github.com/VampireChicken12/youtube-enhancer/commit/9df7c7fa09ad0bd582730830c4f72d3bb2a32620))
+* **video history:** remaining time being overwritten ([416b5f1](https://github.com/VampireChicken12/youtube-enhancer/commit/416b5f19a174ee18f5f70798971bde34d6cc7f04)), closes [#116](https://github.com/VampireChicken12/youtube-enhancer/issues/116)
+
+
+### Features
+
+* **volume boost:** can now be toggled in the feature menu ([a5875f5](https://github.com/VampireChicken12/youtube-enhancer/commit/a5875f529e566e9eb242d6d8aa7b30eef81188cc))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.13.0-Chrome.zip | 910741411fa98306338cee6a6642fc9e7ad5ea8d8224a1fdc29c25eecd39a609 |
+| youtube-enhancer-v1.13.0-Chromium.zip | 910741411fa98306338cee6a6642fc9e7ad5ea8d8224a1fdc29c25eecd39a609 |
+| youtube-enhancer-v1.13.0-Edge.zip | e583c77d03e3d70276cefb4b906a8b32abfb36e09a960e793f5960a3fac9aea2 |
+| youtube-enhancer-v1.13.0-Firefox.zip | 578f07ca520881073c1535d4a72680121a9444d0a8b268ec4488762461247818 |
+
 ## [1.12.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.12.0...v1.12.1) (2023-11-26)
 
 
