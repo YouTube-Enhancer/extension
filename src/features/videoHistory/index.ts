@@ -48,7 +48,7 @@ export async function setupVideoHistory() {
 	};
 	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }
-export async function promptUserToResumeVideo() {
+export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
@@ -66,18 +66,24 @@ export async function promptUserToResumeVideo() {
 
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
+
 	const videoHistoryOneData = await waitForSpecificMessage("videoHistoryOne", "request_data", "content", { id: videoId });
-	if (!videoHistoryOneData) return;
+	if (!videoHistoryOneData) {
+		cb();
+		return;
+	}
 	const {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
-		createResumePrompt(video_history_entry, playerContainer);
+		createResumePrompt(video_history_entry, playerContainer, cb);
+	} else {
+		cb();
 	}
 }
 // Utility function to check if an element exists
 const elementExists = (elementId: string) => !!document.getElementById(elementId);
-function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv) {
+function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv, cb: () => void) {
 	const progressBarId = "resume-prompt-progress-bar";
 	const overlayId = "resume-prompt-overlay";
 	const closeButtonId = "resume-prompt-close-button";
@@ -188,12 +194,14 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		clearInterval(countdownInterval);
 		prompt.style.display = "none";
 		overlay.style.display = "none";
+		cb();
 	}
 
 	function resumeButtonClickListener() {
 		hidePrompt();
 		browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(videoHistoryEntry.timestamp) }), "FgGreen");
 		void playerContainer.seekTo(videoHistoryEntry.timestamp, true);
+		cb();
 	}
 
 	if (!elementExists(progressBarId)) {

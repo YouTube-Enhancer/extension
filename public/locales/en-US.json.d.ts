@@ -13,6 +13,7 @@ interface EnUS {
 				maximizePlayerButton: { label: "Maximize" };
 				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
+				volumeBoostButton: { label: "Volume Boost" };
 			};
 		};
 		options: {

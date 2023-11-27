@@ -95,7 +95,7 @@ export async function addScreenshotButton(): Promise<void> {
 			}
 		})();
 	}
-	void addFeatureItemToMenu({
+	await addFeatureItemToMenu({
 		featureName: "screenshotButton",
 		icon: makeScreenshotIcon(),
 		label: window.i18nextInstance.t("pages.content.features.screenshotButton.label"),

@@ -22,7 +22,7 @@ export async function addLoopButton() {
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 	const loopSVG = makeLoopIcon();
-	void addFeatureItemToMenu({
+	await addFeatureItemToMenu({
 		featureName: "loopButton",
 		icon: loopSVG,
 		isToggle: true,
