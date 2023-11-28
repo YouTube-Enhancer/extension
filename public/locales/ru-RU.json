@@ -31,10 +31,10 @@
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "Настройки сохранены."
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Все параметры были сброшены к значениям по умолчанию.\nТеперь вы можете сохранить изменения, нажав кнопку «Подтвердить» или отменить их, закрыв эту страницу или проигнорировав это уведомление."
 				}
 			}
 		}
@@ -44,120 +44,120 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "Ошибка импорта настроек. Пожалуйста, проверьте формат файла.\n{{ERROR_MESSAGE}}",
+						"unknown": "Ошибка импорта настроек. Пожалуйста, проверьте формат файла.\nПроизошла неизвестная ошибка."
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Настройки успешно импортированы",
+					"title": "Импорт настроек из JSON файла",
+					"value": "Импорт настроек"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Настройки успешно экспортированы",
+					"title": "Экспорт настроек в JSON файл",
+					"value": "Экспорт настроек"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "Прочие параметры",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Remember last volume"
+						"title": "Запоминает громкость последнего видео, которое вы смотрели и устанавливает это значение при открытии нового видео",
+						"label": "Запомнить уровень громкости"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
-						"label": "Enable maximize player button"
+						"title": "Разворачивает видео до размера окна",
+						"label": "Включить кнопку «Развернуть плеер»"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"title": "Отслеживает то, на каком моменте просмотра видео вы остановились и спрашивает, если вы хотите продолжить с этого момента когда это видео загружается снова",
+						"label": "Включить историю видео"
 					},
 					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"title": "Показывает оставшееся время просмотра видео",
+						"label": "Включить отображение оставшегося времени"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"title": "Добавляет кнопку в плеер для автоматического повтора просмотренного видео (зацикливание)",
+						"label": "Включить кнопку «Зациклить»"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
-						"label": "Enable hide scrollbar"
+						"title": "Скрывает полосу прокрутки страницы",
+						"label": "Включить скрытие полосы прокрутки страницы"
 					},
 					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"title": "Автоматически включать режим кинотеатра при загрузке видео",
+						"label": "Включить автоматический режим кинотеатра"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
+				"title": "Настройки управления громкостью с помощью колеса прокрутки",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"title": "Позволяет использовать колесо прокрутки для управления громкостью видео, которое вы просматриваете",
+					"label": "Включить управление громкостью с помощью колеса прокрутки"
 				},
 				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Color"
+					"title": "Выберите цвет для отображения на экране (OSD)",
+					"label": "Цвет OSD"
 				},
 				"osdType": {
-					"title": "Select the style of On-Screen Display",
-					"label": "OSD Type"
+					"title": "Выберите стиль отображения на экране (OSD)",
+					"label": "Тип OSD"
 				},
 				"osdPosition": {
-					"title": "Select the position of the On-Screen Display",
-					"label": "OSD Position"
+					"title": "Выберите позицию отображения на экране (OSD)",
+					"label": "Позиция OSD"
 				},
 				"osdOpacity": {
-					"title": "Adjust the transparency of the On-Screen Display",
-					"label": "OSD Opacity"
+					"title": "Настройка прозрачности отображения на экране (OSD)",
+					"label": "Прозрачность OSD"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "Adjust the volume change per scroll",
-					"label": "Volume Change Per Scroll"
+					"title": "Регулировка значения, на которое изменяется громкость за прокрутку",
+					"label": "Изменение громкости за прокрутку"
 				},
 				"osdHide": {
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
-					"label": "Hide Delay"
+					"title": "Укажите время, в миллисекундах, перед автоматическим скрытием OSD",
+					"label": "Задержка скрытия"
 				},
 				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "Padding"
+					"title": "Регулировка интервала вокруг отображения на экране (OSD) в пикселях. Применяется в частности для углов OSD.",
+					"label": "Отступы"
 				},
 				"onScreenDisplay": {
 					"colors": {
-						"red": "Red",
-						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
-						"orange": "Orange",
-						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
+						"red": "Красный",
+						"green": "Зеленый",
+						"blue": "Синий",
+						"yellow": "Желтый",
+						"orange": "Оранжевый",
+						"purple": "Фиолетовый",
+						"pink": "Розовый",
+						"white": "Белый"
 					},
 					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
+						"top_left": "Слева сверху",
+						"top_right": "Справа сверху",
+						"bottom_left": "Слева снизу",
+						"bottom_right": "Справа снизу",
+						"center": "По центру"
 					},
 					"type": {
-						"no_display": "No display",
-						"text": "Text",
-						"line": "Line",
-						"round": "Round"
+						"no_display": "Не показывать",
+						"text": "Текст",
+						"line": "Линия",
+						"round": "Круг"
 					}
 				},
 				"modifierKey": {
-					"title": "Scroll Wheel Modifier Key",
+					"title": "Клавиша модификатора колеса прокрутки",
 					"enable": {
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable modifier key"
+						"title": "Нажмите клавишу-модификатор, чтобы включить управление громкостью с помощью колеса прокрутки.",
+						"label": "Включить клавишу-модификатор"
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "Клавиша {{KEY}}",
 					"select": {
-						"label": "Modifier key",
+						"label": "Клавиша-модификатор",
 						"title": "The modifier key to use"
 					}
 				}
@@ -206,39 +206,39 @@
 					"title": "The screenshot save type"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "Формат скриншота",
+					"title": "Формат, в котором будет сохраняться скриншот"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "Файл",
+					"clipboard": "Буфер обмена"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "Подтвердить сброс настроек",
+					"value": "Подтвердить"
 				},
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "Очистить все данные, которые это расширение хранит на вашем компьютере",
+					"value": "Удалить данные"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"title": "Сбрасывает все настройки до значений по умолчанию. Нажмите \"Подтвердить\", чтобы сохранить изменения",
+					"value": "Сброс"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "Язык",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Язык",
+					"title": "Язык расширения"
 				}
 			}
 		},
 		"clearData": {
-			"confirmAlert": "This will delete all extension data related to options. Continue?",
-			"allDataDeleted": "All data has been deleted."
+			"confirmAlert": "Это приведет к удалению всех данных расширения, связанных с настройками. Продолжить?",
+			"allDataDeleted": "Все данные были удалены."
 		}
 	},
 	"messages": {
