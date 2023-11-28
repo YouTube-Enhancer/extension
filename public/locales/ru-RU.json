@@ -6,25 +6,25 @@
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Закрыть"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "Возобновить"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "Скриншот скопирован в буфер обмена",
+					"label": "Скриншот"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Зациклить"
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "Развернуть"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "Меню функций"
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "Усиление громкости"
 				}
 			}
 		},
@@ -243,6 +243,6 @@
 	},
 	"messages": {
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"resumingVideo": "Возобновление видео на {{VIDEO_TIME}}"
 	}
 }
