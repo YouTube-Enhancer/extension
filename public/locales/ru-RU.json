@@ -66,7 +66,7 @@
 					},
 					"maximizePlayerButton": {
 						"title": "Разворачивает видео до размера окна",
-						"label": "Включить кнопку «Развернуть плеер»"
+						"label": "Включить кнопку «Развернуть проигрыватель»"
 					},
 					"videoHistory": {
 						"title": "Отслеживает то, на каком моменте просмотра видео вы остановились и спрашивает, если вы хотите продолжить с этого момента когда это видео загружается снова",
@@ -77,7 +77,7 @@
 						"label": "Включить отображение оставшегося времени"
 					},
 					"loopButton": {
-						"title": "Добавляет кнопку в плеер для автоматического повтора просмотренного видео (зацикливание)",
+						"title": "Добавляет кнопку в проигрыватель для автоматического повтора просмотренного видео (зацикливание)",
 						"label": "Включить кнопку «Зациклить»"
 					},
 					"hideScrollbar": {
@@ -158,52 +158,52 @@
 					"optionLabel": "Клавиша {{KEY}}",
 					"select": {
 						"label": "Клавиша-модификатор",
-						"title": "The modifier key to use"
+						"title": "Используемая клавиша-модификатор"
 					}
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "Автоматические настройки качества",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"title": "Автоматически настраивает качество видео на выбранный уровень.",
+					"label": "Включить автоматическую регулировку качества"
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "Качество проигрывателя",
+					"title": "Качество, которое будет задаваться для видео"
 				}
 			},
 			"playbackSpeed": {
-				"title": "Playback speed settings",
+				"title": "Настройки скорости воспроизведения",
 				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Enable forced playback speed"
+					"title": "Устанавливает скорость проигрывания видео на ту, что вы выбрали ниже",
+					"label": "Включить принудительную скорость воспроизведения"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Скорость проигрывателя",
+					"title": "Скорость, которая будет задаваться для видео"
 				}
 			},
 			"volumeBoost": {
-				"title": "Volume boost settings",
+				"title": "Настройки усиления громкости",
 				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Enable volume boost"
+					"title": "Увеличивает громкость просматриваемого видео",
+					"label": "Включить усиление громкости"
 				},
 				"number": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Значение увеличения громкости (дБ)",
+					"title": "Значение, на которое будет увеличена громкость"
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "Настройки скриншотов",
 				"enable": {
-					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Enable screenshot button"
+					"title": "Добавляет кнопку в проигрыватель которая делает скриншот видео",
+					"label": "Включить кнопку «Скриншот»"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "Тип сохранения скриншота",
+					"title": "Тип сохранения скриншота"
 				},
 				"selectFormat": {
 					"label": "Формат скриншота",
