@@ -1,6 +1,8 @@
 import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent } from "react";
 
+import { useSettings } from "../../Settings/Settings";
+
 export type CheckboxProps = {
 	checked: boolean;
 	className?: string;
@@ -11,6 +13,7 @@ export type CheckboxProps = {
 };
 
 const Checkbox: React.FC<CheckboxProps> = ({ checked, className, id, label, onChange, title }) => {
+	const { direction } = useSettings();
 	return (
 		<div className={cn("flex items-center", className)} title={title}>
 			<input
@@ -20,7 +23,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, className, id, label, onCh
 				onChange={onChange}
 				type="checkbox"
 			/>
-			<label className="ml-2 block text-sm text-black dark:text-white" htmlFor={id}>
+			<label className={cn("block text-sm text-black dark:text-white", { "ml-2": direction === "ltr", "mr-2": direction === "rtl" })} htmlFor={id}>
 				{label}
 			</label>
 		</div>

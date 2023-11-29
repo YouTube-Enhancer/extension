@@ -2,7 +2,6 @@ import pkg from "../../../package.json";
 
 chrome.runtime.onInstalled.addListener((details) => {
 	const { previousVersion, reason } = details;
-	console.log(previousVersion, reason);
 	if (!previousVersion) return;
 	switch (reason) {
 		case chrome.runtime.OnInstalledReason.INSTALL: {

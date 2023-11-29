@@ -4,6 +4,7 @@ import type { ChangeEvent, MutableRefObject } from "react";
 import { cn } from "@/src/utils/utilities";
 import React, { useRef } from "react";
 
+import { useSettings } from "../../Settings/Settings";
 import Arrow from "./Arrow";
 import "./Number.css";
 export type NumberInputProps = {
@@ -21,6 +22,7 @@ export type NumberInputProps = {
 const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, label, max = undefined, min = 0, onChange, step = 1, value }) => {
 	const inputElement: MutableRefObject<HTMLInputElement | null> = useRef(null);
 	const inputDiv: MutableRefObject<HTMLDivElement | null> = useRef(null);
+	const { direction } = useSettings();
 	const NumberPlus = () => {
 		if (inputElement.current) {
 			inputElement.current.stepUp();
@@ -79,7 +81,12 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					type="number"
 					value={value}
 				></input>
-				<div className="absolute bottom-1 right-1 flex h-[35px] flex-col">
+				<div
+					className={cn("absolute flex h-[35px] flex-col", {
+						"bottom-1 left-1": direction === "rtl",
+						"bottom-1 right-1": direction === "ltr"
+					})}
+				>
 					<button
 						aria-hidden={true}
 						aria-label="Add one"
