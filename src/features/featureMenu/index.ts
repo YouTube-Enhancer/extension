@@ -75,7 +75,7 @@ function createFeatureMenuButton() {
 	if (!bottomControls) return;
 
 	// Create a tooltip for the feature menu button
-	const { listener: featureMenuButtonMouseOverListener, remove: removeFeatureMenuTooltip } = createTooltip({
+	const { listener: featureMenuButtonMouseOverListener } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
 		id: "yte-feature-menu-tooltip"
@@ -84,40 +84,21 @@ function createFeatureMenuButton() {
 	// Event listeners for showing and hiding the feature menu
 	eventManager.addEventListener(
 		featureMenuButton,
-		"click",
-		() => {
-			const featureMenuVisible = featureMenu.style.display === "block";
-			if (featureMenuVisible) {
-				bottomControls.style.opacity = "";
-				featureMenu.style.display = "none";
-				featureMenuButtonMouseOverListener();
-			} else {
-				removeFeatureMenuTooltip();
-				bottomControls.style.opacity = "1";
-				featureMenu.style.display = "block";
-			}
-		},
-		"featureMenu"
-	);
-
-	eventManager.addEventListener(
-		featureMenuButton,
 		"mouseover",
 		() => {
-			const featureMenuVisible = featureMenu.style.display === "block";
-			if (featureMenuVisible) return;
+			bottomControls.style.opacity = "1";
+			featureMenu.style.display = "block";
 			featureMenuButtonMouseOverListener();
 		},
 		"featureMenu"
 	);
 
 	eventManager.addEventListener(
-		featureMenuButton,
+		featureMenu,
 		"mouseleave",
 		() => {
-			const featureMenuVisible = featureMenu.style.display === "block";
-			if (featureMenuVisible) return;
-			removeFeatureMenuTooltip();
+			featureMenu.style.display = "none";
+			bottomControls.style.opacity = "";
 		},
 		"featureMenu"
 	);
