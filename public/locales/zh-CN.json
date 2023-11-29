@@ -22,6 +22,9 @@
 				},
 				"featureMenu": {
 					"label": "功能单"
+				},
+				"volumeBoostButton": {
+					"label": "Volume Boost"
 				}
 			}
 		},
