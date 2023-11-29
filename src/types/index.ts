@@ -50,7 +50,8 @@ export type configuration = {
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
 	enable_scroll_wheel_volume_control: boolean;
-	enable_scroll_wheel_volume_control_modifier_key: boolean;
+	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
+	enable_scroll_wheel_volume_control_hold_right_click: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	language: AvailableLocales;
