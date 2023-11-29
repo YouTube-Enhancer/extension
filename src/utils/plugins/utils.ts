@@ -1,4 +1,5 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync, statSync } from "fs";
+import { GetInstalledBrowsers } from "get-installed-browsers";
 import { join } from "path";
 
 export function copyDirectorySync(sourceDir: string, targetDir: string) {
@@ -24,3 +25,4 @@ export function copyDirectorySync(sourceDir: string, targetDir: string) {
 		}
 	}
 }
+export const browsers = GetInstalledBrowsers();
