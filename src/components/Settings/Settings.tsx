@@ -256,19 +256,19 @@ export default function Settings() {
 	});
 	const scrollWheelVolumeControlModifierKeyOptions = [
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
 				KEY: "Alt"
 			}),
 			value: "altKey"
 		},
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
 				KEY: "Ctrl"
 			}),
 			value: "ctrlKey"
 		},
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.modifierKey.optionLabel", {
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
 				KEY: "Shift"
 			}),
 			value: "shiftKey"
@@ -552,22 +552,30 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_scroll_wheel_volume_control_modifier_key?.toString() === "true"}
-						id="enable_scroll_wheel_volume_control_modifier_key"
-						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.label")}
-						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_modifier_key")}
-						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.enable.title")}
+						checked={settings.enable_scroll_wheel_volume_control_hold_modifier_key?.toString() === "true"}
+						id="enable_scroll_wheel_volume_control_hold_modifier_key"
+						label={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.enable.label")}
+						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_modifier_key")}
+						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.enable.title")}
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control_modifier_key.toString() !== "true"}
+						checked={settings.enable_scroll_wheel_volume_control_hold_right_click?.toString() === "true"}
+						id="enable_scroll_wheel_volume_control_hold_right_click"
+						label={t("settings.sections.scrollWheelVolumeControl.holdRightClick.enable.label")}
+						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_right_click")}
+						title={t("settings.sections.scrollWheelVolumeControl.holdRightClick.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_scroll_wheel_volume_control_hold_modifier_key.toString() !== "true"}
 						id="scroll_wheel_volume_control_modifier_key"
-						label={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.label")}
+						label={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.label")}
 						onChange={setValueOption("scroll_wheel_volume_control_modifier_key")}
 						options={scrollWheelVolumeControlModifierKeyOptions}
 						selectedOption={selectedModifierKey}
 						setSelectedOption={setSelectedModifierKey}
-						title={t("settings.sections.scrollWheelVolumeControl.modifierKey.select.title")}
+						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.title")}
 						type="select"
 					/>
 					<Setting
