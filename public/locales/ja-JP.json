@@ -34,7 +34,7 @@
 					"saved": "選択がセーブしました"
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "全てのオプションが省略時値でリセットしました。\n今変化を「確認」抓みでクリックするとセーブは可能するかページを閉じるで変化を破棄するかこの通知を捨て置くするは可能です。"
 				}
 			}
 		}
@@ -45,7 +45,7 @@
 				"importButton": {
 					"error": {
 						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。"
 					},
 					"success": "設定がインポートをされました",
 					"title": "JSONファイルから設定がインポートする",
@@ -132,15 +132,15 @@
 						"yellow": "黄色",
 						"orange": "橙色",
 						"purple": "紫色",
-						"pink": "Pink",
-						"white": "White"
+						"pink": "桃色",
+						"white": "白色"
 					},
 					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
+						"top_left": "左上隅",
+						"top_right": "右上隅",
+						"bottom_left": "左下隅",
+						"bottom_right": "右下隅",
+						"center": "中心"
 					},
 					"type": {
 						"no_display": "No display",
@@ -154,7 +154,7 @@
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
 						"label": "Enable hold modifier key"
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "{{KEY}} キー",
 					"select": {
 						"label": "Modifier key",
 						"title": "The modifier key to use"
@@ -215,8 +215,8 @@
 					"title": "The format to save the screenshot in"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "ファイル",
+					"clipboard": "クリップボード"
 				}
 			},
 			"bottomButtons": {
@@ -230,14 +230,14 @@
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"value": "リセット"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "言語",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "言語",
+					"title": "エクステンションに使用する言語"
 				}
 			}
 		},
@@ -248,6 +248,6 @@
 	},
 	"messages": {
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"resumingVideo": "{{VIDEO_TIME}} から動画をレジュームする"
 	}
 }
