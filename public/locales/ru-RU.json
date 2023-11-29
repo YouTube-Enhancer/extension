@@ -149,16 +149,21 @@
 						"round": "Круг"
 					}
 				},
-				"modifierKey": {
-					"title": "Клавиша модификатора колеса прокрутки",
+				"holdModifierKey": {
 					"enable": {
-						"title": "Нажмите клавишу-модификатор, чтобы включить управление громкостью с помощью колеса прокрутки.",
-						"label": "Включить клавишу-модификатор"
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
+						"label": "Enable hold modifier key"
 					},
-					"optionLabel": "Клавиша {{KEY}}",
+					"optionLabel": "{{KEY}} key",
 					"select": {
-						"label": "Клавиша-модификатор",
-						"title": "Используемая клавиша-модификатор"
+						"label": "Modifier key",
+						"title": "The modifier key to use"
+					}
+				},
+				"holdRightClick": {
+					"enable": {
+						"title": "Hold right click to enable scroll wheel volume control",
+						"label": "Enable hold right click"
 					}
 				}
 			},

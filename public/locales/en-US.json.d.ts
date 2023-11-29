@@ -1,192 +1,192 @@
 interface EnUS {
 	langCode: "en-US";
 	langName: "English (US)";
-	messages: {
-		resumingVideo: "Resuming video at {{VIDEO_TIME}}";
-		settingVolume: "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}";
-	};
 	pages: {
 		content: {
 			features: {
-				featureMenu: { label: "Feature menu" };
+				videoHistory: { resumePrompt: { close: "Close" }; resumeButton: "Resume" };
+				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
 				loopButton: { label: "Loop" };
 				maximizePlayerButton: { label: "Maximize" };
-				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
-				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
+				featureMenu: { label: "Feature menu" };
 				volumeBoostButton: { label: "Volume Boost" };
 			};
 		};
 		options: {
 			notifications: {
+				success: { saved: "Options saved." };
 				info: {
 					reset: 'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.';
 				};
-				success: { saved: "Options saved." };
 			};
 		};
 	};
 	settings: {
-		clearData: {
-			allDataDeleted: "All data has been deleted.";
-			confirmAlert: "This will delete all extension data related to options. Continue?";
-		};
 		sections: {
-			automaticQuality: {
-				enable: {
-					label: "Enable automatic quality adjustment";
-					title: "Automatically adjusts the video quality to the selected level.";
-				};
-				select: { label: "Player quality"; title: "The quality to set the video to" };
-				title: "Automatic quality settings";
-			};
-			bottomButtons: {
-				clear: {
-					title: "Clears all data this extension has stored on your machine";
-					value: "Clear Data";
-				};
-				confirm: { title: "Confirm setting reset"; value: "Confirm" };
-				reset: {
-					title: "Resets all settings to their defaults, Click the confirm button to save the changes";
-					value: "Reset";
-				};
-			};
 			importExportSettings: {
-				exportButton: {
-					success: "Settings successfully exported";
-					title: "Export settings to a JSON file";
-					value: "Export Settings";
-				};
 				importButton: {
 					error: {
-						unknown: "Error importing settings. Please check the file format.\nAn unknown error occurred.";
 						validation: "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}";
+						unknown: "Error importing settings. Please check the file format.\nAn unknown error occurred.";
 					};
 					success: "Settings imported successfully";
 					title: "Import settings from a JSON file";
 					value: "Import Settings";
 				};
-			};
-			language: {
-				select: { label: "Language"; title: "The language to use for the extension" };
-				title: "Language";
+				exportButton: {
+					success: "Settings successfully exported";
+					title: "Export settings to a JSON file";
+					value: "Export Settings";
+				};
 			};
 			miscellaneous: {
+				title: "Miscellaneous settings";
 				features: {
-					automaticTheaterMode: {
-						label: "Enable automatic theater mode";
-						title: "Automatically enables theater mode when you load a video";
-					};
-					hideScrollbar: { label: "Enable hide scrollbar"; title: "Hides the pages scrollbar" };
-					loopButton: {
-						label: "Enable loop button";
-						title: "Adds a button to the player to loop the video you're watching";
+					rememberLastVolume: {
+						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
+						label: "Remember last volume";
 					};
 					maximizePlayerButton: {
-						label: "Enable maximize player button";
 						title: "Fills the video to the window size";
-					};
-					remainingTime: {
-						label: "Enable remaining time";
-						title: "Shows the remaining time of the video you're watching";
-					};
-					rememberLastVolume: {
-						label: "Remember last volume";
-						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
+						label: "Enable maximize player button";
 					};
 					videoHistory: {
-						label: "Enable video history";
 						title: "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again";
+						label: "Enable video history";
+					};
+					remainingTime: {
+						title: "Shows the remaining time of the video you're watching";
+						label: "Enable remaining time";
+					};
+					loopButton: {
+						title: "Adds a button to the player to loop the video you're watching";
+						label: "Enable loop button";
+					};
+					hideScrollbar: { title: "Hides the pages scrollbar"; label: "Enable hide scrollbar" };
+					automaticTheaterMode: {
+						title: "Automatically enables theater mode when you load a video";
+						label: "Enable automatic theater mode";
 					};
 				};
-				title: "Miscellaneous settings";
-			};
-			playbackSpeed: {
-				enable: {
-					label: "Enable forced playback speed";
-					title: "Sets the video speed to what you choose below";
-				};
-				select: { label: "Player speed"; title: "The speed to set the video to" };
-				title: "Playback speed settings";
-			};
-			screenshotButton: {
-				enable: {
-					label: "Enable screenshot button";
-					title: "Adds a button to the player to take a screenshot of the video";
-				};
-				saveAs: { clipboard: "Clipboard"; file: "File" };
-				selectFormat: { label: "Screenshot format"; title: "The format to save the screenshot in" };
-				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };
-				title: "Screenshot settings";
 			};
 			scrollWheelVolumeControl: {
+				title: "Scroll wheel volume control settings";
 				enable: {
-					label: "Enable scroll wheel volume control";
 					title: "Lets you use the scroll wheel to control the volume of the video you're watching";
+					label: "Enable scroll wheel volume control";
+				};
+				osdColor: { title: "Select the color for the On-Screen Display"; label: "OSD Color" };
+				osdType: { title: "Select the style of On-Screen Display"; label: "OSD Type" };
+				osdPosition: { title: "Select the position of the On-Screen Display"; label: "OSD Position" };
+				osdOpacity: {
+					title: "Adjust the transparency of the On-Screen Display";
+					label: "OSD Opacity";
+				};
+				osdVolumeAdjustmentSteps: {
+					title: "Adjust the volume change per scroll";
+					label: "Volume Change Per Scroll";
+				};
+				osdHide: {
+					title: "Specify the time, in milliseconds, before automatically hiding the OSD";
+					label: "Hide Delay";
+				};
+				osdPadding: {
+					title: "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.";
+					label: "Padding";
+				};
+				onScreenDisplay: {
+					colors: {
+						red: "Red";
+						green: "Green";
+						blue: "Blue";
+						yellow: "Yellow";
+						orange: "Orange";
+						purple: "Purple";
+						pink: "Pink";
+						white: "White";
+					};
+					position: {
+						top_left: "Top Left";
+						top_right: "Top Right";
+						bottom_left: "Bottom Left";
+						bottom_right: "Bottom Right";
+						center: "Center";
+					};
+					type: { no_display: "No display"; text: "Text"; line: "Line"; round: "Round" };
 				};
 				holdModifierKey: {
 					enable: {
-						label: "Enable hold modifier key";
 						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
+						label: "Enable hold modifier key";
 					};
 					optionLabel: "{{KEY}} key";
 					select: { label: "Modifier key"; title: "The modifier key to use" };
 				};
 				holdRightClick: {
 					enable: {
-						label: "Enable hold right click";
 						title: "Hold right click to enable scroll wheel volume control";
+						label: "Enable hold right click";
 					};
 				};
-				onScreenDisplay: {
-					colors: {
-						blue: "Blue";
-						green: "Green";
-						orange: "Orange";
-						pink: "Pink";
-						purple: "Purple";
-						red: "Red";
-						white: "White";
-						yellow: "Yellow";
-					};
-					position: {
-						bottom_left: "Bottom Left";
-						bottom_right: "Bottom Right";
-						center: "Center";
-						top_left: "Top Left";
-						top_right: "Top Right";
-					};
-					type: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
+			};
+			automaticQuality: {
+				title: "Automatic quality settings";
+				enable: {
+					title: "Automatically adjusts the video quality to the selected level.";
+					label: "Enable automatic quality adjustment";
 				};
-				osdColor: { label: "OSD Color"; title: "Select the color for the On-Screen Display" };
-				osdHide: {
-					label: "Hide Delay";
-					title: "Specify the time, in milliseconds, before automatically hiding the OSD";
+				select: { label: "Player quality"; title: "The quality to set the video to" };
+			};
+			playbackSpeed: {
+				title: "Playback speed settings";
+				enable: {
+					title: "Sets the video speed to what you choose below";
+					label: "Enable forced playback speed";
 				};
-				osdOpacity: {
-					label: "OSD Opacity";
-					title: "Adjust the transparency of the On-Screen Display";
-				};
-				osdPadding: {
-					label: "Padding";
-					title: "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.";
-				};
-				osdPosition: { label: "OSD Position"; title: "Select the position of the On-Screen Display" };
-				osdType: { label: "OSD Type"; title: "Select the style of On-Screen Display" };
-				osdVolumeAdjustmentSteps: {
-					label: "Volume Change Per Scroll";
-					title: "Adjust the volume change per scroll";
-				};
-				title: "Scroll wheel volume control settings";
+				select: { label: "Player speed"; title: "The speed to set the video to" };
 			};
 			volumeBoost: {
+				title: "Volume boost settings";
 				enable: {
-					label: "Enable volume boost";
 					title: "Boosts the volume of the video you're watching";
+					label: "Enable volume boost";
 				};
 				number: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
-				title: "Volume boost settings";
+			};
+			screenshotButton: {
+				title: "Screenshot settings";
+				enable: {
+					title: "Adds a button to the player to take a screenshot of the video";
+					label: "Enable screenshot button";
+				};
+				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };
+				selectFormat: { label: "Screenshot format"; title: "The format to save the screenshot in" };
+				saveAs: { file: "File"; clipboard: "Clipboard" };
+			};
+			bottomButtons: {
+				confirm: { title: "Confirm setting reset"; value: "Confirm" };
+				clear: {
+					title: "Clears all data this extension has stored on your machine";
+					value: "Clear Data";
+				};
+				reset: {
+					title: "Resets all settings to their defaults, Click the confirm button to save the changes";
+					value: "Reset";
+				};
+			};
+			language: {
+				title: "Language";
+				select: { label: "Language"; title: "The language to use for the extension" };
 			};
 		};
+		clearData: {
+			confirmAlert: "This will delete all extension data related to options. Continue?";
+			allDataDeleted: "All data has been deleted.";
+		};
+	};
+	messages: {
+		settingVolume: "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}";
+		resumingVideo: "Resuming video at {{VIDEO_TIME}}";
 	};
 }
 
