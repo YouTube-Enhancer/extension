@@ -61,44 +61,44 @@
 				"title": "他の設定",
 				"features": {
 					"rememberLastVolume": {
-						"title": "新ビデオの音量を前ビデオの音量に変化する。",
+						"title": "新ビデオの音量を前動画の音量に変化する。",
 						"label": "前音量を覚える"
 					},
 					"maximizePlayerButton": {
 						"title": "動画をウィンドウ・サイズまで広がるする",
-						"label": "最大化ボタンをイネーブル"
+						"label": "最大化ボタン"
 					},
 					"videoHistory": {
-						"title": "視聴中のビデオで中断した場所を追跡し、そのビデオが再び読み込まれたときに再開するかどうかを尋ねます",
-						"label": "動画歴史機能"
+						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます",
+						"label": "動画歴史"
 					},
 					"remainingTime": {
-						"title": "ビデオの残り時間を表示します",
-						"label": "残り時間機能"
+						"title": "動画の残り時間を表示します",
+						"label": "残り時間"
 					},
 					"loopButton": {
 						"title": "動画をループ再生するボタンをビデオ・プレーヤーに追加する",
-						"label": "ループボタン機能"
+						"label": "動画ループボタン"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
-						"label": "Enable hide scrollbar"
+						"title": "ページのスクロールバーを隠す",
+						"label": "スクロールバー隠す機能"
 					},
 					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"title": "動画の読み込み時に自動的にシアターモードを有効にする",
+						"label": "自動シアターモード"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
+				"title": "スクロールホイール音量制御設定",
 				"enable": {
 					"title": "スクロールホイールを使用して、ビデオの音量を制御する。",
 					"label": "スクロールホイール音量制御"
 				},
 				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Color"
+					"title": "オンスクリーンディスプレイ(OSD)の色を選択選べる",
+					"label": "OSDの色"
 				},
 				"osdType": {
 					"title": "Select the style of On-Screen Display",
