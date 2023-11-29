@@ -80,7 +80,7 @@
 	"ignorePatterns": ["watch.js", "dist/**", "releases/**"],
 	"overrides": [
 		{
-			"files": ["*.ts", "*.tsx", "*.js"],
+			"files": ["*.ts", "*.tsx", "*.js", ".d.ts", ".spec.ts"],
 			"parser": "@typescript-eslint/parser"
 		}
 	],
