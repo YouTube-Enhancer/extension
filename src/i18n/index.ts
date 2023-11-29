@@ -1,7 +1,60 @@
 import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
-export const availableLocales = ["en-US"] as const;
+export const availableLocales = [
+  "ca-ES",
+  "cs-CZ",
+  "de-DE",
+  "en-US",
+  "es-ES",
+  "fa-IR",
+  "fr-FR",
+  "he-IL",
+  "hi-IN",
+  "it-IT",
+  "ja-JP",
+  "pl-PL",
+  "pt-BR",
+  "ru-RU",
+  "tr-TR",
+  "zh-CN"
+] as const;
+export const translationPercentages: Record<AvailableLocales, number> = {
+  "ca-ES": 0,
+  "cs-CZ": 0,
+  "de-DE": 4,
+  "es-ES": 19,
+  "fa-IR": 0,
+  "fr-FR": 0,
+  "he-IL": 0,
+  "hi-IN": 0,
+  "it-IT": 0,
+  "ja-JP": 23,
+  "pl-PL": 3,
+  "pt-BR": 0,
+  "ru-RU": 91,
+  "tr-TR": 0,
+  "zh-CN": 75,
+  "en-US": 100
+};
+export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
+	"ca-ES": "ltr",
+	"cs-CZ": "ltr",
+	"de-DE": "ltr",
+	"en-US": "ltr",
+	"es-ES": "ltr",
+	"fa-IR": "rtl",
+	"fr-FR": "ltr",
+	"he-IL": "rtl",
+	"hi-IN": "ltr",
+	"it-IT": "ltr",
+	"ja-JP": "ltr",
+	"pl-PL": "ltr",
+	"pt-BR": "ltr",
+	"ru-RU": "ltr",
+	"tr-TR": "ltr",
+	"zh-CN": "ltr"
+};
 export type AvailableLocales = (typeof availableLocales)[number];
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 

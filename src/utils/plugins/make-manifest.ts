@@ -1,12 +1,12 @@
 import type { PluginOption } from "vite";
 
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { GetInstalledBrowsers } from "get-installed-browsers";
 import { resolve } from "path";
 
 import { manifestV2, manifestV3 } from "../../manifest";
 import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
+import { browsers } from "./utils";
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 function writeManifest(version: 2 | 3, browserName: string) {
@@ -19,13 +19,9 @@ function writeManifest(version: 2 | 3, browserName: string) {
 export default function makeManifest(): PluginOption {
 	return {
 		buildEnd() {
-			const browsers = GetInstalledBrowsers();
-			if (!existsSync(outDir)) {
-				mkdirSync(outDir);
-			}
 			for (const browser of browsers) {
 				if (!existsSync(resolve(outDir, browser.name))) {
-					mkdirSync(resolve(outDir, browser.name));
+					mkdirSync(resolve(outDir, browser.name), { recursive: true });
 				}
 				writeManifest(browser.type === "chrome" ? 3 : 2, browser.name);
 			}

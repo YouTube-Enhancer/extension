@@ -392,3 +392,9 @@ public/manifest.json
 releases/
 yarn.lock
 package-lock.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright-data/
+/playwright-downloads/

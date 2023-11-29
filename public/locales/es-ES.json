@@ -1,15 +1,17 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "es-ES",
+	"langName": "Español",
 	"pages": {
 		"content": {
 			"features": {
 				"videoHistory": {
-					"resumePrompt": { "close": "Close" },
-					"resumeButton": "Resume"
+					"resumePrompt": {
+						"close": "Cerrar"
+					},
+					"resumeButton": "Reanudar"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
+					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
 					"label": "Screenshot"
 				},
 				"loopButton": {
@@ -94,12 +96,30 @@
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
 					"label": "Enable scroll wheel volume control"
 				},
-				"osdColor": { "title": "Select the color for the On-Screen Display", "label": "OSD Color" },
-				"osdType": { "title": "Select the style of On-Screen Display", "label": "OSD Type" },
-				"osdPosition": { "title": "Select the position of the On-Screen Display", "label": "OSD Position" },
-				"osdOpacity": { "title": "Adjust the transparency of the On-Screen Display", "label": "OSD Opacity" },
-				"osdVolumeAdjustmentSteps": { "title": "Adjust the volume change per scroll", "label": "Volume Change Per Scroll" },
-				"osdHide": { "title": "Specify the time, in milliseconds, before automatically hiding the OSD", "label": "Hide Delay" },
+				"osdColor": {
+					"title": "Select the color for the On-Screen Display",
+					"label": "OSD Color"
+				},
+				"osdType": {
+					"title": "Select the style of On-Screen Display",
+					"label": "OSD Type"
+				},
+				"osdPosition": {
+					"title": "Select the position of the On-Screen Display",
+					"label": "OSD Position"
+				},
+				"osdOpacity": {
+					"title": "Adjust the transparency of the On-Screen Display",
+					"label": "OSD Opacity"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"title": "Adjust the volume change per scroll",
+					"label": "Volume Change Per Scroll"
+				},
+				"osdHide": {
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
+					"label": "Hide Delay"
+				},
 				"osdPadding": {
 					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
 					"label": "Padding"
@@ -107,13 +127,13 @@
 				"onScreenDisplay": {
 					"colors": {
 						"red": "Red",
-						"green": "Green",
+						"green": "Verde",
 						"blue": "Blue",
 						"yellow": "Yellow",
 						"orange": "Orange",
 						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
+						"pink": "Rosa",
+						"white": "Blanco"
 					},
 					"position": {
 						"top_left": "Top Left",
@@ -123,8 +143,8 @@
 						"center": "Center"
 					},
 					"type": {
-						"no_display": "No display",
-						"text": "Text",
+						"no_display": "No mostrar",
+						"text": "Texto",
 						"line": "Line",
 						"round": "Round"
 					}
@@ -148,13 +168,13 @@
 				}
 			},
 			"automaticQuality": {
-				"title": "Automatic quality settings",
+				"title": "Ajustes de calidad automáticos",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado.",
+					"label": "Habilitar ajuste automático de calidad"
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "Calidad del reproductor",
 					"title": "The quality to set the video to"
 				}
 			},
@@ -165,7 +185,7 @@
 					"label": "Enable forced playback speed"
 				},
 				"select": {
-					"label": "Player speed",
+					"label": "Velocidad del reproductor",
 					"title": "The speed to set the video to"
 				}
 			},
@@ -181,7 +201,7 @@
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "Ajustes de captura de pantalla",
 				"enable": {
 					"title": "Adds a button to the player to take a screenshot of the video",
 					"label": "Enable screenshot button"
@@ -195,14 +215,14 @@
 					"title": "The format to save the screenshot in"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "Archivo",
+					"clipboard": "Portapapeles"
 				}
 			},
 			"bottomButtons": {
 				"confirm": {
 					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"value": "Confirmar"
 				},
 				"clear": {
 					"title": "Clears all data this extension has stored on your machine",
@@ -210,14 +230,14 @@
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"value": "Reestablecer"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "Idioma",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Idioma",
+					"title": "El idioma a usar para la extensión"
 				}
 			}
 		},
@@ -228,6 +248,6 @@
 	},
 	"messages": {
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"resumingVideo": "Reanudando vídeo en {{VIDEO_TIME}}"
 	}
 }

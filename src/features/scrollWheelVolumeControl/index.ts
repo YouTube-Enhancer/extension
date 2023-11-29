@@ -42,19 +42,16 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				data: { options }
 			} = optionsData;
 			// Extract the necessary properties from the options object
-			const { enable_scroll_wheel_volume_control, enable_scroll_wheel_volume_control_modifier_key, scroll_wheel_volume_control_modifier_key } =
-				options;
+			const {
+				enable_scroll_wheel_volume_control_hold_modifier_key,
+				enable_scroll_wheel_volume_control_hold_right_click,
+				scroll_wheel_volume_control_modifier_key
+			} = options;
 			const wheelEvent = event as WheelEvent;
-			if (
-				!(
-					(enable_scroll_wheel_volume_control &&
-						enable_scroll_wheel_volume_control_modifier_key &&
-						scroll_wheel_volume_control_modifier_key &&
-						wheelEvent[scroll_wheel_volume_control_modifier_key]) ||
-					(enable_scroll_wheel_volume_control && !enable_scroll_wheel_volume_control_modifier_key)
-				)
-			)
-				return;
+			// If the modifier key is required and not pressed, return
+			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key]) return;
+			// If the right click is required and not pressed, return
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return;
 			// Get the player element
 			const playerContainer = isWatchPage()
 				? document.querySelector<YouTubePlayerDiv>("div#movie_player")

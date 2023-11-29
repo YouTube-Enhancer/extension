@@ -1,11 +1,13 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "pt-BR",
+	"langName": "Português do Brasil",
 	"pages": {
 		"content": {
 			"features": {
 				"videoHistory": {
-					"resumePrompt": { "close": "Close" },
+					"resumePrompt": {
+						"close": "Close"
+					},
 					"resumeButton": "Resume"
 				},
 				"screenshotButton": {
@@ -94,12 +96,30 @@
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
 					"label": "Enable scroll wheel volume control"
 				},
-				"osdColor": { "title": "Select the color for the On-Screen Display", "label": "OSD Color" },
-				"osdType": { "title": "Select the style of On-Screen Display", "label": "OSD Type" },
-				"osdPosition": { "title": "Select the position of the On-Screen Display", "label": "OSD Position" },
-				"osdOpacity": { "title": "Adjust the transparency of the On-Screen Display", "label": "OSD Opacity" },
-				"osdVolumeAdjustmentSteps": { "title": "Adjust the volume change per scroll", "label": "Volume Change Per Scroll" },
-				"osdHide": { "title": "Specify the time, in milliseconds, before automatically hiding the OSD", "label": "Hide Delay" },
+				"osdColor": {
+					"title": "Select the color for the On-Screen Display",
+					"label": "OSD Color"
+				},
+				"osdType": {
+					"title": "Select the style of On-Screen Display",
+					"label": "OSD Type"
+				},
+				"osdPosition": {
+					"title": "Select the position of the On-Screen Display",
+					"label": "OSD Position"
+				},
+				"osdOpacity": {
+					"title": "Adjust the transparency of the On-Screen Display",
+					"label": "OSD Opacity"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"title": "Adjust the volume change per scroll",
+					"label": "Volume Change Per Scroll"
+				},
+				"osdHide": {
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
+					"label": "Hide Delay"
+				},
 				"osdPadding": {
 					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
 					"label": "Padding"
