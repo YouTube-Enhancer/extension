@@ -28,12 +28,10 @@ type VersionString = `${string}.${string}.${string}`;
 function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString) {
 	const [, oldMinorVersion] = oldVersion.split(".");
 	const [, newMinorVersion] = newVersion.split(".");
-	console.log(oldMinorVersion, newMinorVersion);
 	return oldMinorVersion !== newMinorVersion;
 }
 function isNewMajorVersion(oldVersion: VersionString, newVersion: VersionString) {
 	const [oldMajorVersion] = oldVersion.split(".");
 	const [newMajorVersion] = newVersion.split(".");
-	console.log(oldMajorVersion, newMajorVersion);
 	return oldMajorVersion !== newMajorVersion;
 }
