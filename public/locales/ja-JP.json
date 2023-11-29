@@ -61,24 +61,24 @@
 				"title": "他の設定",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Remember last volume"
+						"title": "新ビデオの音量を前ビデオの音量に変化する。",
+						"label": "前音量を覚える"
 					},
 					"maximizePlayerButton": {
 						"title": "動画をウィンドウ・サイズまで広がるする",
-						"label": "Enable maximize player button"
+						"label": "最大化ボタンをイネーブル"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"title": "視聴中のビデオで中断した場所を追跡し、そのビデオが再び読み込まれたときに再開するかどうかを尋ねます",
+						"label": "動画歴史機能"
 					},
 					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"title": "ビデオの残り時間を表示します",
+						"label": "残り時間機能"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"title": "動画をループ再生するボタンをビデオ・プレーヤーに追加する",
+						"label": "ループボタン機能"
 					},
 					"hideScrollbar": {
 						"title": "Hides the pages scrollbar",
@@ -93,8 +93,8 @@
 			"scrollWheelVolumeControl": {
 				"title": "Scroll wheel volume control settings",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"title": "スクロールホイールを使用して、ビデオの音量を制御する。",
+					"label": "スクロールホイール音量制御"
 				},
 				"osdColor": {
 					"title": "Select the color for the On-Screen Display",
@@ -121,8 +121,8 @@
 					"label": "Hide Delay"
 				},
 				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "Padding"
+					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。",
+					"label": "スペーシング"
 				},
 				"onScreenDisplay": {
 					"colors": {
