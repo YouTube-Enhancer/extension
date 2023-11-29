@@ -51,12 +51,17 @@ const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChang
 
 	const disabledButtonClasses = { "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
-		<div className={cn("relative flex gap-4 flex-row items-baseline justify-between", className)} id={id} ref={selectRef}>
+		<div
+			aria-valuetext={selectedOption}
+			className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}
+			id={id}
+			ref={selectRef}
+		>
 			<label htmlFor={id}>{label}</label>
 			<div className="relative inline-block">
 				<button
 					className={cn(
-						"border border-gray-300 bg-white text-black px-2 py-2 rounded-md flex items-center justify-between w-40 h-10 focus:outline-none dark:bg-[#23272a] dark:text-white dark:border-gray-700",
+						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
 						disabledButtonClasses
 					)}
 					disabled={disabled}
@@ -88,8 +93,9 @@ const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChang
 					<div className="absolute z-10 mt-2 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-[#23272a]">
 						{options.map((option, index) => (
 							<div
+								aria-valuetext={option.value}
 								className={cn(
-									"px-2 py-2 hover:bg-gray-100 dark:hover:bg-[rgba(24,26,27,0.5)] cursor-pointer flex items-center justify-between w-40 focus:outline-none",
+									"flex w-40 cursor-pointer items-center justify-between p-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-[rgba(24,26,27,0.5)]",
 									{
 										"bg-gray-100 dark:bg-[#2c2f33]": selectedOption === option.value,
 										"rounded-b-md": index === options.length - 1,

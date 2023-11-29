@@ -50,8 +50,8 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				tooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
 				document.body.appendChild(tooltip);
 				const clipboardImage = new ClipboardItem({ "image/png": blob });
-				navigator.clipboard.write([clipboardImage]);
-				navigator.clipboard.writeText(dataUrl);
+				void navigator.clipboard.write([clipboardImage]);
+				void navigator.clipboard.writeText(dataUrl);
 				setTimeout(() => {
 					tooltip.remove();
 				}, 1200);
@@ -81,27 +81,29 @@ export async function addScreenshotButton(): Promise<void> {
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;
 	// Add a click event listener to the screenshot button
-	async function screenshotButtonClickListener() {
-		// Get the video element
-		const videoElement = document.querySelector("video") as HTMLVideoElement | null;
-		// If video element is not available, return
-		if (!videoElement) return;
-		try {
-			// Take a screenshot
-			await takeScreenshot(videoElement);
-		} catch (error) {
-			console.error(error);
-		}
+	function screenshotButtonClickListener() {
+		void (async () => {
+			// Get the video element
+			const videoElement = document.querySelector<HTMLVideoElement>("video");
+			// If video element is not available, return
+			if (!videoElement) return;
+			try {
+				// Take a screenshot
+				await takeScreenshot(videoElement);
+			} catch (error) {
+				console.error(error);
+			}
+		})();
 	}
-	addFeatureItemToMenu({
+	await addFeatureItemToMenu({
 		featureName: "screenshotButton",
 		icon: makeScreenshotIcon(),
 		label: window.i18nextInstance.t("pages.content.features.screenshotButton.label"),
 		listener: screenshotButtonClickListener
 	});
 }
-export async function removeScreenshotButton(): Promise<void> {
-	removeFeatureItemFromMenu("screenshotButton");
+export function removeScreenshotButton() {
+	void removeFeatureItemFromMenu("screenshotButton");
 	eventManager.removeEventListeners("screenshotButton");
 }
 function makeScreenshotIcon() {

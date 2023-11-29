@@ -25,7 +25,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 
 		chrome.storage.onChanged.addListener((changes, namespace) => {
 			if (namespace === area && Object.hasOwnProperty.call(changes, key)) {
-				if (changes[key].newValue) setStoredValue(changes[key].newValue);
+				if (changes[key].newValue) setStoredValue(changes[key].newValue as unknown as T);
 			}
 		});
 	}, []);
@@ -64,7 +64,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 export async function readStorage<T>(key: string, area: StorageArea = "local"): Promise<T | undefined> {
 	try {
 		const result = await chrome.storage[area].get(key);
-		return result?.[key];
+		return result?.[key] as unknown as T;
 	} catch (error) {
 		console.warn(`Error reading ${area} storage key "${key}":`, error);
 		return undefined;

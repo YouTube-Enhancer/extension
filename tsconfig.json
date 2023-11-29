@@ -29,5 +29,15 @@
 			"@/hooks/*": ["src/hooks/*"]
 		}
 	},
-	"include": ["src", "src/utils", "vite.config.ts", "public/locales"]
+	"include": [
+		"src",
+		"vite.config.ts",
+		"public/locales",
+		"playwright.config.ts",
+		"tailwind.config.ts",
+		"postcss.config.cjs",
+		"prettier.config.cjs",
+		"src/features/__tests__"
+	],
+	"exclude": ["node_modules", "dist", "releases"]
 }

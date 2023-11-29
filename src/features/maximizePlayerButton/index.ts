@@ -19,7 +19,7 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	if (!enableMaximizePlayerButton) return;
 	const maximizeSVG = makeMaximizeSVG();
 	// Add a click event listener to the maximize button
-	async function maximizePlayerButtonClickListener() {
+	function maximizePlayerButtonClickListener() {
 		maximizePlayer();
 		updateProgressBarPositions();
 		setupVideoPlayerTimeUpdate();
@@ -30,10 +30,10 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
 	function otherElementClickListener() {
 		// Get the video element
-		const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 		// If video element is not available, return
 		if (!videoElement) return;
-		const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+		const videoContainer = document.querySelector<YouTubePlayerDiv>("#movie_player");
 		if (!videoContainer) return;
 		if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
 			const maximizePlayerMenuItem = getFeatureMenuItem("maximizePlayerButton");
@@ -42,7 +42,7 @@ export async function addMaximizePlayerButton(): Promise<void> {
 			maximizePlayerMenuItem.ariaChecked = "false";
 		}
 	}
-	addFeatureItemToMenu({
+	await addFeatureItemToMenu({
 		featureName: "maximizePlayerButton",
 		icon: maximizeSVG,
 		isToggle: true,
@@ -50,15 +50,15 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		listener: maximizePlayerButtonClickListener
 	});
 	function ytpLeftButtonMouseEnterListener(event: MouseEvent) {
-		const ytTooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
+		const ytTooltip = document.querySelector<HTMLDivElement>("#movie_player > div.ytp-tooltip");
 		if (!ytTooltip) return;
 		// Get the video element
-		const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 		// If video element is not available, return
 		if (!videoElement) return;
-		const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+		const videoContainer = document.querySelector<YouTubePlayerDiv>("#movie_player");
 		if (!videoContainer) return;
-		const controlsElement = document.querySelector("div.ytp-chrome-bottom") as HTMLDivElement | null;
+		const controlsElement = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 		if (!controlsElement) return;
 
 		if (
@@ -73,15 +73,15 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		}
 	}
 	function ytpRightButtonMouseEnterListener(event: MouseEvent) {
-		const ytTooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
+		const ytTooltip = document.querySelector<HTMLDivElement>("#movie_player > div.ytp-tooltip");
 		if (!ytTooltip) return;
 		// Get the video element
-		const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 		// If video element is not available, return
 		if (!videoElement) return;
-		const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+		const videoContainer = document.querySelector<YouTubePlayerDiv>("#movie_player");
 		if (!videoContainer) return;
-		const controlsElement = document.querySelector("div.ytp-chrome-bottom") as HTMLDivElement | null;
+		const controlsElement = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 		if (!controlsElement) return;
 
 		if (
@@ -98,15 +98,15 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	}
 	function seekBarMouseEnterListener(event: MouseEvent) {
 		// TODO: get the seek preview to be in the correct place when the video is maximized from default view
-		const ytTooltip = document.querySelector("#movie_player > div.ytp-tooltip") as HTMLDivElement | null;
+		const ytTooltip = document.querySelector<HTMLDivElement>("#movie_player > div.ytp-tooltip");
 		if (!ytTooltip) return;
 		// Get the video element
-		const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 		// If video element is not available, return
 		if (!videoElement) return;
-		const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+		const videoContainer = document.querySelector<YouTubePlayerDiv>("#movie_player");
 		if (!videoContainer) return;
-		const controlsElement = document.querySelector("div.ytp-chrome-bottom") as HTMLDivElement | null;
+		const controlsElement = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 		if (!controlsElement) return;
 
 		if (
@@ -131,21 +131,19 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		eventManager.addEventListener(miniPlayerElement, "click", otherElementClickListener, "maximizePlayerButton");
 	}
 	const typLeftButtons = [
-		...(document.querySelectorAll(
-			"div.ytp-chrome-controls > div.ytp-left-controls > :not(.yte-maximized-player-button)"
-		) as NodeListOf<HTMLButtonElement>)
+		...document.querySelectorAll<HTMLButtonElement>("div.ytp-chrome-controls > div.ytp-left-controls > :not(.yte-maximized-player-button)")
 	];
-	const volumePanel = document.querySelector("div.ytp-chrome-controls > div.ytp-left-controls > span > div") as HTMLButtonElement | null;
-	const seekBarContainer = document.querySelector("div.ytp-chrome-bottom > div.ytp-progress-bar") as HTMLDivElement | null;
+	const volumePanel = document.querySelector<HTMLButtonElement>("div.ytp-chrome-controls > div.ytp-left-controls > span > div");
+	const seekBarContainer = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom > div.ytp-progress-bar");
 	if (!seekBarContainer) return;
 	if (volumePanel) typLeftButtons.push(volumePanel);
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore TODO: figure out the proper type for this
 	eventManager.addEventListener(seekBarContainer, "mouseenter", seekBarMouseEnterListener, "maximizePlayerButton");
 
-	const typRightButtons = document.querySelectorAll(
+	const typRightButtons = document.querySelectorAll<HTMLButtonElement>(
 		"div.ytp-chrome-controls > div.ytp-right-controls > :not(.yte-maximized-player-button)"
-	) as NodeListOf<HTMLButtonElement>;
+	);
 	typLeftButtons.forEach((button) => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore TODO: figure out the proper type for this
@@ -157,7 +155,7 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		eventManager.addEventListener(button, "mouseenter", ytpRightButtonMouseEnterListener, "maximizePlayerButton");
 	});
 }
-export async function removeMaximizePlayerButton(): Promise<void> {
+export function removeMaximizePlayerButton() {
 	removeFeatureItemFromMenu("maximizePlayerButton");
 	eventManager.removeEventListeners("maximizePlayerButton");
 }

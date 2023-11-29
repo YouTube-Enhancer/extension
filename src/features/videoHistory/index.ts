@@ -22,7 +22,7 @@ export async function setupVideoHistory() {
 	const { enable_video_history: enableVideoHistory } = options;
 	if (!enableVideoHistory) return;
 	// Get the player container element
-	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
 	// If player container is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -30,23 +30,25 @@ export async function setupVideoHistory() {
 	if (playerVideoData.isLive) return;
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
-	const videoElement = playerContainer.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
+	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
 
-	const videoPlayerTimeUpdateListener = async () => {
-		const currentTime = await playerContainer.getCurrentTime();
-		const duration = await playerContainer.getDuration();
-		sendContentMessage("videoHistoryOne", "send_data", {
-			video_history_entry: {
-				id: videoId,
-				status: Math.ceil(duration) === Math.ceil(currentTime) ? "watched" : "watching",
-				timestamp: currentTime
-			}
-		});
+	const videoPlayerTimeUpdateListener = () => {
+		void (async () => {
+			const currentTime = await playerContainer.getCurrentTime();
+			const duration = await playerContainer.getDuration();
+			void sendContentMessage("videoHistoryOne", "send_data", {
+				video_history_entry: {
+					id: videoId,
+					status: Math.ceil(duration) === Math.ceil(currentTime) ? "watched" : "watching",
+					timestamp: currentTime
+				}
+			});
+		})();
 	};
 	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }
-export async function promptUserToResumeVideo() {
+export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
@@ -57,25 +59,31 @@ export async function promptUserToResumeVideo() {
 	if (!enableVideoHistory) return;
 
 	// Get the player container element
-	const playerContainer = isWatchPage() ? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null) : isShortsPage() ? null : null;
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
 
 	// If player container is not available, return
 	if (!playerContainer) return;
 
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
+
 	const videoHistoryOneData = await waitForSpecificMessage("videoHistoryOne", "request_data", "content", { id: videoId });
-	if (!videoHistoryOneData) return;
+	if (!videoHistoryOneData) {
+		cb();
+		return;
+	}
 	const {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
-		createResumePrompt(video_history_entry, playerContainer);
+		createResumePrompt(video_history_entry, playerContainer, cb);
+	} else {
+		cb();
 	}
 }
 // Utility function to check if an element exists
 const elementExists = (elementId: string) => !!document.getElementById(elementId);
-function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv) {
+function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv, cb: () => void) {
 	const progressBarId = "resume-prompt-progress-bar";
 	const overlayId = "resume-prompt-overlay";
 	const closeButtonId = "resume-prompt-close-button";
@@ -84,67 +92,87 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	const progressBarDuration = 15;
 	let countdownInterval: NodeJS.Timeout | undefined;
 
-	const prompt = createStyledElement(promptId, "div", {
-		backgroundColor: "#181a1b",
-		borderRadius: "5px",
-		bottom: "10px",
-		boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-		left: "10px",
-		padding: "12px",
-		paddingBottom: "17px",
-		position: "fixed",
-		transition: "all 0.5s ease-in-out",
-		zIndex: "25000"
+	const prompt = createStyledElement({
+		elementId: promptId,
+		elementType: "div",
+		styles: {
+			backgroundColor: "#181a1b",
+			borderRadius: "5px",
+			bottom: "10px",
+			boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
+			left: "10px",
+			padding: "12px",
+			paddingBottom: "17px",
+			position: "fixed",
+			transition: "all 0.5s ease-in-out",
+			zIndex: "25000"
+		}
 	});
-	const progressBar = createStyledElement(progressBarId, "div", {
-		backgroundColor: "#007acc",
-		borderBottomLeftRadius: "5px",
-		borderBottomRightRadius: "5px",
-		bottom: "0",
-		height: "5px",
-		left: "0",
-		position: "absolute",
-		transition: "all 0.5s ease-in-out",
-		width: "100%",
-		zIndex: "1000"
-	});
-
-	const overlay = createStyledElement(overlayId, "div", {
-		backgroundColor: "rgba(0, 0, 0, 0.75)",
-		cursor: "pointer",
-		height: "100%",
-		left: "0",
-		position: "fixed",
-		top: "0",
-		width: "100%",
-		zIndex: "2500"
+	const progressBar = createStyledElement({
+		elementId: progressBarId,
+		elementType: "div",
+		styles: {
+			backgroundColor: "#007acc",
+			borderBottomLeftRadius: "5px",
+			borderBottomRightRadius: "5px",
+			bottom: "0",
+			height: "5px",
+			left: "0",
+			position: "absolute",
+			transition: "all 0.5s ease-in-out",
+			width: "100%",
+			zIndex: "1000"
+		}
 	});
 
-	const closeButton = createStyledElement(closeButtonId, "button", {
-		backgroundColor: "transparent",
-		border: "0",
-		color: "#fff",
-		cursor: "pointer",
-		fontSize: "16px",
-		lineHeight: "1px",
-		padding: "5px",
-		position: "absolute",
-		right: "-2px",
-		top: "2px"
+	const overlay = createStyledElement({
+		elementId: overlayId,
+		elementType: "div",
+		styles: {
+			backgroundColor: "rgba(0, 0, 0, 0.75)",
+			cursor: "pointer",
+			height: "100%",
+			left: "0",
+			position: "fixed",
+			top: "0",
+			width: "100%",
+			zIndex: "2500"
+		}
+	});
+
+	const closeButton = createStyledElement({
+		elementId: closeButtonId,
+		elementType: "button",
+		styles: {
+			backgroundColor: "transparent",
+			border: "0",
+			color: "#fff",
+			cursor: "pointer",
+			fontSize: "16px",
+			lineHeight: "1px",
+			padding: "5px",
+			position: "absolute",
+			right: "-2px",
+			top: "2px"
+		}
 	});
 	closeButton.textContent = "ₓ";
 
-	const resumeButton = createStyledElement(resumeButtonId, "button", {
-		backgroundColor: "hsl(213, 80%, 50%)",
-		border: "transparent",
-		borderRadius: "5px",
-		boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
-		color: "white",
-		cursor: "pointer",
-		padding: "5px",
-		textAlign: "center",
-		transition: "all 0.5s ease-in-out",
-		verticalAlign: "middle"
+	const resumeButton = createStyledElement({
+		elementId: resumeButtonId,
+		elementType: "button",
+		styles: {
+			backgroundColor: "hsl(213, 80%, 50%)",
+			border: "transparent",
+			borderRadius: "5px",
+			boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+			color: "white",
+			cursor: "pointer",
+			padding: "5px",
+			textAlign: "center",
+			transition: "all 0.5s ease-in-out",
+			verticalAlign: "middle"
+		}
 	});
 	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
 
@@ -166,12 +194,14 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		clearInterval(countdownInterval);
 		prompt.style.display = "none";
 		overlay.style.display = "none";
+		cb();
 	}
 
 	function resumeButtonClickListener() {
 		hidePrompt();
 		browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(videoHistoryEntry.timestamp) }), "FgGreen");
-		playerContainer.seekTo(videoHistoryEntry.timestamp, true);
+		void playerContainer.seekTo(videoHistoryEntry.timestamp, true);
+		cb();
 	}
 
 	if (!elementExists(progressBarId)) {

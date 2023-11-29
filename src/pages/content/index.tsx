@@ -15,7 +15,7 @@ import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost from "@/src/features/volumeBoost";
+import volumeBoost, { disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
 import {
@@ -40,11 +40,11 @@ document.documentElement.appendChild(element);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const alwaysShowProgressBar = async function () {
-	const player = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
+	const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
 	if (!player) return;
-	const playBar = player.querySelector(".ytp-play-progress") as HTMLDivElement | null;
+	const playBar = player.querySelector<HTMLDivElement>(".ytp-play-progress");
 	if (!playBar) return;
-	const loadBar = player.querySelector(".ytp-load-progress") as HTMLDivElement | null;
+	const loadBar = player.querySelector<HTMLDivElement>(".ytp-load-progress");
 	if (!loadBar) return;
 	const currentTime = await player.getCurrentTime();
 	const duration = await player.getDuration();
@@ -77,235 +77,226 @@ const alwaysShowProgressBar = async function () {
 	progressLoad += progressWidth;
 };
 
-window.addEventListener("DOMContentLoaded", async function () {
-	enableRememberVolume();
-	enableHideScrollBar();
+window.addEventListener("DOMContentLoaded", function () {
+	void (async () => {
+		void enableRememberVolume();
+		void enableHideScrollBar();
 
-	const enableFeatures = async () => {
-		// Wait for the specified container selectors to be available on the page
-		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-		eventManager.removeAllEventListeners(["featureMenu"]);
-		enableFeatureMenu();
-		addLoopButton();
-		addMaximizePlayerButton();
-		addScreenshotButton();
-		enableRememberVolume();
-		setupPlaybackSpeedChangeListener();
-		setPlayerQuality();
-		setPlayerSpeed();
-		volumeBoost();
-		adjustVolumeOnScrollWheel();
-		setupVideoHistory();
-		promptUserToResumeVideo();
-		setupRemainingTime();
-		automaticTheaterMode();
-	};
-	const response = await waitForSpecificMessage("language", "request_data", "content");
-	if (!response) return;
-	const {
-		data: { language }
-	} = response;
-	const i18nextInstance = await i18nService(language);
-	window.i18nextInstance = i18nextInstance;
-	if (isWatchPage() || isShortsPage()) document.addEventListener("yt-navigate-finish", enableFeatures);
-	document.addEventListener("yt-player-updated", enableFeatures);
-	/**
-	 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
-	 *
-	 * @returns {void}
-	 */
-	document.addEventListener("yte-message-from-extension", async () => {
-		const provider = document.querySelector("#yte-message-from-extension");
-		if (!provider) return;
-		const { textContent: stringifiedMessage } = provider;
-		if (!stringifiedMessage) return;
-		let message;
-		try {
-			message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings] | Messages["response"];
-		} catch (error) {
-			console.error(error);
-			return;
-		}
-		if (!message) return;
-		switch (message.type) {
-			case "volumeBoostChange": {
-				const {
-					data: { volumeBoostAmount, volumeBoostEnabled }
-				} = message;
-				if (volumeBoostEnabled) {
-					if (window.audioCtx && window.gainNode) {
-						browserColorLog(
-							i18nextInstance.t("messages.settingVolume", {
-								VOLUME_BOOST_AMOUNT: Math.pow(10, Number(volumeBoostAmount) / 20)
-							}),
-							"FgMagenta"
-						);
-						window.gainNode.gain.value = Math.pow(10, Number(volumeBoostAmount) / 20);
-					} else {
-						volumeBoost();
+		const enableFeatures = () => {
+			void (async () => {
+				// Wait for the specified container selectors to be available on the page
+				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+				eventManager.removeAllEventListeners(["featureMenu"]);
+				enableFeatureMenu();
+				void addLoopButton();
+				void addMaximizePlayerButton();
+				void volumeBoost();
+				void addScreenshotButton();
+				void enableRememberVolume();
+				setupPlaybackSpeedChangeListener();
+				void setPlayerQuality();
+				void setPlayerSpeed();
+				void volumeBoost();
+				void adjustVolumeOnScrollWheel();
+				void promptUserToResumeVideo(() => {
+					void setupVideoHistory();
+				});
+				void setupRemainingTime();
+				void automaticTheaterMode();
+			})();
+		};
+		const response = await waitForSpecificMessage("language", "request_data", "content");
+		if (!response) return;
+		const {
+			data: { language }
+		} = response;
+		const i18nextInstance = await i18nService(language);
+		window.i18nextInstance = i18nextInstance;
+		if (isWatchPage() || isShortsPage()) document.addEventListener("yt-navigate-finish", enableFeatures);
+		document.addEventListener("yt-player-updated", enableFeatures);
+		/**
+		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
+		 *
+		 * @returns {void}
+		 */
+		document.addEventListener("yte-message-from-extension", () => {
+			void (async () => {
+				const provider = document.querySelector("#yte-message-from-extension");
+				if (!provider) return;
+				const { textContent: stringifiedMessage } = provider;
+				if (!stringifiedMessage) return;
+				let message;
+				try {
+					message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings] | Messages["response"];
+				} catch (error) {
+					console.error(error);
+					return;
+				}
+				if (!message) return;
+				switch (message.type) {
+					case "volumeBoostChange": {
+						const {
+							data: { volumeBoostEnabled }
+						} = message;
+						if (volumeBoostEnabled) {
+							await enableVolumeBoost();
+						} else {
+							disableVolumeBoost();
+							removeVolumeBoostButton();
+						}
+						break;
 					}
-				} else {
-					if (window.audioCtx && window.gainNode) {
-						browserColorLog(
-							i18nextInstance.t("messages.settingVolume", {
-								VOLUME_BOOST_AMOUNT: "1x"
-							}),
-							"FgMagenta"
-						);
-						window.gainNode.gain.value = 1;
+					case "playerSpeedChange": {
+						const {
+							data: { enableForcedPlaybackSpeed, playerSpeed }
+						} = message;
+						if (enableForcedPlaybackSpeed && playerSpeed) {
+							void setPlayerSpeed(Number(playerSpeed));
+						} else if (!enableForcedPlaybackSpeed) {
+							restorePlayerSpeed();
+						}
+						break;
 					}
-				}
-				break;
-			}
-			case "playerSpeedChange": {
-				const {
-					data: { enableForcedPlaybackSpeed, playerSpeed }
-				} = message;
-				if (enableForcedPlaybackSpeed && playerSpeed) {
-					setPlayerSpeed(Number(playerSpeed));
-				} else if (!enableForcedPlaybackSpeed) {
-					restorePlayerSpeed();
-				}
-				break;
-			}
-			case "screenshotButtonChange": {
-				const {
-					data: { screenshotButtonEnabled }
-				} = message;
-				if (screenshotButtonEnabled) {
-					addScreenshotButton();
-				} else {
-					removeScreenshotButton();
-				}
-				break;
-			}
-			case "maximizePlayerButtonChange": {
-				const {
-					data: { maximizePlayerButtonEnabled }
-				} = message;
-				if (maximizePlayerButtonEnabled) {
-					addMaximizePlayerButton();
-				} else {
-					removeMaximizePlayerButton();
-					const maximizePlayerButton = document.querySelector("button.yte-maximize-player-button") as HTMLButtonElement | null;
-					if (!maximizePlayerButton) return;
-					// Get the video element
-					const videoElement = document.querySelector("video.video-stream.html5-main-video") as HTMLVideoElement | null;
-					// If video element is not available, return
-					if (!videoElement) return;
-					const videoContainer = document.querySelector("#movie_player") as YouTubePlayerDiv | null;
-					if (!videoContainer) return;
-					if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
-						maximizePlayer();
+					case "screenshotButtonChange": {
+						const {
+							data: { screenshotButtonEnabled }
+						} = message;
+						if (screenshotButtonEnabled) {
+							void addScreenshotButton();
+						} else {
+							removeScreenshotButton();
+						}
+						break;
 					}
-				}
-				break;
-			}
-			case "videoHistoryChange": {
-				const {
-					data: { videoHistoryEnabled }
-				} = message;
-				if (videoHistoryEnabled) {
-					setupVideoHistory();
-				} else {
-					eventManager.removeEventListeners("videoHistory");
-				}
-				break;
-			}
-			case "remainingTimeChange": {
-				const {
-					data: { remainingTimeEnabled }
-				} = message;
-				if (remainingTimeEnabled) {
-					setupRemainingTime();
-				} else {
-					removeRemainingTimeDisplay();
-				}
-				break;
-			}
-			case "loopButtonChange": {
-				const {
-					data: { loopButtonEnabled }
-				} = message;
-				if (loopButtonEnabled) {
-					addLoopButton();
-				} else {
-					removeLoopButton();
-				}
-				break;
-			}
-			case "scrollWheelVolumeControlChange": {
-				const {
-					data: { scrollWheelVolumeControlEnabled }
-				} = message;
-				if (scrollWheelVolumeControlEnabled) {
-					adjustVolumeOnScrollWheel();
-				} else {
-					eventManager.removeEventListeners("scrollWheelVolumeControl");
-				}
-				break;
-			}
-			case "rememberVolumeChange": {
-				const {
-					data: { rememberVolumeEnabled }
-				} = message;
-				if (rememberVolumeEnabled) {
-					enableRememberVolume();
-				} else {
-					eventManager.removeEventListeners("rememberVolume");
-				}
-				break;
-			}
-			case "hideScrollBarChange": {
-				const scrollBarHidden = document.getElementById("yte-hide-scroll-bar") !== null;
-				const {
-					data: { hideScrollBarEnabled }
-				} = message;
-				if (hideScrollBarEnabled) {
-					if (!scrollBarHidden) {
-						hideScrollBar();
+					case "maximizeButtonChange": {
+						const {
+							data: { maximizePlayerButtonEnabled }
+						} = message;
+						if (maximizePlayerButtonEnabled) {
+							void addMaximizePlayerButton();
+						} else {
+							void removeMaximizePlayerButton();
+							const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
+							if (!maximizePlayerButton) return;
+							// Get the video element
+							const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+							// If video element is not available, return
+							if (!videoElement) return;
+							const videoContainer = document.querySelector<YouTubePlayerDiv>("video.html5-main-video");
+							if (!videoContainer) return;
+							if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
+								maximizePlayer();
+							}
+						}
+						break;
 					}
-				} else {
-					if (scrollBarHidden) {
-						showScrollBar();
+					case "videoHistoryChange": {
+						const {
+							data: { videoHistoryEnabled }
+						} = message;
+						if (videoHistoryEnabled) {
+							void setupVideoHistory();
+						} else {
+							eventManager.removeEventListeners("videoHistory");
+						}
+						break;
 					}
-				}
-				break;
-			}
-			case "languageChange": {
-				const {
-					data: { language }
-				} = message;
-				window.i18nextInstance = await i18nService(language);
-				updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
-				updateFeatureMenuItemLabel("screenshotButton", window.i18nextInstance.t("pages.content.features.screenshotButton.label"));
-				updateFeatureMenuItemLabel("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"));
-				updateFeatureMenuItemLabel("loopButton", window.i18nextInstance.t("pages.content.features.loopButton.label"));
-				break;
-			}
-			case "automaticTheaterModeChange": {
-				// Get the player element
-				const playerContainer = isWatchPage()
-					? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
-					: isShortsPage()
-					  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
-					  : null;
-				// If player element is not available, return
-				if (!playerContainer) return;
-				// Get the size button
-				const sizeButton = document.querySelector("button.ytp-size-button") as HTMLButtonElement | null;
-				// If the size button is not available return
-				if (!sizeButton) return;
-				sizeButton.click();
+					case "remainingTimeChange": {
+						const {
+							data: { remainingTimeEnabled }
+						} = message;
+						if (remainingTimeEnabled) {
+							void setupRemainingTime();
+						} else {
+							removeRemainingTimeDisplay();
+						}
+						break;
+					}
+					case "loopButtonChange": {
+						const {
+							data: { loopButtonEnabled }
+						} = message;
+						if (loopButtonEnabled) {
+							void addLoopButton();
+						} else {
+							removeLoopButton();
+						}
+						break;
+					}
+					case "scrollWheelVolumeControlChange": {
+						const {
+							data: { scrollWheelVolumeControlEnabled }
+						} = message;
+						if (scrollWheelVolumeControlEnabled) {
+							void adjustVolumeOnScrollWheel();
+						} else {
+							eventManager.removeEventListeners("scrollWheelVolumeControl");
+						}
+						break;
+					}
+					case "rememberVolumeChange": {
+						const {
+							data: { rememberVolumeEnabled }
+						} = message;
+						if (rememberVolumeEnabled) {
+							void enableRememberVolume();
+						} else {
+							eventManager.removeEventListeners("rememberVolume");
+						}
+						break;
+					}
+					case "hideScrollBarChange": {
+						const scrollBarHidden = document.getElementById("yte-hide-scroll-bar") !== null;
+						const {
+							data: { hideScrollBarEnabled }
+						} = message;
+						if (hideScrollBarEnabled) {
+							if (!scrollBarHidden) {
+								hideScrollBar();
+							}
+						} else {
+							if (scrollBarHidden) {
+								showScrollBar();
+							}
+						}
+						break;
+					}
+					case "languageChange": {
+						const {
+							data: { language }
+						} = message;
+						window.i18nextInstance = await i18nService(language);
+						void updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
+						void updateFeatureMenuItemLabel("screenshotButton", window.i18nextInstance.t("pages.content.features.screenshotButton.label"));
+						void updateFeatureMenuItemLabel("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"));
+						void updateFeatureMenuItemLabel("loopButton", window.i18nextInstance.t("pages.content.features.loopButton.label"));
+						break;
+					}
+					case "automaticTheaterModeChange": {
+						// Get the player element
+						const playerContainer = isWatchPage()
+							? document.querySelector("div#movie_player")
+							: isShortsPage()
+							  ? document.querySelector("div#shorts-player")
+							  : null;
+						// If player element is not available, return
+						if (!playerContainer) return;
+						// Get the size button
+						const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
+						// If the size button is not available return
+						if (!sizeButton) return;
+						sizeButton.click();
 
-				break;
-			}
-			default: {
-				return;
-			}
-		}
-	});
-	sendContentOnlyMessage("pageLoaded", undefined);
+						break;
+					}
+					default: {
+						return;
+					}
+				}
+			})();
+		});
+		sendContentOnlyMessage("pageLoaded", undefined);
+	})();
 });
 window.onbeforeunload = function () {
 	eventManager.removeAllEventListeners();

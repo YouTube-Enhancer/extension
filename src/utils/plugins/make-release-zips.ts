@@ -1,14 +1,13 @@
 import type { PluginOption } from "vite";
 
 import archiver from "archiver";
-import * as fs from "fs";
-import { GetInstalledBrowsers } from "get-installed-browsers";
-import * as path from "path";
+import { createWriteStream, existsSync, mkdirSync } from "fs";
+import { resolve } from "path";
 
 import pkg from "../../../package.json";
 import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-const { resolve } = path;
+import { browsers } from "./utils";
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 const releaseDir = resolve(__dirname, "..", "..", "..", "releases");
@@ -16,16 +15,12 @@ const releaseDir = resolve(__dirname, "..", "..", "..", "releases");
 export default function makeReleaseZips(): PluginOption {
 	return {
 		closeBundle() {
-			if (!fs.existsSync(releaseDir)) {
-				fs.mkdirSync(releaseDir);
-			}
-			const browsers = GetInstalledBrowsers();
 			for (const browser of browsers) {
-				if (!fs.existsSync(resolve(releaseDir, browser.name))) {
-					fs.mkdirSync(resolve(releaseDir, browser.name));
+				if (!existsSync(resolve(releaseDir, browser.name))) {
+					mkdirSync(resolve(releaseDir, browser.name), { recursive: true });
 				}
 				const releaseZipPath = resolve(releaseDir, browser.name, `${pkg.name}-v${pkg.version}-${browser.name}.zip`);
-				const releaseZipStream = fs.createWriteStream(releaseZipPath);
+				const releaseZipStream = createWriteStream(releaseZipPath);
 				const releaseZip = archiver("zip", {
 					zlib: {
 						level: 9
@@ -37,10 +32,9 @@ export default function makeReleaseZips(): PluginOption {
 				releaseZipStream.on("close", () => {
 					terminalColorLog(`Release zip file created: ${releaseZipPath}`, "success");
 				});
-				releaseZip.finalize();
+				void releaseZip.finalize();
 			}
 		},
-
 		name: "make-release-zips"
 	};
 }

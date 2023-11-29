@@ -1,15 +1,25 @@
-import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
+import type {
+	ModifierKey,
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType,
+	ScreenshotFormat,
+	ScreenshotType,
+	YoutubePlayerQualityLevel,
+	configuration,
+	configurationKeys
+} from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { availableLocales, type i18nInstanceType } from "@/src/i18n";
+import { type AvailableLocales, availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
-import { configurationImportSchema } from "@/src/utils/constants";
-import { cn, settingsAreDefault } from "@/src/utils/utilities";
-import React, { Suspense, useEffect, useState } from "react";
+import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
+import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -26,7 +36,7 @@ async function getLanguageOptions() {
 		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
 		const localeData = (await response?.json()) as EnUS;
 		languageOptions.push({
-			label: (localeData as typeof EnUS).langName,
+			label: `${localeData.langName} (${translationPercentages[locale]}%)`,
 			value: locale
 		});
 	}
@@ -64,55 +74,126 @@ function LanguageOptions({
 		</SettingSection>
 	);
 }
-export default function Settings({
-	defaultSettings,
-	i18nInstance,
-	selectedColor,
-	selectedDisplayPosition,
-	selectedDisplayType,
-	selectedLanguage,
-	selectedModifierKey,
-	selectedPlayerQuality,
-	selectedPlayerSpeed,
-	selectedScreenshotFormat,
-	selectedScreenshotSaveAs,
-	setSelectedColor,
-	setSelectedDisplayPosition,
-	setSelectedDisplayType,
-	setSelectedLanguage,
-	setSelectedModifierKey,
-	setSelectedPlayerQuality,
-	setSelectedPlayerSpeed,
-	setSelectedScreenshotFormat,
-	setSelectedScreenshotSaveAs,
-	setSettings,
-	settings
-}: {
-	defaultSettings: configuration;
-	i18nInstance: i18nInstanceType;
-	selectedColor: string | undefined;
-	selectedDisplayPosition: string | undefined;
-	selectedDisplayType: string | undefined;
-	selectedLanguage: string | undefined;
-	selectedModifierKey: string | undefined;
-	selectedPlayerQuality: string | undefined;
-	selectedPlayerSpeed: string | undefined;
-	selectedScreenshotFormat: string | undefined;
-	selectedScreenshotSaveAs: string | undefined;
-	setSelectedColor: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedDisplayPosition: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedDisplayType: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedModifierKey: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedPlayerQuality: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedPlayerSpeed: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedScreenshotSaveAs: Dispatch<SetStateAction<string | undefined>>;
-	setSettings: Dispatch<SetStateAction<configuration | undefined>>;
-	settings: configuration | undefined;
-}) {
+export default function Settings() {
+	const [settings, setSettings] = useState<configuration | undefined>(undefined);
+	const [selectedColor, setSelectedColor] = useState<string | undefined>();
+	const [selectedDisplayType, setSelectedDisplayType] = useState<string | undefined>();
+	const [selectedDisplayPosition, setSelectedDisplayPosition] = useState<string | undefined>();
+	const [selectedPlayerQuality, setSelectedPlayerQuality] = useState<string | undefined>();
+	const [selectedPlayerSpeed, setSelectedPlayerSpeed] = useState<string | undefined>();
+	const [selectedScreenshotSaveAs, setSelectedScreenshotSaveAs] = useState<string | undefined>();
+	const [selectedScreenshotFormat, setSelectedScreenshotFormat] = useState<string | undefined>();
+	const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
+	const [selectedModifierKey, setSelectedModifierKey] = useState<string | undefined>();
+	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	const [firstLoad, setFirstLoad] = useState(true);
+	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const { addNotification, notifications, removeNotification } = useNotifications();
+	useEffect(() => {
+		const fetchSettings = () => {
+			chrome.storage.local.get((settings) => {
+				const storedSettings: Partial<configuration> = (
+					Object.keys(settings)
+						.filter((key) => typeof key === "string")
+						.filter((key) => Object.keys(defaultSettings).includes(key as unknown as string)) as configurationKeys[]
+				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const castedSettings = storedSettings as configuration;
+				setSettings({ ...castedSettings });
+				setSelectedColor(castedSettings.osd_display_color);
+				setSelectedDisplayType(castedSettings.osd_display_type);
+				setSelectedDisplayPosition(castedSettings.osd_display_position);
+				setSelectedPlayerQuality(castedSettings.player_quality);
+				setSelectedPlayerSpeed(castedSettings.player_speed.toString());
+				setSelectedScreenshotSaveAs(castedSettings.screenshot_save_as);
+				setSelectedScreenshotFormat(castedSettings.screenshot_format);
+				setSelectedLanguage(castedSettings.language);
+				setSelectedModifierKey(castedSettings.scroll_wheel_volume_control_modifier_key);
+			});
+		};
+
+		fetchSettings();
+	}, []);
+	useEffect(() => {
+		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
+			saveOptions();
+		}
+	}, [settings]);
+	useEffect(() => {
+		const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+			if (areaName !== "local") return;
+			const castedChanges = changes as {
+				[K in keyof configuration]: {
+					newValue: configuration[K] | undefined;
+					oldValue: configuration[K] | undefined;
+				};
+			};
+			Object.keys(castedChanges).forEach((key) => {
+				const {
+					[key]: { newValue, oldValue }
+				} = changes;
+				const parsedNewValue = parseStoredValue(newValue as string);
+				const parsedOldValue = parseStoredValue(oldValue as string);
+				if (parsedNewValue === parsedOldValue) return;
+				if (
+					parsedOldValue !== null &&
+					parsedNewValue !== null &&
+					typeof parsedOldValue === "object" &&
+					typeof parsedNewValue === "object" &&
+					JSON.stringify(parsedNewValue) === JSON.stringify(parsedOldValue)
+				)
+					return;
+				switch (key) {
+					case "osd_display_color":
+						setSelectedColor(parsedNewValue as OnScreenDisplayColor);
+						break;
+					case "osd_display_type":
+						setSelectedDisplayType(parsedNewValue as OnScreenDisplayType);
+						break;
+					case "osd_display_position":
+						setSelectedDisplayPosition(parsedNewValue as OnScreenDisplayPosition);
+						break;
+					case "player_quality":
+						setSelectedPlayerQuality(parsedNewValue as YoutubePlayerQualityLevel);
+						break;
+					case "player_speed":
+						setSelectedPlayerSpeed(parsedNewValue as string);
+						break;
+					case "screenshot_save_as":
+						setSelectedScreenshotSaveAs(parsedNewValue as ScreenshotType);
+						break;
+					case "screenshot_format":
+						setSelectedScreenshotFormat(parsedNewValue as ScreenshotFormat);
+						break;
+					case "language":
+						setSelectedLanguage(parsedNewValue as AvailableLocales);
+						break;
+				}
+				setSettings((prevSettings) => {
+					if (prevSettings) {
+						return { ...prevSettings, [key]: parsedNewValue as configuration[typeof key] };
+					}
+					return undefined;
+				});
+			});
+		};
+
+		chrome.storage.onChanged.addListener(handleStorageChange);
+		chrome.runtime.onSuspend.addListener(() => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		});
+		return () => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		};
+	}, []);
+	useEffect(() => {
+		void (async () => {
+			const instance = await i18nService((selectedLanguage as AvailableLocales) ?? "en-US");
+			setI18nInstance(instance);
+		})();
+	}, [selectedLanguage]);
+	if (!settings || !i18nInstance || (i18nInstance && i18nInstance.isInitialized === false)) {
+		return <Loader />;
+	}
 	const { t } = i18nInstance;
 	const setCheckboxOption =
 		(key: configurationKeys) =>
@@ -120,41 +201,42 @@ export default function Settings({
 			setFirstLoad(false);
 			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
 		};
-
 	const setValueOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			setFirstLoad(false);
 			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
 		};
-
-	useEffect(() => {
-		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
-			saveOptions();
-		}
-	}, [settings]);
 	function saveOptions() {
 		if (settings) {
-			if (settings.enable_automatically_set_quality && !settings.player_quality) {
-				addNotification("error", t("pages.options.notifications.error.playerQuality"));
-				return;
+			for (const key of Object.keys(settings)) {
+				if (typeof settings[key] !== "string") {
+					localStorage.setItem(key, JSON.stringify(settings[key]));
+					void chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
+				} else {
+					localStorage.setItem(key, settings[key] as string);
+					void chrome.storage.local.set({ [key]: settings[key] as string });
+				}
 			}
-			Object.assign(localStorage, settings);
-			chrome.storage.local.set(settings);
 
 			addNotification("success", t("pages.options.notifications.success.saved"));
 		}
 	}
-
 	function resetOptions() {
 		addNotification("info", t("pages.options.notifications.info.reset"), "reset_settings");
 	}
-
 	function clearData() {
 		const userHasConfirmed = window.confirm(t("settings.clearData.confirmAlert"));
 		if (userHasConfirmed) {
-			Object.assign(localStorage, defaultSettings);
-			chrome.storage.local.set(defaultSettings);
+			for (const key of Object.keys(defaultSettings)) {
+				if (typeof defaultSettings[key] !== "string") {
+					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
+					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
+				} else {
+					localStorage.setItem(key, defaultSettings[key] as string);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
+				}
+			}
 			addNotification("success", t("settings.clearData.allDataDeleted"));
 		}
 	}
@@ -194,42 +276,42 @@ export default function Settings({
 	] as { label: string; value: ModifierKey }[] as SelectOption[];
 	const colorOptions: SelectOption[] = [
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[red]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: red,
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
 			label: green,
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
 			label: blue,
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
 			label: yellow,
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
 			label: orange,
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
 			label: purple,
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
 			label: pink,
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-black border-[1px] border-solid", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
 			label: white,
 			value: "white"
 		}
@@ -297,65 +379,86 @@ export default function Settings({
 		{ label: file, value: "file" },
 		{ label: clipboard, value: "clipboard" }
 	];
-
 	// Import settings from a JSON file.
-	const importSettings = () => {
-		const input = document.createElement("input");
-		input.type = "file";
-		input.accept = ".json";
+	function importSettings() {
+		if (settingsImportRef.current === null) return;
 
-		input.addEventListener("change", async (event) => {
-			const { target } = event;
-			if (!target) return;
-			const { files } = target as HTMLInputElement;
-			const file = files?.[0];
-			if (file) {
-				try {
-					const fileContents = await file.text();
-					const importedSettings = JSON.parse(fileContents);
-					// Validate the imported settings.
-					const result = configurationImportSchema.safeParse(importedSettings);
-					if (!result.success) {
-						const { error } = result;
-						const errorMessage = generateErrorMessage(error.errors);
-						window.alert(
-							t("settings.sections.importExportSettings.importButton.error.validation", {
-								ERROR_MESSAGE: errorMessage
-							})
-						);
-					} else {
-						const castSettings = importedSettings as configuration;
-						// Set the imported settings in your state.
-						setSettings({ ...castSettings });
-						Object.assign(localStorage, castSettings);
-						chrome.storage.local.set(castSettings);
-						// Show a success notification.
-						addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+		settingsImportRef.current.addEventListener("change", (event) => {
+			void (async () => {
+				const { target } = event;
+				if (!target) return;
+				const { files } = target as HTMLInputElement;
+				const file = files?.[0];
+				if (file) {
+					try {
+						const fileContents = await file.text();
+						const importedSettings = JSON.parse(fileContents);
+						// Validate the imported settings.
+						const result = configurationImportSchema.safeParse(importedSettings);
+						if (!result.success) {
+							const { error } = result;
+							const errorMessage = generateErrorMessage(error.errors);
+							window.alert(
+								t("settings.sections.importExportSettings.importButton.error.validation", {
+									ERROR_MESSAGE: errorMessage
+								})
+							);
+						} else {
+							const castSettings = importedSettings as configuration;
+							// Set the imported settings in your state.
+							setSettings({ ...castSettings });
+							for (const key of Object.keys(castSettings)) {
+								if (typeof castSettings[key] !== "string") {
+									localStorage.setItem(key, JSON.stringify(castSettings[key]));
+									void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
+								} else {
+									localStorage.setItem(key, castSettings[key] as string);
+									void chrome.storage.local.set({ [key]: castSettings[key] as string });
+								}
+							}
+							// Show a success notification.
+							addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+						}
+					} catch (error) {
+						// Handle any import errors.
+						window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 					}
-				} catch (error) {
-					// Handle any import errors.
-					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 				}
-			}
+				if (settingsImportRef.current) settingsImportRef.current.value = "";
+			})();
 		});
 
 		// Trigger the file input dialog.
-		input.click();
-	};
-
+		settingsImportRef.current.click();
+	}
 	// Export settings to a JSON file.
 	const exportSettings = () => {
 		if (settings) {
+			// Get the current settings
+			const exportableSettings: configuration = Object.keys(defaultSettings).reduce(
+				(acc, key) =>
+					Object.assign(acc, {
+						[key]: parseStoredValue(settings[key] as string)
+					}),
+				{} as configuration
+			);
+			// Get the current date and time, and format it for use in the filename.
 			const timestamp = formatDateForFileName(new Date());
+			// Create the filename.
 			const filename = `youtube_enhancer_settings_${timestamp}.json`;
-			const settingsJSON = JSON.stringify(settings);
+			// Convert the settings to JSON.
+			const settingsJSON = JSON.stringify(exportableSettings);
 
+			// Create a blob to hold the JSON.
 			const blob = new Blob([settingsJSON], { type: "application/json" });
+			// Get a URL for the blob.
 			const url = URL.createObjectURL(blob);
 
+			// Create a link to the blob.
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
+			// Click the link to download the file.
 			a.click();
 
 			// Show a success notification.
@@ -364,9 +467,9 @@ export default function Settings({
 	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
-		settings && (
-			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white">
-				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl">
+		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], settings }}>
+			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
 					<img className="h-16 w-16 sm:h-16 sm:w-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
@@ -675,8 +778,14 @@ export default function Settings({
 								if (notificationToRemove) {
 									removeNotification(notificationToRemove);
 								}
-								Object.assign(localStorage, Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
-								chrome.storage.local.set(Object.assign(defaultSettings, { remembered_volumes: settings.remembered_volumes }));
+								localStorage.setItem("remembered_volumes", JSON.stringify(settings.remembered_volumes));
+								void chrome.storage.local.set({ remembered_volumes: JSON.stringify(settings.remembered_volumes) });
+								for (const key of Object.keys(defaultSettings)) {
+									if (typeof defaultSettings[key] !== "string") {
+										localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
+										void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
+									}
+								}
 
 								addNotification("success", t("pages.options.notifications.success.saved"));
 							}}
@@ -696,7 +805,20 @@ export default function Settings({
 					)}
 				</div>
 				<SettingsNotifications />
+				<input accept=".json" hidden={true} id="import_settings_input" ref={settingsImportRef} type="file" />
 			</div>
-		)
+		</SettingsContext.Provider>
 	);
 }
+type SettingsContextProps = {
+	direction: "ltr" | "rtl";
+	settings: configuration;
+};
+export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
+export const useSettings = () => {
+	const context = useContext(SettingsContext);
+	if (context === undefined) {
+		throw new Error("useSettings must be used within a SettingsProvider");
+	}
+	return context;
+};

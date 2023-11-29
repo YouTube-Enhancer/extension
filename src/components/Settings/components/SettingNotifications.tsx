@@ -9,7 +9,7 @@ export default function SettingsNotifications() {
 		<div id="notifications" ref={parentRef}>
 			{notifications.map((notification, index) => (
 				<div
-					className={cn("relative notification inverse bg-teal-600", {
+					className={cn("notification inverse relative bg-teal-600", {
 						"bg-blue-600": notification.type === "info",
 						"bg-green-600": notification.type === "success",
 						"bg-red-600": notification.type === "error",

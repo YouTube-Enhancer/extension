@@ -38,7 +38,7 @@ export const screenshotFormat = ["png", "jpg", "webp"] as const;
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKey)[number];
-
+export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type configuration = {
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
@@ -62,10 +62,7 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
-	remembered_volumes?: {
-		shortsPageVolume: number;
-		watchPageVolume: number;
-	};
+	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
 	scroll_wheel_volume_control_modifier_key: ModifierKey;
@@ -109,14 +106,14 @@ export type RequestDataMessage<Type extends string, D> = Prettify<
 >;
 export type ContentSendOnlyMessageMappings = {
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
-	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", { shortsPageVolume?: number; watchPageVolume?: number }>;
+	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
-	maximizePlayerButtonChange: DataResponseMessage<"maximizePlayerButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
@@ -168,7 +165,7 @@ export type TypeToZodSchema<T> = z.ZodObject<{
 	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
 }>;
 export type TypeToPartialZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodOptionalType<z.ZodType<T[K]>>;
+	[K in keyof T]: T[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>> : z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];

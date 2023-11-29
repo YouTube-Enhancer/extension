@@ -1,7 +1,60 @@
-import i18next, { type Resource, createInstance } from "i18next";
+import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
-export const availableLocales = ["en-US"] as const;
+export const availableLocales = [
+  "ca-ES",
+  "cs-CZ",
+  "de-DE",
+  "en-US",
+  "es-ES",
+  "fa-IR",
+  "fr-FR",
+  "he-IL",
+  "hi-IN",
+  "it-IT",
+  "ja-JP",
+  "pl-PL",
+  "pt-BR",
+  "ru-RU",
+  "tr-TR",
+  "zh-CN"
+] as const;
+export const translationPercentages: Record<AvailableLocales, number> = {
+  "ca-ES": 90,
+  "cs-CZ": 90,
+  "de-DE": 90,
+  "es-ES": 94,
+  "fa-IR": 90,
+  "fr-FR": 90,
+  "he-IL": 90,
+  "hi-IN": 90,
+  "it-IT": 90,
+  "ja-JP": 98,
+  "pl-PL": 94,
+  "pt-BR": 90,
+  "ru-RU": 99,
+  "tr-TR": 90,
+  "zh-CN": 99,
+  "en-US": 100
+};
+export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
+	"ca-ES": "ltr",
+	"cs-CZ": "ltr",
+	"de-DE": "ltr",
+	"en-US": "ltr",
+	"es-ES": "ltr",
+	"fa-IR": "rtl",
+	"fr-FR": "ltr",
+	"he-IL": "rtl",
+	"hi-IN": "ltr",
+	"it-IT": "ltr",
+	"ja-JP": "ltr",
+	"pl-PL": "ltr",
+	"pt-BR": "ltr",
+	"ru-RU": "ltr",
+	"tr-TR": "ltr",
+	"zh-CN": "ltr"
+};
 export type AvailableLocales = (typeof availableLocales)[number];
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
@@ -19,7 +72,11 @@ export async function i18nService(locale: AvailableLocales) {
 	}
 	if (!availableLocales.includes(locale)) throw new Error(`The locale '${locale}' is not available`);
 	const response = await fetch(`${extensionURL}locales/${locale}.json`).catch((err) => {
-		throw new Error(err);
+		if (err instanceof Error) {
+			throw err;
+		} else {
+			throw new Error("unknown error");
+		}
 	});
 	const translations = (await response.json()) as typeof import("../../public/locales/en-US.json");
 	const i18nextInstance = await new Promise<i18nInstanceType>((resolve, reject) => {
@@ -30,8 +87,8 @@ export async function i18nService(locale: AvailableLocales) {
 		} = {
 			[locale]: { translation: translations }
 		};
-		const instance = i18next.createInstance();
-		instance.init(
+		const instance = createInstance();
+		void instance.init(
 			{
 				debug: true,
 				fallbackLng: "en-US",

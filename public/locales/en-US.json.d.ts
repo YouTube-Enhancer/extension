@@ -13,13 +13,11 @@ interface EnUS {
 				maximizePlayerButton: { label: "Maximize" };
 				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
+				volumeBoostButton: { label: "Volume Boost" };
 			};
 		};
 		options: {
 			notifications: {
-				error: {
-					playerQuality: "You must select a player quality if you want to enable the automatic quality feature.";
-				};
 				info: {
 					reset: 'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.';
 				};

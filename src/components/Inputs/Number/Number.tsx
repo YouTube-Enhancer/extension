@@ -4,6 +4,7 @@ import type { ChangeEvent, MutableRefObject } from "react";
 import { cn } from "@/src/utils/utilities";
 import React, { useRef } from "react";
 
+import { useSettings } from "../../Settings/Settings";
 import Arrow from "./Arrow";
 import "./Number.css";
 export type NumberInputProps = {
@@ -21,6 +22,7 @@ export type NumberInputProps = {
 const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, label, max = undefined, min = 0, onChange, step = 1, value }) => {
 	const inputElement: MutableRefObject<HTMLInputElement | null> = useRef(null);
 	const inputDiv: MutableRefObject<HTMLDivElement | null> = useRef(null);
+	const { direction } = useSettings();
 	const NumberPlus = () => {
 		if (inputElement.current) {
 			inputElement.current.stepUp();
@@ -52,7 +54,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 		"text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	return (
-		<div className={cn("relative flex gap-4 items-baseline justify-between flex-row", className)} ref={inputDiv}>
+		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
 			<label className="mb-1" htmlFor={id}>
 				{label}
 			</label>
@@ -60,10 +62,11 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 				<input
 					aria-hidden={true}
 					className={cn(
-						"number border border-gray-300 bg-white text-black px-2 py-2 rounded-md flex items-center justify-between w-40 h-10 focus:outline-none dark:bg-[#23272a] dark:text-white dark:border-gray-700",
+						"number flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
 						{ "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled }
 					)}
 					disabled={disabled}
+					id={id}
 					max={max}
 					min={min}
 					onChange={(e) => handleChange(e.currentTarget.value)}
@@ -78,12 +81,17 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					type="number"
 					value={value}
 				></input>
-				<div className="absolute bottom-1 right-1 flex h-[35px] flex-col">
+				<div
+					className={cn("absolute flex h-[35px] flex-col", {
+						"bottom-1 left-1": direction === "rtl",
+						"bottom-1 right-1": direction === "ltr"
+					})}
+				>
 					<button
 						aria-hidden={true}
 						aria-label="Add one"
 						className={cn(
-							"flex text-black dark:text-white round-r dark:bg-[#23272a] dark:hover:bg-[rgba(24,26,27,0.5)] w-full h-1/2 p-1 justify-center cursor-default",
+							"round-r flex h-1/2 w-full cursor-default justify-center p-1 text-black dark:bg-[#23272a] dark:text-white dark:hover:bg-[rgba(24,26,27,0.5)]",
 							disabledButtonClasses
 						)}
 						disabled={disabled}
@@ -100,7 +108,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 						aria-hidden={true}
 						aria-label="Subtract one"
 						className={cn(
-							"flex text-black dark:text-white round-r dark:bg-[#23272a] dark:hover:bg-[rgba(24,26,27,0.5)] w-full h-1/2 p-1 justify-center cursor-default",
+							"round-r flex h-1/2 w-full cursor-default justify-center p-1 text-black dark:bg-[#23272a] dark:text-white dark:hover:bg-[rgba(24,26,27,0.5)]",
 							disabledButtonClasses
 						)}
 						disabled={disabled}

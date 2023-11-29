@@ -17,26 +17,28 @@ export async function setupVolumeChangeListener() {
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
 	const playerContainer = IsWatchPage
-		? (document.querySelector("div#movie_player") as YouTubePlayerDiv | null)
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: IsShortsPage
-		  ? (document.querySelector("div#shorts-player") as YouTubePlayerDiv | null)
+		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		  : null;
 	if (!playerContainer) return;
-	const videoElement: HTMLVideoElement | null = playerContainer.querySelector("div > video");
+	const videoElement = playerContainer.querySelector<HTMLVideoElement>("div > video");
 	if (!videoElement) return;
 	eventManager.addEventListener(
 		videoElement,
 		"volumechange",
-		async ({ currentTarget }) => {
-			if (!currentTarget) return;
-			const newVolume = await playerContainer.getVolume();
-			if (IsWatchPage) {
-				// Send a "setVolume" message to the content script
-				sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
-			} else if (IsShortsPage) {
-				// Send a "setVolume" message to the content script
-				sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
-			}
+		({ currentTarget }) => {
+			void (async () => {
+				if (!currentTarget) return;
+				const newVolume = await playerContainer.getVolume();
+				if (IsWatchPage) {
+					// Send a "setVolume" message to the content script
+					sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
+				} else if (IsShortsPage) {
+					// Send a "setVolume" message to the content script
+					sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
+				}
+			})();
 		},
 		"rememberVolume"
 	);
