@@ -149,16 +149,21 @@
 						"round": "丸い"
 					}
 				},
-				"modifierKey": {
-					"title": "Scroll Wheel Modifier Key",
+				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable modifier key"
+						"label": "Enable hold modifier key"
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
 						"label": "Modifier key",
 						"title": "The modifier key to use"
+					}
+				},
+				"holdRightClick": {
+					"enable": {
+						"title": "Hold right click to enable scroll wheel volume control",
+						"label": "Enable hold right click"
 					}
 				}
 			},
