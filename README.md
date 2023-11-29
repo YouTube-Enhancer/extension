@@ -14,6 +14,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 
 - [Introduction](#-introduction)
 - [Features](#%EF%B8%8F-features)
+- [Installing from pre-built package](#installing-from-pre-built-zip-archive)
 - [Building the Extension](#%EF%B8%8F-building-the-extension)
 - [Configuration](#-configuration)
 - [Usage](#-usage)
@@ -91,6 +92,32 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
 
+## Installing from pre-built zip archive
+
+To install the YouTube Enhancer Extension from the latest release, follow these steps:
+
+1. Visit the [Latest Release Page](https://github.com/VampireChicken12/youtube-enhancer/releases/latest).
+
+2. Download the pre-built zip archive for your preferred browser.
+
+3. Extract the contents of the zip archive to a directory of your choice.
+
+4. Depending on your browser, follow these steps:
+
+   - **Google Chrome, Microsoft Edge, Brave:**
+
+     - Open your browser and go to `chrome://extensions/` (or `edge://extensions/` for Edge, `brave://extensions/` for Brave).
+     - Enable 'Developer mode'.
+     - Click 'Load unpacked' and select the extracted directory.
+
+   - **Mozilla Firefox:**
+     - Open Firefox and go to `about:debugging#/runtime/this-firefox`.
+     - Click on 'Load Temporary Add-on' and select any file in the extracted directory.
+
+5. Test the extension on YouTube to ensure it functions as expected.
+
+That's it! You've successfully installed the YouTube Enhancer Extension from the latest release.
+
 ## 🛠️ Building the Extension
 
 To build the YouTube Enhancer extension from scratch, follow these steps. We'll start with installing the necessary dependencies:
@@ -137,17 +164,21 @@ npm run build
 
 This command will bundle the extension's code and assets into a 'dist' directory.
 
-### 6. Load the Extension
+### 6. Loading the Extension from the 'dist' Folder
 
-Now that you've built the extension, you can load it into your browser for testing:
+After building the extension, you can load it into your browser for testing. Follow these steps:
 
-- **Google Chrome:** Open Chrome and go to `chrome://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+Depending on your browser, follow these steps:
 
-- **Microsoft Edge:** Open Edge and go to `edge://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+- **Google Chrome, Microsoft Edge, Brave:**
 
-- **Brave:** Open Brave and go to `brave://extensions/`. Enable 'Developer mode', then click 'Load unpacked' and select the 'dist/Chrome' directory.
+  - Open your browser and go to `chrome://extensions/` (or `edge://extensions/` for Edge, `brave://extensions/` for Brave).
+  - Enable 'Developer mode'.
+  - Click 'Load unpacked' and select the 'dist/Chrome' directory.
 
-- **Mozilla Firefox:** Open Firefox and go to `about:debugging#/runtime/this-firefox`. Click on 'Load Temporary Add-on' and select any file in the 'dist/Firefox" directory.
+- **Mozilla Firefox:**
+  - Open Firefox and go to `about:debugging#/runtime/this-firefox`.
+  - Click on 'Load Temporary Add-on' and select any file in the 'dist/Firefox" directory.
 
 ### 7. Test the Extension
 
