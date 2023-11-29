@@ -1,3 +1,23 @@
+# [1.14.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.13.1...v1.14.0) (2023-11-29)
+
+
+### Features
+
+* hold right click scroll wheel volume control ([3587c4a](https://github.com/VampireChicken12/youtube-enhancer/commit/3587c4a103903533e9b790d74e80d56b5179fe9b))
+* hover feature menu ([1006e40](https://github.com/VampireChicken12/youtube-enhancer/commit/1006e40ada448e06bfa6beb9cdbf88195bac4566))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.14.0-Chrome.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
+| youtube-enhancer-v1.14.0-Chromium.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
+| youtube-enhancer-v1.14.0-Edge.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
+| youtube-enhancer-v1.14.0-Firefox.zip | 7b22ad88a317c695d30a6819408c60b5e55292a515c0ef98041ed9e48328ae34 |
+
 ## [1.13.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.13.0...v1.13.1) (2023-11-27)
 
 ### Bug Fixes

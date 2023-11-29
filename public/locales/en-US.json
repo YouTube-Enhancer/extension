@@ -64,27 +64,27 @@
 					},
 					"maximizePlayerButton": {
 						"title": "Fills the video to the window size",
-						"label": "Maximize player button"
+						"label": "Enable maximize player button"
 					},
 					"videoHistory": {
 						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Video history"
+						"label": "Enable video history"
 					},
 					"remainingTime": {
 						"title": "Shows the remaining time of the video you're watching",
-						"label": "Remaining time"
+						"label": "Enable remaining time"
 					},
 					"loopButton": {
 						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Loop button"
+						"label": "Enable loop button"
 					},
 					"hideScrollbar": {
 						"title": "Hides the pages scrollbar",
-						"label": "Hide scrollbar"
+						"label": "Enable hide scrollbar"
 					},
 					"automaticTheaterMode": {
 						"title": "Automatically enables theater mode when you load a video",
-						"label": "Automatic theater mode"
+						"label": "Enable automatic theater mode"
 					}
 				}
 			},
@@ -92,7 +92,7 @@
 				"title": "Scroll wheel volume control settings",
 				"enable": {
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Scroll wheel volume control"
+					"label": "Enable scroll wheel volume control"
 				},
 				"osdColor": { "title": "Select the color for the On-Screen Display", "label": "OSD Color" },
 				"osdType": { "title": "Select the style of On-Screen Display", "label": "OSD Type" },
@@ -132,7 +132,7 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Hold modifier key"
+						"label": "Enable hold modifier key"
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
@@ -143,7 +143,7 @@
 				"holdRightClick": {
 					"enable": {
 						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Hold right click"
+						"label": "Enable hold right click"
 					}
 				}
 			},
@@ -151,7 +151,7 @@
 				"title": "Automatic quality settings",
 				"enable": {
 					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Automatic quality adjustment"
+					"label": "Enable automatic quality adjustment"
 				},
 				"select": {
 					"label": "Player quality",
@@ -162,7 +162,7 @@
 				"title": "Playback speed settings",
 				"enable": {
 					"title": "Sets the video speed to what you choose below",
-					"label": "Forced playback speed"
+					"label": "Enable forced playback speed"
 				},
 				"select": {
 					"label": "Player speed",
@@ -173,7 +173,7 @@
 				"title": "Volume boost settings",
 				"enable": {
 					"title": "Boosts the volume of the video you're watching",
-					"label": "Volume boost"
+					"label": "Enable volume boost"
 				},
 				"number": {
 					"label": "Volume boost amount (dB)",
@@ -184,7 +184,7 @@
 				"title": "Screenshot settings",
 				"enable": {
 					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Screenshot button"
+					"label": "Enable screenshot button"
 				},
 				"selectSaveAs": {
 					"label": "Screenshot save type",
