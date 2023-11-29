@@ -31,23 +31,25 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Remember Last Volume:** This option remembers the last volume set for Shorts and the Watch page separately, applying the appropriate volume when you revisit each type of video content.
 
-- **Enable Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
+- **Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
 
-- **Enable Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
+- **Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
 
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
-- **Enable Loop Button:** Adds a dedicated button to toggle the video player loop.
+- **Loop Button:** Adds a dedicated button to toggle the video player loop.
 
-- **Enable Hide Scrollbar:** Hides the pages scroll bar
+- **Hide Scrollbar:** Hides the pages scroll bar
 
-- **Enable Automatic Theater Mode:** Automatically enables theater mode when you load a video
+- **Automatic Theater Mode:** Automatically enables theater mode when you load a video
 
 ### 2. Scroll Wheel Volume Control Settings
 
-- **Enable Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
+- **Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
 
-- **Scroll Wheel Volume Control Modifier Key**: Optionally, enable a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
+- **Scroll Wheel Volume Control Modifier Key**: Optionally, enable holding a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
+
+- **Scroll Wheel Volume Control Right Click**: Optionally, enable holding down the right mouse button during scroll wheel actions.
 
 - **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
 
@@ -65,25 +67,25 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ### 3. Automatic Quality Settings
 
-- **Enable Automatically Set Quality:** Automatically sets the video quality to the chosen level.
+- **Automatically Set Quality:** Automatically sets the video quality to the chosen level.
 
 - **Player Quality:** Choose the desired video quality for playback.
 
 ### 4. Playback Speed Settings
 
-- **Enable Forced Playback Speed:** Allows users to force videos to play at a specific speed.
+- **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
 - **Player Speed:** Define the playback speed for videos.
 
 ### 5. Volume Boost Settings
 
-- **Enable Volume Boost:** Boosts the volume of the video being watched.
+- **Volume Boost:** Boosts the volume of the video being watched.
 
 - **Volume Boost Amount (dB):** Specify the amount by which to boost the volume.
 
 ### 6. Screenshot Settings
 
-- **Enable Screenshot Button:** Adds a button to the player for taking screenshots of videos.
+- **Screenshot Button:** Adds a button to the player for taking screenshots of videos.
 
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
