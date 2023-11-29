@@ -33,9 +33,6 @@
 				"success": {
 					"saved": "选项已保存。"
 				},
-				"error": {
-					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
-				},
 				"info": {
 					"reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
 				}

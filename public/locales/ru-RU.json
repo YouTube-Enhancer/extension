@@ -33,9 +33,6 @@
 				"success": {
 					"saved": "Настройки сохранены."
 				},
-				"error": {
-					"playerQuality": "You must select a player quality if you want to enable the automatic quality feature."
-				},
 				"info": {
 					"reset": "Все параметры были сброшены к значениям по умолчанию.\nТеперь вы можете сохранить изменения, нажав кнопку «Подтвердить» или отменить их, закрыв эту страницу или проигнорировав это уведомление."
 				}
