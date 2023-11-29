@@ -24,7 +24,7 @@
 					"label": "フィーチャー・メニュー"
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "音量ブースト"
 				}
 			}
 		},
@@ -44,7 +44,7 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
+						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
 						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
 					},
 					"success": "設定がインポートをされました",
