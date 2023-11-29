@@ -24,7 +24,7 @@
 					"label": "フィーチャー・メニュー"
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "音量ブースト"
 				}
 			}
 		},
@@ -34,7 +34,7 @@
 					"saved": "選択がセーブしました"
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "全てのオプションが省略時値でリセットしました。\n今変化を「確認」抓みでクリックするとセーブは可能するかページを閉じるで変化を破棄するかこの通知を捨て置くするは可能です。"
 				}
 			}
 		}
@@ -44,8 +44,8 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
+						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。"
 					},
 					"success": "設定がインポートをされました",
 					"title": "JSONファイルから設定がインポートする",
@@ -61,44 +61,44 @@
 				"title": "他の設定",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Remember last volume"
+						"title": "新ビデオの音量を前動画の音量に変化する。",
+						"label": "前音量を覚える"
 					},
 					"maximizePlayerButton": {
 						"title": "動画をウィンドウ・サイズまで広がるする",
-						"label": "Enable maximize player button"
+						"label": "最大化ボタン"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます",
+						"label": "動画歴史"
 					},
 					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"title": "動画の残り時間を表示します",
+						"label": "残り時間"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"title": "動画をループ再生するボタンをビデオ・プレーヤーに追加する",
+						"label": "動画ループボタン"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
-						"label": "Enable hide scrollbar"
+						"title": "ページのスクロールバーを隠す",
+						"label": "スクロールバー隠す機能"
 					},
 					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"title": "動画の読み込み時に自動的にシアターモードを有効にする",
+						"label": "自動シアターモード"
 					}
 				}
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
+				"title": "スクロールホイール音量制御設定",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"title": "スクロールホイールを使用して、ビデオの音量を制御する。",
+					"label": "スクロールホイール音量制御"
 				},
 				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Color"
+					"title": "オンスクリーンディスプレイ(OSD)の色を選択選べる",
+					"label": "OSDの色"
 				},
 				"osdType": {
 					"title": "Select the style of On-Screen Display",
@@ -121,8 +121,8 @@
 					"label": "Hide Delay"
 				},
 				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "Padding"
+					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。",
+					"label": "スペーシング"
 				},
 				"onScreenDisplay": {
 					"colors": {
@@ -132,15 +132,15 @@
 						"yellow": "黄色",
 						"orange": "橙色",
 						"purple": "紫色",
-						"pink": "Pink",
-						"white": "White"
+						"pink": "桃色",
+						"white": "白色"
 					},
 					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
+						"top_left": "左上隅",
+						"top_right": "右上隅",
+						"bottom_left": "左下隅",
+						"bottom_right": "右下隅",
+						"center": "中心"
 					},
 					"type": {
 						"no_display": "No display",
@@ -154,7 +154,7 @@
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
 						"label": "Enable hold modifier key"
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "{{KEY}} キー",
 					"select": {
 						"label": "Modifier key",
 						"title": "The modifier key to use"
@@ -215,8 +215,8 @@
 					"title": "The format to save the screenshot in"
 				},
 				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
+					"file": "ファイル",
+					"clipboard": "クリップボード"
 				}
 			},
 			"bottomButtons": {
@@ -230,14 +230,14 @@
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"value": "リセット"
 				}
 			},
 			"language": {
-				"title": "Language",
+				"title": "言語",
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "言語",
+					"title": "エクステンションに使用する言語"
 				}
 			}
 		},
@@ -248,6 +248,6 @@
 	},
 	"messages": {
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
+		"resumingVideo": "{{VIDEO_TIME}} から動画をレジュームする"
 	}
 }
