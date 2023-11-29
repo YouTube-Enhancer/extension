@@ -22,6 +22,9 @@
 				},
 				"featureMenu": {
 					"label": "Меню функций"
+				},
+				"volumeBoostButton": {
+					"label": "Volume Boost"
 				}
 			}
 		},
