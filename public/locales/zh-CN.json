@@ -86,7 +86,7 @@
 					},
 					"automaticTheaterMode": {
 						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"label": "Automatic theater mode"
 					}
 				}
 			},
@@ -152,7 +152,7 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable hold modifier key"
+						"label": "Hold modifier key"
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
@@ -163,7 +163,7 @@
 				"holdRightClick": {
 					"enable": {
 						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable hold right click"
+						"label": "Enable Holding right click"
 					}
 				}
 			},

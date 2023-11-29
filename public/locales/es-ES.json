@@ -66,27 +66,27 @@
 					},
 					"maximizePlayerButton": {
 						"title": "Fills the video to the window size",
-						"label": "Enable maximize player button"
+						"label": "Maximize player button"
 					},
 					"videoHistory": {
 						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Enable video history"
+						"label": "Video history"
 					},
 					"remainingTime": {
 						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"label": "Remaining time"
 					},
 					"loopButton": {
 						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"label": "Loop button"
 					},
 					"hideScrollbar": {
 						"title": "Hides the pages scrollbar",
-						"label": "Enable hide scrollbar"
+						"label": "Hide scrollbar"
 					},
 					"automaticTheaterMode": {
 						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"label": "Automatic theater mode"
 					}
 				}
 			},
@@ -94,7 +94,7 @@
 				"title": "Scroll wheel volume control settings",
 				"enable": {
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"label": "Scroll wheel volume control"
 				},
 				"osdColor": {
 					"title": "Select the color for the On-Screen Display",
@@ -152,7 +152,7 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable hold modifier key"
+						"label": "Hold modifier key"
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
@@ -163,7 +163,7 @@
 				"holdRightClick": {
 					"enable": {
 						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable hold right click"
+						"label": "Enable Holding right click"
 					}
 				}
 			},
@@ -182,7 +182,7 @@
 				"title": "Playback speed settings",
 				"enable": {
 					"title": "Sets the video speed to what you choose below",
-					"label": "Enable forced playback speed"
+					"label": "Forced playback speed"
 				},
 				"select": {
 					"label": "Velocidad del reproductor",
@@ -193,7 +193,7 @@
 				"title": "Volume boost settings",
 				"enable": {
 					"title": "Boosts the volume of the video you're watching",
-					"label": "Enable volume boost"
+					"label": "Volume boost"
 				},
 				"number": {
 					"label": "Volume boost amount (dB)",
@@ -204,7 +204,7 @@
 				"title": "Ajustes de captura de pantalla",
 				"enable": {
 					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Enable screenshot button"
+					"label": "Screenshot button"
 				},
 				"selectSaveAs": {
 					"label": "Screenshot save type",

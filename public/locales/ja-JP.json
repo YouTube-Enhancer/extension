@@ -101,24 +101,24 @@
 					"label": "OSDの色"
 				},
 				"osdType": {
-					"title": "Select the style of On-Screen Display",
-					"label": "OSD Type"
+					"title": "オンスクリーンディスプレイ(OSD)型を選択選べる",
+					"label": "OSD型"
 				},
 				"osdPosition": {
-					"title": "Select the position of the On-Screen Display",
-					"label": "OSD Position"
+					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選べる",
+					"label": "OSDポジション"
 				},
 				"osdOpacity": {
-					"title": "Adjust the transparency of the On-Screen Display",
-					"label": "OSD Opacity"
+					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する",
+					"label": "OSDの不透明度"
 				},
 				"osdVolumeAdjustmentSteps": {
-					"title": "Adjust the volume change per scroll",
-					"label": "Volume Change Per Scroll"
+					"title": "スクロール増分ごとの音量を調整する",
+					"label": "スクロール増分ごとの音量変更"
 				},
 				"osdHide": {
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
-					"label": "Hide Delay"
+					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します",
+					"label": "非表示の遅延"
 				},
 				"osdPadding": {
 					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。",
@@ -143,7 +143,7 @@
 						"center": "中心"
 					},
 					"type": {
-						"no_display": "No display",
+						"no_display": "見せない",
 						"text": "テキスト",
 						"line": "ライン",
 						"round": "丸い"
@@ -152,18 +152,18 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable hold modifier key"
+						"label": "Hold modifier key"
 					},
 					"optionLabel": "{{KEY}} キー",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "キーバインド",
+						"title": "キーバインド選択選べる"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
 						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable hold right click"
+						"label": "Enable Holding right click"
 					}
 				}
 			},
@@ -171,10 +171,10 @@
 				"title": "自動画質設定",
 				"enable": {
 					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Enable automatic quality adjustment"
+					"label": "自動画質調整"
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "プレイヤーの動画質",
 					"title": "The quality to set the video to"
 				}
 			},
@@ -182,7 +182,7 @@
 				"title": "Playback speed settings",
 				"enable": {
 					"title": "Sets the video speed to what you choose below",
-					"label": "Enable forced playback speed"
+					"label": "Forced playback speed"
 				},
 				"select": {
 					"label": "Player speed",
@@ -193,7 +193,7 @@
 				"title": "Volume boost settings",
 				"enable": {
 					"title": "Boosts the volume of the video you're watching",
-					"label": "Enable volume boost"
+					"label": "Volume boost"
 				},
 				"number": {
 					"label": "Volume boost amount (dB)",
@@ -204,15 +204,15 @@
 				"title": "Screenshot settings",
 				"enable": {
 					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Enable screenshot button"
+					"label": "スクリーンショットボタン"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "スクリーンショットセーブ型",
+					"title": "スクリーンショットのセーブ型"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "スクリーンショットフォーマット",
+					"title": "スクリーンショットを保存するフォーマット"
 				},
 				"saveAs": {
 					"file": "ファイル",
@@ -221,15 +221,15 @@
 			},
 			"bottomButtons": {
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "設定リセットを確認する",
+					"value": "確認"
 				},
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "マシンに保存されているすべてのエクステンションデータを消去します",
+					"value": "データの消去"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
 					"value": "リセット"
 				}
 			},
@@ -242,12 +242,12 @@
 			}
 		},
 		"clearData": {
-			"confirmAlert": "This will delete all extension data related to options. Continue?",
-			"allDataDeleted": "All data has been deleted."
+			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？",
+			"allDataDeleted": "すべてのデータが削除されました。"
 		}
 	},
 	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
+		"settingVolume": "音量ブーストを{{VOLUME_BOOST_AMOUNT}}に設定中",
 		"resumingVideo": "{{VIDEO_TIME}} から動画をレジュームする"
 	}
 }

@@ -74,11 +74,11 @@
 					},
 					"remainingTime": {
 						"title": "Shows the remaining time of the video you're watching",
-						"label": "Enable remaining time"
+						"label": "Remaining time"
 					},
 					"loopButton": {
 						"title": "Adds a button to the player to loop the video you're watching",
-						"label": "Enable loop button"
+						"label": "Loop button"
 					},
 					"hideScrollbar": {
 						"title": "Hides the pages scrollbar",
@@ -86,7 +86,7 @@
 					},
 					"automaticTheaterMode": {
 						"title": "Automatically enables theater mode when you load a video",
-						"label": "Enable automatic theater mode"
+						"label": "Automatic theater mode"
 					}
 				}
 			},
@@ -94,7 +94,7 @@
 				"title": "Scroll wheel volume control settings",
 				"enable": {
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Enable scroll wheel volume control"
+					"label": "Scroll wheel volume control"
 				},
 				"osdColor": {
 					"title": "Select the color for the On-Screen Display",
@@ -152,7 +152,7 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable hold modifier key"
+						"label": "Hold modifier key"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
