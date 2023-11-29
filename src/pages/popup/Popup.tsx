@@ -1,6 +1,10 @@
-import SettingsWrapper from "@/src/components/SettingsWrapper";
-import React from "react";
+import Settings from "@/src/components/Settings/Settings";
+import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
 
 export default function Options(): JSX.Element {
-	return <SettingsWrapper />;
+	return (
+		<NotificationsProvider>
+			<Settings />
+		</NotificationsProvider>
+	);
 }

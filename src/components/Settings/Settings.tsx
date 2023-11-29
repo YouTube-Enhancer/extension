@@ -1,15 +1,25 @@
-import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
+import type {
+	ModifierKey,
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType,
+	ScreenshotFormat,
+	ScreenshotType,
+	YoutubePlayerQualityLevel,
+	configuration,
+	configurationKeys
+} from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { availableLocales, type i18nInstanceType } from "@/src/i18n";
+import { type AvailableLocales, availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
-import { configurationImportSchema, defaultConfiguration } from "@/src/utils/constants";
+import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -26,7 +36,7 @@ async function getLanguageOptions() {
 		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
 		const localeData = (await response?.json()) as EnUS;
 		languageOptions.push({
-			label: localeData.langName,
+			label: `${localeData.langName} (${translationPercentages[locale]}%)`,
 			value: locale
 		});
 	}
@@ -64,76 +74,139 @@ function LanguageOptions({
 		</SettingSection>
 	);
 }
-export default function Settings({
-	defaultSettings,
-	i18nInstance,
-	selectedColor,
-	selectedDisplayPosition,
-	selectedDisplayType,
-	selectedLanguage,
-	selectedModifierKey,
-	selectedPlayerQuality,
-	selectedPlayerSpeed,
-	selectedScreenshotFormat,
-	selectedScreenshotSaveAs,
-	setSelectedColor,
-	setSelectedDisplayPosition,
-	setSelectedDisplayType,
-	setSelectedLanguage,
-	setSelectedModifierKey,
-	setSelectedPlayerQuality,
-	setSelectedPlayerSpeed,
-	setSelectedScreenshotFormat,
-	setSelectedScreenshotSaveAs,
-	setSettings,
-	settings
-}: {
-	defaultSettings: configuration;
-	i18nInstance: i18nInstanceType;
-	selectedColor: string | undefined;
-	selectedDisplayPosition: string | undefined;
-	selectedDisplayType: string | undefined;
-	selectedLanguage: string | undefined;
-	selectedModifierKey: string | undefined;
-	selectedPlayerQuality: string | undefined;
-	selectedPlayerSpeed: string | undefined;
-	selectedScreenshotFormat: string | undefined;
-	selectedScreenshotSaveAs: string | undefined;
-	setSelectedColor: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedDisplayPosition: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedDisplayType: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedModifierKey: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedPlayerQuality: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedPlayerSpeed: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedScreenshotFormat: Dispatch<SetStateAction<string | undefined>>;
-	setSelectedScreenshotSaveAs: Dispatch<SetStateAction<string | undefined>>;
-	setSettings: Dispatch<SetStateAction<configuration | undefined>>;
-	settings: configuration | undefined;
-}) {
+export default function Settings() {
+	const [settings, setSettings] = useState<configuration | undefined>(undefined);
+	const [selectedColor, setSelectedColor] = useState<string | undefined>();
+	const [selectedDisplayType, setSelectedDisplayType] = useState<string | undefined>();
+	const [selectedDisplayPosition, setSelectedDisplayPosition] = useState<string | undefined>();
+	const [selectedPlayerQuality, setSelectedPlayerQuality] = useState<string | undefined>();
+	const [selectedPlayerSpeed, setSelectedPlayerSpeed] = useState<string | undefined>();
+	const [selectedScreenshotSaveAs, setSelectedScreenshotSaveAs] = useState<string | undefined>();
+	const [selectedScreenshotFormat, setSelectedScreenshotFormat] = useState<string | undefined>();
+	const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
+	const [selectedModifierKey, setSelectedModifierKey] = useState<string | undefined>();
+	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	const [firstLoad, setFirstLoad] = useState(true);
-	const { addNotification, notifications, removeNotification } = useNotifications();
-	const { t } = i18nInstance;
 	const settingsImportRef = useRef<HTMLInputElement>(null);
+	const { addNotification, notifications, removeNotification } = useNotifications();
+	useEffect(() => {
+		const fetchSettings = () => {
+			chrome.storage.local.get((settings) => {
+				const storedSettings: Partial<configuration> = (
+					Object.keys(settings)
+						.filter((key) => typeof key === "string")
+						.filter((key) => Object.keys(defaultSettings).includes(key as unknown as string)) as configurationKeys[]
+				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const castedSettings = storedSettings as configuration;
+				setSettings({ ...castedSettings });
+				setSelectedColor(castedSettings.osd_display_color);
+				setSelectedDisplayType(castedSettings.osd_display_type);
+				setSelectedDisplayPosition(castedSettings.osd_display_position);
+				setSelectedPlayerQuality(castedSettings.player_quality);
+				setSelectedPlayerSpeed(castedSettings.player_speed.toString());
+				setSelectedScreenshotSaveAs(castedSettings.screenshot_save_as);
+				setSelectedScreenshotFormat(castedSettings.screenshot_format);
+				setSelectedLanguage(castedSettings.language);
+				setSelectedModifierKey(castedSettings.scroll_wheel_volume_control_modifier_key);
+			});
+		};
+
+		fetchSettings();
+	}, []);
+	useEffect(() => {
+		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
+			saveOptions();
+		}
+	}, [settings]);
+	useEffect(() => {
+		const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+			if (areaName !== "local") return;
+			const castedChanges = changes as {
+				[K in keyof configuration]: {
+					newValue: configuration[K] | undefined;
+					oldValue: configuration[K] | undefined;
+				};
+			};
+			Object.keys(castedChanges).forEach((key) => {
+				const {
+					[key]: { newValue, oldValue }
+				} = changes;
+				const parsedNewValue = parseStoredValue(newValue as string);
+				const parsedOldValue = parseStoredValue(oldValue as string);
+				if (parsedNewValue === parsedOldValue) return;
+				if (
+					parsedOldValue !== null &&
+					parsedNewValue !== null &&
+					typeof parsedOldValue === "object" &&
+					typeof parsedNewValue === "object" &&
+					JSON.stringify(parsedNewValue) === JSON.stringify(parsedOldValue)
+				)
+					return;
+				switch (key) {
+					case "osd_display_color":
+						setSelectedColor(parsedNewValue as OnScreenDisplayColor);
+						break;
+					case "osd_display_type":
+						setSelectedDisplayType(parsedNewValue as OnScreenDisplayType);
+						break;
+					case "osd_display_position":
+						setSelectedDisplayPosition(parsedNewValue as OnScreenDisplayPosition);
+						break;
+					case "player_quality":
+						setSelectedPlayerQuality(parsedNewValue as YoutubePlayerQualityLevel);
+						break;
+					case "player_speed":
+						setSelectedPlayerSpeed(parsedNewValue as string);
+						break;
+					case "screenshot_save_as":
+						setSelectedScreenshotSaveAs(parsedNewValue as ScreenshotType);
+						break;
+					case "screenshot_format":
+						setSelectedScreenshotFormat(parsedNewValue as ScreenshotFormat);
+						break;
+					case "language":
+						setSelectedLanguage(parsedNewValue as AvailableLocales);
+						break;
+				}
+				setSettings((prevSettings) => {
+					if (prevSettings) {
+						return { ...prevSettings, [key]: parsedNewValue as configuration[typeof key] };
+					}
+					return undefined;
+				});
+			});
+		};
+
+		chrome.storage.onChanged.addListener(handleStorageChange);
+		chrome.runtime.onSuspend.addListener(() => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		});
+		return () => {
+			chrome.storage.onChanged.removeListener(handleStorageChange);
+		};
+	}, []);
+	useEffect(() => {
+		void (async () => {
+			const instance = await i18nService((selectedLanguage as AvailableLocales) ?? "en-US");
+			setI18nInstance(instance);
+		})();
+	}, [selectedLanguage]);
+	if (!settings || !i18nInstance || (i18nInstance && i18nInstance.isInitialized === false)) {
+		return <Loader />;
+	}
+	const { t } = i18nInstance;
 	const setCheckboxOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
 			setFirstLoad(false);
 			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
 		};
-
 	const setValueOption =
 		(key: configurationKeys) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			setFirstLoad(false);
 			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
 		};
-
-	useEffect(() => {
-		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
-			saveOptions();
-		}
-	}, [settings]);
 	function saveOptions() {
 		if (settings) {
 			for (const key of Object.keys(settings)) {
@@ -149,11 +222,9 @@ export default function Settings({
 			addNotification("success", t("pages.options.notifications.success.saved"));
 		}
 	}
-
 	function resetOptions() {
 		addNotification("info", t("pages.options.notifications.info.reset"), "reset_settings");
 	}
-
 	function clearData() {
 		const userHasConfirmed = window.confirm(t("settings.clearData.confirmAlert"));
 		if (userHasConfirmed) {
@@ -308,7 +379,6 @@ export default function Settings({
 		{ label: file, value: "file" },
 		{ label: clipboard, value: "clipboard" }
 	];
-
 	// Import settings from a JSON file.
 	function importSettings() {
 		if (settingsImportRef.current === null) return;
@@ -361,12 +431,11 @@ export default function Settings({
 		// Trigger the file input dialog.
 		settingsImportRef.current.click();
 	}
-
 	// Export settings to a JSON file.
 	const exportSettings = () => {
 		if (settings) {
 			// Get the current settings
-			const exportableSettings: configuration = Object.keys(defaultConfiguration).reduce(
+			const exportableSettings: configuration = Object.keys(defaultSettings).reduce(
 				(acc, key) =>
 					Object.assign(acc, {
 						[key]: parseStoredValue(settings[key] as string)
@@ -398,9 +467,9 @@ export default function Settings({
 	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
-		settings && (
-			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white">
-				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl">
+		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], settings }}>
+			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
 					<img className="h-16 w-16 sm:h-16 sm:w-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
@@ -738,6 +807,18 @@ export default function Settings({
 				<SettingsNotifications />
 				<input accept=".json" hidden={true} id="import_settings_input" ref={settingsImportRef} type="file" />
 			</div>
-		)
+		</SettingsContext.Provider>
 	);
 }
+type SettingsContextProps = {
+	direction: "ltr" | "rtl";
+	settings: configuration;
+};
+export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
+export const useSettings = () => {
+	const context = useContext(SettingsContext);
+	if (context === undefined) {
+		throw new Error("useSettings must be used within a SettingsProvider");
+	}
+	return context;
+};
