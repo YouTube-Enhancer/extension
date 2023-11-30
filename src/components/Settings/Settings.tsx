@@ -1,21 +1,11 @@
-import type {
-	ModifierKey,
-	OnScreenDisplayColor,
-	OnScreenDisplayPosition,
-	OnScreenDisplayType,
-	ScreenshotFormat,
-	ScreenshotType,
-	YoutubePlayerQualityLevel,
-	configuration,
-	configurationKeys
-} from "@/src/types";
+import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
-import type { ChangeEvent, Dispatch, SetStateAction } from "react";
+import type { ChangeEvent, ChangeEventHandler } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { type AvailableLocales, availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
+import { availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
@@ -44,12 +34,10 @@ async function getLanguageOptions() {
 }
 function LanguageOptions({
 	selectedLanguage,
-	setSelectedLanguage,
 	setValueOption,
 	t
 }: {
 	selectedLanguage: string | undefined;
-	setSelectedLanguage: Dispatch<SetStateAction<string | undefined>>;
 	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	t: i18nInstanceType["t"];
 }) {
@@ -67,7 +55,6 @@ function LanguageOptions({
 				onChange={setValueOption("language")}
 				options={languageOptions}
 				selectedOption={selectedLanguage}
-				setSelectedOption={setSelectedLanguage}
 				title={t("settings.sections.language.select.title")}
 				type="select"
 			/>
@@ -76,15 +63,6 @@ function LanguageOptions({
 }
 export default function Settings() {
 	const [settings, setSettings] = useState<configuration | undefined>(undefined);
-	const [selectedColor, setSelectedColor] = useState<string | undefined>();
-	const [selectedDisplayType, setSelectedDisplayType] = useState<string | undefined>();
-	const [selectedDisplayPosition, setSelectedDisplayPosition] = useState<string | undefined>();
-	const [selectedPlayerQuality, setSelectedPlayerQuality] = useState<string | undefined>();
-	const [selectedPlayerSpeed, setSelectedPlayerSpeed] = useState<string | undefined>();
-	const [selectedScreenshotSaveAs, setSelectedScreenshotSaveAs] = useState<string | undefined>();
-	const [selectedScreenshotFormat, setSelectedScreenshotFormat] = useState<string | undefined>();
-	const [selectedLanguage, setSelectedLanguage] = useState<string | undefined>();
-	const [selectedModifierKey, setSelectedModifierKey] = useState<string | undefined>();
 	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	const [firstLoad, setFirstLoad] = useState(true);
 	const settingsImportRef = useRef<HTMLInputElement>(null);
@@ -99,15 +77,6 @@ export default function Settings() {
 				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
 				setSettings({ ...castedSettings });
-				setSelectedColor(castedSettings.osd_display_color);
-				setSelectedDisplayType(castedSettings.osd_display_type);
-				setSelectedDisplayPosition(castedSettings.osd_display_position);
-				setSelectedPlayerQuality(castedSettings.player_quality);
-				setSelectedPlayerSpeed(castedSettings.player_speed.toString());
-				setSelectedScreenshotSaveAs(castedSettings.screenshot_save_as);
-				setSelectedScreenshotFormat(castedSettings.screenshot_format);
-				setSelectedLanguage(castedSettings.language);
-				setSelectedModifierKey(castedSettings.scroll_wheel_volume_control_modifier_key);
 			});
 		};
 
@@ -142,32 +111,6 @@ export default function Settings() {
 					JSON.stringify(parsedNewValue) === JSON.stringify(parsedOldValue)
 				)
 					return;
-				switch (key) {
-					case "osd_display_color":
-						setSelectedColor(parsedNewValue as OnScreenDisplayColor);
-						break;
-					case "osd_display_type":
-						setSelectedDisplayType(parsedNewValue as OnScreenDisplayType);
-						break;
-					case "osd_display_position":
-						setSelectedDisplayPosition(parsedNewValue as OnScreenDisplayPosition);
-						break;
-					case "player_quality":
-						setSelectedPlayerQuality(parsedNewValue as YoutubePlayerQualityLevel);
-						break;
-					case "player_speed":
-						setSelectedPlayerSpeed(parsedNewValue as string);
-						break;
-					case "screenshot_save_as":
-						setSelectedScreenshotSaveAs(parsedNewValue as ScreenshotType);
-						break;
-					case "screenshot_format":
-						setSelectedScreenshotFormat(parsedNewValue as ScreenshotFormat);
-						break;
-					case "language":
-						setSelectedLanguage(parsedNewValue as AvailableLocales);
-						break;
-				}
 				setSettings((prevSettings) => {
 					if (prevSettings) {
 						return { ...prevSettings, [key]: parsedNewValue as configuration[typeof key] };
@@ -186,11 +129,13 @@ export default function Settings() {
 		};
 	}, []);
 	useEffect(() => {
-		void (async () => {
-			const instance = await i18nService((selectedLanguage as AvailableLocales) ?? "en-US");
-			setI18nInstance(instance);
-		})();
-	}, [selectedLanguage]);
+		if (settings && settings["language"]) {
+			void (async () => {
+				const instance = await i18nService(settings["language"] ?? "en-US");
+				setI18nInstance(instance);
+			})();
+		}
+	}, [settings]);
 	if (!settings || !i18nInstance || (i18nInstance && i18nInstance.isInitialized === false)) {
 		return <Loader />;
 	}
@@ -207,6 +152,7 @@ export default function Settings() {
 			setFirstLoad(false);
 			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
 		};
+	const getSelectedOption = <K extends configurationKeys>(key: K) => settings[key];
 	function saveOptions() {
 		if (settings) {
 			for (const key of Object.keys(settings)) {
@@ -369,7 +315,7 @@ export default function Settings() {
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
 	].reverse();
-	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate.toString(), value: rate.toString() }));
+	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() }));
 	const ScreenshotFormatOptions: SelectOption[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -379,55 +325,53 @@ export default function Settings() {
 		{ label: file, value: "file" },
 		{ label: clipboard, value: "clipboard" }
 	];
+	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
+		void (async () => {
+			const { target } = event;
+			if (!target) return;
+			const { files } = target as HTMLInputElement;
+			const file = files?.[0];
+			if (file) {
+				try {
+					const fileContents = await file.text();
+					const importedSettings = JSON.parse(fileContents);
+					// Validate the imported settings.
+					const result = configurationImportSchema.safeParse(importedSettings);
+					if (!result.success) {
+						const { error } = result;
+						const errorMessage = generateErrorMessage(error.errors);
+						window.alert(
+							t("settings.sections.importExportSettings.importButton.error.validation", {
+								ERROR_MESSAGE: errorMessage
+							})
+						);
+					} else {
+						const castSettings = importedSettings as configuration;
+						// Set the imported settings in your state.
+						setSettings({ ...castSettings });
+						for (const key of Object.keys(castSettings)) {
+							if (typeof castSettings[key] !== "string") {
+								localStorage.setItem(key, JSON.stringify(castSettings[key]));
+								void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
+							} else {
+								localStorage.setItem(key, castSettings[key] as string);
+								void chrome.storage.local.set({ [key]: castSettings[key] as string });
+							}
+						}
+						// Show a success notification.
+						addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+					}
+				} catch (error) {
+					// Handle any import errors.
+					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
+				}
+			}
+			if (settingsImportRef.current) settingsImportRef.current.value = "";
+		})();
+	};
 	// Import settings from a JSON file.
 	function importSettings() {
 		if (settingsImportRef.current === null) return;
-
-		settingsImportRef.current.addEventListener("change", (event) => {
-			void (async () => {
-				const { target } = event;
-				if (!target) return;
-				const { files } = target as HTMLInputElement;
-				const file = files?.[0];
-				if (file) {
-					try {
-						const fileContents = await file.text();
-						const importedSettings = JSON.parse(fileContents);
-						// Validate the imported settings.
-						const result = configurationImportSchema.safeParse(importedSettings);
-						if (!result.success) {
-							const { error } = result;
-							const errorMessage = generateErrorMessage(error.errors);
-							window.alert(
-								t("settings.sections.importExportSettings.importButton.error.validation", {
-									ERROR_MESSAGE: errorMessage
-								})
-							);
-						} else {
-							const castSettings = importedSettings as configuration;
-							// Set the imported settings in your state.
-							setSettings({ ...castSettings });
-							for (const key of Object.keys(castSettings)) {
-								if (typeof castSettings[key] !== "string") {
-									localStorage.setItem(key, JSON.stringify(castSettings[key]));
-									void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
-								} else {
-									localStorage.setItem(key, castSettings[key] as string);
-									void chrome.storage.local.set({ [key]: castSettings[key] as string });
-								}
-							}
-							// Show a success notification.
-							addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
-						}
-					} catch (error) {
-						// Handle any import errors.
-						window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
-					}
-				}
-				if (settingsImportRef.current) settingsImportRef.current.value = "";
-			})();
-		});
-
 		// Trigger the file input dialog.
 		settingsImportRef.current.click();
 	}
@@ -475,12 +419,7 @@ export default function Settings() {
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
 				<Suspense fallback={<Loader />}>
-					<LanguageOptions
-						selectedLanguage={selectedLanguage}
-						setSelectedLanguage={setSelectedLanguage}
-						setValueOption={setValueOption}
-						t={i18nInstance.t}
-					/>
+					<LanguageOptions selectedLanguage={settings["language"]} setValueOption={setValueOption} t={i18nInstance.t} />
 				</Suspense>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
@@ -568,51 +507,47 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control_hold_modifier_key.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control_hold_modifier_key?.toString() !== "true"}
 						id="scroll_wheel_volume_control_modifier_key"
 						label={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.label")}
 						onChange={setValueOption("scroll_wheel_volume_control_modifier_key")}
 						options={scrollWheelVolumeControlModifierKeyOptions}
-						selectedOption={selectedModifierKey}
-						setSelectedOption={setSelectedModifierKey}
+						selectedOption={getSelectedOption("scroll_wheel_volume_control_modifier_key")}
 						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_color"
 						label={t("settings.sections.scrollWheelVolumeControl.osdColor.label")}
 						onChange={setValueOption("osd_display_color")}
 						options={colorOptions}
-						selectedOption={selectedColor}
-						setSelectedOption={setSelectedColor}
+						selectedOption={getSelectedOption("osd_display_color")}
 						title={t("settings.sections.scrollWheelVolumeControl.osdColor.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_type"
 						label={t("settings.sections.scrollWheelVolumeControl.osdType.label")}
 						onChange={setValueOption("osd_display_type")}
 						options={OSD_DisplayTypeOptions}
-						selectedOption={selectedDisplayType}
-						setSelectedOption={setSelectedDisplayType}
+						selectedOption={getSelectedOption("osd_display_type")}
 						title={t("settings.sections.scrollWheelVolumeControl.osdType.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_position"
 						label={t("settings.sections.scrollWheelVolumeControl.osdPosition.label")}
 						onChange={setValueOption("osd_display_position")}
 						options={OSD_PositionOptions}
-						selectedOption={selectedDisplayPosition}
-						setSelectedOption={setSelectedDisplayPosition}
+						selectedOption={getSelectedOption("osd_display_position")}
 						title={t("settings.sections.scrollWheelVolumeControl.osdPosition.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_opacity"
 						label={t("settings.sections.scrollWheelVolumeControl.osdOpacity.label")}
 						max={100}
@@ -623,7 +558,7 @@ export default function Settings() {
 						value={settings.osd_display_opacity}
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="volume_adjustment_steps"
 						label={t("settings.sections.scrollWheelVolumeControl.osdVolumeAdjustmentSteps.label")}
 						min={1}
@@ -633,7 +568,7 @@ export default function Settings() {
 						value={settings.volume_adjustment_steps}
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_hide_time"
 						label={t("settings.sections.scrollWheelVolumeControl.osdHide.label")}
 						min={1}
@@ -643,7 +578,7 @@ export default function Settings() {
 						value={settings.osd_display_hide_time}
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control.toString() !== "true"}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="osd_display_padding"
 						label={t("settings.sections.scrollWheelVolumeControl.osdPadding.label")}
 						min={0}
@@ -664,13 +599,12 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_automatically_set_quality.toString() !== "true"}
+						disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
 						id="player_quality"
 						label={t("settings.sections.automaticQuality.select.label")}
 						onChange={setValueOption("player_quality")}
 						options={YouTubePlayerQualityOptions}
-						selectedOption={selectedPlayerQuality}
-						setSelectedOption={setSelectedPlayerQuality}
+						selectedOption={getSelectedOption("player_quality")}
 						title={t("settings.sections.automaticQuality.select.title")}
 						type="select"
 					/>
@@ -686,13 +620,12 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_forced_playback_speed.toString() !== "true"}
+						disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
 						onChange={setValueOption("player_speed")}
 						options={YouTubePlayerSpeedOptions}
-						selectedOption={selectedPlayerSpeed?.toString()}
-						setSelectedOption={setSelectedPlayerSpeed}
+						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
 						type="select"
 					/>
@@ -708,7 +641,7 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_volume_boost.toString() !== "true"}
+						disabled={settings.enable_volume_boost?.toString() !== "true"}
 						id="volume_boost_amount"
 						label={t("settings.sections.volumeBoost.number.label")}
 						max={100}
@@ -730,24 +663,22 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						disabled={settings.enable_screenshot_button.toString() !== "true"}
+						disabled={settings.enable_screenshot_button?.toString() !== "true"}
 						id="screenshot_save_as"
 						label={t("settings.sections.screenshotButton.selectSaveAs.label")}
 						onChange={setValueOption("screenshot_save_as")}
 						options={ScreenshotSaveAsOptions}
-						selectedOption={selectedScreenshotSaveAs}
-						setSelectedOption={setSelectedScreenshotSaveAs}
+						selectedOption={getSelectedOption("screenshot_save_as")}
 						title={t("settings.sections.screenshotButton.selectSaveAs.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_screenshot_button.toString() !== "true"}
+						disabled={settings.enable_screenshot_button?.toString() !== "true"}
 						id="screenshot_format"
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
 						options={ScreenshotFormatOptions}
-						selectedOption={selectedScreenshotFormat}
-						setSelectedOption={setSelectedScreenshotFormat}
+						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
 					/>
@@ -813,7 +744,7 @@ export default function Settings() {
 					)}
 				</div>
 				<SettingsNotifications />
-				<input accept=".json" hidden={true} id="import_settings_input" ref={settingsImportRef} type="file" />
+				<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />
 			</div>
 		</SettingsContext.Provider>
 	);

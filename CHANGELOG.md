@@ -1,3 +1,36 @@
+## [1.14.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.3...v1.14.4) (2023-11-30)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.14.4-Chrome.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
+| youtube-enhancer-v1.14.4-Chromium.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
+| youtube-enhancer-v1.14.4-Edge.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
+| youtube-enhancer-v1.14.4-Firefox.zip | 0f26d826fb411a7b94eb3cb0102789587c5713c158214a46a81f2859a6cf839c |
+
+## [1.14.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.2...v1.14.3) (2023-11-30)
+
+
+### Bug Fixes
+
+* importing old settings error ([55b20e7](https://github.com/VampireChicken12/youtube-enhancer/commit/55b20e7606745a08a1274752f14501e922a2cb5c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.14.3-Chrome.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
+| youtube-enhancer-v1.14.3-Chromium.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
+| youtube-enhancer-v1.14.3-Edge.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
+| youtube-enhancer-v1.14.3-Firefox.zip | 6bde2d33463a227775c9ac8ef2c1a6218f98661bb523fda32eaa96d820abc845 |
+
 ## [1.14.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.1...v1.14.2) (2023-11-29)
 
 
