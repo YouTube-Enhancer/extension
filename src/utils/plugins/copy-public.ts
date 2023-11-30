@@ -12,7 +12,7 @@ const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 const publicDir = resolve(__dirname, "..", "..", "..", "public");
 export default function copyPublic(): PluginOption {
 	return {
-		buildEnd() {
+		closeBundle() {
 			for (const browser of browsers) {
 				if (!existsSync(resolve(outDir, browser.name))) {
 					mkdirSync(resolve(outDir, browser.name), { recursive: true });

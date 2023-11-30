@@ -151,8 +151,8 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Hold modifier key"
+						"title": "キーバインドを押さえるでスクロールホイール音量制御可能にさせる",
+						"label": "キーバインドに押さえる"
 					},
 					"optionLabel": "{{KEY}} キー",
 					"select": {
@@ -162,48 +162,48 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable Holding right click"
+						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする",
+						"label": "右クリックに押さえるで可能にする"
 					}
 				}
 			},
 			"automaticQuality": {
 				"title": "自動画質設定",
 				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
+					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。",
 					"label": "自動画質調整"
 				},
 				"select": {
 					"label": "プレイヤーの動画質",
-					"title": "The quality to set the video to"
+					"title": "動画の画質に設定する"
 				}
 			},
 			"playbackSpeed": {
-				"title": "Playback speed settings",
+				"title": "再生速度設定",
 				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Forced playback speed"
+					"title": "強制再生速度を可能にする",
+					"label": "強制再生速度"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "動画の再生速度",
+					"title": "動画の速度に設定する"
 				}
 			},
 			"volumeBoost": {
-				"title": "Volume boost settings",
+				"title": "音量ブーストの設定",
 				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Volume boost"
+					"title": "見ている動画の音量をブーストする",
+					"label": "音量ブースト"
 				},
 				"number": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "デシベル(dB)で音量ブースト",
+					"title": "音量ブーストの量"
 				}
 			},
 			"screenshotButton": {
-				"title": "Screenshot settings",
+				"title": "スクリーンショット設定",
 				"enable": {
-					"title": "Adds a button to the player to take a screenshot of the video",
+					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する",
 					"label": "スクリーンショットボタン"
 				},
 				"selectSaveAs": {

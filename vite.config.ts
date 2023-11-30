@@ -1,3 +1,5 @@
+import type EnUS from "public/locales/en-US.json";
+
 import react from "@vitejs/plugin-react-swc";
 import { existsSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from "fs";
 import { resolve } from "path";
@@ -39,21 +41,26 @@ const emptyOutputFolder = () => {
 		}
 	}
 };
-function flattenTranslationValues(translationFile: TranslationFile): string[] {
+function flattenTranslationValues(translationFile: TranslationFile, parentKey = ""): { keys: string[]; values: string[] } {
 	let values: string[] = [];
-
+	let keys: string[] = [];
 	for (const key in translationFile) {
 		if (["langCode", "langName"].includes(key)) continue;
 		const { [key]: value } = translationFile;
 
+		const currentKey = parentKey ? `${parentKey}.${key}` : key;
+
 		if (typeof value === "object") {
-			values = values.concat(flattenTranslationValues(value as TranslationFile));
+			const { keys: nestedKeys, values: nestedValues } = flattenTranslationValues(value, currentKey);
+			values = values.concat(nestedValues);
+			keys = keys.concat(nestedKeys);
 		} else {
 			values.push(value);
+			keys.push(currentKey);
 		}
 	}
 
-	return values;
+	return { keys, values };
 }
 function getTranslationFile(translation: AvailableLocales): TranslationFile {
 	const translationFile = readFileSync(`${publicDir}/locales/${translation}.json`, "utf-8");
@@ -74,13 +81,38 @@ function calculateTranslationPercentages() {
 	return translationPercentages;
 }
 function calculateTranslationPercentage(englishFile: TranslationFile, translationFile: TranslationFile): number {
-	const englishValues = flattenTranslationValues(englishFile);
-	const translationValues = flattenTranslationValues(translationFile);
+	const { values: englishValues } = flattenTranslationValues(englishFile);
+	const { values: translationValues } = flattenTranslationValues(translationFile);
 	const differingValues = englishValues.filter((value, index) => value !== translationValues[index]);
 
 	const translationPercentage = (differingValues.length / englishValues.length) * 100;
 
 	return Math.floor(translationPercentage);
+}
+function checkForMissingKeys(englishFile: TranslationFile, translationFile: TranslationFile) {
+	const { keys: englishKeys } = flattenTranslationValues(englishFile);
+	const { keys: translationKeys } = flattenTranslationValues(translationFile);
+	if (englishKeys.length !== translationKeys.length) {
+		const missingKeys = englishKeys.filter((key) => !translationKeys.includes(key));
+		const message = `${(translationFile as unknown as EnUS)["langCode"]} is missing ${missingKeys.length} keys\nMissing keys:\n${missingKeys.join(
+			", "
+		)}`;
+		return message;
+	}
+	return false;
+}
+function checkLocalesForMissingKeys() {
+	const englishFile = getTranslationFile("en-US");
+	const missingKeys = availableLocales
+		.filter((availableLocales) => availableLocales !== "en-US")
+		.map((locale) => {
+			const translationFile = getTranslationFile(locale);
+			return checkForMissingKeys(englishFile, translationFile);
+		})
+		.filter(Boolean);
+	if (missingKeys.length) {
+		throw new Error(missingKeys.join("\n\n"));
+	}
 }
 function updateTranslationPercentageObject(code: string, updatedObject: Record<string, number>) {
 	const match = code.match(/export\s+const\s+translationPercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
@@ -125,6 +157,7 @@ function updateAvailableLocales() {
 export default function build() {
 	emptyOutputFolder();
 	updateAvailableLocales();
+	checkLocalesForMissingKeys();
 	updateTranslationPercentages();
 	return defineConfig({
 		build: {

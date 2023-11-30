@@ -152,7 +152,7 @@
 				"holdModifierKey": {
 					"enable": {
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Hold modifier key"
+						"label": "Enable when holding modifier key"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
