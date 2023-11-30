@@ -18,7 +18,7 @@ function writeManifest(version: 2 | 3, browserName: string) {
 }
 export default function makeManifest(): PluginOption {
 	return {
-		buildEnd() {
+		closeBundle() {
 			for (const browser of browsers) {
 				if (!existsSync(resolve(outDir, browser.name))) {
 					mkdirSync(resolve(outDir, browser.name), { recursive: true });
