@@ -40,7 +40,7 @@ function SettingInput(settingProps: SettingInputProps) {
 			);
 		}
 		case "select": {
-			const { className, disabled, id, label, onChange, options, selectedOption, setSelectedOption, title } = settingProps;
+			const { className, disabled, id, label, onChange, options, selectedOption, title } = settingProps;
 			return (
 				<Select
 					className={className}
@@ -50,7 +50,6 @@ function SettingInput(settingProps: SettingInputProps) {
 					onChange={onChange}
 					options={options}
 					selectedOption={selectedOption}
-					setSelectedOption={setSelectedOption}
 					title={title}
 				/>
 			);
