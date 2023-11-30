@@ -1,5 +1,5 @@
 import type { ClassValue } from "clsx";
-import type { ChangeEvent, Dispatch, SetStateAction } from "react";
+import type { ChangeEvent } from "react";
 
 import { useComponentVisible } from "@/hooks";
 import { cn } from "@/src/utils/utilities";
@@ -28,11 +28,10 @@ export type SelectProps = {
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
 	options: SelectOption[];
 	selectedOption: string | undefined;
-	setSelectedOption: Dispatch<SetStateAction<string | undefined>>;
 	title: string;
 };
 
-const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChange, options, selectedOption, setSelectedOption }) => {
+const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChange, options, selectedOption }) => {
 	const {
 		isComponentVisible: isSelectVisible,
 		ref: selectRef,
@@ -44,7 +43,6 @@ const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChang
 	};
 
 	const handleOptionSelect = (option: string) => {
-		setSelectedOption(option);
 		setIsSelectVisible(false);
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
