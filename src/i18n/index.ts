@@ -29,7 +29,7 @@ export const translationPercentages: Record<AvailableLocales, number> = {
   "he-IL": 0,
   "hi-IN": 0,
   "it-IT": 0,
-  "ja-JP": 83,
+  "ja-JP": 100,
   "pl-PL": 3,
   "pt-BR": 0,
   "ru-RU": 100,
