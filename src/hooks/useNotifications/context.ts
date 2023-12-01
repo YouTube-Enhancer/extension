@@ -2,9 +2,13 @@ import type { Notification, NotificationAction, NotificationType } from "@/src/t
 
 import { createContext } from "react";
 
+export type AddNotification = (type: NotificationType, message: Notification["message"], action?: NotificationAction) => void;
+
+export type RemoveNotification = (notification: Notification) => void;
+
 export type NotificationsContextProps = {
-	addNotification: (type: NotificationType, message: string, action?: NotificationAction) => void;
+	addNotification: AddNotification;
 	notifications: Notification[];
-	removeNotification: (notification: Notification) => void;
+	removeNotification: RemoveNotification;
 };
 export const NotificationsContext = createContext<NotificationsContextProps | undefined>(undefined);
