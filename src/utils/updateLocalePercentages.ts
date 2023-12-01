@@ -22,7 +22,6 @@ function calculateLocalePercentages() {
 			const localePercentage = calculateLocalePercentage(englishFile, localeFile);
 			localePercentages.set(locale, localePercentage);
 		});
-	localePercentages.set("en-US", 100);
 	return localePercentages;
 }
 function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
