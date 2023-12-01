@@ -1,3 +1,4 @@
+import type { ParseKeys, TOptions } from "i18next";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z from "zod";
@@ -181,7 +182,7 @@ export type NotificationAction = "reset_settings" | undefined;
 
 export type Notification = {
 	action: NotificationAction;
-	message: string;
+	message: ParseKeys<"en-US", TOptions, undefined>;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;

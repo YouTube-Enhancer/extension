@@ -1,14 +1,14 @@
-import type { Notification, NotificationAction, NotificationType } from "@/src/types";
+import type { Notification } from "@/src/types";
 
 import { isNotStrictEqual } from "@/src/utils/utilities";
-import React, { type ReactElement, useEffect, useState } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 
-import { NotificationsContext, type NotificationsContextProps } from "./context";
+import { type AddNotification, NotificationsContext, type NotificationsContextProps, type RemoveNotification } from "./context";
 type NotificationProviderProps = { children: ReactElement | ReactElement[] };
 export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 
-	function addNotification(type: NotificationType, message: string, action?: NotificationAction) {
+	const addNotification: AddNotification = (type, message, action) => {
 		const existingNotification = notifications.find((n) => n.message === message && n.type === type);
 		if (existingNotification) {
 			return;
@@ -24,10 +24,10 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 				removeNotification(notification);
 			}, removeNotificationAfterMs);
 		}
-	}
-	function removeNotification(notification: Notification) {
+	};
+	const removeNotification: RemoveNotification = (notification) => {
 		setNotifications((notifications) => notifications.filter(isNotStrictEqual(notification)));
-	}
+	};
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setNotifications((notifications) => {
