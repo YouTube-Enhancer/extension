@@ -5,7 +5,7 @@ import type { ChangeEvent, ChangeEventHandler } from "react";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
+import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
@@ -26,7 +26,7 @@ async function getLanguageOptions() {
 		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
 		const localeData = (await response?.json()) as EnUS;
 		languageOptions.push({
-			label: `${localeData.langName} (${translationPercentages[locale]}%)`,
+			label: `${localeData.langName} (${localePercentages[locale]}%)`,
 			value: locale
 		});
 	}
