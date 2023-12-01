@@ -5,9 +5,9 @@ import { type LocaleFile, flattenLocaleValues, getLocaleFile, i18nDir } from "./
 function calculateLocalePercentage(englishFile: LocaleFile, localeFile: LocaleFile): number {
 	const { values: englishValues } = flattenLocaleValues(englishFile);
 	const { values: localeValues } = flattenLocaleValues(localeFile);
-	const differingValues = englishValues.filter((value, index) => value !== localeValues[index]);
+	const translatedValues = englishValues.filter((value, index) => value !== localeValues[index]);
 
-	const localePercentage = (differingValues.length / englishValues.length) * 100;
+	const localePercentage = (translatedValues.length / englishValues.length) * 100;
 
 	return Math.floor(localePercentage);
 }
