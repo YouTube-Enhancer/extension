@@ -1,3 +1,23 @@
+# [1.15.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.4...v1.15.0) (2023-12-01)
+
+
+### Bug Fixes
+
+* **notifications:** used old language when switching language ([4954223](https://github.com/VampireChicken12/youtube-enhancer/commit/49542238798b53127649731f882e1df9cd05c2d5))
+* **popup:** width was made too wide by long text ([2a88352](https://github.com/VampireChicken12/youtube-enhancer/commit/2a883524f485e7a788317d45e12dbf19b87569c7))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.15.0-Chrome.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
+| youtube-enhancer-v1.15.0-Chromium.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
+| youtube-enhancer-v1.15.0-Edge.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
+| youtube-enhancer-v1.15.0-Firefox.zip | 7aa484939d665d8aba089242fef2a4358600a679e68d1f79fad1fd93ba7c79c3 |
+
 ## [1.14.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.3...v1.14.4) (2023-11-30)
 
 
