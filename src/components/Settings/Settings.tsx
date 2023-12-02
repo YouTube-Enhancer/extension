@@ -5,7 +5,7 @@ import type { ChangeEvent, ChangeEventHandler } from "react";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import { availableLocales, type i18nInstanceType, i18nService, localeDirection, translationPercentages } from "@/src/i18n";
+import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
@@ -26,7 +26,7 @@ async function getLanguageOptions() {
 		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
 		const localeData = (await response?.json()) as EnUS;
 		languageOptions.push({
-			label: `${localeData.langName} (${translationPercentages[locale]}%)`,
+			label: `${localeData.langName} (${localePercentages[locale]}%)`,
 			value: locale
 		});
 	}
@@ -165,11 +165,11 @@ export default function Settings() {
 				}
 			}
 
-			addNotification("success", t("pages.options.notifications.success.saved"));
+			addNotification("success", "pages.options.notifications.success.saved");
 		}
 	}
 	function resetOptions() {
-		addNotification("info", t("pages.options.notifications.info.reset"), "reset_settings");
+		addNotification("info", "pages.options.notifications.info.reset", "reset_settings");
 	}
 	function clearData() {
 		const userHasConfirmed = window.confirm(t("settings.clearData.confirmAlert"));
@@ -183,7 +183,7 @@ export default function Settings() {
 					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
 				}
 			}
-			addNotification("success", t("settings.clearData.allDataDeleted"));
+			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
 	const {
@@ -359,7 +359,7 @@ export default function Settings() {
 							}
 						}
 						// Show a success notification.
-						addNotification("success", t("settings.sections.importExportSettings.importButton.success"));
+						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
 				} catch (error) {
 					// Handle any import errors.
@@ -406,12 +406,12 @@ export default function Settings() {
 			a.click();
 
 			// Show a success notification.
-			addNotification("success", t("settings.sections.importExportSettings.exportButton.success"));
+			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
 	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
-		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], settings }}>
+		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
 			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
 				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
 					<img className="h-16 w-16 sm:h-16 sm:w-16" src="/icons/icon_128.png" />
@@ -726,7 +726,7 @@ export default function Settings() {
 									}
 								}
 
-								addNotification("success", t("pages.options.notifications.success.saved"));
+								addNotification("success", "pages.options.notifications.success.saved");
 							}}
 							title={t("settings.sections.bottomButtons.confirm.title")}
 							type="button"
@@ -751,6 +751,7 @@ export default function Settings() {
 }
 type SettingsContextProps = {
 	direction: "ltr" | "rtl";
+	i18nInstance: i18nInstanceType;
 	settings: configuration;
 };
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);

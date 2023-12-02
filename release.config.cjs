@@ -8,7 +8,7 @@ module.exports = {
 					{ type: "translations", release: "patch" },
 					{
 						type: "refactor",
-						release: "minor"
+						release: "patch"
 					}
 				]
 			}
