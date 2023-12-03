@@ -12,29 +12,29 @@
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
-					"label": "Screenshot"
+					"label": "Capturar pantalla"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Bucle"
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "Maximizar"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "Menú de funciones"
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "Potenciar volumen"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "Opciones guardadas."
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Todas las opciones han sido preestablecidas a sus valores de por defecto.\nAhora puedes guardarlas haciendo clic en el botón \"Confirmar\" o descartarlas cerrando esta página o ignorando esta notificación."
 				}
 			}
 		}
@@ -44,33 +44,33 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\n{{ERROR_MESSAGE}}",
+						"unknown": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\nUn error desconocido se ha producido."
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Ajustes importados correctamente",
+					"title": "Importar ajustes desde un archivo JSON",
+					"value": "Importar Ajustes"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Ajustes exportados correctamente",
+					"title": "Exportar ajustes a un archivo JSON",
+					"value": "Exportar Ajustes"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "Ajustes varios",
 				"features": {
 					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Remember last volume"
+						"title": "Recuerda el volumen del último vídeo que estabas viendo y lo establece cuando abres un nuevo vídeo",
+						"label": "Recordar el nivel de volumen"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
-						"label": "Maximize player button"
+						"title": "Ajusta el video al tamaño de la ventana",
+						"label": "Botón de maximizar en el reproductor"
 					},
 					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Video history"
+						"title": "Recuerda el progreso de los videos y te pregunta si quieres reanudarlo donde lo dejaste cuando vuelves a reproducirlo",
+						"label": "Historial de vídeo"
 					},
 					"remainingTime": {
 						"title": "Shows the remaining time of the video you're watching",
