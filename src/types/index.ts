@@ -87,27 +87,27 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
 	source: S;
 };
-export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = Prettify<
+export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
 	BaseMessage<T, S> & {
 		data: D;
 		type: Type;
 	}
 >;
-export type DataResponseMessage<Type extends string, D> = Prettify<
+export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"data_response", "extension"> & {
 		data: D;
 		type: Type;
 	}
 >;
 
-export type RequestDataMessage<Type extends string, D> = Prettify<
+export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"request_data", "content"> & {
 		data: D;
 		type: Type;
 	}
 >;
 export type ContentSendOnlyMessageMappings = {
-	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
+	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
 };
 export type ExtensionSendOnlyMessageMappings = {
@@ -129,19 +129,19 @@ export type FilterMessagesBySource<T extends Messages, S extends MessageSource> 
 };
 export type MessageMappings = Prettify<{
 	extensionURL: {
-		request: RequestDataMessage<"extensionURL", undefined>;
+		request: RequestDataMessage<"extensionURL">;
 		response: DataResponseMessage<"extensionURL", { extensionURL: string }>;
 	};
 	language: {
-		request: RequestDataMessage<"language", undefined>;
+		request: RequestDataMessage<"language">;
 		response: DataResponseMessage<"language", { language: AvailableLocales }>;
 	};
 	options: {
-		request: RequestDataMessage<"options", undefined>;
+		request: RequestDataMessage<"options">;
 		response: DataResponseMessage<"options", { options: configuration }>;
 	};
 	videoHistoryAll: {
-		request: RequestDataMessage<"videoHistoryAll", undefined>;
+		request: RequestDataMessage<"videoHistoryAll">;
 		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
 	};
 	videoHistoryOne: {
