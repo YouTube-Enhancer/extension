@@ -884,10 +884,10 @@
   dependencies:
     "@types/readdir-glob" "*"
 
-"@types/chrome@^0.0.251":
-  version "0.0.251"
-  resolved "https://registry.npmjs.org/@types/chrome/-/chrome-0.0.251.tgz"
-  integrity sha512-UF+yr0LEKWWGsKxQ5A3XOSF5SNoU1ctW3pXcWJPpT8OOUTEspYeaLU8spDKe+6xalXeMTS0TBrX1g0b6qlWmkw==
+"@types/chrome@^0.0.253":
+  version "0.0.253"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.253.tgz#3b7c1b37c1eecae7c65799ebbf9d5d3e3a78cc5a"
+  integrity sha512-ZnBlbeoje0XaBrJbFCXI8DsDfqvqdoWQO5NSGecMCHFC8W8z/rb/n7lI1FHob+TFKKLR4L2c3QJJSFLwtVc9TA==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
