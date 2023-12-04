@@ -15,9 +15,7 @@ import updateLocalePercentages from "./src/utils/updateLocalePercentages";
 export default function build() {
 	emptyOutputFolder();
 	void updateAvailableLocales();
-	if (process.env.__DEV__ !== "true") {
-		void checkLocalesForMissingKeys();
-	}
+	void checkLocalesForMissingKeys();
 	void updateLocalePercentages();
 	return defineConfig({
 		build: {

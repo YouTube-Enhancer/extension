@@ -246,11 +246,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostEnabled: newValue
 			});
 		},
-		feature_menu_open_type: (newValue) => {
-			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
-				featureMenuOpenType: newValue
-			});
-		},
 		language: (newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue

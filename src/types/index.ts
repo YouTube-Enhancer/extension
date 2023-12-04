@@ -55,7 +55,6 @@ export type configuration = {
 	enable_scroll_wheel_volume_control_hold_right_click: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
-	feature_menu_open_type: FeatureMenuOpenType;
 	language: AvailableLocales;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;
@@ -113,7 +112,6 @@ export type ContentSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
-	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
@@ -177,8 +175,6 @@ export type Prettify<T> = {
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
-export const featureMenuOpenType = ["click", "hover"] as const;
-export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
 export type WithId<S extends string> = `#${S}`;
 export type NotificationType = "error" | "info" | "success" | "warning";
 
