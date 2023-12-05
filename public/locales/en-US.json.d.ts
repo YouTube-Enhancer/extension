@@ -50,6 +50,16 @@ interface EnUS {
 					value: "Reset";
 				};
 			};
+			featureMenu: {
+				openType: {
+					select: {
+						label: "Menu Activation Type";
+						options: { click: "Click"; hover: "Hover" };
+						title: "Select the method to activate the feature menu";
+					};
+					title: "Feature menu settings";
+				};
+			};
 			importExportSettings: {
 				exportButton: {
 					success: "Settings successfully exported";
