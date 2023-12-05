@@ -1,3 +1,28 @@
+# [1.16.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.15.1...v1.16.0) (2023-12-05)
+
+
+### Bug Fixes
+
+* **event manager:** fix multiple events per target not being supported ([999f865](https://github.com/VampireChicken12/youtube-enhancer/commit/999f86536eddc90e2852656bd541529e9c6d6186))
+* **import settings:** fix defaults not being saved ([e4ae516](https://github.com/VampireChicken12/youtube-enhancer/commit/e4ae516e816d93b4e009bf0631c08a5846d57356))
+
+
+### Features
+
+* **feature menu:** Add behaviour setting with click and hover option ([c595f99](https://github.com/VampireChicken12/youtube-enhancer/commit/c595f99a7f8faab7424f7bae2ceb65de35d23855))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.16.0-Chrome.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
+| youtube-enhancer-v1.16.0-Chromium.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
+| youtube-enhancer-v1.16.0-Edge.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
+| youtube-enhancer-v1.16.0-Firefox.zip | 3664a8fc1bf3516912b7ea6343c508d886ebe06d8339ff2bf50a394866945018 |
+
 ## [1.15.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.15.0...v1.15.1) (2023-12-01)
 
 
