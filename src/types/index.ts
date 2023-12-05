@@ -55,6 +55,7 @@ export type configuration = {
 	enable_scroll_wheel_volume_control_hold_right_click: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
+	feature_menu_open_type: FeatureMenuOpenType;
 	language: AvailableLocales;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;
@@ -87,31 +88,32 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
 	source: S;
 };
-export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D> = Prettify<
+export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
 	BaseMessage<T, S> & {
 		data: D;
 		type: Type;
 	}
 >;
-export type DataResponseMessage<Type extends string, D> = Prettify<
+export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"data_response", "extension"> & {
 		data: D;
 		type: Type;
 	}
 >;
 
-export type RequestDataMessage<Type extends string, D> = Prettify<
+export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"request_data", "content"> & {
 		data: D;
 		type: Type;
 	}
 >;
 export type ContentSendOnlyMessageMappings = {
-	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded", undefined>;
+	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
+	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
@@ -129,19 +131,19 @@ export type FilterMessagesBySource<T extends Messages, S extends MessageSource> 
 };
 export type MessageMappings = Prettify<{
 	extensionURL: {
-		request: RequestDataMessage<"extensionURL", undefined>;
+		request: RequestDataMessage<"extensionURL">;
 		response: DataResponseMessage<"extensionURL", { extensionURL: string }>;
 	};
 	language: {
-		request: RequestDataMessage<"language", undefined>;
+		request: RequestDataMessage<"language">;
 		response: DataResponseMessage<"language", { language: AvailableLocales }>;
 	};
 	options: {
-		request: RequestDataMessage<"options", undefined>;
+		request: RequestDataMessage<"options">;
 		response: DataResponseMessage<"options", { options: configuration }>;
 	};
 	videoHistoryAll: {
-		request: RequestDataMessage<"videoHistoryAll", undefined>;
+		request: RequestDataMessage<"videoHistoryAll">;
 		response: DataResponseMessage<"videoHistoryAll", { video_history_entries: VideoHistoryStorage }>;
 	};
 	videoHistoryOne: {
@@ -175,6 +177,8 @@ export type Prettify<T> = {
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
+export const featureMenuOpenType = ["click", "hover"] as const;
+export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
 export type WithId<S extends string> = `#${S}`;
 export type NotificationType = "error" | "info" | "success" | "warning";
 

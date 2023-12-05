@@ -41,6 +41,19 @@
 	},
 	"settings": {
 		"sections": {
+			"featureMenu": {
+				"openType": {
+					"title": "Feature menu settings",
+					"select": {
+						"label": "Menu Activation Type",
+						"title": "Select the method to activate the feature menu",
+						"options": {
+							"click": "Click",
+							"hover": "Hover"
+						}
+					}
+				}
+			},
 			"importExportSettings": {
 				"importButton": {
 					"error": {

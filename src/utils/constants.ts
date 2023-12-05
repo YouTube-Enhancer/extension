@@ -4,6 +4,7 @@ import type { TypeToPartialZodSchema, configuration } from "../types";
 
 import { availableLocales } from "../i18n/index";
 import {
+	featureMenuOpenType,
 	modifierKey,
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
@@ -28,6 +29,7 @@ export const defaultConfiguration = {
 	enable_scroll_wheel_volume_control_hold_right_click: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
+	feature_menu_open_type: "hover",
 	language: "en-US",
 	osd_display_color: "white",
 	osd_display_hide_time: 750,
@@ -62,6 +64,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	enable_scroll_wheel_volume_control_hold_right_click: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
+	feature_menu_open_type: z.enum(featureMenuOpenType).optional(),
 	language: z.enum(availableLocales).optional(),
 	osd_display_color: z.enum(onScreenDisplayColor).optional(),
 	osd_display_hide_time: z.number().optional(),
