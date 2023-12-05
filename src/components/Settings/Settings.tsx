@@ -14,6 +14,7 @@ import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 
+import { defaultConfiguration } from "../../utils/constants";
 import { formatDateForFileName } from "../../utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
@@ -346,9 +347,9 @@ export default function Settings() {
 							})
 						);
 					} else {
-						const castSettings = importedSettings as configuration;
+						const castSettings = { ...defaultConfiguration, ...(importedSettings as configuration) };
 						// Set the imported settings in your state.
-						setSettings({ ...castSettings });
+						setSettings(castSettings);
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
