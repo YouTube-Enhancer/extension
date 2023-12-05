@@ -1,7 +1,9 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { FeatureMenuOpenType, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createStyledElement, createTooltip, isShortsPage, isWatchPage } from "@/src/utils/utilities";
+import { createStyledElement, createTooltip, isShortsPage, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
+
+import { waitForSpecificMessage } from "../../utils/utilities";
 
 function createFeatureMenu() {
 	// Create the feature menu div
@@ -13,7 +15,6 @@ function createFeatureMenu() {
 			display: "none"
 		}
 	});
-
 	// Create the feature menu panel
 	const featureMenuPanel = createStyledElement({
 		classlist: ["ytp-panel"],
@@ -23,10 +24,8 @@ function createFeatureMenu() {
 			display: "contents"
 		}
 	});
-
 	// Append the panel to the menu
 	featureMenu.appendChild(featureMenuPanel);
-
 	// Create the panel menu
 	const featureMenuPanelMenu = createStyledElement({
 		classlist: ["ytp-panel-menu"],
@@ -34,15 +33,13 @@ function createFeatureMenu() {
 		elementType: "div"
 	});
 	featureMenuPanel.appendChild(featureMenuPanelMenu);
-
 	return featureMenu;
 }
 
-function createFeatureMenuButton() {
+async function createFeatureMenuButton() {
 	// Check if the feature menu already exists
 	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
 	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
-
 	// Create the feature menu button
 	const featureMenuButton = createStyledElement({
 		classlist: ["ytp-button"],
@@ -52,76 +49,132 @@ function createFeatureMenuButton() {
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.label");
 	// Create the SVG icon for the button
+	const featureButtonSVG = makeFeatureMenuIcon();
+	featureMenuButton.appendChild(featureButtonSVG);
+	// Get references to various elements and check their existence
+	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+	if (!settingsButton) return;
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
+	if (!playerContainer) return;
+	// Insert the feature menu button and feature menu itself
+	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
+	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
+	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	if (!optionsData) return;
+	const {
+		data: { options }
+	} = optionsData;
+	// Extract the necessary properties from the options object
+	const { feature_menu_open_type: featureMenuOpenType } = options;
+	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
+	setupFeatureMenuEventListeners(featureMenuOpenType);
+}
+function makeFeatureMenuIcon() {
 	const featureButtonSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	const featureButtonSVGPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
 	featureButtonSVG.setAttribute("viewBox", "0 0 36 36");
 	featureButtonSVG.setAttribute("height", "48px");
 	featureButtonSVG.setAttribute("width", "48px");
 	featureButtonSVG.setAttribute("fill", "white");
+	const featureButtonSVGPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
 	featureButtonSVGPath.setAttribute(
 		"d",
 		"M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z"
 	);
 	featureButtonSVGPath.setAttribute("fill", "white");
 	featureButtonSVG.appendChild(featureButtonSVGPath);
-	featureMenuButton.appendChild(featureButtonSVG);
+	return featureButtonSVG;
+}
 
-	// Get references to various elements and check their existence
+// Function to enable the feature menu
+export async function enableFeatureMenu() {
+	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
+	if (featureMenuButtonExists) return;
+	await createFeatureMenuButton();
+}
+
+export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
 	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
-
-	// Create a tooltip for the feature menu button
-	const { listener: featureMenuButtonMouseOverListener } = createTooltip({
+	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+	if (!featureMenu) return;
+	const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
+	if (!featureMenuButton) return;
+	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
 		id: "yte-feature-menu-tooltip"
 	});
-
-	// Event listeners for showing and hiding the feature menu
-	eventManager.addEventListener(
-		featureMenuButton,
-		"mouseover",
-		() => {
-			bottomControls.style.opacity = "1";
-			featureMenu.style.display = "block";
-			featureMenuButtonMouseOverListener();
-		},
-		"featureMenu"
-	);
-
-	eventManager.addEventListener(
-		featureMenu,
-		"mouseleave",
-		() => {
-			featureMenu.style.display = "none";
-			bottomControls.style.opacity = "";
-		},
-		"featureMenu"
-	);
-
-	// Event listener to hide the menu when clicking outside
-	document.addEventListener("click", (event) => {
+	const showFeatureMenu = () => {
+		bottomControls.style.opacity = "1";
+		featureMenu.style.display = "block";
+	};
+	const hideFeatureMenu = () => {
+		featureMenu.style.display = "none";
+		bottomControls.style.opacity = "";
+	};
+	const clickOutsideListener = (event: Event) => {
 		if (!featureMenuButton) return;
 		if (event.target === featureMenuButton) return;
 		if (event.target === featureMenu) return;
 		if (!featureMenu.contains(event.target as Node)) {
-			featureMenu.style.display = "none";
-			bottomControls.style.opacity = "";
+			hideFeatureMenu();
 		}
-	});
-
-	// Insert the feature menu button and feature menu itself
-	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
-	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-}
-
-// Function to enable the feature menu
-export function enableFeatureMenu() {
-	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
-	if (featureMenuButtonExists) return;
-	createFeatureMenuButton();
+	};
+	switch (featureMenuOpenType) {
+		case "click": {
+			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
+			eventManager.addEventListener(
+				featureMenuButton,
+				"click",
+				() => {
+					const featureMenuVisible = featureMenu.style.display === "block";
+					if (featureMenuVisible) {
+						hideFeatureMenu();
+					} else {
+						showFeatureMenu();
+					}
+				},
+				"featureMenu"
+			);
+			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
+			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
+			break;
+		}
+		case "hover": {
+			eventManager.addEventListener(
+				featureMenuButton,
+				"mouseover",
+				() => {
+					showFeatureMenuTooltip();
+					showFeatureMenu();
+				},
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				featureMenu,
+				"mouseleave",
+				() => {
+					removeFeatureMenuTooltip();
+					hideFeatureMenu();
+				},
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				playerContainer,
+				"mouseleave",
+				() => {
+					removeFeatureMenuTooltip();
+					hideFeatureMenu();
+				},
+				"featureMenu"
+			);
+			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
+			break;
+		}
+	}
 }

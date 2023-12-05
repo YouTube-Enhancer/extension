@@ -1,7 +1,7 @@
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
-import { enableFeatureMenu } from "@/src/features/featureMenu";
+import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -87,7 +87,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				// Wait for the specified container selectors to be available on the page
 				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 				eventManager.removeAllEventListeners(["featureMenu"]);
-				enableFeatureMenu();
+				void enableFeatureMenu();
 				void addLoopButton();
 				void addMaximizePlayerButton();
 				void volumeBoost();
@@ -287,6 +287,13 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (!sizeButton) return;
 						sizeButton.click();
 
+						break;
+					}
+					case "featureMenuOpenTypeChange": {
+						const {
+							data: { featureMenuOpenType }
+						} = message;
+						setupFeatureMenuEventListeners(featureMenuOpenType);
 						break;
 					}
 					default: {
