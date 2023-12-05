@@ -14,6 +14,7 @@ import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 
+import { defaultConfiguration } from "../../utils/constants";
 import { formatDateForFileName } from "../../utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
@@ -346,9 +347,9 @@ export default function Settings() {
 							})
 						);
 					} else {
-						const castSettings = importedSettings as configuration;
+						const castSettings = { ...defaultConfiguration, ...(importedSettings as configuration) };
 						// Set the imported settings in your state.
-						setSettings({ ...castSettings });
+						setSettings(castSettings);
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
@@ -421,6 +422,21 @@ export default function Settings() {
 				<Suspense fallback={<Loader />}>
 					<LanguageOptions selectedLanguage={settings["language"]} setValueOption={setValueOption} t={i18nInstance.t} />
 				</Suspense>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.featureMenu.openType.title")} />
+					<Setting
+						id="feature_menu_open_type"
+						label={t("settings.sections.featureMenu.openType.select.label")}
+						onChange={setValueOption("feature_menu_open_type")}
+						options={[
+							{ label: t("settings.sections.featureMenu.openType.select.options.hover"), value: "hover" },
+							{ label: t("settings.sections.featureMenu.openType.select.options.click"), value: "click" }
+						]}
+						selectedOption={getSelectedOption("feature_menu_open_type")}
+						title={t("settings.sections.featureMenu.openType.select.title")}
+						type="select"
+					/>
+				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
 					<Setting

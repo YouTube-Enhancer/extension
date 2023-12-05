@@ -2,14 +2,15 @@
 
 The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience.
 
-[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
-[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&style=for-the-badge&logo=Github)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
+[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
+[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&logo=Github)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
 
 <br/>
 
 ![Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total.svg)
 ![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer.svg)
-
+[![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
+[![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord)](https://discord.gg/VpdGFmuB4B)
 ## Table of Contents
 
 - [Introduction](#-introduction)

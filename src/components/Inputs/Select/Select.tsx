@@ -22,7 +22,7 @@ export type SelectOption = {
 
 export type SelectProps = {
 	className?: string;
-	disabled: boolean;
+	disabled?: boolean;
 	id?: string;
 	label: string;
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
@@ -31,7 +31,7 @@ export type SelectProps = {
 	title: string;
 };
 
-const Select: React.FC<SelectProps> = ({ className, disabled, id, label, onChange, options, selectedOption }) => {
+const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label, onChange, options, selectedOption }) => {
 	const {
 		isComponentVisible: isSelectVisible,
 		ref: selectRef,
