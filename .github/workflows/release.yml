@@ -20,6 +20,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+      - name: Create .env file
+        run: |
+          touch .env
+          echo CROWDIN_TOKEN=${{ secrets.CROWDIN_TOKEN }} >> .env
       - name: Run Semantic Release
         run: npx semantic-release
         env:
