@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { BaseMessage, YouTubePlayerDiv, configuration } from "@/src/types";
 
 import { isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -33,11 +33,24 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		type OptionsData = BaseMessage<"data_response", "extension"> & {
+			data: {
+				options: configuration;
+			};
+			type: "options";
+		};
+		type GlobalWindow = Window & typeof globalThis & { yte_OptionsData?: OptionsData };
+		const globalWindow = window as GlobalWindow;
+
+		const setGlobalOptionsData = async () => {
+			return (globalWindow.yte_OptionsData = await waitForSpecificMessage("options", "request_data", "content"));
+		};
+
 		void (async () => {
-			preventScroll(event);
-			// Wait for the "options" message from the content script
-			const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-			if (!optionsData) return;
+			const { yte_OptionsData: optionsData } = globalWindow;
+			if (!optionsData) {
+				return void (await setGlobalOptionsData());
+			}
 			const {
 				data: { options }
 			} = optionsData;
@@ -52,6 +65,14 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key]) return;
 			// If the right click is required and not pressed, return
 			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return;
+
+			// Only prevent default scroll wheel behavior
+			// if we are going to handle the event
+			preventScroll(wheelEvent);
+
+			// Retreive the options data after preventScroll()
+			await setGlobalOptionsData();
+
 			// Get the player element
 			const playerContainer = isWatchPage()
 				? document.querySelector<YouTubePlayerDiv>("div#movie_player")
