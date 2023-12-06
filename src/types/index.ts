@@ -166,10 +166,14 @@ type TypeToZod<T> = {
 		: z.ZodObject<TypeToZod<T[K]>>;
 };
 export type TypeToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>> : T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
 }>;
 export type TypeToPartialZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>> : z.ZodOptionalType<z.ZodType<T[K]>>;
+	[K in keyof T]: T[K] extends any[]
+		? z.ZodOptionalType<z.ZodType<T[K]>>
+		: T[K] extends object
+		  ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>>
+		  : z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
@@ -191,4 +195,45 @@ export type Notification = {
 	removeAfterMs?: number;
 	timestamp?: number;
 	type: NotificationType;
+};
+export type CrowdinLanguageProgressResponse = {
+	data: {
+		data: {
+			approvalProgress: number;
+			language: {
+				androidCode: string;
+				dialectOf: null | string;
+				editorCode: string;
+				id: string;
+				locale: string;
+				name: string;
+				osxCode: string;
+				osxLocale: string;
+				pluralCategoryNames: string[];
+				pluralExamples: string[];
+				pluralRules: string;
+				textDirection: string;
+				threeLettersCode: string;
+				twoLettersCode: string;
+			};
+			languageId: string;
+			phrases: {
+				approved: number;
+				preTranslateAppliedTo: number;
+				total: number;
+				translated: number;
+			};
+			translationProgress: number;
+			words: {
+				approved: number;
+				preTranslateAppliedTo: number;
+				total: number;
+				translated: number;
+			};
+		};
+	}[];
+	pagination: {
+		limit: number;
+		offset: number;
+	};
 };
