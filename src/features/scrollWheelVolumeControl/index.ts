@@ -1,4 +1,4 @@
-import type { BaseMessage, YouTubePlayerDiv, configuration } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -19,7 +19,7 @@ function preventScroll(event: Event) {
  */
 export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
 	const {
 		data: { options }
@@ -31,22 +31,13 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 
-	type OptionsData = BaseMessage<"data_response", "extension"> & {
-		data: {
-			options: configuration;
-		};
-		type: "options";
-	};
-	let dynamicOptionsData: OptionsData | undefined;
-
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
 		const setGlobalOptionsData = async () => {
-			return (dynamicOptionsData = await waitForSpecificMessage("options", "request_data", "content"));
+			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
 
 		void (async () => {
-			const optionsData = dynamicOptionsData;
 			if (!optionsData) {
 				return void (await setGlobalOptionsData());
 			}
