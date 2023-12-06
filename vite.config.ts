@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react-swc";
+import { config } from "dotenv";
 import { resolve } from "path";
 import { defineConfig } from "vite";
 
@@ -11,14 +12,14 @@ import makeReleaseZips from "./src/utils/plugins/make-release-zips";
 import { assetsDir, componentsDir, emptyOutputFolder, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "./src/utils/plugins/utils";
 import updateAvailableLocales from "./src/utils/updateAvailableLocales";
 import updateLocalePercentages from "./src/utils/updateLocalePercentages";
-
+config();
 export default function build() {
 	emptyOutputFolder();
 	void updateAvailableLocales();
 	if (process.env.__DEV__ !== "true") {
 		void checkLocalesForMissingKeys();
+		void updateLocalePercentages();
 	}
-	void updateLocalePercentages();
 	return defineConfig({
 		build: {
 			emptyOutDir: false,

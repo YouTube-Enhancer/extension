@@ -23,19 +23,19 @@ export const localePercentages: Record<AvailableLocales, number> = {
   "en-US": 100,
   "ca-ES": 0,
   "cs-CZ": 0,
-  "de-DE": 93,
-  "es-ES": 95,
+  "de-DE": 97,
+  "es-ES": 97,
   "fa-IR": 0,
   "fr-FR": 0,
   "he-IL": 0,
   "hi-IN": 0,
   "it-IT": 0,
-  "ja-JP": 95,
-  "pl-PL": 3,
+  "ja-JP": 97,
+  "pl-PL": 0,
   "pt-BR": 0,
-  "ru-RU": 95,
-  "tr-TR": 63,
-  "zh-CN": 72
+  "ru-RU": 97,
+  "tr-TR": 42,
+  "zh-CN": 2
 };
 export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
 	"ca-ES": "ltr",
