@@ -61,7 +61,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
 
-			// Retrieve the options data after preventScroll()
+			// Update the options data after preventScroll()
 			await setOptionsData();
 
 			// Get the player element
