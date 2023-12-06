@@ -43,13 +43,13 @@
 		"sections": {
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
+					"title": "フィーチャー・メニュー設定",
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "メニューの有効化型",
 						"title": "Select the method to activate the feature menu",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "ボタンクリック",
+							"hover": "マウスホバー"
 						}
 					}
 				}
