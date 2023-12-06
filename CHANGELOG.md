@@ -1,3 +1,24 @@
+## [1.16.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.2...v1.16.3) (2023-12-06)
+
+
+### Bug Fixes
+
+* **scroll in video bug:** Allow scroll to be used ([0d8a9c0](https://github.com/VampireChicken12/youtube-enhancer/commit/0d8a9c0766649410106726a028756f5652aa1c21))
+* **scroll in video bug:** make it work ([6b2af8d](https://github.com/VampireChicken12/youtube-enhancer/commit/6b2af8d74432e7fb93587f662e59baaee41dab35))
+* **scroll in video bug:** make it work ([d417fe7](https://github.com/VampireChicken12/youtube-enhancer/commit/d417fe7771173b7380ab59c49050a7dc5be583f2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.16.3-Chrome.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
+| youtube-enhancer-v1.16.3-Chromium.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
+| youtube-enhancer-v1.16.3-Edge.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
+| youtube-enhancer-v1.16.3-Firefox.zip | 9f17be568828703cebca1c2f76a8eb7382e9a2589b0bdbd9ffb34bece13af92a |
+
 ## [1.16.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.1...v1.16.2) (2023-12-06)
 
 
