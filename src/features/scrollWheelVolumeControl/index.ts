@@ -31,23 +31,22 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 
+	type OptionsData = BaseMessage<"data_response", "extension"> & {
+		data: {
+			options: configuration;
+		};
+		type: "options";
+	};
+	let dynamicOptionsData: OptionsData | undefined;
+
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
-		type OptionsData = BaseMessage<"data_response", "extension"> & {
-			data: {
-				options: configuration;
-			};
-			type: "options";
-		};
-		type GlobalWindow = Window & typeof globalThis & { yte_OptionsData?: OptionsData };
-		const globalWindow = window as GlobalWindow;
-
 		const setGlobalOptionsData = async () => {
-			return (globalWindow.yte_OptionsData = await waitForSpecificMessage("options", "request_data", "content"));
+			return (dynamicOptionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
 
 		void (async () => {
-			const { yte_OptionsData: optionsData } = globalWindow;
+			const optionsData = dynamicOptionsData;
 			if (!optionsData) {
 				return void (await setGlobalOptionsData());
 			}
