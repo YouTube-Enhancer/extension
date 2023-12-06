@@ -43,13 +43,13 @@
 		"sections": {
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
+					"title": "Özellik menüsü ayarları",
 					"select": {
-						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
+						"label": "Menü Aktivasyon Türü",
+						"title": "Özellik menüsünü etkinleştirme yöntemini seçin",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Tıkla",
+							"hover": "İmleci Üzerine Getir"
 						}
 					}
 				}
