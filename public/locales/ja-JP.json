@@ -46,7 +46,7 @@
 					"title": "フィーチャー・メニュー設定",
 					"select": {
 						"label": "メニューの有効化型",
-						"title": "Select the method to activate the feature menu",
+						"title": "フィーチャー・メニューを有効化にする方法を選択します",
 						"options": {
 							"click": "ボタンクリック",
 							"hover": "マウスホバー"
