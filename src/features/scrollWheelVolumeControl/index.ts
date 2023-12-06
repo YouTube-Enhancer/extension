@@ -33,13 +33,13 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
-		const setGlobalOptionsData = async () => {
+		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
 
 		void (async () => {
 			if (!optionsData) {
-				return void (await setGlobalOptionsData());
+				return void (await setOptionsData());
 			}
 			const {
 				data: { options }
@@ -53,16 +53,16 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			const wheelEvent = event as WheelEvent;
 			// If the modifier key is required and not pressed, return
 			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key])
-				return void (await setGlobalOptionsData());
+				return void (await setOptionsData());
 			// If the right click is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setGlobalOptionsData());
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
 
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
 
-			// Retreive the options data after preventScroll()
-			await setGlobalOptionsData();
+			// Retrieve the options data after preventScroll()
+			await setOptionsData();
 
 			// Get the player element
 			const playerContainer = isWatchPage()
