@@ -62,9 +62,10 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			} = options;
 			const wheelEvent = event as WheelEvent;
 			// If the modifier key is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key]) return;
+			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key])
+				return void (await setGlobalOptionsData());
 			// If the right click is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return;
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setGlobalOptionsData());
 
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
