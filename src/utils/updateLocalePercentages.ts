@@ -73,7 +73,7 @@ export default async function updateLocalePercentages() {
 	}
 }
 async function getLocalePercentagesFromCrowdin() {
-	if (!process.env.CROWDIN_TOKEN) throw new Error("CROWDIN_TOKEN is not defined");
+	if (!process.env.CROWDIN_TOKEN) return;
 	try {
 		const response = await fetch("https://crowdin.com/api/v2/projects/627048/languages/progress", {
 			headers: { Authorization: "Bearer " + process.env.CROWDIN_TOKEN },
