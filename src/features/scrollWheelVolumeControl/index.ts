@@ -19,7 +19,7 @@ function preventScroll(event: Event) {
  */
 export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
 	const {
 		data: { options }
@@ -33,11 +33,14 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		const setOptionsData = async () => {
+			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
+		};
+
 		void (async () => {
-			preventScroll(event);
-			// Wait for the "options" message from the content script
-			const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-			if (!optionsData) return;
+			if (!optionsData) {
+				return void (await setOptionsData());
+			}
 			const {
 				data: { options }
 			} = optionsData;
@@ -49,9 +52,18 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			} = options;
 			const wheelEvent = event as WheelEvent;
 			// If the modifier key is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key]) return;
+			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key])
+				return void (await setOptionsData());
 			// If the right click is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return;
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
+
+			// Only prevent default scroll wheel behavior
+			// if we are going to handle the event
+			preventScroll(wheelEvent);
+
+			// Update the options data after preventScroll()
+			await setOptionsData();
+
 			// Get the player element
 			const playerContainer = isWatchPage()
 				? document.querySelector<YouTubePlayerDiv>("div#movie_player")

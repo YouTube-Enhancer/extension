@@ -1,29 +1,57 @@
 import { readFileSync, writeFileSync } from "fs";
+import { z } from "zod";
+import { generateErrorMessage } from "zod-error";
 
-import { type AvailableLocales, availableLocales } from "../i18n";
-import { type LocaleFile, flattenLocaleValues, getLocaleFile, i18nDir } from "./plugins/utils";
-function calculateLocalePercentage(englishFile: LocaleFile, localeFile: LocaleFile): number {
-	const { values: englishValues } = flattenLocaleValues(englishFile);
-	const { values: localeValues } = flattenLocaleValues(localeFile);
-	const translatedValues = englishValues.filter((value, index) => value !== localeValues[index]);
+import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "../types";
 
-	const localePercentage = (translatedValues.length / englishValues.length) * 100;
+import { type AvailableLocales } from "../i18n";
+import { i18nDir } from "./plugins/utils";
+import { formatError } from "./utilities";
 
-	return Math.floor(localePercentage);
-}
-function calculateLocalePercentages() {
-	const englishFile = getLocaleFile("en-US");
-	const localePercentages = new Map<AvailableLocales, number>([["en-US", 100]]);
+const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProgressResponse> = z.object({
+	data: z.array(
+		z.object({
+			data: z.object({
+				approvalProgress: z.number(),
+				language: z.object({
+					androidCode: z.string(),
+					dialectOf: z.string().nullable(),
+					editorCode: z.string(),
+					id: z.string(),
+					locale: z.string(),
+					name: z.string(),
+					osxCode: z.string(),
+					osxLocale: z.string(),
+					pluralCategoryNames: z.array(z.string()),
+					pluralExamples: z.array(z.string()),
+					pluralRules: z.string(),
+					textDirection: z.string(),
+					threeLettersCode: z.string(),
+					twoLettersCode: z.string()
+				}),
+				languageId: z.string(),
+				phrases: z.object({
+					approved: z.number(),
+					preTranslateAppliedTo: z.number(),
+					total: z.number(),
+					translated: z.number()
+				}),
+				translationProgress: z.number(),
+				words: z.object({
+					approved: z.number(),
+					preTranslateAppliedTo: z.number(),
+					total: z.number(),
+					translated: z.number()
+				})
+			})
+		})
+	),
+	pagination: z.object({
+		limit: z.number(),
+		offset: z.number()
+	})
+});
 
-	availableLocales
-		.filter((availableLocales) => availableLocales !== "en-US")
-		.forEach((locale) => {
-			const localeFile = getLocaleFile(locale);
-			const localePercentage = calculateLocalePercentage(englishFile, localeFile);
-			localePercentages.set(locale, localePercentage);
-		});
-	return localePercentages;
-}
 function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
 	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
 
@@ -35,11 +63,44 @@ function updateLocalePercentageObject(code: string, updatedObject: Record<string
 		return null;
 	}
 }
-export default function updateLocalePercentages() {
-	const localePercentages = calculateLocalePercentages();
+export default async function updateLocalePercentages() {
+	const localePercentages = await getLocalePercentagesFromCrowdin();
+	if (!localePercentages) return;
 	const localePercentagesFile = readFileSync(`${i18nDir}/index.ts`, "utf-8");
 	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, Object.fromEntries(localePercentages));
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
 		writeFileSync(`${i18nDir}/index.ts`, updatedLocalePercentagesFile);
+	}
+}
+async function getLocalePercentagesFromCrowdin() {
+	if (!process.env.CROWDIN_TOKEN) return;
+	try {
+		const response = await fetch("https://crowdin.com/api/v2/projects/627048/languages/progress", {
+			headers: { Authorization: "Bearer " + process.env.CROWDIN_TOKEN },
+			method: "get"
+		});
+		const data = await response.text();
+		const json = JSON.parse(data);
+		const crowdinLanguageProgressResponseParsed = crowdinLanguageProgressResponseSchema.safeParse(json);
+		if (crowdinLanguageProgressResponseParsed.success) {
+			const { data } = json as CrowdinLanguageProgressResponse;
+			const localePercentages = new Map<AvailableLocales, number>([
+				["en-US", 100],
+				...data.map(
+					({
+						data: {
+							approvalProgress,
+							language: { locale }
+						}
+					}) => [locale as AvailableLocales, approvalProgress] as [AvailableLocales, number]
+				)
+			]);
+			return localePercentages;
+		} else if (!crowdinLanguageProgressResponseParsed.success) {
+			const { error } = crowdinLanguageProgressResponseParsed;
+			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.errors)}`);
+		}
+	} catch (error) {
+		throw new Error(formatError(error));
 	}
 }
