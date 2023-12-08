@@ -14,7 +14,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 			return;
 		}
 
-		const removeNotificationAfterMs = action && action === "reset_settings" ? 10_000 : 3_000;
+		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 5_000;
 		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 
 		setNotifications((notifications) => [notification, ...notifications]);
