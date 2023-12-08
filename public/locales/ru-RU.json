@@ -43,13 +43,13 @@
 		"sections": {
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
+					"title": "Настройки меню функций",
 					"select": {
-						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
+						"label": "Тип активации меню",
+						"title": "Выберите способ активации меню функций",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Посредством нажатия",
+							"hover": "При наведении курсора"
 						}
 					}
 				}
