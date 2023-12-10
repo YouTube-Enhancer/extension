@@ -90,9 +90,12 @@ interface EnUS {
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					loopButton: {
 						label: "Loop button";
-						title: "Adds a button to the player to loop the video you're watching";
+						title: "Adds a button to the feature menu to loop the video you're watching";
 					};
-					maximizePlayerButton: { label: "Maximize player button"; title: "Fills the video to the window size" };
+					maximizePlayerButton: {
+						label: "Maximize player button";
+						title: "Adds a button to the feature menu to maximize the player";
+					};
 					openTranscriptButton: {
 						label: "Open transcript button";
 						title: "Adds a button to the feature menu to open the transcript of the video you're watching";
