@@ -79,7 +79,7 @@
 						"label": "Remember last volume"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
+						"title": "Adds a button to the feature menu to maximize the player",
 						"label": "Maximize player button"
 					},
 					"videoHistory": {
@@ -91,7 +91,7 @@
 						"label": "Remaining time"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
+						"title": "Adds a button to the feature menu to loop the video you're watching",
 						"label": "Loop button"
 					},
 					"hideScrollbar": {
