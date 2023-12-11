@@ -4,7 +4,6 @@ export type FeatureName =
 	| "hideScrollBar"
 	| "loopButton"
 	| "maximizePlayerButton"
-	| "openTranscriptButton"
 	| "playerQuality"
 	| "playerSpeed"
 	| "remainingTime"

@@ -8,7 +8,6 @@ import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
-import { openTranscriptButton, removeTranscriptButton } from "@/src/features/openTranscriptButton";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -89,7 +88,6 @@ window.addEventListener("DOMContentLoaded", function () {
 				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
-				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
 				void volumeBoost();
@@ -296,17 +294,6 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { featureMenuOpenType }
 						} = message;
 						setupFeatureMenuEventListeners(featureMenuOpenType);
-						break;
-					}
-					case "openTranscriptButtonChange": {
-						const {
-							data: { openTranscriptButtonEnabled }
-						} = message;
-						if (openTranscriptButtonEnabled) {
-							void openTranscriptButton();
-						} else {
-							void removeTranscriptButton();
-						}
 						break;
 					}
 					default: {
