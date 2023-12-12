@@ -1,34 +1,33 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
+import { createSVGElement } from "@/src/utils/utilities";
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
 export function makeMaximizeSVG(): SVGElement {
-	const maximizeSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	maximizeSVG.setAttributeNS(null, "stroke", "currentColor");
-	maximizeSVG.setAttributeNS(null, "height", "100%");
-	maximizeSVG.setAttributeNS(null, "width", "100%");
-	maximizeSVG.setAttributeNS(null, "fill", "none");
-	maximizeSVG.setAttributeNS(null, "stroke-width", "1.5");
-	maximizeSVG.setAttributeNS(null, "viewBox", "0 0 24 24");
-	const maximize_SVG_FirstPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	maximize_SVG_FirstPath.setAttributeNS(
-		null,
-		"d",
-		"M 21.283309,21.283314 H 2.7166914 V 2.7166868 H 21.283309 Z m -18.5666175,0 V 2.7166868 H 21.283309 V 21.283314 Z"
+	const maximizeSVG = createSVGElement(
+		"svg",
+		{
+			fill: "none",
+			height: "100%",
+			stroke: "currentColor",
+			"stroke-width": "1.5",
+			viewBox: "0 0 24 24",
+			width: "100%"
+		},
+		createSVGElement("path", {
+			d: "M 21.283309,21.283314 H 2.7166914 V 2.7166868 H 21.283309 Z m -18.5666175,0 V 2.7166868 H 21.283309 V 21.283314 Z",
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round",
+			"stroke-width": "1.5"
+		}),
+		createSVGElement("path", {
+			d: "M 12,8.0214379 V 15.978562 M 15.978561,12 H 8.0214389",
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round",
+			"stroke-width": "1.5"
+		})
 	);
-	maximize_SVG_FirstPath.setAttributeNS(null, "stroke-linecap", "round");
-	maximize_SVG_FirstPath.setAttributeNS(null, "stroke-linejoin", "round");
-	maximize_SVG_FirstPath.style.strokeWidth = "1.5";
-	maximize_SVG_FirstPath.style.strokeLinejoin = "round";
-	const maximize_SVG_SecondPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	maximize_SVG_SecondPath.setAttributeNS(null, "d", "M 12,8.0214379 V 15.978562 M 15.978561,12 H 8.0214389");
-	maximize_SVG_SecondPath.setAttributeNS(null, "stroke-linecap", "round");
-	maximize_SVG_SecondPath.setAttributeNS(null, "stroke-linejoin", "round");
-	maximize_SVG_SecondPath.style.strokeWidth = "1.5";
-	maximize_SVG_SecondPath.style.strokeLinejoin = "round";
-	maximizeSVG.appendChild(maximize_SVG_FirstPath);
-	maximizeSVG.appendChild(maximize_SVG_SecondPath);
 	return maximizeSVG;
 }
 

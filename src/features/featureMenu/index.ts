@@ -1,7 +1,7 @@
 import type { FeatureMenuOpenType, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createStyledElement, createTooltip, isShortsPage, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
+import { createSVGElement, createStyledElement, createTooltip, isShortsPage, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
 
 import { waitForSpecificMessage } from "../../utils/utilities";
 
@@ -71,18 +71,19 @@ async function createFeatureMenuButton() {
 	setupFeatureMenuEventListeners(featureMenuOpenType);
 }
 function makeFeatureMenuIcon() {
-	const featureButtonSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	featureButtonSVG.setAttribute("viewBox", "0 0 36 36");
-	featureButtonSVG.setAttribute("height", "48px");
-	featureButtonSVG.setAttribute("width", "48px");
-	featureButtonSVG.setAttribute("fill", "white");
-	const featureButtonSVGPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	featureButtonSVGPath.setAttribute(
-		"d",
-		"M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z"
+	const featureButtonSVG = createSVGElement(
+		"svg",
+		{
+			fill: "white",
+			height: "48px",
+			viewBox: "0 0 36 36",
+			width: "48px"
+		},
+		createSVGElement("path", {
+			d: "M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z",
+			fill: "white"
+		})
 	);
-	featureButtonSVGPath.setAttribute("fill", "white");
-	featureButtonSVG.appendChild(featureButtonSVGPath);
 	return featureButtonSVG;
 }
 

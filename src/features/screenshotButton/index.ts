@@ -1,5 +1,5 @@
 import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createSVGElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
 
@@ -107,26 +107,26 @@ export function removeScreenshotButton() {
 	eventManager.removeEventListeners("screenshotButton");
 }
 function makeScreenshotIcon() {
-	const screenshotSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	screenshotSVG.style.height = "24px";
-	screenshotSVG.style.width = "24px";
-	screenshotSVG.setAttributeNS(null, "stroke-width", "1.5");
-	screenshotSVG.setAttributeNS(null, "stroke", "currentColor");
-	screenshotSVG.setAttributeNS(null, "fill", "none");
-	screenshotSVG.setAttributeNS(null, "viewBox", "0 0 24 24");
-	const firstPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	firstPath.setAttributeNS(
-		null,
-		"d",
-		"M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+	const screenshotSVG = createSVGElement(
+		"svg",
+		{
+			fill: "none",
+			height: "24px",
+			stroke: "currentColor",
+			"stroke-width": "1.5",
+			viewBox: "0 0 24 24",
+			width: "24px"
+		},
+		createSVGElement("path", {
+			d: "M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316",
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round"
+		}),
+		createSVGElement("path", {
+			d: "M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z",
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round"
+		})
 	);
-	firstPath.setAttributeNS(null, "stroke-linecap", "round");
-	firstPath.setAttributeNS(null, "stroke-linejoin", "round");
-	const secondPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-	secondPath.setAttributeNS(null, "d", "M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z");
-	secondPath.setAttributeNS(null, "stroke-linecap", "round");
-	secondPath.setAttributeNS(null, "stroke-linejoin", "round");
-	screenshotSVG.appendChild(firstPath);
-	screenshotSVG.appendChild(secondPath);
 	return screenshotSVG;
 }
