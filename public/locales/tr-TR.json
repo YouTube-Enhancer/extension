@@ -81,7 +81,7 @@
 						"label": "Son ses hacmini hatırla"
 					},
 					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
+						"title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler",
 						"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir"
 					},
 					"videoHistory": {
@@ -93,7 +93,7 @@
 						"label": "Remaining time"
 					},
 					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
+						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler",
 						"label": "Loop button"
 					},
 					"hideScrollbar": {
