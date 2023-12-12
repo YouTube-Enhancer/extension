@@ -1,7 +1,7 @@
 import eventManager from "@/src/utils/EventManager";
 import { createSVGElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
 
 export async function openTranscriptButton() {
 	// Wait for the "options" message from the content script
@@ -15,7 +15,12 @@ export async function openTranscriptButton() {
 	// If the open transcript button option is disabled, return
 	if (!enableOpenTranscriptButton) return;
 	const transcriptButton = document.querySelector("ytd-video-description-transcript-section-renderer button");
+	const transcriptButtonMenuItem = getFeatureMenuItem("openTranscriptButton");
+	// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item
+	if (!transcriptButton && transcriptButtonMenuItem) removeFeatureItemFromMenu("openTranscriptButton");
+	// If the transcript button isn't found return
 	if (!transcriptButton) return;
+	// If the transcript button is found and the "openTranscriptButton" menu item does not exist, add the transcript button menu item
 	void addTranscriptButton();
 }
 async function addTranscriptButton() {
