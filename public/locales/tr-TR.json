@@ -25,6 +25,9 @@
 				},
 				"volumeBoostButton": {
 					"label": "Ses Güçlendirmesi"
+				},
+				"openTranscriptButton": {
+					"label": "Open Transcript"
 				}
 			}
 		},
@@ -78,7 +81,7 @@
 						"label": "Son ses hacmini hatırla"
 					},
 					"maximizePlayerButton": {
-						"title": "Fills the video to the window size",
+						"title": "Adds a button to the feature menu to maximize the player",
 						"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir"
 					},
 					"videoHistory": {
@@ -90,7 +93,7 @@
 						"label": "Remaining time"
 					},
 					"loopButton": {
-						"title": "Adds a button to the player to loop the video you're watching",
+						"title": "Adds a button to the feature menu to loop the video you're watching",
 						"label": "Loop button"
 					},
 					"hideScrollbar": {
@@ -100,6 +103,10 @@
 					"automaticTheaterMode": {
 						"title": "Automatically enables theater mode when you load a video",
 						"label": "Automatic theater mode"
+					},
+					"openTranscriptButton": {
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
+						"label": "Open transcript button"
 					}
 				}
 			},
