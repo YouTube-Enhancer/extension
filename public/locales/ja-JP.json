@@ -27,7 +27,7 @@
 					"label": "音量ブースト"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "文字起こしを見せる"
 				}
 			}
 		},
@@ -81,7 +81,7 @@
 						"label": "前音量を覚える"
 					},
 					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
+						"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する",
 						"label": "最大化ボタン"
 					},
 					"videoHistory": {
@@ -93,7 +93,7 @@
 						"label": "残り時間"
 					},
 					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
+						"title": "動画をループするボタンをフィーチャー・メニューに追加する",
 						"label": "動画ループボタン"
 					},
 					"hideScrollbar": {
@@ -105,7 +105,7 @@
 						"label": "自動シアターモード"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
+						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する",
 						"label": "Open transcript button"
 					}
 				}
