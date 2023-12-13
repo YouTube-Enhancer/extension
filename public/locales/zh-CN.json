@@ -1,18 +1,15 @@
 {
 	"langCode": "zh-CN",
-	"langName": "中文（简体)",
+	"langName": "Simplified Chinese",
+	"messages": {
+		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "关"
-					},
-					"resumeButton": "恢复"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "屏幕截图已复制到剪贴板",
-					"label": "屏幕截图"
+				"featureMenu": {
+					"label": "功能单"
 				},
 				"loopButton": {
 					"label": "循环"
@@ -20,8 +17,15 @@
 				"maximizePlayerButton": {
 					"label": "化最大"
 				},
-				"featureMenu": {
-					"label": "功能单"
+				"screenshotButton": {
+					"copiedToClipboard": "屏幕截图已复制到剪贴板",
+					"label": "屏幕截图"
+				},
+				"videoHistory": {
+					"resumeButton": "恢复",
+					"resumePrompt": {
+						"close": "关"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "Volume Boost"
@@ -30,142 +34,154 @@
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "选项已保存。"
-				},
 				"info": {
 					"reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
+				},
+				"success": {
+					"saved": "选项已保存。"
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "所有数据已被删除。",
+			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "启用自动质量调整",
+					"title": "自动调整视频质量到所选等级。"
+				},
+				"select": {
+					"label": "播放器质量",
+					"title": "将视频设置为"
+				},
+				"title": "自动质量设置"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "清除此扩展存储在您机器上的所有数据",
+					"value": "清除数据"
+				},
+				"confirm": {
+					"title": "确认重置设置",
+					"value": "确认"
+				},
+				"reset": {
+					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
+					"value": "重新开始"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
 					"select": {
 						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
 						"options": {
 							"click": "Click",
 							"hover": "Hover"
-						}
-					}
+						},
+						"title": "Select the method to activate the feature menu"
+					},
+					"title": "Feature menu settings"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。"
-					},
-					"success": "成功导入设置",
-					"title": "从 JSON 文件导入设置",
-					"value": "导入设置"
-				},
 				"exportButton": {
 					"success": "设置导出成功",
 					"title": "导出设置到 JSON 文件",
 					"value": "导出设置"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
+						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "成功导入设置",
+					"title": "从 JSON 文件导入设置",
+					"value": "导入设置"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "语言",
+					"title": "扩展使用的语言"
+				},
+				"title": "语言"
 			},
 			"miscellaneous": {
-				"title": "杂项设置",
 				"features": {
-					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "记住最后一个音量"
-					},
-					"maximizePlayerButton": {
-						"title": "将视频填充到窗口大小",
-						"label": "启用最大化播放器按钮"
-					},
-					"videoHistory": {
-						"title": "保持跟踪您在视频上离开的位置，并询问您是否想要在视频重新加载时恢复",
-						"label": "启用视频历史"
-					},
-					"remainingTime": {
-						"title": "显示您观看的视频的剩余时间",
-						"label": "启用剩余时间"
-					},
-					"loopButton": {
-						"title": "向播放器添加一个按钮来循环您正在观看的视频",
-						"label": "启用循环按钮"
+					"automaticTheaterMode": {
+						"label": "Automatic theater mode",
+						"title": "Automatically enables theater mode when you load a video"
 					},
 					"hideScrollbar": {
-						"title": "隐藏页面滚动条",
-						"label": "启用隐藏滚动条"
+						"label": "启用隐藏滚动条",
+						"title": "隐藏页面滚动条"
 					},
-					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Automatic theater mode"
+					"loopButton": {
+						"label": "启用循环按钮",
+						"title": "向播放器添加一个按钮来循环您正在观看的视频"
+					},
+					"maximizePlayerButton": {
+						"label": "启用最大化播放器按钮",
+						"title": "将视频填充到窗口大小"
+					},
+					"remainingTime": {
+						"label": "启用剩余时间",
+						"title": "显示您观看的视频的剩余时间"
+					},
+					"rememberLastVolume": {
+						"label": "记住最后一个音量",
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					},
+					"videoHistory": {
+						"label": "启用视频历史",
+						"title": "保持跟踪您在视频上离开的位置，并询问您是否想要在视频重新加载时恢复"
 					}
-				}
+				},
+				"title": "杂项设置"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "启用强制播放速度",
+					"title": "设置视频速度为您在下面选择的内容"
+				},
+				"select": {
+					"label": "播放器速度",
+					"title": "视频设置为"
+				},
+				"title": "回放速度设置"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "启用屏幕截图按钮",
+					"title": "向播放器添加一个按钮以拍摄视频的截图"
+				},
+				"saveAs": {
+					"clipboard": "剪切板",
+					"file": "文件"
+				},
+				"selectFormat": {
+					"label": "截图格式",
+					"title": "保存屏幕截图的格式"
+				},
+				"selectSaveAs": {
+					"label": "截图保存类型",
+					"title": "屏幕截图保存类型"
+				},
+				"title": "屏幕截图设置"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "滚动滚轮音量控制设置",
 				"enable": {
-					"title": "让您使用滚轮来控制您正在观看的视频音量",
-					"label": "启用滚轮音量控制"
-				},
-				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Color"
-				},
-				"osdType": {
-					"title": "Select the style of On-Screen Display",
-					"label": "OSD Type"
-				},
-				"osdPosition": {
-					"title": "Select the position of the On-Screen Display",
-					"label": "OSD Position"
-				},
-				"osdOpacity": {
-					"title": "Adjust the transparency of the On-Screen Display",
-					"label": "OSD Opacity"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "Adjust the volume change per scroll",
-					"label": "Volume Change Per Scroll"
-				},
-				"osdHide": {
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
-					"label": "Hide Delay"
-				},
-				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "填充"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "红色",
-						"green": "绿色",
-						"blue": "蓝色",
-						"yellow": "黄色",
-						"orange": "橙色",
-						"purple": "紫色",
-						"pink": "粉色",
-						"white": "白色"
-					},
-					"position": {
-						"top_left": "左上",
-						"top_right": "右上",
-						"bottom_left": "左下",
-						"bottom_right": "右下",
-						"center": "中间"
-					},
-					"type": {
-						"no_display": "没有显示",
-						"text": "文本",
-						"line": "直线",
-						"round": "圆形"
-					}
+					"label": "启用滚轮音量控制",
+					"title": "让您使用滚轮来控制您正在观看的视频音量"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable when holding modifier key"
+						"label": "Enable when holding modifier key",
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
@@ -175,92 +191,76 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable when holding right click"
+						"label": "Enable when holding right click",
+						"title": "Hold right click to enable scroll wheel volume control"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "自动质量设置",
-				"enable": {
-					"title": "自动调整视频质量到所选等级。",
-					"label": "启用自动质量调整"
 				},
-				"select": {
-					"label": "播放器质量",
-					"title": "将视频设置为"
-				}
-			},
-			"playbackSpeed": {
-				"title": "回放速度设置",
-				"enable": {
-					"title": "设置视频速度为您在下面选择的内容",
-					"label": "启用强制播放速度"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "蓝色",
+						"green": "绿色",
+						"orange": "橙色",
+						"pink": "粉色",
+						"purple": "紫色",
+						"red": "红色",
+						"white": "白色",
+						"yellow": "黄色"
+					},
+					"position": {
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "中间",
+						"top_left": "左上",
+						"top_right": "右上"
+					},
+					"type": {
+						"line": "直线",
+						"no_display": "没有显示",
+						"round": "圆形",
+						"text": "文本"
+					}
 				},
-				"select": {
-					"label": "播放器速度",
-					"title": "视频设置为"
-				}
+				"osdColor": {
+					"label": "OSD Color",
+					"title": "Select the color for the On-Screen Display"
+				},
+				"osdHide": {
+					"label": "Hide Delay",
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD"
+				},
+				"osdOpacity": {
+					"label": "OSD Opacity",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"osdPadding": {
+					"label": "填充",
+					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD."
+				},
+				"osdPosition": {
+					"label": "OSD Position",
+					"title": "Select the position of the On-Screen Display"
+				},
+				"osdType": {
+					"label": "OSD Type",
+					"title": "Select the style of On-Screen Display"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
+				"title": "滚动滚轮音量控制设置"
 			},
 			"volumeBoost": {
-				"title": "音量提升设置",
 				"enable": {
-					"title": "提升您观看的视频音量",
-					"label": "启用音量加速"
+					"label": "启用音量加速",
+					"title": "提升您观看的视频音量"
 				},
 				"number": {
 					"label": "音量升压量 (dB)",
 					"title": "要提升音量的金额"
-				}
-			},
-			"screenshotButton": {
-				"title": "屏幕截图设置",
-				"enable": {
-					"title": "向播放器添加一个按钮以拍摄视频的截图",
-					"label": "启用屏幕截图按钮"
 				},
-				"selectSaveAs": {
-					"label": "截图保存类型",
-					"title": "屏幕截图保存类型"
-				},
-				"selectFormat": {
-					"label": "截图格式",
-					"title": "保存屏幕截图的格式"
-				},
-				"saveAs": {
-					"file": "文件",
-					"clipboard": "剪切板"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "确认重置设置",
-					"value": "确认"
-				},
-				"clear": {
-					"title": "清除此扩展存储在您机器上的所有数据",
-					"value": "清除数据"
-				},
-				"reset": {
-					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
-					"value": "重新开始"
-				}
-			},
-			"language": {
-				"title": "语言",
-				"select": {
-					"label": "语言",
-					"title": "扩展使用的语言"
-				}
+				"title": "音量提升设置"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？",
-			"allDataDeleted": "所有数据已被删除。"
 		}
-	},
-	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
 	}
 }
