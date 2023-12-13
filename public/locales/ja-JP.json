@@ -106,7 +106,7 @@
 					},
 					"openTranscriptButton": {
 						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する",
-						"label": "文字起こしを見せるボタン"
+						"label": "Open transcript button"
 					}
 				}
 			},

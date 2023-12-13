@@ -1,8 +1,4 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"i18n-ally.localesPaths": ["public/locales"],
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "always"
-	},
-	"eslint.codeActionsOnSave.mode": "all"
+	"i18n-ally.localesPaths": ["public/locales"]
 }
