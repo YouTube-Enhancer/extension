@@ -25,6 +25,9 @@
 				},
 				"volumeBoostButton": {
 					"label": "Lautsärke Verstärkung"
+				},
+				"openTranscriptButton": {
+					"label": "Open Transcript"
 				}
 			}
 		},
@@ -78,7 +81,7 @@
 						"label": "Letzte Lautstärke merken"
 					},
 					"maximizePlayerButton": {
-						"title": "Füllt das Video in die Fenstergröße",
+						"title": "Adds a button to the feature menu to maximize the player",
 						"label": "Player-Button maximieren"
 					},
 					"videoHistory": {
@@ -90,7 +93,7 @@
 						"label": "Verbleibende Zeit"
 					},
 					"loopButton": {
-						"title": "Fügt dem Player einen Button hinzu, um das Video dass du siehst in Dauerschleife zu setzen",
+						"title": "Adds a button to the feature menu to loop the video you're watching",
 						"label": "Dauerschleife-Button"
 					},
 					"hideScrollbar": {
@@ -100,6 +103,10 @@
 					"automaticTheaterMode": {
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird",
 						"label": "Automatischer Theatermodus"
+					},
+					"openTranscriptButton": {
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
+						"label": "Open transcript button"
 					}
 				}
 			},
