@@ -24,8 +24,8 @@ export default function SettingsNotifications() {
 						})}
 						key={index}
 					>
-						{notification.action ? (
-							notification.action === "reset_settings" ? (
+						{notification.action ?
+							notification.action === "reset_settings" ?
 								<>
 									{message.split("\n").map((line, index) => (
 										<p key={index}>{line}</p>
@@ -34,15 +34,14 @@ export default function SettingsNotifications() {
 										&times;
 									</button>
 								</>
-							) : null
-						) : (
-							<>
+							:	null
+						:	<>
 								{message}
 								<button className="absolute right-[5px] top-[-1px] text-base font-normal" onClick={() => removeNotification(notification)}>
 									&times;
 								</button>
 							</>
-						)}
+						}
 						<div
 							className="absolute bottom-0 left-0 h-1 rounded-b bg-[#0086ff]"
 							id={`${notification.type}_notification_${message.split(/s /).join("_")}_progress_bar`}

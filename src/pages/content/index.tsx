@@ -276,11 +276,10 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "automaticTheaterModeChange": {
 						// Get the player element
-						const playerContainer = isWatchPage()
-							? document.querySelector("div#movie_player")
-							: isShortsPage()
-							  ? document.querySelector("div#shorts-player")
-							  : null;
+						const playerContainer =
+							isWatchPage() ? document.querySelector("div#movie_player")
+							: isShortsPage() ? document.querySelector("div#shorts-player")
+							: null;
 						// If player element is not available, return
 						if (!playerContainer) return;
 						// Get the size button
