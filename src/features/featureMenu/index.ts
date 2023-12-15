@@ -93,7 +93,16 @@ export async function enableFeatureMenu() {
 	if (featureMenuButtonExists) return;
 	await createFeatureMenuButton();
 }
-
+function adjustAdsContainerStyles(featureMenuOpen: boolean) {
+	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
+	if (adsContainer) {
+		const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+		if (adsSpan) {
+			adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
+			adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
+		}
+	}
+}
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
@@ -111,10 +120,12 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		id: "yte-feature-menu-tooltip"
 	});
 	const showFeatureMenu = () => {
+		adjustAdsContainerStyles(true);
 		bottomControls.style.opacity = "1";
 		featureMenu.style.display = "block";
 	};
 	const hideFeatureMenu = () => {
+		adjustAdsContainerStyles(false);
 		featureMenu.style.display = "none";
 		bottomControls.style.opacity = "";
 	};
@@ -178,4 +189,25 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			break;
 		}
 	}
+	function handleMutation(mutations: MutationRecord[]) {
+		mutations.forEach((mutation) => {
+			if (mutation.type === "childList") {
+				const addedNodes = Array.from(mutation.addedNodes);
+				const isAdsElementAdded = addedNodes.some(
+					(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
+				);
+				if (isAdsElementAdded) {
+					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+					if (featureMenu) {
+						adjustAdsContainerStyles(featureMenu.style.display === "block");
+					}
+				}
+			}
+		});
+	}
+	const observer = new MutationObserver(handleMutation);
+	observer.observe(playerContainer, {
+		childList: true,
+		subtree: true
+	});
 }

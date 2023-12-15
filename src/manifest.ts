@@ -63,8 +63,7 @@ const manifestV2: Manifest.WebExtensionManifest = {
 	},
 	browser_specific_settings: {
 		gecko: {
-			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}",
-			strict_min_version: "119.0"
+			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}"
 		}
 	},
 	content_scripts: [
