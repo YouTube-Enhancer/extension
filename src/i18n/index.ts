@@ -21,23 +21,23 @@ export const availableLocales = [
   "zh-TW"
 ] as const;
 export const localePercentages: Record<AvailableLocales, number> = {
-	"ca-ES": 0,
-	"cs-CZ": 0,
-	"de-DE": 97,
-	"en-US": 100,
-	"es-ES": 97,
-	"fa-IR": 0,
-	"fr-FR": 0,
-	"he-IL": 0,
-	"hi-IN": 0,
-	"it-IT": 0,
-	"ja-JP": 97,
-	"pl-PL": 0,
-	"pt-BR": 0,
-	"ru-RU": 97,
-	"tr-TR": 42,
-	"zh-CN": 2,
-	"zh-TW": 0
+  "en-US": 100,
+  "ca-ES": 0,
+  "cs-CZ": 0,
+  "de-DE": 89,
+  "es-ES": 89,
+  "fa-IR": 0,
+  "fr-FR": 0,
+  "he-IL": 0,
+  "hi-IN": 0,
+  "it-IT": 0,
+  "ja-JP": 100,
+  "pl-PL": 1,
+  "pt-BR": 0,
+  "ru-RU": 92,
+  "tr-TR": 45,
+  "zh-CN": 2,
+  "zh-TW": 0
 };
 export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
 	"ca-ES": "ltr",
