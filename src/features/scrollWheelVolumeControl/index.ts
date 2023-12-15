@@ -33,6 +33,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+		// If the settings panel menu is targeted return
+		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
