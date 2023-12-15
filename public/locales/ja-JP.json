@@ -25,6 +25,9 @@
 				},
 				"volumeBoostButton": {
 					"label": "音量ブースト"
+				},
+				"openTranscriptButton": {
+					"label": "文字起こしを見せる"
 				}
 			}
 		},
@@ -78,7 +81,7 @@
 						"label": "前音量を覚える"
 					},
 					"maximizePlayerButton": {
-						"title": "動画をウィンドウ・サイズまで広がるする",
+						"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する",
 						"label": "最大化ボタン"
 					},
 					"videoHistory": {
@@ -90,7 +93,7 @@
 						"label": "残り時間"
 					},
 					"loopButton": {
-						"title": "動画をループ再生するボタンをビデオ・プレーヤーに追加する",
+						"title": "動画をループするボタンをフィーチャー・メニューに追加する",
 						"label": "動画ループボタン"
 					},
 					"hideScrollbar": {
@@ -100,6 +103,10 @@
 					"automaticTheaterMode": {
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする",
 						"label": "自動シアターモード"
+					},
+					"openTranscriptButton": {
+						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する",
+						"label": "文字起こしを見せるボタン"
 					}
 				}
 			},

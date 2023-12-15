@@ -25,6 +25,9 @@
 				},
 				"volumeBoostButton": {
 					"label": "Усиление громкости"
+				},
+				"openTranscriptButton": {
+					"label": "Open Transcript"
 				}
 			}
 		},
@@ -43,13 +46,13 @@
 		"sections": {
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
+					"title": "Настройки меню функций",
 					"select": {
-						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
+						"label": "Тип активации меню",
+						"title": "Выберите способ активации меню функций",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Посредством нажатия",
+							"hover": "При наведении курсора"
 						}
 					}
 				}
@@ -78,7 +81,7 @@
 						"label": "Запомнить уровень громкости"
 					},
 					"maximizePlayerButton": {
-						"title": "Разворачивает видео до размера окна",
+						"title": "Adds a button to the feature menu to maximize the player",
 						"label": "Включить кнопку «Развернуть проигрыватель»"
 					},
 					"videoHistory": {
@@ -90,7 +93,7 @@
 						"label": "Включить отображение оставшегося времени"
 					},
 					"loopButton": {
-						"title": "Добавляет кнопку в проигрыватель для автоматического повтора просмотренного видео (зацикливание)",
+						"title": "Adds a button to the feature menu to loop the video you're watching",
 						"label": "Включить кнопку «Зациклить»"
 					},
 					"hideScrollbar": {
@@ -100,6 +103,10 @@
 					"automaticTheaterMode": {
 						"title": "Автоматически включать режим кинотеатра при загрузке видео",
 						"label": "Включить автоматический режим кинотеатра"
+					},
+					"openTranscriptButton": {
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
+						"label": "Open transcript button"
 					}
 				}
 			},
