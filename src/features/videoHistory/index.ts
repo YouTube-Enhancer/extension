@@ -22,7 +22,10 @@ export async function setupVideoHistory() {
 	const { enable_video_history: enableVideoHistory } = options;
 	if (!enableVideoHistory) return;
 	// Get the player container element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? null
+		: null;
 	// If player container is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -59,7 +62,10 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	if (!enableVideoHistory) return;
 
 	// Get the player container element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? null
+		: null;
 
 	// If player container is not available, return
 	if (!playerContainer) return;

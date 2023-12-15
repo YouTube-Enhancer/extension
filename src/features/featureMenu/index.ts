@@ -54,7 +54,10 @@ async function createFeatureMenuButton() {
 	// Get references to various elements and check their existence
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? null
+		: null;
 	if (!playerContainer) return;
 	// Insert the feature menu button and feature menu itself
 	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
@@ -106,7 +109,10 @@ function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : isShortsPage() ? null : null;
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? null
+		: null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;

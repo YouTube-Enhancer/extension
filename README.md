@@ -11,6 +11,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 ![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer.svg)
 [![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
 [![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord)](https://discord.gg/VpdGFmuB4B)
+
 ## Table of Contents
 
 - [Introduction](#-introduction)

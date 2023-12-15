@@ -1,234 +1,186 @@
 ## [1.17.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.0...v1.17.1) (2023-12-15)
 
-
 ### Bug Fixes
 
-* **scroll wheel volume control:** the youtube settings menu can now be scrolled in ([6607ef3](https://github.com/VampireChicken12/youtube-enhancer/commit/6607ef398aa975987927a7795f185ed88f6e3e9d)), closes [#178](https://github.com/VampireChicken12/youtube-enhancer/issues/178)
-
-
-
-
+- **scroll wheel volume control:** the youtube settings menu can now be scrolled in ([6607ef3](https://github.com/VampireChicken12/youtube-enhancer/commit/6607ef398aa975987927a7795f185ed88f6e3e9d)), closes [#178](https://github.com/VampireChicken12/youtube-enhancer/issues/178)
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.17.1-Chrome.zip | 21ab80071e7c87c999b1ba51d7c10b37ec7099f1c60b92bba4031c253ddf5f9a |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.17.1-Chrome.zip   | 21ab80071e7c87c999b1ba51d7c10b37ec7099f1c60b92bba4031c253ddf5f9a |
 | youtube-enhancer-v1.17.1-Chromium.zip | 21ab80071e7c87c999b1ba51d7c10b37ec7099f1c60b92bba4031c253ddf5f9a |
-| youtube-enhancer-v1.17.1-Edge.zip | 21ab80071e7c87c999b1ba51d7c10b37ec7099f1c60b92bba4031c253ddf5f9a |
-| youtube-enhancer-v1.17.1-Firefox.zip | 542a774e109469a80edb7976e98d7f0f3d923e8a96132ce978cbc5db16cd6b84 |
+| youtube-enhancer-v1.17.1-Edge.zip     | 21ab80071e7c87c999b1ba51d7c10b37ec7099f1c60b92bba4031c253ddf5f9a |
+| youtube-enhancer-v1.17.1-Firefox.zip  | 542a774e109469a80edb7976e98d7f0f3d923e8a96132ce978cbc5db16cd6b84 |
 
 # [1.17.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.3...v1.17.0) (2023-12-15)
 
-
 ### Bug Fixes
 
-* **feature menu:** ads button now dimmed when feature menu is open ([2dea512](https://github.com/VampireChicken12/youtube-enhancer/commit/2dea512eaca67c9070f5bdae737878cb7d98e720)), closes [#162](https://github.com/VampireChicken12/youtube-enhancer/issues/162)
-
+- **feature menu:** ads button now dimmed when feature menu is open ([2dea512](https://github.com/VampireChicken12/youtube-enhancer/commit/2dea512eaca67c9070f5bdae737878cb7d98e720)), closes [#162](https://github.com/VampireChicken12/youtube-enhancer/issues/162)
 
 ### Features
 
-* add open transcript button to feature menu ([36d91d7](https://github.com/VampireChicken12/youtube-enhancer/commit/36d91d7f4be417db138cddb62ccdfbaf49b7c9a9)), closes [#164](https://github.com/VampireChicken12/youtube-enhancer/issues/164)
-
-
-
-
+- add open transcript button to feature menu ([36d91d7](https://github.com/VampireChicken12/youtube-enhancer/commit/36d91d7f4be417db138cddb62ccdfbaf49b7c9a9)), closes [#164](https://github.com/VampireChicken12/youtube-enhancer/issues/164)
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.17.0-Chrome.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.17.0-Chrome.zip   | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
 | youtube-enhancer-v1.17.0-Chromium.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
-| youtube-enhancer-v1.17.0-Edge.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
-| youtube-enhancer-v1.17.0-Firefox.zip | cd48448b32f9be65e194f7843872ced9b92eeae4992ca446ef38d9d03c941960 |
+| youtube-enhancer-v1.17.0-Edge.zip     | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
+| youtube-enhancer-v1.17.0-Firefox.zip  | cd48448b32f9be65e194f7843872ced9b92eeae4992ca446ef38d9d03c941960 |
 
 ## [1.16.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.2...v1.16.3) (2023-12-06)
 
-
 ### Bug Fixes
 
-* **scroll in video bug:** Allow scroll to be used ([0d8a9c0](https://github.com/VampireChicken12/youtube-enhancer/commit/0d8a9c0766649410106726a028756f5652aa1c21))
-* **scroll in video bug:** make it work ([6b2af8d](https://github.com/VampireChicken12/youtube-enhancer/commit/6b2af8d74432e7fb93587f662e59baaee41dab35))
-* **scroll in video bug:** make it work ([d417fe7](https://github.com/VampireChicken12/youtube-enhancer/commit/d417fe7771173b7380ab59c49050a7dc5be583f2))
-
-
-
-
+- **scroll in video bug:** Allow scroll to be used ([0d8a9c0](https://github.com/VampireChicken12/youtube-enhancer/commit/0d8a9c0766649410106726a028756f5652aa1c21))
+- **scroll in video bug:** make it work ([6b2af8d](https://github.com/VampireChicken12/youtube-enhancer/commit/6b2af8d74432e7fb93587f662e59baaee41dab35))
+- **scroll in video bug:** make it work ([d417fe7](https://github.com/VampireChicken12/youtube-enhancer/commit/d417fe7771173b7380ab59c49050a7dc5be583f2))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.16.3-Chrome.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.16.3-Chrome.zip   | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
 | youtube-enhancer-v1.16.3-Chromium.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
-| youtube-enhancer-v1.16.3-Edge.zip | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
-| youtube-enhancer-v1.16.3-Firefox.zip | 9f17be568828703cebca1c2f76a8eb7382e9a2589b0bdbd9ffb34bece13af92a |
+| youtube-enhancer-v1.16.3-Edge.zip     | d3d5bcb979ab923bbc45d775f5203a93b7d551ca29e8fc14cd04cdfe1336d7ee |
+| youtube-enhancer-v1.16.3-Firefox.zip  | 9f17be568828703cebca1c2f76a8eb7382e9a2589b0bdbd9ffb34bece13af92a |
 
 ## [1.16.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.1...v1.16.2) (2023-12-06)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.16.2-Chrome.zip | 7ca0f3e0bc0eaf126a3a48ce19ac1b81650497b8ab1bae6ea7ec66f8a4d077ec |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.16.2-Chrome.zip   | 7ca0f3e0bc0eaf126a3a48ce19ac1b81650497b8ab1bae6ea7ec66f8a4d077ec |
 | youtube-enhancer-v1.16.2-Chromium.zip | 7ca0f3e0bc0eaf126a3a48ce19ac1b81650497b8ab1bae6ea7ec66f8a4d077ec |
-| youtube-enhancer-v1.16.2-Edge.zip | 7ca0f3e0bc0eaf126a3a48ce19ac1b81650497b8ab1bae6ea7ec66f8a4d077ec |
-| youtube-enhancer-v1.16.2-Firefox.zip | 07daed3b52043d7c829c3afaf2c82b78316ca00831e9dd21ae9277fcb9cb028c |
+| youtube-enhancer-v1.16.2-Edge.zip     | 7ca0f3e0bc0eaf126a3a48ce19ac1b81650497b8ab1bae6ea7ec66f8a4d077ec |
+| youtube-enhancer-v1.16.2-Firefox.zip  | 07daed3b52043d7c829c3afaf2c82b78316ca00831e9dd21ae9277fcb9cb028c |
 
 ## [1.16.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.0...v1.16.1) (2023-12-06)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.16.1-Chrome.zip | 1a20a46dfc01500f2d29b8161196305bff30261888728bd90a68454b33e3cd6f |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.16.1-Chrome.zip   | 1a20a46dfc01500f2d29b8161196305bff30261888728bd90a68454b33e3cd6f |
 | youtube-enhancer-v1.16.1-Chromium.zip | 1a20a46dfc01500f2d29b8161196305bff30261888728bd90a68454b33e3cd6f |
-| youtube-enhancer-v1.16.1-Edge.zip | 1a20a46dfc01500f2d29b8161196305bff30261888728bd90a68454b33e3cd6f |
-| youtube-enhancer-v1.16.1-Firefox.zip | 99e7c71d78ff61155a787e7e55c4f38e5f5f7c5d66faf923538d7c65cd333e33 |
+| youtube-enhancer-v1.16.1-Edge.zip     | 1a20a46dfc01500f2d29b8161196305bff30261888728bd90a68454b33e3cd6f |
+| youtube-enhancer-v1.16.1-Firefox.zip  | 99e7c71d78ff61155a787e7e55c4f38e5f5f7c5d66faf923538d7c65cd333e33 |
 
 # [1.16.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.15.1...v1.16.0) (2023-12-05)
 
-
 ### Bug Fixes
 
-* **event manager:** fix multiple events per target not being supported ([999f865](https://github.com/VampireChicken12/youtube-enhancer/commit/999f86536eddc90e2852656bd541529e9c6d6186))
-* **import settings:** fix defaults not being saved ([e4ae516](https://github.com/VampireChicken12/youtube-enhancer/commit/e4ae516e816d93b4e009bf0631c08a5846d57356))
-
+- **event manager:** fix multiple events per target not being supported ([999f865](https://github.com/VampireChicken12/youtube-enhancer/commit/999f86536eddc90e2852656bd541529e9c6d6186))
+- **import settings:** fix defaults not being saved ([e4ae516](https://github.com/VampireChicken12/youtube-enhancer/commit/e4ae516e816d93b4e009bf0631c08a5846d57356))
 
 ### Features
 
-* **feature menu:** Add behaviour setting with click and hover option ([c595f99](https://github.com/VampireChicken12/youtube-enhancer/commit/c595f99a7f8faab7424f7bae2ceb65de35d23855))
-
-
-
-
+- **feature menu:** Add behaviour setting with click and hover option ([c595f99](https://github.com/VampireChicken12/youtube-enhancer/commit/c595f99a7f8faab7424f7bae2ceb65de35d23855))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.16.0-Chrome.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.16.0-Chrome.zip   | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
 | youtube-enhancer-v1.16.0-Chromium.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
-| youtube-enhancer-v1.16.0-Edge.zip | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
-| youtube-enhancer-v1.16.0-Firefox.zip | 3664a8fc1bf3516912b7ea6343c508d886ebe06d8339ff2bf50a394866945018 |
+| youtube-enhancer-v1.16.0-Edge.zip     | daab1b724bc43b29bb17f298e38f01c8ca7f4c2cd76db31587b1fdffaf609532 |
+| youtube-enhancer-v1.16.0-Firefox.zip  | 3664a8fc1bf3516912b7ea6343c508d886ebe06d8339ff2bf50a394866945018 |
 
 ## [1.15.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.15.0...v1.15.1) (2023-12-01)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.15.1-Chrome.zip | 4dea658ce7f79b3bbfdf7742f7fb62756ede94e0c0f18b33da09d0fe0efd4a14 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.15.1-Chrome.zip   | 4dea658ce7f79b3bbfdf7742f7fb62756ede94e0c0f18b33da09d0fe0efd4a14 |
 | youtube-enhancer-v1.15.1-Chromium.zip | 4dea658ce7f79b3bbfdf7742f7fb62756ede94e0c0f18b33da09d0fe0efd4a14 |
-| youtube-enhancer-v1.15.1-Edge.zip | 4dea658ce7f79b3bbfdf7742f7fb62756ede94e0c0f18b33da09d0fe0efd4a14 |
-| youtube-enhancer-v1.15.1-Firefox.zip | 37a39fe038b7f368a0ae19fbee25aa5ae98ec38c75477fd9182244acab0e5e13 |
+| youtube-enhancer-v1.15.1-Edge.zip     | 4dea658ce7f79b3bbfdf7742f7fb62756ede94e0c0f18b33da09d0fe0efd4a14 |
+| youtube-enhancer-v1.15.1-Firefox.zip  | 37a39fe038b7f368a0ae19fbee25aa5ae98ec38c75477fd9182244acab0e5e13 |
 
 # [1.15.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.4...v1.15.0) (2023-12-01)
 
-
 ### Bug Fixes
 
-* **notifications:** used old language when switching language ([4954223](https://github.com/VampireChicken12/youtube-enhancer/commit/49542238798b53127649731f882e1df9cd05c2d5))
-* **popup:** width was made too wide by long text ([2a88352](https://github.com/VampireChicken12/youtube-enhancer/commit/2a883524f485e7a788317d45e12dbf19b87569c7))
-
-
-
-
+- **notifications:** used old language when switching language ([4954223](https://github.com/VampireChicken12/youtube-enhancer/commit/49542238798b53127649731f882e1df9cd05c2d5))
+- **popup:** width was made too wide by long text ([2a88352](https://github.com/VampireChicken12/youtube-enhancer/commit/2a883524f485e7a788317d45e12dbf19b87569c7))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.15.0-Chrome.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.15.0-Chrome.zip   | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
 | youtube-enhancer-v1.15.0-Chromium.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
-| youtube-enhancer-v1.15.0-Edge.zip | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
-| youtube-enhancer-v1.15.0-Firefox.zip | 7aa484939d665d8aba089242fef2a4358600a679e68d1f79fad1fd93ba7c79c3 |
+| youtube-enhancer-v1.15.0-Edge.zip     | 98794847ecec435fb991bf889454eeaec872c896932ff12e5aceb4a131dafb81 |
+| youtube-enhancer-v1.15.0-Firefox.zip  | 7aa484939d665d8aba089242fef2a4358600a679e68d1f79fad1fd93ba7c79c3 |
 
 ## [1.14.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.3...v1.14.4) (2023-11-30)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.14.4-Chrome.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.14.4-Chrome.zip   | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
 | youtube-enhancer-v1.14.4-Chromium.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
-| youtube-enhancer-v1.14.4-Edge.zip | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
-| youtube-enhancer-v1.14.4-Firefox.zip | 0f26d826fb411a7b94eb3cb0102789587c5713c158214a46a81f2859a6cf839c |
+| youtube-enhancer-v1.14.4-Edge.zip     | 025e4cde5380e49bcf0a187eb90c46698ab4c294f59ee6146d63379dd8a30bd6 |
+| youtube-enhancer-v1.14.4-Firefox.zip  | 0f26d826fb411a7b94eb3cb0102789587c5713c158214a46a81f2859a6cf839c |
 
 ## [1.14.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.2...v1.14.3) (2023-11-30)
 
-
 ### Bug Fixes
 
-* importing old settings error ([55b20e7](https://github.com/VampireChicken12/youtube-enhancer/commit/55b20e7606745a08a1274752f14501e922a2cb5c))
-
-
-
-
+- importing old settings error ([55b20e7](https://github.com/VampireChicken12/youtube-enhancer/commit/55b20e7606745a08a1274752f14501e922a2cb5c))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.14.3-Chrome.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.14.3-Chrome.zip   | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
 | youtube-enhancer-v1.14.3-Chromium.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
-| youtube-enhancer-v1.14.3-Edge.zip | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
-| youtube-enhancer-v1.14.3-Firefox.zip | 6bde2d33463a227775c9ac8ef2c1a6218f98661bb523fda32eaa96d820abc845 |
+| youtube-enhancer-v1.14.3-Edge.zip     | 64ba968f7a063a2c296f5ddddeb33c1fe0af189b5024de04dd08676c05c9a4f2 |
+| youtube-enhancer-v1.14.3-Firefox.zip  | 6bde2d33463a227775c9ac8ef2c1a6218f98661bb523fda32eaa96d820abc845 |
 
 ## [1.14.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.1...v1.14.2) (2023-11-29)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.14.2-Chrome.zip | e357d83d5560d838434c0ae1884b3cd66c6a66e41cace6a254ea8b8bfd5d0575 |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.14.2-Chrome.zip   | e357d83d5560d838434c0ae1884b3cd66c6a66e41cace6a254ea8b8bfd5d0575 |
 | youtube-enhancer-v1.14.2-Chromium.zip | e357d83d5560d838434c0ae1884b3cd66c6a66e41cace6a254ea8b8bfd5d0575 |
-| youtube-enhancer-v1.14.2-Edge.zip | e357d83d5560d838434c0ae1884b3cd66c6a66e41cace6a254ea8b8bfd5d0575 |
-| youtube-enhancer-v1.14.2-Firefox.zip | 36bcafe9cdb8f8f884ba891dd1d0863e50e11a564c3c3b48be2cfc60cf172226 |
+| youtube-enhancer-v1.14.2-Edge.zip     | e357d83d5560d838434c0ae1884b3cd66c6a66e41cace6a254ea8b8bfd5d0575 |
+| youtube-enhancer-v1.14.2-Firefox.zip  | 36bcafe9cdb8f8f884ba891dd1d0863e50e11a564c3c3b48be2cfc60cf172226 |
 
 ## [1.14.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.14.0...v1.14.1) (2023-11-29)
 
-
-
-
-
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.14.1-Chrome.zip | c28715edb67de453bfe9b7b11300421a336bea8d35f148c6f23415088ba70f1a |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.14.1-Chrome.zip   | c28715edb67de453bfe9b7b11300421a336bea8d35f148c6f23415088ba70f1a |
 | youtube-enhancer-v1.14.1-Chromium.zip | c28715edb67de453bfe9b7b11300421a336bea8d35f148c6f23415088ba70f1a |
-| youtube-enhancer-v1.14.1-Edge.zip | c28715edb67de453bfe9b7b11300421a336bea8d35f148c6f23415088ba70f1a |
-| youtube-enhancer-v1.14.1-Firefox.zip | 3f17c3a79fe8edd48ffbcc76c9b1615d795c43a67bd885ef8f7617617756002f |
+| youtube-enhancer-v1.14.1-Edge.zip     | c28715edb67de453bfe9b7b11300421a336bea8d35f148c6f23415088ba70f1a |
+| youtube-enhancer-v1.14.1-Firefox.zip  | 3f17c3a79fe8edd48ffbcc76c9b1615d795c43a67bd885ef8f7617617756002f |
 
 # [1.14.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.13.1...v1.14.0) (2023-11-29)
 
-
 ### Features
 
-* hold right click scroll wheel volume control ([3587c4a](https://github.com/VampireChicken12/youtube-enhancer/commit/3587c4a103903533e9b790d74e80d56b5179fe9b))
-* hover feature menu ([1006e40](https://github.com/VampireChicken12/youtube-enhancer/commit/1006e40ada448e06bfa6beb9cdbf88195bac4566))
-
-
-
-
+- hold right click scroll wheel volume control ([3587c4a](https://github.com/VampireChicken12/youtube-enhancer/commit/3587c4a103903533e9b790d74e80d56b5179fe9b))
+- hover feature menu ([1006e40](https://github.com/VampireChicken12/youtube-enhancer/commit/1006e40ada448e06bfa6beb9cdbf88195bac4566))
 
 ## Release Artifacts
-| File Name | SHA-256 Hash |
-| :--- | :---: |
-| youtube-enhancer-v1.14.0-Chrome.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
+
+| File Name                             |                           SHA-256 Hash                           |
+| :------------------------------------ | :--------------------------------------------------------------: |
+| youtube-enhancer-v1.14.0-Chrome.zip   | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
 | youtube-enhancer-v1.14.0-Chromium.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
-| youtube-enhancer-v1.14.0-Edge.zip | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
-| youtube-enhancer-v1.14.0-Firefox.zip | 7b22ad88a317c695d30a6819408c60b5e55292a515c0ef98041ed9e48328ae34 |
+| youtube-enhancer-v1.14.0-Edge.zip     | 46dcb9ff70f513b0270e3dcdfa3ad3612fde7b1f57834a23d2e50ce47d47ec4c |
+| youtube-enhancer-v1.14.0-Firefox.zip  | 7b22ad88a317c695d30a6819408c60b5e55292a515c0ef98041ed9e48328ae34 |
 
 ## [1.13.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.13.0...v1.13.1) (2023-11-27)
 
