@@ -495,6 +495,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.automaticTheaterMode.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_open_transcript_button?.toString() === "true"}
+						id="enable_open_transcript_button"
+						label={t("settings.sections.miscellaneous.features.openTranscriptButton.label")}
+						onChange={setCheckboxOption("enable_open_transcript_button")}
+						title={t("settings.sections.miscellaneous.features.openTranscriptButton.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.scrollWheelVolumeControl.title")} />

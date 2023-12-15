@@ -215,6 +215,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				maximizePlayerButtonEnabled: newValue
 			});
 		},
+		enable_open_transcript_button: (newValue) => {
+			sendExtensionOnlyMessage("openTranscriptButtonChange", {
+				openTranscriptButtonEnabled: newValue
+			});
+		},
 		enable_remaining_time: (newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue
