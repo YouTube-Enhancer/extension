@@ -1,3 +1,27 @@
+# [1.17.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.3...v1.17.0) (2023-12-15)
+
+
+### Bug Fixes
+
+* **feature menu:** ads button now dimmed when feature menu is open ([2dea512](https://github.com/VampireChicken12/youtube-enhancer/commit/2dea512eaca67c9070f5bdae737878cb7d98e720)), closes [#162](https://github.com/VampireChicken12/youtube-enhancer/issues/162)
+
+
+### Features
+
+* add open transcript button to feature menu ([36d91d7](https://github.com/VampireChicken12/youtube-enhancer/commit/36d91d7f4be417db138cddb62ccdfbaf49b7c9a9)), closes [#164](https://github.com/VampireChicken12/youtube-enhancer/issues/164)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.17.0-Chrome.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
+| youtube-enhancer-v1.17.0-Chromium.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
+| youtube-enhancer-v1.17.0-Edge.zip | 53f2675ff8b2c8d5324b76314d4c209757874460448b4c847d4329a99adc9c13 |
+| youtube-enhancer-v1.17.0-Firefox.zip | cd48448b32f9be65e194f7843872ced9b92eeae4992ca446ef38d9d03c941960 |
+
 ## [1.16.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.16.2...v1.16.3) (2023-12-06)
 
 
