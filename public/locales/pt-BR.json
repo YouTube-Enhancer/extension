@@ -6,38 +6,38 @@
 			"features": {
 				"videoHistory": {
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Fechar"
 					},
-					"resumeButton": "Resume"
+					"resumeButton": "Continuar"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "Captura de tela copiada para a área de transferência",
+					"label": "Captura de tela"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Repetir"
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "Maximizar"
 				},
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "Menu de funções"
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "Impulsionador de volume"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Abrir Transcrição"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
 				"success": {
-					"saved": "Options saved."
+					"saved": "Opções salvas."
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Todas as opções foram restauradas aos seus valores padrão.\nAgora você pode salvar as mudanças clicando no botão \"Confirmar\" ou descartá-las fechando a página ou ignorando essa notificação."
 				}
 			}
 		}
@@ -46,13 +46,13 @@
 		"sections": {
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
+					"title": "Configurações do menu de funções",
 					"select": {
-						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
+						"label": "Tipo de ativação do Menu",
+						"title": "Selecione o método para ativar o menu de funções",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Clique",
+							"hover": "Ao Passar o Cursor"
 						}
 					}
 				}
@@ -60,21 +60,21 @@
 			"importExportSettings": {
 				"importButton": {
 					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
+						"validation": "Erro ao importar as configurações. Por favor, verifique o formato do arquivo.\n{{ERROR_MESSAGE}}",
+						"unknown": "Erro ao importar as configurações. Por favor, verifique o formato do arquivo.\nUm erro desconhecido ocorreu."
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Configurações importadas com sucesso",
+					"title": "Importar configurações de um arquivo JSON",
+					"value": "Importar Configurações"
 				},
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "As configurações foram exportadas com sucesso",
+					"title": "Exportar configurações para um arquivo JSON",
+					"value": "Exportar Configurações"
 				}
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
+				"title": "Configurações diversas",
 				"features": {
 					"rememberLastVolume": {
 						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
