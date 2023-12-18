@@ -24,6 +24,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 - [Configuration](#-configuration)
 - [Usage](#-usage)
 - [Contributing](#-contributing)
+- [Contributors](#-contributors)
 - [Internationalization (i18n)](#-internationalization-i18n)
 - [License](#-license)
 
@@ -221,7 +222,9 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a> <a href="#code-mist8kengas" title="Code">💻</a> <a href="#bug-mist8kengas" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://hikari-bot.com"><img src="https://avatars.githubusercontent.com/u/45531575?v=4?s=100" width="100px;" alt="Nathan"/><br /><sub><b>Nathan</b></sub></a><br /><a href="#design-VampireChicken12" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/commonly-ts"><img src="https://avatars.githubusercontent.com/u/51011212?v=4?s=100" width="100px;" alt="Commonly"/><br /><sub><b>Commonly</b></sub></a><br /><a href="#bug-commonly-ts" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
