@@ -218,6 +218,13 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
