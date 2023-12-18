@@ -214,7 +214,7 @@ Using the YouTube Enhancer Extension is straightforward:
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
 
-## Contributors
+## 🤝 Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
