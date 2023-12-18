@@ -16,11 +16,10 @@ export async function setupVolumeChangeListener() {
 	const IsWatchPage = isWatchPage();
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
-	const playerContainer = IsWatchPage
-		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: IsShortsPage
-		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		  : null;
+	const playerContainer =
+		IsWatchPage ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: IsShortsPage ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
 	if (!playerContainer) return;
 	const videoElement = playerContainer.querySelector<HTMLVideoElement>("div > video");
 	if (!videoElement) return;

@@ -12,6 +12,7 @@ import type {
 	YoutubePlayerQualityLevel,
 	configuration
 } from "../types";
+import type { SVGElementAttributes } from "./SVGElementAttributes";
 
 import { youtubePlayerQualityLevel } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
@@ -544,5 +545,26 @@ export function createStyledElement<ID extends string, K extends keyof HTMLEleme
 		element.classList.add(...classlist);
 	}
 	// Return the element
+	return element;
+}
+type SVGChildElement = SVGElement | SVGPathElement | SVGTSpanElement | SVGTextElement;
+
+export function createSVGElement<K extends keyof SVGElementTagNameMap>(
+	tagName: K,
+	attributes?: SVGElementAttributes<K>,
+	...children: SVGChildElement[]
+): SVGElementTagNameMap[K] {
+	const element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+
+	if (attributes) {
+		Object.entries(attributes).forEach(([key, value]) => {
+			element.setAttribute(key, String(value));
+		});
+	}
+
+	children.forEach((child) => {
+		element.appendChild(child);
+	});
+
 	return element;
 }

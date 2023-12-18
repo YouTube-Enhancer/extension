@@ -8,11 +8,10 @@ import { calculateRemainingTime } from "./utils";
 function playerTimeUpdateListener() {
 	void (async () => {
 		// Get the player element
-		const playerContainer = isWatchPage()
-			? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage()
-			  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-			  : null;
+		const playerContainer =
+			isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
 
 		// If player element is not available, return
 		if (!playerContainer) return;
@@ -43,11 +42,10 @@ export async function setupRemainingTime() {
 	const timeDisplay = document.querySelector(".ytp-time-display > span:nth-of-type(2)");
 	if (!timeDisplay) return;
 	// Get the player element
-	const playerContainer = isWatchPage()
-		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage()
-		  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		  : null;
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// Get the video element

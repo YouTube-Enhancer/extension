@@ -27,7 +27,7 @@
 					"label": "Усиление громкости"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Открыть стенограмму"
 				}
 			}
 		},
@@ -81,7 +81,7 @@
 						"label": "Запомнить уровень громкости"
 					},
 					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
+						"title": "Добавляет кнопку в меню функций, которая позволит максимизировать проигрыватель",
 						"label": "Включить кнопку «Развернуть проигрыватель»"
 					},
 					"videoHistory": {
@@ -93,7 +93,7 @@
 						"label": "Включить отображение оставшегося времени"
 					},
 					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
+						"title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)",
 						"label": "Включить кнопку «Зациклить»"
 					},
 					"hideScrollbar": {
@@ -105,8 +105,8 @@
 						"label": "Включить автоматический режим кинотеатра"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
-						"label": "Open transcript button"
+						"title": "Добавляет кнопку в меню функций, чтобы открыть стенограмму видео, которое вы просматриваете",
+						"label": "Показать кнопку стенограммы видео"
 					}
 				}
 			},

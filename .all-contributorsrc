@@ -1,0 +1,60 @@
+{
+  "projectName": "youtube-enhancer",
+  "projectOwner": "VampireChicken12",
+  "files": [
+    "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "mist8kengas",
+      "name": "mist8kengas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46955469?v=4",
+      "profile": "https://hioctane.org",
+      "contributions": [
+        "translation",
+        "code"
+      ]
+    },
+    {
+      "login": "VampireChicken12",
+      "name": "Nathan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45531575?v=4",
+      "profile": "https://hikari-bot.com",
+      "contributions": [
+        "design",
+        "code",
+        "translation"
+      ]
+    },
+    {
+      "login": "commonly-ts",
+      "name": "Commonly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51011212?v=4",
+      "profile": "https://github.com/commonly-ts",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "eduardozgz",
+      "name": "Eduardo Aznar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30407412?v=4",
+      "profile": "https://eduardozgz.com",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "lamyergeier",
+      "name": "Lamyergeier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42092626?v=4",
+      "profile": "https://github.com/lamyergeier",
+      "contributions": [
+        "ideas"
+      ]
+    }
+  ]
+}

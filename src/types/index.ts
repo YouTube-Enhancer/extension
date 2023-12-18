@@ -47,6 +47,7 @@ export type configuration = {
 	enable_hide_scrollbar: boolean;
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
+	enable_open_transcript_button: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
@@ -118,6 +119,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
@@ -159,21 +161,21 @@ export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | null | number | string | undefined
-		? undefined extends T[K]
-			? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-			: z.ZodType<T[K]>
-		: z.ZodObject<TypeToZod<T[K]>>;
+	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
+		undefined extends T[K] ?
+			z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+		:	z.ZodType<T[K]>
+	:	z.ZodObject<TypeToZod<T[K]>>;
 };
 export type TypeToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>> : T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>>
+	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
+	: z.ZodType<T[K]>;
 }>;
 export type TypeToPartialZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[]
-		? z.ZodOptionalType<z.ZodType<T[K]>>
-		: T[K] extends object
-		  ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>>
-		  : z.ZodOptionalType<z.ZodType<T[K]>>;
+	[K in keyof T]: T[K] extends any[] ? z.ZodOptionalType<z.ZodType<T[K]>>
+	: T[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>>
+	: z.ZodOptionalType<z.ZodType<T[K]>>;
 }>;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];

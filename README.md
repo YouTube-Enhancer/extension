@@ -2,15 +2,19 @@
 
 The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience.
 
-[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
-[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&logo=Github)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
+[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
+![Mozilla Add-on Users](https://img.shields.io/amo/users/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
+![Mozilla Add-on Downloads](https://img.shields.io/amo/dw/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
+[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
 
 <br/>
 
-![Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total.svg)
-![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer.svg)
+![GitHub Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total?logo=Github&labelColor=5b5b5b&color=4fca21)
+![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer?logo=Github&labelColor=5b5b5b&color=4fca21)
+[![All Contributors](https://img.shields.io/github/all-contributors/VampireChicken12/youtube-enhancer?labelColor=5b5b5b&color=4fca21)](#contributors)
 [![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
-[![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord)](https://discord.gg/VpdGFmuB4B)
+[![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord&labelColor=5b5b5b&color=4fca21)](https://discord.gg/VpdGFmuB4B)
+
 ## Table of Contents
 
 - [Introduction](#-introduction)
@@ -20,6 +24,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 - [Configuration](#-configuration)
 - [Usage](#-usage)
 - [Contributing](#-contributing)
+- [Contributors](#-contributors)
 - [Internationalization (i18n)](#-internationalization-i18n)
 - [License](#-license)
 
@@ -208,6 +213,28 @@ Using the YouTube Enhancer Extension is straightforward:
 ## 📝 Contributing
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
+
+## 🤝 Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a> <a href="#code-mist8kengas" title="Code">💻</a> <a href="#bug-mist8kengas" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://hikari-bot.com"><img src="https://avatars.githubusercontent.com/u/45531575?v=4?s=100" width="100px;" alt="Nathan"/><br /><sub><b>Nathan</b></sub></a><br /><a href="#design-VampireChicken12" title="Design">🎨</a> <a href="#code-VampireChicken12" title="Code">💻</a> <a href="#translation-VampireChicken12" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/commonly-ts"><img src="https://avatars.githubusercontent.com/u/51011212?v=4?s=100" width="100px;" alt="Commonly"/><br /><sub><b>Commonly</b></sub></a><br /><a href="#bug-commonly-ts" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/lamyergeier"><img src="https://avatars.githubusercontent.com/u/42092626?v=4?s=100" width="100px;" alt="Lamyergeier"/><br /><sub><b>Lamyergeier</b></sub></a><br /><a href="#ideas-lamyergeier" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## 🌐 Internationalization (i18n)
 

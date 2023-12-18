@@ -33,6 +33,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+		// If the settings panel menu is targeted return
+		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
@@ -56,7 +59,11 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				return void (await setOptionsData());
 			// If the right click is required and not pressed, return
 			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
-
+			// If the right click is required and is pressed hide the context menu
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
+				const contextMenu = document.querySelector<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
+				if (contextMenu) contextMenu.style.display = "none";
+			}
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
@@ -65,11 +72,10 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			await setOptionsData();
 
 			// Get the player element
-			const playerContainer = isWatchPage()
-				? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-				: isShortsPage()
-				  ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-				  : null;
+			const playerContainer =
+				isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+				: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;
 
@@ -89,6 +95,11 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				playerContainer: playerContainer,
 				volume: newVolume
 			});
+			// If right click is required revert the context menu display
+			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
+				const contextMenu = document.querySelector<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
+				if (contextMenu) contextMenu.style.display = "";
+			}
 		})();
 	};
 
