@@ -732,7 +732,7 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.exportButton.value")}
 					/>
-					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
+					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
 							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="confirm_button"
@@ -756,8 +756,7 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
-					) : (
-						<input
+					:	<input
 							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="reset_button"
 							onClick={resetOptions}
@@ -765,7 +764,7 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.reset.value")}
 						/>
-					)}
+					}
 				</div>
 				<SettingsNotifications />
 				<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />

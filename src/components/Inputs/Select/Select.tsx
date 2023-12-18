@@ -67,24 +67,21 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 					onClick={toggleSelect}
 					type="button"
 				>
-					{selectedOption ? (
-						options.find((option) => option.value === selectedOption)?.element ? (
+					{selectedOption ?
+						options.find((option) => option.value === selectedOption)?.element ?
 							<div className="flex w-full items-center justify-between pr-4">
 								<span className={cn("text-black dark:text-white", disabledButtonClasses)}>
 									{options.find((option) => option.value === selectedOption)?.label}
 								</span>
 								{options.find((option) => option.value === selectedOption)?.element}
 							</div>
-						) : (
-							<div className="flex w-full items-center justify-between pr-2">
+						:	<div className="flex w-full items-center justify-between pr-2">
 								<span className={cn("text-black dark:text-white", disabledButtonClasses)}>
 									{options.find((option) => option.value === selectedOption)?.label}
 								</span>
 							</div>
-						)
-					) : (
-						<span className={cn("text-black dark:text-white", disabledButtonClasses)}>Select an option</span>
-					)}
+
+					:	<span className={cn("text-black dark:text-white", disabledButtonClasses)}>Select an option</span>}
 					<Arrow rotation={isSelectVisible ? "up" : "down"} />
 				</button>
 				{isSelectVisible && (
