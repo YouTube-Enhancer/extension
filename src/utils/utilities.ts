@@ -338,7 +338,7 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 	// Create a promise that will resolve when all of the target elements are found.
 	return new Promise((resolve) => {
 		// Log a message to the console to let the user know what's happening.
-		browserColorLog("Waiting for target nodes", "FgMagenta");
+		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 
 		// Create a Map to store the elements as they are found.
 		const elementsMap = new Map<string, Element | null>();
