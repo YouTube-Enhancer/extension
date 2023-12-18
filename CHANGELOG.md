@@ -1,3 +1,22 @@
+## [1.17.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.1...v1.17.2) (2023-12-18)
+
+
+### Bug Fixes
+
+* **open transcript button:** fix open transcript button not appearing ([3b4392c](https://github.com/VampireChicken12/youtube-enhancer/commit/3b4392c3261cc8ff6807624303f2776cf35e2823)), closes [#164](https://github.com/VampireChicken12/youtube-enhancer/issues/164)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.17.2-Chrome.zip | 58082e354dc145f0d93866b7855684affbfc94d240bacc916d99398e125c288c |
+| youtube-enhancer-v1.17.2-Chromium.zip | 58082e354dc145f0d93866b7855684affbfc94d240bacc916d99398e125c288c |
+| youtube-enhancer-v1.17.2-Edge.zip | 58082e354dc145f0d93866b7855684affbfc94d240bacc916d99398e125c288c |
+| youtube-enhancer-v1.17.2-Firefox.zip | 4bd7098d1f06de580462b381b66df1b46d0d99f943ae3cc72172af87f81953c0 |
+
 ## [1.17.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.0...v1.17.1) (2023-12-15)
 
 ### Bug Fixes
