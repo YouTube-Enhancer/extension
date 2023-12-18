@@ -2,15 +2,18 @@
 
 The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience.
 
-[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
-[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&logo=Github)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
+[![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
+![Mozilla Add-on Users](https://img.shields.io/amo/users/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
+![Mozilla Add-on Downloads](https://img.shields.io/amo/dw/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
+[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Latest%20Release&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
 
 <br/>
 
-![Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total.svg)
-![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer.svg)
+![GitHub Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total?logo=Github&labelColor=5b5b5b&color=4fca21)
+![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer?logo=Github&labelColor=5b5b5b&color=4fca21)
+[![All Contributors](https://img.shields.io/github/all-contributors/VampireChicken12/youtube-enhancer&labelColor=5b5b5b&color=4fca21)](#contributors)
 [![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
-[![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord)](https://discord.gg/VpdGFmuB4B)
+[![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord&labelColor=5b5b5b&color=4fca21)](https://discord.gg/VpdGFmuB4B)
 
 ## Table of Contents
 
@@ -209,6 +212,17 @@ Using the YouTube Enhancer Extension is straightforward:
 ## 📝 Contributing
 
 Contributions to the YouTube Enhancer Extension are welcome! If you'd like to contribute to the development of this extension or report issues, please refer to the project's GitHub repository.
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## 🌐 Internationalization (i18n)
 
