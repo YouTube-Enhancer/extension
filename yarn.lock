@@ -1069,7 +1069,7 @@
     semver "^7.5.4"
     ts-api-utils "^1.0.1"
 
-"@typescript-eslint/utils@6.11.0", "@typescript-eslint/utils@^6.10.0":
+"@typescript-eslint/utils@6.11.0":
   version "6.11.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/utils/-/utils-6.11.0.tgz"
   integrity sha512-p23ibf68fxoZy605dc0dQAEoUsoiNoP3MD9WQGiHLDuTSOuqoTsa4oAy+h3KDkTcxbbfOtUjb9h3Ta0gT4ug2g==
@@ -1080,6 +1080,19 @@
     "@typescript-eslint/scope-manager" "6.11.0"
     "@typescript-eslint/types" "6.11.0"
     "@typescript-eslint/typescript-estree" "6.11.0"
+    semver "^7.5.4"
+
+"@typescript-eslint/utils@^6.13.0":
+  version "6.14.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-6.14.0.tgz#856a9e274367d99ffbd39c48128b93a86c4261e3"
+  integrity sha512-XwRTnbvRr7Ey9a1NT6jqdKX8y/atWG+8fAIu3z73HSP8h06i3r/ClMhmaF/RGWGW1tHJEwij1uEg2GbEmPYvYg==
+  dependencies:
+    "@eslint-community/eslint-utils" "^4.4.0"
+    "@types/json-schema" "^7.0.12"
+    "@types/semver" "^7.5.0"
+    "@typescript-eslint/scope-manager" "6.14.0"
+    "@typescript-eslint/types" "6.14.0"
+    "@typescript-eslint/typescript-estree" "6.14.0"
     semver "^7.5.4"
 
 "@typescript-eslint/visitor-keys@6.11.0":
@@ -2342,11 +2355,11 @@ eslint-plugin-no-secrets@^0.8.9:
   integrity sha512-CqaBxXrImABCtxMWspAnm8d5UKkpNylC7zqVveb+fJHEvsSiNGJlSWzdSIvBUnW1XhJXkzifNIZQC08rEII5Ng==
 
 eslint-plugin-perfectionist@^2.3.0:
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/eslint-plugin-perfectionist/-/eslint-plugin-perfectionist-2.4.0.tgz"
-  integrity sha512-til+vyf56wAUgFv5guBA1Zo5lTw9xj2kCeK/g+9NBtsRy1rkGrlqnvxYNuFExcK3VsPhUUtx5UdScEDz9ahQ5Q==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-perfectionist/-/eslint-plugin-perfectionist-2.5.0.tgz#f7f83733e18d1b26694c4aab1b986eac836773a7"
+  integrity sha512-F6XXcq4mKKUe/SREoMGQqzgw6cgCgf3pFzkFfQVIGtqD1yXVpQjnhTepzhBeZfxZwgMzR9HO4yH4CUhIQ2WBcQ==
   dependencies:
-    "@typescript-eslint/utils" "^6.10.0"
+    "@typescript-eslint/utils" "^6.13.0"
     minimatch "^9.0.3"
     natural-compare-lite "^1.4.0"
 
