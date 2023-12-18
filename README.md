@@ -24,6 +24,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 - [Configuration](#-configuration)
 - [Usage](#-usage)
 - [Contributing](#-contributing)
+- [Contributors](#-contributors)
 - [Internationalization (i18n)](#-internationalization-i18n)
 - [License](#-license)
 
