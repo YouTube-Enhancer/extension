@@ -221,7 +221,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a> <a href="#code-mist8kengas" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://hioctane.org"><img src="https://avatars.githubusercontent.com/u/46955469?v=4?s=100" width="100px;" alt="mist8kengas"/><br /><sub><b>mist8kengas</b></sub></a><br /><a href="#translation-mist8kengas" title="Translation">🌍</a> <a href="#code-mist8kengas" title="Code">💻</a> <a href="#bug-mist8kengas" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
