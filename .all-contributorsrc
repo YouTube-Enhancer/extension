@@ -1,4 +1,21 @@
 {
-	"projectName": "youtube-enhancer",
-	"projectOwner": "VampireChicken12"
+  "projectName": "youtube-enhancer",
+  "projectOwner": "VampireChicken12",
+  "files": [
+    "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "mist8kengas",
+      "name": "mist8kengas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46955469?v=4",
+      "profile": "https://hioctane.org",
+      "contributions": [
+        "translation"
+      ]
+    }
+  ]
 }
