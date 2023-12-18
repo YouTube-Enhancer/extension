@@ -7,6 +7,20 @@
 ## Release Artifacts
 | File Name | SHA-256 Hash |
 | :--- | :---: |
+| youtube-enhancer-v1.17.3-Chrome.zip | 3028c343d0d90dbfcfe529a65e43509d4f48b6e9da8e384a16c3c91a36fcf6b9 |
+| youtube-enhancer-v1.17.3-Chromium.zip | 3028c343d0d90dbfcfe529a65e43509d4f48b6e9da8e384a16c3c91a36fcf6b9 |
+| youtube-enhancer-v1.17.3-Edge.zip | 3028c343d0d90dbfcfe529a65e43509d4f48b6e9da8e384a16c3c91a36fcf6b9 |
+| youtube-enhancer-v1.17.3-Firefox.zip | 2f199825a588002d62004cff06faa540a837499849aed5f463c5b21949b3d06e |
+
+## [1.17.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.2...v1.17.3) (2023-12-18)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
 | youtube-enhancer-v1.17.3-Chrome.zip | a99d6903f2d4c3cbc3a5f9b166bd0669fa759de4a273443c7ce8898181aa5ed0 |
 | youtube-enhancer-v1.17.3-Chromium.zip | a99d6903f2d4c3cbc3a5f9b166bd0669fa759de4a273443c7ce8898181aa5ed0 |
 | youtube-enhancer-v1.17.3-Edge.zip | a99d6903f2d4c3cbc3a5f9b166bd0669fa759de4a273443c7ce8898181aa5ed0 |
