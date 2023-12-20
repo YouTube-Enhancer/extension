@@ -1,18 +1,15 @@
 {
 	"langCode": "zh-TW",
 	"langName": "繁體中文 (台灣)",
+	"messages": {
+		"resumingVideo": "從 {{VIDEO_TIME}} 繼續播放",
+		"settingVolume": "設定音量增強到 {{VOLUME_BOOST_AMOUNT}}"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "關閉"
-					},
-					"resumeButton": "繼續"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "螢幕截圖已複製剪貼簿",
-					"label": "螢幕截圖"
+				"featureMenu": {
+					"label": "功能選單"
 				},
 				"loopButton": {
 					"label": "循環播放"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "最大化"
 				},
-				"featureMenu": {
-					"label": "功能選單"
+				"openTranscriptButton": {
+					"label": "打開文字記錄"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "螢幕截圖已複製剪貼簿",
+					"label": "螢幕截圖"
+				},
+				"videoHistory": {
+					"resumeButton": "繼續",
+					"resumePrompt": {
+						"close": "關閉"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "音量增強"
-				},
-				"openTranscriptButton": {
-					"label": "打開文字記錄"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "選項已儲存"
-				},
 				"info": {
 					"reset": "全部選項已回復到初始值。\n你現在可以使用「確定」按鈕儲存選項，或關閉此頁放棄更改，亦可無視這個提示。"
+				},
+				"success": {
+					"saved": "選項已儲存"
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "所有資料已重置。",
+			"confirmAlert": "將會清除這個擴充套件的相關選項，繼續？"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "自動畫質調整",
+					"title": "自動調整到指定畫質"
+				},
+				"select": {
+					"label": "播放畫質",
+					"title": "設定影片播放畫質"
+				},
+				"title": "自動畫質設定"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "清除這個擴充套件儲存在此機上的資料",
+					"value": "清除資料"
+				},
+				"confirm": {
+					"title": "確認重設設定",
+					"value": "確認"
+				},
+				"reset": {
+					"title": "將所以設定回復到初始值，按確認儲存變更",
+					"value": "重置"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "功能選單設定",
 					"select": {
 						"label": "選單開啟方式",
-						"title": "選擇選單開啟方式",
 						"options": {
 							"click": "點擊",
 							"hover": "游標懸浮"
-						}
-					}
+						},
+						"title": "選擇選單開啟方式"
+					},
+					"title": "功能選單設定"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "設定匯入失敗，請檢查檔案格式。{{ERROR_MESSAGE}}",
-						"unknown": "設定匯入失敗，請檢查檔案格式。\n發生不明錯誤。"
-					},
-					"success": "設定已成功匯入",
-					"title": "由 JSON 檔案匯入設定",
-					"value": "匯入設定"
-				},
 				"exportButton": {
 					"success": "設定已成功匯出",
 					"title": "匯出設定至 JSON 檔案",
 					"value": "匯出設定"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "設定匯入失敗，請檢查檔案格式。\n發生不明錯誤。",
+						"validation": "設定匯入失敗，請檢查檔案格式。{{ERROR_MESSAGE}}"
+					},
+					"success": "設定已成功匯入",
+					"title": "由 JSON 檔案匯入設定",
+					"value": "匯入設定"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "語言",
+					"title": "擴充套件使用的語言"
+				},
+				"title": "語言"
 			},
 			"miscellaneous": {
-				"title": "其他設定",
 				"features": {
-					"rememberLastVolume": {
-						"title": "記住上次的播放音量，設定到新播放的影片上",
-						"label": "記住上次播放音量"
-					},
-					"maximizePlayerButton": {
-						"title": "加入最大化播放器按鈕",
-						"label": "最大化播放器按鈕"
-					},
-					"videoHistory": {
-						"title": "記錄上次影片的播放時間，載入影片時詢問是否從該時間繼續播放",
-						"label": "觀看記錄"
-					},
-					"remainingTime": {
-						"title": "顥示現時影片的剩餘時間",
-						"label": "剩餘時間"
-					},
-					"loopButton": {
-						"title": "加入按鈕循環播放當前影片",
-						"label": "循環按鈕"
+					"automaticTheaterMode": {
+						"label": "自動啟用劇院模式",
+						"title": "載入影片時自動啟用劇院模式"
 					},
 					"hideScrollbar": {
-						"title": "隱藏頁面捲軸",
-						"label": "隱藏捲軸"
+						"label": "隱藏捲軸",
+						"title": "隱藏頁面捲軸"
 					},
-					"automaticTheaterMode": {
-						"title": "載入影片時自動啟用劇院模式",
-						"label": "自動啟用劇院模式"
+					"loopButton": {
+						"label": "循環按鈕",
+						"title": "加入按鈕循環播放當前影片"
+					},
+					"maximizePlayerButton": {
+						"label": "最大化播放器按鈕",
+						"title": "加入最大化播放器按鈕"
 					},
 					"openTranscriptButton": {
-						"title": "加入按鈕開啟當前影片的文子記錄",
-						"label": "開啟文字記錄按鈕"
+						"label": "開啟文字記錄按鈕",
+						"title": "加入按鈕開啟當前影片的文子記錄"
+					},
+					"remainingTime": {
+						"label": "剩餘時間",
+						"title": "顥示現時影片的剩餘時間"
+					},
+					"rememberLastVolume": {
+						"label": "記住上次播放音量",
+						"title": "記住上次的播放音量，設定到新播放的影片上"
+					},
+					"videoHistory": {
+						"label": "觀看記錄",
+						"title": "記錄上次影片的播放時間，載入影片時詢問是否從該時間繼續播放"
 					}
-				}
+				},
+				"title": "其他設定"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "強制播放速度",
+					"title": "設定影片播放速度如下"
+				},
+				"select": {
+					"label": "播放速度",
+					"title": "設定影片播放速度為"
+				},
+				"title": "播放速度設定"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "螢幕截圖按鈕",
+					"title": "在播放器加入擷取螢幕截圖按鈕"
+				},
+				"saveAs": {
+					"clipboard": "剪貼簿",
+					"file": "檔案"
+				},
+				"selectFormat": {
+					"label": "螢幕截圖儲存格式",
+					"title": "螢幕截圖的儲存格式"
+				},
+				"selectSaveAs": {
+					"label": "螢幕截圖儲存方式",
+					"title": "螢幕截圖的儲存方式"
+				},
+				"title": "螢幕截圖設定"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "滾輪音量控制設定",
 				"enable": {
-					"title": "使用滑鼠滾輪控制現在播放的影片音量",
-					"label": "滾輪音量控制"
-				},
-				"osdColor": {
-					"title": "選擇 OSD 的顏色",
-					"label": "OSD 顏色"
-				},
-				"osdType": {
-					"title": "選擇 OSD 的顯示風格",
-					"label": "OSD 方式"
-				},
-				"osdPosition": {
-					"title": "選擇 OSD 的顯示位置",
-					"label": "OSD 位置"
-				},
-				"osdOpacity": {
-					"title": "調節OSD的透明度",
-					"label": "OSD 透明度"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "調整每次滾動時的音量增減幅度",
-					"label": "每次滾動的音量增減"
-				},
-				"osdHide": {
-					"title": "指定多少毫秒後自動隱藏 OSD",
-					"label": "隱藏延遲"
-				},
-				"osdPadding": {
-					"title": "以像素為單位調整屏幕顥示 (OSD) 周圍的空間，適用於置於角落的 OSD。",
-					"label": "填充"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "紅色",
-						"green": "綠色",
-						"blue": "藍色",
-						"yellow": "黃色",
-						"orange": "橙色",
-						"purple": "紫色",
-						"pink": "粉紅色",
-						"white": "白色"
-					},
-					"position": {
-						"top_left": "左上",
-						"top_right": "右上",
-						"bottom_left": "左下",
-						"bottom_right": "右下",
-						"center": "置中"
-					},
-					"type": {
-						"no_display": "不顯示",
-						"text": "文字",
-						"line": "線狀",
-						"round": "圓形"
-					}
+					"label": "滾輪音量控制",
+					"title": "使用滑鼠滾輪控制現在播放的影片音量"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "按住輔助按鍵來啟用滾輪音量調節",
-						"label": "啟用輔助按鍵"
+						"label": "啟用輔助按鍵",
+						"title": "按住輔助按鍵來啟用滾輪音量調節"
 					},
 					"optionLabel": "{{KEY}} 鍵",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "住滑鼠右鍵時啟用滾輪音量調節",
-						"label": "按住滑鼠右鍵時啟用"
+						"label": "按住滑鼠右鍵時啟用",
+						"title": "住滑鼠右鍵時啟用滾輪音量調節"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "自動畫質設定",
-				"enable": {
-					"title": "自動調整到指定畫質",
-					"label": "自動畫質調整"
 				},
-				"select": {
-					"label": "播放畫質",
-					"title": "設定影片播放畫質"
-				}
-			},
-			"playbackSpeed": {
-				"title": "播放速度設定",
-				"enable": {
-					"title": "設定影片播放速度如下",
-					"label": "強制播放速度"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "藍色",
+						"green": "綠色",
+						"orange": "橙色",
+						"pink": "粉紅色",
+						"purple": "紫色",
+						"red": "紅色",
+						"white": "白色",
+						"yellow": "黃色"
+					},
+					"position": {
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "置中",
+						"top_left": "左上",
+						"top_right": "右上"
+					},
+					"type": {
+						"line": "線狀",
+						"no_display": "不顯示",
+						"round": "圓形",
+						"text": "文字"
+					}
 				},
-				"select": {
-					"label": "播放速度",
-					"title": "設定影片播放速度為"
-				}
+				"osdColor": {
+					"label": "OSD 顏色",
+					"title": "選擇 OSD 的顏色"
+				},
+				"osdHide": {
+					"label": "隱藏延遲",
+					"title": "指定多少毫秒後自動隱藏 OSD"
+				},
+				"osdOpacity": {
+					"label": "OSD 透明度",
+					"title": "調節OSD的透明度"
+				},
+				"osdPadding": {
+					"label": "填充",
+					"title": "以像素為單位調整屏幕顥示 (OSD) 周圍的空間，適用於置於角落的 OSD。"
+				},
+				"osdPosition": {
+					"label": "OSD 位置",
+					"title": "選擇 OSD 的顯示位置"
+				},
+				"osdType": {
+					"label": "OSD 方式",
+					"title": "選擇 OSD 的顯示風格"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "每次滾動的音量增減",
+					"title": "調整每次滾動時的音量增減幅度"
+				},
+				"title": "滾輪音量控制設定"
 			},
 			"volumeBoost": {
-				"title": "音量增強設定",
+				"boostAmount": {
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
+				},
 				"enable": {
-					"title": "增強播放中的影片音量",
-					"label": "音量增強"
+					"label": "音量增強",
+					"title": "Enable volume boost"
 				},
-				"number": {
-					"label": "音量增強度 (分貝)",
-					"title": "將音量增幅至"
-				}
-			},
-			"screenshotButton": {
-				"title": "螢幕截圖設定",
-				"enable": {
-					"title": "在播放器加入擷取螢幕截圖按鈕",
-					"label": "螢幕截圖按鈕"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectSaveAs": {
-					"label": "螢幕截圖儲存方式",
-					"title": "螢幕截圖的儲存方式"
-				},
-				"selectFormat": {
-					"label": "螢幕截圖儲存格式",
-					"title": "螢幕截圖的儲存格式"
-				},
-				"saveAs": {
-					"file": "檔案",
-					"clipboard": "剪貼簿"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "確認重設設定",
-					"value": "確認"
-				},
-				"clear": {
-					"title": "清除這個擴充套件儲存在此機上的資料",
-					"value": "清除資料"
-				},
-				"reset": {
-					"title": "將所以設定回復到初始值，按確認儲存變更",
-					"value": "重置"
-				}
-			},
-			"language": {
-				"title": "語言",
-				"select": {
-					"label": "語言",
-					"title": "擴充套件使用的語言"
-				}
+				"title": "音量增強設定"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "將會清除這個擴充套件的相關選項，繼續？",
-			"allDataDeleted": "所有資料已重置。"
 		}
-	},
-	"messages": {
-		"settingVolume": "設定音量增強到 {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "從 {{VIDEO_TIME}} 繼續播放"
 	}
 }

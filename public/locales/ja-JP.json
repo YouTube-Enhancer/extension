@@ -1,18 +1,15 @@
 {
 	"langCode": "ja-JP",
 	"langName": "日本語",
+	"messages": {
+		"resumingVideo": "{{VIDEO_TIME}} から動画をレジュームする",
+		"settingVolume": "音量ブーストを{{VOLUME_BOOST_AMOUNT}}に設定中"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "終了"
-					},
-					"resumeButton": "レジューム"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
-					"label": "スクリーンショット"
+				"featureMenu": {
+					"label": "フィーチャー・メニュー"
 				},
 				"loopButton": {
 					"label": "ループ"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "最大表示"
 				},
-				"featureMenu": {
-					"label": "フィーチャー・メニュー"
+				"openTranscriptButton": {
+					"label": "文字起こしを見せる"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
+					"label": "スクリーンショット"
+				},
+				"videoHistory": {
+					"resumeButton": "レジューム",
+					"resumePrompt": {
+						"close": "終了"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "音量ブースト"
-				},
-				"openTranscriptButton": {
-					"label": "文字起こしを見せる"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "選択がセーブしました"
-				},
 				"info": {
 					"reset": "全てのオプションが省略時値でリセットしました。\n今変化を「確認」抓みでクリックするとセーブは可能するかページを閉じるで変化を破棄するかこの通知を捨て置くするは可能です。"
+				},
+				"success": {
+					"saved": "選択がセーブしました"
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "すべてのデータが削除されました。",
+			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "自動画質調整",
+					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。"
+				},
+				"select": {
+					"label": "プレイヤーの動画質",
+					"title": "動画の画質に設定する"
+				},
+				"title": "自動画質設定"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "マシンに保存されているすべてのエクステンションデータを消去します",
+					"value": "データの消去"
+				},
+				"confirm": {
+					"title": "設定リセットを確認する",
+					"value": "確認"
+				},
+				"reset": {
+					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
+					"value": "リセット"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "フィーチャー・メニュー設定",
 					"select": {
 						"label": "メニューの有効化型",
-						"title": "フィーチャー・メニューを有効化にする方法を選択します",
 						"options": {
 							"click": "ボタンクリック",
 							"hover": "マウスホバー"
-						}
-					}
+						},
+						"title": "フィーチャー・メニューを有効化にする方法を選択します"
+					},
+					"title": "フィーチャー・メニュー設定"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}",
-						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。"
-					},
-					"success": "設定がインポートをされました",
-					"title": "JSONファイルから設定がインポートする",
-					"value": "インポート設定"
-				},
 				"exportButton": {
 					"success": "設定がエクスポートをされました",
 					"title": "JSONファイルで設定がエクスポートする",
 					"value": "エクスポート設定"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。",
+						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
+					},
+					"success": "設定がインポートをされました",
+					"title": "JSONファイルから設定がインポートする",
+					"value": "インポート設定"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "言語",
+					"title": "エクステンションに使用する言語"
+				},
+				"title": "言語"
 			},
 			"miscellaneous": {
-				"title": "他の設定",
 				"features": {
-					"rememberLastVolume": {
-						"title": "新ビデオの音量を前動画の音量に変化する。",
-						"label": "前音量を覚える"
-					},
-					"maximizePlayerButton": {
-						"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する",
-						"label": "最大化ボタン"
-					},
-					"videoHistory": {
-						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます",
-						"label": "動画歴史"
-					},
-					"remainingTime": {
-						"title": "動画の残り時間を表示します",
-						"label": "残り時間"
-					},
-					"loopButton": {
-						"title": "動画をループするボタンをフィーチャー・メニューに追加する",
-						"label": "動画ループボタン"
+					"automaticTheaterMode": {
+						"label": "自動シアターモード",
+						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
 					"hideScrollbar": {
-						"title": "ページのスクロールバーを隠す",
-						"label": "スクロールバー隠す機能"
+						"label": "スクロールバー隠す機能",
+						"title": "ページのスクロールバーを隠す"
 					},
-					"automaticTheaterMode": {
-						"title": "動画の読み込み時に自動的にシアターモードを有効にする",
-						"label": "自動シアターモード"
+					"loopButton": {
+						"label": "動画ループボタン",
+						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
+					},
+					"maximizePlayerButton": {
+						"label": "最大化ボタン",
+						"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する"
 					},
 					"openTranscriptButton": {
-						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する",
-						"label": "文字起こしを見せるボタン"
+						"label": "文字起こしを見せるボタン",
+						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する"
+					},
+					"remainingTime": {
+						"label": "残り時間",
+						"title": "動画の残り時間を表示します"
+					},
+					"rememberLastVolume": {
+						"label": "前音量を覚える",
+						"title": "新ビデオの音量を前動画の音量に変化する。"
+					},
+					"videoHistory": {
+						"label": "動画歴史",
+						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます"
 					}
-				}
+				},
+				"title": "他の設定"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "強制再生速度",
+					"title": "強制再生速度を可能にする"
+				},
+				"select": {
+					"label": "動画の再生速度",
+					"title": "動画の速度に設定する"
+				},
+				"title": "再生速度設定"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "スクリーンショットボタン",
+					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する"
+				},
+				"saveAs": {
+					"clipboard": "クリップボード",
+					"file": "ファイル"
+				},
+				"selectFormat": {
+					"label": "スクリーンショットフォーマット",
+					"title": "スクリーンショットを保存するフォーマット"
+				},
+				"selectSaveAs": {
+					"label": "スクリーンショットセーブ型",
+					"title": "スクリーンショットのセーブ型"
+				},
+				"title": "スクリーンショット設定"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "スクロールホイール音量制御設定",
 				"enable": {
-					"title": "スクロールホイールを使用して、ビデオの音量を制御する。",
-					"label": "スクロールホイール音量制御"
-				},
-				"osdColor": {
-					"title": "オンスクリーンディスプレイ(OSD)の色を選択選べる",
-					"label": "OSDの色"
-				},
-				"osdType": {
-					"title": "オンスクリーンディスプレイ(OSD)型を選択選べる",
-					"label": "OSD型"
-				},
-				"osdPosition": {
-					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選べる",
-					"label": "OSDポジション"
-				},
-				"osdOpacity": {
-					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する",
-					"label": "OSDの不透明度"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "スクロール増分ごとの音量を調整する",
-					"label": "スクロール増分ごとの音量変更"
-				},
-				"osdHide": {
-					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します",
-					"label": "非表示の遅延"
-				},
-				"osdPadding": {
-					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。",
-					"label": "スペーシング"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "赤色",
-						"green": "緑色",
-						"blue": "青色",
-						"yellow": "黄色",
-						"orange": "橙色",
-						"purple": "紫色",
-						"pink": "桃色",
-						"white": "白色"
-					},
-					"position": {
-						"top_left": "左上隅",
-						"top_right": "右上隅",
-						"bottom_left": "左下隅",
-						"bottom_right": "右下隅",
-						"center": "中心"
-					},
-					"type": {
-						"no_display": "見せない",
-						"text": "テキスト",
-						"line": "ライン",
-						"round": "丸い"
-					}
+					"label": "スクロールホイール音量制御",
+					"title": "スクロールホイールを使用して、ビデオの音量を制御する。"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "キーバインドを押さえるでスクロールホイール音量制御可能にさせる",
-						"label": "キーバインドに押さえる"
+						"label": "キーバインドに押さえる",
+						"title": "キーバインドを押さえるでスクロールホイール音量制御可能にさせる"
 					},
 					"optionLabel": "{{KEY}} キー",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする",
-						"label": "右クリックに押さえるで可能にする"
+						"label": "右クリックに押さえるで可能にする",
+						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "自動画質設定",
-				"enable": {
-					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。",
-					"label": "自動画質調整"
 				},
-				"select": {
-					"label": "プレイヤーの動画質",
-					"title": "動画の画質に設定する"
-				}
-			},
-			"playbackSpeed": {
-				"title": "再生速度設定",
-				"enable": {
-					"title": "強制再生速度を可能にする",
-					"label": "強制再生速度"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "青色",
+						"green": "緑色",
+						"orange": "橙色",
+						"pink": "桃色",
+						"purple": "紫色",
+						"red": "赤色",
+						"white": "白色",
+						"yellow": "黄色"
+					},
+					"position": {
+						"bottom_left": "左下隅",
+						"bottom_right": "右下隅",
+						"center": "中心",
+						"top_left": "左上隅",
+						"top_right": "右上隅"
+					},
+					"type": {
+						"line": "ライン",
+						"no_display": "見せない",
+						"round": "丸い",
+						"text": "テキスト"
+					}
 				},
-				"select": {
-					"label": "動画の再生速度",
-					"title": "動画の速度に設定する"
-				}
+				"osdColor": {
+					"label": "OSDの色",
+					"title": "オンスクリーンディスプレイ(OSD)の色を選択選べる"
+				},
+				"osdHide": {
+					"label": "非表示の遅延",
+					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します"
+				},
+				"osdOpacity": {
+					"label": "OSDの不透明度",
+					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する"
+				},
+				"osdPadding": {
+					"label": "スペーシング",
+					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。"
+				},
+				"osdPosition": {
+					"label": "OSDポジション",
+					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選べる"
+				},
+				"osdType": {
+					"label": "OSD型",
+					"title": "オンスクリーンディスプレイ(OSD)型を選択選べる"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "スクロール増分ごとの音量変更",
+					"title": "スクロール増分ごとの音量を調整する"
+				},
+				"title": "スクロールホイール音量制御設定"
 			},
 			"volumeBoost": {
-				"title": "音量ブーストの設定",
+				"boostAmount": {
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
+				},
 				"enable": {
-					"title": "見ている動画の音量をブーストする",
-					"label": "音量ブースト"
+					"label": "音量ブースト",
+					"title": "Enable volume boost"
 				},
-				"number": {
-					"label": "デシベル(dB)で音量ブースト",
-					"title": "音量ブーストの量"
-				}
-			},
-			"screenshotButton": {
-				"title": "スクリーンショット設定",
-				"enable": {
-					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する",
-					"label": "スクリーンショットボタン"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectSaveAs": {
-					"label": "スクリーンショットセーブ型",
-					"title": "スクリーンショットのセーブ型"
-				},
-				"selectFormat": {
-					"label": "スクリーンショットフォーマット",
-					"title": "スクリーンショットを保存するフォーマット"
-				},
-				"saveAs": {
-					"file": "ファイル",
-					"clipboard": "クリップボード"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "設定リセットを確認する",
-					"value": "確認"
-				},
-				"clear": {
-					"title": "マシンに保存されているすべてのエクステンションデータを消去します",
-					"value": "データの消去"
-				},
-				"reset": {
-					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
-					"value": "リセット"
-				}
-			},
-			"language": {
-				"title": "言語",
-				"select": {
-					"label": "言語",
-					"title": "エクステンションに使用する言語"
-				}
+				"title": "音量ブーストの設定"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？",
-			"allDataDeleted": "すべてのデータが削除されました。"
 		}
-	},
-	"messages": {
-		"settingVolume": "音量ブーストを{{VOLUME_BOOST_AMOUNT}}に設定中",
-		"resumingVideo": "{{VIDEO_TIME}} から動画をレジュームする"
 	}
 }

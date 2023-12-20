@@ -1,18 +1,15 @@
 {
 	"langCode": "fa-IR",
 	"langName": "فارسی",
+	"messages": {
+		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "Close"
-					},
-					"resumeButton": "Resume"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+				"featureMenu": {
+					"label": "Feature menu"
 				},
 				"loopButton": {
 					"label": "Loop"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "Maximize"
 				},
-				"featureMenu": {
-					"label": "Feature menu"
+				"openTranscriptButton": {
+					"label": "Open Transcript"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot copied to clipboard",
+					"label": "Screenshot"
+				},
+				"videoHistory": {
+					"resumeButton": "Resume",
+					"resumePrompt": {
+						"close": "Close"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "Volume Boost"
-				},
-				"openTranscriptButton": {
-					"label": "Open Transcript"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "Options saved."
-				},
 				"info": {
 					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+				},
+				"success": {
+					"saved": "Options saved."
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "All data has been deleted.",
+			"confirmAlert": "This will delete all extension data related to options. Continue?"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "Automatic quality adjustment",
+					"title": "Automatically adjusts the video quality to the selected level."
+				},
+				"select": {
+					"label": "Player quality",
+					"title": "The quality to set the video to"
+				},
+				"title": "Automatic quality settings"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "Clears all data this extension has stored on your machine",
+					"value": "Clear Data"
+				},
+				"confirm": {
+					"title": "Confirm setting reset",
+					"value": "Confirm"
+				},
+				"reset": {
+					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+					"value": "Reset"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
 					"select": {
 						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
 						"options": {
 							"click": "Click",
 							"hover": "Hover"
-						}
-					}
+						},
+						"title": "Select the method to activate the feature menu"
+					},
+					"title": "Feature menu settings"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
-					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
-				},
 				"exportButton": {
 					"success": "Settings successfully exported",
 					"title": "Export settings to a JSON file",
 					"value": "Export Settings"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "Settings imported successfully",
+					"title": "Import settings from a JSON file",
+					"value": "Import Settings"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "Language",
+					"title": "The language to use for the extension"
+				},
+				"title": "Language"
 			},
 			"miscellaneous": {
-				"title": "Miscellaneous settings",
 				"features": {
-					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Remember last volume"
-					},
-					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
-						"label": "Maximize player button"
-					},
-					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Video history"
-					},
-					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Remaining time"
-					},
-					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
-						"label": "Loop button"
+					"automaticTheaterMode": {
+						"label": "Automatic theater mode",
+						"title": "Automatically enables theater mode when you load a video"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
-						"label": "Hide scrollbar"
+						"label": "Hide scrollbar",
+						"title": "Hides the pages scrollbar"
 					},
-					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Automatic theater mode"
+					"loopButton": {
+						"label": "Loop button",
+						"title": "Adds a button to the feature menu to loop the video you're watching"
+					},
+					"maximizePlayerButton": {
+						"label": "Maximize player button",
+						"title": "Adds a button to the feature menu to maximize the player"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
-						"label": "Open transcript button"
+						"label": "Open transcript button",
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+					},
+					"remainingTime": {
+						"label": "Remaining time",
+						"title": "Shows the remaining time of the video you're watching"
+					},
+					"rememberLastVolume": {
+						"label": "Remember last volume",
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					},
+					"videoHistory": {
+						"label": "Video history",
+						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
 					}
-				}
+				},
+				"title": "Miscellaneous settings"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "Forced playback speed",
+					"title": "Sets the video speed to what you choose below"
+				},
+				"select": {
+					"label": "Player speed",
+					"title": "The speed to set the video to"
+				},
+				"title": "Playback speed settings"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Screenshot button",
+					"title": "Adds a button to the player to take a screenshot of the video"
+				},
+				"saveAs": {
+					"clipboard": "Clipboard",
+					"file": "File"
+				},
+				"selectFormat": {
+					"label": "Screenshot format",
+					"title": "The format to save the screenshot in"
+				},
+				"selectSaveAs": {
+					"label": "Screenshot save type",
+					"title": "The screenshot save type"
+				},
+				"title": "Screenshot settings"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Scroll wheel volume control"
-				},
-				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Color"
-				},
-				"osdType": {
-					"title": "Select the style of On-Screen Display",
-					"label": "OSD Type"
-				},
-				"osdPosition": {
-					"title": "Select the position of the On-Screen Display",
-					"label": "OSD Position"
-				},
-				"osdOpacity": {
-					"title": "Adjust the transparency of the On-Screen Display",
-					"label": "OSD Opacity"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "Adjust the volume change per scroll",
-					"label": "Volume Change Per Scroll"
-				},
-				"osdHide": {
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
-					"label": "Hide Delay"
-				},
-				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "Padding"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "Red",
-						"green": "Green",
-						"blue": "Blue",
-						"yellow": "Yellow",
-						"orange": "Orange",
-						"purple": "Purple",
-						"pink": "Pink",
-						"white": "White"
-					},
-					"position": {
-						"top_left": "Top Left",
-						"top_right": "Top Right",
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center"
-					},
-					"type": {
-						"no_display": "No display",
-						"text": "Text",
-						"line": "Line",
-						"round": "Round"
-					}
+					"label": "Scroll wheel volume control",
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable when holding modifier key"
+						"label": "Enable when holding modifier key",
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"optionLabel": "{{KEY}} key",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Enable when holding right click"
+						"label": "Enable when holding right click",
+						"title": "Hold right click to enable scroll wheel volume control"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "Automatic quality settings",
-				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Automatic quality adjustment"
 				},
-				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
-				}
-			},
-			"playbackSpeed": {
-				"title": "Playback speed settings",
-				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Forced playback speed"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "Blue",
+						"green": "Green",
+						"orange": "Orange",
+						"pink": "Pink",
+						"purple": "Purple",
+						"red": "Red",
+						"white": "White",
+						"yellow": "Yellow"
+					},
+					"position": {
+						"bottom_left": "Bottom Left",
+						"bottom_right": "Bottom Right",
+						"center": "Center",
+						"top_left": "Top Left",
+						"top_right": "Top Right"
+					},
+					"type": {
+						"line": "Line",
+						"no_display": "No display",
+						"round": "Round",
+						"text": "Text"
+					}
 				},
-				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
-				}
+				"osdColor": {
+					"label": "OSD Color",
+					"title": "Select the color for the On-Screen Display"
+				},
+				"osdHide": {
+					"label": "Hide Delay",
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD"
+				},
+				"osdOpacity": {
+					"label": "OSD Opacity",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"osdPadding": {
+					"label": "Padding",
+					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD."
+				},
+				"osdPosition": {
+					"label": "OSD Position",
+					"title": "Select the position of the On-Screen Display"
+				},
+				"osdType": {
+					"label": "OSD Type",
+					"title": "Select the style of On-Screen Display"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
+				"title": "Scroll wheel volume control settings"
 			},
 			"volumeBoost": {
-				"title": "Volume boost settings",
-				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Volume boost"
-				},
-				"number": {
+				"boostAmount": {
 					"label": "Volume boost amount (dB)",
 					"title": "The amount to boost the volume by"
-				}
-			},
-			"screenshotButton": {
-				"title": "Screenshot settings",
+				},
 				"enable": {
-					"title": "Adds a button to the player to take a screenshot of the video",
-					"label": "Screenshot button"
+					"label": "Volume boost",
+					"title": "Enable volume boost"
 				},
-				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
-				},
-				"saveAs": {
-					"file": "File",
-					"clipboard": "Clipboard"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
-				},
-				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
-				},
-				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
-				}
-			},
-			"language": {
-				"title": "Language",
-				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
-				}
+				"title": "Volume boost settings"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "This will delete all extension data related to options. Continue?",
-			"allDataDeleted": "All data has been deleted."
 		}
-	},
-	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}"
 	}
 }

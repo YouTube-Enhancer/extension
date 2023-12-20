@@ -1,18 +1,15 @@
 {
 	"langCode": "es-ES",
 	"langName": "Español",
+	"messages": {
+		"resumingVideo": "Reanudando vídeo en {{VIDEO_TIME}}",
+		"settingVolume": "Ajustando el potenciador de volumen a {{VOLUME_BOOST_AMOUNT}}"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "Cerrar"
-					},
-					"resumeButton": "Reanudar"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
-					"label": "Capturar pantalla"
+				"featureMenu": {
+					"label": "Menú de funciones"
 				},
 				"loopButton": {
 					"label": "Bucle"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "Maximizar"
 				},
-				"featureMenu": {
-					"label": "Menú de funciones"
+				"openTranscriptButton": {
+					"label": "Open Transcript"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
+					"label": "Capturar pantalla"
+				},
+				"videoHistory": {
+					"resumeButton": "Reanudar",
+					"resumePrompt": {
+						"close": "Cerrar"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "Potenciar volumen"
-				},
-				"openTranscriptButton": {
-					"label": "Open Transcript"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "Opciones guardadas."
-				},
 				"info": {
 					"reset": "Todas las opciones han sido preestablecidas a sus valores de por defecto.\nAhora puedes guardarlas haciendo clic en el botón \"Confirmar\" o descartarlas cerrando esta página o ignorando esta notificación."
+				},
+				"success": {
+					"saved": "Opciones guardadas."
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "Todos los datos han sido eliminados.",
+			"confirmAlert": "Esto eliminará todos los datos de la extensión relacionados con las opciones. ¿Continuar?"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "Habilitar ajuste automático de calidad",
+					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado."
+				},
+				"select": {
+					"label": "Calidad del reproductor",
+					"title": "La calidad a la que establecer el vídeo"
+				},
+				"title": "Ajustes de calidad automáticos"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "Limpia todos los datos que esta extensión ha almacenado en su equipo",
+					"value": "Limpiar datos"
+				},
+				"confirm": {
+					"title": "Confirma el restablecimiento de los ajustes",
+					"value": "Confirmar"
+				},
+				"reset": {
+					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
+					"value": "Reestablecer"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
 					"select": {
 						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
 						"options": {
 							"click": "Click",
 							"hover": "Hover"
-						}
-					}
+						},
+						"title": "Select the method to activate the feature menu"
+					},
+					"title": "Feature menu settings"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\nUn error desconocido se ha producido."
-					},
-					"success": "Ajustes importados correctamente",
-					"title": "Importar ajustes desde un archivo JSON",
-					"value": "Importar Ajustes"
-				},
 				"exportButton": {
 					"success": "Ajustes exportados correctamente",
 					"title": "Exportar ajustes a un archivo JSON",
 					"value": "Exportar Ajustes"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\nUn error desconocido se ha producido.",
+						"validation": "Error al importar la configuración. Por favor, compruebe el formato del archivo.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "Ajustes importados correctamente",
+					"title": "Importar ajustes desde un archivo JSON",
+					"value": "Importar Ajustes"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "Idioma",
+					"title": "El idioma a usar para la extensión"
+				},
+				"title": "Idioma"
 			},
 			"miscellaneous": {
-				"title": "Ajustes varios",
 				"features": {
-					"rememberLastVolume": {
-						"title": "Recuerda el volumen del último vídeo que estabas viendo y lo establece cuando abres un nuevo vídeo",
-						"label": "Recordar el nivel de volumen"
-					},
-					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
-						"label": "Botón de maximizar en el reproductor"
-					},
-					"videoHistory": {
-						"title": "Recuerda el progreso de los videos y te pregunta si quieres reanudarlo donde lo dejaste cuando vuelves a reproducirlo",
-						"label": "Historial de vídeo"
-					},
-					"remainingTime": {
-						"title": "Muestra el tiempo restante del vídeo que estás viendo",
-						"label": "Tiempo restante"
-					},
-					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
-						"label": "Botón de bucle"
+					"automaticTheaterMode": {
+						"label": "Modo cine automático",
+						"title": "Activar automáticamente el modo cine al cargar un vídeo"
 					},
 					"hideScrollbar": {
-						"title": "Oculta la barra de desplazamiento de la página",
-						"label": "Ocultar barra de desplazamiento"
+						"label": "Ocultar barra de desplazamiento",
+						"title": "Oculta la barra de desplazamiento de la página"
 					},
-					"automaticTheaterMode": {
-						"title": "Activar automáticamente el modo cine al cargar un vídeo",
-						"label": "Modo cine automático"
+					"loopButton": {
+						"label": "Botón de bucle",
+						"title": "Adds a button to the feature menu to loop the video you're watching"
+					},
+					"maximizePlayerButton": {
+						"label": "Botón de maximizar en el reproductor",
+						"title": "Adds a button to the feature menu to maximize the player"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
-						"label": "Open transcript button"
+						"label": "Open transcript button",
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+					},
+					"remainingTime": {
+						"label": "Tiempo restante",
+						"title": "Muestra el tiempo restante del vídeo que estás viendo"
+					},
+					"rememberLastVolume": {
+						"label": "Recordar el nivel de volumen",
+						"title": "Recuerda el volumen del último vídeo que estabas viendo y lo establece cuando abres un nuevo vídeo"
+					},
+					"videoHistory": {
+						"label": "Historial de vídeo",
+						"title": "Recuerda el progreso de los videos y te pregunta si quieres reanudarlo donde lo dejaste cuando vuelves a reproducirlo"
 					}
-				}
+				},
+				"title": "Ajustes varios"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "Velocidad de reproducción forzada",
+					"title": "Establece la velocidad del video a lo que elijas a continuación"
+				},
+				"select": {
+					"label": "Velocidad del reproductor",
+					"title": "La velocidad a la que ajustar el vídeo"
+				},
+				"title": "Ajustes de velocidad de reproducción"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Botón de captura de pantalla",
+					"title": "Añade un botón al reproductor para capturar la pantalal del vídeo que estás viendo"
+				},
+				"saveAs": {
+					"clipboard": "Portapapeles",
+					"file": "Archivo"
+				},
+				"selectFormat": {
+					"label": "Formato de captura de pantalla",
+					"title": "El formato en el que guardar la captura de pantalla"
+				},
+				"selectSaveAs": {
+					"label": "Método de guardado de captura de pantalla",
+					"title": "Método de guardado sobre el que se guardará la captura de pantalla"
+				},
+				"title": "Ajustes de captura de pantalla"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Ajustes de control de volumen con la rueda del ratón",
 				"enable": {
-					"title": "Te permite usar la rueda del ratón para controlar el volumen del vídeo que estás viendo",
-					"label": "Control de volumen con la rueda"
-				},
-				"osdColor": {
-					"title": "Selecciona el color que será usado por el visualizador en pantalla",
-					"label": "Color del visualizador en pantalla"
-				},
-				"osdType": {
-					"title": "Selecciona el estilo del visualizador en pantalla",
-					"label": "Tipo de visualizador en pantalla"
-				},
-				"osdPosition": {
-					"title": "Selecciona la posición del visualizador en pantalla",
-					"label": "Posición del visualizador en pantalla"
-				},
-				"osdOpacity": {
-					"title": "Ajusta la transparencia del visualizador en pantalla",
-					"label": "Opacidad del visualizador en pantalla"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "Volumen ajustado por desplazamiento de la rueda del ratón",
-					"label": "Volumen cambiado por desplazamiento"
-				},
-				"osdHide": {
-					"title": "Especifique el tiempo, en milisegundos, antes de ocultar automáticamente el visualizador en pantalla",
-					"label": "Ocultar retardo"
-				},
-				"osdPadding": {
-					"title": "Ajuste el espacio alrededor dl visualizador en pantalla en píxeles. Esto se aplica específicamente al visualizador de pantalla de la esquina.",
-					"label": "Relleno"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "Rojo",
-						"green": "Verde",
-						"blue": "Azul",
-						"yellow": "Amarillo",
-						"orange": "Naranja",
-						"purple": "Morado",
-						"pink": "Rosa",
-						"white": "Blanco"
-					},
-					"position": {
-						"top_left": "Parte superior izquierda",
-						"top_right": "Parte superior derecha",
-						"bottom_left": "Parte inferior izquierda",
-						"bottom_right": "Parte inferior derecha",
-						"center": "Centrado"
-					},
-					"type": {
-						"no_display": "No mostrar",
-						"text": "Texto",
-						"line": "Línea",
-						"round": "Redondeado"
-					}
+					"label": "Control de volumen con la rueda",
+					"title": "Te permite usar la rueda del ratón para controlar el volumen del vídeo que estás viendo"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Presione una tecla modificadora para activar el ajuste de volumen con la rueda del ratón.",
-						"label": "Activar al mantener pulsada la tecla modificadora"
+						"label": "Activar al mantener pulsada la tecla modificadora",
+						"title": "Presione una tecla modificadora para activar el ajuste de volumen con la rueda del ratón."
 					},
 					"optionLabel": "Tecla {{KEY}}",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Mantenga pulsado el botón derecho para activar el control de volumen con la rueda del ratón",
-						"label": "Activar al mantener pulsado el botón derecho"
+						"label": "Activar al mantener pulsado el botón derecho",
+						"title": "Mantenga pulsado el botón derecho para activar el control de volumen con la rueda del ratón"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "Ajustes de calidad automáticos",
-				"enable": {
-					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado.",
-					"label": "Habilitar ajuste automático de calidad"
 				},
-				"select": {
-					"label": "Calidad del reproductor",
-					"title": "La calidad a la que establecer el vídeo"
-				}
-			},
-			"playbackSpeed": {
-				"title": "Ajustes de velocidad de reproducción",
-				"enable": {
-					"title": "Establece la velocidad del video a lo que elijas a continuación",
-					"label": "Velocidad de reproducción forzada"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "Azul",
+						"green": "Verde",
+						"orange": "Naranja",
+						"pink": "Rosa",
+						"purple": "Morado",
+						"red": "Rojo",
+						"white": "Blanco",
+						"yellow": "Amarillo"
+					},
+					"position": {
+						"bottom_left": "Parte inferior izquierda",
+						"bottom_right": "Parte inferior derecha",
+						"center": "Centrado",
+						"top_left": "Parte superior izquierda",
+						"top_right": "Parte superior derecha"
+					},
+					"type": {
+						"line": "Línea",
+						"no_display": "No mostrar",
+						"round": "Redondeado",
+						"text": "Texto"
+					}
 				},
-				"select": {
-					"label": "Velocidad del reproductor",
-					"title": "La velocidad a la que ajustar el vídeo"
-				}
+				"osdColor": {
+					"label": "Color del visualizador en pantalla",
+					"title": "Selecciona el color que será usado por el visualizador en pantalla"
+				},
+				"osdHide": {
+					"label": "Ocultar retardo",
+					"title": "Especifique el tiempo, en milisegundos, antes de ocultar automáticamente el visualizador en pantalla"
+				},
+				"osdOpacity": {
+					"label": "Opacidad del visualizador en pantalla",
+					"title": "Ajusta la transparencia del visualizador en pantalla"
+				},
+				"osdPadding": {
+					"label": "Relleno",
+					"title": "Ajuste el espacio alrededor dl visualizador en pantalla en píxeles. Esto se aplica específicamente al visualizador de pantalla de la esquina."
+				},
+				"osdPosition": {
+					"label": "Posición del visualizador en pantalla",
+					"title": "Selecciona la posición del visualizador en pantalla"
+				},
+				"osdType": {
+					"label": "Tipo de visualizador en pantalla",
+					"title": "Selecciona el estilo del visualizador en pantalla"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "Volumen cambiado por desplazamiento",
+					"title": "Volumen ajustado por desplazamiento de la rueda del ratón"
+				},
+				"title": "Ajustes de control de volumen con la rueda del ratón"
 			},
 			"volumeBoost": {
-				"title": "Ajustes de potenciado de volumen",
+				"boostAmount": {
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
+				},
 				"enable": {
-					"title": "Potencia el volumen del video que estás viendo",
-					"label": "Potenciador de volumen"
+					"label": "Potenciador de volumen",
+					"title": "Enable volume boost"
 				},
-				"number": {
-					"label": "Cantidad de potenciado de volumen (dB)",
-					"title": "Cantidad a potenciar el volumen"
-				}
-			},
-			"screenshotButton": {
-				"title": "Ajustes de captura de pantalla",
-				"enable": {
-					"title": "Añade un botón al reproductor para capturar la pantalal del vídeo que estás viendo",
-					"label": "Botón de captura de pantalla"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectSaveAs": {
-					"label": "Método de guardado de captura de pantalla",
-					"title": "Método de guardado sobre el que se guardará la captura de pantalla"
-				},
-				"selectFormat": {
-					"label": "Formato de captura de pantalla",
-					"title": "El formato en el que guardar la captura de pantalla"
-				},
-				"saveAs": {
-					"file": "Archivo",
-					"clipboard": "Portapapeles"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "Confirma el restablecimiento de los ajustes",
-					"value": "Confirmar"
-				},
-				"clear": {
-					"title": "Limpia todos los datos que esta extensión ha almacenado en su equipo",
-					"value": "Limpiar datos"
-				},
-				"reset": {
-					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
-					"value": "Reestablecer"
-				}
-			},
-			"language": {
-				"title": "Idioma",
-				"select": {
-					"label": "Idioma",
-					"title": "El idioma a usar para la extensión"
-				}
+				"title": "Ajustes de potenciado de volumen"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "Esto eliminará todos los datos de la extensión relacionados con las opciones. ¿Continuar?",
-			"allDataDeleted": "Todos los datos han sido eliminados."
 		}
-	},
-	"messages": {
-		"settingVolume": "Ajustando el potenciador de volumen a {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "Reanudando vídeo en {{VIDEO_TIME}}"
 	}
 }
