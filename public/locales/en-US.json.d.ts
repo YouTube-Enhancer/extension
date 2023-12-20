@@ -194,11 +194,15 @@ interface EnUS {
 				title: "Scroll wheel volume control settings";
 			};
 			volumeBoost: {
-				enable: {
-					label: "Volume boost";
-					title: "Boosts the volume of the video you're watching";
+				boostAmount: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
+				enable: { label: "Volume boost"; title: "Enable volume boost" };
+				mode: {
+					select: {
+						label: "Volume boost mode";
+						options: { global: "Global"; perVideo: "Per video" };
+						title: "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled.";
+					};
 				};
-				number: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
 				title: "Volume boost settings";
 			};
 		};

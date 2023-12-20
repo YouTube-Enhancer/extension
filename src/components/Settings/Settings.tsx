@@ -1,4 +1,4 @@
-import type { ModifierKey, configuration, configurationKeys } from "@/src/types";
+import type { ModifierKey, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -326,6 +326,16 @@ export default function Settings() {
 		{ label: file, value: "file" },
 		{ label: clipboard, value: "clipboard" }
 	];
+	const VolumeBoostModeOptions: SelectOption[] = [
+		{
+			label: t("settings.sections.volumeBoost.mode.select.options.global"),
+			value: "global"
+		},
+		{
+			label: t("settings.sections.volumeBoost.mode.select.options.perVideo"),
+			value: "per_video"
+		}
+	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -666,12 +676,22 @@ export default function Settings() {
 					/>
 					<Setting
 						disabled={settings.enable_volume_boost?.toString() !== "true"}
+						id="volume_boost_mode"
+						label={t("settings.sections.volumeBoost.mode.select.label")}
+						onChange={setValueOption("volume_boost_mode")}
+						options={VolumeBoostModeOptions}
+						selectedOption={getSelectedOption("volume_boost_mode")}
+						title={t("settings.sections.volumeBoost.mode.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_volume_boost?.toString() !== "true"}
 						id="volume_boost_amount"
-						label={t("settings.sections.volumeBoost.number.label")}
+						label={t("settings.sections.volumeBoost.boostAmount.label")}
 						max={100}
 						min={1}
 						onChange={setValueOption("volume_boost_amount")}
-						title={t("settings.sections.volumeBoost.number.title")}
+						title={t("settings.sections.volumeBoost.boostAmount.title")}
 						type="number"
 						value={settings.volume_boost_amount}
 					/>

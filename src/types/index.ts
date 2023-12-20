@@ -40,6 +40,8 @@ export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKey)[number];
 export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
+export const volumeBoostMode = ["global", "per_video"] as const;
+export type VolumeBoostMode = (typeof volumeBoostMode)[number];
 export type configuration = {
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
@@ -72,6 +74,7 @@ export type configuration = {
 	scroll_wheel_volume_control_modifier_key: ModifierKey;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
+	volume_boost_mode: VolumeBoostMode;
 };
 export type configurationKeys = keyof configuration;
 export type configurationId = configurationKeys;
@@ -126,7 +129,10 @@ export type ExtensionSendOnlyMessageMappings = {
 	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
-	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostAmount?: number; volumeBoostEnabled: boolean }>;
+	volumeBoostChange: DataResponseMessage<
+		"volumeBoostChange",
+		{ volumeBoostAmount?: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
+	>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;

@@ -16,7 +16,7 @@ import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost, { disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
+import volumeBoost, { addVolumeBoostButton, disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
 import {
@@ -138,13 +138,21 @@ window.addEventListener("DOMContentLoaded", function () {
 				switch (message.type) {
 					case "volumeBoostChange": {
 						const {
-							data: { volumeBoostEnabled }
+							data: { volumeBoostEnabled, volumeBoostMode }
 						} = message;
 						if (volumeBoostEnabled) {
-							await enableVolumeBoost();
+							if (volumeBoostMode === "global") {
+								removeVolumeBoostButton();
+								await enableVolumeBoost();
+							} else {
+								disableVolumeBoost();
+								await addVolumeBoostButton();
+							}
 						} else {
 							disableVolumeBoost();
-							removeVolumeBoostButton();
+							if (volumeBoostMode === "per_video") {
+								removeVolumeBoostButton();
+							}
 						}
 						break;
 					}
