@@ -48,6 +48,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Automatic Theater Mode:** Automatically enables theater mode when you load a video
 
+- **Open Transcript Button:** Adds a button to the feature menu to open the video transcript (available if the video has a transcript).
+
 ### 2. Scroll Wheel Volume Control Settings
 
 - **Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
@@ -84,9 +86,9 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ### 5. Volume Boost Settings
 
-- **Volume Boost:** Boosts the volume of the video being watched.
+- **Volume Boost Mode Selection:** Introduced in version 1.18.0, this feature allows users to choose how the volume boost is applied. You can select 'Per Video' mode to enable volume boost for each video individually, or 'Global' mode to apply volume boost to all videos when the feature is enabled.
 
-- **Volume Boost Amount (dB):** Specify the amount by which to boost the volume.
+- **Volume Boost Amount (dB):** Specify the amount by which to boost the volume. This setting applies to both 'Per Video' and 'Global' modes.
 
 ### 6. Screenshot Settings
 
