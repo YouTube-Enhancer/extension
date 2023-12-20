@@ -1,3 +1,22 @@
+# [1.18.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.3...v1.18.0) (2023-12-20)
+
+
+### Features
+
+* **volume boost:** add mode selection ([ddadc6f](https://github.com/VampireChicken12/youtube-enhancer/commit/ddadc6f91ce609c756b82d7383dd0d4137a3042d))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.18.0-Chrome.zip | b1bb2c92956239cc577548dd1cc2904c91b590953c137f227459282ee1927fbe |
+| youtube-enhancer-v1.18.0-Chromium.zip | b1bb2c92956239cc577548dd1cc2904c91b590953c137f227459282ee1927fbe |
+| youtube-enhancer-v1.18.0-Edge.zip | b1bb2c92956239cc577548dd1cc2904c91b590953c137f227459282ee1927fbe |
+| youtube-enhancer-v1.18.0-Firefox.zip | 273f6071c3a9b06cea58ff53176795a21a10cf2e84352d4215eb2b9b8a87a64d |
+
 ## [1.17.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.2...v1.17.3) (2023-12-18)
 
 
