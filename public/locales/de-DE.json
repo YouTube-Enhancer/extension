@@ -1,18 +1,15 @@
 {
 	"langCode": "de-DE",
 	"langName": "Deutsch",
+	"messages": {
+		"resumingVideo": "Video bei {{VIDEO_TIME}} fortsetzen",
+		"settingVolume": "Lautstärke-Boost wird auf {{VOLUME_BOOST_AMOUNT}} eingestellt"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "Schließen"
-					},
-					"resumeButton": "Fortsetzen"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "Screenshot in Zwischenablage kopiert",
-					"label": "Bildschirmfoto"
+				"featureMenu": {
+					"label": "Funktions-Menü"
 				},
 				"loopButton": {
 					"label": "Dauerschleife"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "Vergrößern"
 				},
-				"featureMenu": {
-					"label": "Funktions-Menü"
+				"openTranscriptButton": {
+					"label": "Open Transcript"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot in Zwischenablage kopiert",
+					"label": "Bildschirmfoto"
+				},
+				"videoHistory": {
+					"resumeButton": "Fortsetzen",
+					"resumePrompt": {
+						"close": "Schließen"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "Lautsärke Verstärkung"
-				},
-				"openTranscriptButton": {
-					"label": "Open Transcript"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "Optionen gespeichert."
-				},
 				"info": {
 					"reset": "Alle Optionen wurden auf ihre Standardwerte zurückgesetzt.\nSie können die Änderungen jetzt speichern, indem Sie auf den \"Bestätigen\"-Button klicken oder diese verwerfen, indem Sie diese Seite schließen oder diese Benachrichtigung ignorieren."
+				},
+				"success": {
+					"saved": "Optionen gespeichert."
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "Die Daten wurden gelöscht.",
+			"confirmAlert": "Dies löscht alle Erweiterungsdaten zu Optionen. Fortfahren?"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "Automatische Qualitätsanpassung",
+					"title": "Die Videoqualität wird automatisch auf die ausgewählte Qualität gestellt."
+				},
+				"select": {
+					"label": "Video-Qualität",
+					"title": "Die Qualität auf die das Video gestellt werden soll"
+				},
+				"title": "Automatische Qualitätseinstellungen"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "Löscht alle Daten, die diese Erweiterung auf Ihrem Rechner gespeichert hat",
+					"value": "Daten löschen"
+				},
+				"confirm": {
+					"title": "Einstellungen zurücksetzen",
+					"value": "Bestätigen"
+				},
+				"reset": {
+					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
+					"value": "Zurücksetzen"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "Feature menu settings",
 					"select": {
 						"label": "Menu Activation Type",
-						"title": "Select the method to activate the feature menu",
 						"options": {
 							"click": "Click",
 							"hover": "Hover"
-						}
-					}
+						},
+						"title": "Select the method to activate the feature menu"
+					},
+					"title": "Feature menu settings"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\n{{ERROR_MESSAGE}}",
-						"unknown": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\nEin unbekannter Fehler ist aufgetreten."
-					},
-					"success": "Einstellungen erfolgreich importiert",
-					"title": "Einstellungen aus JSON-Datei importieren",
-					"value": "Einstellungen importieren"
-				},
 				"exportButton": {
 					"success": "Einstellungen erfolgreich exportiert",
 					"title": "Einstellungen zu JSON-Datei exportieren",
 					"value": "Eistellungen exportieren"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\nEin unbekannter Fehler ist aufgetreten.",
+						"validation": "Fehler beim Importieren der Einstellungen. Bitte überprüfen Sie das Dateiformat.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "Einstellungen erfolgreich importiert",
+					"title": "Einstellungen aus JSON-Datei importieren",
+					"value": "Einstellungen importieren"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "Sprache",
+					"title": "Die Sprache dieser Erweiterung"
+				},
+				"title": "Sprache"
 			},
 			"miscellaneous": {
-				"title": "Weitere Einstellungen",
 				"features": {
-					"rememberLastVolume": {
-						"title": "Speichere die Lautstärke des letzten Videos, das du gesehen hast und setze es beim Öffnen eines neuen Videos",
-						"label": "Letzte Lautstärke merken"
-					},
-					"maximizePlayerButton": {
-						"title": "Adds a button to the feature menu to maximize the player",
-						"label": "Player-Button maximieren"
-					},
-					"videoHistory": {
-						"title": "Merkt sich den Zeitpunkt pausieren des Videos. Fragt beim erneut laden, ob man Vortfahren möchte.",
-						"label": "Videoverlauf"
-					},
-					"remainingTime": {
-						"title": "Zeigt die verbleibende Zeit des Videos, das du siehst",
-						"label": "Verbleibende Zeit"
-					},
-					"loopButton": {
-						"title": "Adds a button to the feature menu to loop the video you're watching",
-						"label": "Dauerschleife-Button"
+					"automaticTheaterMode": {
+						"label": "Automatischer Theatermodus",
+						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
 					"hideScrollbar": {
-						"title": "Versteckt die Scrollleiste",
-						"label": "Scrollbar ausblenden"
+						"label": "Scrollbar ausblenden",
+						"title": "Versteckt die Scrollleiste"
 					},
-					"automaticTheaterMode": {
-						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird",
-						"label": "Automatischer Theatermodus"
+					"loopButton": {
+						"label": "Dauerschleife-Button",
+						"title": "Adds a button to the feature menu to loop the video you're watching"
+					},
+					"maximizePlayerButton": {
+						"label": "Player-Button maximieren",
+						"title": "Adds a button to the feature menu to maximize the player"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
-						"label": "Open transcript button"
+						"label": "Open transcript button",
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+					},
+					"remainingTime": {
+						"label": "Verbleibende Zeit",
+						"title": "Zeigt die verbleibende Zeit des Videos, das du siehst"
+					},
+					"rememberLastVolume": {
+						"label": "Letzte Lautstärke merken",
+						"title": "Speichere die Lautstärke des letzten Videos, das du gesehen hast und setze es beim Öffnen eines neuen Videos"
+					},
+					"videoHistory": {
+						"label": "Videoverlauf",
+						"title": "Merkt sich den Zeitpunkt pausieren des Videos. Fragt beim erneut laden, ob man Vortfahren möchte."
 					}
-				}
+				},
+				"title": "Weitere Einstellungen"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "Erzwungene Wiedergabegeschwindigkeit",
+					"title": "Setzt die Videogeschwindigkeit auf das, was du unten wählst"
+				},
+				"select": {
+					"label": "Video Geschwindigkeit",
+					"title": "Die Geschwindigkeit auf die das Video gestellt wird"
+				},
+				"title": "Wiedergabegeschwindigkeit Einstellungen"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Screenshot-Taste",
+					"title": "Fügt dem Player einen Button hinzu, um einen Screenshot des Videos zu machen"
+				},
+				"saveAs": {
+					"clipboard": "Zwischenablage",
+					"file": "Datei"
+				},
+				"selectFormat": {
+					"label": "Screenshot-Format",
+					"title": "Das Format zum Speichern des Screenshots"
+				},
+				"selectSaveAs": {
+					"label": "Screenshot-Speicherart",
+					"title": "Der Screenshot-Speichertyp"
+				},
+				"title": "Screenshot-Einstellungen"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Lautstärke durch Mausrad ändern",
 				"enable": {
-					"title": "Lässt dich das Scrollrad verwenden, um die Lautstärke des Videos zu steuern, das du siehst",
-					"label": "Lautstärke durch Mausrad ändern"
-				},
-				"osdColor": {
-					"title": "Farbe für den On-Screen Display wählen",
-					"label": "OSD-Farbe"
-				},
-				"osdType": {
-					"title": "Wähle den Style des On-Screen Displays",
-					"label": "OSD Typ"
-				},
-				"osdPosition": {
-					"title": "Wählt die Position des On-Screen Displays",
-					"label": "OSD Position"
-				},
-				"osdOpacity": {
-					"title": "Transparenz des On-Screen Display verändern",
-					"label": "OSD Transparenz"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "Lautstärke-Änderung pro Scroll anpassen",
-					"label": "Lautstärke-Änderung pro Scroll"
-				},
-				"osdHide": {
-					"title": "Geben Sie die Zeit in Millisekunden an, bevor der OSD automatisch versteckt wird",
-					"label": "Verstecken Verzögerung"
-				},
-				"osdPadding": {
-					"title": "Passen Sie den Abstand um den Display auf dem Bildschirm (OSD) in Pixeln an. Dies gilt insbesondere für die Eck-OSD.",
-					"label": "Abstand"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "Rot",
-						"green": "Grün",
-						"blue": "Blau",
-						"yellow": "Gelb",
-						"orange": "Orange",
-						"purple": "Lila",
-						"pink": "Rosa",
-						"white": "Weiß"
-					},
-					"position": {
-						"top_left": "Oben Links",
-						"top_right": "Oben Rechts",
-						"bottom_left": "Unten Links",
-						"bottom_right": "Unten Rechts",
-						"center": "Mitte"
-					},
-					"type": {
-						"no_display": "Keine Anzeige",
-						"text": "Text",
-						"line": "Linie",
-						"round": "Rund"
-					}
+					"label": "Lautstärke durch Mausrad ändern",
+					"title": "Lässt dich das Scrollrad verwenden, um die Lautstärke des Videos zu steuern, das du siehst"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Drücken Sie eine Modifikator-Taste, um die Lautstärkeregelung mit dem Scrollrad zu aktivieren.",
-						"label": "Aktivieren, wenn die Modifikator-Taste gedrückt wird"
+						"label": "Aktivieren, wenn die Modifikator-Taste gedrückt wird",
+						"title": "Drücken Sie eine Modifikator-Taste, um die Lautstärkeregelung mit dem Scrollrad zu aktivieren."
 					},
 					"optionLabel": "{{KEY}} Taste",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Rechtsklick gedrückt halten, um die Lautstärkeregelung des Scrollrades zu aktivieren",
-						"label": "Aktivieren, wenn Rechtsklick gedrückt wird"
+						"label": "Aktivieren, wenn Rechtsklick gedrückt wird",
+						"title": "Rechtsklick gedrückt halten, um die Lautstärkeregelung des Scrollrades zu aktivieren"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "Automatische Qualitätseinstellungen",
-				"enable": {
-					"title": "Die Videoqualität wird automatisch auf die ausgewählte Qualität gestellt.",
-					"label": "Automatische Qualitätsanpassung"
 				},
-				"select": {
-					"label": "Video-Qualität",
-					"title": "Die Qualität auf die das Video gestellt werden soll"
-				}
-			},
-			"playbackSpeed": {
-				"title": "Wiedergabegeschwindigkeit Einstellungen",
-				"enable": {
-					"title": "Setzt die Videogeschwindigkeit auf das, was du unten wählst",
-					"label": "Erzwungene Wiedergabegeschwindigkeit"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "Blau",
+						"green": "Grün",
+						"orange": "Orange",
+						"pink": "Rosa",
+						"purple": "Lila",
+						"red": "Rot",
+						"white": "Weiß",
+						"yellow": "Gelb"
+					},
+					"position": {
+						"bottom_left": "Unten Links",
+						"bottom_right": "Unten Rechts",
+						"center": "Mitte",
+						"top_left": "Oben Links",
+						"top_right": "Oben Rechts"
+					},
+					"type": {
+						"line": "Linie",
+						"no_display": "Keine Anzeige",
+						"round": "Rund",
+						"text": "Text"
+					}
 				},
-				"select": {
-					"label": "Video Geschwindigkeit",
-					"title": "Die Geschwindigkeit auf die das Video gestellt wird"
-				}
+				"osdColor": {
+					"label": "OSD-Farbe",
+					"title": "Farbe für den On-Screen Display wählen"
+				},
+				"osdHide": {
+					"label": "Verstecken Verzögerung",
+					"title": "Geben Sie die Zeit in Millisekunden an, bevor der OSD automatisch versteckt wird"
+				},
+				"osdOpacity": {
+					"label": "OSD Transparenz",
+					"title": "Transparenz des On-Screen Display verändern"
+				},
+				"osdPadding": {
+					"label": "Abstand",
+					"title": "Passen Sie den Abstand um den Display auf dem Bildschirm (OSD) in Pixeln an. Dies gilt insbesondere für die Eck-OSD."
+				},
+				"osdPosition": {
+					"label": "OSD Position",
+					"title": "Wählt die Position des On-Screen Displays"
+				},
+				"osdType": {
+					"label": "OSD Typ",
+					"title": "Wähle den Style des On-Screen Displays"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "Lautstärke-Änderung pro Scroll",
+					"title": "Lautstärke-Änderung pro Scroll anpassen"
+				},
+				"title": "Lautstärke durch Mausrad ändern"
 			},
 			"volumeBoost": {
-				"title": "´Lautstärke-Boost Einstellungen",
+				"boostAmount": {
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
+				},
 				"enable": {
-					"title": "Erhöht die Lautstärke des Videos, das du siehst",
-					"label": "Lautstärken-Boost"
+					"label": "Lautstärken-Boost",
+					"title": "Enable volume boost"
 				},
-				"number": {
-					"label": "Lautstärke-Boost (dB)",
-					"title": "Die Höhe um die die Lautsätke verstärkt wird"
-				}
-			},
-			"screenshotButton": {
-				"title": "Screenshot-Einstellungen",
-				"enable": {
-					"title": "Fügt dem Player einen Button hinzu, um einen Screenshot des Videos zu machen",
-					"label": "Screenshot-Taste"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectSaveAs": {
-					"label": "Screenshot-Speicherart",
-					"title": "Der Screenshot-Speichertyp"
-				},
-				"selectFormat": {
-					"label": "Screenshot-Format",
-					"title": "Das Format zum Speichern des Screenshots"
-				},
-				"saveAs": {
-					"file": "Datei",
-					"clipboard": "Zwischenablage"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "Einstellungen zurücksetzen",
-					"value": "Bestätigen"
-				},
-				"clear": {
-					"title": "Löscht alle Daten, die diese Erweiterung auf Ihrem Rechner gespeichert hat",
-					"value": "Daten löschen"
-				},
-				"reset": {
-					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
-					"value": "Zurücksetzen"
-				}
-			},
-			"language": {
-				"title": "Sprache",
-				"select": {
-					"label": "Sprache",
-					"title": "Die Sprache dieser Erweiterung"
-				}
+				"title": "´Lautstärke-Boost Einstellungen"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "Dies löscht alle Erweiterungsdaten zu Optionen. Fortfahren?",
-			"allDataDeleted": "Die Daten wurden gelöscht."
 		}
-	},
-	"messages": {
-		"settingVolume": "Lautstärke-Boost wird auf {{VOLUME_BOOST_AMOUNT}} eingestellt",
-		"resumingVideo": "Video bei {{VIDEO_TIME}} fortsetzen"
 	}
 }
