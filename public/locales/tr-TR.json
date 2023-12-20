@@ -1,18 +1,15 @@
 {
 	"langCode": "tr-TR",
 	"langName": "Türkçe",
+	"messages": {
+		"resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir",
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+	},
 	"pages": {
 		"content": {
 			"features": {
-				"videoHistory": {
-					"resumePrompt": {
-						"close": "Kapat"
-					},
-					"resumeButton": "Devam Et"
-				},
-				"screenshotButton": {
-					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
-					"label": "Ekran Görüntüsü"
+				"featureMenu": {
+					"label": "Özellik menüsü"
 				},
 				"loopButton": {
 					"label": "Loop"
@@ -20,159 +17,178 @@
 				"maximizePlayerButton": {
 					"label": "Ekranı Kapla"
 				},
-				"featureMenu": {
-					"label": "Özellik menüsü"
+				"openTranscriptButton": {
+					"label": "Open Transcript"
+				},
+				"screenshotButton": {
+					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
+					"label": "Ekran Görüntüsü"
+				},
+				"videoHistory": {
+					"resumeButton": "Devam Et",
+					"resumePrompt": {
+						"close": "Kapat"
+					}
 				},
 				"volumeBoostButton": {
 					"label": "Ses Güçlendirmesi"
-				},
-				"openTranscriptButton": {
-					"label": "Open Transcript"
 				}
 			}
 		},
 		"options": {
 			"notifications": {
-				"success": {
-					"saved": "Seçenekler kaydedildi."
-				},
 				"info": {
 					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+				},
+				"success": {
+					"saved": "Seçenekler kaydedildi."
 				}
 			}
 		}
 	},
 	"settings": {
+		"clearData": {
+			"allDataDeleted": "Tüm veriler silindi.",
+			"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
+		},
 		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "Otomatik kalite ayarlamayı etkinleştir",
+					"title": "Automatically adjusts the video quality to the selected level."
+				},
+				"select": {
+					"label": "Oynatma kalitesi",
+					"title": "Videonun ayarlanacağı kalite"
+				},
+				"title": "Otomatik kalite ayarları"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
+					"value": "Veriyi Temizle"
+				},
+				"confirm": {
+					"title": "Ayarı sıfırlamayı onayla",
+					"value": "Onayla"
+				},
+				"reset": {
+					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
+					"value": "Sıfırla"
+				}
+			},
 			"featureMenu": {
 				"openType": {
-					"title": "Özellik menüsü ayarları",
 					"select": {
 						"label": "Menü Aktivasyon Türü",
-						"title": "Özellik menüsünü etkinleştirme yöntemini seçin",
 						"options": {
 							"click": "Tıkla",
 							"hover": "İmleci Üzerine Getir"
-						}
-					}
+						},
+						"title": "Özellik menüsünü etkinleştirme yöntemini seçin"
+					},
+					"title": "Özellik menüsü ayarları"
 				}
 			},
 			"importExportSettings": {
-				"importButton": {
-					"error": {
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}",
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred."
-					},
-					"success": "Ayarlar başarıyla içe aktarıldı",
-					"title": "Ayarları JSON dosyasına aktar",
-					"value": "Ayarları İçe Aktar"
-				},
 				"exportButton": {
 					"success": "Ayarlar başarıyla dışa aktarıldı",
 					"title": "Ayarları JSON dosyasına aktar",
 					"value": "Ayarları Dışa Aktar"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "Ayarlar başarıyla içe aktarıldı",
+					"title": "Ayarları JSON dosyasına aktar",
+					"value": "Ayarları İçe Aktar"
 				}
+			},
+			"language": {
+				"select": {
+					"label": "Dil",
+					"title": "Uzuntı için kullanılacak dil"
+				},
+				"title": "Dil"
 			},
 			"miscellaneous": {
-				"title": "Çeşitli ayarlar",
 				"features": {
-					"rememberLastVolume": {
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video",
-						"label": "Son ses hacmini hatırla"
-					},
-					"maximizePlayerButton": {
-						"title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler",
-						"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir"
-					},
-					"videoHistory": {
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again",
-						"label": "Video geçmişini etkinleştir"
-					},
-					"remainingTime": {
-						"title": "Shows the remaining time of the video you're watching",
-						"label": "Remaining time"
-					},
-					"loopButton": {
-						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler",
-						"label": "Loop button"
+					"automaticTheaterMode": {
+						"label": "Automatic theater mode",
+						"title": "Automatically enables theater mode when you load a video"
 					},
 					"hideScrollbar": {
-						"title": "Hides the pages scrollbar",
-						"label": "Kaydırma çubuğu gizlemeyi etkinleştir"
+						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
+						"title": "Hides the pages scrollbar"
 					},
-					"automaticTheaterMode": {
-						"title": "Automatically enables theater mode when you load a video",
-						"label": "Automatic theater mode"
+					"loopButton": {
+						"label": "Loop button",
+						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
+					},
+					"maximizePlayerButton": {
+						"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir",
+						"title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler"
 					},
 					"openTranscriptButton": {
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching",
-						"label": "Open transcript button"
+						"label": "Open transcript button",
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+					},
+					"remainingTime": {
+						"label": "Remaining time",
+						"title": "Shows the remaining time of the video you're watching"
+					},
+					"rememberLastVolume": {
+						"label": "Son ses hacmini hatırla",
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					},
+					"videoHistory": {
+						"label": "Video geçmişini etkinleştir",
+						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
 					}
-				}
+				},
+				"title": "Çeşitli ayarlar"
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "Zorunlu oynatma hızını etkinleştir",
+					"title": "Sets the video speed to what you choose below"
+				},
+				"select": {
+					"label": "Oynatma hızı",
+					"title": "The speed to set the video to"
+				},
+				"title": "Oynatma hızı ayarları"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Ekran görüntüsü tuşunu etkinleştir",
+					"title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler"
+				},
+				"saveAs": {
+					"clipboard": "Pano",
+					"file": "Dosya"
+				},
+				"selectFormat": {
+					"label": "Ekran görüntüsü formatı",
+					"title": "Ekran görüntüsünün kaydedileceği format"
+				},
+				"selectSaveAs": {
+					"label": "Ekran görüntüsü kaydetme türü",
+					"title": "Ekran görüntüsü kaydetme türü"
+				},
+				"title": "Ekran görüntüsü ayarları"
 			},
 			"scrollWheelVolumeControl": {
-				"title": "Scroll wheel volume control settings",
 				"enable": {
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching",
-					"label": "Scroll wheel volume control"
-				},
-				"osdColor": {
-					"title": "Select the color for the On-Screen Display",
-					"label": "OSD Rengi"
-				},
-				"osdType": {
-					"title": "Select the style of On-Screen Display",
-					"label": "OSD Türü"
-				},
-				"osdPosition": {
-					"title": "Select the position of the On-Screen Display",
-					"label": "OSD Konumu"
-				},
-				"osdOpacity": {
-					"title": "Adjust the transparency of the On-Screen Display",
-					"label": "OSD Şeffaflığı"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"title": "Adjust the volume change per scroll",
-					"label": "Volume Change Per Scroll"
-				},
-				"osdHide": {
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD",
-					"label": "Gecikmeyi Gizle"
-				},
-				"osdPadding": {
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.",
-					"label": "Padding"
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"red": "Kırmızı",
-						"green": "Yeşil",
-						"blue": "Mavi",
-						"yellow": "Sarı",
-						"orange": "Turuncu",
-						"purple": "Mor",
-						"pink": "Pembe",
-						"white": "Beyaz"
-					},
-					"position": {
-						"top_left": "Sol Üst",
-						"top_right": "Sağ Üst",
-						"bottom_left": "Sol Alt",
-						"bottom_right": "Sağ Alt",
-						"center": "Orta"
-					},
-					"type": {
-						"no_display": "No display",
-						"text": "Metin",
-						"line": "Satır",
-						"round": "Yuvarlak"
-					}
+					"label": "Scroll wheel volume control",
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel.",
-						"label": "Enable when holding modifier key"
+						"label": "Enable when holding modifier key",
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
@@ -182,92 +198,86 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"title": "Hold right click to enable scroll wheel volume control",
-						"label": "Etkinleştirmek için sağ tuşa basılı tutun"
+						"label": "Etkinleştirmek için sağ tuşa basılı tutun",
+						"title": "Hold right click to enable scroll wheel volume control"
 					}
-				}
-			},
-			"automaticQuality": {
-				"title": "Otomatik kalite ayarları",
-				"enable": {
-					"title": "Automatically adjusts the video quality to the selected level.",
-					"label": "Otomatik kalite ayarlamayı etkinleştir"
 				},
-				"select": {
-					"label": "Oynatma kalitesi",
-					"title": "Videonun ayarlanacağı kalite"
-				}
-			},
-			"playbackSpeed": {
-				"title": "Oynatma hızı ayarları",
-				"enable": {
-					"title": "Sets the video speed to what you choose below",
-					"label": "Zorunlu oynatma hızını etkinleştir"
+				"onScreenDisplay": {
+					"colors": {
+						"blue": "Mavi",
+						"green": "Yeşil",
+						"orange": "Turuncu",
+						"pink": "Pembe",
+						"purple": "Mor",
+						"red": "Kırmızı",
+						"white": "Beyaz",
+						"yellow": "Sarı"
+					},
+					"position": {
+						"bottom_left": "Sol Alt",
+						"bottom_right": "Sağ Alt",
+						"center": "Orta",
+						"top_left": "Sol Üst",
+						"top_right": "Sağ Üst"
+					},
+					"type": {
+						"line": "Satır",
+						"no_display": "No display",
+						"round": "Yuvarlak",
+						"text": "Metin"
+					}
 				},
-				"select": {
-					"label": "Oynatma hızı",
-					"title": "The speed to set the video to"
-				}
+				"osdColor": {
+					"label": "OSD Rengi",
+					"title": "Select the color for the On-Screen Display"
+				},
+				"osdHide": {
+					"label": "Gecikmeyi Gizle",
+					"title": "Specify the time, in milliseconds, before automatically hiding the OSD"
+				},
+				"osdOpacity": {
+					"label": "OSD Şeffaflığı",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"osdPadding": {
+					"label": "Padding",
+					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD."
+				},
+				"osdPosition": {
+					"label": "OSD Konumu",
+					"title": "Select the position of the On-Screen Display"
+				},
+				"osdType": {
+					"label": "OSD Türü",
+					"title": "Select the style of On-Screen Display"
+				},
+				"osdVolumeAdjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
+				"title": "Scroll wheel volume control settings"
 			},
 			"volumeBoost": {
-				"title": "Ses güçlendirme ayarları",
-				"enable": {
-					"title": "Boosts the volume of the video you're watching",
-					"label": "Ses güçlendirmeyi etkinleştir"
-				},
-				"number": {
-					"label": "Ses yükseltme miktarı (dB)",
+				"boostAmount": {
+					"label": "Volume boost amount (dB)",
 					"title": "The amount to boost the volume by"
-				}
-			},
-			"screenshotButton": {
-				"title": "Ekran görüntüsü ayarları",
+				},
 				"enable": {
-					"title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler",
-					"label": "Ekran görüntüsü tuşunu etkinleştir"
+					"label": "Ses güçlendirmeyi etkinleştir",
+					"title": "Enable volume boost"
 				},
-				"selectSaveAs": {
-					"label": "Ekran görüntüsü kaydetme türü",
-					"title": "Ekran görüntüsü kaydetme türü"
+				"mode": {
+					"select": {
+						"label": "Volume boost mode",
+						"options": {
+							"global": "Global",
+							"perVideo": "Per video"
+						},
+						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+					}
 				},
-				"selectFormat": {
-					"label": "Ekran görüntüsü formatı",
-					"title": "Ekran görüntüsünün kaydedileceği format"
-				},
-				"saveAs": {
-					"file": "Dosya",
-					"clipboard": "Pano"
-				}
-			},
-			"bottomButtons": {
-				"confirm": {
-					"title": "Ayarı sıfırlamayı onayla",
-					"value": "Onayla"
-				},
-				"clear": {
-					"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
-					"value": "Veriyi Temizle"
-				},
-				"reset": {
-					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
-					"value": "Sıfırla"
-				}
-			},
-			"language": {
-				"title": "Dil",
-				"select": {
-					"label": "Dil",
-					"title": "Uzuntı için kullanılacak dil"
-				}
+				"title": "Ses güçlendirme ayarları"
 			}
-		},
-		"clearData": {
-			"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?",
-			"allDataDeleted": "Tüm veriler silindi."
 		}
-	},
-	"messages": {
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}",
-		"resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir"
 	}
 }

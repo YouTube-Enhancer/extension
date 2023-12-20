@@ -248,7 +248,8 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_volume_boost: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
 				volumeBoostAmount: options.volume_boost_amount,
-				volumeBoostEnabled: newValue
+				volumeBoostEnabled: newValue,
+				volumeBoostMode: options.volume_boost_mode
 			});
 		},
 		feature_menu_open_type: (newValue) => {
@@ -270,7 +271,15 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
 				volumeBoostAmount: newValue,
-				volumeBoostEnabled: options.enable_volume_boost
+				volumeBoostEnabled: options.enable_volume_boost,
+				volumeBoostMode: options.volume_boost_mode
+			});
+		},
+		volume_boost_mode: (newValue) => {
+			sendExtensionOnlyMessage("volumeBoostChange", {
+				volumeBoostAmount: options.volume_boost_amount,
+				volumeBoostEnabled: options.enable_volume_boost,
+				volumeBoostMode: newValue
 			});
 		}
 	};

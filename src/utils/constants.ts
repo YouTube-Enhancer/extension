@@ -11,6 +11,7 @@ import {
 	onScreenDisplayType,
 	screenshotFormat,
 	screenshotType,
+	volumeBoostMode,
 	youtubePlayerQualityLevel
 } from "../types";
 export const outputFolderName = "dist";
@@ -48,7 +49,8 @@ export const defaultConfiguration = {
 	screenshot_save_as: "file",
 	scroll_wheel_volume_control_modifier_key: "ctrlKey",
 	volume_adjustment_steps: 5,
-	volume_boost_amount: 1
+	volume_boost_amount: 1,
+	volume_boost_mode: "global"
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
 	enable_automatic_theater_mode: z.boolean().optional(),
@@ -86,5 +88,6 @@ export const configurationImportSchema: TypeToPartialZodSchema<configuration> = 
 	screenshot_save_as: z.enum(screenshotType).optional(),
 	scroll_wheel_volume_control_modifier_key: z.enum(modifierKey).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
-	volume_boost_amount: z.number().optional()
+	volume_boost_amount: z.number().optional(),
+	volume_boost_mode: z.enum(volumeBoostMode).optional()
 });
