@@ -40,8 +40,8 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "滾輪播放速度輔助按鍵不能跟音量增強輔助按鍵相同。",
+							"volumeControl": "滾輪音量增強輔助按鍵不能跟播放速度輔助按鍵相同。"
 						}
 					}
 				},
@@ -160,52 +160,52 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "顏色",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "藍色",
+						"green": "綠色",
+						"orange": "橙色",
+						"pink": "粉紅色",
+						"purple": "紫色",
+						"red": "紅色",
+						"white": "白色",
+						"yellow": "黃色"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "選擇屏幕顥示的顏色"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "隱藏延遲",
+					"title": "指定多少毫秒後自動隱藏屏幕顥示"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "透明度",
+					"title": "調節屏幕顥示的透明度"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "填充",
+					"title": "以像素為單位調整屏幕顥示周圍的空間，適用於置於角落的屏幕顥示。"
 				},
 				"position": {
-					"label": "Position",
+					"label": "位置",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "置中",
+						"top_left": "左上",
+						"top_right": "右上"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "選擇屏幕顥示的位置"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "屏幕顥示設定",
 				"type": {
-					"label": "Type",
+					"label": "類型",
 					"options": {
-						"line": "Line",
-						"no_display": "No display",
-						"round": "Round",
-						"text": "Text"
+						"line": "線條",
+						"no_display": "不顯示",
+						"round": "圓形",
+						"text": "文字"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "選擇屏幕顥示風格"
 				}
 			},
 			"playbackSpeed": {
