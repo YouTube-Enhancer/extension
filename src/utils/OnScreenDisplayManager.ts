@@ -11,6 +11,7 @@ export type DisplayOptions = {
 	displayType: OnScreenDisplayType;
 	playerContainer: YouTubePlayerDiv | null;
 };
+
 export const valueType = {
 	Speed: "speed",
 	Volume: "volume"
@@ -22,41 +23,72 @@ type Value<V extends ValueType> = {
 	type: V;
 	value: number;
 };
+
 export const ensurePlayerContainerExists = (playerContainer: YouTubePlayerDiv | null): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {
 		throw new Error("Player container not found");
 	}
 	return true;
 };
+
 export default class OnScreenDisplayManager<V extends ValueType> {
+	// Default font size for the display.
 	private readonly defaultFontSize = 48;
 
+	// Current font size for the display.
 	private fontSize: number = this.defaultFontSize;
+
+	// Current value for the display.
 	private value?: Value<V>;
+
+	// Canvas element for the display.
 	protected canvas: HTMLCanvasElement;
+
+	// Context for the canvas element.
 	protected context: CanvasRenderingContext2D | null = null;
 	constructor(
+		// Options for the display.
 		protected options: DisplayOptions,
+		// ID for the display.
 		private displayId: string,
+		// Value for the display.
 		value: Value<V>
 	) {
+		// Initialize instance variables.
 		this.options = options;
 		this.value = value;
+
+		// Create the canvas element.
 		this.canvas = this.createCanvas();
+
+		// Setup the canvas element.
 		this.setupCanvas();
+
+		// Get the context for the canvas element.
 		this.context = this.getContext();
+
+		// Draw on the canvas element.
 		this.drawCanvas();
+
+		// Append the canvas element to the parent element.
 		this.appendCanvas();
 	}
+
 	private appendCanvas() {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return;
+
+		// Check if an existing canvas is present.
 		const existingCanvas = this.getExistingCanvas();
+
+		// If no existing canvas, append the canvas to the parent.
 		if (!existingCanvas) {
 			this.appendToParent();
 		} else {
+			// If existing canvas, update it.
 			this.updateExistingCanvas(existingCanvas);
 		}
 
+		// Schedule removal of the canvas after a certain time.
 		this.scheduleRemoval();
 	}
 
@@ -86,13 +118,16 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	private drawCanvas(): void {
 		if (!this.context) return;
 		if (!this.value) return;
+
 		const {
 			fontSize,
 			options: { displayColor, displayOpacity, displayType },
 			value: { max, type, value }
 		} = this;
+
 		switch (displayType) {
 			case "text": {
+				// Draw text on the canvas.
 				let text: string = "";
 				switch (type) {
 					case "speed": {
@@ -116,6 +151,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				break;
 			}
 			case "line": {
+				// Draw a line on the canvas.
 				const lineWidth = Math.round(round(value / max, 2) * max);
 				const lineHeight = 5;
 				this.canvas.width = lineWidth;
@@ -129,6 +165,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				break;
 			}
 			case "round": {
+				// Draw a round shape on the canvas.
 				const lineWidth = 5;
 				const radius = 75 / 2 - lineWidth;
 				const circleWidth = radius * 2 + lineWidth * 2;
@@ -148,26 +185,30 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				break;
 			}
 			case "no_display":
+				// Do nothing for no_display type.
 				break;
 			default:
-				throw new Error("Invalid display type");
+				this.handleError("Invalid display type");
 		}
 	}
 
 	private getContext(): CanvasRenderingContext2D | null {
 		const context = this.canvas.getContext("2d");
 		if (!context) {
-			throw new Error("Canvas context not found");
+			this.handleError("Canvas context not found");
 		}
 		return context;
 	}
+
 	private getExistingCanvas(): HTMLCanvasElement | null {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return null;
 		return this.options.playerContainer.parentElement?.parentElement?.querySelector(`canvas#${this.displayId}`) ?? null;
 	}
+
 	private handleError(message: string) {
-		throw new Error(message);
+		this.handleError(message);
 	}
+
 	private scheduleRemoval() {
 		setTimeout(() => {
 			this.canvas.remove();
@@ -181,6 +222,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		this.context.textBaseline = "middle";
 	}
 
+	// method to set up the canvas based on options.
 	private setupCanvas(): void {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return;
 
@@ -189,16 +231,22 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				playerContainer: { clientHeight: height, clientWidth: width }
 			}
 		} = this;
+
+		// Adjust displayPadding if it exceeds max width or height.
 		if (this.options.displayPadding > Math.max(width, height)) {
-			// Clamp displayPadding to max width and height
 			this.options.displayPadding = clamp(this.options.displayPadding, 0, Math.max(width, height));
 			browserColorLog(`Clamped display padding to ${this.options.displayPadding}`, "FgRed");
 		}
+
+		// Calculate font size based on canvas dimensions.
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
+
+		// Find elements for positioning the canvas.
 		const bottomElement: HTMLDivElement | null =
 			document.querySelector(
 				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 			) ?? document.querySelector(".ytp-chrome-bottom");
+
 		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
 		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
 		const heightExcludingMarginPadding =
@@ -210,12 +258,17 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
 				10
 			:	0;
+
 		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
+
+		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
 			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)
 		});
 	}
+
+	// method to update an existing canvas.
 	private updateExistingCanvas(existingCanvas: HTMLCanvasElement) {
 		existingCanvas.replaceWith(this.canvas);
 	}
