@@ -7,6 +7,7 @@ import type {
 	MessageMappings,
 	MessageSource,
 	Messages,
+	OnScreenDisplayPosition,
 	Selector,
 	SendDataMessage,
 	YoutubePlayerQualityLevel,
@@ -567,4 +568,35 @@ export function createSVGElement<K extends keyof SVGElementTagNameMap>(
 	});
 
 	return element;
+}
+export function preventScroll(event: Event) {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	event.stopPropagation();
+}
+export function calculateCanvasPosition(displayPosition: OnScreenDisplayPosition, displayPadding: number, paddingTop: number, paddingBottom: number) {
+	let styles: Partial<CSSStyleDeclaration> = {};
+
+	switch (displayPosition) {
+		case "top_left":
+			styles = { left: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
+			break;
+		case "top_right":
+			styles = { right: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
+			break;
+		case "bottom_left":
+			styles = { bottom: `${displayPadding + paddingBottom}px`, left: `${displayPadding}px` };
+			break;
+		case "bottom_right":
+			styles = { bottom: `${displayPadding + paddingBottom}px`, right: `${displayPadding}px` };
+			break;
+		case "center":
+			styles = { left: "50%", top: "50%", transform: "translate(-50%, -50%)" };
+			break;
+		default:
+			console.error("Invalid display position");
+			break;
+	}
+
+	return styles;
 }
