@@ -3,17 +3,10 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { adjustVolume, setupScrollListeners } from "./utils";
+import { setupScrollListeners } from "../scrollWheelVolumeControl/utils";
+import { adjustSpeed } from "./utils";
 
-/**
- * Adjusts the volume on scroll wheel events.
- * It listens for scroll wheel events on specified container selectors,
- * adjusts the volume based on the scroll direction and options,
- * and updates the volume display.
- *
- * @returns {Promise<void>} A promise that resolves once the volume adjustment is completed.
- */
-export default async function adjustVolumeOnScrollWheel(): Promise<void> {
+export default async function adjustSpeedOnScrollWheel() {
 	// Wait for the "options" message from the content script
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
@@ -21,17 +14,23 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		data: { options }
 	} = optionsData;
 	// Extract the necessary properties from the options object
-	const { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl } = options;
-	// If scroll wheel volume control is disabled, return
-	if (!enableScrollWheelVolumeControl) return;
+	const { enable_scroll_wheel_speed_control: enableScrollWheelSpeedControl } = options;
+	// If scroll wheel speed control is disabled, return
+	if (!enableScrollWheelSpeedControl) return;
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-
+	// Get the player element
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
+	// If player element is not available, return
+	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	// If the video is live return
+	if (playerVideoData.isLive) return;
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
-		const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-		// If the settings panel menu is targeted return
-		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
@@ -44,26 +43,11 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				data: { options }
 			} = optionsData;
 			// Extract the necessary properties from the options object
-			const {
-				enable_scroll_wheel_speed_control,
-				enable_scroll_wheel_volume_control_hold_modifier_key,
-				enable_scroll_wheel_volume_control_hold_right_click,
-				scroll_wheel_speed_control_modifier_key,
-				scroll_wheel_volume_control_modifier_key
-			} = options;
+			const { enable_scroll_wheel_speed_control, scroll_wheel_speed_control_modifier_key } = options;
 			const wheelEvent = event as WheelEvent;
-			// If scroll wheel speed control is enabled and the modifier key is pressed return
-			if (enable_scroll_wheel_speed_control && wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
 			// If the modifier key is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key])
-				return void (await setOptionsData());
-			// If the right click is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
-			// If the right click is required and is pressed hide the context menu
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
-				const contextMenu = document.querySelector<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
-				if (contextMenu) contextMenu.style.display = "none";
-			}
+			if (enable_scroll_wheel_speed_control && !wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
+
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
@@ -79,10 +63,10 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			// If player element is not available, return
 			if (!playerContainer) return;
 
-			// Adjust the volume based on the scroll direction
+			// Adjust the speed based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
-			// Adjust the volume based on the scroll direction and options
-			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, options.volume_adjustment_steps);
+			// Adjust the speed based on the scroll direction and options
+			const { newSpeed } = await adjustSpeed(playerContainer, scrollDelta, options.speed_adjustment_steps);
 			new OnScreenDisplayManager(
 				{
 					displayColor: options.osd_display_color,
@@ -95,9 +79,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				},
 				"yte-osd",
 				{
-					max: 100,
-					type: "volume",
-					value: newVolume
+					max: 4,
+					type: "speed",
+					value: newSpeed
 				}
 			);
 		})();

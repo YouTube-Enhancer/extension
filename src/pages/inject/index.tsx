@@ -235,6 +235,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				screenshotButtonEnabled: newValue
 			});
 		},
+		enable_scroll_wheel_speed_control: (newValue) => {
+			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
+				scrollWheelSpeedControlEnabled: newValue
+			});
+		},
 		enable_scroll_wheel_volume_control: (newValue) => {
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
 				scrollWheelVolumeControlEnabled: newValue

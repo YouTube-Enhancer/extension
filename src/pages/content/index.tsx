@@ -14,6 +14,7 @@ import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } 
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
+import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, { addVolumeBoostButton, disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
@@ -100,6 +101,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				void setPlayerSpeed();
 				void volumeBoost();
 				void adjustVolumeOnScrollWheel();
+				void adjustSpeedOnScrollWheel();
 				void promptUserToResumeVideo(() => {
 					void setupVideoHistory();
 				});
@@ -123,7 +125,7 @@ window.addEventListener("DOMContentLoaded", function () {
 		 */
 		document.addEventListener("yte-message-from-extension", () => {
 			void (async () => {
-				const provider = document.querySelector("#yte-message-from-extension");
+				const provider = document.querySelector("div#yte-message-from-extension");
 				if (!provider) return;
 				const { textContent: stringifiedMessage } = provider;
 				if (!stringifiedMessage) return;
@@ -241,6 +243,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							void adjustVolumeOnScrollWheel();
 						} else {
 							eventManager.removeEventListeners("scrollWheelVolumeControl");
+						}
+						break;
+					}
+					case "scrollWheelSpeedControlChange": {
+						const {
+							data: { scrollWheelSpeedControlEnabled }
+						} = message;
+						if (scrollWheelSpeedControlEnabled) {
+							void adjustSpeedOnScrollWheel();
+						} else {
+							eventManager.removeEventListeners("scrollWheelSpeedControl");
 						}
 						break;
 					}
