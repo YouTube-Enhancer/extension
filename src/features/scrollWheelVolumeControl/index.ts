@@ -1,14 +1,10 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
+import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { adjustVolume, drawVolumeDisplay, setupScrollListeners } from "./utils";
+import { adjustVolume, setupScrollListeners } from "./utils";
 
-function preventScroll(event: Event) {
-	event.preventDefault();
-	event.stopImmediatePropagation();
-	event.stopPropagation();
-}
 /**
  * Adjusts the volume on scroll wheel events.
  * It listens for scroll wheel events on specified container selectors,
@@ -83,23 +79,23 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the volume based on the scroll direction and options
 			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, options.volume_adjustment_steps);
-
-			// Update the volume display
-			drawVolumeDisplay({
-				displayColor: options.osd_display_color,
-				displayHideTime: options.osd_display_hide_time,
-				displayOpacity: options.osd_display_opacity,
-				displayPadding: options.osd_display_padding,
-				displayPosition: options.osd_display_position,
-				displayType: options.osd_display_type,
-				playerContainer: playerContainer,
-				volume: newVolume
-			});
-			// If right click is required revert the context menu display
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
-				const contextMenu = document.querySelector<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
-				if (contextMenu) contextMenu.style.display = "";
-			}
+			new OnScreenDisplayManager(
+				{
+					displayColor: options.osd_display_color,
+					displayHideTime: options.osd_display_hide_time,
+					displayOpacity: options.osd_display_opacity,
+					displayPadding: options.osd_display_padding,
+					displayPosition: options.osd_display_position,
+					displayType: options.osd_display_type,
+					playerContainer: playerContainer
+				},
+				"yte-osd",
+				{
+					max: 100,
+					type: "volume",
+					value: newVolume
+				}
+			);
 		})();
 	};
 
