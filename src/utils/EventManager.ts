@@ -10,6 +10,7 @@ export type FeatureName =
 	| "remainingTime"
 	| "rememberVolume"
 	| "screenshotButton"
+	| "scrollWheelSpeedControl"
 	| "scrollWheelVolumeControl"
 	| "videoHistory"
 	| "volumeBoost";

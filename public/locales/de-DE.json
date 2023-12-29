@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+						}
+					}
+				},
 				"info": {
 					"reset": "Alle Optionen wurden auf ihre Standardwerte zurückgesetzt.\nSie können die Änderungen jetzt speichern, indem Sie auf den \"Bestätigen\"-Button klicken oder diese verwerfen, indem Sie diese Seite schließen oder diese Benachrichtigung ignorieren."
 				},
@@ -150,6 +158,56 @@
 				},
 				"title": "Weitere Einstellungen"
 			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "Color",
+					"options": {
+						"blue": "Blue",
+						"green": "Green",
+						"orange": "Orange",
+						"pink": "Pink",
+						"purple": "Purple",
+						"red": "Red",
+						"white": "White",
+						"yellow": "Yellow"
+					},
+					"title": "Select the color for the On-Screen Display"
+				},
+				"hide": {
+					"label": "Hide Delay",
+					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+				},
+				"opacity": {
+					"label": "Opacity",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"padding": {
+					"label": "Padding",
+					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+				},
+				"position": {
+					"label": "Position",
+					"options": {
+						"bottom_left": "Bottom Left",
+						"bottom_right": "Bottom Right",
+						"center": "Center",
+						"top_left": "Top Left",
+						"top_right": "Top Right"
+					},
+					"title": "Select the position of the On-Screen Display"
+				},
+				"title": "On-Screen Display Settings",
+				"type": {
+					"label": "Type",
+					"options": {
+						"line": "Line",
+						"no_display": "No display",
+						"round": "Round",
+						"text": "Text"
+					},
+					"title": "Select the type of On-Screen Display"
+				}
+			},
 			"playbackSpeed": {
 				"enable": {
 					"label": "Erzwungene Wiedergabegeschwindigkeit",
@@ -180,7 +238,27 @@
 				},
 				"title": "Screenshot-Einstellungen"
 			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "Speed Change Per Scroll",
+					"title": "Adjust the speed change per scroll"
+				},
+				"enable": {
+					"label": "Scroll wheel speed control",
+					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+				},
+				"optionLabel": "{{KEY}} key",
+				"select": {
+					"label": "Modifier key",
+					"title": "The modifier key to use"
+				},
+				"title": "Scroll wheel speed control settings"
+			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
 				"enable": {
 					"label": "Lautstärke durch Mausrad ändern",
 					"title": "Lässt dich das Scrollrad verwenden, um die Lautstärke des Videos zu steuern, das du siehst"
@@ -201,59 +279,6 @@
 						"label": "Aktivieren, wenn Rechtsklick gedrückt wird",
 						"title": "Rechtsklick gedrückt halten, um die Lautstärkeregelung des Scrollrades zu aktivieren"
 					}
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "Blau",
-						"green": "Grün",
-						"orange": "Orange",
-						"pink": "Rosa",
-						"purple": "Lila",
-						"red": "Rot",
-						"white": "Weiß",
-						"yellow": "Gelb"
-					},
-					"position": {
-						"bottom_left": "Unten Links",
-						"bottom_right": "Unten Rechts",
-						"center": "Mitte",
-						"top_left": "Oben Links",
-						"top_right": "Oben Rechts"
-					},
-					"type": {
-						"line": "Linie",
-						"no_display": "Keine Anzeige",
-						"round": "Rund",
-						"text": "Text"
-					}
-				},
-				"osdColor": {
-					"label": "OSD-Farbe",
-					"title": "Farbe für den On-Screen Display wählen"
-				},
-				"osdHide": {
-					"label": "Verstecken Verzögerung",
-					"title": "Geben Sie die Zeit in Millisekunden an, bevor der OSD automatisch versteckt wird"
-				},
-				"osdOpacity": {
-					"label": "OSD Transparenz",
-					"title": "Transparenz des On-Screen Display verändern"
-				},
-				"osdPadding": {
-					"label": "Abstand",
-					"title": "Passen Sie den Abstand um den Display auf dem Bildschirm (OSD) in Pixeln an. Dies gilt insbesondere für die Eck-OSD."
-				},
-				"osdPosition": {
-					"label": "OSD Position",
-					"title": "Wählt die Position des On-Screen Displays"
-				},
-				"osdType": {
-					"label": "OSD Typ",
-					"title": "Wähle den Style des On-Screen Displays"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "Lautstärke-Änderung pro Scroll",
-					"title": "Lautstärke-Änderung pro Scroll anpassen"
 				},
 				"title": "Lautstärke durch Mausrad ändern"
 			},

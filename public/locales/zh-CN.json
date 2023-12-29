@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+						}
+					}
+				},
 				"info": {
 					"reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
 				},
@@ -150,6 +158,56 @@
 				},
 				"title": "杂项设置"
 			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "Color",
+					"options": {
+						"blue": "Blue",
+						"green": "Green",
+						"orange": "Orange",
+						"pink": "Pink",
+						"purple": "Purple",
+						"red": "Red",
+						"white": "White",
+						"yellow": "Yellow"
+					},
+					"title": "Select the color for the On-Screen Display"
+				},
+				"hide": {
+					"label": "Hide Delay",
+					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+				},
+				"opacity": {
+					"label": "Opacity",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"padding": {
+					"label": "Padding",
+					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+				},
+				"position": {
+					"label": "Position",
+					"options": {
+						"bottom_left": "Bottom Left",
+						"bottom_right": "Bottom Right",
+						"center": "Center",
+						"top_left": "Top Left",
+						"top_right": "Top Right"
+					},
+					"title": "Select the position of the On-Screen Display"
+				},
+				"title": "On-Screen Display Settings",
+				"type": {
+					"label": "Type",
+					"options": {
+						"line": "Line",
+						"no_display": "No display",
+						"round": "Round",
+						"text": "Text"
+					},
+					"title": "Select the type of On-Screen Display"
+				}
+			},
 			"playbackSpeed": {
 				"enable": {
 					"label": "启用强制播放速度",
@@ -180,7 +238,27 @@
 				},
 				"title": "屏幕截图设置"
 			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "Speed Change Per Scroll",
+					"title": "Adjust the speed change per scroll"
+				},
+				"enable": {
+					"label": "Scroll wheel speed control",
+					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+				},
+				"optionLabel": "{{KEY}} key",
+				"select": {
+					"label": "Modifier key",
+					"title": "The modifier key to use"
+				},
+				"title": "Scroll wheel speed control settings"
+			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
 				"enable": {
 					"label": "启用滚轮音量控制",
 					"title": "让您使用滚轮来控制您正在观看的视频音量"
@@ -201,59 +279,6 @@
 						"label": "Enable when holding right click",
 						"title": "Hold right click to enable scroll wheel volume control"
 					}
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "蓝色",
-						"green": "绿色",
-						"orange": "橙色",
-						"pink": "粉色",
-						"purple": "紫色",
-						"red": "红色",
-						"white": "白色",
-						"yellow": "黄色"
-					},
-					"position": {
-						"bottom_left": "左下",
-						"bottom_right": "右下",
-						"center": "中间",
-						"top_left": "左上",
-						"top_right": "右上"
-					},
-					"type": {
-						"line": "直线",
-						"no_display": "没有显示",
-						"round": "圆形",
-						"text": "文本"
-					}
-				},
-				"osdColor": {
-					"label": "OSD Color",
-					"title": "Select the color for the On-Screen Display"
-				},
-				"osdHide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD"
-				},
-				"osdOpacity": {
-					"label": "OSD Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
-				},
-				"osdPadding": {
-					"label": "填充",
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD."
-				},
-				"osdPosition": {
-					"label": "OSD Position",
-					"title": "Select the position of the On-Screen Display"
-				},
-				"osdType": {
-					"label": "OSD Type",
-					"title": "Select the style of On-Screen Display"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
 				},
 				"title": "滚动滚轮音量控制设置"
 			},
