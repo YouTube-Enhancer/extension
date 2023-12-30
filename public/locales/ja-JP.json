@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "スクロールホイール再生速度制御キーバインドは、スクロールホイール音量制御キーバインドと同じにすることはできません。",
+							"volumeControl": "スクロールホイール音量制御キーバインドは、スクロールホイール再生速度制御キーバインドと同じにすることはできません。"
+						}
+					}
+				},
 				"info": {
 					"reset": "全てのオプションが省略時値でリセットしました。\n今変化を「確認」抓みでクリックするとセーブは可能するかページを閉じるで変化を破棄するかこの通知を捨て置くするは可能です。"
 				},
@@ -135,6 +143,10 @@
 						"label": "文字起こしを見せるボタン",
 						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"
@@ -149,6 +161,56 @@
 					}
 				},
 				"title": "他の設定"
+			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "OSDの色",
+					"options": {
+						"blue": "青色",
+						"green": "緑色",
+						"orange": "橙色",
+						"pink": "桃色",
+						"purple": "紫色",
+						"red": "赤色",
+						"white": "白色",
+						"yellow": "黄色"
+					},
+					"title": "オンスクリーンディスプレイ(OSD)の色を選択選ぶ"
+				},
+				"hide": {
+					"label": "非表示の遅延",
+					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します"
+				},
+				"opacity": {
+					"label": "OSDの不透明度",
+					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する"
+				},
+				"padding": {
+					"label": "スペーシング",
+					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。"
+				},
+				"position": {
+					"label": "ポジション",
+					"options": {
+						"bottom_left": "左下隅",
+						"bottom_right": "右下隅",
+						"center": "中心",
+						"top_left": "左上隅",
+						"top_right": "右上隅"
+					},
+					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
+				},
+				"title": "オンスクリーンディスプレイの設定",
+				"type": {
+					"label": "OSD型",
+					"options": {
+						"line": "ライン",
+						"no_display": "見せない",
+						"round": "丸い",
+						"text": "テキスト"
+					},
+					"title": "オンスクリーンディスプレイ(OSD)型を選択選ぶ"
+				}
 			},
 			"playbackSpeed": {
 				"enable": {
@@ -180,7 +242,27 @@
 				},
 				"title": "スクリーンショット設定"
 			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "スクロールごとの速度変化",
+					"title": "スクロールごとの速度変化の分量をする"
+				},
+				"enable": {
+					"label": "スクロールホイール再生速度制御",
+					"title": "キーバインドを押さえるでスクロールホイール再生速度制御可能にさせる。"
+				},
+				"optionLabel": "{{KEY}} キー",
+				"select": {
+					"label": "キーバインド",
+					"title": "キーバインド選択選ぶ"
+				},
+				"title": "スクロールホイール再生速度制御設定"
+			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "スクロールごとの音量変化",
+					"title": "スクロールごとの音量変化の分量をする"
+				},
 				"enable": {
 					"label": "スクロールホイール音量制御",
 					"title": "スクロールホイールを使用して、ビデオの音量を制御する。"
@@ -202,78 +284,25 @@
 						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする"
 					}
 				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "青色",
-						"green": "緑色",
-						"orange": "橙色",
-						"pink": "桃色",
-						"purple": "紫色",
-						"red": "赤色",
-						"white": "白色",
-						"yellow": "黄色"
-					},
-					"position": {
-						"bottom_left": "左下隅",
-						"bottom_right": "右下隅",
-						"center": "中心",
-						"top_left": "左上隅",
-						"top_right": "右上隅"
-					},
-					"type": {
-						"line": "ライン",
-						"no_display": "見せない",
-						"round": "丸い",
-						"text": "テキスト"
-					}
-				},
-				"osdColor": {
-					"label": "OSDの色",
-					"title": "オンスクリーンディスプレイ(OSD)の色を選択選べる"
-				},
-				"osdHide": {
-					"label": "非表示の遅延",
-					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します"
-				},
-				"osdOpacity": {
-					"label": "OSDの不透明度",
-					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する"
-				},
-				"osdPadding": {
-					"label": "スペーシング",
-					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。"
-				},
-				"osdPosition": {
-					"label": "OSDポジション",
-					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選べる"
-				},
-				"osdType": {
-					"label": "OSD型",
-					"title": "オンスクリーンディスプレイ(OSD)型を選択選べる"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "スクロール増分ごとの音量変更",
-					"title": "スクロール増分ごとの音量を調整する"
-				},
 				"title": "スクロールホイール音量制御設定"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "音量ブーストの量(dB)",
+					"title": "音量を上げる量"
 				},
 				"enable": {
 					"label": "音量ブースト",
-					"title": "Enable volume boost"
+					"title": "音量ブーストを可能にする"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "音量ブースト型",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "全て",
+							"perVideo": "動画ごと"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "音量ブーストの適用方法を選択します。「動画ごと」は別々の動画ごとを音量ブーストに可能する。「全て」は全ての動画を音量ブーストに付ける。"
 					}
 				},
 				"title": "音量ブーストの設定"

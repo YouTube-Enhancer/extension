@@ -19,6 +19,14 @@ interface EnUS {
 		};
 		options: {
 			notifications: {
+				error: {
+					scrollWheelHoldModifierKey: {
+						sameKey: {
+							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.";
+							volumeControl: "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key.";
+						};
+					};
+				};
 				info: {
 					reset: 'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.';
 				};
@@ -100,6 +108,10 @@ interface EnUS {
 						label: "Open transcript button";
 						title: "Adds a button to the feature menu to open the transcript of the video you're watching";
 					};
+					openYouTubeSettingsOnHover: {
+						label: "Open YouTube settings on hover";
+						title: "Opens the YouTube settings menu when you hover over the settings button";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -114,6 +126,48 @@ interface EnUS {
 					};
 				};
 				title: "Miscellaneous settings";
+			};
+			onScreenDisplaySettings: {
+				color: {
+					label: "Color";
+					options: {
+						blue: "Blue";
+						green: "Green";
+						orange: "Orange";
+						pink: "Pink";
+						purple: "Purple";
+						red: "Red";
+						white: "White";
+						yellow: "Yellow";
+					};
+					title: "Select the color for the On-Screen Display";
+				};
+				hide: {
+					label: "Hide Delay";
+					title: "Specify the time, in milliseconds, before automatically hiding the On-Screen Display";
+				};
+				opacity: { label: "Opacity"; title: "Adjust the transparency of the On-Screen Display" };
+				padding: {
+					label: "Padding";
+					title: "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display.";
+				};
+				position: {
+					label: "Position";
+					options: {
+						bottom_left: "Bottom Left";
+						bottom_right: "Bottom Right";
+						center: "Center";
+						top_left: "Top Left";
+						top_right: "Top Right";
+					};
+					title: "Select the position of the On-Screen Display";
+				};
+				title: "On-Screen Display Settings";
+				type: {
+					label: "Type";
+					options: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
+					title: "Select the type of On-Screen Display";
+				};
 			};
 			playbackSpeed: {
 				enable: {
@@ -133,7 +187,21 @@ interface EnUS {
 				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };
 				title: "Screenshot settings";
 			};
+			scrollWheelSpeedControl: {
+				adjustmentSteps: { label: "Speed Change Per Scroll"; title: "Adjust the speed change per scroll" };
+				enable: {
+					label: "Scroll wheel speed control";
+					title: "Press a modifier key to enable speed adjustment with the scroll wheel.";
+				};
+				optionLabel: "{{KEY}} key";
+				select: { label: "Modifier key"; title: "The modifier key to use" };
+				title: "Scroll wheel speed control settings";
+			};
 			scrollWheelVolumeControl: {
+				adjustmentSteps: {
+					label: "Volume Change Per Scroll";
+					title: "Adjust the volume change per scroll";
+				};
 				enable: {
 					label: "Scroll wheel volume control";
 					title: "Lets you use the scroll wheel to control the volume of the video you're watching";
@@ -151,45 +219,6 @@ interface EnUS {
 						label: "Enable when holding right click";
 						title: "Hold right click to enable scroll wheel volume control";
 					};
-				};
-				onScreenDisplay: {
-					colors: {
-						blue: "Blue";
-						green: "Green";
-						orange: "Orange";
-						pink: "Pink";
-						purple: "Purple";
-						red: "Red";
-						white: "White";
-						yellow: "Yellow";
-					};
-					position: {
-						bottom_left: "Bottom Left";
-						bottom_right: "Bottom Right";
-						center: "Center";
-						top_left: "Top Left";
-						top_right: "Top Right";
-					};
-					type: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
-				};
-				osdColor: { label: "OSD Color"; title: "Select the color for the On-Screen Display" };
-				osdHide: {
-					label: "Hide Delay";
-					title: "Specify the time, in milliseconds, before automatically hiding the OSD";
-				};
-				osdOpacity: {
-					label: "OSD Opacity";
-					title: "Adjust the transparency of the On-Screen Display";
-				};
-				osdPadding: {
-					label: "Padding";
-					title: "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD.";
-				};
-				osdPosition: { label: "OSD Position"; title: "Select the position of the On-Screen Display" };
-				osdType: { label: "OSD Type"; title: "Select the style of On-Screen Display" };
-				osdVolumeAdjustmentSteps: {
-					label: "Volume Change Per Scroll";
-					title: "Adjust the volume change per scroll";
 				};
 				title: "Scroll wheel volume control settings";
 			};

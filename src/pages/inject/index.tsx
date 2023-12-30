@@ -220,6 +220,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				openTranscriptButtonEnabled: newValue
 			});
 		},
+		enable_open_youtube_settings_on_hover: (newValue) => {
+			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
+				openYouTubeSettingsOnHoverEnabled: newValue
+			});
+		},
 		enable_remaining_time: (newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue
@@ -233,6 +238,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_screenshot_button: (newValue) => {
 			sendExtensionOnlyMessage("screenshotButtonChange", {
 				screenshotButtonEnabled: newValue
+			});
+		},
+		enable_scroll_wheel_speed_control: (newValue) => {
+			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
+				scrollWheelSpeedControlEnabled: newValue
 			});
 		},
 		enable_scroll_wheel_volume_control: (newValue) => {

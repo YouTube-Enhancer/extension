@@ -5,11 +5,13 @@ export type FeatureName =
 	| "loopButton"
 	| "maximizePlayerButton"
 	| "openTranscriptButton"
+	| "openYouTubeSettingsOnHover"
 	| "playerQuality"
 	| "playerSpeed"
 	| "remainingTime"
 	| "rememberVolume"
 	| "screenshotButton"
+	| "scrollWheelSpeedControl"
 	| "scrollWheelVolumeControl"
 	| "videoHistory"
 	| "volumeBoost";

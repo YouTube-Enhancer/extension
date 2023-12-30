@@ -50,9 +50,11 @@ export type configuration = {
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
+	enable_open_youtube_settings_on_hover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
+	enable_scroll_wheel_speed_control: boolean;
 	enable_scroll_wheel_volume_control: boolean;
 	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
 	enable_scroll_wheel_volume_control_hold_right_click: boolean;
@@ -71,7 +73,9 @@ export type configuration = {
 	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
+	scroll_wheel_speed_control_modifier_key: ModifierKey;
 	scroll_wheel_volume_control_modifier_key: ModifierKey;
+	speed_adjustment_steps: number;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
@@ -123,10 +127,17 @@ export type ExtensionSendOnlyMessageMappings = {
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
+	openYTSettingsOnHoverChange: DataResponseMessage<
+		"openYTSettingsOnHoverChange",
+		{
+			openYouTubeSettingsOnHoverEnabled: boolean;
+		}
+	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
+	scrollWheelSpeedControlChange: DataResponseMessage<"scrollWheelSpeedControlChange", { scrollWheelSpeedControlEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	volumeBoostChange: DataResponseMessage<

@@ -32,7 +32,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 ## 🎛️ Features
 
-### 1. Miscellaneous Settings
+### Miscellaneous Settings
 
 - **Remember Last Volume:** This option remembers the last volume set for Shorts and the Watch page separately, applying the appropriate volume when you revisit each type of video content.
 
@@ -50,47 +50,61 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Open Transcript Button:** Adds a button to the feature menu to open the video transcript (available if the video has a transcript).
 
-### 2. Scroll Wheel Volume Control Settings
+- **Open YouTube Settings On Hover:** Opens the settings menu when you hover over the settings button.
+
+### On-Screen Display Settings
+
+- **Color:** Select the color for the On-Screen Display (red, green, blue, orange, yellow, white, pink)
+
+- **Type:** Select the type of On-Screen Display (text, line, round, no display).
+
+- **Position:** Select the position of the On-Screen Display (top left, top right, bottom left, bottom right, center).
+
+- **Opacity:** Adjust the transparency of the On-Screen Display.
+
+- **Hide Delay:** Specify the time, in milliseconds, before automatically hiding the On-Screen Display.
+
+- **Padding:** Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display.
+
+### Scroll Wheel Speed Control Settings
+
+- **Scroll Wheel Speed Control:** Enables adjusting video speed with scroll wheel while holding the modifier key down.
+
+- **Modifier Key:** Select the modifier key for use with scroll wheel speed control.
+
+- **Speed Change Per Scroll:** The amount the speed is changed per scroll.
+
+### Scroll Wheel Volume Control Settings
 
 - **Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
 
-- **Scroll Wheel Volume Control Modifier Key**: Optionally, enable holding a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
+- **Enable when holding modifier key**: Optionally, enable holding a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
 
-- **Scroll Wheel Volume Control Right Click**: Optionally, enable holding down the right mouse button during scroll wheel actions.
-
-- **OSD Color:** Choose the color of the On-Screen Display (OSD) for volume control.
-
-- **OSD Type:** Define the type of OSD, including text, line, round, or no display.
-
-- **OSD Position:** Set where the OSD should be displayed on the screen (top left, top right, bottom left, bottom right, or center).
-
-- **OSD Opacity:** Adjust the opacity of the OSD for better visibility.
+- **Enable when holding right click**: Optionally, enable holding down the right mouse button during scroll wheel actions.
 
 - **Amount to Adjust Volume per Scroll:** Define how much the volume should change with each scroll.
 
-- **Time to Hide OSD:** Set the time delay before the OSD disappears.
-
-- **Padding for OSD:** Define the amount of padding to add to the OSD (applies to corner OSD).
-
-### 3. Automatic Quality Settings
+### Automatic Quality Settings
 
 - **Automatically Set Quality:** Automatically sets the video quality to the chosen level.
 
 - **Player Quality:** Choose the desired video quality for playback.
 
-### 4. Playback Speed Settings
+### Playback Speed Settings
 
 - **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
 - **Player Speed:** Define the playback speed for videos.
 
-### 5. Volume Boost Settings
+### Volume Boost Settings
 
-- **Volume Boost Mode Selection:** Introduced in version 1.18.0, this feature allows users to choose how the volume boost is applied. You can select 'Per Video' mode to enable volume boost for each video individually, or 'Global' mode to apply volume boost to all videos when the feature is enabled.
+- **Volume Boost:** Enables the volume boost feature.
+
+- **Volume Boost Mode Selection:** You can select 'Per Video' mode to enable volume boost for each video individually, or 'Global' mode to apply volume boost to all videos when the feature is enabled.
 
 - **Volume Boost Amount (dB):** Specify the amount by which to boost the volume. This setting applies to both 'Per Video' and 'Global' modes.
 
-### 6. Screenshot Settings
+### Screenshot Settings
 
 - **Screenshot Button:** Adds a button to the player for taking screenshots of videos.
 

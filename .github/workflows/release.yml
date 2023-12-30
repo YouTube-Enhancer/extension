@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
       - name: Run Semantic Release
         run: |
           touch .env
@@ -28,6 +29,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}
+
+      - name: Push changes to main branch
+        run: |
+          # Ensure we are on the main branch
+          git checkout main
+
+          # Push local changes to the main branch
+          git push origin main
 
       - name: Merge changes from main into dev
         run: |

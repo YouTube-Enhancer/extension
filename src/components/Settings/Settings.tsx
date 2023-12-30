@@ -187,21 +187,7 @@ export default function Settings() {
 			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
-	const {
-		colors: { blue, green, orange, pink, purple, red, white, yellow },
-		position: { bottom_left, bottom_right, center, top_left, top_right },
-		type: { line, no_display, round, text }
-	} = t("settings.sections.scrollWheelVolumeControl.onScreenDisplay", {
-		defaultValue: {},
-		returnObjects: true
-	});
-	const {
-		saveAs: { clipboard, file }
-	} = t("settings.sections.screenshotButton", {
-		defaultValue: {},
-		returnObjects: true
-	});
-	const scrollWheelVolumeControlModifierKeyOptions = [
+	const scrollWheelControlModifierKeyOptions = [
 		{
 			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
 				KEY: "Alt"
@@ -224,82 +210,82 @@ export default function Settings() {
 	const colorOptions: SelectOption[] = [
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
-			label: red,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
-			label: green,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
-			label: blue,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
-			label: yellow,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
-			label: orange,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
-			label: purple,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
-			label: pink,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
 			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
-			label: white,
+			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
 	];
 	const OSD_DisplayTypeOptions: SelectOption[] = [
 		{
-			label: no_display,
+			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
 		},
 		{
-			label: text,
+			label: t("settings.sections.onScreenDisplaySettings.type.options.text"),
 			value: "text"
 		},
 		{
-			label: line,
+			label: t("settings.sections.onScreenDisplaySettings.type.options.line"),
 			value: "line"
 		},
 		{
-			label: round,
+			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
 			value: "round"
 		}
 	];
 	const OSD_PositionOptions: SelectOption[] = [
 		{
-			label: top_left,
+			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
 		},
 		{
-			label: top_right,
+			label: t("settings.sections.onScreenDisplaySettings.position.options.top_right"),
 			value: "top_right"
 		},
 		{
-			label: bottom_left,
+			label: t("settings.sections.onScreenDisplaySettings.position.options.bottom_left"),
 			value: "bottom_left"
 		},
 		{
-			label: bottom_right,
+			label: t("settings.sections.onScreenDisplaySettings.position.options.bottom_right"),
 			value: "bottom_right"
 		},
 		{
-			label: center,
+			label: t("settings.sections.onScreenDisplaySettings.position.options.center"),
 			value: "center"
 		}
 	];
@@ -323,8 +309,8 @@ export default function Settings() {
 		{ label: "WebP", value: "webp" }
 	];
 	const ScreenshotSaveAsOptions: SelectOption[] = [
-		{ label: file, value: "file" },
-		{ label: clipboard, value: "clipboard" }
+		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
+		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
 	];
 	const VolumeBoostModeOptions: SelectOption[] = [
 		{
@@ -513,6 +499,135 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.openTranscriptButton.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_open_youtube_settings_on_hover?.toString() === "true"}
+						id="enable_open_youtube_settings_on_hover"
+						label={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.label")}
+						onChange={setCheckboxOption("enable_open_youtube_settings_on_hover")}
+						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
+						type="checkbox"
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.onScreenDisplaySettings.title")} />
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_color"
+						label={t("settings.sections.onScreenDisplaySettings.color.label")}
+						onChange={setValueOption("osd_display_color")}
+						options={colorOptions}
+						selectedOption={getSelectedOption("osd_display_color")}
+						title={t("settings.sections.onScreenDisplaySettings.color.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_type"
+						label={t("settings.sections.onScreenDisplaySettings.type.label")}
+						onChange={setValueOption("osd_display_type")}
+						options={OSD_DisplayTypeOptions}
+						selectedOption={getSelectedOption("osd_display_type")}
+						title={t("settings.sections.onScreenDisplaySettings.type.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_position"
+						label={t("settings.sections.onScreenDisplaySettings.position.label")}
+						onChange={setValueOption("osd_display_position")}
+						options={OSD_PositionOptions}
+						selectedOption={getSelectedOption("osd_display_position")}
+						title={t("settings.sections.onScreenDisplaySettings.position.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_opacity"
+						label={t("settings.sections.onScreenDisplaySettings.opacity.label")}
+						max={100}
+						min={1}
+						onChange={setValueOption("osd_display_opacity")}
+						title={t("settings.sections.onScreenDisplaySettings.opacity.title")}
+						type="number"
+						value={settings.osd_display_opacity}
+					/>
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_hide_time"
+						label={t("settings.sections.onScreenDisplaySettings.hide.label")}
+						min={1}
+						onChange={setValueOption("osd_display_hide_time")}
+						title={t("settings.sections.onScreenDisplaySettings.hide.title")}
+						type="number"
+						value={settings.osd_display_hide_time}
+					/>
+					<Setting
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
+						id="osd_display_padding"
+						label={t("settings.sections.onScreenDisplaySettings.padding.label")}
+						min={0}
+						onChange={setValueOption("osd_display_padding")}
+						title={t("settings.sections.onScreenDisplaySettings.padding.title")}
+						type="number"
+						value={settings.osd_display_padding}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.scrollWheelSpeedControl.title")} />
+					<Setting
+						checked={settings.enable_scroll_wheel_speed_control?.toString() === "true"}
+						id="enable_scroll_wheel_speed_control"
+						label={t("settings.sections.scrollWheelSpeedControl.enable.label")}
+						onChange={setCheckboxOption("enable_scroll_wheel_speed_control")}
+						title={t("settings.sections.scrollWheelSpeedControl.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
+						id="scroll_wheel_speed_control_modifier_key"
+						label={t("settings.sections.scrollWheelSpeedControl.select.label")}
+						onChange={(value) => {
+							const {
+								currentTarget: { value: scrollWheelModifierKey }
+							} = value;
+							if (
+								settings.enable_scroll_wheel_speed_control &&
+								settings.enable_scroll_wheel_volume_control_hold_modifier_key &&
+								settings.scroll_wheel_volume_control_modifier_key === scrollWheelModifierKey
+							) {
+								return addNotification("error", "pages.options.notifications.error.scrollWheelHoldModifierKey.sameKey.speedControl");
+							}
+							setValueOption("scroll_wheel_speed_control_modifier_key")(value);
+						}}
+						options={scrollWheelControlModifierKeyOptions}
+						selectedOption={getSelectedOption("scroll_wheel_speed_control_modifier_key")}
+						title={t("settings.sections.scrollWheelSpeedControl.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
+						id="speed_adjustment_steps"
+						label={t("settings.sections.scrollWheelSpeedControl.adjustmentSteps.label")}
+						max={1}
+						min={0.05}
+						onChange={setValueOption("speed_adjustment_steps")}
+						step={0.05}
+						title={t("settings.sections.scrollWheelSpeedControl.adjustmentSteps.title")}
+						type="number"
+						value={settings.speed_adjustment_steps}
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.scrollWheelVolumeControl.title")} />
@@ -544,82 +659,33 @@ export default function Settings() {
 						disabled={settings.enable_scroll_wheel_volume_control_hold_modifier_key?.toString() !== "true"}
 						id="scroll_wheel_volume_control_modifier_key"
 						label={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.label")}
-						onChange={setValueOption("scroll_wheel_volume_control_modifier_key")}
-						options={scrollWheelVolumeControlModifierKeyOptions}
+						onChange={(value) => {
+							const {
+								currentTarget: { value: scrollWheelModifierKey }
+							} = value;
+							if (
+								settings.enable_scroll_wheel_speed_control &&
+								settings.enable_scroll_wheel_volume_control_hold_modifier_key &&
+								settings.scroll_wheel_speed_control_modifier_key === scrollWheelModifierKey
+							) {
+								return addNotification("error", "pages.options.notifications.error.scrollWheelHoldModifierKey.sameKey.volumeControl");
+							}
+							setValueOption("scroll_wheel_volume_control_modifier_key")(value);
+						}}
+						options={scrollWheelControlModifierKeyOptions}
 						selectedOption={getSelectedOption("scroll_wheel_volume_control_modifier_key")}
 						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.title")}
 						type="select"
 					/>
 					<Setting
 						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_color"
-						label={t("settings.sections.scrollWheelVolumeControl.osdColor.label")}
-						onChange={setValueOption("osd_display_color")}
-						options={colorOptions}
-						selectedOption={getSelectedOption("osd_display_color")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdColor.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_type"
-						label={t("settings.sections.scrollWheelVolumeControl.osdType.label")}
-						onChange={setValueOption("osd_display_type")}
-						options={OSD_DisplayTypeOptions}
-						selectedOption={getSelectedOption("osd_display_type")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdType.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_position"
-						label={t("settings.sections.scrollWheelVolumeControl.osdPosition.label")}
-						onChange={setValueOption("osd_display_position")}
-						options={OSD_PositionOptions}
-						selectedOption={getSelectedOption("osd_display_position")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdPosition.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_opacity"
-						label={t("settings.sections.scrollWheelVolumeControl.osdOpacity.label")}
-						max={100}
-						min={1}
-						onChange={setValueOption("osd_display_opacity")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdOpacity.title")}
-						type="number"
-						value={settings.osd_display_opacity}
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
 						id="volume_adjustment_steps"
-						label={t("settings.sections.scrollWheelVolumeControl.osdVolumeAdjustmentSteps.label")}
+						label={t("settings.sections.scrollWheelVolumeControl.adjustmentSteps.label")}
 						min={1}
 						onChange={setValueOption("volume_adjustment_steps")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdVolumeAdjustmentSteps.title")}
+						title={t("settings.sections.scrollWheelVolumeControl.adjustmentSteps.title")}
 						type="number"
 						value={settings.volume_adjustment_steps}
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_hide_time"
-						label={t("settings.sections.scrollWheelVolumeControl.osdHide.label")}
-						min={1}
-						onChange={setValueOption("osd_display_hide_time")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdHide.title")}
-						type="number"
-						value={settings.osd_display_hide_time}
-					/>
-					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
-						id="osd_display_padding"
-						label={t("settings.sections.scrollWheelVolumeControl.osdPadding.label")}
-						min={0}
-						onChange={setValueOption("osd_display_padding")}
-						title={t("settings.sections.scrollWheelVolumeControl.osdPadding.title")}
-						type="number"
-						value={settings.osd_display_padding}
 					/>
 				</SettingSection>
 				<SettingSection>

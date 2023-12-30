@@ -18,7 +18,7 @@
 					"label": "Maximizar"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Abrir transcripción"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+						}
+					}
+				},
 				"info": {
 					"reset": "Todas las opciones han sido preestablecidas a sus valores de por defecto.\nAhora puedes guardarlas haciendo clic en el botón \"Confirmar\" o descartarlas cerrando esta página o ignorando esta notificación."
 				},
@@ -83,11 +91,11 @@
 						"label": "Menu Activation Type",
 						"options": {
 							"click": "Click",
-							"hover": "Hover"
+							"hover": "Pasar el cursor por encima"
 						},
 						"title": "Select the method to activate the feature menu"
 					},
-					"title": "Feature menu settings"
+					"title": "Configuración del menú"
 				}
 			},
 			"importExportSettings": {
@@ -125,15 +133,19 @@
 					},
 					"loopButton": {
 						"label": "Botón de bucle",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"title": "Añade un botón al menú para poner en bucle el vídeo que estás viendo"
 					},
 					"maximizePlayerButton": {
 						"label": "Botón de maximizar en el reproductor",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"title": "Añade un botón al menú para maximizar el reproductor"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Botón \"Abrir transcripción\"",
+						"title": "Añade un botón al menú para abrir la transcripción del video que estás viendo"
+					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"remainingTime": {
 						"label": "Tiempo restante",
@@ -149,6 +161,56 @@
 					}
 				},
 				"title": "Ajustes varios"
+			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "Color",
+					"options": {
+						"blue": "Azul",
+						"green": "Verde",
+						"orange": "Naranja",
+						"pink": "Rosa",
+						"purple": "Morado",
+						"red": "Rojo",
+						"white": "Blanco",
+						"yellow": "Amarillo"
+					},
+					"title": "Select the color for the On-Screen Display"
+				},
+				"hide": {
+					"label": "Oculta el retardo",
+					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+				},
+				"opacity": {
+					"label": "Opacidad",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"padding": {
+					"label": "Margen",
+					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+				},
+				"position": {
+					"label": "Position",
+					"options": {
+						"bottom_left": "Parte inferior izquierda",
+						"bottom_right": "Parte inferior derecha",
+						"center": "Centrado",
+						"top_left": "Parte superior izquierda",
+						"top_right": "Parte superior derecha"
+					},
+					"title": "Select the position of the On-Screen Display"
+				},
+				"title": "On-Screen Display Settings",
+				"type": {
+					"label": "Tipo",
+					"options": {
+						"line": "Line",
+						"no_display": "No mostrar",
+						"round": "Round",
+						"text": "Text"
+					},
+					"title": "Select the type of On-Screen Display"
+				}
 			},
 			"playbackSpeed": {
 				"enable": {
@@ -180,7 +242,27 @@
 				},
 				"title": "Ajustes de captura de pantalla"
 			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "Volumen cambiado por cada scroll con la rueda del ratón",
+					"title": "Ajustar la velocidad que cambia por el scroll de la rueda del ratón"
+				},
+				"enable": {
+					"label": "Control de velocidad con la rueda",
+					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+				},
+				"optionLabel": "{{KEY}} key",
+				"select": {
+					"label": "Modifier key",
+					"title": "The modifier key to use"
+				},
+				"title": "Scroll wheel speed control settings"
+			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
+				},
 				"enable": {
 					"label": "Control de volumen con la rueda",
 					"title": "Te permite usar la rueda del ratón para controlar el volumen del vídeo que estás viendo"
@@ -201,59 +283,6 @@
 						"label": "Activar al mantener pulsado el botón derecho",
 						"title": "Mantenga pulsado el botón derecho para activar el control de volumen con la rueda del ratón"
 					}
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "Azul",
-						"green": "Verde",
-						"orange": "Naranja",
-						"pink": "Rosa",
-						"purple": "Morado",
-						"red": "Rojo",
-						"white": "Blanco",
-						"yellow": "Amarillo"
-					},
-					"position": {
-						"bottom_left": "Parte inferior izquierda",
-						"bottom_right": "Parte inferior derecha",
-						"center": "Centrado",
-						"top_left": "Parte superior izquierda",
-						"top_right": "Parte superior derecha"
-					},
-					"type": {
-						"line": "Línea",
-						"no_display": "No mostrar",
-						"round": "Redondeado",
-						"text": "Texto"
-					}
-				},
-				"osdColor": {
-					"label": "Color del visualizador en pantalla",
-					"title": "Selecciona el color que será usado por el visualizador en pantalla"
-				},
-				"osdHide": {
-					"label": "Ocultar retardo",
-					"title": "Especifique el tiempo, en milisegundos, antes de ocultar automáticamente el visualizador en pantalla"
-				},
-				"osdOpacity": {
-					"label": "Opacidad del visualizador en pantalla",
-					"title": "Ajusta la transparencia del visualizador en pantalla"
-				},
-				"osdPadding": {
-					"label": "Relleno",
-					"title": "Ajuste el espacio alrededor dl visualizador en pantalla en píxeles. Esto se aplica específicamente al visualizador de pantalla de la esquina."
-				},
-				"osdPosition": {
-					"label": "Posición del visualizador en pantalla",
-					"title": "Selecciona la posición del visualizador en pantalla"
-				},
-				"osdType": {
-					"label": "Tipo de visualizador en pantalla",
-					"title": "Selecciona el estilo del visualizador en pantalla"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "Volumen cambiado por desplazamiento",
-					"title": "Volumen ajustado por desplazamiento de la rueda del ratón"
 				},
 				"title": "Ajustes de control de volumen con la rueda del ratón"
 			},

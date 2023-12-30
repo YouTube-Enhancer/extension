@@ -9,11 +9,13 @@ import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton, removeTranscriptButton } from "@/src/features/openTranscriptButton";
+import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
+import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, { addVolumeBoostButton, disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
@@ -89,6 +91,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
+				void enableOpenYouTubeSettingsOnHover();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -100,6 +103,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				void setPlayerSpeed();
 				void volumeBoost();
 				void adjustVolumeOnScrollWheel();
+				void adjustSpeedOnScrollWheel();
 				void promptUserToResumeVideo(() => {
 					void setupVideoHistory();
 				});
@@ -123,7 +127,7 @@ window.addEventListener("DOMContentLoaded", function () {
 		 */
 		document.addEventListener("yte-message-from-extension", () => {
 			void (async () => {
-				const provider = document.querySelector("#yte-message-from-extension");
+				const provider = document.querySelector("div#yte-message-from-extension");
 				if (!provider) return;
 				const { textContent: stringifiedMessage } = provider;
 				if (!stringifiedMessage) return;
@@ -244,6 +248,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "scrollWheelSpeedControlChange": {
+						const {
+							data: { scrollWheelSpeedControlEnabled }
+						} = message;
+						if (scrollWheelSpeedControlEnabled) {
+							void adjustSpeedOnScrollWheel();
+						} else {
+							eventManager.removeEventListeners("scrollWheelSpeedControl");
+						}
+						break;
+					}
 					case "rememberVolumeChange": {
 						const {
 							data: { rememberVolumeEnabled }
@@ -285,7 +300,7 @@ window.addEventListener("DOMContentLoaded", function () {
 					case "automaticTheaterModeChange": {
 						// Get the player element
 						const playerContainer =
-							isWatchPage() ? document.querySelector("div#movie_player")
+							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
 							: isShortsPage() ? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return
@@ -313,6 +328,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							void openTranscriptButton();
 						} else {
 							void removeTranscriptButton();
+						}
+						break;
+					}
+					case "openYTSettingsOnHoverChange": {
+						const {
+							data: { openYouTubeSettingsOnHoverEnabled }
+						} = message;
+						if (openYouTubeSettingsOnHoverEnabled) {
+							void enableOpenYouTubeSettingsOnHover();
+						} else {
+							void disableOpenYouTubeSettingsOnHover();
 						}
 						break;
 					}

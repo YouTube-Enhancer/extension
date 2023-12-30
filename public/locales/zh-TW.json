@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "滾輪播放速度輔助按鍵不能跟音量增強輔助按鍵相同。",
+							"volumeControl": "滾輪音量增強輔助按鍵不能跟播放速度輔助按鍵相同。"
+						}
+					}
+				},
 				"info": {
 					"reset": "全部選項已回復到初始值。\n你現在可以使用「確定」按鈕儲存選項，或關閉此頁放棄更改，亦可無視這個提示。"
 				},
@@ -135,6 +143,10 @@
 						"label": "開啟文字記錄按鈕",
 						"title": "加入按鈕開啟當前影片的文子記錄"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
 						"label": "剩餘時間",
 						"title": "顥示現時影片的剩餘時間"
@@ -149,6 +161,56 @@
 					}
 				},
 				"title": "其他設定"
+			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "顏色",
+					"options": {
+						"blue": "藍色",
+						"green": "綠色",
+						"orange": "橙色",
+						"pink": "粉紅色",
+						"purple": "紫色",
+						"red": "紅色",
+						"white": "白色",
+						"yellow": "黃色"
+					},
+					"title": "選擇屏幕顥示的顏色"
+				},
+				"hide": {
+					"label": "隱藏延遲",
+					"title": "指定多少毫秒後自動隱藏屏幕顥示"
+				},
+				"opacity": {
+					"label": "透明度",
+					"title": "調節屏幕顥示的透明度"
+				},
+				"padding": {
+					"label": "填充",
+					"title": "以像素為單位調整屏幕顥示周圍的空間，適用於置於角落的屏幕顥示。"
+				},
+				"position": {
+					"label": "位置",
+					"options": {
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "置中",
+						"top_left": "左上",
+						"top_right": "右上"
+					},
+					"title": "選擇屏幕顥示的位置"
+				},
+				"title": "屏幕顥示設定",
+				"type": {
+					"label": "類型",
+					"options": {
+						"line": "線條",
+						"no_display": "不顯示",
+						"round": "圓形",
+						"text": "文字"
+					},
+					"title": "選擇屏幕顥示風格"
+				}
 			},
 			"playbackSpeed": {
 				"enable": {
@@ -180,7 +242,27 @@
 				},
 				"title": "螢幕截圖設定"
 			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "每次滾動的速度增減",
+					"title": "調整每次滾動時的播放速度幅度"
+				},
+				"enable": {
+					"label": "滾輪播放速度控制",
+					"title": "按住輔助按鍵來啟用播放速度調節"
+				},
+				"optionLabel": "{{KEY}} 鍵",
+				"select": {
+					"label": "輔助按鍵",
+					"title": "使用的輔助按鍵"
+				},
+				"title": "滾輪播放速度控制設定"
+			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "每次滾動的音量增減",
+					"title": "調整每次滾動時的音量增減幅度"
+				},
 				"enable": {
 					"label": "滾輪音量控制",
 					"title": "使用滑鼠滾輪控制現在播放的影片音量"
@@ -202,78 +284,25 @@
 						"title": "住滑鼠右鍵時啟用滾輪音量調節"
 					}
 				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "藍色",
-						"green": "綠色",
-						"orange": "橙色",
-						"pink": "粉紅色",
-						"purple": "紫色",
-						"red": "紅色",
-						"white": "白色",
-						"yellow": "黃色"
-					},
-					"position": {
-						"bottom_left": "左下",
-						"bottom_right": "右下",
-						"center": "置中",
-						"top_left": "左上",
-						"top_right": "右上"
-					},
-					"type": {
-						"line": "線狀",
-						"no_display": "不顯示",
-						"round": "圓形",
-						"text": "文字"
-					}
-				},
-				"osdColor": {
-					"label": "OSD 顏色",
-					"title": "選擇 OSD 的顏色"
-				},
-				"osdHide": {
-					"label": "隱藏延遲",
-					"title": "指定多少毫秒後自動隱藏 OSD"
-				},
-				"osdOpacity": {
-					"label": "OSD 透明度",
-					"title": "調節OSD的透明度"
-				},
-				"osdPadding": {
-					"label": "填充",
-					"title": "以像素為單位調整屏幕顥示 (OSD) 周圍的空間，適用於置於角落的 OSD。"
-				},
-				"osdPosition": {
-					"label": "OSD 位置",
-					"title": "選擇 OSD 的顯示位置"
-				},
-				"osdType": {
-					"label": "OSD 方式",
-					"title": "選擇 OSD 的顯示風格"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "每次滾動的音量增減",
-					"title": "調整每次滾動時的音量增減幅度"
-				},
 				"title": "滾輪音量控制設定"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "音量增強度 (分貝)",
+					"title": "將音量增幅至"
 				},
 				"enable": {
 					"label": "音量增強",
-					"title": "Enable volume boost"
+					"title": "啟用音量增強"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "音量增強模式",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "全局",
+							"perVideo": "單獨"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "選擇音量增強如何應用到影片。「單獨」能使用選單為該影片開啟音量增強。「全局」在啟用音量增強時會應用到所影片。"
 					}
 				},
 				"title": "音量增強設定"

@@ -7,6 +7,7 @@ import {
 	createTooltip,
 	isShortsPage,
 	isWatchPage,
+	round,
 	sendContentMessage,
 	waitForSpecificMessage
 } from "@/utils/utilities";
@@ -89,6 +90,8 @@ export async function promptUserToResumeVideo(cb: () => void) {
 }
 // Utility function to check if an element exists
 const elementExists = (elementId: string) => !!document.getElementById(elementId);
+let animationFrameId: null | number = null;
+let start: null | number = null;
 function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv, cb: () => void) {
 	const progressBarId = "resume-prompt-progress-bar";
 	const overlayId = "resume-prompt-overlay";
@@ -96,7 +99,6 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	const resumeButtonId = "resume-prompt-button";
 	const promptId = "resume-prompt";
 	const progressBarDuration = 15;
-	let countdownInterval: NodeJS.Timeout | undefined;
 
 	const prompt = createStyledElement({
 		elementId: promptId,
@@ -185,19 +187,26 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	function startCountdown() {
 		if (prompt) prompt.style.display = "block";
 		if (overlay) overlay.style.display = "block";
-		let countdown = progressBarDuration;
-		countdownInterval = setInterval(() => {
-			countdown--;
-			progressBar.style.width = `${(countdown / progressBarDuration) * 100}%`;
-
-			if (countdown <= 0) {
+		if (animationFrameId) {
+			cancelAnimationFrame(animationFrameId);
+			animationFrameId = null;
+		}
+		function updateResumeProgress(timestamp: number) {
+			if (!start) start = timestamp;
+			const elapsed = round(timestamp - start);
+			const progress = round(Math.min(elapsed / (progressBarDuration * 1000), 1), 2);
+			progressBar.style.width = `${round((1 - progress) * 100, 2)}%`;
+			if (progress < 1) {
+				animationFrameId = requestAnimationFrame(updateResumeProgress);
+			} else {
 				hidePrompt();
 			}
-		}, 1000);
+		}
+		animationFrameId = requestAnimationFrame(updateResumeProgress);
 	}
 
 	function hidePrompt() {
-		clearInterval(countdownInterval);
+		if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		prompt.style.display = "none";
 		overlay.style.display = "none";
 		cb();

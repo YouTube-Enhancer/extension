@@ -2,8 +2,8 @@
 	"langCode": "pt-BR",
 	"langName": "Português do Brasil",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "Retomando vídeo em {{VIDEO_TIME}}",
+		"settingVolume": "Definindo o ganho de volume para {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
@@ -37,6 +37,14 @@
 		},
 		"options": {
 			"notifications": {
+				"error": {
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "A tecla modificadora de controle de velocidade da rodinha do mouse não pode ser o mesmo que a tecla modificadora de controle de volume da rodinha do mouse.",
+							"volumeControl": "A tecla modificadora de controle de volume da rodinha do mouse não pode ser o mesmo que a tecla modificadora de controle de velocidade da rodinha do mouse."
+						}
+					}
+				},
 				"info": {
 					"reset": "Todas as opções foram restauradas aos seus valores padrão.\nAgora você pode salvar as mudanças clicando no botão \"Confirmar\" ou descartá-las fechando a página ou ignorando essa notificação."
 				},
@@ -48,33 +56,33 @@
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"allDataDeleted": "Todos os dados foram excluídos.",
+			"confirmAlert": "Isto irá apagar todos os dados da extensão relacionados às opções. Continuar?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Automatic quality adjustment",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"label": "Ajuste automático de qualidade",
+					"title": "Ajusta automaticamente a qualidade do vídeo para o nível selecionado."
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "Qualidade do reprodutor",
+					"title": "A qualidade a ser definida para o vídeo"
 				},
-				"title": "Automatic quality settings"
+				"title": "Configurações de qualidade automáticas"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "Limpa todos os dados que esta extensão armazenou em sua máquina",
+					"value": "Limpar Dados"
 				},
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "Confirmar redefinição de configuração",
+					"value": "Confirmar"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"title": "Redefinir todas as configurações para seus padrões, Clique no botão confirmar para salvar as alterações",
+					"value": "Redefinir"
 				}
 			},
 			"featureMenu": {
@@ -108,10 +116,10 @@
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Linguagem",
+					"title": "A linguagem a ser usada para a extensão"
 				},
-				"title": "Language"
+				"title": "Linguagem"
 			},
 			"miscellaneous": {
 				"features": {
@@ -135,6 +143,10 @@
 						"label": "Abrir botão de transcrição",
 						"title": "Adiciona um botão ao menu de recursos para abrir a transcrição do vídeo que você está assistindo"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
 						"label": "Tempo restante",
 						"title": "Mostra o tempo restante do vídeo que você está assistindo"
@@ -150,133 +162,150 @@
 				},
 				"title": "Configurações diversas"
 			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "Cor",
+					"options": {
+						"blue": "Azul",
+						"green": "Verde",
+						"orange": "Laranja",
+						"pink": "Rosa",
+						"purple": "Roxo",
+						"red": "Vermelho",
+						"white": "Branco",
+						"yellow": "Amarelo"
+					},
+					"title": "Select the color for the On-Screen Display"
+				},
+				"hide": {
+					"label": "Atraso para esconder",
+					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+				},
+				"opacity": {
+					"label": "Opacidade",
+					"title": "Adjust the transparency of the On-Screen Display"
+				},
+				"padding": {
+					"label": "Espaçamento",
+					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+				},
+				"position": {
+					"label": "Posição",
+					"options": {
+						"bottom_left": "Inferior Esquerdo",
+						"bottom_right": "Inferior direito",
+						"center": "Centralizado",
+						"top_left": "Superior esquerdo",
+						"top_right": "Superior Direito"
+					},
+					"title": "Select the position of the On-Screen Display"
+				},
+				"title": "On-Screen Display Settings",
+				"type": {
+					"label": "Tipo",
+					"options": {
+						"line": "Linha",
+						"no_display": "Sem exibição",
+						"round": "Arredondado",
+						"text": "Texto"
+					},
+					"title": "Select the type of On-Screen Display"
+				}
+			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Forced playback speed",
-					"title": "Sets the video speed to what you choose below"
+					"label": "Velocidade de reprodução forçada",
+					"title": "Define a velocidade do vídeo para a que você escolher abaixo"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Velocidade do reprodutor",
+					"title": "A velocidade a ser definida para o vídeo"
 				},
-				"title": "Playback speed settings"
+				"title": "Configurações de velocidade de reprodução"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Screenshot button",
-					"title": "Adds a button to the player to take a screenshot of the video"
+					"label": "Botão de captura de tela",
+					"title": "Adiciona um botão ao reprodutor para tirar uma captura de tela do vídeo"
 				},
 				"saveAs": {
-					"clipboard": "Clipboard",
-					"file": "File"
+					"clipboard": "Área de Transferência",
+					"file": "Arquivo"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "Formato da captura de tela",
+					"title": "O formato para salvar a captura de tela"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "Tipo de armazenamento da captura de tela",
+					"title": "O tipo de armazenamento da captura de tela"
 				},
-				"title": "Screenshot settings"
+				"title": "Opções de captura de tela"
+			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "Mudar Volume por Rolagem",
+					"title": "Ajusta a mudança de velocidade por rolagem"
+				},
+				"enable": {
+					"label": "Controle de velocidade da rodinha do mouse",
+					"title": "Pressione uma tecla modificadora para ativar o ajuste de velocidade com a rodinha do mouse."
+				},
+				"optionLabel": "Tecla {{KEY}}",
+				"select": {
+					"label": "Tecla modificadora",
+					"title": "A tecla modificadora a ser usada"
+				},
+				"title": "Configurações de controle de volume pela rodinha do mouse"
 			},
 			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "Mudar Volume por Rolagem",
+					"title": "Ajuste a mudança de volume por rolagem"
+				},
 				"enable": {
 					"label": "Controle do volume por rodinha do mouse",
 					"title": "Permite usar a rodinha do mouse para controlar o volume do vídeo que você está assistindo"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "Ativar ao segurar a tecla modificadora",
+						"title": "Pressione uma tecla modificadora para ativar o ajuste de volume com a rodinha do mouse."
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "Tecla {{KEY}}",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "Tecla modificadora",
+						"title": "A tecla modificadora a ser usada"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "Ativar ao segurar o botão direito",
+						"title": "Segure o botão direito para ativar o controle de volume da rodinha do mouse"
 					}
-				},
-				"onScreenDisplay": {
-					"colors": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
-					},
-					"position": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
-					},
-					"type": {
-						"line": "Line",
-						"no_display": "No display",
-						"round": "Round",
-						"text": "Text"
-					}
-				},
-				"osdColor": {
-					"label": "OSD Color",
-					"title": "Select the color for the On-Screen Display"
-				},
-				"osdHide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the OSD"
-				},
-				"osdOpacity": {
-					"label": "OSD Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
-				},
-				"osdPadding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the on-screen display (OSD) in pixels. This applies specifically to corner OSD."
-				},
-				"osdPosition": {
-					"label": "OSD Position",
-					"title": "Select the position of the On-Screen Display"
-				},
-				"osdType": {
-					"label": "OSD Type",
-					"title": "Select the style of On-Screen Display"
-				},
-				"osdVolumeAdjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
 				},
 				"title": "Configurações de controle do volume por rodinha do mouse"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Quantidade de impulsão de volume (dB)",
+					"title": "O valor para impulsionar o volume em"
 				},
 				"enable": {
-					"label": "Volume boost",
-					"title": "Enable volume boost"
+					"label": "Impulso do volume",
+					"title": "Ativar impulso de volume"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "Modo de impulso de volume",
 						"options": {
 							"global": "Global",
-							"perVideo": "Per video"
+							"perVideo": "Por vídeo"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Escolha como o impulso de volume é aplicado. 'Por vídeo' permite ativar o impulso para cada vídeo individualmente no menu de recursos. 'Global' aplica impulso a todos os vídeos quando o impulso de volume está habilitado."
 					}
 				},
-				"title": "Volume boost settings"
+				"title": "Configurações de impulso de volume"
 			}
 		}
 	}
