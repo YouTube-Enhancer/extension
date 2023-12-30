@@ -50,6 +50,7 @@ export type configuration = {
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
+	enable_open_youtube_settings_on_hover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
@@ -126,6 +127,12 @@ export type ExtensionSendOnlyMessageMappings = {
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
+	openYTSettingsOnHoverChange: DataResponseMessage<
+		"openYTSettingsOnHoverChange",
+		{
+			openYouTubeSettingsOnHoverEnabled: boolean;
+		}
+	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;

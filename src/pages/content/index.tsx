@@ -9,6 +9,7 @@ import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton, removeTranscriptButton } from "@/src/features/openTranscriptButton";
+import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -90,6 +91,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
+				void enableOpenYouTubeSettingsOnHover();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -298,7 +300,7 @@ window.addEventListener("DOMContentLoaded", function () {
 					case "automaticTheaterModeChange": {
 						// Get the player element
 						const playerContainer =
-							isWatchPage() ? document.querySelector("div#movie_player")
+							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
 							: isShortsPage() ? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return
@@ -326,6 +328,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							void openTranscriptButton();
 						} else {
 							void removeTranscriptButton();
+						}
+						break;
+					}
+					case "openYTSettingsOnHoverChange": {
+						const {
+							data: { openYouTubeSettingsOnHoverEnabled }
+						} = message;
+						if (openYouTubeSettingsOnHoverEnabled) {
+							void enableOpenYouTubeSettingsOnHover();
+						} else {
+							void disableOpenYouTubeSettingsOnHover();
 						}
 						break;
 					}

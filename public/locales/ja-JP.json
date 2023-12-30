@@ -143,6 +143,10 @@
 						"label": "文字起こしを見せるボタン",
 						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"

@@ -108,6 +108,10 @@ interface EnUS {
 						label: "Open transcript button";
 						title: "Adds a button to the feature menu to open the transcript of the video you're watching";
 					};
+					openYouTubeSettingsOnHover: {
+						label: "Open YouTube settings on hover";
+						title: "Opens the YouTube settings menu when you hover over the settings button";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";

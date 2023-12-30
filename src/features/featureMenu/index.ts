@@ -1,7 +1,7 @@
-import type { FeatureMenuOpenType, YouTubePlayerDiv } from "@/src/types";
+import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, createStyledElement, createTooltip, isShortsPage, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
+import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
 
 import { waitForSpecificMessage } from "../../utils/utilities";
 
@@ -54,10 +54,7 @@ async function createFeatureMenuButton() {
 	// Get references to various elements and check their existence
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? null
-		: null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("div#player-container.ytd-watch-flexy") : null;
 	if (!playerContainer) return;
 	// Insert the feature menu button and feature menu itself
 	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
@@ -109,10 +106,7 @@ function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? null
-		: null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("div#player-container.ytd-watch-flexy") : null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
@@ -125,12 +119,20 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		featureName: "featureMenu",
 		id: "yte-feature-menu-tooltip"
 	});
+	const hideYouTubeSettings = () => {
+		const settingsMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+		if (!settingsMenu) return;
+		if (settingsMenu.style.display === "none") return;
+		settingsButton.click();
+	};
 	const showFeatureMenu = () => {
+		if (featureMenu.style.display !== "none") return;
 		adjustAdsContainerStyles(true);
 		bottomControls.style.opacity = "1";
 		featureMenu.style.display = "block";
 	};
 	const hideFeatureMenu = () => {
+		if (featureMenu.style.display === "none") return;
 		adjustAdsContainerStyles(false);
 		featureMenu.style.display = "none";
 		bottomControls.style.opacity = "";
@@ -143,6 +145,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			hideFeatureMenu();
 		}
 	};
+
 	switch (featureMenuOpenType) {
 		case "click": {
 			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
@@ -168,8 +171,20 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				featureMenuButton,
 				"mouseover",
 				() => {
+					hideYouTubeSettings();
 					showFeatureMenuTooltip();
 					showFeatureMenu();
+				},
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				featureMenuButton,
+				"mouseleave",
+				(event) => {
+					if (event.target !== featureMenu) {
+						removeFeatureMenuTooltip();
+						hideFeatureMenu();
+					}
 				},
 				"featureMenu"
 			);

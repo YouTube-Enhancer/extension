@@ -5,6 +5,7 @@ export type FeatureName =
 	| "loopButton"
 	| "maximizePlayerButton"
 	| "openTranscriptButton"
+	| "openYouTubeSettingsOnHover"
 	| "playerQuality"
 	| "playerSpeed"
 	| "remainingTime"

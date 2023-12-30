@@ -187,7 +187,7 @@ export default function Settings() {
 			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
-	const scrollWheelVolumeControlModifierKeyOptions = [
+	const scrollWheelControlModifierKeyOptions = [
 		{
 			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
 				KEY: "Alt"
@@ -499,6 +499,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.openTranscriptButton.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_open_youtube_settings_on_hover?.toString() === "true"}
+						id="enable_open_youtube_settings_on_hover"
+						label={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.label")}
+						onChange={setCheckboxOption("enable_open_youtube_settings_on_hover")}
+						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.onScreenDisplaySettings.title")} />
@@ -603,7 +611,7 @@ export default function Settings() {
 							}
 							setValueOption("scroll_wheel_speed_control_modifier_key")(value);
 						}}
-						options={scrollWheelVolumeControlModifierKeyOptions}
+						options={scrollWheelControlModifierKeyOptions}
 						selectedOption={getSelectedOption("scroll_wheel_speed_control_modifier_key")}
 						title={t("settings.sections.scrollWheelSpeedControl.select.title")}
 						type="select"
@@ -664,7 +672,7 @@ export default function Settings() {
 							}
 							setValueOption("scroll_wheel_volume_control_modifier_key")(value);
 						}}
-						options={scrollWheelVolumeControlModifierKeyOptions}
+						options={scrollWheelControlModifierKeyOptions}
 						selectedOption={getSelectedOption("scroll_wheel_volume_control_modifier_key")}
 						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.title")}
 						type="select"
