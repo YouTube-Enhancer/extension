@@ -220,6 +220,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				openTranscriptButtonEnabled: newValue
 			});
 		},
+		enable_open_youtube_settings_on_hover: (newValue) => {
+			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
+				openYouTubeSettingsOnHoverEnabled: newValue
+			});
+		},
 		enable_remaining_time: (newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue

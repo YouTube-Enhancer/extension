@@ -40,8 +40,8 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Клавиша-модификатор для управления скоростью воспроизведения с помощью колеса прокрутки не может совпадать с клавишей-модификатором для управления громкостью.",
+							"volumeControl": "Клавиша-модификатор для управления громкостью с помощью колеса прокрутки не может совпадать с клавишей-модификатором для управления скоростью воспроизведения."
 						}
 					}
 				},
@@ -143,6 +143,10 @@
 						"label": "Показать кнопку стенограммы видео",
 						"title": "Добавляет кнопку в меню функций, чтобы открыть стенограмму видео, которое вы просматриваете"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
 						"title": "Показывает оставшееся время просмотра видео"
@@ -160,52 +164,52 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Цвет",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Синий",
+						"green": "Зеленый",
+						"orange": "Оранжевый",
+						"pink": "Розовый",
+						"purple": "Фиолетовый",
+						"red": "Красный",
+						"white": "Белый",
+						"yellow": "Желтый"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Выберите цвет для отображения на экране (OSD)"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "Задержка скрытия",
+					"title": "Укажите время, в миллисекундах, перед автоматическим скрытием OSD"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Прозрачность",
+					"title": "Настройка прозрачности отображения на экране (OSD)"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "Отступы",
+					"title": "Регулировка интервала вокруг отображения на экране (OSD) в пикселях. Применяется в частности для углов OSD."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Расположение",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "Слева снизу",
+						"bottom_right": "Справа снизу",
+						"center": "По центру",
+						"top_left": "Слева сверху",
+						"top_right": "Справа сверху"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Выберите позицию отображения на экране (OSD)"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Настройки отображения на экране (OSD)",
 				"type": {
-					"label": "Type",
+					"label": "Тип",
 					"options": {
-						"line": "Line",
-						"no_display": "No display",
-						"round": "Round",
-						"text": "Text"
+						"line": "Линия",
+						"no_display": "Не показывать",
+						"round": "Круг",
+						"text": "Текст"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Выберите тип отображения на экране (OSD)"
 				}
 			},
 			"playbackSpeed": {
@@ -240,24 +244,24 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Изменение скорости воспроизведения за прокрутку колеса",
+					"title": "Регулировка значения, на которое изменяется скорость воспроизведения за прокрутку"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"label": "Включить управление скоростью воспроизведения с помощью колеса прокрутки",
+					"title": "Нажмите клавишу-модификатор, чтобы включить управление скоростью воспроизведения с помощью колеса прокрутки."
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "Клавиша {{KEY}}",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "Клавиша-модификатор",
+					"title": "Используемая клавиша-модификатор"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "Настройки управления скоростью воспроизведения с помощью колеса прокрутки"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "Изменение громкости за прокрутку колеса",
+					"title": "Регулировка значения, на которое изменяется громкость за прокрутку"
 				},
 				"enable": {
 					"label": "Включить управление громкостью с помощью колеса прокрутки",

@@ -18,7 +18,7 @@
 					"label": "Maximizar"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Abrir transcripción"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
@@ -91,11 +91,11 @@
 						"label": "Menu Activation Type",
 						"options": {
 							"click": "Click",
-							"hover": "Hover"
+							"hover": "Pasar el cursor por encima"
 						},
 						"title": "Select the method to activate the feature menu"
 					},
-					"title": "Feature menu settings"
+					"title": "Configuración del menú"
 				}
 			},
 			"importExportSettings": {
@@ -133,15 +133,19 @@
 					},
 					"loopButton": {
 						"label": "Botón de bucle",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"title": "Añade un botón al menú para poner en bucle el vídeo que estás viendo"
 					},
 					"maximizePlayerButton": {
 						"label": "Botón de maximizar en el reproductor",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"title": "Añade un botón al menú para maximizar el reproductor"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Botón \"Abrir transcripción\"",
+						"title": "Añade un botón al menú para abrir la transcripción del video que estás viendo"
+					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"remainingTime": {
 						"label": "Tiempo restante",
@@ -162,46 +166,46 @@
 				"color": {
 					"label": "Color",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Azul",
+						"green": "Verde",
+						"orange": "Naranja",
+						"pink": "Rosa",
+						"purple": "Morado",
+						"red": "Rojo",
+						"white": "Blanco",
+						"yellow": "Amarillo"
 					},
 					"title": "Select the color for the On-Screen Display"
 				},
 				"hide": {
-					"label": "Hide Delay",
+					"label": "Oculta el retardo",
 					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
 				},
 				"opacity": {
-					"label": "Opacity",
+					"label": "Opacidad",
 					"title": "Adjust the transparency of the On-Screen Display"
 				},
 				"padding": {
-					"label": "Padding",
+					"label": "Margen",
 					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 				},
 				"position": {
 					"label": "Position",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "Parte inferior izquierda",
+						"bottom_right": "Parte inferior derecha",
+						"center": "Centrado",
+						"top_left": "Parte superior izquierda",
+						"top_right": "Parte superior derecha"
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
 				"title": "On-Screen Display Settings",
 				"type": {
-					"label": "Type",
+					"label": "Tipo",
 					"options": {
 						"line": "Line",
-						"no_display": "No display",
+						"no_display": "No mostrar",
 						"round": "Round",
 						"text": "Text"
 					},
@@ -240,11 +244,11 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Volumen cambiado por cada scroll con la rueda del ratón",
+					"title": "Ajustar la velocidad que cambia por el scroll de la rueda del ratón"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
+					"label": "Control de velocidad con la rueda",
 					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
 				"optionLabel": "{{KEY}} key",

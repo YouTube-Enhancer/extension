@@ -12,13 +12,13 @@
 					"label": "Özellik menüsü"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Döngü"
 				},
 				"maximizePlayerButton": {
 					"label": "Ekranı Kapla"
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Not dökümünü aç"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
@@ -132,7 +132,7 @@
 						"title": "Hides the pages scrollbar"
 					},
 					"loopButton": {
-						"label": "Loop button",
+						"label": "Tekrarlama düğmesi",
 						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
 					},
 					"maximizePlayerButton": {
@@ -140,11 +140,15 @@
 						"title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
+						"label": "Not dökümü düğmesini gizle",
 						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open YouTube settings on hover",
+						"title": "Opens the YouTube settings menu when you hover over the settings button"
+					},
 					"remainingTime": {
-						"label": "Remaining time",
+						"label": "Kalan süre",
 						"title": "Shows the remaining time of the video you're watching"
 					},
 					"rememberLastVolume": {
@@ -160,11 +164,11 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Renk",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
+						"blue": "Mavi",
+						"green": "Yeşil",
+						"orange": "Turuncu",
 						"pink": "Pink",
 						"purple": "Purple",
 						"red": "Red",
