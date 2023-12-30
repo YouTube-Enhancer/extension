@@ -231,6 +231,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="http://livingflore.me"><img src="https://avatars.githubusercontent.com/u/63370734?v=4?s=100" width="100px;" alt="livingflore"/><br /><sub><b>livingflore</b></sub></a><br /><a href="#translation-livingflore" title="Translation">🌍</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/crvt7"><img src="https://avatars.githubusercontent.com/u/79649679?v=4?s=100" width="100px;" alt="Patryk Popardowski"/><br /><sub><b>Patryk Popardowski</b></sub></a><br /><a href="#translation-crvt7" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/luisaosan"><img src="https://avatars.githubusercontent.com/u/48157083?v=4?s=100" width="100px;" alt="Luis Felipe"/><br /><sub><b>Luis Felipe</b></sub></a><br /><a href="#translation-luisaosan" title="Translation">🌍</a></td>
     </tr>
   </tbody>
