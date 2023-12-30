@@ -228,6 +228,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lamyergeier"><img src="https://avatars.githubusercontent.com/u/42092626?v=4?s=100" width="100px;" alt="Lamyergeier"/><br /><sub><b>Lamyergeier</b></sub></a><br /><a href="#ideas-lamyergeier" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SleepyPrince"><img src="https://avatars.githubusercontent.com/u/670216?v=4?s=100" width="100px;" alt="Jackal Chan"/><br /><sub><b>Jackal Chan</b></sub></a><br /><a href="#translation-SleepyPrince" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://livingflore.me"><img src="https://avatars.githubusercontent.com/u/63370734?v=4?s=100" width="100px;" alt="livingflore"/><br /><sub><b>livingflore</b></sub></a><br /><a href="#translation-livingflore" title="Translation">🌍</a></td>
     </tr>
   </tbody>
 </table>
