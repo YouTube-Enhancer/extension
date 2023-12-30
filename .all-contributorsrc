@@ -65,6 +65,33 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "livingflore",
+      "name": "livingflore",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63370734?v=4",
+      "profile": "http://livingflore.me",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "crvt7",
+      "name": "Patryk Popardowski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79649679?v=4",
+      "profile": "https://github.com/crvt7",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "luisaosan",
+      "name": "Luis Felipe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48157083?v=4",
+      "profile": "https://github.com/luisaosan",
+      "contributions": [
+        "translation"
+      ]
     }
   ]
 }

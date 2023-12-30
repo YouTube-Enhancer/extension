@@ -1,3 +1,23 @@
+# [1.19.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.18.0...v1.19.0) (2023-12-30)
+
+
+### Features
+
+* Open YouTube settings on hover ([cff4db4](https://github.com/VampireChicken12/youtube-enhancer/commit/cff4db481b68b7528195ad5d2f0b51b1d7a4d1d3))
+* Scroll Wheel Speed Control ([327eb36](https://github.com/VampireChicken12/youtube-enhancer/commit/327eb36e4d35f7954f18738ba50ff4bd319c2da9)), closes [#177](https://github.com/VampireChicken12/youtube-enhancer/issues/177)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.19.0-Chrome.zip | dbfbac7e9632061d33f393fb66f94847fb29d0d7026315948421ea762db2641d |
+| youtube-enhancer-v1.19.0-Chromium.zip | dbfbac7e9632061d33f393fb66f94847fb29d0d7026315948421ea762db2641d |
+| youtube-enhancer-v1.19.0-Edge.zip | dbfbac7e9632061d33f393fb66f94847fb29d0d7026315948421ea762db2641d |
+| youtube-enhancer-v1.19.0-Firefox.zip | 3059346f451ccfaf8d9b8562a039322bc6520a7187db2598b51114e4b35fbb9d |
+
 # [1.18.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.17.3...v1.18.0) (2023-12-20)
 
 
