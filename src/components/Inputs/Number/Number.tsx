@@ -38,10 +38,10 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 	};
 
 	const handleChange = (value: string) => {
-		if (min && parseInt(value) < min) value = min + "";
-		if (max && parseInt(value) > max) value = max + "";
+		if (min && parseFloat(value) < min) value = min + "";
+		if (max && parseFloat(value) > max) value = max + "";
 
-		if (!isNaN(parseInt(value))) {
+		if (!isNaN(parseFloat(value))) {
 			onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 		}
 	};
