@@ -1,3 +1,22 @@
+## [1.19.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.0...v1.19.1) (2023-12-30)
+
+
+### Bug Fixes
+
+* float not working ([ee68665](https://github.com/VampireChicken12/youtube-enhancer/commit/ee686651275a88cb53314be51dbd81b114d7b697))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.19.1-Chrome.zip | 26afa0b596e1002122c237e4b7f2a40c79a79afab80b85db90aa0b762852deda |
+| youtube-enhancer-v1.19.1-Chromium.zip | 26afa0b596e1002122c237e4b7f2a40c79a79afab80b85db90aa0b762852deda |
+| youtube-enhancer-v1.19.1-Edge.zip | 26afa0b596e1002122c237e4b7f2a40c79a79afab80b85db90aa0b762852deda |
+| youtube-enhancer-v1.19.1-Firefox.zip | 7d28ffd3e4c0f1d25e91e9307ee06fa76fd33c1ee73b7569dea4dfe3dbc89a6a |
+
 # [1.19.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.18.0...v1.19.0) (2023-12-30)
 
 
