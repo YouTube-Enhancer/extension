@@ -40,8 +40,8 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "A tecla modificadora de controle de velocidade da rodinha do mouse não pode ser o mesmo que a tecla modificadora de controle de volume da rodinha do mouse.",
-							"volumeControl": "A tecla modificadora de controle de volume da rodinha do mouse não pode ser o mesmo que a tecla modificadora de controle de velocidade da rodinha do mouse."
+							"speedControl": "A tecla modificadora de controle de velocidade da roda do mouse não pode ser o mesmo que a tecla modificadora de controle de volume da roda do mouse.",
+							"volumeControl": "A tecla modificadora de controle de volume da roda do mouse não pode ser o mesmo que a tecla modificadora de controle de velocidade da roda do mouse."
 						}
 					}
 				},
@@ -128,7 +128,7 @@
 						"title": "Ativar automaticamente o modo teatro quando você carregar um vídeo"
 					},
 					"hideScrollbar": {
-						"label": "Oculta a barra de rolagem",
+						"label": "Ocultar a barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
 					"loopButton": {
@@ -144,8 +144,8 @@
 						"title": "Adiciona um botão ao menu de recursos para abrir a transcrição do vídeo que você está assistindo"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "Abrir configurações do YouTube ao passar o mouse",
+						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
@@ -175,19 +175,19 @@
 						"white": "Branco",
 						"yellow": "Amarelo"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Seleciona a cor para as informações na tela"
 				},
 				"hide": {
 					"label": "Atraso para esconder",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"title": "Especifique o tempo, em milissegundos, antes de ocultar automaticamente as informações na tela"
 				},
 				"opacity": {
 					"label": "Opacidade",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"title": "Ajusta a transparência das informações na tela"
 				},
 				"padding": {
 					"label": "Espaçamento",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"title": "Ajuste o espaçamento em torno das informações na tela em pixels. Isso se aplica especificamente ao canto das informações na tela."
 				},
 				"position": {
 					"label": "Posição",
@@ -198,9 +198,9 @@
 						"top_left": "Superior esquerdo",
 						"top_right": "Superior Direito"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Selecione a posição das informações na tela"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Configurações das informações na tela",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -209,7 +209,7 @@
 						"round": "Arredondado",
 						"text": "Texto"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Selecione o tipo de informações na tela"
 				}
 			},
 			"playbackSpeed": {
@@ -248,15 +248,15 @@
 					"title": "Ajusta a mudança de velocidade por rolagem"
 				},
 				"enable": {
-					"label": "Controle de velocidade da rodinha do mouse",
-					"title": "Pressione uma tecla modificadora para ativar o ajuste de velocidade com a rodinha do mouse."
+					"label": "Controle de velocidade da roda do mouse",
+					"title": "Pressione uma tecla modificadora para ativar o ajuste de velocidade com a roda do mouse."
 				},
 				"optionLabel": "Tecla {{KEY}}",
 				"select": {
 					"label": "Tecla modificadora",
 					"title": "A tecla modificadora a ser usada"
 				},
-				"title": "Configurações de controle de volume pela rodinha do mouse"
+				"title": "Configurações de controle de volume pela roda do mouse"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
@@ -264,13 +264,13 @@
 					"title": "Ajuste a mudança de volume por rolagem"
 				},
 				"enable": {
-					"label": "Controle do volume por rodinha do mouse",
-					"title": "Permite usar a rodinha do mouse para controlar o volume do vídeo que você está assistindo"
+					"label": "Controle do volume por roda do mouse",
+					"title": "Permite usar a roda do mouse para controlar o volume do vídeo que você está assistindo"
 				},
 				"holdModifierKey": {
 					"enable": {
 						"label": "Ativar ao segurar a tecla modificadora",
-						"title": "Pressione uma tecla modificadora para ativar o ajuste de volume com a rodinha do mouse."
+						"title": "Pressione uma tecla modificadora para ativar o ajuste de volume com a roda do mouse."
 					},
 					"optionLabel": "Tecla {{KEY}}",
 					"select": {
@@ -281,10 +281,10 @@
 				"holdRightClick": {
 					"enable": {
 						"label": "Ativar ao segurar o botão direito",
-						"title": "Segure o botão direito para ativar o controle de volume da rodinha do mouse"
+						"title": "Segure o botão direito para ativar o controle de volume da roda do mouse"
 					}
 				},
-				"title": "Configurações de controle do volume por rodinha do mouse"
+				"title": "Configurações de controle do volume por roda do mouse"
 			},
 			"volumeBoost": {
 				"boostAmount": {
