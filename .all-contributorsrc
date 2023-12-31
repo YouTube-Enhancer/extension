@@ -101,6 +101,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "rado84-github",
+      "name": "rado84",
+      "avatar_url": "https://avatars.githubusercontent.com/u/41172201?v=4",
+      "profile": "https://github.com/rado84-github",
+      "contributions": [
+        "bug"
+      ]
     }
   ]
 }
