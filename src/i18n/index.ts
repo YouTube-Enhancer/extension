@@ -33,7 +33,7 @@ export const localePercentages: Record<AvailableLocales, number> = {
   "it-IT": 0,
   "ja-JP": 97,
   "pl-PL": 1,
-  "pt-BR": 89,
+  "pt-BR": 100,
   "ru-RU": 97,
   "tr-TR": 34,
   "zh-CN": 1,
