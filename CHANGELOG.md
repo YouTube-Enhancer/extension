@@ -1,3 +1,22 @@
+## [1.19.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.1...v1.19.2) (2023-12-31)
+
+
+### Bug Fixes
+
+* **feature menu:** being hidden when player is maximized ([7365b64](https://github.com/VampireChicken12/youtube-enhancer/commit/7365b6463dacc18c2170eac9d90d8ea534ceba12))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.19.2-Chrome.zip | 0c4af2f535521c24a5199389bf3fb20aa73466b0ed9bf407abe483c294cc2cfe |
+| youtube-enhancer-v1.19.2-Chromium.zip | 0c4af2f535521c24a5199389bf3fb20aa73466b0ed9bf407abe483c294cc2cfe |
+| youtube-enhancer-v1.19.2-Edge.zip | 0c4af2f535521c24a5199389bf3fb20aa73466b0ed9bf407abe483c294cc2cfe |
+| youtube-enhancer-v1.19.2-Firefox.zip | 270b259ec2d4c50d975a46f20fe2f8c4733ee0d7a519bdf9eb17517a22f2748f |
+
 ## [1.19.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.0...v1.19.1) (2023-12-30)
 
 
