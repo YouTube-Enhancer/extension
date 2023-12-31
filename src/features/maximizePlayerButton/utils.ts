@@ -69,6 +69,8 @@ export function maximizePlayer() {
 	if (!controlsElement) return;
 	const sizeElement = document.querySelector("button.ytp-button.ytp-size-button");
 	if (!sizeElement) return;
+	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+	if (!featureMenu) return;
 	const {
 		childNodes: [svgElement]
 	} = sizeElement;
@@ -121,6 +123,7 @@ export function maximizePlayer() {
 		videoElement.classList.remove("maximized_video");
 		videoContainer.classList.remove("maximized_video_container");
 		controlsElement.classList.remove("maximized_controls");
+		featureMenu.style.bottom = "";
 	} else {
 		// sizeElement.click();
 
@@ -141,5 +144,6 @@ export function maximizePlayer() {
 		videoElement.classList.add("maximized_video");
 		videoContainer.classList.add("maximized_video_container");
 		controlsElement.classList.add("maximized_controls");
+		featureMenu.style.bottom = "-14px";
 	}
 }

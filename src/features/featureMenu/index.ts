@@ -12,7 +12,8 @@ function createFeatureMenu() {
 		elementId: "yte-feature-menu",
 		elementType: "div",
 		styles: {
-			display: "none"
+			display: "none",
+			zIndex: "2050"
 		}
 	});
 	// Create the feature menu panel
