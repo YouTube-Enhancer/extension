@@ -93,7 +93,7 @@
 							"click": "Click",
 							"hover": "Pasar el cursor por encima"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Selecciona el método para abrir el menú"
 					},
 					"title": "Configuración del menú"
 				}
@@ -144,8 +144,8 @@
 						"title": "Añade un botón al menú para abrir la transcripción del video que estás viendo"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "Abrir ajustes de YouTube al pasar el cursor",
+						"title": "Abre el menú de configuración de YouTube cuando pasa el cursor por encima del botón de ajustes"
 					},
 					"remainingTime": {
 						"label": "Tiempo restante",
@@ -190,7 +190,7 @@
 					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Posición",
 					"options": {
 						"bottom_left": "Parte inferior izquierda",
 						"bottom_right": "Parte inferior derecha",
@@ -249,19 +249,19 @@
 				},
 				"enable": {
 					"label": "Control de velocidad con la rueda",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"title": "Pulsa una tecla para activar el ajuste de velocidad con la rueda del ratón."
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "Tecla {{KEY}}",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "Tecla modificadora",
+					"title": "Tecla a usar"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "Ajustes sobre el control de velocidad con la rueda del ratón"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "Velocidad cambiada por cada scroll con la rueda del ratón",
+					"title": "Ajustar el volumen que cambia por el scroll de la rueda del ratón"
 				},
 				"enable": {
 					"label": "Control de volumen con la rueda",
@@ -288,21 +288,21 @@
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Incremento de volumen (dB)",
+					"title": "Cuantos decibelios quieres aumentar el volumen"
 				},
 				"enable": {
 					"label": "Potenciador de volumen",
-					"title": "Enable volume boost"
+					"title": "Activar incremento de volumen"
 				},
 				"mode": {
 					"select": {
 						"label": "Volume boost mode",
 						"options": {
 							"global": "Global",
-							"perVideo": "Per video"
+							"perVideo": "Por vídeo"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Elegir cómo se aplica el aumento de volumen. 'Por vídeo' permite activar optimización para cada video individualmente en el menú de características. 'Global' aplica el boost a todos los vídeos cuando el aumento de volumen está activado."
 					}
 				},
 				"title": "Ajustes de potenciado de volumen"

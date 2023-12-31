@@ -144,8 +144,8 @@
 						"title": "加入按鈕開啟當前影片的文子記錄"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "懸浮時開啟設定選單",
+						"title": "鼠標懸浮在設定按鈕時開啟選單"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
