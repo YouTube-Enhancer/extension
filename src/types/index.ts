@@ -5,6 +5,7 @@ import z from "zod";
 
 import type { AvailableLocales } from "../i18n";
 import type { FeatureName } from "../utils/EventManager";
+export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
 export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
