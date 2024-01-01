@@ -39,9 +39,7 @@ export async function enableOpenYouTubeSettingsOnHover() {
 		settingsButton,
 		"mouseleave",
 		(event) => {
-			if (event.target === settingsMenu) return;
-			if (event.target === settingsButton) return;
-			hideSettings();
+			if (event.target !== settingsMenu) hideSettings();
 		},
 		"openYouTubeSettingsOnHover"
 	);

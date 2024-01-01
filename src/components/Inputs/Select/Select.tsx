@@ -112,4 +112,4 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 		</div>
 	);
 };
-export default Select;
+export { Select };
