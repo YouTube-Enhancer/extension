@@ -1,3 +1,28 @@
+# [1.20.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.4...v1.20.0) (2024-01-05)
+
+
+### Bug Fixes
+
+* **open settings on hoover:** fix settings hiding when it shouldn't ([1129f8e](https://github.com/VampireChicken12/youtube-enhancer/commit/1129f8ec208d8e877182be9547aa25cb02e76a06))
+* open yt settings on hover not staying open ([50957a0](https://github.com/VampireChicken12/youtube-enhancer/commit/50957a04d1a22f54f9a8ed291ef1b19ae1819e2c))
+
+
+### Features
+
+* custom css ([268a75f](https://github.com/VampireChicken12/youtube-enhancer/commit/268a75f1540418644831f9928d3aa6a53f3e73f3)), closes [#227](https://github.com/VampireChicken12/youtube-enhancer/issues/227)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.20.0-Chrome.zip | a298dbd191879f07a69cf16a099899e0c18448974154fed7bd0835bb7455e279 |
+| youtube-enhancer-v1.20.0-Chromium.zip | a298dbd191879f07a69cf16a099899e0c18448974154fed7bd0835bb7455e279 |
+| youtube-enhancer-v1.20.0-Edge.zip | a298dbd191879f07a69cf16a099899e0c18448974154fed7bd0835bb7455e279 |
+| youtube-enhancer-v1.20.0-Firefox.zip | ed644ae2fedda8976dfaad38a4aa15a24460ae5f067f444fef308c54e3eb3c4f |
+
 ## [1.19.4](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.3...v1.19.4) (2023-12-31)
 
 
