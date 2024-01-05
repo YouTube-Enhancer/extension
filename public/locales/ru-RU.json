@@ -87,14 +87,15 @@
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor"
+					"collapse": "Свернуть редактор",
+					"expand": "Расширить редактор",
+					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Включить пользовательский CSS",
+					"title": "Включает пользовательские настройки CSS для применения к странице"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Пользовательские настройки CSS"
 			},
 			"featureMenu": {
 				"openType": {

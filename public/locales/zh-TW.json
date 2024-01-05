@@ -87,14 +87,15 @@
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor"
+					"collapse": "收起編輯器",
+					"expand": "展開編輯器",
+					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "啟用自訂CSS",
+					"title": "啟用應用到頁面的自訂CSS"
 				},
-				"title": "Custom CSS Settings"
+				"title": "自訂CSS設定"
 			},
 			"featureMenu": {
 				"openType": {

@@ -60,7 +60,11 @@ interface EnUS {
 				};
 			};
 			customCSS: {
-				editor: { collapse: "Collapse Editor"; expand: "Expand Editor" };
+				editor: {
+					collapse: "Collapse Editor";
+					expand: "Expand Editor";
+					noProblems: "No problems found.";
+				};
 				enable: {
 					label: "Enable custom CSS";
 					title: "Enables custom CSS to be applied to the page";
