@@ -1,3 +1,17 @@
+## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.20.1-Chrome.zip | 2cee66543dcc1f03df694d3b0eecfae498cb1936712b1de57e5929b8a9bb4238 |
+| youtube-enhancer-v1.20.1-Chromium.zip | 2cee66543dcc1f03df694d3b0eecfae498cb1936712b1de57e5929b8a9bb4238 |
+| youtube-enhancer-v1.20.1-Edge.zip | 2cee66543dcc1f03df694d3b0eecfae498cb1936712b1de57e5929b8a9bb4238 |
+| youtube-enhancer-v1.20.1-Firefox.zip | 87b5cd3048bc9519c32ba58b747b61e5335f2a01597aac04f4e299c4a8e4fd54 |
+
 # [1.20.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.19.4...v1.20.0) (2024-01-05)
 
 
