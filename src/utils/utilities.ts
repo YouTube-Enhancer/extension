@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type {
+	AnyFunction,
 	ContentSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
@@ -599,4 +600,13 @@ export function calculateCanvasPosition(displayPosition: OnScreenDisplayPosition
 	}
 
 	return styles;
+}
+export function debounce(func: AnyFunction, delay: number) {
+	let timeoutId: ReturnType<typeof setTimeout>;
+	return (...args: unknown[]) => {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => {
+			func(...args);
+		}, delay);
+	};
 }

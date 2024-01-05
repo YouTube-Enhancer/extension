@@ -34,15 +34,13 @@ export async function enableOpenYouTubeSettingsOnHover() {
 		if (settingsMenu.style.display === "none") return;
 		settingsButton.click();
 	};
+	const settingsButtonMouseLeaveListener = (event: Event) => {
+		if (event.target === settingsButton) return;
+		if (settingsMenu.contains(event.target as Node | null)) return;
+		hideSettings();
+	};
 	eventManager.addEventListener(settingsButton, "mouseenter", showSettings, "openYouTubeSettingsOnHover");
-	eventManager.addEventListener(
-		settingsButton,
-		"mouseleave",
-		(event) => {
-			if (event.target !== settingsMenu) hideSettings();
-		},
-		"openYouTubeSettingsOnHover"
-	);
+	eventManager.addEventListener(settingsButton, "mouseleave", settingsButtonMouseLeaveListener, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(settingsMenu, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(playerContainer, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
 }

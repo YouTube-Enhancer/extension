@@ -333,6 +333,7 @@ input[type="button"] {
 	flex-direction: column-reverse;
 	max-width: 100%;
 	width: 320px;
+	z-index: 100;
 }
 
 #notifications > .notification {

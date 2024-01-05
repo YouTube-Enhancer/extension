@@ -793,7 +793,28 @@ export default function Settings() {
 						type="select"
 					/>
 				</SettingSection>
-				<div className="sticky bottom-0 left-0 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.customCSS.title")} />
+					<Setting
+						checked={settings.enable_custom_css?.toString() === "true"}
+						id="enable_custom_css"
+						label={t("settings.sections.customCSS.enable.label")}
+						onChange={setCheckboxOption("enable_custom_css")}
+						title={t("settings.sections.customCSS.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="custom_css_code"
+						onChange={(value) => {
+							if (value !== undefined) {
+								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
+							}
+						}}
+						type="css-editor"
+						value={settings.custom_css_code}
+					/>
+				</SettingSection>
+				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="clear_data_button"

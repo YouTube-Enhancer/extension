@@ -1,0 +1,46 @@
+:root {
+	--problemsHintIcon: #3794ff;
+	--problemsInfoIcon: #3794ff;
+	--problemsWarningIcon: #d19a66;
+	--problemsErrorIcon: #c24038;
+}
+.marker-icon {
+	height: 22px;
+	margin: 0 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.codicon-error {
+	color: var(--problemsErrorIcon);
+}
+.codicon-warning {
+	color: var(--problemsWarningIcon);
+}
+.codicon-info {
+	color: var(--problemsInfoIcon);
+}
+.codicon-hint {
+	color: var(--problemsHintIcon);
+}
+.marker-message-details-container {
+	flex: 1;
+	overflow: hidden;
+}
+.marker-message-line.details-container {
+	display: flex;
+	line-height: 22px;
+}
+.marker-message {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.marker-source,
+.marker-line {
+	opacity: 0.7;
+	margin-left: 6px;
+}
+.marker-code {
+	opacity: 0.7;
+}
