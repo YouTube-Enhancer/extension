@@ -1,6 +1,25 @@
 ## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
 
 
+### Bug Fixes
+
+* **custom css:** page CSS didn't update when editor css changed ([443edd8](https://github.com/VampireChicken12/youtube-enhancer/commit/443edd8135e3536e096a47aaaf6c4014c1af1336))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.20.1-Chrome.zip | 684aab8c06264ad3fbfd6b1d4054f81ca0094b2f5078444fa376d3de18e159d8 |
+| youtube-enhancer-v1.20.1-Chromium.zip | 684aab8c06264ad3fbfd6b1d4054f81ca0094b2f5078444fa376d3de18e159d8 |
+| youtube-enhancer-v1.20.1-Edge.zip | 684aab8c06264ad3fbfd6b1d4054f81ca0094b2f5078444fa376d3de18e159d8 |
+| youtube-enhancer-v1.20.1-Firefox.zip | 3f816ff78ce86bdb2db873775d9fbb9140d11964c15bf51ce08dfaa350f0ec61 |
+
+## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
+
+
 
 
 
