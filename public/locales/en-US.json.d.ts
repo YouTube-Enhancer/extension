@@ -59,6 +59,14 @@ interface EnUS {
 					value: "Reset";
 				};
 			};
+			customCSS: {
+				editor: { collapse: "Collapse Editor"; expand: "Expand Editor" };
+				enable: {
+					label: "Enable custom CSS";
+					title: "Enables custom CSS to be applied to the page";
+				};
+				title: "Custom CSS Settings";
+			};
 			featureMenu: {
 				openType: {
 					select: {

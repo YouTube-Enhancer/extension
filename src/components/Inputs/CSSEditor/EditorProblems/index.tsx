@@ -1,0 +1,70 @@
+import { MarkerSeverity, type editor } from "@/src/utils/monaco";
+import { cn } from "@/src/utils/utilities";
+import React, { forwardRef } from "react";
+
+import "./index.css";
+type EditorProblemsProps = {
+	className: string;
+	editor: editor.IStandaloneCodeEditor | null;
+	problems: editor.IMarker[];
+};
+const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ className, editor, problems }, ref) => {
+	const getIcon = (severity: MarkerSeverity) => {
+		switch (severity) {
+			case MarkerSeverity.Hint:
+				return "hint";
+			case MarkerSeverity.Info:
+				return "info";
+			case MarkerSeverity.Warning:
+				return "warning";
+			case MarkerSeverity.Error:
+				return "error";
+			default:
+				return "";
+		}
+	};
+	return (
+		<div className={cn("bg-[#1e1e1e]", className)} ref={ref}>
+			{problems.length === 0 && <div className="center p-1">No problems found</div>}
+			{problems.map((problem, index) => (
+				<div
+					className="center flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc] hover:bg-[#2e2e2e]"
+					key={index}
+					onClick={() => {
+						if (!editor) return;
+						editor.focus();
+						editor.revealLine(problem.startLineNumber);
+						editor.setPosition({
+							column: problem.startColumn,
+							lineNumber: problem.startLineNumber
+						});
+					}}
+				>
+					<div className={`marker-icon ${getIcon(problem.severity)}`}>
+						<div className={`codicon codicon-${getIcon(problem.severity)}`} />
+					</div>
+					<div className="marker-message-details-container">
+						<div className="marker-message-line details-container">
+							<div className="marker-message">
+								<span>{problem.message}</span>
+							</div>
+							{problem.source && (
+								<>
+									<div className="marker-source">
+										<span>{problem.source}</span>
+									</div>
+									<div className="marker-code">
+										<span>{problem.code && typeof problem.code === "string" ? `(${problem.code})` : ""}</span>
+									</div>
+								</>
+							)}
+							<span className="marker-line">{`[Ln ${problem.startLineNumber}, Col ${problem.startColumn}]`}</span>
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+	);
+});
+EditorProblems.displayName = "EditorProblems";
+export default EditorProblems;

@@ -16,8 +16,10 @@ import {
 } from "../types";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
+	custom_css_code: "",
 	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
+	enable_custom_css: false,
 	enable_forced_playback_speed: false,
 	enable_hide_scrollbar: false,
 	enable_loop_button: false,
@@ -57,8 +59,10 @@ export const defaultConfiguration = {
 	volume_boost_mode: "global"
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+	custom_css_code: z.string().optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
+	enable_custom_css: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_loop_button: z.boolean().optional(),

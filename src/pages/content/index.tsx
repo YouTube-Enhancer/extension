@@ -1,6 +1,8 @@
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
+import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
@@ -98,6 +100,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				void volumeBoost();
 				void addScreenshotButton();
 				void enableRememberVolume();
+				void enableCustomCSS();
 				setupPlaybackSpeedChangeListener();
 				void setPlayerQuality();
 				void setPlayerSpeed();
@@ -339,6 +342,21 @@ window.addEventListener("DOMContentLoaded", function () {
 							void enableOpenYouTubeSettingsOnHover();
 						} else {
 							void disableOpenYouTubeSettingsOnHover();
+						}
+						break;
+					}
+					case "customCSSChange": {
+						const {
+							data: { customCSSCode, customCSSEnabled }
+						} = message;
+						if (customCSSEnabled) {
+							if (customCSSExists()) {
+								updateCustomCSS({ custom_css_code: customCSSCode });
+							} else {
+								await enableCustomCSS();
+							}
+						} else {
+							disableCustomCSS();
 						}
 						break;
 					}
