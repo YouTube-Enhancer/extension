@@ -44,8 +44,10 @@ export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: n
 export const volumeBoostMode = ["global", "per_video"] as const;
 export type VolumeBoostMode = (typeof volumeBoostMode)[number];
 export type configuration = {
+	custom_css_code: string;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
+	enable_custom_css: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_loop_button: boolean;
@@ -122,6 +124,7 @@ export type ContentSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
+	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;

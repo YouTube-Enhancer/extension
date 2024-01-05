@@ -1,17 +1,19 @@
 import type { configuration } from "@/src/types";
 
+import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
 import type { NumberInputProps } from "../../Inputs/Number/Number";
 import type { SelectProps } from "../../Inputs/Select/Select";
 import type { SliderProps } from "../../Inputs/Slider/Slider";
 
-import { Checkbox, NumberInput, Select, Slider } from "../../Inputs";
+import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
 type SettingInputProps = {
 	id: keyof configuration;
-	title: string;
+	title?: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
+	| ({ type: "css-editor" } & CSSEditorProps)
 	| ({ type: "number" } & NumberInputProps)
 	| ({ type: "select" } & SelectProps)
 	| ({ type: "slider" } & SliderProps)
@@ -57,6 +59,10 @@ function SettingInput(settingProps: SettingInputProps) {
 		case "slider": {
 			const { initialValue, max, min, onChange, step } = settingProps;
 			return <Slider initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
+		}
+		case "css-editor": {
+			const { className, id, onChange, value } = settingProps;
+			return <CSSEditor className={className} id={id} onChange={onChange} value={value} />;
 		}
 	}
 }

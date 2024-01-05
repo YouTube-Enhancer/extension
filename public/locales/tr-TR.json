@@ -46,7 +46,7 @@
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Tüm seçenekler varsayılan değerlerine sıfırlandı.\nArtık \"Onayla\" düğmesine tıklayarak değişiklikleri kaydedebilir veya bu sayfayı kapatarak iptal edebilir veya bu bildirimi göz ardı edebilirsiniz."
 				},
 				"success": {
 					"saved": "Seçenekler kaydedildi."
@@ -63,7 +63,7 @@
 			"automaticQuality": {
 				"enable": {
 					"label": "Otomatik kalite ayarlamayı etkinleştir",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
 				},
 				"select": {
 					"label": "Oynatma kalitesi",
@@ -84,6 +84,17 @@
 					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
 					"value": "Sıfırla"
 				}
+			},
+			"customCSS": {
+				"editor": {
+					"collapse": "Collapse Editor",
+					"expand": "Expand Editor"
+				},
+				"enable": {
+					"label": "Enable custom CSS",
+					"title": "Enables custom CSS to be applied to the page"
+				},
+				"title": "Custom CSS Settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -106,8 +117,8 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\nBilinmeyen bir hata oluştu.",
+						"validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Ayarlar başarıyla içe aktarıldı",
 					"title": "Ayarları JSON dosyasına aktar",
@@ -124,12 +135,12 @@
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
-						"label": "Automatic theater mode",
-						"title": "Automatically enables theater mode when you load a video"
+						"label": "Otomatik tiyatro modu",
+						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
-						"title": "Hides the pages scrollbar"
+						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
@@ -144,8 +155,8 @@
 						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
+						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
@@ -169,45 +180,45 @@
 						"blue": "Mavi",
 						"green": "Yeşil",
 						"orange": "Turuncu",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"pink": "Pembe",
+						"purple": "Mor",
+						"red": "Kırmızı",
+						"white": "Beyaz",
+						"yellow": "Sarı"
 					},
 					"title": "Select the color for the On-Screen Display"
 				},
 				"hide": {
-					"label": "Hide Delay",
+					"label": "Gecikmeyi Gizle",
 					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
 				},
 				"opacity": {
-					"label": "Opacity",
+					"label": "Saydamlık",
 					"title": "Adjust the transparency of the On-Screen Display"
 				},
 				"padding": {
-					"label": "Padding",
+					"label": "İç Boşluk",
 					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Konum",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "Sol Alt",
+						"bottom_right": "Sağ Alt",
+						"center": "Orta",
+						"top_left": "Sol Üst",
+						"top_right": "Sağ Üst"
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
 				"title": "On-Screen Display Settings",
 				"type": {
-					"label": "Type",
+					"label": "Tür",
 					"options": {
-						"line": "Line",
-						"no_display": "No display",
+						"line": "Satır",
+						"no_display": "Ekran yok",
 						"round": "Round",
-						"text": "Text"
+						"text": "Metin"
 					},
 					"title": "Select the type of On-Screen Display"
 				}
@@ -215,7 +226,7 @@
 			"playbackSpeed": {
 				"enable": {
 					"label": "Zorunlu oynatma hızını etkinleştir",
-					"title": "Sets the video speed to what you choose below"
+					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
 				},
 				"select": {
 					"label": "Oynatma hızı",
@@ -251,9 +262,9 @@
 					"label": "Scroll wheel speed control",
 					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "{{KEY}} anahtarı",
 				"select": {
-					"label": "Modifier key",
+					"label": "Düzenleyici anahtar",
 					"title": "The modifier key to use"
 				},
 				"title": "Scroll wheel speed control settings"
@@ -293,16 +304,16 @@
 				},
 				"enable": {
 					"label": "Ses güçlendirmeyi etkinleştir",
-					"title": "Enable volume boost"
+					"title": "Ses güçlendirmeyi etkinleştir"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "Ses güçlendirme modu",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "Genel",
+							"perVideo": "Video başına"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Ses artırmanın nasıl uygulanacağını seçin. 'Video başına', özellik menüsünde her video için ayrı ayrı güçlendirmenin etkinleştirilmesine olanak tanır. 'Genel', ses artırma etkinleştirildiğinde tüm videolara güçlendirme uygular."
 					}
 				},
 				"title": "Ses güçlendirme ayarları"

@@ -189,10 +189,19 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	const keyActions: {
 		[K in keyof configuration]?: (newValue: configuration[K]) => void;
 	} = {
+		custom_css_code: (newValue) => {
+			sendExtensionOnlyMessage("customCSSChange", {
+				customCSSCode: newValue,
+				customCSSEnabled: options.enable_custom_css
+			});
+		},
 		enable_automatic_theater_mode: (newValue) => {
 			sendExtensionOnlyMessage("automaticTheaterModeChange", {
 				automaticTheaterModeEnabled: newValue
 			});
+		},
+		enable_custom_css: (newValue) => {
+			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
 		},
 		enable_forced_playback_speed: (newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
