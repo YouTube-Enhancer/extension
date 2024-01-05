@@ -249,6 +249,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/luisaosan"><img src="https://avatars.githubusercontent.com/u/48157083?v=4?s=100" width="100px;" alt="Luis Felipe"/><br /><sub><b>Luis Felipe</b></sub></a><br /><a href="#translation-luisaosan" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://nosesisaid.com"><img src="https://avatars.githubusercontent.com/u/74506415?v=4?s=100" width="100px;" alt="Vic"/><br /><sub><b>Vic</b></sub></a><br /><a href="#translation-v1ctorio" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rado84-github"><img src="https://avatars.githubusercontent.com/u/41172201?v=4?s=100" width="100px;" alt="rado84"/><br /><sub><b>rado84</b></sub></a><br /><a href="#bug-rado84-github" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
     </tr>
   </tbody>
 </table>
