@@ -5,8 +5,7 @@ export function updateCustomCSS({ custom_css_code }: Pick<configuration, "custom
 	const customCSSStyleElement = document.querySelector<HTMLStyleElement>("#yte-custom-css");
 	// Check if the custom CSS style element exists
 	if (!customCSSStyleElement) return;
-	// Update the custom CSS style element
-	customCSSStyleElement.textContent = custom_css_code;
+	customCSSStyleElement.replaceWith(createCustomCSSElement({ custom_css_code }));
 }
 export function createCustomCSSElement({ custom_css_code }: Pick<configuration, "custom_css_code">) {
 	// Create the custom CSS style element
