@@ -47,7 +47,7 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
-	const disabledButtonClasses = { "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled } satisfies ClassValue;
+	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
 		<div
 			aria-valuetext={selectedOption}

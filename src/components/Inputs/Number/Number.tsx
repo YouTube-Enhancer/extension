@@ -53,6 +53,8 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 		"hover:bg-transparent": disabled,
 		"text-[#4b5563]": disabled
 	} satisfies ClassValue;
+	const buttonClasses =
+		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
 	return (
 		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
 			<label className="mb-1" htmlFor={id}>
@@ -62,7 +64,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 				<input
 					aria-hidden={true}
 					className={cn(
-						"number flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
+						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
 						{ "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled }
 					)}
 					disabled={disabled}
@@ -73,8 +75,6 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					ref={inputElement}
 					step={step}
 					style={{
-						MozAppearance: "textfield",
-						WebkitAppearance: "none",
 						borderBottomLeftRadius: "0.375rem",
 						borderTopLeftRadius: "0.375rem"
 					}}
@@ -82,18 +82,15 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					value={value}
 				></input>
 				<div
-					className={cn("absolute flex h-[35px] flex-col", {
-						"bottom-1 left-1": direction === "rtl",
-						"bottom-1 right-1": direction === "ltr"
+					className={cn("absolute bottom-[1px] flex h-[38px] flex-col", {
+						"left-[1px]": direction === "rtl",
+						"right-[1px]": direction === "ltr"
 					})}
 				>
 					<button
 						aria-hidden={true}
 						aria-label="Add one"
-						className={cn(
-							"round-r flex h-1/2 w-full cursor-default justify-center p-1 text-black dark:bg-[#23272a] dark:text-white dark:hover:bg-[rgba(24,26,27,0.5)]",
-							disabledButtonClasses
-						)}
+						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
 						onClick={NumberPlus}
 						style={{
@@ -107,14 +104,11 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					<button
 						aria-hidden={true}
 						aria-label="Subtract one"
-						className={cn(
-							"round-r flex h-1/2 w-full cursor-default justify-center p-1 text-black dark:bg-[#23272a] dark:text-white dark:hover:bg-[rgba(24,26,27,0.5)]",
-							disabledButtonClasses
-						)}
+						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
 						onClick={NumberMinus}
 						style={{
-							borderTopRightRadius: "0.375rem",
+							borderBottomRightRadius: "0.375rem",
 							transition: "all linear 0.1s"
 						}}
 						type="button"
