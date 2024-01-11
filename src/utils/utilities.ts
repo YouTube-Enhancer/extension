@@ -341,75 +341,57 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 	return new Promise((resolve) => {
 		// Log a message to the console to let the user know what's happening.
 		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
-
 		// Create a Map to store the elements as they are found.
 		const elementsMap = new Map<string, Element | null>();
-
 		// Get the number of selectors in the array so we know how many elements we are waiting for.
 		const { length: selectorsCount } = selectors;
-
 		// Create a counter for the number of elements that have been found.
 		let resolvedCount = 0;
-
 		// Create a MutationObserver to watch for changes in the DOM.
 		const observer = new MutationObserver(() => {
 			// Loop through each of the selectors.
 			selectors.forEach((selector) => {
 				// Get the element that matches the selector.
 				const element = document.querySelector(selector);
-
 				// Add the element to the Map.
 				elementsMap.set(selector, element);
-
 				// If the element is not found, return early.
 				if (!element) {
 					return;
 				}
-
 				// Increase the counter by 1.
 				resolvedCount++;
-
 				// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
 				if (resolvedCount === selectorsCount) {
 					// Disconnect the observer so it doesn't keep running.
 					observer.disconnect();
-
 					// Get an array of the resolved elements.
 					const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
-
 					// Resolve the promise with the array of resolved elements.
 					resolve(resolvedElements);
 				}
 			});
 		});
-
 		// Start listening for changes to the DOM.
 		observer.observe(document, { childList: true, subtree: true });
-
 		// Loop through each of the selectors.
 		selectors.forEach((selector) => {
 			// Get the element that matches the selector.
 			const element = document.querySelector(selector);
-
 			// Add the element to the Map.
 			elementsMap.set(selector, element);
-
 			// If the element is not found, return early.
 			if (!element) {
 				return;
 			}
-
 			// Increase the counter by 1.
 			resolvedCount++;
-
 			// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
 			if (resolvedCount === selectorsCount) {
 				// Disconnect the observer so it doesn't keep running.
 				observer.disconnect();
-
 				// Get an array of the resolved elements.
 				const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
-
 				// Resolve the promise with the array of resolved elements.
 				resolve(resolvedElements);
 			}
