@@ -76,7 +76,7 @@ export function applyVolumeBoost(volume_boost_amount: number) {
 }
 export async function addVolumeBoostButton() {
 	await addFeatureItemToMenu({
-		featureName: "volumeBoost",
+		featureName: "volumeBoostButton",
 		icon: makeVolumeBoostIcon(),
 		isToggle: true,
 		label: window.i18nextInstance.t("pages.content.features.volumeBoostButton.label"),
@@ -94,6 +94,6 @@ export async function addVolumeBoostButton() {
 	});
 }
 export function removeVolumeBoostButton() {
-	removeFeatureItemFromMenu("volumeBoost");
-	eventManager.removeEventListeners("volumeBoost");
+	removeFeatureItemFromMenu("volumeBoostButton");
+	eventManager.removeEventListeners("volumeBoostButton");
 }
