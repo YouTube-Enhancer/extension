@@ -1,7 +1,22 @@
 import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/types";
+import type { ParseKeys, TOptions } from "i18next";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
+type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+type FeaturesInMenu = Exclude<
+	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
+	"featureMenu"
+>;
+const featuresThatHaveMenuItems: FeaturesInMenu[] = [
+	"loopButton",
+	"maximizePlayerButton",
+	"openTranscriptButton",
+	"screenshotButton",
+	"volumeBoostButton"
+];
+export const featuresInMenu = new Set<FeaturesInMenu>();
+
 function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?: boolean) => void, isToggle: boolean) {
 	if (isToggle) {
 		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
@@ -31,6 +46,10 @@ export async function addFeatureItemToMenu({
 	label: string;
 	listener: (checked?: boolean) => void;
 }) {
+	// Add the feature name to the set of features in the menu
+	if (!featuresInMenu.has(featureName) && featuresThatHaveMenuItems.includes(featureName)) {
+		featuresInMenu.add(featureName as FeaturesInMenu);
+	}
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
 
@@ -107,6 +126,10 @@ export async function addFeatureItemToMenu({
  * @param featureName - The name of the feature to remove.
  */
 export function removeFeatureItemFromMenu(featureName: FeatureName) {
+	// Remove the feature name from the set of features in the menu
+	if (featuresInMenu.has(featureName) && featuresThatHaveMenuItems.includes(featureName)) {
+		featuresInMenu.delete(featureName as FeaturesInMenu);
+	}
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(featureName);
 	// Find the feature menu

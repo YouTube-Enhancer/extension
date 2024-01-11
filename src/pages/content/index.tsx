@@ -4,7 +4,7 @@ import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
@@ -294,10 +294,10 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { language }
 						} = message;
 						window.i18nextInstance = await i18nService(language);
-						void updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
-						void updateFeatureMenuItemLabel("screenshotButton", window.i18nextInstance.t("pages.content.features.screenshotButton.label"));
-						void updateFeatureMenuItemLabel("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"));
-						void updateFeatureMenuItemLabel("loopButton", window.i18nextInstance.t("pages.content.features.loopButton.label"));
+						updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
+						for (const feature of featuresInMenu) {
+							updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+						}
 						break;
 					}
 					case "automaticTheaterModeChange": {
