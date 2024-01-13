@@ -43,7 +43,34 @@ export type ModifierKey = (typeof modifierKey)[number];
 export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export const volumeBoostMode = ["global", "per_video"] as const;
 export type VolumeBoostMode = (typeof volumeBoostMode)[number];
+export type ButtonPlacement =
+	| {
+			location: "below_player";
+	  }
+	| {
+			location: "feature_menu";
+	  }
+	| {
+			location: "player_controls";
+			side: "left" | "right";
+	  };
+export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+export type FeaturesThatHaveButtons = Exclude<
+	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
+	"featureMenu"
+>;
+export const featuresThatHaveButtons = Object.keys({
+	loopButton: "",
+	maximizePlayerButton: "",
+	openTranscriptButton: "",
+	screenshotButton: "",
+	volumeBoostButton: ""
+} satisfies Record<FeaturesThatHaveButtons, "">);
+export type ButtonPlacementConfiguration = {
+	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
+};
 export type configuration = {
+	button_placements: ButtonPlacementConfiguration;
 	custom_css_code: string;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
