@@ -22,15 +22,25 @@ import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
 async function getLanguageOptions() {
-	const languageOptions: SelectOption[] = [];
-	for (const locale of availableLocales) {
-		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
-		const localeData = (await response?.json()) as EnUS;
-		languageOptions.push({
-			label: `${localeData.langName} (${localePercentages[locale]}%)`,
-			value: locale
-		});
-	}
+	const promises = availableLocales.map(async (locale) => {
+		try {
+			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+			const localeData = await response.json();
+			return Promise.resolve({
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
+				value: locale
+			} as SelectOption);
+		} catch (err) {
+			return Promise.reject(err);
+		}
+	});
+
+	const results = await Promise.allSettled(promises);
+
+	const languageOptions: SelectOption[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
+		.map((result) => result.value);
+
 	return languageOptions;
 }
 function LanguageOptions({
@@ -43,8 +53,17 @@ function LanguageOptions({
 	t: i18nInstanceType["t"];
 }) {
 	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
-		getLanguageOptions().then(setLanguageOptions).catch(console.error);
+		void (async () => {
+			try {
+				const languages = await getLanguageOptions();
+				setLanguageOptions(languages);
+				setLanguagesLoading(false);
+			} catch (error) {
+				setLanguagesLoading(false);
+			}
+		})();
 	}, []);
 	return (
 		<SettingSection>
@@ -53,6 +72,7 @@ function LanguageOptions({
 				disabled={false}
 				id="language"
 				label={t("settings.sections.language.select.label")}
+				loading={languagesLoading}
 				onChange={setValueOption("language")}
 				options={languageOptions}
 				selectedOption={selectedLanguage}
