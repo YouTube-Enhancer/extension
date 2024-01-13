@@ -1,7 +1,16 @@
 import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/types";
+import type { ParseKeys, TOptions } from "i18next";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
+type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+type FeaturesThatHaveMenuItems = Exclude<
+	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
+	"featureMenu"
+>;
+
+export const featuresInMenu = new Set<FeaturesThatHaveMenuItems>();
+
 function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?: boolean) => void, isToggle: boolean) {
 	if (isToggle) {
 		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
@@ -25,12 +34,15 @@ export async function addFeatureItemToMenu({
 	label,
 	listener
 }: {
-	featureName: FeatureName;
+	featureName: FeaturesThatHaveMenuItems;
 	icon: SVGElement;
 	isToggle?: boolean;
 	label: string;
 	listener: (checked?: boolean) => void;
 }) {
+	// Add the feature name to the set of features in the menu
+	featuresInMenu.add(featureName);
+
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
 
@@ -106,7 +118,10 @@ export async function addFeatureItemToMenu({
  * Removes a feature item from the feature menu.
  * @param featureName - The name of the feature to remove.
  */
-export function removeFeatureItemFromMenu(featureName: FeatureName) {
+export function removeFeatureItemFromMenu(featureName: FeaturesThatHaveMenuItems) {
+	// Remove the feature name from the set of features in the menu
+	featuresInMenu.delete(featureName as FeaturesThatHaveMenuItems);
+
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(featureName);
 	// Find the feature menu
@@ -145,7 +160,7 @@ export function removeFeatureItemFromMenu(featureName: FeatureName) {
  * @param label the label to set
  * @returns
  */
-export function updateFeatureMenuItemLabel(featureName: FeatureName, label: string) {
+export function updateFeatureMenuItemLabel(featureName: FeaturesThatHaveMenuItems, label: string) {
 	const featureMenuItemLabel = getFeatureMenuItemLabel(featureName);
 	if (!featureMenuItemLabel) return;
 	featureMenuItemLabel.textContent = label;

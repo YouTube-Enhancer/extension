@@ -22,15 +22,25 @@ import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
 async function getLanguageOptions() {
-	const languageOptions: SelectOption[] = [];
-	for (const locale of availableLocales) {
-		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
-		const localeData = (await response?.json()) as EnUS;
-		languageOptions.push({
-			label: `${localeData.langName} (${localePercentages[locale]}%)`,
-			value: locale
-		});
-	}
+	const promises = availableLocales.map(async (locale) => {
+		try {
+			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+			const localeData = await response.json();
+			return Promise.resolve({
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
+				value: locale
+			} as SelectOption);
+		} catch (err) {
+			return Promise.reject(err);
+		}
+	});
+
+	const results = await Promise.allSettled(promises);
+
+	const languageOptions: SelectOption[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
+		.map((result) => result.value);
+
 	return languageOptions;
 }
 function LanguageOptions({
@@ -43,8 +53,17 @@ function LanguageOptions({
 	t: i18nInstanceType["t"];
 }) {
 	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
-		getLanguageOptions().then(setLanguageOptions).catch(console.error);
+		void (async () => {
+			try {
+				const languages = await getLanguageOptions();
+				setLanguageOptions(languages);
+				setLanguagesLoading(false);
+			} catch (error) {
+				setLanguagesLoading(false);
+			}
+		})();
 	}, []);
 	return (
 		<SettingSection>
@@ -53,6 +72,7 @@ function LanguageOptions({
 				disabled={false}
 				id="language"
 				label={t("settings.sections.language.select.label")}
+				loading={languagesLoading}
 				onChange={setValueOption("language")}
 				options={languageOptions}
 				selectedOption={selectedLanguage}
@@ -389,19 +409,16 @@ export default function Settings() {
 			const filename = `youtube_enhancer_settings_${timestamp}.json`;
 			// Convert the settings to JSON.
 			const settingsJSON = JSON.stringify(exportableSettings);
-
 			// Create a blob to hold the JSON.
 			const blob = new Blob([settingsJSON], { type: "application/json" });
 			// Get a URL for the blob.
 			const url = URL.createObjectURL(blob);
-
 			// Create a link to the blob.
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
 			// Click the link to download the file.
 			a.click();
-
 			// Show a success notification.
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
@@ -816,7 +833,7 @@ export default function Settings() {
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -824,7 +841,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -832,7 +849,7 @@ export default function Settings() {
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -841,7 +858,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
-							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -864,7 +881,7 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
 					:	<input
-							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}
