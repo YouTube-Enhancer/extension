@@ -1,15 +1,9 @@
-import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, WithId } from "@/src/types";
-import type { ParseKeys, TOptions } from "i18next";
+import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, WithId } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
-type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
-type FeaturesThatHaveMenuItems = Exclude<
-	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
-	"featureMenu"
->;
 
-export const featuresInMenu = new Set<FeaturesThatHaveMenuItems>();
+export const featuresInMenu = new Set<FeaturesThatHaveButtons>();
 
 function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?: boolean) => void, isToggle: boolean) {
 	if (isToggle) {
@@ -34,7 +28,7 @@ export async function addFeatureItemToMenu({
 	label,
 	listener
 }: {
-	featureName: FeaturesThatHaveMenuItems;
+	featureName: FeaturesThatHaveButtons;
 	icon: SVGElement;
 	isToggle?: boolean;
 	label: string;
@@ -118,9 +112,9 @@ export async function addFeatureItemToMenu({
  * Removes a feature item from the feature menu.
  * @param featureName - The name of the feature to remove.
  */
-export function removeFeatureItemFromMenu(featureName: FeaturesThatHaveMenuItems) {
+export function removeFeatureItemFromMenu(featureName: FeaturesThatHaveButtons) {
 	// Remove the feature name from the set of features in the menu
-	featuresInMenu.delete(featureName as FeaturesThatHaveMenuItems);
+	featuresInMenu.delete(featureName as FeaturesThatHaveButtons);
 
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(featureName);
@@ -160,7 +154,7 @@ export function removeFeatureItemFromMenu(featureName: FeaturesThatHaveMenuItems
  * @param label the label to set
  * @returns
  */
-export function updateFeatureMenuItemLabel(featureName: FeaturesThatHaveMenuItems, label: string) {
+export function updateFeatureMenuItemLabel(featureName: FeaturesThatHaveButtons, label: string) {
 	const featureMenuItemLabel = getFeatureMenuItemLabel(featureName);
 	if (!featureMenuItemLabel) return;
 	featureMenuItemLabel.textContent = label;
