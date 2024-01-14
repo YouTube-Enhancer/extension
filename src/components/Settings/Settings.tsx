@@ -1,4 +1,4 @@
-import type { ModifierKey, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, PathValue, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -6,7 +6,7 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { youtubePlayerSpeedRate } from "@/src/types";
+import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -21,6 +21,22 @@ import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
+
+function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
+	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
+	let value: any = obj;
+
+	for (const key of keys) {
+		if (value && typeof value === "object" && key in value) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			({ [key]: value } = value);
+		} else {
+			throw new Error(`Invalid path: ${String(path)}`);
+		}
+	}
+
+	return value as PathValue<T, P>;
+}
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
@@ -162,18 +178,18 @@ export default function Settings() {
 	}
 	const { t } = i18nInstance;
 	const setCheckboxOption =
-		(key: configurationKeys) =>
+		(key: Path<configuration>) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
 			setFirstLoad(false);
 			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
 		};
 	const setValueOption =
-		(key: configurationKeys) =>
+		(key: Path<configuration>) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			setFirstLoad(false);
 			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
 		};
-	const getSelectedOption = <K extends configurationKeys>(key: K) => settings[key];
+	const getSelectedOption = <K extends Path<configuration>>(key: K) => getPathValue(settings, key);
 	function saveOptions() {
 		if (settings) {
 			for (const key of Object.keys(settings)) {
@@ -342,6 +358,21 @@ export default function Settings() {
 			value: "per_video"
 		}
 	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
+	const buttonPlacementOptions: SelectOption[] = [
+		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
+		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
+		{
+			label: t("settings.sections.buttonPlacement.select.options.player_controls_left.value"),
+			value: "player_controls_left"
+		},
+		{
+			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
+			value: "player_controls_right"
+		}
+	] as {
+		label: string;
+		value: ButtonPlacement;
+	}[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -438,6 +469,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.featureMenu.openType.title")} />
 					<Setting
+						disabled={Object.values(settings.button_placements).some((v) => v !== "feature_menu")}
 						id="feature_menu_open_type"
 						label={t("settings.sections.featureMenu.openType.select.label")}
 						onChange={setValueOption("feature_menu_open_type")}
@@ -449,6 +481,28 @@ export default function Settings() {
 						title={t("settings.sections.featureMenu.openType.select.title")}
 						type="select"
 					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
+					{featuresThatHaveButtons.map((feature) => {
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
+						return (
+							<Setting
+								id={`button_placements.${feature}`}
+								key={feature}
+								label={label}
+								onChange={setValueOption(`button_placements.${feature}`)}
+								options={buttonPlacementOptions}
+								selectedOption={getSelectedOption(`button_placements.${feature}`)}
+								title={t(`settings.sections.buttonPlacement.select.title`, {
+									BUTTON_NAME: label.toLowerCase(),
+									PLACEMENT: t(`settings.sections.buttonPlacement.select.options.${getSelectedOption(`button_placements.${feature}`)}.placement`)
+								})}
+								type="select"
+							/>
+						);
+					})}
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
