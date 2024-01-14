@@ -1,10 +1,12 @@
-import z, { ZodLiteral, ZodObject, ZodOptional, ZodUnion } from "zod";
+import z, { ZodEnum } from "zod";
 
-import type { FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
+import type { ButtonPlacement, FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
 
 import { availableLocales } from "../i18n/index";
 import {
+	buttonPlacement,
 	featureMenuOpenType,
+	featuresThatHaveButtons,
 	modifierKey,
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
@@ -18,21 +20,11 @@ import {
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
-		loopButton: {
-			location: "feature_menu"
-		},
-		maximizePlayerButton: {
-			location: "feature_menu"
-		},
-		openTranscriptButton: {
-			location: "feature_menu"
-		},
-		screenshotButton: {
-			location: "feature_menu"
-		},
-		volumeBoostButton: {
-			location: "feature_menu"
-		}
+		loopButton: "feature_menu",
+		maximizePlayerButton: "feature_menu",
+		openTranscriptButton: "feature_menu",
+		screenshotButton: "feature_menu",
+		volumeBoostButton: "feature_menu"
 	},
 	custom_css_code: "",
 	enable_automatic_theater_mode: false,
@@ -76,41 +68,14 @@ export const defaultConfiguration = {
 	volume_boost_amount: 1,
 	volume_boost_mode: "global"
 } satisfies configuration;
-type ButtonPlacementZodSchema = ZodUnion<
-	[
-		ZodObject<{ location: ZodLiteral<"feature_menu"> }>,
-		ZodObject<{ location: ZodLiteral<"below_player">; placement: ZodUnion<[ZodLiteral<"left">, ZodLiteral<"center">, ZodLiteral<"right">]> }>,
-		ZodObject<{ location: ZodLiteral<"player_controls">; side: ZodUnion<[ZodLiteral<"left">, ZodLiteral<"right">]> }>
-	]
->;
-type ButtonPlacementConfigurationZodSchema = ZodOptional<ZodObject<{ [Key in FeaturesThatHaveButtons]: ButtonPlacementZodSchema }>>;
-export const ButtonPlacementZodSchema: ButtonPlacementZodSchema = z.union([
-	z.object({
-		location: z.literal("feature_menu")
+// TODO: fix this type error
+export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+	button_placements: z.object({
+		...featuresThatHaveButtons.reduce(
+			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacement).optional() }),
+			{} as Record<FeaturesThatHaveButtons, ZodEnum<[ButtonPlacement]>>
+		)
 	}),
-	z.object({
-		location: z.literal("below_player"),
-		placement: z.union([z.literal("left"), z.literal("center"), z.literal("right")])
-	}),
-	z.object({
-		location: z.literal("player_controls"),
-		side: z.union([z.literal("left"), z.literal("right")])
-	})
-]);
-
-export const buttonPlacementConfiguration: ButtonPlacementConfigurationZodSchema = z
-	.object({
-		loopButton: ButtonPlacementZodSchema,
-		maximizePlayerButton: ButtonPlacementZodSchema,
-		openTranscriptButton: ButtonPlacementZodSchema,
-		screenshotButton: ButtonPlacementZodSchema,
-		volumeBoostButton: ButtonPlacementZodSchema
-	})
-	.optional();
-export const configurationImportSchema: Exclude<TypeToPartialZodSchema<configuration>, "button_placements"> & {
-	button_placements: ButtonPlacementConfigurationZodSchema;
-} = z.object({
-	button_placements: buttonPlacementConfiguration,
 	custom_css_code: z.string().optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),

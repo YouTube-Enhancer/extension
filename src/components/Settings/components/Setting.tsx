@@ -1,4 +1,4 @@
-import type { configuration } from "@/src/types";
+import type { Path, configuration } from "@/src/types";
 
 import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
@@ -9,7 +9,7 @@ import type { SliderProps } from "../../Inputs/Slider/Slider";
 import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
 type SettingInputProps = {
-	id: keyof configuration;
+	id: Path<configuration>;
 	title?: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
