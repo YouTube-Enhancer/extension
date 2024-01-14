@@ -1,7 +1,7 @@
 import type { ParseKeys, TOptions } from "i18next";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
-import z from "zod";
+import z, { ZodType } from "zod";
 
 import type { AvailableLocales } from "../i18n";
 import type { FeatureName } from "../utils/EventManager";
@@ -43,17 +43,9 @@ export type ModifierKey = (typeof modifierKey)[number];
 export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export const volumeBoostMode = ["global", "per_video"] as const;
 export type VolumeBoostMode = (typeof volumeBoostMode)[number];
-export type ButtonPlacement =
-	| {
-			location: "below_player";
-	  }
-	| {
-			location: "feature_menu";
-	  }
-	| {
-			location: "player_controls";
-			side: "left" | "right";
-	  };
+export const buttonPlacement = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
+export type ButtonPlacement = (typeof buttonPlacement)[number];
+
 export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
 export type FeaturesThatHaveButtons = Exclude<
 	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
@@ -218,11 +210,42 @@ export type TypeToZodSchema<T> = z.ZodObject<{
 	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
 	: z.ZodType<T[K]>;
 }>;
-export type TypeToPartialZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? z.ZodOptionalType<z.ZodType<T[K]>>
-	: T[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<T[K]>>>
-	: z.ZodOptionalType<z.ZodType<T[K]>>;
-}>;
+export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodType }> = {
+	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
+	: Omit<Input, Omitted>[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
+	: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
+} & Override;
+export type TypeToPartialZodSchema<
+	Input,
+	Omitted extends keyof Input = never,
+	Override extends { [Key in Omitted]: ZodType } = never,
+	Omit = false
+> = z.ZodObject<
+	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
+	:	{
+			[K in keyof Input]: Input[K] extends any[] ? z.ZodOptionalType<z.ZodType<Input[K]>>
+			: Input[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
+			: z.ZodOptionalType<z.ZodType<Input[K]>>;
+		}
+>;
+type PathImpl<T, Key extends keyof T> = Key extends string ?
+	T[Key] extends Record<string, any> ?
+		T[Key] extends ArrayLike<any> ?
+			`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
+		:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
+	:	Key
+:	never;
+
+export type Path<T> = PathImpl<T, keyof T> | keyof T;
+
+export type PathValue<T, P extends Path<T>> = P extends `${infer Key}.${infer Rest}` ?
+	Key extends keyof T ?
+		Rest extends Path<T[Key]> ?
+			PathValue<T[Key], Rest>
+		:	never
+	:	never
+: P extends keyof T ? T[P]
+: never;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
