@@ -1,11 +1,14 @@
+import type { BasicIcon } from "@/src/icons";
 import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, WithId } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
 
+import type { ListenerType } from "../buttonPlacement/utils";
+
 export const featuresInMenu = new Set<FeaturesThatHaveButtons>();
 
-function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?: boolean) => void, isToggle: boolean) {
+function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
 	if (isToggle) {
 		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
 		listener(JSON.parse(menuItem.ariaChecked) as boolean);
@@ -15,25 +18,19 @@ function featureMenuClickListener(menuItem: HTMLDivElement, listener: (checked?:
 }
 /**
  * Adds a feature item to the feature menu.
- * @param icon - The SVG icon for the feature item.
- * @param label - The label for the feature item.
- * @param listener - The callback function when the item is clicked.
- * @param featureName - The name of the feature.
- * @param isToggle - (Optional) Indicates if the item is a toggle.
+ * @param featureName The name of the feature
+ * @param label The label for the feature
+ * @param icon The icon for the feature
+ * @param listener The listener for the feature
+ * @param isToggle Whether the feature is a toggle
  */
-export async function addFeatureItemToMenu({
-	featureName,
-	icon,
-	isToggle = false,
-	label,
-	listener
-}: {
-	featureName: FeaturesThatHaveButtons;
-	icon: SVGElement;
-	isToggle?: boolean;
-	label: string;
-	listener: (checked?: boolean) => void;
-}) {
+export async function addFeatureItemToMenu<Name extends FeaturesThatHaveButtons, Toggle extends boolean>(
+	featureName: Name,
+	label: string,
+	icon: BasicIcon,
+	listener: ListenerType<Toggle>,
+	isToggle: boolean
+) {
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(featureName);
 
@@ -45,7 +42,7 @@ export async function addFeatureItemToMenu({
 	if (!featureMenu) return;
 
 	// Check if the feature item already exists in the menu
-	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#yte-feature-${featureName}`);
+	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`);
 	if (featureExistsInMenu) {
 		const menuItem = getFeatureMenuItem(featureName);
 		if (!menuItem) return;
@@ -180,7 +177,7 @@ export function getFeatureIds(featureName: FeatureName): {
 	featureMenuItemLabelId: FeatureMenuItemLabelId;
 } {
 	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${featureName}-icon`;
-	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${featureName}`;
+	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${featureName}-menuitem`;
 	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${featureName}-label`;
 	return {
 		featureMenuItemIconId,
@@ -197,6 +194,6 @@ export function getFeatureMenuItemLabel(featureName: FeatureName): HTMLDivElemen
 	return document.querySelector(selector);
 }
 export function getFeatureMenuItem(featureName: FeatureName): HTMLDivElement | null {
-	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${featureName}`;
-	return document.querySelector(selector);
+	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${featureName}-menuitem`;
+	return document.querySelector(`#yte-panel-menu > ${selector}`);
 }

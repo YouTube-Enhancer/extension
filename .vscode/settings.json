@@ -4,5 +4,6 @@
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "always"
 	},
-	"eslint.codeActionsOnSave.mode": "all"
+	"eslint.codeActionsOnSave.mode": "all",
+	"editor.snippets.codeActions.enabled": true
 }

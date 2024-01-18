@@ -4,32 +4,6 @@ import eventManager from "@/src/utils/EventManager";
 import { createSVGElement } from "@/src/utils/utilities";
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
-export function makeMaximizeSVG(): SVGElement {
-	const maximizeSVG = createSVGElement(
-		"svg",
-		{
-			fill: "none",
-			height: "100%",
-			stroke: "currentColor",
-			"stroke-width": "1.5",
-			viewBox: "0 0 24 24",
-			width: "100%"
-		},
-		createSVGElement("path", {
-			d: "M 21.283309,21.283314 H 2.7166914 V 2.7166868 H 21.283309 Z m -18.5666175,0 V 2.7166868 H 21.283309 V 21.283314 Z",
-			"stroke-linecap": "round",
-			"stroke-linejoin": "round",
-			"stroke-width": "1.5"
-		}),
-		createSVGElement("path", {
-			d: "M 12,8.0214379 V 15.978562 M 15.978561,12 H 8.0214389",
-			"stroke-linecap": "round",
-			"stroke-linejoin": "round",
-			"stroke-width": "1.5"
-		})
-	);
-	return maximizeSVG;
-}
 
 // TODO: get played progress bar to be accurate when maximized from default view
 // TODO: Add event listener that updates scrubber position when maximize button is clicked
