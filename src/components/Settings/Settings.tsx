@@ -187,7 +187,34 @@ export default function Settings() {
 		(key: Path<configuration>) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			setFirstLoad(false);
-			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
+			setSettings((state) => {
+				if (!state) {
+					return undefined;
+				}
+
+				const updatedState = { ...state };
+				const keys = key.split(".") as Array<keyof configuration>;
+				let parentValue: any = updatedState;
+
+				for (const currentKey of keys.slice(0, -1)) {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					({ [currentKey]: parentValue } = parentValue);
+				}
+
+				const propertyName = keys.at(keys.length - 1);
+				if (!propertyName) return updatedState;
+				if (typeof parentValue === "object" && parentValue !== null) {
+					// If the path represents a nested property, update the nested property
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+					parentValue[propertyName] = value;
+				} else {
+					// If the path represents a top-level property, update it directly
+					// @ts-expect-error not sure how to type this
+					updatedState[propertyName] = value;
+				}
+
+				return updatedState;
+			});
 		};
 	const getSelectedOption = <K extends Path<configuration>>(key: K) => getPathValue(settings, key);
 	function saveOptions() {
@@ -469,7 +496,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.featureMenu.openType.title")} />
 					<Setting
-						disabled={Object.values(settings.button_placements).some((v) => v !== "feature_menu")}
+						disabled={Object.values(settings.button_placements).every((v) => v !== "feature_menu")}
 						id="feature_menu_open_type"
 						label={t("settings.sections.featureMenu.openType.select.label")}
 						onChange={setValueOption("feature_menu_open_type")}
