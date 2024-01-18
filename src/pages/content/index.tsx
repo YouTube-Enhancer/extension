@@ -1,6 +1,8 @@
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
+import { featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { checkIfFeatureButtonExists } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
@@ -10,7 +12,8 @@ import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
-import { openTranscriptButton, removeTranscriptButton } from "@/src/features/openTranscriptButton";
+import { openTranscriptButton } from "@/src/features/openTranscriptButton";
+import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
@@ -343,7 +346,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (openTranscriptButtonEnabled) {
 							void openTranscriptButton();
 						} else {
-							void removeTranscriptButton();
+							void removeOpenTranscriptButton();
 						}
 						break;
 					}
@@ -373,6 +376,18 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "buttonPlacementChange": {
+						const {
+							data: { buttonPlacement: buttonPlacements }
+						} = message;
+						for (const [featureName, buttonPlacement] of Object.entries(buttonPlacements)) {
+							const buttonExists = checkIfFeatureButtonExists(featureName, buttonPlacement);
+							if (buttonExists) continue;
+							featureButtonFunctions[featureName].remove();
+							await featureButtonFunctions[featureName].add();
+						}
+						break;
+					}
 					default: {
 						return;
 					}
@@ -390,9 +405,15 @@ window.onbeforeunload = function () {
 // Error handling
 window.addEventListener("error", (event) => {
 	event.preventDefault();
-	browserColorLog(formatError(event.error), "FgRed");
+	const {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		error: { stack: errorLine }
+	} = event;
+	browserColorLog(formatError(event.error) + "\nAt: " + errorLine, "FgRed");
 });
+
 window.addEventListener("unhandledrejection", (event) => {
 	event.preventDefault();
-	browserColorLog(`Unhandled rejection: ${event.reason}`, "FgRed");
+	const errorLine = event.reason instanceof Error ? event.reason.stack : "Stack trace not available";
+	browserColorLog(`Unhandled rejection: ${event.reason}\nAt: ${errorLine}`, "FgRed");
 });
