@@ -189,6 +189,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	const keyActions: {
 		[K in keyof configuration]?: (newValue: configuration[K]) => void;
 	} = {
+		button_placements: (newValue) => {
+			sendExtensionOnlyMessage("buttonPlacementChange", {
+				buttonPlacement: newValue
+			});
+		},
 		custom_css_code: (newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", {
 				customCSSCode: newValue,

@@ -1,10 +1,12 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { getIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
-import { makeMaximizeSVG, maximizePlayer, setupVideoPlayerTimeUpdate, updateProgressBarPositions } from "./utils";
+import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
+import { getFeatureMenuItem } from "../featureMenu/utils";
+import { maximizePlayer, setupVideoPlayerTimeUpdate, updateProgressBarPositions } from "./utils";
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
@@ -14,10 +16,12 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		data: { options }
 	} = optionsData;
 	// Extract the necessary properties from the options object
-	const { enable_maximize_player_button: enableMaximizePlayerButton } = options;
+	const {
+		button_placements: { maximizePlayerButton: maximizePlayerButtonPlacement },
+		enable_maximize_player_button: enableMaximizePlayerButton
+	} = options;
 	// If the maximize player button option is disabled, return
 	if (!enableMaximizePlayerButton) return;
-	const maximizeSVG = makeMaximizeSVG();
 	// Add a click event listener to the maximize button
 	function maximizePlayerButtonClickListener() {
 		maximizePlayer();
@@ -42,13 +46,14 @@ export async function addMaximizePlayerButton(): Promise<void> {
 			maximizePlayerMenuItem.ariaChecked = "false";
 		}
 	}
-	await addFeatureItemToMenu({
-		featureName: "maximizePlayerButton",
-		icon: maximizeSVG,
-		isToggle: true,
-		label: window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"),
-		listener: maximizePlayerButtonClickListener
-	});
+	await addFeatureButton(
+		"maximizePlayerButton",
+		maximizePlayerButtonPlacement,
+		window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"),
+		getIcon("maximizePlayerButton", maximizePlayerButtonPlacement !== "feature_menu" ? "shared_position_icon" : "feature_menu"),
+		maximizePlayerButtonClickListener,
+		true
+	);
 	function ytpLeftButtonMouseEnterListener(event: MouseEvent) {
 		const ytTooltip = document.querySelector<HTMLDivElement>("#movie_player > div.ytp-tooltip");
 		if (!ytTooltip) return;
@@ -156,6 +161,6 @@ export async function addMaximizePlayerButton(): Promise<void> {
 	});
 }
 export function removeMaximizePlayerButton() {
-	removeFeatureItemFromMenu("maximizePlayerButton");
+	void removeFeatureButton("maximizePlayerButton");
 	eventManager.removeEventListeners("maximizePlayerButton");
 }
