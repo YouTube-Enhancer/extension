@@ -143,6 +143,7 @@ export type ContentSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
+	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", { buttonPlacement: ButtonPlacementConfiguration }>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
@@ -252,7 +253,7 @@ export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
-export type FeatureMenuItemId = `yte-feature-${FeatureName}`;
+export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
 export const featureMenuOpenType = ["click", "hover"] as const;
 export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];

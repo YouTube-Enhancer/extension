@@ -449,7 +449,19 @@ export function parseStoredValue(value: string) {
 	// If parsing or type checking fails, return the original value as a string
 	return value;
 }
-export function createTooltip({ element, featureName, id, text }: { element: HTMLElement; featureName: FeatureName; id: string; text?: string }): {
+export function createTooltip({
+	direction = "up",
+	element,
+	featureName,
+	id,
+	text
+}: {
+	direction?: "down" | "up";
+	element: HTMLElement;
+	featureName: FeatureName;
+	id: string;
+	text?: string;
+}): {
 	listener: () => void;
 	remove: () => void;
 	update: () => void;
@@ -464,7 +476,7 @@ export function createTooltip({ element, featureName, id, text }: { element: HTM
 		tooltip.classList.add("ytp-bottom");
 		tooltip.id = id;
 		tooltip.style.left = `${rect.left + rect.width / 2}px`;
-		tooltip.style.top = `${rect.top - 2}px`;
+		tooltip.style.top = direction === "up" ? `${rect.top - 2}px` : `${rect.bottom + 32}px`;
 		tooltip.style.zIndex = "99999";
 		const {
 			dataset: { title }
@@ -472,7 +484,6 @@ export function createTooltip({ element, featureName, id, text }: { element: HTM
 		tooltip.textContent = text ?? title ?? "";
 		function mouseLeaveListener() {
 			tooltip.remove();
-			eventManager.removeEventListener(element, "mouseleave", featureName);
 		}
 		eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
 		return tooltip;
