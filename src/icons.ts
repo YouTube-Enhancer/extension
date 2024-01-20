@@ -8,12 +8,12 @@ export const toggleFeatures = Object.keys({ loopButton: "", maximizePlayerButton
 >);
 export type ToggleFeatures = (typeof toggleFeatures)[number];
 export type IconType<T extends FeaturesThatHaveButtons | ToggleFeatures> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
-export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_position_icon";
+export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
 export type GetIconType<Name extends FeaturesThatHaveButtons, Placement extends ButtonPlacement> = FeatureIconsType[Name][GetPlacementKey<Placement>];
 export type FeatureIconsType = {
 	[Feature in FeaturesThatHaveButtons]: {
 		feature_menu: BasicIcon;
-		shared_position_icon: IconType<Feature>;
+		shared_icon_position: IconType<Feature>;
 	};
 };
 
@@ -21,53 +21,44 @@ const loopOnSVG = createSVGElement(
 	"svg",
 	{
 		fill: "white",
-		height: "36",
+		height: "24px",
 		stroke: "white",
-		"stroke-width": "1.5",
-		viewBox: "0 0 36 36",
-		width: "36"
+		viewBox: "0 0 24 24",
+		width: "24px"
 	},
-	createSVGElement(
-		"g",
-		{
-			transform: "matrix(0.0943489,0,0,-0.09705882,-1.9972187,36.735291)"
-		},
-		createSVGElement("path", {
-			d: "m 120.59273,172.42419 v 20.60606 20.60606 l -1e-5,20.60608 v 20.60606 h 40.55254 40.55253 40.55255 40.55253 v 30.9091 l 50.69068,-41.21213 -50.69068,-51.51516 v 30.9091 h -32.94893 -32.94893 -32.94895 -32.94893 v -12.8788 -12.87879 -12.87879 -12.87879 h -7.6036 -7.6036 -7.6036 z",
-			transform: "matrix(1.0454545,0,0,0.99999979,-14.814644,20.606103)"
-		}),
-		createSVGElement("path", {
-			d: "m 313.21727,172.4242 1e-5,-82.42427 H 151.00712 V 59.09087 l -50.69065,41.21209 50.69065,51.51516 v -30.90909 h 131.79575 v 51.51517 z",
-			transform: "matrix(1.0454545,0,0,0.99999979,-14.814644,20.606103)"
-		})
-	)
+	createSVGElement("path", {
+		d: "m 2.4999994,12.000002 v -1.999999 -2 l -1e-6,-2.000001 v -2 h 4.0000004 3.9999992 4.000001 4 V 1.0000021 L 23.5,5.000002 l -5.000001,5 V 7.000001 h -3.25 H 12 8.7499986 5.4999992 v 1.250001 1.25 1.25 1.25 h -0.75 -0.7499999 -0.7499999 z",
+		"stroke-width": 0
+	}),
+	createSVGElement("path", {
+		d: "m 21.499999,12.000001 1e-6,8.000001 H 5.4999982 v 2.999996 l -4.99999798,-3.999996 4.99999798,-5 v 3 H 18.499999 v -5.000001 z",
+		"stroke-width": 0
+	})
 );
 const loopOffSVG = createSVGElement(
 	"svg",
 	{
 		fill: "white",
-		height: "36",
+		height: "24px",
 		stroke: "white",
-		"stroke-width": "1.5",
-		viewBox: "0 0 36 36",
-		width: "36"
+		viewBox: "0 0 24 24",
+		width: "24px"
 	},
-	createSVGElement(
-		"g",
-		{
-			transform: "matrix(0.09863748,0,0,-0.0970588,-3.3949621,34.735285)"
-		},
-		createSVGElement("path", {
-			d: "M 282.80287,285.75755 V 270.303 254.84845 h -81.10508 -57.44282 l 35.48347,-30.9091 h 103.06443 v -15.45454 -15.45455 l 25.34533,25.75758 25.34534,25.75758 -25.34534,20.60607 z M 151.00712,211.73026 v -39.30607 h -15.2072 -15.2072 v 65.93941 z"
-		}),
-		createSVGElement("path", {
-			d: "m 282.80287,172.42419 v -25.75758 -12.51658 l 30.4144,-26.48201 v 23.54404 41.21213 h -15.2072 z M 151.00712,151.81812 125.66179,126.06054 100.31645,100.30296 125.66179,79.696895 151.00712,59.090829 v 15.45455 15.454549 h 81.10508 58.45648 l -35.48347,30.909102 h -38.18022 -65.89787 v 15.45455 z"
-		}),
-		createSVGElement("path", {
-			d: "M 7,10 28,28 29.981167,25.855305 8.9811674,7.8553045 Z",
-			transform: "matrix(10.138134,0,0,-10.303033,29.349514,357.87878)"
-		})
-	)
+	createSVGElement("path", {
+		d: "M 221.97407,347.57575 V 332.1212 316.66665 H 140.86899 83.426168 l 35.483472,-30.9091 h 103.06443 v -15.45454 -15.45455 l 25.34533,25.75758 25.34534,25.75758 -25.34534,20.60607 z M 90.178318,273.54846 v -39.30607 h -15.2072 -15.2072 v 65.93941 z",
+		"stroke-width": 0,
+		transform: "matrix(0.09863748,0,0,-0.0970588,-3.3949621,34.735285)"
+	}),
+	createSVGElement("path", {
+		d: "m 221.97407,234.24239 v -25.75758 -12.51658 l 30.4144,-26.48201 v 23.54404 41.21213 h -15.2072 z m -131.795752,-20.60607 -25.34533,-25.75758 -25.34534,-25.75758 25.34534,-20.60607 25.34533,-20.60606 v 15.45455 15.45455 h 81.105082 58.45648 l -35.48347,30.9091 H 156.07619 90.178318 v 15.45455 z",
+		"stroke-width": 0,
+		transform: "matrix(0.09863748,0,0,-0.0970588,-3.3949621,34.735285)"
+	}),
+	createSVGElement("path", {
+		d: "M 39.48765,316.66665 252.38846,131.21205 272.4738,153.30892 59.57299,338.76352 Z",
+		"stroke-width": 0,
+		transform: "matrix(0.09863748,0,0,-0.0970588,-3.3949621,34.735285)"
+	})
 );
 const screenshotButtonSVG = createSVGElement(
 	"svg",
@@ -90,7 +81,7 @@ const screenshotButtonSVG = createSVGElement(
 		"stroke-linejoin": "round"
 	})
 );
-const volumeBoostSVG = createSVGElement(
+const volumeBoostOnSVG = createSVGElement(
 	"svg",
 	{
 		fill: "white",
@@ -100,8 +91,30 @@ const volumeBoostSVG = createSVGElement(
 		width: "24px"
 	},
 	createSVGElement("path", {
-		d: "M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77 0-4.28-2.99-7.86-7-8.77",
-		stroke: "none"
+		d: "m 18.678443,19.914783 c -0.237137,0 -0.474274,-0.0902 -0.654617,-0.27176 -0.361886,-0.36192 -0.361886,-0.94868 0,-1.31064 1.690919,-1.69112 2.62223,-3.9406 2.62223,-6.33336 0,-2.3927605 -0.931311,-4.6409929 -2.62223,-6.3333449 -0.361886,-0.36194 -0.361886,-0.948708 0,-1.310648 0.361885,-0.36194 0.948589,-0.36194 1.310476,0 C 21.376027,6.3969701 22.5,9.1109055 22.5,11.997783 c 0,2.88688 -1.123973,5.60084 -3.165698,7.64276 -0.180304,0.18036 -0.417482,0.2718 -0.654618,0.2718 z m -3.290446,-1.74668 c -0.237138,0 -0.474274,-0.0902 -0.654617,-0.27176 -0.361886,-0.36196 -0.361886,-0.94872 0,-1.31068 2.528358,-2.52864 2.528358,-6.6434005 0,-9.1720449 -0.361886,-0.36194 -0.361886,-0.948704 0,-1.310648 0.361885,-0.36194 0.948589,-0.36194 1.310514,0 1.57481,1.575 2.441888,3.6688124 2.441888,5.8960529 0,2.22724 -0.867078,4.32108 -2.441888,5.89608 -0.180343,0.18036 -0.41748,0.27176 -0.654657,0.27176 v 0 z m -3.291647,-1.74796 c -0.237177,0 -0.474314,-0.0902 -0.654657,-0.27176 -0.361886,-0.36192 -0.361886,-0.94872 0,-1.31064 1.564971,-1.56512 1.564971,-4.11228 0,-5.6774055 -0.361886,-0.361955 -0.361886,-0.9487194 0,-1.3106594 0.361925,-0.36194 0.948629,-0.36194 1.310515,0 2.287503,2.2877849 2.287503,6.0097049 0,8.2987049 -0.180343,0.18036 -0.41748,0.27176 -0.654618,0.27176 z",
+		"stroke-width": 0
+	}),
+	createSVGElement("path", {
+		d: "m 9.5297155,20.647343 c -0.160584,0 -0.318688,-0.063 -0.437243,-0.18036 L 4.3321986,15.706143 H 2.1175737 c -0.3408996,0 -0.6175732,-0.27668 -0.6175732,-0.61764 V 8.9120255 c 0,-0.340933 0.2766736,-0.6176434 0.6175732,-0.6176434 h 2.2146249 l 4.7602739,-4.760824 c 0.176625,-0.176644 0.442162,-0.229764 0.67314,-0.133408 0.230978,0.096358 0.3816835,0.321176 0.3816835,0.570704 V 20.029663 c 0,0.24956 -0.1507055,0.4756 -0.3816835,0.57072 -0.07639,0.032 -0.156865,0.0468 -0.235897,0.0468 z",
+		"stroke-width": 0
+	})
+);
+const volumeBoostOffSVG = createSVGElement(
+	"svg",
+	{
+		fill: "white",
+		height: "24px",
+		stroke: "white",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "m 12.09635,16.420143 c -0.237177,0 -0.474314,-0.0902 -0.654657,-0.27176 -0.361886,-0.36192 -0.361886,-0.94872 0,-1.31064 1.564971,-1.56512 1.564971,-4.11228 0,-5.6774055 -0.361886,-0.361955 -0.361886,-0.9487194 0,-1.3106594 0.361925,-0.36194 0.948629,-0.36194 1.310515,0 2.287503,2.2877849 2.287503,6.0097049 0,8.2987049 -0.180343,0.18036 -0.41748,0.27176 -0.654618,0.27176 z",
+		"stroke-width": 0
+	}),
+	createSVGElement("path", {
+		d: "m 9.5297155,20.647343 c -0.160584,0 -0.318688,-0.063 -0.437243,-0.18036 L 4.3321986,15.706143 H 2.1175737 c -0.3408996,0 -0.6175732,-0.27668 -0.6175732,-0.61764 V 8.9120255 c 0,-0.340933 0.2766736,-0.6176434 0.6175732,-0.6176434 h 2.2146249 l 4.7602739,-4.760824 c 0.176625,-0.176644 0.442162,-0.229764 0.67314,-0.133408 0.230978,0.096358 0.3816835,0.321176 0.3816835,0.570704 V 20.029663 c 0,0.24956 -0.1507055,0.4756 -0.3816835,0.57072 -0.07639,0.032 -0.156865,0.0468 -0.235897,0.0468 z",
+		"stroke-width": 0
 	})
 );
 const openTranscriptSVG = createSVGElement(
@@ -140,20 +153,20 @@ const maximizePlayerSVG = createSVGElement(
 	"svg",
 	{
 		fill: "none",
-		height: "100%",
+		height: "24px",
 		stroke: "white",
 		"stroke-width": "1.5",
-		viewBox: "0 0 36 36",
-		width: "100%"
+		viewBox: "0 0 24 24",
+		width: "24px"
 	},
 	createSVGElement("path", {
-		d: "M 26.171872,26.171876 H 9.8281282 V 9.8281241 H 26.171872 Z m -16.3437437,0 V 9.8281241 H 26.171872 V 26.171876 Z",
+		d: "M 21.788344,21.788346 H 2.2116561 V 2.2116538 H 21.788344 Z m -19.5766878,0 V 2.2116538 H 21.788344 V 21.788346 Z",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round",
 		"stroke-width": "1.5"
 	}),
 	createSVGElement("path", {
-		d: "m 18,14.497768 v 7.004464 M 21.502231,18 h -7.004462",
+		d: "m 12.000002,7.804995 v 8.39001 m 4.195002,-4.195006 H 7.8049961",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round",
 		"stroke-width": "1.5"
@@ -163,20 +176,20 @@ const minimizePlayerSVG = createSVGElement(
 	"svg",
 	{
 		fill: "none",
-		height: "100%",
+		height: "24px",
 		stroke: "white",
 		"stroke-width": "1.5",
-		viewBox: "0 0 36 36",
-		width: "100%"
+		viewBox: "0 0 24 24",
+		width: "24px"
 	},
 	createSVGElement("path", {
-		d: "M 26.171872,26.171876 H 9.8281282 V 9.8281241 H 26.171872 Z m -16.3437437,0 V 9.8281241 H 26.171872 V 26.171876 Z",
+		d: "M 21.788346,21.788346 H 2.2116542 V 2.2116541 H 21.788346 Z m -19.5766917,0 V 2.2116541 H 21.788346 V 21.788346 Z",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round",
 		"stroke-width": "1.5"
 	}),
 	createSVGElement("path", {
-		d: "M 21.502231,18 H 14.497769",
+		d: "M 16.195005,12 H 7.804995",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round",
 		"stroke-width": "1.5"
@@ -185,36 +198,35 @@ const minimizePlayerSVG = createSVGElement(
 export const featureIcons = {
 	loopButton: {
 		feature_menu: loopOnSVG,
-		shared_position_icon: {
+		shared_icon_position: {
 			off: loopOffSVG,
 			on: loopOnSVG
 		}
 	},
 	maximizePlayerButton: {
 		feature_menu: maximizePlayerSVG,
-		shared_position_icon: {
+		shared_icon_position: {
 			off: maximizePlayerSVG,
 			on: minimizePlayerSVG
 		}
 	},
 	openTranscriptButton: {
 		feature_menu: openTranscriptSVG,
-		shared_position_icon: openTranscriptSVG
+		shared_icon_position: openTranscriptSVG
 	},
 	screenshotButton: {
 		feature_menu: screenshotButtonSVG,
-		shared_position_icon: screenshotButtonSVG
+		shared_icon_position: screenshotButtonSVG
 	},
 	volumeBoostButton: {
-		feature_menu: volumeBoostSVG,
-		shared_position_icon: {
-			off: volumeBoostSVG, // TODO: replace with different icon
-			on: volumeBoostSVG
+		feature_menu: volumeBoostOnSVG,
+		shared_icon_position: {
+			off: volumeBoostOffSVG,
+			on: volumeBoostOnSVG
 		}
 	}
 } satisfies FeatureIconsType;
-// TODO: finish moving icon definitions to here
-export function getIcon<Name extends FeaturesThatHaveButtons, Placement extends ButtonPlacement>(
+export function getFeatureIcon<Name extends FeaturesThatHaveButtons, Placement extends ButtonPlacement>(
 	featureName: Name,
 	placement: GetPlacementKey<Placement>
 ) {

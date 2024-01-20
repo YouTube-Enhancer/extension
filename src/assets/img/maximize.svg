@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   stroke="currentColor"
-   class="w-6 h-6"
-   fill="none"
-   height="24"
-   version="1.1"
-   viewBox="0 0 23.999999 24.000001"
-   width="24"
-   id="svg7037"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs7041" />
-  <path
-     d="M 21.283309,21.283314 H 2.7166914 V 2.7166868 H 21.283309 Z m -18.5666175,0 V 2.7166868 H 21.283309 V 21.283314 Z"
-     style="stroke-width:1.34987;stroke-linejoin:round;stroke-dasharray:none"
-     id="path7033" />
-  <path
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     d="M 12,8.0214379 V 15.978562 M 15.978561,12 H 8.0214389"
-     style="stroke-width:1.34987;stroke-linejoin:round;stroke-dasharray:none"
-     id="path7035" />
+<svg stroke="currentColor" class="w-6 h-6" fill="none" height="24" version="1.1" viewBox="0 0 24 24" width="24" id="svg7037"
+	xmlns="http://www.w3.org/2000/svg"
+	xmlns:svg="http://www.w3.org/2000/svg">
+	<path d="M 21.788344,21.788346 H 2.2116561 V 2.2116538 H 21.788344 Z m -19.5766878,0 V 2.2116538 H 21.788344 V 21.788346 Z" id="path7033" />
+	<path stroke-linecap="round" stroke-linejoin="round" d="m 12.000002,7.804995 v 8.39001 m 4.195002,-4.195006 H 7.8049961" id="path7035" />
 </svg>
