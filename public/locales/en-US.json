@@ -12,13 +12,21 @@
 					"label": "Feature menu"
 				},
 				"loopButton": {
-					"label": "Loop"
+					"label": "Loop",
+					"toggle": {
+						"off": "Loop off",
+						"on": "Loop on"
+					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize"
+					"label": "Maximize",
+					"toggle": {
+						"off": "Maximize off",
+						"on": "Maximize on"
+					}
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "Open transcript"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Screenshot copied to clipboard",
@@ -31,7 +39,11 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "Volume Boost",
+					"toggle": {
+						"off": "Volume boost off",
+						"on": "Volume boost on"
+					}
 				}
 			}
 		},

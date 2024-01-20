@@ -2,7 +2,8 @@ import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } fro
 
 import { featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
-import { checkIfFeatureButtonExists } from "@/src/features/buttonPlacement/utils";
+import { featuresInControls } from "@/src/features/buttonPlacement";
+import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
@@ -23,8 +24,15 @@ import { addScreenshotButton, removeScreenshotButton } from "@/src/features/scre
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost, { addVolumeBoostButton, disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
+import volumeBoost, {
+	addVolumeBoostButton,
+	applyVolumeBoost,
+	disableVolumeBoost,
+	enableVolumeBoost,
+	removeVolumeBoostButton
+} from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
+import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
@@ -297,9 +305,27 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { language }
 						} = message;
 						window.i18nextInstance = await i18nService(language);
-						updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
-						for (const feature of featuresInMenu) {
-							updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+						if (featuresInMenu.size > 0) {
+							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
+							for (const feature of featuresInMenu) {
+								updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+							}
+						}
+						if (featuresInControls.size > 0) {
+							for (const feature of featuresInControls) {
+								if (toggleFeatures.includes(feature)) {
+									const toggleFeature = feature as ToggleFeatures;
+									const featureButton = getFeatureButton(toggleFeature);
+									if (!featureButton) return;
+									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
+									updateFeatureButtonTitle(
+										feature,
+										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.toggle.${buttonChecked ? "on" : "off"}`)
+									);
+								} else {
+									updateFeatureButtonTitle(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+								}
+							}
 						}
 						break;
 					}
@@ -367,10 +393,10 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { buttonPlacement: buttonPlacements }
 						} = message;
-						for (const [featureName, buttonPlacement] of Object.entries(buttonPlacements)) {
-							const buttonExists = checkIfFeatureButtonExists(featureName, buttonPlacement);
+						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(buttonPlacements)) {
+							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
 							if (buttonExists) continue;
-							featureButtonFunctions[featureName].remove();
+							featureButtonFunctions[featureName].remove(oldPlacement);
 							await featureButtonFunctions[featureName].add();
 						}
 						break;
@@ -401,6 +427,6 @@ window.addEventListener("error", (event) => {
 
 window.addEventListener("unhandledrejection", (event) => {
 	event.preventDefault();
-	const errorLine = event.reason instanceof Error ? event.reason.stack : "Stack trace not available";
+	const errorLine = event.reason instanceof Error ? event?.reason?.stack : "Stack trace not available";
 	browserColorLog(`Unhandled rejection: ${event.reason}\nAt: ${errorLine}`, "FgRed");
 });

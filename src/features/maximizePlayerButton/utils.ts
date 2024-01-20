@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement } from "@/src/utils/utilities";
+
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
 
