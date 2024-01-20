@@ -174,6 +174,13 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "volumeBoostAmountChange": {
+						const {
+							data: { volumeBoostAmount }
+						} = message;
+						applyVolumeBoost(volumeBoostAmount);
+						break;
+					}
 					case "playerSpeedChange": {
 						const {
 							data: { enableForcedPlaybackSpeed, playerSpeed }

@@ -314,15 +314,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			});
 		},
 		volume_boost_amount: (newValue) => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostAmount: newValue,
-				volumeBoostEnabled: options.enable_volume_boost,
-				volumeBoostMode: options.volume_boost_mode
+			sendExtensionOnlyMessage("volumeBoostAmountChange", {
+				volumeBoostAmount: newValue
 			});
 		},
 		volume_boost_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostAmount: options.volume_boost_amount,
 				volumeBoostEnabled: options.enable_volume_boost,
 				volumeBoostMode: newValue
 			});
