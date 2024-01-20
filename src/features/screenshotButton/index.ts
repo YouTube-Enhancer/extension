@@ -1,9 +1,10 @@
-import { getIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import type { ButtonPlacement } from "@/src/types";
 
-import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
-import { getFeatureMenuItem } from "../featureMenu/utils";
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { getFeatureIcon } from "@/src/icons";
+import eventManager from "@/src/utils/EventManager";
+import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -37,25 +38,21 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 		switch (screenshot_save_as) {
 			case "clipboard": {
-				const tooltip = document.createElement("div");
-				const screenshotMenuItem = getFeatureMenuItem("screenshotButton");
-				if (!screenshotMenuItem) return;
-				const rect = screenshotMenuItem.getBoundingClientRect();
-				tooltip.classList.add("yte-button-tooltip");
-				tooltip.classList.add("ytp-tooltip");
-				tooltip.classList.add("ytp-rounded-tooltip");
-				tooltip.classList.add("ytp-bottom");
-				tooltip.id = "yte-screenshot-tooltip";
-				tooltip.style.left = `${rect.left + rect.width / 2}px`;
-				tooltip.style.top = `${rect.top - 2}px`;
-				tooltip.style.zIndex = "99999";
-				tooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
-				document.body.appendChild(tooltip);
+				const screenshotButton = getFeatureButton("screenshotButton");
+				if (!screenshotButton) return;
+				const { listener, remove } = createTooltip({
+					direction: "up",
+					element: screenshotButton,
+					featureName: "screenshotButton",
+					id: "yte-feature-screenshotButton-tooltip",
+					text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
+				});
+				listener();
 				const clipboardImage = new ClipboardItem({ "image/png": blob });
 				void navigator.clipboard.write([clipboardImage]);
 				void navigator.clipboard.writeText(dataUrl);
 				setTimeout(() => {
-					tooltip.remove();
+					remove();
 				}, 1200);
 				break;
 			}
@@ -105,12 +102,12 @@ export async function addScreenshotButton(): Promise<void> {
 		"screenshotButton",
 		screenshotButtonPlacement,
 		window.i18nextInstance.t("pages.content.features.screenshotButton.label"),
-		getIcon("screenshotButton", screenshotButtonPlacement !== "feature_menu" ? "shared_position_icon" : "feature_menu"),
+		getFeatureIcon("screenshotButton", screenshotButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		screenshotButtonClickListener,
 		false
 	);
 }
-export function removeScreenshotButton() {
-	void removeFeatureButton("screenshotButton");
+export function removeScreenshotButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("screenshotButton", placement);
 	eventManager.removeEventListeners("screenshotButton");
 }
