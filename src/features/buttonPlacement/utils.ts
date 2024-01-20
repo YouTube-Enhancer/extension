@@ -1,10 +1,8 @@
+import { getFeatureIds, getFeatureMenuItem } from "@/src/features/featureMenu/utils";
 import { type GetIconType } from "@/src/icons";
 import { type ButtonPlacement, type FeaturesThatHaveButtons } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { createStyledElement, createTooltip } from "@/src/utils/utilities";
-
-import { getFeatureIds } from "../featureMenu/utils";
-// TODO: fix icon type for toggle buttons
 
 export type ListenerType<Toggle extends boolean> = Toggle extends true ? (checked?: boolean) => void : () => void;
 
@@ -16,10 +14,9 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends Fea
 ) {
 	if (isToggle) {
 		button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
-		// TODO: add language strings for toggle features and update the tooltip text
 		if (typeof icon === "object" && "off" in icon && "on" in icon) {
 			updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
-		} else if (typeof icon === "object" && icon instanceof SVGSVGElement) {
+		} else if (icon instanceof SVGSVGElement) {
 			updateFeatureButtonIcon(button, icon);
 		}
 		listener(JSON.parse(button.ariaChecked) as boolean);
@@ -38,6 +35,7 @@ export function makeFeatureButton<Name extends FeaturesThatHaveButtons, Placemen
 ) {
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const buttonExists = document.querySelector(`button#${getFeatureButtonId(featureName)}`) !== null;
+	// TODO: fix left controls chapter container shrinking buttons
 	// TODO: fix right controls button making control buttons overflow
 	const button = createStyledElement({
 		classlist: ["ytp-button"],
@@ -53,40 +51,63 @@ export function makeFeatureButton<Name extends FeaturesThatHaveButtons, Placemen
 			width: "48px"
 		}
 	});
-	const { listener: tooltipListener } = createTooltip({
-		direction: placement === "below_player" ? "up" : "up",
+	button.dataset.title = label;
+	const { listener: tooltipListener, update } = createTooltip({
+		direction: placement === "below_player" ? "down" : "up",
 		element: button,
 		featureName,
-		id: `yte-feature-${featureName}-tooltip`,
-		text: label
+		id: `yte-feature-${featureName}-tooltip`
 	});
 	if (buttonExists) {
 		eventManager.removeEventListener(button, "click", featureName);
-		eventManager.addEventListener(button, "click", () => buttonClickListener<Placement, Name, Toggle>(button, icon, listener, isToggle), featureName);
+		eventManager.addEventListener(
+			button,
+			"click",
+			() => {
+				buttonClickListener<Placement, Name, Toggle>(button, icon, listener, isToggle);
+				update();
+			},
+			featureName
+		);
 		eventManager.removeEventListener(button, "mouseover", featureName);
 		eventManager.addEventListener(button, "mouseover", tooltipListener, featureName);
 		return button;
 	}
 
-	button.dataset.title = label;
 	if (isToggle) {
 		button.ariaChecked = "false";
 		if (typeof icon === "object" && "off" in icon && "on" in icon) {
 			button.append(icon.off);
-		} else if (typeof icon === "object" && icon instanceof SVGSVGElement) {
+		} else if (icon instanceof SVGSVGElement) {
+			button.append(icon);
+		}
+	} else {
+		if (icon instanceof SVGSVGElement) {
 			button.append(icon);
 		}
 	}
 
 	eventManager.addEventListener(button, "mouseover", tooltipListener, featureName);
-	eventManager.addEventListener(button, "click", () => buttonClickListener<Placement, Name, Toggle>(button, icon, listener, isToggle), featureName);
+	eventManager.addEventListener(
+		button,
+		"click",
+		() => {
+			buttonClickListener<Placement, Name, Toggle>(button, icon, listener, isToggle);
+			update();
+		},
+		featureName
+	);
 	return button;
 }
-function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
+export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
 	if (button.firstChild) {
-		button.firstChild.remove();
-		button.append(icon);
+		button.firstChild.replaceWith(icon);
 	}
+}
+export function updateFeatureButtonTitle(featureName: FeaturesThatHaveButtons, title: string) {
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
+	if (!button) return;
+	button.dataset.title = title;
 }
 export function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonPlacement, "feature_menu">) {
 	switch (placement) {
@@ -147,5 +168,8 @@ export function checkIfFeatureButtonExists(featureName: FeaturesThatHaveButtons,
 }
 export function getFeatureButtonId(featureName: FeaturesThatHaveButtons) {
 	return `yte-feature-${featureName}-button` as const;
+}
+export function getFeatureButton(featureName: FeaturesThatHaveButtons) {
+	return getFeatureMenuItem(featureName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
 }
 export const buttonContainerId = "yte-button-container";

@@ -9,12 +9,15 @@ interface EnUS {
 		content: {
 			features: {
 				featureMenu: { label: "Feature menu" };
-				loopButton: { label: "Loop" };
-				maximizePlayerButton: { label: "Maximize" };
-				openTranscriptButton: { label: "Open Transcript" };
+				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
+				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
+				openTranscriptButton: { label: "Open transcript" };
 				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
-				volumeBoostButton: { label: "Volume Boost" };
+				volumeBoostButton: {
+					label: "Volume Boost";
+					toggle: { off: "Volume boost off"; on: "Volume boost on" };
+				};
 			};
 		};
 		options: {

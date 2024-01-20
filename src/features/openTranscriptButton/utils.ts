@@ -1,8 +1,9 @@
-import { getIcon } from "@/src/icons";
+import type { ButtonPlacement } from "@/src/types";
+
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
-
-import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
 
 export async function addOpenTranscriptButton() {
 	// Wait for the "options" message from the content script
@@ -24,12 +25,12 @@ export async function addOpenTranscriptButton() {
 		"openTranscriptButton",
 		openTranscriptButtonPlacement,
 		window.i18nextInstance.t("pages.content.features.openTranscriptButton.label"),
-		getIcon("openTranscriptButton", openTranscriptButtonPlacement !== "feature_menu" ? "shared_position_icon" : "feature_menu"),
+		getFeatureIcon("openTranscriptButton", openTranscriptButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		transcriptButtonClickerListener,
 		false
 	);
 }
-export function removeOpenTranscriptButton() {
-	void removeFeatureButton("openTranscriptButton");
+export function removeOpenTranscriptButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("openTranscriptButton", placement);
 	eventManager.removeEventListeners("openTranscriptButton");
 }

@@ -1,9 +1,8 @@
 import type { Selector, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, clamp, toDivisible } from "@/src/utils/utilities";
+import { browserColorLog, clamp, round, toDivisible } from "@/src/utils/utilities";
 
-import { round } from "../../utils/utilities";
 /**
  * Adjust the speed based on the scroll direction.
  *

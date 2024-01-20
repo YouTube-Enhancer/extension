@@ -1,9 +1,12 @@
-import { getIcon } from "@/src/icons";
+import type { ButtonPlacement } from "@/src/types";
+
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
+import { getFeatureIds } from "@/src/features/featureMenu/utils";
+import { getFeatureIcon } from "@/src/icons";
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
-import { getFeatureIds, getFeatureMenuItem } from "../featureMenu/utils";
 import { loopButtonClickListener } from "./utils";
 
 export async function addLoopButton() {
@@ -27,17 +30,18 @@ export async function addLoopButton() {
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 
-	const loopSVG = getIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_position_icon" : "feature_menu");
-	// TODO: fix icon positioning
 	await addFeatureButton(
 		"loopButton",
 		loopButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.loopButton.label"),
-		loopSVG,
+		loopButtonPlacement === "feature_menu" ?
+			window.i18nextInstance.t("pages.content.features.loopButton.label")
+		:	window.i18nextInstance.t("pages.content.features.loopButton.toggle.off"),
+		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		loopButtonClickListener,
 		true
 	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
+		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu");
 		for (const mutation of mutationList) {
 			if (mutation.type === "attributes") {
 				const { attributeName, target } = mutation;
@@ -50,17 +54,16 @@ export async function addLoopButton() {
 					const featureExistsInMenu =
 						featureMenu && featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`) !== null;
 					if (featureExistsInMenu) {
-						const menuItem = getFeatureMenuItem(featureName);
+						const menuItem = getFeatureButton(featureName);
 						if (!menuItem) return;
 						menuItem.ariaChecked = loop ? "true" : "false";
 					}
-					const button = document.querySelector<HTMLButtonElement>(`#yte-feature-${featureName}-button`);
+					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
 					if (!button) return;
-					button.firstChild?.remove();
 					switch (loopButtonPlacement) {
 						case "feature_menu": {
 							if (loopSVG instanceof SVGSVGElement) {
-								button.appendChild(loopSVG);
+								button.firstChild?.replaceWith(loopSVG);
 							}
 							break;
 						}
@@ -80,7 +83,7 @@ export async function addLoopButton() {
 	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
 	loopChangeMutationObserver.observe(videoElement, { attributeFilter: ["loop"], attributes: true });
 }
-export function removeLoopButton() {
-	void removeFeatureButton("loopButton");
+export function removeLoopButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("loopButton", placement);
 	eventManager.removeEventListeners("loopButton");
 }

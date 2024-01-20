@@ -1,10 +1,10 @@
-import type { FeaturesThatHaveButtons } from "../types";
+import type { ButtonPlacement, FeaturesThatHaveButtons } from "@/src/types";
 
-import { addLoopButton, removeLoopButton } from "./loopButton";
-import { addMaximizePlayerButton, removeMaximizePlayerButton } from "./maximizePlayerButton";
-import { addOpenTranscriptButton, removeOpenTranscriptButton } from "./openTranscriptButton/utils";
-import { addScreenshotButton, removeScreenshotButton } from "./screenshotButton";
-import { addVolumeBoostButton, removeVolumeBoostButton } from "./volumeBoost";
+import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
+import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
+import { addOpenTranscriptButton, removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
+import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
+import { addVolumeBoostButton, removeVolumeBoostButton } from "@/src/features/volumeBoost";
 
 export const featureButtonFunctions = {
 	loopButton: {
@@ -31,6 +31,6 @@ export const featureButtonFunctions = {
 	FeaturesThatHaveButtons,
 	{
 		add: (() => Promise<void>) | (() => void);
-		remove: (() => Promise<void>) | (() => void);
+		remove: ((placement: ButtonPlacement) => Promise<void>) | ((placement: ButtonPlacement) => void);
 	}
 >;

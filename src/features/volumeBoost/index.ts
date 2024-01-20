@@ -1,8 +1,10 @@
-import { getIcon } from "@/src/icons";
+import type { ButtonPlacement } from "@/src/types";
+
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
-
-import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
 
 export default async function volumeBoost() {
 	setupVolumeBoost();
@@ -73,11 +75,17 @@ export async function addVolumeBoostButton() {
 	await addFeatureButton(
 		"volumeBoostButton",
 		volumeBoostButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.volumeBoostButton.label"),
-		getIcon("volumeBoostButton", volumeBoostButtonPlacement !== "feature_menu" ? "shared_position_icon" : "feature_menu"),
+		volumeBoostButtonPlacement === "feature_menu" ?
+			window.i18nextInstance.t("pages.content.features.volumeBoostButton.label")
+		:	window.i18nextInstance.t(`pages.content.features.volumeBoostButton.toggle.off`),
+		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		(checked) => {
 			void (async () => {
 				if (checked !== undefined) {
+					updateFeatureButtonTitle(
+						"volumeBoostButton",
+						window.i18nextInstance.t(`pages.content.features.volumeBoostButton.toggle.${checked ? "on" : "off"}`)
+					);
 					if (checked) {
 						await enableVolumeBoost();
 					} else {
@@ -89,7 +97,7 @@ export async function addVolumeBoostButton() {
 		true
 	);
 }
-export function removeVolumeBoostButton() {
-	void removeFeatureButton("volumeBoostButton");
+export function removeVolumeBoostButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("volumeBoostButton", placement);
 	eventManager.removeEventListeners("volumeBoostButton");
 }

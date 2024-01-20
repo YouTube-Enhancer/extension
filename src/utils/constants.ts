@@ -1,4 +1,4 @@
-import z, { ZodEnum } from "zod";
+import z, { ZodEnum, ZodObject } from "zod";
 
 import type { ButtonPlacement, FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
 
@@ -68,8 +68,16 @@ export const defaultConfiguration = {
 	volume_boost_amount: 1,
 	volume_boost_mode: "global"
 } satisfies configuration;
-// TODO: fix this type error
-export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+export const configurationImportSchema: TypeToPartialZodSchema<
+	configuration,
+	"button_placements",
+	{
+		button_placements: ZodObject<{
+			[K in FeaturesThatHaveButtons]: ZodEnum<[ButtonPlacement]>;
+		}>;
+	},
+	true
+> = z.object({
 	button_placements: z.object({
 		...featuresThatHaveButtons.reduce(
 			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacement).optional() }),

@@ -45,7 +45,6 @@ export const volumeBoostMode = ["global", "per_video"] as const;
 export type VolumeBoostMode = (typeof volumeBoostMode)[number];
 export const buttonPlacement = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacement)[number];
-
 export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
 export type FeaturesThatHaveButtons = Exclude<
 	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
@@ -143,7 +142,17 @@ export type ContentSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
-	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", { buttonPlacement: ButtonPlacementConfiguration }>;
+	buttonPlacementChange: DataResponseMessage<
+		"buttonPlacementChange",
+		{
+			buttonPlacement: {
+				[Key in FeaturesThatHaveButtons]: {
+					new: ButtonPlacement;
+					old: ButtonPlacement;
+				};
+			};
+		}
+	>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
