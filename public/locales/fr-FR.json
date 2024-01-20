@@ -12,10 +12,18 @@
 					"label": "Menu des fonctionnalités"
 				},
 				"loopButton": {
-					"label": "Lire en boucle"
+					"label": "Lire en boucle",
+					"toggle": {
+						"off": "Loop off",
+						"on": "Loop on"
+					}
 				},
 				"maximizePlayerButton": {
-					"label": "Agrandir"
+					"label": "Agrandir",
+					"toggle": {
+						"off": "Maximize off",
+						"on": "Maximize on"
+					}
 				},
 				"openTranscriptButton": {
 					"label": "Ouvrir la transcription"
@@ -31,7 +39,11 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Gain sonore"
+					"label": "Gain sonore",
+					"toggle": {
+						"off": "Volume boost off",
+						"on": "Volume boost on"
+					}
 				}
 			}
 		},
@@ -84,6 +96,37 @@
 					"title": "Réinitialise tous les paramètres par défaut, cliquez sur le bouton de confirmation pour enregistrer les modifications",
 					"value": "Réinitialiser"
 				}
+			},
+			"buttonPlacement": {
+				"select": {
+					"buttonNames": {
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
+					},
+					"options": {
+						"below_player": {
+							"placement": "below the player controls",
+							"value": "Below Player"
+						},
+						"feature_menu": {
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
+						},
+						"player_controls_left": {
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
+						},
+						"player_controls_right": {
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
+						}
+					},
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+				},
+				"title": "Button Placement Settings"
 			},
 			"customCSS": {
 				"editor": {
