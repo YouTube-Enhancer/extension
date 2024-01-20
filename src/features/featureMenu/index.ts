@@ -1,9 +1,7 @@
 import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements } from "@/src/utils/utilities";
-
-import { waitForSpecificMessage } from "../../utils/utilities";
+import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 function createFeatureMenu() {
 	// Create the feature menu div
@@ -118,7 +116,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
-		id: "yte-feature-menu-tooltip"
+		id: "yte-feature-featureMenu-tooltip"
 	});
 	const hideYouTubeSettings = () => {
 		const settingsMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
