@@ -23,7 +23,13 @@ import { addScreenshotButton, removeScreenshotButton } from "@/src/features/scre
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost, { addVolumeBoostButton, disableVolumeBoost, enableVolumeBoost, removeVolumeBoostButton } from "@/src/features/volumeBoost";
+import volumeBoost, {
+	addVolumeBoostButton,
+	applyVolumeBoost,
+	disableVolumeBoost,
+	enableVolumeBoost,
+	removeVolumeBoostButton
+} from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import eventManager from "@/utils/EventManager";
 import {
@@ -164,6 +170,13 @@ window.addEventListener("DOMContentLoaded", function () {
 								removeVolumeBoostButton();
 							}
 						}
+						break;
+					}
+					case "volumeBoostAmountChange": {
+						const {
+							data: { volumeBoostAmount }
+						} = message;
+						applyVolumeBoost(volumeBoostAmount);
 						break;
 					}
 					case "playerSpeedChange": {
