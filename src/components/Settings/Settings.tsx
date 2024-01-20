@@ -1,4 +1,4 @@
-import type { ModifierKey, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, PathValue, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -6,7 +6,7 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { youtubePlayerSpeedRate } from "@/src/types";
+import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -21,16 +21,42 @@ import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
-async function getLanguageOptions() {
-	const languageOptions: SelectOption[] = [];
-	for (const locale of availableLocales) {
-		const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`).catch((err) => console.error(err));
-		const localeData = (await response?.json()) as EnUS;
-		languageOptions.push({
-			label: `${localeData.langName} (${localePercentages[locale]}%)`,
-			value: locale
-		});
+
+function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
+	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
+	let value: any = obj;
+
+	for (const key of keys) {
+		if (value && typeof value === "object" && key in value) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			({ [key]: value } = value);
+		} else {
+			throw new Error(`Invalid path: ${String(path)}`);
+		}
 	}
+
+	return value as PathValue<T, P>;
+}
+async function getLanguageOptions() {
+	const promises = availableLocales.map(async (locale) => {
+		try {
+			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+			const localeData = await response.json();
+			return Promise.resolve({
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
+				value: locale
+			} as SelectOption);
+		} catch (err) {
+			return Promise.reject(err);
+		}
+	});
+
+	const results = await Promise.allSettled(promises);
+
+	const languageOptions: SelectOption[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
+		.map((result) => result.value);
+
 	return languageOptions;
 }
 function LanguageOptions({
@@ -43,8 +69,17 @@ function LanguageOptions({
 	t: i18nInstanceType["t"];
 }) {
 	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
-		getLanguageOptions().then(setLanguageOptions).catch(console.error);
+		void (async () => {
+			try {
+				const languages = await getLanguageOptions();
+				setLanguageOptions(languages);
+				setLanguagesLoading(false);
+			} catch (error) {
+				setLanguagesLoading(false);
+			}
+		})();
 	}, []);
 	return (
 		<SettingSection>
@@ -53,6 +88,7 @@ function LanguageOptions({
 				disabled={false}
 				id="language"
 				label={t("settings.sections.language.select.label")}
+				loading={languagesLoading}
 				onChange={setValueOption("language")}
 				options={languageOptions}
 				selectedOption={selectedLanguage}
@@ -142,18 +178,45 @@ export default function Settings() {
 	}
 	const { t } = i18nInstance;
 	const setCheckboxOption =
-		(key: configurationKeys) =>
+		(key: Path<configuration>) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
 			setFirstLoad(false);
 			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
 		};
 	const setValueOption =
-		(key: configurationKeys) =>
+		(key: Path<configuration>) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 			setFirstLoad(false);
-			setSettings((state) => (state ? { ...state, [key]: value } : undefined));
+			setSettings((state) => {
+				if (!state) {
+					return undefined;
+				}
+
+				const updatedState = { ...state };
+				const keys = key.split(".") as Array<keyof configuration>;
+				let parentValue: any = updatedState;
+
+				for (const currentKey of keys.slice(0, -1)) {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+					({ [currentKey]: parentValue } = parentValue);
+				}
+
+				const propertyName = keys.at(keys.length - 1);
+				if (!propertyName) return updatedState;
+				if (typeof parentValue === "object" && parentValue !== null) {
+					// If the path represents a nested property, update the nested property
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+					parentValue[propertyName] = value;
+				} else {
+					// If the path represents a top-level property, update it directly
+					// @ts-expect-error not sure how to type this
+					updatedState[propertyName] = value;
+				}
+
+				return updatedState;
+			});
 		};
-	const getSelectedOption = <K extends configurationKeys>(key: K) => settings[key];
+	const getSelectedOption = <K extends Path<configuration>>(key: K) => getPathValue(settings, key);
 	function saveOptions() {
 		if (settings) {
 			for (const key of Object.keys(settings)) {
@@ -322,6 +385,21 @@ export default function Settings() {
 			value: "per_video"
 		}
 	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
+	const buttonPlacementOptions: SelectOption[] = [
+		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
+		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
+		{
+			label: t("settings.sections.buttonPlacement.select.options.player_controls_left.value"),
+			value: "player_controls_left"
+		},
+		{
+			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
+			value: "player_controls_right"
+		}
+	] as {
+		label: string;
+		value: ButtonPlacement;
+	}[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -389,19 +467,16 @@ export default function Settings() {
 			const filename = `youtube_enhancer_settings_${timestamp}.json`;
 			// Convert the settings to JSON.
 			const settingsJSON = JSON.stringify(exportableSettings);
-
 			// Create a blob to hold the JSON.
 			const blob = new Blob([settingsJSON], { type: "application/json" });
 			// Get a URL for the blob.
 			const url = URL.createObjectURL(blob);
-
 			// Create a link to the blob.
 			const a = document.createElement("a");
 			a.href = url;
 			a.download = filename;
 			// Click the link to download the file.
 			a.click();
-
 			// Show a success notification.
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
@@ -421,6 +496,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.featureMenu.openType.title")} />
 					<Setting
+						disabled={Object.values(settings.button_placements).every((v) => v !== "feature_menu")}
 						id="feature_menu_open_type"
 						label={t("settings.sections.featureMenu.openType.select.label")}
 						onChange={setValueOption("feature_menu_open_type")}
@@ -432,6 +508,28 @@ export default function Settings() {
 						title={t("settings.sections.featureMenu.openType.select.title")}
 						type="select"
 					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
+					{featuresThatHaveButtons.map((feature) => {
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
+						return (
+							<Setting
+								id={`button_placements.${feature}`}
+								key={feature}
+								label={label}
+								onChange={setValueOption(`button_placements.${feature}`)}
+								options={buttonPlacementOptions}
+								selectedOption={getSelectedOption(`button_placements.${feature}`)}
+								title={t(`settings.sections.buttonPlacement.select.title`, {
+									BUTTON_NAME: label.toLowerCase(),
+									PLACEMENT: t(`settings.sections.buttonPlacement.select.options.${getSelectedOption(`button_placements.${feature}`)}.placement`)
+								})}
+								type="select"
+							/>
+						);
+					})}
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.miscellaneous.title")} />
@@ -816,7 +914,7 @@ export default function Settings() {
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -824,7 +922,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -832,7 +930,7 @@ export default function Settings() {
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -841,7 +939,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
-							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -864,7 +962,7 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
 					:	<input
-							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}

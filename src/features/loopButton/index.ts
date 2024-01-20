@@ -1,18 +1,26 @@
+import type { ButtonPlacement } from "@/src/types";
+
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
+import { getFeatureIds } from "@/src/features/featureMenu/utils";
+import { getFeatureIcon } from "@/src/icons";
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
-import { loopButtonClickListener, makeLoopIcon } from "./utils";
+import { loopButtonClickListener } from "./utils";
 
 export async function addLoopButton() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: {
+				button_placements: { loopButton: loopButtonPlacement },
+				enable_loop_button
+			}
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_loop_button } = options;
 	// If the loop button option is disabled, return
 	if (!enable_loop_button) return;
 	// Get the volume control element
@@ -21,15 +29,19 @@ export async function addLoopButton() {
 	if (!volumeControl) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
-	const loopSVG = makeLoopIcon();
-	await addFeatureItemToMenu({
-		featureName: "loopButton",
-		icon: loopSVG,
-		isToggle: true,
-		label: window.i18nextInstance.t("pages.content.features.loopButton.label"),
-		listener: loopButtonClickListener
-	});
+
+	await addFeatureButton(
+		"loopButton",
+		loopButtonPlacement,
+		loopButtonPlacement === "feature_menu" ?
+			window.i18nextInstance.t("pages.content.features.loopButton.label")
+		:	window.i18nextInstance.t("pages.content.features.loopButton.toggle.off"),
+		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		loopButtonClickListener,
+		true
+	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
+		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu");
 		for (const mutation of mutationList) {
 			if (mutation.type === "attributes") {
 				const { attributeName, target } = mutation;
@@ -38,14 +50,31 @@ export async function addLoopButton() {
 					const featureName: FeatureName = "loopButton";
 					// Get the feature menu
 					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					if (!featureMenu) return;
-
 					// Check if the feature item already exists in the menu
-					const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#yte-feature-${featureName}`) !== null;
+					const featureExistsInMenu =
+						featureMenu && featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`) !== null;
 					if (featureExistsInMenu) {
-						const menuItem = getFeatureMenuItem(featureName);
+						const menuItem = getFeatureButton(featureName);
 						if (!menuItem) return;
 						menuItem.ariaChecked = loop ? "true" : "false";
+					}
+					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
+					if (!button) return;
+					switch (loopButtonPlacement) {
+						case "feature_menu": {
+							if (loopSVG instanceof SVGSVGElement) {
+								button.firstChild?.replaceWith(loopSVG);
+							}
+							break;
+						}
+						case "below_player":
+						case "player_controls_left":
+						case "player_controls_right": {
+							if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
+								button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -54,7 +83,7 @@ export async function addLoopButton() {
 	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
 	loopChangeMutationObserver.observe(videoElement, { attributeFilter: ["loop"], attributes: true });
 }
-export function removeLoopButton() {
-	removeFeatureItemFromMenu("loopButton");
+export function removeLoopButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("loopButton", placement);
 	eventManager.removeEventListeners("loopButton");
 }
