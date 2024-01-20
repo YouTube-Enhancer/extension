@@ -1,10 +1,9 @@
+import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
 import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, WithId } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
-
-import type { ListenerType } from "../buttonPlacement/utils";
 
 export const featuresInMenu = new Set<FeaturesThatHaveButtons>();
 

@@ -1,9 +1,9 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { setupScrollListeners } from "@/src/features/scrollWheelVolumeControl/utils";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { setupScrollListeners } from "../scrollWheelVolumeControl/utils";
 import { adjustSpeed } from "./utils";
 
 export default async function adjustSpeedOnScrollWheel() {

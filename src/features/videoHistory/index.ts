@@ -1,5 +1,6 @@
 import type { VideoHistoryEntry, YouTubePlayerDiv } from "@/src/types";
 
+import { formatTime } from "@/src/features/remainingTime/utils";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
@@ -11,8 +12,6 @@ import {
 	sendContentMessage,
 	waitForSpecificMessage
 } from "@/utils/utilities";
-
-import { formatTime } from "../remainingTime/utils";
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
@@ -231,7 +230,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
 			element: closeButton,
 			featureName: "videoHistory",
-			id: "yte-resume-prompt-close-button-tooltip",
+			id: "yte-feature-videoHistory-tooltip",
 			text: window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close")
 		});
 		eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
