@@ -144,10 +144,8 @@ export type ExtensionSendOnlyMessageMappings = {
 	scrollWheelSpeedControlChange: DataResponseMessage<"scrollWheelSpeedControlChange", { scrollWheelSpeedControlEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
-	volumeBoostChange: DataResponseMessage<
-		"volumeBoostChange",
-		{ volumeBoostAmount?: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
-	>;
+	volumeBoostAmountChange: DataResponseMessage<"volumeBoostAmountChange", { volumeBoostAmount: number }>;
+	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
