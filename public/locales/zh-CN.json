@@ -1,9 +1,9 @@
 {
 	"langCode": "zh-CN",
-	"langName": "中文（简体)",
+	"langName": "English (US)",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "恢复视频播放时刻于 {{VIDEO_TIME}}",
+		"settingVolume": "设置音量增强至 {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
@@ -12,26 +12,38 @@
 					"label": "功能单"
 				},
 				"loopButton": {
-					"label": "循环"
+					"label": "Loop",
+					"toggle": {
+						"off": "Loop off",
+						"on": "Loop on"
+					}
 				},
 				"maximizePlayerButton": {
-					"label": "化最大"
+					"label": "化最大",
+					"toggle": {
+						"off": "Maximize off",
+						"on": "Maximize on"
+					}
 				},
 				"openTranscriptButton": {
-					"label": "Open Transcript"
+					"label": "打开转写文稿"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "屏幕截图已复制到剪贴板",
-					"label": "屏幕截图"
+					"copiedToClipboard": "Screenshot copied to clipboard",
+					"label": "Screenshot"
 				},
 				"videoHistory": {
-					"resumeButton": "恢复",
+					"resumeButton": "Resume",
 					"resumePrompt": {
 						"close": "关"
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost"
+					"label": "音量增强",
+					"toggle": {
+						"off": "Volume boost off",
+						"on": "Volume boost on"
+					}
 				}
 			}
 		},
@@ -40,284 +52,315 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "滚轮控制播放速度键位与控制音量冲突。",
+							"volumeControl": "滚轮控制音量键位与控制播放速度冲突。"
 						}
 					}
 				},
 				"info": {
-					"reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
+					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
 				},
 				"success": {
-					"saved": "选项已保存。"
+					"saved": "Options saved."
 				}
 			}
 		}
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "所有数据已被删除。",
-			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
+			"allDataDeleted": "All data has been deleted.",
+			"confirmAlert": "This will delete all extension data related to options. Continue?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "启用自动质量调整",
-					"title": "自动调整视频质量到所选等级。"
+					"label": "Automatic quality adjustment",
+					"title": "Automatically adjusts the video quality to the selected level."
 				},
 				"select": {
-					"label": "播放器质量",
-					"title": "将视频设置为"
+					"label": "Player quality",
+					"title": "将视频质量设为"
 				},
-				"title": "自动质量设置"
+				"title": "Automatic quality settings"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "清除此扩展存储在您机器上的所有数据",
-					"value": "清除数据"
+					"title": "Clears all data this extension has stored on your machine",
+					"value": "Clear Data"
 				},
 				"confirm": {
-					"title": "确认重置设置",
-					"value": "确认"
+					"title": "Confirm setting reset",
+					"value": "Confirm"
 				},
 				"reset": {
-					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
+					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
 					"value": "重新开始"
 				}
 			},
+			"buttonPlacement": {
+				"select": {
+					"buttonNames": {
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
+					},
+					"options": {
+						"below_player": {
+							"placement": "below the player controls",
+							"value": "Below Player"
+						},
+						"feature_menu": {
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
+						},
+						"player_controls_left": {
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
+						},
+						"player_controls_right": {
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
+						}
+					},
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+				},
+				"title": "Button Placement Settings"
+			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "折叠编辑器",
+					"expand": "展开编辑器",
+					"noProblems": "未发现问题"
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "启用自定义 CSS",
+					"title": "启用自定义 CSS 以应用到页面"
 				},
-				"title": "Custom CSS Settings"
+				"title": "自定义 CSS 设置"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "菜单激活方式",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "点击",
+							"hover": "悬停"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "设置打开功能菜单的方式"
 					},
-					"title": "Feature menu settings"
+					"title": "功能菜单设置"
 				}
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "设置导出成功",
-					"title": "导出设置到 JSON 文件",
-					"value": "导出设置"
+					"success": "Settings successfully exported",
+					"title": "Export settings to a JSON file",
+					"value": "Export Settings"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+						"validation": "导入设置出错。请检查文件格式。\n{{ERROR_MESSAGE}}"
 					},
-					"success": "成功导入设置",
-					"title": "从 JSON 文件导入设置",
-					"value": "导入设置"
+					"success": "Settings imported successfully",
+					"title": "Import settings from a JSON file",
+					"value": "Import Settings"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "语言",
-					"title": "扩展使用的语言"
+					"label": "Language",
+					"title": "用于扩展的语言"
 				},
-				"title": "语言"
+				"title": "Language"
 			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
-						"label": "Automatic theater mode",
-						"title": "Automatically enables theater mode when you load a video"
+						"label": "自动启用剧场模式",
+						"title": "当视频打开时，自动启用剧场模式"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
-						"title": "隐藏页面滚动条"
+						"title": "Hides the pages scrollbar"
 					},
 					"loopButton": {
-						"label": "启用循环按钮",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"label": "Loop button",
+						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
 					},
 					"maximizePlayerButton": {
-						"label": "启用最大化播放器按钮",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"label": "Maximize player button",
+						"title": "在功能菜单中添加一个按钮来最大化播放器"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "转写文稿按钮",
+						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "悬停时打开 YouTube 设置",
+						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
 					},
 					"remainingTime": {
-						"label": "启用剩余时间",
-						"title": "显示您观看的视频的剩余时间"
+						"label": "Remaining time",
+						"title": "Shows the remaining time of the video you're watching"
 					},
 					"rememberLastVolume": {
-						"label": "记住最后一个音量",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+						"label": "Remember last volume",
+						"title": "记住最后一个视频的音量并在打开新视频时设置"
 					},
 					"videoHistory": {
-						"label": "启用视频历史",
-						"title": "保持跟踪您在视频上离开的位置，并询问您是否想要在视频重新加载时恢复"
+						"label": "Video history",
+						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
 					}
 				},
-				"title": "杂项设置"
+				"title": "Miscellaneous settings"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "颜色",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "蓝色",
+						"green": "绿色",
+						"orange": "橙色",
+						"pink": "粉色",
+						"purple": "紫色",
+						"red": "红色",
+						"white": "白色",
+						"yellow": "黄色"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "选择屏幕提示文本颜色"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "隐藏延时",
+					"title": "指定时间，以毫秒计，然后自动隐藏屏幕显示"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "透明度",
+					"title": "调整屏幕提示文本的透明度"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "内边距",
+					"title": "调整屏幕提示周围以像素为单位的间距。主要适用于角落的屏幕提示。"
 				},
 				"position": {
-					"label": "Position",
+					"label": "位置",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "左下",
+						"bottom_right": "右下",
+						"center": "居中",
+						"top_left": "左上",
+						"top_right": "右上"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "选择屏幕提示文本颜色"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "屏幕提示信息设置",
 				"type": {
-					"label": "Type",
+					"label": "类型",
 					"options": {
-						"line": "Line",
-						"no_display": "No display",
-						"round": "Round",
-						"text": "Text"
+						"line": "直线",
+						"no_display": "无显示",
+						"round": "圆角",
+						"text": "文本"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "选择屏幕提示文本颜色"
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "启用强制播放速度",
-					"title": "设置视频速度为您在下面选择的内容"
+					"label": "Forced playback speed",
+					"title": "Sets the video speed to what you choose below"
 				},
 				"select": {
-					"label": "播放器速度",
-					"title": "视频设置为"
+					"label": "Player speed",
+					"title": "将视频播放速度设为"
 				},
-				"title": "回放速度设置"
+				"title": "播放速度设置"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "启用屏幕截图按钮",
-					"title": "向播放器添加一个按钮以拍摄视频的截图"
+					"label": "Screenshot button",
+					"title": "Adds a button to the player to take a screenshot of the video"
 				},
 				"saveAs": {
-					"clipboard": "剪切板",
-					"file": "文件"
+					"clipboard": "Clipboard",
+					"file": "File"
 				},
 				"selectFormat": {
-					"label": "截图格式",
-					"title": "保存屏幕截图的格式"
+					"label": "Screenshot format",
+					"title": "The format to save the screenshot in"
 				},
 				"selectSaveAs": {
-					"label": "截图保存类型",
-					"title": "屏幕截图保存类型"
+					"label": "Screenshot save type",
+					"title": "The screenshot save type"
 				},
-				"title": "屏幕截图设置"
+				"title": "Screenshot settings"
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "每轮滚动音量",
+					"title": "调整每轮滚动的音量变化"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"label": "滚轮控制播放速度设置",
+					"title": "按下控制键时启用滚轮音量调整"
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "{{KEY}} 键",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "控制键",
+					"title": "启用功能时按住的控制键"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "滚轮控制播放速度设置"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "每轮滚动音量",
+					"title": "调整每轮滚动的音量变化"
 				},
 				"enable": {
-					"label": "启用滚轮音量控制",
-					"title": "让您使用滚轮来控制您正在观看的视频音量"
+					"label": "Scroll wheel volume control",
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "在按住控制键时启用功能",
+						"title": "按下控制键时启用滚轮音量调整"
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "{{KEY}} 键",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "控制键",
+						"title": "启用功能时按住的控制键"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "按住右键时启用",
+						"title": "按住右键以启用滚轮音量控制"
 					}
 				},
-				"title": "滚动滚轮音量控制设置"
+				"title": "Scroll wheel volume control settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "音量提升量(分贝)",
+					"title": "音量提升量（分贝）"
 				},
 				"enable": {
-					"label": "启用音量加速",
-					"title": "Enable volume boost"
+					"label": "Volume boost",
+					"title": "启用音量增强"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "音量增强模式",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "全局统一",
+							"perVideo": "分别记忆"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "选择音量增强生效的方式。“分别记忆”为每个视频记住各自的设置。“全局”使音量增强功能开启时，对所有视频采用同一设置。"
 					}
 				},
-				"title": "音量提升设置"
+				"title": "音量增强设置"
 			}
 		}
 	}

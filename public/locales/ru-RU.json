@@ -12,10 +12,18 @@
 					"label": "Меню функций"
 				},
 				"loopButton": {
-					"label": "Зациклить"
+					"label": "Зациклить",
+					"toggle": {
+						"off": "Loop off",
+						"on": "Loop on"
+					}
 				},
 				"maximizePlayerButton": {
-					"label": "Развернуть"
+					"label": "Развернуть",
+					"toggle": {
+						"off": "Maximize off",
+						"on": "Maximize on"
+					}
 				},
 				"openTranscriptButton": {
 					"label": "Открыть стенограмму"
@@ -31,7 +39,11 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Усиление громкости"
+					"label": "Усиление громкости",
+					"toggle": {
+						"off": "Volume boost off",
+						"on": "Volume boost on"
+					}
 				}
 			}
 		},
@@ -85,11 +97,42 @@
 					"value": "Сброс"
 				}
 			},
+			"buttonPlacement": {
+				"select": {
+					"buttonNames": {
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
+					},
+					"options": {
+						"below_player": {
+							"placement": "below the player controls",
+							"value": "Below Player"
+						},
+						"feature_menu": {
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
+						},
+						"player_controls_left": {
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
+						},
+						"player_controls_right": {
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
+						}
+					},
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+				},
+				"title": "Button Placement Settings"
+			},
 			"customCSS": {
 				"editor": {
 					"collapse": "Свернуть редактор",
 					"expand": "Расширить редактор",
-					"noProblems": "No problems found."
+					"noProblems": "Проблем не найдено."
 				},
 				"enable": {
 					"label": "Включить пользовательский CSS",
