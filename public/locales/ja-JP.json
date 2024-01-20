@@ -12,10 +12,18 @@
 					"label": "フィーチャー・メニュー"
 				},
 				"loopButton": {
-					"label": "ループ"
+					"label": "ループ",
+					"toggle": {
+						"off": "Loop off",
+						"on": "Loop on"
+					}
 				},
 				"maximizePlayerButton": {
-					"label": "最大表示"
+					"label": "最大表示",
+					"toggle": {
+						"off": "Maximize off",
+						"on": "Maximize on"
+					}
 				},
 				"openTranscriptButton": {
 					"label": "文字起こしを見せる"
@@ -31,7 +39,11 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "音量ブースト"
+					"label": "音量ブースト",
+					"toggle": {
+						"off": "Volume boost off",
+						"on": "Volume boost on"
+					}
 				}
 			}
 		},
@@ -85,17 +97,48 @@
 					"value": "リセット"
 				}
 			},
+			"buttonPlacement": {
+				"select": {
+					"buttonNames": {
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
+					},
+					"options": {
+						"below_player": {
+							"placement": "below the player controls",
+							"value": "Below Player"
+						},
+						"feature_menu": {
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
+						},
+						"player_controls_left": {
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
+						},
+						"player_controls_right": {
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
+						}
+					},
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+				},
+				"title": "Button Placement Settings"
+			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "エディターを最小化する",
+					"expand": "エディターを広げる",
+					"noProblems": "構文に問題はありませんでした。"
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "カスタムCSSを可能にする",
+					"title": "ページに適用するカスタムCSSを可能にする"
 				},
-				"title": "Custom CSS Settings"
+				"title": "カスタムCSS設定"
 			},
 			"featureMenu": {
 				"openType": {
