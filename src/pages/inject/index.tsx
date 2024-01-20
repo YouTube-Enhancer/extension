@@ -1,7 +1,17 @@
 import type { AvailableLocales } from "@/src/i18n";
-import type { ContentSendOnlyMessageMappings, Messages, RememberedVolumes, StorageChanges, configuration, configurationKeys } from "@/src/types";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import {
+	type ButtonPlacement,
+	type ContentSendOnlyMessageMappings,
+	type FeaturesThatHaveButtons,
+	type Messages,
+	type RememberedVolumes,
+	type StorageChanges,
+	type configuration,
+	type configurationKeys,
+	featuresThatHaveButtons
+} from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
 
@@ -187,106 +197,117 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	// Get the current configuration options from local storage
 	const options = await getStoredSettings();
 	const keyActions: {
-		[K in keyof configuration]?: (newValue: configuration[K]) => void;
+		[K in keyof configuration]?: (oldValue: configuration[K], newValue: configuration[K]) => void;
 	} = {
-		button_placements: (newValue) => {
+		button_placements: (oldValue, newValue) => {
 			sendExtensionOnlyMessage("buttonPlacementChange", {
-				buttonPlacement: newValue
+				buttonPlacement: featuresThatHaveButtons.reduce(
+					(acc, feature) => {
+						const { [feature]: oldPlacement } = oldValue;
+						const { [feature]: newPlacement } = newValue;
+						return Object.assign(acc, {
+							[feature]: {
+								new: newPlacement,
+								old: oldPlacement
+							}
+						});
+					},
+					{} as Record<FeaturesThatHaveButtons, { new: ButtonPlacement; old: ButtonPlacement }>
+				)
 			});
 		},
-		custom_css_code: (newValue) => {
+		custom_css_code: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", {
 				customCSSCode: newValue,
 				customCSSEnabled: options.enable_custom_css
 			});
 		},
-		enable_automatic_theater_mode: (newValue) => {
+		enable_automatic_theater_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("automaticTheaterModeChange", {
 				automaticTheaterModeEnabled: newValue
 			});
 		},
-		enable_custom_css: (newValue) => {
+		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
 		},
-		enable_forced_playback_speed: (newValue) => {
+		enable_forced_playback_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: newValue,
 				playerSpeed: options.player_speed
 			});
 		},
-		enable_hide_scrollbar: (newValue) => {
+		enable_hide_scrollbar: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideScrollBarChange", {
 				hideScrollBarEnabled: newValue
 			});
 		},
-		enable_loop_button: (newValue) => {
+		enable_loop_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("loopButtonChange", {
 				loopButtonEnabled: newValue
 			});
 		},
-		enable_maximize_player_button: (newValue) => {
+		enable_maximize_player_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("maximizeButtonChange", {
 				maximizePlayerButtonEnabled: newValue
 			});
 		},
-		enable_open_transcript_button: (newValue) => {
+		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
 				openTranscriptButtonEnabled: newValue
 			});
 		},
-		enable_open_youtube_settings_on_hover: (newValue) => {
+		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
 				openYouTubeSettingsOnHoverEnabled: newValue
 			});
 		},
-		enable_remaining_time: (newValue) => {
+		enable_remaining_time: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue
 			});
 		},
-		enable_remember_last_volume: (newValue) => {
+		enable_remember_last_volume: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("rememberVolumeChange", {
 				rememberVolumeEnabled: newValue
 			});
 		},
-		enable_screenshot_button: (newValue) => {
+		enable_screenshot_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("screenshotButtonChange", {
 				screenshotButtonEnabled: newValue
 			});
 		},
-		enable_scroll_wheel_speed_control: (newValue) => {
+		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
 				scrollWheelSpeedControlEnabled: newValue
 			});
 		},
-		enable_scroll_wheel_volume_control: (newValue) => {
+		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
 				scrollWheelVolumeControlEnabled: newValue
 			});
 		},
-		enable_video_history: (newValue) => {
+		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue
 			});
 		},
-		enable_volume_boost: (newValue) => {
+		enable_volume_boost: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostAmount: options.volume_boost_amount,
 				volumeBoostEnabled: newValue,
 				volumeBoostMode: options.volume_boost_mode
 			});
 		},
-		feature_menu_open_type: (newValue) => {
+		feature_menu_open_type: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
 				featureMenuOpenType: newValue
 			});
 		},
-		language: (newValue) => {
+		language: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue
 			});
 		},
-		player_speed: (newValue) => {
+		player_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
 				playerSpeed: newValue
@@ -299,7 +320,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostMode: options.volume_boost_mode
 			});
 		},
-		volume_boost_mode: (newValue) => {
+		volume_boost_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
 				volumeBoostAmount: options.volume_boost_amount,
 				volumeBoostEnabled: options.enable_volume_boost,
@@ -310,10 +331,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	Object.entries(castedChanges).forEach(([key, change]) => {
 		if (isValidChange(change)) {
 			if (!change.newValue) return;
+			if (!change.oldValue) return;
+			const oldValue = parseStoredValue(change.oldValue) as configuration[typeof key];
 			const newValue = parseStoredValue(change.newValue) as configuration[typeof key];
 			const { [key]: handler } = keyActions;
 			if (!handler) return;
-			(handler as (newValue: configuration[typeof key]) => void)(newValue);
+			(handler as (oldValue: configuration[typeof key], newValue: configuration[typeof key]) => void)(oldValue, newValue);
 		}
 	});
 };
