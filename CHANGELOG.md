@@ -1,3 +1,22 @@
+## [1.21.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.0...v1.21.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* left controls being squished, right controls overflowing ([18ccc33](https://github.com/VampireChicken12/youtube-enhancer/commit/18ccc33d0e08c8e150c548342903f93ad2dc7bda))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.1-Chrome.zip | 55e9a923d07fbbd715e4984343ba2df2fef0151a01bd79ec59944424b0d6c8a9 |
+| youtube-enhancer-v1.21.1-Chromium.zip | 55e9a923d07fbbd715e4984343ba2df2fef0151a01bd79ec59944424b0d6c8a9 |
+| youtube-enhancer-v1.21.1-Edge.zip | 55e9a923d07fbbd715e4984343ba2df2fef0151a01bd79ec59944424b0d6c8a9 |
+| youtube-enhancer-v1.21.1-Firefox.zip | b43db62502ba5bc681a8cc82d71946f582c0cb6885e0449ee91b462c4859abc7 |
+
 # [1.21.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.1...v1.21.0) (2024-01-22)
 
 
