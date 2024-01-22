@@ -18,9 +18,11 @@ body.no-scroll .yte-button-tooltip {
 	padding: 8px 9px !important;
 	transform: translate(-50%, -75%) !important;
 }
+
 .maximized_chapter {
 	width: 100% !important;
 }
+
 .maximized_video {
 	width: 100vw !important;
 	height: 100vh !important;
@@ -29,6 +31,7 @@ body.no-scroll .yte-button-tooltip {
 	object-fit: contain !important;
 	background: black !important;
 }
+
 .maximized_video_container {
 	position: fixed !important;
 	top: 0 !important;
@@ -37,10 +40,12 @@ body.no-scroll .yte-button-tooltip {
 	height: 100vh !important;
 	z-index: 2020 !important;
 }
+
 .maximized_controls {
 	width: 97vw !important;
 	right: 12px !important;
 }
+
 .yte-maximize-player-button {
 	opacity: 0.9;
 	display: inline-block;
@@ -50,4 +55,12 @@ body.no-scroll .yte-button-tooltip {
 	-o-transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
 	transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
 	overflow: hidden;
+}
+
+.ytp-chapter-container {
+	flex: 1 !important;
+}
+
+.ytp-right-controls {
+	display: flex !important;
 }
