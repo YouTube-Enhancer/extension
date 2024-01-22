@@ -961,10 +961,10 @@
   dependencies:
     "@types/readdir-glob" "*"
 
-"@types/chrome@^0.0.254":
-  version "0.0.254"
-  resolved "https://registry.npmjs.org/@types/chrome/-/chrome-0.0.254.tgz"
-  integrity sha512-svkOGKwA+6ZZuk9xtrYun8MYpNY/9hD17rgZ19v3KunhsK1ZOKaMESw12/1AXLh1u3UPA8jQIRi2370DXv9wgw==
+"@types/chrome@^0.0.258":
+  version "0.0.258"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.258.tgz#81dc7dab909786eb7ffca74b6c80a9ecb5549a68"
+  integrity sha512-vicJi6cg2zaFuLmLY7laG6PHBknjKFusPYlaKQ9Zlycskofy71rStlGvW07MUuqUIVorZf8k5KH+zeTTGcH2dQ==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
@@ -2071,9 +2071,9 @@ dot-prop@^5.1.0:
     is-obj "^2.0.0"
 
 dotenv@^16.3.1:
-  version "16.3.1"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.3.1.tgz"
-  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.2.tgz#3cb611ce5a63002dbabf7c281bc331f69d28f03f"
+  integrity sha512-HTlk5nmhkm8F6JcdXvHIzaorzCoziNQT9mGxLPVXW8wJF1TiGSL60ZGB4gHWabHOaMmWmhvk2/lPHfnBiT78AQ==
 
 duplexer2@~0.1.0:
   version "0.1.4"
