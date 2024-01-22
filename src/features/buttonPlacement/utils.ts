@@ -35,8 +35,6 @@ export function makeFeatureButton<Name extends FeaturesThatHaveButtons, Placemen
 ) {
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const buttonExists = document.querySelector(`button#${getFeatureButtonId(featureName)}`) !== null;
-	// TODO: fix left controls chapter container shrinking buttons
-	// TODO: fix right controls button making control buttons overflow
 	const button = createStyledElement({
 		classlist: ["ytp-button"],
 		elementId: `${getFeatureButtonId(featureName)}`,
@@ -131,7 +129,9 @@ export function placeButton(button: HTMLButtonElement, placement: Exclude<Button
 		case "player_controls_left": {
 			const leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls");
 			if (!leftControls) return;
-			leftControls.append(button);
+			const timeDisplay = leftControls.querySelector<HTMLDivElement>(".ytp-time-display");
+			if (!timeDisplay) return;
+			timeDisplay.insertAdjacentElement("beforebegin", button);
 			break;
 		}
 		case "player_controls_right": {
