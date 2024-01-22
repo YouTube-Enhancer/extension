@@ -15,11 +15,8 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends Fea
 	if (isToggle) {
 		button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
 		if (typeof icon === "object" && "off" in icon && "on" in icon) {
-			icon.on.style.transform = "translate(7px,7px)";
-			icon.off.style.transform = "translate(7px,7px)";
 			updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
 		} else if (icon instanceof SVGSVGElement) {
-			icon.style.transform = "translate(7px,7px)";
 			updateFeatureButtonIcon(button, icon);
 		}
 		listener(JSON.parse(button.ariaChecked) as boolean);
@@ -45,8 +42,11 @@ export function makeFeatureButton<Name extends FeaturesThatHaveButtons, Placemen
 		elementId: `${getFeatureButtonId(featureName)}`,
 		elementType: "button",
 		styles: {
-			display: "inline-block",
+			alignContent: "center",
+			display: "flex",
+			flexWrap: "wrap",
 			height: "48px",
+			justifyContent: "center",
 			padding: "0px 4px",
 			width: "48px"
 		}
@@ -77,15 +77,12 @@ export function makeFeatureButton<Name extends FeaturesThatHaveButtons, Placemen
 	if (isToggle) {
 		button.ariaChecked = "false";
 		if (typeof icon === "object" && "off" in icon && "on" in icon) {
-			icon.off.style.transform = "translate(7px,7px)";
 			button.append(icon.off);
 		} else if (icon instanceof SVGSVGElement) {
-			icon.style.transform = "translate(7px,7px)";
 			button.append(icon);
 		}
 	} else {
 		if (icon instanceof SVGSVGElement) {
-			icon.style.transform = "translate(7px,7px)";
 			button.append(icon);
 		}
 	}
