@@ -1,3 +1,47 @@
+## [1.21.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.0...v1.21.1) (2024-01-22)
+
+
+### Bug Fixes
+
+* left controls being squished by chapter and right controls overflowing ([bfaa2c4](https://github.com/VampireChicken12/youtube-enhancer/commit/bfaa2c43a94899a641b28a4deffc27fa6fea91c7))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.1-Chrome.zip | cb35875b8d434551303cc3a782ca5416bad0d089326d4cc454a75cee62c33c48 |
+| youtube-enhancer-v1.21.1-Chromium.zip | cb35875b8d434551303cc3a782ca5416bad0d089326d4cc454a75cee62c33c48 |
+| youtube-enhancer-v1.21.1-Edge.zip | cb35875b8d434551303cc3a782ca5416bad0d089326d4cc454a75cee62c33c48 |
+| youtube-enhancer-v1.21.1-Firefox.zip | 8fa17342f857edb20b06320f3fbc454a9ccca5512d62fdf948550428c5c838a8 |
+
+# [1.21.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.1...v1.21.0) (2024-01-22)
+
+
+### Bug Fixes
+
+* menu item labels not updated when language changed ([b34056d](https://github.com/VampireChicken12/youtube-enhancer/commit/b34056d36fa260d2083a8ac71e9ea82702544f50))
+* per video volume boost was disabled when adjusting boost ([cc799dd](https://github.com/VampireChicken12/youtube-enhancer/commit/cc799ddf58b4e504c837c39c121e3da7ac2290b2))
+
+
+### Features
+
+* button placement ([98b675c](https://github.com/VampireChicken12/youtube-enhancer/commit/98b675c2338ca4ca6200099fe199d9aeafa26ae1)), closes [#247](https://github.com/VampireChicken12/youtube-enhancer/issues/247)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.0-Chrome.zip | 39d05604e4efc277b17be713a80ff934068f26d386f8430d5fc6b59de26c90a4 |
+| youtube-enhancer-v1.21.0-Chromium.zip | 39d05604e4efc277b17be713a80ff934068f26d386f8430d5fc6b59de26c90a4 |
+| youtube-enhancer-v1.21.0-Edge.zip | 39d05604e4efc277b17be713a80ff934068f26d386f8430d5fc6b59de26c90a4 |
+| youtube-enhancer-v1.21.0-Firefox.zip | 34cffb89855aa94dbccb22d853dd758773e806902f09a15d29e5c7f5438d219b |
+
 ## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
 
 
