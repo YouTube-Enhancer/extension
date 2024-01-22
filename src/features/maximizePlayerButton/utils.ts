@@ -1,4 +1,7 @@
+import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
+
+import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "../buttonPlacement/utils";
 
 // TODO: get played progress bar to be accurate when maximized from default view
 // TODO: Add event listener that updates scrubber position when maximize button is clicked
@@ -64,9 +67,15 @@ export function maximizePlayer() {
 				"click",
 				() => {
 					minimizePlayer();
-					const maximizePlayerMenuItem = getFeatureMenuItem("maximizePlayerButton");
-					if (!maximizePlayerMenuItem) return;
-					maximizePlayerMenuItem.ariaChecked = "false";
+					const maximizePlayerButton = getFeatureButton("maximizePlayerButton");
+					if (!maximizePlayerButton) return;
+					maximizePlayerButton.ariaChecked = "false";
+					const button = getFeatureButton("maximizePlayerButton");
+					const icon = getFeatureIcon("maximizePlayerButton", "shared_icon_position");
+					if (button && button instanceof HTMLButtonElement) {
+						if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, icon.off);
+						updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.toggle.off"));
+					}
 				},
 				"maximizePlayerButton"
 			);
