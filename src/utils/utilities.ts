@@ -323,7 +323,7 @@ export function isShortsPage() {
 }
 export function formatError(error: unknown) {
 	if (error instanceof Error) {
-		return `${error.message}\n${error.stack}`;
+		return `${error.message}\n${error?.stack}`;
 	} else if (error instanceof String) {
 		return error.toString();
 	} else {
@@ -449,30 +449,62 @@ export function parseStoredValue(value: string) {
 	// If parsing or type checking fails, return the original value as a string
 	return value;
 }
-export function createTooltip({ element, featureName, id, text }: { element: HTMLElement; featureName: FeatureName; id: string; text?: string }): {
+export function createTooltip({
+	direction = "up",
+	element,
+	featureName,
+	id,
+	text
+}: {
+	direction?: "down" | "left" | "right" | "up";
+	element: HTMLElement;
+	featureName: FeatureName;
+	id: `yte-feature-${FeatureName}-tooltip`;
+	text?: string;
+}): {
 	listener: () => void;
 	remove: () => void;
 	update: () => void;
 } {
 	function makeTooltip() {
-		// Create tooltip element
-		const tooltip = document.createElement("div");
 		const rect = element.getBoundingClientRect();
-		tooltip.classList.add("yte-button-tooltip");
-		tooltip.classList.add("ytp-tooltip");
-		tooltip.classList.add("ytp-rounded-tooltip");
-		tooltip.classList.add("ytp-bottom");
-		tooltip.id = id;
-		tooltip.style.left = `${rect.left + rect.width / 2}px`;
-		tooltip.style.top = `${rect.top - 2}px`;
-		tooltip.style.zIndex = "99999";
+		// Create tooltip element
+		const tooltip = createStyledElement({
+			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-rounded-tooltip", "ytp-bottom"],
+			elementId: id,
+			elementType: "div",
+			styles: {
+				...conditionalStyles({
+					condition: direction === "down" || direction === "up",
+					left: `${rect.left + rect.width / 2}px`
+				}),
+				...conditionalStyles({
+					condition: direction === "up",
+					top: `${rect.top - 2}px`
+				}),
+				...conditionalStyles({
+					condition: direction === "down",
+					top: `${rect.bottom + rect.height}px`
+				}),
+				...conditionalStyles({
+					condition: direction === "left",
+					left: `${rect.left - rect.width}px`,
+					top: `${rect.bottom}px`
+				}),
+				...conditionalStyles({
+					condition: direction === "right",
+					left: `${rect.right + rect.width}px`,
+					top: `${rect.bottom}px`
+				}),
+				zIndex: "99999"
+			}
+		});
 		const {
 			dataset: { title }
 		} = element;
 		tooltip.textContent = text ?? title ?? "";
 		function mouseLeaveListener() {
 			tooltip.remove();
-			eventManager.removeEventListener(element, "mouseleave", featureName);
 		}
 		eventManager.addEventListener(element, "mouseleave", mouseLeaveListener, featureName);
 		return tooltip;
@@ -500,9 +532,16 @@ export function createTooltip({ element, featureName, id, text }: { element: HTM
 		}
 	};
 }
-
+export function removeTooltip(id: `yte-feature-${FeatureName}-tooltip`) {
+	const tooltip = document.getElementById(id);
+	if (!tooltip) return;
+	tooltip.remove();
+}
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+export function conditionalStyles(...input: ({ condition: boolean } & Partial<CSSStyleDeclaration>)[]) {
+	return input.reduce((acc, { condition, ...style }) => (condition ? { ...acc, ...style } : acc), {} as Partial<CSSStyleDeclaration>);
 }
 // Utility function to create and style an element
 export function createStyledElement<ID extends string, K extends keyof HTMLElementTagNameMap>({

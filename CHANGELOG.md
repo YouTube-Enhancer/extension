@@ -1,3 +1,22 @@
+# [1.21.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.1...v1.21.0) (2024-01-20)
+
+
+### Features
+
+* button placement [#247](https://github.com/VampireChicken12/youtube-enhancer/issues/247) ([84ac6a8](https://github.com/VampireChicken12/youtube-enhancer/commit/84ac6a896c1bb56cd1c2f20f2fa475e3224de21e))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.0-Chrome.zip | adc4d5e9671951a3390dd81a8b5e1cbe9875ff58ce87d2cdb2a5afd91615d7a7 |
+| youtube-enhancer-v1.21.0-Chromium.zip | adc4d5e9671951a3390dd81a8b5e1cbe9875ff58ce87d2cdb2a5afd91615d7a7 |
+| youtube-enhancer-v1.21.0-Edge.zip | adc4d5e9671951a3390dd81a8b5e1cbe9875ff58ce87d2cdb2a5afd91615d7a7 |
+| youtube-enhancer-v1.21.0-Firefox.zip | 499bc7e720959503cf1baf37c8bda7dbd8ed5d4771571f2c61bd357a26320ab8 |
+
 ## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
 
 

@@ -1,7 +1,10 @@
-import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import type { ButtonPlacement } from "@/src/types";
 
-import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { getFeatureIcon } from "@/src/icons";
+import eventManager from "@/src/utils/EventManager";
+import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -35,25 +38,21 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 		switch (screenshot_save_as) {
 			case "clipboard": {
-				const tooltip = document.createElement("div");
-				const screenshotMenuItem = getFeatureMenuItem("screenshotButton");
-				if (!screenshotMenuItem) return;
-				const rect = screenshotMenuItem.getBoundingClientRect();
-				tooltip.classList.add("yte-button-tooltip");
-				tooltip.classList.add("ytp-tooltip");
-				tooltip.classList.add("ytp-rounded-tooltip");
-				tooltip.classList.add("ytp-bottom");
-				tooltip.id = "yte-screenshot-tooltip";
-				tooltip.style.left = `${rect.left + rect.width / 2}px`;
-				tooltip.style.top = `${rect.top - 2}px`;
-				tooltip.style.zIndex = "99999";
-				tooltip.textContent = window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard");
-				document.body.appendChild(tooltip);
+				const screenshotButton = getFeatureButton("screenshotButton");
+				if (!screenshotButton) return;
+				const { listener, remove } = createTooltip({
+					direction: "up",
+					element: screenshotButton,
+					featureName: "screenshotButton",
+					id: "yte-feature-screenshotButton-tooltip",
+					text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
+				});
+				listener();
 				const clipboardImage = new ClipboardItem({ "image/png": blob });
 				void navigator.clipboard.write([clipboardImage]);
 				void navigator.clipboard.writeText(dataUrl);
 				setTimeout(() => {
-					tooltip.remove();
+					remove();
 				}, 1200);
 				break;
 			}
@@ -74,10 +73,14 @@ export async function addScreenshotButton(): Promise<void> {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: {
+				button_placements: { screenshotButton: screenshotButtonPlacement },
+				enable_screenshot_button: enableScreenshotButton
+			}
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_screenshot_button: enableScreenshotButton } = options;
+
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;
 	// Add a click event listener to the screenshot button
@@ -95,38 +98,16 @@ export async function addScreenshotButton(): Promise<void> {
 			}
 		})();
 	}
-	await addFeatureItemToMenu({
-		featureName: "screenshotButton",
-		icon: makeScreenshotIcon(),
-		label: window.i18nextInstance.t("pages.content.features.screenshotButton.label"),
-		listener: screenshotButtonClickListener
-	});
-}
-export function removeScreenshotButton() {
-	void removeFeatureItemFromMenu("screenshotButton");
-	eventManager.removeEventListeners("screenshotButton");
-}
-function makeScreenshotIcon() {
-	const screenshotSVG = createSVGElement(
-		"svg",
-		{
-			fill: "none",
-			height: "24px",
-			stroke: "currentColor",
-			"stroke-width": "1.5",
-			viewBox: "0 0 24 24",
-			width: "24px"
-		},
-		createSVGElement("path", {
-			d: "M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316",
-			"stroke-linecap": "round",
-			"stroke-linejoin": "round"
-		}),
-		createSVGElement("path", {
-			d: "M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z",
-			"stroke-linecap": "round",
-			"stroke-linejoin": "round"
-		})
+	await addFeatureButton(
+		"screenshotButton",
+		screenshotButtonPlacement,
+		window.i18nextInstance.t("pages.content.features.screenshotButton.label"),
+		getFeatureIcon("screenshotButton", screenshotButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		screenshotButtonClickListener,
+		false
 	);
-	return screenshotSVG;
+}
+export function removeScreenshotButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("screenshotButton", placement);
+	eventManager.removeEventListeners("screenshotButton");
 }

@@ -9,12 +9,15 @@ interface EnUS {
 		content: {
 			features: {
 				featureMenu: { label: "Feature menu" };
-				loopButton: { label: "Loop" };
-				maximizePlayerButton: { label: "Maximize" };
-				openTranscriptButton: { label: "Open Transcript" };
+				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
+				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
+				openTranscriptButton: { label: "Open transcript" };
 				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
-				volumeBoostButton: { label: "Volume Boost" };
+				volumeBoostButton: {
+					label: "Volume Boost";
+					toggle: { off: "Volume boost off"; on: "Volume boost on" };
+				};
 			};
 		};
 		options: {
@@ -58,6 +61,25 @@ interface EnUS {
 					title: "Resets all settings to their defaults, Click the confirm button to save the changes";
 					value: "Reset";
 				};
+			};
+			buttonPlacement: {
+				select: {
+					buttonNames: {
+						loopButton: "Loop button";
+						maximizePlayerButton: "Maximize button";
+						openTranscriptButton: "Open Transcript button";
+						screenshotButton: "Screenshot button";
+						volumeBoostButton: "Volume Boost button";
+					};
+					options: {
+						below_player: { placement: "below the player controls"; value: "Below Player" };
+						feature_menu: { placement: "in the feature menu"; value: "Feature Menu" };
+						player_controls_left: { placement: "on the left side of player controls"; value: "Left Controls" };
+						player_controls_right: { placement: "on the right side of player controls"; value: "Right Controls" };
+					};
+					title: "Place the {{BUTTON_NAME}} {{PLACEMENT}}";
+				};
+				title: "Button Placement Settings";
 			};
 			customCSS: {
 				editor: {

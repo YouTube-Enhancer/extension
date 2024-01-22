@@ -1,10 +1,12 @@
-import z from "zod";
+import z, { ZodEnum, ZodObject } from "zod";
 
-import type { TypeToPartialZodSchema, configuration } from "../types";
+import type { ButtonPlacement, FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
 
 import { availableLocales } from "../i18n/index";
 import {
+	buttonPlacement,
 	featureMenuOpenType,
+	featuresThatHaveButtons,
 	modifierKey,
 	onScreenDisplayColor,
 	onScreenDisplayPosition,
@@ -14,8 +16,16 @@ import {
 	volumeBoostMode,
 	youtubePlayerQualityLevel
 } from "../types";
+
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
+	button_placements: {
+		loopButton: "feature_menu",
+		maximizePlayerButton: "feature_menu",
+		openTranscriptButton: "feature_menu",
+		screenshotButton: "feature_menu",
+		volumeBoostButton: "feature_menu"
+	},
 	custom_css_code: "",
 	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
@@ -58,7 +68,22 @@ export const defaultConfiguration = {
 	volume_boost_amount: 1,
 	volume_boost_mode: "global"
 } satisfies configuration;
-export const configurationImportSchema: TypeToPartialZodSchema<configuration> = z.object({
+export const configurationImportSchema: TypeToPartialZodSchema<
+	configuration,
+	"button_placements",
+	{
+		button_placements: ZodObject<{
+			[K in FeaturesThatHaveButtons]: ZodEnum<[ButtonPlacement]>;
+		}>;
+	},
+	true
+> = z.object({
+	button_placements: z.object({
+		...featuresThatHaveButtons.reduce(
+			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacement).optional() }),
+			{} as Record<FeaturesThatHaveButtons, ZodEnum<[ButtonPlacement]>>
+		)
+	}),
 	custom_css_code: z.string().optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),

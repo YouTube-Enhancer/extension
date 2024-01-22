@@ -1,28 +1,35 @@
+import type { ButtonPlacement } from "@/src/types";
+
+import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "../featureMenu/utils";
+import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
 import "./index.css";
-import { makeMaximizeSVG, maximizePlayer, minimizePlayer } from "./utils";
+import { maximizePlayer, minimizePlayer } from "./utils";
 
 export async function addMaximizePlayerButton(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: {
+				button_placements: { maximizePlayerButton: maximizePlayerButtonPlacement },
+				enable_maximize_player_button: enableMaximizePlayerButton
+			}
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_maximize_player_button: enableMaximizePlayerButton } = options;
 	// If the maximize player button option is disabled, return
 	if (!enableMaximizePlayerButton) return;
-	const maximizeSVG = makeMaximizeSVG();
-	await addFeatureItemToMenu({
-		featureName: "maximizePlayerButton",
-		icon: maximizeSVG,
-		isToggle: true,
-		label: window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label"),
-		listener: (checked) => {
+	await addFeatureButton(
+		"maximizePlayerButton",
+		maximizePlayerButtonPlacement,
+		maximizePlayerButtonPlacement === "feature_menu" ?
+			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label")
+		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.toggle.off"),
+		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		(checked) => {
 			if (checked === undefined) return;
 			console.log(checked);
 			if (checked) {
@@ -30,11 +37,11 @@ export async function addMaximizePlayerButton(): Promise<void> {
 			} else {
 				minimizePlayer();
 			}
-		}
-	});
+		},
+		true
+	);
 }
-export function removeMaximizePlayerButton() {
-	removeFeatureItemFromMenu("maximizePlayerButton");
-	minimizePlayer();
+export function removeMaximizePlayerButton(placement?: ButtonPlacement) {
+	void removeFeatureButton("maximizePlayerButton", placement);
 	eventManager.removeEventListeners("maximizePlayerButton");
 }
