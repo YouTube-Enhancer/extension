@@ -2,9 +2,10 @@ import type { ButtonPlacement } from "@/src/types";
 
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { addFeatureButton, removeFeatureButton } from "../buttonPlacement";
+import { getFeatureButton, updateFeatureButtonTitle } from "../buttonPlacement/utils";
 import "./index.css";
 import { maximizePlayer, minimizePlayer } from "./utils";
 
@@ -32,7 +33,21 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		(checked) => {
 			if (checked === undefined) return;
 			console.log(checked);
+			const button = getFeatureButton("maximizePlayerButton");
+			if (!button) return;
+			const featureName = "maximizePlayerButton";
+			const { remove } = createTooltip({
+				direction: maximizePlayerButtonPlacement === "below_player" ? "down" : "up",
+				element: button,
+				featureName,
+				id: `yte-feature-${featureName}-tooltip`
+			});
+			updateFeatureButtonTitle(
+				"maximizePlayerButton",
+				window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.toggle.${checked ? "on" : "off"}`)
+			);
 			if (checked) {
+				remove();
 				maximizePlayer();
 			} else {
 				minimizePlayer();
