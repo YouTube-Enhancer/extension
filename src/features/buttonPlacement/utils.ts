@@ -131,7 +131,9 @@ export function placeButton(button: HTMLButtonElement, placement: Exclude<Button
 		case "player_controls_left": {
 			const leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls");
 			if (!leftControls) return;
-			leftControls.append(button);
+			const timeDisplay = leftControls.querySelector<HTMLDivElement>(".ytp-time-display");
+			if (!timeDisplay) return;
+			timeDisplay.insertAdjacentElement("beforebegin", button);
 			break;
 		}
 		case "player_controls_right": {
