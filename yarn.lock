@@ -1147,14 +1147,6 @@
     "@typescript-eslint/types" "6.18.1"
     eslint-visitor-keys "^3.4.1"
 
-"@typescript-eslint/visitor-keys@6.18.1":
-  version "6.18.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-6.18.1.tgz#704d789bda2565a15475e7d22f145b8fe77443f4"
-  integrity sha512-/kvt0C5lRqGoCfsbmm7/CwMqoSkY3zzHLIjdhHZQW3VFrnz7ATecOHR7nb7V+xn4286MBxfnQfQhAmCI0u+bJA==
-  dependencies:
-    "@typescript-eslint/types" "6.18.1"
-    eslint-visitor-keys "^3.4.1"
-
 "@ungap/structured-clone@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.2.0.tgz"
@@ -5966,10 +5958,10 @@ vite-plugin-css-injected-by-js@^3.3.0:
   resolved "https://registry.yarnpkg.com/vite-plugin-css-injected-by-js/-/vite-plugin-css-injected-by-js-3.3.1.tgz#26b41f108c5554ee728359bdec01c68c93a48547"
   integrity sha512-PjM/X45DR3/V1K1fTRs8HtZHEQ55kIfdrn+dzaqNBFrOYO073SeSNCxp4j7gSYhV9NffVHaEnOL4myoko0ePAg==
 
-vite@^5.0.11:
-  version "5.0.11"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-5.0.11.tgz#31562e41e004cb68e1d51f5d2c641ab313b289e4"
-  integrity sha512-XBMnDjZcNAw/G1gEiskiM1v6yzM4GE5aMGvhWTlHAYYhxb7S3/V1s3m2LDHa8Vh6yIWYYB0iJwsEaS523c4oYA==
+vite@^5.0.12:
+  version "5.0.12"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-5.0.12.tgz#8a2ffd4da36c132aec4adafe05d7adde38333c47"
+  integrity sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==
   dependencies:
     esbuild "^0.19.3"
     postcss "^8.4.32"
