@@ -60,12 +60,11 @@ async function createFeatureMenuButton() {
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { feature_menu_open_type: featureMenuOpenType }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { feature_menu_open_type: featureMenuOpenType } = options;
 	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
 	setupFeatureMenuEventListeners(featureMenuOpenType);
 }
