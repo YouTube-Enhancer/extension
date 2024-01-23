@@ -1,5 +1,3 @@
-import type { ButtonPlacement } from "@/src/types";
-
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIds } from "@/src/features/featureMenu/utils";
@@ -7,9 +5,11 @@ import { getFeatureIcon } from "@/src/icons";
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
+import type { AddButtonFunction, RemoveButtonFunction } from "../index";
+
 import { loopButtonClickListener } from "./utils";
 
-export async function addLoopButton() {
+export const addLoopButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -81,8 +81,8 @@ export async function addLoopButton() {
 	};
 	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
 	loopChangeMutationObserver.observe(videoElement, { attributeFilter: ["loop"], attributes: true });
-}
-export function removeLoopButton(placement?: ButtonPlacement) {
-	void removeFeatureButton("loopButton", placement);
+};
+export const removeLoopButton: RemoveButtonFunction = async (placement) => {
+	await removeFeatureButton("loopButton", placement);
 	eventManager.removeEventListeners("loopButton");
-}
+};

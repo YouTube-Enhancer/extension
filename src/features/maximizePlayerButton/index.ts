@@ -1,4 +1,5 @@
-import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
+import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -8,7 +9,7 @@ import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { maximizePlayer, setupVideoPlayerTimeUpdate, updateProgressBarPositions } from "./utils";
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
-export async function addMaximizePlayerButton(): Promise<void> {
+export const addMaximizePlayerButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -182,8 +183,8 @@ export async function addMaximizePlayerButton(): Promise<void> {
 		// @ts-ignore TODO: figure out the proper type for this
 		eventManager.addEventListener(button, "mouseenter", ytpRightButtonMouseEnterListener, "maximizePlayerButton");
 	});
-}
-export function removeMaximizePlayerButton(placement?: ButtonPlacement) {
-	void removeFeatureButton("maximizePlayerButton", placement);
+};
+export const removeMaximizePlayerButton: RemoveButtonFunction = async (placement) => {
+	await removeFeatureButton("maximizePlayerButton", placement);
 	eventManager.removeEventListeners("maximizePlayerButton");
-}
+};
