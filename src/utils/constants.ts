@@ -1,10 +1,10 @@
-import z, { ZodEnum, ZodObject } from "zod";
-
-import type { ButtonPlacement, FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
-
-import { availableLocales } from "../i18n/index";
+import { availableLocales } from "@/src/i18n/index";
 import {
+	type ButtonPlacement,
+	type FeaturesThatHaveButtons,
+	type TypeToPartialZodSchema,
 	buttonPlacement,
+	type configuration,
 	featureMenuOpenType,
 	featuresThatHaveButtons,
 	modifierKey,
@@ -15,7 +15,8 @@ import {
 	screenshotType,
 	volumeBoostMode,
 	youtubePlayerQualityLevel
-} from "../types";
+} from "@/src/types";
+import z, { ZodEnum, ZodObject } from "zod";
 
 export const outputFolderName = "dist";
 export const defaultConfiguration = {

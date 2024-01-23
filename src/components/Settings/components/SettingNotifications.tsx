@@ -1,8 +1,7 @@
+import { useSettings } from "@/src/components/Settings/Settings";
 import { useNotifications } from "@/src/hooks";
 import { cn } from "@/src/utils/utilities";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-
-import { useSettings } from "../Settings";
 
 export default function SettingsNotifications() {
 	const { notifications, removeNotification } = useNotifications();

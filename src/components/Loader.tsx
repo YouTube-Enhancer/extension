@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx";
 
-import { cn } from "../utils/utilities";
+import { cn } from "@/src/utils/utilities";
 
 type LoaderProps = {
 	className?: ClassValue;

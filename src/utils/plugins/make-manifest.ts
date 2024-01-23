@@ -1,9 +1,9 @@
 import type { PluginOption } from "vite";
 
+import { manifestV2, manifestV3 } from "@/src/manifest";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import { manifestV2, manifestV3 } from "../../manifest";
 import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
 import { browsers } from "./utils";
