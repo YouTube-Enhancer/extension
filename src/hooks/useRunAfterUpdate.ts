@@ -1,6 +1,6 @@
-import type { AnyFunction } from "@/src/types";
-
 import { useLayoutEffect, useRef } from "react";
+
+import type { AnyFunction } from "../types";
 
 export const useRunAfterUpdate = () => {
 	const handlersRef = useRef<AnyFunction[]>([]);

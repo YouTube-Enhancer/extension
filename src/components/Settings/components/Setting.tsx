@@ -1,11 +1,12 @@
-import type { CSSEditorProps } from "@/src/components/Inputs/CSSEditor/CSSEditor";
-import type { CheckboxProps } from "@/src/components/Inputs/CheckBox/CheckBox";
-import type { NumberInputProps } from "@/src/components/Inputs/Number/Number";
-import type { SelectProps } from "@/src/components/Inputs/Select/Select";
-import type { SliderProps } from "@/src/components/Inputs/Slider/Slider";
 import type { Path, configuration } from "@/src/types";
 
-import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "@/src/components/Inputs";
+import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
+import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
+import type { NumberInputProps } from "../../Inputs/Number/Number";
+import type { SelectProps } from "../../Inputs/Select/Select";
+import type { SliderProps } from "../../Inputs/Slider/Slider";
+
+import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
 type SettingInputProps = {
 	id: Path<configuration>;

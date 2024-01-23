@@ -1,9 +1,10 @@
-import type { AvailableLocales } from "@/src/i18n";
-import type { FeatureName } from "@/src/utils/EventManager";
 import type { ParseKeys, TOptions } from "i18next";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z, { ZodType } from "zod";
+
+import type { AvailableLocales } from "../i18n";
+import type { FeatureName } from "../utils/EventManager";
 export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };

@@ -2,10 +2,11 @@ import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
 import { useComponentVisible } from "@/hooks";
-import Arrow from "@/src/components/Inputs/Number/Arrow";
-import Loader from "@/src/components/Loader";
 import { cn } from "@/src/utils/utilities";
 import React from "react";
+
+import Loader from "../../Loader";
+import Arrow from "../Number/Arrow";
 
 interface SelectOptionProps {
 	children: React.ReactNode;

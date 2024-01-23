@@ -1,6 +1,7 @@
-import { useSettings } from "@/src/components/Settings/Settings";
 import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent } from "react";
+
+import { useSettings } from "../../Settings/Settings";
 
 export type CheckboxProps = {
 	checked: boolean;

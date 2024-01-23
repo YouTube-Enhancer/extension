@@ -1,10 +1,10 @@
 import type { ClassValue } from "clsx";
 import type { ChangeEvent, MutableRefObject } from "react";
 
-import { useSettings } from "@/src/components/Settings/Settings";
 import { cn } from "@/src/utils/utilities";
 import React, { useRef } from "react";
 
+import { useSettings } from "../../Settings/Settings";
 import Arrow from "./Arrow";
 import "./Number.css";
 export type NumberInputProps = {

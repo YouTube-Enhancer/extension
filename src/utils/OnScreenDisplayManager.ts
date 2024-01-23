@@ -1,4 +1,4 @@
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, YouTubePlayerDiv } from "@/src/types";
+import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, YouTubePlayerDiv } from "../types";
 
 import { browserColorLog, calculateCanvasPosition, clamp, createStyledElement, isShortsPage, round } from "./utilities";
 
