@@ -1,4 +1,4 @@
-import type { ButtonPlacement } from "@/src/types";
+import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -61,7 +61,7 @@ export function applyVolumeBoost(volume_boost_amount: number) {
 	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
 	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 }
-export async function addVolumeBoostButton() {
+export const addVolumeBoostButton: AddButtonFunction = async () => {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 
 	const {
@@ -95,8 +95,8 @@ export async function addVolumeBoostButton() {
 		},
 		true
 	);
-}
-export function removeVolumeBoostButton(placement?: ButtonPlacement) {
-	void removeFeatureButton("volumeBoostButton", placement);
+};
+export const removeVolumeBoostButton: RemoveButtonFunction = async (placement) => {
+	await removeFeatureButton("volumeBoostButton", placement);
 	eventManager.removeEventListeners("volumeBoostButton");
-}
+};

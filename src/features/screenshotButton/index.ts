@@ -1,4 +1,4 @@
-import type { ButtonPlacement } from "@/src/types";
+import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
@@ -67,7 +67,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 	} catch (error) {}
 }
 
-export async function addScreenshotButton(): Promise<void> {
+export const addScreenshotButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -104,8 +104,8 @@ export async function addScreenshotButton(): Promise<void> {
 		screenshotButtonClickListener,
 		false
 	);
-}
-export function removeScreenshotButton(placement?: ButtonPlacement) {
-	void removeFeatureButton("screenshotButton", placement);
+};
+export const removeScreenshotButton: RemoveButtonFunction = async (placement) => {
+	await removeFeatureButton("screenshotButton", placement);
 	eventManager.removeEventListeners("screenshotButton");
-}
+};

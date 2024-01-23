@@ -1,11 +1,11 @@
-import type { ButtonPlacement } from "@/src/types";
+import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-export async function addOpenTranscriptButton() {
+export const addOpenTranscriptButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -28,8 +28,8 @@ export async function addOpenTranscriptButton() {
 		transcriptButtonClickerListener,
 		false
 	);
-}
-export function removeOpenTranscriptButton(placement?: ButtonPlacement) {
-	void removeFeatureButton("openTranscriptButton", placement);
+};
+export const removeOpenTranscriptButton: RemoveButtonFunction = async (placement) => {
+	await removeFeatureButton("openTranscriptButton", placement);
 	eventManager.removeEventListeners("openTranscriptButton");
-}
+};
