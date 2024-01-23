@@ -23,12 +23,11 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 		// Wait for the options message and get the format from it
 		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-		if (!optionsData) return;
 		const {
-			data: { options }
+			data: {
+				options: { screenshot_format, screenshot_save_as }
+			}
 		} = optionsData;
-		if (!options) return;
-		const { screenshot_format, screenshot_save_as } = options;
 		const format = `image/${screenshot_format}`;
 
 		// Get the data URL of the canvas and create a blob from it
@@ -71,7 +70,6 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 export async function addScreenshotButton(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
 		data: {
 			options: {

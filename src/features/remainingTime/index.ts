@@ -31,12 +31,11 @@ function playerTimeUpdateListener() {
 export async function setupRemainingTime() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_remaining_time }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_remaining_time } = options;
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
 	const timeDisplay = document.querySelector(".ytp-time-display > span:nth-of-type(2)");

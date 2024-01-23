@@ -11,12 +11,11 @@ import { browserColorLog, chooseClosestQuality, isShortsPage, isWatchPage, waitF
 export default async function setPlayerQuality(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_automatically_set_quality, player_quality }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_automatically_set_quality, player_quality } = options;
 
 	// If automatically set quality option is disabled, return
 	if (!enable_automatically_set_quality) return;

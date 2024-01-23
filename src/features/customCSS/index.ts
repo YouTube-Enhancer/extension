@@ -5,12 +5,11 @@ import { createCustomCSSElement } from "./utils";
 export async function enableCustomCSS() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { custom_css_code, enable_custom_css }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { custom_css_code, enable_custom_css } = options;
 	// Check if custom CSS is enabled
 	if (!enable_custom_css) return;
 	// Create the custom CSS style element
