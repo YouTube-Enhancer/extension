@@ -6,6 +6,11 @@ import { addOpenTranscriptButton, removeOpenTranscriptButton } from "@/src/featu
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import { addVolumeBoostButton, removeVolumeBoostButton } from "@/src/features/volumeBoost";
 
+export type FeatureFuncRecord = {
+	add: AddButtonFunction;
+	remove: RemoveButtonFunction;
+};
+
 export const featureButtonFunctions = {
 	loopButton: {
 		add: addLoopButton,
@@ -27,12 +32,6 @@ export const featureButtonFunctions = {
 		add: addVolumeBoostButton,
 		remove: removeVolumeBoostButton
 	}
-} satisfies Record<
-	FeaturesThatHaveButtons,
-	{
-		add: AddButtonFunction;
-		remove: RemoveButtonFunction;
-	}
->;
+} satisfies Record<FeaturesThatHaveButtons, FeatureFuncRecord>;
 export type AddButtonFunction = () => Promise<void>;
 export type RemoveButtonFunction = (placement?: ButtonPlacement) => Promise<void>;

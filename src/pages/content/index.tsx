@@ -1,6 +1,6 @@
 import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
 
-import { featureButtonFunctions } from "@/src/features";
+import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -160,7 +160,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (volumeBoostEnabled) {
 							if (volumeBoostMode === "global") {
-								removeVolumeBoostButton();
+								await removeVolumeBoostButton();
 								await enableVolumeBoost();
 							} else {
 								disableVolumeBoost();
@@ -169,7 +169,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						} else {
 							disableVolumeBoost();
 							if (volumeBoostMode === "per_video") {
-								removeVolumeBoostButton();
+								await removeVolumeBoostButton();
 							}
 						}
 						break;
@@ -186,7 +186,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { enableForcedPlaybackSpeed, playerSpeed }
 						} = message;
 						if (enableForcedPlaybackSpeed && playerSpeed) {
-							void setPlayerSpeed(Number(playerSpeed));
+							await setPlayerSpeed(Number(playerSpeed));
 						} else if (!enableForcedPlaybackSpeed) {
 							restorePlayerSpeed();
 						}
@@ -197,9 +197,9 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { screenshotButtonEnabled }
 						} = message;
 						if (screenshotButtonEnabled) {
-							void addScreenshotButton();
+							await addScreenshotButton();
 						} else {
-							removeScreenshotButton();
+							await removeScreenshotButton();
 						}
 						break;
 					}
@@ -208,9 +208,9 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { maximizePlayerButtonEnabled }
 						} = message;
 						if (maximizePlayerButtonEnabled) {
-							void addMaximizePlayerButton();
+							await addMaximizePlayerButton();
 						} else {
-							void removeMaximizePlayerButton();
+							await removeMaximizePlayerButton();
 							const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
 							if (!maximizePlayerButton) return;
 							// Get the video element
@@ -230,7 +230,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { videoHistoryEnabled }
 						} = message;
 						if (videoHistoryEnabled) {
-							void setupVideoHistory();
+							await setupVideoHistory();
 						} else {
 							eventManager.removeEventListeners("videoHistory");
 						}
@@ -241,7 +241,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { remainingTimeEnabled }
 						} = message;
 						if (remainingTimeEnabled) {
-							void setupRemainingTime();
+							await setupRemainingTime();
 						} else {
 							removeRemainingTimeDisplay();
 						}
@@ -252,9 +252,9 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { loopButtonEnabled }
 						} = message;
 						if (loopButtonEnabled) {
-							void addLoopButton();
+							await addLoopButton();
 						} else {
-							removeLoopButton();
+							await removeLoopButton();
 						}
 						break;
 					}
@@ -263,7 +263,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { scrollWheelVolumeControlEnabled }
 						} = message;
 						if (scrollWheelVolumeControlEnabled) {
-							void adjustVolumeOnScrollWheel();
+							await adjustVolumeOnScrollWheel();
 						} else {
 							eventManager.removeEventListeners("scrollWheelVolumeControl");
 						}
@@ -274,7 +274,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { scrollWheelSpeedControlEnabled }
 						} = message;
 						if (scrollWheelSpeedControlEnabled) {
-							void adjustSpeedOnScrollWheel();
+							await adjustSpeedOnScrollWheel();
 						} else {
 							eventManager.removeEventListeners("scrollWheelSpeedControl");
 						}
@@ -285,7 +285,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { rememberVolumeEnabled }
 						} = message;
 						if (rememberVolumeEnabled) {
-							void enableRememberVolume();
+							await enableRememberVolume();
 						} else {
 							eventManager.removeEventListeners("rememberVolume");
 						}
@@ -364,9 +364,9 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { openTranscriptButtonEnabled }
 						} = message;
 						if (openTranscriptButtonEnabled) {
-							void openTranscriptButton();
+							await openTranscriptButton();
 						} else {
-							void removeOpenTranscriptButton();
+							await removeOpenTranscriptButton();
 						}
 						break;
 					}
@@ -375,9 +375,9 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { openYouTubeSettingsOnHoverEnabled }
 						} = message;
 						if (openYouTubeSettingsOnHoverEnabled) {
-							void enableOpenYouTubeSettingsOnHover();
+							await enableOpenYouTubeSettingsOnHover();
 						} else {
-							void disableOpenYouTubeSettingsOnHover();
+							disableOpenYouTubeSettingsOnHover();
 						}
 						break;
 					}
@@ -403,8 +403,9 @@ window.addEventListener("DOMContentLoaded", function () {
 						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(buttonPlacements)) {
 							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
 							if (buttonExists) continue;
-							featureButtonFunctions[featureName].remove(oldPlacement);
-							await featureButtonFunctions[featureName].add();
+							const { [featureName]: featureFunctions } = featureButtonFunctions;
+							await (featureFunctions as FeatureFuncRecord).remove(oldPlacement);
+							await (featureFunctions as FeatureFuncRecord).add();
 						}
 						break;
 					}
