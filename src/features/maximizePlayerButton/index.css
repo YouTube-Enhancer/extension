@@ -1,0 +1,26 @@
+div.ytp-chapter-hover-container.yte-maximized-chapter-hover-container,
+div.ytp-chrome-bottom.yte-maximized-chrome-bottom {
+	width: calc(100vw - 26px) !important;
+}
+video.html5-main-video.yte-maximized-video {
+	width: 100vw !important;
+	height: 100vh !important;
+	left: 0 !important;
+	top: 0 !important;
+	object-fit: contain !important;
+	background: black !important;
+}
+div#movie_player.yte-maximized-video-container {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	z-index: 2020 !important;
+}
+div.ytp-storyboard-framepreview-timestamp.yte-maximized-storyboard-framepreview-timestamp {
+	z-index: 2021 !important;
+}
+div.ytp-tooltip.yte-maximized-tooltip {
+	top: calc(100vh - 231px) !important;
+}
