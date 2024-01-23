@@ -8,7 +8,6 @@ import { waitForSpecificMessage } from "@/src/utils/utilities";
 export async function addOpenTranscriptButton() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
 		data: {
 			options: {

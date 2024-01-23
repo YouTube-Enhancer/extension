@@ -33,7 +33,6 @@ export async function removeFeatureButton<Name extends FeaturesThatHaveButtons>(
 	if (placement === undefined) {
 		// Wait for the "options" message from the content script
 		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-		if (!optionsData) return;
 		({
 			data: {
 				options: {

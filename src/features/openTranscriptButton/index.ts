@@ -7,7 +7,6 @@ import { addOpenTranscriptButton } from "./utils";
 export async function openTranscriptButton() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
 		data: {
 			options: { enable_open_transcript_button: enableOpenTranscriptButton }

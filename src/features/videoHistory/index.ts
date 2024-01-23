@@ -15,11 +15,11 @@ import {
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_video_history: enableVideoHistory }
+		}
 	} = optionsData;
-	const { enable_video_history: enableVideoHistory } = options;
 	if (!enableVideoHistory) return;
 	// Get the player container element
 	const playerContainer =
@@ -54,11 +54,11 @@ export async function setupVideoHistory() {
 export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_video_history: enableVideoHistory }
+		}
 	} = optionsData;
-	const { enable_video_history: enableVideoHistory } = options;
 	if (!enableVideoHistory) return;
 
 	// Get the player container element

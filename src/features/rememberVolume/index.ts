@@ -13,12 +13,11 @@ import { setRememberedVolume, setupVolumeChangeListener } from "./utils";
 export default async function enableRememberVolume(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_remember_last_volume: enableRememberVolume, remembered_volumes: rememberedVolumes }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_remember_last_volume: enableRememberVolume, remembered_volumes: rememberedVolumes } = options;
 	// If the volume is not being remembered, return
 	if (!enableRememberVolume) return;
 	const IsWatchPage = isWatchPage();

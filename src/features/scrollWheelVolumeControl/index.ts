@@ -16,12 +16,11 @@ import { adjustVolume, setupScrollListeners } from "./utils";
 export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	// Wait for the "options" message from the content script
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 	const {
-		data: { options }
+		data: {
+			options: { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl }
+		}
 	} = optionsData;
-	// Extract the necessary properties from the options object
-	const { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl } = options;
 	// If scroll wheel volume control is disabled, return
 	if (!enableScrollWheelVolumeControl) return;
 	// Wait for the specified container selectors to be available on the page
@@ -41,16 +40,23 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				return void (await setOptionsData());
 			}
 			const {
-				data: { options }
+				data: {
+					options: {
+						enable_scroll_wheel_speed_control,
+						enable_scroll_wheel_volume_control_hold_modifier_key,
+						enable_scroll_wheel_volume_control_hold_right_click,
+						osd_display_color,
+						osd_display_hide_time,
+						osd_display_opacity,
+						osd_display_padding,
+						osd_display_position,
+						osd_display_type,
+						scroll_wheel_speed_control_modifier_key,
+						scroll_wheel_volume_control_modifier_key,
+						volume_adjustment_steps
+					}
+				}
 			} = optionsData;
-			// Extract the necessary properties from the options object
-			const {
-				enable_scroll_wheel_speed_control,
-				enable_scroll_wheel_volume_control_hold_modifier_key,
-				enable_scroll_wheel_volume_control_hold_right_click,
-				scroll_wheel_speed_control_modifier_key,
-				scroll_wheel_volume_control_modifier_key
-			} = options;
 			const wheelEvent = event as WheelEvent;
 			// If scroll wheel speed control is enabled and the modifier key is pressed return
 			if (enable_scroll_wheel_speed_control && wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
@@ -82,15 +88,15 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			// Adjust the volume based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the volume based on the scroll direction and options
-			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, options.volume_adjustment_steps);
+			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, volume_adjustment_steps);
 			new OnScreenDisplayManager(
 				{
-					displayColor: options.osd_display_color,
-					displayHideTime: options.osd_display_hide_time,
-					displayOpacity: options.osd_display_opacity,
-					displayPadding: options.osd_display_padding,
-					displayPosition: options.osd_display_position,
-					displayType: options.osd_display_type,
+					displayColor: osd_display_color,
+					displayHideTime: osd_display_hide_time,
+					displayOpacity: osd_display_opacity,
+					displayPadding: osd_display_padding,
+					displayPosition: osd_display_position,
+					displayType: osd_display_type,
 					playerContainer: playerContainer
 				},
 				"yte-osd",

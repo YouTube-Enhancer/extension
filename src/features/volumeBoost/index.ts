@@ -9,13 +9,13 @@ import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/util
 export default async function volumeBoost() {
 	setupVolumeBoost();
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 
 	const {
-		data: { options }
+		data: {
+			options: { volume_boost_amount, volume_boost_mode }
+		}
 	} = optionsData;
 
-	const { volume_boost_amount, volume_boost_mode } = options;
 	if (volume_boost_mode === "per_video") {
 		await addVolumeBoostButton();
 	} else if (volume_boost_mode === "global") {
@@ -25,13 +25,13 @@ export default async function volumeBoost() {
 export async function enableVolumeBoost() {
 	setupVolumeBoost();
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 
 	const {
-		data: { options }
+		data: {
+			options: { volume_boost_amount }
+		}
 	} = optionsData;
 
-	const { volume_boost_amount } = options;
 	applyVolumeBoost(volume_boost_amount);
 }
 function setupVolumeBoost() {
@@ -63,7 +63,6 @@ export function applyVolumeBoost(volume_boost_amount: number) {
 }
 export async function addVolumeBoostButton() {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	if (!optionsData) return;
 
 	const {
 		data: {

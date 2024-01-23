@@ -274,14 +274,14 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 	action: MessageMappings[T]["request"]["action"],
 	source: S,
 	data?: D
-): Promise<MessageMappings[T]["response"] | undefined> {
+): Promise<MessageMappings[T]["response"]> {
 	const message = {
 		action,
 		data,
 		source,
 		type
 	};
-	return new Promise<MessageMappings[T]["response"] | undefined>((resolve) => {
+	return new Promise<MessageMappings[T]["response"]>((resolve) => {
 		document.addEventListener("yte-message-from-extension", () => {
 			const provider = document.getElementById("yte-message-from-extension");
 			if (!provider) return;
