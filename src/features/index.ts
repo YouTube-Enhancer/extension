@@ -30,7 +30,9 @@ export const featureButtonFunctions = {
 } satisfies Record<
 	FeaturesThatHaveButtons,
 	{
-		add: (() => Promise<void>) | (() => void);
-		remove: ((placement: ButtonPlacement) => Promise<void>) | ((placement: ButtonPlacement) => void);
+		add: AddButtonFunction;
+		remove: RemoveButtonFunction;
 	}
 >;
+export type AddButtonFunction = () => Promise<void>;
+export type RemoveButtonFunction = (placement?: ButtonPlacement) => Promise<void>;
