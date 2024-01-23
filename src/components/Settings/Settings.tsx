@@ -1,3 +1,4 @@
+import type { SelectOption } from "@/src/components/Inputs";
 import type { ButtonPlacement, ModifierKey, Path, PathValue, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
@@ -5,18 +6,14 @@ import type { ChangeEvent, ChangeEventHandler } from "react";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
+import Loader from "@/src/components/Loader";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
-import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
+import { configurationImportSchema, defaultConfiguration, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { cn, formatDateForFileName, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
-import type { SelectOption } from "../Inputs";
-
-import { defaultConfiguration } from "../../utils/constants";
-import { formatDateForFileName } from "../../utils/utilities";
-import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";

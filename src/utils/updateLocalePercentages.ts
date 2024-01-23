@@ -1,10 +1,10 @@
+import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "@/src/types";
+
+import { type AvailableLocales } from "@/src/i18n";
 import { readFileSync, writeFileSync } from "fs";
 import { z } from "zod";
 import { generateErrorMessage } from "zod-error";
 
-import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "../types";
-
-import { type AvailableLocales } from "../i18n";
 import { i18nDir } from "./plugins/utils";
 import { formatError } from "./utilities";
 
