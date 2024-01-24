@@ -28,7 +28,9 @@
     "lint:fix": "oxlint . --fix && prettier --write \"**/*.{ts,tsx,js,mjs,cjs}\"",
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
-    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
+    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js",
+    "test": "playwright test",
+    "test:auth": "node scripts/auth-setup.mjs"
   },
   "type": "module",
   "optionalDependencies": {
@@ -42,6 +44,7 @@
     "fuse.js": "^7.3.0",
     "i18next": "^26.0.4",
     "monaco-editor": "0.56.0",
+    "playwright-webextext": "^0.0.5",
     "react": "^19.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^19.2.0",
@@ -55,6 +58,7 @@
     "youtubei.js": "^17.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
