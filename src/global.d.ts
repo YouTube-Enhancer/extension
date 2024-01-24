@@ -1,5 +1,5 @@
 import type { i18nInstanceType } from "./i18n";
-
+import type { YoutubePlayerQualityLabel } from "./types";
 declare module "*.svg" {
 	import React = require("react");
 	export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
@@ -38,6 +38,7 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		video_quality_features: string[];
 	}
 	interface YouTubePlayer {
+		getPlaybackQualityLabel(): Promise<YoutubePlayerQualityLabel>;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
 		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
