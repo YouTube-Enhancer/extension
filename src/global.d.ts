@@ -1,7 +1,7 @@
 import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
 
 import type { i18nInstanceType } from "./i18n";
-import type { YouTubeNavigateStart } from "./types";
+import type { YouTubeNavigateStart, YoutubePlayerQualityLabel } from "./types";
 
 declare module "*.svg" {
 	import React from "react";
@@ -61,6 +61,7 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 	interface YouTubePlayer {
 		getAudioTrack(): Promise<audioTrack>;
 		getAvailableAudioTracks(): Promise<audioTrack[]>;
+		getPlaybackQualityLabel(): Promise<YoutubePlayerQualityLabel>;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
