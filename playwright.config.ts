@@ -60,7 +60,7 @@ export async function navigateToPage(page: Page, url: string) {
 	expect(page.url()).toBe(url);
 }
 export function waitForSelector(page: Page, selector: configurationId) {
-	const element = page.locator(`#${selector}`);
+	const element = page.locator(`id=${selector}`);
 	return element;
 }
 export async function getValueFromYouTubePlayer<P extends Page, K extends YouTubePlayerGetKeysWithoutParams>(page: P, key: K) {
