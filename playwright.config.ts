@@ -1,12 +1,23 @@
 import type { PlayerSize, YouTubePlayer } from "youtube-player/dist/types";
 
+import { buttonContainerId } from "@/src/features/buttonPlacement/utils";
 import { defaultConfiguration } from "@/src/utils/constants";
 // TODO: update tests to test all button placements
 import { type BrowserContext, type Page, test as base, chromium, defineConfig, devices } from "@playwright/test";
 import { join } from "path";
 import { cwd } from "process";
 
-import type { FeatureMenuItemId, ModifierKey, YoutubePlayerQualityLevel, configuration, configurationId } from "./src/types/index";
+import type {
+	ButtonPlacement,
+	FeatureButtonId,
+	FeatureMenuItemId,
+	ModifierKey,
+	Path,
+	PathValue,
+	YoutubePlayerQualityLevel,
+	configuration,
+	configurationId
+} from "./src/types/index";
 
 import { chooseClosestQuality } from "./src/utils/utilities";
 type FilterKeysByPrefix<O extends object, K extends keyof O, Prefix extends string> = K extends `${Prefix}${string}` ? K : never;
@@ -33,7 +44,9 @@ type YouTubePlayerGetReturnTypeMappings = {
 	getVolume: number;
 };
 type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K : never;
+	[K in keyof O]: O[K] extends ValueType ? K
+	: O[K] extends Record<string, ValueType> ? K
+	: never;
 }[keyof O];
 
 export async function navigateToOptionsPage(page: Page, extensionId: string) {
@@ -84,11 +97,10 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 		{ key, selector: "div#movie_player", value } as const
 	);
 }
-export async function selectOption<
-	P extends Page,
-	K extends Exclude<FilterKeysByValueType<configuration, number | string>, undefined>,
-	V extends configuration[K]
->(page: P, id: K, value: V) {
+type SelectKeys = {
+	[K in Path<configuration>]: PathValue<configuration, K> extends number | string ? K : never;
+}[Path<configuration>];
+export async function selectOption<P extends Page, K extends SelectKeys, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
 	// Wait for the select to appear on the page
 	const select = waitForSelector(page, id);
 	expect(select).toBeTruthy();
@@ -198,10 +210,38 @@ export async function expectFeatureMenuItemToBeFalsy(page: Page, featureId: Feat
 	// Check that the menu item is not attached to the DOM
 	await expect(menuItem).not.toBeAttached();
 }
+export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is attached to the DOM
+	await expect(menuItem).toBeAttached();
+}
+export async function expectFeatureButtonToBeFalsy(page: Page, featureId: FeatureButtonId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is not attached to the DOM
+	await expect(menuItem).not.toBeAttached();
+}
+export async function expectFeatureButtonToBeIn(page: Page, featureId: FeatureButtonId, placement: Exclude<ButtonPlacement, "feature_menu">) {
+	const placementSelectors = {
+		below_player: `#${buttonContainerId}`,
+		player_controls_left: ".ytp-left-controls",
+		player_controls_right: ".ytp-right-controls"
+	};
+	const { [placement]: selector } = placementSelectors;
+	const container = page.locator(selector);
+	await expect(container).toBeAttached();
+	const button = container.locator(`#${featureId}`);
+	await expect(button).toBeAttached();
+}
 export async function clickFeatureMenuItem(page: Page, featureId: FeatureMenuItemId) {
 	// Open the features menu
 	await page.locator(`#yte-feature-menu-button`).click();
 	// Click the feature menu item
+	await page.locator(`#${featureId}`).click();
+}
+export async function clickFeatureButton(page: Page, featureId: FeatureButtonId) {
+	// Click the feature button
 	await page.locator(`#${featureId}`).click();
 }
 export async function expectCurrentQualityLevelToBeTruthy(page: Page, expectedQuality: YoutubePlayerQualityLevel) {
