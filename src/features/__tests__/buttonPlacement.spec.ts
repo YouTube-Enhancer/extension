@@ -1,11 +1,7 @@
 import type { Page } from "@playwright/test";
 
 import {
-	clickFeatureButton,
-	disableFeature,
 	enableFeature,
-	expect,
-	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
 	expectFeatureButtonToBeTruthy,
 	expectFeatureMenuItemToBeFalsy,
