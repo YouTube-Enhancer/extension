@@ -1,9 +1,5 @@
 import {
-	clickFeatureButton,
-	disableFeature,
 	enableFeature,
-	expect,
-	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
 	expectFeatureButtonToBeTruthy,
 	navigateToOptionsPage,
