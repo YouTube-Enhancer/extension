@@ -350,7 +350,7 @@ export async function adjustWithScrollWheel({
 	// Get the value after the scroll and expect it to be adjusted correctly
 	const valueAfterScroll = await getCurrentValue(page, controlType);
 	expect(valueAfterScroll).toBeTruthy();
-	expect(valueAfterScroll).toBe(value + (direction === "up" ? 1 : -1) * 5);
+	expect(valueAfterScroll).toBe(value + (direction === "up" ? 1 : -1) * defaultConfiguration[`${controlType}_adjustment_steps`]);
 }
 async function getCurrentValue(page: Page, controlType: "speed" | "volume") {
 	const { [controlType]: key } = {
