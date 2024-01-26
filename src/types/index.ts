@@ -50,6 +50,7 @@ export type FeaturesThatHaveButtons = Exclude<
 	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
 	"featureMenu"
 >;
+export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
 export const featuresThatHaveButtons = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
@@ -102,7 +103,7 @@ export type configuration = {
 	volume_boost_mode: VolumeBoostMode;
 };
 export type configurationKeys = keyof configuration;
-export type configurationId = configurationKeys;
+export type configurationId = Path<configuration>;
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
