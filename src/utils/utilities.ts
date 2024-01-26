@@ -9,6 +9,8 @@ import type {
 	MessageSource,
 	Messages,
 	OnScreenDisplayPosition,
+	Path,
+	PathValue,
 	Selector,
 	SendDataMessage,
 	YoutubePlayerQualityLevel,
@@ -630,4 +632,19 @@ export function debounce(func: AnyFunction, delay: number) {
 			func(...args);
 		}, delay);
 	};
+}
+export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
+	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
+	let value: any = obj;
+
+	for (const key of keys) {
+		if (value && typeof value === "object" && key in value) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			({ [key]: value } = value);
+		} else {
+			throw new Error(`Invalid path: ${String(path)}`);
+		}
+	}
+
+	return value as PathValue<T, P>;
 }
