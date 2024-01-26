@@ -42,15 +42,15 @@ export const toDivisible = (value: number, divider: number): number => Math.ceil
 
 export function chooseClosestQuality(
 	selectedQuality: YoutubePlayerQualityLevel,
-	availableQualities: YoutubePlayerQualityLevel[]
-): YoutubePlayerQualityLevel | null {
+	availableQualities: Exclude<YoutubePlayerQualityLevel, "auto">[]
+): Exclude<YoutubePlayerQualityLevel, "auto"> | null {
 	// If there are no available qualities, return null
 	if (availableQualities.length === 0) {
 		return null;
 	}
 
 	// Find the index of the selected quality in the array
-	const selectedIndex = youtubePlayerQualityLevel.indexOf(selectedQuality);
+	const selectedIndex = youtubePlayerQualityLevel.filter((quality) => quality !== "auto").indexOf(selectedQuality);
 
 	// If the selected quality is not in the array, return null
 	if (selectedIndex === -1) {
@@ -60,13 +60,13 @@ export function chooseClosestQuality(
 	// Find the available quality levels that are closest to the selected quality level
 	const closestQualities = availableQualities.reduce(
 		(acc, quality) => {
-			const qualityIndex = youtubePlayerQualityLevel.indexOf(quality);
+			const qualityIndex = youtubePlayerQualityLevel.filter((quality) => quality !== "auto").indexOf(quality);
 			if (qualityIndex !== -1) {
 				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality });
 			}
 			return acc;
 		},
-		[] as { difference: number; quality: YoutubePlayerQualityLevel }[]
+		[] as { difference: number; quality: Exclude<YoutubePlayerQualityLevel, "auto"> }[]
 	);
 
 	// Sort the closest qualities by difference in ascending order

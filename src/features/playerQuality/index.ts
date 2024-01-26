@@ -36,7 +36,7 @@ export default async function setPlayerQuality(): Promise<void> {
 	if (!playerContainer.setPlaybackQuality) return;
 
 	// Get the available quality levels
-	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
+	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as Exclude<YoutubePlayerQualityLevel, "auto">[];
 
 	// Check if the specified player quality is available
 	if (player_quality && player_quality !== "auto") {
