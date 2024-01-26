@@ -19,7 +19,7 @@ import type {
 	configurationId
 } from "./src/types/index";
 
-import { chooseClosestQuality } from "./src/utils/utilities";
+import { chooseClosestQuality, clamp } from "./src/utils/utilities";
 type FilterKeysByPrefix<O extends object, K extends keyof O, Prefix extends string> = K extends `${Prefix}${string}` ? K : never;
 
 type YouTubePlayerSetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "set">;
@@ -37,7 +37,7 @@ type YouTubePlayerGetKeysWithoutParams = Exclude<YouTubePlayerGetKeys, FilterMet
 type YouTubePlayerGetReturnType<K extends YouTubePlayerGetKeysWithoutParams> =
 	K extends keyof YouTubePlayerGetReturnTypeMappings ? YouTubePlayerGetReturnTypeMappings[K] : "Return type not implemented";
 type YouTubePlayerGetReturnTypeMappings = {
-	getAvailableQualityLevels: YoutubePlayerQualityLevel[];
+	getAvailableQualityLevels: Exclude<YoutubePlayerQualityLevel, "auto">[];
 	getPlaybackQuality: YoutubePlayerQualityLevel;
 	getPlaybackRate: number;
 	getSize: PlayerSize;
@@ -389,8 +389,9 @@ export async function adjustWithScrollWheel({
 	}
 	// Get the value after the scroll and expect it to be adjusted correctly
 	const valueAfterScroll = await getCurrentValue(page, controlType);
+	const expectedValue = value + (direction === "up" ? 1 : -1) * defaultConfiguration[`${controlType}_adjustment_steps`];
 	expect(valueAfterScroll).toBeTruthy();
-	expect(valueAfterScroll).toBe(value + (direction === "up" ? 1 : -1) * defaultConfiguration[`${controlType}_adjustment_steps`]);
+	expect(valueAfterScroll).toBe(controlType === "speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
 }
 async function getCurrentValue(page: Page, controlType: "speed" | "volume") {
 	const { [controlType]: key } = {
