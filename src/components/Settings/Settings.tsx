@@ -1,4 +1,4 @@
-import type { ButtonPlacement, ModifierKey, Path, PathValue, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -8,7 +8,7 @@ import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
+import { cn, getPathValue, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
@@ -22,21 +22,6 @@ import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
 
-function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
-	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
-	let value: any = obj;
-
-	for (const key of keys) {
-		if (value && typeof value === "object" && key in value) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			({ [key]: value } = value);
-		} else {
-			throw new Error(`Invalid path: ${String(path)}`);
-		}
-	}
-
-	return value as PathValue<T, P>;
-}
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
