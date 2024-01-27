@@ -102,6 +102,7 @@ function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 	}
 }
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
+	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("div#player-container.ytd-watch-flexy") : null;
