@@ -1,3 +1,23 @@
+## [1.21.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.1...v1.21.2) (2024-01-27)
+
+
+### Bug Fixes
+
+* changing open type not working properly ([c5fa4c4](https://github.com/VampireChicken12/youtube-enhancer/commit/c5fa4c4a57b930c8993cfeee932306ae625cf25f))
+* hover feature menu hiding when it shouldn't ([078088f](https://github.com/VampireChicken12/youtube-enhancer/commit/078088fe17b04755401bba6721c6c2379e893c0b))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.2-Chrome.zip | 6ba939d46f7ebf9dbe0fde85897661e2a477341375d0a14043a6a1cfa784fbd2 |
+| youtube-enhancer-v1.21.2-Chromium.zip | 6ba939d46f7ebf9dbe0fde85897661e2a477341375d0a14043a6a1cfa784fbd2 |
+| youtube-enhancer-v1.21.2-Edge.zip | 6ba939d46f7ebf9dbe0fde85897661e2a477341375d0a14043a6a1cfa784fbd2 |
+| youtube-enhancer-v1.21.2-Firefox.zip | 1819d0badbdc1e22185297299cc14f68a5c559818b0226209b9fef199c40206e |
+
 ## [1.21.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.0...v1.21.1) (2024-01-27)
 
 
