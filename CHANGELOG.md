@@ -1,3 +1,28 @@
+# [1.21.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.1...v1.21.0) (2024-01-27)
+
+
+### Bug Fixes
+
+* menu item labels not updated when language changed ([807e6c3](https://github.com/VampireChicken12/youtube-enhancer/commit/807e6c3154244d62487dc0cc8470e13319d7ee76))
+* per video volume boost was disabled when adjusting boost ([daef94c](https://github.com/VampireChicken12/youtube-enhancer/commit/daef94c528eddd59685f79dd9b2a68bdde259d44))
+
+
+### Features
+
+* button placement ([d11de5d](https://github.com/VampireChicken12/youtube-enhancer/commit/d11de5d251091abc5acc3704438cbee2a314f89a)), closes [#247](https://github.com/VampireChicken12/youtube-enhancer/issues/247)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.21.0-Chrome.zip | f677263384b756d02bf4e5bf4bf3e21ac757efb8e826a51af5e9bde7fe895de3 |
+| youtube-enhancer-v1.21.0-Chromium.zip | f677263384b756d02bf4e5bf4bf3e21ac757efb8e826a51af5e9bde7fe895de3 |
+| youtube-enhancer-v1.21.0-Edge.zip | f677263384b756d02bf4e5bf4bf3e21ac757efb8e826a51af5e9bde7fe895de3 |
+| youtube-enhancer-v1.21.0-Firefox.zip | 3971c940b6b6871489a97befd1132e2cdcef4ec32fb79b460c6c9509cc0926b8 |
+
 ## [1.20.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.20.0...v1.20.1) (2024-01-05)
 
 
