@@ -179,7 +179,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				featureMenuButton,
 				"mouseleave",
 				(event) => {
-					if (event.target !== featureMenu) {
+					if (![featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) {
 						removeFeatureMenuTooltip();
 						hideFeatureMenu();
 					}
