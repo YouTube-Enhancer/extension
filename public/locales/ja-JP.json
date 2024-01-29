@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "前音量を覚える",
 						"title": "新ビデオの音量を前動画の音量に変化する。"
-					},
-					"videoHistory": {
-						"label": "動画歴史",
-						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます"
 					}
 				},
 				"title": "他の設定"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "スクロールホイール音量制御設定"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
