@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Запомнить уровень громкости",
 						"title": "Запоминает громкость последнего видео, которое вы смотрели и устанавливает это значение при открытии нового видео"
-					},
-					"videoHistory": {
-						"label": "Включить историю видео",
-						"title": "Отслеживает то, на каком моменте просмотра видео вы остановились и спрашивает, если вы хотите продолжить с этого момента когда это видео загружается снова"
 					}
 				},
 				"title": "Прочие параметры"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "Настройки управления громкостью с помощью колеса прокрутки"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
