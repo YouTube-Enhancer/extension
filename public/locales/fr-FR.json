@@ -132,7 +132,7 @@
 				"editor": {
 					"collapse": "Collapse Editor",
 					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"noProblems": "Aucun problème détecté."
 				},
 				"enable": {
 					"label": "Enable custom CSS",

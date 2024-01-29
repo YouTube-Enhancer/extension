@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "Repetir",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "Repetição inativa",
+						"on": "Repetição ativa"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "Maximizar",
 					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+						"off": "Maximização inativa",
+						"on": "Maximização ativa"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "Impulsionador de volume",
 					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+						"off": "Impulso de Volume inativo",
+						"on": "Impulso de Volume ativo"
 					}
 				}
 			}
@@ -100,33 +100,33 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"loopButton": "Botão de Repetir",
+						"maximizePlayerButton": "Botão de Maximizar",
+						"openTranscriptButton": "Abrir botão de transcrição",
+						"screenshotButton": "Botão de captura de tela",
+						"volumeBoostButton": "Botão de Impulso de Volume"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "abaixo dos controles do reprodutor",
+							"value": "Abaixo do reprodutor"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "no menu de recursos",
+							"value": "Menu de recursos"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "no lado esquerdo dos controles do reprodutor",
+							"value": "Controle Esquerdo"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "no lado direito dos controles do reprodutor",
+							"value": "Controle Direito"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Coloque o {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Configurações de posicionamento de botão"
 			},
 			"customCSS": {
 				"editor": {
