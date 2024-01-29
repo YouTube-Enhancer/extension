@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Lembrar o último volume",
 						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
-					},
-					"videoHistory": {
-						"label": "Histórico de vídeos",
-						"title": "Mantém o controle de onde você parou nos vídeos que você estava assistindo e pergunta se você deseja retomar quando aquele vídeo é carregado novamente"
 					}
 				},
 				"title": "Configurações diversas"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "Configurações de controle do volume por roda do mouse"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
