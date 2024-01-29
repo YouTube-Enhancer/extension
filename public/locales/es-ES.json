@@ -14,8 +14,8 @@
 				"loopButton": {
 					"label": "Bucle",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "Desactivar repetición",
+						"on": "Activar repetición"
 					}
 				},
 				"maximizePlayerButton": {
@@ -100,50 +100,50 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"loopButton": "Botón de repetición",
+						"maximizePlayerButton": "Maximizar botón",
+						"openTranscriptButton": "Abrir botón de transcripción",
+						"screenshotButton": "Botón de captura de pantalla",
+						"volumeBoostButton": "Botón Aumento de Volumen"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "debajo de los controles del reproductor",
+							"value": "Debajo del reproductor"
 						},
 						"feature_menu": {
 							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"value": "Menú de funciones"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "a la izquierda de los controles del reproductor",
+							"value": "Controles a la izquierda"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "a la derecha de los controles del reproductor",
+							"value": "Controles a la derecha"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Ajustes de posición de los botones"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "Colapsar editor",
+					"expand": "Expandir editor",
+					"noProblems": "No se encontraron problemas."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Habilitar CSS personalizado",
+					"title": "Permite aplicar CSS personalizado a la página"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Ajustes de CSS personalizados"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Tipo de activación del menú",
 						"options": {
 							"click": "Click",
 							"hover": "Pasar el cursor por encima"
@@ -259,10 +259,10 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"line": "Line",
+						"line": "Línea",
 						"no_display": "No mostrar",
 						"round": "Round",
-						"text": "Text"
+						"text": "Texto"
 					},
 					"title": "Select the type of On-Screen Display"
 				}
