@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "记住最后一个音量",
 						"title": "记住最后一个视频的音量并在打开新视频时设置"
-					},
-					"videoHistory": {
-						"label": "视频历史记录",
-						"title": "保持跟踪您在视频上离开的位置，并询问您是否想要在视频重新加载时恢复"
 					}
 				},
 				"title": "其他设置"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "滚轮控制音量设置"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

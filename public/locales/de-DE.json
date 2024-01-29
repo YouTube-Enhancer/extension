@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Letzte Lautstärke merken",
 						"title": "Speichere die Lautstärke des letzten Videos, das du gesehen hast und setze es beim Öffnen eines neuen Videos"
-					},
-					"videoHistory": {
-						"label": "Videoverlauf",
-						"title": "Merkt sich den Zeitpunkt pausieren des Videos. Fragt beim erneut laden, ob man Vortfahren möchte."
 					}
 				},
 				"title": "Weitere Einstellungen"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "Lautstärke durch Mausrad ändern"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
