@@ -98,6 +98,7 @@ let start: null | number = null;
 function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv, cb: () => void) {
 	const progressBarId = "resume-prompt-progress-bar";
 	const closeButtonId = "resume-prompt-close-button";
+	const resumeButtonId = "resume-prompt-button";
 	const promptId = "resume-prompt";
 	const progressBarDuration = 15;
 
@@ -108,10 +109,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			backgroundColor: "rgba(28, 28, 28, 0.9)",
 			borderRadius: "5px",
 			boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)",
-			cursor: "pointer",
 			left: "50%",
-			padding: "12px",
-			paddingBottom: "17px",
 			position: "absolute",
 			top: "50%",
 			transform: "translate(-50%, -50%)",
@@ -148,13 +146,28 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			lineHeight: "1px",
 			padding: "5px",
 			position: "absolute",
-			right: "-2px",
-			top: "2px"
+			right: "0px",
+			top: "0px"
 		}
 	});
 	closeButton.textContent = "ₓ";
-
-	prompt.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
+	const resumeButton = createStyledElement({
+		elementId: resumeButtonId,
+		elementType: "button",
+		styles: {
+			backgroundColor: "rgb(15, 15, 15)",
+			border: "transparent",
+			borderRadius: "5px",
+			boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+			color: "white",
+			cursor: "pointer",
+			padding: "10px 12px",
+			textAlign: "center",
+			transition: "all 0.5s ease-in-out",
+			verticalAlign: "middle"
+		}
+	});
+	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
 
 	function startCountdown() {
 		if (prompt) prompt.style.display = "block";
@@ -210,13 +223,14 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	const closeListener = () => {
 		hidePrompt();
 	};
-	eventManager.removeEventListener(prompt, "click", "videoHistory");
-	eventManager.addEventListener(prompt, "click", resumeButtonClickListener, "videoHistory");
+	eventManager.removeEventListener(resumeButton, "click", "videoHistory");
+	eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 	eventManager.removeEventListener(closeButton, "click", "videoHistory");
 	eventManager.addEventListener(closeButton, "click", closeListener, "videoHistory");
 
 	// Display the prompt
 	if (!elementExists(promptId)) {
+		prompt.appendChild(resumeButton);
 		playerContainer.appendChild(prompt);
 	}
 }
