@@ -339,20 +339,20 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "視聴した動画に追跡をつける",
+					"title": "再生を再開できるように、視聴中の動画で中断した場所を追跡します"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "レジューム型",
 						"options": {
 							"automatic": "自動",
-							"prompt": "Prompt"
+							"prompt": "入力要求"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "動画をレジュームするの方法を選択します"
 					}
 				},
-				"title": "Video history settings"
+				"title": "動画履歴設定"
 			},
 			"volumeBoost": {
 				"boostAmount": {
