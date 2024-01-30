@@ -346,7 +346,7 @@
 					"select": {
 						"label": "Resume type",
 						"options": {
-							"automatic": "Automatic",
+							"automatic": "自動",
 							"prompt": "Prompt"
 						},
 						"title": "Select how you want to resume videos"
