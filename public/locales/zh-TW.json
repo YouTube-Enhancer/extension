@@ -339,20 +339,20 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "記住已觀看的影片",
+					"title": "記住己觀看影片的播放位置及啟用繼續播放"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "繼續播放方式",
 						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
+							"automatic": "自動",
+							"prompt": "提示"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "選擇如何繼續播放"
 					}
 				},
-				"title": "Video history settings"
+				"title": "觀看記錄設定"
 			},
 			"volumeBoost": {
 				"boostAmount": {
