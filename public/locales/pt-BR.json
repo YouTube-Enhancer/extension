@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "Repetir",
 					"toggle": {
-						"off": "Repetição inativa",
-						"on": "Repetição ativa"
+						"off": "Loop off",
+						"on": "Loop on"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "Maximizar",
 					"toggle": {
-						"off": "Maximização inativa",
-						"on": "Maximização ativa"
+						"off": "Maximize off",
+						"on": "Maximize on"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "Impulsionador de volume",
 					"toggle": {
-						"off": "Impulso de Volume inativo",
-						"on": "Impulso de Volume ativo"
+						"off": "Volume boost off",
+						"on": "Volume boost on"
 					}
 				}
 			}
@@ -100,33 +100,33 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Botão de Repetir",
-						"maximizePlayerButton": "Botão de Maximizar",
-						"openTranscriptButton": "Abrir botão de transcrição",
-						"screenshotButton": "Botão de captura de tela",
-						"volumeBoostButton": "Botão de Impulso de Volume"
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
 					},
 					"options": {
 						"below_player": {
-							"placement": "abaixo dos controles do reprodutor",
-							"value": "Abaixo do reprodutor"
+							"placement": "below the player controls",
+							"value": "Below Player"
 						},
 						"feature_menu": {
-							"placement": "no menu de recursos",
-							"value": "Menu de recursos"
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
 						},
 						"player_controls_left": {
-							"placement": "no lado esquerdo dos controles do reprodutor",
-							"value": "Controle Esquerdo"
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
 						},
 						"player_controls_right": {
-							"placement": "no lado direito dos controles do reprodutor",
-							"value": "Controle Direito"
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
 						}
 					},
-					"title": "Coloque o {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Configurações de posicionamento de botão"
+				"title": "Button Placement Settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -209,6 +209,10 @@
 					"rememberLastVolume": {
 						"label": "Lembrar o último volume",
 						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
+					},
+					"videoHistory": {
+						"label": "Histórico de vídeos",
+						"title": "Mantém o controle de onde você parou nos vídeos que você estava assistindo e pergunta se você deseja retomar quando aquele vídeo é carregado novamente"
 					}
 				},
 				"title": "Configurações diversas"
@@ -336,23 +340,6 @@
 					}
 				},
 				"title": "Configurações de controle do volume por roda do mouse"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
-				},
-				"resumeType": {
-					"select": {
-						"label": "Resume type",
-						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
-						},
-						"title": "Select how you want to resume videos"
-					}
-				},
-				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

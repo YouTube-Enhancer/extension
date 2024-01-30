@@ -14,8 +14,8 @@
 				"loopButton": {
 					"label": "Bucle",
 					"toggle": {
-						"off": "Desactivar repetición",
-						"on": "Activar repetición"
+						"off": "Loop off",
+						"on": "Loop on"
 					}
 				},
 				"maximizePlayerButton": {
@@ -100,50 +100,50 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Botón de repetición",
-						"maximizePlayerButton": "Maximizar botón",
-						"openTranscriptButton": "Abrir botón de transcripción",
-						"screenshotButton": "Botón de captura de pantalla",
-						"volumeBoostButton": "Botón Aumento de Volumen"
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
 					},
 					"options": {
 						"below_player": {
-							"placement": "debajo de los controles del reproductor",
-							"value": "Debajo del reproductor"
+							"placement": "below the player controls",
+							"value": "Below Player"
 						},
 						"feature_menu": {
 							"placement": "in the feature menu",
-							"value": "Menú de funciones"
+							"value": "Feature Menu"
 						},
 						"player_controls_left": {
-							"placement": "a la izquierda de los controles del reproductor",
-							"value": "Controles a la izquierda"
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
 						},
 						"player_controls_right": {
-							"placement": "a la derecha de los controles del reproductor",
-							"value": "Controles a la derecha"
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
 						}
 					},
-					"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}"
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Ajustes de posición de los botones"
+				"title": "Button Placement Settings"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Colapsar editor",
-					"expand": "Expandir editor",
-					"noProblems": "No se encontraron problemas."
+					"collapse": "Collapse Editor",
+					"expand": "Expand Editor",
+					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Habilitar CSS personalizado",
-					"title": "Permite aplicar CSS personalizado a la página"
+					"label": "Enable custom CSS",
+					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Ajustes de CSS personalizados"
+				"title": "Custom CSS Settings"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Tipo de activación del menú",
+						"label": "Menu Activation Type",
 						"options": {
 							"click": "Click",
 							"hover": "Pasar el cursor por encima"
@@ -209,6 +209,10 @@
 					"rememberLastVolume": {
 						"label": "Recordar el nivel de volumen",
 						"title": "Recuerda el volumen del último vídeo que estabas viendo y lo establece cuando abres un nuevo vídeo"
+					},
+					"videoHistory": {
+						"label": "Historial de vídeo",
+						"title": "Recuerda el progreso de los videos y te pregunta si quieres reanudarlo donde lo dejaste cuando vuelves a reproducirlo"
 					}
 				},
 				"title": "Ajustes varios"
@@ -255,10 +259,10 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"line": "Línea",
+						"line": "Line",
 						"no_display": "No mostrar",
 						"round": "Round",
-						"text": "Texto"
+						"text": "Text"
 					},
 					"title": "Select the type of On-Screen Display"
 				}
@@ -336,23 +340,6 @@
 					}
 				},
 				"title": "Ajustes de control de volumen con la rueda del ratón"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
-				},
-				"resumeType": {
-					"select": {
-						"label": "Resume type",
-						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
-						},
-						"title": "Select how you want to resume videos"
-					}
-				},
-				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

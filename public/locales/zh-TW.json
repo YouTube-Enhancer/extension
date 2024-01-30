@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "循環播放",
 					"toggle": {
-						"off": "關閉循環播放",
-						"on": "啟用循環播放"
+						"off": "Loop off",
+						"on": "Loop on"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "最大化",
 					"toggle": {
-						"off": "關閉最大化",
-						"on": "啟用最大化"
+						"off": "Maximize off",
+						"on": "Maximize on"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "音量增強",
 					"toggle": {
-						"off": "關閉音量增強",
-						"on": "啟用音量增強"
+						"off": "Volume boost off",
+						"on": "Volume boost on"
 					}
 				}
 			}
@@ -100,33 +100,33 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "循環播放按鈕",
-						"maximizePlayerButton": "最大化按鈕",
-						"openTranscriptButton": "開啟文字記錄按鈕",
-						"screenshotButton": "螢幕截圖按鈕",
-						"volumeBoostButton": "音量增強按鈕"
+						"loopButton": "Loop button",
+						"maximizePlayerButton": "Maximize button",
+						"openTranscriptButton": "Open Transcript button",
+						"screenshotButton": "Screenshot button",
+						"volumeBoostButton": "Volume Boost button"
 					},
 					"options": {
 						"below_player": {
-							"placement": "於播放器底下",
-							"value": "播放器底下"
+							"placement": "below the player controls",
+							"value": "Below Player"
 						},
 						"feature_menu": {
-							"placement": "於功能選單",
-							"value": "功能選單"
+							"placement": "in the feature menu",
+							"value": "Feature Menu"
 						},
 						"player_controls_left": {
-							"placement": "於播放器左邊",
-							"value": "播放器左邊"
+							"placement": "on the left side of player controls",
+							"value": "Left Controls"
 						},
 						"player_controls_right": {
-							"placement": "於播放器右邊",
-							"value": "播放器右邊"
+							"placement": "on the right side of player controls",
+							"value": "Right Controls"
 						}
 					},
-					"title": "將{{BUTTON_NAME}}放{{PLACEMENT}}"
+					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "按鈕位置設定"
+				"title": "Button Placement Settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -209,6 +209,10 @@
 					"rememberLastVolume": {
 						"label": "記住上次播放音量",
 						"title": "記住上次的播放音量，設定到新播放的影片上"
+					},
+					"videoHistory": {
+						"label": "觀看記錄",
+						"title": "記錄上次影片的播放時間，載入影片時詢問是否從該時間繼續播放"
 					}
 				},
 				"title": "其他設定"
@@ -336,23 +340,6 @@
 					}
 				},
 				"title": "滾輪音量控制設定"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
-				},
-				"resumeType": {
-					"select": {
-						"label": "Resume type",
-						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
-						},
-						"title": "Select how you want to resume videos"
-					}
-				},
-				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
