@@ -132,7 +132,7 @@
 				"editor": {
 					"collapse": "Collapse Editor",
 					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"noProblems": "Aucun problème détecté."
 				},
 				"enable": {
 					"label": "Enable custom CSS",
@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Sauvegarder le volume précédent",
 						"title": "Se souvenir du volume de la dernière vidéo que vous regardiez et définissez-le lorsque vous ouvrez une nouvelle vidéo"
-					},
-					"videoHistory": {
-						"label": "Historique des vidéos",
-						"title": "Garde la trace de l'endroit où vous vous êtes arrêté sur les vidéos que vous regardiez et demander si vous voulez reprendre lorsque cette vidéo se charge à nouveau"
 					}
 				},
 				"title": "Autre paramètres"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "Réglages du contrôle du volume par la molette de défilement"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

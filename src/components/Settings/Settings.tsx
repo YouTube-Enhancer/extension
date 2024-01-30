@@ -1,4 +1,4 @@
-import type { ButtonPlacement, ModifierKey, Path, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -385,6 +385,16 @@ export default function Settings() {
 		label: string;
 		value: ButtonPlacement;
 	}[] as SelectOption[];
+	const videoHistoryResumeTypeOptions: SelectOption[] = [
+		{
+			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
+			value: "automatic"
+		},
+		{
+			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
+			value: "prompt"
+		}
+	] as { label: string; value: VideoHistoryResumeType }[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -535,14 +545,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_video_history?.toString() === "true"}
-						id="enable_video_history"
-						label={t("settings.sections.miscellaneous.features.videoHistory.label")}
-						onChange={setCheckboxOption("enable_video_history")}
-						title={t("settings.sections.miscellaneous.features.videoHistory.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_remaining_time?.toString() === "true"}
 						id="enable_remaining_time"
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
@@ -589,6 +591,26 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_open_youtube_settings_on_hover")}
 						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
 						type="checkbox"
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.videoHistory.title")} />
+					<Setting
+						checked={settings.enable_video_history?.toString() === "true"}
+						id="enable_video_history"
+						label={t("settings.sections.videoHistory.enable.label")}
+						onChange={setCheckboxOption("enable_video_history")}
+						title={t("settings.sections.videoHistory.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="video_history_resume_type"
+						label={t("settings.sections.videoHistory.resumeType.select.label")}
+						onChange={setValueOption("video_history_resume_type")}
+						options={videoHistoryResumeTypeOptions}
+						selectedOption={getSelectedOption("video_history_resume_type")}
+						title={t("settings.sections.videoHistory.resumeType.select.title")}
+						type="select"
 					/>
 				</SettingSection>
 				<SettingSection>

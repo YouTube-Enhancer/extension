@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "Döngü",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "Döngü kapalı",
+						"on": "Düngü açık"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "Ekranı Kapla",
 					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+						"off": "Tam ekran kapalı",
+						"on": "Tam ekran açık"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "Ses Güçlendirmesi",
 					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+						"off": "Ses güçlendirmesi kapalı",
+						"on": "Ses güçlendirmesi açık"
 					}
 				}
 			}
@@ -100,45 +100,45 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
+						"loopButton": "Döngü düğmesi",
+						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"screenshotButton": "Ekran görüntüsü düğmesi",
+						"volumeBoostButton": "Ses güçlendirme düğmesi"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "oynatıcı kontrollerinin altında",
+							"value": "Oynatıcının altında"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "özellik menüsünde",
+							"value": "Özellik Menüsü"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "oynatıcı kontrollerinin sol tarafında",
+							"value": "Sol Kontroller"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "oynatıcı kontrollerinin sağ tarafında",
+							"value": "Sağ Kontroller"
 						}
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Düğme Yerleşim Ayarları"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "Düzenleyiciyi Daralt",
+					"expand": "Düzenleyiciyi Genişlet",
+					"noProblems": "Hiç bir sorun bulunamadı."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
+					"label": "Özel CSS'yi etkinleştir",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Özel CSS Ayarları"
 			},
 			"featureMenu": {
 				"openType": {
@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Son ses hacmini hatırla",
 						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
-					},
-					"videoHistory": {
-						"label": "Video geçmişini etkinleştir",
-						"title": "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -261,7 +257,7 @@
 					"options": {
 						"line": "Satır",
 						"no_display": "Ekran yok",
-						"round": "Round",
+						"round": "Tur",
 						"text": "Metin"
 					},
 					"title": "Select the type of On-Screen Display"
@@ -303,7 +299,7 @@
 					"title": "Adjust the speed change per scroll"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
+					"label": "Kaydırma tekerleği hız kontrolü",
 					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
 				"optionLabel": "{{KEY}} anahtarı",
@@ -319,7 +315,7 @@
 					"title": "Adjust the volume change per scroll"
 				},
 				"enable": {
-					"label": "Scroll wheel volume control",
+					"label": "Kaydırma tekerleği ile ses kontrolü",
 					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"holdModifierKey": {
@@ -336,10 +332,27 @@
 				"holdRightClick": {
 					"enable": {
 						"label": "Etkinleştirmek için sağ tuşa basılı tutun",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"title": "Kaydırma tekerleği ile ses kontrolünü etkinleştirmek için farenin sağ düğmesine basılı tutun"
 					}
 				},
-				"title": "Scroll wheel volume control settings"
+				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

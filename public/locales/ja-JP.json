@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "ループ",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "ループオフ",
+						"on": "ループオン"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "最大表示",
 					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+						"off": "最大表示オフ",
+						"on": "最大表示オン"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "音量ブースト",
 					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+						"off": "音量ブーストオフ",
+						"on": "音量ブーストオン"
 					}
 				}
 			}
@@ -100,33 +100,33 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"loopButton": "ループボタン",
+						"maximizePlayerButton": "最大表示ボタン",
+						"openTranscriptButton": "文字起こしを見せるボタン",
+						"screenshotButton": "スクリーンショットボタン",
+						"volumeBoostButton": "音量ブーストボタン"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "プレイヤーコントローラーの下",
+							"value": "プレイヤーの下"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "フィーチャー・メニューの中",
+							"value": "フィーチャー・メニュー"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "プレイヤーコントローラーの左側",
+							"value": "左のコントロール"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "プレイヤーコントローラーの右側",
+							"value": "右のコントロール"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
 				},
-				"title": "Button Placement Settings"
+				"title": "ボタン置き方設定"
 			},
 			"customCSS": {
 				"editor": {
@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "前音量を覚える",
 						"title": "新ビデオの音量を前動画の音量に変化する。"
-					},
-					"videoHistory": {
-						"label": "動画歴史",
-						"title": "視聴中のビデオで中断した場所を追跡し、その動画が再び読み込まれたときに再開するかどうかを尋ねます"
 					}
 				},
 				"title": "他の設定"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "スクロールホイール音量制御設定"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "視聴した動画に追跡をつける",
+					"title": "再生を再開できるように、視聴中の動画で中断した場所を追跡します"
+				},
+				"resumeType": {
+					"select": {
+						"label": "レジューム型",
+						"options": {
+							"automatic": "自動",
+							"prompt": "入力要求"
+						},
+						"title": "動画をレジュームするの方法を選択します"
+					}
+				},
+				"title": "動画履歴設定"
 			},
 			"volumeBoost": {
 				"boostAmount": {

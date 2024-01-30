@@ -154,10 +154,6 @@ interface EnUS {
 						label: "Remember last volume";
 						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
 					};
-					videoHistory: {
-						label: "Video history";
-						title: "Keeps track of where you left off on videos you were watching and asks if you want to resume when that video loads again";
-					};
 				};
 				title: "Miscellaneous settings";
 			};
@@ -255,6 +251,20 @@ interface EnUS {
 					};
 				};
 				title: "Scroll wheel volume control settings";
+			};
+			videoHistory: {
+				enable: {
+					label: "Track watched videos";
+					title: "Keeps track of where you left off on videos you were watching and enables resuming playback";
+				};
+				resumeType: {
+					select: {
+						label: "Resume type";
+						options: { automatic: "Automatic"; prompt: "Prompt" };
+						title: "Select how you want to resume videos";
+					};
+				};
+				title: "Video history settings";
 			};
 			volumeBoost: {
 				boostAmount: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
