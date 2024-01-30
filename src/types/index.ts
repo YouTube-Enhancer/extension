@@ -61,6 +61,8 @@ export const featuresThatHaveButtons = Object.keys({
 export type ButtonPlacementConfiguration = {
 	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
 };
+export const videoHistoryResumeType = ["automatic", "prompt"] as const;
+export type VideoHistoryResumeType = (typeof videoHistoryResumeType)[number];
 export type configuration = {
 	button_placements: ButtonPlacementConfiguration;
 	custom_css_code: string;
@@ -98,6 +100,7 @@ export type configuration = {
 	scroll_wheel_speed_control_modifier_key: ModifierKey;
 	scroll_wheel_volume_control_modifier_key: ModifierKey;
 	speed_adjustment_steps: number;
+	video_history_resume_type: VideoHistoryResumeType;
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
