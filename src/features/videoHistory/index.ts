@@ -99,7 +99,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	const progressBarId = "resume-prompt-progress-bar";
 	const closeButtonId = "resume-prompt-close-button";
 	const promptId = "resume-prompt";
-	const progressBarDuration = Infinity;
+	const progressBarDuration = 15;
 
 	const prompt = createStyledElement({
 		elementId: promptId,
