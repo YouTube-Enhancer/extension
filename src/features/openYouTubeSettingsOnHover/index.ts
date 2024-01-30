@@ -29,14 +29,15 @@ export async function enableOpenYouTubeSettingsOnHover() {
 		if (settingsMenu.style.display !== "none") return;
 		settingsButton.click();
 	};
-	const hideSettings = () => {
+	const hideSettings = (event: Event) => {
 		if (settingsMenu.style.display === "none") return;
+		if (event.target && (event.target as HTMLDivElement).classList.contains("ytp-popup-animating")) return;
 		settingsButton.click();
 	};
 	const settingsButtonMouseLeaveListener = (event: Event) => {
 		if (event.target === settingsButton) return;
 		if (settingsMenu.contains(event.target as Node | null)) return;
-		hideSettings();
+		hideSettings(event);
 	};
 	eventManager.addEventListener(settingsButton, "mouseenter", showSettings, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(settingsButton, "mouseleave", settingsButtonMouseLeaveListener, "openYouTubeSettingsOnHover");
