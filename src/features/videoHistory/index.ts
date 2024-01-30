@@ -56,7 +56,7 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
-			options: { enable_video_history: enableVideoHistory }
+			options: { enable_video_history: enableVideoHistory, video_history_resume_type }
 		}
 	} = optionsData;
 	if (!enableVideoHistory) return;
@@ -82,6 +82,10 @@ export async function promptUserToResumeVideo(cb: () => void) {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
+		if (video_history_resume_type === "automatic") {
+			void playerContainer.seekTo(video_history_entry.timestamp, true);
+			return cb();
+		}
 		createResumePrompt(video_history_entry, playerContainer, cb);
 	} else {
 		cb();

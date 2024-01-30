@@ -14,15 +14,15 @@
 				"loopButton": {
 					"label": "Зациклить",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "Зацикливание выключено",
+						"on": "Зацикливание включено"
 					}
 				},
 				"maximizePlayerButton": {
 					"label": "Развернуть",
 					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+						"off": "Проигрыватель свернут",
+						"on": "Проигрыватель развернут"
 					}
 				},
 				"openTranscriptButton": {
@@ -41,8 +41,8 @@
 				"volumeBoostButton": {
 					"label": "Усиление громкости",
 					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+						"off": "Увеличение громкости выключено",
+						"on": "Увеличение громкости включено"
 					}
 				}
 			}
@@ -93,40 +93,40 @@
 					"value": "Подтвердить"
 				},
 				"reset": {
-					"title": "Сбрасывает все настройки до значений по умолчанию. Нажмите \"Подтвердить\", чтобы сохранить изменения",
+					"title": "Сбрасывает все параметры до значений по умолчанию. Нажмите \"Подтвердить\", чтобы сохранить изменения",
 					"value": "Сброс"
 				}
 			},
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"loopButton": "Кнопка «Зациклить»",
+						"maximizePlayerButton": "Кнопка «Развернуть»",
+						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
+						"screenshotButton": "Кнопка «Скриншот»",
+						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "под проигрывателем",
+							"value": "Под проигрывателем"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "в меню функций",
+							"value": "Меню функций"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "с левой стороны панели управления",
+							"value": "Слева"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "с правой стороны панели управления",
+							"value": "Справа"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Настройки размещения кнопок"
 			},
 			"customCSS": {
 				"editor": {
@@ -209,10 +209,6 @@
 					"rememberLastVolume": {
 						"label": "Запомнить уровень громкости",
 						"title": "Запоминает громкость последнего видео, которое вы смотрели и устанавливает это значение при открытии нового видео"
-					},
-					"videoHistory": {
-						"label": "Включить историю видео",
-						"title": "Отслеживает то, на каком моменте просмотра видео вы остановились и спрашивает, если вы хотите продолжить с этого момента когда это видео загружается снова"
 					}
 				},
 				"title": "Прочие параметры"
@@ -340,6 +336,23 @@
 					}
 				},
 				"title": "Настройки управления громкостью с помощью колеса прокрутки"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Resume type",
+						"options": {
+							"automatic": "Automatic",
+							"prompt": "Prompt"
+						},
+						"title": "Select how you want to resume videos"
+					}
+				},
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {

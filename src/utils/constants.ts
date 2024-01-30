@@ -13,6 +13,7 @@ import {
 	onScreenDisplayType,
 	screenshotFormat,
 	screenshotType,
+	videoHistoryResumeType,
 	volumeBoostMode,
 	youtubePlayerQualityLevel
 } from "../types";
@@ -64,6 +65,7 @@ export const defaultConfiguration = {
 	scroll_wheel_speed_control_modifier_key: "altKey",
 	scroll_wheel_volume_control_modifier_key: "ctrlKey",
 	speed_adjustment_steps: 0.25,
+	video_history_resume_type: "prompt",
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 1,
 	volume_boost_mode: "global"
@@ -124,6 +126,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	scroll_wheel_speed_control_modifier_key: z.enum(modifierKey).optional(),
 	scroll_wheel_volume_control_modifier_key: z.enum(modifierKey).optional(),
 	speed_adjustment_steps: z.number().min(0.05).max(1.0).step(0.05).optional(),
+	video_history_resume_type: z.enum(videoHistoryResumeType).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostMode).optional()
