@@ -146,6 +146,10 @@ interface EnUS {
 						label: "Open YouTube settings on hover";
 						title: "Opens the YouTube settings menu when you hover over the settings button";
 					};
+					removeRedirect: {
+						label: "Remove YouTube /redirect URLs";
+						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";

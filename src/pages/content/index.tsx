@@ -16,6 +16,7 @@ import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
+import removeRedirect from "@/src/features/removeRedirect";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -105,6 +106,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
+				void removeRedirect();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -378,6 +380,15 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableOpenYouTubeSettingsOnHover();
 						} else {
 							disableOpenYouTubeSettingsOnHover();
+						}
+						break;
+					}
+					case "removeRedirectChange": {
+						const {
+							data: { removeRedirectEnabled }
+ 						} = message; 
+						if (removeRedirectEnabled) {
+							await removeRedirect();
 						}
 						break;
 					}
