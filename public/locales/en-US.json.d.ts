@@ -146,10 +146,6 @@ interface EnUS {
 						label: "Open YouTube settings on hover";
 						title: "Opens the YouTube settings menu when you hover over the settings button";
 					};
-					removeRedirect: {
-						label: "Remove YouTube /redirect URLs";
-						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
-					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -157,6 +153,14 @@ interface EnUS {
 					rememberLastVolume: {
 						label: "Remember last volume";
 						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
+					};
+					removeRedirect: {
+						label: "Remove YouTube /redirect URLs";
+						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
+					};
+					shareShortener: {
+						label: "Shorten YouTube video share link";
+						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
 					};
 				};
 				title: "Miscellaneous settings";

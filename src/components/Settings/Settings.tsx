@@ -600,6 +600,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.removeRedirect.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_share_shortener?.toString() === "true"}
+						id="enable_share_shortener"
+						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
+						onChange={setCheckboxOption("enable_share_shortener")}
+						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />

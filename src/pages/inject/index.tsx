@@ -266,6 +266,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				removeRedirectEnabled: newValue
 			});
 		},
+		enable_share_shortener: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("shareShortenerChange", {
+				shareShortenerEnabled: newValue
+			});
+		},
 		enable_remaining_time: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue

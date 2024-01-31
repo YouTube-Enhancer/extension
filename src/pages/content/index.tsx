@@ -17,6 +17,7 @@ import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
 import removeRedirect from "@/src/features/removeRedirect";
+import { enableShareShortener, disableShareShortener } from "@/src/features/shareShortener";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -107,6 +108,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
 				void removeRedirect();
+				void enableShareShortener();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -389,6 +391,17 @@ window.addEventListener("DOMContentLoaded", function () {
  						} = message; 
 						if (removeRedirectEnabled) {
 							await removeRedirect();
+						}
+						break;
+					}
+					case "shareShortenerChange": {
+						const {
+							data: { shareShortenerEnabled }
+ 						} = message; 
+						if (shareShortenerEnabled) {
+							await enableShareShortener();
+						} else {
+							disableShareShortener();
 						}
 						break;
 					}
