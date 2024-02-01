@@ -9,14 +9,14 @@ export default async function removeRedirect() {
 	} = optionsData;
 	if (!removeRedirectEnabled) return;
 	const regex = /https\:\/\/www\.youtube\.com\/redirect\?.+/gm;
-	
-	const links: NodeListOf<HTMLElement> = document.querySelectorAll('.yt-core-attributed-string__link');
+
+	const links: NodeListOf<HTMLElement> = document.querySelectorAll(".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string");
 	links.forEach((link: HTMLElement) => {
-	const href: string | null = link.getAttribute('href');
-	if(href && href.match(regex)) {
+		const href: string | null = link.getAttribute("href");
+		if (href && href.match(regex)) {
 			const urlParams: URLSearchParams = new URLSearchParams(href);
-			link.setAttribute('href', urlParams.get('q') || '');
-	}
+			link.setAttribute("href", urlParams.get("q") || "");
+		}
 	});
 
 	const callback: MutationCallback = (mutationsList: MutationRecord[]) => {
