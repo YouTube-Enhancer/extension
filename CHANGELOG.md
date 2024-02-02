@@ -1,3 +1,29 @@
+# [1.22.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.2...v1.22.0) (2024-02-02)
+
+
+### Bug Fixes
+
+* close button resuming video, modify styles ([53a30b8](https://github.com/VampireChicken12/youtube-enhancer/commit/53a30b82e15d119fcd4043a807a9ed1206bf505c))
+* settings saving repeatedly ([7f670d9](https://github.com/VampireChicken12/youtube-enhancer/commit/7f670d928f938ef562949e8286e5580622463a4f))
+* youtube settings closing when clicking the quality, speed item ([f45c0d9](https://github.com/VampireChicken12/youtube-enhancer/commit/f45c0d972d2baca89a641c91e4c7055a9047a4f0))
+
+
+### Features
+
+* video history resume type (automatic, prompt) ([16da25c](https://github.com/VampireChicken12/youtube-enhancer/commit/16da25c7f54f78ac5b80995265bee8f11ace0ad2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.22.0-Chrome.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Chromium.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Edge.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Firefox.zip | ae7177babcc1361891571e3ed8b3e0c3d70bb8e96fa3eab4c2a2f212ac7691ca |
+
 ## [1.21.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.1...v1.21.2) (2024-01-27)
 
 
