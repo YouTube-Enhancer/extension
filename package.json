@@ -21,13 +21,14 @@
   "type": "module",
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
+    "@monaco-editor/react": "^4.6.0",
+    "@tanstack/react-query": "^5.18.0",
     "dotenv": "^16.3.1",
     "i18next": "^23.7.3",
+    "monaco-editor": "^0.45.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vite-plugin-css-injected-by-js": "^3.3.0",
-    "@monaco-editor/react": "^4.6.0",
-    "monaco-editor": "^0.45.0",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
