@@ -38,8 +38,6 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
 
-- **Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
-
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
 - **Loop Button:** Adds a dedicated button to toggle the video player loop.
@@ -51,6 +49,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Open Transcript Button:** Adds a button to the feature menu to open the video transcript (available if the video has a transcript).
 
 - **Open YouTube Settings On Hover:** Opens the settings menu when you hover over the settings button.
+
+### Video history settings
+
+- **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
+- **Resume type:** Select how you want to resume playback (Automatic, Prompt)
 
 ### On-Screen Display Settings
 
@@ -111,6 +114,10 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
+
+### Custom CSS Settings
+
+- **Enable custom CSS:** Applies the custom CSS from the editor to the YouTube page.
 
 ## Installing from pre-built zip archive
 
