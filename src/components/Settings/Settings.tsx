@@ -1,4 +1,4 @@
-import type { ButtonPlacement, ModifierKey, Path, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -8,7 +8,8 @@ import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, getPathValue, parseStoredValue, settingsAreDefault } from "@/src/utils/utilities";
+import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { generateErrorMessage } from "zod-error";
 
@@ -83,73 +84,62 @@ function LanguageOptions({
 		</SettingSection>
 	);
 }
-export default function Settings() {
-	const [settings, setSettings] = useState<configuration | undefined>(undefined);
-	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
-	const [firstLoad, setFirstLoad] = useState(true);
-	const settingsImportRef = useRef<HTMLInputElement>(null);
-	const { addNotification, notifications, removeNotification } = useNotifications();
-	useEffect(() => {
-		const fetchSettings = () => {
-			chrome.storage.local.get((settings) => {
+function getSettings(): Promise<configuration> {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get((settings) => {
+			try {
 				const storedSettings: Partial<configuration> = (
 					Object.keys(settings)
 						.filter((key) => typeof key === "string")
 						.filter((key) => Object.keys(defaultSettings).includes(key as unknown as string)) as configurationKeys[]
 				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
-				setSettings({ ...castedSettings });
-			});
-		};
-
-		fetchSettings();
-	}, []);
-	useEffect(() => {
-		if (!firstLoad && settings && !settingsAreDefault(defaultSettings, settings)) {
-			saveOptions();
-		}
-	}, [settings]);
-	useEffect(() => {
-		const handleStorageChange = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-			if (areaName !== "local") return;
-			const castedChanges = changes as {
-				[K in keyof configuration]: {
-					newValue: configuration[K] | undefined;
-					oldValue: configuration[K] | undefined;
-				};
-			};
-			Object.keys(castedChanges).forEach((key) => {
-				const {
-					[key]: { newValue, oldValue }
-				} = changes;
-				const parsedNewValue = parseStoredValue(newValue as string);
-				const parsedOldValue = parseStoredValue(oldValue as string);
-				if (parsedNewValue === parsedOldValue) return;
-				if (
-					parsedOldValue !== null &&
-					parsedNewValue !== null &&
-					typeof parsedOldValue === "object" &&
-					typeof parsedNewValue === "object" &&
-					JSON.stringify(parsedNewValue) === JSON.stringify(parsedOldValue)
-				)
-					return;
-				setSettings((prevSettings) => {
-					if (prevSettings) {
-						return { ...prevSettings, [key]: parsedNewValue as configuration[typeof key] };
-					}
-					return undefined;
-				});
-			});
-		};
-
-		chrome.storage.onChanged.addListener(handleStorageChange);
-		chrome.runtime.onSuspend.addListener(() => {
-			chrome.storage.onChanged.removeListener(handleStorageChange);
+				resolve(castedSettings);
+			} catch (error) {
+				reject(error);
+			}
 		});
-		return () => {
-			chrome.storage.onChanged.removeListener(handleStorageChange);
-		};
-	}, []);
+	});
+}
+async function fetchSettings() {
+	try {
+		const settings = await getSettings();
+		return settings;
+	} catch (error) {
+		console.error("Failed to get settings:", error);
+		throw new Error("Failed to fetch settings"); //
+	}
+}
+async function setSettings(settings: configuration) {
+	for (const key of Object.keys(settings)) {
+		if (typeof settings[key] !== "string") {
+			localStorage.setItem(key, JSON.stringify(settings[key]));
+			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
+		} else {
+			localStorage.setItem(key, settings[key] as string);
+			await chrome.storage.local.set({ [key]: settings[key] as string });
+		}
+	}
+}
+export default function Settings() {
+	const queryClient = useQueryClient();
+	const { data: settings } = useQuery({
+		queryFn: fetchSettings,
+		queryKey: ["settings"]
+	});
+	const settingsMutate = useMutation({
+		mutationFn: setSettings,
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: ["settings"]
+			});
+			addNotification("success", "pages.options.notifications.success.saved");
+		}
+	});
+	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
+	const settingsImportRef = useRef<HTMLInputElement>(null);
+	const { addNotification, notifications, removeNotification } = useNotifications();
+
 	useEffect(() => {
 		if (settings && settings["language"]) {
 			void (async () => {
@@ -165,58 +155,39 @@ export default function Settings() {
 	const setCheckboxOption =
 		(key: Path<configuration>) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
-			setFirstLoad(false);
-			setSettings((options) => (options ? { ...options, [key]: checked } : undefined));
+			settingsMutate.mutate({ ...settings, [key]: checked });
 		};
 	const setValueOption =
 		(key: Path<configuration>) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			setFirstLoad(false);
-			setSettings((state) => {
-				if (!state) {
-					return undefined;
-				}
+			settingsMutate.mutate(
+				((state) => {
+					const updatedState = { ...state };
+					const keys = key.split(".") as Array<keyof configuration>;
+					let parentValue: any = updatedState;
 
-				const updatedState = { ...state };
-				const keys = key.split(".") as Array<keyof configuration>;
-				let parentValue: any = updatedState;
+					for (const currentKey of keys.slice(0, -1)) {
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+						({ [currentKey]: parentValue } = parentValue);
+					}
 
-				for (const currentKey of keys.slice(0, -1)) {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-					({ [currentKey]: parentValue } = parentValue);
-				}
+					const propertyName = keys.at(keys.length - 1);
+					if (!propertyName) return updatedState;
+					if (typeof parentValue === "object" && parentValue !== null) {
+						// If the path represents a nested property, update the nested property
+						// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+						parentValue[propertyName] = value;
+					} else {
+						// If the path represents a top-level property, update it directly
+						// @ts-expect-error not sure how to type this
+						updatedState[propertyName] = value;
+					}
 
-				const propertyName = keys.at(keys.length - 1);
-				if (!propertyName) return updatedState;
-				if (typeof parentValue === "object" && parentValue !== null) {
-					// If the path represents a nested property, update the nested property
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-					parentValue[propertyName] = value;
-				} else {
-					// If the path represents a top-level property, update it directly
-					// @ts-expect-error not sure how to type this
-					updatedState[propertyName] = value;
-				}
-
-				return updatedState;
-			});
+					return updatedState;
+				})(settings)
+			);
 		};
 	const getSelectedOption = <K extends Path<configuration>>(key: K) => getPathValue(settings, key);
-	function saveOptions() {
-		if (settings) {
-			for (const key of Object.keys(settings)) {
-				if (typeof settings[key] !== "string") {
-					localStorage.setItem(key, JSON.stringify(settings[key]));
-					void chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
-				} else {
-					localStorage.setItem(key, settings[key] as string);
-					void chrome.storage.local.set({ [key]: settings[key] as string });
-				}
-			}
-
-			addNotification("success", "pages.options.notifications.success.saved");
-		}
-	}
 	function resetOptions() {
 		addNotification("info", "pages.options.notifications.info.reset", "reset_settings");
 	}
@@ -385,6 +356,16 @@ export default function Settings() {
 		label: string;
 		value: ButtonPlacement;
 	}[] as SelectOption[];
+	const videoHistoryResumeTypeOptions: SelectOption[] = [
+		{
+			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
+			value: "automatic"
+		},
+		{
+			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
+			value: "prompt"
+		}
+	] as { label: string; value: VideoHistoryResumeType }[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -408,7 +389,7 @@ export default function Settings() {
 					} else {
 						const castSettings = { ...defaultConfiguration, ...(importedSettings as configuration) };
 						// Set the imported settings in your state.
-						setSettings(castSettings);
+						settingsMutate.mutate(castSettings);
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
@@ -535,14 +516,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_video_history?.toString() === "true"}
-						id="enable_video_history"
-						label={t("settings.sections.miscellaneous.features.videoHistory.label")}
-						onChange={setCheckboxOption("enable_video_history")}
-						title={t("settings.sections.miscellaneous.features.videoHistory.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_remaining_time?.toString() === "true"}
 						id="enable_remaining_time"
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
@@ -589,6 +562,26 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_open_youtube_settings_on_hover")}
 						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
 						type="checkbox"
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.videoHistory.title")} />
+					<Setting
+						checked={settings.enable_video_history?.toString() === "true"}
+						id="enable_video_history"
+						label={t("settings.sections.videoHistory.enable.label")}
+						onChange={setCheckboxOption("enable_video_history")}
+						title={t("settings.sections.videoHistory.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="video_history_resume_type"
+						label={t("settings.sections.videoHistory.resumeType.select.label")}
+						onChange={setValueOption("video_history_resume_type")}
+						options={videoHistoryResumeTypeOptions}
+						selectedOption={getSelectedOption("video_history_resume_type")}
+						title={t("settings.sections.videoHistory.resumeType.select.title")}
+						type="select"
 					/>
 				</SettingSection>
 				<SettingSection>

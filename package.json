@@ -21,13 +21,14 @@
   "type": "module",
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
+    "@monaco-editor/react": "^4.6.0",
+    "@tanstack/react-query": "^5.18.0",
     "dotenv": "^16.3.1",
     "i18next": "^23.7.3",
+    "monaco-editor": "^0.45.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vite-plugin-css-injected-by-js": "^3.3.0",
-    "@monaco-editor/react": "^4.6.0",
-    "monaco-editor": "^0.45.0",
     "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/archiver": "^6.0.1",
-    "@types/chrome": "^0.0.254",
+    "@types/chrome": "^0.0.259",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -72,7 +73,7 @@
     "ts-json-as-const": "^1.0.7",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
-    "vite": "^5.0.11",
+    "vite": "^5.0.12",
     "zod": "^3.22.4",
     "zod-error": "^1.5.0"
   }
