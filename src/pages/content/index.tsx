@@ -24,6 +24,7 @@ import removeRedirect from "@/src/features/removeRedirect";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
+import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -107,6 +108,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
 				void removeRedirect();
+				void enableShareShortener();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -390,6 +392,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message; 
 						if (removeRedirectEnabled) {
 							await removeRedirect();
+						}
+						break;
+					}
+					case "shareShortenerChange": {
+						const {
+							data: { shareShortenerEnabled }
+						} = message; 
+						if (shareShortenerEnabled) {
+							await enableShareShortener();
+						} else {
+							disableShareShortener();
 						}
 						break;
 					}

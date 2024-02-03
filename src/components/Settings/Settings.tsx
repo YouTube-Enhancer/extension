@@ -571,6 +571,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.removeRedirect.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_share_shortener?.toString() === "true"}
+						id="enable_share_shortener"
+						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
+						onChange={setCheckboxOption("enable_share_shortener")}
+						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />
@@ -900,7 +908,7 @@ export default function Settings() {
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -908,7 +916,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -916,7 +924,7 @@ export default function Settings() {
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -925,7 +933,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
 						<input
-							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -949,7 +957,7 @@ export default function Settings() {
 						/>
 					) : (
 						<input
-							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}
