@@ -563,6 +563,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_redirect_remover?.toString() === "true"}
+						id="enable_redirect_remover"
+						label={t("settings.sections.miscellaneous.features.removeRedirect.label")}
+						onChange={setCheckboxOption("enable_redirect_remover")}
+						title={t("settings.sections.miscellaneous.features.removeRedirect.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />
@@ -915,7 +923,7 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.exportButton.value")}
 					/>
-					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
+					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
 						<input
 							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="confirm_button"
@@ -939,7 +947,8 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
-					:	<input
+					) : (
+						<input
 							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="reset_button"
 							onClick={resetOptions}
@@ -947,7 +956,7 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.reset.value")}
 						/>
-					}
+					)}
 				</div>
 				<SettingsNotifications />
 				<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />

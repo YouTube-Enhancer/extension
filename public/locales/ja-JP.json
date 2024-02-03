@@ -202,6 +202,10 @@
 						"label": "マウスを合わせでYouTubeの設定を開ける",
 						"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"

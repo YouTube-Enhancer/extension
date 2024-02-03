@@ -202,6 +202,10 @@
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "Kalan süre",
 						"title": "Shows the remaining time of the video you're watching"

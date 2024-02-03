@@ -261,6 +261,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				openYouTubeSettingsOnHoverEnabled: newValue
 			});
 		},
+		enable_redirect_remover: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("removeRedirectChange", {
+				removeRedirectEnabled: newValue
+			});
+		},
 		enable_remaining_time: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("remainingTimeChange", {
 				remainingTimeEnabled: newValue

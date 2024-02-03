@@ -202,6 +202,10 @@
 						"label": "悬停时打开 YouTube 设置",
 						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "剩余时间",
 						"title": "显示您观看的视频的剩余时间"

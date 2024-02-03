@@ -202,6 +202,10 @@
 						"label": "Open YouTube settings on hover",
 						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "Verbleibende Zeit",
 						"title": "Zeigt die verbleibende Zeit des Videos, das du siehst"

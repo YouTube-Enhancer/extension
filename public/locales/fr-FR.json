@@ -202,6 +202,10 @@
 						"label": "Ouvrir les paramètres YouTube au survol",
 						"title": "Ouvre le menu des paramètres YouTube lorsque vous survolez le bouton des paramètres"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "Temps restant",
 						"title": "Affiche le temps restant de la vidéo que vous regardez"
