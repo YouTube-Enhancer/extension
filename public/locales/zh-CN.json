@@ -19,7 +19,7 @@
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "化最大",
+					"label": "网页全屏",
 					"toggle": {
 						"off": "最大化关闭",
 						"on": "最大化开启"
