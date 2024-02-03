@@ -202,6 +202,14 @@
 						"label": "Abrir configurações do YouTube ao passar o mouse",
 						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"shareShortener": {
+						"label": "Shorten YouTube video share link",
+						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+					},
 					"remainingTime": {
 						"label": "Tempo restante",
 						"title": "Mostra o tempo restante do vídeo que você está assistindo"
