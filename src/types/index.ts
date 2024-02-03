@@ -75,6 +75,7 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
+	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_screenshot_button: boolean;
@@ -170,6 +171,7 @@ export type ExtensionSendOnlyMessageMappings = {
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
 	>;
+	removeRedirectChange: DataResponseMessage<"removeRedirectChange", { removeRedirectEnabled: boolean }>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;

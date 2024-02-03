@@ -202,6 +202,10 @@
 						"label": "Abrir configurações do YouTube ao passar o mouse",
 						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
 					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
 					"remainingTime": {
 						"label": "Tempo restante",
 						"title": "Mostra o tempo restante do vídeo que você está assistindo"
