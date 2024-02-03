@@ -291,6 +291,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				scrollWheelVolumeControlEnabled: newValue
 			});
 		},
+		enable_share_shortener: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("shareShortenerChange", {
+				shareShortenerEnabled: newValue
+			});
+		},
 		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue
