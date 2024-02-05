@@ -84,7 +84,6 @@ export type configuration = {
 	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
 	enable_scroll_wheel_volume_control_hold_right_click: boolean;
 	enable_share_shortener: boolean;
-	enable_shorts_auto_scroll: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;
@@ -181,12 +180,6 @@ export type ExtensionSendOnlyMessageMappings = {
 	scrollWheelSpeedControlChange: DataResponseMessage<"scrollWheelSpeedControlChange", { scrollWheelSpeedControlEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
 	shareShortenerChange: DataResponseMessage<"shareShortenerChange", { shareShortenerEnabled: boolean }>;
-	shortsAutoScrollChange: DataResponseMessage<
-		"shortsAutoScrollChange",
-		{
-			shortsAutoScrollEnabled: boolean;
-		}
-	>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	volumeBoostAmountChange: DataResponseMessage<"volumeBoostAmountChange", { volumeBoostAmount: number }>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;

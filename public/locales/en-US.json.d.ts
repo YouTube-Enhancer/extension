@@ -162,7 +162,6 @@ interface EnUS {
 						label: "Shorten YouTube video share link";
 						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
 					};
-					shortsAutoScroll: { label: "Shorts auto scroll"; title: "Automatically scrolls to the next short" };
 				};
 				title: "Miscellaneous settings";
 			};
