@@ -203,12 +203,12 @@
 						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
 					},
 					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+						"label": "屏蔽YouTube重定向链接",
+						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "缩短YouTube视频分享链接",
+						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
