@@ -202,6 +202,14 @@
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
+					"remainingTime": {
+						"label": "Kalan süre",
+						"title": "Shows the remaining time of the video you're watching"
+					},
+					"rememberLastVolume": {
+						"label": "Son ses hacmini hatırla",
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					},
 					"removeRedirect": {
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
@@ -210,13 +218,9 @@
 						"label": "YouTube video paylaşım bağlantısını kısalt",
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
 					},
-					"remainingTime": {
-						"label": "Kalan süre",
-						"title": "Shows the remaining time of the video you're watching"
-					},
-					"rememberLastVolume": {
-						"label": "Son ses hacmini hatırla",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "Çeşitli ayarlar"
