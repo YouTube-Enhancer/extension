@@ -202,6 +202,14 @@
 						"label": "Ouvrir les paramètres YouTube au survol",
 						"title": "Ouvre le menu des paramètres YouTube lorsque vous survolez le bouton des paramètres"
 					},
+					"remainingTime": {
+						"label": "Temps restant",
+						"title": "Affiche le temps restant de la vidéo que vous regardez"
+					},
+					"rememberLastVolume": {
+						"label": "Sauvegarder le volume précédent",
+						"title": "Se souvenir du volume de la dernière vidéo que vous regardiez et définissez-le lorsque vous ouvrez une nouvelle vidéo"
+					},
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
@@ -210,13 +218,9 @@
 						"label": "Shorten YouTube video share link",
 						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
 					},
-					"remainingTime": {
-						"label": "Temps restant",
-						"title": "Affiche le temps restant de la vidéo que vous regardez"
-					},
-					"rememberLastVolume": {
-						"label": "Sauvegarder le volume précédent",
-						"title": "Se souvenir du volume de la dernière vidéo que vous regardiez et définissez-le lorsque vous ouvrez une nouvelle vidéo"
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "Autre paramètres"

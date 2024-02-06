@@ -202,14 +202,6 @@
 						"label": "懸浮時開啟設定選單",
 						"title": "鼠標懸浮在設定按鈕時開啟選單"
 					},
-					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
-					},
-					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
-					},
 					"remainingTime": {
 						"label": "剩餘時間",
 						"title": "顥示現時影片的剩餘時間"
@@ -217,6 +209,18 @@
 					"rememberLastVolume": {
 						"label": "記住上次播放音量",
 						"title": "記住上次的播放音量，設定到新播放的影片上"
+					},
+					"removeRedirect": {
+						"label": "移除 YouTube 重新導向網址",
+						"title": "以真正網址取代 YouTube 重新導向網址，跳過重新導向警告對話框"
+					},
+					"shareShortener": {
+						"label": "縮短 YouTube 影片共享連結",
+						"title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
+					},
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "其他設定"
