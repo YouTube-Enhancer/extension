@@ -202,6 +202,14 @@
 						"label": "Abrir configurações do YouTube ao passar o mouse",
 						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
 					},
+					"remainingTime": {
+						"label": "Tempo restante",
+						"title": "Mostra o tempo restante do vídeo que você está assistindo"
+					},
+					"rememberLastVolume": {
+						"label": "Lembrar o último volume",
+						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
+					},
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
@@ -210,13 +218,9 @@
 						"label": "Shorten YouTube video share link",
 						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
 					},
-					"remainingTime": {
-						"label": "Tempo restante",
-						"title": "Mostra o tempo restante do vídeo que você está assistindo"
-					},
-					"rememberLastVolume": {
-						"label": "Lembrar o último volume",
-						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "Configurações diversas"
