@@ -37,7 +37,25 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		video_quality: string;
 		video_quality_features: string[];
 	}
+	interface ProgressState {
+		airingEnd: number;
+		airingStart: number;
+		allowSeeking: boolean;
+		clipEnd: null | number;
+		clipStart: number;
+		current: number;
+		displayedStart: number;
+		duration: number;
+		ingestionTime: null;
+		isAtLiveHead: boolean;
+		loaded: number;
+		offset: number;
+		seekableEnd: number;
+		seekableStart: number;
+		viewerLivestreamJoinMediaTime: number;
+	}
 	interface YouTubePlayer {
+		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
 		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
