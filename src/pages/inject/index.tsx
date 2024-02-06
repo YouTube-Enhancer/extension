@@ -296,6 +296,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				shareShortenerEnabled: newValue
 			});
 		},
+		enable_shorts_auto_scroll: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("shortsAutoScrollChange", {
+				shortsAutoScrollEnabled: newValue
+			});
+		},
 		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue
