@@ -202,6 +202,14 @@
 						"label": "悬停时打开 YouTube 设置",
 						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
 					},
+					"remainingTime": {
+						"label": "剩余时间",
+						"title": "显示您观看的视频的剩余时间"
+					},
+					"rememberLastVolume": {
+						"label": "记住最后一个音量",
+						"title": "记住最后一个视频的音量并在打开新视频时设置"
+					},
 					"removeRedirect": {
 						"label": "屏蔽YouTube重定向链接",
 						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
@@ -210,13 +218,9 @@
 						"label": "缩短YouTube视频分享链接",
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
-					"remainingTime": {
-						"label": "剩余时间",
-						"title": "显示您观看的视频的剩余时间"
-					},
-					"rememberLastVolume": {
-						"label": "记住最后一个音量",
-						"title": "记住最后一个视频的音量并在打开新视频时设置"
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "其他设置"
