@@ -25,6 +25,7 @@ import { addScreenshotButton, removeScreenshotButton } from "@/src/features/scre
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
+import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -107,6 +108,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
+				void enableShortsAutoScroll();
 				void removeRedirect();
 				void enableShareShortener();
 				void openTranscriptButton();
@@ -342,10 +344,9 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "automaticTheaterModeChange": {
 						// Get the player element
-						const playerContainer = isWatchPage()
-							? document.querySelector("div#player-container.ytd-watch-flexy")
-							: isShortsPage()
-							? document.querySelector("div#shorts-player")
+						const playerContainer =
+							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
+							: isShortsPage() ? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return
 						if (!playerContainer) return;
@@ -389,7 +390,7 @@ window.addEventListener("DOMContentLoaded", function () {
 					case "removeRedirectChange": {
 						const {
 							data: { removeRedirectEnabled }
-						} = message; 
+						} = message;
 						if (removeRedirectEnabled) {
 							await removeRedirect();
 						}
@@ -398,7 +399,7 @@ window.addEventListener("DOMContentLoaded", function () {
 					case "shareShortenerChange": {
 						const {
 							data: { shareShortenerEnabled }
-						} = message; 
+						} = message;
 						if (shareShortenerEnabled) {
 							await enableShareShortener();
 						} else {
@@ -429,8 +430,23 @@ window.addEventListener("DOMContentLoaded", function () {
 							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
 							if (buttonExists) continue;
 							const { [featureName]: featureFunctions } = featureButtonFunctions;
-							await (featureFunctions as FeatureFuncRecord).remove(oldPlacement);
-							await (featureFunctions as FeatureFuncRecord).add();
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.remove(oldPlacement);
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.add();
+						}
+						break;
+					}
+					case "shortsAutoScrollChange": {
+						const {
+							data: { shortsAutoScrollEnabled }
+						} = message;
+						if (shortsAutoScrollEnabled) {
+							await enableShortsAutoScroll();
+						} else {
+							disableShortsAutoScroll();
 						}
 						break;
 					}
