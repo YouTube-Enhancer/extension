@@ -219,8 +219,8 @@
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Kısa videoya otomatik kaydır",
+						"title": "Bir sonraki kısa videoya otomatik kaydır"
 					}
 				},
 				"title": "Çeşitli ayarlar"
