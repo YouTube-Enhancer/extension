@@ -219,8 +219,8 @@
 						"title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Shorts 自動滾動",
+						"title": "自動滾動到下一段 Short"
 					}
 				},
 				"title": "其他設定"
