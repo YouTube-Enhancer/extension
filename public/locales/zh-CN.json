@@ -219,8 +219,8 @@
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "短视频自动下滑",
+						"title": "短视频播完后，自动下滑播放下一个"
 					}
 				},
 				"title": "其他设置"
