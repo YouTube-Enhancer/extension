@@ -155,7 +155,7 @@
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
+					"success": "Inställningar har exporterats",
 					"title": "Exportera inställningarna till en JSON-fil",
 					"value": "Exportera Inställningar"
 				},
@@ -164,7 +164,7 @@
 						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
+					"success": "Inställningar har importerats",
 					"title": "Importera inställningarna från en JSON-fil",
 					"value": "Importera inställningar"
 				}
@@ -179,28 +179,28 @@
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
-						"label": "Automatic theater mode",
-						"title": "Automatically enables theater mode when you load a video"
+						"label": "Automatiskt teaterläge",
+						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
-						"title": "Hides the pages scrollbar"
+						"title": "Döljer sidornas rullningsfält"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"title": "Lägger till en knapp i funktionsmenyn för att slinga videon du tittar på"
 					},
 					"maximizePlayerButton": {
-						"label": "Maximize player button",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"label": "Maximeringsknapp för spelaren",
+						"title": "Lägger till en knapp i funktionsmenyn för att maximera spelaren"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Öppningsknapp för transkript",
+						"title": "Lägger till en knapp i funktionsmenyn för att visa transkript av videon du tittar på"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "Öppna YouTube-inställningar vid musöver",
+						"title": "Öppnar YouTube-inställningsmenyn när du håller muspekaren över inställningsknappen"
 					},
 					"remainingTime": {
 						"label": "Återstående tid",
