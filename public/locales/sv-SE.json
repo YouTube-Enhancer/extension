@@ -126,27 +126,27 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Inställningar för knappplacering"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
+					"collapse": "Fäll ihop redigeraren",
+					"expand": "Fäll ut redigeraren",
 					"noProblems": "Inga problem hittades."
 				},
 				"enable": {
 					"label": "Aktivera anpassad CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"title": "Aktiverar anpassad CSS som ska tillämpas på sidan"
 				},
 				"title": "Anpassade CSS-inställningar"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Aktiveringstyp för menyn",
 						"options": {
 							"click": "Klicka",
-							"hover": "Hover"
+							"hover": "Musöver"
 						},
 						"title": "Select the method to activate the feature menu"
 					},
@@ -204,14 +204,14 @@
 					},
 					"remainingTime": {
 						"label": "Återstående tid",
-						"title": "Shows the remaining time of the video you're watching"
+						"title": "Visar återstående tid för videon du tittar på"
 					},
 					"rememberLastVolume": {
 						"label": "Kom ihåg senaste volymen",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+						"title": "Kommer ihåg volymen på den senaste videon du tittade på och ställer in den när du öppnar en ny video"
 					},
 					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
+						"label": "Ta bort YouTube /omdirigeringswebbadresser",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
 					},
 					"shareShortener": {
@@ -223,7 +223,7 @@
 						"title": "Automatically scrolls to the next short"
 					}
 				},
-				"title": "Miscellaneous settings"
+				"title": "Övriga inställningar"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
@@ -238,19 +238,19 @@
 						"white": "Vit",
 						"yellow": "Gul"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Välj färgen för On-Screen Display"
 				},
 				"hide": {
 					"label": "Dölj fördröjning",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"title": "Ange tiden i millisekunder innan On-Screen Display automatiskt döljs"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Genomskinlighet",
+					"title": "Justera genomskinligheten för On-Screen Display"
 				},
 				"padding": {
 					"label": "Utfyllnad",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"title": "Justera avståndet runt On-Screen Display i pixlar. Detta gäller specifikt för hörn On-Screen Display."
 				},
 				"position": {
 					"label": "Position",
@@ -261,24 +261,24 @@
 						"top_left": "Övre vänstra",
 						"top_right": "Övre högra"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Välj placering av On-Screen Display"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "On-Screen Display-inställningar",
 				"type": {
 					"label": "Typ",
 					"options": {
 						"line": "Rad",
-						"no_display": "No display",
+						"no_display": "Ingen visning",
 						"round": "Rund",
 						"text": "Text"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Välj typ av On-Screen Display"
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Forced playback speed",
-					"title": "Sets the video speed to what you choose below"
+					"label": "Tvingad uppspelningshastighet",
+					"title": "Ställer in videohastigheten till det du väljer nedan"
 				},
 				"select": {
 					"label": "Uppspelningshastighet",
@@ -289,7 +289,7 @@
 			"screenshotButton": {
 				"enable": {
 					"label": "Skärmbildsknapp",
-					"title": "Adds a button to the player to take a screenshot of the video"
+					"title": "Lägger till en knapp till spelaren för att ta en skärmbild av videon"
 				},
 				"saveAs": {
 					"clipboard": "Urklipp",
@@ -297,74 +297,74 @@
 				},
 				"selectFormat": {
 					"label": "Skärmbildsformat",
-					"title": "The format to save the screenshot in"
+					"title": "Formatet för att spara skärmbilden i"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "Skärmbildstyp att spara i",
+					"title": "Skärmbildens spartyp"
 				},
 				"title": "Skärmbildsinställningar"
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Hastighetsändring per rullning",
+					"title": "Justera hastighetsändringen per rullning"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"label": "Hastighetsändring med rullningshjulet",
+					"title": "Tryck på en modifierartangent för att aktivera hastighetsjustering med rullningshjulet."
 				},
 				"optionLabel": "{{KEY}}-tangent",
 				"select": {
 					"label": "Modifieringstangent",
 					"title": "Modifieringstangent att använda"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "Inställningar för rullningshjulets hastighetsändring"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "Volymändring per rullning",
+					"title": "Justera volymändringen per rullning"
 				},
 				"enable": {
-					"label": "Scroll wheel volume control",
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
+					"label": "Volymändring med rullningshjulet",
+					"title": "Låter dig använda rullningshjulet för att ändra volymen på videon du tittar på"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "Aktivera när du håller ner modifieringstangenten",
+						"title": "Tryck på en modifierartangent för att aktivera hastighetsändringen med rullningshjulet."
 					},
 					"optionLabel": "{{KEY}}-tangent",
 					"select": {
 						"label": "Modifieringstangent",
-						"title": "The modifier key to use"
+						"title": "Modifieringstangent att använda"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "Aktivera när du håller ner höger musknapp",
+						"title": "Håll höger musknapp nertryckt för att aktivera rullningshjulets volymkontroll"
 					}
 				},
-				"title": "Scroll wheel volume control settings"
+				"title": "Rullningshjulets volyminställningar"
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "Håll reda på visade videor",
+					"title": "Håller reda på var du slutade på videor du tittade på och gör det möjligt att återuppta uppspelningen"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "Återupptagningstyp",
 						"options": {
 							"automatic": "Automatisk",
-							"prompt": "Prompt"
+							"prompt": "Fråga"
 						},
 						"title": "Välj hur du vill återuppta videor"
 					}
 				},
-				"title": "Video history settings"
+				"title": "Inställningar för videohistorik"
 			},
 			"volumeBoost": {
 				"boostAmount": {
@@ -382,7 +382,7 @@
 							"global": "Global",
 							"perVideo": "Per video"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Välj hur volymökning tillämpas. \"Per video\" gör det möjligt att aktivera ökning för varje video individuellt i funktionsmenyn. 'Global' gäller ökning för alla videor när volymökning är aktiverat."
 					}
 				},
 				"title": "Inställningar för volymökning"
