@@ -1,48 +1,48 @@
 {
 	"langCode": "en-US",
-	"langName": "English (US)",
+	"langName": "Engelska (US)",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "Återupptar video vid {{VIDEO_TIME}}",
+		"settingVolume": "Ställa in volymökning till {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"featureMenu": {
-					"label": "Feature menu"
+					"label": "Funktionsmeny"
 				},
 				"loopButton": {
-					"label": "Loop",
+					"label": "Slinga",
 					"toggle": {
-						"off": "Loop off",
-						"on": "Loop on"
+						"off": "Slinga av",
+						"on": "Slinga på"
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximize",
+					"label": "Maximera",
 					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+						"off": "Maximera av",
+						"on": "Maximera på"
 					}
 				},
 				"openTranscriptButton": {
 					"label": "Open transcript"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
-					"label": "Screenshot"
+					"copiedToClipboard": "Skärmbild kopierad till urklipp",
+					"label": "Skärmbild"
 				},
 				"videoHistory": {
-					"resumeButton": "Resume",
+					"resumeButton": "Återuppta",
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Stäng"
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Volume Boost",
+					"label": "Volymökning",
 					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+						"off": "Volymökning av",
+						"on": "Volymökning på"
 					}
 				}
 			}
@@ -61,14 +61,14 @@
 					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "Inställningarna sparade."
 				}
 			}
 		}
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "All data has been deleted.",
+			"allDataDeleted": "All data har tagits bort.",
 			"confirmAlert": "This will delete all extension data related to options. Continue?"
 		},
 		"sections": {
@@ -78,53 +78,53 @@
 					"title": "Automatically adjusts the video quality to the selected level."
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "Spelarkvalitet",
 					"title": "The quality to set the video to"
 				},
-				"title": "Automatic quality settings"
+				"title": "Automatisk kvalitetsinställningar"
 			},
 			"bottomButtons": {
 				"clear": {
 					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"value": "Rensa data"
 				},
 				"confirm": {
 					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"value": "Bekräfta"
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"value": "Återställ"
 				}
 			},
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
+						"loopButton": "Slingknapp",
+						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"screenshotButton": "Skärmbildsknapp",
+						"volumeBoostButton": "Volymökningsknapp"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "under spelarkontrollerna",
+							"value": "Under spelaren"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "i funktionsmenyn",
+							"value": "Funktionsmeny"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "på vänster sida av spelarkontrollerna",
+							"value": "Vänster kontroller"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "på höger sida av spelarkontrollerna",
+							"value": "Höger kontroller"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
 				"title": "Button Placement Settings"
 			},
@@ -132,20 +132,20 @@
 				"editor": {
 					"collapse": "Collapse Editor",
 					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"noProblems": "Inga problem hittades."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
+					"label": "Aktivera anpassad CSS",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Anpassade CSS-inställningar"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
 						"label": "Menu Activation Type",
 						"options": {
-							"click": "Click",
+							"click": "Klicka",
 							"hover": "Hover"
 						},
 						"title": "Select the method to activate the feature menu"
@@ -156,8 +156,8 @@
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"title": "Exportera inställningarna till en JSON-fil",
+					"value": "Exportera Inställningar"
 				},
 				"importButton": {
 					"error": {
@@ -165,16 +165,16 @@
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"title": "Importera inställningarna från en JSON-fil",
+					"value": "Importera inställningar"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Språk",
+					"title": "Språket som ska användas för tillägget"
 				},
-				"title": "Language"
+				"title": "Språk"
 			},
 			"miscellaneous": {
 				"features": {
@@ -183,11 +183,11 @@
 						"title": "Automatically enables theater mode when you load a video"
 					},
 					"hideScrollbar": {
-						"label": "Hide scrollbar",
+						"label": "Dölj rullningslisten",
 						"title": "Hides the pages scrollbar"
 					},
 					"loopButton": {
-						"label": "Loop button",
+						"label": "Slingknapp",
 						"title": "Adds a button to the feature menu to loop the video you're watching"
 					},
 					"maximizePlayerButton": {
@@ -203,11 +203,11 @@
 						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"remainingTime": {
-						"label": "Remaining time",
+						"label": "Återstående tid",
 						"title": "Shows the remaining time of the video you're watching"
 					},
 					"rememberLastVolume": {
-						"label": "Remember last volume",
+						"label": "Kom ihåg senaste volymen",
 						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
 					},
 					"removeRedirect": {
@@ -227,21 +227,21 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Färg",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
+						"blue": "Blå",
+						"green": "Grön",
 						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"pink": "Rosa",
+						"purple": "Lila",
+						"red": "Röd",
+						"white": "Vit",
+						"yellow": "Gul"
 					},
 					"title": "Select the color for the On-Screen Display"
 				},
 				"hide": {
-					"label": "Hide Delay",
+					"label": "Dölj fördröjning",
 					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
 				},
 				"opacity": {
@@ -249,27 +249,27 @@
 					"title": "Adjust the transparency of the On-Screen Display"
 				},
 				"padding": {
-					"label": "Padding",
+					"label": "Utfyllnad",
 					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 				},
 				"position": {
 					"label": "Position",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "Nedre vänstra",
+						"bottom_right": "Nedre högra",
+						"center": "Mitten",
+						"top_left": "Övre vänstra",
+						"top_right": "Övre högra"
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
 				"title": "On-Screen Display Settings",
 				"type": {
-					"label": "Type",
+					"label": "Typ",
 					"options": {
-						"line": "Line",
+						"line": "Rad",
 						"no_display": "No display",
-						"round": "Round",
+						"round": "Rund",
 						"text": "Text"
 					},
 					"title": "Select the type of On-Screen Display"
@@ -281,29 +281,29 @@
 					"title": "Sets the video speed to what you choose below"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Uppspelningshastighet",
+					"title": "Hastigheten att spela upp videon i"
 				},
-				"title": "Playback speed settings"
+				"title": "Inställningar för uppspelningshastighet"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Screenshot button",
+					"label": "Skärmbildsknapp",
 					"title": "Adds a button to the player to take a screenshot of the video"
 				},
 				"saveAs": {
-					"clipboard": "Clipboard",
-					"file": "File"
+					"clipboard": "Urklipp",
+					"file": "Fil"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
+					"label": "Skärmbildsformat",
 					"title": "The format to save the screenshot in"
 				},
 				"selectSaveAs": {
 					"label": "Screenshot save type",
 					"title": "The screenshot save type"
 				},
-				"title": "Screenshot settings"
+				"title": "Skärmbildsinställningar"
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
@@ -314,10 +314,10 @@
 					"label": "Scroll wheel speed control",
 					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "{{KEY}}-tangent",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "Modifieringstangent",
+					"title": "Modifieringstangent att använda"
 				},
 				"title": "Scroll wheel speed control settings"
 			},
@@ -335,9 +335,9 @@
 						"label": "Enable when holding modifier key",
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "{{KEY}}-tangent",
 					"select": {
-						"label": "Modifier key",
+						"label": "Modifieringstangent",
 						"title": "The modifier key to use"
 					}
 				},
@@ -358,26 +358,26 @@
 					"select": {
 						"label": "Resume type",
 						"options": {
-							"automatic": "Automatic",
+							"automatic": "Automatisk",
 							"prompt": "Prompt"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "Välj hur du vill återuppta videor"
 					}
 				},
 				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Volymökningsmängd (dB)",
+					"title": "Hur mycket ljudet ska öka med"
 				},
 				"enable": {
-					"label": "Volume boost",
-					"title": "Enable volume boost"
+					"label": "Volymökning",
+					"title": "Aktivera volymökning"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "Volymökningsläge",
 						"options": {
 							"global": "Global",
 							"perVideo": "Per video"
@@ -385,7 +385,7 @@
 						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
 					}
 				},
-				"title": "Volume boost settings"
+				"title": "Inställningar för volymökning"
 			}
 		}
 	}
