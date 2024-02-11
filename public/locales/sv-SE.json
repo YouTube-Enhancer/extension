@@ -1,6 +1,6 @@
 {
 	"langCode": "en-US",
-	"langName": "Engelska (US)",
+	"langName": "Svenska (SV)",
 	"messages": {
 		"resumingVideo": "Återupptar video vid {{VIDEO_TIME}}",
 		"settingVolume": "Ställa in volymökning till {{VOLUME_BOOST_AMOUNT}}"
@@ -52,13 +52,13 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Rullningshjulets modifieringstangent för hastighetsreglering kan inte vara densamma modifieringstangent som rullningshjulets volymreglering.",
+							"volumeControl": "Rullningshjulets modifieringstangent för volymreglering kan inte vara densamma modifieringstangent som rullningshjulets hastighetsreglering."
 						}
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Alla alternativ har återställts till sina standardvärden.\nDu kan nu spara ändringarna genom att klicka på knappen \"Bekräfta\" eller örkasta dem genom att stänga denna sida eller ignorera detta meddelande."
 				},
 				"success": {
 					"saved": "Inställningarna sparade."
@@ -69,7 +69,7 @@
 	"settings": {
 		"clearData": {
 			"allDataDeleted": "All data har tagits bort.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
 		},
 		"sections": {
 			"automaticQuality": {
