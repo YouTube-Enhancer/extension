@@ -26,7 +26,7 @@
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Open transcript"
+					"label": "Öppna transkript"
 				},
 				"screenshotButton": {
 					"copiedToClipboard": "Skärmbild kopierad till urklipp",
@@ -74,26 +74,26 @@
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Automatic quality adjustment",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"label": "Automatisk kvalitetsjustering",
+					"title": "Justerar automatiskt videokvaliteten till den valda nivån."
 				},
 				"select": {
 					"label": "Spelarkvalitet",
-					"title": "The quality to set the video to"
+					"title": "Kvaliteten för att ställa in videon till"
 				},
 				"title": "Automatisk kvalitetsinställningar"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
+					"title": "Rensar all data som detta tillägg har lagrat på din dator",
 					"value": "Rensa data"
 				},
 				"confirm": {
-					"title": "Confirm setting reset",
+					"title": "Bekräfta återställning av inställningar",
 					"value": "Bekräfta"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+					"title": "Återställer alla inställningar till sina standardinställningar, Klicka på bekräftelseknappen för att spara ändringarna",
 					"value": "Återställ"
 				}
 			},
@@ -102,7 +102,7 @@
 					"buttonNames": {
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
-						"openTranscriptButton": "Open Transcript button",
+						"openTranscriptButton": "Öppna transkriptknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -148,9 +148,9 @@
 							"click": "Klicka",
 							"hover": "Musöver"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Välj metod för att aktivera funktionsmenyn"
 					},
-					"title": "Feature menu settings"
+					"title": "Inställningar för funktionsmeny"
 				}
 			},
 			"importExportSettings": {
@@ -161,8 +161,8 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Fel vid import av inställningar. Kontrollera filformatet.\nEtt okänt fel uppstod.",
+						"validation": "Fel vid import av inställningar. Kontrollera filformatet.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Inställningar har importerats",
 					"title": "Importera inställningarna från en JSON-fil",
@@ -212,15 +212,15 @@
 					},
 					"removeRedirect": {
 						"label": "Ta bort YouTube /omdirigeringswebbadresser",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "Förkorta YouTube-videons delningslänk",
+						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort si/funktionsparametrar från den"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Automatisk rullning för shorts",
+						"title": "Rullar automatiskt till nästa shorts"
 					}
 				},
 				"title": "Övriga inställningar"
