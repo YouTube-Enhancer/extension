@@ -64,7 +64,3 @@ body.no-scroll .yte-button-tooltip {
 .ytp-right-controls {
 	display: flex !important;
 }
-
-.yte-hide-shorts {
-	display: none !important;
-}
