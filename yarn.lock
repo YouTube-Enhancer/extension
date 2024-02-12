@@ -34,10 +34,10 @@
     chalk "^2.4.2"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.7":
-  version "7.23.9"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.9.tgz#47791a15e4603bb5f905bc0753801cf21d6345f7"
-  integrity sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==
+"@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.5":
+  version "7.23.5"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.23.5.tgz"
+  integrity sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w==
   dependencies:
     regenerator-runtime "^0.14.0"
 
@@ -2459,9 +2459,9 @@ eslint-plugin-react@^7.33.2:
     string.prototype.matchall "^4.0.8"
 
 eslint-plugin-tailwindcss@^3.13.0:
-  version "3.14.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-tailwindcss/-/eslint-plugin-tailwindcss-3.14.1.tgz#9e243dd3c67b5e767460516dcc367da0676ddacc"
-  integrity sha512-orNkVzJ1fdCkj5d8AHE3tAbixNpMJRoKoHPnxZbZ6iBHTsNvOEmeBz62C3THPhFnXCXaD55SRbNjqGzMEXRoZA==
+  version "3.14.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-tailwindcss/-/eslint-plugin-tailwindcss-3.14.2.tgz#70995ee0c7ae7f8bf9ca23817077276b9874bf87"
+  integrity sha512-fNzdf4poZP2yQC0xC2prQxMuArMSb5mnellLQvwb9HC3NcLzxs+0IVKWIg1BqUqyui0c+bbjMmhWcKUWK67SLQ==
   dependencies:
     fast-glob "^3.2.5"
     postcss "^8.4.4"
@@ -5627,11 +5627,11 @@ synckit@^0.8.6:
     tslib "^2.6.2"
 
 tailwind-merge@^2.0.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-2.2.1.tgz#3f10f296a2dba1d88769de8244fafd95c3324aeb"
-  integrity sha512-o+2GTLkthfa5YUt4JxPfzMIpQzZ3adD1vLVkvKE1Twl9UAhGsEbIZhHHZVRttyW177S8PDJI3bTQNaebyofK3Q==
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/tailwind-merge/-/tailwind-merge-2.2.0.tgz"
+  integrity sha512-SqqhhaL0T06SW59+JVNfAqKdqLs0497esifRrZ7jOaefP3o64fdFNDMrAQWZFMxTLJPiHVjRLUywT8uFz1xNWQ==
   dependencies:
-    "@babel/runtime" "^7.23.7"
+    "@babel/runtime" "^7.23.5"
 
 tailwindcss@^3.3.5:
   version "3.4.1"
