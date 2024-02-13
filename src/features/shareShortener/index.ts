@@ -13,9 +13,9 @@ export async function enableShareShortener() {
 	const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
 
 	function attachEventListener(): void {
-		const checkbox: HTMLElement | null = document.querySelector(".style-scope.tp-yt-paper-checkbox");
-		const tsInput: HTMLElement | null = document.querySelector(".style-scope.tp-yt-paper-input .input-element input");
-		const allElements: HTMLElement[] = Array.from(document.querySelectorAll("*"));
+		const checkbox = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-checkbox");
+		const tsInput = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-input .input-element input");
+		const allElements = Array.from(document.querySelectorAll("*"));
 		allElements.forEach((e) => {
 			const href: null | string = e.getAttribute("href");
 			if (href && href.match(/^\/watch\?v\=.+$/gm)) {
@@ -25,7 +25,7 @@ export async function enableShareShortener() {
 
 		if (checkbox && tsInput) {
 			checkbox.addEventListener("DOMAttrModified", function (this: HTMLInputElement) {
-				const shareUrlInput = document.getElementById("share-url") as HTMLInputElement;
+				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
 				if (shareUrlInput) {
 					setTimeout(() => {
 						shareUrlInput.value = shareUrlInput.value.replace(regexp, "");
@@ -36,7 +36,7 @@ export async function enableShareShortener() {
 			tsInput.addEventListener("keypress", function (event: KeyboardEvent) {
 				if (event.key === "Enter") {
 					setTimeout(() => {
-						const shareUrlInput = document.getElementById("share-url") as HTMLInputElement;
+						const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
 						if (shareUrlInput) {
 							const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
 							shareUrlInput.value = cleanUrl;
@@ -50,7 +50,7 @@ export async function enableShareShortener() {
 	function monitorUrl(mutationsList: MutationRecord[]): void {
 		for (const mutation of mutationsList) {
 			if (mutation.target !== document.getElementById("share-url")) {
-				const shareUrlInput = document.getElementById("share-url") as HTMLInputElement;
+				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
 				if (shareUrlInput) {
 					const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
 					shareUrlInput.value = cleanUrl;
