@@ -211,16 +211,16 @@
 						"title": "Запоминает громкость последнего видео, которое вы смотрели и устанавливает это значение при открытии нового видео"
 					},
 					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+						"label": "Убрать YouTube /redirect ссылки",
+						"title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "Укоротить ссылку с кнопки \"Поделиться\"",
+						"title": "Укорачивает ссылку с кнопки \"Поделиться\" (youtu.be), убирая параметры si/feature из нее"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Автоматическая прокрутка Shorts",
+						"title": "Автоматически скроллит до следующего Shorts"
 					}
 				},
 				"title": "Прочие параметры"
@@ -351,17 +351,17 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "Отслеживание таймкода просматриваемого видео",
+					"title": "Отслеживает, на каком моменте вы остановили просмотр видео и продолжает с него"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "Тип возобновления",
 						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
+							"automatic": "Автоматически",
+							"prompt": "Запрашивать"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "Выберите, как вы хотите возобновлять просмотр видео"
 					}
 				},
 				"title": "Video history settings"
