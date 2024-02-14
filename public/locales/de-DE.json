@@ -186,6 +186,10 @@
 						"label": "Scrollbar ausblenden",
 						"title": "Versteckt die Scrollleiste"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Dauerschleife-Button",
 						"title": "Adds a button to the feature menu to loop the video you're watching"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "Letzte Lautstärke merken",
 						"title": "Speichere die Lautstärke des letzten Videos, das du gesehen hast und setze es beim Öffnen eines neuen Videos"
+					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"shareShortener": {
+						"label": "Shorten YouTube video share link",
+						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+					},
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "Weitere Einstellungen"

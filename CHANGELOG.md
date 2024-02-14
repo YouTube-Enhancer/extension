@@ -1,3 +1,71 @@
+## [1.23.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.0...v1.23.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* some features not being enabled when they should be ([4cf3194](https://github.com/VampireChicken12/youtube-enhancer/commit/4cf31945482ae1a950d9d3f76bea72de59e1511f))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.1-Chrome.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Chromium.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Edge.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Firefox.zip | 43b74750ac8d5f571116e18794803a10f0f06e6916e713e2761d3bfc19c19e33 |
+
+# [1.23.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.22.0...v1.23.0) (2024-02-14)
+
+
+### Features
+
+* [#340](https://github.com/VampireChicken12/youtube-enhancer/issues/340) ([525d915](https://github.com/VampireChicken12/youtube-enhancer/commit/525d91533eb2337e442e11c288eb29eebcc1f3d2))
+* hide shorts ([84f457f](https://github.com/VampireChicken12/youtube-enhancer/commit/84f457f0675988fb730bbfbf0723c0e15d4081b7))
+* removeRedirect ([a77e840](https://github.com/VampireChicken12/youtube-enhancer/commit/a77e8403f9e81fd25f829eff2245f10113c0018b))
+* shareShortener ([bb3e77d](https://github.com/VampireChicken12/youtube-enhancer/commit/bb3e77de3674f0886b317357d7dfa1d86f9ffa0a))
+* shorts auto scroll ([aafc3c8](https://github.com/VampireChicken12/youtube-enhancer/commit/aafc3c8a7b2268184f7a6a3882dca49074e328a4))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.0-Chrome.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Chromium.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Edge.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Firefox.zip | bbd0a7a2ceacfd150aaad8d89552883c52e2ed208712418aa36be4aff4d381c2 |
+
+# [1.22.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.2...v1.22.0) (2024-02-02)
+
+
+### Bug Fixes
+
+* close button resuming video, modify styles ([53a30b8](https://github.com/VampireChicken12/youtube-enhancer/commit/53a30b82e15d119fcd4043a807a9ed1206bf505c))
+* settings saving repeatedly ([7f670d9](https://github.com/VampireChicken12/youtube-enhancer/commit/7f670d928f938ef562949e8286e5580622463a4f))
+* youtube settings closing when clicking the quality, speed item ([f45c0d9](https://github.com/VampireChicken12/youtube-enhancer/commit/f45c0d972d2baca89a641c91e4c7055a9047a4f0))
+
+
+### Features
+
+* video history resume type (automatic, prompt) ([16da25c](https://github.com/VampireChicken12/youtube-enhancer/commit/16da25c7f54f78ac5b80995265bee8f11ace0ad2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.22.0-Chrome.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Chromium.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Edge.zip | 40693d8bbd9c8315a99902658a3b7ab278824fd1b999709903bbd84641e1cb11 |
+| youtube-enhancer-v1.22.0-Firefox.zip | ae7177babcc1361891571e3ed8b3e0c3d70bb8e96fa3eab4c2a2f212ac7691ca |
+
 ## [1.21.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.1...v1.21.2) (2024-01-27)
 
 

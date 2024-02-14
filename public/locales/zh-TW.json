@@ -186,6 +186,10 @@
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "循環按鈕",
 						"title": "加入按鈕循環播放當前影片"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "記住上次播放音量",
 						"title": "記住上次的播放音量，設定到新播放的影片上"
+					},
+					"removeRedirect": {
+						"label": "移除 YouTube 重新導向網址",
+						"title": "以真正網址取代 YouTube 重新導向網址，跳過重新導向警告對話框"
+					},
+					"shareShortener": {
+						"label": "縮短 YouTube 影片共享連結",
+						"title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
+					},
+					"shortsAutoScroll": {
+						"label": "Shorts 自動滾動",
+						"title": "自動滾動到下一段 Short"
 					}
 				},
 				"title": "其他設定"

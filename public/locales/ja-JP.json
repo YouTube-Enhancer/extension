@@ -186,6 +186,10 @@
 						"label": "スクロールバー隠す機能",
 						"title": "ページのスクロールバーを隠す"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "動画ループボタン",
 						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "前音量を覚える",
 						"title": "新ビデオの音量を前動画の音量に変化する。"
+					},
+					"removeRedirect": {
+						"label": "YouTubeのリダイレクトURLを削除する",
+						"title": "YouTubeリダイレクトを実物なURLを換えして、リダイレクト注意を抜かします"
+					},
+					"shareShortener": {
+						"label": "YouTube動画のURLを短縮する",
+						"title": "YouTube動画のURLに機能パラメータを削除して短縮する(youtu.be)"
+					},
+					"shortsAutoScroll": {
+						"label": "ショートの自動スクロール",
+						"title": "次のショートを自動にスクロールする"
 					}
 				},
 				"title": "他の設定"

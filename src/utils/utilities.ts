@@ -13,8 +13,7 @@ import type {
 	PathValue,
 	Selector,
 	SendDataMessage,
-	YoutubePlayerQualityLevel,
-	configuration
+	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
@@ -399,17 +398,6 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 			}
 		});
 	});
-}
-export function settingsAreDefault(defaultSettings: Partial<configuration>, currentSettings: Partial<configuration>): boolean {
-	// Get the keys of the default and current settings
-	const defaultKeys = Object.keys(defaultSettings);
-	const currentKeys = Object.keys(currentSettings);
-	// Calculate the intersection of keys between default and current settings
-	const commonKeys = defaultKeys.filter((key) => currentKeys.includes(key));
-	// Check that the values of the common keys are the same
-	const settingsTheSame = commonKeys.filter((key) => isStrictEqual(defaultSettings[key])(currentSettings[key]));
-	// Check if the number of keys that match is the same as the total number of keys
-	return isStrictEqual(settingsTheSame.length)(commonKeys.length);
 }
 export function formatDateForFileName(date: Date): string {
 	const dateFormatOptions: Intl.DateTimeFormatOptions = {

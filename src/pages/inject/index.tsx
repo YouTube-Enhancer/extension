@@ -241,6 +241,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideScrollBarEnabled: newValue
 			});
 		},
+		enable_hide_shorts: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				hideShortsEnabled: newValue
+			});
+		},
 		enable_loop_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("loopButtonChange", {
 				loopButtonEnabled: newValue
@@ -259,6 +264,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
 				openYouTubeSettingsOnHoverEnabled: newValue
+			});
+		},
+		enable_redirect_remover: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("removeRedirectChange", {
+				removeRedirectEnabled: newValue
 			});
 		},
 		enable_remaining_time: (__oldValue, newValue) => {
@@ -284,6 +294,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
 				scrollWheelVolumeControlEnabled: newValue
+			});
+		},
+		enable_share_shortener: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("shareShortenerChange", {
+				shareShortenerEnabled: newValue
+			});
+		},
+		enable_shorts_auto_scroll: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("shortsAutoScrollChange", {
+				shortsAutoScrollEnabled: newValue
 			});
 		},
 		enable_video_history: (__oldValue, newValue) => {

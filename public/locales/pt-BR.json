@@ -186,6 +186,10 @@
 						"label": "Ocultar a barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Botão de Repetir",
 						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "Lembrar o último volume",
 						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
+					},
+					"removeRedirect": {
+						"label": "Remove YouTube /redirect URLs",
+						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"shareShortener": {
+						"label": "Shorten YouTube video share link",
+						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+					},
+					"shortsAutoScroll": {
+						"label": "Shorts auto scroll",
+						"title": "Automatically scrolls to the next short"
 					}
 				},
 				"title": "Configurações diversas"

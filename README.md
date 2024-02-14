@@ -38,8 +38,6 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
 
-- **Video History:** Keeps track of the position of the videos you have watched and asked to resume playback upon loading the video again.
-
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
 - **Loop Button:** Adds a dedicated button to toggle the video player loop.
@@ -51,6 +49,19 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Open Transcript Button:** Adds a button to the feature menu to open the video transcript (available if the video has a transcript).
 
 - **Open YouTube Settings On Hover:** Opens the settings menu when you hover over the settings button.
+
+- **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
+
+- **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
+
+- **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
+
+- **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
+
+### Video history settings
+
+- **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
+- **Resume type:** Select how you want to resume playback (Automatic, Prompt)
 
 ### On-Screen Display Settings
 
@@ -111,6 +122,10 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
+
+### Custom CSS Settings
+
+- **Enable custom CSS:** Applies the custom CSS from the editor to the YouTube page.
 
 ## Installing from pre-built zip archive
 
@@ -242,7 +257,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lamyergeier"><img src="https://avatars.githubusercontent.com/u/42092626?v=4?s=100" width="100px;" alt="Lamyergeier"/><br /><sub><b>Lamyergeier</b></sub></a><br /><a href="#ideas-lamyergeier" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SleepyPrince"><img src="https://avatars.githubusercontent.com/u/670216?v=4?s=100" width="100px;" alt="Jackal Chan"/><br /><sub><b>Jackal Chan</b></sub></a><br /><a href="#translation-SleepyPrince" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://livingflore.me"><img src="https://avatars.githubusercontent.com/u/63370734?v=4?s=100" width="100px;" alt="livingflore"/><br /><sub><b>livingflore</b></sub></a><br /><a href="#translation-livingflore" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://livingflore.me"><img src="https://avatars.githubusercontent.com/u/63370734?v=4?s=100" width="100px;" alt="livingflore"/><br /><sub><b>livingflore</b></sub></a><br /><a href="#translation-livingflore" title="Translation">🌍</a> <a href="#code-livingflore" title="Code">💻</a></td>
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/crvt7"><img src="https://avatars.githubusercontent.com/u/79649679?v=4?s=100" width="100px;" alt="Patryk Popardowski"/><br /><sub><b>Patryk Popardowski</b></sub></a><br /><a href="#translation-crvt7" title="Translation">🌍</a></td>

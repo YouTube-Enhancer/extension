@@ -19,7 +19,7 @@
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "化最大",
+					"label": "网页全屏",
 					"toggle": {
 						"off": "最大化关闭",
 						"on": "最大化开启"
@@ -186,6 +186,10 @@
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "循环按钮",
 						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "记住最后一个音量",
 						"title": "记住最后一个视频的音量并在打开新视频时设置"
+					},
+					"removeRedirect": {
+						"label": "屏蔽YouTube重定向链接",
+						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
+					},
+					"shareShortener": {
+						"label": "缩短YouTube视频分享链接",
+						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
+					},
+					"shortsAutoScroll": {
+						"label": "短视频自动下滑",
+						"title": "短视频播完后，自动下滑播放下一个"
 					}
 				},
 				"title": "其他设置"
@@ -339,20 +355,20 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "记录已观看视频",
+					"title": "记录您关闭视频的进度并在下次播放时恢复"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "进度恢复方式",
 						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
+							"automatic": "自动",
+							"prompt": "提示"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "选择恢复视频播放进度的方式"
 					}
 				},
-				"title": "Video history settings"
+				"title": "视频历史记录设置"
 			},
 			"volumeBoost": {
 				"boostAmount": {
