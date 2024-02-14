@@ -1,3 +1,22 @@
+## [1.23.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.0...v1.23.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* some features not being enabled when they should be ([4cf3194](https://github.com/VampireChicken12/youtube-enhancer/commit/4cf31945482ae1a950d9d3f76bea72de59e1511f))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.1-Chrome.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Chromium.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Edge.zip | eb26f7c5756529110dc6f3102bc39a00ec90bc179201c5de53790aa902e5ea6f |
+| youtube-enhancer-v1.23.1-Firefox.zip | 43b74750ac8d5f571116e18794803a10f0f06e6916e713e2761d3bfc19c19e33 |
+
 # [1.23.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.22.0...v1.23.0) (2024-02-14)
 
 
