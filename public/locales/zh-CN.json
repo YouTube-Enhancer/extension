@@ -186,6 +186,10 @@
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "循环按钮",
 						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
@@ -219,8 +223,8 @@
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "短视频自动下滑",
+						"title": "短视频播完后，自动下滑播放下一个"
 					}
 				},
 				"title": "其他设置"

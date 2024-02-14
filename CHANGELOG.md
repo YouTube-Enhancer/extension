@@ -1,3 +1,26 @@
+# [1.23.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.22.0...v1.23.0) (2024-02-14)
+
+
+### Features
+
+* [#340](https://github.com/VampireChicken12/youtube-enhancer/issues/340) ([525d915](https://github.com/VampireChicken12/youtube-enhancer/commit/525d91533eb2337e442e11c288eb29eebcc1f3d2))
+* hide shorts ([84f457f](https://github.com/VampireChicken12/youtube-enhancer/commit/84f457f0675988fb730bbfbf0723c0e15d4081b7))
+* removeRedirect ([a77e840](https://github.com/VampireChicken12/youtube-enhancer/commit/a77e8403f9e81fd25f829eff2245f10113c0018b))
+* shareShortener ([bb3e77d](https://github.com/VampireChicken12/youtube-enhancer/commit/bb3e77de3674f0886b317357d7dfa1d86f9ffa0a))
+* shorts auto scroll ([aafc3c8](https://github.com/VampireChicken12/youtube-enhancer/commit/aafc3c8a7b2268184f7a6a3882dca49074e328a4))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.0-Chrome.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Chromium.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Edge.zip | ec3af901a724026f162c33800ce1f042b1214ed091cdc2de00cfe87488e52bf0 |
+| youtube-enhancer-v1.23.0-Firefox.zip | bbd0a7a2ceacfd150aaad8d89552883c52e2ed208712418aa36be4aff4d381c2 |
+
 # [1.22.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.21.2...v1.22.0) (2024-02-02)
 
 

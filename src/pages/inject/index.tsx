@@ -241,6 +241,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideScrollBarEnabled: newValue
 			});
 		},
+		enable_hide_shorts: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				hideShortsEnabled: newValue
+			});
+		},
 		enable_loop_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("loopButtonChange", {
 				loopButtonEnabled: newValue
