@@ -2,24 +2,24 @@ import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
 export const availableLocales = [
-	"ca-ES",
-	"cs-CZ",
-	"de-DE",
-	"en-US",
-	"es-ES",
-	"fa-IR",
-	"fr-FR",
-	"he-IL",
-	"hi-IN",
-	"it-IT",
-	"ja-JP",
-	"pl-PL",
-	"pt-BR",
-	"ru-RU",
-	"sv-SE",
-	"tr-TR",
-	"zh-CN",
-	"zh-TW"
+  "ca-ES",
+  "cs-CZ",
+  "de-DE",
+  "en-US",
+  "es-ES",
+  "fa-IR",
+  "fr-FR",
+  "he-IL",
+  "hi-IN",
+  "it-IT",
+  "ja-JP",
+  "pl-PL",
+  "pt-BR",
+  "ru-RU",
+  "sv-SE",
+  "tr-TR",
+  "zh-CN",
+  "zh-TW"
 ] as const;
 export const localePercentages: Record<AvailableLocales, number> = {
 	"ca-ES": 0,
