@@ -186,6 +186,10 @@
 						"label": "Ocultar barra de desplazamiento",
 						"title": "Oculta la barra de desplazamiento de la página"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Botón de bucle",
 						"title": "Añade un botón al menú para poner en bucle el vídeo que estás viendo"
