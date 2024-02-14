@@ -71,6 +71,7 @@ export type configuration = {
 	enable_custom_css: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_scrollbar: boolean;
+	enable_hide_shorts: boolean;
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
@@ -163,6 +164,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
+	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;

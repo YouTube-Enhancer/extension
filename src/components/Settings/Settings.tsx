@@ -587,6 +587,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.shortsAutoScroll.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_hide_shorts?.toString() === "true"}
+						id="enable_hide_shorts"
+						label={t("settings.sections.miscellaneous.features.hideShorts.label")}
+						onChange={setCheckboxOption("enable_hide_shorts")}
+						title={t("settings.sections.miscellaneous.features.hideShorts.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />

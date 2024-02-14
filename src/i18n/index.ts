@@ -21,10 +21,10 @@ export const availableLocales = [
   "zh-TW"
 ] as const;
 export const localePercentages: Record<AvailableLocales, number> = {
-  "en-US": 100,
   "ca-ES": 0,
   "cs-CZ": 0,
   "de-DE": 44,
+  "en-US": 100,
   "es-ES": 77,
   "fa-IR": 0,
   "fr-FR": 81,
