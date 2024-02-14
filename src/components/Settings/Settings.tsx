@@ -563,6 +563,38 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_redirect_remover?.toString() === "true"}
+						id="enable_redirect_remover"
+						label={t("settings.sections.miscellaneous.features.removeRedirect.label")}
+						onChange={setCheckboxOption("enable_redirect_remover")}
+						title={t("settings.sections.miscellaneous.features.removeRedirect.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_share_shortener?.toString() === "true"}
+						id="enable_share_shortener"
+						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
+						onChange={setCheckboxOption("enable_share_shortener")}
+						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_shorts_auto_scroll?.toString() === "true"}
+						id="enable_shorts_auto_scroll"
+						label={t("settings.sections.miscellaneous.features.shortsAutoScroll.label")}
+						onChange={setCheckboxOption("enable_shorts_auto_scroll")}
+						title={t("settings.sections.miscellaneous.features.shortsAutoScroll.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_hide_shorts?.toString() === "true"}
+						id="enable_hide_shorts"
+						label={t("settings.sections.miscellaneous.features.hideShorts.label")}
+						onChange={setCheckboxOption("enable_hide_shorts")}
+						title={t("settings.sections.miscellaneous.features.hideShorts.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />

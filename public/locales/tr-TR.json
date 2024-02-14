@@ -186,6 +186,10 @@
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
 						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
@@ -209,6 +213,18 @@
 					"rememberLastVolume": {
 						"label": "Son ses hacmini hatırla",
 						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+					},
+					"removeRedirect": {
+						"label": "YouTube yönlendirme bağlantılarını kaldır",
+						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
+					},
+					"shareShortener": {
+						"label": "YouTube video paylaşım bağlantısını kısalt",
+						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
+					},
+					"shortsAutoScroll": {
+						"label": "Kısa videoya otomatik kaydır",
+						"title": "Bir sonraki kısa videoya otomatik kaydır"
 					}
 				},
 				"title": "Çeşitli ayarlar"

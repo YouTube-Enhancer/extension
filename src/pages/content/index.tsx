@@ -10,6 +10,7 @@ import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/feature
 import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
+import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
@@ -20,9 +21,12 @@ import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
+import removeRedirect from "@/src/features/removeRedirect";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
+import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
+import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -105,6 +109,10 @@ window.addEventListener("DOMContentLoaded", function () {
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
+				void enableHideShorts();
+				void enableShortsAutoScroll();
+				void removeRedirect();
+				void enableShareShortener();
 				void openTranscriptButton();
 				void addLoopButton();
 				void addMaximizePlayerButton();
@@ -307,6 +315,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "hideShortsChange": {
+						const {
+							data: { hideShortsEnabled }
+						} = message;
+						if (hideShortsEnabled) {
+							await enableHideShorts();
+						} else {
+							disableHideShorts();
+						}
+						break;
+					}
 					case "languageChange": {
 						const {
 							data: { language }
@@ -381,6 +400,26 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "removeRedirectChange": {
+						const {
+							data: { removeRedirectEnabled }
+						} = message;
+						if (removeRedirectEnabled) {
+							await removeRedirect();
+						}
+						break;
+					}
+					case "shareShortenerChange": {
+						const {
+							data: { shareShortenerEnabled }
+						} = message;
+						if (shareShortenerEnabled) {
+							await enableShareShortener();
+						} else {
+							disableShareShortener();
+						}
+						break;
+					}
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
@@ -404,8 +443,23 @@ window.addEventListener("DOMContentLoaded", function () {
 							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
 							if (buttonExists) continue;
 							const { [featureName]: featureFunctions } = featureButtonFunctions;
-							await (featureFunctions as FeatureFuncRecord).remove(oldPlacement);
-							await (featureFunctions as FeatureFuncRecord).add();
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.remove(oldPlacement);
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.add();
+						}
+						break;
+					}
+					case "shortsAutoScrollChange": {
+						const {
+							data: { shortsAutoScrollEnabled }
+						} = message;
+						if (shortsAutoScrollEnabled) {
+							await enableShortsAutoScroll();
+						} else {
+							disableShortsAutoScroll();
 						}
 						break;
 					}
