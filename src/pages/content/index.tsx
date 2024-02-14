@@ -99,38 +99,39 @@ const alwaysShowProgressBar = async function () {
 
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
-		void enableRememberVolume();
-		void enableHideScrollBar();
-
 		const enableFeatures = () => {
 			void (async () => {
 				// Wait for the specified container selectors to be available on the page
 				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 				eventManager.removeAllEventListeners(["featureMenu"]);
-				void enableFeatureMenu();
-				void enableOpenYouTubeSettingsOnHover();
 				void enableHideShorts();
-				void enableShortsAutoScroll();
 				void removeRedirect();
 				void enableShareShortener();
-				void openTranscriptButton();
-				void addLoopButton();
-				void addMaximizePlayerButton();
-				void volumeBoost();
-				void addScreenshotButton();
 				void enableRememberVolume();
+				void enableHideScrollBar();
 				void enableCustomCSS();
-				setupPlaybackSpeedChangeListener();
-				void setPlayerQuality();
-				void setPlayerSpeed();
-				void volumeBoost();
-				void adjustVolumeOnScrollWheel();
-				void adjustSpeedOnScrollWheel();
-				void promptUserToResumeVideo(() => {
-					void setupVideoHistory();
-				});
-				void setupRemainingTime();
-				void automaticTheaterMode();
+				if (isWatchPage() || isShortsPage()) {
+					void promptUserToResumeVideo(() => {
+						void setupVideoHistory();
+					});
+					setupPlaybackSpeedChangeListener();
+					void enableShortsAutoScroll();
+					void enableFeatureMenu();
+					void enableOpenYouTubeSettingsOnHover();
+					void enableRememberVolume();
+					void automaticTheaterMode();
+					void setupRemainingTime();
+					void volumeBoost();
+					void setPlayerQuality();
+					void setPlayerSpeed();
+					void openTranscriptButton();
+					void addLoopButton();
+					void addMaximizePlayerButton();
+					void addScreenshotButton();
+					void volumeBoost();
+					void adjustVolumeOnScrollWheel();
+					void adjustSpeedOnScrollWheel();
+				}
 			})();
 		};
 		const response = await waitForSpecificMessage("language", "request_data", "content");
@@ -140,7 +141,8 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-		if (isWatchPage() || isShortsPage()) document.addEventListener("yt-navigate-finish", enableFeatures);
+		enableFeatures();
+		document.addEventListener("yt-navigate-finish", enableFeatures);
 		document.addEventListener("yt-player-updated", enableFeatures);
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
