@@ -186,6 +186,10 @@
 						"label": "Ocultar a barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Botão de Repetir",
 						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"

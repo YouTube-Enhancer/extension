@@ -186,6 +186,10 @@
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
 						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
@@ -219,8 +223,8 @@
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Kısa videoya otomatik kaydır",
+						"title": "Bir sonraki kısa videoya otomatik kaydır"
 					}
 				},
 				"title": "Çeşitli ayarlar"

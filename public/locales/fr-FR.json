@@ -186,6 +186,10 @@
 						"label": "Cacher la barre de défilement",
 						"title": "Cache la barre de défilement des pages"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Bouton de boucle",
 						"title": "Ajoute un bouton au menu de fonctionnalité pour regarder la vidéo en boucle"

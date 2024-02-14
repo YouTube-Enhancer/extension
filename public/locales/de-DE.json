@@ -186,6 +186,10 @@
 						"label": "Scrollbar ausblenden",
 						"title": "Versteckt die Scrollleiste"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Dauerschleife-Button",
 						"title": "Adds a button to the feature menu to loop the video you're watching"
