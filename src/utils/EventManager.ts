@@ -2,6 +2,7 @@ export type FeatureName =
 	| "automaticTheaterMode"
 	| "featureMenu"
 	| "hideScrollBar"
+	| "hideShorts"
 	| "loopButton"
 	| "maximizePlayerButton"
 	| "openTranscriptButton"

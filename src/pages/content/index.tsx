@@ -10,6 +10,7 @@ import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/feature
 import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
+import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
@@ -108,6 +109,7 @@ window.addEventListener("DOMContentLoaded", function () {
 				eventManager.removeAllEventListeners(["featureMenu"]);
 				void enableFeatureMenu();
 				void enableOpenYouTubeSettingsOnHover();
+				void enableHideShorts();
 				void enableShortsAutoScroll();
 				void removeRedirect();
 				void enableShareShortener();
@@ -310,6 +312,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							if (scrollBarHidden) {
 								showScrollBar();
 							}
+						}
+						break;
+					}
+					case "hideShortsChange": {
+						const {
+							data: { hideShortsEnabled }
+						} = message;
+						if (hideShortsEnabled) {
+							await enableHideShorts();
+						} else {
+							disableHideShorts();
 						}
 						break;
 					}

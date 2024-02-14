@@ -130,6 +130,7 @@ interface EnUS {
 						title: "Automatically enables theater mode when you load a video";
 					};
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
+					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					loopButton: {
 						label: "Loop button";
 						title: "Adds a button to the feature menu to loop the video you're watching";
