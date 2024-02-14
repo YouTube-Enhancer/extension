@@ -186,6 +186,10 @@
 						"label": "Dölj rullningslisten",
 						"title": "Döljer sidornas rullningsfält"
 					},
+					"hideShorts": {
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
+					},
 					"loopButton": {
 						"label": "Slingknapp",
 						"title": "Lägger till en knapp i funktionsmenyn för att slinga videon du tittar på"
