@@ -50,6 +50,14 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Open YouTube Settings On Hover:** Opens the settings menu when you hover over the settings button.
 
+- **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
+
+- **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
+
+- **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
+
+- **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
+
 ### Video history settings
 
 - **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
