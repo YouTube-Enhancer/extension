@@ -1,3 +1,22 @@
+## [1.23.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.1...v1.23.2) (2024-02-15)
+
+
+### Bug Fixes
+
+* video history resuming multiple times ([935d44c](https://github.com/VampireChicken12/youtube-enhancer/commit/935d44cfdf83ac41507f4451073d2541025d5fd8))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.2-Chrome.zip | 26c13e2a62fc076c194ade4c805a1193abc2cb94459b9225de93ff8df7bf490c |
+| youtube-enhancer-v1.23.2-Chromium.zip | 26c13e2a62fc076c194ade4c805a1193abc2cb94459b9225de93ff8df7bf490c |
+| youtube-enhancer-v1.23.2-Edge.zip | 26c13e2a62fc076c194ade4c805a1193abc2cb94459b9225de93ff8df7bf490c |
+| youtube-enhancer-v1.23.2-Firefox.zip | fe49e5f339a8a13c7930d78f1d400ef4dcde4ea9f41e7dcd13309afa922bd8a8 |
+
 ## [1.23.1](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.0...v1.23.1) (2024-02-14)
 
 
