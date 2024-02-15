@@ -187,8 +187,8 @@
 						"title": "Döljer sidornas rullningsfält"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Dölj shorts",
+						"title": "Gömmer alla shorts"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
