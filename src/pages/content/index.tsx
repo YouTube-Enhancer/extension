@@ -141,9 +141,12 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-		enableFeatures();
-		document.addEventListener("yt-navigate-finish", enableFeatures);
-		document.addEventListener("yt-player-updated", enableFeatures);
+		if (isWatchPage() || isShortsPage()) {
+			document.addEventListener("yt-navigate-finish", enableFeatures);
+			document.addEventListener("yt-player-updated", enableFeatures);
+		} else {
+			enableFeatures();
+		}
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
