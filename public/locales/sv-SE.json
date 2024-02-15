@@ -215,7 +215,7 @@
 						"title": "Kommer ihåg volymen på den senaste videon du tittade på och ställer in den när du öppnar en ny video"
 					},
 					"removeRedirect": {
-						"label": "Ta bort YouTube /omdirigeringswebbadresser",
+						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
 					},
 					"shareShortener": {
