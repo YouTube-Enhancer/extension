@@ -141,6 +141,19 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
+
+		// Listen to YouTube's soft navigate event
+		document.addEventListener("yt-navigate-finish", (event: YoutubeNavigateEvent) => {
+			const pageType = event.detail?.pageType;
+			// Only run enableFeatures() if the pageType is either `watch` or `shorts`
+			if (pageType === "watch" || pageType === "shorts") {
+				// Log the console about detecting the soft navigation
+				browserColorLog("Detected a soft navigation to player page, enabling features", "FgMagenta");
+
+				enableFeatures();
+			}
+		});
+
 		if (isWatchPage() || isShortsPage()) {
 			document.addEventListener("yt-navigate-finish", enableFeatures);
 			document.addEventListener("yt-player-updated", enableFeatures);

@@ -72,5 +72,19 @@ declare global {
 		i18nextInstance: i18nInstanceType;
 		webkitAudioContext: AudioContext;
 	}
+
+	/**
+	 * Type definitions for the `yt-navigate-finish` event
+	 *
+	 * @abstract
+	 */
+	// TODO: Add exhaustive type definitions
+	interface YoutubeNavigateEvent extends Event {
+		detail?: {
+			endpoint: unknown;
+			pageType: string;
+		};
+	}
 }
+
 export {};
