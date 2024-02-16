@@ -110,7 +110,7 @@ const enableFeatures = () => {
 		void enableCustomCSS();
 
 		// Use a guard clause to reduce amount of times nesting code happens
-		if (!isWatchPage() || !isShortsPage()) return;
+		if (!(isWatchPage() || isShortsPage())) return;
 
 		void promptUserToResumeVideo(() => {
 			void setupVideoHistory();
@@ -148,7 +148,6 @@ window.addEventListener("DOMContentLoaded", function () {
 		// Listen to YouTube's soft navigate event
 		document.addEventListener("yt-navigate-finish", enableFeatures);
 		document.addEventListener("yt-player-updated", enableFeatures);
-		enableFeatures();
 
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
