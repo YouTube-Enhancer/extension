@@ -102,36 +102,38 @@ const enableFeatures = () => {
 		// Wait for the specified container selectors to be available on the page
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
-		void enableHideShorts();
-		void removeRedirect();
-		void enableShareShortener();
-		void enableRememberVolume();
-		void enableHideScrollBar();
-		void enableCustomCSS();
+		void Promise.all([
+			enableHideShorts(),
+			removeRedirect(),
+			enableShareShortener(),
+			enableRememberVolume(),
+			enableHideScrollBar(),
+			enableCustomCSS()
+		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (!(isWatchPage() || isShortsPage())) return;
 
-		void promptUserToResumeVideo(() => {
-			void setupVideoHistory();
-		});
-		setupPlaybackSpeedChangeListener();
-		void enableShortsAutoScroll();
-		void enableFeatureMenu();
-		void enableOpenYouTubeSettingsOnHover();
-		void enableRememberVolume();
-		void automaticTheaterMode();
-		void setupRemainingTime();
-		void volumeBoost();
-		void setPlayerQuality();
-		void setPlayerSpeed();
-		void openTranscriptButton();
-		void addLoopButton();
-		void addMaximizePlayerButton();
-		void addScreenshotButton();
-		void volumeBoost();
-		void adjustVolumeOnScrollWheel();
-		void adjustSpeedOnScrollWheel();
+		void Promise.all([
+			promptUserToResumeVideo(() => void setupVideoHistory()),
+			setupPlaybackSpeedChangeListener(),
+			enableShortsAutoScroll(),
+			enableFeatureMenu(),
+			enableOpenYouTubeSettingsOnHover(),
+			enableRememberVolume(),
+			automaticTheaterMode(),
+			setupRemainingTime(),
+			volumeBoost(),
+			setPlayerQuality(),
+			setPlayerSpeed(),
+			openTranscriptButton(),
+			addLoopButton(),
+			addMaximizePlayerButton(),
+			addScreenshotButton(),
+			volumeBoost(),
+			adjustVolumeOnScrollWheel(),
+			adjustSpeedOnScrollWheel()
+		]);
 	})();
 };
 
