@@ -97,43 +97,48 @@ const alwaysShowProgressBar = async function () {
 	progressLoad += progressWidth;
 };
 
+const enableFeatures = () => {
+	void (async () => {
+		// Wait for the specified container selectors to be available on the page
+		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+		eventManager.removeAllEventListeners(["featureMenu"]);
+		void Promise.all([
+			enableHideShorts(),
+			removeRedirect(),
+			enableShareShortener(),
+			enableRememberVolume(),
+			enableHideScrollBar(),
+			enableCustomCSS()
+		]);
+
+		// Use a guard clause to reduce amount of times nesting code happens
+		if (!(isWatchPage() || isShortsPage())) return;
+
+		void Promise.all([
+			promptUserToResumeVideo(() => void setupVideoHistory()),
+			setupPlaybackSpeedChangeListener(),
+			enableShortsAutoScroll(),
+			enableFeatureMenu(),
+			enableOpenYouTubeSettingsOnHover(),
+			enableRememberVolume(),
+			automaticTheaterMode(),
+			setupRemainingTime(),
+			volumeBoost(),
+			setPlayerQuality(),
+			setPlayerSpeed(),
+			openTranscriptButton(),
+			addLoopButton(),
+			addMaximizePlayerButton(),
+			addScreenshotButton(),
+			volumeBoost(),
+			adjustVolumeOnScrollWheel(),
+			adjustSpeedOnScrollWheel()
+		]);
+	})();
+};
+
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
-		const enableFeatures = () => {
-			void (async () => {
-				// Wait for the specified container selectors to be available on the page
-				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-				eventManager.removeAllEventListeners(["featureMenu"]);
-				void enableHideShorts();
-				void removeRedirect();
-				void enableShareShortener();
-				void enableRememberVolume();
-				void enableHideScrollBar();
-				void enableCustomCSS();
-				if (isWatchPage() || isShortsPage()) {
-					void promptUserToResumeVideo(() => {
-						void setupVideoHistory();
-					});
-					setupPlaybackSpeedChangeListener();
-					void enableShortsAutoScroll();
-					void enableFeatureMenu();
-					void enableOpenYouTubeSettingsOnHover();
-					void enableRememberVolume();
-					void automaticTheaterMode();
-					void setupRemainingTime();
-					void volumeBoost();
-					void setPlayerQuality();
-					void setPlayerSpeed();
-					void openTranscriptButton();
-					void addLoopButton();
-					void addMaximizePlayerButton();
-					void addScreenshotButton();
-					void volumeBoost();
-					void adjustVolumeOnScrollWheel();
-					void adjustSpeedOnScrollWheel();
-				}
-			})();
-		};
 		const response = await waitForSpecificMessage("language", "request_data", "content");
 		if (!response) return;
 		const {
@@ -141,12 +146,11 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-		if (isWatchPage() || isShortsPage()) {
-			document.addEventListener("yt-navigate-finish", enableFeatures);
-			document.addEventListener("yt-player-updated", enableFeatures);
-		} else {
-			enableFeatures();
-		}
+
+		// Listen to YouTube's soft navigate event
+		document.addEventListener("yt-navigate-finish", enableFeatures);
+		document.addEventListener("yt-player-updated", enableFeatures);
+
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
