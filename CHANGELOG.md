@@ -1,3 +1,23 @@
+## [1.23.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.2...v1.23.3) (2024-02-18)
+
+
+### Bug Fixes
+
+* **cleanup:** remove unused `YoutubeNavigateEvent` interface ([13e7660](https://github.com/VampireChicken12/youtube-enhancer/commit/13e76600f04402765418d0280be0fbb57a33113f))
+* use `Promise.all` in `enableFeatures()` function ([5a27d99](https://github.com/VampireChicken12/youtube-enhancer/commit/5a27d9972ac676e1f049cd54999aabdfbd32362a))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.23.3-Chrome.zip | c02aa71b22724667d04bd692161cd7ac3995bdd38a644a8f195ff786aad781d7 |
+| youtube-enhancer-v1.23.3-Chromium.zip | c02aa71b22724667d04bd692161cd7ac3995bdd38a644a8f195ff786aad781d7 |
+| youtube-enhancer-v1.23.3-Edge.zip | c02aa71b22724667d04bd692161cd7ac3995bdd38a644a8f195ff786aad781d7 |
+| youtube-enhancer-v1.23.3-Firefox.zip | 5e3194a969b726167f29cf8a756359aa071ff7313c138ea982d327a05d77d43c |
+
 ## [1.23.2](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.1...v1.23.2) (2024-02-15)
 
 
