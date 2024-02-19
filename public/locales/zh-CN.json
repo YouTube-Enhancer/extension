@@ -187,8 +187,8 @@
 						"title": "隐藏页面滚动条"
 					},
 					"hideShorts": {
-						"label": "隐藏短视频",
-						"title": "隐藏所有短视频"
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
 					},
 					"loopButton": {
 						"label": "循环按钮",
