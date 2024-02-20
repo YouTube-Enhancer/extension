@@ -187,8 +187,8 @@
 						"title": "ページのスクロールバーを隠す"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "ショートを隠す",
+						"title": "全ショートを隠す"
 					},
 					"loopButton": {
 						"label": "動画ループボタン",

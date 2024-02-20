@@ -2,24 +2,24 @@ import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
 export const availableLocales = [
-  "ca-ES",
-  "cs-CZ",
-  "de-DE",
-  "en-US",
-  "es-ES",
-  "fa-IR",
-  "fr-FR",
-  "he-IL",
-  "hi-IN",
-  "it-IT",
-  "ja-JP",
-  "pl-PL",
-  "pt-BR",
-  "ru-RU",
-  "sv-SE",
-  "tr-TR",
-  "zh-CN",
-  "zh-TW"
+	"ca-ES",
+	"cs-CZ",
+	"de-DE",
+	"en-US",
+	"es-ES",
+	"fa-IR",
+	"fr-FR",
+	"he-IL",
+	"hi-IN",
+	"it-IT",
+	"ja-JP",
+	"pl-PL",
+	"pt-BR",
+	"ru-RU",
+	"sv-SE",
+	"tr-TR",
+	"zh-CN",
+	"zh-TW"
 ] as const;
 export const localePercentages: Record<AvailableLocales, number> = {
 	"ca-ES": 0,
@@ -32,14 +32,14 @@ export const localePercentages: Record<AvailableLocales, number> = {
 	"he-IL": 0,
 	"hi-IN": 0,
 	"it-IT": 0,
-	"ja-JP": 99,
+	"ja-JP": 100,
 	"pl-PL": 1,
 	"pt-BR": 90,
 	"ru-RU": 99,
-	"sv-SE": 99,
-	"tr-TR": 63,
-	"zh-CN": 99,
-	"zh-TW": 99
+	"sv-SE": 100,
+	"tr-TR": 65,
+	"zh-CN": 100,
+	"zh-TW": 100
 };
 export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
 	"ca-ES": "ltr",

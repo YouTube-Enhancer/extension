@@ -187,8 +187,8 @@
 						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Kısa videoları gizle",
+						"title": "Tüm kısa videoları gizler"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
