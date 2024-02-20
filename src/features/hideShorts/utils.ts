@@ -1,5 +1,5 @@
 const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
-const sideBarClosedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
+const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
 const homePageShortsSectionSelector = "ytd-rich-section-renderer:has(#rich-shelf-header)";
 const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has(#title-container)";
 const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
