@@ -130,6 +130,7 @@ interface EnUS {
 						title: "Automatically enables theater mode when you load a video";
 					};
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
+					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					loopButton: {
 						label: "Loop button";
 						title: "Adds a button to the feature menu to loop the video you're watching";
@@ -154,6 +155,15 @@ interface EnUS {
 						label: "Remember last volume";
 						title: "Remembers the volume of the last video you were watching and sets it when you open a new video";
 					};
+					removeRedirect: {
+						label: "Remove YouTube /redirect URLs";
+						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
+					};
+					shareShortener: {
+						label: "Shorten YouTube video share link";
+						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
+					};
+					shortsAutoScroll: { label: "Shorts auto scroll"; title: "Automatically scrolls to the next short" };
 				};
 				title: "Miscellaneous settings";
 			};

@@ -10,6 +10,7 @@ import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/feature
 import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
+import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
@@ -20,9 +21,12 @@ import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
+import removeRedirect from "@/src/features/removeRedirect";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
+import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
+import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -93,38 +97,48 @@ const alwaysShowProgressBar = async function () {
 	progressLoad += progressWidth;
 };
 
+const enableFeatures = () => {
+	void (async () => {
+		// Wait for the specified container selectors to be available on the page
+		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+		eventManager.removeAllEventListeners(["featureMenu"]);
+		void Promise.all([
+			enableHideShorts(),
+			removeRedirect(),
+			enableShareShortener(),
+			enableRememberVolume(),
+			enableHideScrollBar(),
+			enableCustomCSS()
+		]);
+
+		// Use a guard clause to reduce amount of times nesting code happens
+		if (!(isWatchPage() || isShortsPage())) return;
+
+		void Promise.all([
+			promptUserToResumeVideo(() => void setupVideoHistory()),
+			setupPlaybackSpeedChangeListener(),
+			enableShortsAutoScroll(),
+			enableFeatureMenu(),
+			enableOpenYouTubeSettingsOnHover(),
+			enableRememberVolume(),
+			automaticTheaterMode(),
+			setupRemainingTime(),
+			volumeBoost(),
+			setPlayerQuality(),
+			setPlayerSpeed(),
+			openTranscriptButton(),
+			addLoopButton(),
+			addMaximizePlayerButton(),
+			addScreenshotButton(),
+			volumeBoost(),
+			adjustVolumeOnScrollWheel(),
+			adjustSpeedOnScrollWheel()
+		]);
+	})();
+};
+
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
-		void enableRememberVolume();
-		void enableHideScrollBar();
-
-		const enableFeatures = () => {
-			void (async () => {
-				// Wait for the specified container selectors to be available on the page
-				await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-				eventManager.removeAllEventListeners(["featureMenu"]);
-				void enableFeatureMenu();
-				void enableOpenYouTubeSettingsOnHover();
-				void openTranscriptButton();
-				void addLoopButton();
-				void addMaximizePlayerButton();
-				void volumeBoost();
-				void addScreenshotButton();
-				void enableRememberVolume();
-				void enableCustomCSS();
-				setupPlaybackSpeedChangeListener();
-				void setPlayerQuality();
-				void setPlayerSpeed();
-				void volumeBoost();
-				void adjustVolumeOnScrollWheel();
-				void adjustSpeedOnScrollWheel();
-				void promptUserToResumeVideo(() => {
-					void setupVideoHistory();
-				});
-				void setupRemainingTime();
-				void automaticTheaterMode();
-			})();
-		};
 		const response = await waitForSpecificMessage("language", "request_data", "content");
 		if (!response) return;
 		const {
@@ -132,8 +146,11 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-		if (isWatchPage() || isShortsPage()) document.addEventListener("yt-navigate-finish", enableFeatures);
+
+		// Listen to YouTube's soft navigate event
+		document.addEventListener("yt-navigate-finish", enableFeatures);
 		document.addEventListener("yt-player-updated", enableFeatures);
+
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
@@ -307,6 +324,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "hideShortsChange": {
+						const {
+							data: { hideShortsEnabled }
+						} = message;
+						if (hideShortsEnabled) {
+							await enableHideShorts();
+						} else {
+							disableHideShorts();
+						}
+						break;
+					}
 					case "languageChange": {
 						const {
 							data: { language }
@@ -381,6 +409,26 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "removeRedirectChange": {
+						const {
+							data: { removeRedirectEnabled }
+						} = message;
+						if (removeRedirectEnabled) {
+							await removeRedirect();
+						}
+						break;
+					}
+					case "shareShortenerChange": {
+						const {
+							data: { shareShortenerEnabled }
+						} = message;
+						if (shareShortenerEnabled) {
+							await enableShareShortener();
+						} else {
+							disableShareShortener();
+						}
+						break;
+					}
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
@@ -404,8 +452,23 @@ window.addEventListener("DOMContentLoaded", function () {
 							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
 							if (buttonExists) continue;
 							const { [featureName]: featureFunctions } = featureButtonFunctions;
-							await (featureFunctions as FeatureFuncRecord).remove(oldPlacement);
-							await (featureFunctions as FeatureFuncRecord).add();
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.remove(oldPlacement);
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.add();
+						}
+						break;
+					}
+					case "shortsAutoScrollChange": {
+						const {
+							data: { shortsAutoScrollEnabled }
+						} = message;
+						if (shortsAutoScrollEnabled) {
+							await enableShortsAutoScroll();
+						} else {
+							disableShortsAutoScroll();
 						}
 						break;
 					}
