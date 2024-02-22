@@ -1,19 +1,4 @@
-import type {
-	ButtonPlacement,
-	ModifierKey,
-	OnScreenDisplayColor,
-	OnScreenDisplayPosition,
-	OnScreenDisplayType,
-	Path,
-	ScreenshotFormat,
-	ScreenshotType,
-	VideoHistoryResumeType,
-	VolumeBoostMode,
-	YoutubePlayerQualityLabel,
-	YoutubePlayerQualityLevel,
-	configuration,
-	configurationKeys
-} from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -26,7 +11,6 @@ import { configurationImportSchema, defaultConfiguration as defaultSettings } fr
 import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
-import { MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -38,6 +22,7 @@ import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
+
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
@@ -241,7 +226,7 @@ export default function Settings() {
 			value: "shiftKey"
 		}
 	] as { label: string; value: ModifierKey }[] as SelectOption[];
-	const colorOptions = [
+	const colorOptions: SelectOption[] = [
 		{
 			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
@@ -282,8 +267,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
-	] as { element: JSX.Element; label: string; value: OnScreenDisplayColor }[] as SelectOption[];
-	const OSD_DisplayTypeOptions = [
+	];
+	const OSD_DisplayTypeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
@@ -300,8 +285,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
 			value: "round"
 		}
-	] as { label: string; value: OnScreenDisplayType }[] as SelectOption[];
-	const OSD_PositionOptions = [
+	];
+	const OSD_PositionOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
@@ -322,8 +307,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.position.options.center"),
 			value: "center"
 		}
-	] as { label: string; value: OnScreenDisplayPosition }[] as SelectOption[];
-	const YouTubePlayerQualityOptions = [
+	];
+	const YouTubePlayerQualityOptions: SelectOption[] = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
 		{ label: "360p", value: "medium" },
@@ -335,21 +320,18 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
-	].reverse() as { label: YoutubePlayerQualityLevel; value: YoutubePlayerQualityLabel }[] as SelectOption[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() })) as {
-		label: string;
-		value: string;
-	}[] as SelectOption[];
-	const ScreenshotFormatOptions = [
+	].reverse();
+	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() }));
+	const ScreenshotFormatOptions: SelectOption[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
-	] as { label: string; value: ScreenshotFormat }[] as SelectOption[];
-	const ScreenshotSaveAsOptions = [
+	];
+	const ScreenshotSaveAsOptions: SelectOption[] = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
-	] as { label: string; value: ScreenshotType }[] as SelectOption[];
-	const VolumeBoostModeOptions = [
+	];
+	const VolumeBoostModeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
 			value: "global"
@@ -359,7 +341,7 @@ export default function Settings() {
 			value: "per_video"
 		}
 	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
-	const buttonPlacementOptions = [
+	const buttonPlacementOptions: SelectOption[] = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
 		{
@@ -370,8 +352,11 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	] as { label: string; value: ButtonPlacement }[] as SelectOption[];
-	const videoHistoryResumeTypeOptions = [
+	] as {
+		label: string;
+		value: ButtonPlacement;
+	}[] as SelectOption[];
+	const videoHistoryResumeTypeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
 			value: "automatic"
@@ -461,10 +446,6 @@ export default function Settings() {
 			// Show a success notification.
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
-	};
-	const openInNewTab = (path: string) => {
-		const url = chrome.runtime.getURL(path);
-		void chrome.tabs.create({ url });
 	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
@@ -958,17 +939,6 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
-					{window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g) && (
-						<button
-							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
-							id="openinnewtab_button"
-							onClick={() => openInNewTab("src/pages/options/index.html")}
-							title={t("settings.sections.bottomButtons.openTab.title")}
-							type="button"
-						>
-							<MdOutlineOpenInNew color="white" size={20} />
-						</button>
-					)}
 					<input
 						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"

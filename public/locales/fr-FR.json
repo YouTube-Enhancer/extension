@@ -88,9 +88,6 @@
 					"title": "Efface toutes les données stockées par cette extension sur votre ordinateur",
 					"value": "Effacer les données"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Confirmer la réinitialisation des réglages",
 					"value": "Confirmer"
