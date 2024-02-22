@@ -187,8 +187,8 @@
 						"title": "隱藏頁面捲軸"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "隱藏 Shorts",
+						"title": "隱藏全部 Shorts"
 					},
 					"loopButton": {
 						"label": "循環按鈕",
