@@ -88,9 +88,6 @@
 					"title": "Limpia todos los datos que esta extensión ha almacenado en su equipo",
 					"value": "Limpiar datos"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Confirma el restablecimiento de los ajustes",
 					"value": "Confirmar"
