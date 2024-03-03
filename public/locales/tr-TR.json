@@ -92,6 +92,9 @@
 					"title": "Ayarı sıfırlamayı onayla",
 					"value": "Onayla"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
 					"value": "Sıfırla"
