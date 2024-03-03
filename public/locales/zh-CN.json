@@ -93,7 +93,7 @@
 					"value": "确认"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "在新标签中打开扩展设置"
 				},
 				"reset": {
 					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
