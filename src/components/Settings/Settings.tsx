@@ -1,4 +1,19 @@
-import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type {
+	ButtonPlacement,
+	ModifierKey,
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType,
+	Path,
+	ScreenshotFormat,
+	ScreenshotType,
+	VideoHistoryResumeType,
+	VolumeBoostMode,
+	YoutubePlayerQualityLabel,
+	YoutubePlayerQualityLevel,
+	configuration,
+	configurationKeys
+} from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -226,7 +241,7 @@ export default function Settings() {
 			value: "shiftKey"
 		}
 	] as { label: string; value: ModifierKey }[] as SelectOption[];
-	const colorOptions: SelectOption[] = [
+	const colorOptions = [
 		{
 			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
@@ -267,8 +282,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
-	];
-	const OSD_DisplayTypeOptions: SelectOption[] = [
+	] as { element: JSX.Element; label: string; value: OnScreenDisplayColor }[] as SelectOption[];
+	const OSD_DisplayTypeOptions = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
@@ -285,8 +300,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
 			value: "round"
 		}
-	];
-	const OSD_PositionOptions: SelectOption[] = [
+	] as { label: string; value: OnScreenDisplayType }[] as SelectOption[];
+	const OSD_PositionOptions = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
@@ -307,8 +322,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.position.options.center"),
 			value: "center"
 		}
-	];
-	const YouTubePlayerQualityOptions: SelectOption[] = [
+	] as { label: string; value: OnScreenDisplayPosition }[] as SelectOption[];
+	const YouTubePlayerQualityOptions = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
 		{ label: "360p", value: "medium" },
@@ -320,18 +335,21 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
-	].reverse();
-	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() }));
-	const ScreenshotFormatOptions: SelectOption[] = [
+	].reverse() as { label: YoutubePlayerQualityLevel; value: YoutubePlayerQualityLabel }[] as SelectOption[];
+	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() })) as {
+		label: string;
+		value: string;
+	}[] as SelectOption[];
+	const ScreenshotFormatOptions = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
-	];
-	const ScreenshotSaveAsOptions: SelectOption[] = [
+	] as { label: string; value: ScreenshotFormat }[] as SelectOption[];
+	const ScreenshotSaveAsOptions = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
-	];
-	const VolumeBoostModeOptions: SelectOption[] = [
+	] as { label: string; value: ScreenshotType }[] as SelectOption[];
+	const VolumeBoostModeOptions = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
 			value: "global"
@@ -341,7 +359,7 @@ export default function Settings() {
 			value: "per_video"
 		}
 	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
-	const buttonPlacementOptions: SelectOption[] = [
+	const buttonPlacementOptions = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
 		{
@@ -352,11 +370,8 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	] as {
-		label: string;
-		value: ButtonPlacement;
-	}[] as SelectOption[];
-	const videoHistoryResumeTypeOptions: SelectOption[] = [
+	] as { label: string; value: ButtonPlacement }[] as SelectOption[];
+	const videoHistoryResumeTypeOptions = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
 			value: "automatic"
@@ -951,7 +966,7 @@ export default function Settings() {
 							title={t("settings.sections.bottomButtons.openTab.title")}
 							type="button"
 						>
-							<MdOutlineOpenInNew color="white" size={20}/>
+							<MdOutlineOpenInNew color="white" size={20} />
 						</button>
 					)}
 					<input
@@ -962,7 +977,7 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.exportButton.value")}
 					/>
-					{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
+					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
 							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="confirm_button"
@@ -986,8 +1001,7 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
-					) : (
-						<input
+					:	<input
 							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="reset_button"
 							onClick={resetOptions}
@@ -995,7 +1009,7 @@ export default function Settings() {
 							type="button"
 							value={t("settings.sections.bottomButtons.reset.value")}
 						/>
-					)}
+					}
 				</div>
 				<SettingsNotifications />
 				<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />
