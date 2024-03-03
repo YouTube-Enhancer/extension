@@ -88,6 +88,9 @@
 					"title": "清除這個擴充套件儲存在此機上的資料",
 					"value": "清除資料"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "確認重設設定",
 					"value": "確認"

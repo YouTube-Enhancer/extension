@@ -88,6 +88,9 @@
 					"title": "Rensar all data som detta tillägg har lagrat på din dator",
 					"value": "Rensa data"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Bekräfta återställning av inställningar",
 					"value": "Bekräfta"

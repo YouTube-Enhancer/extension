@@ -88,6 +88,9 @@
 					"title": "Löscht alle Daten, die diese Erweiterung auf Ihrem Rechner gespeichert hat",
 					"value": "Daten löschen"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Einstellungen zurücksetzen",
 					"value": "Bestätigen"
