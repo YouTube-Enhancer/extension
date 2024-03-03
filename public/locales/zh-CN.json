@@ -88,6 +88,9 @@
 					"title": "清除此扩展存储在您机器上的所有数据",
 					"value": "清除数据"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "确认重置设置",
 					"value": "确认"

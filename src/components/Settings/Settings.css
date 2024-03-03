@@ -180,6 +180,7 @@ hr {
 /* inputs */
 input[type="text"],
 input[type="button"],
+button,
 select {
 	border-radius: var(--border-radius-md);
 	margin-bottom: 4px;
@@ -187,6 +188,7 @@ select {
 }
 
 input[type="text"],
+button,
 select {
 	border: 0;
 	background: var(--input-background);
@@ -199,11 +201,13 @@ select {
 }
 
 input[type="button"],
+button,
 input[type="checkbox"] {
 	cursor: pointer;
 }
 
-input[type="button"] {
+input[type="button"],
+button {
 	min-width: 50px;
 	color: var(--neutral-lightest);
 	border: 0;
@@ -219,16 +223,21 @@ input[type="button"].loading:disabled {
 }
 
 /* accent */
-input[type="button"].accent {
+input[type="button"].accent,
+button.accent {
 	background: var(--accent);
 }
 input[type="button"].accent:hover,
 input[type="button"].accent:focus,
-input[type="button"].accent:active {
+input[type="button"].accent:active,
+button.accent:hover,
+button.accent:focus,
+button.accent:active {
 	background: var(--accent);
 }
 
-input[type="button"].accent.ghost {
+input[type="button"].accent.ghost,
+button.accent.ghost {
 	border: 2px solid var(--accent);
 	background: var(--neutral-lightest);
 	color: var(--accent);
@@ -320,7 +329,8 @@ input[type="color"] {
 	width: 80px;
 }
 
-input[type="button"] {
+input[type="button"],
+button {
 	min-width: 60px;
 }
 
