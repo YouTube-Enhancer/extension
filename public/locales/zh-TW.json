@@ -92,6 +92,9 @@
 					"title": "確認重設設定",
 					"value": "確認"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "將所以設定回復到初始值，按確認儲存變更",
 					"value": "重置"
