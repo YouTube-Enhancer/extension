@@ -92,6 +92,9 @@
 					"title": "設定リセットを確認する",
 					"value": "確認"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
 					"value": "リセット"
