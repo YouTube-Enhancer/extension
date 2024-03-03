@@ -92,6 +92,9 @@
 					"title": "Confirmar redefinição de configuração",
 					"value": "Confirmar"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Redefinir todas as configurações para seus padrões, Clique no botão confirmar para salvar as alterações",
 					"value": "Redefinir"
