@@ -88,6 +88,9 @@
 					"title": "清除此扩展存储在您机器上的所有数据",
 					"value": "清除数据"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "确认重置设置",
 					"value": "确认"
@@ -187,8 +190,8 @@
 						"title": "隐藏页面滚动条"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "隐藏短视频",
+						"title": "隐藏所有短视频"
 					},
 					"loopButton": {
 						"label": "循环按钮",

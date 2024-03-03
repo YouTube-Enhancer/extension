@@ -88,6 +88,9 @@
 					"title": "Limpa todos os dados que esta extensão armazenou em sua máquina",
 					"value": "Limpar Dados"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Confirmar redefinição de configuração",
 					"value": "Confirmar"

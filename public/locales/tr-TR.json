@@ -88,6 +88,9 @@
 					"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
 					"value": "Veriyi Temizle"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Ayarı sıfırlamayı onayla",
 					"value": "Onayla"
@@ -187,8 +190,8 @@
 						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Kısa videoları gizle",
+						"title": "Tüm kısa videoları gizler"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
