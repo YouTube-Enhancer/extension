@@ -93,7 +93,7 @@
 					"value": "確認"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "於新頁面開啟擴充套件設定"
 				},
 				"reset": {
 					"title": "將所以設定回復到初始值，按確認儲存變更",
