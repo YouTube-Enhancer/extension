@@ -92,6 +92,9 @@
 					"title": "Confirma el restablecimiento de los ajustes",
 					"value": "Confirmar"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
 					"value": "Reestablecer"
