@@ -92,6 +92,9 @@
 					"title": "Einstellungen zurücksetzen",
 					"value": "Bestätigen"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
 					"value": "Zurücksetzen"
