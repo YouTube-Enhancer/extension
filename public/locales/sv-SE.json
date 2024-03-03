@@ -92,6 +92,9 @@
 					"title": "Bekräfta återställning av inställningar",
 					"value": "Bekräfta"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Återställer alla inställningar till sina standardinställningar, Klicka på bekräftelseknappen för att spara ändringarna",
 					"value": "Återställ"
