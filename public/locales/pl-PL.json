@@ -88,6 +88,9 @@
 					"title": "Clears all data this extension has stored on your machine",
 					"value": "Clear Data"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Confirm setting reset",
 					"value": "Confirm"
