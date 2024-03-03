@@ -92,6 +92,9 @@
 					"title": "Confirmer la réinitialisation des réglages",
 					"value": "Confirmer"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Réinitialise tous les paramètres par défaut, cliquez sur le bouton de confirmation pour enregistrer les modifications",
 					"value": "Réinitialiser"
