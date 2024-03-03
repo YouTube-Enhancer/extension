@@ -93,7 +93,7 @@
 					"value": "Onayla"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Uzantı ayarlarını yeni bir sekmede açın"
 				},
 				"reset": {
 					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
@@ -330,17 +330,17 @@
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "Her kaydırmada değiştirilecek ses düzeyi",
+					"title": "Her kaydırmada değiştirilecek ses düzeyini ayarlayın"
 				},
 				"enable": {
 					"label": "Kaydırma tekerleği ile ses kontrolü",
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
+					"title": "İzlediğiniz videonun ses düzeyini kontrol etmek için kaydırma tekerleğini kullanmanızı sağlar"
 				},
 				"holdModifierKey": {
 					"enable": {
 						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
@@ -359,7 +359,7 @@
 			"videoHistory": {
 				"enable": {
 					"label": "İzlenen videoları takip edin",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"title": "İzlediğiniz videolarda en son nerede kaldığınızı takip eder ve oynatmaya oradan devam etmenizi sağlar"
 				},
 				"resumeType": {
 					"select": {
@@ -368,7 +368,7 @@
 							"automatic": "Otomatik",
 							"prompt": "Prompt"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
 					}
 				},
 				"title": "Video geçmişi ayarları"
