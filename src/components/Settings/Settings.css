@@ -180,7 +180,7 @@ hr {
 /* inputs */
 input[type="text"],
 input[type="button"],
-button,
+button[id="openinnewtab_button"],
 select {
 	border-radius: var(--border-radius-md);
 	margin-bottom: 4px;
@@ -188,7 +188,7 @@ select {
 }
 
 input[type="text"],
-button,
+button[id="openinnewtab_button"],
 select {
 	border: 0;
 	background: var(--input-background);
@@ -201,13 +201,13 @@ select {
 }
 
 input[type="button"],
-button,
+button[id="openinnewtab_button"],
 input[type="checkbox"] {
 	cursor: pointer;
 }
 
 input[type="button"],
-button {
+button[id="openinnewtab_button"] {
 	min-width: 50px;
 	color: var(--neutral-lightest);
 	border: 0;
@@ -224,20 +224,20 @@ input[type="button"].loading:disabled {
 
 /* accent */
 input[type="button"].accent,
-button.accent {
+button[id="openinnewtab_button"].accent {
 	background: var(--accent);
 }
 input[type="button"].accent:hover,
 input[type="button"].accent:focus,
 input[type="button"].accent:active,
-button.accent:hover,
-button.accent:focus,
-button.accent:active {
+button[id="openinnewtab_button"].accent:hover,
+button[id="openinnewtab_button"].accent:focus,
+button[id="openinnewtab_button"].accent:active {
 	background: var(--accent);
 }
 
 input[type="button"].accent.ghost,
-button.accent.ghost {
+button[id="openinnewtab_button"].accent.ghost {
 	border: 2px solid var(--accent);
 	background: var(--neutral-lightest);
 	color: var(--accent);
@@ -330,7 +330,7 @@ input[type="color"] {
 }
 
 input[type="button"],
-button {
+button[id="openinnewtab_button"] {
 	min-width: 60px;
 }
 
