@@ -35,7 +35,7 @@ export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, .
 
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
-export const screenshotFormat = ["png", "jpg", "webp"] as const;
+export const screenshotFormat = ["png", "jpeg", "webp"] as const;
 
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
