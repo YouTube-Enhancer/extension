@@ -35,7 +35,7 @@ export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, .
 
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
-export const screenshotFormat = ["png", "jpg", "webp"] as const;
+export const screenshotFormat = ["png", "jpeg", "webp"] as const;
 
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
@@ -255,27 +255,34 @@ export type TypeToPartialZodSchema<
 			: z.ZodOptionalType<z.ZodType<Input[K]>>;
 		}
 >;
-type PathImpl<T, Key extends keyof T> = Key extends string ?
-	T[Key] extends Record<string, any> ?
-		T[Key] extends ArrayLike<any> ?
-			`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
-		:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
-	:	Key
-:	never;
+type PathImpl<T, Key extends keyof T> =
+	Key extends string ?
+		T[Key] extends Record<string, any> ?
+			T[Key] extends ArrayLike<any> ?
+				`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
+			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
+		:	Key
+	:	never;
 
 export type Path<T> = PathImpl<T, keyof T> | keyof T;
 
-export type PathValue<T, P extends Path<T>> = P extends `${infer Key}.${infer Rest}` ?
-	Key extends keyof T ?
-		Rest extends Path<T[Key]> ?
-			PathValue<T[Key], Rest>
+export type PathValue<T, P extends Path<T>> =
+	P extends `${infer Key}.${infer Rest}` ?
+		Key extends keyof T ?
+			Rest extends Path<T[Key]> ?
+				PathValue<T[Key], Rest>
+			:	never
 		:	never
-	:	never
-: P extends keyof T ? T[P]
-: never;
+	: P extends keyof T ? T[P]
+	: never;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
+export type FilterKeysByValueType<O extends object, ValueType> = {
+	[K in keyof O]: O[K] extends ValueType ? K
+	: O[K] extends Record<string, ValueType> ? K
+	: never;
+}[keyof O];
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;

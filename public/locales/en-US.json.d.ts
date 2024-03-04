@@ -57,6 +57,7 @@ interface EnUS {
 					value: "Clear Data";
 				};
 				confirm: { title: "Confirm setting reset"; value: "Confirm" };
+				openTab: { title: "Open extension settings in a new tab" };
 				reset: {
 					title: "Resets all settings to their defaults, Click the confirm button to save the changes";
 					value: "Reset";

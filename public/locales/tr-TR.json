@@ -88,6 +88,9 @@
 					"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
 					"value": "Veriyi Temizle"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "Ayarı sıfırlamayı onayla",
 					"value": "Onayla"

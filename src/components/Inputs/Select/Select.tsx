@@ -1,3 +1,4 @@
+import type { PathValue, configuration, configurationId } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
@@ -14,26 +15,34 @@ interface SelectOptionProps {
 	id?: string;
 	value: string;
 }
-
-export type SelectOption = {
+export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;
 	label: string;
-	value: string;
+	value: Extract<PathValue<configuration, Key>, string>;
 };
 
-export type SelectProps = {
+export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
 	id?: string;
 	label: string;
 	loading?: boolean;
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
-	options: SelectOption[];
+	options: SelectOption<Key>[];
 	selectedOption: string | undefined;
 	title: string;
 };
 
-const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label, loading = false, onChange, options, selectedOption }) => {
+const Select = <Key extends configurationId>({
+	className,
+	disabled = false,
+	id,
+	label,
+	loading = false,
+	onChange,
+	options,
+	selectedOption
+}: SelectProps<Key>) => {
 	const {
 		isComponentVisible: isSelectVisible,
 		ref: selectRef,
@@ -71,7 +80,7 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 						type="button"
 					>
 						{loading ?
-							<Loader className={"h-4 w-4"} />
+							<Loader className={"size-4"} />
 						: selectedOption ?
 							options.find((option) => option.value === selectedOption)?.element ?
 								<div className="flex w-full items-center justify-between pr-4">

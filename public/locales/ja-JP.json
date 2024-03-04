@@ -88,6 +88,9 @@
 					"title": "マシンに保存されているすべてのエクステンションデータを消去します",
 					"value": "データの消去"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"confirm": {
 					"title": "設定リセットを確認する",
 					"value": "確認"
