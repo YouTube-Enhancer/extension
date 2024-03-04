@@ -1,4 +1,4 @@
-import type { Path, configuration } from "@/src/types";
+import type { configurationId } from "@/src/types";
 
 import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
@@ -8,17 +8,17 @@ import type { SliderProps } from "../../Inputs/Slider/Slider";
 
 import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "../../Inputs";
 
-type SettingInputProps = {
-	id: Path<configuration>;
+type SettingInputProps<ID extends configurationId> = {
+	id: ID;
 	title?: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
 	| ({ type: "css-editor" } & CSSEditorProps)
 	| ({ type: "number" } & NumberInputProps)
-	| ({ type: "select" } & SelectProps)
+	| ({ type: "select" } & SelectProps<ID>)
 	| ({ type: "slider" } & SliderProps)
 );
-function SettingInput(settingProps: SettingInputProps) {
+function SettingInput<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
@@ -67,7 +67,7 @@ function SettingInput(settingProps: SettingInputProps) {
 		}
 	}
 }
-export default function Setting(settingProps: SettingInputProps) {
+export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	return (
 		<div className="mx-2 mb-1" title={settingProps.title}>
 			<SettingInput {...settingProps} />

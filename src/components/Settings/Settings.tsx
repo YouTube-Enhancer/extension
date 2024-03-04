@@ -1,19 +1,4 @@
-import type {
-	ButtonPlacement,
-	ModifierKey,
-	OnScreenDisplayColor,
-	OnScreenDisplayPosition,
-	OnScreenDisplayType,
-	Path,
-	ScreenshotFormat,
-	ScreenshotType,
-	VideoHistoryResumeType,
-	VolumeBoostMode,
-	YoutubePlayerQualityLabel,
-	YoutubePlayerQualityLevel,
-	configuration,
-	configurationKeys
-} from "@/src/types";
+import type { FeaturesThatHaveButtons, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -46,7 +31,7 @@ async function getLanguageOptions() {
 			return Promise.resolve({
 				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
 				value: locale
-			} as SelectOption);
+			} as SelectOption<"language">);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -54,8 +39,8 @@ async function getLanguageOptions() {
 
 	const results = await Promise.allSettled(promises);
 
-	const languageOptions: SelectOption[] = results
-		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
+	const languageOptions: SelectOption<"language">[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
 		.map((result) => result.value);
 
 	return languageOptions;
@@ -69,7 +54,7 @@ function LanguageOptions({
 	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	t: i18nInstanceType["t"];
 }) {
-	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
 	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
 		void (async () => {
@@ -240,7 +225,7 @@ export default function Settings() {
 			}),
 			value: "shiftKey"
 		}
-	] as { label: string; value: ModifierKey }[] as SelectOption[];
+	] as SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[];
 	const colorOptions = [
 		{
 			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
@@ -282,7 +267,7 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
-	] as { element: JSX.Element; label: string; value: OnScreenDisplayColor }[] as SelectOption[];
+	] as SelectOption<"osd_display_color">[];
 	const OSD_DisplayTypeOptions = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
@@ -300,7 +285,7 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
 			value: "round"
 		}
-	] as { label: string; value: OnScreenDisplayType }[] as SelectOption[];
+	] as SelectOption<"osd_display_type">[];
 	const OSD_PositionOptions = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
@@ -322,7 +307,7 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.position.options.center"),
 			value: "center"
 		}
-	] as { label: string; value: OnScreenDisplayPosition }[] as SelectOption[];
+	] as SelectOption<"osd_display_position">[];
 	const YouTubePlayerQualityOptions = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
@@ -335,20 +320,20 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
-	].reverse() as { label: YoutubePlayerQualityLevel; value: YoutubePlayerQualityLabel }[] as SelectOption[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() })) as {
-		label: string;
-		value: string;
-	}[] as SelectOption[];
+	].reverse() as SelectOption<"player_quality">[];
+	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({
+		label: rate?.toString(),
+		value: rate?.toString()
+	})) as SelectOption<"player_speed">[];
 	const ScreenshotFormatOptions = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
-	] as { label: string; value: ScreenshotFormat }[] as SelectOption[];
+	] as SelectOption<"screenshot_format">[];
 	const ScreenshotSaveAsOptions = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
-	] as { label: string; value: ScreenshotType }[] as SelectOption[];
+	] as SelectOption<"screenshot_save_as">[];
 	const VolumeBoostModeOptions = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
@@ -358,7 +343,7 @@ export default function Settings() {
 			label: t("settings.sections.volumeBoost.mode.select.options.perVideo"),
 			value: "per_video"
 		}
-	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
+	] as SelectOption<"volume_boost_mode">[];
 	const buttonPlacementOptions = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
@@ -370,7 +355,14 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	] as { label: string; value: ButtonPlacement }[] as SelectOption[];
+	] as SelectOption<
+		| "button_placements.loopButton"
+		// eslint-disable-next-line no-secrets/no-secrets
+		| "button_placements.maximizePlayerButton"
+		| "button_placements.openTranscriptButton"
+		| "button_placements.screenshotButton"
+		| "button_placements.volumeBoostButton"
+	>[];
 	const videoHistoryResumeTypeOptions = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
@@ -380,7 +372,7 @@ export default function Settings() {
 			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
 			value: "prompt"
 		}
-	] as { label: string; value: VideoHistoryResumeType }[] as SelectOption[];
+	] as SelectOption<"video_history_resume_type">[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -501,7 +493,7 @@ export default function Settings() {
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								id={`button_placements.${feature}`}
+								id={`button_placements.${feature}` as `button_placements.${FeaturesThatHaveButtons}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}
