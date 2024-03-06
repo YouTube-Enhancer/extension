@@ -139,3 +139,5 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostMode).optional()
 });
+export const DEV_MODE = process.env.__DEV__ === "true";
+export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;
