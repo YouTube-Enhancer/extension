@@ -28,10 +28,11 @@ async function getLanguageOptions() {
 		try {
 			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
-			return Promise.resolve({
+			const languageOption: SelectOption<"language"> = {
 				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
 				value: locale
-			} as SelectOption<"language">);
+			};
+			return Promise.resolve(languageOption);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -107,7 +108,7 @@ async function fetchSettings() {
 		return settings;
 	} catch (error) {
 		console.error("Failed to get settings:", error);
-		throw new Error("Failed to fetch settings"); //
+		throw new Error("Failed to fetch settings");
 	}
 }
 async function setSettings(settings: configuration) {
@@ -206,27 +207,28 @@ export default function Settings() {
 			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
-	const scrollWheelControlModifierKeyOptions = [
-		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Alt"
-			}),
-			value: "altKey"
-		},
-		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Ctrl"
-			}),
-			value: "ctrlKey"
-		},
-		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Shift"
-			}),
-			value: "shiftKey"
-		}
-	] as SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[];
-	const colorOptions = [
+	const scrollWheelControlModifierKeyOptions: SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[] =
+		[
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Alt"
+				}),
+				value: "altKey"
+			},
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Ctrl"
+				}),
+				value: "ctrlKey"
+			},
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Shift"
+				}),
+				value: "shiftKey"
+			}
+		];
+	const colorOptions: SelectOption<"osd_display_color">[] = [
 		{
 			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
@@ -267,8 +269,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
-	] as SelectOption<"osd_display_color">[];
-	const OSD_DisplayTypeOptions = [
+	];
+	const OSD_DisplayTypeOptions: SelectOption<"osd_display_type">[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
@@ -285,8 +287,8 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
 			value: "round"
 		}
-	] as SelectOption<"osd_display_type">[];
-	const OSD_PositionOptions = [
+	];
+	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
@@ -307,7 +309,7 @@ export default function Settings() {
 			label: t("settings.sections.onScreenDisplaySettings.position.options.center"),
 			value: "center"
 		}
-	] as SelectOption<"osd_display_position">[];
+	];
 	const YouTubePlayerQualityOptions = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
@@ -320,21 +322,23 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
+		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
 	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
+		// This cast is here because I'm not sure what the proper type is
 	})) as SelectOption<"player_speed">[];
-	const ScreenshotFormatOptions = [
+	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
-	] as SelectOption<"screenshot_format">[];
-	const ScreenshotSaveAsOptions = [
+	];
+	const ScreenshotSaveAsOptions: SelectOption<"screenshot_save_as">[] = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
-	] as SelectOption<"screenshot_save_as">[];
-	const VolumeBoostModeOptions = [
+	];
+	const VolumeBoostModeOptions: SelectOption<"volume_boost_mode">[] = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
 			value: "global"
@@ -343,8 +347,15 @@ export default function Settings() {
 			label: t("settings.sections.volumeBoost.mode.select.options.perVideo"),
 			value: "per_video"
 		}
-	] as SelectOption<"volume_boost_mode">[];
-	const buttonPlacementOptions = [
+	];
+	const buttonPlacementOptions: SelectOption<
+		| "button_placements.loopButton"
+		// eslint-disable-next-line no-secrets/no-secrets
+		| "button_placements.maximizePlayerButton"
+		| "button_placements.openTranscriptButton"
+		| "button_placements.screenshotButton"
+		| "button_placements.volumeBoostButton"
+	>[] = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
 		{
@@ -355,15 +366,8 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	] as SelectOption<
-		| "button_placements.loopButton"
-		// eslint-disable-next-line no-secrets/no-secrets
-		| "button_placements.maximizePlayerButton"
-		| "button_placements.openTranscriptButton"
-		| "button_placements.screenshotButton"
-		| "button_placements.volumeBoostButton"
-	>[];
-	const videoHistoryResumeTypeOptions = [
+	];
+	const videoHistoryResumeTypeOptions: SelectOption<"video_history_resume_type">[] = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
 			value: "automatic"
@@ -372,7 +376,7 @@ export default function Settings() {
 			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
 			value: "prompt"
 		}
-	] as SelectOption<"video_history_resume_type">[];
+	];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
