@@ -142,7 +142,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				ref={expandButtonRef}
 			/>
 			<Editor
-				className={"h-full w-full grow"}
+				className={"size-full grow"}
 				height={isEditorExpanded ? editorHeight : 700}
 				language="css"
 				onChange={handleEditorChange}
