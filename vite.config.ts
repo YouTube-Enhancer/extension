@@ -4,6 +4,7 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 
 import checkLocalesForMissingKeys from "./src/utils/checkLocalesForMissingKeys";
+import { ENABLE_SOURCE_MAP } from "./src/utils/constants";
 import buildContentScript from "./src/utils/plugins/build-content-script";
 import copyBuild from "./src/utils/plugins/copy-build";
 import copyPublic from "./src/utils/plugins/copy-public";
@@ -13,6 +14,7 @@ import { assetsDir, componentsDir, emptyOutputFolder, hooksDir, outDir, pagesDir
 import updateAvailableLocales from "./src/utils/updateAvailableLocales";
 import updateLocalePercentages from "./src/utils/updateLocalePercentages";
 config();
+
 export default function build() {
 	emptyOutputFolder();
 	void updateAvailableLocales();
@@ -36,7 +38,7 @@ export default function build() {
 					}
 				}
 			},
-			sourcemap: process.env.__DEV__ === "true" ? "inline" : false
+			sourcemap: ENABLE_SOURCE_MAP
 		},
 		plugins: [react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		resolve: {
