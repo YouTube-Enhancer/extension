@@ -8,6 +8,7 @@ import type {
 	MessageMappings,
 	MessageSource,
 	Messages,
+	Nullable,
 	OnScreenDisplayPosition,
 	Path,
 	PathValue,
@@ -42,7 +43,7 @@ export const toDivisible = (value: number, divider: number): number => Math.ceil
 export function chooseClosestQuality(
 	selectedQuality: YoutubePlayerQualityLevel,
 	availableQualities: YoutubePlayerQualityLevel[]
-): YoutubePlayerQualityLevel | null {
+): Nullable<YoutubePlayerQualityLevel> {
 	// If there are no available qualities, return null
 	if (availableQualities.length === 0) {
 		return null;
@@ -343,7 +344,7 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 		// Log a message to the console to let the user know what's happening.
 		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 		// Create a Map to store the elements as they are found.
-		const elementsMap = new Map<string, Element | null>();
+		const elementsMap = new Map<string, Nullable<Element>>();
 		// Get the number of selectors in the array so we know how many elements we are waiting for.
 		const { length: selectorsCount } = selectors;
 		// Create a counter for the number of elements that have been found.

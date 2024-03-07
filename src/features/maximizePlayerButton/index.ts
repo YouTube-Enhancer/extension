@@ -1,5 +1,5 @@
 import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -45,9 +45,9 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		setupVideoPlayerTimeUpdate();
 	}
 
-	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
-	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
-	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
+	const pipElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-pip-button");
+	const sizeElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-size-button");
+	const miniPlayerElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-miniplayer-button");
 	function otherElementClickListener() {
 		// Get the video element
 		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
