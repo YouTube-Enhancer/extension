@@ -1,6 +1,6 @@
 import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
-import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, WithId } from "@/src/types";
+import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, Nullable, WithId } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForAllElements } from "@/src/utils/utilities";
@@ -184,15 +184,15 @@ export function getFeatureIds(featureName: FeatureName): {
 		featureMenuItemLabelId
 	};
 }
-export function getFeatureMenuItemIcon(featureName: FeatureName): HTMLDivElement | null {
+export function getFeatureMenuItemIcon(featureName: FeatureName): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemIconId> = `#yte-${featureName}-icon`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItemLabel(featureName: FeatureName): HTMLDivElement | null {
+export function getFeatureMenuItemLabel(featureName: FeatureName): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${featureName}-label`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItem(featureName: FeatureName): HTMLDivElement | null {
+export function getFeatureMenuItem(featureName: FeatureName): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${featureName}-menuitem`;
 	return document.querySelector(`#yte-panel-menu > ${selector}`);
 }

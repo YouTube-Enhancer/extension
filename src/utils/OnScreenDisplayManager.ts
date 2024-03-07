@@ -1,4 +1,4 @@
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, YouTubePlayerDiv } from "../types";
+import type { Nullable, OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, YouTubePlayerDiv } from "../types";
 
 import { browserColorLog, calculateCanvasPosition, clamp, createStyledElement, isShortsPage, round } from "./utilities";
 
@@ -9,7 +9,7 @@ export type DisplayOptions = {
 	displayPadding: number;
 	displayPosition: OnScreenDisplayPosition;
 	displayType: OnScreenDisplayType;
-	playerContainer: YouTubePlayerDiv | null;
+	playerContainer: Nullable<YouTubePlayerDiv>;
 };
 
 export const valueType = {
@@ -24,7 +24,7 @@ type Value<V extends ValueType> = {
 	value: number;
 };
 
-export const ensurePlayerContainerExists = (playerContainer: YouTubePlayerDiv | null): playerContainer is YouTubePlayerDiv => {
+export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePlayerDiv>): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {
 		throw new Error("Player container not found");
 	}
@@ -45,7 +45,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	protected canvas: HTMLCanvasElement;
 
 	// Context for the canvas element.
-	protected context: CanvasRenderingContext2D | null = null;
+	protected context: Nullable<CanvasRenderingContext2D> = null;
 	constructor(
 		// Options for the display.
 		protected options: DisplayOptions,
@@ -192,7 +192,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		}
 	}
 
-	private getContext(): CanvasRenderingContext2D | null {
+	private getContext(): Nullable<CanvasRenderingContext2D> {
 		const context = this.canvas.getContext("2d");
 		if (!context) {
 			this.handleError("Canvas context not found");
@@ -200,7 +200,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		return context;
 	}
 
-	private getExistingCanvas(): HTMLCanvasElement | null {
+	private getExistingCanvas(): Nullable<HTMLCanvasElement> {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return null;
 		return this.options.playerContainer.parentElement?.parentElement?.querySelector(`canvas#${this.displayId}`) ?? null;
 	}
@@ -242,7 +242,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
 
 		// Find elements for positioning the canvas.
-		const bottomElement: HTMLDivElement | null =
+		const bottomElement: Nullable<HTMLDivElement> =
 			document.querySelector(
 				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 			) ?? document.querySelector(".ytp-chrome-bottom");

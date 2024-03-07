@@ -1,4 +1,4 @@
-import type { FeaturesThatHaveButtons, Path, configuration, configurationKeys } from "@/src/types";
+import type { FeaturesThatHaveButtons, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -137,7 +137,7 @@ export default function Settings() {
 			addNotification("success", "pages.options.notifications.success.saved");
 		}
 	});
-	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
+	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const { addNotification, notifications, removeNotification } = useNotifications();
 

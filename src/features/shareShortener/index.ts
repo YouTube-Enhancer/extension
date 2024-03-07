@@ -1,6 +1,6 @@
+import { type Nullable } from "@/src/types";
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
-
-let observer: MutationObserver | null = null;
+let observer: Nullable<MutationObserver> = null;
 const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
 function cleanUrl(url: string): string {
 	return url.replace(regexp, "");
