@@ -5,9 +5,72 @@ import z, { ZodType } from "zod";
 
 import type { AvailableLocales } from "../i18n";
 import type { FeatureName } from "../utils/EventManager";
+// #region Utility types
+export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+export type WithId<S extends string> = `#${S}`;
+export type Prettify<T> = {
+	[K in keyof T]: T[K];
+};
+export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+// Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
+type TypeToZod<T> = {
+	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
+		undefined extends T[K] ?
+			z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+		:	z.ZodType<T[K]>
+	:	z.ZodObject<TypeToZod<T[K]>>;
+};
+export type TypeToZodSchema<T> = z.ZodObject<{
+	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>>
+	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
+	: z.ZodType<T[K]>;
+}>;
+export type TypeToPartialZodSchema<
+	Input,
+	Omitted extends keyof Input = never,
+	Override extends { [Key in Omitted]: ZodType } = never,
+	Omit = false
+> = z.ZodObject<
+	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
+	:	{
+			[K in keyof Input]: Input[K] extends any[] ? z.ZodOptionalType<z.ZodType<Input[K]>>
+			: Input[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
+			: z.ZodOptionalType<z.ZodType<Input[K]>>;
+		}
+>;
+type PathImpl<T, Key extends keyof T> =
+	Key extends string ?
+		T[Key] extends Record<string, any> ?
+			T[Key] extends ArrayLike<any> ?
+				`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
+			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
+		:	Key
+	:	never;
+export type Path<T> = PathImpl<T, keyof T> | keyof T;
+export type PathValue<T, P extends Path<T>> =
+	P extends `${infer Key}.${infer Rest}` ?
+		Key extends keyof T ?
+			Rest extends Path<T[Key]> ?
+				PathValue<T[Key], Rest>
+			:	never
+		:	never
+	: P extends keyof T ? T[P]
+	: never;
+export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodType }> = {
+	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
+	: Omit<Input, Omitted>[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
+	: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
+} & Override;
+export type FilterKeysByValueType<O extends object, ValueType> = {
+	[K in keyof O]: O[K] extends ValueType ? K
+	: O[K] extends Record<string, ValueType> ? K
+	: never;
+}[keyof O];
+// #endregion Utility types
+// #region Constants
 export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
 export type OnScreenDisplayColor = (typeof onScreenDisplayColor)[number];
 export const onScreenDisplayType = ["no_display", "text", "line", "round"] as const;
@@ -32,25 +95,32 @@ export const youtubePlayerQualityLevel = [
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
 export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
-
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
 export const screenshotFormat = ["png", "jpeg", "webp"] as const;
-
 export type ScreenshotFormat = (typeof screenshotFormat)[number];
 export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKey)[number];
 export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export const volumeBoostMode = ["global", "per_video"] as const;
 export type VolumeBoostMode = (typeof volumeBoostMode)[number];
+export const videoHistoryResumeType = ["automatic", "prompt"] as const;
+export type VideoHistoryResumeType = (typeof videoHistoryResumeType)[number];
 export const buttonPlacement = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacement)[number];
-export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+export const featureMenuOpenType = ["click", "hover"] as const;
+export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
+export type ButtonPlacementConfiguration = {
+	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
+};
 export type FeaturesThatHaveButtons = Exclude<
 	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
 	"featureMenu"
 >;
 export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
+export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
+export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
 export const featuresThatHaveButtons = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
@@ -58,59 +128,6 @@ export const featuresThatHaveButtons = Object.keys({
 	screenshotButton: "",
 	volumeBoostButton: ""
 } satisfies Record<FeaturesThatHaveButtons, "">);
-export type ButtonPlacementConfiguration = {
-	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
-};
-export const videoHistoryResumeType = ["automatic", "prompt"] as const;
-export type VideoHistoryResumeType = (typeof videoHistoryResumeType)[number];
-export type configuration = {
-	button_placements: ButtonPlacementConfiguration;
-	custom_css_code: string;
-	enable_automatic_theater_mode: boolean;
-	enable_automatically_set_quality: boolean;
-	enable_custom_css: boolean;
-	enable_forced_playback_speed: boolean;
-	enable_hide_scrollbar: boolean;
-	enable_hide_shorts: boolean;
-	enable_loop_button: boolean;
-	enable_maximize_player_button: boolean;
-	enable_open_transcript_button: boolean;
-	enable_open_youtube_settings_on_hover: boolean;
-	enable_redirect_remover: boolean;
-	enable_remaining_time: boolean;
-	enable_remember_last_volume: boolean;
-	enable_screenshot_button: boolean;
-	enable_scroll_wheel_speed_control: boolean;
-	enable_scroll_wheel_volume_control: boolean;
-	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
-	enable_scroll_wheel_volume_control_hold_right_click: boolean;
-	enable_share_shortener: boolean;
-	enable_shorts_auto_scroll: boolean;
-	enable_video_history: boolean;
-	enable_volume_boost: boolean;
-	feature_menu_open_type: FeatureMenuOpenType;
-	language: AvailableLocales;
-	osd_display_color: OnScreenDisplayColor;
-	osd_display_hide_time: number;
-	osd_display_opacity: number;
-	osd_display_padding: number;
-	osd_display_position: OnScreenDisplayPosition;
-	osd_display_type: OnScreenDisplayType;
-	player_quality: YoutubePlayerQualityLevel;
-	player_speed: number;
-	remembered_volumes: RememberedVolumes;
-	screenshot_format: ScreenshotFormat;
-	screenshot_save_as: ScreenshotType;
-	scroll_wheel_speed_control_modifier_key: ModifierKey;
-	scroll_wheel_volume_control_modifier_key: ModifierKey;
-	speed_adjustment_steps: number;
-	video_history_resume_type: VideoHistoryResumeType;
-	volume_adjustment_steps: number;
-	volume_boost_amount: number;
-	volume_boost_mode: VolumeBoostMode;
-};
-export type configurationKeys = keyof configuration;
-export type configurationId = Path<configuration>;
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -118,6 +135,62 @@ export type VideoHistoryEntry = {
 	timestamp: number;
 };
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
+export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
+export type Selector = string;
+export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
+export type NotificationType = "error" | "info" | "success" | "warning";
+export type NotificationAction = "reset_settings" | undefined;
+export type Notification = {
+	action: NotificationAction;
+	message: ParseKeys<"en-US", TOptions, undefined>;
+	progress?: number;
+	removeAfterMs?: number;
+	timestamp?: number;
+	type: NotificationType;
+};
+export type CrowdinLanguageProgressResponse = {
+	data: {
+		data: {
+			approvalProgress: number;
+			language: {
+				androidCode: string;
+				dialectOf: null | string;
+				editorCode: string;
+				id: string;
+				locale: string;
+				name: string;
+				osxCode: string;
+				osxLocale: string;
+				pluralCategoryNames: string[];
+				pluralExamples: string[];
+				pluralRules: string;
+				textDirection: string;
+				threeLettersCode: string;
+				twoLettersCode: string;
+			};
+			languageId: string;
+			phrases: {
+				approved: number;
+				preTranslateAppliedTo: number;
+				total: number;
+				translated: number;
+			};
+			translationProgress: number;
+			words: {
+				approved: number;
+				preTranslateAppliedTo: number;
+				total: number;
+				translated: number;
+			};
+		};
+	}[];
+	pagination: {
+		limit: number;
+		offset: number;
+	};
+};
+// #endregion Constants
+// #region Extension Messaging Types
 export type MessageAction = "data_response" | "request_data" | "send_data";
 export type MessageSource = "content" | "extension";
 
@@ -221,124 +294,54 @@ export type MessageMappings = Prettify<{
 	};
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
-export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
-export type Selector = string;
-export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
-// Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
-type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
-		undefined extends T[K] ?
-			z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-		:	z.ZodType<T[K]>
-	:	z.ZodObject<TypeToZod<T[K]>>;
+// #endregion Extension Messaging Types
+// #region Configuration types
+export type configuration = {
+	button_placements: ButtonPlacementConfiguration;
+	custom_css_code: string;
+	enable_automatic_theater_mode: boolean;
+	enable_automatically_set_quality: boolean;
+	enable_custom_css: boolean;
+	enable_forced_playback_speed: boolean;
+	enable_hide_scrollbar: boolean;
+	enable_hide_shorts: boolean;
+	enable_loop_button: boolean;
+	enable_maximize_player_button: boolean;
+	enable_open_transcript_button: boolean;
+	enable_open_youtube_settings_on_hover: boolean;
+	enable_redirect_remover: boolean;
+	enable_remaining_time: boolean;
+	enable_remember_last_volume: boolean;
+	enable_screenshot_button: boolean;
+	enable_scroll_wheel_speed_control: boolean;
+	enable_scroll_wheel_volume_control: boolean;
+	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
+	enable_scroll_wheel_volume_control_hold_right_click: boolean;
+	enable_share_shortener: boolean;
+	enable_shorts_auto_scroll: boolean;
+	enable_video_history: boolean;
+	enable_volume_boost: boolean;
+	feature_menu_open_type: FeatureMenuOpenType;
+	language: AvailableLocales;
+	osd_display_color: OnScreenDisplayColor;
+	osd_display_hide_time: number;
+	osd_display_opacity: number;
+	osd_display_padding: number;
+	osd_display_position: OnScreenDisplayPosition;
+	osd_display_type: OnScreenDisplayType;
+	player_quality: YoutubePlayerQualityLevel;
+	player_speed: number;
+	remembered_volumes: RememberedVolumes;
+	screenshot_format: ScreenshotFormat;
+	screenshot_save_as: ScreenshotType;
+	scroll_wheel_speed_control_modifier_key: ModifierKey;
+	scroll_wheel_volume_control_modifier_key: ModifierKey;
+	speed_adjustment_steps: number;
+	video_history_resume_type: VideoHistoryResumeType;
+	volume_adjustment_steps: number;
+	volume_boost_amount: number;
+	volume_boost_mode: VolumeBoostMode;
 };
-export type TypeToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>>
-	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
-	: z.ZodType<T[K]>;
-}>;
-export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodType }> = {
-	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
-	: Omit<Input, Omitted>[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
-	: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
-} & Override;
-export type TypeToPartialZodSchema<
-	Input,
-	Omitted extends keyof Input = never,
-	Override extends { [Key in Omitted]: ZodType } = never,
-	Omit = false
-> = z.ZodObject<
-	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
-	:	{
-			[K in keyof Input]: Input[K] extends any[] ? z.ZodOptionalType<z.ZodType<Input[K]>>
-			: Input[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
-			: z.ZodOptionalType<z.ZodType<Input[K]>>;
-		}
->;
-type PathImpl<T, Key extends keyof T> =
-	Key extends string ?
-		T[Key] extends Record<string, any> ?
-			T[Key] extends ArrayLike<any> ?
-				`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
-			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
-		:	Key
-	:	never;
-
-export type Path<T> = PathImpl<T, keyof T> | keyof T;
-
-export type PathValue<T, P extends Path<T>> =
-	P extends `${infer Key}.${infer Rest}` ?
-		Key extends keyof T ?
-			Rest extends Path<T[Key]> ?
-				PathValue<T[Key], Rest>
-			:	never
-		:	never
-	: P extends keyof T ? T[P]
-	: never;
-export type Prettify<T> = {
-	[K in keyof T]: T[K];
-};
-export type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K
-	: O[K] extends Record<string, ValueType> ? K
-	: never;
-}[keyof O];
-export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
-export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
-export const featureMenuOpenType = ["click", "hover"] as const;
-export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
-export type WithId<S extends string> = `#${S}`;
-export type NotificationType = "error" | "info" | "success" | "warning";
-
-export type NotificationAction = "reset_settings" | undefined;
-
-export type Notification = {
-	action: NotificationAction;
-	message: ParseKeys<"en-US", TOptions, undefined>;
-	progress?: number;
-	removeAfterMs?: number;
-	timestamp?: number;
-	type: NotificationType;
-};
-export type CrowdinLanguageProgressResponse = {
-	data: {
-		data: {
-			approvalProgress: number;
-			language: {
-				androidCode: string;
-				dialectOf: null | string;
-				editorCode: string;
-				id: string;
-				locale: string;
-				name: string;
-				osxCode: string;
-				osxLocale: string;
-				pluralCategoryNames: string[];
-				pluralExamples: string[];
-				pluralRules: string;
-				textDirection: string;
-				threeLettersCode: string;
-				twoLettersCode: string;
-			};
-			languageId: string;
-			phrases: {
-				approved: number;
-				preTranslateAppliedTo: number;
-				total: number;
-				translated: number;
-			};
-			translationProgress: number;
-			words: {
-				approved: number;
-				preTranslateAppliedTo: number;
-				total: number;
-				translated: number;
-			};
-		};
-	}[];
-	pagination: {
-		limit: number;
-		offset: number;
-	};
-};
+export type configurationKeys = keyof configuration;
+export type configurationId = Path<configuration>;
+// #endregion Configuration types
