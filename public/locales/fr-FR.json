@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Menu des fonctionnalités"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers",
 					"label": "Capture d'écran"
 				},
-				"videoHistory": {
-					"resumeButton": "Reprendre",
-					"resumePrompt": {
-						"close": "Fermer"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Gain sonore",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Reprendre",
+					"resumePrompt": {
+						"close": "Fermer"
 					}
 				}
 			}
