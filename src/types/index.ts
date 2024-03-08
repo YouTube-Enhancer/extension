@@ -14,7 +14,7 @@ export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type ExtractFeatureName<T> = T extends `pages.content.features.${infer FeatureName}.label` ? FeatureName : never;
+export type ExtractButtonNames<T> = T extends `pages.content.buttons.${infer ButtonName}.label` ? ButtonName : never;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
@@ -113,10 +113,7 @@ export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
 export type ButtonPlacementConfiguration = {
 	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
 };
-export type FeaturesThatHaveButtons = Exclude<
-	ExtractFeatureName<ParseKeys<"en-US", TOptions, undefined> & `pages.content.features.${FeatureName}.label`>,
-	"featureMenu"
->;
+export type FeaturesThatHaveButtons = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
 export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
