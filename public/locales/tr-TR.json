@@ -29,7 +29,6 @@
 					"label": "Not dökümünü aç"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
 					"label": "Ekran Görüntüsü"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot copied to clipboard"
+				},
 				"videoHistory": {
 					"resumeButton": "Devam Et",
 					"resumePrompt": {
