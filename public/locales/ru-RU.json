@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Меню функций"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Скриншот скопирован в буфер обмена",
 					"label": "Скриншот"
 				},
-				"videoHistory": {
-					"resumeButton": "Возобновить",
-					"resumePrompt": {
-						"close": "Закрыть"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Усиление громкости",
 					"toggle": {
 						"off": "Увеличение громкости выключено",
 						"on": "Увеличение громкости включено"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Возобновить",
+					"resumePrompt": {
+						"close": "Закрыть"
 					}
 				}
 			}
