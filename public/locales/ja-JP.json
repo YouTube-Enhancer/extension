@@ -29,7 +29,6 @@
 					"label": "文字起こしを見せる"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
 					"label": "スクリーンショット"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot copied to clipboard"
+				},
 				"videoHistory": {
 					"resumeButton": "レジューム",
 					"resumePrompt": {
