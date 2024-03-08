@@ -1,4 +1,5 @@
 import { useSettings } from "@/src/components/Settings/Settings";
+import { type Nullable } from "@/src/types";
 import { MarkerSeverity, type editor } from "@/src/utils/monaco";
 import { cn } from "@/src/utils/utilities";
 import React, { forwardRef } from "react";
@@ -6,7 +7,7 @@ import React, { forwardRef } from "react";
 import "./index.css";
 type EditorProblemsProps = {
 	className: string;
-	editor: editor.IStandaloneCodeEditor | null;
+	editor: Nullable<editor.IStandaloneCodeEditor>;
 	problems: editor.IMarker[];
 };
 const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ className, editor, problems }, ref) => {

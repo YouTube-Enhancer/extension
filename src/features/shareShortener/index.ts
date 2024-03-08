@@ -1,6 +1,23 @@
+import { type Nullable } from "@/src/types";
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
-
-let observer: MutationObserver | null = null;
+let observer: Nullable<MutationObserver> = null;
+const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
+function cleanUrl(url: string): string {
+	return url.replace(regexp, "");
+}
+function cleanAndUpdateUrl(): void {
+	setTimeout(() => {
+		const input = document.querySelector<HTMLInputElement>("#share-url");
+		if (input) {
+			input.value = cleanUrl(input.value);
+		}
+	}, 0);
+}
+function handleKeyPress(event: KeyboardEvent) {
+	if (event.key === "Enter") {
+		cleanAndUpdateUrl();
+	}
+}
 export async function enableShareShortener() {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -10,8 +27,6 @@ export async function enableShareShortener() {
 	} = optionsData;
 	if (!enable_share_shortener) return;
 
-	const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
-
 	function attachEventListener(): void {
 		const checkbox = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-checkbox");
 		const tsInput = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-input .input-element input");
@@ -19,42 +34,22 @@ export async function enableShareShortener() {
 		allElements.forEach((e) => {
 			const href: null | string = e.getAttribute("href");
 			if (href && href.match(/^\/watch\?v\=.+$/gm)) {
-				e.setAttribute("href", href.replace(regexp, ""));
+				e.setAttribute("href", cleanUrl(href));
 			}
 		});
 
 		if (checkbox && tsInput) {
-			checkbox.addEventListener("DOMAttrModified", function (this: HTMLInputElement) {
-				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-				if (shareUrlInput) {
-					setTimeout(() => {
-						shareUrlInput.value = shareUrlInput.value.replace(regexp, "");
-					}, 0);
-				}
-			});
-
-			tsInput.addEventListener("keypress", function (event: KeyboardEvent) {
-				if (event.key === "Enter") {
-					setTimeout(() => {
-						const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-						if (shareUrlInput) {
-							const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
-							shareUrlInput.value = cleanUrl;
-						}
-					}, 0);
-				}
-			});
+			checkbox.removeEventListener("DOMAttrModified", cleanAndUpdateUrl);
+			tsInput.removeEventListener("keypress", handleKeyPress);
+			checkbox.addEventListener("DOMAttrModified", cleanAndUpdateUrl);
+			tsInput.addEventListener("keypress", handleKeyPress);
 		}
 	}
 
 	function monitorUrl(mutationsList: MutationRecord[]): void {
 		for (const mutation of mutationsList) {
 			if (mutation.target !== document.getElementById("share-url")) {
-				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-				if (shareUrlInput) {
-					const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
-					shareUrlInput.value = cleanUrl;
-				}
+				cleanAndUpdateUrl();
 			}
 		}
 	}

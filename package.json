@@ -28,6 +28,7 @@
     "monaco-editor": "^0.46.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.0.1",
     "vite-plugin-css-injected-by-js": "^3.3.0",
     "webextension-polyfill": "^0.10.0"
   },
@@ -39,7 +40,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/archiver": "^6.0.1",
-    "@types/chrome": "^0.0.260",
+    "@types/chrome": "^0.0.262",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",

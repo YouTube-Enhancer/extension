@@ -1,4 +1,4 @@
-import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
+import type { FeaturesThatHaveButtons, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -11,6 +11,7 @@ import { configurationImportSchema, defaultConfiguration as defaultSettings } fr
 import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
+import { MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -22,16 +23,16 @@ import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
-
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
 			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
-			return Promise.resolve({
+			const languageOption: SelectOption<"language"> = {
 				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
 				value: locale
-			} as SelectOption);
+			};
+			return Promise.resolve(languageOption);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -39,8 +40,8 @@ async function getLanguageOptions() {
 
 	const results = await Promise.allSettled(promises);
 
-	const languageOptions: SelectOption[] = results
-		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
+	const languageOptions: SelectOption<"language">[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
 		.map((result) => result.value);
 
 	return languageOptions;
@@ -54,7 +55,7 @@ function LanguageOptions({
 	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	t: i18nInstanceType["t"];
 }) {
-	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
+	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
 	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
 		void (async () => {
@@ -107,7 +108,7 @@ async function fetchSettings() {
 		return settings;
 	} catch (error) {
 		console.error("Failed to get settings:", error);
-		throw new Error("Failed to fetch settings"); //
+		throw new Error("Failed to fetch settings");
 	}
 }
 async function setSettings(settings: configuration) {
@@ -136,7 +137,7 @@ export default function Settings() {
 			addNotification("success", "pages.options.notifications.success.saved");
 		}
 	});
-	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
+	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const { addNotification, notifications, removeNotification } = useNotifications();
 
@@ -206,69 +207,70 @@ export default function Settings() {
 			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
-	const scrollWheelControlModifierKeyOptions = [
+	const scrollWheelControlModifierKeyOptions: SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[] =
+		[
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Alt"
+				}),
+				value: "altKey"
+			},
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Ctrl"
+				}),
+				value: "ctrlKey"
+			},
+			{
+				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+					KEY: "Shift"
+				}),
+				value: "shiftKey"
+			}
+		];
+	const colorOptions: SelectOption<"osd_display_color">[] = [
 		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Alt"
-			}),
-			value: "altKey"
-		},
-		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Ctrl"
-			}),
-			value: "ctrlKey"
-		},
-		{
-			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-				KEY: "Shift"
-			}),
-			value: "shiftKey"
-		}
-	] as { label: string; value: ModifierKey }[] as SelectOption[];
-	const colorOptions: SelectOption[] = [
-		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
 	];
-	const OSD_DisplayTypeOptions: SelectOption[] = [
+	const OSD_DisplayTypeOptions: SelectOption<"osd_display_type">[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
@@ -286,7 +288,7 @@ export default function Settings() {
 			value: "round"
 		}
 	];
-	const OSD_PositionOptions: SelectOption[] = [
+	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
@@ -308,7 +310,7 @@ export default function Settings() {
 			value: "center"
 		}
 	];
-	const YouTubePlayerQualityOptions: SelectOption[] = [
+	const YouTubePlayerQualityOptions = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
 		{ label: "360p", value: "medium" },
@@ -320,18 +322,23 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
-	].reverse();
-	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() }));
-	const ScreenshotFormatOptions: SelectOption[] = [
+		// This cast is here because otherwise it would require marking all the options 'as const'
+	].reverse() as SelectOption<"player_quality">[];
+	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({
+		label: rate?.toString(),
+		value: rate?.toString()
+		// This cast is here because I'm not sure what the proper type is
+	})) as SelectOption<"player_speed">[];
+	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
 	];
-	const ScreenshotSaveAsOptions: SelectOption[] = [
+	const ScreenshotSaveAsOptions: SelectOption<"screenshot_save_as">[] = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
 	];
-	const VolumeBoostModeOptions: SelectOption[] = [
+	const VolumeBoostModeOptions: SelectOption<"volume_boost_mode">[] = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
 			value: "global"
@@ -340,8 +347,15 @@ export default function Settings() {
 			label: t("settings.sections.volumeBoost.mode.select.options.perVideo"),
 			value: "per_video"
 		}
-	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
-	const buttonPlacementOptions: SelectOption[] = [
+	];
+	const buttonPlacementOptions: SelectOption<
+		| "button_placements.loopButton"
+		// eslint-disable-next-line no-secrets/no-secrets
+		| "button_placements.maximizePlayerButton"
+		| "button_placements.openTranscriptButton"
+		| "button_placements.screenshotButton"
+		| "button_placements.volumeBoostButton"
+	>[] = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
 		{
@@ -352,11 +366,8 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	] as {
-		label: string;
-		value: ButtonPlacement;
-	}[] as SelectOption[];
-	const videoHistoryResumeTypeOptions: SelectOption[] = [
+	];
+	const videoHistoryResumeTypeOptions: SelectOption<"video_history_resume_type">[] = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
 			value: "automatic"
@@ -365,7 +376,7 @@ export default function Settings() {
 			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
 			value: "prompt"
 		}
-	] as { label: string; value: VideoHistoryResumeType }[] as SelectOption[];
+	];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -447,12 +458,16 @@ export default function Settings() {
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
 	};
+	const openInNewTab = (path: string) => {
+		const url = chrome.runtime.getURL(path);
+		void chrome.tabs.create({ url });
+	};
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
-			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+			<div className="size-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
 				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
-					<img className="h-16 w-16 sm:h-16 sm:w-16" src="/icons/icon_128.png" />
+					<img className="size-16 sm:size-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
@@ -482,7 +497,7 @@ export default function Settings() {
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								id={`button_placements.${feature}`}
+								id={`button_placements.${feature}` as `button_placements.${FeaturesThatHaveButtons}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}
@@ -939,6 +954,17 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
+					{window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g) && (
+						<button
+							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							id="openinnewtab_button"
+							onClick={() => openInNewTab("src/pages/options/index.html")}
+							title={t("settings.sections.bottomButtons.openTab.title")}
+							type="button"
+						>
+							<MdOutlineOpenInNew color="white" size={20} />
+						</button>
+					)}
 					<input
 						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"

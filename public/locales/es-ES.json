@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Menú de funciones"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
 					"label": "Capturar pantalla"
 				},
-				"videoHistory": {
-					"resumeButton": "Reanudar",
-					"resumePrompt": {
-						"close": "Cerrar"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Potenciar volumen",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Reanudar",
+					"resumePrompt": {
+						"close": "Cerrar"
 					}
 				}
 			}
@@ -91,6 +93,9 @@
 				"confirm": {
 					"title": "Confirma el restablecimiento de los ajustes",
 					"value": "Confirmar"
+				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
 				},
 				"reset": {
 					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
