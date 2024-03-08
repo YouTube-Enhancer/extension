@@ -7,18 +7,18 @@ interface EnUS {
 	};
 	pages: {
 		content: {
-			features: {
+			buttons: {
 				featureMenu: { label: "Feature menu" };
 				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
 				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
 				openTranscriptButton: { label: "Open transcript" };
 				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
-				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
 				volumeBoostButton: {
 					label: "Volume Boost";
 					toggle: { off: "Volume boost off"; on: "Volume boost on" };
 				};
 			};
+			features: { videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } } };
 		};
 		options: {
 			notifications: {

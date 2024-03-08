@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "功能選單"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "螢幕截圖已複製剪貼簿",
 					"label": "螢幕截圖"
 				},
-				"videoHistory": {
-					"resumeButton": "繼續",
-					"resumePrompt": {
-						"close": "關閉"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "音量增強",
 					"toggle": {
 						"off": "關閉音量增強",
 						"on": "啟用音量增強"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "繼續",
+					"resumePrompt": {
+						"close": "關閉"
 					}
 				}
 			}
@@ -88,12 +90,12 @@
 					"title": "清除這個擴充套件儲存在此機上的資料",
 					"value": "清除資料"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "確認重設設定",
 					"value": "確認"
+				},
+				"openTab": {
+					"title": "於新頁面開啟擴充套件設定"
 				},
 				"reset": {
 					"title": "將所以設定回復到初始值，按確認儲存變更",

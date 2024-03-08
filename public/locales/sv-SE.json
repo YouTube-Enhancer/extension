@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Funktionsmeny"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Skärmbild kopierad till urklipp",
 					"label": "Skärmbild"
 				},
-				"videoHistory": {
-					"resumeButton": "Återuppta",
-					"resumePrompt": {
-						"close": "Stäng"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Volymökning",
 					"toggle": {
 						"off": "Volymökning av",
 						"on": "Volymökning på"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Återuppta",
+					"resumePrompt": {
+						"close": "Stäng"
 					}
 				}
 			}
@@ -88,12 +90,12 @@
 					"title": "Rensar all data som detta tillägg har lagrat på din dator",
 					"value": "Rensa data"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Bekräfta återställning av inställningar",
 					"value": "Bekräfta"
+				},
+				"openTab": {
+					"title": "Öppna tilläggsinställningar i en ny flik"
 				},
 				"reset": {
 					"title": "Återställer alla inställningar till sina standardinställningar, Klicka på bekräftelseknappen för att spara ändringarna",
@@ -191,7 +193,7 @@
 					},
 					"hideShorts": {
 						"label": "Dölj shorts",
-						"title": "Gömmer alla shorts"
+						"title": "Döljer alla shorts"
 					},
 					"loopButton": {
 						"label": "Slingknapp",

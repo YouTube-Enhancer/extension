@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Feature menu"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Screenshot copied to clipboard",
 					"label": "Screenshot"
 				},
-				"videoHistory": {
-					"resumeButton": "Resume",
-					"resumePrompt": {
-						"close": "Close"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Volume Boost",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Resume",
+					"resumePrompt": {
+						"close": "Close"
 					}
 				}
 			}
@@ -88,12 +90,12 @@
 					"title": "Clears all data this extension has stored on your machine",
 					"value": "Clear Data"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Confirm setting reset",
 					"value": "Confirm"
+				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
 				},
 				"reset": {
 					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
