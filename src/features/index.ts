@@ -1,4 +1,4 @@
-import type { ButtonPlacement, FeaturesThatHaveButtons } from "@/src/types";
+import type { ButtonNames, ButtonPlacement } from "@/src/types";
 
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
@@ -32,6 +32,6 @@ export const featureButtonFunctions = {
 		add: addVolumeBoostButton,
 		remove: removeVolumeBoostButton
 	}
-} satisfies Record<FeaturesThatHaveButtons, FeatureFuncRecord>;
+} satisfies Record<ButtonNames, FeatureFuncRecord>;
 export type AddButtonFunction = () => Promise<void>;
 export type RemoveButtonFunction = (placement?: ButtonPlacement) => Promise<void>;

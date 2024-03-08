@@ -1,6 +1,6 @@
 import z, { ZodEnum, ZodObject } from "zod";
 
-import type { ButtonPlacement, FeaturesThatHaveButtons, TypeToPartialZodSchema, configuration } from "../types";
+import type { ButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
 
 import { availableLocales } from "../i18n/index";
 import {
@@ -79,7 +79,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	"button_placements",
 	{
 		button_placements: ZodObject<{
-			[K in FeaturesThatHaveButtons]: ZodEnum<[ButtonPlacement]>;
+			[K in ButtonNames]: ZodEnum<[ButtonPlacement]>;
 		}>;
 	},
 	true
@@ -87,7 +87,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	button_placements: z.object({
 		...featuresThatHaveButtons.reduce(
 			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacement).optional() }),
-			{} as Record<FeaturesThatHaveButtons, ZodEnum<[ButtonPlacement]>>
+			{} as Record<ButtonNames, ZodEnum<[ButtonPlacement]>>
 		)
 	}),
 	custom_css_code: z.string().optional(),

@@ -111,9 +111,9 @@ export type ButtonPlacement = (typeof buttonPlacement)[number];
 export const featureMenuOpenType = ["click", "hover"] as const;
 export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
 export type ButtonPlacementConfiguration = {
-	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
+	[Key in ButtonNames]: ButtonPlacement;
 };
-export type FeaturesThatHaveButtons = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
+export type ButtonNames = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
 export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
 export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
 export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
@@ -124,7 +124,7 @@ export const featuresThatHaveButtons = Object.keys({
 	openTranscriptButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
-} satisfies Record<FeaturesThatHaveButtons, "">);
+} satisfies Record<ButtonNames, "">);
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -224,7 +224,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"buttonPlacementChange",
 		{
 			buttonPlacement: {
-				[Key in FeaturesThatHaveButtons]: {
+				[Key in ButtonNames]: {
 					new: ButtonPlacement;
 					old: ButtonPlacement;
 				};
