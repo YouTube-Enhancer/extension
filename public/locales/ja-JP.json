@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "フィーチャー・メニュー"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
 					"label": "スクリーンショット"
 				},
-				"videoHistory": {
-					"resumeButton": "レジューム",
-					"resumePrompt": {
-						"close": "終了"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "音量ブースト",
 					"toggle": {
 						"off": "音量ブーストオフ",
 						"on": "音量ブーストオン"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "レジューム",
+					"resumePrompt": {
+						"close": "終了"
 					}
 				}
 			}
