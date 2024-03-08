@@ -341,9 +341,9 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						window.i18nextInstance = await i18nService(language);
 						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.label"));
+							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.buttons.featureMenu.label"));
 							for (const feature of featuresInMenu) {
-								updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+								updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
 							}
 						}
 						if (featuresInControls.size > 0) {
@@ -355,10 +355,10 @@ window.addEventListener("DOMContentLoaded", function () {
 									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
 									updateFeatureButtonTitle(
 										feature,
-										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.toggle.${buttonChecked ? "on" : "off"}`)
+										window.i18nextInstance.t(`pages.content.buttons.${toggleFeature}.toggle.${buttonChecked ? "on" : "off"}`)
 									);
 								} else {
-									updateFeatureButtonTitle(feature, window.i18nextInstance.t(`pages.content.features.${feature}.label`));
+									updateFeatureButtonTitle(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
 								}
 							}
 						}

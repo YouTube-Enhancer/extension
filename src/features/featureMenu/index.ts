@@ -46,7 +46,7 @@ async function createFeatureMenuButton() {
 		elementType: "button",
 		styles: { display: "none" }
 	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.label");
+	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.buttons.featureMenu.label");
 	// Create the SVG icon for the button
 	const featureButtonSVG = makeFeatureMenuIcon();
 	featureMenuButton.appendChild(featureButtonSVG);
