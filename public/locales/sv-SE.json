@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Funktionsmeny"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Skärmbild kopierad till urklipp",
 					"label": "Skärmbild"
 				},
-				"videoHistory": {
-					"resumeButton": "Återuppta",
-					"resumePrompt": {
-						"close": "Stäng"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Volymökning",
 					"toggle": {
 						"off": "Volymökning av",
 						"on": "Volymökning på"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Återuppta",
+					"resumePrompt": {
+						"close": "Stäng"
 					}
 				}
 			}
