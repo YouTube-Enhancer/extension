@@ -24,6 +24,7 @@
     "build": "tsx src/pipeline/runBuilds.ts",
     "dev": "nodemon",
     "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "playwright test",
     "format": "prettier --write .",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
