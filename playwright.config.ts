@@ -1,6 +1,7 @@
 import type { PlayerSize, YouTubePlayer } from "youtube-player/dist/types";
 
 import { buttonContainerId } from "@/src/features/buttonPlacement/utils";
+import { checkTests } from "@/src/utils/checkTests";
 import { defaultConfiguration } from "@/src/utils/constants";
 // TODO: update tests to test all button placements
 import { type BrowserContext, type Page, test as base, chromium, defineConfig, devices } from "@playwright/test";
@@ -20,6 +21,8 @@ import type {
 } from "./src/types/index";
 
 import { chooseClosestQuality, clamp } from "./src/utils/utilities";
+checkTests();
+
 type FilterKeysByPrefix<O extends object, K extends keyof O, Prefix extends string> = K extends `${Prefix}${string}` ? K : never;
 
 type YouTubePlayerSetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "set">;
