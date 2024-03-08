@@ -1,17 +1,17 @@
-import type { ButtonPlacement, FeaturesThatHaveButtons } from "./types";
+import type { ButtonNames, ButtonPlacement } from "./types";
 
 import { createSVGElement } from "./utils/utilities";
 export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export type BasicIcon = SVGSVGElement;
 export const toggleFeatures = Object.keys({ loopButton: "", maximizePlayerButton: "", volumeBoostButton: "" } satisfies Partial<
-	Record<FeaturesThatHaveButtons, "">
+	Record<ButtonNames, "">
 >);
 export type ToggleFeatures = (typeof toggleFeatures)[number];
-export type IconType<T extends FeaturesThatHaveButtons | ToggleFeatures> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
+export type IconType<T extends ButtonNames | ToggleFeatures> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
 export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
-export type GetIconType<Name extends FeaturesThatHaveButtons, Placement extends ButtonPlacement> = FeatureIconsType[Name][GetPlacementKey<Placement>];
+export type GetIconType<Name extends ButtonNames, Placement extends ButtonPlacement> = FeatureIconsType[Name][GetPlacementKey<Placement>];
 export type FeatureIconsType = {
-	[Feature in FeaturesThatHaveButtons]: {
+	[Feature in ButtonNames]: {
 		feature_menu: BasicIcon;
 		shared_icon_position: IconType<Feature>;
 	};
@@ -226,7 +226,7 @@ export const featureIcons = {
 		}
 	}
 } satisfies FeatureIconsType;
-export function getFeatureIcon<Name extends FeaturesThatHaveButtons, Placement extends ButtonPlacement>(
+export function getFeatureIcon<Name extends ButtonNames, Placement extends ButtonPlacement>(
 	featureName: Name,
 	placement: GetPlacementKey<Placement>
 ) {

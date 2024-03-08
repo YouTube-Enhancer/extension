@@ -1,4 +1,4 @@
-import type { FeaturesThatHaveButtons, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { ButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -497,7 +497,7 @@ export default function Settings() {
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								id={`button_placements.${feature}` as `button_placements.${FeaturesThatHaveButtons}`}
+								id={`button_placements.${feature}` as `button_placements.${ButtonNames}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}

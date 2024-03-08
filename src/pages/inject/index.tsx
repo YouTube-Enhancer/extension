@@ -2,9 +2,9 @@ import type { AvailableLocales } from "@/src/i18n";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
+	type ButtonNames,
 	type ButtonPlacement,
 	type ContentSendOnlyMessageMappings,
-	type FeaturesThatHaveButtons,
 	type Messages,
 	type RememberedVolumes,
 	type StorageChanges,
@@ -212,7 +212,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 							}
 						});
 					},
-					{} as Record<FeaturesThatHaveButtons, { new: ButtonPlacement; old: ButtonPlacement }>
+					{} as Record<ButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
 				)
 			});
 		},

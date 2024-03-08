@@ -1,18 +1,20 @@
 import type { GetIconType } from "@/src/icons";
-import type { ButtonPlacement, FeaturesThatHaveButtons } from "@/src/types";
+import type { ButtonNames, ButtonPlacement } from "@/src/types";
 
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
 import { removeTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { type ListenerType, getFeatureButtonId, makeFeatureButton, placeButton } from "./utils";
-export const featuresInControls = new Set<FeaturesThatHaveButtons>();
+export const featuresInControls = new Set<ButtonNames>();
 
-export async function addFeatureButton<
-	Name extends FeaturesThatHaveButtons,
-	Placement extends ButtonPlacement,
-	Label extends string,
-	Toggle extends boolean
->(featureName: Name, placement: Placement, label: Label, icon: GetIconType<Name, Placement>, listener: ListenerType<Toggle>, isToggle: boolean) {
+export async function addFeatureButton<Name extends ButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
+	featureName: Name,
+	placement: Placement,
+	label: Label,
+	icon: GetIconType<Name, Placement>,
+	listener: ListenerType<Toggle>,
+	isToggle: boolean
+) {
 	switch (placement) {
 		case "feature_menu": {
 			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(featureName, label, icon, listener, isToggle);
@@ -29,7 +31,7 @@ export async function addFeatureButton<
 		}
 	}
 }
-export async function removeFeatureButton<Name extends FeaturesThatHaveButtons>(featureName: Name, placement?: ButtonPlacement) {
+export async function removeFeatureButton<Name extends ButtonNames>(featureName: Name, placement?: ButtonPlacement) {
 	if (placement === undefined) {
 		// Wait for the "options" message from the content script
 		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
