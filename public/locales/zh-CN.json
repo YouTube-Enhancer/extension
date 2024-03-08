@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "功能单"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "截图已复制到剪贴板",
 					"label": "截图"
 				},
-				"videoHistory": {
-					"resumeButton": "继续播放",
-					"resumePrompt": {
-						"close": "关"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "音量增强",
 					"toggle": {
 						"off": "关闭音量增强",
 						"on": "开启音量增强"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "继续播放",
+					"resumePrompt": {
+						"close": "关"
 					}
 				}
 			}
