@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Menu des fonctionnalités"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers",
 					"label": "Capture d'écran"
 				},
-				"videoHistory": {
-					"resumeButton": "Reprendre",
-					"resumePrompt": {
-						"close": "Fermer"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Gain sonore",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Reprendre",
+					"resumePrompt": {
+						"close": "Fermer"
 					}
 				}
 			}
@@ -88,12 +90,12 @@
 					"title": "Efface toutes les données stockées par cette extension sur votre ordinateur",
 					"value": "Effacer les données"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Confirmer la réinitialisation des réglages",
 					"value": "Confirmer"
+				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
 				},
 				"reset": {
 					"title": "Réinitialise tous les paramètres par défaut, cliquez sur le bouton de confirmation pour enregistrer les modifications",

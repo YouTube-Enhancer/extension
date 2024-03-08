@@ -3,11 +3,11 @@
 	"langName": "Türkçe",
 	"messages": {
 		"resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"settingVolume": "Ses güçlendirmesini {{VOLUME_BOOST_AMOUNT}} olarak ayarla"
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Özellik menüsü"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
 					"label": "Ekran Görüntüsü"
 				},
-				"videoHistory": {
-					"resumeButton": "Devam Et",
-					"resumePrompt": {
-						"close": "Kapat"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Ses Güçlendirmesi",
 					"toggle": {
 						"off": "Ses güçlendirmesi kapalı",
 						"on": "Ses güçlendirmesi açık"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Devam Et",
+					"resumePrompt": {
+						"close": "Kapat"
 					}
 				}
 			}
@@ -88,12 +90,12 @@
 					"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
 					"value": "Veriyi Temizle"
 				},
-				"openTab": {
-					"title": "Open extension settings in a new tab"
-				},
 				"confirm": {
 					"title": "Ayarı sıfırlamayı onayla",
 					"value": "Onayla"
+				},
+				"openTab": {
+					"title": "Uzantı ayarlarını yeni bir sekmede açın"
 				},
 				"reset": {
 					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
@@ -139,7 +141,7 @@
 				},
 				"enable": {
 					"label": "Özel CSS'yi etkinleştir",
-					"title": "Enables custom CSS to be applied to the page"
+					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
 				},
 				"title": "Özel CSS Ayarları"
 			},
@@ -203,7 +205,7 @@
 					},
 					"openTranscriptButton": {
 						"label": "Not dökümü düğmesini gizle",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"title": "İzlediğiniz videonun metnini açmak için özellik menüsüne bir düğme ekler"
 					},
 					"openYouTubeSettingsOnHover": {
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
@@ -211,11 +213,11 @@
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
-						"title": "Shows the remaining time of the video you're watching"
+						"title": "İzlediğiniz videonun kalan süresini gösterir"
 					},
 					"rememberLastVolume": {
 						"label": "Son ses hacmini hatırla",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+						"title": "İzlediğiniz son videonun ses seviyesini hatırlar ve yeni bir video açtığınızda bu ses seviyesine ayarlar"
 					},
 					"removeRedirect": {
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
@@ -245,7 +247,7 @@
 						"white": "Beyaz",
 						"yellow": "Sarı"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Ekran göstergesinin rengini seçin"
 				},
 				"hide": {
 					"label": "Gecikmeyi Gizle",
@@ -289,7 +291,7 @@
 				},
 				"select": {
 					"label": "Oynatma hızı",
-					"title": "The speed to set the video to"
+					"title": "Video oynatma hızını ayarlar"
 				},
 				"title": "Oynatma hızı ayarları"
 			},
@@ -314,38 +316,38 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Kaydırma başına hız değişimi",
+					"title": "Kaydırma başına hız değiştirmeyi ayarlar"
 				},
 				"enable": {
 					"label": "Kaydırma tekerleği hız kontrolü",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"title": "Kaydırma tekerleği ile hız ayarını etkinleştirmek için değiştirici tuşlarından birine basın."
 				},
 				"optionLabel": "{{KEY}} anahtarı",
 				"select": {
 					"label": "Düzenleyici anahtar",
-					"title": "The modifier key to use"
+					"title": "Kullanılacak kısayol düğmesi"
 				},
 				"title": "Scroll wheel speed control settings"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "Her kaydırmada değiştirilecek ses düzeyi",
+					"title": "Her kaydırmada değiştirilecek ses düzeyini ayarlayın"
 				},
 				"enable": {
 					"label": "Kaydırma tekerleği ile ses kontrolü",
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
+					"title": "İzlediğiniz videonun ses düzeyini kontrol etmek için kaydırma tekerleğini kullanmanızı sağlar"
 				},
 				"holdModifierKey": {
 					"enable": {
 						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
 						"label": "Düzenleyici anahtar",
-						"title": "The modifier key to use"
+						"title": "Kullanılacak kısayol düğmesi"
 					}
 				},
 				"holdRightClick": {
@@ -358,25 +360,25 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "İzlenen videoları takip edin",
+					"title": "İzlediğiniz videolarda en son nerede kaldığınızı takip eder ve oynatmaya oradan devam etmenizi sağlar"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "Devam etme türü",
 						"options": {
-							"automatic": "Automatic",
+							"automatic": "Otomatik",
 							"prompt": "Prompt"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
 					}
 				},
-				"title": "Video history settings"
+				"title": "Video geçmişi ayarları"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Ses güçlendirme miktarı (dB)",
+					"title": "Ses güçlendirme miktarı"
 				},
 				"enable": {
 					"label": "Ses güçlendirmeyi etkinleştir",
