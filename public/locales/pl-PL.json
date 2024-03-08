@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Feature menu"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Zrzut ekranu skopiowany do schowka",
 					"label": "Zrzut ekranu"
 				},
-				"videoHistory": {
-					"resumeButton": "Wznów",
-					"resumePrompt": {
-						"close": "Zamknij"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Volume Boost",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Wznów",
+					"resumePrompt": {
+						"close": "Zamknij"
 					}
 				}
 			}
