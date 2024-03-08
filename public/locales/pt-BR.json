@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Menu de recursos"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Captura de tela copiada para a área de transferência",
 					"label": "Captura de tela"
 				},
-				"videoHistory": {
-					"resumeButton": "Continuar",
-					"resumePrompt": {
-						"close": "Fechar"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Impulsionador de volume",
 					"toggle": {
 						"off": "Impulso de Volume inativo",
 						"on": "Impulso de Volume ativo"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Continuar",
+					"resumePrompt": {
+						"close": "Fechar"
 					}
 				}
 			}
