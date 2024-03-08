@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Funktions-Menü"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Screenshot in Zwischenablage kopiert",
 					"label": "Bildschirmfoto"
 				},
-				"videoHistory": {
-					"resumeButton": "Fortsetzen",
-					"resumePrompt": {
-						"close": "Schließen"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Lautsärke Verstärkung",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Fortsetzen",
+					"resumePrompt": {
+						"close": "Schließen"
 					}
 				}
 			}
