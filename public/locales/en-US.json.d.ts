@@ -12,13 +12,16 @@ interface EnUS {
 				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
 				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
 				openTranscriptButton: { label: "Open transcript" };
-				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
+				screenshotButton: { label: "Screenshot" };
 				volumeBoostButton: {
 					label: "Volume Boost";
 					toggle: { off: "Volume boost off"; on: "Volume boost on" };
 				};
 			};
-			features: { videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } } };
+			features: {
+				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard" };
+				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
+			};
 		};
 		options: {
 			notifications: {

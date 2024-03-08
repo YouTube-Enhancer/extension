@@ -29,7 +29,6 @@
 					"label": "Abrir Transcrição"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Captura de tela copiada para a área de transferência",
 					"label": "Captura de tela"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
+				},
 				"videoHistory": {
 					"resumeButton": "Continuar",
 					"resumePrompt": {

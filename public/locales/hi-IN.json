@@ -29,7 +29,6 @@
 					"label": "Open transcript"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
 					"label": "Screenshot"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot copied to clipboard"
+				},
 				"videoHistory": {
 					"resumeButton": "Resume",
 					"resumePrompt": {

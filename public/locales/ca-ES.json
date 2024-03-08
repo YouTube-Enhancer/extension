@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Feature menu"
 				},
@@ -29,20 +29,24 @@
 					"label": "Open transcript"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard",
 					"label": "Screenshot"
-				},
-				"videoHistory": {
-					"resumeButton": "Resume",
-					"resumePrompt": {
-						"close": "Close"
-					}
 				},
 				"volumeBoostButton": {
 					"label": "Volume Boost",
 					"toggle": {
 						"off": "Volume boost off",
 						"on": "Volume boost on"
+					}
+				}
+			},
+			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Screenshot copied to clipboard"
+				},
+				"videoHistory": {
+					"resumeButton": "Resume",
+					"resumePrompt": {
+						"close": "Close"
 					}
 				}
 			}

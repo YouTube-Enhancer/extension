@@ -29,7 +29,6 @@
 					"label": "Открыть стенограмму"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Скриншот скопирован в буфер обмена",
 					"label": "Скриншот"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Скриншот скопирован в буфер обмена"
+				},
 				"videoHistory": {
 					"resumeButton": "Возобновить",
 					"resumePrompt": {

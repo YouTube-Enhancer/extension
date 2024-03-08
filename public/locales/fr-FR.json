@@ -29,7 +29,6 @@
 					"label": "Ouvrir la transcription"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers",
 					"label": "Capture d'écran"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers"
+				},
 				"videoHistory": {
 					"resumeButton": "Reprendre",
 					"resumePrompt": {

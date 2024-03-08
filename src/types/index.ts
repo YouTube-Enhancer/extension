@@ -4,7 +4,6 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 import z, { ZodType } from "zod";
 
 import type { AvailableLocales } from "../i18n";
-import type { FeatureName } from "../utils/EventManager";
 // #region Utility types
 export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
@@ -114,10 +113,9 @@ export type ButtonPlacementConfiguration = {
 	[Key in ButtonNames]: ButtonPlacement;
 };
 export type ButtonNames = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
-export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
-export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
+export type FeatureMenuItemIconId = `yte-${ButtonNames}-icon`;
+export type FeatureMenuItemId = `yte-feature-${ButtonNames}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${ButtonNames}-label`;
 export const featuresThatHaveButtons = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
