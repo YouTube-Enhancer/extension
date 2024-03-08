@@ -19,7 +19,8 @@
     "lint:fix": "eslint . --fix",
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
-    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
+    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js",
+		"test": "playwright test"
   },
   "type": "module",
   "optionalDependencies": {
