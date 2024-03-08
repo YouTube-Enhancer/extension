@@ -29,7 +29,6 @@
 					"label": "打開文字記錄"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "螢幕截圖已複製剪貼簿",
 					"label": "螢幕截圖"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "螢幕截圖已複製剪貼簿"
+				},
 				"videoHistory": {
 					"resumeButton": "繼續",
 					"resumePrompt": {

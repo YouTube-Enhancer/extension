@@ -29,7 +29,6 @@
 					"label": "打开转写文稿"
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "截图已复制到剪贴板",
 					"label": "截图"
 				},
 				"volumeBoostButton": {
@@ -41,6 +40,9 @@
 				}
 			},
 			"features": {
+				"screenshotButton": {
+					"copiedToClipboard": "截图已复制到剪贴板"
+				},
 				"videoHistory": {
 					"resumeButton": "继续播放",
 					"resumePrompt": {
