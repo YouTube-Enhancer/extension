@@ -7,7 +7,7 @@
 	},
 	"pages": {
 		"content": {
-			"features": {
+			"buttons": {
 				"featureMenu": {
 					"label": "Özellik menüsü"
 				},
@@ -32,17 +32,19 @@
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
 					"label": "Ekran Görüntüsü"
 				},
-				"videoHistory": {
-					"resumeButton": "Devam Et",
-					"resumePrompt": {
-						"close": "Kapat"
-					}
-				},
 				"volumeBoostButton": {
 					"label": "Ses Güçlendirmesi",
 					"toggle": {
 						"off": "Ses güçlendirmesi kapalı",
 						"on": "Ses güçlendirmesi açık"
+					}
+				}
+			},
+			"features": {
+				"videoHistory": {
+					"resumeButton": "Devam Et",
+					"resumePrompt": {
+						"close": "Kapat"
 					}
 				}
 			}
