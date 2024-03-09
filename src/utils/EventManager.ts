@@ -9,6 +9,7 @@ export type FeatureName =
 	| "openYouTubeSettingsOnHover"
 	| "playerQuality"
 	| "playerSpeed"
+	| "playerSpeedButtons"
 	| "remainingTime"
 	| "rememberVolume"
 	| "screenshotButton"

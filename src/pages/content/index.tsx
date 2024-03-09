@@ -1,5 +1,4 @@
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
-
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
@@ -37,9 +36,20 @@ import volumeBoost, {
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
+import {
+	type ButtonFeatureNames,
+	type ButtonNamesExcludingSingleButtonNames,
+	type ExtensionSendOnlyMessageMappings,
+	type FeatureNamesExcludingSingleButtonFeatureNames,
+	type Messages,
+	type SingleButtonNames,
+	type YouTubePlayerDiv,
+	featureNameToButtonNames
+} from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
+	findKeyByValue,
 	formatError,
 	isShortsPage,
 	isWatchPage,
@@ -341,24 +351,50 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						window.i18nextInstance = await i18nService(language);
 						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.buttons.featureMenu.label"));
+							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
-								updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
+								const featureName = findKeyByValue(feature as ButtonNamesExcludingSingleButtonNames) ?? (feature as ButtonFeatureNames);
+								if (featureNameToButtonNames.has(featureName)) {
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(
+											`pages.content.features.${featureName as FeatureNamesExcludingSingleButtonFeatureNames}.buttons.${feature as ButtonNamesExcludingSingleButtonNames}.label`
+										)
+									);
+								} else {
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+									);
+								}
 							}
 						}
 						if (featuresInControls.size > 0) {
 							for (const feature of featuresInControls) {
+								const featureName = findKeyByValue(feature as ButtonNamesExcludingSingleButtonNames) ?? (feature as ButtonFeatureNames);
 								if (toggleFeatures.includes(feature)) {
 									const toggleFeature = feature as ToggleFeatures;
 									const featureButton = getFeatureButton(toggleFeature);
 									if (!featureButton) return;
 									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
 									updateFeatureButtonTitle(
-										feature,
-										window.i18nextInstance.t(`pages.content.buttons.${toggleFeature}.toggle.${buttonChecked ? "on" : "off"}`)
+										toggleFeature,
+										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
 									);
 								} else {
-									updateFeatureButtonTitle(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
+									if (featureNameToButtonNames.has(featureName)) {
+										updateFeatureMenuItemLabel(
+											feature,
+											window.i18nextInstance.t(
+												`pages.content.features.${featureName as FeatureNamesExcludingSingleButtonFeatureNames}.buttons.${feature as ButtonNamesExcludingSingleButtonNames}.label`
+											)
+										);
+									} else {
+										updateFeatureButtonTitle(
+											feature,
+											window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+										);
+									}
 								}
 							}
 						}

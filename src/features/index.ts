@@ -12,6 +12,14 @@ export type FeatureFuncRecord = {
 };
 
 export const featureButtonFunctions = {
+	decreaseSpeedButton: {
+		add: async () => {},
+		remove: async () => {}
+	},
+	increaseSpeedButton: {
+		add: async () => {},
+		remove: async () => {}
+	},
 	loopButton: {
 		add: addLoopButton,
 		remove: removeLoopButton
