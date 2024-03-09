@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Скриншот скопирован в буфер обмена"
 				},
 				"videoHistory": {
 					"resumeButton": "Возобновить",
