@@ -3,6 +3,8 @@ import { twMerge } from "tailwind-merge";
 
 import type {
 	AnyFunction,
+	ButtonFeatureNames,
+	ButtonNames,
 	ContentSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
@@ -18,7 +20,7 @@ import type {
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { youtubePlayerQualityLevel } from "../types";
+import { featureNameToButtonNames, youtubePlayerQualityLevel } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -631,9 +633,17 @@ export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			({ [key]: value } = value);
 		} else {
-			throw new Error(`Invalid path: ${String(path)}`);
+			console.error(`Invalid path: ${String(path)}`);
 		}
 	}
 
 	return value as PathValue<T, P>;
+}
+export function findKeyByValue(value: Exclude<ButtonNames, ButtonFeatureNames>) {
+	for (const [key, values] of featureNameToButtonNames.entries()) {
+		if (values.includes(value)) {
+			return key;
+		}
+	}
+	return undefined; // Key not found
 }

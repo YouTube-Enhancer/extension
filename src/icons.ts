@@ -7,13 +7,13 @@ export const toggleFeatures = Object.keys({ loopButton: "", maximizePlayerButton
 	Record<ButtonNames, "">
 >);
 export type ToggleFeatures = (typeof toggleFeatures)[number];
-export type IconType<T extends ButtonNames | ToggleFeatures> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
+export type IconType<T extends ButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
 export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
 export type GetIconType<Name extends ButtonNames, Placement extends ButtonPlacement> = FeatureIconsType[Name][GetPlacementKey<Placement>];
 export type FeatureIconsType = {
-	[Feature in ButtonNames]: {
+	[ButtonName in ButtonNames]: {
 		feature_menu: BasicIcon;
-		shared_icon_position: IconType<Feature>;
+		shared_icon_position: IconType<ButtonName>;
 	};
 };
 
@@ -195,7 +195,17 @@ const minimizePlayerSVG = createSVGElement(
 		"stroke-width": "1.5"
 	})
 );
+const decreaseSpeedButtonSVG = createSVGElement("svg");
+const increaseSpeedButtonSVG = createSVGElement("svg");
 export const featureIcons = {
+	decreaseSpeedButton: {
+		feature_menu: decreaseSpeedButtonSVG,
+		shared_icon_position: decreaseSpeedButtonSVG
+	},
+	increaseSpeedButton: {
+		feature_menu: increaseSpeedButtonSVG,
+		shared_icon_position: increaseSpeedButtonSVG
+	},
 	loopButton: {
 		feature_menu: loopOnSVG,
 		shared_icon_position: {

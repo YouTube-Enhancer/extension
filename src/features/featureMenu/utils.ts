@@ -1,9 +1,18 @@
 import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
-import type { ButtonNames, FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, Nullable, WithId } from "@/src/types";
 
+import {
+	type ButtonFeatureNames,
+	type ButtonNames,
+	type ButtonNamesExcludingSingleButtonNames,
+	type FeatureMenuItemIconId,
+	type FeatureMenuItemId,
+	type FeatureMenuItemLabelId,
+	type Nullable,
+	type WithId
+} from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
-import { waitForAllElements } from "@/src/utils/utilities";
+import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
 
 export const featuresInMenu = new Set<ButtonNames>();
 
@@ -30,6 +39,7 @@ export async function addFeatureItemToMenu<Name extends ButtonNames, Toggle exte
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
+	const featureName = findKeyByValue(buttonName as ButtonNamesExcludingSingleButtonNames) ?? (buttonName as ButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
 
@@ -45,8 +55,8 @@ export async function addFeatureItemToMenu<Name extends ButtonNames, Toggle exte
 	if (featureExistsInMenu) {
 		const menuItem = getFeatureMenuItem(buttonName);
 		if (!menuItem) return;
-		eventManager.removeEventListener(menuItem, "click", buttonName);
-		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), buttonName);
+		eventManager.removeEventListener(menuItem, "click", featureName);
+		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 		return;
 	}
 
@@ -74,7 +84,7 @@ export async function addFeatureItemToMenu<Name extends ButtonNames, Toggle exte
 	menuItemLabel.classList.add("ytp-menuitem-label");
 	menuItemLabel.textContent = label;
 	menuItemLabel.id = featureMenuItemLabelId;
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), buttonName);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	menuItem.appendChild(menuItemLabel);
 
 	// If it's a toggle item, create the toggle elements

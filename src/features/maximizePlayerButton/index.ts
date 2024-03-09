@@ -37,7 +37,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			if (checked) remove();
 			updateFeatureButtonTitle(
 				"maximizePlayerButton",
-				window.i18nextInstance.t(`pages.content.buttons.maximizePlayerButton.toggle.${checked ? "on" : "off"}`)
+				window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.button.toggle.${checked ? "on" : "off"}`)
 			);
 		}
 		maximizePlayer();
@@ -64,7 +64,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			const icon = getFeatureIcon("maximizePlayerButton", "shared_icon_position");
 			if (button && button instanceof HTMLButtonElement) {
 				if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, icon.off);
-				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.buttons.maximizePlayerButton.toggle.off"));
+				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
 			}
 		}
 	}
@@ -72,8 +72,8 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		"maximizePlayerButton",
 		maximizePlayerButtonPlacement,
 		maximizePlayerButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.buttons.maximizePlayerButton.label")
-		:	window.i18nextInstance.t("pages.content.buttons.maximizePlayerButton.toggle.off"),
+			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.label")
+		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"),
 		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		maximizePlayerButtonClickListener,
 		true

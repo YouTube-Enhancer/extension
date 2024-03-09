@@ -21,6 +21,8 @@ import {
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
+		decreaseSpeedButton: "feature_menu",
+		increaseSpeedButton: "feature_menu",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
 		openTranscriptButton: "feature_menu",

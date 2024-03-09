@@ -13,7 +13,14 @@ export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type ExtractButtonNames<T> = T extends `pages.content.buttons.${infer ButtonName}.label` ? ButtonName : never;
+export type ExtractButtonFeatureNames<T> =
+	T extends `pages.content.features.${infer FeatureName}.button.label` ? FeatureName
+	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label` ? FeatureName
+	: never;
+export type ExtractButtonNames<T> =
+	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
+	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
+	: never;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
@@ -113,10 +120,19 @@ export type ButtonPlacementConfiguration = {
 	[Key in ButtonNames]: ButtonPlacement;
 };
 export type ButtonNames = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
+export type SingleButtonNames = Exclude<ButtonNames, ButtonNamesExcludingSingleButtonNames>;
+export type ButtonFeatureNames = Exclude<ExtractButtonFeatureNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
+export type ButtonNamesExcludingSingleButtonNames = Exclude<ButtonNames, ButtonFeatureNames>;
+export type FeatureNamesExcludingSingleButtonFeatureNames = Exclude<ButtonFeatureNames, ButtonNames>;
+export const featureNameToButtonNames: Map<FeatureNamesExcludingSingleButtonFeatureNames, ButtonNamesExcludingSingleButtonNames[]> = new Map([
+	["playerSpeedButtons", ["increaseSpeedButton", "decreaseSpeedButton"]]
+]);
 export type FeatureMenuItemIconId = `yte-${ButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${ButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${ButtonNames}-label`;
 export const featuresThatHaveButtons = Object.keys({
+	decreaseSpeedButton: "",
+	increaseSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	openTranscriptButton: "",

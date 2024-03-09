@@ -349,6 +349,8 @@ export default function Settings() {
 		}
 	];
 	const buttonPlacementOptions: SelectOption<
+		| "button_placements.decreaseSpeedButton"
+		| "button_placements.increaseSpeedButton"
 		| "button_placements.loopButton"
 		// eslint-disable-next-line no-secrets/no-secrets
 		| "button_placements.maximizePlayerButton"
