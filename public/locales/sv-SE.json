@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Skärmbild kopierad till urklipp"
 				},
 				"videoHistory": {
 					"resumeButton": "Återuppta",
