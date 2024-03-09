@@ -16,6 +16,12 @@ import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
+import { 
+	addDecreasePlaybackSpeedButton,
+	addIncreasePlaybackSpeedButton,
+	removeDecreasePlaybackSpeedButton,
+	removeIncreasePlaybackSpeedButton
+} from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -138,6 +144,8 @@ const enableFeatures = () => {
 			setPlayerSpeed(),
 			openTranscriptButton(),
 			addLoopButton(),
+			addIncreasePlaybackSpeedButton(),
+			addDecreasePlaybackSpeedButton(),
 			addMaximizePlayerButton(),
 			addScreenshotButton(),
 			volumeBoost(),
@@ -282,6 +290,19 @@ window.addEventListener("DOMContentLoaded", function () {
 							await addLoopButton();
 						} else {
 							await removeLoopButton();
+						}
+						break;
+					}
+					case "playbackSpeedButtonsChange": {
+						const {
+							data: { playbackSpeedButtonsEnabled }
+						} = message;
+						if (playbackSpeedButtonsEnabled) {
+							await addDecreasePlaybackSpeedButton();
+							await addIncreasePlaybackSpeedButton();
+						} else {
+							await removeDecreasePlaybackSpeedButton();
+							await removeIncreasePlaybackSpeedButton();
 						}
 						break;
 					}
