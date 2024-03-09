@@ -7,46 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "功能選單"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "循環播放",
-					"toggle": {
-						"off": "關閉循環播放",
-						"on": "啟用循環播放"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "最大化",
-					"toggle": {
-						"off": "關閉最大化",
-						"on": "啟用最大化"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "打開文字記錄"
-				},
-				"screenshotButton": {
-					"label": "螢幕截圖"
-				},
-				"volumeBoostButton": {
-					"label": "音量增強",
-					"toggle": {
-						"off": "關閉音量增強",
-						"on": "啟用音量增強"
+					"button": {
+						"label": "Open transcript"
 					}
-				}
-			},
-			"features": {
+				},
+				"playerSpeedButtons": {
+					"buttons": {
+						"decreaseSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increaseSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
+				},
 				"screenshotButton": {
+					"button": {
+						"label": "Screenshot"
+					},
 					"copiedToClipboard": "螢幕截圖已複製剪貼簿"
 				},
 				"videoHistory": {
 					"resumeButton": "繼續",
 					"resumePrompt": {
 						"close": "關閉"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -107,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreaseSpeedButton": "Decrease Speed button",
+						"increaseSpeedButton": "Increase Speed button",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",

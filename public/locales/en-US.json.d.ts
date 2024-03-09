@@ -7,20 +7,28 @@ interface EnUS {
 	};
 	pages: {
 		content: {
-			buttons: {
-				featureMenu: { label: "Feature menu" };
-				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
-				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
-				openTranscriptButton: { label: "Open transcript" };
-				screenshotButton: { label: "Screenshot" };
-				volumeBoostButton: {
-					label: "Volume Boost";
-					toggle: { off: "Volume boost off"; on: "Volume boost on" };
-				};
-			};
 			features: {
-				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard" };
+				featureMenu: { button: { label: "Feature menu" } };
+				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
+				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
+				openTranscriptButton: { button: { label: "Open transcript" } };
+				playerSpeedButtons: {
+					buttons: {
+						decreaseSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
+						increaseSpeedButton: { label: "Increase Speed by {{SPEED}}" };
+					};
+				};
+				screenshotButton: {
+					button: { label: "Screenshot" };
+					copiedToClipboard: "Screenshot copied to clipboard";
+				};
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
+				volumeBoostButton: {
+					button: {
+						label: "Volume Boost";
+						toggle: { off: "Volume boost off"; on: "Volume boost on" };
+					};
+				};
 			};
 		};
 		options: {
@@ -69,6 +77,8 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						decreaseSpeedButton: "Decrease Speed button";
+						increaseSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
