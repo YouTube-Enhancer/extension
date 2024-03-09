@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "截图已复制到剪贴板"
 				},
 				"videoHistory": {
 					"resumeButton": "继续播放",
