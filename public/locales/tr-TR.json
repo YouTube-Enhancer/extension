@@ -7,46 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "Özellik menüsü"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "Döngü",
-					"toggle": {
-						"off": "Döngü kapalı",
-						"on": "Düngü açık"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Ekranı Kapla",
-					"toggle": {
-						"off": "Tam ekran kapalı",
-						"on": "Tam ekran açık"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Not dökümünü aç"
-				},
-				"screenshotButton": {
-					"label": "Ekran Görüntüsü"
-				},
-				"volumeBoostButton": {
-					"label": "Ses Güçlendirmesi",
-					"toggle": {
-						"off": "Ses güçlendirmesi kapalı",
-						"on": "Ses güçlendirmesi açık"
+					"button": {
+						"label": "Open transcript"
 					}
-				}
-			},
-			"features": {
+				},
+				"playerSpeedButtons": {
+					"buttons": {
+						"decreaseSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increaseSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
+				},
 				"screenshotButton": {
+					"button": {
+						"label": "Screenshot"
+					},
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
 				},
 				"videoHistory": {
 					"resumeButton": "Devam Et",
 					"resumePrompt": {
 						"close": "Kapat"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -107,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreaseSpeedButton": "Decrease Speed button",
+						"increaseSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
