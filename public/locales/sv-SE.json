@@ -7,46 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "Funktionsmeny"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "Slinga",
-					"toggle": {
-						"off": "Slinga av",
-						"on": "Slinga på"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximera",
-					"toggle": {
-						"off": "Maximera av",
-						"on": "Maximera på"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Öppna transkript"
-				},
-				"screenshotButton": {
-					"label": "Skärmbild"
-				},
-				"volumeBoostButton": {
-					"label": "Volymökning",
-					"toggle": {
-						"off": "Volymökning av",
-						"on": "Volymökning på"
+					"button": {
+						"label": "Open transcript"
 					}
-				}
-			},
-			"features": {
+				},
+				"playerSpeedButtons": {
+					"buttons": {
+						"decreaseSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increaseSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
+				},
 				"screenshotButton": {
+					"button": {
+						"label": "Screenshot"
+					},
 					"copiedToClipboard": "Skärmbild kopierad till urklipp"
 				},
 				"videoHistory": {
 					"resumeButton": "Återuppta",
 					"resumePrompt": {
 						"close": "Stäng"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -107,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreaseSpeedButton": "Decrease Speed button",
+						"increaseSpeedButton": "Increase Speed button",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Öppna transkriptknapp",
