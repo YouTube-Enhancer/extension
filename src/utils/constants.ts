@@ -21,8 +21,8 @@ import {
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
-		decreaseSpeedButton: "feature_menu",
-		increaseSpeedButton: "feature_menu",
+		decreasePlaybackSpeedButton: "player_controls_left",
+		increasePlaybackSpeedButton: "player_controls_left",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
 		openTranscriptButton: "feature_menu",
@@ -40,6 +40,7 @@ export const defaultConfiguration = {
 	enable_maximize_player_button: false,
 	enable_open_transcript_button: false,
 	enable_open_youtube_settings_on_hover: false,
+	enable_playback_speed_buttons: false,
 	enable_redirect_remover: false,
 	enable_remaining_time: false,
 	enable_remember_last_volume: false,
@@ -60,6 +61,7 @@ export const defaultConfiguration = {
 	osd_display_padding: 5,
 	osd_display_position: "center",
 	osd_display_type: "text",
+	playback_buttons_speed: 0.25,
 	player_quality: "auto",
 	player_speed: 1,
 	remembered_volumes: {
@@ -103,6 +105,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_maximize_player_button: z.boolean().optional(),
 	enable_open_transcript_button: z.boolean().optional(),
 	enable_open_youtube_settings_on_hover: z.boolean().optional(),
+	enable_playback_speed_buttons: z.boolean().optional(),
 	enable_redirect_remover: z.boolean().optional(),
 	enable_remaining_time: z.boolean().optional(),
 	enable_remember_last_volume: z.boolean().optional(),
@@ -123,6 +126,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	osd_display_padding: z.number().optional(),
 	osd_display_position: z.enum(onScreenDisplayPosition).optional(),
 	osd_display_type: z.enum(onScreenDisplayType).optional(),
+	playback_buttons_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	player_quality: z.enum(youtubePlayerQualityLevel).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	remembered_volumes: z

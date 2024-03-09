@@ -6,7 +6,7 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
+import { featuresThatHaveButtons, youtubePlaybackSpeedButtonsRate, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -329,6 +329,11 @@ export default function Settings() {
 		value: rate?.toString()
 		// This cast is here because I'm not sure what the proper type is
 	})) as SelectOption<"player_speed">[];
+	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRate.map((rate) => ({
+		label: rate?.toString(),
+		value: rate?.toString()
+		// This cast is here because I'm not sure what the proper type is
+	})) as SelectOption<"playback_buttons_speed">[];
 	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -349,10 +354,9 @@ export default function Settings() {
 		}
 	];
 	const buttonPlacementOptions: SelectOption<
-		| "button_placements.decreaseSpeedButton"
-		| "button_placements.increaseSpeedButton"
+		| "button_placements.decreasePlaybackSpeedButton"
+		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
-		// eslint-disable-next-line no-secrets/no-secrets
 		| "button_placements.maximizePlayerButton"
 		| "button_placements.openTranscriptButton"
 		| "button_placements.screenshotButton"
@@ -464,6 +468,9 @@ export default function Settings() {
 		const url = chrome.runtime.getURL(path);
 		void chrome.tabs.create({ url });
 	};
+	const isOSDDisabled = settings.enable_scroll_wheel_volume_control?.toString() !== "true" 
+	&& settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+	&& settings.enable_playback_speed_buttons?.toString() !== "true";
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
@@ -636,9 +643,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.onScreenDisplaySettings.title")} />
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_color"
 						label={t("settings.sections.onScreenDisplaySettings.color.label")}
 						onChange={setValueOption("osd_display_color")}
@@ -648,9 +653,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
 						id="osd_display_type"
 						label={t("settings.sections.onScreenDisplaySettings.type.label")}
 						onChange={setValueOption("osd_display_type")}
@@ -660,9 +663,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_position"
 						label={t("settings.sections.onScreenDisplaySettings.position.label")}
 						onChange={setValueOption("osd_display_position")}
@@ -672,9 +673,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_opacity"
 						label={t("settings.sections.onScreenDisplaySettings.opacity.label")}
 						max={100}
@@ -685,9 +684,7 @@ export default function Settings() {
 						value={settings.osd_display_opacity}
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_hide_time"
 						label={t("settings.sections.onScreenDisplaySettings.hide.label")}
 						min={1}
@@ -697,9 +694,7 @@ export default function Settings() {
 						value={settings.osd_display_hide_time}
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_padding"
 						label={t("settings.sections.onScreenDisplaySettings.padding.label")}
 						min={0}
@@ -845,6 +840,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_playback_speed_buttons?.toString() === "true"}
+						id="enable_playback_speed_buttons"
+						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.label")}
+						onChange={setCheckboxOption("enable_playback_speed_buttons")}
+						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.title")}
+						type="checkbox"
+					/>
+					<Setting
 						disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
@@ -852,6 +855,16 @@ export default function Settings() {
 						options={YouTubePlayerSpeedOptions}
 						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
+						id="playback_buttons_speed"
+						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
+						onChange={setValueOption("playback_buttons_speed")}
+						options={YouTubePlaybackSpeedButtonsOptions}
+						selectedOption={getSelectedOption("playback_buttons_speed")?.toString()}
+						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
 						type="select"
 					/>
 				</SettingSection>
