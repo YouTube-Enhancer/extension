@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
 				},
 				"videoHistory": {
 					"resumeButton": "Continuar",
