@@ -7,46 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "Menu de recursos"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "Repetir",
-					"toggle": {
-						"off": "Repetição inativa",
-						"on": "Repetição ativa"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximizar",
-					"toggle": {
-						"off": "Maximização inativa",
-						"on": "Maximização ativa"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Abrir Transcrição"
-				},
-				"screenshotButton": {
-					"label": "Captura de tela"
-				},
-				"volumeBoostButton": {
-					"label": "Impulsionador de volume",
-					"toggle": {
-						"off": "Impulso de Volume inativo",
-						"on": "Impulso de Volume ativo"
+					"button": {
+						"label": "Open transcript"
 					}
-				}
-			},
-			"features": {
+				},
+				"playerSpeedButtons": {
+					"buttons": {
+						"decreaseSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increaseSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
+				},
 				"screenshotButton": {
+					"button": {
+						"label": "Screenshot"
+					},
 					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
 				},
 				"videoHistory": {
 					"resumeButton": "Continuar",
 					"resumePrompt": {
 						"close": "Fechar"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -107,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreaseSpeedButton": "Decrease Speed button",
+						"increaseSpeedButton": "Increase Speed button",
 						"loopButton": "Botão de Repetir",
 						"maximizePlayerButton": "Botão de Maximizar",
 						"openTranscriptButton": "Abrir botão de transcrição",
