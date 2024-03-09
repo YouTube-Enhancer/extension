@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers"
 				},
 				"videoHistory": {
 					"resumeButton": "Reprendre",
