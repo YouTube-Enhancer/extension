@@ -41,7 +41,7 @@
 			},
 			"features": {
 				"screenshotButton": {
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました"
 				},
 				"videoHistory": {
 					"resumeButton": "レジューム",
