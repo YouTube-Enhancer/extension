@@ -60,6 +60,7 @@ export function disableVolumeBoost() {
 }
 export function applyVolumeBoost(volume_boost_amount: number) {
 	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
+	if (!window.gainNode) setupVolumeBoost();
 	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 }
 export const addVolumeBoostButton: AddButtonFunction = async () => {
