@@ -7,14 +7,15 @@ import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {
-	setupVolumeBoost();
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 
 	const {
 		data: {
-			options: { volume_boost_amount, volume_boost_mode }
+			options: { enable_volume_boost, volume_boost_amount, volume_boost_mode }
 		}
 	} = optionsData;
+	if (!enable_volume_boost) return;
+	setupVolumeBoost();
 
 	if (volume_boost_mode === "per_video") {
 		await addVolumeBoostButton();

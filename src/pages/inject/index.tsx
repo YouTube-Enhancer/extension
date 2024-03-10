@@ -266,12 +266,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				openYouTubeSettingsOnHoverEnabled: newValue
 			});
 		},
-		enable_playback_speed_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: options.playback_buttons_speed,
-				playbackSpeedButtonsEnabled: newValue
-			});
-		},
 		enable_redirect_remover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("removeRedirectChange", {
 				removeRedirectEnabled: newValue
@@ -331,12 +325,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		language: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue
-			});
-		},
-		playback_buttons_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: newValue,
-				playbackSpeedButtonsEnabled: options.enable_playback_speed_buttons
 			});
 		},
 		player_speed: (__oldValue, newValue) => {
