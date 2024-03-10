@@ -647,3 +647,19 @@ export function findKeyByValue(value: Exclude<ButtonNames, ButtonFeatureNames>) 
 	}
 	return undefined; // Key not found
 }
+export function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+	const merged: Record<string, unknown> = { ...target };
+
+	for (const key in source) {
+		if (Object.prototype.hasOwnProperty.call(source, key)) {
+			if (merged[key] && typeof merged[key] === "object") {
+				merged[key] = deepMerge(merged[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
+			} else {
+				// eslint-disable-next-line prefer-destructuring
+				merged[key] = source[key];
+			}
+		}
+	}
+
+	return merged;
+}
