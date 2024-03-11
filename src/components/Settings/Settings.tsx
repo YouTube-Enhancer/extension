@@ -1,4 +1,4 @@
-import type { ButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -6,7 +6,7 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { featuresThatHaveButtons, youtubePlaybackSpeedButtonsRate, youtubePlayerSpeedRate } from "@/src/types";
+import { buttonNames, youtubePlaybackSpeedButtonsRate, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, deepMerge, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -468,9 +468,10 @@ export default function Settings() {
 		const url = chrome.runtime.getURL(path);
 		void chrome.tabs.create({ url });
 	};
-	const isOSDDisabled = settings.enable_scroll_wheel_volume_control?.toString() !== "true" 
-	&& settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-	&& settings.enable_playback_speed_buttons?.toString() !== "true";
+	const isOSDDisabled =
+		settings.enable_scroll_wheel_volume_control?.toString() !== "true" &&
+		settings.enable_scroll_wheel_speed_control?.toString() !== "true" &&
+		settings.enable_playback_speed_buttons?.toString() !== "true";
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
@@ -501,12 +502,12 @@ export default function Settings() {
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
-					{featuresThatHaveButtons.map((feature) => {
+					{buttonNames.map((feature) => {
 						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								id={`button_placements.${feature}` as `button_placements.${ButtonNames}`}
+								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}
@@ -653,7 +654,9 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_type"
 						label={t("settings.sections.onScreenDisplaySettings.type.label")}
 						onChange={setValueOption("osd_display_type")}

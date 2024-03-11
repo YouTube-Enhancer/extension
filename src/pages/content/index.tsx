@@ -16,7 +16,7 @@ import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
-import { 
+import {
 	addDecreasePlaybackSpeedButton,
 	addIncreasePlaybackSpeedButton,
 	removeDecreasePlaybackSpeedButton,
@@ -43,14 +43,14 @@ import volumeBoost, {
 import { i18nService } from "@/src/i18n";
 import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
 import {
-	type ButtonFeatureNames,
-	type ButtonNamesExcludingSingleButtonNames,
 	type ExtensionSendOnlyMessageMappings,
-	type FeatureNamesExcludingSingleButtonFeatureNames,
 	type Messages,
+	type MultiButtonFeatureNames,
+	type MultiButtonNames,
+	type SingleButtonFeatureNames,
 	type SingleButtonNames,
 	type YouTubePlayerDiv,
-	featureNameToButtonNames
+	featureToMultiButtonsMap
 } from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
@@ -374,12 +374,12 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (featuresInMenu.size > 0) {
 							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
-								const featureName = findKeyByValue(feature as ButtonNamesExcludingSingleButtonNames) ?? (feature as ButtonFeatureNames);
-								if (featureNameToButtonNames.has(featureName)) {
+								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
+								if (featureToMultiButtonsMap.has(featureName)) {
 									updateFeatureMenuItemLabel(
 										feature,
 										window.i18nextInstance.t(
-											`pages.content.features.${featureName as FeatureNamesExcludingSingleButtonFeatureNames}.buttons.${feature as ButtonNamesExcludingSingleButtonNames}.label`
+											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
 										)
 									);
 								} else {
@@ -392,7 +392,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						if (featuresInControls.size > 0) {
 							for (const feature of featuresInControls) {
-								const featureName = findKeyByValue(feature as ButtonNamesExcludingSingleButtonNames) ?? (feature as ButtonFeatureNames);
+								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (toggleFeatures.includes(feature)) {
 									const toggleFeature = feature as ToggleFeatures;
 									const featureButton = getFeatureButton(toggleFeature);
@@ -403,11 +403,11 @@ window.addEventListener("DOMContentLoaded", function () {
 										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
 									);
 								} else {
-									if (featureNameToButtonNames.has(featureName)) {
+									if (featureToMultiButtonsMap.has(featureName)) {
 										updateFeatureMenuItemLabel(
 											feature,
 											window.i18nextInstance.t(
-												`pages.content.features.${featureName as FeatureNamesExcludingSingleButtonFeatureNames}.buttons.${feature as ButtonNamesExcludingSingleButtonNames}.label`
+												`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
 											)
 										);
 									} else {

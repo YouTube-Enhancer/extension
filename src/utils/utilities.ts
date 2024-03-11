@@ -2,9 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type {
+	AllButtonNames,
 	AnyFunction,
-	ButtonFeatureNames,
-	ButtonNames,
 	ContentSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
@@ -16,11 +15,12 @@ import type {
 	PathValue,
 	Selector,
 	SendDataMessage,
+	SingleButtonFeatureNames,
 	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { featureNameToButtonNames, youtubePlayerQualityLevel } from "../types";
+import { featureToMultiButtonsMap, youtubePlayerQualityLevel } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -639,8 +639,8 @@ export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T
 
 	return value as PathValue<T, P>;
 }
-export function findKeyByValue(value: Exclude<ButtonNames, ButtonFeatureNames>) {
-	for (const [key, values] of featureNameToButtonNames.entries()) {
+export function findKeyByValue(value: Exclude<AllButtonNames, SingleButtonFeatureNames>) {
+	for (const [key, values] of featureToMultiButtonsMap.entries()) {
 		if (values.includes(value)) {
 			return key;
 		}

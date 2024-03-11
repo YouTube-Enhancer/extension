@@ -2,19 +2,19 @@ import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
 
 import {
-	type ButtonFeatureNames,
-	type ButtonNames,
-	type ButtonNamesExcludingSingleButtonNames,
+	type AllButtonNames,
 	type FeatureMenuItemIconId,
 	type FeatureMenuItemId,
 	type FeatureMenuItemLabelId,
+	type MultiButtonNames,
 	type Nullable,
+	type SingleButtonFeatureNames,
 	type WithId
 } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
 
-export const featuresInMenu = new Set<ButtonNames>();
+export const featuresInMenu = new Set<AllButtonNames>();
 
 function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
 	if (isToggle) {
@@ -32,14 +32,14 @@ function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTML
  * @param listener The listener for the feature
  * @param isToggle Whether the feature is a toggle
  */
-export async function addFeatureItemToMenu<Name extends ButtonNames, Toggle extends boolean>(
+export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
 	label: string,
 	icon: BasicIcon,
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	const featureName = findKeyByValue(buttonName as ButtonNamesExcludingSingleButtonNames) ?? (buttonName as ButtonFeatureNames);
+	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
 
@@ -118,7 +118,7 @@ export async function addFeatureItemToMenu<Name extends ButtonNames, Toggle exte
  * Removes a feature item from the feature menu.
  * @param buttonName - The name of the button to remove.
  */
-export function removeFeatureItemFromMenu(buttonName: ButtonNames) {
+export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	// Remove the feature name from the set of features in the menu
 	featuresInMenu.delete(buttonName);
 
@@ -160,7 +160,7 @@ export function removeFeatureItemFromMenu(buttonName: ButtonNames) {
  * @param label the label to set
  * @returns
  */
-export function updateFeatureMenuItemLabel(buttonName: ButtonNames, label: string) {
+export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: string) {
 	const featureMenuItemLabel = getFeatureMenuItemLabel(buttonName);
 	if (!featureMenuItemLabel) return;
 	featureMenuItemLabel.textContent = label;
@@ -180,7 +180,7 @@ export function updateFeatureMenuTitle(title: string) {
  * @param buttonName the name of the button
  * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
  */
-export function getFeatureIds(buttonName: ButtonNames): {
+export function getFeatureIds(buttonName: AllButtonNames): {
 	featureMenuItemIconId: FeatureMenuItemIconId;
 	featureMenuItemId: FeatureMenuItemId;
 	featureMenuItemLabelId: FeatureMenuItemLabelId;
@@ -194,15 +194,15 @@ export function getFeatureIds(buttonName: ButtonNames): {
 		featureMenuItemLabelId
 	};
 }
-export function getFeatureMenuItemIcon(buttonName: ButtonNames): Nullable<HTMLDivElement> {
+export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItemLabel(buttonName: ButtonNames): Nullable<HTMLDivElement> {
+export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItem(buttonName: ButtonNames): Nullable<HTMLDivElement> {
+export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
 	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
 	return document.querySelector(`#yte-panel-menu > ${selector}`);
 }

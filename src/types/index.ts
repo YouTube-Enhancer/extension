@@ -117,21 +117,22 @@ export const buttonPlacement = ["below_player", "feature_menu", "player_controls
 export type ButtonPlacement = (typeof buttonPlacement)[number];
 export const featureMenuOpenType = ["click", "hover"] as const;
 export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
-export type ButtonPlacementConfiguration = {
-	[Key in ButtonNames]: ButtonPlacement;
+export type ButtonPlacementConfigurationMap = {
+	[ButtonName in AllButtonNames]: ButtonPlacement;
 };
-export type ButtonNames = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type SingleButtonNames = Exclude<ButtonNames, ButtonNamesExcludingSingleButtonNames>;
-export type ButtonFeatureNames = Exclude<ExtractButtonFeatureNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type ButtonNamesExcludingSingleButtonNames = Exclude<ButtonNames, ButtonFeatureNames>;
-export type FeatureNamesExcludingSingleButtonFeatureNames = Exclude<ButtonFeatureNames, ButtonNames>;
-export const featureNameToButtonNames: Map<FeatureNamesExcludingSingleButtonFeatureNames, ButtonNamesExcludingSingleButtonNames[]> = new Map([
+type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
+export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
+export type SingleButtonFeatureNames = Exclude<ExtractButtonFeatureNames<TOptionsKeys>, "featureMenu">;
+export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
+export type MultiButtonFeatureNames = Exclude<SingleButtonFeatureNames, AllButtonNames>;
+export const featureToMultiButtonsMap: Map<MultiButtonFeatureNames, MultiButtonNames[]> = new Map([
 	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
 ]);
-export type FeatureMenuItemIconId = `yte-${ButtonNames}-icon`;
-export type FeatureMenuItemId = `yte-feature-${ButtonNames}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${ButtonNames}-label`;
-export const featuresThatHaveButtons = Object.keys({
+export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
+export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
+export const buttonNames = Object.keys({
 	decreasePlaybackSpeedButton: "",
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
@@ -139,7 +140,7 @@ export const featuresThatHaveButtons = Object.keys({
 	openTranscriptButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
-} satisfies Record<ButtonNames, "">);
+} satisfies Record<AllButtonNames, "">);
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -154,7 +155,7 @@ export type NotificationType = "error" | "info" | "success" | "warning";
 export type NotificationAction = "reset_settings" | undefined;
 export type Notification = {
 	action: NotificationAction;
-	message: ParseKeys<"en-US", TOptions, undefined>;
+	message: TOptionsKeys;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;
@@ -239,7 +240,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"buttonPlacementChange",
 		{
 			buttonPlacement: {
-				[Key in ButtonNames]: {
+				[Key in AllButtonNames]: {
 					new: ButtonPlacement;
 					old: ButtonPlacement;
 				};
@@ -260,7 +261,10 @@ export type ExtensionSendOnlyMessageMappings = {
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
 	>;
-	playbackSpeedButtonsChange: DataResponseMessage<"playbackSpeedButtonsChange", { playbackButtonsSpeed: number, playbackSpeedButtonsEnabled: boolean }>;
+	playbackSpeedButtonsChange: DataResponseMessage<
+		"playbackSpeedButtonsChange",
+		{ playbackButtonsSpeed: number; playbackSpeedButtonsEnabled: boolean }
+	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
@@ -310,7 +314,7 @@ export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
 // #region Configuration types
 export type configuration = {
-	button_placements: ButtonPlacementConfiguration;
+	button_placements: ButtonPlacementConfigurationMap;
 	custom_css_code: string;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;

@@ -1,12 +1,12 @@
 import { getFeatureIds, getFeatureMenuItem } from "@/src/features/featureMenu/utils";
 import { type GetIconType } from "@/src/icons";
-import { type ButtonFeatureNames, type ButtonNames, type ButtonNamesExcludingSingleButtonNames, type ButtonPlacement } from "@/src/types";
+import { type AllButtonNames, type ButtonPlacement, type MultiButtonNames, type SingleButtonFeatureNames } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { createStyledElement, createTooltip, findKeyByValue } from "@/src/utils/utilities";
 
 export type ListenerType<Toggle extends boolean> = Toggle extends true ? (checked?: boolean) => void : () => void;
 
-function buttonClickListener<Placement extends ButtonPlacement, Name extends ButtonNames, Toggle extends boolean>(
+function buttonClickListener<Placement extends ButtonPlacement, Name extends AllButtonNames, Toggle extends boolean>(
 	button: HTMLButtonElement,
 	icon: GetIconType<Name, Placement>,
 	listener: ListenerType<Toggle>,
@@ -25,7 +25,7 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends But
 	}
 }
 
-export function makeFeatureButton<Name extends ButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
+export function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
 	buttonName: Name,
 	placement: Placement,
 	label: string,
@@ -33,7 +33,7 @@ export function makeFeatureButton<Name extends ButtonNames, Placement extends Bu
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	const featureName = findKeyByValue(buttonName as ButtonNamesExcludingSingleButtonNames) ?? (buttonName as ButtonFeatureNames);
+	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const buttonExists = document.querySelector(`button#${getFeatureButtonId(buttonName)}`) !== null;
 	const button = createStyledElement({
@@ -104,7 +104,7 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 		button.firstChild.replaceWith(icon);
 	}
 }
-export function updateFeatureButtonTitle(buttonName: ButtonNames, title: string) {
+export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
 	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 	if (!button) return;
 	button.dataset.title = title;
@@ -144,7 +144,7 @@ export function placeButton(button: HTMLButtonElement, placement: Exclude<Button
 		}
 	}
 }
-export function checkIfFeatureButtonExists(buttonName: ButtonNames, placement: ButtonPlacement): boolean {
+export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): boolean {
 	switch (placement) {
 		case "below_player": {
 			const buttonContainer = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
@@ -168,10 +168,10 @@ export function checkIfFeatureButtonExists(buttonName: ButtonNames, placement: B
 		}
 	}
 }
-export function getFeatureButtonId(buttonName: ButtonNames) {
+export function getFeatureButtonId(buttonName: AllButtonNames) {
 	return `yte-feature-${buttonName}-button` as const;
 }
-export function getFeatureButton(buttonName: ButtonNames) {
+export function getFeatureButton(buttonName: AllButtonNames) {
 	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 }
 export const buttonContainerId = "yte-button-container";
