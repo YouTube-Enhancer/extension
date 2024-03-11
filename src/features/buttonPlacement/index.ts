@@ -1,13 +1,13 @@
 import type { GetIconType } from "@/src/icons";
-import type { ButtonFeatureNames, ButtonNames, ButtonNamesExcludingSingleButtonNames, ButtonPlacement } from "@/src/types";
+import type { AllButtonNames, ButtonPlacement, MultiButtonNames, SingleButtonFeatureNames } from "@/src/types";
 
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
 import { findKeyByValue, removeTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { type ListenerType, getFeatureButtonId, makeFeatureButton, placeButton } from "./utils";
-export const featuresInControls = new Set<ButtonNames>();
+export const featuresInControls = new Set<AllButtonNames>();
 
-export async function addFeatureButton<Name extends ButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
+export async function addFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
 	buttonName: Name,
 	placement: Placement,
 	label: Label,
@@ -31,8 +31,8 @@ export async function addFeatureButton<Name extends ButtonNames, Placement exten
 		}
 	}
 }
-export async function removeFeatureButton<Name extends ButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
-	const featureName = findKeyByValue(buttonName as ButtonNamesExcludingSingleButtonNames) ?? (buttonName as ButtonFeatureNames);
+export async function removeFeatureButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
+	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	if (placement === undefined) {
 		// Wait for the "options" message from the content script
 		const optionsData = await waitForSpecificMessage("options", "request_data", "content");

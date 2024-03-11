@@ -1,4 +1,4 @@
-import type { ButtonFeatureNames } from "@/src/types";
+import type { SingleButtonFeatureNames } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
@@ -48,7 +48,7 @@ export const addLoopButton: AddButtonFunction = async () => {
 				const { attributeName, target } = mutation;
 				if (attributeName === "loop") {
 					const { loop } = target as HTMLVideoElement;
-					const featureName: ButtonFeatureNames = "loopButton";
+					const featureName: SingleButtonFeatureNames = "loopButton";
 					// Get the feature menu
 					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 					// Check if the feature item already exists in the menu

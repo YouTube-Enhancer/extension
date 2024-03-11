@@ -2,15 +2,15 @@ import type { AvailableLocales } from "@/src/i18n";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
-	type ButtonNames,
+	type AllButtonNames,
 	type ButtonPlacement,
 	type ContentSendOnlyMessageMappings,
 	type Messages,
 	type RememberedVolumes,
 	type StorageChanges,
+	buttonNames,
 	type configuration,
-	type configurationKeys,
-	featuresThatHaveButtons
+	type configurationKeys
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
@@ -201,7 +201,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	} = {
 		button_placements: (oldValue, newValue) => {
 			sendExtensionOnlyMessage("buttonPlacementChange", {
-				buttonPlacement: featuresThatHaveButtons.reduce(
+				buttonPlacement: buttonNames.reduce(
 					(acc, feature) => {
 						const { [feature]: oldPlacement } = oldValue;
 						const { [feature]: newPlacement } = newValue;
@@ -212,7 +212,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 							}
 						});
 					},
-					{} as Record<ButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
+					{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
 				)
 			});
 		},
@@ -264,6 +264,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
 				openYouTubeSettingsOnHoverEnabled: newValue
+			});
+		},
+		enable_playback_speed_buttons: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
+				playbackButtonsSpeed: options.playback_buttons_speed,
+				playbackSpeedButtonsEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {
@@ -325,6 +331,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		language: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue
+			});
+		},
+		playback_buttons_speed: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
+				playbackButtonsSpeed: newValue,
+				playbackSpeedButtonsEnabled: options.enable_playback_speed_buttons
 			});
 		},
 		player_speed: (__oldValue, newValue) => {

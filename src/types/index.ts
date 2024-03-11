@@ -101,6 +101,7 @@ export const youtubePlayerQualityLevel = [
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
 export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
+export const youtubePlaybackSpeedButtonsRate = [0.25, 0.5, 0.75, 1] as const;
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
 export const screenshotFormat = ["png", "jpeg", "webp"] as const;
@@ -116,29 +117,30 @@ export const buttonPlacement = ["below_player", "feature_menu", "player_controls
 export type ButtonPlacement = (typeof buttonPlacement)[number];
 export const featureMenuOpenType = ["click", "hover"] as const;
 export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
-export type ButtonPlacementConfiguration = {
-	[Key in ButtonNames]: ButtonPlacement;
+export type ButtonPlacementConfigurationMap = {
+	[ButtonName in AllButtonNames]: ButtonPlacement;
 };
-export type ButtonNames = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type SingleButtonNames = Exclude<ButtonNames, ButtonNamesExcludingSingleButtonNames>;
-export type ButtonFeatureNames = Exclude<ExtractButtonFeatureNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type ButtonNamesExcludingSingleButtonNames = Exclude<ButtonNames, ButtonFeatureNames>;
-export type FeatureNamesExcludingSingleButtonFeatureNames = Exclude<ButtonFeatureNames, ButtonNames>;
-export const featureNameToButtonNames: Map<FeatureNamesExcludingSingleButtonFeatureNames, ButtonNamesExcludingSingleButtonNames[]> = new Map([
-	["playerSpeedButtons", ["increaseSpeedButton", "decreaseSpeedButton"]]
+type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
+export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
+export type SingleButtonFeatureNames = Exclude<ExtractButtonFeatureNames<TOptionsKeys>, "featureMenu">;
+export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
+export type MultiButtonFeatureNames = Exclude<SingleButtonFeatureNames, AllButtonNames>;
+export const featureToMultiButtonsMap: Map<MultiButtonFeatureNames, MultiButtonNames[]> = new Map([
+	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
 ]);
-export type FeatureMenuItemIconId = `yte-${ButtonNames}-icon`;
-export type FeatureMenuItemId = `yte-feature-${ButtonNames}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${ButtonNames}-label`;
-export const featuresThatHaveButtons = Object.keys({
-	decreaseSpeedButton: "",
-	increaseSpeedButton: "",
+export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
+export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
+export const buttonNames = Object.keys({
+	decreasePlaybackSpeedButton: "",
+	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	openTranscriptButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
-} satisfies Record<ButtonNames, "">);
+} satisfies Record<AllButtonNames, "">);
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -153,7 +155,7 @@ export type NotificationType = "error" | "info" | "success" | "warning";
 export type NotificationAction = "reset_settings" | undefined;
 export type Notification = {
 	action: NotificationAction;
-	message: ParseKeys<"en-US", TOptions, undefined>;
+	message: TOptionsKeys;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;
@@ -238,7 +240,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"buttonPlacementChange",
 		{
 			buttonPlacement: {
-				[Key in ButtonNames]: {
+				[Key in AllButtonNames]: {
 					new: ButtonPlacement;
 					old: ButtonPlacement;
 				};
@@ -258,6 +260,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		{
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
+	>;
+	playbackSpeedButtonsChange: DataResponseMessage<
+		"playbackSpeedButtonsChange",
+		{ playbackButtonsSpeed: number; playbackSpeedButtonsEnabled: boolean }
 	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
@@ -308,7 +314,7 @@ export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
 // #region Configuration types
 export type configuration = {
-	button_placements: ButtonPlacementConfiguration;
+	button_placements: ButtonPlacementConfigurationMap;
 	custom_css_code: string;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
@@ -320,6 +326,7 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
+	enable_playback_speed_buttons: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
@@ -340,6 +347,7 @@ export type configuration = {
 	osd_display_padding: number;
 	osd_display_position: OnScreenDisplayPosition;
 	osd_display_type: OnScreenDisplayType;
+	playback_buttons_speed: number;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
 	remembered_volumes: RememberedVolumes;

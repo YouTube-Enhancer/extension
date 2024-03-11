@@ -8,14 +8,16 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
+				decreasePlaybackSpeed: { label: "Decrease playback speed" };
 				featureMenu: { button: { label: "Feature menu" } };
+				increasePlaybackSpeed: { label: "Increase playback speed" };
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
-				playerSpeedButtons: {
+				playbackSpeedButtons: {
 					buttons: {
-						decreaseSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
-						increaseSpeedButton: { label: "Increase Speed by {{SPEED}}" };
+						decreasePlaybackSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
+						increasePlaybackSpeedButton: { label: "Increase Speed by {{SPEED}}" };
 					};
 				};
 				screenshotButton: {
@@ -77,8 +79,10 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
-						decreaseSpeedButton: "Decrease Speed button";
-						increaseSpeedButton: "Increase Speed button";
+						decreasePlaybackSpeed: "Decrease Playback Speed button";
+						decreasePlaybackSpeedButton: "Decrease Speed button";
+						increasePlaybackSpeed: "Increase Playback Speed button";
+						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
@@ -227,6 +231,14 @@ interface EnUS {
 				enable: {
 					label: "Forced playback speed";
 					title: "Sets the video speed to what you choose below";
+				};
+				playbackSpeedButtons: {
+					label: "Playback speed buttons";
+					select: {
+						label: "Playback buttons speed";
+						title: "Amount of speed to be changed per click";
+					};
+					title: "Adds buttons to increase or decrease the playback speed of the video you're watching";
 				};
 				select: { label: "Player speed"; title: "The speed to set the video to" };
 				title: "Playback speed settings";
