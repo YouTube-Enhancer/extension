@@ -6,7 +6,7 @@ import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { buttonNames, youtubePlaybackSpeedButtonsRate, youtubePlayerSpeedRate } from "@/src/types";
+import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { cn, deepMerge, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -324,12 +324,12 @@ export default function Settings() {
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({
+	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
 		// This cast is here because I'm not sure what the proper type is
 	})) as SelectOption<"player_speed">[];
-	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRate.map((rate) => ({
+	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
 		// This cast is here because I'm not sure what the proper type is

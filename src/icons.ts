@@ -9,8 +9,8 @@ export const toggleFeatures = Object.keys({ loopButton: "", maximizePlayerButton
 export type ToggleFeatures = (typeof toggleFeatures)[number];
 export type IconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
 export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
-export type GetIconType<Name extends AllButtonNames, Placement extends ButtonPlacement> = FeatureIconsType[Name][GetPlacementKey<Placement>];
-export type FeatureIconsType = {
+export type GetIconType<Name extends AllButtonNames, Placement extends ButtonPlacement> = FeatureIconMap[Name][GetPlacementKey<Placement>];
+export type FeatureIconMap = {
 	[ButtonName in AllButtonNames]: {
 		feature_menu: BasicIcon;
 		shared_icon_position: IconType<ButtonName>;
@@ -269,7 +269,7 @@ export const featureIcons = {
 			on: volumeBoostOnSVG
 		}
 	}
-} satisfies FeatureIconsType;
+} satisfies FeatureIconMap;
 export function getFeatureIcon<Name extends AllButtonNames, Placement extends ButtonPlacement>(
 	featureName: Name,
 	placement: GetPlacementKey<Placement>
