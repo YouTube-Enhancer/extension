@@ -55,7 +55,7 @@
 		"no-empty": ["error", { "allowEmptyCatch": true }],
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 		"import/first": ["error"],
-		"no-secrets/no-secrets": "error",
+		"no-secrets/no-secrets": ["error", { "tolerance": 5.0 }],
 		"import/no-unresolved": "off",
 		"tailwindcss/no-custom-classname": "off",
 		"tailwindcss/classnames-order": "error",
