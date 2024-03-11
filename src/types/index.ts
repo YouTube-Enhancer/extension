@@ -101,6 +101,7 @@ export const youtubePlayerQualityLevel = [
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
 export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
+export const youtubePlaybackSpeedButtonsRate = [0.25, 0.5, 0.75, 1] as const;
 export const screenshotType = ["file", "clipboard"] as const;
 export type ScreenshotType = (typeof screenshotType)[number];
 export const screenshotFormat = ["png", "jpeg", "webp"] as const;
@@ -125,14 +126,14 @@ export type ButtonFeatureNames = Exclude<ExtractButtonFeatureNames<ParseKeys<"en
 export type ButtonNamesExcludingSingleButtonNames = Exclude<ButtonNames, ButtonFeatureNames>;
 export type FeatureNamesExcludingSingleButtonFeatureNames = Exclude<ButtonFeatureNames, ButtonNames>;
 export const featureNameToButtonNames: Map<FeatureNamesExcludingSingleButtonFeatureNames, ButtonNamesExcludingSingleButtonNames[]> = new Map([
-	["playerSpeedButtons", ["increaseSpeedButton", "decreaseSpeedButton"]]
+	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
 ]);
 export type FeatureMenuItemIconId = `yte-${ButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${ButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${ButtonNames}-label`;
 export const featuresThatHaveButtons = Object.keys({
-	decreaseSpeedButton: "",
-	increaseSpeedButton: "",
+	decreasePlaybackSpeedButton: "",
+	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	openTranscriptButton: "",
@@ -259,6 +260,7 @@ export type ExtensionSendOnlyMessageMappings = {
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
 	>;
+	playbackSpeedButtonsChange: DataResponseMessage<"playbackSpeedButtonsChange", { playbackButtonsSpeed: number, playbackSpeedButtonsEnabled: boolean }>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
@@ -320,6 +322,7 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
+	enable_playback_speed_buttons: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
@@ -340,6 +343,7 @@ export type configuration = {
 	osd_display_padding: number;
 	osd_display_position: OnScreenDisplayPosition;
 	osd_display_type: OnScreenDisplayType;
+	playback_buttons_speed: number;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
 	remembered_volumes: RememberedVolumes;
