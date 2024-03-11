@@ -22,6 +22,12 @@
 						}
 					}
 				},
+				"increasePlaybackSpeed": {
+					"label": "Increase playback speed"
+				},
+				"decreasePlaybackSpeed": {
+					"label": "Decrease playback speed"
+				},
 				"maximizePlayerButton": {
 					"button": {
 						"label": "Maximize",
@@ -36,12 +42,12 @@
 						"label": "Open transcript"
 					}
 				},
-				"playerSpeedButtons": {
+				"playbackSpeedButtons": {
 					"buttons": {
-						"decreaseSpeedButton": {
+						"decreasePlaybackSpeedButton": {
 							"label": "Decrease Speed by {{SPEED}}"
 						},
-						"increaseSpeedButton": {
+						"increasePlaybackSpeedButton": {
 							"label": "Increase Speed by {{SPEED}}"
 						}
 					}
@@ -125,9 +131,11 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreaseSpeedButton": "Decrease Speed button",
-						"increaseSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botão de Repetir",
+						"decreasePlaybackSpeed": "Decrease Playback Speed button",
+						"increasePlaybackSpeed": "Increase Playback Speed button",
 						"maximizePlayerButton": "Botão de Maximizar",
 						"openTranscriptButton": "Abrir botão de transcrição",
 						"screenshotButton": "Botão de captura de tela",
@@ -310,6 +318,14 @@
 				"enable": {
 					"label": "Velocidade de reprodução forçada",
 					"title": "Define a velocidade do vídeo para a que você escolher abaixo"
+				},
+				"playbackSpeedButtons": {
+					"label": "Playback speed buttons",
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Amount of speed to be changed per click"
+					}
 				},
 				"select": {
 					"label": "Velocidade do reprodutor",
