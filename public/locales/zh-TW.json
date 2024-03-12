@@ -23,10 +23,10 @@
 					}
 				},
 				"increasePlaybackSpeed": {
-					"label": "Increase playback speed"
+					"label": "加快播放速度"
 				},
 				"decreasePlaybackSpeed": {
-					"label": "Decrease playback speed"
+					"label": "減慢播放速度"
 				},
 				"maximizePlayerButton": {
 					"button": {
