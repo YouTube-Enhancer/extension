@@ -320,7 +320,7 @@
 					"title": "強制再生速度を可能にする"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "再生速度ボタン",
 					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching",
 					"select": {
 						"label": "Playback buttons speed",
