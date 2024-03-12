@@ -10,51 +10,51 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "功能菜单"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "循环播放",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "取消循环",
+							"on": "启用循环"
 						}
 					}
 				},
 				"increasePlaybackSpeed": {
-					"label": "Increase playback speed"
+					"label": "增加播放速度"
 				},
 				"decreasePlaybackSpeed": {
-					"label": "Decrease playback speed"
+					"label": "降低播放速度"
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "最大化",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "最大化关闭",
+							"on": "最大化开启"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "打开转写文稿"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "降低 {{SPEED}} 播放速度"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "增加 {{SPEED}} 播放速度"
 						}
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "屏幕截图"
 					},
 					"copiedToClipboard": "截图已复制到剪贴板"
 				},
@@ -66,10 +66,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "音量增强",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "关闭音量增强",
+							"on": "开启音量增强"
 						}
 					}
 				}
@@ -131,11 +131,11 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
-						"decreasePlaybackSpeed": "Decrease Playback Speed button",
-						"increasePlaybackSpeed": "Increase Playback Speed button",
+						"decreasePlaybackSpeed": "降低播放速度按钮",
+						"increasePlaybackSpeed": "增加播放速度按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
 						"screenshotButton": "屏幕截图按钮",
@@ -320,11 +320,11 @@
 					"title": "将视频速度设置为您在下面选择的内容"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching",
+					"label": "播放速度按钮",
+					"title": "添加按钮以增加或降低您观看的视频的播放速度",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "播放按钮的速度",
+						"title": "每次点击要更改的速度量"
 					}
 				},
 				"select": {
