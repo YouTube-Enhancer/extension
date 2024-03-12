@@ -23,10 +23,10 @@
 					}
 				},
 				"increasePlaybackSpeed": {
-					"label": "Increase playback speed"
+					"label": "Oynatma hızını artırın"
 				},
 				"decreasePlaybackSpeed": {
-					"label": "Decrease playback speed"
+					"label": "Oynatma hızını azaltın"
 				},
 				"maximizePlayerButton": {
 					"button": {
