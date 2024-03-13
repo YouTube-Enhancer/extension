@@ -4,7 +4,7 @@ import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlac
 import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIds } from "@/src/features/featureMenu/utils";
 import { getFeatureIcon } from "@/src/icons";
-import eventManager, { type FeatureName } from "@/src/utils/EventManager";
+import eventManager from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
