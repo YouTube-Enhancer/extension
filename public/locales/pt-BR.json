@@ -22,12 +22,6 @@
 						}
 					}
 				},
-				"increasePlaybackSpeed": {
-					"label": "Increase playback speed"
-				},
-				"decreasePlaybackSpeed": {
-					"label": "Decrease playback speed"
-				},
 				"maximizePlayerButton": {
 					"button": {
 						"label": "Maximize",
@@ -134,8 +128,6 @@
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botão de Repetir",
-						"decreasePlaybackSpeed": "Decrease Playback Speed button",
-						"increasePlaybackSpeed": "Increase Playback Speed button",
 						"maximizePlayerButton": "Botão de Maximizar",
 						"openTranscriptButton": "Abrir botão de transcrição",
 						"screenshotButton": "Botão de captura de tela",
@@ -321,11 +313,11 @@
 				},
 				"playbackSpeedButtons": {
 					"label": "Playback speed buttons",
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching",
 					"select": {
 						"label": "Playback buttons speed",
 						"title": "Amount of speed to be changed per click"
-					}
+					},
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 				},
 				"select": {
 					"label": "Velocidade do reprodutor",
