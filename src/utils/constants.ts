@@ -5,17 +5,17 @@ import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configura
 import { availableLocales } from "../i18n/index";
 import {
 	buttonNames,
-	buttonPlacement,
-	featureMenuOpenType,
-	modifierKey,
-	onScreenDisplayColor,
-	onScreenDisplayPosition,
-	onScreenDisplayType,
-	screenshotFormat,
-	screenshotType,
-	videoHistoryResumeType,
-	volumeBoostMode,
-	youtubePlayerQualityLevel
+	buttonPlacements,
+	featureMenuOpenTypes,
+	modifierKeys,
+	onScreenDisplayColors,
+	onScreenDisplayPositions,
+	onScreenDisplayTypes,
+	screenshotFormats,
+	screenshotTypes,
+	videoHistoryResumeTypes,
+	volumeBoostModes,
+	youtubePlayerQualityLevels
 } from "../types";
 
 export const outputFolderName = "dist";
@@ -90,7 +90,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 > = z.object({
 	button_placements: z.object({
 		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacement).optional() }),
+			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements).optional() }),
 			{} as Record<AllButtonNames, ZodEnum<[ButtonPlacement]>>
 		)
 	}),
@@ -118,16 +118,16 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_shorts_auto_scroll: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
-	feature_menu_open_type: z.enum(featureMenuOpenType).optional(),
+	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),
 	language: z.enum(availableLocales).optional(),
-	osd_display_color: z.enum(onScreenDisplayColor).optional(),
+	osd_display_color: z.enum(onScreenDisplayColors).optional(),
 	osd_display_hide_time: z.number().optional(),
 	osd_display_opacity: z.number().min(1).max(100).optional(),
 	osd_display_padding: z.number().optional(),
-	osd_display_position: z.enum(onScreenDisplayPosition).optional(),
-	osd_display_type: z.enum(onScreenDisplayType).optional(),
+	osd_display_position: z.enum(onScreenDisplayPositions).optional(),
+	osd_display_type: z.enum(onScreenDisplayTypes).optional(),
 	playback_buttons_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
-	player_quality: z.enum(youtubePlayerQualityLevel).optional(),
+	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	remembered_volumes: z
 		.object({
@@ -135,15 +135,15 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 			watchPageVolume: z.number().min(0).max(100).optional()
 		})
 		.optional(),
-	screenshot_format: z.enum(screenshotFormat).optional(),
-	screenshot_save_as: z.enum(screenshotType).optional(),
-	scroll_wheel_speed_control_modifier_key: z.enum(modifierKey).optional(),
-	scroll_wheel_volume_control_modifier_key: z.enum(modifierKey).optional(),
+	screenshot_format: z.enum(screenshotFormats).optional(),
+	screenshot_save_as: z.enum(screenshotTypes).optional(),
+	scroll_wheel_speed_control_modifier_key: z.enum(modifierKeys).optional(),
+	scroll_wheel_volume_control_modifier_key: z.enum(modifierKeys).optional(),
 	speed_adjustment_steps: z.number().min(0.05).max(1.0).step(0.05).optional(),
-	video_history_resume_type: z.enum(videoHistoryResumeType).optional(),
+	video_history_resume_type: z.enum(videoHistoryResumeTypes).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional(),
-	volume_boost_mode: z.enum(volumeBoostMode).optional()
+	volume_boost_mode: z.enum(volumeBoostModes).optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

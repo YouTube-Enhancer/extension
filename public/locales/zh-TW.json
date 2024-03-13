@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "減慢播放速度 {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "加快播放速度 {{SPEED}}"
 						}
 					}
 				},
@@ -125,8 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "減慢速度按鈕",
+						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
@@ -310,6 +310,14 @@
 				"enable": {
 					"label": "強制播放速度",
 					"title": "設定影片播放速度如下"
+				},
+				"playbackSpeedButtons": {
+					"label": "播放速度按鈕",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "每次按下時改變的速度"
+					},
+					"title": "加入加快或減慢播放速度按鈕"
 				},
 				"select": {
 					"label": "播放速度",

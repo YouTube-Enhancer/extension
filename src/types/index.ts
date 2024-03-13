@@ -77,15 +77,15 @@ export type FilterKeysByValueType<O extends object, ValueType> = {
 }[keyof O];
 // #endregion Utility types
 // #region Constants
-export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
-export type OnScreenDisplayColor = (typeof onScreenDisplayColor)[number];
-export const onScreenDisplayType = ["no_display", "text", "line", "round"] as const;
-export type OnScreenDisplayType = (typeof onScreenDisplayType)[number];
-export const onScreenDisplayPosition = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
-export type OnScreenDisplayPosition = (typeof onScreenDisplayPosition)[number];
-export const youtubePlayerQualityLabel = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
-export type YoutubePlayerQualityLabel = (typeof youtubePlayerQualityLabel)[number];
-export const youtubePlayerQualityLevel = [
+export const onScreenDisplayColors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
+export type OnScreenDisplayColor = (typeof onScreenDisplayColors)[number];
+export const onScreenDisplayTypes = ["no_display", "text", "line", "round"] as const;
+export type OnScreenDisplayType = (typeof onScreenDisplayTypes)[number];
+export const onScreenDisplayPositions = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
+export type OnScreenDisplayPosition = (typeof onScreenDisplayPositions)[number];
+export const youtubePlayerQualityLabels = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
+export type YoutubePlayerQualityLabel = (typeof youtubePlayerQualityLabels)[number];
+export const youtubePlayerQualityLevels = [
 	"tiny",
 	"small",
 	"medium",
@@ -98,28 +98,24 @@ export const youtubePlayerQualityLevel = [
 	"highres",
 	"auto"
 ] as const;
-export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
-export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
-export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
-export const youtubePlaybackSpeedButtonsRate = [0.25, 0.5, 0.75, 1] as const;
-export const screenshotType = ["file", "clipboard"] as const;
-export type ScreenshotType = (typeof screenshotType)[number];
-export const screenshotFormat = ["png", "jpeg", "webp"] as const;
-export type ScreenshotFormat = (typeof screenshotFormat)[number];
-export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
-export type ModifierKey = (typeof modifierKey)[number];
-export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
-export const volumeBoostMode = ["global", "per_video"] as const;
-export type VolumeBoostMode = (typeof volumeBoostMode)[number];
-export const videoHistoryResumeType = ["automatic", "prompt"] as const;
-export type VideoHistoryResumeType = (typeof videoHistoryResumeType)[number];
-export const buttonPlacement = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
-export type ButtonPlacement = (typeof buttonPlacement)[number];
-export const featureMenuOpenType = ["click", "hover"] as const;
-export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
-export type ButtonPlacementConfigurationMap = {
-	[ButtonName in AllButtonNames]: ButtonPlacement;
-};
+export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevels)[number];
+export const youtubePlayerSpeedRatesExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
+export const youtubePlayerSpeedRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRatesExtended] as const;
+export const youtubePlaybackSpeedButtonsRates = [0.25, 0.5, 0.75, 1] as const;
+export const screenshotTypes = ["file", "clipboard"] as const;
+export type ScreenshotType = (typeof screenshotTypes)[number];
+export const screenshotFormats = ["png", "jpeg", "webp"] as const;
+export type ScreenshotFormat = (typeof screenshotFormats)[number];
+export const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
+export type ModifierKey = (typeof modifierKeys)[number];
+export const volumeBoostModes = ["global", "per_video"] as const;
+export type VolumeBoostMode = (typeof volumeBoostModes)[number];
+export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
+export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
+export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
+export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const featureMenuOpenTypes = ["click", "hover"] as const;
+export type FeatureMenuOpenType = (typeof featureMenuOpenTypes)[number];
 type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
@@ -141,6 +137,10 @@ export const buttonNames = Object.keys({
 	screenshotButton: "",
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
+export type ButtonPlacementConfigurationMap = {
+	[ButtonName in AllButtonNames]: ButtonPlacement;
+};
+export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;

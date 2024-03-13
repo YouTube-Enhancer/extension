@@ -20,7 +20,7 @@ import type {
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { featureToMultiButtonsMap, youtubePlayerQualityLevel } from "../types";
+import { featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -52,7 +52,7 @@ export function chooseClosestQuality(
 	}
 
 	// Find the index of the selected quality in the array
-	const selectedIndex = youtubePlayerQualityLevel.indexOf(selectedQuality);
+	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
 
 	// If the selected quality is not in the array, return null
 	if (selectedIndex === -1) {
@@ -62,7 +62,7 @@ export function chooseClosestQuality(
 	// Find the available quality levels that are closest to the selected quality level
 	const closestQualities = availableQualities.reduce(
 		(acc, quality) => {
-			const qualityIndex = youtubePlayerQualityLevel.indexOf(quality);
+			const qualityIndex = youtubePlayerQualityLevels.indexOf(quality);
 			if (qualityIndex !== -1) {
 				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality });
 			}
