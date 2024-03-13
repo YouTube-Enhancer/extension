@@ -23,10 +23,10 @@
 					}
 				},
 				"increasePlaybackSpeed": {
-					"label": "Increase playback speed"
+					"label": "再生速度を上げる"
 				},
 				"decreasePlaybackSpeed": {
-					"label": "Decrease playback speed"
+					"label": "再生速度を下げる"
 				},
 				"maximizePlayerButton": {
 					"button": {
@@ -45,10 +45,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "再生速度を{{SPEED}}で下げする"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "再生速度を{{SPEED}}で上げする"
 						}
 					}
 				},
@@ -121,7 +121,7 @@
 					"value": "確認"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "新しいブラウザタブに拡張機能設定を開けるする"
 				},
 				"reset": {
 					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
@@ -131,11 +131,11 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "速度を下げるボタン",
+						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
-						"decreasePlaybackSpeed": "Decrease Playback Speed button",
-						"increasePlaybackSpeed": "Increase Playback Speed button",
+						"decreasePlaybackSpeed": "再生速度を下げるボタン",
+						"increasePlaybackSpeed": "再生速度を上げるボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
 						"screenshotButton": "スクリーンショットボタン",
@@ -321,10 +321,10 @@
 				},
 				"playbackSpeedButtons": {
 					"label": "再生速度ボタン",
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching",
+					"title": "動画の再生速度を上げか下げボタンに追加する",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "再生ボタン速度",
+						"title": "マウスクリックに速度を変化する量"
 					}
 				},
 				"select": {
