@@ -22,12 +22,6 @@
 						}
 					}
 				},
-				"increasePlaybackSpeed": {
-					"label": "加快播放速度"
-				},
-				"decreasePlaybackSpeed": {
-					"label": "減慢播放速度"
-				},
 				"maximizePlayerButton": {
 					"button": {
 						"label": "Maximize",
@@ -134,8 +128,6 @@
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
-						"decreasePlaybackSpeed": "減慢播放速度按鈕",
-						"increasePlaybackSpeed": "加快播放速度按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
 						"screenshotButton": "螢幕截圖按鈕",
@@ -321,11 +313,11 @@
 				},
 				"playbackSpeedButtons": {
 					"label": "播放速度按鈕",
-					"title": "加入加快或減慢播放速度按鈕",
 					"select": {
 						"label": "Playback buttons speed",
 						"title": "每次按下時改變的速度"
-					}
+					},
+					"title": "加入加快或減慢播放速度按鈕"
 				},
 				"select": {
 					"label": "播放速度",
