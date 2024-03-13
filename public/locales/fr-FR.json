@@ -311,6 +311,14 @@
 					"label": "Vitesse de lecture forcée",
 					"title": "Définit la vitesse de la vidéo comme choisie ci-dessous"
 				},
+				"playbackSpeedButtons": {
+					"label": "Playback speed buttons",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Amount of speed to be changed per click"
+					},
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+				},
 				"select": {
 					"label": "Vitesse de la vidéo",
 					"title": "La vitesse à laquelle la vidéo est définie"

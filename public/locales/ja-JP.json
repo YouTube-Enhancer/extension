@@ -10,45 +10,45 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "フィーチャー・メニュー"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "ループ",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "ループオフ",
+							"on": "ループオン"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "最大表示",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "最大表示オフ",
+							"on": "最大表示オン"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "文字起こしを見せる"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "再生速度を{{SPEED}}で下げする"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "再生速度を{{SPEED}}で上げする"
 						}
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "スクリーンショット"
 					},
 					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました"
 				},
@@ -60,10 +60,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "音量ブースト",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "音量ブーストオフ",
+							"on": "音量ブーストオン"
 						}
 					}
 				}
@@ -115,7 +115,7 @@
 					"value": "確認"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "新しいブラウザタブに拡張機能設定を開けるする"
 				},
 				"reset": {
 					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
@@ -125,8 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "速度を下げるボタン",
+						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
@@ -310,6 +310,14 @@
 				"enable": {
 					"label": "強制再生速度",
 					"title": "強制再生速度を可能にする"
+				},
+				"playbackSpeedButtons": {
+					"label": "再生速度ボタン",
+					"select": {
+						"label": "再生ボタン速度",
+						"title": "マウスクリックに速度を変化する量"
+					},
+					"title": "動画の再生速度を上げか下げボタンに追加する"
 				},
 				"select": {
 					"label": "動画の再生速度",

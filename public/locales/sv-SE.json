@@ -311,6 +311,14 @@
 					"label": "Tvingad uppspelningshastighet",
 					"title": "Ställer in videohastigheten till det du väljer nedan"
 				},
+				"playbackSpeedButtons": {
+					"label": "Playback speed buttons",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Amount of speed to be changed per click"
+					},
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+				},
 				"select": {
 					"label": "Uppspelningshastighet",
 					"title": "Hastigheten att spela upp videon i"
