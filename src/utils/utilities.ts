@@ -104,6 +104,20 @@ const BrowserColors = {
 } as const;
 
 type ColorType = "error" | "info" | "success" | "warning" | keyof typeof BrowserColors;
+function getColor(type: ColorType) {
+	switch (type) {
+		case "error":
+			return BrowserColors.FgRed;
+		case "info":
+			return BrowserColors.FgBlue;
+		case "success":
+			return BrowserColors.FgGreen;
+		case "warning":
+			return BrowserColors.FgYellow;
+		default:
+			return BrowserColors[type];
+	}
+}
 /**
  * Colorize a log message based on the specified type.
  *
@@ -111,33 +125,8 @@ type ColorType = "error" | "info" | "success" | "warning" | keyof typeof Browser
  * @param type - The type of the log message.
  * @returns An object containing the colorized message and its styling.
  */
-function colorizeLog(message: string, type?: ColorType): { message: string; styling: string[] } {
-	type = type || "FgBlack";
-	let style = "";
-
-	switch (type) {
-		case "success":
-			style = "color: green;";
-			break;
-		case "info":
-			style = "color: blue;";
-			break;
-		case "error":
-			style = "color: red;";
-			break;
-		case "warning":
-			style = "color: yellow;";
-			break;
-		default: {
-			if (typeof type === "string" && BrowserColors[type]) {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				({ [`${type}`]: style } = BrowserColors);
-			}
-			break;
-		}
-	}
-
+function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: string; styling: string[] } {
+	const style = getColor(type);
 	return {
 		message: `%c${message}%c`,
 		styling: [style, BrowserColors.Reset]
