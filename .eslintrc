@@ -12,7 +12,9 @@
 		"plugin:import/typescript",
 		"plugin:tailwindcss/recommended",
 		"plugin:promise/recommended",
-		"plugin:perfectionist/recommended-natural"
+		"plugin:perfectionist/recommended-natural",
+		"plugin:react-hooks/recommended",
+		"plugin:prettier/recommended"
 	],
 	"root": true,
 	"parser": "@typescript-eslint/parser",
