@@ -41,7 +41,8 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
 	const [editorHeight, setEditorHeight] = useState<number>(700);
-
+	const editorPosition = editorRef.current?.getPosition();
+	const editorScrollTop = editorRef.current?.getScrollTop();
 	const getEditorHeight = () => {
 		const {
 			documentElement: { clientHeight: documentHeight }
@@ -56,7 +57,10 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 		monacoRef.current = monaco;
 		setEditorHeight(getEditorHeight());
 	};
-	const handleEditorChange = useCallback(debounce(onChange, 250), []);
+	const handleEditorChange = useCallback(
+		(value: string | undefined, ev: editor.IModelContentChangedEvent) => debounce(onChange, 250)(value, ev),
+		[onChange]
+	);
 
 	const expandEditor = () => {
 		const currentScrollPosition = { x: window.scrollX, y: window.scrollY };
@@ -87,12 +91,12 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				}
 			});
 		}
-	}, [editorRef.current?.getPosition(), editorRef.current?.getScrollTop()]);
+	}, [editorPosition, editorScrollTop]);
 	useLayoutEffect(() => {
 		if (!isEditorExpanded) {
 			window.scrollTo(pageScrollPosition.x, pageScrollPosition.y);
 		}
-	}, [isEditorExpanded]);
+	}, [isEditorExpanded, pageScrollPosition]);
 	useEffect(() => {
 		if (editorRef.current) {
 			const { current: editor } = editorRef;
@@ -102,7 +106,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 			const position = new monaco.Position(lineNumber, columnNumber);
 			editor.setPosition(position);
 		}
-	}, [value]);
+	}, [value, editorState]);
 	useEffect(() => {
 		if (editorProblemsRef.current && expandButtonRef.current) {
 			setEditorHeight(getEditorHeight());
