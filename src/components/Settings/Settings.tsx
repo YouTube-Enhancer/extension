@@ -430,6 +430,13 @@ export default function Settings() {
 	// Import settings from a JSON file.
 	function importSettings() {
 		if (settingsImportRef.current === null) return;
+		const isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+		if (isFirefox && isPopup) {
+			// If user is currently on a popup, opens extensions page in a new tab to prevent settings not being imported.
+			openInNewTab("src/pages/options/index.html");
+			window.close();
+			return;
+		}
 		// Trigger the file input dialog.
 		settingsImportRef.current.click();
 	}
@@ -464,6 +471,7 @@ export default function Settings() {
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
 	};
+	const isPopup = window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g);
 	const openInNewTab = (path: string) => {
 		const url = chrome.runtime.getURL(path);
 		void chrome.tabs.create({ url });
@@ -972,7 +980,7 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
-					{window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g) && (
+					{isPopup && (
 						<button
 							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="openinnewtab_button"
