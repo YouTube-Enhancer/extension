@@ -8,7 +8,7 @@ import { useNotifications } from "@/hooks";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, deepMerge, getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineOpenInNew } from "react-icons/md";
@@ -16,8 +16,6 @@ import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 
-import { defaultConfiguration } from "../../utils/constants";
-import { formatDateForFileName } from "../../utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
@@ -404,7 +402,7 @@ export default function Settings() {
 							})
 						);
 					} else {
-						const castSettings = deepMerge(defaultConfiguration, importedSettings as configuration) as configuration;
+						const castSettings = deepMerge(defaultSettings, importedSettings as configuration) as configuration;
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
