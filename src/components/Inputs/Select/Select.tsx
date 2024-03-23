@@ -4,7 +4,7 @@ import type { ChangeEvent } from "react";
 
 import { useComponentVisible } from "@/hooks";
 import { cn } from "@/src/utils/utilities";
-import React from "react";
+import React, { useRef } from "react";
 
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
@@ -43,11 +43,8 @@ const Select = <Key extends configurationId>({
 	options,
 	selectedOption
 }: SelectProps<Key>) => {
-	const {
-		isComponentVisible: isSelectVisible,
-		ref: selectRef,
-		setIsComponentVisible: setIsSelectVisible
-	} = useComponentVisible<HTMLDivElement>(false);
+	const selectRef = useRef<HTMLDivElement>(null);
+	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } = useComponentVisible<HTMLDivElement>(selectRef, false);
 
 	const toggleSelect = () => {
 		setIsSelectVisible(!isSelectVisible);
