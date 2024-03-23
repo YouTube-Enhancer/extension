@@ -67,7 +67,7 @@ const Select = <Key extends configurationId>({
 			ref={selectRef}
 		>
 			<label htmlFor={id}>{label}</label>
-			<div className="relative inline-block">
+			<div>
 				<>
 					<button
 						className={cn(
