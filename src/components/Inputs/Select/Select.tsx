@@ -100,7 +100,7 @@ const Select = <Key extends configurationId>({
 					</button>
 					{isSelectVisible && (
 						<div
-							className="absolute z-10 mt-2 max-h-60 w-40 overflow-x-hidden 
+							className="z-10 mt-2 max-h-60 w-40 overflow-x-hidden 
 						overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg 
 						dark:border-gray-700 dark:bg-[#23272a]"
 						>
