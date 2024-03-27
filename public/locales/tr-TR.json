@@ -10,24 +10,24 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Özellik menüsü"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Tekrarla",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Tekrarlama kapalı",
+							"on": "Tekrarlama açık"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Ekranı kapla",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Tam ekran kapalı",
+							"on": "Tam ekran açıl"
 						}
 					}
 				},
