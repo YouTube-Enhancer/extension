@@ -7,10 +7,10 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { ENABLE_SOURCE_MAP, outputFolderName } from "../constants";
 const packages: { [entryAlias: string]: string }[] = [
 	{
-		content: resolve(__dirname, "../../../", "src/pages/content/index.tsx")
+		content: resolve(__dirname, "../../../", "src/pages/content/index.ts")
 	},
 	{
-		inject: resolve(__dirname, "../../../", "src/pages/inject/index.tsx")
+		embedded: resolve(__dirname, "../../../", "src/pages/embedded/index.ts")
 	}
 ];
 const root = resolve("src");

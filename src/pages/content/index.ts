@@ -20,7 +20,7 @@ import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
  */
 const script = document.createElement("script");
-script.src = chrome.runtime.getURL("src/pages/content/index.js");
+script.src = chrome.runtime.getURL("src/pages/embedded/index.js");
 script.type = "text/javascript";
 function initializeCommunicationElement() {
 	const element = document.createElement("div");
@@ -30,6 +30,7 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
+
 void (async () => {
 	/**
 	 * Retrieves the options from the local storage and sends them back to the youtube page.
