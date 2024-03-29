@@ -8,7 +8,9 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
+				decreasePlaybackSpeed: { label: "Decrease playback speed" };
 				featureMenu: { button: { label: "Feature menu" } };
+				increasePlaybackSpeed: { label: "Increase playback speed" };
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
@@ -77,7 +79,9 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						decreasePlaybackSpeed: "Decrease Playback Speed button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
+						increasePlaybackSpeed: "Increase Playback Speed button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
@@ -160,10 +164,6 @@ interface EnUS {
 					openYouTubeSettingsOnHover: {
 						label: "Open YouTube settings on hover";
 						title: "Opens the YouTube settings menu when you hover over the settings button";
-					};
-					pauseBackgroundPlayers: {
-						label: "Pause background players";
-						title: "Pauses video players in background tabs when you start a new player in foreground tab";
 					};
 					remainingTime: {
 						label: "Remaining time";

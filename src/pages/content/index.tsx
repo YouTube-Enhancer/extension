@@ -16,7 +16,6 @@ import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
-import { disablePauseBackgroundPlayers, enablePauseBackgroundPlayers } from "@/src/features/pauseBackgroundPlayers";
 import {
 	addDecreasePlaybackSpeedButton,
 	addIncreasePlaybackSpeedButton,
@@ -123,7 +122,6 @@ const enableFeatures = () => {
 			enableHideShorts(),
 			removeRedirect(),
 			enableShareShortener(),
-			enablePauseBackgroundPlayers(),
 			enableRememberVolume(),
 			enableHideScrollBar(),
 			enableCustomCSS()
@@ -474,17 +472,6 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (removeRedirectEnabled) {
 							await removeRedirect();
-						}
-						break;
-					}
-					case "pauseBackgroundPlayersChange": {
-						const {
-							data: { pauseBackgroundPlayersEnabled }
-						} = message;
-						if (pauseBackgroundPlayersEnabled) {
-							await enablePauseBackgroundPlayers();
-						} else {
-							disablePauseBackgroundPlayers();
 						}
 						break;
 					}

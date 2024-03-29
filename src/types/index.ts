@@ -204,7 +204,7 @@ export type CrowdinLanguageProgressResponse = {
 };
 // #endregion Constants
 // #region Extension Messaging Types
-export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
+export type MessageAction = "data_response" | "request_data" | "send_data";
 export type MessageSource = "content" | "extension";
 
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
@@ -230,19 +230,9 @@ export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 		type: Type;
 	}
 >;
-export type ActionMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_action", "content"> & {
-		data: D;
-		type: Type;
-	}
->;
 export type ContentSendOnlyMessageMappings = {
-	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
-};
-export type ContentToBackgroundSendOnlyMessageMappings = {
-	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
@@ -271,7 +261,6 @@ export type ExtensionSendOnlyMessageMappings = {
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
 	>;
-	pauseBackgroundPlayersChange: DataResponseMessage<"pauseBackgroundPlayersChange", { pauseBackgroundPlayersEnabled: boolean }>;
 	playbackSpeedButtonsChange: DataResponseMessage<
 		"playbackSpeedButtonsChange",
 		{ playbackButtonsSpeed: number; playbackSpeedButtonsEnabled: boolean }
@@ -337,7 +326,6 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
-	enable_pausing_background_players: boolean;
 	enable_playback_speed_buttons: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
