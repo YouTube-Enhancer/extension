@@ -8,9 +8,7 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
-				decreasePlaybackSpeed: { label: "Decrease playback speed" };
 				featureMenu: { button: { label: "Feature menu" } };
-				increasePlaybackSpeed: { label: "Increase playback speed" };
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
@@ -79,9 +77,7 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
-						decreasePlaybackSpeed: "Decrease Playback Speed button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
-						increasePlaybackSpeed: "Increase Playback Speed button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
@@ -313,6 +309,25 @@ interface EnUS {
 					};
 				};
 				title: "Volume boost settings";
+			};
+			youtubeDeepDark: {
+				author: "Author";
+				"co-authors": "Co-authors";
+				colors: {
+					colorShadow: { label: "Shadow color"; title: "Color for shadows" };
+					dimmerText: { label: "Secondary text color"; title: "Color for secondary text" };
+					hoverBackground: { label: "Hover background"; title: "Color for hover background" };
+					mainBackground: { label: "Main background color"; title: "Color for main background" };
+					mainColor: { label: "Accent color"; title: "Color for accent" };
+					mainText: { label: "Main text color"; title: "Color for main text" };
+					secondBackground: { label: "Secondary background"; title: "Color for secondary background" };
+				};
+				enable: {
+					label: "Enable selected theme";
+					title: "Activate the selected theme for the page";
+				};
+				select: { label: "Select theme"; title: "Select a theme to be applied to the page" };
+				title: "YouTube Deep Dark Settings";
 			};
 		};
 	};

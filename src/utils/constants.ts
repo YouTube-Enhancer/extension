@@ -2,6 +2,7 @@ import z, { ZodEnum, ZodObject } from "zod";
 
 import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
 
+import { deepDarkPreset } from "../deepDarkPresets";
 import { availableLocales } from "../i18n/index";
 import {
 	buttonNames,
@@ -30,9 +31,20 @@ export const defaultConfiguration = {
 		volumeBoostButton: "feature_menu"
 	},
 	custom_css_code: "",
+	deep_dark_custom_theme_colors: {
+		colorShadow: "#383c4a4d",
+		dimmerText: "#cccccc",
+		hoverBackground: "#4e5467",
+		mainBackground: "#22242d",
+		mainColor: "#367bf0",
+		mainText: "#eeeeee",
+		secondBackground: "#242730"
+	},
+	deep_dark_preset: "Deep-Dark",
 	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
 	enable_custom_css: false,
+	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
@@ -95,9 +107,22 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 		)
 	}),
 	custom_css_code: z.string().optional(),
+	deep_dark_custom_theme_colors: z
+		.object({
+			colorShadow: z.string(),
+			dimmerText: z.string(),
+			hoverBackground: z.string(),
+			mainBackground: z.string(),
+			mainColor: z.string(),
+			mainText: z.string(),
+			secondBackground: z.string()
+		})
+		.optional(),
+	deep_dark_preset: z.enum(deepDarkPreset).optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_custom_css: z.boolean().optional(),
+	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_hide_shorts: z.boolean().optional(),
