@@ -204,7 +204,7 @@ export type CrowdinLanguageProgressResponse = {
 };
 // #endregion Constants
 // #region Extension Messaging Types
-export type MessageAction = "data_response" | "request_data" | "send_data";
+export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
 export type MessageSource = "content" | "extension";
 
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
@@ -230,9 +230,18 @@ export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 		type: Type;
 	}
 >;
+export type ActionMessage<Type extends string, D = undefined> = Prettify<
+	BaseMessage<"request_action", "content"> & {
+		data: D;
+		type: Type;
+	}
+>;
 export type ContentSendOnlyMessageMappings = {
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
+};
+export type ContentToBackgroundSendOnlyMessageMappings = {
+	pauseBackgroundVideos: ActionMessage<"pauseBackgroundVideos">;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;

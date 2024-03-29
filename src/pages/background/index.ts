@@ -1,3 +1,5 @@
+import type { ContentToBackgroundSendOnlyMessageMappings } from "@/src/types";
+
 import pkg from "../../../package.json";
 
 chrome.runtime.onInstalled.addListener((details) => {
@@ -34,3 +36,12 @@ function isNewMajorVersion(oldVersion: VersionString, newVersion: VersionString)
 	const [newMajorVersion] = newVersion.split(".");
 	return oldMajorVersion !== newMajorVersion;
 }
+chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]) => {
+	switch (message.type) {
+		case "pauseBackgroundVideos": {
+			console.log("pauseBackgroundVideos");
+			// TODO: livingflore implement this
+			break;
+		}
+	}
+});

@@ -2,9 +2,11 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type {
+	ActionMessage,
 	AllButtonNames,
 	AnyFunction,
 	ContentSendOnlyMessageMappings,
+	ContentToBackgroundSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
 	MessageSource,
@@ -198,7 +200,31 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 		document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
 	}
 }
-
+/**
+ * Sends a content message to the background.
+ *
+ * @param {T} type - The type of the content message.
+ * @param {ContentToBackgroundSendOnlyMessageMappings[T]["data"]} data - The data of the content message.
+ * @return {Promise<void>} A promise that resolves when the message is sent.
+ */
+export function sendContentToBackgroundMessage<T extends keyof ContentToBackgroundSendOnlyMessageMappings>(
+	type: T,
+	data?: ContentToBackgroundSendOnlyMessageMappings[T]["data"]
+): Promise<void> {
+	const message: ActionMessage<T, typeof data> = {
+		action: "request_action",
+		data,
+		source: "content",
+		type
+	};
+	return new Promise((resolve) => {
+		const provider = document.getElementById("yte-message-from-youtube");
+		if (!provider) return;
+		provider.textContent = JSON.stringify(message);
+		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
+		resolve();
+	});
+}
 /**
  * Sends a message from the extension
  *

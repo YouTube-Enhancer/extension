@@ -60,6 +60,7 @@ import {
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
+	sendContentToBackgroundMessage,
 	waitForAllElements,
 	waitForSpecificMessage
 } from "@/utils/utilities";
@@ -118,6 +119,7 @@ const enableFeatures = () => {
 		// Wait for the specified container selectors to be available on the page
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
+		await sendContentToBackgroundMessage("pauseBackgroundVideos");
 		void Promise.all([
 			enableHideShorts(),
 			removeRedirect(),
