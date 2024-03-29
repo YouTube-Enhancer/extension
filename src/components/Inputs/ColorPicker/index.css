@@ -1,0 +1,30 @@
+.react-colorful {
+	cursor: pointer !important;
+	width: 150px !important;
+	height: 150px !important;
+	margin: 4px !important;
+}
+
+.react-colorful__saturation {
+	border-radius: 6px 6px 0 0 !important;
+}
+
+.react-colorful__hue,
+.react-colorful__alpha {
+	height: 16px !important;
+}
+
+.react-colorful__alpha {
+	border-radius: 0 0 6px 6px !important;
+}
+
+.react-colorful__pointer {
+	height: 18px !important;
+	width: 18px !important;
+	border: 1px solid #fff !important;
+}
+
+input#color-picker-input {
+	margin: 4px;
+	width: 150px;
+}

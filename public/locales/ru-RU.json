@@ -10,45 +10,45 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Меню функций"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Зациклить",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Зацикливание выключено",
+							"on": "Зацикливание включено"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Развернуть",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Проигрыватель свернут",
+							"on": "Проигрыватель развернут"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Открыть стенограмму"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "Уменьшить скорость на {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "Увеличить скорость на {{SPEED}}"
 						}
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Скриншот"
 					},
 					"copiedToClipboard": "Скриншот скопирован в буфер обмена"
 				},
@@ -60,10 +60,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Усиление громкости",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Увеличение громкости выключено",
+							"on": "Увеличение громкости включено"
 						}
 					}
 				}
@@ -115,7 +115,7 @@
 					"value": "Подтвердить"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Открывать настройки расширения в новой вкладке"
 				},
 				"reset": {
 					"title": "Сбрасывает все параметры до значений по умолчанию. Нажмите \"Подтвердить\", чтобы сохранить изменения",
@@ -125,8 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
+						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
@@ -214,8 +214,8 @@
 						"title": "Скрывает полосу прокрутки страницы"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Скрыть Shorts",
+						"title": "Скрывает все Shorts"
 					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
@@ -312,12 +312,12 @@
 					"title": "Устанавливает скорость проигрывания видео на ту, что вы выбрали ниже"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Кнопки регулирования скорости видео",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "Дельта кнопок регулирования скорости",
+						"title": "Число, на которое будет изменена скорость за клик"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "Добавляет кнопки для увеличения или уменьшения скорости воспроизведения просматриваемого видео"
 				},
 				"select": {
 					"label": "Скорость проигрывателя",
@@ -425,6 +425,49 @@
 					}
 				},
 				"title": "Настройки усиления громкости"
+			},
+			"youtubeDeepDark": {
+				"author": "Author",
+				"co-authors": "Co-authors",
+				"colors": {
+					"colorShadow": {
+						"label": "Shadow color",
+						"title": "Color for shadows"
+					},
+					"dimmerText": {
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
+					},
+					"hoverBackground": {
+						"label": "Hover background",
+						"title": "Color for hover background"
+					},
+					"mainBackground": {
+						"label": "Main background color",
+						"title": "Color for main background"
+					},
+					"mainColor": {
+						"label": "Accent color",
+						"title": "Color for accent"
+					},
+					"mainText": {
+						"label": "Main text color",
+						"title": "Color for main text"
+					},
+					"secondBackground": {
+						"label": "Secondary background",
+						"title": "Color for secondary background"
+					}
+				},
+				"enable": {
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
+				},
+				"select": {
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
+				},
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}

@@ -5,6 +5,8 @@ import type { ChangeEvent, ChangeEventHandler } from "react";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
+import Link from "@/src/components/Link";
+import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
@@ -381,6 +383,12 @@ export default function Settings() {
 			value: "prompt"
 		}
 	];
+	const youtubeDeepDarkThemeOptions: SelectOption<"deep_dark_preset">[] = deepDarkPreset.map((value) => {
+		return {
+			label: value,
+			value
+		};
+	});
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -959,6 +967,101 @@ export default function Settings() {
 						}}
 						type="css-editor"
 						value={settings.custom_css_code}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.youtubeDeepDark.title")} />
+					<SettingSection className="flex flex-row gap-1">
+						<SettingSection className="mb-1">
+							<SettingTitle title={t("settings.sections.youtubeDeepDark.author")} />
+							<Link href="https://github.com/RaitaroH">RaitaroH</Link>
+						</SettingSection>
+						<SettingSection className="mb-1">
+							<SettingTitle title={t("settings.sections.youtubeDeepDark.co-authors")} />
+							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
+							<Link href="https://github.com/MaximeRF">MaximeRF</Link>
+						</SettingSection>
+					</SettingSection>
+					<Setting
+						checked={settings.enable_deep_dark_theme?.toString() === "true"}
+						id="enable_deep_dark_theme"
+						label={t("settings.sections.youtubeDeepDark.enable.label")}
+						onChange={setCheckboxOption("enable_deep_dark_theme")}
+						title={t("settings.sections.youtubeDeepDark.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_deep_dark_theme?.toString() === "false"}
+						id="deep_dark_preset"
+						label={t("settings.sections.youtubeDeepDark.select.label")}
+						onChange={setValueOption("deep_dark_preset")}
+						options={youtubeDeepDarkThemeOptions}
+						selectedOption={getSelectedOption("deep_dark_preset")}
+						title={t("settings.sections.youtubeDeepDark.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainColor"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainColor}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.secondBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.secondBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.hoverBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.hoverBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainText"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainText}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.dimmerText"}
+						label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
+						title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.dimmerText}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.colorShadow"}
+						label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
+						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.colorShadow}
 					/>
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
