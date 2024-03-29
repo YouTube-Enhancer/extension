@@ -8,9 +8,7 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
-				decreasePlaybackSpeed: { label: "Decrease playback speed" };
 				featureMenu: { button: { label: "Feature menu" } };
-				increasePlaybackSpeed: { label: "Increase playback speed" };
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
@@ -79,9 +77,7 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
-						decreasePlaybackSpeed: "Decrease Playback Speed button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
-						increasePlaybackSpeed: "Increase Playback Speed button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
