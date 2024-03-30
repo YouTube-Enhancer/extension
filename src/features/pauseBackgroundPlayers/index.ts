@@ -1,5 +1,11 @@
 import { browserColorLog, sendContentToBackgroundMessage, waitForSpecificMessage } from "@/src/utils/utilities";
 
+const PauseBackgroundPlayers = () => {
+	sendContentToBackgroundMessage("pauseBackgroundPlayers").catch((error) => {
+		throw new Error(`Failed to pause background players: ${error}`);
+	});
+};
+
 export async function enablePauseBackgroundPlayers() {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -8,19 +14,17 @@ export async function enablePauseBackgroundPlayers() {
 		}
 	} = optionsData;
 	if (!pauseBackgroundPlayersEnabled) return;
-	browserColorLog(`Enabling pauseBackgroundPlayers`, "FgMagenta");
+	// ignore home page
+	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com\/?$/gm)) return;
+	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");
 
-	let videoPlayerContainer: HTMLElement | null = null;
+	let videoPlayerContainer: HTMLVideoElement | null = null;
 	if (!videoPlayerContainer) {
 		videoPlayerContainer = document.querySelector(".html5-main-video");
 	}
 	function detectPlaying() {
 		if (videoPlayerContainer) {
-			videoPlayerContainer.addEventListener("playing", () => {
-				void (async () => {
-					await sendContentToBackgroundMessage("pauseBackgroundPlayers");
-				})();
-			});
+			videoPlayerContainer.addEventListener("playing", PauseBackgroundPlayers);
 		}
 	}
 
@@ -40,17 +44,16 @@ export async function enablePauseBackgroundPlayers() {
 	if (videoPlayerContainer) {
 		observer.observe(videoPlayerContainer, { childList: true, subtree: true });
 	}
+	if (!videoPlayerContainer?.paused) {
+		PauseBackgroundPlayers();
+	}
 	detectPlaying();
 }
 
 export function disablePauseBackgroundPlayers() {
 	const videoPlayerContainer: HTMLElement | null = document.querySelector(".html5-main-video");
 	if (videoPlayerContainer) {
-		videoPlayerContainer.removeEventListener("playing", () => {
-			void (async () => {
-				await sendContentToBackgroundMessage("pauseBackgroundPlayers");
-			})();
-		});
+		videoPlayerContainer.removeEventListener("playing", PauseBackgroundPlayers);
 	}
 	browserColorLog("Disabling pauseBackgroundPlayers", "FgMagenta");
 }
