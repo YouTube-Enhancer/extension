@@ -161,6 +161,10 @@ interface EnUS {
 						label: "Open YouTube settings on hover";
 						title: "Opens the YouTube settings menu when you hover over the settings button";
 					};
+					pauseBackgroundPlayers: {
+						label: "Pause background players";
+						title: "Pauses video players in background tabs when you start a new player in foreground tab";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";

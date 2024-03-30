@@ -2,7 +2,8 @@ import type { Manifest } from "webextension-polyfill";
 
 import pkg from "../package.json";
 import { availableLocales } from "./i18n";
-const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs"];
+const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
+const hostPermissions: Manifest.MatchPattern[] = ["https://www.youtube.com/*"];
 const resources = [
 	"contentStyle.css",
 	"/icons/icon_128.png",
@@ -40,6 +41,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 		}
 	],
 	description: pkg.description,
+	host_permissions: hostPermissions,
 	icons,
 	manifest_version: 3,
 	name: pkg.displayName,
@@ -81,7 +83,7 @@ const manifestV2: Manifest.WebExtensionManifest = {
 	options_ui: {
 		page: "src/pages/options/index.html"
 	},
-	permissions,
+	permissions: permissions.concat(hostPermissions),
 	version: pkg.version,
 	web_accessible_resources: resources
 };

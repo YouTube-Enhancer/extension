@@ -555,6 +555,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_pausing_background_players?.toString() === "true"}
+						id="enable_pausing_background_players"
+						label={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.label")}
+						onChange={setCheckboxOption("enable_pausing_background_players")}
+						title={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_loop_button?.toString() === "true"}
 						id="enable_loop_button"
 						label={t("settings.sections.miscellaneous.features.loopButton.label")}
