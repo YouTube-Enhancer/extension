@@ -129,7 +129,7 @@
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
-						"openTranscriptButton": "Öppna transkriptknapp",
+						"openTranscriptButton": "Transkriptknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -272,7 +272,7 @@
 					"title": "Välj färgen för On-Screen Display"
 				},
 				"hide": {
-					"label": "Dölj fördröjning",
+					"label": "Döljfördröjning",
 					"title": "Ange tiden i millisekunder innan On-Screen Display automatiskt döljs"
 				},
 				"opacity": {
