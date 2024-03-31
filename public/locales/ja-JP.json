@@ -233,6 +233,10 @@
 						"label": "マウスを合わせでYouTubeの設定を開ける",
 						"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"
@@ -427,11 +431,11 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDeepDark": {
-				"author": "作家",
-				"co-authors": "共同作家",
+				"author": "Author",
+				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {
-						"label": "陰の色",
+						"label": "Shadow color",
 						"title": "Color for shadows"
 					},
 					"dimmerText": {
