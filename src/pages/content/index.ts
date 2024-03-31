@@ -240,6 +240,20 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				customCSSEnabled: options.enable_custom_css
 			});
 		},
+		deep_dark_custom_theme_colors: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("deepDarkThemeChange", {
+				deepDarkCustomThemeColors: newValue,
+				deepDarkPreset: options.deep_dark_preset,
+				deepDarkThemeEnabled: options.enable_deep_dark_theme
+			});
+		},
+		deep_dark_preset: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("deepDarkThemeChange", {
+				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
+				deepDarkPreset: newValue,
+				deepDarkThemeEnabled: options.enable_deep_dark_theme
+			});
+		},
 		enable_automatic_theater_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("automaticTheaterModeChange", {
 				automaticTheaterModeEnabled: newValue
@@ -247,6 +261,13 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		},
 		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
+		},
+		enable_deep_dark_theme: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("deepDarkThemeChange", {
+				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
+				deepDarkPreset: options.deep_dark_preset,
+				deepDarkThemeEnabled: newValue
+			});
 		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {

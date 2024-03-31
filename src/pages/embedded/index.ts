@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
+import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
+import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
@@ -126,7 +129,8 @@ const enableFeatures = () => {
 			enablePauseBackgroundPlayers(),
 			enableRememberVolume(),
 			enableHideScrollBar(),
-			enableCustomCSS()
+			enableCustomCSS(),
+			enableDeepDarkCSS()
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
@@ -496,6 +500,23 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableShareShortener();
 						} else {
 							disableShareShortener();
+						}
+						break;
+					}
+					case "deepDarkThemeChange": {
+						const {
+							data: { deepDarkCustomThemeColors, deepDarkPreset, deepDarkThemeEnabled }
+						} = message;
+						if (deepDarkThemeEnabled) {
+							if (deepDarkCSSExists()) {
+								updateDeepDarkCSS(
+									deepDarkPreset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkCustomThemeColors) : deepDarkPresets[deepDarkPreset]
+								);
+							} else {
+								await enableDeepDarkCSS();
+							}
+						} else {
+							disableDeepDarkCSS();
 						}
 						break;
 					}

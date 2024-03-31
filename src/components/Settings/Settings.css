@@ -51,7 +51,8 @@
 	--transition-border-color: border-color 200ms var(--transition-timing-ease-out);
 	--transition-box-shadow: box-shadow 200ms var(--transition-timing-ease-out);
 	--transition-color: color 200ms var(--transition-timing-ease-out);
-	--transition-opacity: opacity 200ms var(--transition-timing-linear); /* Timing opacity looks weird */
+	--transition-opacity: opacity 200ms var(--transition-timing-linear);
+	/* Timing opacity looks weird */
 	--transition-transform: transform 200ms var(--transition-timing-ease-out);
 
 	/* Misc */
@@ -73,7 +74,7 @@ html {
 }
 
 /* https://stackoverflow.com/questions/11243337/a-taller-than-its-img-child */
-a > img {
+a>img {
 	display: block;
 }
 
@@ -93,15 +94,11 @@ fieldset {
 	padding-left: 0 !important;
 }
 
-fieldset + fieldset {
-	margin-top: 12px !important;
-}
-
-fieldset > p:first-of-type {
+fieldset>p:first-of-type {
 	margin-top: 0 !important;
 }
 
-fieldset > p:last-of-type {
+fieldset>p:last-of-type {
 	margin-bottom: 0 !important;
 }
 
@@ -114,9 +111,11 @@ legend {
 .left {
 	float: left;
 }
+
 .right {
 	float: right;
 }
+
 .clear {
 	clear: both;
 }
@@ -129,18 +128,23 @@ legend {
 .accent {
 	color: var(--accent);
 }
+
 .success {
 	color: var(--success);
 }
+
 .warning {
 	color: var(--warning);
 }
+
 .danger {
 	color: var(--danger);
 }
+
 .light {
 	color: var(--foreground-light);
 }
+
 .inverse {
 	color: var(--foreground-inverse);
 }
@@ -149,12 +153,15 @@ legend {
 .bg-accent {
 	background: var(--accent);
 }
+
 .bg-success {
 	background: var(--success);
 }
+
 .bg-warning {
 	background: var(--warning);
 }
+
 .bg-danger {
 	background: var(--danger);
 }
@@ -214,10 +221,12 @@ button[id="openinnewtab_button"] {
 	padding: 8px 12px;
 	transition: var(--transition-background);
 }
+
 input[type="button"]:disabled {
 	cursor: help;
 	opacity: 0.6;
 }
+
 input[type="button"].loading:disabled {
 	cursor: wait;
 }
@@ -227,6 +236,7 @@ input[type="button"].accent,
 button[id="openinnewtab_button"].accent {
 	background: var(--accent);
 }
+
 input[type="button"].accent:hover,
 input[type="button"].accent:focus,
 input[type="button"].accent:active,
@@ -248,6 +258,7 @@ input[type="button"].success {
 	border: 2px solid var(--success-light);
 	background: var(--success-light);
 }
+
 input[type="button"].success:hover,
 input[type="button"].success:focus,
 input[type="button"].success:active {
@@ -266,6 +277,7 @@ input[type="button"].warning {
 	border: 2px solid var(--warning-light);
 	background: var(--warning-light);
 }
+
 input[type="button"].warning:hover,
 input[type="button"].warning:focus,
 input[type="button"].warning:active {
@@ -284,6 +296,7 @@ input[type="button"].danger {
 	border: 2px solid var(--danger-light);
 	background: var(--danger-light);
 }
+
 input[type="button"].danger:hover,
 input[type="button"].danger:focus,
 input[type="button"].danger:active {
@@ -346,7 +359,7 @@ button[id="openinnewtab_button"] {
 	z-index: 100;
 }
 
-#notifications > .notification {
+#notifications>.notification {
 	border-radius: var(--border-radius-md);
 	padding: 10px 14px;
 }

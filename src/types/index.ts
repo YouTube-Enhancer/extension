@@ -3,6 +3,7 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z, { ZodType } from "zod";
 
+import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n";
 // #region Utility types
 export type Nullable<T> = T | null;
@@ -116,6 +117,15 @@ export const buttonPlacements = ["below_player", "feature_menu", "player_control
 export type ButtonPlacement = (typeof buttonPlacements)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
 export type FeatureMenuOpenType = (typeof featureMenuOpenTypes)[number];
+export type DeepDarkCustomThemeColors = {
+	colorShadow: string;
+	dimmerText: string;
+	hoverBackground: string;
+	mainBackground: string;
+	mainColor: string;
+	mainText: string;
+	secondBackground: string;
+};
 type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
@@ -258,6 +268,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		}
 	>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
+	deepDarkThemeChange: DataResponseMessage<
+		"deepDarkThemeChange",
+		{ deepDarkCustomThemeColors: DeepDarkCustomThemeColors; deepDarkPreset: DeepDarkPreset; deepDarkThemeEnabled: boolean }
+	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
@@ -327,9 +341,12 @@ export type Messages = MessageMappings[keyof MessageMappings];
 export type configuration = {
 	button_placements: ButtonPlacementConfigurationMap;
 	custom_css_code: string;
+	deep_dark_custom_theme_colors: DeepDarkCustomThemeColors;
+	deep_dark_preset: DeepDarkPreset;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_custom_css: boolean;
+	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
