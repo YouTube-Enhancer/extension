@@ -233,6 +233,10 @@
 						"label": "Abrir configurações do YouTube ao passar o mouse",
 						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "Tempo restante",
 						"title": "Mostra o tempo restante do vídeo que você está assistindo"
