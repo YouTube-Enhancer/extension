@@ -427,45 +427,45 @@
 				"title": "Ses güçlendirme ayarları"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Yazar",
+				"co-authors": "Ortak yazarlar",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
+						"label": "Gölge rengi",
 						"title": "Color for shadows"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
+						"label": "İkincil metin rengi",
 						"title": "Color for secondary text"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
+						"label": "Arka plan rengi",
 						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "Main background color",
+						"label": "Ana arka plan rengi",
 						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "Accent color",
+						"label": "Vurgu rengi",
 						"title": "Color for accent"
 					},
 					"mainText": {
-						"label": "Main text color",
+						"label": "Ana metin rengi",
 						"title": "Color for main text"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
+						"label": "İkincil arka plan rengi",
 						"title": "Color for secondary background"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Seçilen temayı etkinleştir",
+					"title": "Sayfa için seçilen temayı etkinleştirin"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Tema seç",
+					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
 				"title": "YouTube Deep Dark Settings"
 			}
