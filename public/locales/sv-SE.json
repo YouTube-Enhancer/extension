@@ -233,6 +233,10 @@
 						"label": "Öppna YouTube-inställningar vid musöver",
 						"title": "Öppnar YouTube-inställningsmenyn när du håller muspekaren över inställningsknappen"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -427,47 +431,47 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDeepDark": {
-				"author": "Skapare",
-				"co-authors": "Medskapare",
+				"author": "Author",
+				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {
-						"label": "Skuggfärg",
-						"title": "Färg för skuggor"
+						"label": "Shadow color",
+						"title": "Color for shadows"
 					},
 					"dimmerText": {
-						"label": "Sekundär textfärg",
-						"title": "Färg för sekundärtext"
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
 					},
 					"hoverBackground": {
-						"label": "Musöverbakgrund",
-						"title": "Färg för musöverbakgrund"
+						"label": "Hover background",
+						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "Primär bakgrundsfärg",
-						"title": "Färg för primär bakgrund"
+						"label": "Main background color",
+						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "Accentfärg",
-						"title": "Färg för accent"
+						"label": "Accent color",
+						"title": "Color for accent"
 					},
 					"mainText": {
-						"label": "Primär textfärg",
-						"title": "Färg för primär text"
+						"label": "Main text color",
+						"title": "Color for main text"
 					},
 					"secondBackground": {
-						"label": "Sekundär bakgrund",
-						"title": "Färg för sekundär bakgrund"
+						"label": "Secondary background",
+						"title": "Color for secondary background"
 					}
 				},
 				"enable": {
-					"label": "Aktivera valt tema",
-					"title": "Aktivera det valda temat för sidan"
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
 				},
 				"select": {
-					"label": "Välj tema",
-					"title": "Välj ett tema som ska tillämpas på sidan"
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
 				},
-				"title": "Deep Dark-inställningar för YouTube"
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}
