@@ -233,6 +233,10 @@
 						"label": "懸浮時開啟設定選單",
 						"title": "鼠標懸浮在設定按鈕時開啟選單"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "剩餘時間",
 						"title": "顥示現時影片的剩餘時間"
@@ -427,47 +431,47 @@
 				"title": "音量增強設定"
 			},
 			"youtubeDeepDark": {
-				"author": "作者",
-				"co-authors": "共同作者",
+				"author": "Author",
+				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {
-						"label": "陰影顏色",
-						"title": "陰影的顏色"
+						"label": "Shadow color",
+						"title": "Color for shadows"
 					},
 					"dimmerText": {
-						"label": "次要文字顏色",
-						"title": "次要文字的顏色"
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
 					},
 					"hoverBackground": {
-						"label": "滑過背景",
-						"title": "滑過背景顏色"
+						"label": "Hover background",
+						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "主要背景顏色",
-						"title": "主要背景的顏色"
+						"label": "Main background color",
+						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "重點色調",
-						"title": "重點色調的顏色"
+						"label": "Accent color",
+						"title": "Color for accent"
 					},
 					"mainText": {
-						"label": "主要文字顏色",
-						"title": "主要文字的顏色"
+						"label": "Main text color",
+						"title": "Color for main text"
 					},
 					"secondBackground": {
-						"label": "次要背景",
-						"title": "次要背景顏色"
+						"label": "Secondary background",
+						"title": "Color for secondary background"
 					}
 				},
 				"enable": {
-					"label": "啟用已選主題",
-					"title": "啟用頁面的已選主題"
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
 				},
 				"select": {
-					"label": "選擇主題",
-					"title": "選擇套用到頁面的主題"
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
 				},
-				"title": "YouTube Deep Dark 設定"
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}
