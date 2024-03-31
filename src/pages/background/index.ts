@@ -38,9 +38,49 @@ function isNewMajorVersion(oldVersion: VersionString, newVersion: VersionString)
 }
 chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]) => {
 	switch (message.type) {
-		case "pauseBackgroundVideos": {
-			console.log("pauseBackgroundVideos");
-			// TODO: livingflore implement this
+		case "pauseBackgroundPlayers": {
+			// Get the active tab's ID
+			chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
+				const [activeTab] = activeTabs;
+				const { id: activeTabId } = activeTab;
+				// Query all tabs except the active one
+				chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
+					for (const tab of tabs) {
+						// Skip the active tab
+						if (tab.id === activeTabId) continue;
+						if (tab.id !== undefined) {
+							chrome.scripting.executeScript(
+								{
+									func: () => {
+										const videos = document.querySelectorAll("video");
+										videos.forEach((video) => {
+											if (!video.paused) {
+												video.pause();
+											}
+										});
+										const audios = document.querySelectorAll("audio");
+										audios.forEach((audio) => {
+											if (!audio.paused) {
+												audio.pause();
+											}
+										});
+									},
+									target: { tabId: tab.id }
+								},
+								(results) => {
+									if (chrome.runtime.lastError) {
+										console.error(chrome.runtime.lastError.message);
+									} else {
+										if (results[0].result) {
+											console.log(results);
+										}
+									}
+								}
+							);
+						}
+					}
+				});
+			});
 			break;
 		}
 	}

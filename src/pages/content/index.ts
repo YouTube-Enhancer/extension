@@ -284,6 +284,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				openYouTubeSettingsOnHoverEnabled: newValue
 			});
 		},
+		enable_pausing_background_players: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("pauseBackgroundPlayersChange", {
+				pauseBackgroundPlayersEnabled: newValue
+			});
+		},
 		enable_playback_speed_buttons: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
 				playbackButtonsSpeed: options.playback_buttons_speed,
