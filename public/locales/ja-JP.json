@@ -427,11 +427,11 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "作家",
+				"co-authors": "共同作家",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
+						"label": "陰の色",
 						"title": "Color for shadows"
 					},
 					"dimmerText": {
