@@ -10,45 +10,45 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Funktionsmeny"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Slinga",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Slinga av",
+							"on": "Slinga på"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximera",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Maximera av",
+							"on": "Maximera på"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Öppna transkript"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "Minska hastigheten med {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "Öka hastigheten med {{SPEED}}"
 						}
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Skärmbild"
 					},
 					"copiedToClipboard": "Skärmbild kopierad till urklipp"
 				},
@@ -60,10 +60,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Volymökning",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Volymökning av",
+							"on": "Volymökning på"
 						}
 					}
 				}
@@ -125,8 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
+						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Öppna transkriptknapp",
@@ -312,12 +312,12 @@
 					"title": "Ställer in videohastigheten till det du väljer nedan"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Knapp för uppspelningshastigheten",
 					"select": {
 						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"title": "Hastighetsändring per klick"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "Lägger till knappar för att öka eller minska uppspelningshastigheten på videon du tittar på"
 				},
 				"select": {
 					"label": "Uppspelningshastighet",
@@ -427,47 +427,47 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Skapare",
+				"co-authors": "Medskapare",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Skuggfärg",
+						"title": "Färg för skuggor"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Sekundär textfärg",
+						"title": "Färg för sekundärtext"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
-						"title": "Color for hover background"
+						"label": "Musöverbakgrund",
+						"title": "Färg för musöverbakgrund"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Primär bakgrundsfärg",
+						"title": "Färg för primär bakgrund"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Accentfärg",
+						"title": "Färg för accent"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Primär textfärg",
+						"title": "Färg för primär text"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
-						"title": "Color for secondary background"
+						"label": "Sekundär bakgrund",
+						"title": "Färg för sekundär bakgrund"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Aktivera valt tema",
+					"title": "Aktivera det valda temat för sidan"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Välj tema",
+					"title": "Välj ett tema som ska tillämpas på sidan"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "Deep Dark-inställningar för YouTube"
 			}
 		}
 	}
