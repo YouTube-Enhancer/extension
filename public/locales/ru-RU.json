@@ -233,6 +233,10 @@
 						"label": "Открывать настройки YouTube при наведении курсора",
 						"title": "Открывает меню настроек YouTube при наведении на кнопку меню"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
 						"title": "Показывает оставшееся время просмотра видео"
