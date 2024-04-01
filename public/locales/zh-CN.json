@@ -440,32 +440,32 @@
 					},
 					"dimmerText": {
 						"label": "次要文本颜色",
-						"title": "次要文本颜色"
+						"title": "为次要文本使用的颜色"
 					},
 					"hoverBackground": {
 						"label": "悬停背景色",
-						"title": "Color for hover background"
+						"title": "为悬停背景使用的颜色"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "主要背景颜色",
+						"title": "为主要背景使用的颜色"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "强调颜色",
+						"title": "为强调使用的颜色"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "主要文本颜色",
+						"title": "为主要文本使用的颜色"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
-						"title": "Color for secondary background"
+						"label": "次要背景",
+						"title": "为次要背景使用的颜色"
 					}
 				},
 				"enable": {
 					"label": "启用所选主题",
-					"title": "Activate the selected theme for the page"
+					"title": "在页面上应用所选主题"
 				},
 				"select": {
 					"label": "选择主题",
