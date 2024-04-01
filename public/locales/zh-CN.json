@@ -234,8 +234,8 @@
 						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "暂停后台播放",
+						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
@@ -431,19 +431,19 @@
 				"title": "音量增强设置"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "作者",
+				"co-authors": "合作作者",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "阴影颜色",
+						"title": "阴影颜色"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "次要文本颜色",
+						"title": "次要文本颜色"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
+						"label": "悬停背景色",
 						"title": "Color for hover background"
 					},
 					"mainBackground": {
@@ -464,14 +464,14 @@
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
+					"label": "启用所选主题",
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "选择主题",
+					"title": "选择要应用到页面的主题"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTube 暗黑模式设置"
 			}
 		}
 	}
