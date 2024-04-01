@@ -2,68 +2,68 @@
 	"langCode": "it-IT",
 	"langName": "Italiano",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "Video a {{VIDEO_TIME}} in ripresa",
+		"settingVolume": "Impostazione aumento volume a {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menu' funzioni"
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Ripeti",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Ripetizione NO",
+							"on": "Ripetizione SÌ"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Ingrandisci",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Massimizza NO",
+							"on": "Massimizza SÌ"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Apri trascrizione"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "Diminuisci velocità di {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "Aumenta velocità di {{SPEED}}"
 						}
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Schermata"
 					},
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Schermata copiata negli Appunti"
 				},
 				"videoHistory": {
-					"resumeButton": "Resume",
+					"resumeButton": "Riprendi",
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Chiudi"
 					}
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Aumento volume",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Aumento volume NO",
+							"on": "Aumento volume SÌ"
 						}
 					}
 				}
@@ -74,52 +74,52 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Il tasto per modificare la velocità della rotellina del mouse non può essere lo stesso che modifica il volume con la rotellina del mouse.",
+							"volumeControl": "Il tasto che modifica il volume con la rotellina del mouse non può essere lo stesso che modifica la velocità della rotellina del mouse."
 						}
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Le opzioni sono state reimpostate ai valori predefiniti.\nPuoi salvare le modifiche cliccando il pulsante \"Conferma\" o scartarle chiudendo la pagina oppure ignorando questa notifica."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "Opzioni salvate."
 				}
 			}
 		}
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"allDataDeleted": "Tutti i dati sono stati eliminati.",
+			"confirmAlert": "Questo eliminerà tutti i dati delle estensioni relativi alle opzioni. Continuare?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Automatic quality adjustment",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"label": "Regolazione automatica qualità",
+					"title": "Regola automaticamente la qualità video al livello selezionato."
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "Qualità riproduttore",
+					"title": "La qualità alla quale impostare il video"
 				},
-				"title": "Automatic quality settings"
+				"title": "Impostazioni qualità automatiche"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "Cancella tutti i dati che questa estensione ha memorizzato sulla tua macchina",
+					"value": "Cancella dati"
 				},
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "Conferma ripristino impostazioni",
+					"value": "Conferma"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Apri impostazioni estensione in una nuova scheda"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"title": "Reimposta le impostazioni ai valori predefiniti, clicca il pulsante di conferma per salvare le modifiche",
+					"value": "Reimposta"
 				}
 			},
 			"buttonPlacement": {
