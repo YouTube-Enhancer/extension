@@ -127,20 +127,20 @@
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"loopButton": "Pulsante Ripeti",
+						"maximizePlayerButton": "Pulsante Massimizza",
+						"openTranscriptButton": "Pulsante Apri trascrizione",
+						"screenshotButton": "Pulsante Schermata",
+						"volumeBoostButton": "Pulsante Aumento volume"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "sotto i controlli del riproduttore",
+							"value": "Sotto il riproduttore"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "nel menu' delle funzioni",
+							"value": "Menu' funzioni"
 						},
 						"player_controls_left": {
 							"placement": "on the left side of player controls",
