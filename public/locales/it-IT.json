@@ -125,8 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
+						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
@@ -143,22 +143,22 @@
 							"value": "Menu' funzioni"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "alla sinistra dei controlli di riproduzione",
+							"value": "A sinistra"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "alla destra dei controlli di riproduzione",
+							"value": "A destra"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Posiziona {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Impostazioni posizione pulsante"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
+					"collapse": "Comprimi editor",
+					"expand": "Espandi editor",
 					"noProblems": "No problems found."
 				},
 				"enable": {
