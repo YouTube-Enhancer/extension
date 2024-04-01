@@ -234,8 +234,8 @@
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "Arka plan oynatıcılarını duraklat",
+						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
