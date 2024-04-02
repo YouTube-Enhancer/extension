@@ -159,32 +159,32 @@
 				"editor": {
 					"collapse": "Comprimi editor",
 					"expand": "Espandi editor",
-					"noProblems": "No problems found."
+					"noProblems": "Nessun problema trovato."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Abilita CSS personalizzato",
+					"title": "Abilita il CSS personalizzato da applicare alla pagina"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Impostazioni CSS personalizzate"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Tipo attivazione menu'",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Clic",
+							"hover": "Sorvola"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Seleziona il metodo per attivare il menu' funzioni"
 					},
-					"title": "Feature menu settings"
+					"title": "Impostazioni menu' funzioni"
 				}
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Impostazioni esportate correttamente",
+					"title": "Esporta impostazioni in un file JSON",
+					"value": "Esporta impostazioni"
 				},
 				"importButton": {
 					"error": {
