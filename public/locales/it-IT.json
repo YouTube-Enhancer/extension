@@ -215,7 +215,7 @@
 					},
 					"hideShorts": {
 						"label": "Nascondi blocchi",
-						"title": "Hides all shorts"
+						"title": "Nasconde tutti i blocchi"
 					},
 					"loopButton": {
 						"label": "Pulsante Ripeti",
@@ -255,7 +255,7 @@
 					},
 					"shortsAutoScroll": {
 						"label": "Scorri al blocco",
-						"title": "Automatically scrolls to the next short"
+						"title": "Scorri automaticamente al prossimo blocco"
 					}
 				},
 				"title": "Impostazioni varie"
@@ -285,7 +285,7 @@
 				},
 				"padding": {
 					"label": "Bordatura",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"title": "Regola la bordatura dello schermo in pixel. Questo si applica specificamente agli angoli dello schermo."
 				},
 				"position": {
 					"label": "Posizione",
@@ -302,40 +302,40 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"line": "Line",
-						"no_display": "No display",
-						"round": "Round",
+						"line": "Linea",
+						"no_display": "Nessuno schermo",
+						"round": "Tondo",
 						"text": "Testuale"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Seleziona il tipo di schermo interattivo"
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Forced playback speed",
-					"title": "Sets the video speed to what you choose below"
+					"label": "Velocità forzata riproduzione",
+					"title": "Imposta la velocità del video a quella che scegli qui sotto"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Pulsanti velocità riproduzione",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "Velocità ai pulsanti di riproduzione",
+						"title": "Quantità di velocità che il clic modifica"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "Aggiunge pulsanti per aumentare o diminuire la velocità di riproduzione del video che stai guardando"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Velocità riproduttore",
+					"title": "La velocità alla quale impostare il video"
 				},
-				"title": "Playback speed settings"
+				"title": "Impostazioni velocità riproduzione"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Screenshot button",
-					"title": "Adds a button to the player to take a screenshot of the video"
+					"label": "Pulsante Schermata",
+					"title": "Aggiunge un pulsante al riproduttore per catturare una schermata del video"
 				},
 				"saveAs": {
-					"clipboard": "Clipboard",
+					"clipboard": "Appunti",
 					"file": "File"
 				},
 				"selectFormat": {
