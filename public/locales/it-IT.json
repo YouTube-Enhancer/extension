@@ -188,49 +188,49 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Errore nell'importazione delle impostazioni. Controllare il formato del file.\nSi è verificato un errore sconosciuto.",
+						"validation": "Errore nell'importazione delle impostazioni. Controllare il formato del file.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Impostazioni importate correttamente",
+					"title": "Importa impostazioni da un file JSON",
+					"value": "Importa impostazioni"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Lingua",
+					"title": "La lingua da usare per l'estensione"
 				},
-				"title": "Language"
+				"title": "Lingua"
 			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
-						"label": "Automatic theater mode",
-						"title": "Automatically enables theater mode when you load a video"
+						"label": "Modalità teatro automatica",
+						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
 					"hideScrollbar": {
-						"label": "Hide scrollbar",
-						"title": "Hides the pages scrollbar"
+						"label": "Nascondi barra scorrimento",
+						"title": "Nasconde la barra di scorrimento delle pagine"
 					},
 					"hideShorts": {
 						"label": "Hide shorts",
 						"title": "Hides all shorts"
 					},
 					"loopButton": {
-						"label": "Loop button",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"label": "Pulsante Ripeti",
+						"title": "Aggiunge un pulsante al menu' funzioni per ripetere il video che stai guardando"
 					},
 					"maximizePlayerButton": {
-						"label": "Maximize player button",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"label": "Pulsante Ingrandisci riproduttore",
+						"title": "Aggiunge un pulsante al menu' funzioni per ingrandire il riproduttore"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Pulsante Apri trascrizione",
+						"title": "Aggiunge un pulsante al menu' funzioni per aprire la trascrizione del video che stai guardando"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
+						"label": "Apri le impostazioni di YouTube al sorvolo",
 						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"pauseBackgroundPlayers": {
