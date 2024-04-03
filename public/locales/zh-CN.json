@@ -443,7 +443,7 @@
 						"title": "为次要文本使用的颜色"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
+						"label": "悬停背景颜色",
 						"title": "为悬停背景使用的颜色"
 					},
 					"mainBackground": {
@@ -459,7 +459,7 @@
 						"title": "为主要文本使用的颜色"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
+						"label": "次要背景颜色",
 						"title": "为次要背景使用的颜色"
 					}
 				},
