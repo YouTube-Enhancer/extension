@@ -234,8 +234,8 @@
 						"title": "Öppnar YouTube-inställningsmenyn när du håller muspekaren över inställningsknappen"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "Pausa spelare i bakgrunden",
+						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
 					"remainingTime": {
 						"label": "Återstående tid",
@@ -318,7 +318,7 @@
 				"playbackSpeedButtons": {
 					"label": "Knapp för uppspelningshastigheten",
 					"select": {
-						"label": "Playback buttons speed",
+						"label": "Knapp för uppspelningshastigheten",
 						"title": "Hastighetsändring per klick"
 					},
 					"title": "Lägger till knappar för att öka eller minska uppspelningshastigheten på videon du tittar på"
@@ -431,47 +431,47 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Skapare",
+				"co-authors": "Medskapare",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Skuggfärg",
+						"title": "Färg för skuggor"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Sekundär textfärg",
+						"title": "Färg för sekundärtext"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Bakgrundsfärg för musöver",
+						"title": "Bakgrundsfärg för musöver"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Primär bakgrundsfärg",
+						"title": "Färg för primär bakgrund"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Accentfärg",
+						"title": "Färg för accent"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Primär textfärg",
+						"title": "Färg för primär text"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Sekundär bakgrundsfärg",
+						"title": "Färg för sekundär bakgrund"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Aktivera valt tema",
+					"title": "Aktivera det valda temat för sidan"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Välj tema",
+					"title": "Välj ett tema som ska tillämpas på sidan"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "Deep Dark-inställningar för YouTube"
 			}
 		}
 	}
