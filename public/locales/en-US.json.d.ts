@@ -320,11 +320,11 @@ interface EnUS {
 				colors: {
 					colorShadow: { label: "Shadow color"; title: "Color for shadows" };
 					dimmerText: { label: "Secondary text color"; title: "Color for secondary text" };
-					hoverBackground: { label: "Hover background"; title: "Color for hover background" };
+					hoverBackground: { label: "Hover background color"; title: "Color for hover background" };
 					mainBackground: { label: "Main background color"; title: "Color for main background" };
 					mainColor: { label: "Accent color"; title: "Color for accent" };
 					mainText: { label: "Main text color"; title: "Color for main text" };
-					secondBackground: { label: "Secondary background"; title: "Color for secondary background" };
+					secondBackground: { label: "Secondary background color"; title: "Color for secondary background" };
 				};
 				enable: {
 					label: "Enable selected theme";

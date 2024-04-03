@@ -233,6 +233,10 @@
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Arka plan oynatıcılarını duraklat",
+						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
+					},
 					"remainingTime": {
 						"label": "Kalan süre",
 						"title": "İzlediğiniz videonun kalan süresini gösterir"
