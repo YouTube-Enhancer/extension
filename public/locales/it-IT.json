@@ -214,7 +214,7 @@
 						"title": "Nasconde la barra di scorrimento delle pagine"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
+						"label": "Nascondi blocchi",
 						"title": "Hides all shorts"
 					},
 					"loopButton": {
@@ -231,81 +231,81 @@
 					},
 					"openYouTubeSettingsOnHover": {
 						"label": "Apri le impostazioni di YouTube al sorvolo",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"title": "Apre il menu' delle impostazioni di YouTube quando si passa sopra il pulsante delle impostazioni"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "Metti in pausa riproduttori in secondo piano",
+						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
 					},
 					"remainingTime": {
-						"label": "Remaining time",
-						"title": "Shows the remaining time of the video you're watching"
+						"label": "Tempo rimanente",
+						"title": "Mostra il tempo rimanente per il video che stai guardando"
 					},
 					"rememberLastVolume": {
-						"label": "Remember last volume",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+						"label": "Ricorda l'ultimo volume",
+						"title": "Ricorda il volume dell'ultimo video che hai guardato e lo imposta quando apri un nuovo video"
 					},
 					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+						"label": "Rimuovi URL /redirect di YouTube",
+						"title": "Rimpiazza il reindirizzamento di YouTube con gli URL attuali saltando il dialogo di avviso di reindirizzamento"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "Abbrevia il collegamento di condivisione video di YouTube",
+						"title": "Riduce il collegamento di condivisione video di YouTube (youtu.be) eliminando da esso i parametri si/feature"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
+						"label": "Scorri al blocco",
 						"title": "Automatically scrolls to the next short"
 					}
 				},
-				"title": "Miscellaneous settings"
+				"title": "Impostazioni varie"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Colore",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Blu",
+						"green": "Verde",
+						"orange": "Arancione",
+						"pink": "Rosa",
+						"purple": "Viola",
+						"red": "Rosso",
+						"white": "Bianco",
+						"yellow": "Giallo"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Seleziona il colore per lo schermo interattivo"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "Ritardo sparizione",
+					"title": "Specifica il tempo, in millisecondi, prima di nascondere automaticamente le parti interattive"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Opacità",
+					"title": "Regola l'opacità delle parti interattive"
 				},
 				"padding": {
-					"label": "Padding",
+					"label": "Bordatura",
 					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Posizione",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "In basso a sinistra",
+						"bottom_right": "In basso a destra",
+						"center": "Centro",
+						"top_left": "Alto a sinistra",
+						"top_right": "In alto a destra"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Seleziona la posizione dello schermo interattivo"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Impostazioni schermo interattivo",
 				"type": {
-					"label": "Type",
+					"label": "Tipo",
 					"options": {
 						"line": "Line",
 						"no_display": "No display",
 						"round": "Round",
-						"text": "Text"
+						"text": "Testuale"
 					},
 					"title": "Select the type of On-Screen Display"
 				}
@@ -375,22 +375,22 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "Abilita tenendo premuto il tasto modificatore",
+						"title": "Premi un tasto modificatore per abilitare la regolazione del volume con la rotellina."
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "Tasto {{KEY}}",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "Tasto modificatore",
+						"title": "Il tasto modificatore da usare"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "Abilita tenendo premuto il tasto destro",
+						"title": "Tieni premuto il tasto destro per abilitare il controllo del volume con la rotellina"
 					}
 				},
-				"title": "Scroll wheel volume control settings"
+				"title": "Impostazioni controllo volume con rotellina"
 			},
 			"videoHistory": {
 				"enable": {
