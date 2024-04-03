@@ -233,6 +233,10 @@
 						"label": "マウスを合わせでYouTubeの設定を開ける",
 						"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "背後タブのビデオプレイヤーを一時停止",
+						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"
@@ -427,47 +431,47 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "作家",
+				"co-authors": "共同作家",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "陰の色",
+						"title": "陰の色"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "二の次テキストの色",
+						"title": "二の次テキストの色"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
-						"title": "Color for hover background"
+						"label": "背景マウスホバー",
+						"title": "背景マウスホバーの色"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "主背景色",
+						"title": "主背景の色"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "アクセント色",
+						"title": "アクセントの色"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "メインテキスト色",
+						"title": "メインテキストの色"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
-						"title": "Color for secondary background"
+						"label": "二次背景色",
+						"title": "二次背景の色"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "選択中テーマを可能にする",
+					"title": "選択中ページにテーマを可能にする"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "テーマを選択",
+					"title": "ページのテーマを選択選べしてください"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTubeディープダーク設定"
 			}
 		}
 	}
