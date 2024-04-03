@@ -443,7 +443,7 @@
 						"title": "Цвет для вторичного текста"
 					},
 					"hoverBackground": {
-						"label": "Цвет фона при наведении",
+						"label": "Hover background color",
 						"title": "Цвет, который будет задаваться фону при наведении"
 					},
 					"mainBackground": {
@@ -459,7 +459,7 @@
 						"title": "Цвет для основного текста"
 					},
 					"secondBackground": {
-						"label": "Цвет вторичного фона",
+						"label": "Secondary background color",
 						"title": "Цвет для вторичного фона"
 					}
 				},
