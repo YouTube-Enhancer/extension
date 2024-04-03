@@ -443,7 +443,7 @@
 						"title": "次要文字的顏色"
 					},
 					"hoverBackground": {
-						"label": "滑過背景",
+						"label": "Hover background color",
 						"title": "滑過背景顏色"
 					},
 					"mainBackground": {
@@ -459,7 +459,7 @@
 						"title": "主要文字的顏色"
 					},
 					"secondBackground": {
-						"label": "次要背景",
+						"label": "Secondary background color",
 						"title": "次要背景顏色"
 					}
 				},
