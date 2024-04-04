@@ -302,9 +302,9 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"line": "Line",
+						"line": "Riga",
 						"no_display": "Nessuno schermo",
-						"round": "Round",
+						"round": "Tondo",
 						"text": "Testuale"
 					},
 					"title": "Seleziona il tipo di schermo interattivo"
