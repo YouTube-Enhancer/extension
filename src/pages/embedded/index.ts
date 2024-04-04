@@ -1,11 +1,13 @@
-import type { ExtensionSendOnlyMessageMappings, Messages, YouTubePlayerDiv } from "@/src/types";
-
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
+import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
+import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
@@ -17,6 +19,13 @@ import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
+import { disablePauseBackgroundPlayers, enablePauseBackgroundPlayers } from "@/src/features/pauseBackgroundPlayers";
+import {
+	addDecreasePlaybackSpeedButton,
+	addIncreasePlaybackSpeedButton,
+	removeDecreasePlaybackSpeedButton,
+	removeIncreasePlaybackSpeedButton
+} from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
@@ -37,9 +46,20 @@ import volumeBoost, {
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
 import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
+import {
+	type ExtensionSendOnlyMessageMappings,
+	type Messages,
+	type MultiButtonFeatureNames,
+	type MultiButtonNames,
+	type SingleButtonFeatureNames,
+	type SingleButtonNames,
+	type YouTubePlayerDiv,
+	featureToMultiButtonsMap
+} from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
+	findKeyByValue,
 	formatError,
 	isShortsPage,
 	isWatchPage,
@@ -106,9 +126,11 @@ const enableFeatures = () => {
 			enableHideShorts(),
 			removeRedirect(),
 			enableShareShortener(),
+			enablePauseBackgroundPlayers(),
 			enableRememberVolume(),
 			enableHideScrollBar(),
-			enableCustomCSS()
+			enableCustomCSS(),
+			enableDeepDarkCSS()
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
@@ -128,6 +150,8 @@ const enableFeatures = () => {
 			setPlayerSpeed(),
 			openTranscriptButton(),
 			addLoopButton(),
+			addIncreasePlaybackSpeedButton(),
+			addDecreasePlaybackSpeedButton(),
 			addMaximizePlayerButton(),
 			addScreenshotButton(),
 			volumeBoost(),
@@ -275,6 +299,19 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "playbackSpeedButtonsChange": {
+						const {
+							data: { playbackSpeedButtonsEnabled }
+						} = message;
+						if (playbackSpeedButtonsEnabled) {
+							await addDecreasePlaybackSpeedButton();
+							await addIncreasePlaybackSpeedButton();
+						} else {
+							await removeDecreasePlaybackSpeedButton();
+							await removeIncreasePlaybackSpeedButton();
+						}
+						break;
+					}
 					case "scrollWheelVolumeControlChange": {
 						const {
 							data: { scrollWheelVolumeControlEnabled }
@@ -341,24 +378,50 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						window.i18nextInstance = await i18nService(language);
 						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.buttons.featureMenu.label"));
+							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
-								updateFeatureMenuItemLabel(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
+								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
+								if (featureToMultiButtonsMap.has(featureName)) {
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(
+											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+										)
+									);
+								} else {
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+									);
+								}
 							}
 						}
 						if (featuresInControls.size > 0) {
 							for (const feature of featuresInControls) {
+								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (toggleFeatures.includes(feature)) {
 									const toggleFeature = feature as ToggleFeatures;
 									const featureButton = getFeatureButton(toggleFeature);
 									if (!featureButton) return;
 									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
 									updateFeatureButtonTitle(
-										feature,
-										window.i18nextInstance.t(`pages.content.buttons.${toggleFeature}.toggle.${buttonChecked ? "on" : "off"}`)
+										toggleFeature,
+										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
 									);
 								} else {
-									updateFeatureButtonTitle(feature, window.i18nextInstance.t(`pages.content.buttons.${feature}.label`));
+									if (featureToMultiButtonsMap.has(featureName)) {
+										updateFeatureMenuItemLabel(
+											feature,
+											window.i18nextInstance.t(
+												`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+											)
+										);
+									} else {
+										updateFeatureButtonTitle(
+											feature,
+											window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+										);
+									}
 								}
 							}
 						}
@@ -418,6 +481,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "pauseBackgroundPlayersChange": {
+						const {
+							data: { pauseBackgroundPlayersEnabled }
+						} = message;
+						if (pauseBackgroundPlayersEnabled) {
+							await enablePauseBackgroundPlayers();
+						} else {
+							disablePauseBackgroundPlayers();
+						}
+						break;
+					}
 					case "shareShortenerChange": {
 						const {
 							data: { shareShortenerEnabled }
@@ -426,6 +500,23 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableShareShortener();
 						} else {
 							disableShareShortener();
+						}
+						break;
+					}
+					case "deepDarkThemeChange": {
+						const {
+							data: { deepDarkCustomThemeColors, deepDarkPreset, deepDarkThemeEnabled }
+						} = message;
+						if (deepDarkThemeEnabled) {
+							if (deepDarkCSSExists()) {
+								updateDeepDarkCSS(
+									deepDarkPreset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkCustomThemeColors) : deepDarkPresets[deepDarkPreset]
+								);
+							} else {
+								await enableDeepDarkCSS();
+							}
+						} else {
+							disableDeepDarkCSS();
 						}
 						break;
 					}

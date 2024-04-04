@@ -7,44 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "Özellik menüsü"
+					"button": {
+						"label": "Özellik menüsü"
+					}
 				},
 				"loopButton": {
-					"label": "Döngü",
-					"toggle": {
-						"off": "Döngü kapalı",
-						"on": "Düngü açık"
+					"button": {
+						"label": "Tekrarla",
+						"toggle": {
+							"off": "Tekrarlama kapalı",
+							"on": "Tekrarlama açık"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Ekranı Kapla",
-					"toggle": {
-						"off": "Tam ekran kapalı",
-						"on": "Tam ekran açık"
+					"button": {
+						"label": "Ekranı kapla",
+						"toggle": {
+							"off": "Tam ekran kapalı",
+							"on": "Tam ekran açıl"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Not dökümünü aç"
+					"button": {
+						"label": "Open transcript"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
-					"label": "Ekran Görüntüsü"
+					"button": {
+						"label": "Screenshot"
+					},
+					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
 				},
-				"volumeBoostButton": {
-					"label": "Ses Güçlendirmesi",
-					"toggle": {
-						"off": "Ses güçlendirmesi kapalı",
-						"on": "Ses güçlendirmesi açık"
-					}
-				}
-			},
-			"features": {
 				"videoHistory": {
 					"resumeButton": "Devam Et",
 					"resumePrompt": {
 						"close": "Kapat"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -105,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
@@ -211,6 +233,10 @@
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Arka plan oynatıcılarını duraklat",
+						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
+					},
 					"remainingTime": {
 						"label": "Kalan süre",
 						"title": "İzlediğiniz videonun kalan süresini gösterir"
@@ -288,6 +314,14 @@
 				"enable": {
 					"label": "Zorunlu oynatma hızını etkinleştir",
 					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
+				},
+				"playbackSpeedButtons": {
+					"label": "Playback speed buttons",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Amount of speed to be changed per click"
+					},
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 				},
 				"select": {
 					"label": "Oynatma hızı",
@@ -395,6 +429,49 @@
 					}
 				},
 				"title": "Ses güçlendirme ayarları"
+			},
+			"youtubeDeepDark": {
+				"author": "Author",
+				"co-authors": "Co-authors",
+				"colors": {
+					"colorShadow": {
+						"label": "Shadow color",
+						"title": "Color for shadows"
+					},
+					"dimmerText": {
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
+					},
+					"hoverBackground": {
+						"label": "Hover background",
+						"title": "Color for hover background"
+					},
+					"mainBackground": {
+						"label": "Main background color",
+						"title": "Color for main background"
+					},
+					"mainColor": {
+						"label": "Accent color",
+						"title": "Color for accent"
+					},
+					"mainText": {
+						"label": "Main text color",
+						"title": "Color for main text"
+					},
+					"secondBackground": {
+						"label": "Secondary background",
+						"title": "Color for secondary background"
+					}
+				},
+				"enable": {
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
+				},
+				"select": {
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
+				},
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}

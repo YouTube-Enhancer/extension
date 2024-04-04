@@ -7,44 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "Funktionsmeny"
+					"button": {
+						"label": "Funktionsmeny"
+					}
 				},
 				"loopButton": {
-					"label": "Slinga",
-					"toggle": {
-						"off": "Slinga av",
-						"on": "Slinga på"
+					"button": {
+						"label": "Slinga",
+						"toggle": {
+							"off": "Slinga av",
+							"on": "Slinga på"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximera",
-					"toggle": {
-						"off": "Maximera av",
-						"on": "Maximera på"
+					"button": {
+						"label": "Maximera",
+						"toggle": {
+							"off": "Maximera av",
+							"on": "Maximera på"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Öppna transkript"
+					"button": {
+						"label": "Öppna transkript"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Minska hastigheten med {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Öka hastigheten med {{SPEED}}"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Skärmbild kopierad till urklipp",
-					"label": "Skärmbild"
+					"button": {
+						"label": "Skärmbild"
+					},
+					"copiedToClipboard": "Skärmbild kopierad till urklipp"
 				},
-				"volumeBoostButton": {
-					"label": "Volymökning",
-					"toggle": {
-						"off": "Volymökning av",
-						"on": "Volymökning på"
-					}
-				}
-			},
-			"features": {
 				"videoHistory": {
 					"resumeButton": "Återuppta",
 					"resumePrompt": {
 						"close": "Stäng"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volymökning",
+						"toggle": {
+							"off": "Volymökning av",
+							"on": "Volymökning på"
+						}
 					}
 				}
 			}
@@ -105,9 +125,11 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
+						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
-						"openTranscriptButton": "Öppna transkriptknapp",
+						"openTranscriptButton": "Transkriptknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -211,6 +233,10 @@
 						"label": "Öppna YouTube-inställningar vid musöver",
 						"title": "Öppnar YouTube-inställningsmenyn när du håller muspekaren över inställningsknappen"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -250,7 +276,7 @@
 					"title": "Välj färgen för On-Screen Display"
 				},
 				"hide": {
-					"label": "Dölj fördröjning",
+					"label": "Döljfördröjning",
 					"title": "Ange tiden i millisekunder innan On-Screen Display automatiskt döljs"
 				},
 				"opacity": {
@@ -288,6 +314,14 @@
 				"enable": {
 					"label": "Tvingad uppspelningshastighet",
 					"title": "Ställer in videohastigheten till det du väljer nedan"
+				},
+				"playbackSpeedButtons": {
+					"label": "Knapp för uppspelningshastigheten",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Hastighetsändring per klick"
+					},
+					"title": "Lägger till knappar för att öka eller minska uppspelningshastigheten på videon du tittar på"
 				},
 				"select": {
 					"label": "Uppspelningshastighet",
@@ -395,6 +429,49 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
+			},
+			"youtubeDeepDark": {
+				"author": "Author",
+				"co-authors": "Co-authors",
+				"colors": {
+					"colorShadow": {
+						"label": "Shadow color",
+						"title": "Color for shadows"
+					},
+					"dimmerText": {
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
+					},
+					"hoverBackground": {
+						"label": "Hover background",
+						"title": "Color for hover background"
+					},
+					"mainBackground": {
+						"label": "Main background color",
+						"title": "Color for main background"
+					},
+					"mainColor": {
+						"label": "Accent color",
+						"title": "Color for accent"
+					},
+					"mainText": {
+						"label": "Main text color",
+						"title": "Color for main text"
+					},
+					"secondBackground": {
+						"label": "Secondary background",
+						"title": "Color for secondary background"
+					}
+				},
+				"enable": {
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
+				},
+				"select": {
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
+				},
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}

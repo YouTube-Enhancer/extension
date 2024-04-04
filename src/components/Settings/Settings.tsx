@@ -1,14 +1,16 @@
-import type { FeaturesThatHaveButtons, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
+import Link from "@/src/components/Link";
+import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
+import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineOpenInNew } from "react-icons/md";
@@ -16,8 +18,6 @@ import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 
-import { defaultConfiguration } from "../../utils/constants";
-import { formatDateForFileName } from "../../utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
@@ -324,11 +324,16 @@ export default function Settings() {
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRate.map((rate) => ({
+	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
 		// This cast is here because I'm not sure what the proper type is
 	})) as SelectOption<"player_speed">[];
+	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRates.map((rate) => ({
+		label: rate?.toString(),
+		value: rate?.toString()
+		// This cast is here because I'm not sure what the proper type is
+	})) as SelectOption<"playback_buttons_speed">[];
 	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -349,8 +354,9 @@ export default function Settings() {
 		}
 	];
 	const buttonPlacementOptions: SelectOption<
+		| "button_placements.decreasePlaybackSpeedButton"
+		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
-		// eslint-disable-next-line no-secrets/no-secrets
 		| "button_placements.maximizePlayerButton"
 		| "button_placements.openTranscriptButton"
 		| "button_placements.screenshotButton"
@@ -377,6 +383,12 @@ export default function Settings() {
 			value: "prompt"
 		}
 	];
+	const youtubeDeepDarkThemeOptions: SelectOption<"deep_dark_preset">[] = deepDarkPreset.map((value) => {
+		return {
+			label: value,
+			value
+		};
+	});
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -398,9 +410,7 @@ export default function Settings() {
 							})
 						);
 					} else {
-						const castSettings = { ...defaultConfiguration, ...(importedSettings as configuration) };
-						// Set the imported settings in your state.
-						settingsMutate.mutate(castSettings);
+						const castSettings = deepMerge(defaultSettings, importedSettings as configuration) as configuration;
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
@@ -410,6 +420,8 @@ export default function Settings() {
 								void chrome.storage.local.set({ [key]: castSettings[key] as string });
 							}
 						}
+						// Set the imported settings in your state.
+						settingsMutate.mutate(castSettings);
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
@@ -424,6 +436,13 @@ export default function Settings() {
 	// Import settings from a JSON file.
 	function importSettings() {
 		if (settingsImportRef.current === null) return;
+		const isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
+		if (isFirefox && isPopup) {
+			// If user is currently on a popup, opens extensions page in a new tab to prevent settings not being imported.
+			openInNewTab("src/pages/options/index.html");
+			window.close();
+			return;
+		}
 		// Trigger the file input dialog.
 		settingsImportRef.current.click();
 	}
@@ -458,10 +477,15 @@ export default function Settings() {
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
 	};
+	const isPopup = window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g);
 	const openInNewTab = (path: string) => {
 		const url = chrome.runtime.getURL(path);
 		void chrome.tabs.create({ url });
 	};
+	const isOSDDisabled =
+		settings.enable_scroll_wheel_volume_control?.toString() !== "true" &&
+		settings.enable_scroll_wheel_speed_control?.toString() !== "true" &&
+		settings.enable_playback_speed_buttons?.toString() !== "true";
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
@@ -492,12 +516,12 @@ export default function Settings() {
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
-					{featuresThatHaveButtons.map((feature) => {
+					{buttonNames.map((feature) => {
 						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								id={`button_placements.${feature}` as `button_placements.${FeaturesThatHaveButtons}`}
+								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}
@@ -536,6 +560,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}
 						title={t("settings.sections.miscellaneous.features.remainingTime.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_pausing_background_players?.toString() === "true"}
+						id="enable_pausing_background_players"
+						label={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.label")}
+						onChange={setCheckboxOption("enable_pausing_background_players")}
+						title={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.title")}
 						type="checkbox"
 					/>
 					<Setting
@@ -634,9 +666,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.onScreenDisplaySettings.title")} />
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_color"
 						label={t("settings.sections.onScreenDisplaySettings.color.label")}
 						onChange={setValueOption("osd_display_color")}
@@ -658,9 +688,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_position"
 						label={t("settings.sections.onScreenDisplaySettings.position.label")}
 						onChange={setValueOption("osd_display_position")}
@@ -670,9 +698,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_opacity"
 						label={t("settings.sections.onScreenDisplaySettings.opacity.label")}
 						max={100}
@@ -683,9 +709,7 @@ export default function Settings() {
 						value={settings.osd_display_opacity}
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_hide_time"
 						label={t("settings.sections.onScreenDisplaySettings.hide.label")}
 						min={1}
@@ -695,9 +719,7 @@ export default function Settings() {
 						value={settings.osd_display_hide_time}
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_padding"
 						label={t("settings.sections.onScreenDisplaySettings.padding.label")}
 						min={0}
@@ -843,6 +865,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_playback_speed_buttons?.toString() === "true"}
+						id="enable_playback_speed_buttons"
+						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.label")}
+						onChange={setCheckboxOption("enable_playback_speed_buttons")}
+						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.title")}
+						type="checkbox"
+					/>
+					<Setting
 						disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
@@ -850,6 +880,16 @@ export default function Settings() {
 						options={YouTubePlayerSpeedOptions}
 						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
+						id="playback_buttons_speed"
+						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
+						onChange={setValueOption("playback_buttons_speed")}
+						options={YouTubePlaybackSpeedButtonsOptions}
+						selectedOption={getSelectedOption("playback_buttons_speed")?.toString()}
+						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
 						type="select"
 					/>
 				</SettingSection>
@@ -937,6 +977,101 @@ export default function Settings() {
 						value={settings.custom_css_code}
 					/>
 				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.youtubeDeepDark.title")} />
+					<SettingSection className="flex flex-row gap-1">
+						<SettingSection className="mb-1">
+							<SettingTitle title={t("settings.sections.youtubeDeepDark.author")} />
+							<Link href="https://github.com/RaitaroH">RaitaroH</Link>
+						</SettingSection>
+						<SettingSection className="mb-1">
+							<SettingTitle title={t("settings.sections.youtubeDeepDark.co-authors")} />
+							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
+							<Link href="https://github.com/MaximeRF">MaximeRF</Link>
+						</SettingSection>
+					</SettingSection>
+					<Setting
+						checked={settings.enable_deep_dark_theme?.toString() === "true"}
+						id="enable_deep_dark_theme"
+						label={t("settings.sections.youtubeDeepDark.enable.label")}
+						onChange={setCheckboxOption("enable_deep_dark_theme")}
+						title={t("settings.sections.youtubeDeepDark.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_deep_dark_theme?.toString() === "false"}
+						id="deep_dark_preset"
+						label={t("settings.sections.youtubeDeepDark.select.label")}
+						onChange={setValueOption("deep_dark_preset")}
+						options={youtubeDeepDarkThemeOptions}
+						selectedOption={getSelectedOption("deep_dark_preset")}
+						title={t("settings.sections.youtubeDeepDark.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainColor"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainColor}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.secondBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.secondBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.hoverBackground"}
+						label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
+						title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.hoverBackground}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.mainText"}
+						label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
+						title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.mainText}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.dimmerText"}
+						label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
+						title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.dimmerText}
+					/>
+					<Setting
+						disabled={settings.deep_dark_preset !== "Custom"}
+						id={"deep_dark_custom_theme_colors.colorShadow"}
+						label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
+						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
+						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
+						type="color-picker"
+						value={settings.deep_dark_custom_theme_colors.colorShadow}
+					/>
+				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
@@ -954,7 +1089,7 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
-					{window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g) && (
+					{isPopup && (
 						<button
 							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="openinnewtab_button"

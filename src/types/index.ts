@@ -3,8 +3,8 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z, { ZodType } from "zod";
 
+import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n";
-import type { FeatureName } from "../utils/EventManager";
 // #region Utility types
 export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
@@ -14,7 +14,14 @@ export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type ExtractButtonNames<T> = T extends `pages.content.buttons.${infer ButtonName}.label` ? ButtonName : never;
+export type ExtractButtonFeatureNames<T> =
+	T extends `pages.content.features.${infer FeatureName}.button.label` ? FeatureName
+	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label` ? FeatureName
+	: never;
+export type ExtractButtonNames<T> =
+	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
+	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
+	: never;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
@@ -71,15 +78,15 @@ export type FilterKeysByValueType<O extends object, ValueType> = {
 }[keyof O];
 // #endregion Utility types
 // #region Constants
-export const onScreenDisplayColor = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
-export type OnScreenDisplayColor = (typeof onScreenDisplayColor)[number];
-export const onScreenDisplayType = ["no_display", "text", "line", "round"] as const;
-export type OnScreenDisplayType = (typeof onScreenDisplayType)[number];
-export const onScreenDisplayPosition = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
-export type OnScreenDisplayPosition = (typeof onScreenDisplayPosition)[number];
-export const youtubePlayerQualityLabel = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
-export type YoutubePlayerQualityLabel = (typeof youtubePlayerQualityLabel)[number];
-export const youtubePlayerQualityLevel = [
+export const onScreenDisplayColors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
+export type OnScreenDisplayColor = (typeof onScreenDisplayColors)[number];
+export const onScreenDisplayTypes = ["no_display", "text", "line", "round"] as const;
+export type OnScreenDisplayType = (typeof onScreenDisplayTypes)[number];
+export const onScreenDisplayPositions = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
+export type OnScreenDisplayPosition = (typeof onScreenDisplayPositions)[number];
+export const youtubePlayerQualityLabels = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p", "2880p", "4320p", "auto"] as const;
+export type YoutubePlayerQualityLabel = (typeof youtubePlayerQualityLabels)[number];
+export const youtubePlayerQualityLevels = [
 	"tiny",
 	"small",
 	"medium",
@@ -92,39 +99,60 @@ export const youtubePlayerQualityLevel = [
 	"highres",
 	"auto"
 ] as const;
-export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevel)[number];
-export const youtubePlayerSpeedRateExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
-export const youtubePlayerSpeedRate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRateExtended] as const;
-export const screenshotType = ["file", "clipboard"] as const;
-export type ScreenshotType = (typeof screenshotType)[number];
-export const screenshotFormat = ["png", "jpeg", "webp"] as const;
-export type ScreenshotFormat = (typeof screenshotFormat)[number];
-export const modifierKey = ["altKey", "ctrlKey", "shiftKey"] as const;
-export type ModifierKey = (typeof modifierKey)[number];
-export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
-export const volumeBoostMode = ["global", "per_video"] as const;
-export type VolumeBoostMode = (typeof volumeBoostMode)[number];
-export const videoHistoryResumeType = ["automatic", "prompt"] as const;
-export type VideoHistoryResumeType = (typeof videoHistoryResumeType)[number];
-export const buttonPlacement = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
-export type ButtonPlacement = (typeof buttonPlacement)[number];
-export const featureMenuOpenType = ["click", "hover"] as const;
-export type FeatureMenuOpenType = (typeof featureMenuOpenType)[number];
-export type ButtonPlacementConfiguration = {
-	[Key in FeaturesThatHaveButtons]: ButtonPlacement;
+export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevels)[number];
+export const youtubePlayerSpeedRatesExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
+export const youtubePlayerSpeedRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRatesExtended] as const;
+export const youtubePlaybackSpeedButtonsRates = [0.25, 0.5, 0.75, 1] as const;
+export const screenshotTypes = ["file", "clipboard"] as const;
+export type ScreenshotType = (typeof screenshotTypes)[number];
+export const screenshotFormats = ["png", "jpeg", "webp"] as const;
+export type ScreenshotFormat = (typeof screenshotFormats)[number];
+export const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
+export type ModifierKey = (typeof modifierKeys)[number];
+export const volumeBoostModes = ["global", "per_video"] as const;
+export type VolumeBoostMode = (typeof volumeBoostModes)[number];
+export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
+export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
+export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
+export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const featureMenuOpenTypes = ["click", "hover"] as const;
+export type FeatureMenuOpenType = (typeof featureMenuOpenTypes)[number];
+export type DeepDarkCustomThemeColors = {
+	colorShadow: string;
+	dimmerText: string;
+	hoverBackground: string;
+	mainBackground: string;
+	mainColor: string;
+	mainText: string;
+	secondBackground: string;
 };
-export type FeaturesThatHaveButtons = Exclude<ExtractButtonNames<ParseKeys<"en-US", TOptions, undefined>>, "featureMenu">;
-export type FeatureButtonId = `yte-feature-${FeatureName}-button`;
-export type FeatureMenuItemIconId = `yte-${FeatureName}-icon`;
-export type FeatureMenuItemId = `yte-feature-${FeatureName}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${FeatureName}-label`;
-export const featuresThatHaveButtons = Object.keys({
+type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
+export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
+export type SingleButtonFeatureNames = Exclude<ExtractButtonFeatureNames<TOptionsKeys>, "featureMenu">;
+export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
+export type MultiButtonFeatureNames = Exclude<SingleButtonFeatureNames, AllButtonNames>;
+export const featureToMultiButtonsMap: Map<MultiButtonFeatureNames, MultiButtonNames[]> = new Map([
+	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
+]);
+export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
+export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
+
+export type FeatureButtonId = `yte-feature-${AllButtonNames}-button`;
+export const buttonNames = Object.keys({
+	decreasePlaybackSpeedButton: "",
+	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	openTranscriptButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
-} satisfies Record<FeaturesThatHaveButtons, "">);
+} satisfies Record<AllButtonNames, "">);
+export type ButtonPlacementConfigurationMap = {
+	[ButtonName in AllButtonNames]: ButtonPlacement;
+};
+export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryEntry = {
 	id: string;
@@ -139,7 +167,7 @@ export type NotificationType = "error" | "info" | "success" | "warning";
 export type NotificationAction = "reset_settings" | undefined;
 export type Notification = {
 	action: NotificationAction;
-	message: ParseKeys<"en-US", TOptions, undefined>;
+	message: TOptionsKeys;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;
@@ -188,7 +216,7 @@ export type CrowdinLanguageProgressResponse = {
 };
 // #endregion Constants
 // #region Extension Messaging Types
-export type MessageAction = "data_response" | "request_data" | "send_data";
+export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
 export type MessageSource = "content" | "extension";
 
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
@@ -214,9 +242,19 @@ export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 		type: Type;
 	}
 >;
+export type ActionMessage<Type extends string, D = undefined> = Prettify<
+	BaseMessage<"request_action", "content"> & {
+		data: D;
+		type: Type;
+	}
+>;
 export type ContentSendOnlyMessageMappings = {
+	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
+};
+export type ContentToBackgroundSendOnlyMessageMappings = {
+	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
@@ -224,7 +262,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"buttonPlacementChange",
 		{
 			buttonPlacement: {
-				[Key in FeaturesThatHaveButtons]: {
+				[Key in AllButtonNames]: {
 					new: ButtonPlacement;
 					old: ButtonPlacement;
 				};
@@ -232,6 +270,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		}
 	>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
+	deepDarkThemeChange: DataResponseMessage<
+		"deepDarkThemeChange",
+		{ deepDarkCustomThemeColors: DeepDarkCustomThemeColors; deepDarkPreset: DeepDarkPreset; deepDarkThemeEnabled: boolean }
+	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
@@ -244,6 +286,11 @@ export type ExtensionSendOnlyMessageMappings = {
 		{
 			openYouTubeSettingsOnHoverEnabled: boolean;
 		}
+	>;
+	pauseBackgroundPlayersChange: DataResponseMessage<"pauseBackgroundPlayersChange", { pauseBackgroundPlayersEnabled: boolean }>;
+	playbackSpeedButtonsChange: DataResponseMessage<
+		"playbackSpeedButtonsChange",
+		{ playbackButtonsSpeed: number; playbackSpeedButtonsEnabled: boolean }
 	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
@@ -294,11 +341,14 @@ export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
 // #region Configuration types
 export type configuration = {
-	button_placements: ButtonPlacementConfiguration;
+	button_placements: ButtonPlacementConfigurationMap;
 	custom_css_code: string;
+	deep_dark_custom_theme_colors: DeepDarkCustomThemeColors;
+	deep_dark_preset: DeepDarkPreset;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_custom_css: boolean;
+	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
@@ -306,6 +356,8 @@ export type configuration = {
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
+	enable_pausing_background_players: boolean;
+	enable_playback_speed_buttons: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
@@ -326,6 +378,7 @@ export type configuration = {
 	osd_display_padding: number;
 	osd_display_position: OnScreenDisplayPosition;
 	osd_display_type: OnScreenDisplayType;
+	playback_buttons_speed: number;
 	player_quality: YoutubePlayerQualityLevel;
 	player_speed: number;
 	remembered_volumes: RememberedVolumes;

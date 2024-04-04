@@ -7,44 +7,64 @@
 	},
 	"pages": {
 		"content": {
-			"buttons": {
+			"features": {
 				"featureMenu": {
-					"label": "フィーチャー・メニュー"
+					"button": {
+						"label": "フィーチャー・メニュー"
+					}
 				},
 				"loopButton": {
-					"label": "ループ",
-					"toggle": {
-						"off": "ループオフ",
-						"on": "ループオン"
+					"button": {
+						"label": "ループ",
+						"toggle": {
+							"off": "ループオフ",
+							"on": "ループオン"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "最大表示",
-					"toggle": {
-						"off": "最大表示オフ",
-						"on": "最大表示オン"
+					"button": {
+						"label": "最大表示",
+						"toggle": {
+							"off": "最大表示オフ",
+							"on": "最大表示オン"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "文字起こしを見せる"
+					"button": {
+						"label": "文字起こしを見せる"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "再生速度を{{SPEED}}で下げする"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "再生速度を{{SPEED}}で上げする"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました",
-					"label": "スクリーンショット"
+					"button": {
+						"label": "スクリーンショット"
+					},
+					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました"
 				},
-				"volumeBoostButton": {
-					"label": "音量ブースト",
-					"toggle": {
-						"off": "音量ブーストオフ",
-						"on": "音量ブーストオン"
-					}
-				}
-			},
-			"features": {
 				"videoHistory": {
 					"resumeButton": "レジューム",
 					"resumePrompt": {
 						"close": "終了"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "音量ブースト",
+						"toggle": {
+							"off": "音量ブーストオフ",
+							"on": "音量ブーストオン"
+						}
 					}
 				}
 			}
@@ -95,7 +115,7 @@
 					"value": "確認"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "新しいブラウザタブに拡張機能設定を開けるする"
 				},
 				"reset": {
 					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
@@ -105,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "速度を下げるボタン",
+						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
@@ -211,6 +233,10 @@
 						"label": "マウスを合わせでYouTubeの設定を開ける",
 						"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "背後タブのビデオプレイヤーを一時停止",
+						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"
@@ -288,6 +314,14 @@
 				"enable": {
 					"label": "強制再生速度",
 					"title": "強制再生速度を可能にする"
+				},
+				"playbackSpeedButtons": {
+					"label": "再生速度ボタン",
+					"select": {
+						"label": "再生ボタン速度",
+						"title": "マウスクリックに速度を変化する量"
+					},
+					"title": "動画の再生速度を上げか下げボタンに追加する"
 				},
 				"select": {
 					"label": "動画の再生速度",
@@ -395,6 +429,49 @@
 					}
 				},
 				"title": "音量ブーストの設定"
+			},
+			"youtubeDeepDark": {
+				"author": "作家",
+				"co-authors": "共同作家",
+				"colors": {
+					"colorShadow": {
+						"label": "陰の色",
+						"title": "陰の色"
+					},
+					"dimmerText": {
+						"label": "二の次テキストの色",
+						"title": "二の次テキストの色"
+					},
+					"hoverBackground": {
+						"label": "背景マウスホバー",
+						"title": "背景マウスホバーの色"
+					},
+					"mainBackground": {
+						"label": "主背景色",
+						"title": "主背景の色"
+					},
+					"mainColor": {
+						"label": "アクセント色",
+						"title": "アクセントの色"
+					},
+					"mainText": {
+						"label": "メインテキスト色",
+						"title": "メインテキストの色"
+					},
+					"secondBackground": {
+						"label": "二次背景色",
+						"title": "二次背景の色"
+					}
+				},
+				"enable": {
+					"label": "選択中テーマを可能にする",
+					"title": "選択中ページにテーマを可能にする"
+				},
+				"select": {
+					"label": "テーマを選択",
+					"title": "ページのテーマを選択選べしてください"
+				},
+				"title": "YouTubeディープダーク設定"
 			}
 		}
 	}

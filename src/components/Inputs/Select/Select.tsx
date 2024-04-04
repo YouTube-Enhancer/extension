@@ -4,7 +4,7 @@ import type { ChangeEvent } from "react";
 
 import { useComponentVisible } from "@/hooks";
 import { cn } from "@/src/utils/utilities";
-import React from "react";
+import React, { useRef } from "react";
 
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
@@ -43,11 +43,8 @@ const Select = <Key extends configurationId>({
 	options,
 	selectedOption
 }: SelectProps<Key>) => {
-	const {
-		isComponentVisible: isSelectVisible,
-		ref: selectRef,
-		setIsComponentVisible: setIsSelectVisible
-	} = useComponentVisible<HTMLDivElement>(false);
+	const selectRef = useRef<HTMLDivElement>(null);
+	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } = useComponentVisible<HTMLDivElement>(selectRef, false);
 
 	const toggleSelect = () => {
 		setIsSelectVisible(!isSelectVisible);
@@ -60,14 +57,9 @@ const Select = <Key extends configurationId>({
 
 	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
-		<div
-			aria-valuetext={selectedOption}
-			className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}
-			id={id}
-			ref={selectRef}
-		>
+		<div aria-valuetext={selectedOption} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id}>
 			<label htmlFor={id}>{label}</label>
-			<div className="relative inline-block">
+			<div ref={selectRef}>
 				<>
 					<button
 						className={cn(
@@ -99,7 +91,11 @@ const Select = <Key extends configurationId>({
 						<Arrow rotation={isSelectVisible ? "up" : "down"} />
 					</button>
 					{isSelectVisible && (
-						<div className="absolute z-10 mt-2 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-[#23272a]">
+						<div
+							className="z-10 mt-2 max-h-60 w-40 overflow-x-hidden 
+						overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg 
+						dark:border-gray-700 dark:bg-[#23272a]"
+						>
 							{options.map((option, index) => (
 								<div
 									aria-valuetext={option.value}

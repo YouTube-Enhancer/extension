@@ -46,6 +46,7 @@ type YouTubePlayerGetReturnTypeMappings = {
 	getSize: PlayerSize;
 	getVolume: number;
 };
+
 type FilterKeysByValueType<O extends object, ValueType> = {
 	[K in keyof O]: O[K] extends ValueType ? K
 	: O[K] extends Record<string, ValueType> ? K
