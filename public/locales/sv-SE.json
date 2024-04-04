@@ -251,7 +251,7 @@
 					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",
-						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort si/funktionsparametrar från den"
+						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
 					},
 					"shortsAutoScroll": {
 						"label": "Automatisk rullning för shorts",
