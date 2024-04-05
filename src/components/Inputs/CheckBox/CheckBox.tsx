@@ -20,6 +20,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, className, id, label, onCh
 				checked={checked}
 				className="form-checkbox size-3.5 text-indigo-600 transition duration-150 ease-in-out"
 				id={id}
+				key={`checkbox-${id}-${checked}`}
 				onChange={onChange}
 				type="checkbox"
 			/>
