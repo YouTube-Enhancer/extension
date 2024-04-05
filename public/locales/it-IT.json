@@ -302,7 +302,7 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"line": "Riga",
+						"line": "Linea",
 						"no_display": "Nessuno schermo",
 						"round": "Tondo",
 						"text": "Testuale"
