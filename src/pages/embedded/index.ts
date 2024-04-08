@@ -36,7 +36,6 @@ import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
-import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -127,7 +126,6 @@ const enableFeatures = () => {
 			enableHideShorts(),
 			removeRedirect(),
 			enableShareShortener(),
-			enableSkipContinueWatching(),
 			enablePauseBackgroundPlayers(),
 			enableRememberVolume(),
 			enableHideScrollBar(),
@@ -502,15 +500,6 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableShareShortener();
 						} else {
 							disableShareShortener();
-						}
-						break;
-					}
-					case "skipContinueWatchingChange": {
-						const {
-							data: { skipContinueWatchingEnabled }
-						} = message;
-						if (skipContinueWatchingEnabled) {
-							await enableSkipContinueWatching();
 						}
 						break;
 					}
