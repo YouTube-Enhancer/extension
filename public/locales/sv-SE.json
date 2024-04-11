@@ -253,6 +253,10 @@
 						"label": "Förkorta YouTube-videons delningslänk",
 						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
 					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
+					},
 					"shortsAutoScroll": {
 						"label": "Automatisk rullning för shorts",
 						"title": "Rullar automatiskt till nästa shorts"
