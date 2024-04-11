@@ -253,6 +253,10 @@
 						"label": "YouTube動画のURLを短縮する",
 						"title": "YouTube動画のURLに機能パラメータを削除して短縮する(youtu.be)"
 					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
+					},
 					"shortsAutoScroll": {
 						"label": "ショートの自動スクロール",
 						"title": "次のショートを自動にスクロールする"
