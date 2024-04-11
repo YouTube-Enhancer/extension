@@ -443,7 +443,7 @@
 						"title": "二の次テキストの色"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
+						"label": "背景マウスホバーの色",
 						"title": "背景マウスホバーの色"
 					},
 					"mainBackground": {
@@ -459,7 +459,7 @@
 						"title": "メインテキストの色"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
+						"label": "二次背景色",
 						"title": "二次背景の色"
 					}
 				},
