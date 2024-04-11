@@ -253,6 +253,10 @@
 						"label": "缩短YouTube视频分享链接",
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
+					},
 					"shortsAutoScroll": {
 						"label": "短视频自动下滑",
 						"title": "短视频播完后，自动下滑播放下一个"
