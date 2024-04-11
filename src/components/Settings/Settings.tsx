@@ -517,10 +517,10 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
 					{buttonNames.map((feature) => {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
+								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
@@ -624,6 +624,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
 						onChange={setCheckboxOption("enable_share_shortener")}
 						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_skip_continue_watching?.toString() === "true"}
+						id="enable_skip_continue_watching"
+						label={t("settings.sections.miscellaneous.features.skipContinueWatching.label")}
+						onChange={setCheckboxOption("enable_skip_continue_watching")}
+						title={t("settings.sections.miscellaneous.features.skipContinueWatching.title")}
 						type="checkbox"
 					/>
 					<Setting

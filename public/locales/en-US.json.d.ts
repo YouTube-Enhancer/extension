@@ -182,6 +182,10 @@ interface EnUS {
 						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
 					};
 					shortsAutoScroll: { label: "Shorts auto scroll"; title: "Automatically scrolls to the next short" };
+					skipContinueWatching: {
+						label: 'Skip "Video is paused. Continue watching?"';
+						title: "Skips the idle dialog that pauses video playback";
+					};
 				};
 				title: "Miscellaneous settings";
 			};
