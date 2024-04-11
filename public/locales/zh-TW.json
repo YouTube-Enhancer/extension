@@ -254,8 +254,8 @@
 						"title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "跳過「影片已暫停，繼續觀看？」",
+						"title": "跳過暫停影片播放的閒置對話框"
 					},
 					"shortsAutoScroll": {
 						"label": "Shorts 自動滾動",
