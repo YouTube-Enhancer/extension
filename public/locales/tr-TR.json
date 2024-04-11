@@ -253,6 +253,10 @@
 						"label": "YouTube video paylaşım bağlantısını kısalt",
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
 					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
+					},
 					"shortsAutoScroll": {
 						"label": "Kısa videoya otomatik kaydır",
 						"title": "Bir sonraki kısa videoya otomatik kaydır"
