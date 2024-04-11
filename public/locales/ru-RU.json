@@ -253,6 +253,10 @@
 						"label": "Укоротить ссылку с кнопки \"Поделиться\"",
 						"title": "Укорачивает ссылку с кнопки \"Поделиться\" (youtu.be), убирая параметры si/feature из нее"
 					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
+					},
 					"shortsAutoScroll": {
 						"label": "Автоматическая прокрутка Shorts",
 						"title": "Автоматически скроллит до следующего Shorts"
