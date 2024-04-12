@@ -253,13 +253,13 @@
 						"label": "Shorten YouTube video share link",
 						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
 					},
-					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
-					},
 					"shortsAutoScroll": {
 						"label": "Shorts auto scroll",
 						"title": "Automatically scrolls to the next short"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Configurações diversas"
@@ -306,9 +306,9 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
+						"circle": "Circle",
 						"line": "Linha",
 						"no_display": "Sem exibição",
-						"round": "Arredondado",
 						"text": "Texto"
 					},
 					"title": "Selecione o tipo de informações na tela"
