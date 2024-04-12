@@ -253,13 +253,13 @@
 						"label": "缩短YouTube视频分享链接",
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
 					},
-					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
-					},
 					"shortsAutoScroll": {
 						"label": "短视频自动下滑",
 						"title": "短视频播完后，自动下滑播放下一个"
+					},
+					"skipContinueWatching": {
+						"label": "跳过\"视频已暂停。继续观看吗？\"",
+						"title": "跳过暂停视频播放的闲置对话框"
 					}
 				},
 				"title": "其他设置"
@@ -306,9 +306,9 @@
 				"type": {
 					"label": "类型",
 					"options": {
+						"circle": "圆形图标",
 						"line": "直线",
 						"no_display": "无显示",
-						"round": "圆角",
 						"text": "文本"
 					},
 					"title": "选择屏幕提示文本颜色"
