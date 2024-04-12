@@ -253,13 +253,13 @@
 						"label": "YouTube動画のURLを短縮する",
 						"title": "YouTube動画のURLに機能パラメータを削除して短縮する(youtu.be)"
 					},
-					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
-					},
 					"shortsAutoScroll": {
 						"label": "ショートの自動スクロール",
 						"title": "次のショートを自動にスクロールする"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "他の設定"
@@ -306,9 +306,9 @@
 				"type": {
 					"label": "OSD型",
 					"options": {
+						"circle": "Circle",
 						"line": "ライン",
 						"no_display": "見せない",
-						"round": "丸い",
 						"text": "テキスト"
 					},
 					"title": "オンスクリーンディスプレイ(OSD)型を選択選ぶ"
