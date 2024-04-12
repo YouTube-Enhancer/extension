@@ -96,9 +96,6 @@ async function updateStoredSettings() {
 	try {
 		const settings = await getStoredSettings();
 		const removedKeys = Object.keys(settings).filter((key) => !Object.keys(defaultConfiguration).includes(key));
-		for (const key of removedKeys) {
-			delete settings[key];
-		}
 		for (const changedKey of changedKeys) {
 			switch (changedKey) {
 				case "osd_display_type": {
@@ -108,6 +105,9 @@ async function updateStoredSettings() {
 					break;
 				}
 			}
+		}
+		for (const key of removedKeys) {
+			delete settings[key];
 		}
 		await setModifiedSettings(settings);
 	} catch (error) {
