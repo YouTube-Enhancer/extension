@@ -256,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "ショートの自動スクロール",
 						"title": "次のショートを自動にスクロールする"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "他の設定"
@@ -302,9 +306,9 @@
 				"type": {
 					"label": "OSD型",
 					"options": {
+						"circle": "Circle",
 						"line": "ライン",
 						"no_display": "見せない",
-						"round": "丸い",
 						"text": "テキスト"
 					},
 					"title": "オンスクリーンディスプレイ(OSD)型を選択選ぶ"
@@ -443,7 +447,7 @@
 						"title": "二の次テキストの色"
 					},
 					"hoverBackground": {
-						"label": "背景マウスホバー",
+						"label": "背景マウスホバーの色",
 						"title": "背景マウスホバーの色"
 					},
 					"mainBackground": {

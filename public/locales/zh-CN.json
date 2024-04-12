@@ -256,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "短视频自动下滑",
 						"title": "短视频播完后，自动下滑播放下一个"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "其他设置"
@@ -302,9 +306,9 @@
 				"type": {
 					"label": "类型",
 					"options": {
+						"circle": "Circle",
 						"line": "直线",
 						"no_display": "无显示",
-						"round": "圆角",
 						"text": "文本"
 					},
 					"title": "选择屏幕提示文本颜色"
@@ -443,7 +447,7 @@
 						"title": "为次要文本使用的颜色"
 					},
 					"hoverBackground": {
-						"label": "悬停背景色",
+						"label": "悬停背景颜色",
 						"title": "为悬停背景使用的颜色"
 					},
 					"mainBackground": {
@@ -459,7 +463,7 @@
 						"title": "为主要文本使用的颜色"
 					},
 					"secondBackground": {
-						"label": "次要背景",
+						"label": "次要背景颜色",
 						"title": "为次要背景使用的颜色"
 					}
 				},
