@@ -253,13 +253,13 @@
 						"label": "縮短 YouTube 影片共享連結",
 						"title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
 					},
-					"skipContinueWatching": {
-						"label": "跳過「影片已暫停，繼續觀看？」",
-						"title": "跳過暫停影片播放的閒置對話框"
-					},
 					"shortsAutoScroll": {
 						"label": "Shorts 自動滾動",
 						"title": "自動滾動到下一段 Short"
+					},
+					"skipContinueWatching": {
+						"label": "跳過「影片已暫停，繼續觀看？」",
+						"title": "跳過暫停影片播放的閒置對話框"
 					}
 				},
 				"title": "其他設定"
@@ -306,9 +306,9 @@
 				"type": {
 					"label": "類型",
 					"options": {
+						"circle": "Circle",
 						"line": "線條",
 						"no_display": "不顯示",
-						"round": "圓形",
 						"text": "文字"
 					},
 					"title": "選擇屏幕顥示風格"
