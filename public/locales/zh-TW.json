@@ -306,7 +306,7 @@
 				"type": {
 					"label": "類型",
 					"options": {
-						"circle": "Circle",
+						"circle": "圓形",
 						"line": "線條",
 						"no_display": "不顯示",
 						"text": "文字"
