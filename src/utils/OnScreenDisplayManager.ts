@@ -164,8 +164,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
 				break;
 			}
-			case "round": {
-				// Draw a round shape on the canvas.
+			case "circle": {
+				// Draw a circle shape on the canvas.
 				const lineWidth = 5;
 				const radius = 75 / 2 - lineWidth;
 				const circleWidth = radius * 2 + lineWidth * 2;

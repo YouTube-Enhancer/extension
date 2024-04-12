@@ -227,7 +227,7 @@ interface EnUS {
 				title: "On-Screen Display Settings";
 				type: {
 					label: "Type";
-					options: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
+					options: { circle: "Circle"; line: "Line"; no_display: "No display"; text: "Text" };
 					title: "Select the type of On-Screen Display";
 				};
 			};

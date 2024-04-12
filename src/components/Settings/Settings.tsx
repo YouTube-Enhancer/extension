@@ -284,8 +284,8 @@ export default function Settings() {
 			value: "line"
 		},
 		{
-			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
-			value: "round"
+			label: t("settings.sections.onScreenDisplaySettings.type.options.circle"),
+			value: "circle"
 		}
 	];
 	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
