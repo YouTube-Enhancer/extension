@@ -253,13 +253,13 @@
 						"label": "Abbrevia il collegamento di condivisione video di YouTube",
 						"title": "Riduce il collegamento di condivisione video di YouTube (youtu.be) eliminando da esso i parametri si/feature"
 					},
-					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
-					},
 					"shortsAutoScroll": {
 						"label": "Scorri al blocco",
 						"title": "Scorri automaticamente al prossimo blocco"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Impostazioni varie"
@@ -306,9 +306,9 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
+						"circle": "Circle",
 						"line": "Linea",
 						"no_display": "Nessuno schermo",
-						"round": "Tondo",
 						"text": "Testuale"
 					},
 					"title": "Seleziona il tipo di schermo interattivo"
