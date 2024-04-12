@@ -254,8 +254,8 @@
 						"title": "Укорачивает ссылку с кнопки \"Поделиться\" (youtu.be), убирая параметры si/feature из нее"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Пропускать \"Воспроизведение приостановлено. Продолжить?\"",
+						"title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
 					},
 					"shortsAutoScroll": {
 						"label": "Автоматическая прокрутка Shorts",
@@ -447,7 +447,7 @@
 						"title": "Цвет для вторичного текста"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
+						"label": "Цвет фона при наведении",
 						"title": "Цвет, который будет задаваться фону при наведении"
 					},
 					"mainBackground": {
@@ -463,7 +463,7 @@
 						"title": "Цвет для основного текста"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
+						"label": "Дополнительный цвет фона",
 						"title": "Цвет для вторичного фона"
 					}
 				},
