@@ -306,7 +306,7 @@
 				"type": {
 					"label": "Тип",
 					"options": {
-						"circle": "Circle",
+						"circle": "Круг",
 						"line": "Линия",
 						"no_display": "Не показывать",
 						"text": "Текст"
