@@ -9,28 +9,48 @@
 		"content": {
 			"features": {
 				"featureMenu": {
-					"label": "功能单"
+					"button": {
+						"label": "功能菜单"
+					}
 				},
 				"loopButton": {
-					"label": "循环播放",
-					"toggle": {
-						"off": "取消循环",
-						"on": "启用循环"
+					"button": {
+						"label": "循环播放",
+						"toggle": {
+							"off": "取消循环",
+							"on": "启用循环"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "网页全屏",
-					"toggle": {
-						"off": "最大化关闭",
-						"on": "最大化开启"
+					"button": {
+						"label": "最大化",
+						"toggle": {
+							"off": "最大化关闭",
+							"on": "最大化开启"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "打开转写文稿"
+					"button": {
+						"label": "打开转写文稿"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "降低 {{SPEED}} 播放速度"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "增加 {{SPEED}} 播放速度"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "截图已复制到剪贴板",
-					"label": "截图"
+					"button": {
+						"label": "屏幕截图"
+					},
+					"copiedToClipboard": "截图已复制到剪贴板"
 				},
 				"videoHistory": {
 					"resumeButton": "继续播放",
@@ -39,10 +59,12 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "音量增强",
-					"toggle": {
-						"off": "关闭音量增强",
-						"on": "开启音量增强"
+					"button": {
+						"label": "音量增强",
+						"toggle": {
+							"off": "关闭音量增强",
+							"on": "开启音量增强"
+						}
 					}
 				}
 			}
@@ -92,6 +114,9 @@
 					"title": "确认重置设置",
 					"value": "确认"
 				},
+				"openTab": {
+					"title": "在新标签中打开扩展设置"
+				},
 				"reset": {
 					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
 					"value": "重新开始"
@@ -100,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
@@ -187,8 +214,8 @@
 						"title": "隐藏页面滚动条"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "隐藏短视频",
+						"title": "隐藏所有短视频"
 					},
 					"loopButton": {
 						"label": "循环按钮",
@@ -205,6 +232,10 @@
 					"openYouTubeSettingsOnHover": {
 						"label": "悬停时打开 YouTube 设置",
 						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
+					},
+					"pauseBackgroundPlayers": {
+						"label": "暂停后台播放",
+						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
@@ -225,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "短视频自动下滑",
 						"title": "短视频播完后，自动下滑播放下一个"
+					},
+					"skipContinueWatching": {
+						"label": "跳过\"视频已暂停。继续观看吗？\"",
+						"title": "跳过暂停视频播放的闲置对话框"
 					}
 				},
 				"title": "其他设置"
@@ -271,9 +306,9 @@
 				"type": {
 					"label": "类型",
 					"options": {
+						"circle": "圆形图标",
 						"line": "直线",
 						"no_display": "无显示",
-						"round": "圆角",
 						"text": "文本"
 					},
 					"title": "选择屏幕提示文本颜色"
@@ -283,6 +318,14 @@
 				"enable": {
 					"label": "强制播放速度",
 					"title": "将视频速度设置为您在下面选择的内容"
+				},
+				"playbackSpeedButtons": {
+					"label": "播放速度按钮",
+					"select": {
+						"label": "播放按钮的速度",
+						"title": "每次点击要更改的速度量"
+					},
+					"title": "添加按钮以增加或降低您观看的视频的播放速度"
 				},
 				"select": {
 					"label": "播放速度",
@@ -390,6 +433,49 @@
 					}
 				},
 				"title": "音量增强设置"
+			},
+			"youtubeDeepDark": {
+				"author": "作者",
+				"co-authors": "合作作者",
+				"colors": {
+					"colorShadow": {
+						"label": "阴影颜色",
+						"title": "阴影颜色"
+					},
+					"dimmerText": {
+						"label": "次要文本颜色",
+						"title": "为次要文本使用的颜色"
+					},
+					"hoverBackground": {
+						"label": "悬停背景颜色",
+						"title": "为悬停背景使用的颜色"
+					},
+					"mainBackground": {
+						"label": "主要背景颜色",
+						"title": "为主要背景使用的颜色"
+					},
+					"mainColor": {
+						"label": "强调颜色",
+						"title": "为强调使用的颜色"
+					},
+					"mainText": {
+						"label": "主要文本颜色",
+						"title": "为主要文本使用的颜色"
+					},
+					"secondBackground": {
+						"label": "次要背景颜色",
+						"title": "为次要背景使用的颜色"
+					}
+				},
+				"enable": {
+					"label": "启用所选主题",
+					"title": "在页面上应用所选主题"
+				},
+				"select": {
+					"label": "选择主题",
+					"title": "选择要应用到页面的主题"
+				},
+				"title": "YouTube 暗黑模式设置"
 			}
 		}
 	}

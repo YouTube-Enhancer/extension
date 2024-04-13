@@ -1,10 +1,10 @@
-const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
-const sideBarClosedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
-const homePageShortsSectionSelector = "ytd-rich-section-renderer:has(#rich-shelf-header)";
-const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has(#title-container)";
-const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
-const searchResultsShortsTabSelector = "yt-chip-cloud-chip-renderer:has(yt-formatted-string[title=Shorts])";
-const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-style=SHORTS])";
+export const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
+export const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
+export const homePageShortsSectionSelector = "ytd-rich-section-renderer:has(#rich-shelf-header)";
+export const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has(#title-container)";
+export const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
+export const searchResultsShortsTabSelector = "yt-chip-cloud-chip-renderer:has(yt-formatted-string[title=Shorts])";
+export const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-style=SHORTS])";
 
 type ElementVisibilityAction = (element: HTMLElement) => void;
 

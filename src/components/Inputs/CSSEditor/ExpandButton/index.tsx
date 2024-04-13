@@ -13,7 +13,7 @@ const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpand
 
 	return (
 		<input
-			className={cn("my-2 flex self-start rounded-md bg-[rgba(43,43,43,1)] p-2 text-sm dark:hover:bg-[rgba(43,43,43,0.5)] sm:text-base md:text-lg", {
+			className={cn("my-2 flex self-start rounded-md bg-[rgba(43,43,43,1)] p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(43,43,43,0.5)]", {
 				"ml-2": isExpanded
 			})}
 			onClick={onToggle}

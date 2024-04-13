@@ -1,5 +1,5 @@
 import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -37,7 +37,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			if (checked) remove();
 			updateFeatureButtonTitle(
 				"maximizePlayerButton",
-				window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.toggle.${checked ? "on" : "off"}`)
+				window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.button.toggle.${checked ? "on" : "off"}`)
 			);
 		}
 		maximizePlayer();
@@ -45,9 +45,9 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		setupVideoPlayerTimeUpdate();
 	}
 
-	const pipElement: HTMLButtonElement | null = document.querySelector("button.ytp-pip-button");
-	const sizeElement: HTMLButtonElement | null = document.querySelector("button.ytp-size-button");
-	const miniPlayerElement: HTMLButtonElement | null = document.querySelector("button.ytp-miniplayer-button");
+	const pipElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-pip-button");
+	const sizeElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-size-button");
+	const miniPlayerElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-miniplayer-button");
 	function otherElementClickListener() {
 		// Get the video element
 		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
@@ -64,7 +64,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			const icon = getFeatureIcon("maximizePlayerButton", "shared_icon_position");
 			if (button && button instanceof HTMLButtonElement) {
 				if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, icon.off);
-				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.toggle.off"));
+				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
 			}
 		}
 	}
@@ -72,8 +72,8 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		"maximizePlayerButton",
 		maximizePlayerButtonPlacement,
 		maximizePlayerButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.label")
-		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.toggle.off"),
+			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.label")
+		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"),
 		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		maximizePlayerButtonClickListener,
 		true

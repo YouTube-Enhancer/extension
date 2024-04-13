@@ -1,21 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { type RefObject, useCallback, useEffect, useState } from "react";
 
-export default function useComponentVisible<ElementType extends HTMLElementTagNameMap[keyof HTMLElementTagNameMap]>(initialIsVisible: boolean) {
+export default function useComponentVisible<ElementType extends HTMLElementTagNameMap[keyof HTMLElementTagNameMap]>(
+	ref: RefObject<ElementType>,
+	initialIsVisible: boolean
+) {
 	const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
-	const ref = useRef<ElementType>(null);
 
-	const handleClickOutside = (event: MouseEvent) => {
-		if (ref.current && !ref.current.contains(event.target as Node)) {
-			setIsComponentVisible(false);
-		}
-	};
+	const handleClickOutside = useCallback(
+		(event: MouseEvent) => {
+			if (ref.current && !ref.current.contains(event.target as Node)) {
+				setIsComponentVisible(false);
+			}
+		},
+		[ref]
+	);
 
 	useEffect(() => {
 		document.addEventListener("click", handleClickOutside, true);
 		return () => {
 			document.removeEventListener("click", handleClickOutside, true);
 		};
-	}, []);
+	}, [handleClickOutside]);
 
-	return { isComponentVisible, ref, setIsComponentVisible };
+	return { isComponentVisible, setIsComponentVisible };
 }

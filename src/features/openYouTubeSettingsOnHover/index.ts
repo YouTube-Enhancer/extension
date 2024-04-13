@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -36,7 +36,7 @@ export async function enableOpenYouTubeSettingsOnHover() {
 	};
 	const settingsButtonMouseLeaveListener = (event: Event) => {
 		if (event.target === settingsButton) return;
-		if (settingsMenu.contains(event.target as Node | null)) return;
+		if (settingsMenu.contains(event.target as Nullable<Node>)) return;
 		hideSettings(event);
 	};
 	eventManager.addEventListener(settingsButton, "mouseenter", showSettings, "openYouTubeSettingsOnHover");

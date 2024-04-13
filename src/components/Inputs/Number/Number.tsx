@@ -1,6 +1,7 @@
 import type { ClassValue } from "clsx";
-import type { ChangeEvent, MutableRefObject } from "react";
+import type { ChangeEvent } from "react";
 
+import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/utilities";
 import React, { useRef } from "react";
 
@@ -20,8 +21,8 @@ export type NumberInputProps = {
 };
 
 const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, label, max = undefined, min = 0, onChange, step = 1, value }) => {
-	const inputElement: MutableRefObject<HTMLInputElement | null> = useRef(null);
-	const inputDiv: MutableRefObject<HTMLDivElement | null> = useRef(null);
+	const inputElement = useRef<Nullable<HTMLInputElement>>(null);
+	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
 	const { direction } = useSettings();
 	const NumberPlus = () => {
 		if (inputElement.current) {

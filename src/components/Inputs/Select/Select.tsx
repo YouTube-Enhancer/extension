@@ -1,9 +1,10 @@
+import type { PathValue, configuration, configurationId } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
 import { useComponentVisible } from "@/hooks";
 import { cn } from "@/src/utils/utilities";
-import React from "react";
+import React, { useRef } from "react";
 
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
@@ -14,31 +15,36 @@ interface SelectOptionProps {
 	id?: string;
 	value: string;
 }
-
-export type SelectOption = {
+export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;
 	label: string;
-	value: string;
+	value: Extract<PathValue<configuration, Key>, string>;
 };
 
-export type SelectProps = {
+export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
 	id?: string;
 	label: string;
 	loading?: boolean;
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
-	options: SelectOption[];
+	options: SelectOption<Key>[];
 	selectedOption: string | undefined;
 	title: string;
 };
 
-const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label, loading = false, onChange, options, selectedOption }) => {
-	const {
-		isComponentVisible: isSelectVisible,
-		ref: selectRef,
-		setIsComponentVisible: setIsSelectVisible
-	} = useComponentVisible<HTMLDivElement>(false);
+const Select = <Key extends configurationId>({
+	className,
+	disabled = false,
+	id,
+	label,
+	loading = false,
+	onChange,
+	options,
+	selectedOption
+}: SelectProps<Key>) => {
+	const selectRef = useRef<HTMLDivElement>(null);
+	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } = useComponentVisible<HTMLDivElement>(selectRef, false);
 
 	const toggleSelect = () => {
 		setIsSelectVisible(!isSelectVisible);
@@ -51,14 +57,9 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 
 	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
-		<div
-			aria-valuetext={selectedOption}
-			className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}
-			id={id}
-			ref={selectRef}
-		>
+		<div aria-valuetext={selectedOption} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id}>
 			<label htmlFor={id}>{label}</label>
-			<div className="relative inline-block">
+			<div ref={selectRef}>
 				<>
 					<button
 						className={cn(
@@ -71,7 +72,7 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 						type="button"
 					>
 						{loading ?
-							<Loader className={"h-4 w-4"} />
+							<Loader className={"size-4"} />
 						: selectedOption ?
 							options.find((option) => option.value === selectedOption)?.element ?
 								<div className="flex w-full items-center justify-between pr-4">
@@ -90,7 +91,11 @@ const Select: React.FC<SelectProps> = ({ className, disabled = false, id, label,
 						<Arrow rotation={isSelectVisible ? "up" : "down"} />
 					</button>
 					{isSelectVisible && (
-						<div className="absolute z-10 mt-2 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-[#23272a]">
+						<div
+							className="z-10 mt-2 max-h-60 w-40 overflow-x-hidden 
+						overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg 
+						dark:border-gray-700 dark:bg-[#23272a]"
+						>
 							{options.map((option, index) => (
 								<div
 									aria-valuetext={option.value}

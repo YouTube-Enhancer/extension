@@ -7,14 +7,15 @@ import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {
-	setupVolumeBoost();
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 
 	const {
 		data: {
-			options: { volume_boost_amount, volume_boost_mode }
+			options: { enable_volume_boost, volume_boost_amount, volume_boost_mode }
 		}
 	} = optionsData;
+	if (!enable_volume_boost) return;
+	setupVolumeBoost();
 
 	if (volume_boost_mode === "per_video") {
 		await addVolumeBoostButton();
@@ -59,6 +60,7 @@ export function disableVolumeBoost() {
 }
 export function applyVolumeBoost(volume_boost_amount: number) {
 	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
+	if (!window.gainNode) setupVolumeBoost();
 	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 }
 export const addVolumeBoostButton: AddButtonFunction = async () => {
@@ -75,15 +77,15 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 		"volumeBoostButton",
 		volumeBoostButtonPlacement,
 		volumeBoostButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.features.volumeBoostButton.label")
-		:	window.i18nextInstance.t(`pages.content.features.volumeBoostButton.toggle.off`),
+			window.i18nextInstance.t("pages.content.features.volumeBoostButton.button.label")
+		:	window.i18nextInstance.t(`pages.content.features.volumeBoostButton.button.toggle.off`),
 		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		(checked) => {
 			void (async () => {
 				if (checked !== undefined) {
 					updateFeatureButtonTitle(
 						"volumeBoostButton",
-						window.i18nextInstance.t(`pages.content.features.volumeBoostButton.toggle.${checked ? "on" : "off"}`)
+						window.i18nextInstance.t(`pages.content.features.volumeBoostButton.button.toggle.${checked ? "on" : "off"}`)
 					);
 					if (checked) {
 						await enableVolumeBoost();
