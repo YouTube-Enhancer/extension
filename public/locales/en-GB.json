@@ -1,5 +1,5 @@
 {
-	"langCode": "en-UK",
+	"langCode": "en-GB",
 	"langName": "English (UK)",
 	"messages": {
 		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
