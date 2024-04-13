@@ -1,5 +1,6 @@
-import useClickOutside from "./useClickOutside";
 import useComponentVisible from "./useComponentVisible";
-import useNotifications from "./useNotifications";
-import useRunAfterUpdate from "./useRunAfterUpdate";
-export { useClickOutside, useComponentVisible, useNotifications, useRunAfterUpdate };
+import { useNotifications } from "./useNotifications";
+import useOuterClick from "./useOuterClick";
+import { useRunAfterUpdate } from "./useRunAfterUpdate";
+
+export { useComponentVisible, useNotifications, useOuterClick, useRunAfterUpdate };

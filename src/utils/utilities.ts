@@ -2,27 +2,22 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import type {
-	ActionMessage,
-	AllButtonNames,
 	AnyFunction,
 	ContentSendOnlyMessageMappings,
-	ContentToBackgroundSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
 	MessageMappings,
 	MessageSource,
 	Messages,
-	Nullable,
 	OnScreenDisplayPosition,
 	Path,
 	PathValue,
 	Selector,
 	SendDataMessage,
-	SingleButtonFeatureNames,
 	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { youtubePlayerQualityLevel } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -47,14 +42,14 @@ export const toDivisible = (value: number, divider: number): number => Math.ceil
 export function chooseClosestQuality(
 	selectedQuality: YoutubePlayerQualityLevel,
 	availableQualities: YoutubePlayerQualityLevel[]
-): Nullable<YoutubePlayerQualityLevel> {
+): YoutubePlayerQualityLevel | null {
 	// If there are no available qualities, return null
 	if (availableQualities.length === 0) {
 		return null;
 	}
 
 	// Find the index of the selected quality in the array
-	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
+	const selectedIndex = youtubePlayerQualityLevel.indexOf(selectedQuality);
 
 	// If the selected quality is not in the array, return null
 	if (selectedIndex === -1) {
@@ -64,7 +59,7 @@ export function chooseClosestQuality(
 	// Find the available quality levels that are closest to the selected quality level
 	const closestQualities = availableQualities.reduce(
 		(acc, quality) => {
-			const qualityIndex = youtubePlayerQualityLevels.indexOf(quality);
+			const qualityIndex = youtubePlayerQualityLevel.indexOf(quality);
 			if (qualityIndex !== -1) {
 				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality });
 			}
@@ -106,20 +101,6 @@ const BrowserColors = {
 } as const;
 
 type ColorType = "error" | "info" | "success" | "warning" | keyof typeof BrowserColors;
-function getColor(type: ColorType) {
-	switch (type) {
-		case "error":
-			return BrowserColors.FgRed;
-		case "info":
-			return BrowserColors.FgBlue;
-		case "success":
-			return BrowserColors.FgGreen;
-		case "warning":
-			return BrowserColors.FgYellow;
-		default:
-			return BrowserColors[type];
-	}
-}
 /**
  * Colorize a log message based on the specified type.
  *
@@ -127,8 +108,33 @@ function getColor(type: ColorType) {
  * @param type - The type of the log message.
  * @returns An object containing the colorized message and its styling.
  */
-function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: string; styling: string[] } {
-	const style = getColor(type);
+function colorizeLog(message: string, type?: ColorType): { message: string; styling: string[] } {
+	type = type || "FgBlack";
+	let style = "";
+
+	switch (type) {
+		case "success":
+			style = "color: green;";
+			break;
+		case "info":
+			style = "color: blue;";
+			break;
+		case "error":
+			style = "color: red;";
+			break;
+		case "warning":
+			style = "color: yellow;";
+			break;
+		default: {
+			if (typeof type === "string" && BrowserColors[type]) {
+				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+				// @ts-ignore
+				({ [`${type}`]: style } = BrowserColors);
+			}
+			break;
+		}
+	}
+
 	return {
 		message: `%c${message}%c`,
 		styling: [style, BrowserColors.Reset]
@@ -200,31 +206,7 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 		document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
 	}
 }
-/**
- * Sends a content message to the background.
- *
- * @param {T} type - The type of the content message.
- * @param {ContentToBackgroundSendOnlyMessageMappings[T]["data"]} data - The data of the content message.
- * @return {Promise<void>} A promise that resolves when the message is sent.
- */
-export function sendContentToBackgroundMessage<T extends keyof ContentToBackgroundSendOnlyMessageMappings>(
-	type: T,
-	data?: ContentToBackgroundSendOnlyMessageMappings[T]["data"]
-): Promise<void> {
-	const message: ActionMessage<T, typeof data> = {
-		action: "request_action",
-		data,
-		source: "content",
-		type
-	};
-	return new Promise((resolve) => {
-		const provider = document.getElementById("yte-message-from-youtube");
-		if (!provider) return;
-		provider.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
-		resolve();
-	});
-}
+
 /**
  * Sends a message from the extension
  *
@@ -361,7 +343,7 @@ export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
 		// Log a message to the console to let the user know what's happening.
 		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 		// Create a Map to store the elements as they are found.
-		const elementsMap = new Map<string, Nullable<Element>>();
+		const elementsMap = new Map<string, Element | null>();
 		// Get the number of selectors in the array so we know how many elements we are waiting for.
 		const { length: selectorsCount } = selectors;
 		// Create a counter for the number of elements that have been found.
@@ -648,33 +630,9 @@ export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			({ [key]: value } = value);
 		} else {
-			console.error(`Invalid path: ${String(path)}`);
+			throw new Error(`Invalid path: ${String(path)}`);
 		}
 	}
 
 	return value as PathValue<T, P>;
-}
-export function findKeyByValue(value: Exclude<AllButtonNames, SingleButtonFeatureNames>) {
-	for (const [key, values] of featureToMultiButtonsMap.entries()) {
-		if (values.includes(value)) {
-			return key;
-		}
-	}
-	return undefined; // Key not found
-}
-export function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
-	const merged: Record<string, unknown> = { ...target };
-
-	for (const key in source) {
-		if (Object.prototype.hasOwnProperty.call(source, key)) {
-			if (merged[key] && typeof merged[key] === "object") {
-				merged[key] = deepMerge(merged[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
-			} else {
-				// eslint-disable-next-line prefer-destructuring
-				merged[key] = source[key];
-			}
-		}
-	}
-
-	return merged;
 }

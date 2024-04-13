@@ -1,38 +1,37 @@
-import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { ButtonPlacement, ModifierKey, Path, VideoHistoryResumeType, VolumeBoostMode, configuration, configurationKeys } from "@/src/types";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import Link from "@/src/components/Link";
-import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
-import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
+import { featuresThatHaveButtons, youtubePlayerSpeedRate } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
-import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { cn, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
-import { MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 
+import { defaultConfiguration } from "../../utils/constants";
+import { formatDateForFileName } from "../../utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
+
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
 			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
-			const languageOption: SelectOption<"language"> = {
+			return Promise.resolve({
 				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
 				value: locale
-			};
-			return Promise.resolve(languageOption);
+			} as SelectOption);
 		} catch (err) {
 			return Promise.reject(err);
 		}
@@ -40,8 +39,8 @@ async function getLanguageOptions() {
 
 	const results = await Promise.allSettled(promises);
 
-	const languageOptions: SelectOption<"language">[] = results
-		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
+	const languageOptions: SelectOption[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption> => result.status === "fulfilled")
 		.map((result) => result.value);
 
 	return languageOptions;
@@ -55,7 +54,7 @@ function LanguageOptions({
 	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	t: i18nInstanceType["t"];
 }) {
-	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
+	const [languageOptions, setLanguageOptions] = useState<SelectOption[]>([]);
 	const [languagesLoading, setLanguagesLoading] = useState(true);
 	useEffect(() => {
 		void (async () => {
@@ -108,7 +107,7 @@ async function fetchSettings() {
 		return settings;
 	} catch (error) {
 		console.error("Failed to get settings:", error);
-		throw new Error("Failed to fetch settings");
+		throw new Error("Failed to fetch settings"); //
 	}
 }
 async function setSettings(settings: configuration) {
@@ -137,7 +136,7 @@ export default function Settings() {
 			addNotification("success", "pages.options.notifications.success.saved");
 		}
 	});
-	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
+	const [i18nInstance, setI18nInstance] = useState<i18nInstanceType | null>(null);
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const { addNotification, notifications, removeNotification } = useNotifications();
 
@@ -207,70 +206,69 @@ export default function Settings() {
 			addNotification("success", "settings.clearData.allDataDeleted");
 		}
 	}
-	const scrollWheelControlModifierKeyOptions: SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[] =
-		[
-			{
-				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-					KEY: "Alt"
-				}),
-				value: "altKey"
-			},
-			{
-				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-					KEY: "Ctrl"
-				}),
-				value: "ctrlKey"
-			},
-			{
-				label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
-					KEY: "Shift"
-				}),
-				value: "shiftKey"
-			}
-		];
-	const colorOptions: SelectOption<"osd_display_color">[] = [
+	const scrollWheelControlModifierKeyOptions = [
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+				KEY: "Alt"
+			}),
+			value: "altKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+				KEY: "Ctrl"
+			}),
+			value: "ctrlKey"
+		},
+		{
+			label: t("settings.sections.scrollWheelVolumeControl.holdModifierKey.optionLabel", {
+				KEY: "Shift"
+			}),
+			value: "shiftKey"
+		}
+	] as { label: string; value: ModifierKey }[] as SelectOption[];
+	const colorOptions: SelectOption[] = [
+		{
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 h-3 w-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
 	];
-	const OSD_DisplayTypeOptions: SelectOption<"osd_display_type">[] = [
+	const OSD_DisplayTypeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.type.options.no_display"),
 			value: "no_display"
@@ -284,11 +282,11 @@ export default function Settings() {
 			value: "line"
 		},
 		{
-			label: t("settings.sections.onScreenDisplaySettings.type.options.circle"),
-			value: "circle"
+			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
+			value: "round"
 		}
 	];
-	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
+	const OSD_PositionOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.onScreenDisplaySettings.position.options.top_left"),
 			value: "top_left"
@@ -310,7 +308,7 @@ export default function Settings() {
 			value: "center"
 		}
 	];
-	const YouTubePlayerQualityOptions = [
+	const YouTubePlayerQualityOptions: SelectOption[] = [
 		{ label: "144p", value: "tiny" },
 		{ label: "240p", value: "small" },
 		{ label: "360p", value: "medium" },
@@ -322,28 +320,18 @@ export default function Settings() {
 		{ label: "2880p", value: "hd2880" },
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
-		// This cast is here because otherwise it would require marking all the options 'as const'
-	].reverse() as SelectOption<"player_quality">[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"player_speed">[];
-	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"playback_buttons_speed">[];
-	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
+	].reverse();
+	const YouTubePlayerSpeedOptions: SelectOption[] = youtubePlayerSpeedRate.map((rate) => ({ label: rate?.toString(), value: rate?.toString() }));
+	const ScreenshotFormatOptions: SelectOption[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
 	];
-	const ScreenshotSaveAsOptions: SelectOption<"screenshot_save_as">[] = [
+	const ScreenshotSaveAsOptions: SelectOption[] = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
 		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
 	];
-	const VolumeBoostModeOptions: SelectOption<"volume_boost_mode">[] = [
+	const VolumeBoostModeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.volumeBoost.mode.select.options.global"),
 			value: "global"
@@ -352,16 +340,8 @@ export default function Settings() {
 			label: t("settings.sections.volumeBoost.mode.select.options.perVideo"),
 			value: "per_video"
 		}
-	];
-	const buttonPlacementOptions: SelectOption<
-		| "button_placements.decreasePlaybackSpeedButton"
-		| "button_placements.increasePlaybackSpeedButton"
-		| "button_placements.loopButton"
-		| "button_placements.maximizePlayerButton"
-		| "button_placements.openTranscriptButton"
-		| "button_placements.screenshotButton"
-		| "button_placements.volumeBoostButton"
-	>[] = [
+	] as { label: string; value: VolumeBoostMode }[] as SelectOption[];
+	const buttonPlacementOptions: SelectOption[] = [
 		{ label: t("settings.sections.buttonPlacement.select.options.below_player.value"), value: "below_player" },
 		{ label: t("settings.sections.buttonPlacement.select.options.feature_menu.value"), value: "feature_menu" },
 		{
@@ -372,8 +352,11 @@ export default function Settings() {
 			label: t("settings.sections.buttonPlacement.select.options.player_controls_right.value"),
 			value: "player_controls_right"
 		}
-	];
-	const videoHistoryResumeTypeOptions: SelectOption<"video_history_resume_type">[] = [
+	] as {
+		label: string;
+		value: ButtonPlacement;
+	}[] as SelectOption[];
+	const videoHistoryResumeTypeOptions: SelectOption[] = [
 		{
 			label: t("settings.sections.videoHistory.resumeType.select.options.automatic"),
 			value: "automatic"
@@ -382,13 +365,7 @@ export default function Settings() {
 			label: t("settings.sections.videoHistory.resumeType.select.options.prompt"),
 			value: "prompt"
 		}
-	];
-	const youtubeDeepDarkThemeOptions: SelectOption<"deep_dark_preset">[] = deepDarkPreset.map((value) => {
-		return {
-			label: value,
-			value
-		};
-	});
+	] as { label: string; value: VideoHistoryResumeType }[] as SelectOption[];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -410,7 +387,9 @@ export default function Settings() {
 							})
 						);
 					} else {
-						const castSettings = deepMerge(defaultSettings, importedSettings as configuration) as configuration;
+						const castSettings = { ...defaultConfiguration, ...(importedSettings as configuration) };
+						// Set the imported settings in your state.
+						settingsMutate.mutate(castSettings);
 						for (const key of Object.keys(castSettings)) {
 							if (typeof castSettings[key] !== "string") {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
@@ -420,8 +399,6 @@ export default function Settings() {
 								void chrome.storage.local.set({ [key]: castSettings[key] as string });
 							}
 						}
-						// Set the imported settings in your state.
-						settingsMutate.mutate(castSettings);
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
@@ -436,13 +413,6 @@ export default function Settings() {
 	// Import settings from a JSON file.
 	function importSettings() {
 		if (settingsImportRef.current === null) return;
-		const isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
-		if (isFirefox && isPopup) {
-			// If user is currently on a popup, opens extensions page in a new tab to prevent settings not being imported.
-			openInNewTab("src/pages/options/index.html");
-			window.close();
-			return;
-		}
 		// Trigger the file input dialog.
 		settingsImportRef.current.click();
 	}
@@ -477,21 +447,12 @@ export default function Settings() {
 			addNotification("success", "settings.sections.importExportSettings.exportButton.success");
 		}
 	};
-	const isPopup = window.location.href.match(/.+\/src\/pages\/popup\/index\.html/g);
-	const openInNewTab = (path: string) => {
-		const url = chrome.runtime.getURL(path);
-		void chrome.tabs.create({ url });
-	};
-	const isOSDDisabled =
-		settings.enable_scroll_wheel_volume_control?.toString() !== "true" &&
-		settings.enable_scroll_wheel_speed_control?.toString() !== "true" &&
-		settings.enable_playback_speed_buttons?.toString() !== "true";
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
-			<div className="size-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
 				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
-					<img className="size-16 sm:size-16" src="/icons/icon_128.png" />
+					<img className="h-16 w-16 sm:h-16 sm:w-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
@@ -516,12 +477,12 @@ export default function Settings() {
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
-					{buttonNames.map((feature) => {
+					{featuresThatHaveButtons.map((feature) => {
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
+								id={`button_placements.${feature}`}
 								key={feature}
 								label={label}
 								onChange={setValueOption(`button_placements.${feature}`)}
@@ -560,14 +521,6 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}
 						title={t("settings.sections.miscellaneous.features.remainingTime.title")}
-						type="checkbox"
-					/>
-					<Setting
-						checked={settings.enable_pausing_background_players?.toString() === "true"}
-						id="enable_pausing_background_players"
-						label={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.label")}
-						onChange={setCheckboxOption("enable_pausing_background_players")}
-						title={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.title")}
 						type="checkbox"
 					/>
 					<Setting
@@ -627,14 +580,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_skip_continue_watching?.toString() === "true"}
-						id="enable_skip_continue_watching"
-						label={t("settings.sections.miscellaneous.features.skipContinueWatching.label")}
-						onChange={setCheckboxOption("enable_skip_continue_watching")}
-						title={t("settings.sections.miscellaneous.features.skipContinueWatching.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_shorts_auto_scroll?.toString() === "true"}
 						id="enable_shorts_auto_scroll"
 						label={t("settings.sections.miscellaneous.features.shortsAutoScroll.label")}
@@ -674,7 +619,9 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.onScreenDisplaySettings.title")} />
 					<Setting
-						disabled={isOSDDisabled}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_color"
 						label={t("settings.sections.onScreenDisplaySettings.color.label")}
 						onChange={setValueOption("osd_display_color")}
@@ -696,7 +643,9 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={isOSDDisabled}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_position"
 						label={t("settings.sections.onScreenDisplaySettings.position.label")}
 						onChange={setValueOption("osd_display_position")}
@@ -706,7 +655,9 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={isOSDDisabled}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_opacity"
 						label={t("settings.sections.onScreenDisplaySettings.opacity.label")}
 						max={100}
@@ -717,7 +668,9 @@ export default function Settings() {
 						value={settings.osd_display_opacity}
 					/>
 					<Setting
-						disabled={isOSDDisabled}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_hide_time"
 						label={t("settings.sections.onScreenDisplaySettings.hide.label")}
 						min={1}
@@ -727,7 +680,9 @@ export default function Settings() {
 						value={settings.osd_display_hide_time}
 					/>
 					<Setting
-						disabled={isOSDDisabled}
+						disabled={
+							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
+						}
 						id="osd_display_padding"
 						label={t("settings.sections.onScreenDisplaySettings.padding.label")}
 						min={0}
@@ -873,14 +828,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_playback_speed_buttons?.toString() === "true"}
-						id="enable_playback_speed_buttons"
-						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.label")}
-						onChange={setCheckboxOption("enable_playback_speed_buttons")}
-						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.title")}
-						type="checkbox"
-					/>
-					<Setting
 						disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
@@ -888,16 +835,6 @@ export default function Settings() {
 						options={YouTubePlayerSpeedOptions}
 						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
-						id="playback_buttons_speed"
-						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
-						onChange={setValueOption("playback_buttons_speed")}
-						options={YouTubePlaybackSpeedButtonsOptions}
-						selectedOption={getSelectedOption("playback_buttons_speed")?.toString()}
-						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
 						type="select"
 					/>
 				</SettingSection>
@@ -985,101 +922,6 @@ export default function Settings() {
 						value={settings.custom_css_code}
 					/>
 				</SettingSection>
-				<SettingSection>
-					<SettingTitle title={t("settings.sections.youtubeDeepDark.title")} />
-					<SettingSection className="flex flex-row gap-1">
-						<SettingSection className="mb-1">
-							<SettingTitle title={t("settings.sections.youtubeDeepDark.author")} />
-							<Link href="https://github.com/RaitaroH">RaitaroH</Link>
-						</SettingSection>
-						<SettingSection className="mb-1">
-							<SettingTitle title={t("settings.sections.youtubeDeepDark.co-authors")} />
-							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
-							<Link href="https://github.com/MaximeRF">MaximeRF</Link>
-						</SettingSection>
-					</SettingSection>
-					<Setting
-						checked={settings.enable_deep_dark_theme?.toString() === "true"}
-						id="enable_deep_dark_theme"
-						label={t("settings.sections.youtubeDeepDark.enable.label")}
-						onChange={setCheckboxOption("enable_deep_dark_theme")}
-						title={t("settings.sections.youtubeDeepDark.enable.title")}
-						type="checkbox"
-					/>
-					<Setting
-						disabled={settings.enable_deep_dark_theme?.toString() === "false"}
-						id="deep_dark_preset"
-						label={t("settings.sections.youtubeDeepDark.select.label")}
-						onChange={setValueOption("deep_dark_preset")}
-						options={youtubeDeepDarkThemeOptions}
-						selectedOption={getSelectedOption("deep_dark_preset")}
-						title={t("settings.sections.youtubeDeepDark.select.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.mainColor"}
-						label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
-						title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainColor}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.mainBackground"}
-						label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
-						title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainBackground}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.secondBackground"}
-						label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
-						title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.secondBackground}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.hoverBackground"}
-						label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
-						title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.hoverBackground}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.mainText"}
-						label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
-						title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainText}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.dimmerText"}
-						label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
-						title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.dimmerText}
-					/>
-					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
-						id={"deep_dark_custom_theme_colors.colorShadow"}
-						label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
-						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.colorShadow}
-					/>
-				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
@@ -1097,17 +939,6 @@ export default function Settings() {
 						type="button"
 						value={t("settings.sections.importExportSettings.importButton.value")}
 					/>
-					{isPopup && (
-						<button
-							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
-							id="openinnewtab_button"
-							onClick={() => openInNewTab("src/pages/options/index.html")}
-							title={t("settings.sections.bottomButtons.openTab.title")}
-							type="button"
-						>
-							<MdOutlineOpenInNew color="white" size={20} />
-						</button>
-					)}
 					<input
 						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"

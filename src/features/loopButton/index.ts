@@ -1,10 +1,8 @@
-import type { SingleButtonFeatureNames } from "@/src/types";
-
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIds } from "@/src/features/featureMenu/utils";
 import { getFeatureIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
+import eventManager, { type FeatureName } from "@/src/utils/EventManager";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
@@ -35,8 +33,8 @@ export const addLoopButton: AddButtonFunction = async () => {
 		"loopButton",
 		loopButtonPlacement,
 		loopButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.features.loopButton.button.label")
-		:	window.i18nextInstance.t("pages.content.features.loopButton.button.toggle.off"),
+			window.i18nextInstance.t("pages.content.features.loopButton.label")
+		:	window.i18nextInstance.t("pages.content.features.loopButton.toggle.off"),
 		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		loopButtonClickListener,
 		true
@@ -48,7 +46,7 @@ export const addLoopButton: AddButtonFunction = async () => {
 				const { attributeName, target } = mutation;
 				if (attributeName === "loop") {
 					const { loop } = target as HTMLVideoElement;
-					const featureName: SingleButtonFeatureNames = "loopButton";
+					const featureName: FeatureName = "loopButton";
 					// Get the feature menu
 					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 					// Check if the feature item already exists in the menu

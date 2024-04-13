@@ -2,16 +2,15 @@ import type { AvailableLocales } from "@/src/i18n";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
-	type AllButtonNames,
 	type ButtonPlacement,
 	type ContentSendOnlyMessageMappings,
-	type ContentToBackgroundSendOnlyMessageMappings,
+	type FeaturesThatHaveButtons,
 	type Messages,
 	type RememberedVolumes,
 	type StorageChanges,
-	buttonNames,
 	type configuration,
-	type configurationKeys
+	type configurationKeys,
+	featuresThatHaveButtons
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
@@ -21,7 +20,7 @@ import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
  */
 const script = document.createElement("script");
-script.src = chrome.runtime.getURL("src/pages/embedded/index.js");
+script.src = chrome.runtime.getURL("src/pages/content/index.js");
 script.type = "text/javascript";
 function initializeCommunicationElement() {
 	const element = document.createElement("div");
@@ -31,7 +30,6 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
-
 void (async () => {
 	/**
 	 * Retrieves the options from the local storage and sends them back to the youtube page.
@@ -64,44 +62,37 @@ document.addEventListener("yte-message-from-youtube", () => {
 		if (!stringifiedMessage) return;
 		let message;
 		try {
-			message = JSON.parse(stringifiedMessage) as
-				| ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings]
-				| ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]
-				| Messages["request"];
+			message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings] | Messages["request"];
 		} catch (error) {
 			console.error(error);
 			return;
 		}
 		if (!message) return;
-		switch (message.action) {
-			case "request_action": {
-				await chrome.runtime.sendMessage(message);
+		switch (message.type) {
+			case "options": {
+				/**
+				 * Retrieves the options from the local storage and sends them back to the youtube page.
+				 *
+				 * @type {configuration}
+				 */
+				const options: configuration = await new Promise((resolve) => {
+					chrome.storage.local.get((settings) => {
+						const storedSettings: Partial<configuration> = (
+							Object.keys(settings)
+								.filter((key) => typeof key === "string")
+								.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+						).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+						resolve(storedSettings as configuration);
+					});
+				});
+				void sendExtensionMessage("options", "data_response", { options });
 				break;
 			}
-			case "request_data": {
-				switch (message.type) {
-					case "options": {
-						/**
-						 * Retrieves the options from the local storage and sends them back to the youtube page.
-						 *
-						 * @type {configuration}
-						 */
-						const options: configuration = await new Promise((resolve) => {
-							chrome.storage.local.get((settings) => {
-								const storedSettings: Partial<configuration> = (
-									Object.keys(settings)
-										.filter((key) => typeof key === "string")
-										.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-								).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-								resolve(storedSettings as configuration);
-							});
-						});
-						void sendExtensionMessage("options", "data_response", { options });
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
+			case "videoHistoryOne": {
+				const { action, data } = message;
+				if (!data) return;
+				switch (action) {
+					case "request_data": {
 						const { id } = data;
 						const videoHistory = getVideoHistory();
 						void sendExtensionMessage("videoHistoryOne", "data_response", {
@@ -109,53 +100,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 						});
 						break;
 					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
-					case "extensionURL": {
-						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: chrome.runtime.getURL("")
-						});
-						break;
-					}
-
-					case "language": {
-						const language = await new Promise<AvailableLocales>((resolve) => {
-							chrome.storage.local.get("language", (o) => {
-								resolve(o.language as AvailableLocales);
-							});
-						});
-						void sendExtensionMessage("language", "data_response", {
-							language
-						});
-						break;
-					}
-				}
-				break;
-			}
-			case "send_data": {
-				switch (message.type) {
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
-						break;
-					}
-
-					case "pageLoaded": {
-						chrome.storage.onChanged.addListener(storageListeners);
-						window.onunload = () => {
-							chrome.storage.onChanged.removeListener(storageListeners);
-						};
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
+					case "send_data": {
 						const { video_history_entry } = data;
 						if (!video_history_entry) return;
 						const { id, status, timestamp } = video_history_entry;
@@ -163,6 +108,43 @@ document.addEventListener("yte-message-from-youtube", () => {
 						break;
 					}
 				}
+				break;
+			}
+			case "videoHistoryAll": {
+				const videoHistory = getVideoHistory();
+				void sendExtensionMessage("videoHistoryAll", "data_response", {
+					video_history_entries: videoHistory
+				});
+				break;
+			}
+			case "setRememberedVolume": {
+				const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
+				const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
+				void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
+				break;
+			}
+			case "extensionURL": {
+				void sendExtensionMessage("extensionURL", "data_response", {
+					extensionURL: chrome.runtime.getURL("")
+				});
+				break;
+			}
+			case "language": {
+				const language = await new Promise<AvailableLocales>((resolve) => {
+					chrome.storage.local.get("language", (o) => {
+						resolve(o.language as AvailableLocales);
+					});
+				});
+				void sendExtensionMessage("language", "data_response", {
+					language
+				});
+				break;
+			}
+			case "pageLoaded": {
+				chrome.storage.onChanged.addListener(storageListeners);
+				window.onunload = () => {
+					chrome.storage.onChanged.removeListener(storageListeners);
+				};
 			}
 		}
 	})();
@@ -219,7 +201,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	} = {
 		button_placements: (oldValue, newValue) => {
 			sendExtensionOnlyMessage("buttonPlacementChange", {
-				buttonPlacement: buttonNames.reduce(
+				buttonPlacement: featuresThatHaveButtons.reduce(
 					(acc, feature) => {
 						const { [feature]: oldPlacement } = oldValue;
 						const { [feature]: newPlacement } = newValue;
@@ -230,7 +212,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 							}
 						});
 					},
-					{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
+					{} as Record<FeaturesThatHaveButtons, { new: ButtonPlacement; old: ButtonPlacement }>
 				)
 			});
 		},
@@ -240,20 +222,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				customCSSEnabled: options.enable_custom_css
 			});
 		},
-		deep_dark_custom_theme_colors: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: newValue,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
-		deep_dark_preset: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: newValue,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
 		enable_automatic_theater_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("automaticTheaterModeChange", {
 				automaticTheaterModeEnabled: newValue
@@ -261,13 +229,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		},
 		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
-		},
-		enable_deep_dark_theme: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: newValue
-			});
 		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
@@ -303,17 +264,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
 				openYouTubeSettingsOnHoverEnabled: newValue
-			});
-		},
-		enable_pausing_background_players: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("pauseBackgroundPlayersChange", {
-				pauseBackgroundPlayersEnabled: newValue
-			});
-		},
-		enable_playback_speed_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: options.playback_buttons_speed,
-				playbackSpeedButtonsEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {
@@ -356,11 +306,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				shortsAutoScrollEnabled: newValue
 			});
 		},
-		enable_skip_continue_watching: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("skipContinueWatchingChange", {
-				skipContinueWatchingEnabled: newValue
-			});
-		},
 		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue
@@ -380,12 +325,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		language: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue
-			});
-		},
-		playback_buttons_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: newValue,
-				playbackSpeedButtonsEnabled: options.enable_playback_speed_buttons
 			});
 		},
 		player_speed: (__oldValue, newValue) => {

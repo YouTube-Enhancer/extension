@@ -1,7 +1,7 @@
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { createCustomCSSElement, customCSSExists, updateCustomCSS } from "./utils";
-export const customCssID = "yte-custom-css";
+import { createCustomCSSElement } from "./utils";
+
 export async function enableCustomCSS() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
@@ -12,12 +12,6 @@ export async function enableCustomCSS() {
 	} = optionsData;
 	// Check if custom CSS is enabled
 	if (!enable_custom_css) return;
-	if (customCSSExists()) {
-		updateCustomCSS({
-			custom_css_code
-		});
-		return;
-	}
 	// Create the custom CSS style element
 	const customCSSStyleElement = createCustomCSSElement({
 		custom_css_code
@@ -27,7 +21,7 @@ export async function enableCustomCSS() {
 }
 export function disableCustomCSS() {
 	// Get the custom CSS style element
-	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${customCssID}`);
+	const customCSSStyleElement = document.querySelector<HTMLStyleElement>("#yte-custom-css");
 	// Check if the custom CSS style element exists
 	if (!customCSSStyleElement) return;
 	// Remove the custom CSS style element

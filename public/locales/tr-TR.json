@@ -3,54 +3,34 @@
 	"langName": "Türkçe",
 	"messages": {
 		"resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir",
-		"settingVolume": "Ses güçlendirmesini {{VOLUME_BOOST_AMOUNT}} olarak ayarla"
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"featureMenu": {
-					"button": {
-						"label": "Özellik menüsü"
-					}
+					"label": "Özellik menüsü"
 				},
 				"loopButton": {
-					"button": {
-						"label": "Tekrarla",
-						"toggle": {
-							"off": "Tekrarlama kapalı",
-							"on": "Tekrarlama açık"
-						}
+					"label": "Döngü",
+					"toggle": {
+						"off": "Döngü kapalı",
+						"on": "Düngü açık"
 					}
 				},
 				"maximizePlayerButton": {
-					"button": {
-						"label": "Ekranı kapla",
-						"toggle": {
-							"off": "Tam ekran kapalı",
-							"on": "Tam ekran açıl"
-						}
+					"label": "Ekranı Kapla",
+					"toggle": {
+						"off": "Tam ekran kapalı",
+						"on": "Tam ekran açık"
 					}
 				},
 				"openTranscriptButton": {
-					"button": {
-						"label": "Open transcript"
-					}
-				},
-				"playbackSpeedButtons": {
-					"buttons": {
-						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
-						},
-						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
-						}
-					}
+					"label": "Not dökümünü aç"
 				},
 				"screenshotButton": {
-					"button": {
-						"label": "Screenshot"
-					},
-					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
+					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı",
+					"label": "Ekran Görüntüsü"
 				},
 				"videoHistory": {
 					"resumeButton": "Devam Et",
@@ -59,12 +39,10 @@
 					}
 				},
 				"volumeBoostButton": {
-					"button": {
-						"label": "Volume Boost",
-						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
-						}
+					"label": "Ses Güçlendirmesi",
+					"toggle": {
+						"off": "Ses güçlendirmesi kapalı",
+						"on": "Ses güçlendirmesi açık"
 					}
 				}
 			}
@@ -114,9 +92,6 @@
 					"title": "Ayarı sıfırlamayı onayla",
 					"value": "Onayla"
 				},
-				"openTab": {
-					"title": "Uzantı ayarlarını yeni bir sekmede açın"
-				},
 				"reset": {
 					"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
 					"value": "Sıfırla"
@@ -125,8 +100,6 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
@@ -163,7 +136,7 @@
 				},
 				"enable": {
 					"label": "Özel CSS'yi etkinleştir",
-					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
+					"title": "Enables custom CSS to be applied to the page"
 				},
 				"title": "Özel CSS Ayarları"
 			},
@@ -214,8 +187,8 @@
 						"title": "Sayfa kaydırma çubuğunu gizler"
 					},
 					"hideShorts": {
-						"label": "Kısa videoları gizle",
-						"title": "Tüm kısa videoları gizler"
+						"label": "Hide shorts",
+						"title": "Hides all shorts"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
@@ -227,23 +200,19 @@
 					},
 					"openTranscriptButton": {
 						"label": "Not dökümü düğmesini gizle",
-						"title": "İzlediğiniz videonun metnini açmak için özellik menüsüne bir düğme ekler"
+						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 					},
 					"openYouTubeSettingsOnHover": {
 						"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
 						"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
 					},
-					"pauseBackgroundPlayers": {
-						"label": "Arka plan oynatıcılarını duraklat",
-						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
-					},
 					"remainingTime": {
 						"label": "Kalan süre",
-						"title": "İzlediğiniz videonun kalan süresini gösterir"
+						"title": "Shows the remaining time of the video you're watching"
 					},
 					"rememberLastVolume": {
 						"label": "Son ses hacmini hatırla",
-						"title": "İzlediğiniz son videonun ses seviyesini hatırlar ve yeni bir video açtığınızda bu ses seviyesine ayarlar"
+						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
 					},
 					"removeRedirect": {
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
@@ -256,10 +225,6 @@
 					"shortsAutoScroll": {
 						"label": "Kısa videoya otomatik kaydır",
 						"title": "Bir sonraki kısa videoya otomatik kaydır"
-					},
-					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -277,7 +242,7 @@
 						"white": "Beyaz",
 						"yellow": "Sarı"
 					},
-					"title": "Ekran göstergesinin rengini seçin"
+					"title": "Select the color for the On-Screen Display"
 				},
 				"hide": {
 					"label": "Gecikmeyi Gizle",
@@ -306,9 +271,9 @@
 				"type": {
 					"label": "Tür",
 					"options": {
-						"circle": "Circle",
 						"line": "Satır",
 						"no_display": "Ekran yok",
+						"round": "Tur",
 						"text": "Metin"
 					},
 					"title": "Select the type of On-Screen Display"
@@ -319,17 +284,9 @@
 					"label": "Zorunlu oynatma hızını etkinleştir",
 					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
 				},
-				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
-					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
-					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
-				},
 				"select": {
 					"label": "Oynatma hızı",
-					"title": "Video oynatma hızını ayarlar"
+					"title": "The speed to set the video to"
 				},
 				"title": "Oynatma hızı ayarları"
 			},
@@ -354,38 +311,38 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Kaydırma başına hız değişimi",
-					"title": "Kaydırma başına hız değiştirmeyi ayarlar"
+					"label": "Speed Change Per Scroll",
+					"title": "Adjust the speed change per scroll"
 				},
 				"enable": {
 					"label": "Kaydırma tekerleği hız kontrolü",
-					"title": "Kaydırma tekerleği ile hız ayarını etkinleştirmek için değiştirici tuşlarından birine basın."
+					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
 				"optionLabel": "{{KEY}} anahtarı",
 				"select": {
 					"label": "Düzenleyici anahtar",
-					"title": "Kullanılacak kısayol düğmesi"
+					"title": "The modifier key to use"
 				},
 				"title": "Scroll wheel speed control settings"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Her kaydırmada değiştirilecek ses düzeyi",
-					"title": "Her kaydırmada değiştirilecek ses düzeyini ayarlayın"
+					"label": "Volume Change Per Scroll",
+					"title": "Adjust the volume change per scroll"
 				},
 				"enable": {
 					"label": "Kaydırma tekerleği ile ses kontrolü",
-					"title": "İzlediğiniz videonun ses düzeyini kontrol etmek için kaydırma tekerleğini kullanmanızı sağlar"
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"holdModifierKey": {
 					"enable": {
 						"label": "Enable when holding modifier key",
-						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"optionLabel": "{{KEY}} anahtarı",
 					"select": {
 						"label": "Düzenleyici anahtar",
-						"title": "Kullanılacak kısayol düğmesi"
+						"title": "The modifier key to use"
 					}
 				},
 				"holdRightClick": {
@@ -398,25 +355,25 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "İzlenen videoları takip edin",
-					"title": "İzlediğiniz videolarda en son nerede kaldığınızı takip eder ve oynatmaya oradan devam etmenizi sağlar"
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
 				},
 				"resumeType": {
 					"select": {
-						"label": "Devam etme türü",
+						"label": "Resume type",
 						"options": {
-							"automatic": "Otomatik",
+							"automatic": "Automatic",
 							"prompt": "Prompt"
 						},
-						"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
+						"title": "Select how you want to resume videos"
 					}
 				},
-				"title": "Video geçmişi ayarları"
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Ses güçlendirme miktarı (dB)",
-					"title": "Ses güçlendirme miktarı"
+					"label": "Volume boost amount (dB)",
+					"title": "The amount to boost the volume by"
 				},
 				"enable": {
 					"label": "Ses güçlendirmeyi etkinleştir",
@@ -433,49 +390,6 @@
 					}
 				},
 				"title": "Ses güçlendirme ayarları"
-			},
-			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
-				"colors": {
-					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
-					},
-					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
-					},
-					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
-					},
-					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
-					},
-					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
-					},
-					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
-					},
-					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
-					}
-				},
-				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
-				},
-				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
-				},
-				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}

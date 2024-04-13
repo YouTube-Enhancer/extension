@@ -12,9 +12,7 @@
 		"plugin:import/typescript",
 		"plugin:tailwindcss/recommended",
 		"plugin:promise/recommended",
-		"plugin:perfectionist/recommended-natural",
-		"plugin:react-hooks/recommended",
-		"plugin:prettier/recommended"
+		"plugin:perfectionist/recommended-natural"
 	],
 	"root": true,
 	"parser": "@typescript-eslint/parser",
@@ -33,7 +31,6 @@
 		"@typescript-eslint/no-unused-vars": ["error"],
 		"@typescript-eslint/no-explicit-any": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
-		"@typescript-eslint/restrict-template-expressions": "off",
 		"quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
 		"semi": ["error", "always"],
 		"prefer-const": [
@@ -57,7 +54,7 @@
 		"no-empty": ["error", { "allowEmptyCatch": true }],
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 		"import/first": ["error"],
-		"no-secrets/no-secrets": ["error", { "tolerance": 5.0 }],
+		"no-secrets/no-secrets": "error",
 		"import/no-unresolved": "off",
 		"tailwindcss/no-custom-classname": "off",
 		"tailwindcss/classnames-order": "error",

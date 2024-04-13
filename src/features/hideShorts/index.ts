@@ -1,7 +1,6 @@
 import { hideShorts, observeShortsElements, showShorts } from "@/src/features/hideShorts/utils";
-import { type Nullable } from "@/src/types";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
-let shortsObserver: Nullable<MutationObserver> = null;
+let shortsObserver: MutationObserver | null = null;
 export async function enableHideShorts() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");

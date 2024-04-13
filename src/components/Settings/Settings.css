@@ -51,8 +51,7 @@
 	--transition-border-color: border-color 200ms var(--transition-timing-ease-out);
 	--transition-box-shadow: box-shadow 200ms var(--transition-timing-ease-out);
 	--transition-color: color 200ms var(--transition-timing-ease-out);
-	--transition-opacity: opacity 200ms var(--transition-timing-linear);
-	/* Timing opacity looks weird */
+	--transition-opacity: opacity 200ms var(--transition-timing-linear); /* Timing opacity looks weird */
 	--transition-transform: transform 200ms var(--transition-timing-ease-out);
 
 	/* Misc */
@@ -94,6 +93,10 @@ fieldset {
 	padding-left: 0 !important;
 }
 
+fieldset + fieldset {
+	margin-top: 12px !important;
+}
+
 fieldset > p:first-of-type {
 	margin-top: 0 !important;
 }
@@ -111,11 +114,9 @@ legend {
 .left {
 	float: left;
 }
-
 .right {
 	float: right;
 }
-
 .clear {
 	clear: both;
 }
@@ -128,23 +129,18 @@ legend {
 .accent {
 	color: var(--accent);
 }
-
 .success {
 	color: var(--success);
 }
-
 .warning {
 	color: var(--warning);
 }
-
 .danger {
 	color: var(--danger);
 }
-
 .light {
 	color: var(--foreground-light);
 }
-
 .inverse {
 	color: var(--foreground-inverse);
 }
@@ -153,15 +149,12 @@ legend {
 .bg-accent {
 	background: var(--accent);
 }
-
 .bg-success {
 	background: var(--success);
 }
-
 .bg-warning {
 	background: var(--warning);
 }
-
 .bg-danger {
 	background: var(--danger);
 }
@@ -187,7 +180,6 @@ hr {
 /* inputs */
 input[type="text"],
 input[type="button"],
-button[id="openinnewtab_button"],
 select {
 	border-radius: var(--border-radius-md);
 	margin-bottom: 4px;
@@ -195,7 +187,6 @@ select {
 }
 
 input[type="text"],
-button[id="openinnewtab_button"],
 select {
 	border: 0;
 	background: var(--input-background);
@@ -208,46 +199,36 @@ select {
 }
 
 input[type="button"],
-button[id="openinnewtab_button"],
 input[type="checkbox"] {
 	cursor: pointer;
 }
 
-input[type="button"],
-button[id="openinnewtab_button"] {
+input[type="button"] {
 	min-width: 50px;
 	color: var(--neutral-lightest);
 	border: 0;
 	padding: 8px 12px;
 	transition: var(--transition-background);
 }
-
 input[type="button"]:disabled {
 	cursor: help;
 	opacity: 0.6;
 }
-
 input[type="button"].loading:disabled {
 	cursor: wait;
 }
 
 /* accent */
-input[type="button"].accent,
-button[id="openinnewtab_button"].accent {
+input[type="button"].accent {
 	background: var(--accent);
 }
-
 input[type="button"].accent:hover,
 input[type="button"].accent:focus,
-input[type="button"].accent:active,
-button[id="openinnewtab_button"].accent:hover,
-button[id="openinnewtab_button"].accent:focus,
-button[id="openinnewtab_button"].accent:active {
+input[type="button"].accent:active {
 	background: var(--accent);
 }
 
-input[type="button"].accent.ghost,
-button[id="openinnewtab_button"].accent.ghost {
+input[type="button"].accent.ghost {
 	border: 2px solid var(--accent);
 	background: var(--neutral-lightest);
 	color: var(--accent);
@@ -258,7 +239,6 @@ input[type="button"].success {
 	border: 2px solid var(--success-light);
 	background: var(--success-light);
 }
-
 input[type="button"].success:hover,
 input[type="button"].success:focus,
 input[type="button"].success:active {
@@ -277,7 +257,6 @@ input[type="button"].warning {
 	border: 2px solid var(--warning-light);
 	background: var(--warning-light);
 }
-
 input[type="button"].warning:hover,
 input[type="button"].warning:focus,
 input[type="button"].warning:active {
@@ -296,7 +275,6 @@ input[type="button"].danger {
 	border: 2px solid var(--danger-light);
 	background: var(--danger-light);
 }
-
 input[type="button"].danger:hover,
 input[type="button"].danger:focus,
 input[type="button"].danger:active {
@@ -342,8 +320,7 @@ input[type="color"] {
 	width: 80px;
 }
 
-input[type="button"],
-button[id="openinnewtab_button"] {
+input[type="button"] {
 	min-width: 60px;
 }
 

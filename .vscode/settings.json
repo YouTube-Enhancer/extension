@@ -5,7 +5,5 @@
 		"source.fixAll": "always"
 	},
 	"eslint.codeActionsOnSave.mode": "all",
-	"editor.snippets.codeActions.enabled": true,
-	"typescript.validate.enable": true,
-	"typescript.tsserver.experimental.enableProjectDiagnostics": true
+	"editor.snippets.codeActions.enabled": true
 }

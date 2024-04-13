@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from "react";
 
 import type { AnyFunction } from "../types";
 
-const useRunAfterUpdate = () => {
+export const useRunAfterUpdate = () => {
 	const handlersRef = useRef<AnyFunction[]>([]);
 
 	useLayoutEffect(() => {
@@ -14,4 +14,3 @@ const useRunAfterUpdate = () => {
 		handlersRef.current.push(handler);
 	};
 };
-export default useRunAfterUpdate;

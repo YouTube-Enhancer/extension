@@ -1,20 +1,11 @@
 import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
+import type { FeatureMenuItemIconId, FeatureMenuItemId, FeatureMenuItemLabelId, FeaturesThatHaveButtons, WithId } from "@/src/types";
 
-import {
-	type AllButtonNames,
-	type FeatureMenuItemIconId,
-	type FeatureMenuItemId,
-	type FeatureMenuItemLabelId,
-	type MultiButtonNames,
-	type Nullable,
-	type SingleButtonFeatureNames,
-	type WithId
-} from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
+import eventManager, { type FeatureName } from "@/src/utils/EventManager";
+import { waitForAllElements } from "@/src/utils/utilities";
 
-export const featuresInMenu = new Set<AllButtonNames>();
+export const featuresInMenu = new Set<FeaturesThatHaveButtons>();
 
 function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
 	if (isToggle) {
@@ -26,22 +17,21 @@ function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTML
 }
 /**
  * Adds a feature item to the feature menu.
- * @param buttonName The name of the button
+ * @param featureName The name of the feature
  * @param label The label for the feature
  * @param icon The icon for the feature
  * @param listener The listener for the feature
  * @param isToggle Whether the feature is a toggle
  */
-export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
-	buttonName: Name,
+export async function addFeatureItemToMenu<Name extends FeaturesThatHaveButtons, Toggle extends boolean>(
+	featureName: Name,
 	label: string,
 	icon: BasicIcon,
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
-	featuresInMenu.add(buttonName);
+	featuresInMenu.add(featureName);
 
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
@@ -51,9 +41,9 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	if (!featureMenu) return;
 
 	// Check if the feature item already exists in the menu
-	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`);
+	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`);
 	if (featureExistsInMenu) {
-		const menuItem = getFeatureMenuItem(buttonName);
+		const menuItem = getFeatureMenuItem(featureName);
 		if (!menuItem) return;
 		eventManager.removeEventListener(menuItem, "click", featureName);
 		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
@@ -65,7 +55,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	if (!featureMenuPanel) return;
 
 	// Get the IDs for the feature item
-	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(buttonName);
+	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(featureName);
 
 	// Create a menu item element
 	const menuItem = document.createElement("div");
@@ -116,14 +106,14 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 }
 /**
  * Removes a feature item from the feature menu.
- * @param buttonName - The name of the button to remove.
+ * @param featureName - The name of the feature to remove.
  */
-export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
+export function removeFeatureItemFromMenu(featureName: FeaturesThatHaveButtons) {
 	// Remove the feature name from the set of features in the menu
-	featuresInMenu.delete(buttonName);
+	featuresInMenu.delete(featureName as FeaturesThatHaveButtons);
 
 	// Get the unique ID for the feature item
-	const { featureMenuItemId } = getFeatureIds(buttonName);
+	const { featureMenuItemId } = getFeatureIds(featureName);
 	// Find the feature menu
 	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 	if (!featureMenu) return;
@@ -156,12 +146,12 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 }
 /**
  * Updates the label for a feature item.
- * @param buttonName the name of the button
+ * @param featureName the name of the feature
  * @param label the label to set
  * @returns
  */
-export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: string) {
-	const featureMenuItemLabel = getFeatureMenuItemLabel(buttonName);
+export function updateFeatureMenuItemLabel(featureName: FeaturesThatHaveButtons, label: string) {
+	const featureMenuItemLabel = getFeatureMenuItemLabel(featureName);
 	if (!featureMenuItemLabel) return;
 	featureMenuItemLabel.textContent = label;
 }
@@ -177,32 +167,32 @@ export function updateFeatureMenuTitle(title: string) {
 }
 /**
  * Gets the IDs for a feature item.
- * @param buttonName the name of the button
+ * @param featureName the name of the feature
  * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
  */
-export function getFeatureIds(buttonName: AllButtonNames): {
+export function getFeatureIds(featureName: FeatureName): {
 	featureMenuItemIconId: FeatureMenuItemIconId;
 	featureMenuItemId: FeatureMenuItemId;
 	featureMenuItemLabelId: FeatureMenuItemLabelId;
 } {
-	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
-	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
-	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
+	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${featureName}-icon`;
+	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${featureName}-menuitem`;
+	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${featureName}-label`;
 	return {
 		featureMenuItemIconId,
 		featureMenuItemId,
 		featureMenuItemLabelId
 	};
 }
-export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
+export function getFeatureMenuItemIcon(featureName: FeatureName): HTMLDivElement | null {
+	const selector: WithId<FeatureMenuItemIconId> = `#yte-${featureName}-icon`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
+export function getFeatureMenuItemLabel(featureName: FeatureName): HTMLDivElement | null {
+	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${featureName}-label`;
 	return document.querySelector(selector);
 }
-export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
+export function getFeatureMenuItem(featureName: FeatureName): HTMLDivElement | null {
+	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${featureName}-menuitem`;
 	return document.querySelector(`#yte-panel-menu > ${selector}`);
 }

@@ -4,13 +4,13 @@ import { resolve } from "path";
 import { build } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
-import { ENABLE_SOURCE_MAP, outputFolderName } from "../constants";
+import { outputFolderName } from "../constants";
 const packages: { [entryAlias: string]: string }[] = [
 	{
-		content: resolve(__dirname, "../../../", "src/pages/content/index.ts")
+		content: resolve(__dirname, "../../../", "src/pages/content/index.tsx")
 	},
 	{
-		embedded: resolve(__dirname, "../../../", "src/pages/embedded/index.ts")
+		inject: resolve(__dirname, "../../../", "src/pages/inject/index.tsx")
 	}
 ];
 const root = resolve("src");
@@ -37,7 +37,7 @@ export default function buildContentScript(): PluginOption {
 								}
 							}
 						},
-						sourcemap: ENABLE_SOURCE_MAP
+						sourcemap: process.env.__DEV__ === "true" ? "inline" : false
 					},
 					configFile: false,
 					plugins: [cssInjectedByJsPlugin()],
