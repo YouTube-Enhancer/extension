@@ -306,7 +306,7 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
-						"circle": "Cerchio",
+						"circle": "Circle",
 						"line": "Linea",
 						"no_display": "Nessuno schermo",
 						"text": "Testuale"
