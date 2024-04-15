@@ -995,7 +995,6 @@ export default function Settings() {
 						<SettingSection className="mb-1">
 							<SettingTitle title={t("settings.sections.youtubeDeepDark.co-authors")} />
 							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
-							<Link href="https://github.com/MaximeRF">MaximeRF</Link>
 						</SettingSection>
 					</SettingSection>
 					<Setting
