@@ -129,6 +129,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "MaximeRF",
+      "name": "Maxime RF",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12028968?v=4",
+      "profile": "https://www.mrfdev.com",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
