@@ -129,6 +129,15 @@
       "contributions": [
         "translation"
       ]
+    },
+    {
+      "login": "MechaLynx",
+      "name": "MechaLynx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8427257?v=4",
+      "profile": "https://github.com/mechalynx",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
