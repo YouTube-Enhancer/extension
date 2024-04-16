@@ -47,7 +47,8 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 			height: "48px",
 			justifyContent: "center",
 			padding: "0px 4px",
-			width: "48px"
+			width: "48px",
+			zIndex: "0"
 		}
 	});
 	button.dataset.title = label;
