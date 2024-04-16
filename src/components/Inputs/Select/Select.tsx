@@ -71,7 +71,7 @@ const Select = <Key extends configurationId>({
 				<>
 					<button
 						className={cn(
-							"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
+							"flex h-fit w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
 							disabledButtonClasses
 						)}
 						disabled={loading || disabled}
