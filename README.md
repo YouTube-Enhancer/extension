@@ -40,9 +40,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
+- **Pause background players:** Pauses video players in background tabs when you start a new player in the foreground.
+
 - **Loop Button:** Adds a dedicated button to toggle the video player loop.
 
-- **Hide Scrollbar:** Hides the pages scroll bar
+- **Hide Scrollbar:** Hides the pages scroll bar.
 
 - **Automatic Theater Mode:** Automatically enables theater mode when you load a video
 
@@ -53,6 +55,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
 
 - **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
+
+- **Skip "Video is paused. Continue watching?" popup**: Skips the idle dialog that pauses video playback.
 
 - **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
 
@@ -105,7 +109,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
+- **Playback speed buttons:** Adds buttons to adjust the playback speed.
+
 - **Player Speed:** Define the playback speed for videos.
+
+- **Playback buttons speed:** Define the speed adjustment per button press.
 
 ### Volume Boost Settings
 
@@ -122,6 +130,26 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
+
+### YouTube Deep Dark Settings
+
+- **Enable selected theme:** Enables the selected YouTube Deep Dark theme.
+
+- **Select theme:** Select the YouTube Deep Dark theme to use (9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark).
+
+- **Accent color:** Select the accent color for the "Custom" theme.
+
+- **Main background color:** Select the main background color for the "Custom" theme.
+
+- **Secondary background color:** Select the secondary background color for the "Custom" theme.
+
+- **Hover background color:** Select the hover background color for the "Custom" theme.
+
+- **Main text color:** Select the main text color for the "Custom" theme.
+
+- **Secondary text color:** Select the secondary text color for the "Custom" theme.
+
+- **Shadow color:** Select the shadow color for the "Custom" theme.
 
 ### Custom CSS Settings
 
