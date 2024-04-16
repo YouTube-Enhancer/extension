@@ -322,6 +322,8 @@ We welcome contributions to improve translations and make the extension accessib
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
 
+![Alt](https://repobeats.axiom.co/api/embed/5f047f2fde5309f072dda1602645f76bb8e74cdc.svg "Repobeats analytics image")
+
 ## 🌟 Star History
 
 <a href="https://star-history.com/#VampireChicken12/youtube-enhancer&Date">
