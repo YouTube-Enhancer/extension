@@ -42,7 +42,7 @@ export type DeepDarkPresets = Record<Exclude<DeepDarkPreset, "Custom">, string>;
 /**
  * Theme presets are adapted from the "YouTube DeepDark" Stylus theme by RaitaroH.
  * Author: RaitaroH
- * Co-authors: https://github.com/MechaLynx https://github.com/MaximeRF
+ * Co-authors: https://github.com/MechaLynx
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
  */
 export const deepDarkPresets = {
