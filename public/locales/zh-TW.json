@@ -9,28 +9,48 @@
 		"content": {
 			"features": {
 				"featureMenu": {
-					"label": "功能選單"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "循環播放",
-					"toggle": {
-						"off": "關閉循環播放",
-						"on": "啟用循環播放"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "最大化",
-					"toggle": {
-						"off": "關閉最大化",
-						"on": "啟用最大化"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "打開文字記錄"
+					"button": {
+						"label": "Open transcript"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "減慢播放速度 {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "加快播放速度 {{SPEED}}"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "螢幕截圖已複製剪貼簿",
-					"label": "螢幕截圖"
+					"button": {
+						"label": "Screenshot"
+					},
+					"copiedToClipboard": "螢幕截圖已複製剪貼簿"
 				},
 				"videoHistory": {
 					"resumeButton": "繼續",
@@ -39,10 +59,12 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "音量增強",
-					"toggle": {
-						"off": "關閉音量增強",
-						"on": "啟用音量增強"
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -92,6 +114,9 @@
 					"title": "確認重設設定",
 					"value": "確認"
 				},
+				"openTab": {
+					"title": "於新頁面開啟擴充套件設定"
+				},
 				"reset": {
 					"title": "將所以設定回復到初始值，按確認儲存變更",
 					"value": "重置"
@@ -100,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "減慢速度按鈕",
+						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
@@ -187,8 +214,8 @@
 						"title": "隱藏頁面捲軸"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "隱藏 Shorts",
+						"title": "隱藏全部 Shorts"
 					},
 					"loopButton": {
 						"label": "循環按鈕",
@@ -205,6 +232,10 @@
 					"openYouTubeSettingsOnHover": {
 						"label": "懸浮時開啟設定選單",
 						"title": "鼠標懸浮在設定按鈕時開啟選單"
+					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
@@ -225,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "Shorts 自動滾動",
 						"title": "自動滾動到下一段 Short"
+					},
+					"skipContinueWatching": {
+						"label": "跳過「影片已暫停，繼續觀看？」",
+						"title": "跳過暫停影片播放的閒置對話框"
 					}
 				},
 				"title": "其他設定"
@@ -271,9 +306,9 @@
 				"type": {
 					"label": "類型",
 					"options": {
+						"circle": "圓形",
 						"line": "線條",
 						"no_display": "不顯示",
-						"round": "圓形",
 						"text": "文字"
 					},
 					"title": "選擇屏幕顥示風格"
@@ -283,6 +318,14 @@
 				"enable": {
 					"label": "強制播放速度",
 					"title": "設定影片播放速度如下"
+				},
+				"playbackSpeedButtons": {
+					"label": "播放速度按鈕",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "每次按下時改變的速度"
+					},
+					"title": "加入加快或減慢播放速度按鈕"
 				},
 				"select": {
 					"label": "播放速度",
@@ -390,6 +433,49 @@
 					}
 				},
 				"title": "音量增強設定"
+			},
+			"youtubeDeepDark": {
+				"author": "作者",
+				"co-authors": "共同作者",
+				"colors": {
+					"colorShadow": {
+						"label": "陰影顏色",
+						"title": "陰影的顏色"
+					},
+					"dimmerText": {
+						"label": "次要文字顏色",
+						"title": "次要文字的顏色"
+					},
+					"hoverBackground": {
+						"label": "Hover background color",
+						"title": "滑過背景顏色"
+					},
+					"mainBackground": {
+						"label": "主要背景顏色",
+						"title": "主要背景的顏色"
+					},
+					"mainColor": {
+						"label": "重點色調",
+						"title": "重點色調的顏色"
+					},
+					"mainText": {
+						"label": "主要文字顏色",
+						"title": "主要文字的顏色"
+					},
+					"secondBackground": {
+						"label": "Secondary background color",
+						"title": "次要背景顏色"
+					}
+				},
+				"enable": {
+					"label": "啟用已選主題",
+					"title": "啟用頁面的已選主題"
+				},
+				"select": {
+					"label": "選擇主題",
+					"title": "選擇套用到頁面的主題"
+				},
+				"title": "YouTube Deep Dark 設定"
 			}
 		}
 	}

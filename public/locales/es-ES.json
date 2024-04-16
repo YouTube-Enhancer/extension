@@ -9,28 +9,48 @@
 		"content": {
 			"features": {
 				"featureMenu": {
-					"label": "Menú de funciones"
+					"button": {
+						"label": "Feature menu"
+					}
 				},
 				"loopButton": {
-					"label": "Bucle",
-					"toggle": {
-						"off": "Desactivar repetición",
-						"on": "Activar repetición"
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop off",
+							"on": "Loop on"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximizar",
-					"toggle": {
-						"off": "Maximize off",
-						"on": "Maximize on"
+					"button": {
+						"label": "Maximize",
+						"toggle": {
+							"off": "Maximize off",
+							"on": "Maximize on"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Abrir transcripción"
+					"button": {
+						"label": "Open transcript"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Decrease Speed by {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Increase Speed by {{SPEED}}"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Captura de pantalla copiada al portapapeles",
-					"label": "Capturar pantalla"
+					"button": {
+						"label": "Screenshot"
+					},
+					"copiedToClipboard": "Captura de pantalla copiada al portapapeles"
 				},
 				"videoHistory": {
 					"resumeButton": "Reanudar",
@@ -39,10 +59,12 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Potenciar volumen",
-					"toggle": {
-						"off": "Volume boost off",
-						"on": "Volume boost on"
+					"button": {
+						"label": "Volume Boost",
+						"toggle": {
+							"off": "Volume boost off",
+							"on": "Volume boost on"
+						}
 					}
 				}
 			}
@@ -92,6 +114,9 @@
 					"title": "Confirma el restablecimiento de los ajustes",
 					"value": "Confirmar"
 				},
+				"openTab": {
+					"title": "Open extension settings in a new tab"
+				},
 				"reset": {
 					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
 					"value": "Reestablecer"
@@ -100,6 +125,8 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botón de repetición",
 						"maximizePlayerButton": "Maximizar botón",
 						"openTranscriptButton": "Abrir botón de transcripción",
@@ -206,6 +233,10 @@
 						"label": "Abrir ajustes de YouTube al pasar el cursor",
 						"title": "Abre el menú de configuración de YouTube cuando pasa el cursor por encima del botón de ajustes"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pause background players",
+						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
 					"remainingTime": {
 						"label": "Tiempo restante",
 						"title": "Muestra el tiempo restante del vídeo que estás viendo"
@@ -225,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "Shorts auto scroll",
 						"title": "Automatically scrolls to the next short"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Ajustes varios"
@@ -271,9 +306,9 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
+						"circle": "Circle",
 						"line": "Línea",
 						"no_display": "No mostrar",
-						"round": "Round",
 						"text": "Texto"
 					},
 					"title": "Select the type of On-Screen Display"
@@ -283,6 +318,14 @@
 				"enable": {
 					"label": "Velocidad de reproducción forzada",
 					"title": "Establece la velocidad del video a lo que elijas a continuación"
+				},
+				"playbackSpeedButtons": {
+					"label": "Playback speed buttons",
+					"select": {
+						"label": "Playback buttons speed",
+						"title": "Amount of speed to be changed per click"
+					},
+					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 				},
 				"select": {
 					"label": "Velocidad del reproductor",
@@ -390,6 +433,49 @@
 					}
 				},
 				"title": "Ajustes de potenciado de volumen"
+			},
+			"youtubeDeepDark": {
+				"author": "Author",
+				"co-authors": "Co-authors",
+				"colors": {
+					"colorShadow": {
+						"label": "Shadow color",
+						"title": "Color for shadows"
+					},
+					"dimmerText": {
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
+					},
+					"hoverBackground": {
+						"label": "Hover background color",
+						"title": "Color for hover background"
+					},
+					"mainBackground": {
+						"label": "Main background color",
+						"title": "Color for main background"
+					},
+					"mainColor": {
+						"label": "Accent color",
+						"title": "Color for accent"
+					},
+					"mainText": {
+						"label": "Main text color",
+						"title": "Color for main text"
+					},
+					"secondBackground": {
+						"label": "Secondary background color",
+						"title": "Color for secondary background"
+					}
+				},
+				"enable": {
+					"label": "Enable selected theme",
+					"title": "Activate the selected theme for the page"
+				},
+				"select": {
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
+				},
+				"title": "YouTube Deep Dark Settings"
 			}
 		}
 	}

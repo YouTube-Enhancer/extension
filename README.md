@@ -40,9 +40,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
+- **Pause background players:** Pauses video players in background tabs when you start a new player in the foreground.
+
 - **Loop Button:** Adds a dedicated button to toggle the video player loop.
 
-- **Hide Scrollbar:** Hides the pages scroll bar
+- **Hide Scrollbar:** Hides the pages scroll bar.
 
 - **Automatic Theater Mode:** Automatically enables theater mode when you load a video
 
@@ -53,6 +55,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
 
 - **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
+
+- **Skip "Video is paused. Continue watching?" popup**: Skips the idle dialog that pauses video playback.
 
 - **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
 
@@ -105,7 +109,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
+- **Playback speed buttons:** Adds buttons to adjust the playback speed.
+
 - **Player Speed:** Define the playback speed for videos.
+
+- **Playback buttons speed:** Define the speed adjustment per button press.
 
 ### Volume Boost Settings
 
@@ -122,6 +130,26 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
+
+### YouTube Deep Dark Settings
+
+- **Enable selected theme:** Enables the selected YouTube Deep Dark theme.
+
+- **Select theme:** Select the YouTube Deep Dark theme to use (9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark).
+
+- **Accent color:** Select the accent color for the "Custom" theme.
+
+- **Main background color:** Select the main background color for the "Custom" theme.
+
+- **Secondary background color:** Select the secondary background color for the "Custom" theme.
+
+- **Hover background color:** Select the hover background color for the "Custom" theme.
+
+- **Main text color:** Select the main text color for the "Custom" theme.
+
+- **Secondary text color:** Select the secondary text color for the "Custom" theme.
+
+- **Shadow color:** Select the shadow color for the "Custom" theme.
 
 ### Custom CSS Settings
 
@@ -266,6 +294,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rado84-github"><img src="https://avatars.githubusercontent.com/u/41172201?v=4?s=100" width="100px;" alt="rado84"/><br /><sub><b>rado84</b></sub></a><br /><a href="#bug-rado84-github" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
     </tr>
   </tbody>
 </table>
@@ -292,6 +321,8 @@ We welcome contributions to improve translations and make the extension accessib
 ## 📜 License
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
+
+![Alt](https://repobeats.axiom.co/api/embed/5f047f2fde5309f072dda1602645f76bb8e74cdc.svg "Repobeats analytics image")
 
 ## 🌟 Star History
 

@@ -1,24 +1,26 @@
-import type { Path, configuration } from "@/src/types";
+import type { configurationId } from "@/src/types";
 
 import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
+import type { ColorPickerProps } from "../../Inputs/ColorPicker/ColorPicker";
 import type { NumberInputProps } from "../../Inputs/Number/Number";
 import type { SelectProps } from "../../Inputs/Select/Select";
 import type { SliderProps } from "../../Inputs/Slider/Slider";
 
-import { CSSEditor, Checkbox, NumberInput, Select, Slider } from "../../Inputs";
+import { CSSEditor, Checkbox, ColorPicker, NumberInput, Select, Slider } from "../../Inputs";
 
-type SettingInputProps = {
-	id: Path<configuration>;
+type SettingInputProps<ID extends configurationId> = {
+	id: ID;
 	title?: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
+	| ({ type: "color-picker" } & ColorPickerProps)
 	| ({ type: "css-editor" } & CSSEditorProps)
 	| ({ type: "number" } & NumberInputProps)
-	| ({ type: "select" } & SelectProps)
+	| ({ type: "select" } & SelectProps<ID>)
 	| ({ type: "slider" } & SliderProps)
 );
-function SettingInput(settingProps: SettingInputProps) {
+function SettingInput<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
@@ -65,9 +67,13 @@ function SettingInput(settingProps: SettingInputProps) {
 			const { className, id, onChange, value } = settingProps;
 			return <CSSEditor className={className} id={id} onChange={onChange} value={value} />;
 		}
+		case "color-picker": {
+			const { className, disabled, id, label, onChange, title, value } = settingProps;
+			return <ColorPicker className={className} disabled={disabled} id={id} label={label} onChange={onChange} title={title} value={value} />;
+		}
 	}
 }
-export default function Setting(settingProps: SettingInputProps) {
+export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	return (
 		<div className="mx-2 mb-1" title={settingProps.title}>
 			<SettingInput {...settingProps} />

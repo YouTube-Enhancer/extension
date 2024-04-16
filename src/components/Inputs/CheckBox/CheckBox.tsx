@@ -18,8 +18,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ checked, className, id, label, onCh
 		<div className={cn("flex items-center", className)} title={title}>
 			<input
 				checked={checked}
-				className="form-checkbox h-3.5 w-3.5 text-indigo-600 transition duration-150 ease-in-out"
+				className="form-checkbox size-3.5 text-indigo-600 transition duration-150 ease-in-out"
 				id={id}
+				key={`checkbox-${id}-${checked}`}
 				onChange={onChange}
 				type="checkbox"
 			/>

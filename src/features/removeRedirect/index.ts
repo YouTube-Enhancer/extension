@@ -1,7 +1,7 @@
+import { type Nullable } from "@/src/types";
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function removeRedirect() {
-	browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
@@ -9,9 +9,12 @@ export default async function removeRedirect() {
 		}
 	} = optionsData;
 	if (!removeRedirectEnabled) return;
+	browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 	const regex = /https\:\/\/www\.youtube\.com\/redirect\?.+/gm;
 
-	const links: NodeListOf<HTMLElement> = document.querySelectorAll(".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string");
+	const links: NodeListOf<HTMLElement> = document.querySelectorAll(
+		".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string"
+	);
 	links.forEach((link: HTMLElement) => {
 		const href: null | string = link.getAttribute("href");
 		if (href && href.match(regex)) {
@@ -23,7 +26,7 @@ export default async function removeRedirect() {
 	const callback: MutationCallback = (mutationsList: MutationRecord[]) => {
 		for (const mutation of mutationsList) {
 			if (mutation.type === "childList") {
-				mutation.addedNodes.forEach((node: Node | null) => {
+				mutation.addedNodes.forEach((node: Nullable<Node>) => {
 					if (node instanceof Element && node.hasAttribute("href")) {
 						const href: null | string = node.getAttribute("href");
 						if (href !== null && href.match(regex)) {

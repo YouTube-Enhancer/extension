@@ -28,7 +28,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 				if (changes[key].newValue) setStoredValue(changes[key].newValue as unknown as T);
 			}
 		});
-	}, []);
+	}, [area, key]);
 
 	const setValueRef = useRef<SetValue<T>>();
 

@@ -8,15 +8,26 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
-				featureMenu: { label: "Feature menu" };
-				loopButton: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } };
-				maximizePlayerButton: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } };
-				openTranscriptButton: { label: "Open transcript" };
-				screenshotButton: { copiedToClipboard: "Screenshot copied to clipboard"; label: "Screenshot" };
+				featureMenu: { button: { label: "Feature menu" } };
+				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
+				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
+				openTranscriptButton: { button: { label: "Open transcript" } };
+				playbackSpeedButtons: {
+					buttons: {
+						decreasePlaybackSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
+						increasePlaybackSpeedButton: { label: "Increase Speed by {{SPEED}}" };
+					};
+				};
+				screenshotButton: {
+					button: { label: "Screenshot" };
+					copiedToClipboard: "Screenshot copied to clipboard";
+				};
 				videoHistory: { resumeButton: "Resume"; resumePrompt: { close: "Close" } };
 				volumeBoostButton: {
-					label: "Volume Boost";
-					toggle: { off: "Volume boost off"; on: "Volume boost on" };
+					button: {
+						label: "Volume Boost";
+						toggle: { off: "Volume boost off"; on: "Volume boost on" };
+					};
 				};
 			};
 		};
@@ -57,6 +68,7 @@ interface EnUS {
 					value: "Clear Data";
 				};
 				confirm: { title: "Confirm setting reset"; value: "Confirm" };
+				openTab: { title: "Open extension settings in a new tab" };
 				reset: {
 					title: "Resets all settings to their defaults, Click the confirm button to save the changes";
 					value: "Reset";
@@ -65,6 +77,8 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						decreasePlaybackSpeedButton: "Decrease Speed button";
+						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
@@ -147,6 +161,10 @@ interface EnUS {
 						label: "Open YouTube settings on hover";
 						title: "Opens the YouTube settings menu when you hover over the settings button";
 					};
+					pauseBackgroundPlayers: {
+						label: "Pause background players";
+						title: "Pauses video players in background tabs when you start a new player in foreground tab";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -164,6 +182,10 @@ interface EnUS {
 						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
 					};
 					shortsAutoScroll: { label: "Shorts auto scroll"; title: "Automatically scrolls to the next short" };
+					skipContinueWatching: {
+						label: 'Skip "Video is paused. Continue watching?"';
+						title: "Skips the idle dialog that pauses video playback";
+					};
 				};
 				title: "Miscellaneous settings";
 			};
@@ -205,7 +227,7 @@ interface EnUS {
 				title: "On-Screen Display Settings";
 				type: {
 					label: "Type";
-					options: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
+					options: { circle: "Circle"; line: "Line"; no_display: "No display"; text: "Text" };
 					title: "Select the type of On-Screen Display";
 				};
 			};
@@ -213,6 +235,14 @@ interface EnUS {
 				enable: {
 					label: "Forced playback speed";
 					title: "Sets the video speed to what you choose below";
+				};
+				playbackSpeedButtons: {
+					label: "Playback speed buttons";
+					select: {
+						label: "Playback buttons speed";
+						title: "Amount of speed to be changed per click";
+					};
+					title: "Adds buttons to increase or decrease the playback speed of the video you're watching";
 				};
 				select: { label: "Player speed"; title: "The speed to set the video to" };
 				title: "Playback speed settings";
@@ -287,6 +317,25 @@ interface EnUS {
 					};
 				};
 				title: "Volume boost settings";
+			};
+			youtubeDeepDark: {
+				author: "Author";
+				"co-authors": "Co-authors";
+				colors: {
+					colorShadow: { label: "Shadow color"; title: "Color for shadows" };
+					dimmerText: { label: "Secondary text color"; title: "Color for secondary text" };
+					hoverBackground: { label: "Hover background color"; title: "Color for hover background" };
+					mainBackground: { label: "Main background color"; title: "Color for main background" };
+					mainColor: { label: "Accent color"; title: "Color for accent" };
+					mainText: { label: "Main text color"; title: "Color for main text" };
+					secondBackground: { label: "Secondary background color"; title: "Color for secondary background" };
+				};
+				enable: {
+					label: "Enable selected theme";
+					title: "Activate the selected theme for the page";
+				};
+				select: { label: "Select theme"; title: "Select a theme to be applied to the page" };
+				title: "YouTube Deep Dark Settings";
 			};
 		};
 	};

@@ -9,28 +9,48 @@
 		"content": {
 			"features": {
 				"featureMenu": {
-					"label": "Funktionsmeny"
+					"button": {
+						"label": "Funktionsmeny"
+					}
 				},
 				"loopButton": {
-					"label": "Slinga",
-					"toggle": {
-						"off": "Slinga av",
-						"on": "Slinga på"
+					"button": {
+						"label": "Slinga",
+						"toggle": {
+							"off": "Slinga av",
+							"on": "Slinga på"
+						}
 					}
 				},
 				"maximizePlayerButton": {
-					"label": "Maximera",
-					"toggle": {
-						"off": "Maximera av",
-						"on": "Maximera på"
+					"button": {
+						"label": "Maximera",
+						"toggle": {
+							"off": "Maximera av",
+							"on": "Maximera på"
+						}
 					}
 				},
 				"openTranscriptButton": {
-					"label": "Öppna transkript"
+					"button": {
+						"label": "Öppna transkript"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Minska hastigheten med {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Öka hastigheten med {{SPEED}}"
+						}
+					}
 				},
 				"screenshotButton": {
-					"copiedToClipboard": "Skärmbild kopierad till urklipp",
-					"label": "Skärmbild"
+					"button": {
+						"label": "Skärmbild"
+					},
+					"copiedToClipboard": "Skärmbild kopierad till urklipp"
 				},
 				"videoHistory": {
 					"resumeButton": "Återuppta",
@@ -39,10 +59,12 @@
 					}
 				},
 				"volumeBoostButton": {
-					"label": "Volymökning",
-					"toggle": {
-						"off": "Volymökning av",
-						"on": "Volymökning på"
+					"button": {
+						"label": "Volymökning",
+						"toggle": {
+							"off": "Volymökning av",
+							"on": "Volymökning på"
+						}
 					}
 				}
 			}
@@ -92,6 +114,9 @@
 					"title": "Bekräfta återställning av inställningar",
 					"value": "Bekräfta"
 				},
+				"openTab": {
+					"title": "Öppna tilläggsinställningar i en ny flik"
+				},
 				"reset": {
 					"title": "Återställer alla inställningar till sina standardinställningar, Klicka på bekräftelseknappen för att spara ändringarna",
 					"value": "Återställ"
@@ -100,9 +125,11 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
+						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
-						"openTranscriptButton": "Öppna transkriptknapp",
+						"openTranscriptButton": "Transkriptknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -187,8 +214,8 @@
 						"title": "Döljer sidornas rullningsfält"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Dölj shorts",
+						"title": "Döljer alla shorts"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
@@ -206,6 +233,10 @@
 						"label": "Öppna YouTube-inställningar vid musöver",
 						"title": "Öppnar YouTube-inställningsmenyn när du håller muspekaren över inställningsknappen"
 					},
+					"pauseBackgroundPlayers": {
+						"label": "Pausa spelare i bakgrunden",
+						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -215,16 +246,20 @@
 						"title": "Kommer ihåg volymen på den senaste videon du tittade på och ställer in den när du öppnar en ny video"
 					},
 					"removeRedirect": {
-						"label": "Ta bort YouTube /omdirigeringswebbadresser",
+						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
 					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",
-						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort si/funktionsparametrar från den"
+						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
 					},
 					"shortsAutoScroll": {
 						"label": "Automatisk rullning för shorts",
 						"title": "Rullar automatiskt till nästa shorts"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Övriga inställningar"
@@ -245,7 +280,7 @@
 					"title": "Välj färgen för On-Screen Display"
 				},
 				"hide": {
-					"label": "Dölj fördröjning",
+					"label": "Döljfördröjning",
 					"title": "Ange tiden i millisekunder innan On-Screen Display automatiskt döljs"
 				},
 				"opacity": {
@@ -271,9 +306,9 @@
 				"type": {
 					"label": "Typ",
 					"options": {
+						"circle": "Circle",
 						"line": "Rad",
 						"no_display": "Ingen visning",
-						"round": "Rund",
 						"text": "Text"
 					},
 					"title": "Välj typ av On-Screen Display"
@@ -283,6 +318,14 @@
 				"enable": {
 					"label": "Tvingad uppspelningshastighet",
 					"title": "Ställer in videohastigheten till det du väljer nedan"
+				},
+				"playbackSpeedButtons": {
+					"label": "Knapp för uppspelningshastigheten",
+					"select": {
+						"label": "Knapp för uppspelningshastigheten",
+						"title": "Hastighetsändring per klick"
+					},
+					"title": "Lägger till knappar för att öka eller minska uppspelningshastigheten på videon du tittar på"
 				},
 				"select": {
 					"label": "Uppspelningshastighet",
@@ -390,6 +433,49 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
+			},
+			"youtubeDeepDark": {
+				"author": "Skapare",
+				"co-authors": "Medskapare",
+				"colors": {
+					"colorShadow": {
+						"label": "Skuggfärg",
+						"title": "Färg för skuggor"
+					},
+					"dimmerText": {
+						"label": "Sekundär textfärg",
+						"title": "Färg för sekundärtext"
+					},
+					"hoverBackground": {
+						"label": "Bakgrundsfärg för musöver",
+						"title": "Bakgrundsfärg för musöver"
+					},
+					"mainBackground": {
+						"label": "Primär bakgrundsfärg",
+						"title": "Färg för primär bakgrund"
+					},
+					"mainColor": {
+						"label": "Accentfärg",
+						"title": "Färg för accent"
+					},
+					"mainText": {
+						"label": "Primär textfärg",
+						"title": "Färg för primär text"
+					},
+					"secondBackground": {
+						"label": "Sekundär bakgrundsfärg",
+						"title": "Färg för sekundär bakgrund"
+					}
+				},
+				"enable": {
+					"label": "Aktivera valt tema",
+					"title": "Aktivera det valda temat för sidan"
+				},
+				"select": {
+					"label": "Välj tema",
+					"title": "Välj ett tema som ska tillämpas på sidan"
+				},
+				"title": "Deep Dark-inställningar för YouTube"
 			}
 		}
 	}

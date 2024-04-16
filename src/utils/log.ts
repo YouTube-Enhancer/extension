@@ -1,31 +1,20 @@
 type ColorType = "error" | "info" | "success" | "warning" | keyof typeof TerminalColors;
-export function colorizeTerminalLog(message: string, type?: ColorType) {
-	let color;
-	type ??= type || "FgBlack";
-
+function getColor(type: ColorType) {
 	switch (type) {
-		case "success":
-			({ ["FgGreen"]: color } = TerminalColors);
-			break;
-		case "info":
-			({ ["FgBlue"]: color } = TerminalColors);
-			break;
 		case "error":
-			({ ["FgRed"]: color } = TerminalColors);
-			break;
+			return TerminalColors.FgRed;
+		case "info":
+			return TerminalColors.FgBlue;
+		case "success":
+			return TerminalColors.FgGreen;
 		case "warning":
-			({ ["FgYellow"]: color } = TerminalColors);
-			break;
-		default: {
-			if (typeof type === "string" && TerminalColors[type]) {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				({ [`${type}`]: color } = TerminalColors);
-			}
-			break;
-		}
+			return TerminalColors.FgYellow;
+		default:
+			return TerminalColors[type];
 	}
-
+}
+export function colorizeTerminalLog(message: string, type: ColorType = "FgBlack") {
+	const color = getColor(type);
 	return `${color}${message}${TerminalColors.Reset}`;
 }
 export default function terminalColorLog(message: string, type?: ColorType) {

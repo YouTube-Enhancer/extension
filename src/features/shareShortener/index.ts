@@ -1,6 +1,48 @@
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
+const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
+let intervalId: NodeJS.Timeout | null = null;
+let input: HTMLInputElement | null;
+function cleanUrl(url: string): string {
+	return url.replace(regexp, "");
+}
 
-let observer: MutationObserver | null = null;
+function cleanAndUpdateUrl() {
+	if (intervalId) {
+		clearInterval(intervalId);
+		intervalId = null;
+		input = null;
+	}
+	intervalId = setInterval(() => {
+		if (!input) {
+			input = document.querySelector<HTMLInputElement>("#share-url");
+		}
+		if (input) {
+			if (!input.value.match(regexp)) return;
+			console.log("cleanAndUpdateUrl");
+			input.value = cleanUrl(input.value);
+		}
+	}, 50);
+}
+
+function cleanSearchPage(url: string) {
+	if (!url.match(/https?:\/\/(?:www\.)?youtube\.com\/results\?search\_query\=.+/gm)) return;
+	const allElements = Array.from(document.querySelectorAll("*"));
+	allElements.forEach((e) => {
+		const href: null | string = e.getAttribute("href");
+		if (href && href.match(/^\/watch\?v\=.+$/gm)) {
+			e.setAttribute("href", href.replace(regexp, ""));
+		}
+	});
+}
+
+function handleInput(event: MouseEvent) {
+	const element = event.target as Element;
+	if (!element.classList.contains("yt-spec-touch-feedback-shape__fill")) {
+		return;
+	}
+	cleanAndUpdateUrl();
+}
+
 export async function enableShareShortener() {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -9,70 +51,15 @@ export async function enableShareShortener() {
 		}
 	} = optionsData;
 	if (!enable_share_shortener) return;
-
-	const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
-
-	function attachEventListener(): void {
-		const checkbox = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-checkbox");
-		const tsInput = document.querySelector<HTMLElement>(".style-scope.tp-yt-paper-input .input-element input");
-		const allElements = Array.from(document.querySelectorAll("*"));
-		allElements.forEach((e) => {
-			const href: null | string = e.getAttribute("href");
-			if (href && href.match(/^\/watch\?v\=.+$/gm)) {
-				e.setAttribute("href", href.replace(regexp, ""));
-			}
-		});
-
-		if (checkbox && tsInput) {
-			checkbox.addEventListener("DOMAttrModified", function (this: HTMLInputElement) {
-				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-				if (shareUrlInput) {
-					setTimeout(() => {
-						shareUrlInput.value = shareUrlInput.value.replace(regexp, "");
-					}, 0);
-				}
-			});
-
-			tsInput.addEventListener("keypress", function (event: KeyboardEvent) {
-				if (event.key === "Enter") {
-					setTimeout(() => {
-						const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-						if (shareUrlInput) {
-							const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
-							shareUrlInput.value = cleanUrl;
-						}
-					}, 0);
-				}
-			});
-		}
-	}
-
-	function monitorUrl(mutationsList: MutationRecord[]): void {
-		for (const mutation of mutationsList) {
-			if (mutation.target !== document.getElementById("share-url")) {
-				const shareUrlInput = document.querySelector<HTMLInputElement>("#share-url");
-				if (shareUrlInput) {
-					const cleanUrl: string = shareUrlInput.value.replace(regexp, "");
-					shareUrlInput.value = cleanUrl;
-				}
-			}
-		}
-	}
-
-	observer = new MutationObserver(function (mutationsList: MutationRecord[]) {
-		attachEventListener();
-		if (observer) {
-			monitorUrl(mutationsList);
-		}
-	});
-
-	observer.observe(document, { childList: true, subtree: true });
+	cleanSearchPage(window.location.href);
+	document.addEventListener("click", handleInput);
 }
 
 export function disableShareShortener() {
 	browserColorLog(`Disabling share shortener`, "FgMagenta");
-	if (observer) {
-		observer.disconnect();
-		observer = null;
+	document.removeEventListener("click", handleInput);
+	if (intervalId) {
+		clearInterval(intervalId);
+		intervalId = null;
 	}
 }

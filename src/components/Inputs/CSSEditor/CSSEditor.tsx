@@ -1,3 +1,4 @@
+import { type Nullable } from "@/src/types";
 import { type editor, monaco } from "@/src/utils/monaco";
 import { cn, debounce } from "@/src/utils/utilities";
 import { Editor, type Monaco } from "@monaco-editor/react";
@@ -26,11 +27,12 @@ type CSSEditorState = {
 	cursorPosition: CursorPosition;
 };
 // TODO: add share custom css button with integration with yt-enhancer.dev
+
 const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value }) => {
-	const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-	const monacoRef = useRef<Monaco | null>(null);
-	const editorProblemsRef = useRef<HTMLDivElement | null>(null);
-	const expandButtonRef = useRef<HTMLInputElement | null>(null);
+	const editorRef = useRef<Nullable<editor.IStandaloneCodeEditor>>(null);
+	const monacoRef = useRef<Nullable<Monaco>>(null);
+	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
+	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
 
 	const [isEditorExpanded, setEditorExpanded] = useState(false);
 	const [editorState, setEditorState] = useState<CSSEditorState>({
@@ -39,7 +41,8 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
 	const [editorHeight, setEditorHeight] = useState<number>(700);
-
+	const editorPosition = editorRef.current?.getPosition();
+	const editorScrollTop = editorRef.current?.getScrollTop();
 	const getEditorHeight = () => {
 		const {
 			documentElement: { clientHeight: documentHeight }
@@ -54,7 +57,10 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 		monacoRef.current = monaco;
 		setEditorHeight(getEditorHeight());
 	};
-	const handleEditorChange = useCallback(debounce(onChange, 250), []);
+	const handleEditorChange = useCallback(
+		(value: string | undefined, ev: editor.IModelContentChangedEvent) => debounce(onChange, 250)(value, ev),
+		[onChange]
+	);
 
 	const expandEditor = () => {
 		const currentScrollPosition = { x: window.scrollX, y: window.scrollY };
@@ -85,12 +91,12 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				}
 			});
 		}
-	}, [editorRef.current?.getPosition(), editorRef.current?.getScrollTop()]);
+	}, [editorPosition, editorScrollTop]);
 	useLayoutEffect(() => {
 		if (!isEditorExpanded) {
 			window.scrollTo(pageScrollPosition.x, pageScrollPosition.y);
 		}
-	}, [isEditorExpanded]);
+	}, [isEditorExpanded, pageScrollPosition]);
 	useEffect(() => {
 		if (editorRef.current) {
 			const { current: editor } = editorRef;
@@ -100,7 +106,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 			const position = new monaco.Position(lineNumber, columnNumber);
 			editor.setPosition(position);
 		}
-	}, [value]);
+	}, [value, editorState]);
 	useEffect(() => {
 		if (editorProblemsRef.current && expandButtonRef.current) {
 			setEditorHeight(getEditorHeight());
@@ -142,7 +148,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				ref={expandButtonRef}
 			/>
 			<Editor
-				className={"h-full w-full grow"}
+				className={"size-full grow"}
 				height={isEditorExpanded ? editorHeight : 700}
 				language="css"
 				onChange={handleEditorChange}
