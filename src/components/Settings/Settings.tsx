@@ -29,7 +29,7 @@ async function getLanguageOptions() {
 			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
 			const languageOption: SelectOption<"language"> = {
-				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale] ?? 0}%)`,
 				value: locale
 			};
 			return Promise.resolve(languageOption);
