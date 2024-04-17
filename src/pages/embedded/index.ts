@@ -150,7 +150,6 @@ const enableFeatures = () => {
 			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
-			volumeBoost(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel()
 		]);
