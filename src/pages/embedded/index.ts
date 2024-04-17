@@ -150,16 +150,17 @@ const enableFeatures = () => {
 			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
-			openTranscriptButton(),
-			addLoopButton(),
-			addIncreasePlaybackSpeedButton(),
-			addDecreasePlaybackSpeedButton(),
-			addMaximizePlayerButton(),
-			addScreenshotButton(),
 			volumeBoost(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel()
 		]);
+		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addIncreasePlaybackSpeedButton();
+		await addDecreasePlaybackSpeedButton();
+		await addScreenshotButton();
+		await openTranscriptButton();
+		await addMaximizePlayerButton();
+		await addLoopButton();
 	})();
 };
 
