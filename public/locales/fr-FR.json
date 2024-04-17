@@ -42,7 +42,7 @@
 							"label": "Decrease Speed to {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase speed to {{SPEED}}"
+							"label": "Increase Speed to {{SPEED}}"
 						}
 					}
 				},
