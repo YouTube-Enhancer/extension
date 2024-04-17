@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "再生速度を{{SPEED}}で下げする"
+							"label": "Decrease Speed to {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "再生速度を{{SPEED}}で上げする"
+							"label": "Increase Speed to {{SPEED}}"
 						}
 					}
 				},
