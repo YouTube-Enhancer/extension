@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "減慢播放速度 {{SPEED}}"
+							"label": "Decrease Speed to {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "加快播放速度 {{SPEED}}"
+							"label": "Increase Speed to {{SPEED}}"
 						}
 					}
 				},
