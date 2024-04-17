@@ -1,4 +1,4 @@
-import type { AllButtonNames, YouTubePlayerDiv } from "@/src/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -11,8 +11,8 @@ import { createTooltip, isShortsPage, isWatchPage, waitForSpecificMessage } from
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;
 
-async function updateTooltip<ButtonName extends AllButtonNames>(
-	buttonName: ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton" ? ButtonName : never,
+async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
+	buttonName: ButtonName,
 	speed: string
 ) {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
@@ -39,11 +39,12 @@ async function updateTooltip<ButtonName extends AllButtonNames>(
 	remove();
 	updateFeatureButtonTitle(
 		buttonName,
-		//@ts-expect-error ↓↓↓
-		// TODO: Adjust i18n types so it won't cause an error
-		window.i18nextInstance.t(`pages.content.features.playbackSpeedButtons.buttons.${buttonName}.label`, {
-			SPEED: speed
-		})
+		window.i18nextInstance.t(
+			`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+			{
+				SPEED: speed
+			}
+		)
 	);
 }
 
