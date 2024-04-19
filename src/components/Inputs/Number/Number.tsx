@@ -83,7 +83,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					value={value}
 				></input>
 				<div
-					className={cn("absolute bottom-[1px] flex h-[38px] flex-col", {
+					className={cn("absolute bottom-px flex h-[38px] flex-col", {
 						"left-[1px]": direction === "rtl",
 						"right-[1px]": direction === "ltr"
 					})}
