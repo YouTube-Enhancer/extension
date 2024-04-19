@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Minska hastigheten med {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Öka hastigheten med {{SPEED}}"
 						}
 					}
 				},
