@@ -158,7 +158,7 @@ export type VideoHistoryEntry = {
 	timestamp: number;
 };
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
-export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
+export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
 export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 export type NotificationType = "error" | "info" | "success" | "warning";
@@ -222,29 +222,29 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	source: S;
 };
 export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
-	BaseMessage<T, S> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<T, S>
 >;
 export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"data_response", "extension"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"data_response", "extension">
 >;
 
 export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_data", "content"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"request_data", "content">
 >;
 export type ActionMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_action", "content"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"request_action", "content">
 >;
 export type ContentSendOnlyMessageMappings = {
 	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;

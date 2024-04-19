@@ -230,42 +230,42 @@ export default function Settings() {
 		];
 	const colorOptions: SelectOption<"osd_display_color">[] = [
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[green]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[blue]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[yellow]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[orange]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[purple]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[pink]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
+			element: <div className={cn("m-2 size-3 rounded-[50%] border-DEFAULT border-solid border-black", "bg-[white]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
