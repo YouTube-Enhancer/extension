@@ -139,8 +139,11 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 			<ExpandButton
 				isExpanded={isEditorExpanded}
 				onToggle={() => {
-					if (!isEditorExpanded) return expandEditor();
-					collapseEditor();
+					if (!isEditorExpanded) {
+						expandEditor();
+					} else {
+						collapseEditor();
+					}
 				}}
 				ref={expandButtonRef}
 			/>

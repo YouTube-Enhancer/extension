@@ -12,14 +12,17 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	if (!isToggle) return listener();
-	button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
-	if (typeof icon === "object" && "off" in icon && "on" in icon) {
-		updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
-	} else if (icon instanceof SVGSVGElement) {
-		updateFeatureButtonIcon(button, icon);
+	if (isToggle) {
+		button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
+		if (typeof icon === "object" && "off" in icon && "on" in icon) {
+			updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
+		} else if (icon instanceof SVGSVGElement) {
+			updateFeatureButtonIcon(button, icon);
+		}
+		listener(JSON.parse(button.ariaChecked) as boolean);
+	} else {
+		listener();
 	}
-	listener(JSON.parse(button.ariaChecked) as boolean);
 }
 
 export function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
