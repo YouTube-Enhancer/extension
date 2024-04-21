@@ -40,6 +40,7 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 	updateFeatureButtonTitle(
 		buttonName,
 		window.i18nextInstance.t(
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 			{
 				SPEED: speed
