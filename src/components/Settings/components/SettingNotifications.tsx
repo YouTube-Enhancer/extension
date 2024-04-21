@@ -8,7 +8,7 @@ import { useSettings } from "../Settings";
 function NotificationCloseButton({ notification }: { notification: Notification }) {
 	const { removeNotification } = useNotifications();
 	return (
-		<button className="absolute right-[5px] top-[-1px] text-base font-normal" onClick={() => removeNotification(notification)}>
+		<button className="absolute -top-px right-[5px] text-base font-normal" onClick={() => removeNotification(notification)}>
 			&times;
 		</button>
 	);
