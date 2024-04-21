@@ -12,7 +12,7 @@
     "url": "https://github.com/VampireChicken12/youtube-enhancer.git"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "concurrently \"vite build\" \"ts-json-as-const public/locales/en-US.json\" \"prettier --write public/locales/en-US.json.d.ts\" \"eslint --fix public/locales/en-US.json.d.ts\"",
     "dev": "nodemon",
     "format": "prettier --write .",
     "lint": "eslint .",
@@ -30,6 +30,7 @@
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
+    "tailwindcss-multi": "^0.3.30",
     "use-debouncy": "^5.0.1",
     "vite-plugin-css-injected-by-js": "^3.3.0",
     "webextension-polyfill": "^0.11.0"
@@ -72,7 +73,7 @@
     "prettier": "^3.0.3",
     "semantic-release": "^23.0.0",
     "tailwind-merge": "^2.0.0",
-    "tailwindcss": "^3.3.5",
+    "tailwindcss": "3.3.6",
     "ts-json-as-const": "^1.0.7",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
