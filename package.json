@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/VampireChicken12/youtube-enhancer.git"
+    "url": "https://github.com/YouTube-Enhancer/extension.git"
   },
   "scripts": {
     "build": "vite build",
