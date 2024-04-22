@@ -1,3 +1,17 @@
+## [1.24.1](https://github.com/YouTube-Enhancer/extension/compare/v1.24.0...v1.24.1) (2024-04-22)
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.1-Chrome.zip | 9327aa526677244ff770eb27ce05ee45deb526dc3957b8dc8c82e7cffbdfab34 |
+| youtube-enhancer-v1.24.1-Chromium.zip | 9327aa526677244ff770eb27ce05ee45deb526dc3957b8dc8c82e7cffbdfab34 |
+| youtube-enhancer-v1.24.1-Edge.zip | 9327aa526677244ff770eb27ce05ee45deb526dc3957b8dc8c82e7cffbdfab34 |
+| youtube-enhancer-v1.24.1-Firefox.zip | 5d7796f6385dcd03fcf15efbcb2b10d98c2095f4341ffadcd29ea0c527c7144a |
+
 # [1.24.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.3...v1.24.0) (2024-04-16)
 
 
