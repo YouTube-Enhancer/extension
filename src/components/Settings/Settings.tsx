@@ -971,27 +971,6 @@ export default function Settings() {
 					/>
 				</SettingSection>
 				<SettingSection>
-					<SettingTitle title={t("settings.sections.customCSS.title")} />
-					<Setting
-						checked={settings.enable_custom_css?.toString() === "true"}
-						id="enable_custom_css"
-						label={t("settings.sections.customCSS.enable.label")}
-						onChange={setCheckboxOption("enable_custom_css")}
-						title={t("settings.sections.customCSS.enable.title")}
-						type="checkbox"
-					/>
-					<Setting
-						id="custom_css_code"
-						onChange={(value) => {
-							if (value !== undefined) {
-								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
-							}
-						}}
-						type="css-editor"
-						value={settings.custom_css_code}
-					/>
-				</SettingSection>
-				<SettingSection>
 					<SettingTitle title={t("settings.sections.youtubeDeepDark.title")} />
 					<SettingSection className="flex flex-row gap-1">
 						<SettingSection className="mb-1">
@@ -1083,6 +1062,27 @@ export default function Settings() {
 						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.colorShadow}
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.customCSS.title")} />
+					<Setting
+						checked={settings.enable_custom_css?.toString() === "true"}
+						id="enable_custom_css"
+						label={t("settings.sections.customCSS.enable.label")}
+						onChange={setCheckboxOption("enable_custom_css")}
+						title={t("settings.sections.customCSS.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="custom_css_code"
+						onChange={(value) => {
+							if (value !== undefined) {
+								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
+							}
+						}}
+						type="css-editor"
+						value={settings.custom_css_code}
 					/>
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
