@@ -258,8 +258,8 @@
 						"title": "Scorri automaticamente al prossimo blocco"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
+						"title": "Salta la finestra che mette in pausa la riproduzione video"
 					}
 				},
 				"title": "Impostazioni varie"
