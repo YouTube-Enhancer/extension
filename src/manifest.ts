@@ -60,7 +60,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 const manifestV2: Manifest.WebExtensionManifest = {
 	author: pkg.author.name,
 	background: {
-		scripts: ["src/pages/background/index.js"]
+		page: "src/pages/background/index.html"
 	},
 	browser_action: action,
 	browser_specific_settings: {
