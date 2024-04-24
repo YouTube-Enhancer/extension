@@ -15,10 +15,10 @@
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "循環播放",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "關閉循環播放",
+							"on": "開啟循環播放"
 						}
 					}
 				},
@@ -48,7 +48,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "螢幕截圖"
 					},
 					"copiedToClipboard": "螢幕截圖已複製剪貼簿"
 				},
