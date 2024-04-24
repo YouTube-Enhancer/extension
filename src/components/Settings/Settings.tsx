@@ -12,6 +12,7 @@ import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -423,8 +424,10 @@ export default function Settings() {
 								void chrome.storage.local.set({ [key]: castSettings[key] as string });
 							}
 						}
+						await updateStoredSettings();
+						const storedSettings = await getSettings();
 						// Set the imported settings in your state.
-						settingsMutate.mutate(castSettings);
+						settingsMutate.mutate(storedSettings);
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
