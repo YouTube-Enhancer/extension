@@ -29,10 +29,6 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				options: { screenshot_format, screenshot_save_as }
 			}
 		} = optionsData;
-		const format = `image/${screenshot_format}`;
-
-		// Get the data URL of the canvas and create a blob from it
-		const dataUrl = canvas.toDataURL(format);
 		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, "image/png"));
 		if (!blob) return;
 
@@ -50,7 +46,6 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				listener();
 				const clipboardImage = new ClipboardItem({ "image/png": blob });
 				void navigator.clipboard.write([clipboardImage]);
-				void navigator.clipboard.writeText(dataUrl);
 				setTimeout(() => {
 					remove();
 				}, 1200);

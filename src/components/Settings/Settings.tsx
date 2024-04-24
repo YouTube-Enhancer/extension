@@ -960,7 +960,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_screenshot_button?.toString() !== "true"}
+						disabled={settings.enable_screenshot_button?.toString() !== "true" || settings.screenshot_save_as?.toString() === "clipboard"}
 						id="screenshot_format"
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
