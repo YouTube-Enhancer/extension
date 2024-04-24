@@ -29,7 +29,7 @@ export default function build() {
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
 				input: {
-					background: resolve(pagesDir, "background", "index.ts"),
+					background: resolve(pagesDir, "background", "index.html"),
 					options: resolve(pagesDir, "options", "index.html"),
 					popup: resolve(pagesDir, "popup", "index.html")
 				},
