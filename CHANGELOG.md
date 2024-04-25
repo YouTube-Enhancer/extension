@@ -1,3 +1,25 @@
+## [1.24.2](https://github.com/YouTube-Enhancer/extension/compare/v1.24.1...v1.24.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* background script import error on firefox ([acef3d9](https://github.com/YouTube-Enhancer/extension/commit/acef3d947017238b9fe7d2cf8a0bd3715a193154))
+* chrome background script error ([3c90c0b](https://github.com/YouTube-Enhancer/extension/commit/3c90c0bfcbb10d5508cb1a7c7e8a137188a58f5a))
+* clipboard image copy ([3ede9eb](https://github.com/YouTube-Enhancer/extension/commit/3ede9eb06d6be65a446c23b04dd43c763ffa14cf))
+* **volume boost:** Boost was enabled on per video mode when adjusting boost amount ([e4e8d38](https://github.com/YouTube-Enhancer/extension/commit/e4e8d38795732108c1f36db0826d9baca2ce50ec))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.2-Chrome.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Chromium.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Edge.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Firefox.zip | aa18540e6d766ee8ec9de7085cfae0bf37d6f55bf69d0c5b5619e56b5fc660f9 |
+
 ## [1.24.1](https://github.com/YouTube-Enhancer/extension/compare/v1.24.0...v1.24.1) (2024-04-25)
 
 
