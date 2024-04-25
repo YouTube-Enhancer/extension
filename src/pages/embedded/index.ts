@@ -197,7 +197,6 @@ window.addEventListener("DOMContentLoaded", function () {
 					return;
 				}
 				if (!message) return;
-				browserColorLog(`received ${message.type} message from extension`, "FgGreen");
 				switch (message.type) {
 					case "volumeBoostChange": {
 						const {
