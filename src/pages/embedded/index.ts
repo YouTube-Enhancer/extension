@@ -9,7 +9,7 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -197,6 +197,7 @@ window.addEventListener("DOMContentLoaded", function () {
 					return;
 				}
 				if (!message) return;
+				browserColorLog(`received ${message.type} message from extension`, "FgGreen");
 				switch (message.type) {
 					case "volumeBoostChange": {
 						const {
@@ -220,9 +221,24 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "volumeBoostAmountChange": {
 						const {
-							data: { volumeBoostAmount }
+							data: { volumeBoostAmount, volumeBoostEnabled, volumeBoostMode }
 						} = message;
-						applyVolumeBoost(volumeBoostAmount);
+
+						switch (volumeBoostMode) {
+							case "global": {
+								if (!volumeBoostEnabled) return;
+								applyVolumeBoost(volumeBoostAmount);
+								break;
+							}
+							case "per_video": {
+								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
+								console.log(volumeBoostButton);
+								if (!volumeBoostButton) return;
+								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
+								console.log(volumeBoostForVideoEnabled, volumeBoostButton.ariaChecked);
+								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+							}
+						}
 						break;
 					}
 					case "playerSpeedChange": {

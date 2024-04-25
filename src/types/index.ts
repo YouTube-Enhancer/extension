@@ -306,7 +306,10 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	skipContinueWatchingChange: DataResponseMessage<"skipContinueWatchingChange", { skipContinueWatchingEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
-	volumeBoostAmountChange: DataResponseMessage<"volumeBoostAmountChange", { volumeBoostAmount: number }>;
+	volumeBoostAmountChange: DataResponseMessage<
+		"volumeBoostAmountChange",
+		{ volumeBoostAmount: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
+	>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
