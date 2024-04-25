@@ -1,3 +1,24 @@
+## [1.24.1](https://github.com/YouTube-Enhancer/extension/compare/v1.24.0...v1.24.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* button ordering is consistent now ([a340ee0](https://github.com/YouTube-Enhancer/extension/commit/a340ee086dabab080c063ba9b249fb6e6bc37ae0))
+* enable feature menu before buttons ([267b4e8](https://github.com/YouTube-Enhancer/extension/commit/267b4e8532589dd577fd03fe8a5767306dfbe8c5))
+* volumeBoost enabled twice ([00102dd](https://github.com/YouTube-Enhancer/extension/commit/00102dd009ce4bdbc75264dfca78f3c57fc05e26))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.1-Chrome.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Chromium.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Edge.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Firefox.zip | 10ac176c10771eddcf7279b64033cbeb84480d27071670892f438bdc6a44408a |
+
 # [1.24.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.3...v1.24.0) (2024-04-16)
 
 
