@@ -26,6 +26,7 @@ export default function build() {
 	return defineConfig({
 		build: {
 			emptyOutDir: false,
+			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
 				input: {
