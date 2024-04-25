@@ -89,7 +89,7 @@ export const defaultConfiguration = {
 	speed_adjustment_steps: 0.25,
 	video_history_resume_type: "prompt",
 	volume_adjustment_steps: 5,
-	volume_boost_amount: 1,
+	volume_boost_amount: 5,
 	volume_boost_mode: "global"
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
