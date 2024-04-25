@@ -26,10 +26,11 @@ export default function build() {
 	return defineConfig({
 		build: {
 			emptyOutDir: false,
+			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
 				input: {
-					background: resolve(pagesDir, "background", "index.ts"),
+					background: resolve(pagesDir, "background", "index.html"),
 					options: resolve(pagesDir, "options", "index.html"),
 					popup: resolve(pagesDir, "popup", "index.html")
 				},

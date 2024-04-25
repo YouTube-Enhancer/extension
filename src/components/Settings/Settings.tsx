@@ -12,6 +12,7 @@ import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -423,8 +424,10 @@ export default function Settings() {
 								void chrome.storage.local.set({ [key]: castSettings[key] as string });
 							}
 						}
+						await updateStoredSettings();
+						const storedSettings = await getSettings();
 						// Set the imported settings in your state.
-						settingsMutate.mutate(castSettings);
+						settingsMutate.mutate(storedSettings);
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
@@ -957,7 +960,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_screenshot_button?.toString() !== "true"}
+						disabled={settings.enable_screenshot_button?.toString() !== "true" || settings.screenshot_save_as?.toString() === "clipboard"}
 						id="screenshot_format"
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
@@ -965,27 +968,6 @@ export default function Settings() {
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
-					/>
-				</SettingSection>
-				<SettingSection>
-					<SettingTitle title={t("settings.sections.customCSS.title")} />
-					<Setting
-						checked={settings.enable_custom_css?.toString() === "true"}
-						id="enable_custom_css"
-						label={t("settings.sections.customCSS.enable.label")}
-						onChange={setCheckboxOption("enable_custom_css")}
-						title={t("settings.sections.customCSS.enable.title")}
-						type="checkbox"
-					/>
-					<Setting
-						id="custom_css_code"
-						onChange={(value) => {
-							if (value !== undefined) {
-								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
-							}
-						}}
-						type="css-editor"
-						value={settings.custom_css_code}
 					/>
 				</SettingSection>
 				<SettingSection>
@@ -1082,9 +1064,30 @@ export default function Settings() {
 						value={settings.deep_dark_custom_theme_colors.colorShadow}
 					/>
 				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.customCSS.title")} />
+					<Setting
+						checked={settings.enable_custom_css?.toString() === "true"}
+						id="enable_custom_css"
+						label={t("settings.sections.customCSS.enable.label")}
+						onChange={setCheckboxOption("enable_custom_css")}
+						title={t("settings.sections.customCSS.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="custom_css_code"
+						onChange={(value) => {
+							if (value !== undefined) {
+								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
+							}
+						}}
+						type="css-editor"
+						value={settings.custom_css_code}
+					/>
+				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -1092,7 +1095,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -1101,7 +1104,7 @@ export default function Settings() {
 					/>
 					{isPopup && (
 						<button
-							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="accent flex items-center justify-center p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="openinnewtab_button"
 							onClick={() => openInNewTab("src/pages/options/index.html")}
 							title={t("settings.sections.bottomButtons.openTab.title")}
@@ -1111,7 +1114,7 @@ export default function Settings() {
 						</button>
 					)}
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -1120,7 +1123,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
-							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -1143,7 +1146,7 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
 					:	<input
-							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}
