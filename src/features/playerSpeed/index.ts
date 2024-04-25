@@ -86,7 +86,7 @@ export function restorePlayerSpeed() {
 export function setupPlaybackSpeedChangeListener() {
 	const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 	const speedMenuItemClickListener = (event: Event) => {
-		const { target: speedMenuItem } = event as Event & { target: HTMLDivElement };
+		const { target: speedMenuItem } = event as { target: HTMLDivElement } & Event;
 		if (!speedMenuItem) return;
 		const { textContent: speedValue } = speedMenuItem;
 		// If the playback speed is not available, return
@@ -105,7 +105,7 @@ export function setupPlaybackSpeedChangeListener() {
 	// Create an observer instance
 	const playerSpeedMenuObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
 		mutationsList.forEach((mutation) => {
-			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
+			const { target: targetElement } = mutation as { target: HTMLDivElement } & MutationRecord;
 
 			// Check if the target element has the desired structure
 			const panelHeader = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-header");
@@ -120,7 +120,7 @@ export function setupPlaybackSpeedChangeListener() {
 	});
 	const customSpeedSliderObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
 		mutationsList.forEach((mutation) => {
-			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
+			const { target: targetElement } = mutation as { target: HTMLDivElement } & MutationRecord;
 			const speedValue = targetElement.getAttribute("aria-valuenow");
 			// If the playback speed is not available, return
 			if (!speedValue) return;

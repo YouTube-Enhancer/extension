@@ -142,7 +142,6 @@ const enableFeatures = () => {
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
-			enableFeatureMenu(),
 			enableOpenYouTubeSettingsOnHover(),
 			enableRememberVolume(),
 			automaticTheaterMode(),
@@ -150,16 +149,18 @@ const enableFeatures = () => {
 			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
-			openTranscriptButton(),
-			addLoopButton(),
-			addIncreasePlaybackSpeedButton(),
-			addDecreasePlaybackSpeedButton(),
-			addMaximizePlayerButton(),
-			addScreenshotButton(),
-			volumeBoost(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel()
 		]);
+		// Enable feature menu before calling button functions
+		await enableFeatureMenu();
+		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addIncreasePlaybackSpeedButton();
+		await addDecreasePlaybackSpeedButton();
+		await addScreenshotButton();
+		await openTranscriptButton();
+		await addMaximizePlayerButton();
+		await addLoopButton();
 	})();
 };
 

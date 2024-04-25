@@ -14,8 +14,8 @@ interface EnUS {
 				openTranscriptButton: { button: { label: "Open transcript" } };
 				playbackSpeedButtons: {
 					buttons: {
-						decreasePlaybackSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
-						increasePlaybackSpeedButton: { label: "Increase Speed by {{SPEED}}" };
+						decreasePlaybackSpeedButton: { label: "Decrease Speed to {{SPEED}}" };
+						increasePlaybackSpeedButton: { label: "Increase Speed to {{SPEED}}" };
 					};
 				};
 				screenshotButton: {

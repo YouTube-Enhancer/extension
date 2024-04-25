@@ -1,4 +1,6 @@
+/* eslint-disable tailwindcss/enforces-shorthand */
 import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { ClassValue } from "clsx";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -228,44 +230,45 @@ export default function Settings() {
 				value: "shiftKey"
 			}
 		];
+	const colorDotClassName: ClassValue = "m-2 w-3 h-3 rounded-[50%] border-DEFAULT border-solid border-black";
 	const colorOptions: SelectOption<"osd_display_color">[] = [
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[green]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[blue]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[yellow]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[orange]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[purple]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[pink]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[white]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
@@ -489,9 +492,9 @@ export default function Settings() {
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
-			<div className="size-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']" dir={localeDirection[settings.language]}>
 				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
-					<img className="size-16 sm:size-16" src="/icons/icon_128.png" />
+					<img className="h-16 w-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
