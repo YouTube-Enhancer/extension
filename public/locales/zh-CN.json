@@ -210,8 +210,8 @@
 						"title": "当视频打开时，自动启用剧场模式"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "隐藏直播聊天",
+						"title": "隐藏直播聊天"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
