@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "降低 {{SPEED}} 播放速度"
+							"label": "降低播放速度至 {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "增加 {{SPEED}} 播放速度"
+							"label": "增加播放速度至 {{SPEED}}"
 						}
 					}
 				},
@@ -256,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "短视频自动下滑",
 						"title": "短视频播完后，自动下滑播放下一个"
+					},
+					"skipContinueWatching": {
+						"label": "跳过\"视频已暂停。继续观看吗？\"",
+						"title": "跳过暂停视频播放的闲置对话框"
 					}
 				},
 				"title": "其他设置"
@@ -302,9 +306,9 @@
 				"type": {
 					"label": "类型",
 					"options": {
+						"circle": "圆形图标",
 						"line": "直线",
 						"no_display": "无显示",
-						"round": "圆角",
 						"text": "文本"
 					},
 					"title": "选择屏幕提示文本颜色"
@@ -443,7 +447,7 @@
 						"title": "为次要文本使用的颜色"
 					},
 					"hoverBackground": {
-						"label": "悬停背景色",
+						"label": "悬停背景颜色",
 						"title": "为悬停背景使用的颜色"
 					},
 					"mainBackground": {
@@ -459,7 +463,7 @@
 						"title": "为主要文本使用的颜色"
 					},
 					"secondBackground": {
-						"label": "次要背景",
+						"label": "次要背景颜色",
 						"title": "为次要背景使用的颜色"
 					}
 				},

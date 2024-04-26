@@ -39,10 +39,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed by {{SPEED}}"
+							"label": "Decrease Speed to {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed by {{SPEED}}"
+							"label": "Increase Speed to {{SPEED}}"
 						}
 					}
 				},
@@ -256,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "Shorts auto scroll",
 						"title": "Automatically scrolls to the next short"
+					},
+					"skipContinueWatching": {
+						"label": "Skip \"Video is paused. Continue watching?\"",
+						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
 				"title": "Miscellaneous settings"
@@ -302,9 +306,9 @@
 				"type": {
 					"label": "Type",
 					"options": {
+						"circle": "Circle",
 						"line": "Line",
 						"no_display": "No display",
-						"round": "Round",
 						"text": "Text"
 					},
 					"title": "Select the type of On-Screen Display"
@@ -443,7 +447,7 @@
 						"title": "Color for secondary text"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
+						"label": "Hover background color",
 						"title": "Color for hover background"
 					},
 					"mainBackground": {
@@ -459,7 +463,7 @@
 						"title": "Color for main text"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
+						"label": "Secondary background color",
 						"title": "Color for secondary background"
 					}
 				},

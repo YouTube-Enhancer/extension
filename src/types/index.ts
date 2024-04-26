@@ -80,7 +80,7 @@ export type FilterKeysByValueType<O extends object, ValueType> = {
 // #region Constants
 export const onScreenDisplayColors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "white"] as const;
 export type OnScreenDisplayColor = (typeof onScreenDisplayColors)[number];
-export const onScreenDisplayTypes = ["no_display", "text", "line", "round"] as const;
+export const onScreenDisplayTypes = ["no_display", "text", "line", "circle"] as const;
 export type OnScreenDisplayType = (typeof onScreenDisplayTypes)[number];
 export const onScreenDisplayPositions = ["top_left", "top_right", "bottom_left", "bottom_right", "center"] as const;
 export type OnScreenDisplayPosition = (typeof onScreenDisplayPositions)[number];
@@ -160,7 +160,7 @@ export type VideoHistoryEntry = {
 	timestamp: number;
 };
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
-export type YouTubePlayerDiv = YouTubePlayer & HTMLDivElement;
+export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
 export type Selector = string;
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 export type NotificationType = "error" | "info" | "success" | "warning";
@@ -224,29 +224,29 @@ export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	source: S;
 };
 export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
-	BaseMessage<T, S> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<T, S>
 >;
 export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"data_response", "extension"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"data_response", "extension">
 >;
 
 export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_data", "content"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"request_data", "content">
 >;
 export type ActionMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_action", "content"> & {
+	{
 		data: D;
 		type: Type;
-	}
+	} & BaseMessage<"request_action", "content">
 >;
 export type ContentSendOnlyMessageMappings = {
 	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
@@ -306,8 +306,12 @@ export type ExtensionSendOnlyMessageMappings = {
 			shortsAutoScrollEnabled: boolean;
 		}
 	>;
+	skipContinueWatchingChange: DataResponseMessage<"skipContinueWatchingChange", { skipContinueWatchingEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
-	volumeBoostAmountChange: DataResponseMessage<"volumeBoostAmountChange", { volumeBoostAmount: number }>;
+	volumeBoostAmountChange: DataResponseMessage<
+		"volumeBoostAmountChange",
+		{ volumeBoostAmount: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
+	>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
@@ -368,6 +372,7 @@ export type configuration = {
 	enable_scroll_wheel_volume_control_hold_right_click: boolean;
 	enable_share_shortener: boolean;
 	enable_shorts_auto_scroll: boolean;
+	enable_skip_continue_watching: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;

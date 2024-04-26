@@ -9,7 +9,7 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { featuresInMenu, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -36,6 +36,7 @@ import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
+import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -126,6 +127,7 @@ const enableFeatures = () => {
 			enableHideShorts(),
 			removeRedirect(),
 			enableShareShortener(),
+			enableSkipContinueWatching(),
 			enablePauseBackgroundPlayers(),
 			enableRememberVolume(),
 			enableHideScrollBar(),
@@ -140,7 +142,6 @@ const enableFeatures = () => {
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
-			enableFeatureMenu(),
 			enableOpenYouTubeSettingsOnHover(),
 			enableRememberVolume(),
 			automaticTheaterMode(),
@@ -148,16 +149,18 @@ const enableFeatures = () => {
 			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
-			openTranscriptButton(),
-			addLoopButton(),
-			addIncreasePlaybackSpeedButton(),
-			addDecreasePlaybackSpeedButton(),
-			addMaximizePlayerButton(),
-			addScreenshotButton(),
-			volumeBoost(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel()
 		]);
+		// Enable feature menu before calling button functions
+		await enableFeatureMenu();
+		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addIncreasePlaybackSpeedButton();
+		await addDecreasePlaybackSpeedButton();
+		await addScreenshotButton();
+		await openTranscriptButton();
+		await addMaximizePlayerButton();
+		await addLoopButton();
 	})();
 };
 
@@ -217,9 +220,24 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "volumeBoostAmountChange": {
 						const {
-							data: { volumeBoostAmount }
+							data: { volumeBoostAmount, volumeBoostEnabled, volumeBoostMode }
 						} = message;
-						applyVolumeBoost(volumeBoostAmount);
+
+						switch (volumeBoostMode) {
+							case "global": {
+								if (!volumeBoostEnabled) return;
+								applyVolumeBoost(volumeBoostAmount);
+								break;
+							}
+							case "per_video": {
+								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
+								console.log(volumeBoostButton);
+								if (!volumeBoostButton) return;
+								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
+								console.log(volumeBoostForVideoEnabled, volumeBoostButton.ariaChecked);
+								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+							}
+						}
 						break;
 					}
 					case "playerSpeedChange": {
@@ -500,6 +518,15 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableShareShortener();
 						} else {
 							disableShareShortener();
+						}
+						break;
+					}
+					case "skipContinueWatchingChange": {
+						const {
+							data: { skipContinueWatchingEnabled }
+						} = message;
+						if (skipContinueWatchingEnabled) {
+							await enableSkipContinueWatching();
 						}
 						break;
 					}

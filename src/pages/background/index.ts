@@ -1,6 +1,8 @@
 import type { ContentToBackgroundSendOnlyMessageMappings } from "@/src/types";
 
-import pkg from "../../../package.json";
+import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
+
+import { version } from "../../../package.json";
 
 chrome.runtime.onInstalled.addListener((details) => {
 	const { previousVersion, reason } = details;
@@ -12,7 +14,6 @@ chrome.runtime.onInstalled.addListener((details) => {
 			break;
 		}
 		case chrome.runtime.OnInstalledReason.UPDATE: {
-			const { version } = pkg;
 			if (
 				isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
 				isNewMinorVersion(previousVersion as VersionString, version as VersionString)
@@ -20,6 +21,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 				// Open options page if a new major or minor version is released
 				void chrome.tabs.create({ url: "/src/pages/options/index.html" });
 			}
+			void updateStoredSettings();
 			break;
 		}
 	}

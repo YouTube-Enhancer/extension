@@ -57,13 +57,21 @@ const Select = <Key extends configurationId>({
 
 	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
 	return (
-		<div aria-valuetext={selectedOption} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id}>
-			<label htmlFor={id}>{label}</label>
+		<div
+			aria-valuetext={selectedOption}
+			className={cn("relative flex flex-row justify-between gap-4", className, {
+				"items-baseline": !isSelectVisible
+			})}
+			id={id}
+		>
+			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={id}>
+				{label}
+			</label>
 			<div ref={selectRef}>
 				<>
 					<button
 						className={cn(
-							"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white",
+							"flex h-fit w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
 							disabledButtonClasses
 						)}
 						disabled={loading || disabled}
@@ -93,8 +101,7 @@ const Select = <Key extends configurationId>({
 					{isSelectVisible && (
 						<div
 							className="z-10 mt-2 max-h-60 w-40 overflow-x-hidden 
-						overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg 
-						dark:border-gray-700 dark:bg-[#23272a]"
+						overflow-y-scroll rounded-md border border-gray-300 bg-white shadow-lg dark:multi-['border-gray-700;bg-[#23272a]']"
 						>
 							{options.map((option, index) => (
 								<div

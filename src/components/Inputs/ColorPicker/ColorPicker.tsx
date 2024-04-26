@@ -37,24 +37,25 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, labe
 			<div ref={colorPickerRef}>
 				<>
 					<button
-						className="flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-1 text-black focus:outline-none dark:border-gray-700 dark:bg-[#23272a] dark:text-white"
+						className="flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-1 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']"
 						disabled={disabled}
 						onClick={disabled ? () => void 0 : togglePickerVisibility}
 						type="button"
 					>
 						<div
-							className="size-full rounded-md border border-neutral-500"
+							// eslint-disable-next-line tailwindcss/enforces-shorthand
+							className="h-full w-full rounded-md border border-neutral-500"
 							style={{
 								backgroundColor: value
 							}}
 						/>
 					</button>
 					{isColorPickerVisible && (
-						<div className="z-10 mt-1 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-700 dark:bg-[#23272a]">
+						<div className="z-10 mt-1 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:multi-['border-gray-700;bg-[#23272a]']">
 							<HexAlphaColorPicker color={value} onChange={handleChange} />
 							<HexColorInput
 								alpha
-								className="!bg-white !text-black dark:!bg-[#23272a] dark:!text-white"
+								className="!bg-white !text-black dark:multi-['!bg-[#23272a];!text-white']"
 								color={value}
 								id="color-picker-input"
 								onChange={handleChange}

@@ -1,3 +1,86 @@
+## [1.24.2](https://github.com/YouTube-Enhancer/extension/compare/v1.24.1...v1.24.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* background script import error on firefox ([acef3d9](https://github.com/YouTube-Enhancer/extension/commit/acef3d947017238b9fe7d2cf8a0bd3715a193154))
+* chrome background script error ([3c90c0b](https://github.com/YouTube-Enhancer/extension/commit/3c90c0bfcbb10d5508cb1a7c7e8a137188a58f5a))
+* clipboard image copy ([3ede9eb](https://github.com/YouTube-Enhancer/extension/commit/3ede9eb06d6be65a446c23b04dd43c763ffa14cf))
+* **volume boost:** Boost was enabled on per video mode when adjusting boost amount ([e4e8d38](https://github.com/YouTube-Enhancer/extension/commit/e4e8d38795732108c1f36db0826d9baca2ce50ec))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.2-Chrome.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Chromium.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Edge.zip | bc08d03917d484c8560446ff4ff61ffa4d992230fe3b2aa6b4f9f7168bdcafbe |
+| youtube-enhancer-v1.24.2-Firefox.zip | aa18540e6d766ee8ec9de7085cfae0bf37d6f55bf69d0c5b5619e56b5fc660f9 |
+
+## [1.24.1](https://github.com/YouTube-Enhancer/extension/compare/v1.24.0...v1.24.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* button ordering is consistent now ([a340ee0](https://github.com/YouTube-Enhancer/extension/commit/a340ee086dabab080c063ba9b249fb6e6bc37ae0))
+* enable feature menu before buttons ([267b4e8](https://github.com/YouTube-Enhancer/extension/commit/267b4e8532589dd577fd03fe8a5767306dfbe8c5))
+* volumeBoost enabled twice ([00102dd](https://github.com/YouTube-Enhancer/extension/commit/00102dd009ce4bdbc75264dfca78f3c57fc05e26))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.1-Chrome.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Chromium.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Edge.zip | f0448b286e19d3b29976f02e8257b513b4f6dcdf1a4138484d871caa19c7fb18 |
+| youtube-enhancer-v1.24.1-Firefox.zip | 10ac176c10771eddcf7279b64033cbeb84480d27071670892f438bdc6a44408a |
+
+# [1.24.0](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.3...v1.24.0) (2024-04-16)
+
+
+### Bug Fixes
+
+* [#176](https://github.com/VampireChicken12/youtube-enhancer/issues/176) ([b2fa867](https://github.com/VampireChicken12/youtube-enhancer/commit/b2fa867a6437ef01b94e95c7bca5abcc52042b34))
+* [#422](https://github.com/VampireChicken12/youtube-enhancer/issues/422) ([01e6d7c](https://github.com/VampireChicken12/youtube-enhancer/commit/01e6d7c27de380e26166796d9d59679fd802d3ee))
+* applying styles only to a new tab button ([5aa54b2](https://github.com/VampireChicken12/youtube-enhancer/commit/5aa54b296eb94e59b5b840d674377a59cf07893b))
+* Checkbox not re-rendering when checked changed ([89f6230](https://github.com/VampireChicken12/youtube-enhancer/commit/89f6230706e7355231c1feadd70dcf0e1604bcaa))
+* gainNode being undefined ([cf1f120](https://github.com/VampireChicken12/youtube-enhancer/commit/cf1f1201444f57842c0bce7c169e0aa831c39697))
+* **hide-shorts:** collapsed shorts side button wasn't hidden ([910c103](https://github.com/VampireChicken12/youtube-enhancer/commit/910c103bb2b3b44ccacf981c2fa6622a23bd6caf))
+* jpeg ([3c10720](https://github.com/VampireChicken12/youtube-enhancer/commit/3c107201a34a532c5776218d9d0a7ef4b955bcb7))
+* localePercentages being undefined ([739fd50](https://github.com/VampireChicken12/youtube-enhancer/commit/739fd50de6933e79d4d76cef14c53d5ef092d453))
+* proper label position when select is visible ([61e186f](https://github.com/VampireChicken12/youtube-enhancer/commit/61e186fc062dcdaa727ccab9a664bd5e359bbd8a))
+* select not closing when clicking inside the labels container ([a18637e](https://github.com/VampireChicken12/youtube-enhancer/commit/a18637ee8329fdad0c99ee5283d57a999de2dfc2))
+* select overflow issue ([ab0ce5a](https://github.com/VampireChicken12/youtube-enhancer/commit/ab0ce5a0124d0093fab5effa0a444f97d302eb5e))
+* **settings:** Resolve issue where default values weren't being set on existing configuration properties with the type of object ([f10d43d](https://github.com/VampireChicken12/youtube-enhancer/commit/f10d43dfc249614d781bfb75b8884de8014b313c))
+* Volume boost was enabled when it wasn't enabled ([4b82a05](https://github.com/VampireChicken12/youtube-enhancer/commit/4b82a05c53bb93b819bd0597cd8feb1632af4446))
+
+
+### Features
+
+* open settings in a new tab button ([feaf58e](https://github.com/VampireChicken12/youtube-enhancer/commit/feaf58e773a50e9f337b3703a9a8524b05a64700))
+* pauseBackgroundPlayers [#249](https://github.com/VampireChicken12/youtube-enhancer/issues/249) ([2d4a342](https://github.com/VampireChicken12/youtube-enhancer/commit/2d4a3425df68592e35e753b7d8868837b6789bd5))
+* playbackSpeedButtons [#298](https://github.com/VampireChicken12/youtube-enhancer/issues/298) ([ea34f9b](https://github.com/VampireChicken12/youtube-enhancer/commit/ea34f9b4d5f021e6731517a2fba0a1ccd8ca77ef))
+* skipContinueWatching [#403](https://github.com/VampireChicken12/youtube-enhancer/issues/403) ([9429774](https://github.com/VampireChicken12/youtube-enhancer/commit/942977428d38eb3a0ef1b430f213f22dcea8c314))
+* YouTube DeepDark built in themes [#381](https://github.com/VampireChicken12/youtube-enhancer/issues/381) ([7dfc58c](https://github.com/VampireChicken12/youtube-enhancer/commit/7dfc58cfa7ca771eb2ed19260efd626a66245158))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.24.0-Chrome.zip | d941e8a2f2e410c06b722a1e643092d8e82be6dbfce0d3fa60c8629974b497b9 |
+| youtube-enhancer-v1.24.0-Chromium.zip | d941e8a2f2e410c06b722a1e643092d8e82be6dbfce0d3fa60c8629974b497b9 |
+| youtube-enhancer-v1.24.0-Edge.zip | d941e8a2f2e410c06b722a1e643092d8e82be6dbfce0d3fa60c8629974b497b9 |
+| youtube-enhancer-v1.24.0-Firefox.zip | 66a45c2cafbdb19eff5a32a2bab2451f2cbc02f5f177c303888cbd80f095b57c |
+
 ## [1.23.3](https://github.com/VampireChicken12/youtube-enhancer/compare/v1.23.2...v1.23.3) (2024-02-18)
 
 

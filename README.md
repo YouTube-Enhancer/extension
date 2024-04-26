@@ -3,12 +3,15 @@
 The YouTube Enhancer Extension is a powerful browser extension designed to enhance your YouTube experience.
 
 [![Get the YouTube Enhancer Extension on Firefox](https://img.shields.io/amo/v/youtube-enhancer-vc?label=Firefox&logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
-![Mozilla Add-on Users](https://img.shields.io/amo/users/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
-![Mozilla Add-on Downloads](https://img.shields.io/amo/dw/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)
-[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Github&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
-![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer?logo=Github&labelColor=5b5b5b&color=4fca21)
-![GitHub Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total?logo=Github&labelColor=5b5b5b&color=4fca21)
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
+[![Mozilla Add-on Downloads](https://img.shields.io/amo/dw/youtube-enhancer-vc?logo=Firefox-Browser&labelColor=5b5b5b&color=4fca21)](https://addons.mozilla.org/en-US/firefox/addon/youtube-enhancer-vc?utm_source=github&utm_medium=social)
+[![Get the YouTube Enhancer Extension on Google Chrome](https://img.shields.io/chrome-web-store/v/dejhhgdpambaambdifcfbmpliolehfaj?logo=googlechrome&labelColor=5b5b5b&color=4fca21)](https://chromewebstore.google.com/detail/youtube-enhancer/dejhhgdpambaambdifcfbmpliolehfaj)
+[![Chrome Extension Users](https://img.shields.io/chrome-web-store/users/dejhhgdpambaambdifcfbmpliolehfaj?logo=googlechrome&labelColor=5b5b5b&color=4fca21)](https://chromewebstore.google.com/detail/youtube-enhancer/dejhhgdpambaambdifcfbmpliolehfaj)
+[![Chrome Extension Downloads](https://img.shields.io/chrome-web-store/rating/dejhhgdpambaambdifcfbmpliolehfaj?logo=googlechrome&labelColor=5b5b5b&color=4fca21)](https://chromewebstore.google.com/detail/youtube-enhancer/dejhhgdpambaambdifcfbmpliolehfaj)
 <br/>
+[![GitHub Release](https://img.shields.io/github/v/release/VampireChicken12/youtube-enhancer?label=Github&logo=Github&labelColor=5b5b5b&color=4fca21)](https://github.com/VampireChicken12/youtube-enhancer/releases/latest)
+![GitHub Downloads](https://img.shields.io/github/downloads/VampireChicken12/youtube-enhancer/total?logo=Github&labelColor=5b5b5b&color=4fca21)
+![Stars](https://img.shields.io/github/stars/VampireChicken12/youtube-enhancer?logo=Github&labelColor=5b5b5b&color=4fca21)
 [![All Contributors](https://img.shields.io/github/all-contributors/VampireChicken12/youtube-enhancer?labelColor=5b5b5b&color=4fca21)](#-contributors)
 [![Crowdin Translation Project Badge](https://badges.crowdin.net/youtube-enhancer/localized.svg)](https://crowdin.com/project/youtube-enhancer)
 [![Join our Discord server](https://img.shields.io/discord/1180688348675838132?label=Discord&logo=Discord&labelColor=5b5b5b&color=4fca21)](https://discord.gg/VpdGFmuB4B)
@@ -40,9 +43,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
 
+- **Pause background players:** Pauses video players in background tabs when you start a new player in the foreground.
+
 - **Loop Button:** Adds a dedicated button to toggle the video player loop.
 
-- **Hide Scrollbar:** Hides the pages scroll bar
+- **Hide Scrollbar:** Hides the pages scroll bar.
 
 - **Automatic Theater Mode:** Automatically enables theater mode when you load a video
 
@@ -53,6 +58,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
 
 - **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
+
+- **Skip "Video is paused. Continue watching?" popup**: Skips the idle dialog that pauses video playback.
 
 - **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
 
@@ -105,7 +112,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
 
+- **Playback speed buttons:** Adds buttons to adjust the playback speed.
+
 - **Player Speed:** Define the playback speed for videos.
+
+- **Playback buttons speed:** Define the speed adjustment per button press.
 
 ### Volume Boost Settings
 
@@ -122,6 +133,26 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
 
 - **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
+
+### YouTube Deep Dark Settings
+
+- **Enable selected theme:** Enables the selected YouTube Deep Dark theme.
+
+- **Select theme:** Select the YouTube Deep Dark theme to use (9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark).
+
+- **Accent color:** Select the accent color for the "Custom" theme.
+
+- **Main background color:** Select the main background color for the "Custom" theme.
+
+- **Secondary background color:** Select the secondary background color for the "Custom" theme.
+
+- **Hover background color:** Select the hover background color for the "Custom" theme.
+
+- **Main text color:** Select the main text color for the "Custom" theme.
+
+- **Secondary text color:** Select the secondary text color for the "Custom" theme.
+
+- **Shadow color:** Select the shadow color for the "Custom" theme.
 
 ### Custom CSS Settings
 
@@ -266,6 +297,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rado84-github"><img src="https://avatars.githubusercontent.com/u/41172201?v=4?s=100" width="100px;" alt="rado84"/><br /><sub><b>rado84</b></sub></a><br /><a href="#bug-rado84-github" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
     </tr>
   </tbody>
 </table>
@@ -292,6 +324,8 @@ We welcome contributions to improve translations and make the extension accessib
 ## 📜 License
 
 The YouTube Enhancer Extension is open-source and available under the [MIT License](LICENSE). Feel free to explore, modify, and share it as needed.
+
+![Alt](https://repobeats.axiom.co/api/embed/262a11c40b9db9e119db0a64a23049ead4eaed96.svg "Repobeats analytics image")
 
 ## 🌟 Star History
 

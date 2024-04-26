@@ -356,6 +356,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				shortsAutoScrollEnabled: newValue
 			});
 		},
+		enable_skip_continue_watching: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("skipContinueWatchingChange", {
+				skipContinueWatchingEnabled: newValue
+			});
+		},
 		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue
@@ -391,7 +396,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		},
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostAmountChange", {
-				volumeBoostAmount: newValue
+				volumeBoostAmount: newValue,
+				volumeBoostEnabled: options.enable_volume_boost,
+				volumeBoostMode: options.volume_boost_mode
 			});
 		},
 		volume_boost_mode: (__oldValue, newValue) => {

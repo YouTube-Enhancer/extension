@@ -1,12 +1,12 @@
 /**
  * Version 4.1.8
  * Author: https://github.com/RaitaroH
- * Co-authors: https://github.com/MechaLynx https://github.com/MaximeRF
+ * Co-authors: https://github.com/MechaLynx
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
  */
 export const deepDarkMaterial = `
 /* Author     : Theme made by RaitaroH */
-/* Co-authors : https://github.com/MechaLynx https://github.com/MaximeRF */
+/* Co-authors : https://github.com/MechaLynx */
 /* Home       : https://github.com/RaitaroH/YouTube-DeepDark */
 /* License    : GNU General Public License v3.0 */
 

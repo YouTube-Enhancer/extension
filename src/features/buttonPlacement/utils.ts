@@ -12,17 +12,14 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	if (isToggle) {
-		button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
-		if (typeof icon === "object" && "off" in icon && "on" in icon) {
-			updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
-		} else if (icon instanceof SVGSVGElement) {
-			updateFeatureButtonIcon(button, icon);
-		}
-		listener(JSON.parse(button.ariaChecked) as boolean);
-	} else {
-		listener();
+	if (!isToggle) return listener();
+	button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
+	if (typeof icon === "object" && "off" in icon && "on" in icon) {
+		updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
+	} else if (icon instanceof SVGSVGElement) {
+		updateFeatureButtonIcon(button, icon);
 	}
+	listener(JSON.parse(button.ariaChecked) as boolean);
 }
 
 export function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
@@ -47,7 +44,8 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 			height: "48px",
 			justifyContent: "center",
 			padding: "0px 4px",
-			width: "48px"
+			width: "48px",
+			zIndex: "0"
 		}
 	});
 	button.dataset.title = label;

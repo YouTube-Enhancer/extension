@@ -14,8 +14,8 @@ interface EnUS {
 				openTranscriptButton: { button: { label: "Open transcript" } };
 				playbackSpeedButtons: {
 					buttons: {
-						decreasePlaybackSpeedButton: { label: "Decrease Speed by {{SPEED}}" };
-						increasePlaybackSpeedButton: { label: "Increase Speed by {{SPEED}}" };
+						decreasePlaybackSpeedButton: { label: "Decrease Speed to {{SPEED}}" };
+						increasePlaybackSpeedButton: { label: "Increase Speed to {{SPEED}}" };
 					};
 				};
 				screenshotButton: {
@@ -182,6 +182,10 @@ interface EnUS {
 						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";
 					};
 					shortsAutoScroll: { label: "Shorts auto scroll"; title: "Automatically scrolls to the next short" };
+					skipContinueWatching: {
+						label: 'Skip "Video is paused. Continue watching?"';
+						title: "Skips the idle dialog that pauses video playback";
+					};
 				};
 				title: "Miscellaneous settings";
 			};
@@ -223,7 +227,7 @@ interface EnUS {
 				title: "On-Screen Display Settings";
 				type: {
 					label: "Type";
-					options: { line: "Line"; no_display: "No display"; round: "Round"; text: "Text" };
+					options: { circle: "Circle"; line: "Line"; no_display: "No display"; text: "Text" };
 					title: "Select the type of On-Screen Display";
 				};
 			};

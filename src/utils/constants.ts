@@ -64,6 +64,7 @@ export const defaultConfiguration = {
 	enable_scroll_wheel_volume_control_hold_right_click: false,
 	enable_share_shortener: false,
 	enable_shorts_auto_scroll: false,
+	enable_skip_continue_watching: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
 	feature_menu_open_type: "hover",
@@ -88,7 +89,7 @@ export const defaultConfiguration = {
 	speed_adjustment_steps: 0.25,
 	video_history_resume_type: "prompt",
 	volume_adjustment_steps: 5,
-	volume_boost_amount: 1,
+	volume_boost_amount: 5,
 	volume_boost_mode: "global"
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
@@ -143,6 +144,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_scroll_wheel_volume_control_hold_right_click: z.boolean().optional(),
 	enable_share_shortener: z.boolean().optional(),
 	enable_shorts_auto_scroll: z.boolean().optional(),
+	enable_skip_continue_watching: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
 	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),

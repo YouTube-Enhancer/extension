@@ -1,4 +1,6 @@
+/* eslint-disable tailwindcss/enforces-shorthand */
 import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { ClassValue } from "clsx";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
@@ -10,6 +12,7 @@ import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { availableLocales, type i18nInstanceType, i18nService, localeDirection, localePercentages } from "@/src/i18n";
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
@@ -29,7 +32,7 @@ async function getLanguageOptions() {
 			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
 			const languageOption: SelectOption<"language"> = {
-				label: `${(localeData as EnUS).langName} (${localePercentages[locale]}%)`,
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale] ?? 0}%)`,
 				value: locale
 			};
 			return Promise.resolve(languageOption);
@@ -228,44 +231,45 @@ export default function Settings() {
 				value: "shiftKey"
 			}
 		];
+	const colorDotClassName: ClassValue = "m-2 w-3 h-3 rounded-[50%] border-DEFAULT border-solid border-black";
 	const colorOptions: SelectOption<"osd_display_color">[] = [
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[red]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[red]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.red"),
 			value: "red"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[green]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[green]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.green"),
 			value: "green"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[blue]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[blue]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.blue"),
 			value: "blue"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[yellow]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[yellow]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.yellow"),
 			value: "yellow"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[orange]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[orange]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.orange"),
 			value: "orange"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[purple]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[purple]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.purple"),
 			value: "purple"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[pink]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[pink]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.pink"),
 			value: "pink"
 		},
 		{
-			element: <div className={cn("m-2 size-3 rounded-[50%] border-[1px] border-solid border-black", "bg-[white]")}></div>,
+			element: <div className={cn(colorDotClassName, "bg-[white]")}></div>,
 			label: t("settings.sections.onScreenDisplaySettings.color.options.white"),
 			value: "white"
 		}
@@ -284,8 +288,8 @@ export default function Settings() {
 			value: "line"
 		},
 		{
-			label: t("settings.sections.onScreenDisplaySettings.type.options.round"),
-			value: "round"
+			label: t("settings.sections.onScreenDisplaySettings.type.options.circle"),
+			value: "circle"
 		}
 	];
 	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
@@ -420,8 +424,10 @@ export default function Settings() {
 								void chrome.storage.local.set({ [key]: castSettings[key] as string });
 							}
 						}
+						await updateStoredSettings();
+						const storedSettings = await getSettings();
 						// Set the imported settings in your state.
-						settingsMutate.mutate(castSettings);
+						settingsMutate.mutate(storedSettings);
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
@@ -489,9 +495,9 @@ export default function Settings() {
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
-			<div className="size-fit bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white" dir={localeDirection[settings.language]}>
+			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']" dir={localeDirection[settings.language]}>
 				<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
-					<img className="size-16 sm:size-16" src="/icons/icon_128.png" />
+					<img className="h-16 w-16" src="/icons/icon_128.png" />
 					YouTube Enhancer
 					<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 				</h1>
@@ -517,10 +523,10 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
 					{buttonNames.map((feature) => {
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
+								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
@@ -624,6 +630,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
 						onChange={setCheckboxOption("enable_share_shortener")}
 						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_skip_continue_watching?.toString() === "true"}
+						id="enable_skip_continue_watching"
+						label={t("settings.sections.miscellaneous.features.skipContinueWatching.label")}
+						onChange={setCheckboxOption("enable_skip_continue_watching")}
+						title={t("settings.sections.miscellaneous.features.skipContinueWatching.title")}
 						type="checkbox"
 					/>
 					<Setting
@@ -946,7 +960,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={settings.enable_screenshot_button?.toString() !== "true"}
+						disabled={settings.enable_screenshot_button?.toString() !== "true" || settings.screenshot_save_as?.toString() === "clipboard"}
 						id="screenshot_format"
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
@@ -954,27 +968,6 @@ export default function Settings() {
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
-					/>
-				</SettingSection>
-				<SettingSection>
-					<SettingTitle title={t("settings.sections.customCSS.title")} />
-					<Setting
-						checked={settings.enable_custom_css?.toString() === "true"}
-						id="enable_custom_css"
-						label={t("settings.sections.customCSS.enable.label")}
-						onChange={setCheckboxOption("enable_custom_css")}
-						title={t("settings.sections.customCSS.enable.title")}
-						type="checkbox"
-					/>
-					<Setting
-						id="custom_css_code"
-						onChange={(value) => {
-							if (value !== undefined) {
-								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
-							}
-						}}
-						type="css-editor"
-						value={settings.custom_css_code}
 					/>
 				</SettingSection>
 				<SettingSection>
@@ -987,7 +980,6 @@ export default function Settings() {
 						<SettingSection className="mb-1">
 							<SettingTitle title={t("settings.sections.youtubeDeepDark.co-authors")} />
 							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
-							<Link href="https://github.com/MaximeRF">MaximeRF</Link>
 						</SettingSection>
 					</SettingSection>
 					<Setting
@@ -1072,9 +1064,30 @@ export default function Settings() {
 						value={settings.deep_dark_custom_theme_colors.colorShadow}
 					/>
 				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.customCSS.title")} />
+					<Setting
+						checked={settings.enable_custom_css?.toString() === "true"}
+						id="enable_custom_css"
+						label={t("settings.sections.customCSS.enable.label")}
+						onChange={setCheckboxOption("enable_custom_css")}
+						title={t("settings.sections.customCSS.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						id="custom_css_code"
+						onChange={(value) => {
+							if (value !== undefined) {
+								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
+							}
+						}}
+						type="css-editor"
+						value={settings.custom_css_code}
+					/>
+				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -1082,7 +1095,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -1091,7 +1104,7 @@ export default function Settings() {
 					/>
 					{isPopup && (
 						<button
-							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="accent flex items-center justify-center p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="openinnewtab_button"
 							onClick={() => openInNewTab("src/pages/options/index.html")}
 							title={t("settings.sections.bottomButtons.openTab.title")}
@@ -1101,7 +1114,7 @@ export default function Settings() {
 						</button>
 					)}
 					<input
-						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -1110,7 +1123,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
-							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -1133,7 +1146,7 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
 					:	<input
-							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
+							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}

@@ -256,6 +256,10 @@
 					"shortsAutoScroll": {
 						"label": "Scorri al blocco",
 						"title": "Scorri automaticamente al prossimo blocco"
+					},
+					"skipContinueWatching": {
+						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
+						"title": "Salta la finestra che mette in pausa la riproduzione video"
 					}
 				},
 				"title": "Impostazioni varie"
@@ -302,9 +306,9 @@
 				"type": {
 					"label": "Tipo",
 					"options": {
+						"circle": "Cerchio",
 						"line": "Linea",
 						"no_display": "Nessuno schermo",
-						"round": "Tondo",
 						"text": "Testuale"
 					},
 					"title": "Seleziona il tipo di schermo interattivo"
@@ -425,53 +429,53 @@
 							"global": "Globale",
 							"perVideo": "Per video"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Scegli come l'aumento del volume è applicato. 'Per video' permette di abilitare la spinta per ogni video singolarmente nel menu' delle funzioni. 'Globale' applica la spinta a tutti i video quando l'amplificazione del volume è abilitata."
 					}
 				},
-				"title": "Volume boost settings"
+				"title": "Impostazioni aumento volume"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Autore",
+				"co-authors": "Co-autori",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Colore ombra",
+						"title": "Colore per le ombre"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Colore secondario del testo",
+						"title": "Colore del testo secondario"
 					},
 					"hoverBackground": {
-						"label": "Hover background",
-						"title": "Color for hover background"
+						"label": "Colore sfondo quando puntato",
+						"title": "Colore per lo sfondo al passaggio"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Colore sfondo principale",
+						"title": "Colore per lo sfondo principale"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Colore accento",
+						"title": "Colore per accento"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Colore testo principale",
+						"title": "Colore per il testo principale"
 					},
 					"secondBackground": {
-						"label": "Secondary background",
-						"title": "Color for secondary background"
+						"label": "Colore sfondo secondario",
+						"title": "Colore per lo sfondo secondario"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Abilita tema selezionato",
+					"title": "Abilita il tema selezionato per la pagina"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Seleziona tema",
+					"title": "Seleziona un tema da applicare alla pagina"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "Impostazioni sfondo scuro di YouTube"
 			}
 		}
 	}
