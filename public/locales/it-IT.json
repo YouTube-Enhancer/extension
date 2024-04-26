@@ -210,8 +210,8 @@
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Nascondi chat live stream",
+						"title": "Nasconde la chat live stream"
 					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
