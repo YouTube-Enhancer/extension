@@ -210,8 +210,8 @@
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "配信チャットを隠す",
+						"title": "配信チャットを隠する"
 					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
