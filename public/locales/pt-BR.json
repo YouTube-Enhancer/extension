@@ -209,6 +209,10 @@
 						"label": "Modo teatro automático",
 						"title": "Ativar automaticamente o modo teatro quando você carregar um vídeo"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar a barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"

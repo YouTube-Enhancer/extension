@@ -209,6 +209,10 @@
 						"label": "Otomatik tiyatro modu",
 						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 						"title": "Sayfa kaydırma çubuğunu gizler"

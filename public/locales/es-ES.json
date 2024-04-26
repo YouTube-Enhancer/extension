@@ -209,6 +209,10 @@
 						"label": "Modo cine automático",
 						"title": "Activar automáticamente el modo cine al cargar un vídeo"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de desplazamiento",
 						"title": "Oculta la barra de desplazamiento de la página"

@@ -209,6 +209,10 @@
 						"label": "Включить автоматический режим кинотеатра",
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
 						"title": "Скрывает полосу прокрутки страницы"

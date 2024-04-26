@@ -209,6 +209,10 @@
 						"label": "Automatiskt teaterläge",
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
 						"title": "Döljer sidornas rullningsfält"

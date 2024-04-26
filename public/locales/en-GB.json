@@ -209,6 +209,10 @@
 						"label": "Automatic theatre mode",
 						"title": "Automatically enables theatre mode when you load a video"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Hide scrollbar",
 						"title": "Hides the pages scrollbar"

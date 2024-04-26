@@ -143,6 +143,7 @@ interface EnUS {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
 					};
+					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					loopButton: {
