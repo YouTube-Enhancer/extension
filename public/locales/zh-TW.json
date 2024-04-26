@@ -209,6 +209,10 @@
 						"label": "自動啟用劇院模式",
 						"title": "載入影片時自動啟用劇院模式"
 					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"

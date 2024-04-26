@@ -10,6 +10,7 @@ import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCS
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -119,6 +120,7 @@ const alwaysShowProgressBar = async function () {
 };
 
 const enableFeatures = () => {
+	browserColorLog(`Enabling features...`, "FgMagenta");
 	void (async () => {
 		// Wait for the specified container selectors to be available on the page
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
@@ -143,6 +145,7 @@ const enableFeatures = () => {
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
 			enableOpenYouTubeSettingsOnHover(),
+			enableHideLiveStreamChat(),
 			enableRememberVolume(),
 			automaticTheaterMode(),
 			setupRemainingTime(),
@@ -173,11 +176,9 @@ window.addEventListener("DOMContentLoaded", function () {
 		} = response;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-
 		// Listen to YouTube's soft navigate event
 		document.addEventListener("yt-navigate-finish", enableFeatures);
 		document.addEventListener("yt-player-updated", enableFeatures);
-
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
@@ -387,6 +388,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableHideShorts();
 						} else {
 							disableHideShorts();
+						}
+						break;
+					}
+					case "hideLiveStreamChatChange": {
+						const {
+							data: { hideLiveStreamChatEnabled }
+						} = message;
+						if (hideLiveStreamChatEnabled) {
+							await enableHideLiveStreamChat();
+						} else {
+							await disableHideLiveStreamChat();
 						}
 						break;
 					}
