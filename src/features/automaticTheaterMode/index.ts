@@ -2,7 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
-export async function automaticTheaterMode() {
+export async function enableAutomaticTheaterMode() {
 	// Wait for the "options" message from the content script
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
