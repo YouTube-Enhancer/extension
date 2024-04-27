@@ -210,8 +210,8 @@
 						"title": "載入影片時自動啟用劇院模式"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "隱藏直播聊天室",
+						"title": "隱藏直播的聊天室"
 					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
