@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
-import { automaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
@@ -29,9 +29,9 @@ import {
 } from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
-import { removeRemainingTimeDisplay, setupRemainingTime } from "@/src/features/remainingTime";
+import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
-import removeRedirect from "@/src/features/removeRedirect";
+import enableRemoveRedirect from "@/src/features/removeRedirect";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
@@ -127,7 +127,7 @@ const enableFeatures = () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		void Promise.all([
 			enableHideShorts(),
-			removeRedirect(),
+			enableRemoveRedirect(),
 			enableShareShortener(),
 			enableSkipContinueWatching(),
 			enablePauseBackgroundPlayers(),
@@ -147,8 +147,8 @@ const enableFeatures = () => {
 			enableOpenYouTubeSettingsOnHover(),
 			enableHideLiveStreamChat(),
 			enableRememberVolume(),
-			automaticTheaterMode(),
-			setupRemainingTime(),
+			enableAutomaticTheaterMode(),
+			enableRemainingTime(),
 			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
@@ -301,7 +301,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { remainingTimeEnabled }
 						} = message;
 						if (remainingTimeEnabled) {
-							await setupRemainingTime();
+							await enableRemainingTime();
 						} else {
 							removeRemainingTimeDisplay();
 						}
@@ -507,7 +507,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { removeRedirectEnabled }
 						} = message;
 						if (removeRedirectEnabled) {
-							await removeRedirect();
+							await enableRemoveRedirect();
 						}
 						break;
 					}
