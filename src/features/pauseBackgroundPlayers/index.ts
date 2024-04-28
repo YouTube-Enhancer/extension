@@ -14,8 +14,8 @@ export async function enablePauseBackgroundPlayers() {
 		}
 	} = optionsData;
 	if (!pauseBackgroundPlayersEnabled) return;
-	// ignore home page
-	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com\/?$/gm)) return;
+	// ignore home page and channel pages
+	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;
 	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");
 
 	let videoPlayerContainer: HTMLVideoElement | null = null;

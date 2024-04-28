@@ -18,7 +18,6 @@ import type {
 	Selector,
 	SendDataMessage,
 	SingleButtonFeatureNames,
-	SingleButtonNames,
 	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
@@ -468,7 +467,7 @@ export function createTooltip({
 	direction?: "down" | "left" | "right" | "up";
 	element: HTMLElement;
 	featureName: FeatureName;
-	id: `yte-feature-${AllButtonNames | Exclude<FeatureName, SingleButtonNames>}-tooltip`;
+	id: `yte-feature-${FeatureName}-tooltip`;
 	text?: string;
 }): {
 	listener: () => void;

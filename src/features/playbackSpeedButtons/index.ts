@@ -34,7 +34,7 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
 		featureName,
-		id: `yte-feature-${buttonName}-tooltip`
+		id: `yte-feature-${featureName}-tooltip`
 	});
 	remove();
 	updateFeatureButtonTitle(
