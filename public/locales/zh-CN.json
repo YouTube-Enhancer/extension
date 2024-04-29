@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "增加播放速度至 {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
