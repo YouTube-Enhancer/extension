@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Öka hastigheten med {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
