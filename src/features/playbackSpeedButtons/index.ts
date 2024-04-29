@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
@@ -30,23 +30,20 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 	const button = getFeatureButton(buttonName);
 	if (!button) return;
 	const placement = buttonName == "increasePlaybackSpeedButton" ? increasePlaybackSpeedButtonPlacement : decreasePlaybackSpeedButtonPlacement;
-	const { remove } = createTooltip({
+	const { update } = createTooltip({
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
 		featureName,
 		id: `yte-feature-${buttonName}-tooltip`
 	});
-	remove();
-	updateFeatureButtonTitle(
-		buttonName,
-		window.i18nextInstance.t(
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-			`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
-			{
-				SPEED: speed
-			}
-		)
+	button.dataset.title = window.i18nextInstance.t(
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		{
+			SPEED: speed
+		}
 	);
+	update();
 }
 
 function playbackSpeedButtonClickListener(amount: number): () => void {
