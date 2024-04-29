@@ -17,8 +17,6 @@ interface EnUS {
 						decreasePlaybackSpeedButton: { label: "Decrease Speed to {{SPEED}}" };
 						increasePlaybackSpeedButton: { label: "Increase Speed to {{SPEED}}" };
 					};
-					decreaseLimit: "Can't decrease further ({{SPEED}})";
-					increaseLimit: "Can't increase further ({{SPEED}})";
 				};
 				screenshotButton: {
 					button: { label: "Screenshot" };
