@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "再生速度を{{SPEED}}で上げする"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
