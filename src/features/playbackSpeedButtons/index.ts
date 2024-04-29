@@ -13,7 +13,7 @@ let currentPlaybackSpeed = 1;
 
 async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
 	buttonName: ButtonName,
-	speed: string
+	speed: number
 ) {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -22,7 +22,8 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 				button_placements: {
 					decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement,
 					increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement
-				}
+				},
+				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
 	} = optionsData;
@@ -37,10 +38,15 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
+		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
-			SPEED: speed
+			SPEED:
+				speed == 4 || speed == 0.25 ? String(speed)
+				: buttonName == "decreasePlaybackSpeedButton" ? String(speed - playbackSpeedPerClick)
+				: String(speed + playbackSpeedPerClick)
 		}
 	);
 	update();
@@ -64,14 +70,7 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
 					data: {
-						options: {
-							osd_display_color,
-							osd_display_hide_time,
-							osd_display_opacity,
-							osd_display_padding,
-							osd_display_position,
-							playback_buttons_speed: playbackSpeedPerClick
-						}
+						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
 				} = optionsData;
 				new OnScreenDisplayManager(
@@ -93,8 +92,8 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				);
 				const speed = currentPlaybackSpeed + amount;
 				await setPlayerSpeed(speed);
-				await updateTooltip("increasePlaybackSpeedButton", String(speed + playbackSpeedPerClick));
-				await updateTooltip("decreasePlaybackSpeedButton", String(speed - playbackSpeedPerClick));
+				await updateTooltip("increasePlaybackSpeedButton", speed);
+				await updateTooltip("decreasePlaybackSpeedButton", speed);
 			} catch (error) {
 				console.error(error);
 			}
