@@ -45,8 +45,8 @@
 							"label": "加快播放速度 {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "無法再減速 ({{SPEED}})",
+					"increaseLimit": "無法再加速 ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
