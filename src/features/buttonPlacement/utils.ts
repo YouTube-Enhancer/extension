@@ -54,7 +54,7 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
 		featureName,
-		id: `yte-feature-${featureName}-tooltip`
+		id: `yte-feature-${buttonName}-tooltip`
 	});
 	if (buttonExists) {
 		eventManager.removeEventListener(button, "click", featureName);
