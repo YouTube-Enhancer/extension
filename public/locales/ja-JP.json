@@ -45,8 +45,8 @@
 							"label": "再生速度を{{SPEED}}で上げする"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "再生速度を下げるはできまっせん ({{SPEED}})",
+					"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
