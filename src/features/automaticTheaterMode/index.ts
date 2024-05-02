@@ -3,25 +3,21 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export async function enableAutomaticTheaterMode() {
+	if (!isWatchPage()) return;
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_automatic_theater_mode }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If automatic theater mode isn't enabled return
 	if (!enable_automatic_theater_mode) return;
-	if (!isWatchPage()) return;
 	// Get the player element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const { width } = await playerContainer.getSize();
-	const {
-		body: { clientWidth }
-	} = document;
-	const isTheaterMode = width === clientWidth;
+	const isTheaterMode = document.body.clientWidth === width;
 	// Get the size button
 	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	// If the size button is not available return
