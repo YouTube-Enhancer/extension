@@ -4,32 +4,22 @@ import { createCustomCSSElement, customCSSExists, updateCustomCSS } from "./util
 export const customCssID = "yte-custom-css";
 export async function enableCustomCSS() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { custom_css_code, enable_custom_css }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// Check if custom CSS is enabled
 	if (!enable_custom_css) return;
-	if (customCSSExists()) {
-		updateCustomCSS({
-			custom_css_code
-		});
-		return;
-	}
+	if (customCSSExists()) return updateCustomCSS({ custom_css_code });
 	// Create the custom CSS style element
-	const customCSSStyleElement = createCustomCSSElement({
-		custom_css_code
-	});
+	const customCSSStyleElement = createCustomCSSElement({ custom_css_code });
 	// Insert the custom CSS style element
 	document.head.appendChild(customCSSStyleElement);
 }
 export function disableCustomCSS() {
 	// Get the custom CSS style element
 	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${customCssID}`);
-	// Check if the custom CSS style element exists
-	if (!customCSSStyleElement) return;
 	// Remove the custom CSS style element
-	customCSSStyleElement.remove();
+	customCSSStyleElement?.remove();
 }
