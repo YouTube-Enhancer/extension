@@ -30,8 +30,8 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 	listener: ListenerType<Toggle>,
 	isToggle: boolean
 ) {
-	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
+	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	const buttonExists = document.querySelector(`button#${getFeatureButtonId(buttonName)}`) !== null;
 	const button = createStyledElement({
 		classlist: ["ytp-button"],
@@ -72,18 +72,12 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 		return button;
 	}
 
+	const isIconToggle = typeof icon === "object" && "off" in icon && "on" in icon;
 	if (isToggle) {
 		button.ariaChecked = "false";
-		if (typeof icon === "object" && "off" in icon && "on" in icon) {
-			button.append(icon.off);
-		} else if (icon instanceof SVGSVGElement) {
-			button.append(icon);
-		}
-	} else {
-		if (icon instanceof SVGSVGElement) {
-			button.append(icon);
-		}
+		if (isIconToggle) button.append(icon.off);
 	}
+	if (!isIconToggle && icon instanceof SVGSVGElement) button.append(icon);
 
 	eventManager.addEventListener(button, "mouseover", tooltipListener, featureName);
 	eventManager.addEventListener(
@@ -98,9 +92,7 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 	return button;
 }
 export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
-	if (button.firstChild) {
-		button.firstChild.replaceWith(icon);
-	}
+	button.firstChild?.replaceWith(icon);
 }
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
 	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
@@ -166,7 +158,7 @@ export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement
 		}
 	}
 }
-export function getFeatureButtonId(buttonName: AllButtonNames) {
+export function getFeatureButtonId<ButtonName extends AllButtonNames>(buttonName: ButtonName) {
 	return `yte-feature-${buttonName}-button` as const;
 }
 export function getFeatureButton(buttonName: AllButtonNames) {
