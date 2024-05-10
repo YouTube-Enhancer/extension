@@ -10,12 +10,11 @@ import { browserColorLog, chooseClosestQuality, isShortsPage, isWatchPage, waitF
  */
 export default async function setPlayerQuality(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_automatically_set_quality, player_quality }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 
 	// If automatically set quality option is disabled, return
 	if (!enable_automatically_set_quality) return;
@@ -39,14 +38,14 @@ export default async function setPlayerQuality(): Promise<void> {
 	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 
 	// Check if the specified player quality is available
-	if (player_quality && player_quality !== "auto") {
-		const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels);
-		if (!closestQuality) return;
-		// Log the message indicating the player quality being set
-		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
+	if (!player_quality || player_quality === "auto") return;
 
-		// Set the playback quality and update the default quality in the dataset
-		void playerContainer.setPlaybackQualityRange(closestQuality);
-		playerContainer.dataset.defaultQuality = closestQuality;
-	}
+	const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels);
+	if (!closestQuality) return;
+	// Log the message indicating the player quality being set
+	browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
+
+	// Set the playback quality and update the default quality in the dataset
+	void playerContainer.setPlaybackQualityRange(closestQuality);
+	playerContainer.dataset.defaultQuality = closestQuality;
 }
