@@ -11,9 +11,7 @@ export function updateProgressBarPositions() {
 	const seekBar = document.querySelector<HTMLDivElement>("div.ytp-progress-bar");
 	const scrubber = document.querySelector<HTMLDivElement>("div.ytp-scrubber-container");
 	const hoverProgress = document.querySelector<HTMLDivElement>("div.ytp-hover-progress");
-	if (!seekBar) return;
-	if (!scrubber) return;
-	if (!hoverProgress) return;
+	if (!seekBar || !scrubber || !hoverProgress) return;
 	const elapsedTime = parseInt(seekBar?.ariaValueNow ?? "0") ?? 0;
 	const duration = parseInt(seekBar?.ariaValueMax ?? "0") ?? 0;
 	const seekBarWidth = seekBar?.clientWidth ?? 0;
@@ -27,10 +25,7 @@ export function updateProgressBarPositions() {
 export function setupVideoPlayerTimeUpdate() {
 	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
-	const videoPlayerTimeUpdateListener = () => {
-		updateProgressBarPositions();
-	};
-	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "maximizePlayerButton");
+	eventManager.addEventListener(videoElement, "timeupdate", () => updateProgressBarPositions(), "maximizePlayerButton");
 }
 export function maximizePlayer() {
 	// Get the video element
@@ -65,10 +60,8 @@ export function maximizePlayer() {
 		childNodes: [, svgPath]
 	} = svgElement;
 	if (!svgPath || !(svgPath instanceof SVGPathElement)) return;
-	if (svgPath.getAttribute("d") === theaterModeVariables.pathD) wasInTheatreMode = true;
-	else wasInTheatreMode = false;
-	if (wasInTheatreMode) setToTheatreMode = false;
-	else setToTheatreMode = true;
+	wasInTheatreMode = svgPath.getAttribute("d") === theaterModeVariables.pathD;
+	setToTheatreMode = !wasInTheatreMode;
 	// TODO: finish this code to make the maximize player button work properly. (implement ytp-scrubber-container adjustment) if all else fails revert to using the theatre mode button to get the tooltips in the correct place
 	console.log(`setToTheatreMode && wasInTheatreMode: ${setToTheatreMode && wasInTheatreMode}`);
 	console.log(`setToTheatreMode && !wasInTheatreMode: ${setToTheatreMode && !wasInTheatreMode}`);
