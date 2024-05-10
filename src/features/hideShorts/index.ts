@@ -4,12 +4,11 @@ import { waitForSpecificMessage } from "@/src/utils/utilities";
 let shortsObserver: Nullable<MutationObserver> = null;
 export async function enableHideShorts() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_hide_shorts }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the hide shorts option is disabled, return
 	if (!enable_hide_shorts) return;
 	hideShorts();
@@ -20,8 +19,6 @@ export async function enableHideShorts() {
 export function disableHideShorts() {
 	showShorts();
 	// Disconnect the observer
-	if (shortsObserver) {
-		shortsObserver.disconnect();
-		shortsObserver = null;
-	}
+	shortsObserver?.disconnect();
+	shortsObserver = null;
 }
