@@ -11,11 +11,8 @@ import { createTooltip, isShortsPage, isWatchPage, waitForSpecificMessage } from
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;
 
-async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
-	buttonName: ButtonName,
-	speed: number
-) {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
+type TooltipButtonName = "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton";
+async function updateTooltip<ButtonName extends TooltipButtonName>(buttonName: ButtonName, speed: number) {
 	const {
 		data: {
 			options: {
@@ -26,22 +23,21 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = optionsData;
-	const featureName = "playbackSpeedButtons";
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	const button = getFeatureButton(buttonName);
 	if (!button) return;
 	const placement = buttonName == "increasePlaybackSpeedButton" ? increasePlaybackSpeedButtonPlacement : decreasePlaybackSpeedButtonPlacement;
 	const { update } = createTooltip({
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
-		featureName,
+		featureName: "playbackSpeedButtons",
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
 		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
 		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as TooltipButtonName}.label`,
 		{
 			SPEED:
 				speed == 4 || speed == 0.25 ? String(speed)
@@ -67,12 +63,11 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 					: null;
 				if (!playerContainer) return;
-				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
 					data: {
 						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
-				} = optionsData;
+				} = await waitForSpecificMessage("options", "request_data", "content");
 				new OnScreenDisplayManager(
 					{
 						displayColor: osd_display_color,
@@ -81,14 +76,10 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 						displayPadding: osd_display_padding,
 						displayPosition: osd_display_position,
 						displayType: "text", // TODO: support for line/round? currently buggy
-						playerContainer: playerContainer
+						playerContainer
 					},
 					"yte-osd",
-					{
-						max: 4,
-						type: "speed",
-						value: currentPlaybackSpeed + amount
-					}
+					{ max: 4, type: "speed", value: currentPlaybackSpeed + amount }
 				);
 				const speed = currentPlaybackSpeed + amount;
 				await setPlayerSpeed(speed);
@@ -102,7 +93,6 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 }
 
 export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -111,7 +101,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playback_speed_buttons) return;
 	await addFeatureButton(
 		"increasePlaybackSpeedButton",
@@ -126,7 +116,6 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 };
 
 export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -135,7 +124,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playback_speed_buttons) return;
 	await addFeatureButton(
 		"decreasePlaybackSpeedButton",
