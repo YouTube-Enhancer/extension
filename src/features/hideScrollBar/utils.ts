@@ -14,7 +14,5 @@ export function hideScrollBar() {
 }
 export function showScrollBar() {
 	const style = document.getElementById("yte-hide-scroll-bar");
-	if (style) {
-		style.remove();
-	}
+	style?.remove();
 }

@@ -10,7 +10,5 @@ export async function enableHideScrollBar() {
 			options: { enable_hide_scrollbar }
 		}
 	} = optionsData;
-	// If the hide scroll bar option is disabled, return
-	if (!enable_hide_scrollbar) return;
-	hideScrollBar();
+	if (enable_hide_scrollbar) hideScrollBar();
 }
