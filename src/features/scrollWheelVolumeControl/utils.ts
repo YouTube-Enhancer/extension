@@ -18,17 +18,12 @@ export function adjustVolume(
 ): Promise<{ newVolume: number; oldVolume: number }> {
 	return new Promise((resolve) => {
 		void (async () => {
-			if (!playerContainer.getVolume) return;
-			if (!playerContainer.setVolume) return;
-			if (!playerContainer.isMuted) return;
-			if (!playerContainer.unMute) return;
+			if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;
 			const [volume, isMuted] = await Promise.all([playerContainer.getVolume(), playerContainer.isMuted()]);
 			const newVolume = clamp(toDivisible(volume + scrollDelta * volumeStep, volumeStep), 0, 100);
 			browserColorLog(`Adjusting volume by ${volumeStep} to ${newVolume}. Old volume was ${volume}`, "FgMagenta");
 			await playerContainer.setVolume(newVolume);
-			if (isMuted) {
-				if (typeof playerContainer.unMute === "function") await playerContainer.unMute();
-			}
+			if (isMuted && typeof playerContainer.unMute === "function") await playerContainer.unMute();
 			resolve({ newVolume, oldVolume: volume });
 		})();
 	});
@@ -40,7 +35,7 @@ export function adjustVolume(
  * @param listener - The event listener function.
  */
 export function setupScrollListeners(selector: Selector, handleWheel: (event: Event) => void) {
-	const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
+	const elements = document.querySelectorAll<HTMLDivElement>(selector);
 	if (!elements.length) return browserColorLog(`No elements found with selector ${selector}`, "FgRed");
 	for (const element of elements) {
 		eventManager.addEventListener(element, "wheel", handleWheel, "scrollWheelVolumeControl", { passive: false });
