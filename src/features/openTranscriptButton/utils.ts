@@ -7,18 +7,16 @@ import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 export const addOpenTranscriptButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
 				button_placements: { openTranscriptButton: openTranscriptButtonPlacement }
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	function transcriptButtonClickerListener() {
 		const transcriptButton = document.querySelector<HTMLButtonElement>("ytd-video-description-transcript-section-renderer button");
-		if (!transcriptButton) return;
-		transcriptButton.click();
+		transcriptButton?.click();
 	}
 	await addFeatureButton(
 		"openTranscriptButton",
