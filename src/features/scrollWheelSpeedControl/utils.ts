@@ -18,8 +18,7 @@ export function adjustSpeed(
 ): Promise<{ newSpeed: number; oldSpeed: number }> {
 	return new Promise((resolve) => {
 		void (async () => {
-			if (!playerContainer.getPlaybackRate) return;
-			if (!playerContainer.setPlaybackRate) return;
+			if (!playerContainer.getPlaybackRate || !playerContainer.setPlaybackRate) return;
 			const video = playerContainer.querySelector("video");
 			if (!video) return;
 			const { playbackRate: speed } = video;
@@ -38,7 +37,7 @@ export function adjustSpeed(
  * @param listener - The event listener function.
  */
 export function setupScrollListeners(selector: Selector, handleWheel: (event: Event) => void) {
-	const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
+	const elements = document.querySelectorAll<HTMLDivElement>(selector);
 	if (!elements.length) return browserColorLog(`No elements found with selector ${selector}`, "FgRed");
 	for (const element of elements) {
 		eventManager.addEventListener(element, "wheel", handleWheel, "scrollWheelSpeedControl", { passive: false });

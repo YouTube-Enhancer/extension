@@ -30,14 +30,10 @@ export default async function adjustSpeedOnScrollWheel() {
 	if (playerVideoData.isLive) return;
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
-		const setOptionsData = async () => {
-			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
-		};
+		const setOptionsData = async () => (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 
 		void (async () => {
-			if (!optionsData) {
-				return void (await setOptionsData());
-			}
+			if (!optionsData) return void (await setOptionsData());
 			const {
 				data: {
 					options: {
@@ -87,11 +83,7 @@ export default async function adjustSpeedOnScrollWheel() {
 					playerContainer: playerContainer
 				},
 				"yte-osd",
-				{
-					max: 4,
-					type: "speed",
-					value: newSpeed
-				}
+				{ max: 4, type: "speed", value: newSpeed }
 			);
 		})();
 	};
