@@ -9,13 +9,8 @@ export function formatTime(timeInSeconds: number) {
 	];
 
 	const formattedUnits: string[] = units.reduce((acc: string[], unit) => {
-		if (acc.length > 0) {
-			acc.push(unit.toString().padStart(2, "0"));
-		} else {
-			if (unit > 0) {
-				acc.push(unit.toString());
-			}
-		}
+		if (acc.length > 0) acc.push(unit.toString().padStart(2, "0"));
+		else if (unit > 0) acc.push(unit.toString());
 
 		return acc;
 	}, []);

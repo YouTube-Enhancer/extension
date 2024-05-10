@@ -30,12 +30,11 @@ function playerTimeUpdateListener() {
 }
 export async function setupRemainingTime() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_remaining_time }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
 	const timeDisplay = document.querySelector(".ytp-time-display > span:nth-of-type(2)");
@@ -58,9 +57,7 @@ export async function setupRemainingTime() {
 
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");
 	// If the video is live return
-	if (playerVideoData.isLive && remainingTimeElementExists) {
-		remainingTimeElement.remove();
-	}
+	if (playerVideoData.isLive && remainingTimeElementExists) remainingTimeElement.remove();
 	if (!remainingTimeElementExists) {
 		remainingTimeElement.id = "ytp-time-remaining";
 		remainingTimeElement.textContent = remainingTime;
