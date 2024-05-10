@@ -93,13 +93,11 @@ export async function enableFeatureMenu() {
 }
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
-	if (adsContainer) {
-		const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
-		if (adsSpan) {
-			adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
-			adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
-		}
-	}
+	if (!adsContainer) return;
+	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+	if (!adsSpan) return;
+	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
+	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
 }
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	eventManager.removeEventListeners("featureMenu");
@@ -211,23 +209,16 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	}
 	function handleMutation(mutations: MutationRecord[]) {
 		mutations.forEach((mutation) => {
-			if (mutation.type === "childList") {
-				const addedNodes = Array.from(mutation.addedNodes);
-				const isAdsElementAdded = addedNodes.some(
-					(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
-				);
-				if (isAdsElementAdded) {
-					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					if (featureMenu) {
-						adjustAdsContainerStyles(featureMenu.style.display === "block");
-					}
-				}
-			}
+			if (mutation.type !== "childList") return;
+			const addedNodes = Array.from(mutation.addedNodes);
+			const isAdsElementAdded = addedNodes.some(
+				(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
+			);
+			if (!isAdsElementAdded) return;
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			if (featureMenu) adjustAdsContainerStyles(featureMenu.style.display === "block");
 		});
 	}
 	const observer = new MutationObserver(handleMutation);
-	observer.observe(playerContainer, {
-		childList: true,
-		subtree: true
-	});
+	observer.observe(playerContainer, { childList: true, subtree: true });
 }
