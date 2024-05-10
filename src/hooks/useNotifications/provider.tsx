@@ -19,17 +19,12 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 	};
 	const createNotification: CreateNotification = (type, message, action) => {
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 5_000;
-		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
-
-		return notification;
+		return { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 	};
 
 	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (notification, removeAfterMs) => {
-		if (removeAfterMs) {
-			setTimeout(() => {
-				removeNotification(notification);
-			}, removeAfterMs);
-		}
+		if (!removeAfterMs) return;
+		setTimeout(() => removeNotification(notification), removeAfterMs);
 	};
 	const addNotification: AddNotification = (type, message, action) => {
 		const notification = createNotification(type, message, action);
@@ -52,14 +47,9 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 						const timePassed = now - (notification.timestamp ?? now);
 						const { removeAfterMs: progressBarDuration } = notification;
 						const progress = Math.max(100 - (timePassed / (progressBarDuration ?? 3000)) * 100, 0);
-						if (progress <= 0) {
-							// Automatically hide the notification when progress reaches 0
-							return null;
-						}
-						return {
-							...notification,
-							progress
-						};
+						// Automatically hide the notification when progress reaches 0
+						if (progress <= 0) return null;
+						return { ...notification, progress };
 					})
 					.filter(Boolean);
 			});
@@ -67,9 +57,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		};
 		updateNotifications();
 		return () => {
-			if (animationFrameId !== null) {
-				cancelAnimationFrame(animationFrameId);
-			}
+			if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		};
 	}, []);
 	const contextValue = { addNotification, notifications, removeNotification } satisfies NotificationsContextProps;
