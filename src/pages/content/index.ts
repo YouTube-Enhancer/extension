@@ -148,15 +148,13 @@ document.addEventListener("yte-message-from-youtube", () => {
 
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
-						window.onunload = () => {
-							chrome.storage.onChanged.removeListener(storageListeners);
-						};
+						window.onunload = () => chrome.storage.onChanged.removeListener(storageListeners);
 						break;
 					}
 					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { video_history_entry } = data;
+						const {
+							data: { video_history_entry }
+						} = message;
 						if (!video_history_entry) return;
 						const { id, status, timestamp } = video_history_entry;
 						setVideoHistory(id, timestamp, status);
@@ -223,12 +221,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 					(acc, feature) => {
 						const { [feature]: oldPlacement } = oldValue;
 						const { [feature]: newPlacement } = newValue;
-						return Object.assign(acc, {
-							[feature]: {
-								new: newPlacement,
-								old: oldPlacement
-							}
-						});
+						return Object.assign(acc, { [feature]: { new: newPlacement, old: oldPlacement } });
 					},
 					{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
 				)
@@ -415,8 +408,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 	};
 	Object.entries(castedChanges).forEach(([key, change]) => {
 		if (isValidChange(change)) {
-			if (!change.newValue) return;
-			if (!change.oldValue) return;
+			if (!change.newValue || !change.oldValue) return;
 			const oldValue = parseStoredValue(change.oldValue) as configuration[typeof key];
 			const newValue = parseStoredValue(change.newValue) as configuration[typeof key];
 			const { [key]: handler } = keyActions;
