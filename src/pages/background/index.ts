@@ -49,37 +49,26 @@ chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessag
 				chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
 					for (const tab of tabs) {
 						// Skip the active tab
-						if (tab.id === activeTabId) continue;
-						if (tab.id !== undefined) {
-							chrome.scripting.executeScript(
-								{
-									func: () => {
-										const videos = document.querySelectorAll("video");
-										videos.forEach((video) => {
-											if (!video.paused) {
-												video.pause();
-											}
-										});
-										const audios = document.querySelectorAll("audio");
-										audios.forEach((audio) => {
-											if (!audio.paused) {
-												audio.pause();
-											}
-										});
-									},
-									target: { tabId: tab.id }
+						if (!tab.id || tab.id === activeTabId) continue;
+						chrome.scripting.executeScript(
+							{
+								func: () => {
+									const videos = document.querySelectorAll("video");
+									videos.forEach((video) => {
+										if (!video.paused) video.pause();
+									});
+									const audios = document.querySelectorAll("audio");
+									audios.forEach((audio) => {
+										if (!audio.paused) audio.pause();
+									});
 								},
-								(results) => {
-									if (chrome.runtime.lastError) {
-										console.error(chrome.runtime.lastError.message);
-									} else {
-										if (results[0].result) {
-											console.log(results);
-										}
-									}
-								}
-							);
-						}
+								target: { tabId: tab.id }
+							},
+							(results) => {
+								if (chrome.runtime.lastError) console.error(chrome.runtime.lastError.message);
+								else if (results[0].result) console.log(results);
+							}
+						);
 					}
 				});
 			});
