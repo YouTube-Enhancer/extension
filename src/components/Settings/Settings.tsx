@@ -664,6 +664,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.hideLiveStreamChat.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_hide_translate_comment?.toString() === "true"}
+						id="enable_hide_translate_comment"
+						label={t("settings.sections.miscellaneous.features.hideTranslateComment.label")}
+						onChange={setCheckboxOption("enable_hide_translate_comment")}
+						title={t("settings.sections.miscellaneous.features.hideTranslateComment.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />
