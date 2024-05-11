@@ -276,6 +276,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
+	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
@@ -356,6 +357,7 @@ export type configuration = {
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
+	enable_hide_translate_comment: boolean;
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
 	enable_open_transcript_button: boolean;
