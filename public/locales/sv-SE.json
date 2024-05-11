@@ -223,6 +223,10 @@
 						"label": "Dölj shorts",
 						"title": "Döljer alla shorts"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Slingknapp",
 						"title": "Lägger till en knapp i funktionsmenyn för att slinga videon du tittar på"
