@@ -1,4 +1,5 @@
 # YouTube Enhancer Extension 🚀
+
 Thank you for choosing YouTube Enhancer! This Privacy Policy outlines how we collect, use, and safeguard your information when you use our browser extension.
 
 ## Information We Collect

@@ -283,6 +283,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideShortsEnabled: newValue
 			});
 		},
+		enable_hide_translate_comment: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideTranslateCommentChange", {
+				hideTranslateCommentEnabled: newValue
+			});
+		},
 		enable_loop_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("loopButtonChange", {
 				loopButtonEnabled: newValue

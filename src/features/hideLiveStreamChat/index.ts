@@ -1,22 +1,9 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { type ElementClassPair, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
-const liveStreamChatElementPairs: ElementClassPair[] = [
-	{
-		className: "yte-hide-live-stream-chat",
-		selector: "div#chat-container"
-	},
-	{
-		className: "yte-hide-live-stream-chat",
-		selector: "div#chat-container #chat"
-	},
-	{
-		className: "yte-hide-live-stream-chat",
-		selector: "#full-bleed-container #panels-full-bleed-container"
-	}
-];
+
 export async function enableHideLiveStreamChat() {
 	const {
 		data: {
@@ -28,12 +15,38 @@ export async function enableHideLiveStreamChat() {
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	if (!(await player.getVideoData()).isLive) return;
-	modifyElementsClassList("add", liveStreamChatElementPairs);
+	modifyElementsClassList("add", [
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("div#chat-container")
+		},
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("div#chat-container #chat")
+		},
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("#full-bleed-container #panels-full-bleed-container")
+		}
+	]);
 }
 
 export async function disableHideLiveStreamChat() {
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	if (!(await player.getVideoData()).isLive) return;
-	modifyElementsClassList("remove", liveStreamChatElementPairs);
+	modifyElementsClassList("remove", [
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("div#chat-container")
+		},
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("div#chat-container #chat")
+		},
+		{
+			className: "yte-hide-live-stream-chat",
+			element: document.querySelector("#full-bleed-container #panels-full-bleed-container")
+		}
+	]);
 }

@@ -148,6 +148,10 @@ interface EnUS {
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
+					hideTranslateComment: {
+						label: "Hide translate comment button";
+						title: "Hides 'Translate to Language' button under comments";
+					};
 					loopButton: {
 						label: "Loop button";
 						title: "Adds a button to the feature menu to loop the video you're watching";

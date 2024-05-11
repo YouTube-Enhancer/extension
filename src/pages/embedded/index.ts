@@ -14,6 +14,7 @@ import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/featu
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
+import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
@@ -153,7 +154,8 @@ const enableFeatures = () => {
 			setPlayerQuality(),
 			setPlayerSpeed(),
 			adjustVolumeOnScrollWheel(),
-			adjustSpeedOnScrollWheel()
+			adjustSpeedOnScrollWheel(),
+			enableHideTranslateComment()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -332,6 +334,14 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (rememberVolumeEnabled) await enableRememberVolume();
 						else eventManager.removeEventListeners("rememberVolume");
+						break;
+					}
+					case "hideTranslateCommentChange": {
+						const {
+							data: { hideTranslateCommentEnabled }
+						} = message;
+						if (hideTranslateCommentEnabled) await enableHideTranslateComment();
+						else await disableHideTranslateComment();
 						break;
 					}
 					case "hideScrollBarChange": {
