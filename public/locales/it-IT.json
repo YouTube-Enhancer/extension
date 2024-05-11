@@ -223,6 +223,10 @@
 						"label": "Nascondi blocchi",
 						"title": "Nasconde tutti i blocchi"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Pulsante Ripeti",
 						"title": "Aggiunge un pulsante al menu' funzioni per ripetere il video che stai guardando"
