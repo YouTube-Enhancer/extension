@@ -223,6 +223,10 @@
 						"label": "隱藏 Shorts",
 						"title": "隱藏全部 Shorts"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "循環按鈕",
 						"title": "加入按鈕循環播放當前影片"
