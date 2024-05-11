@@ -223,6 +223,10 @@
 						"label": "ショートを隠す",
 						"title": "全ショートを隠す"
 					},
+					"hideTranslateComment": {
+						"label": "コメント翻訳ボタンを隠す",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "動画ループボタン",
 						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
