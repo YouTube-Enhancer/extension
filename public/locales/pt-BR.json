@@ -223,6 +223,10 @@
 						"label": "Hide shorts",
 						"title": "Hides all shorts"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Botão de Repetir",
 						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"
