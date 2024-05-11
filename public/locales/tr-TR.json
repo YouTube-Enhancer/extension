@@ -223,6 +223,10 @@
 						"label": "Kısa videoları gizle",
 						"title": "Tüm kısa videoları gizler"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
 						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
