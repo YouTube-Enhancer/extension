@@ -223,6 +223,10 @@
 						"label": "Скрыть Shorts",
 						"title": "Скрывает все Shorts"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
 						"title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)"
