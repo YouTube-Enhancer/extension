@@ -223,6 +223,10 @@
 						"label": "隐藏短视频",
 						"title": "隐藏所有短视频"
 					},
+					"hideTranslateComment": {
+						"label": "隐藏翻译评论按钮",
+						"title": "隐藏评论下方的“翻译至当前语言”按钮"
+					},
 					"loopButton": {
 						"label": "循环按钮",
 						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
