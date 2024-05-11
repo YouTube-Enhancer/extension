@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "增加播放速度至 {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "不能继续降低({{SPEED}})",
+					"increaseLimit": "不能继续增加({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -210,8 +212,8 @@
 						"title": "当视频打开时，自动启用剧场模式"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "隐藏直播聊天",
+						"title": "隐藏直播聊天"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
@@ -220,6 +222,10 @@
 					"hideShorts": {
 						"label": "隐藏短视频",
 						"title": "隐藏所有短视频"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "循环按钮",

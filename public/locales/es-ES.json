@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Increase Speed to {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -220,6 +222,10 @@
 					"hideShorts": {
 						"label": "Hide shorts",
 						"title": "Hides all shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "Botón de bucle",

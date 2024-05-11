@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Increase Speed to {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -210,8 +212,8 @@
 						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Canlı yayın sohbetini gizle",
+						"title": "Canlı yayın sohbetini gizler"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
@@ -220,6 +222,10 @@
 					"hideShorts": {
 						"label": "Kısa videoları gizle",
 						"title": "Tüm kısa videoları gizler"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
