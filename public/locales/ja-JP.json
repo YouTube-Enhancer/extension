@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "再生速度を{{SPEED}}で上げする"
 						}
-					}
+					},
+					"decreaseLimit": "再生速度を下げるはできまっせん ({{SPEED}})",
+					"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -210,8 +212,8 @@
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "配信チャットを隠す",
+						"title": "配信チャットを隠する"
 					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
@@ -220,6 +222,10 @@
 					"hideShorts": {
 						"label": "ショートを隠す",
 						"title": "全ショートを隠す"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "動画ループボタン",
