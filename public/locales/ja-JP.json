@@ -225,7 +225,7 @@
 					},
 					"hideTranslateComment": {
 						"label": "コメント翻訳ボタンを隠す",
-						"title": "Hides 'Translate to Language' button under comments"
+						"title": "コメントの下で「言語に翻訳する」ボタンを隠する"
 					},
 					"loopButton": {
 						"label": "動画ループボタン",
