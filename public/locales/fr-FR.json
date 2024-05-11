@@ -223,6 +223,10 @@
 						"label": "Hide shorts",
 						"title": "Hides all shorts"
 					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
+					},
 					"loopButton": {
 						"label": "Bouton de boucle",
 						"title": "Ajoute un bouton au menu de fonctionnalité pour regarder la vidéo en boucle"
