@@ -224,8 +224,8 @@
 						"title": "Nasconde tutti i blocchi"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Nascondi pulsante \"Traduci commento\"",
+						"title": "Nasconde il pulsante 'Traduci in…' sotto i commenti"
 					},
 					"loopButton": {
 						"label": "Pulsante Ripeti",
