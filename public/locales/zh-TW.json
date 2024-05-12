@@ -224,8 +224,8 @@
 						"title": "隱藏全部 Shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "隱藏翻譯留言按鈕",
+						"title": "隱藏留言下的翻譯按鈕"
 					},
 					"loopButton": {
 						"label": "循環按鈕",
