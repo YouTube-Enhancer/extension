@@ -234,10 +234,8 @@ window.addEventListener("DOMContentLoaded", function () {
 							}
 							case "per_video": {
 								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
-								console.log(volumeBoostButton);
 								if (!volumeBoostButton) return;
 								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								console.log(volumeBoostForVideoEnabled, volumeBoostButton.ariaChecked);
 								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
 							}
 						}
