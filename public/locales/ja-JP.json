@@ -212,8 +212,8 @@
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "終了画面のカードを非表示にする",
+						"title": "動画の終了で画面カードを非表示にする"
 					},
 					"hideLiveStreamChat": {
 						"label": "配信チャットを隠す",
