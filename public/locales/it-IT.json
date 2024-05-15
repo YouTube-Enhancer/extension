@@ -211,6 +211,10 @@
 						"label": "Modalità teatro automatica",
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
