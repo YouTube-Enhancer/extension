@@ -211,6 +211,10 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
@@ -224,8 +228,8 @@
 						"title": "全ショートを隠す"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "コメント翻訳ボタンを隠す",
+						"title": "コメントの下で「言語に翻訳する」ボタンを隠する"
 					},
 					"loopButton": {
 						"label": "動画ループボタン",

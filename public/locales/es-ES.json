@@ -211,6 +211,10 @@
 						"label": "Modo cine automático",
 						"title": "Activar automáticamente el modo cine al cargar un vídeo"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
