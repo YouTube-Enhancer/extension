@@ -53,14 +53,12 @@ export function chooseClosestQuality(
 	if (availableQualities.length === 0) {
 		return null;
 	}
-
+	// If the selected quality is available, return it
+	if (availableQualities.includes(selectedQuality)) {
+		return selectedQuality;
+	}
 	// Find the index of the selected quality in the array
 	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
-
-	// If the selected quality is not in the array, return null
-	if (selectedIndex === -1) {
-		return null;
-	}
 
 	// Find the available quality levels that are closest to the selected quality level
 	const closestQualities = availableQualities.reduce(
