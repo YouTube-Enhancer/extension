@@ -1,7 +1,7 @@
 import { type Nullable } from "@/src/types";
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
-export default async function removeRedirect() {
+export default async function enableRemoveRedirect() {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {

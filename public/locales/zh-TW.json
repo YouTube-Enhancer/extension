@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "加快播放速度 {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "無法再減速 ({{SPEED}})",
+					"increaseLimit": "無法再加速 ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -209,6 +211,14 @@
 						"label": "自動啟用劇院模式",
 						"title": "載入影片時自動啟用劇院模式"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
+					"hideLiveStreamChat": {
+						"label": "隱藏直播聊天室",
+						"title": "隱藏直播的聊天室"
+					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"
@@ -216,6 +226,10 @@
 					"hideShorts": {
 						"label": "隱藏 Shorts",
 						"title": "隱藏全部 Shorts"
+					},
+					"hideTranslateComment": {
+						"label": "隱藏翻譯留言按鈕",
+						"title": "隱藏留言下的翻譯按鈕"
 					},
 					"loopButton": {
 						"label": "循環按鈕",

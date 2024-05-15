@@ -18,7 +18,6 @@ function cleanAndUpdateUrl() {
 		}
 		if (input) {
 			if (!input.value.match(regexp)) return;
-			console.log("cleanAndUpdateUrl");
 			input.value = cleanUrl(input.value);
 		}
 	}, 50);
