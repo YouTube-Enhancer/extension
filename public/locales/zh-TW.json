@@ -212,8 +212,8 @@
 						"title": "載入影片時自動啟用劇院模式"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "隱藏片尾資訊卡",
+						"title": "隱藏影片片尾的資訊卡"
 					},
 					"hideLiveStreamChat": {
 						"label": "隱藏直播聊天室",
