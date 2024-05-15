@@ -211,6 +211,10 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
