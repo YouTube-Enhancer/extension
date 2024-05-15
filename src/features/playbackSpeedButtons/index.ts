@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
@@ -13,7 +13,7 @@ let currentPlaybackSpeed = 1;
 
 async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
 	buttonName: ButtonName,
-	speed: string
+	speed: number
 ) {
 	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -22,7 +22,8 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 				button_placements: {
 					decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement,
 					increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement
-				}
+				},
+				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
 	} = optionsData;
@@ -30,23 +31,25 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 	const button = getFeatureButton(buttonName);
 	if (!button) return;
 	const placement = buttonName == "increasePlaybackSpeedButton" ? increasePlaybackSpeedButtonPlacement : decreasePlaybackSpeedButtonPlacement;
-	const { remove } = createTooltip({
+	const { update } = createTooltip({
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
 		featureName,
-		id: `yte-feature-${featureName}-tooltip`
+		id: `yte-feature-${buttonName}-tooltip`
 	});
-	remove();
-	updateFeatureButtonTitle(
-		buttonName,
-		window.i18nextInstance.t(
+	button.dataset.title = window.i18nextInstance.t(
+		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
+		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-			`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
-			{
-				SPEED: speed
-			}
-		)
+		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		{
+			SPEED:
+				speed == 4 || speed == 0.25 ? String(speed)
+				: buttonName == "decreasePlaybackSpeedButton" ? String(speed - playbackSpeedPerClick)
+				: String(speed + playbackSpeedPerClick)
+		}
 	);
+	update();
 }
 
 function playbackSpeedButtonClickListener(amount: number): () => void {
@@ -67,14 +70,7 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
 					data: {
-						options: {
-							osd_display_color,
-							osd_display_hide_time,
-							osd_display_opacity,
-							osd_display_padding,
-							osd_display_position,
-							playback_buttons_speed: playbackSpeedPerClick
-						}
+						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
 				} = optionsData;
 				new OnScreenDisplayManager(
@@ -96,8 +92,8 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				);
 				const speed = currentPlaybackSpeed + amount;
 				await setPlayerSpeed(speed);
-				await updateTooltip("increasePlaybackSpeedButton", String(speed + playbackSpeedPerClick));
-				await updateTooltip("decreasePlaybackSpeedButton", String(speed - playbackSpeedPerClick));
+				await updateTooltip("increasePlaybackSpeedButton", speed);
+				await updateTooltip("decreasePlaybackSpeedButton", speed);
 			} catch (error) {
 				console.error(error);
 			}

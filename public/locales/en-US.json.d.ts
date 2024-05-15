@@ -17,6 +17,8 @@ interface EnUS {
 						decreasePlaybackSpeedButton: { label: "Decrease Speed to {{SPEED}}" };
 						increasePlaybackSpeedButton: { label: "Increase Speed to {{SPEED}}" };
 					};
+					decreaseLimit: "Can't decrease further ({{SPEED}})";
+					increaseLimit: "Can't increase further ({{SPEED}})";
 				};
 				screenshotButton: {
 					button: { label: "Screenshot" };
@@ -143,8 +145,17 @@ interface EnUS {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
 					};
+					hideEndScreenCards: {
+						label: "Hide end screen cards";
+						title: "Hides the cards at the end of the video";
+					};
+					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
+					hideTranslateComment: {
+						label: "Hide translate comment button";
+						title: "Hides 'Translate to Language' button under comments";
+					};
 					loopButton: {
 						label: "Loop button";
 						title: "Adds a button to the feature menu to loop the video you're watching";

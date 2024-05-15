@@ -18,6 +18,7 @@ import type {
 	Selector,
 	SendDataMessage,
 	SingleButtonFeatureNames,
+	SingleButtonNames,
 	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
@@ -52,14 +53,12 @@ export function chooseClosestQuality(
 	if (availableQualities.length === 0) {
 		return null;
 	}
-
+	// If the selected quality is available, return it
+	if (availableQualities.includes(selectedQuality)) {
+		return selectedQuality;
+	}
 	// Find the index of the selected quality in the array
 	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
-
-	// If the selected quality is not in the array, return null
-	if (selectedIndex === -1) {
-		return null;
-	}
 
 	// Find the available quality levels that are closest to the selected quality level
 	const closestQualities = availableQualities.reduce(
@@ -72,9 +71,6 @@ export function chooseClosestQuality(
 		},
 		[] as { difference: number; quality: YoutubePlayerQualityLevel }[]
 	);
-
-	// Sort the closest qualities by difference in ascending order
-	closestQualities.sort((a, b) => a.difference - b.difference);
 
 	// Return the quality level with the minimum difference
 	return closestQualities[0].quality;
@@ -467,7 +463,7 @@ export function createTooltip({
 	direction?: "down" | "left" | "right" | "up";
 	element: HTMLElement;
 	featureName: FeatureName;
-	id: `yte-feature-${FeatureName}-tooltip`;
+	id: `yte-feature-${AllButtonNames | Exclude<FeatureName, SingleButtonNames>}-tooltip`;
 	text?: string;
 }): {
 	listener: () => void;
@@ -653,6 +649,15 @@ export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T
 	}
 
 	return value as PathValue<T, P>;
+}
+export type ModifyElementAction = "add" | "remove";
+export type ElementClassPair = { className: string; element: Nullable<Element> };
+export function modifyElementClassList(action: ModifyElementAction, elementPair: ElementClassPair) {
+	const { className, element } = elementPair;
+	element?.classList[action](className);
+}
+export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]) {
+	elements.forEach((element) => modifyElementClassList(action, element));
 }
 export function findKeyByValue(value: Exclude<AllButtonNames, SingleButtonFeatureNames>) {
 	for (const [key, values] of featureToMultiButtonsMap.entries()) {

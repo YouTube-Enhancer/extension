@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Öka hastigheten med {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -209,6 +211,14 @@
 						"label": "Automatiskt teaterläge",
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
 						"title": "Döljer sidornas rullningsfält"
@@ -216,6 +226,10 @@
 					"hideShorts": {
 						"label": "Dölj shorts",
 						"title": "Döljer alla shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "Slingknapp",

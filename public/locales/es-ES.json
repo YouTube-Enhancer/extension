@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Increase Speed to {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -209,6 +211,14 @@
 						"label": "Modo cine automático",
 						"title": "Activar automáticamente el modo cine al cargar un vídeo"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
+					"hideLiveStreamChat": {
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de desplazamiento",
 						"title": "Oculta la barra de desplazamiento de la página"
@@ -216,6 +226,10 @@
 					"hideShorts": {
 						"label": "Hide shorts",
 						"title": "Hides all shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "Botón de bucle",

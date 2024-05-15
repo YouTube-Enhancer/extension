@@ -44,7 +44,9 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Aumenta velocità di {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Impossibile diminuire ulteriormente ({{SPEED}})",
+					"increaseLimit": "Impossibile aumentare ulteriormente ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -209,6 +211,14 @@
 						"label": "Modalità teatro automatica",
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
+					"hideLiveStreamChat": {
+						"label": "Nascondi chat live stream",
+						"title": "Nasconde la chat live stream"
+					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
 						"title": "Nasconde la barra di scorrimento delle pagine"
@@ -216,6 +226,10 @@
 					"hideShorts": {
 						"label": "Nascondi blocchi",
 						"title": "Nasconde tutti i blocchi"
+					},
+					"hideTranslateComment": {
+						"label": "Nascondi pulsante \"Traduci commento\"",
+						"title": "Nasconde il pulsante 'Traduci in…' sotto i commenti"
 					},
 					"loopButton": {
 						"label": "Pulsante Ripeti",
