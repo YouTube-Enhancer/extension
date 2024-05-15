@@ -72,9 +72,6 @@ export function chooseClosestQuality(
 		[] as { difference: number; quality: YoutubePlayerQualityLevel }[]
 	);
 
-	// Sort the closest qualities by difference in ascending order
-	closestQualities.sort((a, b) => a.difference - b.difference);
-
 	// Return the quality level with the minimum difference
 	return closestQualities[0].quality;
 }
