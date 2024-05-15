@@ -45,8 +45,8 @@
 							"label": "Увеличить скорость на {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Невозможно уменьшить ({{SPEED}})",
+					"increaseLimit": "Невозможно увеличить ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -212,12 +212,12 @@
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Спрятать карточки предлагаемых видео в конце",
+						"title": "Прячет карточки, которые вы видите при окончании просмотра видео"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Спрятать чат прямого эфира",
+						"title": "Прячет чат прямого эфира (стрима)"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -228,8 +228,8 @@
 						"title": "Скрывает все Shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Спрятать кнопку 'Перевести на...'",
+						"title": "Прячет кнопку 'Перевести на русский' под комментарием"
 					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
