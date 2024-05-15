@@ -65,6 +65,12 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
 
+- **Hide live stream chat**: Hide the chat section of live streams.
+
+- **Hide translate comment button**: Hides the `Translate to Language` button under comments.
+
+- **Hide end screen cards:**: Hide the end screen cards on videos.
+
 ### Video history settings
 
 - **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
