@@ -211,6 +211,10 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
@@ -224,8 +228,8 @@
 						"title": "隐藏所有短视频"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "隐藏翻译评论按钮",
+						"title": "隐藏评论下方的“翻译至当前语言”按钮"
 					},
 					"loopButton": {
 						"label": "循环按钮",

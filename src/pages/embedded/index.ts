@@ -10,6 +10,7 @@ import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCS
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { disableHideEndScreenCards, enableHideEndScreenCards } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -155,7 +156,8 @@ const enableFeatures = () => {
 			setPlayerSpeed(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel(),
-			enableHideTranslateComment()
+			enableHideTranslateComment(),
+			enableHideEndScreenCards()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -261,6 +263,14 @@ window.addEventListener("DOMContentLoaded", function () {
 						} else {
 							await removeScreenshotButton();
 						}
+						break;
+					}
+					case "hideEndScreenCardsChange": {
+						const {
+							data: { hideEndScreenCardsEnabled }
+						} = message;
+						if (hideEndScreenCardsEnabled) await enableHideEndScreenCards();
+						else await disableHideEndScreenCards();
 						break;
 					}
 					case "maximizeButtonChange": {

@@ -211,6 +211,10 @@
 						"label": "Otomatik tiyatro modu",
 						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "Canlı yayın sohbetini gizle",
 						"title": "Canlı yayın sohbetini gizler"
