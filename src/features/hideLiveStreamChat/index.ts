@@ -5,12 +5,11 @@ import { modifyElementsClassList, waitForAllElements, waitForSpecificMessage } f
 import "./index.css";
 
 export async function enableHideLiveStreamChat() {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_hide_live_stream_chat: enableHideLiveStreamChat }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideLiveStreamChat) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
