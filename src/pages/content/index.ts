@@ -275,6 +275,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playerSpeed: options.player_speed
 			});
 		},
+		enable_hide_end_screen_cards: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
+				hideEndScreenCardsEnabled: newValue
+			});
+		},
 		enable_hide_live_stream_chat: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
 				hideLiveStreamChatEnabled: newValue

@@ -672,6 +672,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.hideTranslateComment.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_hide_end_screen_cards?.toString() === "true"}
+						id="enable_hide_end_screen_cards"
+						label={t("settings.sections.miscellaneous.features.hideEndScreenCards.label")}
+						onChange={setCheckboxOption("enable_hide_end_screen_cards")}
+						title={t("settings.sections.miscellaneous.features.hideEndScreenCards.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.videoHistory.title")} />

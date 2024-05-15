@@ -211,6 +211,10 @@
 						"label": "Automatischer Theatermodus",
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
+					"hideEndScreenCards": {
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
