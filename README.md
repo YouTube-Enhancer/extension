@@ -305,6 +305,9 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/charlymoon741"><img src="https://avatars.githubusercontent.com/u/62484941?v=4?s=100" width="100px;" alt="Carlos Ramos Luna"/><br /><sub><b>Carlos Ramos Luna</b></sub></a><br /><a href="#ideas-charlymoon741" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
