@@ -212,8 +212,8 @@
 						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Bitiş ekranı kartlarını gizle",
+						"title": "Video'nun sonundaki kartları gizler"
 					},
 					"hideLiveStreamChat": {
 						"label": "Canlı yayın sohbetini gizle",
