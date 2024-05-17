@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "終了画面のカードを非表示にする",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "終了画面のカードを表示にする",
+							"on": "終了画面のカードを非表示にする"
 						}
 					}
 				},
