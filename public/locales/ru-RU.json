@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Показать заставки следующих видео",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Скрыть заставки следующих видео",
+							"on": "Показать заставки следующих видео"
 						}
 					}
 				},
@@ -137,7 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "Кнопка «Показать заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
@@ -226,8 +226,8 @@
 						"title": "Прячет карточки, которые вы видите при окончании просмотра видео"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "Кнопка «Показать заставки следующих видео»",
+						"title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
 					},
 					"hideLiveStreamChat": {
 						"label": "Спрятать чат прямого эфира",
