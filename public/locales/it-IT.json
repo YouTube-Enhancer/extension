@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Nascondi le schede finali",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Mostra le schede finali",
+							"on": "Nascondi le schede finali"
 						}
 					}
 				},
@@ -137,7 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
@@ -226,8 +226,8 @@
 						"title": "Nasconde le schede alla fine del video"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "Pulsante Nascondi schede finali",
+						"title": "Aggiunge un pulsante per mostrare/nascondere le schede alla fine del video"
 					},
 					"hideLiveStreamChat": {
 						"label": "Nascondi chat live stream",
