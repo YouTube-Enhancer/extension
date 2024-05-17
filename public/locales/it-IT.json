@@ -13,6 +13,15 @@
 						"label": "Menu' funzioni"
 					}
 				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Hide end screen cards",
+						"toggle": {
+							"off": "Show end screen cards",
+							"on": "Hide end screen cards"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Ripeti",
@@ -128,6 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
+						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
@@ -214,6 +224,10 @@
 					"hideEndScreenCards": {
 						"label": "Nascondi le schede finali",
 						"title": "Nasconde le schede alla fine del video"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Hide end screen cards button",
+						"title": "Adds a button to show/hide the cards at the end of the video"
 					},
 					"hideLiveStreamChat": {
 						"label": "Nascondi chat live stream",
