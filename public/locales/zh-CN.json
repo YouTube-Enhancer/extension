@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "隐藏结束界面卡片",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "显示结束界面卡片",
+							"on": "隐藏结束界面卡片"
 						}
 					}
 				},
@@ -137,7 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "降低速度按钮",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
@@ -226,8 +226,8 @@
 						"title": "隐藏视频末尾的卡片"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "隐藏结束界面卡片按钮",
+						"title": "添加按钮以显示/隐藏视频末尾的卡片"
 					},
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
