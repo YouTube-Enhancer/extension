@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Bitiş ekranı kartlarını gizle",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Bitiş ekranı kartlarını göster",
+							"on": "Bitiş ekranı kartlarını gizle"
 						}
 					}
 				},
@@ -137,7 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
@@ -226,8 +226,8 @@
 						"title": "Video'nun sonundaki kartları gizler"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "Bitiş ekranı kartlarını gizleme düğmesi",
+						"title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
 					},
 					"hideLiveStreamChat": {
 						"label": "Canlı yayın sohbetini gizle",
