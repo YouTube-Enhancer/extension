@@ -1,6 +1,7 @@
 export type FeatureName =
 	| "automaticTheaterMode"
 	| "featureMenu"
+	| "hideEndScreenCardsButton"
 	| "hideScrollBar"
 	| "hideShorts"
 	| "loopButton"

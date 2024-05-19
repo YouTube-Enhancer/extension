@@ -31,13 +31,15 @@ function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTML
  * @param icon The icon for the feature
  * @param listener The listener for the feature
  * @param isToggle Whether the feature is a toggle
+ * @param initialChecked The initial checked state of the feature
  */
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
 	label: string,
 	icon: BasicIcon,
 	listener: ListenerType<Toggle>,
-	isToggle: boolean
+	isToggle: boolean,
+	initialChecked: boolean = false
 ) {
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
@@ -94,7 +96,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		const menuItemToggle = document.createElement("div");
 		menuItemToggle.classList.add("ytp-menuitem-toggle-checkbox");
 		menuItemContent.appendChild(menuItemToggle);
-		menuItem.ariaChecked = "false";
+    menuItem.ariaChecked = initialChecked ? "true" : "false";
 	}
 	menuItem.appendChild(menuItemContent);
 

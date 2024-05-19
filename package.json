@@ -4,7 +4,7 @@
     "name": "VampireChicken12"
   },
   "displayName": "YouTube Enhancer",
-  "version": "1.24.2",
+  "version": "1.25.0",
   "description": "YouTube Enhancer is a simple extension that adds some useful features to YouTube.",
   "license": "MIT",
   "repository": {
@@ -46,7 +46,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.5.1",
     "@types/archiver": "^6.0.1",
-    "@types/chrome": "^0.0.267",
+    "@types/chrome": "^0.0.268",
     "@types/node": "^20.9.0",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -63,7 +63,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
-    "eslint-plugin-no-secrets": "^0.9.1",
+    "eslint-plugin-no-secrets": "^1.0.2",
     "eslint-plugin-perfectionist": "^2.3.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",

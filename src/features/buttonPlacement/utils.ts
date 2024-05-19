@@ -28,7 +28,8 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 	label: string,
 	icon: GetIconType<Name, Placement>,
 	listener: ListenerType<Toggle>,
-	isToggle: boolean
+	isToggle: boolean,
+	initialChecked: boolean = false
 ) {
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
@@ -49,7 +50,6 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 		}
 	});
 	button.dataset.title = label;
-
 	const { listener: tooltipListener, update } = createTooltip({
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
@@ -74,7 +74,7 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 
 	const isIconToggle = typeof icon === "object" && "off" in icon && "on" in icon;
 	if (isToggle) {
-		button.ariaChecked = "false";
+		button.ariaChecked = initialChecked ? "true" : "false";
 		if (isIconToggle) button.append(icon.off);
 	}
 	if (!isIconToggle && icon instanceof SVGSVGElement) button.append(icon);

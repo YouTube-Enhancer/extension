@@ -13,6 +13,15 @@
 						"label": "Feature menu"
 					}
 				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Hide end screen cards",
+						"toggle": {
+							"off": "Show end screen cards",
+							"on": "Hide end screen cards"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "循環播放",
@@ -128,6 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
+						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
@@ -211,6 +221,14 @@
 						"label": "自動啟用劇院模式",
 						"title": "載入影片時自動啟用劇院模式"
 					},
+					"hideEndScreenCards": {
+						"label": "隱藏片尾資訊卡",
+						"title": "隱藏影片片尾的資訊卡"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Hide end screen cards button",
+						"title": "Adds a button to show/hide the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "隱藏直播聊天室",
 						"title": "隱藏直播的聊天室"
@@ -224,8 +242,8 @@
 						"title": "隱藏全部 Shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "隱藏翻譯留言按鈕",
+						"title": "隱藏留言下的翻譯按鈕"
 					},
 					"loopButton": {
 						"label": "循環按鈕",

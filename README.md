@@ -65,6 +65,12 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
 
+- **Hide live stream chat**: Hide the chat section of live streams.
+
+- **Hide translate comment button**: Hides the `Translate to Language` button under comments.
+
+- **Hide end screen cards:**: Hide the end screen cards on videos.
+
 ### Video history settings
 
 - **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
@@ -298,6 +304,10 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/charlymoon741"><img src="https://avatars.githubusercontent.com/u/62484941?v=4?s=100" width="100px;" alt="Carlos Ramos Luna"/><br /><sub><b>Carlos Ramos Luna</b></sub></a><br /><a href="#ideas-charlymoon741" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/szaumoor"><img src="https://avatars.githubusercontent.com/u/78204388?v=4?s=100" width="100px;" alt="Marcos C.R."/><br /><sub><b>Marcos C.R.</b></sub></a><br /><a href="#ideas-szaumoor" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>

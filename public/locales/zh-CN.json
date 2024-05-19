@@ -13,6 +13,15 @@
 						"label": "功能菜单"
 					}
 				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "隐藏结束界面卡片",
+						"toggle": {
+							"off": "显示结束界面卡片",
+							"on": "隐藏结束界面卡片"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "循环播放",
@@ -128,6 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
@@ -211,6 +221,14 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"hideEndScreenCards": {
+						"label": "隐藏结束界面卡片",
+						"title": "隐藏视频末尾的卡片"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "隐藏结束界面卡片按钮",
+						"title": "添加按钮以显示/隐藏视频末尾的卡片"
+					},
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
@@ -224,8 +242,8 @@
 						"title": "隐藏所有短视频"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "隐藏翻译评论按钮",
+						"title": "隐藏评论下方的“翻译至当前语言”按钮"
 					},
 					"loopButton": {
 						"label": "循环按钮",

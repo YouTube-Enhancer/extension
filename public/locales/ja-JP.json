@@ -13,6 +13,15 @@
 						"label": "フィーチャー・メニュー"
 					}
 				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "終了画面のカードを非表示にする",
+						"toggle": {
+							"off": "終了画面のカードを表示にする",
+							"on": "終了画面のカードを非表示にする"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "ループ",
@@ -128,6 +137,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
+						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
@@ -211,6 +221,14 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"hideEndScreenCards": {
+						"label": "終了画面のカードを非表示にする",
+						"title": "動画の終了で画面カードを非表示にする"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Hide end screen cards button",
+						"title": "Adds a button to show/hide the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
@@ -224,8 +242,8 @@
 						"title": "全ショートを隠す"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "コメント翻訳ボタンを隠す",
+						"title": "コメントの下で「言語に翻訳する」ボタンを隠する"
 					},
 					"loopButton": {
 						"label": "動画ループボタン",

@@ -1,3 +1,29 @@
+# [1.25.0](https://github.com/YouTube-Enhancer/extension/compare/v1.24.2...v1.25.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* false pause on channel page ([22aadaa](https://github.com/YouTube-Enhancer/extension/commit/22aadaabff895b5a6e0f77de9b291b9924b4c6e3))
+
+
+### Features
+
+* hide end screen cards [#373](https://github.com/YouTube-Enhancer/extension/issues/373) ([d414119](https://github.com/YouTube-Enhancer/extension/commit/d414119722b1ffe2b723d2e7a9fef313af87cc66))
+* Hide live stream chat [#452](https://github.com/YouTube-Enhancer/extension/issues/452) ([e823cb5](https://github.com/YouTube-Enhancer/extension/commit/e823cb539bd1d3014ecbcdc50dc4fa5a602621e8))
+* hide translate comment [#471](https://github.com/YouTube-Enhancer/extension/issues/471) ([7e86d00](https://github.com/YouTube-Enhancer/extension/commit/7e86d00839d7d38fe06fa1aaeca636554c3fa386))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.25.0-Chrome.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Chromium.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Edge.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Firefox.zip | 20617e0111eb1fefd15260dcd66799e731dfbd5762be880de96ede78493fb9d0 |
+
 ## [1.24.2](https://github.com/YouTube-Enhancer/extension/compare/v1.24.1...v1.24.2) (2024-04-25)
 
 
