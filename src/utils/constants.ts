@@ -23,6 +23,7 @@ export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
 		decreasePlaybackSpeedButton: "player_controls_left",
+		hideEndScreenCardsButton: "player_controls_right",
 		increasePlaybackSpeedButton: "player_controls_left",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
@@ -47,6 +48,7 @@ export const defaultConfiguration = {
 	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
 	enable_hide_end_screen_cards: false,
+	enable_hide_end_screen_cards_button: false,
 	enable_hide_live_stream_chat: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
@@ -130,6 +132,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_end_screen_cards: z.boolean().optional(),
+	enable_hide_end_screen_cards_button: z.boolean().optional(),
 	enable_hide_live_stream_chat: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_hide_shorts: z.boolean().optional(),
