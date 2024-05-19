@@ -306,9 +306,6 @@ export const featureIcons = {
 		}
 	}
 } satisfies FeatureIconMap;
-export function getFeatureIcon<Name extends AllButtonNames, Placement extends ButtonPlacement>(
-	featureName: Name,
-	placement: GetPlacementKey<Placement>
-) {
-	return featureIcons[featureName][placement];
+export function getFeatureIcon<Name extends AllButtonNames>(featureName: Name, placement: ButtonPlacement): IconType<Name> {
+	return featureIcons[featureName][placement !== "feature_menu" ? "shared_icon_position" : "feature_menu"] as IconType<Name>;
 }
