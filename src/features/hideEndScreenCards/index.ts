@@ -56,7 +56,7 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 				"pages.content.features.hideEndScreenCardsButton.button.label"
 			:	`pages.content.features.hideEndScreenCardsButton.button.toggle.${!endScreenCardsAreHidden ? "on" : "off"}`
 		),
-		getFeatureIcon("hideEndScreenCardsButton", hideEndScreenCardsButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("hideEndScreenCardsButton", hideEndScreenCardsButtonPlacement),
 		(checked) => handleButtonClick(hideEndScreenCardsButtonPlacement, checked),
 		true,
 		hideEndScreenCardsButtonPlacement !== "feature_menu" ? !endScreenCardsAreHidden : endScreenCardsAreHidden
