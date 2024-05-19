@@ -277,7 +277,13 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		},
 		enable_hide_end_screen_cards: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
+				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],
 				hideEndScreenCardsEnabled: newValue
+			});
+		},
+		enable_hide_end_screen_cards_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
+				hideEndScreenCardsButtonEnabled: newValue
 			});
 		},
 		enable_hide_live_stream_chat: (__oldValue, newValue) => {

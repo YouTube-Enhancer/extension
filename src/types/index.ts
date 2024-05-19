@@ -140,6 +140,7 @@ export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export const buttonNames = Object.keys({
 	decreasePlaybackSpeedButton: "",
+	hideEndScreenCardsButton: "",
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
@@ -273,7 +274,11 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ deepDarkCustomThemeColors: DeepDarkCustomThemeColors; deepDarkPreset: DeepDarkPreset; deepDarkThemeEnabled: boolean }
 	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
-	hideEndScreenCardsChange: DataResponseMessage<"hideEndScreenCardsChange", { hideEndScreenCardsEnabled: boolean }>;
+	hideEndScreenCardsButtonChange: DataResponseMessage<"hideEndScreenCardsButtonChange", { hideEndScreenCardsButtonEnabled: boolean }>;
+	hideEndScreenCardsChange: DataResponseMessage<
+		"hideEndScreenCardsChange",
+		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
+	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
@@ -356,6 +361,7 @@ export type configuration = {
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_end_screen_cards: boolean;
+	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
