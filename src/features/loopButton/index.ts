@@ -38,12 +38,12 @@ export const addLoopButton: AddButtonFunction = async () => {
 				"pages.content.features.loopButton.button.label"
 			:	"pages.content.features.loopButton.button.toggle.off"
 		),
-		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("loopButton", loopButtonPlacement),
 		loopButtonClickListener,
 		true
 	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
-		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu");
+		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement);
 		mutationList.forEach((mutation) => {
 			if (mutation.type !== "attributes") return;
 			const { attributeName, target } = mutation;

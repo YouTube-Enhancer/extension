@@ -109,7 +109,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		window.i18nextInstance.t("pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label", {
 			SPEED: currentPlaybackSpeed + playbackSpeedPerClick
 		}),
-		getFeatureIcon("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement),
 		playbackSpeedButtonClickListener(playbackSpeedPerClick),
 		false
 	);
@@ -132,7 +132,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		window.i18nextInstance.t("pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label", {
 			SPEED: currentPlaybackSpeed - playbackSpeedPerClick
 		}),
-		getFeatureIcon("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement),
 		playbackSpeedButtonClickListener(-playbackSpeedPerClick),
 		false
 	);

@@ -288,7 +288,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							}
 						};
 						const endScreenCardsHidden = isEndScreenCardsHidden();
-						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "shared_icon_position");
+						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
 						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
 						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
 							await enableHideEndScreenCards();
