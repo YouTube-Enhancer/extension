@@ -148,13 +148,22 @@
         "ideas"
       ]
     },
-		{
+    {
       "login": "charlymoon741",
       "name": "Carlos Ramos Luna",
       "avatar_url": "https://avatars.githubusercontent.com/u/62484941?v=4",
       "profile": "https://github.com/charlymoon741",
       "contributions": [
         "ideas"
+      ]
+    },
+    {
+      "login": "Angsimosaurus",
+      "name": "앙시모사우루스",
+      "avatar_url": "https://avatars.githubusercontent.com/u/79510039?v=4",
+      "profile": "https://github.com/Angsimosaurus",
+      "contributions": [
+        "translation"
       ]
     }
   ]
