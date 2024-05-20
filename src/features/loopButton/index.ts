@@ -37,12 +37,12 @@ export const addLoopButton: AddButtonFunction = async () => {
 		loopButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.loopButton.button.label")
 		:	window.i18nextInstance.t("pages.content.features.loopButton.button.toggle.off"),
-		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("loopButton", loopButtonPlacement),
 		loopButtonClickListener,
 		true
 	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
-		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu");
+		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement);
 		for (const mutation of mutationList) {
 			if (mutation.type === "attributes") {
 				const { attributeName, target } = mutation;
