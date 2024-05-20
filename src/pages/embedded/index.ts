@@ -3,14 +3,25 @@ import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import {
+	checkIfFeatureButtonExists,
+	getFeatureButton,
+	updateFeatureButtonIcon,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
-import { disableHideEndScreenCards, enableHideEndScreenCards } from "@/src/features/hideEndScreenCards";
+import {
+	addHideEndScreenCardsButton,
+	disableHideEndScreenCards,
+	enableHideEndScreenCards,
+	isEndScreenCardsHidden,
+	removeHideEndScreenCardsButton
+} from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -49,7 +60,7 @@ import volumeBoost, {
 	removeVolumeBoostButton
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
-import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
+import { type ToggleFeatures, type ToggleIcon, getFeatureIcon, toggleFeatures } from "@/src/icons";
 import {
 	type ExtensionSendOnlyMessageMappings,
 	type Messages,
@@ -164,6 +175,7 @@ const enableFeatures = () => {
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addIncreasePlaybackSpeedButton();
 		await addDecreasePlaybackSpeedButton();
+		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
@@ -267,10 +279,34 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "hideEndScreenCardsChange": {
 						const {
-							data: { hideEndScreenCardsEnabled }
+							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
 						} = message;
-						if (hideEndScreenCardsEnabled) await enableHideEndScreenCards();
-						else await disableHideEndScreenCards();
+						const updateHideEndScreenCardsButtonState = (icon: ToggleIcon, checked: boolean) => {
+							if (hideEndScreenCardsPlacement === "feature_menu") {
+								const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
+								if (!hideEndScreenCardsMenuItem) return;
+								hideEndScreenCardsMenuItem.ariaChecked = checked ? "false" : "true";
+							} else {
+								const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
+								if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
+								updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
+								updateFeatureButtonTitle(
+									"hideEndScreenCardsButton",
+									i18nextInstance.t(`pages.content.features.hideEndScreenCardsButton.button.toggle.${checked ? "on" : "off"}`)
+								);
+								hideEndScreenCardsButton.ariaChecked = checked ? "true" : "false";
+							}
+						};
+						const endScreenCardsHidden = isEndScreenCardsHidden();
+						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
+						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
+						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
+							await enableHideEndScreenCards();
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, false);
+						} else if (!hideEndScreenCardsEnabled && endScreenCardsHidden) {
+							await disableHideEndScreenCards();
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, true);
+						}
 						break;
 					}
 					case "maximizeButtonChange": {
@@ -407,6 +443,14 @@ window.addEventListener("DOMContentLoaded", function () {
 						} else {
 							disableHideShorts();
 						}
+						break;
+					}
+					case "hideEndScreenCardsButtonChange": {
+						const {
+							data: { hideEndScreenCardsButtonEnabled }
+						} = message;
+						if (hideEndScreenCardsButtonEnabled) await addHideEndScreenCardsButton();
+						else await removeHideEndScreenCardsButton();
 						break;
 					}
 					case "hideLiveStreamChatChange": {

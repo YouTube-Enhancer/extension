@@ -308,6 +308,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/szaumoor"><img src="https://avatars.githubusercontent.com/u/78204388?v=4?s=100" width="100px;" alt="Marcos C.R."/><br /><sub><b>Marcos C.R.</b></sub></a><br /><a href="#ideas-szaumoor" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/charlymoon741"><img src="https://avatars.githubusercontent.com/u/62484941?v=4?s=100" width="100px;" alt="Carlos Ramos Luna"/><br /><sub><b>Carlos Ramos Luna</b></sub></a><br /><a href="#ideas-charlymoon741" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mabra51"><img src="https://avatars.githubusercontent.com/u/12016338?v=4?s=100" width="100px;" alt="Mabra51"/><br /><sub><b>Mabra51</b></sub></a><br /><a href="#ideas-Mabra51" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Angsimosaurus"><img src="https://avatars.githubusercontent.com/u/79510039?v=4?s=100" width="100px;" alt="앙시모사우루스"/><br /><sub><b>앙시모사우루스</b></sub></a><br /><a href="#translation-Angsimosaurus" title="Translation">🌍</a></td>
     </tr>
   </tbody>

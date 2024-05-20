@@ -100,6 +100,8 @@ export const youtubePlayerQualityLevels = [
 	"auto"
 ] as const;
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevels)[number];
+export const PlayerQualityFallbackStrategy = ["higher", "lower"] as const;
+export type PlayerQualityFallbackStrategy = (typeof PlayerQualityFallbackStrategy)[number];
 export const youtubePlayerSpeedRatesExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRatesExtended] as const;
 export const youtubePlaybackSpeedButtonsRates = [0.25, 0.5, 0.75, 1] as const;
@@ -140,6 +142,7 @@ export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export const buttonNames = Object.keys({
 	decreasePlaybackSpeedButton: "",
+	hideEndScreenCardsButton: "",
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
@@ -273,7 +276,11 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ deepDarkCustomThemeColors: DeepDarkCustomThemeColors; deepDarkPreset: DeepDarkPreset; deepDarkThemeEnabled: boolean }
 	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
-	hideEndScreenCardsChange: DataResponseMessage<"hideEndScreenCardsChange", { hideEndScreenCardsEnabled: boolean }>;
+	hideEndScreenCardsButtonChange: DataResponseMessage<"hideEndScreenCardsButtonChange", { hideEndScreenCardsButtonEnabled: boolean }>;
+	hideEndScreenCardsChange: DataResponseMessage<
+		"hideEndScreenCardsChange",
+		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
+	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
@@ -356,6 +363,7 @@ export type configuration = {
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_hide_end_screen_cards: boolean;
+	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
@@ -389,6 +397,7 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	playback_buttons_speed: number;
 	player_quality: YoutubePlayerQualityLevel;
+	player_quality_fallback_strategy: PlayerQualityFallbackStrategy;
 	player_speed: number;
 	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;

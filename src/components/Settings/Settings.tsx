@@ -328,6 +328,16 @@ export default function Settings() {
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
+	const PlayerQualityFallbackStrategyOptions = [
+		{
+			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.higher"),
+			value: "higher"
+		},
+		{
+			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.lower"),
+			value: "lower"
+		}
+	] as SelectOption<"player_quality_fallback_strategy">[];
 	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
@@ -359,6 +369,7 @@ export default function Settings() {
 	];
 	const buttonPlacementOptions: SelectOption<
 		| "button_placements.decreasePlaybackSpeedButton"
+		| "button_placements.hideEndScreenCardsButton"
 		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
 		| "button_placements.maximizePlayerButton"
@@ -523,7 +534,7 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
 					{buttonNames.map((feature) => {
-						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
+						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`);
 						return (
 							<Setting
 								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
@@ -678,6 +689,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.hideEndScreenCards.label")}
 						onChange={setCheckboxOption("enable_hide_end_screen_cards")}
 						title={t("settings.sections.miscellaneous.features.hideEndScreenCards.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_hide_end_screen_cards_button?.toString() === "true"}
+						id="enable_hide_end_screen_cards_button"
+						label={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.label")}
+						onChange={setCheckboxOption("enable_hide_end_screen_cards_button")}
+						title={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.title")}
 						type="checkbox"
 					/>
 				</SettingSection>
@@ -889,6 +908,16 @@ export default function Settings() {
 						options={YouTubePlayerQualityOptions}
 						selectedOption={getSelectedOption("player_quality")}
 						title={t("settings.sections.automaticQuality.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
+						id="player_quality_fallback_strategy"
+						label={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.label")}
+						onChange={setValueOption("player_quality_fallback_strategy")}
+						options={PlayerQualityFallbackStrategyOptions}
+						selectedOption={getSelectedOption("player_quality_fallback_strategy")}
+						title={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.title")}
 						type="select"
 					/>
 				</SettingSection>
