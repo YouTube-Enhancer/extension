@@ -110,6 +110,16 @@
 					"label": "Automatisk kvalitetsjustering",
 					"title": "Justerar automatiskt videokvaliteten till den valda nivån."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Spelarkvalitet",
 					"title": "Kvaliteten för att ställa in videon till"
