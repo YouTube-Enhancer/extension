@@ -110,6 +110,16 @@
 					"label": "Automatische Qualitätsanpassung",
 					"title": "Die Videoqualität wird automatisch auf die ausgewählte Qualität gestellt."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Video-Qualität",
 					"title": "Die Qualität auf die das Video gestellt werden soll"
