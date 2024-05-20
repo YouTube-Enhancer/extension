@@ -15,10 +15,10 @@
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Dölj slutskärmskort",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Visa slutskärmskort",
+							"on": "Dölj slutskärmskort"
 						}
 					}
 				},
@@ -54,8 +54,8 @@
 							"label": "Öka hastigheten med {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Det går inte att sänka mer ({{SPEED}})",
+					"increaseLimit": "Det går inte att höja mer ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -112,12 +112,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Reservmetod för kvaliten",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Högre",
+							"lower": "Lägre"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "Metod att använda när den valda kvaliteten inte är tillgänglig"
 					}
 				},
 				"select": {
@@ -147,7 +147,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
@@ -175,7 +175,7 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Inställningar för knappplacering"
+				"title": "Inställningar för knapplacering"
 			},
 			"customCSS": {
 				"editor": {
@@ -232,16 +232,16 @@
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Dölj slutskärmskort",
+						"title": "Döljer korten i slutet av videon"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "Dölj knappen för slutskärmskort",
+						"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Dölj direktströmschatt",
+						"title": "Döljer direktströmschatten"
 					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
@@ -252,8 +252,8 @@
 						"title": "Döljer alla shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Dölj översättning av kommentarer",
+						"title": "Döljer knappen 'Översätt till språk' under kommentarer"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
@@ -296,8 +296,8 @@
 						"title": "Rullar automatiskt till nästa shorts"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
+						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
 					}
 				},
 				"title": "Övriga inställningar"
@@ -344,7 +344,7 @@
 				"type": {
 					"label": "Typ",
 					"options": {
-						"circle": "Circle",
+						"circle": "Cirkel",
 						"line": "Rad",
 						"no_display": "Ingen visning",
 						"text": "Text"
