@@ -110,6 +110,16 @@
 					"label": "Включить автоматическую регулировку качества",
 					"title": "Автоматически настраивает качество видео на выбранный уровень."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Качество проигрывателя",
 					"title": "Качество, которое будет задаваться для видео"
