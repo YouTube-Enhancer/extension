@@ -112,12 +112,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Strategia ripiego qualità",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Più alta",
+							"lower": "Più bassa"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "La strategia da usare quando la qualità selezionata non è disponibile"
 					}
 				},
 				"select": {
