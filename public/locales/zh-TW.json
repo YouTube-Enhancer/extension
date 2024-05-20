@@ -110,6 +110,16 @@
 					"label": "自動畫質調整",
 					"title": "自動調整到指定畫質"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "畫質後備策略",
+						"options": {
+							"higher": "較高",
+							"lower": "較低"
+						},
+						"title": "所選畫質不適用時的策略"
+					}
+				},
 				"select": {
 					"label": "播放畫質",
 					"title": "設定影片播放畫質"
