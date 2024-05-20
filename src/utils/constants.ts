@@ -5,6 +5,7 @@ import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configura
 import { deepDarkPreset } from "../deepDarkPresets";
 import { availableLocales } from "../i18n/index";
 import {
+	PlayerQualityFallbackStrategy,
 	buttonNames,
 	buttonPlacements,
 	featureMenuOpenTypes,
@@ -82,6 +83,7 @@ export const defaultConfiguration = {
 	osd_display_type: "text",
 	playback_buttons_speed: 0.25,
 	player_quality: "auto",
+	player_quality_fallback_strategy: "lower",
 	player_speed: 1,
 	remembered_volumes: {
 		shortsPageVolume: 100,
@@ -166,6 +168,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	osd_display_type: z.enum(onScreenDisplayTypes).optional(),
 	playback_buttons_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
+	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	remembered_volumes: z
 		.object({
