@@ -110,6 +110,16 @@
 					"label": "Ajustement automatique de la résolution",
 					"title": "Ajuste automatiquement la résolution de la vidéo au niveau sélectionné."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Résolution",
 					"title": "La vidéo aura cette résolution"
