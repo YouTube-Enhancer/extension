@@ -85,30 +85,30 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "중복되는 키가 설정되어 있습니다.",
+							"volumeControl": "중복되는 키가 설정되어 있습니다."
 						}
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "모든 옵션이 기본값으로 재설정되었습니다.\n이제 \"확인\" 버튼를 눌러 변경사항을 저장하거나 이 페이지를 닫아 변경사항을 취소할 수 있습니다."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "저장되었습니다."
 				}
 			}
 		}
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"allDataDeleted": "모든 데이터가 삭제되었습니다.",
+			"confirmAlert": "모든 데이터가 삭제됩니다. 진행할까요?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Automatic quality adjustment",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"label": "화질 설정",
+					"title": "영상의 화질이 자동으로 변경됩니다."
 				},
 				"fallbackQualityStrategy": {
 					"select": {
