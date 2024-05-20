@@ -1,80 +1,80 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "ko-KR",
+	"langName": "한국어",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "영상을 {{VIDEO_TIME}} 부터 다시 재생합니다.",
+		"settingVolume": "볼륨 부스트를 {{VOLUME_BOOST_AMOUNT}} 로 설정합니다."
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "추가 기능"
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "최종 화면 숨기기",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "최종 화면 보기",
+							"on": "최종 화면 숨기기"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "연속 재생",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "연속 재생 끄기",
+							"on": "연속 재생 켜기"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "화면 크기에 맞추기",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "끄기",
+							"on": "켜기"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "스크립트 보기"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "재생 속도를 {{SPEED}} 로 변경"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "재생 속도를 {{SPEED}} 로 변경"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "({{SPEED}}) 에서 더 줄일 수 없습니다.",
+					"increaseLimit": "({{SPEED}}) 에서 더 늘릴 수 없습니다."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "스크린샷"
 					},
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "현재 화면 클립보드에 복사"
 				},
 				"videoHistory": {
-					"resumeButton": "Resume",
+					"resumeButton": "이어서 시청하기",
 					"resumePrompt": {
-						"close": "Close"
+						"close": "닫기"
 					}
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "볼륨 부스트",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "볼륨 부스트 끄기",
+							"on": "볼륨 부스트 켜기"
 						}
 					}
 				}
