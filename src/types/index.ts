@@ -100,6 +100,8 @@ export const youtubePlayerQualityLevels = [
 	"auto"
 ] as const;
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevels)[number];
+export const PlayerQualityFallbackStrategy = ["higher", "lower"] as const;
+export type PlayerQualityFallbackStrategy = (typeof PlayerQualityFallbackStrategy)[number];
 export const youtubePlayerSpeedRatesExtended = [2.25, 2.5, 2.75, 3, 3.25, 3.75, 4] as const;
 export const youtubePlayerSpeedRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, ...youtubePlayerSpeedRatesExtended] as const;
 export const youtubePlaybackSpeedButtonsRates = [0.25, 0.5, 0.75, 1] as const;
@@ -395,6 +397,7 @@ export type configuration = {
 	osd_display_type: OnScreenDisplayType;
 	playback_buttons_speed: number;
 	player_quality: YoutubePlayerQualityLevel;
+	player_quality_fallback_strategy: PlayerQualityFallbackStrategy;
 	player_speed: number;
 	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;

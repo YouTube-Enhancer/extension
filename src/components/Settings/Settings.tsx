@@ -328,6 +328,16 @@ export default function Settings() {
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
+	const PlayerQualityFallbackStrategyOptions = [
+		{
+			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.higher"),
+			value: "higher"
+		},
+		{
+			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.lower"),
+			value: "lower"
+		}
+	] as SelectOption<"player_quality_fallback_strategy">[];
 	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
@@ -898,6 +908,16 @@ export default function Settings() {
 						options={YouTubePlayerQualityOptions}
 						selectedOption={getSelectedOption("player_quality")}
 						title={t("settings.sections.automaticQuality.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
+						id="player_quality_fallback_strategy"
+						label={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.label")}
+						onChange={setValueOption("player_quality_fallback_strategy")}
+						options={PlayerQualityFallbackStrategyOptions}
+						selectedOption={getSelectedOption("player_quality_fallback_strategy")}
+						title={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.title")}
 						type="select"
 					/>
 				</SettingSection>

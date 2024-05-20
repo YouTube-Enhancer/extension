@@ -12,7 +12,7 @@ export default async function setPlayerQuality(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_automatically_set_quality, player_quality }
+			options: { enable_automatically_set_quality, player_quality, player_quality_fallback_strategy }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
@@ -40,7 +40,7 @@ export default async function setPlayerQuality(): Promise<void> {
 	// Check if the specified player quality is available
 	if (!player_quality || player_quality === "auto") return;
 
-	const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels);
+	const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels, player_quality_fallback_strategy);
 	if (!closestQuality) return;
 	// Log the message indicating the player quality being set
 	browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
