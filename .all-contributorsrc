@@ -148,11 +148,20 @@
         "ideas"
       ]
     },
-		{
+    {
       "login": "charlymoon741",
       "name": "Carlos Ramos Luna",
       "avatar_url": "https://avatars.githubusercontent.com/u/62484941?v=4",
       "profile": "https://github.com/charlymoon741",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "Mabra51",
+      "name": "Mabra51",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12016338?v=4",
+      "profile": "https://github.com/Mabra51",
       "contributions": [
         "ideas"
       ]
