@@ -110,6 +110,16 @@
 					"label": "自動画質調整",
 					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "プレイヤーの動画質",
 					"title": "動画の画質に設定する"
