@@ -12,7 +12,7 @@ interface EnUS {
 				hideEndScreenCardsButton: {
 					button: {
 						label: "Hide end screen cards";
-						toggle: { off: "Show end screen cards"; on: "Hide end screen cards" };
+						toggle: { off: "Hide end screen cards"; on: "Show end screen cards" };
 					};
 				};
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
@@ -66,13 +66,6 @@ interface EnUS {
 				enable: {
 					label: "Automatic quality adjustment";
 					title: "Automatically adjusts the video quality to the selected level.";
-				};
-				fallbackQualityStrategy: {
-					select: {
-						label: "Fallback quality strategy";
-						options: { higher: "Higher"; lower: "Lower" };
-						title: "The strategy to use when the selected quality is not available";
-					};
 				};
 				select: { label: "Player quality"; title: "The quality to set the video to" };
 				title: "Automatic quality settings";
@@ -164,7 +157,7 @@ interface EnUS {
 						title: "Hides the cards at the end of the video";
 					};
 					hideEndScreenCardsButton: {
-						label: "Hide end screen cards button";
+						label: "Enable 'Hide end screen cards' button";
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
