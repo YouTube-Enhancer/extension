@@ -110,6 +110,16 @@
 					"label": "Otomatik kalite ayarlamayı etkinleştir",
 					"title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Oynatma kalitesi",
 					"title": "Videonun ayarlanacağı kalite"
