@@ -110,6 +110,16 @@
 					"label": "Automatic quality adjustment",
 					"title": "Automatically adjusts the video quality to the selected level."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Player quality",
 					"title": "The quality to set the video to"
