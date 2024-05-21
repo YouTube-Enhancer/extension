@@ -121,10 +121,10 @@
 					}
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "동영상 화질",
 					"title": "The quality to set the video to"
 				},
-				"title": "Automatic quality settings"
+				"title": "동영상 화질 자동 변경"
 			},
 			"bottomButtons": {
 				"clear": {
