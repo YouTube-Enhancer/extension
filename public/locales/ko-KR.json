@@ -184,29 +184,29 @@
 					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
+					"label": "CSS 커스텀 활성화",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Custom CSS Settings"
+				"title": "커스텀 CSS 설정"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
 						"label": "Menu Activation Type",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "클릭 시",
+							"hover": "마우스 올릴 때"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "추가 기능 메뉴를 어떤 방식으로 열지 선택하세요"
 					},
-					"title": "Feature menu settings"
+					"title": "추가 기능 설정"
 				}
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "설정을 성공적으로 내보냈습니다.",
+					"title": "설정 JSON로 내보내기",
+					"value": "설정 내보내기"
 				},
 				"importButton": {
 					"error": {
@@ -220,16 +220,16 @@
 			},
 			"language": {
 				"select": {
-					"label": "Language",
+					"label": "언어",
 					"title": "The language to use for the extension"
 				},
-				"title": "Language"
+				"title": "언어"
 			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
-						"label": "Automatic theater mode",
-						"title": "Automatically enables theater mode when you load a video"
+						"label": "자동 극장 모드",
+						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
 					},
 					"hideEndScreenCards": {
 						"label": "Hide end screen cards",
