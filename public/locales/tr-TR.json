@@ -114,8 +114,8 @@
 					"select": {
 						"label": "Quality fallback strategy",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Daha yüksek",
+							"lower": "Daha düşük"
 						},
 						"title": "The strategy to use when the selected quality is not available"
 					}
