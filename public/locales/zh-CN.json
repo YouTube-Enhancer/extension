@@ -112,12 +112,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "质量回退策略",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "升高",
+							"lower": "降低"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "当所选质量不可用时使用的策略"
 					}
 				},
 				"select": {
