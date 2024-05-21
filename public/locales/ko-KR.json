@@ -122,38 +122,38 @@
 				},
 				"select": {
 					"label": "동영상 화질",
-					"title": "The quality to set the video to"
+					"title": "항상 선택한 화질로 동영상이 재생됩니다."
 				},
 				"title": "동영상 화질 자동 변경"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "확장과 관련된 데이터를 PC에서 모두 삭제합니다.",
+					"value": "데이터 삭제"
 				},
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "작업을 진행하려면 다시 누르세요",
+					"value": "확인"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "새 탭에서 설정 열기"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"title": "모든 설정을 기본값으로 변경합니다. 진행을 원하시면 확인을 누르세요",
+					"value": "초기화"
 				}
 			},
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"decreasePlaybackSpeedButton": "속도 조절 버튼",
+						"hideEndScreenCardsButton": "최종 화면 숨기기",
+						"increasePlaybackSpeedButton": "속도 조절 버튼",
+						"loopButton": "연속 재생 버튼",
+						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
+						"openTranscriptButton": "스크립트 보기 버튼",
+						"screenshotButton": "스크린샷 버튼",
+						"volumeBoostButton": "볼륨 부스트 버튼"
 					},
 					"options": {
 						"below_player": {
@@ -161,8 +161,8 @@
 							"value": "Below Player"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "추가 기능 버튼",
+							"value": "추가 기능"
 						},
 						"player_controls_left": {
 							"placement": "on the left side of player controls",
