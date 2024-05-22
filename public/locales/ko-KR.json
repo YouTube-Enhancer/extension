@@ -215,13 +215,13 @@
 					},
 					"success": "Settings imported successfully",
 					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"value": "설정 불러오기"
 				}
 			},
 			"language": {
 				"select": {
 					"label": "언어",
-					"title": "The language to use for the extension"
+					"title": "이곳에서 언어를 변경할 수 있습니다."
 				},
 				"title": "언어"
 			},
@@ -232,19 +232,19 @@
 						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "최종 화면 숨기기",
+						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨깁니다."
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "최종 화면 숨기기 버튼",
+						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨기거나 표시합니다."
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "실시간 채팅 숨기기",
+						"title": "실시간 채팅 레이아웃을 숨깁니다."
 					},
 					"hideScrollbar": {
-						"label": "Hide scrollbar",
+						"label": "스크롤바 숨기기",
 						"title": "Hides the pages scrollbar"
 					},
 					"hideShorts": {
