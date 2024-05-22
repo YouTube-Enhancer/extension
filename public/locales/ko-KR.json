@@ -112,12 +112,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "화질 대체",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "높음",
+							"lower": "낮음"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "선택한 화질을 사용할 수 없을 때 다음 방법을 사용합니다."
 					}
 				},
 				"select": {
@@ -157,45 +157,45 @@
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "플레이어 컨트롤 아래",
+							"value": "아래"
 						},
 						"feature_menu": {
 							"placement": "추가 기능 버튼",
 							"value": "추가 기능"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "플레이어 컨트롤의 왼쪽",
+							"value": "왼쪽"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "플레이어 컨트롤의 오른쪽",
+							"value": "오른쪽"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "{{BUTTON_NAME}} 을 {{PLACEMENT}} 에 배치하세요"
 				},
-				"title": "Button Placement Settings"
+				"title": "버튼 배치 설정"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "편집기 축소",
+					"expand": "편집기 확대",
+					"noProblems": "발견된 문제가 없습니다."
 				},
 				"enable": {
 					"label": "CSS 커스텀 활성화",
-					"title": "Enables custom CSS to be applied to the page"
+					"title": "커스텀 CSS를 적용할 수 있습니다."
 				},
 				"title": "커스텀 CSS 설정"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "메뉴 활성화 방식",
 						"options": {
 							"click": "클릭 시",
-							"hover": "마우스 올릴 때"
+							"hover": "마우스 커서를 올릴 때"
 						},
 						"title": "추가 기능 메뉴를 어떤 방식으로 열지 선택하세요"
 					},
@@ -210,12 +210,12 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "설정 가져오기에 오류가 있습니다. 파일 형식을 확인하십시오.",
+						"validation": "설정 가져 오기에 오류가 있습니다. 파일 형식을 확인하십시오.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "설정 불러오기"
+					"success": "설정 파일을 성공적으로 가져왔습니다.",
+					"title": "JSON 파일에서 설정 가져오기",
+					"value": "설정 가져오기"
 				}
 			},
 			"language": {
@@ -245,275 +245,275 @@
 					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
-						"title": "Hides the pages scrollbar"
+						"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "쇼츠 숨기기",
+						"title": "쇼츠 동영상들을 숨깁니다."
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "댓글 번역 버튼 숨기기",
+						"title": "댓글 아래에 표시되는 번역 버튼을 숨깁니다."
 					},
 					"loopButton": {
-						"label": "Loop button",
-						"title": "Adds a button to the feature menu to loop the video you're watching"
+						"label": "연속 재생 버튼",
+						"title": "추가 기능 메뉴에 \"연속 재생\" 버튼을 추가합니다."
 					},
 					"maximizePlayerButton": {
-						"label": "Maximize player button",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"label": "화면 크기에 맞추기 버튼",
+						"title": "추가 기능 메뉴에 \"화면 크기에 맞추기\" 버튼을 추가합니다."
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "스크립트 보기 버튼",
+						"title": "추가 기능 메뉴에 \"스크립트 보기\" 버튼을 추가합니다."
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "마우스 커서를 올려 유튜브 설정 열기",
+						"title": "설정 버튼 위로 마우스 커서를 올리면 유튜브 설정 메뉴를 엽니다."
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "백그라운드 플레이어 일시 중지",
+						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
 					"remainingTime": {
-						"label": "Remaining time",
-						"title": "Shows the remaining time of the video you're watching"
+						"label": "남은 시간 표시",
+						"title": "현재 동영상의 남은 시간을 표시합니다."
 					},
 					"rememberLastVolume": {
-						"label": "Remember last volume",
-						"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+						"label": "마지막 볼륨 기억",
+						"title": "마지막으로 본 동영상의 볼륨이 다른 동영상에서도 유지됩니다."
 					},
 					"removeRedirect": {
-						"label": "Remove YouTube /redirect URLs",
-						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+						"label": "유튜브 / 리디렉션 URL 제거",
+						"title": "리디렉션 경고 대화를 건너뛰고 실제 URL로 유튜브 리디렉션을 대체합니다."
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "유튜브 동영상 공유 링크 짧게하기",
+						"title": "si/feature 매개 변수를 제거하여 유튜브 동영상 공유 링크를 단축(youtu.be)"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "쇼츠 동영상 자동 스크롤",
+						"title": "재생이 완료되면 다음 쇼츠로 넘어갑니다."
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업 스킵",
+						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
 					}
 				},
-				"title": "Miscellaneous settings"
+				"title": "기타 설정"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "색상",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "블루",
+						"green": "그린",
+						"orange": "오렌지",
+						"pink": "핑크",
+						"purple": "퍼플",
+						"red": "레드",
+						"white": "화이트",
+						"yellow": "옐로우"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "화면에 속도 조절 등의 알림을 표시하는 텍스트 색상을 변경합니다."
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "사라지는 시간",
+					"title": "온 스크린 디스플레이가 몇초 후에 사라지는지 설정합니다."
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "투명도",
+					"title": "온 스크린 디스플레이의 투명도 조절"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "여백",
+					"title": "온 스크린 디스플레이의 주변 여백을 픽셀 단위로 조절합니다."
 				},
 				"position": {
-					"label": "Position",
+					"label": "위치",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "왼쪽 아래",
+						"bottom_right": "오른쪽 아래",
+						"center": "가운데",
+						"top_left": "왼쪽 위",
+						"top_right": "오른쪽 위"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "온 스크린 디스플레이의 위치를 선택하세요"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "온 스크린 디스플레이 설정",
 				"type": {
-					"label": "Type",
+					"label": "유형",
 					"options": {
-						"circle": "Circle",
-						"line": "Line",
-						"no_display": "No display",
-						"text": "Text"
+						"circle": "원형",
+						"line": "선",
+						"no_display": "표시 안 함",
+						"text": "텍스트"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "온 스크린 디스플레이가 어떻게 표시될지 선택합니다."
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Forced playback speed",
-					"title": "Sets the video speed to what you choose below"
+					"label": "재생 속도 고정",
+					"title": "동영상 재생 속도를 아래에서 선택한 속도로 설정합니다."
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "재생 속도 버튼",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "재생 속도 버튼",
+						"title": "클릭당 변경되는 속도 단위"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "보고있는 동영상의 재생 속도를 변경하기 위한 버튼 추가"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "플레이어 속도",
+					"title": "동영상의 속도를 변경합니다."
 				},
-				"title": "Playback speed settings"
+				"title": "재생 속도 설정"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Screenshot button",
-					"title": "Adds a button to the player to take a screenshot of the video"
+					"label": "스크린샷 버튼",
+					"title": "현재 화면을 캡처하기 위한 스크린샷 버튼을 추가합니다."
 				},
 				"saveAs": {
-					"clipboard": "Clipboard",
-					"file": "File"
+					"clipboard": "클립보드로 복사",
+					"file": "파일로 저장"
 				},
 				"selectFormat": {
-					"label": "Screenshot format",
-					"title": "The format to save the screenshot in"
+					"label": "캡처 방법",
+					"title": "스크린샷을 저장하는 방식"
 				},
 				"selectSaveAs": {
-					"label": "Screenshot save type",
-					"title": "The screenshot save type"
+					"label": "스크린샷 저장 방식",
+					"title": "현재 화면을 클립보드에 복사, 파일로 저장 두 가지 옵션이 있습니다."
 				},
-				"title": "Screenshot settings"
+				"title": "스크린샷 설정"
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "스크롤 당 속도 변경",
+					"title": "스크롤에 따라 속도가 조절됩니다."
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"label": "스크롤 휠로 속도 제어",
+					"title": "스크롤 휠을 사용해 속도를 조절하려면 이 옵션을 사용하세요"
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "{{KEY}}",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "보조 키",
+					"title": "보조 키와 함께 사용해야 작동이 됩니다."
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "스크롤 휠 속도 제어 설정"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Volume Change Per Scroll",
-					"title": "Adjust the volume change per scroll"
+					"label": "스크롤 당 볼륨 조절",
+					"title": "스크롤에 따라 볼륨이 조절됩니다."
 				},
 				"enable": {
-					"label": "Scroll wheel volume control",
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
+					"label": "스크롤로 볼륨 조절",
+					"title": "스크롤 휠을 사용하여 보고 있는 동영상의 볼륨을 조절할 수 있습니다."
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "보조 키를 누를 때 활성화",
+						"title": "보조 키와 함께 사용해야 작동합니다."
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "{{KEY}}",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "보조 키",
+						"title": "보조 키와 함께 사용해야 작동합니다."
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "마우스 오른쪽 버튼을 누른 상태에서 활성화",
+						"title": "우클릭 상태로 스크롤 하세요"
 					}
 				},
-				"title": "Scroll wheel volume control settings"
+				"title": "스크롤 휠로 볼륨 조절 설정"
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "시청한 동영상 기억",
+					"title": "동영상의 중단된 위치를 기억하고 이어서 시청할 수 있습니다."
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "이어서 시청하기",
 						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
+							"automatic": "자동",
+							"prompt": "팝업 클릭"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "이어서 시청하는 방법 선택"
 					}
 				},
-				"title": "Video history settings"
+				"title": "동영상 시청 기록 설정"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "부피 부스트(dB)",
+					"title": "높을 수록 소리가 커집니다."
 				},
 				"enable": {
-					"label": "Volume boost",
-					"title": "Enable volume boost"
+					"label": "볼륨 부스트",
+					"title": "볼륨 부스트 켜기"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "볼륨 부스트 적용 방법",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "전체",
+							"perVideo": "개별 동영상"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "볼륨 부스트 활성화 방법을 선택하십시오. '개별 동영상'을 사용하면 추가 기능 메뉴에서 각 비디오를 개별적으로 적용할 수 있습니다. 전체'를 선택하면 이 모든 동영상에 적용됩니다."
 					}
 				},
-				"title": "Volume boost settings"
+				"title": "볼륨 부스트 설정"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "개발자",
+				"co-authors": "도와주신분들",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "그림자 색상",
+						"title": "그림자 색상"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "보조 텍스트 색상",
+						"title": "보조 텍스트의 색상"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "마우스 커서를 올렸을 때 색상",
+						"title": "마우스 커서를 올렸을 때의 색상을 변경합니다."
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "메인 배경 색상",
+						"title": "메인 백그라운드 색상을 변경합니다."
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "강조 색상",
+						"title": "강조할 색상을 선택하세요"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "메인 텍스트 색상",
+						"title": "메인 텍스트 색상을 변경합니다."
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "보조 배경 색상",
+						"title": "보조 배경의 색상을 변경합니다."
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "선택한 테마 사용",
+					"title": "선택한 테마를 활성화합니다."
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "테마 선택",
+					"title": "적용할 테마를 선택하세요"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "유튜브 딥 다크 설정"
 			}
 		}
 	}
