@@ -117,7 +117,7 @@
 							"higher": "Выше",
 							"lower": "Ниже"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "Какую стратегию использовать, когда выбранное качество недоступно"
 					}
 				},
 				"select": {
