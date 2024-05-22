@@ -112,10 +112,10 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Стратегия восстановления качества",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Выше",
+							"lower": "Ниже"
 						},
 						"title": "The strategy to use when the selected quality is not available"
 					}
