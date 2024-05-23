@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Avanti veloce di {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Riavvolgi di {{TIME}}"
 						}
 					}
 				},
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "Pulsante Avanti veloce",
 						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Pulsante Riavvolgi",
 						"screenshotButton": "Pulsante Schermata",
 						"volumeBoostButton": "Pulsante Aumento volume"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Abilita pulsanti avanti/riavvolgi",
+					"title": "Aggiunge i pulsanti avanti e riavvolgi al riproduttore video"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Tempo avanzamento/riavvolgimento",
+					"title": "Il periodo di tempo da usare per inoltrare/riavvolgere il video"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Impostazioni pulsante Avanti / Riavvolgi"
 			},
 			"importExportSettings": {
 				"exportButton": {
