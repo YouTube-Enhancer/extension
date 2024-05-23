@@ -12,6 +12,7 @@ export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
+export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
@@ -168,7 +169,11 @@ const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 	}
 };
 export const featureToMultiButtonsMap = new Map(
-	Object.keys(featureToMultiButtonMapEntries).map((key) => [key, Object.keys(featureToMultiButtonMapEntries[key])])
+	Object.keys(featureToMultiButtonMapEntries).map((key) => [
+		key,
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		Object.keys(featureToMultiButtonMapEntries[key]) as KeysOfUnion<FeatureToMultiButtonMap[typeof key]>[]
+	])
 );
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
