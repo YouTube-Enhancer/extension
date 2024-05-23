@@ -13,6 +13,16 @@
 						"label": "추가 기능"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "최종 화면 숨기기",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "속도 조절 버튼",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "최종 화면 숨기기",
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 						"openTranscriptButton": "스크립트 보기 버튼",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "스크린샷 버튼",
 						"volumeBoostButton": "볼륨 부스트 버튼"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "추가 기능 설정"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
