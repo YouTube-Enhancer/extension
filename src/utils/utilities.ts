@@ -724,21 +724,19 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 
 	Object.keys(changes.buttonPlacement).forEach((button) => {
 		const buttonName = button;
-		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
-
-		if (multiButtonFeatureNames) {
-			const featureButtons = featureToMultiButtonsMap.get(multiButtonFeatureNames) || [];
-			if (featureButtons.includes(buttonName)) {
-				if (!multiButtonChanges[multiButtonFeatureNames]) {
-					multiButtonChanges[multiButtonFeatureNames] = {};
-				}
-				// eslint-disable-next-line prefer-destructuring
-				multiButtonChanges[multiButtonFeatureNames]![buttonName as FeatureToMultiButtonMap[typeof multiButtonFeatureNames][number]] =
-					changes.buttonPlacement[buttonName];
-			}
-		} else if (Object.keys(changes.buttonPlacement).includes(buttonName)) {
+		if (Object.keys(changes.buttonPlacement).includes(buttonName))
 			// eslint-disable-next-line prefer-destructuring
-			singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName];
+			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
+		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
+		if (multiButtonFeatureNames === undefined) return;
+		const featureButtons = featureToMultiButtonsMap.get(multiButtonFeatureNames) || [];
+		if (featureButtons.includes(buttonName)) {
+			if (!multiButtonChanges[multiButtonFeatureNames]) {
+				multiButtonChanges[multiButtonFeatureNames] = {};
+			}
+			// eslint-disable-next-line prefer-destructuring
+			multiButtonChanges[multiButtonFeatureNames]![buttonName as FeatureToMultiButtonMap[typeof multiButtonFeatureNames][number]] =
+				changes.buttonPlacement[buttonName as FeatureToMultiButtonMap[typeof multiButtonFeatureNames][number]];
 		}
 	});
 
