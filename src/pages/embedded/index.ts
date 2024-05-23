@@ -654,7 +654,8 @@ window.addEventListener("DOMContentLoaded", function () {
 						for (const [featureName, changes] of Object.entries(multiButtonChanges)) {
 							switch (featureName) {
 								case "playbackSpeedButtons": {
-									for (const [buttonName, { old: oldPlacement }] of Object.entries(changes)) {
+									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
+										if (oldPlacement === newPlacement) continue;
 										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions(
 											"increasePlaybackSpeedButton",
 											buttonName === "decreasePlaybackSpeedButton" ? multiButtonChanges[featureName]["increasePlaybackSpeedButton"].old : oldPlacement
@@ -677,7 +678,8 @@ window.addEventListener("DOMContentLoaded", function () {
 								}
 							}
 						}
-						for (const [featureName, { old: oldPlacement }] of Object.entries(singleButtonChanges)) {
+						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
+							if (oldPlacement === newPlacement) continue;
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
 							await featureFuncs.remove();
 							await featureFuncs.add();
