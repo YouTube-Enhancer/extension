@@ -13,6 +13,16 @@
 						"label": "Меню функций"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Скрыть заставки следующих видео",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Кнопка «Скриншот»",
 						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "Настройки меню функций"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
