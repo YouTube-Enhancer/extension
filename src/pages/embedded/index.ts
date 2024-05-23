@@ -60,6 +60,8 @@ import {
 	type AllButtonNames,
 	type ButtonPlacement,
 	type ExtensionSendOnlyMessageMappings,
+	type FeatureToMultiButtonMap,
+	type KeysOfUnion,
 	type Messages,
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
@@ -481,17 +483,30 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { language }
 						} = message;
 						window.i18nextInstance = await i18nService(language);
+						const {
+							data: { options }
+						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (featuresInMenu.size > 0) {
 							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
 								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (featureToMultiButtonsMap.has(featureName)) {
-									updateFeatureMenuItemLabel(
-										feature,
-										window.i18nextInstance.t(
-											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
-										)
-									);
+									const multiFeatureName = featureName as MultiButtonFeatureNames;
+									const multiButtonName = feature as MultiButtonNames;
+									switch (multiFeatureName) {
+										case "playbackSpeedButtons": {
+											updateFeatureMenuItemLabel(
+												feature,
+												window.i18nextInstance.t(
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+													{
+														SPEED: options.playback_buttons_speed
+													}
+												)
+											);
+											break;
+										}
+									}
 								} else {
 									updateFeatureMenuItemLabel(
 										feature,
@@ -514,12 +529,22 @@ window.addEventListener("DOMContentLoaded", function () {
 									);
 								} else {
 									if (featureToMultiButtonsMap.has(featureName)) {
-										updateFeatureMenuItemLabel(
-											feature,
-											window.i18nextInstance.t(
-												`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
-											)
-										);
+										const multiFeatureName = featureName as MultiButtonFeatureNames;
+										const multiButtonName = feature as MultiButtonNames;
+										switch (multiFeatureName) {
+											case "playbackSpeedButtons": {
+												updateFeatureMenuItemLabel(
+													feature,
+													window.i18nextInstance.t(
+														`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+														{
+															SPEED: options.playback_buttons_speed
+														}
+													)
+												);
+												break;
+											}
+										}
 									} else {
 										updateFeatureButtonTitle(
 											feature,
