@@ -5,12 +5,17 @@ import type {
 	ActionMessage,
 	AllButtonNames,
 	AnyFunction,
+	ButtonPlacement,
+	ButtonPlacementChange,
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
 	ExtensionSendOnlyMessageMappings,
+	FeatureToMultiButtonMap,
 	MessageMappings,
 	MessageSource,
 	Messages,
+	MultiButtonChange,
+	MultiButtonFeatureNames,
 	Nullable,
 	OnScreenDisplayPosition,
 	Path,
@@ -18,6 +23,7 @@ import type {
 	PlayerQualityFallbackStrategy,
 	Selector,
 	SendDataMessage,
+	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
 	YoutubePlayerQualityLevel
@@ -705,4 +711,36 @@ export function deepMerge(target: Record<string, unknown>, source: Record<string
 	}
 
 	return merged;
+}
+
+export function groupButtonChanges(changes: ButtonPlacementChange): {
+	multiButtonChanges: MultiButtonChange;
+	singleButtonChanges: SingleButtonChange;
+} {
+	const multiButtonChanges: {
+		[K in MultiButtonFeatureNames]?: Partial<Record<FeatureToMultiButtonMap[K][number], { new: ButtonPlacement; old: ButtonPlacement }>>;
+	} = {};
+	const singleButtonChanges: { [K in SingleButtonFeatureNames]?: { new: ButtonPlacement; old: ButtonPlacement } } = {};
+
+	Object.keys(changes.buttonPlacement).forEach((button) => {
+		const buttonName = button;
+		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
+
+		if (multiButtonFeatureNames) {
+			const featureButtons = featureToMultiButtonsMap.get(multiButtonFeatureNames) || [];
+			if (featureButtons.includes(buttonName)) {
+				if (!multiButtonChanges[multiButtonFeatureNames]) {
+					multiButtonChanges[multiButtonFeatureNames] = {};
+				}
+				// eslint-disable-next-line prefer-destructuring
+				multiButtonChanges[multiButtonFeatureNames]![buttonName as FeatureToMultiButtonMap[typeof multiButtonFeatureNames][number]] =
+					changes.buttonPlacement[buttonName];
+			}
+		} else if (Object.keys(changes.buttonPlacement).includes(buttonName)) {
+			// eslint-disable-next-line prefer-destructuring
+			singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName];
+		}
+	});
+
+	return { multiButtonChanges: multiButtonChanges as MultiButtonChange, singleButtonChanges: singleButtonChanges as SingleButtonChange };
 }

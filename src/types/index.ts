@@ -1,4 +1,5 @@
 import type { ParseKeys, TOptions } from "i18next";
+import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z, { ZodType } from "zod";
@@ -118,6 +119,18 @@ export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
+export type MultiButtonChange = {
+	[K in MultiButtonFeatureNames]: Record<FeatureToMultiButtonMap[K][number], { new: ButtonPlacement; old: ButtonPlacement }>;
+};
+export type SingleButtonChange = { [K in SingleButtonFeatureNames]: { new: ButtonPlacement; old: ButtonPlacement } };
+export type ButtonPlacementChange = {
+	buttonPlacement: {
+		[Key in AllButtonNames]: {
+			new: ButtonPlacement;
+			old: ButtonPlacement;
+		};
+	};
+};
 export type FeatureMenuOpenType = (typeof featureMenuOpenTypes)[number];
 export type DeepDarkCustomThemeColors = {
 	colorShadow: string;
@@ -131,12 +144,19 @@ export type DeepDarkCustomThemeColors = {
 type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
-export type SingleButtonFeatureNames = Exclude<ExtractButtonFeatureNames<TOptionsKeys>, "featureMenu">;
+export type SingleButtonFeatureNames = Exclude<
+	ExtractButtonFeatureNames<`pages.content.features.${string}.button.label` & TOptionsKeys>,
+	"featureMenu"
+>;
 export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
-export type MultiButtonFeatureNames = Exclude<SingleButtonFeatureNames, AllButtonNames>;
-export const featureToMultiButtonsMap: Map<MultiButtonFeatureNames, MultiButtonNames[]> = new Map([
-	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
-]);
+export type MultiButtonFeatureNames = ExtractButtonFeatureNames<`pages.content.features.${string}.buttons.${string}.label` & TOptionsKeys>;
+export type FeatureToMultiButtonMap = {
+	[K in MultiButtonFeatureNames]: (keyof EnUS["pages"]["content"]["features"][K]["buttons"])[];
+};
+const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
+	playbackSpeedButtons: ["increasePlaybackSpeedButton" as const, "decreasePlaybackSpeedButton" as const]
+};
+export const featureToMultiButtonsMap = new Map(Object.entries(featureToMultiButtonMapEntries));
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
@@ -259,17 +279,7 @@ export type ContentToBackgroundSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
-	buttonPlacementChange: DataResponseMessage<
-		"buttonPlacementChange",
-		{
-			buttonPlacement: {
-				[Key in AllButtonNames]: {
-					new: ButtonPlacement;
-					old: ButtonPlacement;
-				};
-			};
-		}
-	>;
+	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	deepDarkThemeChange: DataResponseMessage<
 		"deepDarkThemeChange",
