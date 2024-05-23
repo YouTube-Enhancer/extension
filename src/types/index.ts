@@ -11,6 +11,7 @@ export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
@@ -120,7 +121,12 @@ export const buttonPlacements = ["below_player", "feature_menu", "player_control
 export type ButtonPlacement = (typeof buttonPlacements)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
 export type MultiButtonChange = {
-	[K in MultiButtonFeatureNames]: Record<FeatureToMultiButtonMap[K][number], { new: ButtonPlacement; old: ButtonPlacement }>;
+	[K in MultiButtonFeatureNames]: {
+		[Button in keyof FeatureToMultiButtonMap[K]]: {
+			new: ButtonPlacement;
+			old: ButtonPlacement;
+		};
+	};
 };
 export type SingleButtonChange = { [K in SingleButtonFeatureNames]: { new: ButtonPlacement; old: ButtonPlacement } };
 export type ButtonPlacementChange = {
@@ -151,12 +157,19 @@ export type SingleButtonFeatureNames = Exclude<
 export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
 export type MultiButtonFeatureNames = ExtractButtonFeatureNames<`pages.content.features.${string}.buttons.${string}.label` & TOptionsKeys>;
 export type FeatureToMultiButtonMap = {
-	[K in MultiButtonFeatureNames]: (keyof EnUS["pages"]["content"]["features"][K]["buttons"])[];
+	[K in MultiButtonFeatureNames]: {
+		[Button in keyof EnUS["pages"]["content"]["features"][K]["buttons"]]: "";
+	};
 };
 const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
-	playbackSpeedButtons: ["increasePlaybackSpeedButton" as const, "decreasePlaybackSpeedButton" as const]
+	playbackSpeedButtons: {
+		decreasePlaybackSpeedButton: "",
+		increasePlaybackSpeedButton: ""
+	}
 };
-export const featureToMultiButtonsMap = new Map(Object.entries(featureToMultiButtonMapEntries));
+export const featureToMultiButtonsMap = new Map(
+	Object.keys(featureToMultiButtonMapEntries).map((key) => [key, Object.keys(featureToMultiButtonMapEntries[key])])
+);
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
