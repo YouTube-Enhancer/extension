@@ -158,7 +158,7 @@
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
 						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
@@ -259,8 +259,8 @@
 						"title": "動画の終了で画面カードを非表示にする"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "終了画面のカードボタンを非表示にする",
+						"title": "終了画面でボタンなカードを見せるか隠すに追加する"
 					},
 					"hideLiveStreamChat": {
 						"label": "配信チャットを隠す",
