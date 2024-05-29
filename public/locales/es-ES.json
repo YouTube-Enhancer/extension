@@ -10,7 +10,7 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": ""
 					}
 				},
 				"forwardRewindButtons": {
