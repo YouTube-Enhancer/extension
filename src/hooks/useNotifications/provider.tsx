@@ -46,30 +46,22 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		let animationFrameId: null | number = null;
 		const updateNotifications = () => {
 			const now = Date.now();
-			setNotifications((notifications) => {
-				return notifications
-					.map((notification) => {
-						const timePassed = now - (notification.timestamp ?? now);
-						const { removeAfterMs: progressBarDuration } = notification;
-						const progress = Math.max(100 - (timePassed / (progressBarDuration ?? 3000)) * 100, 0);
-						if (progress <= 0) {
-							// Automatically hide the notification when progress reaches 0
-							return null;
-						}
-						return {
-							...notification,
-							progress
-						};
-					})
-					.filter(Boolean);
+			setNotifications((prevNotifications) => {
+				if (prevNotifications.length === 0) return prevNotifications;
+				return prevNotifications.reduce((acc: Notification[], notification) => {
+					const elapsed = now - (notification.timestamp ?? now);
+					const progress = Math.max(100 - (elapsed / (notification.removeAfterMs ?? 3000)) * 100, 0);
+					if (progress > 0) {
+						acc.push({ ...notification, progress });
+					}
+					return acc;
+				}, []);
 			});
 			animationFrameId = requestAnimationFrame(updateNotifications);
 		};
 		updateNotifications();
 		return () => {
-			if (animationFrameId !== null) {
-				cancelAnimationFrame(animationFrameId);
-			}
+			if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
 		};
 	}, []);
 	const contextValue = { addNotification, notifications, removeNotification } satisfies NotificationsContextProps;
