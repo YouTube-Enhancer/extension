@@ -25,11 +25,12 @@ import type {
 	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
-	YoutubePlayerQualityLevel
+	YoutubePlayerQualityLevel,
+	configuration
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -738,4 +739,15 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 	});
 
 	return { multiButtonChanges: multiButtonChanges as MultiButtonChange, singleButtonChanges: singleButtonChanges as SingleButtonChange };
+}
+export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: configuration) {
+	switch (buttonName) {
+		case "volumeBoostButton": {
+			return settings.volume_boost_mode === "global" || settings[buttonNameToSettingName[buttonName]] === false;
+		}
+		default: {
+			const { [buttonName]: settingName } = buttonNameToSettingName;
+			return settings[settingName] === false;
+		}
+	}
 }

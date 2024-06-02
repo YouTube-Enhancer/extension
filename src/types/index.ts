@@ -188,6 +188,16 @@ export const buttonNames = Object.keys({
 	screenshotButton: "",
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
+export const buttonNameToSettingName = {
+	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
+	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	loopButton: "enable_loop_button",
+	maximizePlayerButton: "enable_maximize_player_button",
+	openTranscriptButton: "enable_open_transcript_button",
+	screenshotButton: "enable_screenshot_button",
+	volumeBoostButton: "enable_volume_boost"
+} satisfies Record<AllButtonNames, `enable_${string}` & configurationKeys>;
 export type ButtonPlacementConfigurationMap = {
 	[ButtonName in AllButtonNames]: ButtonPlacement;
 };
