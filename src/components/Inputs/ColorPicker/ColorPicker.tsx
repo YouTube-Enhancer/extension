@@ -23,7 +23,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, labe
 		false
 	);
 	const togglePickerVisibility = () => setIsColorPickerVisible(!isColorPickerVisible);
-	useClickOutside(colorPickerRef, () => (isColorPickerVisible ? togglePickerVisibility() : void 0));
+	useClickOutside(colorPickerRef, togglePickerVisibility);
 	return (
 		<div aria-valuetext={value} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id} title={title}>
 			<label
