@@ -13,7 +13,7 @@ import { availableLocales, type i18nInstanceType, i18nService, localeDirection, 
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
-import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
+import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineOpenInNew } from "react-icons/md";
@@ -328,16 +328,6 @@ export default function Settings() {
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
 	].reverse() as SelectOption<"player_quality">[];
-	const PlayerQualityFallbackStrategyOptions = [
-		{
-			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.higher"),
-			value: "higher"
-		},
-		{
-			label: t("settings.sections.automaticQuality.fallbackQualityStrategy.select.options.lower"),
-			value: "lower"
-		}
-	] as SelectOption<"player_quality_fallback_strategy">[];
 	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
 		label: rate?.toString(),
 		value: rate?.toString()
@@ -369,7 +359,6 @@ export default function Settings() {
 	];
 	const buttonPlacementOptions: SelectOption<
 		| "button_placements.decreasePlaybackSpeedButton"
-		| "button_placements.hideEndScreenCardsButton"
 		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
 		| "button_placements.maximizePlayerButton"
@@ -534,10 +523,9 @@ export default function Settings() {
 				<SettingSection>
 					<SettingTitle title={t("settings.sections.buttonPlacement.title")} />
 					{buttonNames.map((feature) => {
-						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`);
+						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`) as string;
 						return (
 							<Setting
-								disabled={isButtonSelectDisabled(feature, settings)}
 								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
@@ -690,14 +678,6 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.hideEndScreenCards.label")}
 						onChange={setCheckboxOption("enable_hide_end_screen_cards")}
 						title={t("settings.sections.miscellaneous.features.hideEndScreenCards.title")}
-						type="checkbox"
-					/>
-					<Setting
-						checked={settings.enable_hide_end_screen_cards_button?.toString() === "true"}
-						id="enable_hide_end_screen_cards_button"
-						label={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.label")}
-						onChange={setCheckboxOption("enable_hide_end_screen_cards_button")}
-						title={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.title")}
 						type="checkbox"
 					/>
 				</SettingSection>
@@ -909,16 +889,6 @@ export default function Settings() {
 						options={YouTubePlayerQualityOptions}
 						selectedOption={getSelectedOption("player_quality")}
 						title={t("settings.sections.automaticQuality.select.title")}
-						type="select"
-					/>
-					<Setting
-						disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
-						id="player_quality_fallback_strategy"
-						label={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.label")}
-						onChange={setValueOption("player_quality_fallback_strategy")}
-						options={PlayerQualityFallbackStrategyOptions}
-						selectedOption={getSelectedOption("player_quality_fallback_strategy")}
-						title={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.title")}
 						type="select"
 					/>
 				</SettingSection>

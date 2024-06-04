@@ -13,15 +13,6 @@
 						"label": "Funktionsmeny"
 					}
 				},
-				"hideEndScreenCardsButton": {
-					"button": {
-						"label": "Hide end screen cards",
-						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
-						}
-					}
-				},
 				"loopButton": {
 					"button": {
 						"label": "Slinga",
@@ -137,7 +128,6 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
@@ -224,10 +214,6 @@
 					"hideEndScreenCards": {
 						"label": "Hide end screen cards",
 						"title": "Hides the cards at the end of the video"
-					},
-					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
 					},
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",

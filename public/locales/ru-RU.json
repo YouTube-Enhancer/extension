@@ -13,15 +13,6 @@
 						"label": "Меню функций"
 					}
 				},
-				"hideEndScreenCardsButton": {
-					"button": {
-						"label": "Скрыть заставки следующих видео",
-						"toggle": {
-							"off": "Показать заставки следующих видео",
-							"on": "Скрыть заставки следующих видео"
-						}
-					}
-				},
 				"loopButton": {
 					"button": {
 						"label": "Зациклить",
@@ -54,8 +45,8 @@
 							"label": "Увеличить скорость на {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Невозможно уменьшить ({{SPEED}})",
-					"increaseLimit": "Невозможно увеличить ({{SPEED}})"
+					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -137,7 +128,6 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
-						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
@@ -222,16 +212,12 @@
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
 					"hideEndScreenCards": {
-						"label": "Скрыть заставки следующих видео",
-						"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
-					},
-					"hideEndScreenCardsButton": {
-						"label": "Кнопка «Скрыть заставки следующих видео»",
-						"title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
+						"label": "Hide end screen cards",
+						"title": "Hides the cards at the end of the video"
 					},
 					"hideLiveStreamChat": {
-						"label": "Спрятать чат прямого эфира",
-						"title": "Прячет чат прямого эфира (стрима)"
+						"label": "Hide live stream chat",
+						"title": "Hides the live stream chat"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -242,8 +228,8 @@
 						"title": "Скрывает все Shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Спрятать кнопку 'Перевести на...'",
-						"title": "Прячет кнопку 'Перевести на русский' под комментарием"
+						"label": "Hide translate comment button",
+						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",

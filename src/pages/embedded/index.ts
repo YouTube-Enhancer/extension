@@ -3,20 +3,14 @@ import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { checkIfFeatureButtonExists, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
-import {
-	addHideEndScreenCardsButton,
-	disableHideEndScreenCards,
-	enableHideEndScreenCards,
-	isEndScreenCardsHidden,
-	removeHideEndScreenCardsButton
-} from "@/src/features/hideEndScreenCards";
+import { disableHideEndScreenCards, enableHideEndScreenCards } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -55,13 +49,9 @@ import volumeBoost, {
 	removeVolumeBoostButton
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
-import { type ToggleFeatures, type ToggleIcon, getFeatureIcon, toggleFeatures } from "@/src/icons";
+import { type ToggleFeatures, toggleFeatures } from "@/src/icons";
 import {
-	type AllButtonNames,
-	type ButtonPlacement,
 	type ExtensionSendOnlyMessageMappings,
-	type FeatureToMultiButtonMap,
-	type KeysOfUnion,
 	type Messages,
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
@@ -75,7 +65,6 @@ import {
 	browserColorLog,
 	findKeyByValue,
 	formatError,
-	groupButtonChanges,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -175,28 +164,13 @@ const enableFeatures = () => {
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addIncreasePlaybackSpeedButton();
 		await addDecreasePlaybackSpeedButton();
-		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
 		await addLoopButton();
 	})();
 };
-const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
-	const { [featureName]: featureFunctions } = featureButtonFunctions;
-	// Ensure featureFunctions exist before proceeding
-	if (!featureFunctions) {
-		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
-	}
 
-	// Cast featureFunctions to FeatureFuncRecord
-	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
-
-	return {
-		add: () => castFeatureFunctions.add(),
-		remove: () => castFeatureFunctions.remove(oldPlacement)
-	};
-};
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
 		const response = await waitForSpecificMessage("language", "request_data", "content");
@@ -293,34 +267,10 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "hideEndScreenCardsChange": {
 						const {
-							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
+							data: { hideEndScreenCardsEnabled }
 						} = message;
-						const updateHideEndScreenCardsButtonState = (icon: ToggleIcon, checked: boolean) => {
-							if (hideEndScreenCardsPlacement === "feature_menu") {
-								const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
-								if (!hideEndScreenCardsMenuItem) return;
-								hideEndScreenCardsMenuItem.ariaChecked = checked ? "false" : "true";
-							} else {
-								const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
-								if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
-								updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
-								updateFeatureButtonTitle(
-									"hideEndScreenCardsButton",
-									i18nextInstance.t(`pages.content.features.hideEndScreenCardsButton.button.toggle.${checked ? "on" : "off"}`)
-								);
-								hideEndScreenCardsButton.ariaChecked = checked ? "true" : "false";
-							}
-						};
-						const endScreenCardsHidden = isEndScreenCardsHidden();
-						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
-						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
-						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
-							await enableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, false);
-						} else if (!hideEndScreenCardsEnabled && endScreenCardsHidden) {
-							await disableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, true);
-						}
+						if (hideEndScreenCardsEnabled) await enableHideEndScreenCards();
+						else await disableHideEndScreenCards();
 						break;
 					}
 					case "maximizeButtonChange": {
@@ -459,14 +409,6 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
-					case "hideEndScreenCardsButtonChange": {
-						const {
-							data: { hideEndScreenCardsButtonEnabled }
-						} = message;
-						if (hideEndScreenCardsButtonEnabled) await addHideEndScreenCardsButton();
-						else await removeHideEndScreenCardsButton();
-						break;
-					}
 					case "hideLiveStreamChatChange": {
 						const {
 							data: { hideLiveStreamChatEnabled }
@@ -483,30 +425,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { language }
 						} = message;
 						window.i18nextInstance = await i18nService(language);
-						const {
-							data: { options }
-						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (featuresInMenu.size > 0) {
 							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
 								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (featureToMultiButtonsMap.has(featureName)) {
-									const multiFeatureName = featureName as MultiButtonFeatureNames;
-									const multiButtonName = feature as MultiButtonNames;
-									switch (multiFeatureName) {
-										case "playbackSpeedButtons": {
-											updateFeatureMenuItemLabel(
-												feature,
-												window.i18nextInstance.t(
-													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-													{
-														SPEED: options.playback_buttons_speed
-													}
-												)
-											);
-											break;
-										}
-									}
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(
+											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+										)
+									);
 								} else {
 									updateFeatureMenuItemLabel(
 										feature,
@@ -529,22 +458,12 @@ window.addEventListener("DOMContentLoaded", function () {
 									);
 								} else {
 									if (featureToMultiButtonsMap.has(featureName)) {
-										const multiFeatureName = featureName as MultiButtonFeatureNames;
-										const multiButtonName = feature as MultiButtonNames;
-										switch (multiFeatureName) {
-											case "playbackSpeedButtons": {
-												updateFeatureMenuItemLabel(
-													feature,
-													window.i18nextInstance.t(
-														`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-														{
-															SPEED: options.playback_buttons_speed
-														}
-													)
-												);
-												break;
-											}
-										}
+										updateFeatureMenuItemLabel(
+											feature,
+											window.i18nextInstance.t(
+												`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+											)
+										);
 									} else {
 										updateFeatureButtonTitle(
 											feature,
@@ -674,40 +593,19 @@ window.addEventListener("DOMContentLoaded", function () {
 						break;
 					}
 					case "buttonPlacementChange": {
-						const { data } = message;
-						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
-						for (const [featureName, changes] of Object.entries(multiButtonChanges)) {
-							switch (featureName) {
-								case "playbackSpeedButtons": {
-									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
-										if (oldPlacement === newPlacement) continue;
-										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"increasePlaybackSpeedButton",
-											buttonName === "decreasePlaybackSpeedButton" ? multiButtonChanges[featureName]["increasePlaybackSpeedButton"].old : oldPlacement
-										);
-										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"decreasePlaybackSpeedButton",
-											buttonName === "increasePlaybackSpeedButton" ? multiButtonChanges[featureName]["decreasePlaybackSpeedButton"].old : oldPlacement
-										);
-										switch (buttonName) {
-											case "increasePlaybackSpeedButton":
-											case "decreasePlaybackSpeedButton": {
-												await decreasePlaybackSpeedButtonFuncs.remove();
-												await increasePlaybackSpeedButtonFuncs.remove();
-												await decreasePlaybackSpeedButtonFuncs.add();
-												await increasePlaybackSpeedButtonFuncs.add();
-											}
-										}
-									}
-									break;
-								}
-							}
-						}
-						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
-							if (oldPlacement === newPlacement) continue;
-							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
-							await featureFuncs.remove();
-							await featureFuncs.add();
+						const {
+							data: { buttonPlacement: buttonPlacements }
+						} = message;
+						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(buttonPlacements)) {
+							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
+							if (buttonExists) continue;
+							const { [featureName]: featureFunctions } = featureButtonFunctions;
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+							const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.remove(oldPlacement);
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+							await castFeatureFunctions.add();
 						}
 						break;
 					}
