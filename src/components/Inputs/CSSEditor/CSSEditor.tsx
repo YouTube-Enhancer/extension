@@ -29,6 +29,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
 
 	const [isEditorExpanded, setEditorExpanded] = useState(false);
+	const [initialBodyOverflowValue, setInitialBodyOverflowValue] = useState<string>("");
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
 	const [windowResized, setWindowResized] = useState(0);
@@ -58,9 +59,13 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 		setPageScrollPosition(currentScrollPosition);
 		setEditorExpanded(true);
 
+		setInitialBodyOverflowValue(document.body.style.overflow);
+		document.body.style.overflow = "hidden";
+
 		editorRef.current?.focus();
 	};
 	const collapseEditor = () => {
+		document.body.style.overflow = initialBodyOverflowValue;
 		setEditorExpanded(false);
 		editorRef.current?.focus();
 	};
