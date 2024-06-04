@@ -34,7 +34,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
 	const [windowResized, setWindowResized] = useState(0);
 
-	const editorHeight = useMemo<number>(() => {
+	const expandedEditorHeight = useMemo<number>(() => {
 		const {
 			documentElement: { clientHeight: documentHeight }
 		} = document;
@@ -105,7 +105,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 			/>
 			<Editor
 				className={"size-full grow"}
-				height={isEditorExpanded ? editorHeight : 700}
+				height={isEditorExpanded ? expandedEditorHeight : 400}
 				language="css"
 				onChange={handleEditorChange}
 				onMount={handleEditorDidMount}
