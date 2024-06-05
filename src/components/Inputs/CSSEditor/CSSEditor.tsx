@@ -27,7 +27,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
 	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
-
+	const [editorValue, setEditorValue] = useState(value);
 	const [isEditorExpanded, setEditorExpanded] = useState(false);
 	const [initialBodyOverflowValue, setInitialBodyOverflowValue] = useState<string>("");
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
@@ -49,10 +49,19 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 		monacoRef.current = monaco;
 	}, []);
 
-	const handleEditorChange = useCallback(
-		(value: string | undefined, ev: editor.IModelContentChangedEvent) => debounce(onChange, 250)(value, ev),
-		[onChange]
+	const debouncedOnChange = useCallback(debounce(onChange, 2000), []);
+
+	const setEditorValueCallback = useCallback(
+		(value: string = "") => {
+			setEditorValue(value);
+			debouncedOnChange(value);
+		},
+		[debouncedOnChange]
 	);
+
+	useEffect(() => {
+		setEditorValue(value);
+	}, [value]);
 
 	const expandEditor = () => {
 		const currentScrollPosition = { x: window.scrollX, y: window.scrollY };
@@ -107,12 +116,12 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				className={"size-full grow"}
 				height={isEditorExpanded ? expandedEditorHeight : 400}
 				language="css"
-				onChange={handleEditorChange}
 				onMount={handleEditorDidMount}
 				onValidate={setProblems}
 				options={editorOptions}
 				theme="vs-dark"
-				value={value}
+				value={editorValue}
+				onChange={setEditorValueCallback}
 				width={isEditorExpanded ? window.document.documentElement.clientWidth : 500}
 			/>
 			<EditorProblems
