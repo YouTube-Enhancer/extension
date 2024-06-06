@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "{{TIME}}で早送する"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}}でリワインドする"
 						}
 					}
 				},
@@ -122,12 +122,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "画質フォールバック対策",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "上位",
+							"lower": "下位"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "使用不能選択中画質ときに対策使ってする"
 					}
 				},
 				"select": {
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "早送ボタン",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
-						"rewindButton": "Rewind button",
+						"rewindButton": "リワインドボタン",
 						"screenshotButton": "スクリーンショットボタン",
 						"volumeBoostButton": "音量ブーストボタン"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "早送/リワインドボタンを可能にする",
+					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "早送/リワインド時間",
+					"title": "動画に早送/リワインドを量時間"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "早送/リワインドボタン設定"
 			},
 			"importExportSettings": {
 				"exportButton": {
