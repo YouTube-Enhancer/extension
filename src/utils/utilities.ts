@@ -5,12 +5,16 @@ import type {
 	ActionMessage,
 	AllButtonNames,
 	AnyFunction,
+	ButtonPlacementChange,
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
+	DeepPartial,
 	ExtensionSendOnlyMessageMappings,
+	FeatureToMultiButtonMap,
 	MessageMappings,
 	MessageSource,
 	Messages,
+	MultiButtonChange,
 	Nullable,
 	OnScreenDisplayPosition,
 	Path,
@@ -18,13 +22,15 @@ import type {
 	PlayerQualityFallbackStrategy,
 	Selector,
 	SendDataMessage,
+	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
-	YoutubePlayerQualityLevel
+	YoutubePlayerQualityLevel,
+	configuration
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -705,4 +711,43 @@ export function deepMerge(target: Record<string, unknown>, source: Record<string
 	}
 
 	return merged;
+}
+
+export function groupButtonChanges(changes: ButtonPlacementChange): {
+	multiButtonChanges: MultiButtonChange;
+	singleButtonChanges: SingleButtonChange;
+} {
+	const multiButtonChanges: DeepPartial<MultiButtonChange> = {};
+	const singleButtonChanges: DeepPartial<SingleButtonChange> = {};
+
+	Object.keys(changes.buttonPlacement).forEach((button) => {
+		const buttonName = button;
+		if (Object.keys(changes.buttonPlacement).includes(buttonName))
+			// eslint-disable-next-line prefer-destructuring
+			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
+		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
+		if (multiButtonFeatureNames === undefined) return;
+		const featureButtons = featureToMultiButtonsMap.get(multiButtonFeatureNames) || [];
+		if (featureButtons.includes(buttonName)) {
+			if (!multiButtonChanges[multiButtonFeatureNames]) {
+				multiButtonChanges[multiButtonFeatureNames] = {};
+			}
+			// eslint-disable-next-line prefer-destructuring
+			multiButtonChanges[multiButtonFeatureNames]![buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
+				changes.buttonPlacement[buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]];
+		}
+	});
+
+	return { multiButtonChanges: multiButtonChanges as MultiButtonChange, singleButtonChanges: singleButtonChanges as SingleButtonChange };
+}
+export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: configuration) {
+	switch (buttonName) {
+		case "volumeBoostButton": {
+			return settings.volume_boost_mode === "global" || settings[buttonNameToSettingName[buttonName]] === false;
+		}
+		default: {
+			const { [buttonName]: settingName } = buttonNameToSettingName;
+			return settings[settingName] === false;
+		}
+	}
 }

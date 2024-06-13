@@ -13,7 +13,7 @@ import { availableLocales, type i18nInstanceType, i18nService, localeDirection, 
 import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
-import { cn, deepMerge, formatDateForFileName, getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineOpenInNew } from "react-icons/md";
@@ -537,6 +537,7 @@ export default function Settings() {
 						const label = t(`settings.sections.buttonPlacement.select.buttonNames.${feature}`);
 						return (
 							<Setting
+								disabled={isButtonSelectDisabled(feature, settings)}
 								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}

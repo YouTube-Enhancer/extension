@@ -1,4 +1,5 @@
 import type { ParseKeys, TOptions } from "i18next";
+import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import z, { ZodType } from "zod";
@@ -10,6 +11,8 @@ export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
+export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
@@ -118,6 +121,23 @@ export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
+export type MultiButtonChange = {
+	[K in MultiButtonFeatureNames]: {
+		[Button in keyof FeatureToMultiButtonMap[K]]: {
+			new: ButtonPlacement;
+			old: ButtonPlacement;
+		};
+	};
+};
+export type SingleButtonChange = { [K in SingleButtonFeatureNames]: { new: ButtonPlacement; old: ButtonPlacement } };
+export type ButtonPlacementChange = {
+	buttonPlacement: {
+		[Key in AllButtonNames]: {
+			new: ButtonPlacement;
+			old: ButtonPlacement;
+		};
+	};
+};
 export type FeatureMenuOpenType = (typeof featureMenuOpenTypes)[number];
 export type DeepDarkCustomThemeColors = {
 	colorShadow: string;
@@ -131,12 +151,30 @@ export type DeepDarkCustomThemeColors = {
 type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
-export type SingleButtonFeatureNames = Exclude<ExtractButtonFeatureNames<TOptionsKeys>, "featureMenu">;
+export type SingleButtonFeatureNames = Exclude<
+	ExtractButtonFeatureNames<`pages.content.features.${string}.button.label` & TOptionsKeys>,
+	"featureMenu"
+>;
 export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
-export type MultiButtonFeatureNames = Exclude<SingleButtonFeatureNames, AllButtonNames>;
-export const featureToMultiButtonsMap: Map<MultiButtonFeatureNames, MultiButtonNames[]> = new Map([
-	["playbackSpeedButtons", ["increasePlaybackSpeedButton", "decreasePlaybackSpeedButton"]]
-]);
+export type MultiButtonFeatureNames = ExtractButtonFeatureNames<`pages.content.features.${string}.buttons.${string}.label` & TOptionsKeys>;
+export type FeatureToMultiButtonMap = {
+	[K in MultiButtonFeatureNames]: {
+		[Button in keyof EnUS["pages"]["content"]["features"][K]["buttons"]]: "";
+	};
+};
+const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
+	playbackSpeedButtons: {
+		decreasePlaybackSpeedButton: "",
+		increasePlaybackSpeedButton: ""
+	}
+};
+export const featureToMultiButtonsMap = new Map(
+	Object.keys(featureToMultiButtonMapEntries).map((key) => [
+		key,
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		Object.keys(featureToMultiButtonMapEntries[key]) as KeysOfUnion<FeatureToMultiButtonMap[typeof key]>[]
+	])
+);
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
@@ -150,6 +188,16 @@ export const buttonNames = Object.keys({
 	screenshotButton: "",
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
+export const buttonNameToSettingName = {
+	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
+	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	loopButton: "enable_loop_button",
+	maximizePlayerButton: "enable_maximize_player_button",
+	openTranscriptButton: "enable_open_transcript_button",
+	screenshotButton: "enable_screenshot_button",
+	volumeBoostButton: "enable_volume_boost"
+} satisfies Record<AllButtonNames, `enable_${string}` & configurationKeys>;
 export type ButtonPlacementConfigurationMap = {
 	[ButtonName in AllButtonNames]: ButtonPlacement;
 };
@@ -259,17 +307,7 @@ export type ContentToBackgroundSendOnlyMessageMappings = {
 };
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
-	buttonPlacementChange: DataResponseMessage<
-		"buttonPlacementChange",
-		{
-			buttonPlacement: {
-				[Key in AllButtonNames]: {
-					new: ButtonPlacement;
-					old: ButtonPlacement;
-				};
-			};
-		}
-	>;
+	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	deepDarkThemeChange: DataResponseMessage<
 		"deepDarkThemeChange",

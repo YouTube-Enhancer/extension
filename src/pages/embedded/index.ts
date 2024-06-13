@@ -3,12 +3,7 @@ import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import {
-	checkIfFeatureButtonExists,
-	getFeatureButton,
-	updateFeatureButtonIcon,
-	updateFeatureButtonTitle
-} from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
@@ -62,7 +57,11 @@ import volumeBoost, {
 import { i18nService } from "@/src/i18n";
 import { type ToggleFeatures, type ToggleIcon, getFeatureIcon, toggleFeatures } from "@/src/icons";
 import {
+	type AllButtonNames,
+	type ButtonPlacement,
 	type ExtensionSendOnlyMessageMappings,
+	type FeatureToMultiButtonMap,
+	type KeysOfUnion,
 	type Messages,
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
@@ -76,6 +75,7 @@ import {
 	browserColorLog,
 	findKeyByValue,
 	formatError,
+	groupButtonChanges,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -182,7 +182,21 @@ const enableFeatures = () => {
 		await addLoopButton();
 	})();
 };
+const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
+	const { [featureName]: featureFunctions } = featureButtonFunctions;
+	// Ensure featureFunctions exist before proceeding
+	if (!featureFunctions) {
+		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
+	}
 
+	// Cast featureFunctions to FeatureFuncRecord
+	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+
+	return {
+		add: () => castFeatureFunctions.add(),
+		remove: () => castFeatureFunctions.remove(oldPlacement)
+	};
+};
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
 		const {
@@ -426,18 +440,36 @@ window.addEventListener("DOMContentLoaded", function () {
 							data: { language }
 						} = message;
 						window.i18nextInstance = await i18nService(language);
+						const {
+							data: { options }
+						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (featuresInMenu.size > 0) {
 							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
 							for (const feature of featuresInMenu) {
 								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
-								updateFeatureMenuItemLabel(
-									feature,
-									window.i18nextInstance.t(
-										featureToMultiButtonsMap.has(featureName) ?
-											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
-										:	`pages.content.features.${featureName as SingleButtonNames}.button.label`
-									)
-								);
+								if (featureToMultiButtonsMap.has(featureName)) {
+									const multiFeatureName = featureName as MultiButtonFeatureNames;
+									const multiButtonName = feature as MultiButtonNames;
+									switch (multiFeatureName) {
+										case "playbackSpeedButtons": {
+											updateFeatureMenuItemLabel(
+												feature,
+												window.i18nextInstance.t(
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+													{
+														SPEED: options.playback_buttons_speed
+													}
+												)
+											);
+											break;
+										}
+									}
+								} else {
+									updateFeatureMenuItemLabel(
+										feature,
+										window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+									);
+								}
 							}
 						}
 						if (featuresInControls.size > 0) {
@@ -455,6 +487,25 @@ window.addEventListener("DOMContentLoaded", function () {
 									return;
 								}
 
+                if (featureToMultiButtonsMap.has(featureName)) {
+                  const multiFeatureName = featureName as MultiButtonFeatureNames;
+                  const multiButtonName = feature as MultiButtonNames;
+                  switch (multiFeatureName) {
+                    case "playbackSpeedButtons": {
+                      updateFeatureMenuItemLabel(
+                        feature,
+                        window.i18nextInstance.t(
+                          `pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+                          {
+                            SPEED: options.playback_buttons_speed
+                          }
+                        )
+                      );
+                      break;
+                    }
+                  }
+                  return
+                } 
 								updateFeatureMenuItemLabel(
 									feature,
 									window.i18nextInstance.t(
@@ -555,19 +606,40 @@ window.addEventListener("DOMContentLoaded", function () {
 						break;
 					}
 					case "buttonPlacementChange": {
-						const {
-							data: { buttonPlacement: buttonPlacements }
-						} = message;
-						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(buttonPlacements)) {
-							const buttonExists = checkIfFeatureButtonExists(featureName, newPlacement);
-							if (buttonExists) continue;
-							const { [featureName]: featureFunctions } = featureButtonFunctions;
-							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-							const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
-							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-							await castFeatureFunctions.remove(oldPlacement);
-							// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-							await castFeatureFunctions.add();
+						const { data } = message;
+						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
+						for (const [featureName, changes] of Object.entries(multiButtonChanges)) {
+							switch (featureName) {
+								case "playbackSpeedButtons": {
+									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
+										if (oldPlacement === newPlacement) continue;
+										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions(
+											"increasePlaybackSpeedButton",
+											buttonName === "decreasePlaybackSpeedButton" ? multiButtonChanges[featureName]["increasePlaybackSpeedButton"].old : oldPlacement
+										);
+										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions(
+											"decreasePlaybackSpeedButton",
+											buttonName === "increasePlaybackSpeedButton" ? multiButtonChanges[featureName]["decreasePlaybackSpeedButton"].old : oldPlacement
+										);
+										switch (buttonName) {
+											case "increasePlaybackSpeedButton":
+											case "decreasePlaybackSpeedButton": {
+												await decreasePlaybackSpeedButtonFuncs.remove();
+												await increasePlaybackSpeedButtonFuncs.remove();
+												await decreasePlaybackSpeedButtonFuncs.add();
+												await increasePlaybackSpeedButtonFuncs.add();
+											}
+										}
+									}
+									break;
+								}
+							}
+						}
+						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
+							if (oldPlacement === newPlacement) continue;
+							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
+							await featureFuncs.remove();
+							await featureFuncs.add();
 						}
 						break;
 					}
