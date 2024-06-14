@@ -1,5 +1,5 @@
 import { type Nullable } from "@/src/types";
-import { type editor, monaco } from "@/src/utils/monaco";
+import { type editor } from "@/src/utils/monaco";
 import { cn, debounce } from "@/src/utils/utilities";
 import { Editor, type Monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -116,12 +116,12 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				className={"size-full grow"}
 				height={isEditorExpanded ? expandedEditorHeight : 400}
 				language="css"
+				onChange={setEditorValueCallback}
 				onMount={handleEditorDidMount}
 				onValidate={setProblems}
 				options={editorOptions}
 				theme="vs-dark"
 				value={editorValue}
-				onChange={setEditorValueCallback}
 				width={isEditorExpanded ? window.document.documentElement.clientWidth : 500}
 			/>
 			<EditorProblems
