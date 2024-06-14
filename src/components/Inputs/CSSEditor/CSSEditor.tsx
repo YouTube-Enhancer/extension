@@ -49,7 +49,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 		monacoRef.current = monaco;
 	}, []);
 
-	const debouncedOnChange = useCallback(debounce(onChange, 2000), []);
+	const debouncedOnChange = useCallback(debounce(onChange, 300), []);
 
 	const setEditorValueCallback = useCallback(
 		(value: string = "") => {
