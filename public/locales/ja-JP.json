@@ -13,16 +13,6 @@
 						"label": "フィーチャー・メニュー"
 					}
 				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "{{TIME}}で早送する"
-						},
-						"rewindButton": {
-							"label": "{{TIME}}でリワインドする"
-						}
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "終了画面のカードを非表示にする",
@@ -157,13 +147,11 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
-						"forwardButton": "早送ボタン",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
-						"rewindButton": "リワインドボタン",
 						"screenshotButton": "スクリーンショットボタン",
 						"volumeBoostButton": "音量ブーストボタン"
 					},
@@ -213,17 +201,6 @@
 					},
 					"title": "フィーチャー・メニュー設定"
 				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "早送/リワインドボタンを可能にする",
-					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
-				},
-				"time": {
-					"label": "早送/リワインド時間",
-					"title": "動画に早送/リワインドを量時間"
-				},
-				"title": "早送/リワインドボタン設定"
 			},
 			"importExportSettings": {
 				"exportButton": {
