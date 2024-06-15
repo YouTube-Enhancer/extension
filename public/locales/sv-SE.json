@@ -13,16 +13,6 @@
 						"label": "Funktionsmeny"
 					}
 				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
-						},
-						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
-						}
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Dölj slutskärmskort",
@@ -157,13 +147,11 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
-						"rewindButton": "Rewind button",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -213,17 +201,6 @@
 					},
 					"title": "Inställningar för funktionsmeny"
 				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
-				},
-				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
-				},
-				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
