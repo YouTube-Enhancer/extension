@@ -13,16 +13,6 @@
 						"label": "추가 기능"
 					}
 				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "{{TIME}} 빨리 감기"
-						},
-						"rewindButton": {
-							"label": "{{TIME}} 되감기"
-						}
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "최종 화면 숨기기",
@@ -157,13 +147,11 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "속도 조절 버튼",
-						"forwardButton": "빨리 감기 버튼",
 						"hideEndScreenCardsButton": "최종 화면 숨기기",
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 						"openTranscriptButton": "스크립트 보기 버튼",
-						"rewindButton": "되감기 버튼",
 						"screenshotButton": "스크린샷 버튼",
 						"volumeBoostButton": "볼륨 부스트 버튼"
 					},
@@ -213,17 +201,6 @@
 					},
 					"title": "추가 기능 설정"
 				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "빨리 감기 / 되감기 버튼 사용",
-					"title": "동영상 플레이어에 빨리 감기 및 되감기 버튼 추가"
-				},
-				"time": {
-					"label": "빨리 감기/되감기 시간",
-					"title": "동영상 빨리 감기 / 되감기 시간"
-				},
-				"title": "빨리 감기/되감기 버튼 설정"
 			},
 			"importExportSettings": {
 				"exportButton": {
