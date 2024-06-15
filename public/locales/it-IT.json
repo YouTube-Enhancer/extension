@@ -13,16 +13,6 @@
 						"label": "Menu' funzioni"
 					}
 				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "Avanti veloce di {{TIME}}"
-						},
-						"rewindButton": {
-							"label": "Riavvolgi di {{TIME}}"
-						}
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Nascondi le schede finali",
@@ -157,13 +147,11 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
-						"forwardButton": "Pulsante Avanti veloce",
 						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
-						"rewindButton": "Pulsante Riavvolgi",
 						"screenshotButton": "Pulsante Schermata",
 						"volumeBoostButton": "Pulsante Aumento volume"
 					},
@@ -213,17 +201,6 @@
 					},
 					"title": "Impostazioni menu' funzioni"
 				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Abilita pulsanti avanti/riavvolgi",
-					"title": "Aggiunge i pulsanti avanti e riavvolgi al riproduttore video"
-				},
-				"time": {
-					"label": "Tempo avanzamento/riavvolgimento",
-					"title": "Il periodo di tempo da usare per inoltrare/riavvolgere il video"
-				},
-				"title": "Impostazioni pulsante Avanti / Riavvolgi"
 			},
 			"importExportSettings": {
 				"exportButton": {
