@@ -13,16 +13,6 @@
 						"label": "Меню функций"
 					}
 				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "Перемотка вперёд на {{TIME}}"
-						},
-						"rewindButton": {
-							"label": "Перемотка назад на {{TIME}}"
-						}
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Скрыть заставки следующих видео",
@@ -157,13 +147,11 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
-						"forwardButton": "Кнопка перемотки вперёд",
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
-						"rewindButton": "Кнопка перемотки назад",
 						"screenshotButton": "Кнопка «Скриншот»",
 						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
@@ -213,17 +201,6 @@
 					},
 					"title": "Настройки меню функций"
 				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "Включить кнопки перемотки вперёд/назад",
-					"title": "Добавляет кнопки перемотки вперёд/назад в проигрыватель"
-				},
-				"time": {
-					"label": "Время перемотки",
-					"title": "Кол-во времени, на которое будет перематываться видео"
-				},
-				"title": "Настройки кнопок перемотки вперёд/назад"
 			},
 			"importExportSettings": {
 				"exportButton": {
