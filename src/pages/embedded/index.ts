@@ -135,6 +135,11 @@ const alwaysShowProgressBar = async function () {
 const enableFeatures = () => {
 	browserColorLog(`Enabling features...`, "FgMagenta");
 	void (async () => {
+		const {
+			data: {
+				options: { button_placements }
+			}
+		} = await waitForSpecificMessage("options", "request_data", "content");
 		// Wait for the specified container selectors to be available on the page
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
@@ -172,9 +177,28 @@ const enableFeatures = () => {
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
+		for (const multiButtonFeatureName of featureToMultiButtonsMap.keys()) {
+			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.pop();
+			if (!buttonName) continue;
+			switch (multiButtonFeatureName) {
+				case "playbackSpeedButtons": {
+					switch (button_placements[buttonName]) {
+						case "below_player":
+						case "player_controls_left":
+						case "feature_menu": {
+							await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
+							break;
+						}
+						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+						case "player_controls_right": {
+							await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+							break;
+						}
+					}
+				}
+			}
+		}
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
-		await addIncreasePlaybackSpeedButton();
-		await addDecreasePlaybackSpeedButton();
 		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
@@ -361,9 +385,27 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { playbackSpeedButtonsEnabled }
 						} = message;
+						const {
+							data: {
+								options: {
+									button_placements: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
+								}
+							}
+						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (playbackSpeedButtonsEnabled) {
-							await addDecreasePlaybackSpeedButton();
-							await addIncreasePlaybackSpeedButton();
+							await removeDecreasePlaybackSpeedButton();
+							await removeIncreasePlaybackSpeedButton();
+							switch (decreasePlaybackSpeedButtonPlacement) {
+								case "below_player":
+								case "player_controls_left": {
+									await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
+									break;
+								}
+								case "player_controls_right": {
+									await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+									break;
+								}
+							}
 						} else {
 							await removeDecreasePlaybackSpeedButton();
 							await removeIncreasePlaybackSpeedButton();
@@ -629,10 +671,10 @@ window.addEventListener("DOMContentLoaded", function () {
 										switch (buttonName) {
 											case "increasePlaybackSpeedButton":
 											case "decreasePlaybackSpeedButton": {
-												await decreasePlaybackSpeedButtonFuncs.remove();
-												await increasePlaybackSpeedButtonFuncs.remove();
-												await decreasePlaybackSpeedButtonFuncs.add();
-												await increasePlaybackSpeedButtonFuncs.add();
+												void decreasePlaybackSpeedButtonFuncs.remove();
+												void decreasePlaybackSpeedButtonFuncs.add();
+												void increasePlaybackSpeedButtonFuncs.remove();
+												void increasePlaybackSpeedButtonFuncs.add();
 											}
 										}
 									}

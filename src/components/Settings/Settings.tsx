@@ -542,7 +542,19 @@ export default function Settings() {
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
-								onChange={setValueOption(`button_placements.${feature}`)}
+								onChange={(change) => {
+									switch (feature) {
+										case "decreasePlaybackSpeedButton":
+										case "increasePlaybackSpeedButton": {
+											setValueOption(`button_placements.decreasePlaybackSpeedButton`)(change);
+											// Timeout required otherwise the button won't work
+											setTimeout(() => setValueOption(`button_placements.increasePlaybackSpeedButton`)(change), 25);
+											break;
+										}
+										default:
+											setValueOption(`button_placements.${feature}`)(change);
+									}
+								}}
 								options={buttonPlacementOptions}
 								selectedOption={getSelectedOption(`button_placements.${feature}`)}
 								title={t(`settings.sections.buttonPlacement.select.title`, {
