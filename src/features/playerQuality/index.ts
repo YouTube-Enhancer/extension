@@ -23,9 +23,10 @@ export default async function setPlayerQuality(): Promise<void> {
 	if (!player_quality) return;
 
 	// Get the player element
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 
 	// If player element is not available, return

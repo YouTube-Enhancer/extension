@@ -455,7 +455,9 @@ window.addEventListener("DOMContentLoaded", function () {
 											updateFeatureMenuItemLabel(
 												feature,
 												window.i18nextInstance.t(
-													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<
+														FeatureToMultiButtonMap[typeof multiFeatureName]
+													>}.label`,
 													{
 														SPEED: options.playback_buttons_speed
 													}
@@ -487,31 +489,33 @@ window.addEventListener("DOMContentLoaded", function () {
 									return;
 								}
 
-                if (featureToMultiButtonsMap.has(featureName)) {
-                  const multiFeatureName = featureName as MultiButtonFeatureNames;
-                  const multiButtonName = feature as MultiButtonNames;
-                  switch (multiFeatureName) {
-                    case "playbackSpeedButtons": {
-                      updateFeatureMenuItemLabel(
-                        feature,
-                        window.i18nextInstance.t(
-                          `pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-                          {
-                            SPEED: options.playback_buttons_speed
-                          }
-                        )
-                      );
-                      break;
-                    }
-                  }
-                  return
-                } 
+								if (featureToMultiButtonsMap.has(featureName)) {
+									const multiFeatureName = featureName as MultiButtonFeatureNames;
+									const multiButtonName = feature as MultiButtonNames;
+									switch (multiFeatureName) {
+										case "playbackSpeedButtons": {
+											updateFeatureMenuItemLabel(
+												feature,
+												window.i18nextInstance.t(
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<
+														FeatureToMultiButtonMap[typeof multiFeatureName]
+													>}.label`,
+													{
+														SPEED: options.playback_buttons_speed
+													}
+												)
+											);
+											break;
+										}
+									}
+									return;
+								}
 								updateFeatureMenuItemLabel(
 									feature,
 									window.i18nextInstance.t(
-										featureToMultiButtonsMap.has(featureName) ?
-											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
-										:	`pages.content.features.${featureName as SingleButtonNames}.button.label`
+										featureToMultiButtonsMap.has(featureName)
+											? `pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+											: `pages.content.features.${featureName as SingleButtonNames}.button.label`
 									)
 								);
 							}
@@ -520,9 +524,10 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "automaticTheaterModeChange": {
 						// Get the player element
-						const playerContainer =
-							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
-							: isShortsPage() ? document.querySelector("div#shorts-player")
+						const playerContainer = isWatchPage()
+							? document.querySelector("div#player-container.ytd-watch-flexy")
+							: isShortsPage()
+							? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return
 						if (!playerContainer) return;

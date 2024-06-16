@@ -19,9 +19,10 @@ export default async function adjustSpeedOnScrollWheel() {
 	// Wait for the specified container selectors to be available on the page
 	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	// Get the player element
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
@@ -61,9 +62,10 @@ export default async function adjustSpeedOnScrollWheel() {
 			await setOptionsData();
 
 			// Get the player element
-			const playerContainer =
-				isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-				: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			const playerContainer = isWatchPage()
+				? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+				: isShortsPage()
+				? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;

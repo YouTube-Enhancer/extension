@@ -34,9 +34,9 @@ export const addLoopButton: AddButtonFunction = async () => {
 		"loopButton",
 		loopButtonPlacement,
 		window.i18nextInstance.t(
-			loopButtonPlacement === "feature_menu" ?
-				"pages.content.features.loopButton.button.label"
-			:	"pages.content.features.loopButton.button.toggle.off"
+			loopButtonPlacement === "feature_menu"
+				? "pages.content.features.loopButton.button.label"
+				: "pages.content.features.loopButton.button.toggle.off"
 		),
 		getFeatureIcon("loopButton", loopButtonPlacement),
 		loopButtonClickListener,

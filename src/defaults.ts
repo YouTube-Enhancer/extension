@@ -20,13 +20,11 @@ function setDefaultValues() {
 		try {
 			// Parse the stored value to check its type
 			const storedValue =
-				(
-					typeof defaultConfiguration[option] === "object" ||
-					typeof defaultConfiguration[option] === "boolean" ||
-					typeof defaultConfiguration[option] === "number"
-				) ?
-					JSON.parse(storedValueString)
-				:	storedValueString;
+				typeof defaultConfiguration[option] === "object" ||
+				typeof defaultConfiguration[option] === "boolean" ||
+				typeof defaultConfiguration[option] === "number"
+					? JSON.parse(storedValueString)
+					: storedValueString;
 			// Check if the parsed value is an object and has properties
 			if (typeof storedValue !== "object" || storedValue === null) continue;
 			// Deep merge missing keys with their default values

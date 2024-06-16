@@ -34,15 +34,19 @@ async function updateTooltip<ButtonName extends TooltipButtonName>(buttonName: B
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
-		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as TooltipButtonName}.label`,
+		speed == 4 && buttonName == "increasePlaybackSpeedButton"
+			? `pages.content.features.playbackSpeedButtons.increaseLimit`
+			: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton"
+			? `pages.content.features.playbackSpeedButtons.decreaseLimit`
+			: // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			  `pages.content.features.playbackSpeedButtons.buttons.${buttonName as TooltipButtonName}.label`,
 		{
 			SPEED:
-				speed == 4 || speed == 0.25 ? String(speed)
-				: buttonName == "decreasePlaybackSpeedButton" ? String(speed - playbackSpeedPerClick)
-				: String(speed + playbackSpeedPerClick)
+				speed == 4 || speed == 0.25
+					? String(speed)
+					: buttonName == "decreasePlaybackSpeedButton"
+					? String(speed - playbackSpeedPerClick)
+					: String(speed + playbackSpeedPerClick)
 		}
 	);
 	update();
@@ -58,9 +62,10 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				currentPlaybackSpeed = playbackRate;
 				if (currentPlaybackSpeed + amount <= 0) return;
 				if (currentPlaybackSpeed + amount > 4) return;
-				const playerContainer =
-					isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				const playerContainer = isWatchPage()
+					? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+					: isShortsPage()
+					? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 					: null;
 				if (!playerContainer) return;
 				const {

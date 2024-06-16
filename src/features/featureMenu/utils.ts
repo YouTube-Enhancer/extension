@@ -96,7 +96,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		const menuItemToggle = document.createElement("div");
 		menuItemToggle.classList.add("ytp-menuitem-toggle-checkbox");
 		menuItemContent.appendChild(menuItemToggle);
-    menuItem.ariaChecked = initialChecked ? "true" : "false";
+		menuItem.ariaChecked = initialChecked ? "true" : "false";
 	}
 	menuItem.appendChild(menuItemContent);
 
