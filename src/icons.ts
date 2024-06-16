@@ -3,9 +3,12 @@ import type { AllButtonNames, ButtonPlacement } from "./types";
 import { createSVGElement } from "./utils/utilities";
 export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export type BasicIcon = SVGSVGElement;
-export const toggleFeatures = Object.keys({ loopButton: "", maximizePlayerButton: "", volumeBoostButton: "" } satisfies Partial<
-	Record<AllButtonNames, "">
->);
+export const toggleFeatures = Object.keys({
+	hideEndScreenCardsButton: "",
+	loopButton: "",
+	maximizePlayerButton: "",
+	volumeBoostButton: ""
+} satisfies Partial<Record<AllButtonNames, "">>);
 export type ToggleFeatures = (typeof toggleFeatures)[number];
 export type IconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
 export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
@@ -231,10 +234,43 @@ const increasePlaybackSpeedButtonSVG = createSVGElement(
 		fill: "white"
 	})
 );
+const hideEndScreenCardsButtonSVG = createSVGElement(
+	"svg",
+	{
+		height: "24px",
+		"stroke-width": "1",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M 19.615385,7.7692309 V 19.615385 a 1.6923077,1.6923077 0 0 1 -1.692308,1.692307 H 2.6923077 A 1.6923077,1.6923077 0 0 1 1,19.615385 V 7.7692309 A 1.6923077,1.6923077 0 0 1 2.6923077,6.0769232 H 17.923077 a 1.6923077,1.6923077 0 0 1 1.692308,1.6923077 z m 1.692307,-5.076923 H 5.2307692 a 0.84615385,0.84615385 0 0 0 0,1.6923077 H 21.307692 V 17.076923 a 0.846154,0.846154 0 0 0 1.692308,0 V 4.3846156 A 1.6923077,1.6923077 0 0 0 21.307692,2.6923079 Z",
+		fill: "white"
+	})
+);
+const showEndScreenCardsButtonSVG = createSVGElement(
+	"svg",
+	{
+		height: "24px",
+		"stroke-width": "1",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M 17.894749,6.1105233 H 2.7368227 A 1.684214,1.6827074 0 0 0 1.0526086,7.793231 v 11.778954 a 1.684214,1.6827074 0 0 0 1.6842141,1.682707 H 17.894749 a 1.684214,1.6827074 0 0 0 1.684215,-1.682707 V 7.793231 A 1.684214,1.6827074 0 0 0 17.894749,6.1105233 Z m 0,13.4616617 H 2.7368227 V 7.793231 H 17.894749 Z M 22.947391,4.4278159 V 17.048122 a 0.84210706,0.84135374 0 0 1 -1.684213,0 V 4.4278159 H 5.2631439 a 0.84210707,0.84135375 0 0 1 0,-1.6827074 H 21.263178 a 1.684214,1.6827074 0 0 1 1.684213,1.6827074 z",
+		fill: "white"
+	})
+);
 export const featureIcons = {
 	decreasePlaybackSpeedButton: {
 		feature_menu: decreasePlaybackSpeedButtonSVG,
 		shared_icon_position: decreasePlaybackSpeedButtonSVG
+	},
+	hideEndScreenCardsButton: {
+		feature_menu: hideEndScreenCardsButtonSVG,
+		shared_icon_position: {
+			off: showEndScreenCardsButtonSVG,
+			on: hideEndScreenCardsButtonSVG
+		}
 	},
 	increasePlaybackSpeedButton: {
 		feature_menu: increasePlaybackSpeedButtonSVG,
@@ -270,9 +306,6 @@ export const featureIcons = {
 		}
 	}
 } satisfies FeatureIconMap;
-export function getFeatureIcon<Name extends AllButtonNames, Placement extends ButtonPlacement>(
-	featureName: Name,
-	placement: GetPlacementKey<Placement>
-) {
-	return featureIcons[featureName][placement];
+export function getFeatureIcon<Name extends AllButtonNames>(featureName: Name, placement: ButtonPlacement): IconType<Name> {
+	return featureIcons[featureName][placement !== "feature_menu" ? "shared_icon_position" : "feature_menu"] as IconType<Name>;
 }

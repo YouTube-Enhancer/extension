@@ -5,6 +5,7 @@ import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configura
 import { deepDarkPreset } from "../deepDarkPresets";
 import { availableLocales } from "../i18n/index";
 import {
+	PlayerQualityFallbackStrategy,
 	buttonNames,
 	buttonPlacements,
 	featureMenuOpenTypes,
@@ -23,6 +24,7 @@ export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
 		decreasePlaybackSpeedButton: "player_controls_left",
+		hideEndScreenCardsButton: "player_controls_right",
 		increasePlaybackSpeedButton: "player_controls_left",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
@@ -47,6 +49,7 @@ export const defaultConfiguration = {
 	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
 	enable_hide_end_screen_cards: false,
+	enable_hide_end_screen_cards_button: false,
 	enable_hide_live_stream_chat: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
@@ -80,6 +83,7 @@ export const defaultConfiguration = {
 	osd_display_type: "text",
 	playback_buttons_speed: 0.25,
 	player_quality: "auto",
+	player_quality_fallback_strategy: "lower",
 	player_speed: 1,
 	remembered_volumes: {
 		shortsPageVolume: 100,
@@ -130,6 +134,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_hide_end_screen_cards: z.boolean().optional(),
+	enable_hide_end_screen_cards_button: z.boolean().optional(),
 	enable_hide_live_stream_chat: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_hide_shorts: z.boolean().optional(),
@@ -163,6 +168,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	osd_display_type: z.enum(onScreenDisplayTypes).optional(),
 	playback_buttons_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
+	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	remembered_volumes: z
 		.object({
