@@ -25,7 +25,7 @@ export default async function enableRemoveRedirect() {
 		for (const mutation of mutationsList) {
 			if (mutation.type !== "childList") return;
 			mutation.addedNodes.forEach((node: Nullable<Node>) => {
-				if (node instanceof Element === false || !node.hasAttribute("href")) return;
+				if (!(node instanceof Element) || !("href" in node)) return;
 				const href: Nullable<string> = node.getAttribute("href");
 				if (!href || !href.match(regex)) return;
 				const urlParams = new URLSearchParams(href);
