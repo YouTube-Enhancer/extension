@@ -722,8 +722,12 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 
 	Object.keys(changes.buttonPlacement).forEach((button) => {
 		const buttonName = button;
-		if (Object.keys(changes.buttonPlacement).includes(buttonName))
-			// eslint-disable-next-line prefer-destructuring
+		if (
+			!Array.from(featureToMultiButtonsMap.keys())
+				.map((key) => featureToMultiButtonsMap.get(key))
+				.flat()
+				.includes(buttonName)
+		)
 			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
 		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
 		if (multiButtonFeatureNames === undefined) return;
