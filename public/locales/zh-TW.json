@@ -13,6 +13,16 @@
 						"label": "功能選單"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "快轉{{TIME}}"
+						},
+						"rewindButton": {
+							"label": "倒帶{{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "隱藏片尾資訊卡",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
+						"forwardButton": "快轉按鈕",
 						"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
+						"rewindButton": "倒帶按鈕",
 						"screenshotButton": "螢幕截圖按鈕",
 						"volumeBoostButton": "音量增強按鈕"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "功能選單設定"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "啟用快轉倒帶按鈕",
+					"title": "在播放器加入快轉和倒帶按鈕"
+				},
+				"time": {
+					"label": "快轉/倒帶時間",
+					"title": "每次快轉/倒帶的時間"
+				},
+				"title": "快轉/倒帶按鈕設定"
 			},
 			"importExportSettings": {
 				"exportButton": {
