@@ -13,6 +13,16 @@
 						"label": "フィーチャー・メニュー"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "終了画面のカードを非表示にする",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "スクリーンショットボタン",
 						"volumeBoostButton": "音量ブーストボタン"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "フィーチャー・メニュー設定"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
