@@ -69,7 +69,7 @@ interface EnUS {
 				};
 				fallbackQualityStrategy: {
 					select: {
-						label: "Fallback quality strategy";
+						label: "Quality fallback strategy";
 						options: { higher: "Higher"; lower: "Lower" };
 						title: "The strategy to use when the selected quality is not available";
 					};
