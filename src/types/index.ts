@@ -5,7 +5,7 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 import z, { ZodType } from "zod";
 
 import type { DeepDarkPreset } from "../deepDarkPresets";
-import type { AvailableLocales } from "../i18n";
+import type { AvailableLocales } from "../i18n/constants";
 // #region Utility types
 export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;

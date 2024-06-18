@@ -1,4 +1,4 @@
-import type { AvailableLocales } from "@/src/i18n";
+import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {

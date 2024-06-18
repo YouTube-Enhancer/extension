@@ -3,7 +3,7 @@ import z, { ZodEnum, ZodObject } from "zod";
 import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
 
 import { deepDarkPreset } from "../deepDarkPresets";
-import { availableLocales } from "../i18n/index";
+import { availableLocales } from "../i18n/constants";
 import {
 	PlayerQualityFallbackStrategy,
 	buttonNames,
