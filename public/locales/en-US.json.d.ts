@@ -9,6 +9,12 @@ interface EnUS {
 		content: {
 			features: {
 				featureMenu: { button: { label: "Feature menu" } };
+				forwardRewindButtons: {
+					buttons: {
+						forwardButton: { label: "Fast forward by {{TIME}}" };
+						rewindButton: { label: "Rewind by {{TIME}}" };
+					};
+				};
 				hideEndScreenCardsButton: {
 					button: {
 						label: "Hide end screen cards";
@@ -93,11 +99,13 @@ interface EnUS {
 				select: {
 					buttonNames: {
 						decreasePlaybackSpeedButton: "Decrease Speed button";
+						forwardButton: "Fast Forward button";
 						hideEndScreenCardsButton: "Hide end screen cards button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
+						rewindButton: "Rewind button";
 						screenshotButton: "Screenshot button";
 						volumeBoostButton: "Volume Boost button";
 					};
@@ -132,6 +140,17 @@ interface EnUS {
 					};
 					title: "Feature menu settings";
 				};
+			};
+			forwardRewindButtons: {
+				enable: {
+					label: "Enable forward/rewind buttons";
+					title: "Adds forward and rewind buttons to the video player";
+				};
+				time: {
+					label: "Forward/rewind time";
+					title: "The amount of time to forward/rewind the video by";
+				};
+				title: "Forward/rewind button settings";
 			};
 			importExportSettings: {
 				exportButton: {

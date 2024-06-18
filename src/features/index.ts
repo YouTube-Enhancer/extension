@@ -1,5 +1,6 @@
 import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 
+import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { addHideEndScreenCardsButton, removeHideEndScreenCardsButton } from "@/src/features/hideEndScreenCards";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
@@ -23,6 +24,10 @@ export const featureButtonFunctions = {
 		add: addDecreasePlaybackSpeedButton,
 		remove: removeDecreasePlaybackSpeedButton
 	},
+	forwardButton: {
+		add: addForwardButton,
+		remove: removeForwardButton
+	},
 	hideEndScreenCardsButton: {
 		add: addHideEndScreenCardsButton,
 		remove: removeHideEndScreenCardsButton
@@ -42,6 +47,10 @@ export const featureButtonFunctions = {
 	openTranscriptButton: {
 		add: addOpenTranscriptButton,
 		remove: removeOpenTranscriptButton
+	},
+	rewindButton: {
+		add: addRewindButton,
+		remove: removeRewindButton
 	},
 	screenshotButton: {
 		add: addScreenshotButton,

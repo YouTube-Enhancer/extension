@@ -13,6 +13,16 @@
 						"label": "功能菜单"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "隐藏结束界面卡片",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "屏幕截图按钮",
 						"volumeBoostButton": "音量增强按钮"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "功能菜单设置"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {

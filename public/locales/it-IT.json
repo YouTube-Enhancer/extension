@@ -13,6 +13,16 @@
 						"label": "Menu' funzioni"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Nascondi le schede finali",
@@ -147,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Pulsante Schermata",
 						"volumeBoostButton": "Pulsante Aumento volume"
 					},
@@ -201,6 +213,17 @@
 					},
 					"title": "Impostazioni menu' funzioni"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
