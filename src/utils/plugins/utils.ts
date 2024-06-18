@@ -1,8 +1,8 @@
+import type { AvailableLocales } from "@/src/i18n/constants";
+
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import { join, resolve } from "path";
-
-import type { AvailableLocales } from "../../../src/i18n";
 
 import { outputFolderName } from "../../../src/utils/constants";
 export type LocaleValue = { [key: string]: LocaleValue } | string;

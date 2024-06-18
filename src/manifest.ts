@@ -1,7 +1,7 @@
 import type { Manifest } from "webextension-polyfill";
 
 import pkg from "../package.json";
-import { availableLocales } from "./i18n";
+import { availableLocales } from "./i18n/constants";
 const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
 const hostPermissions: Manifest.MatchPattern[] = ["https://www.youtube.com/*"];
 const resources = [
