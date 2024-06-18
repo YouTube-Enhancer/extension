@@ -260,10 +260,40 @@ const showEndScreenCardsButtonSVG = createSVGElement(
 		fill: "white"
 	})
 );
+const forwardButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "white",
+		height: "24px",
+		stroke: "white",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M 1.0000006,19.542857 11.685714,12 1.0000006,4.457143 Z M 12.314285,4.457143 V 19.542857 L 22.999999,12 Z"
+	})
+);
+const rewindButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "white",
+		height: "24px",
+		stroke: "white",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M 11.685714,19.542856 V 4.4571438 L 1.000001,12 Z M 12.314285,12 22.999999,19.542856 V 4.4571438 Z"
+	})
+);
 export const featureIcons = {
 	decreasePlaybackSpeedButton: {
 		feature_menu: decreasePlaybackSpeedButtonSVG,
 		shared_icon_position: decreasePlaybackSpeedButtonSVG
+	},
+	forwardButton: {
+		feature_menu: forwardButtonSVG,
+		shared_icon_position: forwardButtonSVG
 	},
 	hideEndScreenCardsButton: {
 		feature_menu: hideEndScreenCardsButtonSVG,
@@ -293,6 +323,10 @@ export const featureIcons = {
 	openTranscriptButton: {
 		feature_menu: openTranscriptSVG,
 		shared_icon_position: openTranscriptSVG
+	},
+	rewindButton: {
+		feature_menu: rewindButtonSVG,
+		shared_icon_position: rewindButtonSVG
 	},
 	screenshotButton: {
 		feature_menu: screenshotButtonSVG,

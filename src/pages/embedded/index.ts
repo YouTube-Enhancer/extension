@@ -10,6 +10,7 @@ import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCS
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import {
 	addHideEndScreenCardsButton,
 	disableHideEndScreenCards,
@@ -192,6 +193,22 @@ const enableFeatures = () => {
 						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
 						case "player_controls_right": {
 							await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+							break;
+						}
+					}
+					break;
+				}
+				case "forwardRewindButtons": {
+					switch (button_placements[buttonName]) {
+						case "below_player":
+						case "player_controls_left":
+						case "feature_menu": {
+							await addRewindButton().then(addForwardButton);
+							break;
+						}
+						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+						case "player_controls_right": {
+							await addForwardButton().then(addRewindButton);
 							break;
 						}
 					}
@@ -399,6 +416,39 @@ window.addEventListener("DOMContentLoaded", function () {
 							await addLoopButton();
 						} else {
 							await removeLoopButton();
+						}
+						break;
+					}
+					case "forwardRewindButtonsChange": {
+						const {
+							data: { forwardRewindButtonsEnabled }
+						} = message;
+						const {
+							data: {
+								options: {
+									button_placements: { forwardButton: forwardButtonPlacement }
+								}
+							}
+						} = await waitForSpecificMessage("options", "request_data", "content");
+						await removeForwardButton();
+						await removeRewindButton();
+						if (forwardRewindButtonsEnabled) {
+							switch (forwardButtonPlacement) {
+								case "below_player":
+								case "player_controls_left":
+								case "feature_menu": {
+									await addRewindButton().then(addForwardButton);
+									break;
+								}
+								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+								case "player_controls_right": {
+									await addForwardButton().then(addRewindButton);
+									break;
+								}
+							}
+						} else {
+							await removeRewindButton();
+							await removeForwardButton();
 						}
 						break;
 					}
@@ -749,6 +799,33 @@ window.addEventListener("DOMContentLoaded", function () {
 										}
 									}
 									break;
+								}
+								case "forwardRewindButtons": {
+									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
+										if (oldPlacement === newPlacement) continue;
+										const rewindButtonFuncs = getFeatureFunctions("rewindButton", oldPlacement);
+										const forwardButtonFuncs = getFeatureFunctions("forwardButton", oldPlacement);
+										switch (buttonName) {
+											case "forwardButton":
+											case "rewindButton": {
+												await forwardButtonFuncs.remove();
+												await rewindButtonFuncs.remove();
+												switch (newPlacement) {
+													case "below_player":
+													case "player_controls_left":
+													case "feature_menu": {
+														await rewindButtonFuncs.add().then(forwardButtonFuncs.add);
+														break;
+													}
+													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+													case "player_controls_right": {
+														await forwardButtonFuncs.add().then(rewindButtonFuncs.add);
+														break;
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}

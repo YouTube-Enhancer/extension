@@ -369,11 +369,13 @@ export default function Settings() {
 	];
 	const buttonPlacementOptions: SelectOption<
 		| "button_placements.decreasePlaybackSpeedButton"
+		| "button_placements.forwardButton"
 		| "button_placements.hideEndScreenCardsButton"
 		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
 		| "button_placements.maximizePlayerButton"
 		| "button_placements.openTranscriptButton"
+		| "button_placements.rewindButton"
 		| "button_placements.screenshotButton"
 		| "button_placements.volumeBoostButton"
 	>[] = [
@@ -549,6 +551,12 @@ export default function Settings() {
 											setValueOption(`button_placements.decreasePlaybackSpeedButton`)(change);
 											// Timeout required otherwise the button won't work
 											setTimeout(() => setValueOption(`button_placements.increasePlaybackSpeedButton`)(change), 25);
+											break;
+										}
+										case "forwardButton":
+										case "rewindButton": {
+											setValueOption(`button_placements.rewindButton`)(change);
+											setTimeout(() => setValueOption(`button_placements.forwardButton`)(change), 50);
 											break;
 										}
 										default:
@@ -1034,6 +1042,26 @@ export default function Settings() {
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
+					/>
+				</SettingSection>
+				<SettingSection>
+					<SettingTitle title={t("settings.sections.forwardRewindButtons.title")} />
+					<Setting
+						checked={settings.enable_forward_rewind_buttons?.toString() === "true"}
+						id="enable_forward_rewind_buttons"
+						label={t("settings.sections.forwardRewindButtons.enable.label")}
+						onChange={setCheckboxOption("enable_forward_rewind_buttons")}
+						title={t("settings.sections.forwardRewindButtons.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_forward_rewind_buttons?.toString() !== "true"}
+						id="forward_rewind_buttons_time"
+						label={t("settings.sections.forwardRewindButtons.time.label")}
+						onChange={setValueOption("forward_rewind_buttons_time")}
+						title={t("settings.sections.forwardRewindButtons.time.title")}
+						type="number"
+						value={settings.forward_rewind_buttons_time}
 					/>
 				</SettingSection>
 				<SettingSection>
