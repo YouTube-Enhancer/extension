@@ -110,6 +110,16 @@
 					"label": "Ajuste automático de qualidade",
 					"title": "Ajusta automaticamente a qualidade do vídeo para o nível selecionado."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Qualidade do reprodutor",
 					"title": "A qualidade a ser definida para o vídeo"
