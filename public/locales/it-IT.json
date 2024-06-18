@@ -110,6 +110,16 @@
 					"label": "Regolazione automatica qualità",
 					"title": "Regola automaticamente la qualità video al livello selezionato."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Strategia ripiego qualità",
+						"options": {
+							"higher": "Più alta",
+							"lower": "Più bassa"
+						},
+						"title": "La strategia da usare quando la qualità selezionata non è disponibile"
+					}
+				},
 				"select": {
 					"label": "Qualità riproduttore",
 					"title": "La qualità alla quale impostare il video"

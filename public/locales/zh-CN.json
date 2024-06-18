@@ -110,6 +110,16 @@
 					"label": "自动质量调整",
 					"title": "自动调整视频质量到所选等级。"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "质量回退策略",
+						"options": {
+							"higher": "升高",
+							"lower": "降低"
+						},
+						"title": "当所选质量不可用时使用的策略"
+					}
+				},
 				"select": {
 					"label": "播放质量",
 					"title": "将视频质量设为"

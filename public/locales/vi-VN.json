@@ -1,6 +1,6 @@
 {
-	"langCode": "ca-ES",
-	"langName": "Català",
+	"langCode": "en-US",
+	"langName": "English (US)",
 	"messages": {
 		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
