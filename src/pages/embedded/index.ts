@@ -178,7 +178,7 @@ const enableFeatures = () => {
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
 		for (const multiButtonFeatureName of featureToMultiButtonsMap.keys()) {
-			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.pop();
+			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.at(-1);
 			if (!buttonName) continue;
 			switch (multiButtonFeatureName) {
 				case "playbackSpeedButtons": {
@@ -418,10 +418,12 @@ window.addEventListener("DOMContentLoaded", function () {
 							await removeIncreasePlaybackSpeedButton();
 							switch (decreasePlaybackSpeedButtonPlacement) {
 								case "below_player":
-								case "player_controls_left": {
+								case "player_controls_left":
+								case "feature_menu": {
 									await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
 									break;
 								}
+								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
 								case "player_controls_right": {
 									await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
 									break;
@@ -723,21 +725,24 @@ window.addEventListener("DOMContentLoaded", function () {
 								case "playbackSpeedButtons": {
 									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
 										if (oldPlacement === newPlacement) continue;
-										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"increasePlaybackSpeedButton",
-											buttonName === "decreasePlaybackSpeedButton" ? multiButtonChanges[featureName]["increasePlaybackSpeedButton"].old : oldPlacement
-										);
-										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"decreasePlaybackSpeedButton",
-											buttonName === "increasePlaybackSpeedButton" ? multiButtonChanges[featureName]["decreasePlaybackSpeedButton"].old : oldPlacement
-										);
+										await removeDecreasePlaybackSpeedButton();
+										await removeIncreasePlaybackSpeedButton();
 										switch (buttonName) {
 											case "increasePlaybackSpeedButton":
 											case "decreasePlaybackSpeedButton": {
-												void decreasePlaybackSpeedButtonFuncs.remove();
-												void decreasePlaybackSpeedButtonFuncs.add();
-												void increasePlaybackSpeedButtonFuncs.remove();
-												void increasePlaybackSpeedButtonFuncs.add();
+												switch (newPlacement) {
+													case "below_player":
+													case "player_controls_left":
+													case "feature_menu": {
+														await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
+														break;
+													}
+													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+													case "player_controls_right": {
+														await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+														break;
+													}
+												}
 											}
 										}
 									}
