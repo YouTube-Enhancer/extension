@@ -725,8 +725,10 @@ window.addEventListener("DOMContentLoaded", function () {
 								case "playbackSpeedButtons": {
 									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
 										if (oldPlacement === newPlacement) continue;
-										await removeDecreasePlaybackSpeedButton();
-										await removeIncreasePlaybackSpeedButton();
+										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions("increasePlaybackSpeedButton", oldPlacement);
+										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions("decreasePlaybackSpeedButton", oldPlacement);
+										await decreasePlaybackSpeedButtonFuncs.remove();
+										await increasePlaybackSpeedButtonFuncs.remove();
 										switch (buttonName) {
 											case "increasePlaybackSpeedButton":
 											case "decreasePlaybackSpeedButton": {
@@ -734,12 +736,12 @@ window.addEventListener("DOMContentLoaded", function () {
 													case "below_player":
 													case "player_controls_left":
 													case "feature_menu": {
-														await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
+														await decreasePlaybackSpeedButtonFuncs.add().then(increasePlaybackSpeedButtonFuncs.add);
 														break;
 													}
 													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
 													case "player_controls_right": {
-														await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+														await increasePlaybackSpeedButtonFuncs.add().then(decreasePlaybackSpeedButtonFuncs.add);
 														break;
 													}
 												}
