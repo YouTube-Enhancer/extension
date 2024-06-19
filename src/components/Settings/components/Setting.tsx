@@ -1,5 +1,8 @@
 import type { configurationId } from "@/src/types";
 
+import useSectionTitle from "@/src/hooks/useSectionTitle";
+import useSettingsFilter from "@/src/hooks/useSettingsFilter";
+
 import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
 import type { ColorPickerProps } from "../../Inputs/ColorPicker/ColorPicker";
@@ -11,6 +14,7 @@ import { CSSEditor, Checkbox, ColorPicker, NumberInput, Select, Slider } from ".
 
 type SettingInputProps<ID extends configurationId> = {
 	id: ID;
+	label?: string;
 	title?: string;
 } & (
 	| ({ type: "checkbox" } & CheckboxProps)
@@ -74,9 +78,19 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 	}
 }
 export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
+	const { filter } = useSettingsFilter();
+	const { title } = useSectionTitle();
+	const shouldSettingBeVisible =
+		filter === "" ? true : (
+			(title && title.toLowerCase().includes(filter.toLowerCase())) ||
+			(settingProps.title !== undefined && settingProps.title.toLowerCase().includes(filter.toLowerCase())) ||
+			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
+		);
 	return (
-		<div className="mx-2 mb-1" title={settingProps.title}>
-			<SettingInput {...settingProps} />
-		</div>
+		shouldSettingBeVisible && (
+			<div className="mx-2 mb-1" title={settingProps.title}>
+				<SettingInput {...settingProps} />
+			</div>
+		)
 	);
 }
