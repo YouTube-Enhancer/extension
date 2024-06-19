@@ -457,6 +457,9 @@
 				},
 				"title": "滾輪音量控制設定"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "記住已觀看的影片",
