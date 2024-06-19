@@ -457,6 +457,9 @@
 				},
 				"title": "Réglages du contrôle du volume par la molette de défilement"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Track watched videos",
