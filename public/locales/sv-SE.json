@@ -457,6 +457,9 @@
 				},
 				"title": "Rullningshjulets volyminställningar"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Håll reda på visade videor",

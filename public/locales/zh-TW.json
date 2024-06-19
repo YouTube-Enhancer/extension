@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "快轉{{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "倒帶{{TIME}}"
 						}
 					}
 				},
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "快轉按鈕",
 						"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
-						"rewindButton": "Rewind button",
+						"rewindButton": "倒帶按鈕",
 						"screenshotButton": "螢幕截圖按鈕",
 						"volumeBoostButton": "音量增強按鈕"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "啟用快轉倒帶按鈕",
+					"title": "在播放器加入快轉和倒帶按鈕"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "快轉/倒帶時間",
+					"title": "每次快轉/倒帶的時間"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "快轉/倒帶按鈕設定"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -456,6 +456,9 @@
 					}
 				},
 				"title": "滾輪音量控制設定"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

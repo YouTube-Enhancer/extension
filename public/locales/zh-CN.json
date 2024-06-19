@@ -457,6 +457,9 @@
 				},
 				"title": "滚轮控制音量设置"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "记录已观看视频",
