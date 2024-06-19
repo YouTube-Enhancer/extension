@@ -457,6 +457,9 @@
 				},
 				"title": "Lautstärke durch Mausrad ändern"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Track watched videos",
