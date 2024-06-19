@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Перемотка вперёд на {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Перемотка назад на {{TIME}}"
 						}
 					}
 				},
@@ -157,7 +157,7 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "Кнопка перемотки вперёд",
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Включить кнопки перемотки вперёд/назад",
+					"title": "Добавляет кнопки перемотки вперёд/назад в проигрыватель"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Время перемотки",
+					"title": "Кол-во времени, на которое будет перематываться видео"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Настройки кнопок перемотки вперёд/назад"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -456,6 +456,9 @@
 					}
 				},
 				"title": "Настройки управления громкостью с помощью колеса мыши"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

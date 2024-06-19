@@ -457,6 +457,9 @@
 				},
 				"title": "Ajustes de control de volumen con la rueda del ratón"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Track watched videos",

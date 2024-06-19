@@ -457,6 +457,9 @@
 				},
 				"title": "スクロールホイール音量制御設定"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "視聴した動画に追跡をつける",

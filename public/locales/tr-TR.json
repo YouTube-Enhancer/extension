@@ -457,6 +457,9 @@
 				},
 				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "İzlenen videoları takip edin",
