@@ -457,6 +457,9 @@
 				},
 				"title": "스크롤 휠로 볼륨 조절 설정"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "시청한 동영상 기억",
