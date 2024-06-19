@@ -340,6 +340,7 @@ interface EnUS {
 				};
 				title: "Scroll wheel volume control settings";
 			};
+			settingSearch: { placeholder: "Search for a setting" };
 			videoHistory: {
 				enable: {
 					label: "Track watched videos";
