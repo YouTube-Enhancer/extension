@@ -457,6 +457,9 @@
 				},
 				"title": "Impostazioni controllo volume con rotellina"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Traccia i video visti",
