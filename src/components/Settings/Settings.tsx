@@ -1071,14 +1071,12 @@ export default function Settings() {
 				<SettingSection title={t("settings.sections.youtubeDeepDark.title")}>
 					<SettingTitle />
 					<fieldset className={cn("flex flex-row gap-1")}>
-						title={t("settings.sections.youtubeDeepDark.author")}
 						<fieldset className={cn("flex flex-row gap-1")}>
-							<SettingTitle />
+							<legend className="mb-1 text-lg sm:text-xl md:text-2xl">{t("settings.sections.youtubeDeepDark.author")}</legend>
 							<Link href="https://github.com/RaitaroH">RaitaroH</Link>
 						</fieldset>
-						title={t("settings.sections.youtubeDeepDark.co-authors")}
 						<fieldset className={cn("flex flex-row gap-1")}>
-							<SettingTitle />
+							<legend className="mb-1 text-lg sm:text-xl md:text-2xl">{t("settings.sections.youtubeDeepDark.co-authors")}</legend>
 							<Link href="https://github.com/MechaLynx">MechaLynx</Link>
 						</fieldset>
 					</fieldset>
