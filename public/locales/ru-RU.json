@@ -457,6 +457,9 @@
 				},
 				"title": "Настройки управления громкостью с помощью колеса мыши"
 			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Отслеживание таймкода просматриваемого видео",
