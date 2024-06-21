@@ -318,6 +318,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideLiveStreamChatEnabled: newValue
 			});
 		},
+		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
+				hidePaidPromotionBannerEnabled: newValue
+			});
+		},
 		enable_hide_scrollbar: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideScrollBarChange", {
 				hideScrollBarEnabled: newValue

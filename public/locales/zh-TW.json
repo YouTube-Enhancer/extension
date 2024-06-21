@@ -266,6 +266,10 @@
 						"label": "隱藏直播聊天室",
 						"title": "隱藏直播的聊天室"
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"
@@ -458,7 +462,7 @@
 				"title": "滾輪音量控制設定"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "搜尋設定"
 			},
 			"videoHistory": {
 				"enable": {
