@@ -163,7 +163,7 @@
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Кнопка перемотки назад",
 						"screenshotButton": "Кнопка «Скриншот»",
 						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
@@ -267,8 +267,8 @@
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "Скрыть \"Содержит прямую рекламу\"",
+						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -462,7 +462,7 @@
 				"title": "Настройки управления громкостью с помощью колеса мыши"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "Поиск настроек"
 			},
 			"videoHistory": {
 				"enable": {
