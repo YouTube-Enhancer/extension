@@ -266,6 +266,10 @@
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
 						"title": "Nasconde la barra di scorrimento delle pagine"
@@ -458,7 +462,7 @@
 				"title": "Impostazioni controllo volume con rotellina"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "Cerca un'impostazione"
 			},
 			"videoHistory": {
 				"enable": {

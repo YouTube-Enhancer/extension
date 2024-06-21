@@ -187,6 +187,10 @@ interface EnUS {
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hidePaidPromotionBanner: {
+						label: "Hide paid promotion banner";
+						title: "Hides the banner that appears when you watch a video that has a paid promotion";
+					};
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					hideTranslateComment: {

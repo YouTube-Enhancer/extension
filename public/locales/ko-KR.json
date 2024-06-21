@@ -266,6 +266,10 @@
 						"label": "실시간 채팅 숨기기",
 						"title": "실시간 채팅 레이아웃을 숨깁니다."
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
 						"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"

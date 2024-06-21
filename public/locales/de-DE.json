@@ -266,6 +266,10 @@
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "Scrollbar ausblenden",
 						"title": "Versteckt die Scrollleiste"

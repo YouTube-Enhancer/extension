@@ -19,6 +19,7 @@ import {
 	removeHideEndScreenCardsButton
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -145,6 +146,7 @@ const enableFeatures = () => {
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		void Promise.all([
+			enableHidePaidPromotionBanner(),
 			enableHideShorts(),
 			enableRemoveRedirect(),
 			enableShareShortener(),
@@ -732,6 +734,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (skipContinueWatchingEnabled) {
 							await enableSkipContinueWatching();
+						}
+						break;
+					}
+					case "hidePaidPromotionBannerChange": {
+						const {
+							data: { hidePaidPromotionBannerEnabled }
+						} = message;
+						if (hidePaidPromotionBannerEnabled) {
+							await enableHidePaidPromotionBanner();
+						} else {
+							disableHidePaidPromotionBanner();
 						}
 						break;
 					}

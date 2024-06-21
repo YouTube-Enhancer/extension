@@ -266,6 +266,10 @@
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"

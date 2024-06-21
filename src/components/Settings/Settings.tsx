@@ -724,6 +724,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_hide_paid_promotion_banner?.toString() === "true"}
+						id="enable_hide_paid_promotion_banner"
+						label={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.label")}
+						onChange={setCheckboxOption("enable_hide_paid_promotion_banner")}
+						title={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
