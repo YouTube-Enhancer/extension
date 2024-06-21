@@ -267,8 +267,8 @@
 						"title": "Nasconde la chat live stream"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "Nascondi banner promozioni a pagamento",
+						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
 					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",

@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "向前快进 {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "向后快退 {{TIME}}"
 						}
 					}
 				},
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "降低速度按钮",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "快进按钮",
 						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
-						"rewindButton": "Rewind button",
+						"rewindButton": "快退按钮",
 						"screenshotButton": "屏幕截图按钮",
 						"volumeBoostButton": "音量增强按钮"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "启用快进/快退按钮",
+					"title": "给视频播放器添加快进/快退按钮"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "快进/快退时间",
+					"title": "快进/快退视频的时间长度"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "快进/快退按钮设置"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -267,8 +267,8 @@
 						"title": "隐藏直播聊天"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "隐藏付费推广横幅",
+						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
@@ -462,7 +462,7 @@
 				"title": "滚轮控制音量设置"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "搜索设置"
 			},
 			"videoHistory": {
 				"enable": {

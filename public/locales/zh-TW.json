@@ -267,8 +267,8 @@
 						"title": "隱藏直播的聊天室"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "隱藏付費推廣橫幅",
+						"title": "隱藏當影片帶有付費推廣時顯示的橫幅"
 					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
