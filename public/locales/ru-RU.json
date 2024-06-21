@@ -266,6 +266,10 @@
 						"label": "Спрятать чат прямого эфира",
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
 						"title": "Скрывает полосу прокрутки страницы"
