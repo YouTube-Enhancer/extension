@@ -13,6 +13,25 @@
 						"label": "Funktionsmeny"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Dölj slutskärmskort",
+						"toggle": {
+							"off": "Visa slutskärmskort",
+							"on": "Dölj slutskärmskort"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Slinga",
@@ -39,14 +58,14 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Minska hastigheten med {{SPEED}}"
+							"label": "Minska hastigheten till {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Öka hastigheten med {{SPEED}}"
+							"label": "Öka hastigheten till {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Det går inte att sänka mer ({{SPEED}})",
+					"increaseLimit": "Det går inte att höja mer ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -101,6 +120,16 @@
 					"label": "Automatisk kvalitetsjustering",
 					"title": "Justerar automatiskt videokvaliteten till den valda nivån."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Reservmetod för kvaliten",
+						"options": {
+							"higher": "Högre",
+							"lower": "Lägre"
+						},
+						"title": "Metod att använda när den valda kvaliteten inte är tillgänglig"
+					}
+				},
 				"select": {
 					"label": "Spelarkvalitet",
 					"title": "Kvaliteten för att ställa in videon till"
@@ -128,10 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
+						"forwardButton": "Fast Forward button",
+						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -155,7 +187,7 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Inställningar för knappplacering"
+				"title": "Inställningar för knapplacering"
 			},
 			"customCSS": {
 				"editor": {
@@ -181,6 +213,17 @@
 					},
 					"title": "Inställningar för funktionsmeny"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -212,12 +255,20 @@
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Dölj slutskärmskort",
+						"title": "Döljer korten i slutet av videon"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Dölj knappen för slutskärmskort",
+						"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Dölj direktströmschatt",
+						"title": "Döljer direktströmschatten"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
@@ -228,8 +279,8 @@
 						"title": "Döljer alla shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Dölj översättning av kommentarer",
+						"title": "Döljer knappen 'Översätt till språk' under kommentarer"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
@@ -272,8 +323,8 @@
 						"title": "Rullar automatiskt till nästa shorts"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
+						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
 					}
 				},
 				"title": "Övriga inställningar"
@@ -320,7 +371,7 @@
 				"type": {
 					"label": "Typ",
 					"options": {
-						"circle": "Circle",
+						"circle": "Cirkel",
 						"line": "Rad",
 						"no_display": "Ingen visning",
 						"text": "Text"
@@ -409,6 +460,9 @@
 					}
 				},
 				"title": "Rullningshjulets volyminställningar"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

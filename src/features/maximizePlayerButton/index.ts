@@ -61,7 +61,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			maximizePlayer();
 			maximizePlayerButton.ariaChecked = "false";
 			const button = getFeatureButton("maximizePlayerButton");
-			const icon = getFeatureIcon("maximizePlayerButton", "shared_icon_position");
+			const icon = getFeatureIcon("maximizePlayerButton", "below_player");
 			if (button && button instanceof HTMLButtonElement) {
 				if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, icon.off);
 				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
@@ -74,7 +74,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		maximizePlayerButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.label")
 		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"),
-		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement),
 		maximizePlayerButtonClickListener,
 		true
 	);

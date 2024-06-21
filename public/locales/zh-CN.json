@@ -13,6 +13,25 @@
 						"label": "功能菜单"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "向前快进 {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "向后快退 {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "隐藏结束界面卡片",
+						"toggle": {
+							"off": "显示结束界面卡片",
+							"on": "隐藏结束界面卡片"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "循环播放",
@@ -101,6 +120,16 @@
 					"label": "自动质量调整",
 					"title": "自动调整视频质量到所选等级。"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "质量回退策略",
+						"options": {
+							"higher": "升高",
+							"lower": "降低"
+						},
+						"title": "当所选质量不可用时使用的策略"
+					}
+				},
 				"select": {
 					"label": "播放质量",
 					"title": "将视频质量设为"
@@ -128,10 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"forwardButton": "快进按钮",
+						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
+						"rewindButton": "快退按钮",
 						"screenshotButton": "屏幕截图按钮",
 						"volumeBoostButton": "音量增强按钮"
 					},
@@ -182,6 +214,17 @@
 					"title": "功能菜单设置"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "启用快进/快退按钮",
+					"title": "给视频播放器添加快进/快退按钮"
+				},
+				"time": {
+					"label": "快进/快退时间",
+					"title": "快进/快退视频的时间长度"
+				},
+				"title": "快进/快退按钮设置"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "导出配置成功",
@@ -212,12 +255,20 @@
 						"title": "当视频打开时，自动启用剧场模式"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "隐藏结束界面卡片",
+						"title": "隐藏视频末尾的卡片"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "隐藏结束界面卡片按钮",
+						"title": "添加按钮以显示/隐藏视频末尾的卡片"
 					},
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "隐藏付费推广横幅",
+						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
@@ -409,6 +460,9 @@
 					}
 				},
 				"title": "滚轮控制音量设置"
+			},
+			"settingSearch": {
+				"placeholder": "搜索设置"
 			},
 			"videoHistory": {
 				"enable": {

@@ -13,6 +13,25 @@
 						"label": "Feature menu"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Hide end screen cards",
+						"toggle": {
+							"off": "Show end screen cards",
+							"on": "Hide end screen cards"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Loop",
@@ -101,6 +120,16 @@
 					"label": "Habilitar ajuste automático de calidad",
 					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Calidad del reproductor",
 					"title": "La calidad a la que establecer el vídeo"
@@ -128,10 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"forwardButton": "Fast Forward button",
+						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botón de repetición",
 						"maximizePlayerButton": "Maximizar botón",
 						"openTranscriptButton": "Abrir botón de transcripción",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Botón de captura de pantalla",
 						"volumeBoostButton": "Botón Aumento de Volumen"
 					},
@@ -182,6 +214,17 @@
 					"title": "Configuración del menú"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Ajustes exportados correctamente",
@@ -215,9 +258,17 @@
 						"label": "Hide end screen cards",
 						"title": "Hides the cards at the end of the video"
 					},
+					"hideEndScreenCardsButton": {
+						"label": "Hide end screen cards button",
+						"title": "Adds a button to show/hide the cards at the end of the video"
+					},
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de desplazamiento",
@@ -409,6 +460,9 @@
 					}
 				},
 				"title": "Ajustes de control de volumen con la rueda del ratón"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

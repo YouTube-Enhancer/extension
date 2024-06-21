@@ -24,7 +24,7 @@ export const addOpenTranscriptButton: AddButtonFunction = async () => {
 		"openTranscriptButton",
 		openTranscriptButtonPlacement,
 		window.i18nextInstance.t("pages.content.features.openTranscriptButton.button.label"),
-		getFeatureIcon("openTranscriptButton", openTranscriptButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("openTranscriptButton", openTranscriptButtonPlacement),
 		transcriptButtonClickerListener,
 		false
 	);

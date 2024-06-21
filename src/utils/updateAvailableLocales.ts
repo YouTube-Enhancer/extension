@@ -17,9 +17,9 @@ export default function updateAvailableLocales() {
 	const availableLocales = readdirSync(`${publicDir}/locales`)
 		.filter((locale) => locale.endsWith(".json"))
 		.map((locale) => locale.replace(".json", ""));
-	const availableLocalesFile = readFileSync(`${i18nDir}/index.ts`, "utf-8");
+	const availableLocalesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	const updatedAvailableLocalesFile = updateAvailableLocalesArray(availableLocalesFile, availableLocales);
 	if (updatedAvailableLocalesFile && updatedAvailableLocalesFile !== availableLocalesFile) {
-		writeFileSync(`${i18nDir}/index.ts`, updatedAvailableLocalesFile);
+		writeFileSync(`${i18nDir}/constants.ts`, updatedAvailableLocalesFile);
 	}
 }

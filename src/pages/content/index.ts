@@ -1,4 +1,4 @@
-import type { AvailableLocales } from "@/src/i18n";
+import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
@@ -199,12 +199,34 @@ const getStoredSettings = async (): Promise<configuration> => {
 
 	return options;
 };
+const deepEqual = (a: unknown, b: unknown): boolean => {
+	if (a === b) return true;
+
+	if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
+		return false;
+	}
+
+	const keysA = Object.keys(a);
+	const keysB = Object.keys(b);
+
+	if (keysA.length !== keysB.length) return false;
+
+	for (const key of keysA) {
+		if (!keysB.includes(key)) return false;
+		if (!deepEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])) return false;
+	}
+
+	return true;
+};
 const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
-	return (
-		change?.newValue !== undefined &&
-		change?.oldValue !== undefined &&
-		parseStoredValue(change.oldValue as string) !== parseStoredValue(change.newValue as string)
-	);
+	if (change?.newValue === undefined || change?.oldValue === undefined) {
+		return false;
+	}
+
+	const parsedOldValue = parseStoredValue(change.oldValue as string);
+	const parsedNewValue = parseStoredValue(change.newValue as string);
+
+	return !deepEqual(parsedOldValue, parsedNewValue);
 };
 const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
@@ -275,14 +297,30 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playerSpeed: options.player_speed
 			});
 		},
+		enable_forward_rewind_buttons: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
+				forwardRewindButtonsEnabled: newValue
+			});
+		},
 		enable_hide_end_screen_cards: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
+				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],
 				hideEndScreenCardsEnabled: newValue
+			});
+		},
+		enable_hide_end_screen_cards_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
+				hideEndScreenCardsButtonEnabled: newValue
 			});
 		},
 		enable_hide_live_stream_chat: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
 				hideLiveStreamChatEnabled: newValue
+			});
+		},
+		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
+				hidePaidPromotionBannerEnabled: newValue
 			});
 		},
 		enable_hide_scrollbar: (__oldValue, newValue) => {
@@ -390,6 +428,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		feature_menu_open_type: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
 				featureMenuOpenType: newValue
+			});
+		},
+		forward_rewind_buttons_time: () => {
+			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
+				forwardRewindButtonsEnabled: options.enable_forward_rewind_buttons
 			});
 		},
 		language: (__oldValue, newValue) => {
