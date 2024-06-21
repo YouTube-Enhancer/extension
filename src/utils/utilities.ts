@@ -5,32 +5,25 @@ import type {
 	ActionMessage,
 	AllButtonNames,
 	AnyFunction,
-	ButtonPlacementChange,
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
-	DeepPartial,
 	ExtensionSendOnlyMessageMappings,
-	FeatureToMultiButtonMap,
 	MessageMappings,
 	MessageSource,
 	Messages,
-	MultiButtonChange,
 	Nullable,
 	OnScreenDisplayPosition,
 	Path,
 	PathValue,
-	PlayerQualityFallbackStrategy,
 	Selector,
 	SendDataMessage,
-	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
-	YoutubePlayerQualityLevel,
-	configuration
+	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
-import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { type FeatureName, eventManager } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -54,19 +47,16 @@ export const toDivisible = (value: number, divider: number): number => Math.ceil
 
 export function chooseClosestQuality(
 	selectedQuality: YoutubePlayerQualityLevel,
-	availableQualities: YoutubePlayerQualityLevel[],
-	fallbackStrategy: PlayerQualityFallbackStrategy
+	availableQualities: YoutubePlayerQualityLevel[]
 ): Nullable<YoutubePlayerQualityLevel> {
 	// If there are no available qualities, return null
 	if (availableQualities.length === 0) {
 		return null;
 	}
-
 	// If the selected quality is available, return it
 	if (availableQualities.includes(selectedQuality)) {
 		return selectedQuality;
 	}
-
 	// Find the index of the selected quality in the array
 	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
 
@@ -75,34 +65,15 @@ export function chooseClosestQuality(
 		(acc, quality) => {
 			const qualityIndex = youtubePlayerQualityLevels.indexOf(quality);
 			if (qualityIndex !== -1) {
-				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality, qualityIndex });
+				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality });
 			}
 			return acc;
 		},
-		[] as { difference: number; quality: YoutubePlayerQualityLevel; qualityIndex: number }[]
+		[] as { difference: number; quality: YoutubePlayerQualityLevel }[]
 	);
 
-	// Sort the closest qualities by difference in ascending order
-	closestQualities.sort((a, b) => a.difference - b.difference);
-
-	// If fallback strategy is "higher", prefer higher quality levels
-	if (fallbackStrategy === "higher") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex > selectedIndex) {
-				return quality;
-			}
-		}
-	}
-
-	// If fallback strategy is "lower", prefer lower quality levels
-	if (fallbackStrategy === "lower") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex < selectedIndex) {
-				return quality;
-			}
-		}
-	}
-	return null;
+	// Return the quality level with the minimum difference
+	return closestQualities[0].quality;
 }
 const BrowserColors = {
 	BgBlack: "background-color: black; color: white;",
@@ -711,47 +682,4 @@ export function deepMerge(target: Record<string, unknown>, source: Record<string
 	}
 
 	return merged;
-}
-
-export function groupButtonChanges(changes: ButtonPlacementChange): {
-	multiButtonChanges: MultiButtonChange;
-	singleButtonChanges: SingleButtonChange;
-} {
-	const multiButtonChanges: DeepPartial<MultiButtonChange> = {};
-	const singleButtonChanges: DeepPartial<SingleButtonChange> = {};
-
-	Object.keys(changes.buttonPlacement).forEach((button) => {
-		const buttonName = button;
-		if (
-			!Array.from(featureToMultiButtonsMap.keys())
-				.map((key) => featureToMultiButtonsMap.get(key))
-				.flat()
-				.includes(buttonName)
-		)
-			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
-		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
-		if (multiButtonFeatureNames === undefined) return;
-		const featureButtons = featureToMultiButtonsMap.get(multiButtonFeatureNames) || [];
-		if (featureButtons.includes(buttonName)) {
-			if (!multiButtonChanges[multiButtonFeatureNames]) {
-				multiButtonChanges[multiButtonFeatureNames] = {};
-			}
-			// eslint-disable-next-line prefer-destructuring
-			multiButtonChanges[multiButtonFeatureNames]![buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
-				changes.buttonPlacement[buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]];
-		}
-	});
-
-	return { multiButtonChanges: multiButtonChanges as MultiButtonChange, singleButtonChanges: singleButtonChanges as SingleButtonChange };
-}
-export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: configuration) {
-	switch (buttonName) {
-		case "volumeBoostButton": {
-			return settings.volume_boost_mode === "global" || settings[buttonNameToSettingName[buttonName]] === false;
-		}
-		default: {
-			const { [buttonName]: settingName } = buttonNameToSettingName;
-			return settings[settingName] === false;
-		}
-	}
 }

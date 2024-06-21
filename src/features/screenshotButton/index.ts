@@ -96,7 +96,7 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 		"screenshotButton",
 		screenshotButtonPlacement,
 		window.i18nextInstance.t("pages.content.features.screenshotButton.button.label"),
-		getFeatureIcon("screenshotButton", screenshotButtonPlacement),
+		getFeatureIcon("screenshotButton", screenshotButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
 		screenshotButtonClickListener,
 		false
 	);
