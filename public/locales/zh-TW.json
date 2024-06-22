@@ -10,15 +10,25 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "功能選單"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "快轉{{TIME}}"
+						},
+						"rewindButton": {
+							"label": "倒帶{{TIME}}"
+						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "隱藏片尾資訊卡",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "顯示片尾資訊卡",
+							"on": "隱藏片尾資訊卡"
 						}
 					}
 				},
@@ -33,16 +43,16 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "最大化",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "關閉最大化",
+							"on": "啟用最大化"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "打開文字記錄"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -71,10 +81,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "音量增強",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "關閉音量增強",
+							"on": "啟用音量增強"
 						}
 					}
 				}
@@ -110,6 +120,16 @@
 					"label": "自動畫質調整",
 					"title": "自動調整到指定畫質"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "畫質後備策略",
+						"options": {
+							"higher": "較高",
+							"lower": "較低"
+						},
+						"title": "所選畫質不適用時的策略"
+					}
+				},
 				"select": {
 					"label": "播放畫質",
 					"title": "設定影片播放畫質"
@@ -137,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"forwardButton": "快轉按鈕",
+						"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
+						"rewindButton": "倒帶按鈕",
 						"screenshotButton": "螢幕截圖按鈕",
 						"volumeBoostButton": "音量增強按鈕"
 					},
@@ -192,6 +214,17 @@
 					"title": "功能選單設定"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "啟用快轉倒帶按鈕",
+					"title": "在播放器加入快轉和倒帶按鈕"
+				},
+				"time": {
+					"label": "快轉/倒帶時間",
+					"title": "每次快轉/倒帶的時間"
+				},
+				"title": "快轉/倒帶按鈕設定"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "設定已成功匯出",
@@ -226,12 +259,16 @@
 						"title": "隱藏影片片尾的資訊卡"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
+						"label": "隱藏片尾資訊卡按鈕",
 						"title": "Adds a button to show/hide the cards at the end of the video"
 					},
 					"hideLiveStreamChat": {
 						"label": "隱藏直播聊天室",
 						"title": "隱藏直播的聊天室"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "隱藏付費推廣橫幅",
+						"title": "隱藏當影片帶有付費推廣時顯示的橫幅"
 					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
@@ -424,6 +461,9 @@
 				},
 				"title": "滾輪音量控制設定"
 			},
+			"settingSearch": {
+				"placeholder": "搜尋設定"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "記住已觀看的影片",
@@ -491,7 +531,7 @@
 						"title": "主要文字的顏色"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
+						"label": "次要背景顏色",
 						"title": "次要背景顏色"
 					}
 				},

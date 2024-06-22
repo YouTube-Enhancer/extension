@@ -4,7 +4,7 @@ import { generateErrorMessage } from "zod-error";
 
 import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "../types";
 
-import { type AvailableLocales } from "../i18n";
+import { type AvailableLocales } from "../i18n/constants";
 import { i18nDir } from "./plugins/utils";
 import { formatError } from "./utilities";
 
@@ -66,10 +66,10 @@ function updateLocalePercentageObject(code: string, updatedObject: Record<string
 export default async function updateLocalePercentages() {
 	const localePercentages = await getLocalePercentagesFromCrowdin();
 	if (!localePercentages) return;
-	const localePercentagesFile = readFileSync(`${i18nDir}/index.ts`, "utf-8");
+	const localePercentagesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, Object.fromEntries(localePercentages));
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
-		writeFileSync(`${i18nDir}/index.ts`, updatedLocalePercentagesFile);
+		writeFileSync(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);
 	}
 }
 async function getLocalePercentagesFromCrowdin() {

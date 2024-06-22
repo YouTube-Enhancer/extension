@@ -5,7 +5,7 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 import z, { ZodType } from "zod";
 
 import type { DeepDarkPreset } from "../deepDarkPresets";
-import type { AvailableLocales } from "../i18n";
+import type { AvailableLocales } from "../i18n/constants";
 // #region Utility types
 export type Nullable<T> = T | null;
 export type AnyFunction = (...args: any[]) => void;
@@ -165,6 +165,10 @@ export type FeatureToMultiButtonMap = {
 	};
 };
 const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
+	forwardRewindButtons: {
+		forwardButton: "",
+		rewindButton: ""
+	},
 	playbackSpeedButtons: {
 		decreasePlaybackSpeedButton: "",
 		increasePlaybackSpeedButton: ""
@@ -182,21 +186,25 @@ export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export const buttonNames = Object.keys({
 	decreasePlaybackSpeedButton: "",
+	forwardButton: "",
 	hideEndScreenCardsButton: "",
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	openTranscriptButton: "",
+	rewindButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
 export const buttonNameToSettingName = {
 	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	forwardButton: "enable_forward_rewind_buttons",
 	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
 	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
 	loopButton: "enable_loop_button",
 	maximizePlayerButton: "enable_maximize_player_button",
 	openTranscriptButton: "enable_open_transcript_button",
+	rewindButton: "enable_forward_rewind_buttons",
 	screenshotButton: "enable_screenshot_button",
 	volumeBoostButton: "enable_volume_boost"
 } satisfies Record<AllButtonNames, `enable_${string}` & configurationKeys>;
@@ -316,12 +324,14 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ deepDarkCustomThemeColors: DeepDarkCustomThemeColors; deepDarkPreset: DeepDarkPreset; deepDarkThemeEnabled: boolean }
 	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
+	forwardRewindButtonsChange: DataResponseMessage<"forwardRewindButtonsChange", { forwardRewindButtonsEnabled: boolean }>;
 	hideEndScreenCardsButtonChange: DataResponseMessage<"hideEndScreenCardsButtonChange", { hideEndScreenCardsButtonEnabled: boolean }>;
 	hideEndScreenCardsChange: DataResponseMessage<
 		"hideEndScreenCardsChange",
 		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
 	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
+	hidePaidPromotionBannerChange: DataResponseMessage<"hidePaidPromotionBannerChange", { hidePaidPromotionBannerEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
 	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
@@ -402,9 +412,11 @@ export type configuration = {
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
+	enable_forward_rewind_buttons: boolean;
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
+	enable_hide_paid_promotion_banner: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
 	enable_hide_translate_comment: boolean;
@@ -428,6 +440,7 @@ export type configuration = {
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;
+	forward_rewind_buttons_time: number;
 	language: AvailableLocales;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;

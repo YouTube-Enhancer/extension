@@ -13,6 +13,16 @@
 						"label": "Feature menu"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Hide end screen cards",
@@ -110,6 +120,16 @@
 					"label": "Ajustement automatique de la résolution",
 					"title": "Ajuste automatiquement la résolution de la vidéo au niveau sélectionné."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Higher",
+							"lower": "Lower"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Résolution",
 					"title": "La vidéo aura cette résolution"
@@ -137,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Loop button",
 						"maximizePlayerButton": "Maximize button",
 						"openTranscriptButton": "Open Transcript button",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Screenshot button",
 						"volumeBoostButton": "Volume Boost button"
 					},
@@ -192,6 +214,17 @@
 					"title": "Paramètres du menu de fonctionnalités"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Réglages exportés avec succès",
@@ -232,6 +265,10 @@
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
 						"label": "Cacher la barre de défilement",
@@ -423,6 +460,9 @@
 					}
 				},
 				"title": "Réglages du contrôle du volume par la molette de défilement"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

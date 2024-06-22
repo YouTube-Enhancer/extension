@@ -1,4 +1,4 @@
-import type { AvailableLocales } from "@/src/i18n";
+import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
@@ -290,6 +290,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playerSpeed: options.player_speed
 			});
 		},
+		enable_forward_rewind_buttons: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
+				forwardRewindButtonsEnabled: newValue
+			});
+		},
 		enable_hide_end_screen_cards: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
 				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],
@@ -304,6 +309,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_hide_live_stream_chat: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
 				hideLiveStreamChatEnabled: newValue
+			});
+		},
+		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
+				hidePaidPromotionBannerEnabled: newValue
 			});
 		},
 		enable_hide_scrollbar: (__oldValue, newValue) => {
@@ -411,6 +421,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		feature_menu_open_type: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
 				featureMenuOpenType: newValue
+			});
+		},
+		forward_rewind_buttons_time: () => {
+			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
+				forwardRewindButtonsEnabled: options.enable_forward_rewind_buttons
 			});
 		},
 		language: (__oldValue, newValue) => {

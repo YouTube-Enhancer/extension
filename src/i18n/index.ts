@@ -1,70 +1,7 @@
+import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 import { type Resource, createInstance } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
-export const availableLocales = [
-  "ca-ES",
-  "cs-CZ",
-  "de-DE",
-  "en-GB",
-  "en-US",
-  "es-ES",
-  "fa-IR",
-  "fr-FR",
-  "he-IL",
-  "hi-IN",
-  "it-IT",
-  "ja-JP",
-  "pl-PL",
-  "pt-BR",
-  "ru-RU",
-  "sv-SE",
-  "tr-TR",
-  "zh-CN",
-  "zh-TW"
-] as const;
-export const localePercentages: Record<AvailableLocales, number> = {
-	"ca-ES": 0,
-	"cs-CZ": 0,
-	"de-DE": 34,
-	"en-GB": 2,
-	"en-US": 100,
-	"es-ES": 61,
-	"fa-IR": 0,
-	"fr-FR": 64,
-	"he-IL": 0,
-	"hi-IN": 0,
-	"it-IT": 98,
-	"ja-JP": 98,
-	"pl-PL": 0,
-	"pt-BR": 71,
-	"ru-RU": 96,
-	"sv-SE": 94,
-	"tr-TR": 72,
-	"zh-CN": 98,
-	"zh-TW": 94
-};
-export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
-	"ca-ES": "ltr",
-	"cs-CZ": "ltr",
-	"de-DE": "ltr",
-	"en-GB": "ltr",
-	"en-US": "ltr",
-	"es-ES": "ltr",
-	"fa-IR": "rtl",
-	"fr-FR": "ltr",
-	"he-IL": "rtl",
-	"hi-IN": "ltr",
-	"it-IT": "ltr",
-	"ja-JP": "ltr",
-	"pl-PL": "ltr",
-	"pt-BR": "ltr",
-	"ru-RU": "ltr",
-	"sv-SE": "ltr",
-	"tr-TR": "ltr",
-	"zh-CN": "ltr",
-	"zh-TW": "ltr"
-};
-export type AvailableLocales = (typeof availableLocales)[number];
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
 export async function i18nService(locale: AvailableLocales) {

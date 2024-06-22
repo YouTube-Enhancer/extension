@@ -13,6 +13,16 @@
 						"label": "フィーチャー・メニュー"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "終了画面のカードを非表示にする",
@@ -110,6 +120,16 @@
 					"label": "自動画質調整",
 					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。"
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "画質フォールバック対策",
+						"options": {
+							"higher": "上位",
+							"lower": "下位"
+						},
+						"title": "使用不能選択中画質ときに対策使ってする"
+					}
+				},
 				"select": {
 					"label": "プレイヤーの動画質",
 					"title": "動画の画質に設定する"
@@ -137,11 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
+						"forwardButton": "Fast Forward button",
+						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "スクリーンショットボタン",
 						"volumeBoostButton": "音量ブーストボタン"
 					},
@@ -192,6 +214,17 @@
 					"title": "フィーチャー・メニュー設定"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "設定がエクスポートをされました",
@@ -226,12 +259,16 @@
 						"title": "動画の終了で画面カードを非表示にする"
 					},
 					"hideEndScreenCardsButton": {
-						"label": "Hide end screen cards button",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"label": "終了画面のカードボタンを非表示にする",
+						"title": "終了画面でボタンなカードを見せるか隠すに追加する"
 					},
 					"hideLiveStreamChat": {
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
@@ -423,6 +460,9 @@
 					}
 				},
 				"title": "スクロールホイール音量制御設定"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

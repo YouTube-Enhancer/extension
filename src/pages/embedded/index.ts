@@ -10,6 +10,7 @@ import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCS
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import {
 	addHideEndScreenCardsButton,
 	disableHideEndScreenCards,
@@ -18,6 +19,7 @@ import {
 	removeHideEndScreenCardsButton
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -144,6 +146,7 @@ const enableFeatures = () => {
 		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		void Promise.all([
+			enableHidePaidPromotionBanner(),
 			enableHideShorts(),
 			enableRemoveRedirect(),
 			enableShareShortener(),
@@ -178,7 +181,7 @@ const enableFeatures = () => {
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
 		for (const multiButtonFeatureName of featureToMultiButtonsMap.keys()) {
-			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.pop();
+			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.at(-1);
 			if (!buttonName) continue;
 			switch (multiButtonFeatureName) {
 				case "playbackSpeedButtons": {
@@ -192,6 +195,22 @@ const enableFeatures = () => {
 						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
 						case "player_controls_right": {
 							await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
+							break;
+						}
+					}
+					break;
+				}
+				case "forwardRewindButtons": {
+					switch (button_placements[buttonName]) {
+						case "below_player":
+						case "player_controls_left":
+						case "feature_menu": {
+							await addRewindButton().then(addForwardButton);
+							break;
+						}
+						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+						case "player_controls_right": {
+							await addForwardButton().then(addRewindButton);
 							break;
 						}
 					}
@@ -381,6 +400,39 @@ window.addEventListener("DOMContentLoaded", function () {
 						else await removeLoopButton();
 						break;
 					}
+					case "forwardRewindButtonsChange": {
+						const {
+							data: { forwardRewindButtonsEnabled }
+						} = message;
+						const {
+							data: {
+								options: {
+									button_placements: { forwardButton: forwardButtonPlacement }
+								}
+							}
+						} = await waitForSpecificMessage("options", "request_data", "content");
+						await removeForwardButton();
+						await removeRewindButton();
+						if (forwardRewindButtonsEnabled) {
+							switch (forwardButtonPlacement) {
+								case "below_player":
+								case "player_controls_left":
+								case "feature_menu": {
+									await addRewindButton().then(addForwardButton);
+									break;
+								}
+								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+								case "player_controls_right": {
+									await addForwardButton().then(addRewindButton);
+									break;
+								}
+							}
+						} else {
+							await removeRewindButton();
+							await removeForwardButton();
+						}
+						break;
+					}
 					case "playbackSpeedButtonsChange": {
 						const {
 							data: { playbackSpeedButtonsEnabled }
@@ -397,10 +449,12 @@ window.addEventListener("DOMContentLoaded", function () {
 							await removeIncreasePlaybackSpeedButton();
 							switch (decreasePlaybackSpeedButtonPlacement) {
 								case "below_player":
-								case "player_controls_left": {
+								case "player_controls_left":
+								case "feature_menu": {
 									await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
 									break;
 								}
+								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
 								case "player_controls_right": {
 									await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
 									break;
@@ -634,6 +688,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (skipContinueWatchingEnabled) await enableSkipContinueWatching();
 						break;
 					}
+					case "hidePaidPromotionBannerChange": {
+						const {
+							data: { hidePaidPromotionBannerEnabled }
+						} = message;
+						if (hidePaidPromotionBannerEnabled) {
+							await enableHidePaidPromotionBanner();
+						} else {
+							disableHidePaidPromotionBanner();
+						}
+						break;
+					}
 					case "deepDarkThemeChange": {
 						const {
 							data: { deepDarkCustomThemeColors, deepDarkPreset, deepDarkThemeEnabled }
@@ -660,25 +725,57 @@ window.addEventListener("DOMContentLoaded", function () {
 								case "playbackSpeedButtons": {
 									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
 										if (oldPlacement === newPlacement) continue;
-										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"increasePlaybackSpeedButton",
-											buttonName === "decreasePlaybackSpeedButton" ? multiButtonChanges[featureName]["increasePlaybackSpeedButton"].old : oldPlacement
-										);
-										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions(
-											"decreasePlaybackSpeedButton",
-											buttonName === "increasePlaybackSpeedButton" ? multiButtonChanges[featureName]["decreasePlaybackSpeedButton"].old : oldPlacement
-										);
+										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions("increasePlaybackSpeedButton", oldPlacement);
+										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions("decreasePlaybackSpeedButton", oldPlacement);
+										await decreasePlaybackSpeedButtonFuncs.remove();
+										await increasePlaybackSpeedButtonFuncs.remove();
 										switch (buttonName) {
 											case "increasePlaybackSpeedButton":
 											case "decreasePlaybackSpeedButton": {
-												void decreasePlaybackSpeedButtonFuncs.remove();
-												void decreasePlaybackSpeedButtonFuncs.add();
-												void increasePlaybackSpeedButtonFuncs.remove();
-												void increasePlaybackSpeedButtonFuncs.add();
+												switch (newPlacement) {
+													case "below_player":
+													case "player_controls_left":
+													case "feature_menu": {
+														await decreasePlaybackSpeedButtonFuncs.add().then(increasePlaybackSpeedButtonFuncs.add);
+														break;
+													}
+													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+													case "player_controls_right": {
+														await increasePlaybackSpeedButtonFuncs.add().then(decreasePlaybackSpeedButtonFuncs.add);
+														break;
+													}
+												}
 											}
 										}
 									}
 									break;
+								}
+								case "forwardRewindButtons": {
+									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
+										if (oldPlacement === newPlacement) continue;
+										const rewindButtonFuncs = getFeatureFunctions("rewindButton", oldPlacement);
+										const forwardButtonFuncs = getFeatureFunctions("forwardButton", oldPlacement);
+										switch (buttonName) {
+											case "forwardButton":
+											case "rewindButton": {
+												await forwardButtonFuncs.remove();
+												await rewindButtonFuncs.remove();
+												switch (newPlacement) {
+													case "below_player":
+													case "player_controls_left":
+													case "feature_menu": {
+														await rewindButtonFuncs.add().then(forwardButtonFuncs.add);
+														break;
+													}
+													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
+													case "player_controls_right": {
+														await forwardButtonFuncs.add().then(rewindButtonFuncs.add);
+														break;
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}

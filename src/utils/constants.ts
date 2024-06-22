@@ -3,7 +3,7 @@ import z, { ZodEnum, ZodObject } from "zod";
 import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
 
 import { deepDarkPreset } from "../deepDarkPresets";
-import { availableLocales } from "../i18n/index";
+import { availableLocales } from "../i18n/constants";
 import {
 	PlayerQualityFallbackStrategy,
 	buttonNames,
@@ -24,11 +24,13 @@ export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
 		decreasePlaybackSpeedButton: "player_controls_left",
+		forwardButton: "player_controls_right",
 		hideEndScreenCardsButton: "player_controls_right",
 		increasePlaybackSpeedButton: "player_controls_left",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
 		openTranscriptButton: "feature_menu",
+		rewindButton: "player_controls_right",
 		screenshotButton: "feature_menu",
 		volumeBoostButton: "feature_menu"
 	},
@@ -48,9 +50,11 @@ export const defaultConfiguration = {
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
+	enable_forward_rewind_buttons: false,
 	enable_hide_end_screen_cards: false,
 	enable_hide_end_screen_cards_button: false,
 	enable_hide_live_stream_chat: false,
+	enable_hide_paid_promotion_banner: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
 	enable_hide_translate_comment: false,
@@ -74,6 +78,7 @@ export const defaultConfiguration = {
 	enable_video_history: false,
 	enable_volume_boost: false,
 	feature_menu_open_type: "hover",
+	forward_rewind_buttons_time: 5,
 	language: "en-US",
 	osd_display_color: "white",
 	osd_display_hide_time: 750,
@@ -133,9 +138,11 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_custom_css: z.boolean().optional(),
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
+	enable_forward_rewind_buttons: z.boolean().optional(),
 	enable_hide_end_screen_cards: z.boolean().optional(),
 	enable_hide_end_screen_cards_button: z.boolean().optional(),
 	enable_hide_live_stream_chat: z.boolean().optional(),
+	enable_hide_paid_promotion_banner: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_hide_shorts: z.boolean().optional(),
 	enable_hide_translate_comment: z.boolean().optional(),
@@ -159,6 +166,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
 	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),
+	forward_rewind_buttons_time: z.number().optional(),
 	language: z.enum(availableLocales).optional(),
 	osd_display_color: z.enum(onScreenDisplayColors).optional(),
 	osd_display_hide_time: z.number().optional(),
