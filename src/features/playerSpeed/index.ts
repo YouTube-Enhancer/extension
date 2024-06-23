@@ -36,10 +36,9 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// If forced playback speed option is disabled, return
 	if (!enablePlayerSpeed) return;
 	// Get the player element
-	const playerContainer = isWatchPage()
-		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage()
-		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
@@ -65,10 +64,9 @@ export function restorePlayerSpeed() {
 	// If the player speed is not available, return
 	if (!playerSpeed) return;
 	// Get the player element
-	const playerContainer = isWatchPage()
-		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage()
-		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	// If player element is not available, return

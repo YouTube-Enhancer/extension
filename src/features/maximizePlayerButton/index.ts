@@ -69,9 +69,9 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		"maximizePlayerButton",
 		maximizePlayerButtonPlacement,
 		window.i18nextInstance.t(
-			maximizePlayerButtonPlacement === "feature_menu"
-				? "pages.content.features.maximizePlayerButton.button.label"
-				: "pages.content.features.maximizePlayerButton.button.toggle.off"
+			maximizePlayerButtonPlacement === "feature_menu" ?
+				"pages.content.features.maximizePlayerButton.button.label"
+			:	"pages.content.features.maximizePlayerButton.button.toggle.off"
 		),
 		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement),
 		maximizePlayerButtonClickListener,

@@ -17,26 +17,26 @@ export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type ExtractButtonFeatureNames<T> = T extends `pages.content.features.${infer FeatureName}.button.label`
-	? FeatureName
-	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label`
-	? FeatureName
+export type ExtractButtonFeatureNames<T> =
+	T extends `pages.content.features.${infer FeatureName}.button.label` ? FeatureName
+	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label` ? FeatureName
 	: never;
-export type ExtractButtonNames<T> = T extends `pages.content.features.${infer ButtonName}.button.label`
-	? ButtonName
-	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label`
-	? ButtonName
+export type ExtractButtonNames<T> =
+	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
+	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
 	: never;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | null | number | string | undefined
-		? undefined extends T[K]
-			? z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-			: z.ZodType<T[K]>
-		: z.ZodObject<TypeToZod<T[K]>>;
+	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
+		undefined extends T[K] ?
+			z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
+		:	z.ZodType<T[K]>
+	:	z.ZodObject<TypeToZod<T[K]>>;
 };
 export type TypeToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>> : T[K] extends object ? z.ZodObject<TypeToZod<T[K]>> : z.ZodType<T[K]>;
+	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>>
+	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
+	: z.ZodType<T[K]>;
 }>;
 export type TypeToPartialZodSchema<
 	Input,
@@ -44,42 +44,40 @@ export type TypeToPartialZodSchema<
 	Override extends { [Key in Omitted]: ZodType } = never,
 	Omit = false
 > = z.ZodObject<
-	Omit extends true
-		? OmitAndOverride<Input, Omitted, Override>
-		: {
-				[K in keyof Input]: Input[K] extends any[]
-					? z.ZodOptionalType<z.ZodType<Input[K]>>
-					: Input[K] extends object
-					? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
-					: z.ZodOptionalType<z.ZodType<Input[K]>>;
-		  }
+	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
+	:	{
+			[K in keyof Input]: Input[K] extends any[] ? z.ZodOptionalType<z.ZodType<Input[K]>>
+			: Input[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
+			: z.ZodOptionalType<z.ZodType<Input[K]>>;
+		}
 >;
-type PathImpl<T, Key extends keyof T> = Key extends string
-	? T[Key] extends Record<string, any>
-		? T[Key] extends ArrayLike<any>
-			? `${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
-			: `${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
-		: Key
-	: never;
+type PathImpl<T, Key extends keyof T> =
+	Key extends string ?
+		T[Key] extends Record<string, any> ?
+			T[Key] extends ArrayLike<any> ?
+				`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
+			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
+		:	Key
+	:	never;
 export type Path<T> = PathImpl<T, keyof T> | keyof T;
-export type PathValue<T, P extends Path<T>> = P extends `${infer Key}.${infer Rest}`
-	? Key extends keyof T
-		? Rest extends Path<T[Key]>
-			? PathValue<T[Key], Rest>
-			: never
-		: never
-	: P extends keyof T
-	? T[P]
+export type PathValue<T, P extends Path<T>> =
+	P extends `${infer Key}.${infer Rest}` ?
+		Key extends keyof T ?
+			Rest extends Path<T[Key]> ?
+				PathValue<T[Key], Rest>
+			:	never
+		:	never
+	: P extends keyof T ? T[P]
 	: never;
 export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodType }> = {
-	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[]
-		? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
-		: Omit<Input, Omitted>[K] extends object
-		? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
-		: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
+	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
+	: Omit<Input, Omitted>[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
+	: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
 } & Override;
 export type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K : O[K] extends Record<string, ValueType> ? K : never;
+	[K in keyof O]: O[K] extends ValueType ? K
+	: O[K] extends Record<string, ValueType> ? K
+	: never;
 }[keyof O];
 // #endregion Utility types
 // #region Constants

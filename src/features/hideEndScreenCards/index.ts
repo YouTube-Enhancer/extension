@@ -52,9 +52,9 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 		"hideEndScreenCardsButton",
 		hideEndScreenCardsButtonPlacement,
 		window.i18nextInstance.t(
-			hideEndScreenCardsButtonPlacement === "feature_menu"
-				? "pages.content.features.hideEndScreenCardsButton.button.label"
-				: `pages.content.features.hideEndScreenCardsButton.button.toggle.${!endScreenCardsAreHidden ? "on" : "off"}`
+			hideEndScreenCardsButtonPlacement === "feature_menu" ?
+				"pages.content.features.hideEndScreenCardsButton.button.label"
+			:	`pages.content.features.hideEndScreenCardsButton.button.toggle.${!endScreenCardsAreHidden ? "on" : "off"}`
 		),
 		getFeatureIcon("hideEndScreenCardsButton", hideEndScreenCardsButtonPlacement),
 		(checked) => handleButtonClick(hideEndScreenCardsButtonPlacement, checked),

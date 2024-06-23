@@ -249,14 +249,15 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
 		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
-		const heightExcludingMarginPadding = bottomElement
-			? bottomElement.offsetHeight -
-			  (parseInt(getComputedStyle(bottomElement).marginTop, 10) +
+		const heightExcludingMarginPadding =
+			bottomElement ?
+				bottomElement.offsetHeight -
+				(parseInt(getComputedStyle(bottomElement).marginTop, 10) +
 					parseInt(getComputedStyle(bottomElement).marginBottom, 10) +
 					parseInt(getComputedStyle(bottomElement).paddingTop, 10) +
 					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
-			  10
-			: 0;
+				10
+			:	0;
 
 		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);

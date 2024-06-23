@@ -22,10 +22,9 @@ export default async function enableRememberVolume(): Promise<void> {
 	const IsWatchPage = isWatchPage();
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
-	const playerContainer = IsWatchPage
-		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: IsShortsPage
-		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+	const playerContainer =
+		IsWatchPage ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: IsShortsPage ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 
 	// If player container is not available, return

@@ -79,5 +79,5 @@ While we don't yet have a strict guideline on what kind of code should be in the
 ---
 
 [^1]: [Why Use Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#why-use-conventional-commits)
-[^2]: [ESLint: A List of Editor Integrations](https://eslint.org/docs/latest/use/integrations#editors)
 
+[^2]: [ESLint: A List of Editor Integrations](https://eslint.org/docs/latest/use/integrations#editors)

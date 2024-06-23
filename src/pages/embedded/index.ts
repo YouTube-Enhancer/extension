@@ -609,9 +609,9 @@ window.addEventListener("DOMContentLoaded", function () {
 								updateFeatureMenuItemLabel(
 									feature,
 									window.i18nextInstance.t(
-										featureToMultiButtonsMap.has(featureName)
-											? `pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
-											: `pages.content.features.${featureName as SingleButtonNames}.button.label`
+										featureToMultiButtonsMap.has(featureName) ?
+											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+										:	`pages.content.features.${featureName as SingleButtonNames}.button.label`
 									)
 								);
 							}
@@ -620,10 +620,9 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					case "automaticTheaterModeChange": {
 						// Get the player element
-						const playerContainer = isWatchPage()
-							? document.querySelector("div#player-container.ytd-watch-flexy")
-							: isShortsPage()
-							? document.querySelector("div#shorts-player")
+						const playerContainer =
+							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
+							: isShortsPage() ? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return
 						if (!playerContainer) return;
