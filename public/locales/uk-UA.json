@@ -10,81 +10,81 @@
 			"features": {
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Меню функцій"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Швидкий перехід до {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Перемотати {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Приховати картки наприкінці відео",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Показати картки наприкінці відео",
+							"on": "Приховати картки наприкінці відео"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Повтор",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Виключити повтор",
+							"on": "Включити повтор"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Розгорнути",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Згорнути",
+							"on": "Розгорнути"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Відкрити транскрипцію"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Зменшити швидкість до {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Збільшити швидкість до {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Неможливо зменшити далі ({{SPEED}})",
+					"increaseLimit": "Неможливо збільшити далі ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Знімок екрана"
 					},
-					"copiedToClipboard": "Screenshot copied to clipboard"
+					"copiedToClipboard": "Знімок екрана скопійовано в буфер обміну"
 				},
 				"videoHistory": {
-					"resumeButton": "Resume",
+					"resumeButton": "Продовжити",
 					"resumePrompt": {
-						"close": "Close"
+						"close": "Закрити"
 					}
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Збільшення гучності",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Вимкнути збільшення гучності",
+							"on": "Включити збільшення гучності"
 						}
 					}
 				}
@@ -95,68 +95,68 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Клавіша для керування швидкістю прокрутки компʼютерною мишею не може бути тією ж, що й клавіша для регулювання гучності.",
+							"volumeControl": "Клавіша для регулювання гучності прокрутки компʼютерною мишею не може бути тією ж, що й клавіша для керування швидкістю."
 						}
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Всі параметри були скинуті до значень за замовчуванням.\nТепер ви можете зберегти зміни, натиснувши кнопку \"Підтвердити\" або відхилити їх, закривши цю сторінку або проігнорувавши це повідомлення."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "Налаштування збережено."
 				}
 			}
 		}
 	},
 	"settings": {
 		"clearData": {
-			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"allDataDeleted": "Усі дані скинуто.",
+			"confirmAlert": "Це видалить всі дані розширення, пов'язані з налаштуваннями. Продовжити?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Automatic quality adjustment",
-					"title": "Automatically adjusts the video quality to the selected level."
+					"label": "Автоматичне регулювання якості",
+					"title": "Автоматично регулює якість відео на обраний рівень."
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Стратегія запасного вибору якості",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Вища",
+							"lower": "Нижча"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "Стратегія для використання, коли вибрана якість недоступна"
 					}
 				},
 				"select": {
-					"label": "Player quality",
-					"title": "The quality to set the video to"
+					"label": "Якість відтворення",
+					"title": "Якість відтворення відео"
 				},
-				"title": "Automatic quality settings"
+				"title": "Автоматичні налаштування якості"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"title": "Очищає всі дані цього розширення збережені на комп'ютері",
+					"value": "Видалити дані"
 				},
 				"confirm": {
-					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"title": "Підтвердити скидання налаштувань",
+					"value": "Підтвердити"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Відкрити налаштування розширення в новій вкладці"
 				},
 				"reset": {
-					"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-					"value": "Reset"
+					"title": "Скидає всі параметри до стандартних налаштувань, натисніть кнопку підтвердження, щоб зберегти зміни",
+					"value": "Скинути"
 				}
 			},
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"decreasePlaybackSpeedButton": "Кнопка зменшення швидкості",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
