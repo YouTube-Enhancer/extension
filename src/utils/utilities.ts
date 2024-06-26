@@ -728,6 +728,7 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 				.flat()
 				.includes(buttonName)
 		)
+			// eslint-disable-next-line prefer-destructuring
 			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
 		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
 		if (multiButtonFeatureNames === undefined) return;
@@ -753,5 +754,15 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 			const { [buttonName]: settingName } = buttonNameToSettingName;
 			return settings[settingName] === false;
 		}
+	}
+}
+export function isNewYouTubeVideoLayout(): boolean {
+	// Check for the class in the new layout
+	const newLayoutElement = document.querySelector("ytd-player.ytd-watch-grid");
+
+	if (newLayoutElement) {
+		return true; // It's the new layout
+	} else {
+		return false; // It's the old layout
 	}
 }
