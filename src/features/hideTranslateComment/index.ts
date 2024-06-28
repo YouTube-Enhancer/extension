@@ -1,10 +1,37 @@
 import type { Nullable } from "@/src/types";
 
-import { observeTranslateComment, translateButtonSelector } from "@/src/features/hideTranslateComment/utils";
-import { modifyElementClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import {
+	type EngagementPanelVisibility,
+	observeCommentsPanelVisibilityChange,
+	observeTranslateComment,
+	translateButtonSelector
+} from "@/src/features/hideTranslateComment/utils";
+import { isNewYouTubeVideoLayout, modifyElementClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+export const commentsPanelSelector = "ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section']";
+export const commentsHeaderSelector = "ytd-item-section-renderer.ytd-comments div#header div#leading-section";
 let translateCommentObserver: Nullable<MutationObserver> = null;
+let commentsPanelObserver: Nullable<MutationObserver> = null;
+type ObserverType = "commentsPanel" | "translateComment";
+export function setHideTranslateCommentObserver(observerType: ObserverType, observer: MutationObserver) {
+	observerType === "translateComment" ? (translateCommentObserver = observer) : (commentsPanelObserver = observer);
+}
+export function cleanUpHideTranslateCommentObserver(observerType: ObserverType) {
+	if (observerType === "translateComment") {
+		translateCommentObserver?.disconnect();
+		translateCommentObserver = null;
+	} else {
+		commentsPanelObserver?.disconnect();
+		commentsPanelObserver = null;
+	}
+}
+export function toggleHideTranslateCommentButtonsVisibility(visible: boolean) {
+	const translateCommentButtons = document.querySelectorAll(translateButtonSelector);
+	translateCommentButtons.forEach((button) =>
+		modifyElementClassList(!visible ? "add" : "remove", { className: "yte-hide-translate-comment", element: button })
+	);
+}
 export async function enableHideTranslateComment() {
 	const {
 		data: {
@@ -12,16 +39,39 @@ export async function enableHideTranslateComment() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_hide_translate_comment) return;
-	await waitForAllElements(["ytd-item-section-renderer.ytd-comments div#header div#leading-section"]);
-	const translateCommentButtons = document.querySelectorAll(translateButtonSelector);
-	translateCommentButtons.forEach((button) => modifyElementClassList("add", { className: "yte-hide-translate-comment", element: button }));
-	translateCommentObserver = observeTranslateComment();
+	const isNewVideLayout = isNewYouTubeVideoLayout();
+	if (isNewVideLayout) {
+		await waitForAllElements([commentsPanelSelector]);
+		const commentsPanelElement = document.querySelector(commentsPanelSelector);
+		if (
+			commentsPanelElement &&
+			(commentsPanelElement.getAttribute("visibility") as EngagementPanelVisibility) === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"
+		)
+			toggleHideTranslateCommentButtonsVisibility(false);
+		const observer = observeCommentsPanelVisibilityChange();
+		if (observer) setHideTranslateCommentObserver("commentsPanel", observer);
+	} else {
+		await waitForAllElements([commentsHeaderSelector]);
+		toggleHideTranslateCommentButtonsVisibility(false);
+		const observer = observeTranslateComment();
+		if (observer) setHideTranslateCommentObserver("translateComment", observer);
+	}
 }
 
 export async function disableHideTranslateComment() {
-	await waitForAllElements(["ytd-item-section-renderer.ytd-comments div#header div#leading-section"]);
-	translateCommentObserver?.disconnect();
-	translateCommentObserver = null;
-	const translateCommentButtons = document.querySelectorAll(translateButtonSelector);
-	translateCommentButtons.forEach((button) => modifyElementClassList("remove", { className: "yte-hide-translate-comment", element: button }));
+	cleanUpHideTranslateCommentObserver("commentsPanel");
+	cleanUpHideTranslateCommentObserver("translateComment");
+	const isNewVideLayout = isNewYouTubeVideoLayout();
+	if (isNewVideLayout) {
+		await waitForAllElements([commentsPanelSelector]);
+		const commentsPanelElement = document.querySelector(commentsPanelSelector);
+		if (
+			commentsPanelElement &&
+			(commentsPanelElement.getAttribute("visibility") as EngagementPanelVisibility) === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"
+		)
+			toggleHideTranslateCommentButtonsVisibility(true);
+	} else {
+		await waitForAllElements([commentsHeaderSelector]);
+		toggleHideTranslateCommentButtonsVisibility(true);
+	}
 }
