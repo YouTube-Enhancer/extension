@@ -13,6 +13,25 @@
 						"label": "Меню функций"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Перемотка вперёд на {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Перемотка назад на {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Скрыть заставки следующих видео",
+						"toggle": {
+							"off": "Показать заставки следующих видео",
+							"on": "Скрыть заставки следующих видео"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Зациклить",
@@ -45,8 +64,8 @@
 							"label": "Увеличить скорость на {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Невозможно уменьшить ({{SPEED}})",
+					"increaseLimit": "Невозможно увеличить ({{SPEED}})"
 				},
 				"screenshotButton": {
 					"button": {
@@ -101,6 +120,16 @@
 					"label": "Включить автоматическую регулировку качества",
 					"title": "Автоматически настраивает качество видео на выбранный уровень."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Стратегия восстановления качества",
+						"options": {
+							"higher": "Выше",
+							"lower": "Ниже"
+						},
+						"title": "Какую стратегию использовать, когда выбранное качество недоступно"
+					}
+				},
 				"select": {
 					"label": "Качество проигрывателя",
 					"title": "Качество, которое будет задаваться для видео"
@@ -128,10 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
+						"forwardButton": "Кнопка перемотки вперёд",
+						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
+						"rewindButton": "Кнопка перемотки назад",
 						"screenshotButton": "Кнопка «Скриншот»",
 						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
@@ -182,6 +214,17 @@
 					"title": "Настройки меню функций"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Включить кнопки перемотки вперёд/назад",
+					"title": "Добавляет кнопки перемотки вперёд/назад в проигрыватель"
+				},
+				"time": {
+					"label": "Время перемотки",
+					"title": "Кол-во времени, на которое будет перематываться видео"
+				},
+				"title": "Настройки кнопок перемотки вперёд/назад"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Настройки успешно экспортированы",
@@ -212,12 +255,20 @@
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Скрыть заставки следующих видео",
+						"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Кнопка «Скрыть заставки следующих видео»",
+						"title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
 					},
 					"hideLiveStreamChat": {
-						"label": "Hide live stream chat",
-						"title": "Hides the live stream chat"
+						"label": "Спрятать чат прямого эфира",
+						"title": "Прячет чат прямого эфира (стрима)"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Скрыть \"Содержит прямую рекламу\"",
+						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -228,8 +279,8 @@
 						"title": "Скрывает все Shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Спрятать кнопку 'Перевести на...'",
+						"title": "Прячет кнопку 'Перевести на русский' под комментарием"
 					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
@@ -409,6 +460,9 @@
 					}
 				},
 				"title": "Настройки управления громкостью с помощью колеса мыши"
+			},
+			"settingSearch": {
+				"placeholder": "Поиск настроек"
 			},
 			"videoHistory": {
 				"enable": {

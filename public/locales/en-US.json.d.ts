@@ -9,6 +9,18 @@ interface EnUS {
 		content: {
 			features: {
 				featureMenu: { button: { label: "Feature menu" } };
+				forwardRewindButtons: {
+					buttons: {
+						forwardButton: { label: "Fast forward by {{TIME}}" };
+						rewindButton: { label: "Rewind by {{TIME}}" };
+					};
+				};
+				hideEndScreenCardsButton: {
+					button: {
+						label: "Hide end screen cards";
+						toggle: { off: "Show end screen cards"; on: "Hide end screen cards" };
+					};
+				};
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
@@ -61,6 +73,13 @@ interface EnUS {
 					label: "Automatic quality adjustment";
 					title: "Automatically adjusts the video quality to the selected level.";
 				};
+				fallbackQualityStrategy: {
+					select: {
+						label: "Quality fallback strategy";
+						options: { higher: "Higher"; lower: "Lower" };
+						title: "The strategy to use when the selected quality is not available";
+					};
+				};
 				select: { label: "Player quality"; title: "The quality to set the video to" };
 				title: "Automatic quality settings";
 			};
@@ -80,10 +99,13 @@ interface EnUS {
 				select: {
 					buttonNames: {
 						decreasePlaybackSpeedButton: "Decrease Speed button";
+						forwardButton: "Fast Forward button";
+						hideEndScreenCardsButton: "Hide end screen cards button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
+						rewindButton: "Rewind button";
 						screenshotButton: "Screenshot button";
 						volumeBoostButton: "Volume Boost button";
 					};
@@ -119,6 +141,17 @@ interface EnUS {
 					title: "Feature menu settings";
 				};
 			};
+			forwardRewindButtons: {
+				enable: {
+					label: "Enable forward/rewind buttons";
+					title: "Adds forward and rewind buttons to the video player";
+				};
+				time: {
+					label: "Forward/rewind time";
+					title: "The amount of time to forward/rewind the video by";
+				};
+				title: "Forward/rewind button settings";
+			};
 			importExportSettings: {
 				exportButton: {
 					success: "Settings successfully exported";
@@ -149,7 +182,15 @@ interface EnUS {
 						label: "Hide end screen cards";
 						title: "Hides the cards at the end of the video";
 					};
+					hideEndScreenCardsButton: {
+						label: "Hide end screen cards button";
+						title: "Adds a button to show/hide the cards at the end of the video";
+					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hidePaidPromotionBanner: {
+						label: "Hide paid promotion banner";
+						title: "Hides the banner that appears when you watch a video that has a paid promotion";
+					};
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					hideTranslateComment: {
@@ -303,6 +344,7 @@ interface EnUS {
 				};
 				title: "Scroll wheel volume control settings";
 			};
+			settingSearch: { placeholder: "Search for a setting" };
 			videoHistory: {
 				enable: {
 					label: "Track watched videos";
