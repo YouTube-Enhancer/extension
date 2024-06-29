@@ -13,6 +13,25 @@
 						"label": "Özellik menüsü"
 					}
 				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Fast forward by {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Rewind by {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Bitiş ekranı kartlarını gizle",
+						"toggle": {
+							"off": "Bitiş ekranı kartlarını göster",
+							"on": "Bitiş ekranı kartlarını gizle"
+						}
+					}
+				},
 				"loopButton": {
 					"button": {
 						"label": "Tekrarla",
@@ -101,6 +120,16 @@
 					"label": "Otomatik kalite ayarlamayı etkinleştir",
 					"title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
 				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Quality fallback strategy",
+						"options": {
+							"higher": "Daha yüksek",
+							"lower": "Daha düşük"
+						},
+						"title": "The strategy to use when the selected quality is not available"
+					}
+				},
 				"select": {
 					"label": "Oynatma kalitesi",
 					"title": "Videonun ayarlanacağı kalite"
@@ -128,10 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"forwardButton": "Fast Forward button",
+						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
+						"rewindButton": "Rewind button",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
 						"volumeBoostButton": "Ses güçlendirme düğmesi"
 					},
@@ -182,6 +214,17 @@
 					"title": "Özellik menüsü ayarları"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Enable forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
+				},
+				"time": {
+					"label": "Forward/rewind time",
+					"title": "The amount of time to forward/rewind the video by"
+				},
+				"title": "Forward/rewind button settings"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Ayarlar başarıyla dışa aktarıldı",
@@ -212,12 +255,20 @@
 						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
 					"hideEndScreenCards": {
-						"label": "Hide end screen cards",
-						"title": "Hides the cards at the end of the video"
+						"label": "Bitiş ekranı kartlarını gizle",
+						"title": "Video'nun sonundaki kartları gizler"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Bitiş ekranı kartlarını gizleme düğmesi",
+						"title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
 					},
 					"hideLiveStreamChat": {
 						"label": "Canlı yayın sohbetini gizle",
 						"title": "Canlı yayın sohbetini gizler"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Hide paid promotion banner",
+						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
@@ -409,6 +460,9 @@
 					}
 				},
 				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
+			},
+			"settingSearch": {
+				"placeholder": "Search for a setting"
 			},
 			"videoHistory": {
 				"enable": {

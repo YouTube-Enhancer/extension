@@ -79,7 +79,7 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 		volumeBoostButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.volumeBoostButton.button.label")
 		:	window.i18nextInstance.t(`pages.content.features.volumeBoostButton.button.toggle.off`),
-		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement),
 		(checked) => {
 			void (async () => {
 				if (checked !== undefined) {

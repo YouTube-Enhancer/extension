@@ -13,11 +13,12 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 	label: Label,
 	icon: GetIconType<Name, Placement>,
 	listener: ListenerType<Toggle>,
-	isToggle: boolean
+	isToggle: boolean,
+	initialChecked: boolean = false
 ) {
 	switch (placement) {
 		case "feature_menu": {
-			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle);
+			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle, initialChecked);
 			break;
 		}
 		case "below_player":
@@ -25,7 +26,7 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 		case "player_controls_right": {
 			// Add the feature name to the set of features in the controls
 			featuresInControls.add(buttonName);
-			const button = makeFeatureButton(buttonName, placement, label, icon, listener, isToggle);
+			const button = makeFeatureButton(buttonName, placement, label, icon, listener, isToggle, initialChecked);
 			placeButton(button, placement);
 			break;
 		}
