@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "{{TIME}}で早送する"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}}でリワインドする"
 						}
 					}
 				},
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "早送ボタン",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
-						"rewindButton": "Rewind button",
+						"rewindButton": "リワインドボタン",
 						"screenshotButton": "スクリーンショットボタン",
 						"volumeBoostButton": "音量ブーストボタン"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "早送/リワインドボタンを可能にする",
+					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "早送/リワインド時間",
+					"title": "動画に早送/リワインドを量時間"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "早送/リワインドボタン設定"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -267,8 +267,8 @@
 						"title": "配信チャットを隠する"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "有料プロモーションバナーを隠す",
+						"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
 					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
@@ -462,7 +462,7 @@
 				"title": "スクロールホイール音量制御設定"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "設定を探す"
 			},
 			"videoHistory": {
 				"enable": {
