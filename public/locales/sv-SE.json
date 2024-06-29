@@ -19,7 +19,7 @@
 							"label": "Snabbspola med {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Återspolas med {{TIME}}"
+							"label": "Återspola med {{TIME}}"
 						}
 					}
 				},
@@ -163,7 +163,7 @@
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
-						"rewindButton": "Återspolningknapp",
+						"rewindButton": "Återspolningsknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Aktivera spola framåt/återspolningsknappar",
-					"title": "Lägger till framåt- och återspolningsknappar till videospelaren"
+					"label": "Aktivera spola framåt-/återspolningsknappar",
+					"title": "Lägger till spola framåt- och återspolningsknappar till videospelaren"
 				},
 				"time": {
-					"label": "Framåt-/återspolningstid",
-					"title": "Tiden som videon ska hoppa framåt/återspolas med"
+					"label": "Spola framåt-/återspolningstid",
+					"title": "Tiden som videon ska spolas framåt/återspolas med"
 				},
-				"title": "Inställningar för framåt- och återspolningsknappen"
+				"title": "Inställningar för knapparna spola framåt/återspola"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -268,7 +268,7 @@
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Dölj betald marknadsföringsbanner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"title": "Döljer bannern som visas när du tittar på en video som har betald marknadsföring"
 					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
