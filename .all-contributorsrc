@@ -45,7 +45,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/30407412?v=4",
       "profile": "https://eduardozgz.com",
       "contributions": [
-        "translation"
+        "translation",
+        "code"
       ]
     },
     {
@@ -148,7 +149,7 @@
         "ideas"
       ]
     },
-		{
+    {
       "login": "charlymoon741",
       "name": "Carlos Ramos Luna",
       "avatar_url": "https://avatars.githubusercontent.com/u/62484941?v=4",
