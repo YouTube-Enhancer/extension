@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Snabbspola med {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Återspolas med {{TIME}}"
 						}
 					}
 				},
@@ -157,13 +157,13 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "Snabbspolningsknapp",
 						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Återspolningknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -216,14 +216,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Aktivera spola framåt/återspolningsknappar",
+					"title": "Lägger till framåt- och återspolningsknappar till videospelaren"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Framåt-/återspolningstid",
+					"title": "Tiden som videon ska hoppa framåt/återspolas med"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Inställningar för framåt- och återspolningsknappen"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -267,7 +267,7 @@
 						"title": "Döljer direktströmschatten"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
+						"label": "Dölj betald marknadsföringsbanner",
 						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
@@ -462,7 +462,7 @@
 				"title": "Rullningshjulets volyminställningar"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "Sök efter en inställning"
 			},
 			"videoHistory": {
 				"enable": {
