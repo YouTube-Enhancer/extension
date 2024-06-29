@@ -1,3 +1,40 @@
+# [1.26.0](https://github.com/YouTube-Enhancer/extension/compare/v1.25.0...v1.26.0) (2024-06-29)
+
+
+### Bug Fixes
+
+* broken features ([742be90](https://github.com/YouTube-Enhancer/extension/commit/742be90f71ad12de28deff895ec41e49025b2e0a))
+* Button placement change causing multi buttons to stop working. ([caed598](https://github.com/YouTube-Enhancer/extension/commit/caed5987c09349bff7a7d906fe5053aa75096d4b))
+* color pickers opening when they shouldn't ([b53edd7](https://github.com/YouTube-Enhancer/extension/commit/b53edd7cfe4e6802bc28a3155a6625d125c15cf6))
+* continue when old and new placement is the same ([dd9b089](https://github.com/YouTube-Enhancer/extension/commit/dd9b089b68fd3fd750025439cd88536b4c0b8382))
+* deep dark author/co author title ([a3503d5](https://github.com/YouTube-Enhancer/extension/commit/a3503d5cda2002cab329b73507be13f9f8242776))
+* features with multi buttons placement issue ([50014cb](https://github.com/YouTube-Enhancer/extension/commit/50014cb2fa3b8ed0510c40dc217b2e0b3bfed8b3))
+* object type not being handled properly ([b34b86e](https://github.com/YouTube-Enhancer/extension/commit/b34b86e4209d7b1438a8bf6d85ba91f6f00ac526))
+* old button placement not being removed ([b995911](https://github.com/YouTube-Enhancer/extension/commit/b995911ef71f7362a04fdee1f4af507281bf14f5))
+* playback speed button order issue ([186c4c5](https://github.com/YouTube-Enhancer/extension/commit/186c4c5620c6f6256b2b94916ce27af260ae1794))
+
+
+### Features
+
+* **automatic quality:** Fallback strategy [#461](https://github.com/YouTube-Enhancer/extension/issues/461) ([c621580](https://github.com/YouTube-Enhancer/extension/commit/c6215801845cc9569e389300246a7f7230a7b94e))
+* Disable button's placement select when button isn't enabled [#504](https://github.com/YouTube-Enhancer/extension/issues/504) ([916b39c](https://github.com/YouTube-Enhancer/extension/commit/916b39c034cab3a5e4467c305346410f1b22d2d1))
+* forward rewind buttons [#486](https://github.com/YouTube-Enhancer/extension/issues/486) ([1a80122](https://github.com/YouTube-Enhancer/extension/commit/1a801220fffcfab9ded603b99990e120f276cdec))
+* Hide end screen cards button [#484](https://github.com/YouTube-Enhancer/extension/issues/484) ([5e047c5](https://github.com/YouTube-Enhancer/extension/commit/5e047c518b574ae8aaa40342f078d8d2d769d920))
+* hide paid promotion banner [#519](https://github.com/YouTube-Enhancer/extension/issues/519) ([5356f8d](https://github.com/YouTube-Enhancer/extension/commit/5356f8deafbb977f9c24b63797d0daa4d5cd02db))
+* Setting search bar ([013ce19](https://github.com/YouTube-Enhancer/extension/commit/013ce19e02f31e158c37377fc32220054f7969e2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.26.0-Chrome.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Chromium.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Edge.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Firefox.zip | 0eee8b8088e4fdbe87b997d252851e4b6918f20180c83574f3405ce2126955fb |
+
 # [1.25.0](https://github.com/YouTube-Enhancer/extension/compare/v1.24.2...v1.25.0) (2024-05-15)
 
 
