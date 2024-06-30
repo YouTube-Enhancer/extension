@@ -78,6 +78,7 @@ import {
 	findKeyByValue,
 	formatError,
 	groupButtonChanges,
+	isNewYouTubeVideoLayout,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -85,7 +86,7 @@ import {
 	waitForSpecificMessage
 } from "@/utils/utilities";
 // TODO: Add always show progressbar feature
-
+let isFirstLoad = true;
 /**
  * Creates a hidden div element with a specific ID that can be used to receive messages from YouTube.
  * The element is appended to the document's root element.
@@ -240,6 +241,11 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 		remove: () => castFeatureFunctions.remove(oldPlacement)
 	};
 };
+function handleSoftNavigate() {
+	// Listen to YouTube's soft navigate event
+	document.addEventListener("yt-navigate-finish", enableFeatures);
+	document.addEventListener("yt-player-updated", enableFeatures);
+}
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
 		const {
@@ -248,9 +254,13 @@ window.addEventListener("DOMContentLoaded", function () {
 		if (!language) return;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
-		// Listen to YouTube's soft navigate event
-		document.addEventListener("yt-navigate-finish", enableFeatures);
-		document.addEventListener("yt-player-updated", enableFeatures);
+		if (isFirstLoad) {
+			enableFeatures();
+			handleSoftNavigate();
+		} else if (!isFirstLoad) {
+			handleSoftNavigate;
+		}
+		isFirstLoad = false;
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
@@ -621,7 +631,10 @@ window.addEventListener("DOMContentLoaded", function () {
 					case "automaticTheaterModeChange": {
 						// Get the player element
 						const playerContainer =
-							isWatchPage() ? document.querySelector("div#player-container.ytd-watch-flexy")
+							isWatchPage() ?
+								document.querySelector<HTMLDivElement>(
+									isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
+								)
 							: isShortsPage() ? document.querySelector("div#shorts-player")
 							: null;
 						// If player element is not available, return

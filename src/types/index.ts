@@ -8,6 +8,8 @@ import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n/constants";
 // #region Utility types
 export type Nullable<T> = T | null;
+export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
+export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 export type AnyFunction = (...args: any[]) => void;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
