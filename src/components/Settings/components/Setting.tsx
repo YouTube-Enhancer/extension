@@ -86,11 +86,9 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 			(settingProps.title !== undefined && settingProps.title.toLowerCase().includes(filter.toLowerCase())) ||
 			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
 		);
-	return (
-		shouldSettingBeVisible && (
+	return shouldSettingBeVisible ?
 			<div className="mx-2 mb-1" title={settingProps.title}>
 				<SettingInput {...settingProps} />
 			</div>
-		)
-	);
+		:	null;
 }
