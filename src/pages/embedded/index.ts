@@ -155,7 +155,6 @@ const enableFeatures = () => {
 			enableShareShortener(),
 			enableSkipContinueWatching(),
 			enablePauseBackgroundPlayers(),
-			enableRememberVolume(),
 			enableHideScrollBar(),
 			enableCustomCSS(),
 			enableDeepDarkCSS()
