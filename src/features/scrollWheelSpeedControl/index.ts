@@ -1,5 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import { setupScrollListeners } from "@/src/features/scrollWheelVolumeControl/utils";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -48,6 +49,7 @@ export default async function adjustSpeedOnScrollWheel() {
 						osd_display_padding,
 						osd_display_position,
 						osd_display_type,
+						playback_buttons_speed,
 						scroll_wheel_speed_control_modifier_key,
 						speed_adjustment_steps
 					}
@@ -76,6 +78,14 @@ export default async function adjustSpeedOnScrollWheel() {
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the speed based on the scroll direction and options
 			const { newSpeed } = await adjustSpeed(playerContainer, scrollDelta, speed_adjustment_steps);
+			await updatePlaybackSpeedButtonTooltip(
+				"increasePlaybackSpeedButton",
+				calculatePlaybackButtonSpeed(newSpeed, playback_buttons_speed, "increase")
+			);
+			await updatePlaybackSpeedButtonTooltip(
+				"decreasePlaybackSpeedButton",
+				calculatePlaybackButtonSpeed(newSpeed, playback_buttons_speed, "decrease")
+			);
 			new OnScreenDisplayManager(
 				{
 					displayColor: osd_display_color,
