@@ -172,7 +172,6 @@ const enableFeatures = () => {
 			enableRememberVolume(),
 			enableAutomaticTheaterMode(),
 			enableRemainingTime(),
-			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
 			adjustVolumeOnScrollWheel(),
@@ -225,6 +224,7 @@ const enableFeatures = () => {
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
 		await addLoopButton();
+		await volumeBoost();
 	})();
 };
 const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
