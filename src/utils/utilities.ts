@@ -178,7 +178,7 @@ function groupMessages(messages: { message: string; styling: string[] }[]): Arra
  * @returns The colorized log message.
  */
 export function browserColorLog(message: string, type?: ColorType) {
-	const prependLog = colorizeLog(`[YouTube Enhancer]`, "FgCyan");
+	const prependLog = colorizeLog(`[${getFormattedTimestamp()}] [YouTube Enhancer]`, "FgCyan");
 	const colorizedMessage = colorizeLog(message, type);
 	console.log(...groupMessages([prependLog, colorizedMessage]));
 }
@@ -765,4 +765,20 @@ export function isNewYouTubeVideoLayout(): boolean {
 	} else {
 		return false; // It's the old layout
 	}
+}
+export function getFormattedTimestamp() {
+	const now = new Date();
+
+	const month = (now.getMonth() + 1).toString().padStart(2, "0");
+	const day = now.getDate().toString().padStart(2, "0");
+	const year = now.getFullYear().toString().substr(-2);
+	const hours = now.getHours();
+	const minutes = now.getMinutes().toString().padStart(2, "0");
+	const seconds = now.getSeconds().toString().padStart(2, "0");
+	const milliseconds = now.getMilliseconds().toString().padStart(3, "0");
+
+	const period = hours >= 12 ? "PM" : "AM";
+	const paddedHours = (hours % 12 || 12).toString().padStart(2, "0"); // Convert to 12-hour format and handle midnight (0 hours)
+
+	return `${month}/${day}/${year} ${paddedHours}:${minutes}:${seconds}:${milliseconds} ${period}`;
 }
