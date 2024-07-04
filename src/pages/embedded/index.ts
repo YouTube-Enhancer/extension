@@ -261,7 +261,7 @@ window.addEventListener("DOMContentLoaded", function () {
 			enableFeatures();
 			handleSoftNavigate();
 		} else if (!isFirstLoad) {
-			handleSoftNavigate;
+			handleSoftNavigate();
 		}
 		isFirstLoad = false;
 		/**
