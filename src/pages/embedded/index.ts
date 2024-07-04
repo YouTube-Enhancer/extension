@@ -243,7 +243,10 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	};
 };
 function handleSoftNavigate() {
-	// Listen to YouTube's soft navigate event
+	// Remove existing listeners
+	document.removeEventListener("yt-navigate-finish", enableFeatures);
+	document.removeEventListener("yt-player-updated", enableFeatures);
+	// Add listeners
 	document.addEventListener("yt-navigate-finish", enableFeatures);
 	document.addEventListener("yt-player-updated", enableFeatures);
 }
