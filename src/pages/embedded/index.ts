@@ -34,8 +34,10 @@ import { disablePauseBackgroundPlayers, enablePauseBackgroundPlayers } from "@/s
 import {
 	addDecreasePlaybackSpeedButton,
 	addIncreasePlaybackSpeedButton,
+	calculatePlaybackButtonSpeed,
 	removeDecreasePlaybackSpeedButton,
-	removeIncreasePlaybackSpeedButton
+	removeIncreasePlaybackSpeedButton,
+	updatePlaybackSpeedButtonTooltip
 } from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
@@ -326,10 +328,34 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { enableForcedPlaybackSpeed, playerSpeed }
 						} = message;
+						const {
+							data: {
+								options: { playback_buttons_speed: playbackSpeedPerClick }
+							}
+						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (enableForcedPlaybackSpeed && playerSpeed) {
+							await updatePlaybackSpeedButtonTooltip(
+								"increasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "increase")
+							);
+							await updatePlaybackSpeedButtonTooltip(
+								"decreasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "decrease")
+							);
 							await setPlayerSpeed(Number(playerSpeed));
 						} else if (!enableForcedPlaybackSpeed) {
 							restorePlayerSpeed();
+							const videoElement = document.querySelector<HTMLVideoElement>("video");
+							if (!videoElement) return;
+							const { playbackRate: currentSpeed } = videoElement;
+							await updatePlaybackSpeedButtonTooltip(
+								"increasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "increase")
+							);
+							await updatePlaybackSpeedButtonTooltip(
+								"decreasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "decrease")
+							);
 						}
 						break;
 					}
