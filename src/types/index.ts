@@ -185,6 +185,7 @@ export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export const buttonNames = Object.keys({
+	copyTimestampUrlButton: "",
 	decreasePlaybackSpeedButton: "",
 	forwardButton: "",
 	hideEndScreenCardsButton: "",
@@ -197,6 +198,7 @@ export const buttonNames = Object.keys({
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
 export const buttonNameToSettingName = {
+	copyTimestampUrlButton: "enable_copy_timestamp_url_button",
 	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
 	forwardButton: "enable_forward_rewind_buttons",
 	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
@@ -318,6 +320,7 @@ export type ContentToBackgroundSendOnlyMessageMappings = {
 export type ExtensionSendOnlyMessageMappings = {
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
+	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	deepDarkThemeChange: DataResponseMessage<
 		"deepDarkThemeChange",
@@ -409,6 +412,7 @@ export type configuration = {
 	deep_dark_preset: DeepDarkPreset;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
+	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;

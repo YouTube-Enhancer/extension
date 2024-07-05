@@ -23,6 +23,7 @@ import {
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
+		copyTimestampUrlButton: "player_controls_right",
 		decreasePlaybackSpeedButton: "player_controls_left",
 		forwardButton: "player_controls_right",
 		hideEndScreenCardsButton: "player_controls_right",
@@ -47,6 +48,7 @@ export const defaultConfiguration = {
 	deep_dark_preset: "Deep-Dark",
 	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
+	enable_copy_timestamp_url_button: false,
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
@@ -135,6 +137,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	deep_dark_preset: z.enum(deepDarkPreset).optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
+	enable_copy_timestamp_url_button: z.boolean().optional(),
 	enable_custom_css: z.boolean().optional(),
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
