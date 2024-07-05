@@ -8,6 +8,7 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
+				copyTimestampUrlButton: { button: { copied: "Copied!"; label: "Copy video URL with timestamp" } };
 				featureMenu: { button: { label: "Feature menu" } };
 				forwardRewindButtons: {
 					buttons: {
@@ -98,6 +99,7 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						copyTimestampUrlButton: "Copy video URL with timestamp button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
 						forwardButton: "Fast Forward button";
 						hideEndScreenCardsButton: "Hide end screen cards button";
@@ -177,6 +179,10 @@ interface EnUS {
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
+					};
+					copyTimestampUrlButton: {
+						label: "Copy video URL with timestamp button";
+						title: "Copies video URL with timestamp (?t=123)";
 					};
 					hideEndScreenCards: {
 						label: "Hide end screen cards";
