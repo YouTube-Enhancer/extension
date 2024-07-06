@@ -32,6 +32,9 @@ interface EnUS {
 					decreaseLimit: "Can't decrease further ({{SPEED}})";
 					increaseLimit: "Can't increase further ({{SPEED}})";
 				};
+				playlistLength: {
+					title: "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length.";
+				};
 				screenshotButton: {
 					button: { label: "Screenshot" };
 					copiedToClipboard: "Screenshot copied to clipboard";
@@ -299,6 +302,19 @@ interface EnUS {
 				select: { label: "Player speed"; title: "The speed to set the video to" };
 				title: "Playback speed settings";
 			};
+			playlistLength: {
+				enable: {
+					label: "Display playlist length information";
+					title: "Shows the total length of the playlist, how much has been watched, and how much remains.";
+				};
+				title: "Playlist length settings";
+				wayToGetLength: {
+					select: {
+						label: "Method to get playlist length";
+						title: "The way to get playlist length information (API method will fallback to HTML if an error occurs)";
+					};
+				};
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";
@@ -370,6 +386,11 @@ interface EnUS {
 					};
 				};
 				title: "Volume boost settings";
+			};
+			youtubeDataApiV3Key: {
+				getApiKeyLinkText: "You can get one from here";
+				input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
+				title: "YouTube API V3 Key";
 			};
 			youtubeDeepDark: {
 				author: "Author";

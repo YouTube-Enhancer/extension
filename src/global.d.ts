@@ -68,6 +68,7 @@ declare global {
 	}
 	interface Window {
 		audioCtx: AudioContext;
+		cachedPlaylistDuration: { playlistId: string; totalTimeSeconds: number } | null;
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;
 		webkitAudioContext: AudioContext;

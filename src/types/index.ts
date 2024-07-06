@@ -122,6 +122,8 @@ export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
 export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const playlistLengthGetMethod = ["api", "html"] as const;
+export type PlaylistLengthGetMethod = (typeof playlistLengthGetMethod)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
 export type MultiButtonChange = {
 	[K in MultiButtonFeatureNames]: {
@@ -231,6 +233,37 @@ export type Notification = {
 	removeAfterMs?: number;
 	timestamp?: number;
 	type: NotificationType;
+};
+export type YouTubePlaylistResponse = {
+	items: YouTubePlaylistItem[];
+	nextPageToken?: string;
+};
+export type YouTubePlaylistItem = {
+	contentDetails: {
+		videoId: string;
+	};
+};
+
+export type YouTubeVideoResponse = {
+	items: YouTubeVideoItem[];
+};
+
+export type YouTubeVideoItem = {
+	contentDetails: {
+		duration: string; // ISO 8601 duration format
+	};
+};
+export type YouTubeAPIQuotaError = {
+	error: {
+		code: number;
+		errors: { domain: string; message: string; reason: string }[];
+		message: string;
+	};
+};
+export type VideoDetails = {
+	duration: number;
+	progress: number;
+	videoId: Nullable<string>;
 };
 export type CrowdinLanguageProgressResponse = {
 	data: {
@@ -351,6 +384,8 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ playbackButtonsSpeed: number; playbackSpeedButtonsEnabled: boolean }
 	>;
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
+	playlistLengthChange: DataResponseMessage<"playlistLengthChange", { playlistLengthEnabled: boolean }>;
+	playlistLengthGetMethodChange: DataResponseMessage<"playlistLengthGetMethodChange", undefined>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	removeRedirectChange: DataResponseMessage<"removeRedirectChange", { removeRedirectEnabled: boolean }>;
@@ -426,6 +461,7 @@ export type configuration = {
 	enable_open_youtube_settings_on_hover: boolean;
 	enable_pausing_background_players: boolean;
 	enable_playback_speed_buttons: boolean;
+	enable_playlist_length: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
@@ -452,6 +488,7 @@ export type configuration = {
 	player_quality: YoutubePlayerQualityLevel;
 	player_quality_fallback_strategy: PlayerQualityFallbackStrategy;
 	player_speed: number;
+	playlist_length_get_method: PlaylistLengthGetMethod;
 	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;
@@ -462,6 +499,7 @@ export type configuration = {
 	volume_adjustment_steps: number;
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
+	youtube_data_api_v3_key: string;
 };
 export type configurationKeys = keyof configuration;
 export type configurationId = Path<configuration>;
