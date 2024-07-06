@@ -1,6 +1,5 @@
 import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 
-import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { addHideEndScreenCardsButton, removeHideEndScreenCardsButton } from "@/src/features/hideEndScreenCards";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
@@ -21,10 +20,6 @@ export type FeatureFuncRecord = {
 };
 
 export const featureButtonFunctions = {
-	copyTimestampUrlButton: {
-		add: addCopyTimestampUrlButton,
-		remove: removeCopyTimestampUrlButton
-	},
 	decreasePlaybackSpeedButton: {
 		add: addDecreasePlaybackSpeedButton,
 		remove: removeDecreasePlaybackSpeedButton

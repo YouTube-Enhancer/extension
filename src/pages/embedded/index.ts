@@ -4,7 +4,6 @@ import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
@@ -42,6 +41,7 @@ import {
 } from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
+import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
@@ -82,6 +82,7 @@ import {
 	formatError,
 	groupButtonChanges,
 	isNewYouTubeVideoLayout,
+	isPlaylistPage,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -162,7 +163,7 @@ const enableFeatures = () => {
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
-		if (!(isWatchPage() || isShortsPage())) return;
+		if (!(isWatchPage() || isShortsPage() || isPlaylistPage())) return;
 
 		void Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
@@ -178,7 +179,8 @@ const enableFeatures = () => {
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel(),
 			enableHideTranslateComment(),
-			enableHideEndScreenCards()
+			enableHideEndScreenCards(),
+			enablePlaylistLength()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -225,7 +227,6 @@ const enableFeatures = () => {
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
 		await addLoopButton();
-		await addCopyTimestampUrlButton();
 		await volumeBoost();
 	})();
 };
@@ -288,6 +289,22 @@ window.addEventListener("DOMContentLoaded", function () {
 				}
 				if (!message) return;
 				switch (message.type) {
+					case "playlistLengthChange": {
+						const {
+							data: { playlistLengthEnabled }
+						} = message;
+						if (playlistLengthEnabled) {
+							await enablePlaylistLength();
+						} else {
+							disablePlaylistLength();
+						}
+						break;
+					}
+					case "playlistLengthGetMethodChange": {
+						disablePlaylistLength();
+						await enablePlaylistLength();
+						break;
+					}
 					case "volumeBoostChange": {
 						const {
 							data: { volumeBoostEnabled, volumeBoostMode }
@@ -458,17 +475,6 @@ window.addEventListener("DOMContentLoaded", function () {
 							await addLoopButton();
 						} else {
 							await removeLoopButton();
-						}
-						break;
-					}
-					case "copyTimestampUrlButtonChange": {
-						const {
-							data: { copyTimestampUrlButtonEnabled }
-						} = message;
-						if (copyTimestampUrlButtonEnabled) {
-							await addCopyTimestampUrlButton();
-						} else {
-							await removeCopyTimestampUrlButton();
 						}
 						break;
 					}

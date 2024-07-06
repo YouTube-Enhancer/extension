@@ -13,6 +13,7 @@ import {
 	onScreenDisplayColors,
 	onScreenDisplayPositions,
 	onScreenDisplayTypes,
+	playlistLengthGetMethod,
 	screenshotFormats,
 	screenshotTypes,
 	videoHistoryResumeTypes,
@@ -23,7 +24,6 @@ import {
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
-		copyTimestampUrlButton: "player_controls_right",
 		decreasePlaybackSpeedButton: "player_controls_left",
 		forwardButton: "player_controls_right",
 		hideEndScreenCardsButton: "player_controls_right",
@@ -48,7 +48,6 @@ export const defaultConfiguration = {
 	deep_dark_preset: "Deep-Dark",
 	enable_automatic_theater_mode: false,
 	enable_automatically_set_quality: false,
-	enable_copy_timestamp_url_button: false,
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_forced_playback_speed: false,
@@ -66,6 +65,7 @@ export const defaultConfiguration = {
 	enable_open_youtube_settings_on_hover: false,
 	enable_pausing_background_players: false,
 	enable_playback_speed_buttons: false,
+	enable_playlist_length: false,
 	enable_redirect_remover: false,
 	enable_remaining_time: false,
 	enable_remember_last_volume: false,
@@ -92,6 +92,7 @@ export const defaultConfiguration = {
 	player_quality: "auto",
 	player_quality_fallback_strategy: "lower",
 	player_speed: 1,
+	playlist_length_get_method: "api",
 	remembered_volumes: {
 		shortsPageVolume: 100,
 		watchPageVolume: 100
@@ -104,7 +105,8 @@ export const defaultConfiguration = {
 	video_history_resume_type: "prompt",
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 5,
-	volume_boost_mode: "global"
+	volume_boost_mode: "global",
+	youtube_data_api_v3_key: ""
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
@@ -137,7 +139,6 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	deep_dark_preset: z.enum(deepDarkPreset).optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
-	enable_copy_timestamp_url_button: z.boolean().optional(),
 	enable_custom_css: z.boolean().optional(),
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
@@ -155,6 +156,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_open_youtube_settings_on_hover: z.boolean().optional(),
 	enable_pausing_background_players: z.boolean().optional(),
 	enable_playback_speed_buttons: z.boolean().optional(),
+	enable_playlist_length: z.boolean().optional(),
 	enable_redirect_remover: z.boolean().optional(),
 	enable_remaining_time: z.boolean().optional(),
 	enable_remember_last_volume: z.boolean().optional(),
@@ -181,6 +183,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
 	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
+	playlist_length_get_method: z.enum(playlistLengthGetMethod).optional(),
 	remembered_volumes: z
 		.object({
 			shortsPageVolume: z.number().min(0).max(100).optional(),
@@ -195,7 +198,9 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	video_history_resume_type: z.enum(videoHistoryResumeTypes).optional(),
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional(),
-	volume_boost_mode: z.enum(volumeBoostModes).optional()
+	volume_boost_mode: z.enum(volumeBoostModes).optional(),
+	youtube_data_api_v3_key: z.string().optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;
+export const YouTube_Enhancer_Public_Youtube_Data_API_V3_Key = "AIzaSyA_z2BR_HSfKsPvuttqjD_6AY60zgqbm5k";

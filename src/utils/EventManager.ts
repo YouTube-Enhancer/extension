@@ -1,6 +1,5 @@
 export type FeatureName =
 	| "automaticTheaterMode"
-	| "copyTimestampUrlButton"
 	| "featureMenu"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"
@@ -13,6 +12,7 @@ export type FeatureName =
 	| "playbackSpeedButtons"
 	| "playerQuality"
 	| "playerSpeed"
+	| "playlistLength"
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"
