@@ -185,6 +185,7 @@ hr {
 }
 
 /* inputs */
+input[type="text"],
 input[type="button"],
 button[id="openinnewtab_button"],
 select {
@@ -193,6 +194,7 @@ select {
 	font-size: 12px;
 }
 
+input[type="text"],
 button[id="openinnewtab_button"],
 select {
 	border: 0;
