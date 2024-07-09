@@ -169,7 +169,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 			}
 		),
 		getFeatureIcon("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement),
-		playbackSpeedButtonClickListener(-playbackSpeedPerClick, "decrease"),
+		playbackSpeedButtonClickListener(playbackSpeedPerClick, "decrease"),
 		false
 	);
 };
