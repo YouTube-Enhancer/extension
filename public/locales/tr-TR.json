@@ -55,6 +55,12 @@
 						"label": "Open transcript"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Döngü düğmesi",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
 						"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir",
