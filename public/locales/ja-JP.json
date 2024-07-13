@@ -55,6 +55,12 @@
 						"label": "文字起こしを見せる"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
 						"rewindButton": "リワインドボタン",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "動画ループボタン",
 						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化ボタン",
