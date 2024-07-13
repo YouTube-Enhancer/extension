@@ -55,6 +55,12 @@
 						"label": "스크립트 보기"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "최종 화면 숨기기",
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 						"openTranscriptButton": "스크립트 보기 버튼",
 						"rewindButton": "Rewind button",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "연속 재생 버튼",
 						"title": "추가 기능 메뉴에 \"연속 재생\" 버튼을 추가합니다."
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "화면 크기에 맞추기 버튼",
