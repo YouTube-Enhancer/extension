@@ -122,8 +122,8 @@ async function setSettings(settings: configuration) {
 			localStorage.setItem(key, JSON.stringify(settings[key]));
 			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
 		} else {
-			localStorage.setItem(key, settings[key] as string);
-			await chrome.storage.local.set({ [key]: settings[key] as string });
+			localStorage.setItem(key, settings[key]);
+			await chrome.storage.local.set({ [key]: settings[key] });
 		}
 	}
 }
@@ -204,8 +204,8 @@ export default function Settings() {
 					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
 					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
 				} else {
-					localStorage.setItem(key, defaultSettings[key] as string);
-					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
+					localStorage.setItem(key, defaultSettings[key]);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] });
 				}
 			}
 			addNotification("success", "settings.clearData.allDataDeleted");
@@ -435,8 +435,8 @@ export default function Settings() {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
 								void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
 							} else {
-								localStorage.setItem(key, castSettings[key] as string);
-								void chrome.storage.local.set({ [key]: castSettings[key] as string });
+								localStorage.setItem(key, castSettings[key]);
+								void chrome.storage.local.set({ [key]: castSettings[key] });
 							}
 						}
 						await updateStoredSettings();
@@ -1202,7 +1202,7 @@ export default function Settings() {
 				</SettingSection>
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
-						className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="clear_data_button"
 						onClick={clearData}
 						title={t("settings.sections.bottomButtons.clear.title")}
@@ -1210,7 +1210,7 @@ export default function Settings() {
 						value={t("settings.sections.bottomButtons.clear.value")}
 					/>
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="import_settings_button"
 						onClick={importSettings}
 						title={t("settings.sections.importExportSettings.importButton.title")}
@@ -1219,7 +1219,7 @@ export default function Settings() {
 					/>
 					{isPopup && (
 						<button
-							className="accent flex items-center justify-center p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="accent flex items-center justify-center p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="openinnewtab_button"
 							onClick={() => openInNewTab("src/pages/options/index.html")}
 							title={t("settings.sections.bottomButtons.openTab.title")}
@@ -1229,7 +1229,7 @@ export default function Settings() {
 						</button>
 					)}
 					<input
-						className="accent p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+						className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 						id="export_settings_button"
 						onClick={exportSettings}
 						title={t("settings.sections.importExportSettings.exportButton.title")}
@@ -1238,7 +1238,7 @@ export default function Settings() {
 					/>
 					{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
 						<input
-							className="danger p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="confirm_button"
 							onClick={() => {
 								const notificationToRemove = notifications.find((n) => n.action === "reset_settings");
@@ -1261,7 +1261,7 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.confirm.value")}
 						/>
 					:	<input
-							className="warning p-2 text-sm dark:hover:bg-[rgba(24,26,27,0.5)] sm:text-base md:text-lg"
+							className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 							id="reset_button"
 							onClick={resetOptions}
 							title={t("settings.sections.bottomButtons.reset.title")}
