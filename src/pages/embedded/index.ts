@@ -4,6 +4,7 @@ import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
@@ -224,6 +225,7 @@ const enableFeatures = () => {
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
 		await addLoopButton();
+		await addCopyTimestampUrlButton();
 		await volumeBoost();
 	})();
 };
@@ -456,6 +458,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							await addLoopButton();
 						} else {
 							await removeLoopButton();
+						}
+						break;
+					}
+					case "copyTimestampUrlButtonChange": {
+						const {
+							data: { copyTimestampUrlButtonEnabled }
+						} = message;
+						if (copyTimestampUrlButtonEnabled) {
+							await addCopyTimestampUrlButton();
+						} else {
+							await removeCopyTimestampUrlButton();
 						}
 						break;
 					}

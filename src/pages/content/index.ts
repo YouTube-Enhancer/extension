@@ -281,6 +281,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
+		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
+				copyTimestampUrlButtonEnabled: newValue
+			});
+		},
 		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
 		},
