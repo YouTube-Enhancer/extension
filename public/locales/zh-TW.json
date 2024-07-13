@@ -55,6 +55,12 @@
 						"label": "打開文字記錄"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
 						"rewindButton": "倒帶按鈕",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "循環按鈕",
 						"title": "加入按鈕循環播放當前影片"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化播放器按鈕",
