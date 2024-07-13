@@ -55,6 +55,12 @@
 						"label": "Open transcript"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botão de Repetir",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Botão de Maximizar",
 						"openTranscriptButton": "Abrir botão de transcrição",
 						"rewindButton": "Rewind button",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "Botão de Repetir",
 						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Botão de maximização do reprodutor",
