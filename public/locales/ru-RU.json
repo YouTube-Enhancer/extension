@@ -55,6 +55,12 @@
 						"label": "Открыть стенограмму"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -161,6 +167,7 @@
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 						"rewindButton": "Кнопка перемотки назад",
@@ -285,6 +292,10 @@
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
 						"title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Включить кнопку «Развернуть проигрыватель»",
