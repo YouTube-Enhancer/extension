@@ -12,10 +12,13 @@ import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;
 export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
 	const calculatedSpeed =
-		speed == 4 && direction == "increase" ? 4
-		: speed == 0.25 && direction == "decrease" ? 0.25
-		: direction == "decrease" ? speed - playbackSpeedPerClick
-		: speed + playbackSpeedPerClick;
+		speed == 4 && direction == "increase"
+			? 4
+			: speed == 0.25 && direction == "decrease"
+			? 0.25
+			: direction == "decrease"
+			? speed - playbackSpeedPerClick
+			: speed + playbackSpeedPerClick;
 	return calculatedSpeed;
 }
 export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
@@ -33,6 +36,9 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 			}
 		}
 	} = optionsData;
+	const videoElement = document.querySelector<HTMLVideoElement>("video");
+	if (!videoElement) return;
+	({ playbackRate: currentPlaybackSpeed } = videoElement);
 	const featureName = "playbackSpeedButtons";
 	const button = getFeatureButton(buttonName);
 	if (!button) return;
@@ -44,10 +50,12 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
-		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		currentPlaybackSpeed == 4 && buttonName == "increasePlaybackSpeedButton"
+			? `pages.content.features.playbackSpeedButtons.increaseLimit`
+			: currentPlaybackSpeed == 0.25 && buttonName == "decreasePlaybackSpeedButton"
+			? `pages.content.features.playbackSpeedButtons.decreaseLimit`
+			: // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			  `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
 			SPEED: speed
 		}
@@ -65,9 +73,10 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 				({ playbackRate: currentPlaybackSpeed } = videoElement);
 				if (currentPlaybackSpeed + adjustmentAmount <= 0) return;
 				if (currentPlaybackSpeed + adjustmentAmount > 4) return;
-				const playerContainer =
-					isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				const playerContainer = isWatchPage()
+					? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+					: isShortsPage()
+					? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 					: null;
 				if (!playerContainer) return;
 				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
@@ -95,14 +104,8 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 				);
 				const speed = currentPlaybackSpeed + adjustmentAmount;
 				await setPlayerSpeed(speed);
-				await updatePlaybackSpeedButtonTooltip(
-					"increasePlaybackSpeedButton",
-					calculatePlaybackButtonSpeed(currentPlaybackSpeed, speedPerClick, "increase")
-				);
-				await updatePlaybackSpeedButtonTooltip(
-					"decreasePlaybackSpeedButton",
-					calculatePlaybackButtonSpeed(currentPlaybackSpeed, speedPerClick, "decrease")
-				);
+				await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(speed, speedPerClick, "increase"));
+				await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(speed, speedPerClick, "decrease"));
 			} catch (error) {
 				console.error(error);
 			}
@@ -129,9 +132,9 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		"increasePlaybackSpeedButton",
 		increasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
-			currentPlaybackSpeed == 4 ?
-				`pages.content.features.playbackSpeedButtons.increaseLimit`
-			:	"pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label",
+			currentPlaybackSpeed == 4
+				? `pages.content.features.playbackSpeedButtons.increaseLimit`
+				: "pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
 			}
@@ -161,9 +164,9 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		"decreasePlaybackSpeedButton",
 		decreasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
-			currentPlaybackSpeed == 0.25 ?
-				`pages.content.features.playbackSpeedButtons.decreaseLimit`
-			:	"pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label",
+			currentPlaybackSpeed == 0.25
+				? `pages.content.features.playbackSpeedButtons.decreaseLimit`
+				: "pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
 			}
