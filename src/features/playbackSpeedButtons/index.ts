@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { checkIfFeatureButtonExists, getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
@@ -128,6 +128,18 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
+	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	if (playerVideoData.isLive && checkIfFeatureButtonExists("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement)) {
+		await removeFeatureButton("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement);
+		eventManager.removeEventListeners("playbackSpeedButtons");
+	}
+	if (playerVideoData.isLive) return;
 	await addFeatureButton(
 		"increasePlaybackSpeedButton",
 		increasePlaybackSpeedButtonPlacement,
@@ -160,6 +172,18 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+		? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
+	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	if (playerVideoData.isLive && checkIfFeatureButtonExists("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement)) {
+		await removeFeatureButton("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement);
+		eventManager.removeEventListeners("playbackSpeedButtons");
+	}
+	if (playerVideoData.isLive) return;
 	await addFeatureButton(
 		"decreasePlaybackSpeedButton",
 		decreasePlaybackSpeedButtonPlacement,
