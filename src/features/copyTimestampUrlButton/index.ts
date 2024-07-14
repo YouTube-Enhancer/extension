@@ -17,28 +17,26 @@ export const addCopyTimestampUrlButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableCopyTimestampUrlButton) return;
 	function copyTimestampUrlButtonClickListener() {
-		(() => {
-			const videoElement = document.querySelector<HTMLVideoElement>("video");
-			if (!videoElement) return;
-			const videoId = new URLSearchParams(window.location.search).get("v");
-			const timestampUrl = `https://youtu.be/${videoId}?t=${videoElement.currentTime.toFixed()}`;
-			void navigator.clipboard.writeText(timestampUrl);
-			const button = getFeatureButton("copyTimestampUrlButton");
-			if (!button) return;
-			const { remove, update } = createTooltip({
-				direction: copyTimestampUrlButtonPlacement === "below_player" ? "down" : "up",
-				element: button,
-				featureName: "copyTimestampUrlButton",
-				id: "yte-feature-copyTimestampUrlButton-tooltip"
-			});
-			button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.copied");
+		const videoElement = document.querySelector<HTMLVideoElement>("video");
+		if (!videoElement) return;
+		const videoId = new URLSearchParams(window.location.search).get("v");
+		const timestampUrl = `https://youtu.be/${videoId}?t=${videoElement.currentTime.toFixed()}`;
+		void navigator.clipboard.writeText(timestampUrl);
+		const button = getFeatureButton("copyTimestampUrlButton");
+		if (!button) return;
+		const { remove, update } = createTooltip({
+			direction: copyTimestampUrlButtonPlacement === "below_player" ? "down" : "up",
+			element: button,
+			featureName: "copyTimestampUrlButton",
+			id: "yte-feature-copyTimestampUrlButton-tooltip"
+		});
+		button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.copied");
+		update();
+		setTimeout(() => {
+			remove();
+			button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.label");
 			update();
-			setTimeout(() => {
-				remove();
-				button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.label");
-				update();
-			}, 1000);
-		})();
+		}, 1000);
 	}
 	await addFeatureButton(
 		"copyTimestampUrlButton",
