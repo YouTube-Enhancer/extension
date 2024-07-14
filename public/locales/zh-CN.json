@@ -57,8 +57,8 @@
 				},
 				"copyTimestampUrlButton": {
 					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
+						"label": "复制带有时间戳的视频 URL",
+						"copied": "复制成功！"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -167,7 +167,7 @@
 						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
 						"rewindButton": "快退按钮",
@@ -294,8 +294,8 @@
 						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "复制带有时间戳的视频 URL 按钮",
+						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化播放器按钮",
