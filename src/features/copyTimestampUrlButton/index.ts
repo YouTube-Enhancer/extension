@@ -17,11 +17,10 @@ export const addCopyTimestampUrlButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableCopyTimestampUrlButton) return;
 	function copyTimestampUrlButtonClickListener() {
-		void (() => {
+		(() => {
 			const videoElement = document.querySelector<HTMLVideoElement>("video");
-			const watchGrid = document.querySelector<HTMLElement>("ytd-watch-grid");
-			if (!videoElement || !watchGrid) return;
-			const videoId = watchGrid.getAttribute("video-id");
+			if (!videoElement) return;
+			const videoId = new URLSearchParams(window.location.search).get("v");
 			const timestampUrl = `https://youtu.be/${videoId}?t=${videoElement.currentTime.toFixed()}`;
 			void navigator.clipboard.writeText(timestampUrl);
 			const button = getFeatureButton("copyTimestampUrlButton");
