@@ -16,10 +16,10 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "{{TIME}} 초 빨리 감기"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} 초 되감기"
 						}
 					}
 				},
@@ -57,8 +57,8 @@
 				},
 				"copyTimestampUrlButton": {
 					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
+						"label": "현재 시간 주소 복사",
+						"copied": "복사되었습니다."
 					}
 				},
 				"playbackSpeedButtons": {
@@ -163,14 +163,14 @@
 				"select": {
 					"buttonNames": {
 						"decreasePlaybackSpeedButton": "속도 조절 버튼",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "빨리 감기 버튼",
 						"hideEndScreenCardsButton": "최종 화면 숨기기",
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "현재 시간 주소 복사 버튼",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 						"openTranscriptButton": "스크립트 보기 버튼",
-						"rewindButton": "Rewind button",
+						"rewindButton": "되감기 버튼",
 						"screenshotButton": "스크린샷 버튼",
 						"volumeBoostButton": "볼륨 부스트 버튼"
 					},
@@ -223,14 +223,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "되감기/빨리 감기 버튼 사용",
+					"title": "플레이어에 되감기와 빨리 감기 버튼을 추가합니다."
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "되감기/빨리 감기 시간",
+					"title": "되감기/빨리 감기 시간"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "되감기/빨리 감기 버튼 설정"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -274,8 +274,8 @@
 						"title": "실시간 채팅 레이아웃을 숨깁니다."
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "유료 광고 배너 숨기기",
+						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
 					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
@@ -294,8 +294,8 @@
 						"title": "추가 기능 메뉴에 \"연속 재생\" 버튼을 추가합니다."
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "현재 시간 주소 복사 버튼",
+						"title": "현재 시간 주소 복사 (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "화면 크기에 맞추기 버튼",
@@ -473,7 +473,7 @@
 				"title": "스크롤 휠로 볼륨 조절 설정"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "설정 검색"
 			},
 			"videoHistory": {
 				"enable": {
