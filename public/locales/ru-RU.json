@@ -57,8 +57,8 @@
 				},
 				"copyTimestampUrlButton": {
 					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
+						"label": "Копировать URL видео с таймкодом",
+						"copied": "Скопировано!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -167,7 +167,7 @@
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "Кнопка «Копировать URL видео с таймкодом»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 						"rewindButton": "Кнопка перемотки назад",
@@ -294,8 +294,8 @@
 						"title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Кнопка «Копировать URL видео с таймкодом»",
+						"title": "Копирует ссылку видео с меткой времени (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Включить кнопку «Развернуть проигрыватель»",
