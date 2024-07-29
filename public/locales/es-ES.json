@@ -55,6 +55,12 @@
 						"label": "Open transcript"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copy video URL with timestamp",
+						"copied": "Copied!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -66,6 +72,9 @@
 					},
 					"decreaseLimit": "Can't decrease further ({{SPEED}})",
 					"increaseLimit": "Can't increase further ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
 				},
 				"screenshotButton": {
 					"button": {
@@ -161,6 +170,7 @@
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Botón de repetición",
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Maximizar botón",
 						"openTranscriptButton": "Abrir botón de transcripción",
 						"rewindButton": "Rewind button",
@@ -286,6 +296,10 @@
 						"label": "Botón de bucle",
 						"title": "Añade un botón al menú para poner en bucle el vídeo que estás viendo"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
+					},
 					"maximizePlayerButton": {
 						"label": "Botón de maximizar en el reproductor",
 						"title": "Añade un botón al menú para maximizar el reproductor"
@@ -398,6 +412,19 @@
 				},
 				"title": "Ajustes de velocidad de reproducción"
 			},
+			"playlistLength": {
+				"enable": {
+					"label": "Display playlist length information",
+					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+				},
+				"title": "Playlist length settings",
+				"wayToGetLength": {
+					"select": {
+						"label": "Method to get playlist length",
+						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				}
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Botón de captura de pantalla",
@@ -501,6 +528,14 @@
 					}
 				},
 				"title": "Ajustes de potenciado de volumen"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "You can get one from here",
+				"input": {
+					"label": "API Key",
+					"title": "Enter your Youtube Data API V3 key."
+				},
+				"title": "YouTube API V3 Key"
 			},
 			"youtubeDeepDark": {
 				"author": "Author",
