@@ -122,8 +122,8 @@ async function setSettings(settings: configuration) {
 			localStorage.setItem(key, JSON.stringify(settings[key]));
 			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
 		} else {
-			localStorage.setItem(key, settings[key] as string);
-			await chrome.storage.local.set({ [key]: settings[key] as string });
+			localStorage.setItem(key, settings[key]);
+			await chrome.storage.local.set({ [key]: settings[key] });
 		}
 	}
 }
@@ -204,8 +204,8 @@ export default function Settings() {
 					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
 					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
 				} else {
-					localStorage.setItem(key, defaultSettings[key] as string);
-					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
+					localStorage.setItem(key, defaultSettings[key]);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] });
 				}
 			}
 			addNotification("success", "settings.clearData.allDataDeleted");
@@ -369,6 +369,7 @@ export default function Settings() {
 		}
 	];
 	const buttonPlacementOptions: SelectOption<
+		| "button_placements.copyTimestampUrlButton"
 		| "button_placements.decreasePlaybackSpeedButton"
 		| "button_placements.forwardButton"
 		| "button_placements.hideEndScreenCardsButton"
@@ -444,8 +445,8 @@ export default function Settings() {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
 								void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
 							} else {
-								localStorage.setItem(key, castSettings[key] as string);
-								void chrome.storage.local.set({ [key]: castSettings[key] as string });
+								localStorage.setItem(key, castSettings[key]);
+								void chrome.storage.local.set({ [key]: castSettings[key] });
 							}
 						}
 						await updateStoredSettings();
@@ -628,6 +629,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.loopButton.label")}
 						onChange={setCheckboxOption("enable_loop_button")}
 						title={t("settings.sections.miscellaneous.features.loopButton.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_copy_timestamp_url_button?.toString() === "true"}
+						id="enable_copy_timestamp_url_button"
+						label={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.label")}
+						onChange={setCheckboxOption("enable_copy_timestamp_url_button")}
+						title={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.title")}
 						type="checkbox"
 					/>
 					<Setting
