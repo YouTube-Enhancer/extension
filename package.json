@@ -67,7 +67,7 @@
     "eslint-plugin-no-secrets": "^1.0.2",
     "eslint-plugin-perfectionist": "^3.0.0",
     "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-promise": "^7.0.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
