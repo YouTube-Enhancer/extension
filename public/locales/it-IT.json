@@ -55,6 +55,12 @@
 						"label": "Apri trascrizione"
 					}
 				},
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Copia URL video con temporizzazione",
+						"copied": "Copiato!"
+					}
+				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
@@ -66,6 +72,9 @@
 					},
 					"decreaseLimit": "Impossibile diminuire ulteriormente ({{SPEED}})",
 					"increaseLimit": "Impossibile aumentare ulteriormente ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
 				},
 				"screenshotButton": {
 					"button": {
@@ -161,6 +170,7 @@
 						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
+						"copyTimestampUrlButton": "Pulsante \"Copia URL video con temporizzazione\"",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
 						"rewindButton": "Pulsante Riavvolgi",
@@ -286,6 +296,10 @@
 						"label": "Pulsante Ripeti",
 						"title": "Aggiunge un pulsante al menu' funzioni per ripetere il video che stai guardando"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Pulsante \"Copia URL video con temporizzazione\"",
+						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
+					},
 					"maximizePlayerButton": {
 						"label": "Pulsante Ingrandisci riproduttore",
 						"title": "Aggiunge un pulsante al menu' funzioni per ingrandire il riproduttore"
@@ -398,6 +412,19 @@
 				},
 				"title": "Impostazioni velocità riproduzione"
 			},
+			"playlistLength": {
+				"enable": {
+					"label": "Display playlist length information",
+					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+				},
+				"title": "Playlist length settings",
+				"wayToGetLength": {
+					"select": {
+						"label": "Method to get playlist length",
+						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				}
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Pulsante Schermata",
@@ -501,6 +528,14 @@
 					}
 				},
 				"title": "Impostazioni aumento volume"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "You can get one from here",
+				"input": {
+					"label": "API Key",
+					"title": "Enter your Youtube Data API V3 key."
+				},
+				"title": "YouTube API V3 Key"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",

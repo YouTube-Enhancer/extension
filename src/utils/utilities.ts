@@ -365,6 +365,10 @@ export function isShortsPage() {
 	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "shorts";
 }
+export function isPlaylistPage() {
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	return firstSection === "playlist";
+}
 export function formatError(error: unknown) {
 	if (error instanceof Error) {
 		return `${error.message}\n${error?.stack}`;
@@ -781,4 +785,55 @@ export function getFormattedTimestamp() {
 	const paddedHours = (hours % 12 || 12).toString().padStart(2, "0"); // Convert to 12-hour format and handle midnight (0 hours)
 
 	return `${month}/${day}/${year} ${paddedHours}:${minutes}:${seconds}:${milliseconds} ${period}`;
+}
+/**
+ * Parses an ISO 8601 duration string and returns the total number of seconds.
+ *
+ * @param {string} duration - The ISO 8601 duration string to parse.
+ * @return {number} The total number of seconds represented by the duration string.
+ */
+export function parseISO8601Duration(duration: string): number {
+	// Regular expression to match ISO 8601 duration format
+	const regex = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+	// Extract hours, minutes, and seconds from the duration string
+	const matches = regex.exec(duration);
+	// If the duration string does not match the expected format, return 0
+	if (!matches) return 0;
+
+	// Parse the hours, minutes, and seconds from the matches array
+	const hours = parseInt(matches[1] || "0", 10);
+	const minutes = parseInt(matches[2] || "0", 10);
+	const seconds = parseInt(matches[3] || "0", 10);
+
+	// Calculate the total number of seconds by multiplying hours, minutes, and seconds
+	return hours * 3600 + minutes * 60 + seconds;
+}
+
+/**
+ * Formats a duration in seconds into a string representation.
+ *
+ * @param {number} seconds - The duration in seconds.
+ * @return {string} The formatted duration string in the format "HHhMMmSSs".
+ */
+export function formatDuration(seconds: number): string {
+	// Calculate the hours, minutes, and seconds
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
+	const secs = seconds % 60;
+
+	// Format the hours, minutes, and seconds with leading zeros
+	const formattedHours = hours.toString();
+	const formattedMinutes = minutes.toString().padStart(2, "0");
+	const formattedSeconds = secs.toString().padStart(2, "0");
+
+	// Combine the formatted values into a single string
+	return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+}
+export function timeStringToSeconds(timeString: string): number {
+	const parts = timeString.split(":").reverse();
+	let seconds = 0;
+	for (let i = 0; i < parts.length; i++) {
+		seconds += parseInt(parts[i], 10) * Math.pow(60, i);
+	}
+	return seconds;
 }
