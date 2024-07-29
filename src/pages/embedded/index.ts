@@ -42,7 +42,6 @@ import {
 } from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
-import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
@@ -83,7 +82,6 @@ import {
 	formatError,
 	groupButtonChanges,
 	isNewYouTubeVideoLayout,
-	isPlaylistPage,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -164,7 +162,7 @@ const enableFeatures = () => {
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
-		if (!(isWatchPage() || isShortsPage() || isPlaylistPage())) return;
+		if (!(isWatchPage() || isShortsPage())) return;
 
 		void Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
@@ -180,8 +178,7 @@ const enableFeatures = () => {
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel(),
 			enableHideTranslateComment(),
-			enableHideEndScreenCards(),
-			enablePlaylistLength()
+			enableHideEndScreenCards()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -291,22 +288,6 @@ window.addEventListener("DOMContentLoaded", function () {
 				}
 				if (!message) return;
 				switch (message.type) {
-					case "playlistLengthChange": {
-						const {
-							data: { playlistLengthEnabled }
-						} = message;
-						if (playlistLengthEnabled) {
-							await enablePlaylistLength();
-						} else {
-							disablePlaylistLength();
-						}
-						break;
-					}
-					case "playlistLengthGetMethodChange": {
-						disablePlaylistLength();
-						await enablePlaylistLength();
-						break;
-					}
 					case "volumeBoostChange": {
 						const {
 							data: { volumeBoostEnabled, volumeBoostMode }
