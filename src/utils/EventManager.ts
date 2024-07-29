@@ -13,6 +13,7 @@ export type FeatureName =
 	| "playbackSpeedButtons"
 	| "playerQuality"
 	| "playerSpeed"
+	| "playlistLength"
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"

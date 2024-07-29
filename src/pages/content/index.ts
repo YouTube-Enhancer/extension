@@ -374,6 +374,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playbackSpeedButtonsEnabled: newValue
 			});
 		},
+		enable_playlist_length: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistLengthChange", {
+				playlistLengthEnabled: newValue
+			});
+		},
 		enable_redirect_remover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("removeRedirectChange", {
 				removeRedirectEnabled: newValue
@@ -456,6 +461,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
 				playerSpeed: newValue
 			});
+		},
+		playlist_length_get_method: () => {
+			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
 		},
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostAmountChange", {
