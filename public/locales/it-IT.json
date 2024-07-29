@@ -74,7 +74,7 @@
 					"increaseLimit": "Impossibile aumentare ulteriormente ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "La lunghezza totale può non essere accurata se alcuni video sono nascosti o se non hai caricato abbastanza video per ottenere la lunghezza completa."
 				},
 				"screenshotButton": {
 					"button": {
@@ -414,14 +414,14 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Mostra informazioni lunghezza lista riproduzioni",
+					"title": "Mostra la lunghezza totale della lista riproduzioni, quanto è stato guardato e quanto ne rimane."
 				},
-				"title": "Playlist length settings",
+				"title": "Impostazioni lunghezza lista riproduzioni",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Metodo per ottenere la lunghezza della lista riproduzioni",
+						"title": "Il modo per ottenere informazioni sulla lunghezza della lista riproduzioni (il metodo API sarà ripiegato in HTML se si verificasse un errore)"
 					}
 				}
 			},
@@ -530,12 +530,12 @@
 				"title": "Impostazioni aumento volume"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Puoi ottenerne una da qui",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "Chiave API",
+					"title": "Inserisci la tua chiave Youtube API V3."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Chiave Youtube API V3"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",
