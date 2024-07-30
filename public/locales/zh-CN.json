@@ -74,7 +74,7 @@
 					"increaseLimit": "不能继续增加({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "如果某些视频被隐藏，或者您没有加载足够的视频来获取全部长度，总长度可能不准确。"
 				},
 				"screenshotButton": {
 					"button": {
@@ -414,7 +414,7 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
+					"label": "显示播放列表长度信息",
 					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
 				},
 				"title": "Playlist length settings",
