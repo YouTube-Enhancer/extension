@@ -415,13 +415,13 @@
 			"playlistLength": {
 				"enable": {
 					"label": "显示播放列表长度信息",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"title": "显示播放列表的总长度，已观看多少，以及还剩多少。"
 				},
-				"title": "Playlist length settings",
+				"title": "播放列表长度设置",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "获取播放列表长度的方法",
+						"title": "获取播放列表长度信息的方式 (如果发生错误，API 方法将回退到 HTML)"
 					}
 				}
 			},
@@ -530,12 +530,12 @@
 				"title": "音量增强设置"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "您可以从这里获取一个",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API 密钥",
+					"title": "输入您的 Youtube 数据 API V3 密钥。"
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 密钥"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",
