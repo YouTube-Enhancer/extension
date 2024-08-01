@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "コピー完了！",
+						"label": "タイムスタンプ付きの動画URLをコピーする"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "フィーチャー・メニュー"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "文字起こしを見せる"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "タイムスタンプ付きの動画URLをコピーする",
-						"copied": "コピー完了！"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
 						"forwardButton": "早送ボタン",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
-						"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
 						"rewindButton": "リワインドボタン",
@@ -264,6 +264,10 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"copyTimestampUrlButton": {
+						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
+						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "終了画面のカードを非表示にする",
 						"title": "動画の終了で画面カードを非表示にする"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "動画ループボタン",
 						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
-					},
-					"copyTimestampUrlButton": {
-						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
-						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化ボタン",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "プレイリストの長さを取得する方法",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
