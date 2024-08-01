@@ -426,9 +426,9 @@
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Metodo per ottenere il tempo già riprodotto",
 						"options": {
-							"duration": "Video Length",
+							"duration": "Durata del video",
 							"youtube": "Video Watch Time"
 						},
 						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
