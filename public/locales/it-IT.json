@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Copiato!",
+						"label": "Copia URL video con temporizzazione"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Menu' funzioni"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "Apri trascrizione"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "Copia URL video con temporizzazione",
-						"copied": "Copiato!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Pulsante \"Copia URL video con temporizzazione\"",
 						"decreasePlaybackSpeedButton": "Pulsante Riduci velocità",
 						"forwardButton": "Pulsante Avanti veloce",
 						"hideEndScreenCardsButton": "Pulsante Nascondi schede finali",
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
-						"copyTimestampUrlButton": "Pulsante \"Copia URL video con temporizzazione\"",
 						"maximizePlayerButton": "Pulsante Massimizza",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
 						"rewindButton": "Pulsante Riavvolgi",
@@ -264,6 +264,10 @@
 						"label": "Modalità teatro automatica",
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Pulsante \"Copia URL video con temporizzazione\"",
+						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "Nascondi le schede finali",
 						"title": "Nasconde le schede alla fine del video"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "Pulsante Ripeti",
 						"title": "Aggiunge un pulsante al menu' funzioni per ripetere il video che stai guardando"
-					},
-					"copyTimestampUrlButton": {
-						"label": "Pulsante \"Copia URL video con temporizzazione\"",
-						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Pulsante Ingrandisci riproduttore",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "Metodo per ottenere la lunghezza della lista riproduzioni",
 						"title": "Il modo per ottenere informazioni sulla lunghezza della lista riproduzioni (il metodo API sarà ripiegato in HTML se si verificasse un errore)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
