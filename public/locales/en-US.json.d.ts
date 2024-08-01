@@ -320,6 +320,13 @@ interface EnUS {
 						title: "The way to get playlist length information (API method will fallback to HTML if an error occurs)";
 					};
 				};
+				wayToGetWatchTime: {
+					select: {
+						label: "Method to get watched time";
+						options: { duration: "Video Length"; youtube: "Video Watch Time" };
+						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
+					};
+				};
 			};
 			screenshotButton: {
 				enable: {

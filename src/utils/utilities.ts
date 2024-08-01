@@ -742,7 +742,7 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 				multiButtonChanges[multiButtonFeatureNames] = {};
 			}
 			// eslint-disable-next-line prefer-destructuring
-			multiButtonChanges[multiButtonFeatureNames][buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
+			multiButtonChanges[multiButtonFeatureNames]![buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
 				changes.buttonPlacement[buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]];
 		}
 	});

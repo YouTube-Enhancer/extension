@@ -10,7 +10,12 @@ export async function enablePlaylistLength() {
 	const IsWatchPage = isWatchPage();
 	const {
 		data: {
-			options: { enable_playlist_length, playlist_length_get_method: playlistLengthGetMethod, youtube_data_api_v3_key }
+			options: {
+				enable_playlist_length,
+				playlist_length_get_method: playlistLengthGetMethod,
+				playlist_watch_time_get_method: playlistWatchTimeGetMethod,
+				youtube_data_api_v3_key
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playlist_length) return;
@@ -23,7 +28,8 @@ export async function enablePlaylistLength() {
 		documentObserver = await initializePlaylistLength({
 			apiKey,
 			pageType,
-			playlistLengthGetMethod
+			playlistLengthGetMethod,
+			playlistWatchTimeGetMethod
 		});
 	} catch (error) {
 		documentObserver?.disconnect();
@@ -31,11 +37,11 @@ export async function enablePlaylistLength() {
 		documentObserver = await initializePlaylistLength({
 			apiKey,
 			pageType,
-			playlistLengthGetMethod: "html"
+			playlistLengthGetMethod: "html",
+			playlistWatchTimeGetMethod
 		});
 	}
 }
-// FIXME: mix playlist type not falling back to get mode html when get mode is api
 export function disablePlaylistLength() {
 	eventManager.removeEventListeners("playlistLength");
 	if (documentObserver) documentObserver.disconnect();

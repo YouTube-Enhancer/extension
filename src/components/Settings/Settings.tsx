@@ -418,6 +418,16 @@ export default function Settings() {
 			value: "html"
 		}
 	];
+	const playlistWatchTimeGetMethodOptions: SelectOption<"playlist_watch_time_get_method">[] = [
+		{
+			label: t("settings.sections.playlistLength.wayToGetWatchTime.select.options.duration"),
+			value: "duration"
+		},
+		{
+			label: t("settings.sections.playlistLength.wayToGetWatchTime.select.options.youtube"),
+			value: "youtube"
+		}
+	];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -1228,6 +1238,16 @@ export default function Settings() {
 						options={playlistLengthGetMethodOptions}
 						selectedOption={getSelectedOption("playlist_length_get_method")}
 						title={t("settings.sections.playlistLength.wayToGetLength.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_playlist_length?.toString() !== "true"}
+						id="playlist_watch_time_get_method"
+						label={t("settings.sections.playlistLength.wayToGetWatchTime.select.label")}
+						onChange={setValueOption("playlist_watch_time_get_method")}
+						options={playlistWatchTimeGetMethodOptions}
+						selectedOption={getSelectedOption("playlist_watch_time_get_method")}
+						title={t("settings.sections.playlistLength.wayToGetWatchTime.select.title")}
 						type="select"
 					/>
 				</SettingSection>
