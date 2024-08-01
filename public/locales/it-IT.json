@@ -429,9 +429,9 @@
 						"label": "Metodo per ottenere il tempo già riprodotto",
 						"options": {
 							"duration": "Durata del video",
-							"youtube": "Video Watch Time"
+							"youtube": "Tempo in riproduzione"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
 			},
