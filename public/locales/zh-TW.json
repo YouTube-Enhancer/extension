@@ -426,12 +426,12 @@
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "影片長度取得方法",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "影片長度",
+							"youtube": "影片已觀看時間"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "取得已觀看時間的方法(影片長度方式只用於觀看頁)"
 					}
 				}
 			},
