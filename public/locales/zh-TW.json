@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "已複製！",
+						"label": "複製目前播放時間的影片網址"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "功能選單"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "打開文字記錄"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "複製目前播放時間的影片網址",
-						"copied": "已複製！"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "複製目前播放時間的影片網址按鈕",
 						"decreasePlaybackSpeedButton": "減慢速度按鈕",
 						"forwardButton": "快轉按鈕",
 						"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
-						"copyTimestampUrlButton": "複製目前播放時間的影片網址按鈕",
 						"maximizePlayerButton": "最大化按鈕",
 						"openTranscriptButton": "開啟文字記錄按鈕",
 						"rewindButton": "倒帶按鈕",
@@ -264,6 +264,10 @@
 						"label": "自動啟用劇院模式",
 						"title": "載入影片時自動啟用劇院模式"
 					},
+					"copyTimestampUrlButton": {
+						"label": "複製目前播放時間的影片網址按鈕",
+						"title": "複製目前播放時間的影片網址 (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "隱藏片尾資訊卡",
 						"title": "隱藏影片片尾的資訊卡"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "循環按鈕",
 						"title": "加入按鈕循環播放當前影片"
-					},
-					"copyTimestampUrlButton": {
-						"label": "複製目前播放時間的影片網址按鈕",
-						"title": "複製目前播放時間的影片網址 (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化播放器按鈕",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "取得播放清單時間方法",
 						"title": "取得播放清單時間資訊的方法(如API方法失敗會使用HTML方式)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
