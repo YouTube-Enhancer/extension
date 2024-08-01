@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "コピー完了！",
+						"label": "タイムスタンプ付きの動画URLをコピーする"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "フィーチャー・メニュー"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "文字起こしを見せる"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"decreasePlaybackSpeedButton": "速度を下げるボタン",
 						"forwardButton": "早送ボタン",
 						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 						"increasePlaybackSpeedButton": "速度を上げるボタン",
 						"loopButton": "ループボタン",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "最大表示ボタン",
 						"openTranscriptButton": "文字起こしを見せるボタン",
 						"rewindButton": "リワインドボタン",
@@ -264,6 +264,10 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"copyTimestampUrlButton": {
+						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
+						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "終了画面のカードを非表示にする",
 						"title": "動画の終了で画面カードを非表示にする"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "動画ループボタン",
 						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
-					},
-					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化ボタン",
@@ -417,11 +417,21 @@
 					"label": "Display playlist length information",
 					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
 				},
-				"title": "Playlist length settings",
+				"title": "プレイリストの長さ設定",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
+						"label": "プレイリストの長さを取得する方法",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
@@ -530,12 +540,12 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "APIキーがここで取得をします。",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "APIキー",
+					"title": "YouTube API V3キーを入力してください。"
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3キー"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
