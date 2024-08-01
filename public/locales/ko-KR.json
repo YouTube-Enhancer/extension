@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "복사되었습니다.",
+						"label": "현재 시간 주소 복사"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "추가 기능"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "스크립트 보기"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "현재 시간 주소 복사",
-						"copied": "복사되었습니다."
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "현재 시간 주소 복사 버튼",
 						"decreasePlaybackSpeedButton": "속도 조절 버튼",
 						"forwardButton": "빨리 감기 버튼",
 						"hideEndScreenCardsButton": "최종 화면 숨기기",
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
-						"copyTimestampUrlButton": "현재 시간 주소 복사 버튼",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 						"openTranscriptButton": "스크립트 보기 버튼",
 						"rewindButton": "되감기 버튼",
@@ -264,6 +264,10 @@
 						"label": "자동 극장 모드",
 						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
 					},
+					"copyTimestampUrlButton": {
+						"label": "현재 시간 주소 복사 버튼",
+						"title": "현재 시간 주소 복사 (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "최종 화면 숨기기",
 						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨깁니다."
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "연속 재생 버튼",
 						"title": "추가 기능 메뉴에 \"연속 재생\" 버튼을 추가합니다."
-					},
-					"copyTimestampUrlButton": {
-						"label": "현재 시간 주소 복사 버튼",
-						"title": "현재 시간 주소 복사 (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "화면 크기에 맞추기 버튼",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "Method to get playlist length",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
