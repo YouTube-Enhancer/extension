@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "复制成功！",
+						"label": "复制带有时间戳的视频 URL"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "功能菜单"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "打开转写文稿"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "复制带有时间戳的视频 URL",
-						"copied": "复制成功！"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 						"decreasePlaybackSpeedButton": "降低速度按钮",
 						"forwardButton": "快进按钮",
 						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
-						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
 						"rewindButton": "快退按钮",
@@ -264,6 +264,10 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"copyTimestampUrlButton": {
+						"label": "复制带有时间戳的视频 URL 按钮",
+						"title": "复制带有时间戳的视频 URL (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "隐藏结束界面卡片",
 						"title": "隐藏视频末尾的卡片"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "循环按钮",
 						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
-					},
-					"copyTimestampUrlButton": {
-						"label": "复制带有时间戳的视频 URL 按钮",
-						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "最大化播放器按钮",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "获取播放列表长度的方法",
 						"title": "获取播放列表长度信息的方式 (如果发生错误，API 方法将回退到 HTML)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
