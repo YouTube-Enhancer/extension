@@ -14,6 +14,7 @@ import {
 	onScreenDisplayPositions,
 	onScreenDisplayTypes,
 	playlistLengthGetMethod,
+	playlistWatchTimeGetMethod,
 	screenshotFormats,
 	screenshotTypes,
 	videoHistoryResumeTypes,
@@ -95,6 +96,7 @@ export const defaultConfiguration = {
 	player_quality_fallback_strategy: "lower",
 	player_speed: 1,
 	playlist_length_get_method: "api",
+	playlist_watch_time_get_method: "youtube",
 	remembered_volumes: {
 		shortsPageVolume: 100,
 		watchPageVolume: 100
@@ -187,6 +189,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
 	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
 	playlist_length_get_method: z.enum(playlistLengthGetMethod).optional(),
+	playlist_watch_time_get_method: z.enum(playlistWatchTimeGetMethod).optional(),
 	remembered_volumes: z
 		.object({
 			shortsPageVolume: z.number().min(0).max(100).optional(),

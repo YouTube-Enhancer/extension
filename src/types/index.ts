@@ -122,6 +122,8 @@ export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
 export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const playlistWatchTimeGetMethod = ["duration", "youtube"] as const;
+export type PlaylistWatchTimeGetMethod = (typeof playlistWatchTimeGetMethod)[number];
 export const playlistLengthGetMethod = ["api", "html"] as const;
 export type PlaylistLengthGetMethod = (typeof playlistLengthGetMethod)[number];
 export const featureMenuOpenTypes = ["click", "hover"] as const;
@@ -389,6 +391,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	playlistLengthChange: DataResponseMessage<"playlistLengthChange", { playlistLengthEnabled: boolean }>;
 	playlistLengthGetMethodChange: DataResponseMessage<"playlistLengthGetMethodChange", undefined>;
+	playlistWatchTimeGetMethodChange: DataResponseMessage<"playlistWatchTimeGetMethodChange", undefined>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	removeRedirectChange: DataResponseMessage<"removeRedirectChange", { removeRedirectEnabled: boolean }>;
@@ -493,6 +496,7 @@ export type configuration = {
 	player_quality_fallback_strategy: PlayerQualityFallbackStrategy;
 	player_speed: number;
 	playlist_length_get_method: PlaylistLengthGetMethod;
+	playlist_watch_time_get_method: PlaylistWatchTimeGetMethod;
 	remembered_volumes: RememberedVolumes;
 	screenshot_format: ScreenshotFormat;
 	screenshot_save_as: ScreenshotType;

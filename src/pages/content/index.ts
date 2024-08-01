@@ -465,6 +465,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		playlist_length_get_method: () => {
 			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
 		},
+		playlist_watch_time_get_method: () => {
+			sendExtensionOnlyMessage("playlistWatchTimeGetMethodChange", undefined);
+		},
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostAmountChange", {
 				volumeBoostAmount: newValue,

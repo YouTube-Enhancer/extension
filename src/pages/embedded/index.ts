@@ -302,7 +302,8 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
-					case "playlistLengthGetMethodChange": {
+					case "playlistLengthGetMethodChange":
+					case "playlistWatchTimeGetMethodChange": {
 						disablePlaylistLength();
 						await enablePlaylistLength();
 						break;
