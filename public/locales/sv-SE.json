@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Copied!",
+						"label": "Copy video URL with timestamp"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Funktionsmeny"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "Öppna transkript"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
 						"forwardButton": "Snabbspolningsknapp",
 						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
 						"rewindButton": "Återspolningsknapp",
@@ -264,6 +264,10 @@
 						"label": "Automatiskt teaterläge",
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "Dölj slutskärmskort",
 						"title": "Döljer korten i slutet av videon"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "Slingknapp",
 						"title": "Lägger till en knapp i funktionsmenyn för att slinga videon du tittar på"
-					},
-					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Maximeringsknapp för spelaren",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "Method to get playlist length",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},

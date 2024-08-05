@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Скопировано!",
+						"label": "Копировать URL видео с таймкодом"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Меню функций"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "Открыть стенограмму"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "Копировать URL видео с таймкодом",
-						"copied": "Скопировано!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Кнопка «Копировать URL видео с таймкодом»",
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
 						"forwardButton": "Кнопка перемотки вперёд",
 						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
-						"copyTimestampUrlButton": "Кнопка «Копировать URL видео с таймкодом»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 						"rewindButton": "Кнопка перемотки назад",
@@ -264,6 +264,10 @@
 						"label": "Включить автоматический режим кинотеатра",
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Кнопка «Копировать URL видео с таймкодом»",
+						"title": "Копирует ссылку видео с меткой времени (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "Скрыть заставки следующих видео",
 						"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
 						"title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)"
-					},
-					"copyTimestampUrlButton": {
-						"label": "Кнопка «Копировать URL видео с таймкодом»",
-						"title": "Копирует ссылку видео с меткой времени (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Включить кнопку «Развернуть проигрыватель»",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "Method to get playlist length",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},

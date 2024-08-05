@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Copied!",
+						"label": "Copy video URL with timestamp"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Feature menu"
@@ -53,12 +59,6 @@
 				"openTranscriptButton": {
 					"button": {
 						"label": "Open transcript"
-					}
-				},
-				"copyTimestampUrlButton": {
-					"button": {
-						"label": "Copy video URL with timestamp",
-						"copied": "Copied!"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Loop button",
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
 						"maximizePlayerButton": "Maximize button",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
@@ -264,6 +264,10 @@
 						"label": "Automatischer Theatermodus",
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
+					"copyTimestampUrlButton": {
+						"label": "Copy video URL with timestamp button",
+						"title": "Copies video URL with timestamp (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "Hide end screen cards",
 						"title": "Hides the cards at the end of the video"
@@ -295,10 +299,6 @@
 					"loopButton": {
 						"label": "Dauerschleife-Button",
 						"title": "Adds a button to the feature menu to loop the video you're watching"
-					},
-					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
 					},
 					"maximizePlayerButton": {
 						"label": "Player-Button maximieren",
@@ -422,6 +422,16 @@
 					"select": {
 						"label": "Method to get playlist length",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
 			},
