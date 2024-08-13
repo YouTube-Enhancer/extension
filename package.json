@@ -54,7 +54,7 @@
     "@types/webextension-polyfill": "^0.10.6",
     "@types/youtube-player": "^5.5.10",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^7.7.0",
+    "@typescript-eslint/parser": "^8.0.1",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.16",
