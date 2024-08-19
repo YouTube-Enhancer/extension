@@ -10,7 +10,7 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
+						"copied": "Kopyalandı!",
 						"label": "Copy video URL with timestamp"
 					}
 				},
@@ -25,7 +25,7 @@
 							"label": "Fast forward by {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} kadar geri sar"
 						}
 					}
 				},
@@ -78,7 +78,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Ekran görüntüsü"
 					},
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
 				},
@@ -542,13 +542,13 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
+					"label": "API Anahtarı",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 Anahtarı"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
+				"author": "Yazar",
 				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {
