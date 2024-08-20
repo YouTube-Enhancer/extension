@@ -11,7 +11,7 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Kopyalandı!",
-						"label": "Copy video URL with timestamp"
+						"label": "Geçerli zamana ait video URL'sini kopyala"
 					}
 				},
 				"featureMenu": {
