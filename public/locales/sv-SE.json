@@ -429,9 +429,9 @@
 						"label": "Metod för att hämta tittad tid",
 						"options": {
 							"duration": "Videons längd",
-							"youtube": "Video Watch Time"
+							"youtube": "Tittad videolängd"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
 			},
@@ -540,7 +540,7 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Du kan hämta en härifrån",
 				"input": {
 					"label": "API-nyckel",
 					"title": "Ange din Youtube Data API V3-nyckel."
