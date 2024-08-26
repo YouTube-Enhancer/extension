@@ -60,7 +60,7 @@
     "autoprefixer": "^10.4.16",
     "clsx": "^2.0.0",
     "concurrently": "^8.2.2",
-    "eslint": "^8.53.0",
+    "eslint": "^9.9.1",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
