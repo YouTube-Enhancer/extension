@@ -281,8 +281,8 @@
 						"title": "隱藏直播的聊天室"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "隱藏官方藝人影片",
+						"title": "從主頁隱藏官方藝人影片"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "隱藏付費推廣橫幅",
