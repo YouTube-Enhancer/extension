@@ -280,6 +280,10 @@
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "有料プロモーションバナーを隠す",
 						"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
