@@ -281,8 +281,8 @@
 						"title": "Nasconde la chat live stream"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "Nascondi video ufficiali dell'artista",
+						"title": "Nascondi video ufficiali dell'artista dalla pagina iniziale"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Nascondi banner promozioni a pagamento",
