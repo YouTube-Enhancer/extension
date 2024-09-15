@@ -10,6 +10,7 @@ import {
 	isWatchPage,
 	round,
 	sendContentMessage,
+	waitForAllElements,
 	waitForSpecificMessage
 } from "@/utils/utilities";
 export async function setupVideoHistory() {
@@ -35,7 +36,9 @@ export async function setupVideoHistory() {
 	if (!videoId) return;
 	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
-
+	await waitForAllElements(["#owner #upload-info #channel-name"]);
+	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	if (isOfficialArtistChannel) return;
 	const videoPlayerTimeUpdateListener = () => {
 		void (async () => {
 			const currentTime = await playerContainer.getCurrentTime();
@@ -69,6 +72,9 @@ export async function promptUserToResumeVideo(cb: () => void) {
 
 	// If player container is not available, return
 	if (!playerContainer) return;
+	await waitForAllElements(["#owner #upload-info #channel-name"]);
+	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	if (isOfficialArtistChannel) return;
 
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
