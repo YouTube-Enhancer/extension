@@ -280,6 +280,10 @@
 						"label": "실시간 채팅 숨기기",
 						"title": "실시간 채팅 레이아웃을 숨깁니다."
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "유료 광고 배너 숨기기",
 						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
