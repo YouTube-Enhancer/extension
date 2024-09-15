@@ -373,6 +373,10 @@ export type ExtensionSendOnlyMessageMappings = {
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
 	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
+	hideOfficialArtistVideosFromHomePageChange: DataResponseMessage<
+		"hideOfficialArtistVideosFromHomePageChange",
+		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }
+	>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
@@ -456,6 +460,7 @@ export type configuration = {
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
 	enable_hide_end_screen_cards: boolean;
+	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_paid_promotion_banner: boolean;
