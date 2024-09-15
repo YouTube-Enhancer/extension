@@ -281,8 +281,8 @@
 						"title": "隐藏直播聊天"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "隐藏音乐人官方视频",
+						"title": "从主页上隐藏来自音乐人官方频道的视频"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "隐藏付费推广横幅",
