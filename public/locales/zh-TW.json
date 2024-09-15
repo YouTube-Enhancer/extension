@@ -280,6 +280,10 @@
 						"label": "隱藏直播聊天室",
 						"title": "隱藏直播的聊天室"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "隱藏付費推廣橫幅",
 						"title": "隱藏當影片帶有付費推廣時顯示的橫幅"
