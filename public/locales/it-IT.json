@@ -280,6 +280,10 @@
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "Nascondi banner promozioni a pagamento",
 						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
