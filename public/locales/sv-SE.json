@@ -280,6 +280,10 @@
 						"label": "Dölj direktströmschatt",
 						"title": "Döljer direktströmschatten"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "Dölj betald marknadsföringsbanner",
 						"title": "Döljer bannern som visas när du tittar på en video som har betald marknadsföring"
