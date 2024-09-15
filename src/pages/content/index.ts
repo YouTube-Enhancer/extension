@@ -353,6 +353,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				maximizePlayerButtonEnabled: newValue
 			});
 		},
+		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
+		},
 		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
 				openTranscriptButtonEnabled: newValue

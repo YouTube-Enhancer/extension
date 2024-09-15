@@ -761,6 +761,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.title")}
 						type="checkbox"
 					/>
+					<Setting
+						type="checkbox"
+						checked={settings.enable_hide_official_artist_videos_from_home_page?.toString() === "true"}
+						id="enable_hide_official_artist_videos_from_home_page"
+						label={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.label")}
+						onChange={setCheckboxOption("enable_hide_official_artist_videos_from_home_page")}
+						title={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.title")}
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
