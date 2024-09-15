@@ -20,6 +20,10 @@ import {
 	removeHideEndScreenCardsButton
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import {
+	disableHideOfficialArtistVideosFromHomePage,
+	enableHideOfficialArtistVideosFromHomePage
+} from "@/src/features/hideOfficialArtistVideosFromHomePage";
 import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -160,7 +164,8 @@ const enableFeatures = () => {
 			enablePauseBackgroundPlayers(),
 			enableHideScrollBar(),
 			enableCustomCSS(),
-			enableDeepDarkCSS()
+			enableDeepDarkCSS(),
+			enableHideOfficialArtistVideosFromHomePage()
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
@@ -291,6 +296,17 @@ window.addEventListener("DOMContentLoaded", function () {
 				}
 				if (!message) return;
 				switch (message.type) {
+					case "hideOfficialArtistVideosFromHomePageChange": {
+						const {
+							data: { hideOfficialArtistVideosFromHomePageEnabled }
+						} = message;
+						if (hideOfficialArtistVideosFromHomePageEnabled) {
+							await enableHideOfficialArtistVideosFromHomePage();
+						} else {
+							disableHideOfficialArtistVideosFromHomePage();
+						}
+						break;
+					}
 					case "playlistLengthChange": {
 						const {
 							data: { playlistLengthEnabled }
