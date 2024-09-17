@@ -10,8 +10,8 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Kopierad!",
+						"label": "Kopiera videons webbadress med tidsstämpel"
 					}
 				},
 				"featureMenu": {
@@ -74,7 +74,7 @@
 					"increaseLimit": "Det går inte att höja mer ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Total längd kanske inte är korrekt om vissa videor är dolda eller om du inte har laddat tillräckligt med videor för att få hela längden."
 				},
 				"screenshotButton": {
 					"button": {
@@ -165,7 +165,7 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "Kopiera videons webbadress med tidsstämpelknappen",
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
 						"forwardButton": "Snabbspolningsknapp",
 						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
@@ -265,8 +265,8 @@
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Kopiera videons webbadress med tidsstämpelknappen",
+						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
 					},
 					"hideEndScreenCards": {
 						"label": "Dölj slutskärmskort",
@@ -279,6 +279,10 @@
 					"hideLiveStreamChat": {
 						"label": "Dölj direktströmschatt",
 						"title": "Döljer direktströmschatten"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Dölj betald marknadsföringsbanner",
@@ -414,24 +418,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Visa information om spellistans längd",
+					"title": "Visar spellistans totala längd och hur mycket som har tittats på och hur mycket som återstår."
 				},
-				"title": "Playlist length settings",
+				"title": "Inställningar för spellistans längd",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Metod för att få spellistans längd",
+						"title": "Sättet att få information om spellista längd (API-metoden kommer att falla tillbaka till HTML om ett fel inträffar)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Metod för att hämta tittad tid",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Videons längd",
+							"youtube": "Tittad videolängd"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
 			},
@@ -540,12 +544,12 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Du kan hämta en härifrån",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API-nyckel",
+					"title": "Ange din Youtube Data API V3-nyckel."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3-nyckel"
 			},
 			"youtubeDeepDark": {
 				"author": "Skapare",

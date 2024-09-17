@@ -10,8 +10,8 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Kopyalandı!",
+						"label": "Geçerli zamana ait video URL'sini kopyala"
 					}
 				},
 				"featureMenu": {
@@ -25,7 +25,7 @@
 							"label": "Fast forward by {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} kadar geri sar"
 						}
 					}
 				},
@@ -78,7 +78,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Ekran görüntüsü"
 					},
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
 				},
@@ -279,6 +279,10 @@
 					"hideLiveStreamChat": {
 						"label": "Canlı yayın sohbetini gizle",
 						"title": "Canlı yayın sohbetini gizler"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Hide paid promotion banner",
@@ -542,13 +546,13 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
+					"label": "API Anahtarı",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 Anahtarı"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
+				"author": "Yazar",
 				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {

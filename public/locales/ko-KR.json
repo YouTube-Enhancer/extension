@@ -74,7 +74,7 @@
 					"increaseLimit": "({{SPEED}}) 에서 더 늘릴 수 없습니다."
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "일부 동영상이 숨겨져 있거나 충분한 동영상이 로드되지 않은 경우 총 길이는 정확하지 않을 수 있습니다."
 				},
 				"screenshotButton": {
 					"button": {
@@ -280,6 +280,10 @@
 						"label": "실시간 채팅 숨기기",
 						"title": "실시간 채팅 레이아웃을 숨깁니다."
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "유료 광고 배너 숨기기",
 						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
@@ -414,24 +418,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "재생목록 총 재생 시간 표시",
+					"title": "재생 목록의 총 길이, 시청한 시간, 남은 시간을 보여줍니다."
 				},
-				"title": "Playlist length settings",
+				"title": "재생목록 재생 시간 설정",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "재생목록 총 재생 시간 측정 방법",
+						"title": "재생목록 총 재생 시간 정보를 얻는 방법 (API 메서드가 오류 발생 시 HTML로 대체됨)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "시청시간을 얻는 방법",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "동영상 길이",
+							"youtube": "동영상 시청시간"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "시청시간을 얻는 방법 (동영상 길이 유형은 시청 페이지에서만 사용됨)"
 					}
 				}
 			},
@@ -540,10 +544,10 @@
 				"title": "볼륨 부스트 설정"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "여기서 받을 수 있습니다.",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API 키",
+					"title": "Youtube Data API V3 키 입력"
 				},
 				"title": "YouTube API V3 Key"
 			},
