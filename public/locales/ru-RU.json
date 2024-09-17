@@ -280,6 +280,10 @@
 						"label": "Спрятать чат прямого эфира",
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "Скрыть \"Содержит прямую рекламу\"",
 						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
