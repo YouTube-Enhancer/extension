@@ -280,6 +280,10 @@
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Nascondi video ufficiali dell'artista",
+						"title": "Nascondi video ufficiali dell'artista dalla pagina iniziale"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "Nascondi banner promozioni a pagamento",
 						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
@@ -426,12 +430,12 @@
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Metodo per ottenere il tempo già riprodotto",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Durata del video",
+							"youtube": "Tempo in riproduzione"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
 			},

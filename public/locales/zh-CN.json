@@ -280,6 +280,10 @@
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
 					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "隐藏音乐人官方视频",
+						"title": "从主页上隐藏来自音乐人官方频道的视频"
+					},
 					"hidePaidPromotionBanner": {
 						"label": "隐藏付费推广横幅",
 						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
@@ -426,12 +430,12 @@
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "获取已观看时间的方法",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "视频长度",
+							"youtube": "视频观看时间"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "获取已观看时间长度的方法 (“视频长度”方法仅会在观看页面使用)"
 					}
 				}
 			},
