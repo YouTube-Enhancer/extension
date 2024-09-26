@@ -264,6 +264,10 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Automatically disable closed captions",
+						"title": "Automatically disables closed captions when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
@@ -421,10 +425,10 @@
 					"label": "Display playlist length information",
 					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
 				},
-				"title": "プレイリストの長さ設定",
+				"title": "Playlist length settings",
 				"wayToGetLength": {
 					"select": {
-						"label": "プレイリストの長さを取得する方法",
+						"label": "Method to get playlist length",
 						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
 					}
 				},
@@ -544,12 +548,12 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "APIキーがここで取得をします。",
+				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "APIキー",
-					"title": "YouTube API V3キーを入力してください。"
+					"label": "API Key",
+					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3キー"
+				"title": "YouTube API V3 Key"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
