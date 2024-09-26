@@ -407,6 +407,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				scrollWheelSpeedControlEnabled: newValue
 			});
 		},
+		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
+				automaticallyDisableClosedCaptionsEnabled: newValue
+			});
+		},
 		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
 				scrollWheelVolumeControlEnabled: newValue

@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
+import {
+	disableAutomaticallyDisableClosedCaptions,
+	enableAutomaticallyDisableClosedCaptions
+} from "@/src/features/automaticallyDisableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -186,7 +190,8 @@ const enableFeatures = () => {
 			adjustSpeedOnScrollWheel(),
 			enableHideTranslateComment(),
 			enableHideEndScreenCards(),
-			enablePlaylistLength()
+			enablePlaylistLength(),
+			enableAutomaticallyDisableClosedCaptions()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -648,6 +653,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (hideEndScreenCardsButtonEnabled) await addHideEndScreenCardsButton();
 						else await removeHideEndScreenCardsButton();
+						break;
+					}
+					case "automaticallyDisableClosedCaptionsChange": {
+						const {
+							data: { automaticallyDisableClosedCaptionsEnabled }
+						} = message;
+						if (automaticallyDisableClosedCaptionsEnabled) {
+							await enableAutomaticallyDisableClosedCaptions();
+						} else {
+							await disableAutomaticallyDisableClosedCaptions();
+						}
 						break;
 					}
 					case "hideLiveStreamChatChange": {

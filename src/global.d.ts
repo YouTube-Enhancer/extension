@@ -55,6 +55,8 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		viewerLivestreamJoinMediaTime: number;
 	}
 	interface YouTubePlayer {
+		unloadModule(moduleName: string): void;
+		loadModule(moduleName: string): void;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
