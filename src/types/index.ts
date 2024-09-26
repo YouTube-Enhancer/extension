@@ -416,6 +416,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ volumeBoostAmount: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
 	>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
+	automaticallyDisableClosedCaptionsChange: DataResponseMessage<
+		"automaticallyDisableClosedCaptionsChange",
+		{ automaticallyDisableClosedCaptionsEnabled: boolean }
+	>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -455,6 +459,7 @@ export type configuration = {
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_copy_timestamp_url_button: boolean;
+	enable_automatically_disable_closed_captions: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;

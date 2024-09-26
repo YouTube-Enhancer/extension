@@ -183,6 +183,10 @@ interface EnUS {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
 					};
+					automaticallyDisableClosedCaptions: {
+						label: "Automatically disable closed captions";
+						title: "Automatically disables closed captions when you load a video";
+					};
 					copyTimestampUrlButton: {
 						label: "Copy video URL with timestamp button";
 						title: "Copies video URL with timestamp (?t=123)";

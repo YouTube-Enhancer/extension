@@ -769,6 +769,14 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_hide_official_artist_videos_from_home_page")}
 						title={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.title")}
 					/>
+					<Setting
+						type="checkbox"
+						checked={settings.enable_automatically_disable_closed_captions?.toString() === "true"}
+						id="enable_automatically_disable_closed_captions"
+						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
+						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
+						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
