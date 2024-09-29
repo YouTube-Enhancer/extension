@@ -74,7 +74,7 @@
 					"increaseLimit": "無法再加速 ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "如果某些影片被隱藏或沒載入足夠影片去讀取總時間的話，總時間有機會不準確。"
 				},
 				"screenshotButton": {
 					"button": {
@@ -265,8 +265,8 @@
 						"title": "載入影片時自動啟用劇院模式"
 					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "自動停用字幕",
+						"title": "載入影片時自動停用字幕"
 					},
 					"copyTimestampUrlButton": {
 						"label": "複製目前播放時間的影片網址按鈕",
@@ -285,8 +285,8 @@
 						"title": "隱藏直播的聊天室"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "隱藏官方藝人影片",
+						"title": "從主頁隱藏官方藝人影片"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "隱藏付費推廣橫幅",
@@ -422,24 +422,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "顯示播放清單時間資訊",
+					"title": "顯示播放清單總時間，已播放時間及剩餘時間。"
 				},
-				"title": "Playlist length settings",
+				"title": "播放清單播放時間設定",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "取得播放清單時間方法",
+						"title": "取得播放清單時間資訊的方法(如API方法失敗會使用HTML方式)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "影片長度取得方法",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "影片長度",
+							"youtube": "影片已觀看時間"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "取得已觀看時間的方法(影片長度方式只用於觀看頁)"
 					}
 				}
 			},
@@ -548,12 +548,12 @@
 				"title": "音量增強設定"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "你可以從這裡取得",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API 金鑰",
+					"title": "輸入你的 YouTube Data API V3 金鑰"
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 金鑰"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",
