@@ -23,11 +23,12 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
 		// Wait for the options message and get the format from it
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		const {
 			data: {
 				options: { screenshot_format, screenshot_save_as }
 			}
-		} = await waitForSpecificMessage("options", "request_data", "content");
+		} = optionsData;
 		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, "image/png"));
 		if (!blob) return;
 
@@ -64,6 +65,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 
 export const addScreenshotButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -71,7 +73,7 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 				enable_screenshot_button: enableScreenshotButton
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;

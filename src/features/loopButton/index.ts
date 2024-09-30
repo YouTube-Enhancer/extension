@@ -13,6 +13,7 @@ import { loopButtonClickListener } from "./utils";
 
 export const addLoopButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -20,7 +21,7 @@ export const addLoopButton: AddButtonFunction = async () => {
 				enable_loop_button
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	// If the loop button option is disabled, return
 	if (!enable_loop_button) return;
 	// Get the volume control element

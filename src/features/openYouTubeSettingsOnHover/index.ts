@@ -5,11 +5,12 @@ import { isNewYouTubeVideoLayout, isWatchPage, waitForSpecificMessage } from "@/
 
 export async function enableOpenYouTubeSettingsOnHover() {
 	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_open_youtube_settings_on_hover: enableOpenYouTubeSettingsOnHover }
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	// If the open YouTube settings on hover option is disabled, return
 	if (!enableOpenYouTubeSettingsOnHover) return;
 	const settingsButton = document.querySelector<HTMLButtonElement>(".ytp-button.ytp-settings-button");

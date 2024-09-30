@@ -43,11 +43,12 @@ function handleInput(event: MouseEvent) {
 }
 
 export async function enableShareShortener() {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_share_shortener }
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	if (!enable_share_shortener) return;
 	cleanSearchPage(window.location.href);
 	document.addEventListener("click", handleInput);

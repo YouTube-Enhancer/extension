@@ -5,11 +5,12 @@ interface YtdWatchElement extends Element {
 }
 
 export async function enableSkipContinueWatching() {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_skip_continue_watching }
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	if (!enable_skip_continue_watching) return;
 	browserColorLog("Enabling skipContinueWatching", "FgMagenta");
 	const ytdWatchElement = document.querySelector(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");

@@ -22,6 +22,7 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 	buttonName: ButtonName,
 	speed: number
 ) {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -31,7 +32,7 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 				}
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
@@ -67,13 +68,17 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 				({ playbackRate: currentPlaybackSpeed } = videoElement);
 				if (currentPlaybackSpeed + adjustmentAmount <= 0) return;
 				if (currentPlaybackSpeed + adjustmentAmount > 4) return;
-				const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer =
+					isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+					: null;
 				if (!playerContainer) return;
+				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
 					data: {
 						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
-				} = await waitForSpecificMessage("options", "request_data", "content");
+				} = optionsData;
 				new OnScreenDisplayManager(
 					{
 						displayColor: osd_display_color,
@@ -103,6 +108,7 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 }
 
 export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -111,13 +117,15 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	if (!enable_playback_speed_buttons) return;
-	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement)) {
@@ -143,6 +151,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 };
 
 export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -151,13 +160,15 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	if (!enable_playback_speed_buttons) return;
-	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement)) {

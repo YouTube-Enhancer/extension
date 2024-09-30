@@ -7,11 +7,12 @@ import { isShortsPage, waitForAllElements, waitForSpecificMessage } from "@/src/
 export async function enableShortsAutoScroll() {
 	if (!isShortsPage()) return;
 	// Wait for the "options" message from the content script
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_shorts_auto_scroll }
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	// If the shorts auto scroll option is disabled, return
 	if (!enable_shorts_auto_scroll) return;
 	await waitForAllElements(["#shorts-player"]);

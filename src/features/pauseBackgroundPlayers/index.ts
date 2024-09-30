@@ -7,11 +7,12 @@ const PauseBackgroundPlayers = () => {
 };
 
 export async function enablePauseBackgroundPlayers() {
+	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_pausing_background_players: pauseBackgroundPlayersEnabled }
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	} = optionsData;
 	if (!pauseBackgroundPlayersEnabled) return;
 	// ignore home page and channel pages
 	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;

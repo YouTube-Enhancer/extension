@@ -36,13 +36,14 @@ export async function removeFeatureButton<Name extends AllButtonNames>(buttonNam
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	if (placement === undefined) {
 		// Wait for the "options" message from the content script
+		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		({
 			data: {
 				options: {
 					button_placements: { [buttonName]: placement }
 				}
 			}
-		} = await waitForSpecificMessage("options", "request_data", "content"));
+		} = optionsData);
 	}
 	switch (placement) {
 		case "feature_menu": {

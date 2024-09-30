@@ -9,7 +9,7 @@ import { Measure, seconds } from "safe-units";
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 const speedButtonListener = async (direction: "backward" | "forward", timeAdjustment: number) => {
 	// Get the player element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	if (!playerContainer.seekTo) return;
@@ -27,9 +27,8 @@ export const addForwardButton: AddButtonFunction = async () => {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_forward_rewind_buttons) return;
-	if (!isWatchPage()) return;
 	// Get the player element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -57,9 +56,8 @@ export const addRewindButton: AddButtonFunction = async () => {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_forward_rewind_buttons) return;
-	if (!isWatchPage()) return;
 	// Get the player element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();

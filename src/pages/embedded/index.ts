@@ -90,7 +90,6 @@ import {
 	findKeyByValue,
 	formatError,
 	groupButtonChanges,
-	isLivePage,
 	isNewYouTubeVideoLayout,
 	isPlaylistPage,
 	isShortsPage,
@@ -148,9 +147,7 @@ const alwaysShowProgressBar = async function () {
 	progressPlay += progressWidth;
 	progressLoad += progressWidth;
 };
-function shouldEnableFeaturesFuncReturn() {
-	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
-}
+
 const enableFeatures = () => {
 	browserColorLog(`Enabling features...`, "FgMagenta");
 	void (async () => {
@@ -176,7 +173,7 @@ const enableFeatures = () => {
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
-		if (shouldEnableFeaturesFuncReturn()) return;
+		if (!(isWatchPage() || isShortsPage() || isPlaylistPage())) return;
 
 		void Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
