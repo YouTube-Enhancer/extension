@@ -44,7 +44,6 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -52,7 +51,6 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	if (playerVideoData.isLive) return;
 	// Log the message indicating the player speed being set
 	browserColorLog(`Setting player speed to ${playerSpeed}`, "FgMagenta");
-
 	// Set the playback speed
 	void playerContainer.setPlaybackRate(playerSpeed);
 	// Set the video playback speed
@@ -100,12 +98,10 @@ export function setupPlaybackSpeedChangeListener() {
 		}
 		window.localStorage.setItem("playerSpeed", String(playerSpeed));
 	};
-
 	// Create an observer instance
 	const playerSpeedMenuObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
 		mutationsList.forEach((mutation) => {
 			const { target: targetElement } = mutation as { target: HTMLDivElement } & MutationRecord;
-
 			// Check if the target element has the desired structure
 			const panelHeader = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-header");
 			const panelMenu = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-menu");
@@ -128,7 +124,6 @@ export function setupPlaybackSpeedChangeListener() {
 		});
 	});
 	const config: MutationObserverInit = { childList: true, subtree: true };
-
 	if (settingsPanelMenu) {
 		playerSpeedMenuObserver.observe(settingsPanelMenu, config);
 		customSpeedSliderObserver.observe(settingsPanelMenu, {

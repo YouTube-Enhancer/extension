@@ -10,7 +10,6 @@ export default async function enableRemoveRedirect() {
 	if (!removeRedirectEnabled) return;
 	browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 	const regex = /https\:\/\/www\.youtube\.com\/redirect\?.+/gm;
-
 	const links: NodeListOf<HTMLElement> = document.querySelectorAll(
 		".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string"
 	);
@@ -21,7 +20,6 @@ export default async function enableRemoveRedirect() {
 			link.setAttribute("href", urlParams.get("q") || "");
 		}
 	});
-
 	const callback: MutationCallback = (mutationsList: MutationRecord[]) => {
 		for (const mutation of mutationsList) {
 			if (mutation.type === "childList") {
@@ -37,7 +35,6 @@ export default async function enableRemoveRedirect() {
 			}
 		}
 	};
-
 	const observer: MutationObserver = new MutationObserver(callback);
 	observer.observe(document.body, { attributes: false, childList: true, subtree: true });
 }

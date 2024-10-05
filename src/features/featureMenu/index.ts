@@ -99,13 +99,11 @@ export async function enableFeatureMenu() {
 }
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
-	if (adsContainer) {
-		const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
-		if (adsSpan) {
-			adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
-			adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
-		}
-	}
+	if (!adsContainer) return;
+	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+	if (!adsSpan) return;
+	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
+	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
 }
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	eventManager.removeEventListeners("featureMenu");
@@ -151,9 +149,8 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		if (!featureMenuButton) return;
 		if (event.target === featureMenuButton) return;
 		if (event.target === featureMenu) return;
-		if (!featureMenu.contains(event.target as Node)) {
-			hideFeatureMenu();
-		}
+		if (featureMenu.contains(event.target as Node)) return;
+		hideFeatureMenu();
 	};
 
 	switch (featureMenuOpenType) {
@@ -164,11 +161,8 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				"click",
 				() => {
 					const featureMenuVisible = featureMenu.style.display === "block";
-					if (featureMenuVisible) {
-						hideFeatureMenu();
-					} else {
-						showFeatureMenu();
-					}
+					if (featureMenuVisible) return hideFeatureMenu();
+					showFeatureMenu();
 				},
 				"featureMenu"
 			);
@@ -191,10 +185,9 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				featureMenuButton,
 				"mouseleave",
 				(event) => {
-					if (![featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) {
-						removeFeatureMenuTooltip();
-						hideFeatureMenu();
-					}
+					if ([featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) return;
+					removeFeatureMenuTooltip();
+					hideFeatureMenu();
 				},
 				"featureMenu"
 			);
@@ -222,18 +215,15 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	}
 	function handleMutation(mutations: MutationRecord[]) {
 		mutations.forEach((mutation) => {
-			if (mutation.type === "childList") {
-				const addedNodes = Array.from(mutation.addedNodes);
-				const isAdsElementAdded = addedNodes.some(
-					(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
-				);
-				if (isAdsElementAdded) {
-					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					if (featureMenu) {
-						adjustAdsContainerStyles(featureMenu.style.display === "block");
-					}
-				}
-			}
+			if (mutation.type !== "childList") return;
+			const addedNodes = Array.from(mutation.addedNodes);
+			const isAdsElementAdded = addedNodes.some(
+				(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
+			);
+			if (!isAdsElementAdded) return;
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			if (!featureMenu) return;
+			adjustAdsContainerStyles(featureMenu.style.display === "block");
 		});
 	}
 	const observer = new MutationObserver(handleMutation);

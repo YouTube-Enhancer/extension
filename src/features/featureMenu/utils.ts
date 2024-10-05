@@ -44,14 +44,11 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
-
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
-
 	// Get the feature menu
 	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 	if (!featureMenu) return;
-
 	// Check if the feature item already exists in the menu
 	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`);
 	if (featureExistsInMenu) {
@@ -61,26 +58,21 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 		return;
 	}
-
 	// Get the feature menu panel
 	const featureMenuPanel = document.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
-
 	// Get the IDs for the feature item
 	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(buttonName);
-
 	// Create a menu item element
 	const menuItem = document.createElement("div");
 	menuItem.classList.add("ytp-menuitem");
 	menuItem.id = featureMenuItemId;
-
 	// Create the menu item icon element
 	const menuItemIcon = document.createElement("div");
 	menuItemIcon.id = featureMenuItemIconId;
 	menuItemIcon.classList.add("ytp-menuitem-icon");
 	menuItemIcon.appendChild(icon);
 	menuItem.appendChild(menuItemIcon);
-
 	// Create the menu item label element
 	const menuItemLabel = document.createElement("div");
 	menuItemLabel.classList.add("ytp-menuitem-label");
@@ -88,7 +80,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	menuItemLabel.id = featureMenuItemLabelId;
 	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	menuItem.appendChild(menuItemLabel);
-
 	// If it's a toggle item, create the toggle elements
 	if (isToggle) {
 		const menuItemContent = document.createElement("div");
@@ -103,10 +94,8 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.classList.add("ytp-menuitem-content");
 		menuItem.appendChild(menuItemContent);
 	}
-
 	// Add the item to the feature menu panel
 	featureMenuPanel.appendChild(menuItem);
-
 	// Adjust the height and width of the feature menu
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 	featureMenu.style.width = "fit-content";
@@ -123,7 +112,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	// Remove the feature name from the set of features in the menu
 	featuresInMenu.delete(buttonName);
-
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(buttonName);
 	// Find the feature menu
@@ -132,27 +120,21 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	// Find the feature menu panel
 	const featureMenuPanel = featureMenu.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
-
 	// Find the specific feature menu item
 	const featureMenuItem = featureMenuPanel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
 	if (!featureMenuItem) return;
-
 	// Remove the feature menu item
 	featureMenuItem.remove();
-
 	// Check if there are any items left in the menu
 	if (featureMenuPanel.childElementCount === 0) {
 		// If no items are left, hide the menu
 		featureMenu.style.display = "none";
-
 		// Find the feature menu button
 		const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
 		if (!featureMenuButton) return;
-
 		// Hide the feature menu button since the menu is empty
 		featureMenuButton.style.display = "none";
 	}
-
 	// Adjust the height and width of the feature menu panel
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 }

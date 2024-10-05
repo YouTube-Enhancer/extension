@@ -34,7 +34,6 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
-
 		void (async () => {
 			if (!optionsData) {
 				return void (await setOptionsData());
@@ -73,10 +72,8 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
-
 			// Update the options data after preventScroll()
 			await setOptionsData();
-
 			// Get the player element
 			const playerContainer =
 				isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
@@ -84,7 +81,6 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;
-
 			// Adjust the volume based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the volume based on the scroll direction and options
@@ -108,7 +104,6 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			);
 		})();
 	};
-
 	// Set up the scroll wheel event listeners on the specified container selectors
 	for (const selector of containerSelectors) {
 		setupScrollListeners(selector, handleWheel);

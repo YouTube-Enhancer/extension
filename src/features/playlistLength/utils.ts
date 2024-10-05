@@ -65,7 +65,6 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string): P
 			allVideos.push(...parsedData.data.items);
 			await delay(40); // Adding delay between requests to avoid rate limiting
 		} while (nextPageToken);
-
 		return allVideos;
 	} catch (error) {
 		throw new Error(`Error fetching playlist videos: ${error}`);
@@ -73,7 +72,6 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string): P
 }
 export async function getPlaylistDuration(playlistVideos: YouTubePlaylistItem[], apiKey: string) {
 	const videoIds = playlistVideos.map((video) => video.contentDetails.videoId);
-
 	try {
 		const videoDurationPromises = videoIds.map(async (videoId) => {
 			await delay(1); // Adding delay between requests to avoid rate limiting
@@ -88,7 +86,6 @@ export async function getPlaylistDuration(playlistVideos: YouTubePlaylistItem[],
 }
 export async function getVideoDuration(videoId: string, apiKey: string) {
 	const videoDetailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&fields=items/contentDetails/duration&key=${apiKey}&id=${videoId}`;
-
 	try {
 		const videoResponse = await fetch(videoDetailsUrl);
 		const data = await videoResponse.json();

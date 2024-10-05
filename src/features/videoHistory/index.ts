@@ -59,22 +59,18 @@ export async function promptUserToResumeVideo(cb: () => void) {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableVideoHistory) return;
-
 	// Get the player container element
 	const playerContainer =
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? null
 		: null;
-
 	// If player container is not available, return
 	if (!playerContainer) return;
 	await waitForAllElements(["#owner #upload-info #channel-name"]);
 	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
 	if (isOfficialArtistChannel) return;
-
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
-
 	const videoHistoryOneData = await waitForSpecificMessage("videoHistoryOne", "request_data", "content", { id: videoId });
 	if (!videoHistoryOneData) {
 		cb();
@@ -103,7 +99,6 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	const resumeButtonId = "resume-prompt-button";
 	const promptId = "resume-prompt";
 	const progressBarDuration = 15;
-
 	const prompt = createStyledElement({
 		elementId: promptId,
 		elementType: "div",
@@ -135,7 +130,6 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			zIndex: "1000"
 		}
 	});
-
 	const closeButton = createStyledElement({
 		elementId: closeButtonId,
 		elementType: "button",
@@ -170,7 +164,6 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		}
 	});
 	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
-
 	function startCountdown() {
 		if (prompt) prompt.style.display = "block";
 		if (animationFrameId) {
@@ -190,24 +183,20 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		}
 		animationFrameId = requestAnimationFrame(updateResumeProgress);
 	}
-
 	function hidePrompt() {
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		prompt.style.display = "none";
 		cb();
 	}
-
 	function resumeButtonClickListener() {
 		hidePrompt();
 		browserColorLog(window.i18nextInstance.t("messages.resumingVideo", { VIDEO_TIME: formatTime(videoHistoryEntry.timestamp) }), "FgGreen");
 		void playerContainer.seekTo(videoHistoryEntry.timestamp, true);
 		cb();
 	}
-
 	if (!elementExists(progressBarId)) {
 		prompt.appendChild(progressBar);
 	}
-
 	if (!elementExists(closeButtonId)) {
 		prompt.appendChild(closeButton);
 	}
@@ -219,9 +208,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	});
 	eventManager.removeEventListener(closeButton, "mouseover", "videoHistory");
 	eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
-
 	startCountdown();
-
 	const closeListener = () => {
 		hidePrompt();
 	};
@@ -229,7 +216,6 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 	eventManager.removeEventListener(closeButton, "click", "videoHistory");
 	eventManager.addEventListener(closeButton, "click", closeListener, "videoHistory");
-
 	// Display the prompt
 	if (!elementExists(promptId)) {
 		prompt.appendChild(resumeButton);

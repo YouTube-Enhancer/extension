@@ -16,7 +16,6 @@ export async function enablePauseBackgroundPlayers() {
 	// ignore home page and channel pages
 	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;
 	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");
-
 	let videoPlayerContainer: HTMLVideoElement | null = null;
 	if (!videoPlayerContainer) {
 		videoPlayerContainer = document.querySelector(".html5-main-video");
@@ -26,7 +25,6 @@ export async function enablePauseBackgroundPlayers() {
 			videoPlayerContainer.addEventListener("playing", PauseBackgroundPlayers);
 		}
 	}
-
 	let debounceTimeout: null | number = null;
 	const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
 		if (debounceTimeout) clearTimeout(debounceTimeout);
@@ -39,7 +37,6 @@ export async function enablePauseBackgroundPlayers() {
 			}
 		}, 100);
 	});
-
 	if (videoPlayerContainer) {
 		observer.observe(videoPlayerContainer, { childList: true, subtree: true });
 	}
