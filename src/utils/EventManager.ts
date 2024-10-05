@@ -86,10 +86,8 @@ export const eventManager: EventManager = {
 			target.addEventListener(eventName, callback, options);
 		}
 	},
-
 	// event listener info objects
 	listeners: new Map<string, TargetedListeners<keyof HTMLElementEventMap>>(),
-
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {
 		// Iterate over all registered listeners
