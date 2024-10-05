@@ -1,5 +1,5 @@
 import type { YouTubePlayerDiv } from "@/src/types";
-import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isLivePage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 let captionsWhereEnabled = false;
 export async function enableAutomaticallyDisableClosedCaptions() {
 	const {
@@ -10,7 +10,7 @@ export async function enableAutomaticallyDisableClosedCaptions() {
 	if (!enable_automatically_disable_closed_captions) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	// Get the player element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
+	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	const subtitlesButton = document.querySelector("button.ytp-subtitles-button");
 	// If player element is not available, return
 	if (!playerContainer || !subtitlesButton) return;
@@ -21,7 +21,7 @@ export async function enableAutomaticallyDisableClosedCaptions() {
 export async function disableAutomaticallyDisableClosedCaptions() {
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	// Get the player element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
+	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// If captions weren't enabled, return

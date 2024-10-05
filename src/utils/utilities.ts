@@ -369,6 +369,10 @@ export function isPlaylistPage() {
 	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "playlist";
 }
+export function isLivePage() {
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	return firstSection === "live";
+}
 export function formatError(error: unknown) {
 	if (error instanceof Error) {
 		return `${error.message}\n${error?.stack}`;

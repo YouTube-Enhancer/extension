@@ -68,10 +68,7 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 				({ playbackRate: currentPlaybackSpeed } = videoElement);
 				if (currentPlaybackSpeed + adjustmentAmount <= 0) return;
 				if (currentPlaybackSpeed + adjustmentAmount > 4) return;
-				const playerContainer =
-					isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-					: null;
+				const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 				if (!playerContainer) return;
 				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
@@ -119,13 +116,11 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		}
 	} = optionsData;
 	if (!enable_playback_speed_buttons) return;
+	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement)) {
@@ -162,13 +157,11 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		}
 	} = optionsData;
 	if (!enable_playback_speed_buttons) return;
+	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement)) {

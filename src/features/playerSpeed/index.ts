@@ -70,11 +70,11 @@ export function restorePlayerSpeed() {
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
 	// Log the message indicating the player speed being set
 	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
