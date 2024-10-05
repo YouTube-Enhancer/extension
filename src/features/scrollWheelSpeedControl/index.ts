@@ -34,7 +34,6 @@ export default async function adjustSpeedOnScrollWheel() {
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
-
 		void (async () => {
 			if (!optionsData) {
 				return void (await setOptionsData());
@@ -58,14 +57,11 @@ export default async function adjustSpeedOnScrollWheel() {
 			const wheelEvent = event as WheelEvent;
 			// If the modifier key is required and not pressed, return
 			if (enable_scroll_wheel_speed_control && !wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
-
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
-
 			// Update the options data after preventScroll()
 			await setOptionsData();
-
 			// Get the player element
 			const playerContainer =
 				isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
@@ -73,7 +69,6 @@ export default async function adjustSpeedOnScrollWheel() {
 				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;
-
 			// Adjust the speed based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the speed based on the scroll direction and options
@@ -105,7 +100,6 @@ export default async function adjustSpeedOnScrollWheel() {
 			);
 		})();
 	};
-
 	// Set up the scroll wheel event listeners on the specified container selectors
 	for (const selector of containerSelectors) {
 		setupScrollListeners(selector, handleWheel);
