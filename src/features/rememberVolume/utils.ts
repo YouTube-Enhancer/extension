@@ -4,12 +4,11 @@ import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, isLivePage, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";
 export async function setupVolumeChangeListener() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_remember_last_volume: enableRememberVolume }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the volume is not being remembered, return
 	if (!enableRememberVolume) return;
 	const IsWatchPage = isWatchPage();

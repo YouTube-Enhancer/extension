@@ -24,12 +24,11 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// If the input is a number, set the player speed to the given number
 	if (input === undefined) {
 		// Wait for the "options" message from the content script
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		({
 			data: {
 				options: { enable_forced_playback_speed: enablePlayerSpeed, player_speed: playerSpeed }
 			}
-		} = optionsData);
+		} = await waitForSpecificMessage("options", "request_data", "content"));
 	} else if (typeof input === "number") {
 		playerSpeed = input;
 	}

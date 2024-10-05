@@ -4,12 +4,11 @@ import { isLivePage, isWatchPage, waitForSpecificMessage } from "@/src/utils/uti
 
 export async function enableAutomaticTheaterMode() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_automatic_theater_mode }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If automatic theater mode isn't enabled return
 	if (!enable_automatic_theater_mode) return;
 	// Get the player element

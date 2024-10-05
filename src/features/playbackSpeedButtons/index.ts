@@ -22,7 +22,6 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 	buttonName: ButtonName,
 	speed: number
 ) {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -32,7 +31,7 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 				}
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
@@ -70,12 +69,11 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 				if (currentPlaybackSpeed + adjustmentAmount > 4) return;
 				const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 				if (!playerContainer) return;
-				const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 				const {
 					data: {
 						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
-				} = optionsData;
+				} = await waitForSpecificMessage("options", "request_data", "content");
 				new OnScreenDisplayManager(
 					{
 						displayColor: osd_display_color,
@@ -105,7 +103,6 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 }
 
 export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -114,7 +111,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playback_speed_buttons) return;
 	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
@@ -146,7 +143,6 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 };
 
 export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -155,7 +151,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playback_speed_buttons) return;
 	if (!isWatchPage()) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");

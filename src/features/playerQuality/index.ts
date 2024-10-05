@@ -10,12 +10,11 @@ import { browserColorLog, chooseClosestQuality, isLivePage, isShortsPage, isWatc
  */
 export default async function setPlayerQuality(): Promise<void> {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_automatically_set_quality, player_quality, player_quality_fallback_strategy }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If automatically set quality option is disabled, return
 	if (!enable_automatically_set_quality) return;
 	// If player quality is not specified, return
