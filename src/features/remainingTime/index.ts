@@ -12,13 +12,10 @@ function playerTimeUpdateListener() {
 			isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 			: null;
-
 		// If player element is not available, return
 		if (!playerContainer) return;
-
 		// Get the video element
 		const videoElement = playerContainer.querySelector("video");
-
 		// If video element is not available, return
 		if (!videoElement) return;
 		// Get the remaining time element

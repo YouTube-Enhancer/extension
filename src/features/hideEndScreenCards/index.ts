@@ -1,11 +1,11 @@
 import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { ButtonPlacement } from "@/src/types";
+import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-import { modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
 export async function enableHideEndScreenCards() {
@@ -15,11 +15,13 @@ export async function enableHideEndScreenCards() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCards) return;
+	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	hideEndScreenCards();
 }
 
 export async function disableHideEndScreenCards() {
+	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	showEndScreenCards();
 }
@@ -33,7 +35,13 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCardsButton) return;
+	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	// Get the player container element
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	if (!playerContainer) return;
+	const videoData = await playerContainer.getVideoData();
+	if (videoData.isLive) return;
 	const endScreenCardsAreHidden = isEndScreenCardsHidden();
 	const handleButtonClick = (placement: ButtonPlacement, checked?: boolean) => {
 		if (placement === "feature_menu") {
@@ -63,6 +71,7 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	);
 };
 export const removeHideEndScreenCardsButton: RemoveButtonFunction = async (placement) => {
+	if (!isWatchPage()) return;
 	await removeFeatureButton("hideEndScreenCardsButton", placement);
 	eventManager.removeEventListeners("hideEndScreenCardsButton");
 };

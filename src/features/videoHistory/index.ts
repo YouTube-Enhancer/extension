@@ -22,11 +22,9 @@ export async function setupVideoHistory() {
 		}
 	} = optionsData;
 	if (!enableVideoHistory) return;
+	if (!isWatchPage()) return;
 	// Get the player container element
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? null
-		: null;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	// If player container is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
