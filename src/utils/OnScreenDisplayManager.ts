@@ -240,28 +240,23 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	// method to set up the canvas based on options.
 	private setupCanvas(): void {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return;
-
 		const {
 			options: {
 				playerContainer: { clientHeight: height, clientWidth: width }
 			}
 		} = this;
-
 		// Adjust displayPadding if it exceeds max width or height.
 		if (this.options.displayPadding > Math.max(width, height)) {
 			this.options.displayPadding = clamp(this.options.displayPadding, 0, Math.max(width, height));
 			browserColorLog(`Clamped display padding to ${this.options.displayPadding}`, "FgRed");
 		}
-
 		// Calculate font size based on canvas dimensions.
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
-
 		// Find elements for positioning the canvas.
 		const bottomElement: Nullable<HTMLDivElement> =
 			document.querySelector(
 				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 			) ?? document.querySelector(".ytp-chrome-bottom");
-
 		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
 		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
 		const heightExcludingMarginPadding =
@@ -273,10 +268,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
 				10
 			:	0;
-
 		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
-
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
 			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)

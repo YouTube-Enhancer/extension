@@ -5,7 +5,6 @@ export default function useComponentVisible<ElementType extends HTMLElementTagNa
 	initialIsVisible: boolean
 ) {
 	const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
-
 	const handleClickOutside = useCallback(
 		(event: MouseEvent) => {
 			if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -14,13 +13,11 @@ export default function useComponentVisible<ElementType extends HTMLElementTagNa
 		},
 		[ref]
 	);
-
 	useEffect(() => {
 		document.addEventListener("click", handleClickOutside, true);
 		return () => {
 			document.removeEventListener("click", handleClickOutside, true);
 		};
 	}, [handleClickOutside]);
-
 	return { isComponentVisible, setIsComponentVisible };
 }

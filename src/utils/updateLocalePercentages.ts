@@ -54,7 +54,6 @@ const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProg
 
 function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
 	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
-
 	if (match) {
 		const [, oldObjectPart] = match;
 		const newObjectPart = JSON.stringify(updatedObject, null, 2);
