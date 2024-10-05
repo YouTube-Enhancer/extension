@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
+import {
+	disableAutomaticallyDisableClosedCaptions,
+	enableAutomaticallyDisableClosedCaptions
+} from "@/src/features/automaticallyDisableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
@@ -19,6 +24,10 @@ import {
 	removeHideEndScreenCardsButton
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import {
+	disableHideOfficialArtistVideosFromHomePage,
+	enableHideOfficialArtistVideosFromHomePage
+} from "@/src/features/hideOfficialArtistVideosFromHomePage";
 import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
@@ -34,11 +43,14 @@ import { disablePauseBackgroundPlayers, enablePauseBackgroundPlayers } from "@/s
 import {
 	addDecreasePlaybackSpeedButton,
 	addIncreasePlaybackSpeedButton,
+	calculatePlaybackButtonSpeed,
 	removeDecreasePlaybackSpeedButton,
-	removeIncreasePlaybackSpeedButton
+	removeIncreasePlaybackSpeedButton,
+	updatePlaybackSpeedButtonTooltip
 } from "@/src/features/playbackSpeedButtons";
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
+import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
@@ -78,7 +90,9 @@ import {
 	findKeyByValue,
 	formatError,
 	groupButtonChanges,
+	isLivePage,
 	isNewYouTubeVideoLayout,
+	isPlaylistPage,
 	isShortsPage,
 	isWatchPage,
 	sendContentOnlyMessage,
@@ -134,7 +148,9 @@ const alwaysShowProgressBar = async function () {
 	progressPlay += progressWidth;
 	progressLoad += progressWidth;
 };
-
+function shouldEnableFeaturesFuncReturn() {
+	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
+}
 const enableFeatures = () => {
 	browserColorLog(`Enabling features...`, "FgMagenta");
 	void (async () => {
@@ -153,14 +169,14 @@ const enableFeatures = () => {
 			enableShareShortener(),
 			enableSkipContinueWatching(),
 			enablePauseBackgroundPlayers(),
-			enableRememberVolume(),
 			enableHideScrollBar(),
 			enableCustomCSS(),
-			enableDeepDarkCSS()
+			enableDeepDarkCSS(),
+			enableHideOfficialArtistVideosFromHomePage()
 		]);
 
 		// Use a guard clause to reduce amount of times nesting code happens
-		if (!(isWatchPage() || isShortsPage())) return;
+		if (shouldEnableFeaturesFuncReturn()) return;
 
 		void Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
@@ -171,13 +187,14 @@ const enableFeatures = () => {
 			enableRememberVolume(),
 			enableAutomaticTheaterMode(),
 			enableRemainingTime(),
-			volumeBoost(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
 			adjustVolumeOnScrollWheel(),
 			adjustSpeedOnScrollWheel(),
 			enableHideTranslateComment(),
-			enableHideEndScreenCards()
+			enableHideEndScreenCards(),
+			enablePlaylistLength(),
+			enableAutomaticallyDisableClosedCaptions()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -224,6 +241,8 @@ const enableFeatures = () => {
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
 		await addLoopButton();
+		await addCopyTimestampUrlButton();
+		await volumeBoost();
 	})();
 };
 const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
@@ -242,7 +261,10 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	};
 };
 function handleSoftNavigate() {
-	// Listen to YouTube's soft navigate event
+	// Remove existing listeners
+	document.removeEventListener("yt-navigate-finish", enableFeatures);
+	document.removeEventListener("yt-player-updated", enableFeatures);
+	// Add listeners
 	document.addEventListener("yt-navigate-finish", enableFeatures);
 	document.addEventListener("yt-player-updated", enableFeatures);
 }
@@ -259,7 +281,7 @@ window.addEventListener("DOMContentLoaded", function () {
 			enableFeatures();
 			handleSoftNavigate();
 		} else if (!isFirstLoad) {
-			handleSoftNavigate;
+			handleSoftNavigate();
 		}
 		isFirstLoad = false;
 		/**
@@ -282,6 +304,34 @@ window.addEventListener("DOMContentLoaded", function () {
 				}
 				if (!message) return;
 				switch (message.type) {
+					case "hideOfficialArtistVideosFromHomePageChange": {
+						const {
+							data: { hideOfficialArtistVideosFromHomePageEnabled }
+						} = message;
+						if (hideOfficialArtistVideosFromHomePageEnabled) {
+							await enableHideOfficialArtistVideosFromHomePage();
+						} else {
+							disableHideOfficialArtistVideosFromHomePage();
+						}
+						break;
+					}
+					case "playlistLengthChange": {
+						const {
+							data: { playlistLengthEnabled }
+						} = message;
+						if (playlistLengthEnabled) {
+							await enablePlaylistLength();
+						} else {
+							disablePlaylistLength();
+						}
+						break;
+					}
+					case "playlistLengthGetMethodChange":
+					case "playlistWatchTimeGetMethodChange": {
+						disablePlaylistLength();
+						await enablePlaylistLength();
+						break;
+					}
 					case "volumeBoostChange": {
 						const {
 							data: { volumeBoostEnabled, volumeBoostMode }
@@ -326,10 +376,34 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { enableForcedPlaybackSpeed, playerSpeed }
 						} = message;
+						const {
+							data: {
+								options: { playback_buttons_speed: playbackSpeedPerClick }
+							}
+						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (enableForcedPlaybackSpeed && playerSpeed) {
+							await updatePlaybackSpeedButtonTooltip(
+								"increasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "increase")
+							);
+							await updatePlaybackSpeedButtonTooltip(
+								"decreasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "decrease")
+							);
 							await setPlayerSpeed(Number(playerSpeed));
 						} else if (!enableForcedPlaybackSpeed) {
 							restorePlayerSpeed();
+							const videoElement = document.querySelector<HTMLVideoElement>("video");
+							if (!videoElement) return;
+							const { playbackRate: currentSpeed } = videoElement;
+							await updatePlaybackSpeedButtonTooltip(
+								"increasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "increase")
+							);
+							await updatePlaybackSpeedButtonTooltip(
+								"decreasePlaybackSpeedButton",
+								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "decrease")
+							);
 						}
 						break;
 					}
@@ -428,6 +502,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							await addLoopButton();
 						} else {
 							await removeLoopButton();
+						}
+						break;
+					}
+					case "copyTimestampUrlButtonChange": {
+						const {
+							data: { copyTimestampUrlButtonEnabled }
+						} = message;
+						if (copyTimestampUrlButtonEnabled) {
+							await addCopyTimestampUrlButton();
+						} else {
+							await removeCopyTimestampUrlButton();
 						}
 						break;
 					}
@@ -571,6 +656,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (hideEndScreenCardsButtonEnabled) await addHideEndScreenCardsButton();
 						else await removeHideEndScreenCardsButton();
+						break;
+					}
+					case "automaticallyDisableClosedCaptionsChange": {
+						const {
+							data: { automaticallyDisableClosedCaptionsEnabled }
+						} = message;
+						if (automaticallyDisableClosedCaptionsEnabled) {
+							await enableAutomaticallyDisableClosedCaptions();
+						} else {
+							await disableAutomaticallyDisableClosedCaptions();
+						}
 						break;
 					}
 					case "hideLiveStreamChatChange": {

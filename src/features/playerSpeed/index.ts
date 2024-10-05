@@ -24,12 +24,11 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// If the input is a number, set the player speed to the given number
 	if (input === undefined) {
 		// Wait for the "options" message from the content script
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		({
 			data: {
 				options: { enable_forced_playback_speed: enablePlayerSpeed, player_speed: playerSpeed }
 			}
-		} = optionsData);
+		} = await waitForSpecificMessage("options", "request_data", "content"));
 	} else if (typeof input === "number") {
 		playerSpeed = input;
 	}
@@ -70,11 +69,11 @@ export function restorePlayerSpeed() {
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
 	// Log the message indicating the player speed being set
 	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");

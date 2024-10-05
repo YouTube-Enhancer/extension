@@ -25,11 +25,9 @@ export default function SettingSection({ children, className = "", title: sectio
 				(child.props.title !== undefined && child.props.title.toLowerCase().includes(filter.toLowerCase()))
 			);
 		}).length > 0;
-	return (
-		shouldSectionBeVisible && (
+	return shouldSectionBeVisible ?
 			<SectionTitleProvider className={className} title={sectionTitle}>
 				{children}
 			</SectionTitleProvider>
-		)
-	);
+		:	null;
 }

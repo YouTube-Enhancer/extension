@@ -144,6 +144,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				this.canvas.width = width;
 				this.canvas.height = fontSize;
 				this.clearCanvas();
+				// Add a shadow effect around the text.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				this.setFont();
@@ -156,11 +161,16 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				const lineHeight = 5;
 				this.canvas.width = lineWidth;
 				this.canvas.height = lineHeight;
-				this.clearCanvas();
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				const lineX = (this.canvas.width - lineWidth) / 2;
 				const lineY = (this.canvas.height - lineHeight) / 2;
+				this.clearCanvas();
+				// Add a shadow effect around the line.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
 				break;
 			}
@@ -176,6 +186,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				const centerY = this.canvas.height / 2;
 				const startAngle = Math.PI + Math.PI * round(value / max, 2);
 				const endAngle = Math.PI - Math.PI * round(value / max, 2);
+				// Add a shadow effect around the circle.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.strokeStyle = displayColor;
 				this.context.lineWidth = lineWidth;
 				this.context.lineCap = "butt";

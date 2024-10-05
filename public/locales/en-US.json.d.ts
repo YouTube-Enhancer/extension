@@ -8,6 +8,7 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
+				copyTimestampUrlButton: { button: { copied: "Copied!"; label: "Copy video URL with timestamp" } };
 				featureMenu: { button: { label: "Feature menu" } };
 				forwardRewindButtons: {
 					buttons: {
@@ -31,6 +32,9 @@ interface EnUS {
 					};
 					decreaseLimit: "Can't decrease further ({{SPEED}})";
 					increaseLimit: "Can't increase further ({{SPEED}})";
+				};
+				playlistLength: {
+					title: "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length.";
 				};
 				screenshotButton: {
 					button: { label: "Screenshot" };
@@ -98,6 +102,7 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						copyTimestampUrlButton: "Copy video URL with timestamp button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
 						forwardButton: "Fast Forward button";
 						hideEndScreenCardsButton: "Hide end screen cards button";
@@ -178,6 +183,14 @@ interface EnUS {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
 					};
+					automaticallyDisableClosedCaptions: {
+						label: "Automatically disable closed captions";
+						title: "Automatically disables closed captions when you load a video";
+					};
+					copyTimestampUrlButton: {
+						label: "Copy video URL with timestamp button";
+						title: "Copies video URL with timestamp (?t=123)";
+					};
 					hideEndScreenCards: {
 						label: "Hide end screen cards";
 						title: "Hides the cards at the end of the video";
@@ -187,6 +200,10 @@ interface EnUS {
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hideOfficialArtistVideosFromHomePage: {
+						label: "Hide Official Artist Videos";
+						title: "Hide Official Artist Videos from Home Page";
+					};
 					hidePaidPromotionBanner: {
 						label: "Hide paid promotion banner";
 						title: "Hides the banner that appears when you watch a video that has a paid promotion";
@@ -299,6 +316,26 @@ interface EnUS {
 				select: { label: "Player speed"; title: "The speed to set the video to" };
 				title: "Playback speed settings";
 			};
+			playlistLength: {
+				enable: {
+					label: "Display playlist length information";
+					title: "Shows the total length of the playlist, how much has been watched, and how much remains.";
+				};
+				title: "Playlist length settings";
+				wayToGetLength: {
+					select: {
+						label: "Method to get playlist length";
+						title: "The way to get playlist length information (API method will fallback to HTML if an error occurs)";
+					};
+				};
+				wayToGetWatchTime: {
+					select: {
+						label: "Method to get watched time";
+						options: { duration: "Video Length"; youtube: "Video Watch Time" };
+						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
+					};
+				};
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";
@@ -370,6 +407,11 @@ interface EnUS {
 					};
 				};
 				title: "Volume boost settings";
+			};
+			youtubeDataApiV3Key: {
+				getApiKeyLinkText: "You can get one from here";
+				input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
+				title: "YouTube API V3 Key";
 			};
 			youtubeDeepDark: {
 				author: "Author";

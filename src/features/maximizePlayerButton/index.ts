@@ -11,7 +11,6 @@ import { maximizePlayer, setupVideoPlayerTimeUpdate, updateProgressBarPositions 
 // TODO: fix the "default/theatre" view button and pip button not making the player minimize to the previous state.
 export const addMaximizePlayerButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -19,7 +18,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 				enable_maximize_player_button: enableMaximizePlayerButton
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the maximize player button option is disabled, return
 	if (!enableMaximizePlayerButton) return;
 	// Add a click event listener to the maximize button

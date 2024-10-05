@@ -10,22 +10,20 @@ import {
 	isWatchPage,
 	round,
 	sendContentMessage,
+	waitForAllElements,
 	waitForSpecificMessage
 } from "@/utils/utilities";
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_video_history: enableVideoHistory }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableVideoHistory) return;
+	if (!isWatchPage()) return;
 	// Get the player container element
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? null
-		: null;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	// If player container is not available, return
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -35,7 +33,9 @@ export async function setupVideoHistory() {
 	if (!videoId) return;
 	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
-
+	await waitForAllElements(["#owner #upload-info #channel-name"]);
+	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	if (isOfficialArtistChannel) return;
 	const videoPlayerTimeUpdateListener = () => {
 		void (async () => {
 			const currentTime = await playerContainer.getCurrentTime();
@@ -53,12 +53,11 @@ export async function setupVideoHistory() {
 }
 export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_video_history: enableVideoHistory, video_history_resume_type }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableVideoHistory) return;
 
 	// Get the player container element
@@ -69,6 +68,9 @@ export async function promptUserToResumeVideo(cb: () => void) {
 
 	// If player container is not available, return
 	if (!playerContainer) return;
+	await waitForAllElements(["#owner #upload-info #channel-name"]);
+	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	if (isOfficialArtistChannel) return;
 
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
