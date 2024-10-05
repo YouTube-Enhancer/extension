@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isLivePage, isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { adjustVolume, setupScrollListeners } from "./utils";
 
@@ -79,7 +79,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 
 			// Get the player element
 			const playerContainer =
-				isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+				isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 				: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 				: null;
 			// If player element is not available, return

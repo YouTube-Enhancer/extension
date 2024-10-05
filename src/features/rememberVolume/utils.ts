@@ -1,22 +1,22 @@
 import type { YouTubePlayerDiv, configuration } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { browserColorLog, isLivePage, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";
 export async function setupVolumeChangeListener() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_remember_last_volume: enableRememberVolume }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the volume is not being remembered, return
 	if (!enableRememberVolume) return;
 	const IsWatchPage = isWatchPage();
+	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
 	const playerContainer =
-		IsWatchPage ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		IsWatchPage || IsLivePage ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: IsShortsPage ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	if (!playerContainer) return;
@@ -29,7 +29,7 @@ export async function setupVolumeChangeListener() {
 			void (async () => {
 				if (!currentTarget) return;
 				const newVolume = await playerContainer.getVolume();
-				if (IsWatchPage) {
+				if (IsWatchPage || IsLivePage) {
 					// Send a "setVolume" message to the content script
 					sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
 				} else if (IsShortsPage) {

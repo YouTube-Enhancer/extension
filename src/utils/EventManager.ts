@@ -1,5 +1,6 @@
 export type FeatureName =
 	| "automaticTheaterMode"
+	| "copyTimestampUrlButton"
 	| "featureMenu"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"
@@ -12,6 +13,7 @@ export type FeatureName =
 	| "playbackSpeedButtons"
 	| "playerQuality"
 	| "playerSpeed"
+	| "playlistLength"
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"
@@ -86,7 +88,7 @@ export const eventManager: EventManager = {
 	},
 
 	// event listener info objects
-	listeners: new Map(),
+	listeners: new Map<string, TargetedListeners<keyof HTMLElementEventMap>>(),
 
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {

@@ -13,7 +13,7 @@ export default function SettingSearch({ i18nInstance }: { i18nInstance: i18nInst
 	return (
 		<div className="relative my-2 w-full rounded-md border border-gray-300 bg-white dark:multi-['border-gray-700;bg-[#23272a]']" dir={direction}>
 			<input
-				className="w-full text-black placeholder:multi-['text-[hsl(0,0%,70%)];text-xs;sm:text-sm;md:text-base'] focus:outline-none dark:text-white"
+				className="w-full border-none bg-transparent px-3 py-2 text-black placeholder:multi-['text-[hsl(0,0%,70%)];text-xs;sm:text-sm;md:text-base'] focus:outline-none dark:text-white"
 				onChange={(e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
 				placeholder={t("settings.sections.settingSearch.placeholder")}
 				ref={inputRef}

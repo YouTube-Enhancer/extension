@@ -8,6 +8,12 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "复制成功！",
+						"label": "复制带有时间戳的视频 URL"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "功能菜单"
@@ -66,6 +72,9 @@
 					},
 					"decreaseLimit": "不能继续降低({{SPEED}})",
 					"increaseLimit": "不能继续增加({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
 				},
 				"screenshotButton": {
 					"button": {
@@ -156,6 +165,7 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 						"decreasePlaybackSpeedButton": "降低速度按钮",
 						"forwardButton": "快进按钮",
 						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
@@ -254,6 +264,14 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Automatically disable closed captions",
+						"title": "Automatically disables closed captions when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "复制带有时间戳的视频 URL 按钮",
+						"title": "复制带有时间戳的视频 URL (?t=123)"
+					},
 					"hideEndScreenCards": {
 						"label": "隐藏结束界面卡片",
 						"title": "隐藏视频末尾的卡片"
@@ -265,6 +283,10 @@
 					"hideLiveStreamChat": {
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Hide Official Artist Videos",
+						"title": "Hide Official Artist Videos from Home Page"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "隐藏付费推广横幅",
@@ -398,6 +420,29 @@
 				},
 				"title": "播放速度设置"
 			},
+			"playlistLength": {
+				"enable": {
+					"label": "Display playlist length information",
+					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+				},
+				"title": "Playlist length settings",
+				"wayToGetLength": {
+					"select": {
+						"label": "Method to get playlist length",
+						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Method to get watched time",
+						"options": {
+							"duration": "Video Length",
+							"youtube": "Video Watch Time"
+						},
+						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+					}
+				}
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "屏幕截图按钮",
@@ -501,6 +546,14 @@
 					}
 				},
 				"title": "音量增强设置"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "You can get one from here",
+				"input": {
+					"label": "API Key",
+					"title": "Enter your Youtube Data API V3 key."
+				},
+				"title": "YouTube API V3 Key"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",

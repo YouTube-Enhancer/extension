@@ -11,10 +11,11 @@ export type EngagementPanelVisibility = (typeof engagementPanelVisibility)[numbe
 export function observeTranslateComment(): MutationObserver {
 	const observer = new MutationObserver((mutationList) => {
 		mutationList
+			.filter((mutation) => mutation.type === "childList")
 			.filter(
 				(mutation) =>
-					mutation.type !== "childList" ||
-					!mutation.addedNodes.length ||
+					(mutation.target instanceof Element &&
+						mutation.target.matches("ytd-comment-thread-renderer #replies ytd-comment-replies-renderer #expander #contents")) ||
 					Array.from(mutation.addedNodes).some(
 						(addedNode) =>
 							addedNode instanceof Element &&

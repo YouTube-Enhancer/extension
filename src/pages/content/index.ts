@@ -281,6 +281,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
+		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
+				copyTimestampUrlButtonEnabled: newValue
+			});
+		},
 		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
 		},
@@ -348,6 +353,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				maximizePlayerButtonEnabled: newValue
 			});
 		},
+		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
+		},
 		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
 				openTranscriptButtonEnabled: newValue
@@ -367,6 +375,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
 				playbackButtonsSpeed: options.playback_buttons_speed,
 				playbackSpeedButtonsEnabled: newValue
+			});
+		},
+		enable_playlist_length: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistLengthChange", {
+				playlistLengthEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {
@@ -392,6 +405,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
 				scrollWheelSpeedControlEnabled: newValue
+			});
+		},
+		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
+				automaticallyDisableClosedCaptionsEnabled: newValue
 			});
 		},
 		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
@@ -451,6 +469,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
 				playerSpeed: newValue
 			});
+		},
+		playlist_length_get_method: () => {
+			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
+		},
+		playlist_watch_time_get_method: () => {
+			sendExtensionOnlyMessage("playlistWatchTimeGetMethodChange", undefined);
 		},
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostAmountChange", {
