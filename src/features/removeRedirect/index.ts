@@ -2,12 +2,11 @@ import { type Nullable } from "@/src/types";
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function enableRemoveRedirect() {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_redirect_remover: removeRedirectEnabled }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!removeRedirectEnabled) return;
 	browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 	const regex = /https\:\/\/www\.youtube\.com\/redirect\?.+/gm;

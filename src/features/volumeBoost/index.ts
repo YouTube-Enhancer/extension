@@ -7,16 +7,13 @@ import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export default async function volumeBoost() {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
 	const {
 		data: {
 			options: { enable_volume_boost, volume_boost_amount, volume_boost_mode }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_volume_boost) return;
 	setupVolumeBoost();
-
 	if (volume_boost_mode === "per_video") {
 		await addVolumeBoostButton();
 	} else if (volume_boost_mode === "global") {
@@ -25,14 +22,11 @@ export default async function volumeBoost() {
 }
 export async function enableVolumeBoost() {
 	setupVolumeBoost();
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
 	const {
 		data: {
 			options: { volume_boost_amount }
 		}
-	} = optionsData;
-
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	applyVolumeBoost(volume_boost_amount);
 }
 function setupVolumeBoost() {
@@ -64,15 +58,13 @@ export function applyVolumeBoost(volume_boost_amount: number) {
 	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 }
 export const addVolumeBoostButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
 	const {
 		data: {
 			options: {
 				button_placements: { volumeBoostButton: volumeBoostButtonPlacement }
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	await addFeatureButton(
 		"volumeBoostButton",
 		volumeBoostButtonPlacement,

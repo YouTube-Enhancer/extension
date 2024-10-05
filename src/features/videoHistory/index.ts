@@ -15,12 +15,11 @@ import {
 } from "@/utils/utilities";
 export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_video_history: enableVideoHistory }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableVideoHistory) return;
 	if (!isWatchPage()) return;
 	// Get the player container element
@@ -54,12 +53,11 @@ export async function setupVideoHistory() {
 }
 export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_video_history: enableVideoHistory, video_history_resume_type }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableVideoHistory) return;
 
 	// Get the player container element
