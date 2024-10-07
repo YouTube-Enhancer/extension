@@ -174,10 +174,8 @@ const enableFeatures = () => {
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage()
 		]);
-
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
-
 		void Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
@@ -251,10 +249,8 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	if (!featureFunctions) {
 		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
 	}
-
 	// Cast featureFunctions to FeatureFuncRecord
 	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
-
 	return {
 		add: () => castFeatureFunctions.add(),
 		remove: () => castFeatureFunctions.remove(oldPlacement)
@@ -356,7 +352,6 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { volumeBoostAmount, volumeBoostEnabled, volumeBoostMode }
 						} = message;
-
 						switch (volumeBoostMode) {
 							case "global": {
 								if (!volumeBoostEnabled) return;
@@ -774,7 +769,6 @@ window.addEventListener("DOMContentLoaded", function () {
 						// If the size button is not available return
 						if (!sizeButton) return;
 						sizeButton.click();
-
 						break;
 					}
 					case "featureMenuOpenTypeChange": {
