@@ -23,7 +23,7 @@ export function adjustSpeed(
 			const video = playerContainer.querySelector("video");
 			if (!video) return;
 			const { playbackRate: speed } = video;
-			const newSpeed = round(clamp(toDivisible(parseFloat((speed + scrollDelta * speedStep).toFixed(2)), speedStep), 0.25, 4), 2);
+			const newSpeed = round(clamp(toDivisible(parseFloat((speed + scrollDelta * speedStep).toFixed(2)), speedStep), 0.25, 16), 2);
 			browserColorLog(`Adjusting speed by ${speedStep} to ${newSpeed}. Old speed was ${speed}`, "FgMagenta");
 			await playerContainer.setPlaybackRate(newSpeed);
 			if (video) video.playbackRate = newSpeed;

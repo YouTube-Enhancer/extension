@@ -38,13 +38,13 @@ async function updateTooltip<ButtonName extends "decreasePlaybackSpeedButton" | 
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		speed == 4 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
+		speed == 16 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
 		: speed == 0.25 && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
 			SPEED:
-				speed == 4 || speed == 0.25 ? String(speed)
+				speed == 16 || speed == 0.25 ? String(speed)
 				: buttonName == "decreasePlaybackSpeedButton" ? String(speed - playbackSpeedPerClick)
 				: String(speed + playbackSpeedPerClick)
 		}
@@ -61,7 +61,7 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 				const { playbackRate: playbackRate } = videoElement;
 				currentPlaybackSpeed = playbackRate;
 				if (currentPlaybackSpeed + amount <= 0) return;
-				if (currentPlaybackSpeed + amount > 4) return;
+				if (currentPlaybackSpeed + amount > 16) return;
 				const playerContainer =
 					isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 					: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
@@ -85,7 +85,7 @@ function playbackSpeedButtonClickListener(amount: number): () => void {
 					},
 					"yte-osd",
 					{
-						max: 4,
+						max: 16,
 						type: "speed",
 						value: currentPlaybackSpeed + amount
 					}
