@@ -19,7 +19,9 @@ import {
 	screenshotTypes,
 	videoHistoryResumeTypes,
 	volumeBoostModes,
-	youtubePlayerQualityLevels
+	youtubePlayerMinSpeed,
+	youtubePlayerQualityLevels,
+	youtubePlayerSpeedStep
 } from "../types";
 
 export const outputFolderName = "dist";
@@ -187,10 +189,10 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	osd_display_padding: z.number().optional(),
 	osd_display_position: z.enum(onScreenDisplayPositions).optional(),
 	osd_display_type: z.enum(onScreenDisplayTypes).optional(),
-	playback_buttons_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
+	playback_buttons_speed: z.number().min(youtubePlayerSpeedStep).max(1.0).step(youtubePlayerSpeedStep).optional(),
 	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
 	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
-	player_speed: z.number().min(0.25).max(4.0).step(0.25).optional(),
+	player_speed: z.number().min(youtubePlayerMinSpeed).max(16.0).step(youtubePlayerSpeedStep).optional(),
 	playlist_length_get_method: z.enum(playlistLengthGetMethod).optional(),
 	playlist_watch_time_get_method: z.enum(playlistWatchTimeGetMethod).optional(),
 	remembered_volumes: z
