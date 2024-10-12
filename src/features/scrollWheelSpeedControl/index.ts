@@ -72,7 +72,7 @@ export default async function adjustSpeedOnScrollWheel() {
 			// Adjust the speed based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the speed based on the scroll direction and options
-			const { newSpeed } = await adjustSpeed(playerContainer, scrollDelta, speed_adjustment_steps);
+			const { newSpeed } = await adjustSpeed(scrollDelta, speed_adjustment_steps);
 			await updatePlaybackSpeedButtonTooltip(
 				"increasePlaybackSpeedButton",
 				calculatePlaybackButtonSpeed(newSpeed, playback_buttons_speed, "increase")
@@ -93,7 +93,7 @@ export default async function adjustSpeedOnScrollWheel() {
 				},
 				"yte-osd",
 				{
-					max: 4,
+					max: 16,
 					type: "speed",
 					value: newSpeed
 				}

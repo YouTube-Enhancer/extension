@@ -12,7 +12,7 @@ import SettingSearch from "@/src/components/Settings/components/SettingSearch";
 import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { availableLocales, localeDirection, localePercentages } from "@/src/i18n/constants";
-import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
+import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerMinSpeed, youtubePlayerSpeedStep } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
@@ -339,16 +339,6 @@ export default function Settings() {
 			value: "lower"
 		}
 	] as SelectOption<"player_quality_fallback_strategy">[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"player_speed">[];
-	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"playback_buttons_speed">[];
 	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -1022,20 +1012,24 @@ export default function Settings() {
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
 						onChange={setValueOption("player_speed")}
-						options={YouTubePlayerSpeedOptions}
-						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
-						type="select"
+						value={settings.player_speed}
+						max={youtubePlayerMaxSpeed}
+						min={youtubePlayerSpeedStep}
+						step={youtubePlayerSpeedStep}
+						type="number"
 					/>
 					<Setting
 						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
 						id="playback_buttons_speed"
 						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
 						onChange={setValueOption("playback_buttons_speed")}
-						options={YouTubePlaybackSpeedButtonsOptions}
-						selectedOption={getSelectedOption("playback_buttons_speed")?.toString()}
+						value={settings.playback_buttons_speed}
+						max={1}
+						min={youtubePlayerSpeedStep}
+						step={youtubePlayerSpeedStep}
 						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
-						type="select"
+						type="number"
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.volumeBoost.title")}>
