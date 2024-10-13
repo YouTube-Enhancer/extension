@@ -1,4 +1,4 @@
-import z, { ZodEnum, ZodObject } from "zod";
+import { z, ZodEnum, ZodObject } from "zod";
 
 import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
 
