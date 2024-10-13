@@ -49,7 +49,6 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		currentPlaybackSpeed == 16 && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
 		: currentPlaybackSpeed == youtubePlayerMinSpeed && buttonName == "decreasePlaybackSpeedButton" ?
 			`pages.content.features.playbackSpeedButtons.decreaseLimit`
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		:	`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
 			SPEED: speed

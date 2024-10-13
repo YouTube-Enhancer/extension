@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable tailwindcss/enforces-shorthand */
 import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type { ClassValue } from "clsx";
@@ -12,7 +13,7 @@ import SettingSearch from "@/src/components/Settings/components/SettingSearch";
 import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { availableLocales, localeDirection, localePercentages } from "@/src/i18n/constants";
-import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerMinSpeed, youtubePlayerSpeedStep } from "@/src/types";
+import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerSpeedStep } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
@@ -68,7 +69,7 @@ function LanguageOptions({
 				const languages = await getLanguageOptions();
 				setLanguageOptions(languages);
 				setLanguagesLoading(false);
-			} catch (error) {
+			} catch (_) {
 				setLanguagesLoading(false);
 			}
 		})();
@@ -172,7 +173,6 @@ export default function Settings() {
 					let parentValue: any = updatedState;
 
 					for (const currentKey of keys.slice(0, -1)) {
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 						({ [currentKey]: parentValue } = parentValue);
 					}
 
@@ -180,7 +180,7 @@ export default function Settings() {
 					if (!propertyName) return updatedState;
 					if (typeof parentValue === "object" && parentValue !== null) {
 						// If the path represents a nested property, update the nested property
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
 						parentValue[propertyName] = value;
 					} else {
 						// If the path represents a top-level property, update it directly
@@ -456,7 +456,7 @@ export default function Settings() {
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
-				} catch (error) {
+				} catch (_) {
 					// Handle any import errors.
 					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 				}
@@ -555,7 +555,6 @@ export default function Settings() {
 						return (
 							<Setting
 								disabled={isButtonSelectDisabled(feature, settings)}
-								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
