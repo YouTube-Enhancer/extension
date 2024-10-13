@@ -12,13 +12,10 @@ function playerTimeUpdateListener() {
 			isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 			: null;
-
 		// If player element is not available, return
 		if (!playerContainer) return;
-
 		// Get the video element
 		const videoElement = playerContainer.querySelector("video");
-
 		// If video element is not available, return
 		if (!videoElement) return;
 		// Get the remaining time element
@@ -30,12 +27,11 @@ function playerTimeUpdateListener() {
 }
 export async function setupRemainingTime() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_remaining_time }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
 	const timeDisplay = document.querySelector(".ytp-time-display > span:nth-of-type(2)");
@@ -55,7 +51,6 @@ export async function setupRemainingTime() {
 	const remainingTime = await calculateRemainingTime({ playerContainer, videoElement });
 	const remainingTimeElementExists = document.querySelector("span#ytp-time-remaining") !== null;
 	if (playerVideoData.isLive && !remainingTimeElementExists) return;
-
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");
 	// If the video is live return
 	if (playerVideoData.isLive && remainingTimeElementExists) {

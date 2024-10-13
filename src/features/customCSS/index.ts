@@ -4,12 +4,11 @@ import { createCustomCSSElement, customCSSExists, updateCustomCSS } from "./util
 export const customCssID = "yte-custom-css";
 export async function enableCustomCSS() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { custom_css_code, enable_custom_css }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// Check if custom CSS is enabled
 	if (!enable_custom_css) return;
 	if (customCSSExists()) {

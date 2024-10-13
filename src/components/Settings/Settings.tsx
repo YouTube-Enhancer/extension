@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable tailwindcss/enforces-shorthand */
 import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
 import type { ClassValue } from "clsx";
@@ -12,7 +13,7 @@ import SettingSearch from "@/src/components/Settings/components/SettingSearch";
 import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { availableLocales, localeDirection, localePercentages } from "@/src/i18n/constants";
-import { buttonNames, youtubePlaybackSpeedButtonsRates, youtubePlayerSpeedRates } from "@/src/types";
+import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerSpeedStep } from "@/src/types";
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
@@ -68,7 +69,7 @@ function LanguageOptions({
 				const languages = await getLanguageOptions();
 				setLanguageOptions(languages);
 				setLanguagesLoading(false);
-			} catch (error) {
+			} catch (_) {
 				setLanguagesLoading(false);
 			}
 		})();
@@ -122,8 +123,8 @@ async function setSettings(settings: configuration) {
 			localStorage.setItem(key, JSON.stringify(settings[key]));
 			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
 		} else {
-			localStorage.setItem(key, settings[key] as string);
-			await chrome.storage.local.set({ [key]: settings[key] as string });
+			localStorage.setItem(key, settings[key]);
+			await chrome.storage.local.set({ [key]: settings[key] });
 		}
 	}
 }
@@ -172,7 +173,6 @@ export default function Settings() {
 					let parentValue: any = updatedState;
 
 					for (const currentKey of keys.slice(0, -1)) {
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 						({ [currentKey]: parentValue } = parentValue);
 					}
 
@@ -180,7 +180,7 @@ export default function Settings() {
 					if (!propertyName) return updatedState;
 					if (typeof parentValue === "object" && parentValue !== null) {
 						// If the path represents a nested property, update the nested property
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
 						parentValue[propertyName] = value;
 					} else {
 						// If the path represents a top-level property, update it directly
@@ -204,8 +204,8 @@ export default function Settings() {
 					localStorage.setItem(key, JSON.stringify(defaultSettings[key]));
 					void chrome.storage.local.set({ [key]: JSON.stringify(defaultSettings[key]) });
 				} else {
-					localStorage.setItem(key, defaultSettings[key] as string);
-					void chrome.storage.local.set({ [key]: defaultSettings[key] as string });
+					localStorage.setItem(key, defaultSettings[key]);
+					void chrome.storage.local.set({ [key]: defaultSettings[key] });
 				}
 			}
 			addNotification("success", "settings.clearData.allDataDeleted");
@@ -339,16 +339,6 @@ export default function Settings() {
 			value: "lower"
 		}
 	] as SelectOption<"player_quality_fallback_strategy">[];
-	const YouTubePlayerSpeedOptions = youtubePlayerSpeedRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"player_speed">[];
-	const YouTubePlaybackSpeedButtonsOptions = youtubePlaybackSpeedButtonsRates.map((rate) => ({
-		label: rate?.toString(),
-		value: rate?.toString()
-		// This cast is here because I'm not sure what the proper type is
-	})) as SelectOption<"playback_buttons_speed">[];
 	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
@@ -369,6 +359,7 @@ export default function Settings() {
 		}
 	];
 	const buttonPlacementOptions: SelectOption<
+		| "button_placements.copyTimestampUrlButton"
 		| "button_placements.decreasePlaybackSpeedButton"
 		| "button_placements.forwardButton"
 		| "button_placements.hideEndScreenCardsButton"
@@ -407,6 +398,26 @@ export default function Settings() {
 			value
 		};
 	});
+	const playlistLengthGetMethodOptions: SelectOption<"playlist_length_get_method">[] = [
+		{
+			label: "API",
+			value: "api"
+		},
+		{
+			label: "HTML",
+			value: "html"
+		}
+	];
+	const playlistWatchTimeGetMethodOptions: SelectOption<"playlist_watch_time_get_method">[] = [
+		{
+			label: t("settings.sections.playlistLength.wayToGetWatchTime.select.options.duration"),
+			value: "duration"
+		},
+		{
+			label: t("settings.sections.playlistLength.wayToGetWatchTime.select.options.youtube"),
+			value: "youtube"
+		}
+	];
 	const settingsImportChange: ChangeEventHandler<HTMLInputElement> = (event): void => {
 		void (async () => {
 			const { target } = event;
@@ -434,8 +445,8 @@ export default function Settings() {
 								localStorage.setItem(key, JSON.stringify(castSettings[key]));
 								void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
 							} else {
-								localStorage.setItem(key, castSettings[key] as string);
-								void chrome.storage.local.set({ [key]: castSettings[key] as string });
+								localStorage.setItem(key, castSettings[key]);
+								void chrome.storage.local.set({ [key]: castSettings[key] });
 							}
 						}
 						await updateStoredSettings();
@@ -445,7 +456,7 @@ export default function Settings() {
 						// Show a success notification.
 						addNotification("success", "settings.sections.importExportSettings.importButton.success");
 					}
-				} catch (error) {
+				} catch (_) {
 					// Handle any import errors.
 					window.alert(t("settings.sections.importExportSettings.importButton.error.unknown"));
 				}
@@ -544,7 +555,6 @@ export default function Settings() {
 						return (
 							<Setting
 								disabled={isButtonSelectDisabled(feature, settings)}
-								// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 								id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
 								key={feature}
 								label={label}
@@ -618,6 +628,14 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.loopButton.label")}
 						onChange={setCheckboxOption("enable_loop_button")}
 						title={t("settings.sections.miscellaneous.features.loopButton.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_copy_timestamp_url_button?.toString() === "true"}
+						id="enable_copy_timestamp_url_button"
+						label={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.label")}
+						onChange={setCheckboxOption("enable_copy_timestamp_url_button")}
+						title={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.title")}
 						type="checkbox"
 					/>
 					<Setting
@@ -731,6 +749,22 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_hide_paid_promotion_banner")}
 						title={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.title")}
 						type="checkbox"
+					/>
+					<Setting
+						type="checkbox"
+						checked={settings.enable_hide_official_artist_videos_from_home_page?.toString() === "true"}
+						id="enable_hide_official_artist_videos_from_home_page"
+						label={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.label")}
+						onChange={setCheckboxOption("enable_hide_official_artist_videos_from_home_page")}
+						title={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.title")}
+					/>
+					<Setting
+						type="checkbox"
+						checked={settings.enable_automatically_disable_closed_captions?.toString() === "true"}
+						id="enable_automatically_disable_closed_captions"
+						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
+						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
+						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
@@ -977,20 +1011,24 @@ export default function Settings() {
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
 						onChange={setValueOption("player_speed")}
-						options={YouTubePlayerSpeedOptions}
-						selectedOption={getSelectedOption("player_speed")?.toString()}
 						title={t("settings.sections.playbackSpeed.select.title")}
-						type="select"
+						value={settings.player_speed}
+						max={youtubePlayerMaxSpeed}
+						min={youtubePlayerSpeedStep}
+						step={youtubePlayerSpeedStep}
+						type="number"
 					/>
 					<Setting
 						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
 						id="playback_buttons_speed"
 						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
 						onChange={setValueOption("playback_buttons_speed")}
-						options={YouTubePlaybackSpeedButtonsOptions}
-						selectedOption={getSelectedOption("playback_buttons_speed")?.toString()}
+						value={settings.playback_buttons_speed}
+						max={1}
+						min={youtubePlayerSpeedStep}
+						step={youtubePlayerSpeedStep}
 						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
-						type="select"
+						type="number"
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.volumeBoost.title")}>
@@ -1191,6 +1229,55 @@ export default function Settings() {
 						value={settings.custom_css_code}
 					/>
 				</SettingSection>
+				<SettingSection title={t("settings.sections.playlistLength.title")}>
+					<SettingTitle />
+					<Setting
+						checked={settings.enable_playlist_length?.toString() === "true"}
+						id="enable_playlist_length"
+						label={t("settings.sections.playlistLength.enable.label")}
+						onChange={setCheckboxOption("enable_playlist_length")}
+						title={t("settings.sections.playlistLength.enable.title")}
+						type="checkbox"
+					/>
+					<Setting
+						disabled={settings.enable_playlist_length?.toString() !== "true"}
+						id="playlist_length_get_method"
+						label={t("settings.sections.playlistLength.wayToGetLength.select.label")}
+						onChange={setValueOption("playlist_length_get_method")}
+						options={playlistLengthGetMethodOptions}
+						selectedOption={getSelectedOption("playlist_length_get_method")}
+						title={t("settings.sections.playlistLength.wayToGetLength.select.title")}
+						type="select"
+					/>
+					<Setting
+						disabled={settings.enable_playlist_length?.toString() !== "true"}
+						id="playlist_watch_time_get_method"
+						label={t("settings.sections.playlistLength.wayToGetWatchTime.select.label")}
+						onChange={setValueOption("playlist_watch_time_get_method")}
+						options={playlistWatchTimeGetMethodOptions}
+						selectedOption={getSelectedOption("playlist_watch_time_get_method")}
+						title={t("settings.sections.playlistLength.wayToGetWatchTime.select.title")}
+						type="select"
+					/>
+				</SettingSection>
+				<SettingSection title={t("settings.sections.youtubeDataApiV3Key.title")}>
+					<SettingTitle />
+					<Setting
+						id="youtube_data_api_v3_key"
+						input_type="password"
+						label={t("settings.sections.youtubeDataApiV3Key.input.label")}
+						onChange={setValueOption("youtube_data_api_v3_key")}
+						title={t("settings.sections.youtubeDataApiV3Key.input.title")}
+						type="text-input"
+						value={settings.youtube_data_api_v3_key}
+					/>
+					<fieldset className={cn("flex flex-row gap-1")}>
+						<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">
+							{t("settings.sections.youtubeDataApiV3Key.getApiKeyLinkText")}
+						</Link>
+					</fieldset>
+				</SettingSection>
+
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"

@@ -55,6 +55,8 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		viewerLivestreamJoinMediaTime: number;
 	}
 	interface YouTubePlayer {
+		unloadModule(moduleName: string): void;
+		loadModule(moduleName: string): void;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
@@ -68,6 +70,7 @@ declare global {
 	}
 	interface Window {
 		audioCtx: AudioContext;
+		cachedPlaylistDuration: { playlistId: string; totalTimeSeconds: number } | null;
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;
 		webkitAudioContext: AudioContext;

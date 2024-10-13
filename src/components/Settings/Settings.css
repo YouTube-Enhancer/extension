@@ -74,7 +74,7 @@ html {
 }
 
 /* https://stackoverflow.com/questions/11243337/a-taller-than-its-img-child */
-a>img {
+a > img {
 	display: block;
 }
 
@@ -94,11 +94,11 @@ fieldset {
 	padding-left: 0 !important;
 }
 
-fieldset>p:first-of-type {
+fieldset > p:first-of-type {
 	margin-top: 0 !important;
 }
 
-fieldset>p:last-of-type {
+fieldset > p:last-of-type {
 	margin-bottom: 0 !important;
 }
 
@@ -185,7 +185,6 @@ hr {
 }
 
 /* inputs */
-input[type="text"],
 input[type="button"],
 button[id="openinnewtab_button"],
 select {
@@ -194,7 +193,6 @@ select {
 	font-size: 12px;
 }
 
-input[type="text"],
 button[id="openinnewtab_button"],
 select {
 	border: 0;
@@ -359,7 +357,7 @@ button[id="openinnewtab_button"] {
 	z-index: 100;
 }
 
-#notifications>.notification {
+#notifications > .notification {
 	border-radius: var(--border-radius-md);
 	padding: 10px 14px;
 }
