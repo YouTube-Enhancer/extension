@@ -580,11 +580,11 @@
 						"title": "Color for accent"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Ana metin rengi",
+						"title": "Ana metin için renk"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
+						"label": "İkincil arka plan rengi",
 						"title": "Color for secondary background"
 					}
 				},
