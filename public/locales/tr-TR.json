@@ -58,20 +58,20 @@
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Transkripti Aç"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Hızı {{SPEED}} değerine düşür"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Hızı {{SPEED}} değerine çıkar"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Daha fazla düşüremezsin ({{SPEED}})",
+					"increaseLimit": "Daha fazla artıramazsın ({{SPEED}})"
 				},
 				"playlistLength": {
 					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
@@ -90,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Ses Yükseltici",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Ses Yükseltici Devredışı",
+							"on": "Ses Yükseltici Aktif"
 						}
 					}
 				}
@@ -165,14 +165,14 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
+						"decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
-						"openTranscriptButton": "Open Transcript button",
+						"openTranscriptButton": "Transkripti Aç butonu",
 						"rewindButton": "Rewind button",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
 						"volumeBoostButton": "Ses güçlendirme düğmesi"
@@ -301,7 +301,7 @@
 						"title": "Tüm kısa videoları gizler"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
+						"label": "Yorumu Çevir'i Gizle Butonu",
 						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
@@ -345,7 +345,7 @@
 						"title": "Bir sonraki kısa videoya otomatik kaydır"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
+						"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
 						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
@@ -393,7 +393,7 @@
 				"type": {
 					"label": "Tür",
 					"options": {
-						"circle": "Circle",
+						"circle": "Daire",
 						"line": "Satır",
 						"no_display": "Ekran yok",
 						"text": "Metin"
@@ -407,9 +407,9 @@
 					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Oynatma hızı ayarları",
 					"select": {
-						"label": "Playback buttons speed",
+						"label": "Oynatma düğmelerinin hızı",
 						"title": "Amount of speed to be changed per click"
 					},
 					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
@@ -422,7 +422,7 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
+					"label": "Çalma listesinin uzunluk bilgilerini göster",
 					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
 				},
 				"title": "Playlist length settings",
@@ -589,14 +589,14 @@
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Seçilen temayı etkinleştir",
+					"title": "Sayfa için seçilen temayı etkinleştirin"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Tema seç",
+					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTube Deep Dark Ayarları"
 			}
 		}
 	}
