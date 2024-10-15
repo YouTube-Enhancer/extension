@@ -207,7 +207,7 @@ Before you begin, ensure you have the following software installed on your syste
 Next, open your terminal (command prompt or shell) and navigate to the directory where you want to store the YouTube Enhancer extension project. Run the following command to clone the repository:
 
 ```bash
-git clone https://github.com/YouTube-Enhancer/extension
+git clone https://github.com/YouTube-Enhancer/extension.git
 ```
 
 ### 3. Navigate to the Project Directory
