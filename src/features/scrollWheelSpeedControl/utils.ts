@@ -21,7 +21,7 @@ export function adjustSpeed(scrollDelta: number, speedStep: number): Promise<{ n
 			const adjustmentAmount = speedStep * scrollDelta;
 			if (currentPlaybackSpeed + adjustmentAmount > 16 || currentPlaybackSpeed + adjustmentAmount < youtubePlayerMinSpeed) return;
 			const speed = round(currentPlaybackSpeed + adjustmentAmount, 2);
-			setPlayerSpeed(speed);
+			await setPlayerSpeed(speed);
 			resolve({ newSpeed: speed, oldSpeed: currentPlaybackSpeed });
 		})();
 	});
