@@ -30,7 +30,7 @@
     "dotenv": "^16.3.1",
     "globals": "^15.11.0",
     "i18next": "^23.7.3",
-    "monaco-editor": "^0.51.0",
+    "monaco-editor": "^0.52.0",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
