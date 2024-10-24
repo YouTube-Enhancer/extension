@@ -1229,7 +1229,9 @@ yt-pdg-buy-flow-header-renderer {
 #title-background.ytd-pdg-comment-preview-renderer {
 	background-color: var(--hover-background) !important;
 }
-
+#progress.yt-page-navigation-progress {
+background: var(--main-color) !important;
+}
 /*Progress bar*/
 #progress {
 	background-color: var(--main-color) !important;
