@@ -10,31 +10,31 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Copiado!",
+						"label": "Copiar URL do vídeo com o minuto do vídeo"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menu de recursos"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Avançar {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Voltar {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Ocultar cards finais",
 						"toggle": {
 							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"on": "Ocultar cartões do final"
 						}
 					}
 				},
