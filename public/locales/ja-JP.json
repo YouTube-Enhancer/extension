@@ -74,7 +74,7 @@
 					"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "一部の動画が非表示になっている場合、または完全な長さを得るために十分な動画を読み込んでいない場合、合計長さが正確でない可能性があります。"
 				},
 				"screenshotButton": {
 					"button": {
@@ -423,13 +423,13 @@
 			"playlistLength": {
 				"enable": {
 					"label": "プレイリストの長さ情報を表示",
-					"title": "プレイリストの長さ全額、視聴時間量、と残り時間を見せてしまう。"
+					"title": "プレイリストの長さ全額、視聴時間量、と残り時間を見せてしまいます。"
 				},
 				"title": "プレイリストの長さ設定",
 				"wayToGetLength": {
 					"select": {
 						"label": "プレイリストの長さを取得する方法",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"title": "プレイリストの長さ情報を取得する方法 (エラーが発生した場合、APIメソッドはHTMLにフォールバックします)"
 					}
 				},
 				"wayToGetWatchTime": {
@@ -439,7 +439,7 @@
 							"duration": "動画の長さ",
 							"youtube": "動画の視聴時間"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "視聴時間の長さを取得する方法 (動画の長さタイプはウォッチページでのみ使用)"
 					}
 				}
 			},
