@@ -33,52 +33,52 @@
 					"button": {
 						"label": "Ocultar cards finais",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Ocultar cartões do final"
+							"off": "Exibir cards finais",
+							"on": "Ocultar cards finais"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Repetir",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Repetição desativada",
+							"on": "Repetição ativa"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximização",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Minimizar",
+							"on": "Maximizar"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Abrir transcrição"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Diminuir velocidade para {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Aumentar velocidade para {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Não pode diminuir mais ({{SPEED}})",
+					"increaseLimit": "Não pode aumentar mais ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "O comprimento total pode não ser preciso se alguns vídeos estiverem ocultos ou você não carregou vídeos o suficiente para obter o comprimento máximo."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Captura de tela"
 					},
 					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
 				},
