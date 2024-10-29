@@ -227,36 +227,36 @@
 			"forwardRewindButtons": {
 				"enable": {
 					"label": "Увімкнути кнопки вперед/назад",
-					"title": "Adds forward and rewind buttons to the video player"
+					"title": "Додає кнопки перемотування до відео плеєра"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Час вперед/назад",
+					"title": "Часовий крок перемотки відео вперед/назад"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Налаштування кнопки вперед/назад"
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Налаштування вдало експортовано",
+					"title": "Експортувати налаштування у файл JSON",
+					"value": "Експортувати налаштування"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Помилка імпорту налаштувань. Перевірте формат файлу. \nВідбулась невідома помилка.",
+						"validation": "Помилка імпорту налаштувань. Перевірте формат файлу.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Налаштування успішно імпортовано",
+					"title": "Імпортувати налаштування з файлу JSON",
+					"value": "Імпортувати параметри"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Мова",
+					"title": "Мова для використання у розширенні"
 				},
-				"title": "Language"
+				"title": "Мова"
 			},
 			"miscellaneous": {
 				"features": {
@@ -359,27 +359,27 @@
 						"green": "Green",
 						"orange": "Orange",
 						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"purple": "Фіолетовий",
+						"red": "Червоний",
+						"white": "Білий",
+						"yellow": "Жовтий"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Вибирає колір екранного зображення"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "Затримка приховування",
+					"title": "Вказує час у мілісекундах перед автоматичним приховуванням екранного зображення"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Прозорість",
+					"title": "Регулювання прозорості екранного зображення"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "Відступ",
+					"title": "Регулює відступи навколо екранного зображення в пікселях. Застосовується спеціально для екранного зображення в кутах."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Розташування",
 					"options": {
 						"bottom_left": "Bottom Left",
 						"bottom_right": "Bottom Right",
