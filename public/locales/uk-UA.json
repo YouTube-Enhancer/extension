@@ -10,8 +10,8 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Скопійовано!",
+						"label": "Скопіювати URL відео з міткою часу"
 					}
 				},
 				"featureMenu": {
@@ -74,7 +74,7 @@
 					"increaseLimit": "Неможливо збільшити далі ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Загальна довжина може бути неточною, якщо деякі відео приховані або якщо ви ще не завантажили достатньо відео, щоб отримати повну довжину."
 				},
 				"screenshotButton": {
 					"button": {
@@ -165,12 +165,12 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "Кнопка скопіювати URL відео за допомогою часової мітки",
 						"decreasePlaybackSpeedButton": "Кнопка зменшення швидкості",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
+						"forwardButton": "Кнопка перемотки",
+						"hideEndScreenCardsButton": "Кнопка приховати картки наприкінці відео",
+						"increasePlaybackSpeedButton": "Кнопка пришвидшення",
+						"loopButton": "Кнопка зациклення",
 						"maximizePlayerButton": "Maximize button",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
