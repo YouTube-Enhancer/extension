@@ -1,9 +1,9 @@
 {
 	"langCode": "pt-BR",
-	"langName": "Português do Brasil",
+	"langName": "Português (Brasil)",
 	"messages": {
 		"resumingVideo": "Retomando vídeo em {{VIDEO_TIME}}",
-		"settingVolume": "Definindo o ganho de volume para {{VOLUME_BOOST_AMOUNT}}"
+		"settingVolume": "Definindo o aumento de volume para {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
@@ -83,7 +83,7 @@
 					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
 				},
 				"videoHistory": {
-					"resumeButton": "Continuar",
+					"resumeButton": "Retomar",
 					"resumePrompt": {
 						"close": "Fechar"
 					}
@@ -104,13 +104,13 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "A tecla modificadora de controle de velocidade da roda do mouse não pode ser o mesmo que a tecla modificadora de controle de volume da roda do mouse.",
-							"volumeControl": "A tecla modificadora de controle de volume da roda do mouse não pode ser o mesmo que a tecla modificadora de controle de velocidade da roda do mouse."
+							"speedControl": "A tecla modificadora do controle de velocidade da rolagem não pode ser o mesmo que a tecla modificadora do controle de volume.",
+							"volumeControl": "A tecla modificadora do controle de volume não pode ser o mesmo que a tecla modificadora do controle de velocidade da rolagem."
 						}
 					}
 				},
 				"info": {
-					"reset": "Todas as opções foram restauradas aos seus valores padrão.\nAgora você pode salvar as mudanças clicando no botão \"Confirmar\" ou descartá-las fechando a página ou ignorando essa notificação."
+					"reset": "Todas as opções foram redefinidas para seus valores padrão.\nAgora você pode salvar as mudanças clicando em \"Confirmar\" ou descarta-las por fechar esta página ou ignorar esta notificação."
 				},
 				"success": {
 					"saved": "Opções salvas."
@@ -121,13 +121,13 @@
 	"settings": {
 		"clearData": {
 			"allDataDeleted": "Todos os dados foram excluídos.",
-			"confirmAlert": "Isto irá apagar todos os dados da extensão relacionados às opções. Continuar?"
+			"confirmAlert": "Isso excluirá todos os dados da extensão relacionado às opções. Deseja continuar?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Ajuste automático de qualidade",
-					"title": "Ajusta automaticamente a qualidade do vídeo para o nível selecionado."
+					"label": "Ajuste de resolução automático",
+					"title": "Ajusta automaticamente a resolução do vídeo para o nível selecionado."
 				},
 				"fallbackQualityStrategy": {
 					"select": {
@@ -140,8 +140,8 @@
 					}
 				},
 				"select": {
-					"label": "Qualidade do reprodutor",
-					"title": "A qualidade a ser definida para o vídeo"
+					"label": "Resolução do reprodutor",
+					"title": "A resolução para ser definida ao vídeo"
 				},
 				"title": "Configurações de qualidade automáticas"
 			},
