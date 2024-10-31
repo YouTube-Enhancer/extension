@@ -90,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Aumento de volume",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Aumento de volume desativado",
+							"on": "Aumento de volume ativado"
 						}
 					}
 				}
@@ -131,12 +131,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Estratégia de redução de resolução",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Maior",
+							"lower": "Menor"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "A estratégia é usada quando a qualidade selecionada não está disponível"
 					}
 				},
 				"select": {
@@ -376,20 +376,20 @@
 				},
 				"padding": {
 					"label": "Alinhamento",
-					"title": "Ajuste o espaçamento em torno das informações na tela em pixels. Isso se aplica especificamente ao canto das informações na tela."
+					"title": "Ajusta o alinhamento de exibição na tela em píxeis. Isso aplica especificamente para exibições no canto da tela"
 				},
 				"position": {
 					"label": "Posição",
 					"options": {
-						"bottom_left": "Inferior Esquerdo",
+						"bottom_left": "Inferior esquerdo",
 						"bottom_right": "Inferior direito",
-						"center": "Centralizado",
+						"center": "Centro",
 						"top_left": "Superior esquerdo",
-						"top_right": "Superior Direito"
+						"top_right": "Superior direito"
 					},
-					"title": "Selecione a posição das informações na tela"
+					"title": "Seleciona a posição da exibição na tela"
 				},
-				"title": "Configurações das informações na tela",
+				"title": "Opções de exibição na tela",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -398,13 +398,13 @@
 						"no_display": "Sem exibição",
 						"text": "Texto"
 					},
-					"title": "Selecione o tipo de informações na tela"
+					"title": "Seleciona o tipo de exibição na tela"
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
 					"label": "Velocidade de reprodução forçada",
-					"title": "Define a velocidade do vídeo para a que você escolher abaixo"
+					"title": "Define a velocidade do vídeo para o que você escolher abaixo"
 				},
 				"playbackSpeedButtons": {
 					"label": "Playback speed buttons",
@@ -418,7 +418,7 @@
 					"label": "Velocidade do reprodutor",
 					"title": "A velocidade a ser definida para o vídeo"
 				},
-				"title": "Configurações de velocidade de reprodução"
+				"title": "Opções de velocidade de reprodução"
 			},
 			"playlistLength": {
 				"enable": {
@@ -449,7 +449,7 @@
 					"title": "Adiciona um botão ao reprodutor para tirar uma captura de tela do vídeo"
 				},
 				"saveAs": {
-					"clipboard": "Área de Transferência",
+					"clipboard": "Área de transferência",
 					"file": "Arquivo"
 				},
 				"selectFormat": {
@@ -464,28 +464,28 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Mudar Volume por Rolagem",
+					"label": "Alterar volume por rolagem",
 					"title": "Ajusta a mudança de velocidade por rolagem"
 				},
 				"enable": {
 					"label": "Controle de velocidade da roda do mouse",
-					"title": "Pressione uma tecla modificadora para ativar o ajuste de velocidade com a roda do mouse."
+					"title": "Pressiona uma tecla modificadora para ativar o ajuste de velocidade com a roda do mouse."
 				},
 				"optionLabel": "Tecla {{KEY}}",
 				"select": {
 					"label": "Tecla modificadora",
-					"title": "A tecla modificadora a ser usada"
+					"title": "A tecla modificadora para usar"
 				},
-				"title": "Configurações de controle de volume pela roda do mouse"
+				"title": "Opções de controle do volume na roda do mouse"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
-					"label": "Mudar Volume por Rolagem",
-					"title": "Ajuste a mudança de volume por rolagem"
+					"label": "Mudança de volume por rolagem",
+					"title": "Ajusta a mudança de volume por rolagem"
 				},
 				"enable": {
-					"label": "Controle do volume por roda do mouse",
-					"title": "Permite usar a roda do mouse para controlar o volume do vídeo que você está assistindo"
+					"label": "Controle do volume na roda do mouse",
+					"title": "Permite usar a roda do mouse para controlar o volume do vídeo"
 				},
 				"holdModifierKey": {
 					"enable": {
@@ -495,7 +495,7 @@
 					"optionLabel": "Tecla {{KEY}}",
 					"select": {
 						"label": "Tecla modificadora",
-						"title": "A tecla modificadora a ser usada"
+						"title": "A tecla modificadora para usar"
 					}
 				},
 				"holdRightClick": {
@@ -504,7 +504,7 @@
 						"title": "Segure o botão direito para ativar o controle de volume da roda do mouse"
 					}
 				},
-				"title": "Configurações de controle do volume por roda do mouse"
+				"title": "Opções de controle do volume na roda do mouse"
 			},
 			"settingSearch": {
 				"placeholder": "Search for a setting"
@@ -528,24 +528,24 @@
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Quantidade de impulsão de volume (dB)",
-					"title": "O valor para impulsionar o volume em"
+					"label": "Aumento de volume (dB)",
+					"title": "O valor para aumentar o volume"
 				},
 				"enable": {
-					"label": "Impulso do volume",
-					"title": "Ativar impulso de volume"
+					"label": "Aumento de volume",
+					"title": "Ativa o aumento de volume"
 				},
 				"mode": {
 					"select": {
-						"label": "Modo de impulso de volume",
+						"label": "Modo de aumento de volume",
 						"options": {
 							"global": "Global",
 							"perVideo": "Por vídeo"
 						},
-						"title": "Escolha como o impulso de volume é aplicado. 'Por vídeo' permite ativar o impulso para cada vídeo individualmente no menu de recursos. 'Global' aplica impulso a todos os vídeos quando o impulso de volume está habilitado."
+						"title": "Selecione como o aumento de volume é aplicado. 'Por vídeo' permite ativar o aumento para cada vídeo individualmente no menu de recursos. Já o 'Global' aplica o aumento para todos os vídeos quando o aumento de volume é ativado."
 					}
 				},
-				"title": "Configurações de impulso de volume"
+				"title": "Opções de aumento de volume"
 			},
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
