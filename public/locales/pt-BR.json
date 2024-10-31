@@ -317,8 +317,8 @@
 						"title": "Adiciona um botão ao menu de recursos para abrir a transcrição do vídeo que você está assistindo"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Abrir configurações do YouTube ao passar o mouse",
-						"title": "Abre o menu de configurações do YouTube ao passar o mouse sobre o botão de configurações"
+						"label": "Abrir opções do YouTube ao passar o mouse",
+						"title": "Abre o menu de opções do YouTube ao passar o mouse sobre o botão de opções"
 					},
 					"pauseBackgroundPlayers": {
 						"label": "Pause background players",
@@ -329,8 +329,8 @@
 						"title": "Mostra o tempo restante do vídeo que você está assistindo"
 					},
 					"rememberLastVolume": {
-						"label": "Lembrar o último volume",
-						"title": "Lembra o volume do último vídeo que você estava assistindo e o coloca quando você abrir um novo vídeo"
+						"label": "Salvar intensidade do volume",
+						"title": "Salva a intensidade do volume do vídeo anterior e o define ao abrir um novo vídeo"
 					},
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
@@ -349,7 +349,7 @@
 						"title": "Skips the idle dialog that pauses video playback"
 					}
 				},
-				"title": "Configurações diversas"
+				"title": "Diversos"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
@@ -364,18 +364,18 @@
 						"white": "Branco",
 						"yellow": "Amarelo"
 					},
-					"title": "Seleciona a cor para as informações na tela"
+					"title": "Define a cor para exibição na tela"
 				},
 				"hide": {
-					"label": "Atraso para esconder",
-					"title": "Especifique o tempo, em milissegundos, antes de ocultar automaticamente as informações na tela"
+					"label": "Ocultar atraso",
+					"title": "Especifica o tempo, em milissegundos, antes de automaticamente ocultar a exibição na tela"
 				},
 				"opacity": {
 					"label": "Opacidade",
-					"title": "Ajusta a transparência das informações na tela"
+					"title": "Ajusta a transparência da exibição na tela"
 				},
 				"padding": {
-					"label": "Espaçamento",
+					"label": "Alinhamento",
 					"title": "Ajuste o espaçamento em torno das informações na tela em pixels. Isso se aplica especificamente ao canto das informações na tela."
 				},
 				"position": {
