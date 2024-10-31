@@ -143,22 +143,22 @@
 					"label": "Resolução do reprodutor",
 					"title": "A resolução para ser definida ao vídeo"
 				},
-				"title": "Configurações de qualidade automáticas"
+				"title": "Opções de resolução automática"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Limpa todos os dados que esta extensão armazenou em sua máquina",
-					"value": "Limpar Dados"
+					"title": "Limpa todos os dados que esta extensão armazenou no seu computador",
+					"value": "Limpar dados"
 				},
 				"confirm": {
-					"title": "Confirmar redefinição de configuração",
+					"title": "Confirma a redefinição de opções",
 					"value": "Confirmar"
 				},
 				"openTab": {
 					"title": "Open extension settings in a new tab"
 				},
 				"reset": {
-					"title": "Redefinir todas as configurações para seus padrões, Clique no botão confirmar para salvar as alterações",
+					"title": "Redefine as opções para o padrão, clique em confirmar para salvar as mudanças",
 					"value": "Redefinir"
 				}
 			},
@@ -170,12 +170,12 @@
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
 						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Botão de Repetir",
-						"maximizePlayerButton": "Botão de Maximizar",
+						"loopButton": "Botão de repetição",
+						"maximizePlayerButton": "Botão de maximização",
 						"openTranscriptButton": "Abrir botão de transcrição",
 						"rewindButton": "Rewind button",
 						"screenshotButton": "Botão de captura de tela",
-						"volumeBoostButton": "Botão de Impulso de Volume"
+						"volumeBoostButton": "Botão de ganho de volume"
 					},
 					"options": {
 						"below_player": {
@@ -188,40 +188,40 @@
 						},
 						"player_controls_left": {
 							"placement": "no lado esquerdo dos controles do reprodutor",
-							"value": "Controle Esquerdo"
+							"value": "Controles esquerdos"
 						},
 						"player_controls_right": {
 							"placement": "no lado direito dos controles do reprodutor",
-							"value": "Controle Direito"
+							"value": "Controles direitos"
 						}
 					},
-					"title": "Coloque o {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
 				},
-				"title": "Configurações de posicionamento de botão"
+				"title": "Opções de posição de botão"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Recolher Editor",
-					"expand": "Expandir Editor",
+					"collapse": "Minimizar editor",
+					"expand": "Maximizar editor",
 					"noProblems": "Nenhum problema encontrado."
 				},
 				"enable": {
-					"label": "Habilitar CSS personalizado",
-					"title": "Permite que CSS personalizado seja aplicado à página"
+					"label": "Ativar CSS personalizado",
+					"title": "Ativa o CSS personalizado para ser aplicado à página"
 				},
-				"title": "Configurações personalizadas de CSS"
+				"title": "Opções do CSS personalizado"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Tipo de ativação do Menu",
+						"label": "Tipo de ativação do menu",
 						"options": {
-							"click": "Clique",
-							"hover": "Ao Passar o Cursor"
+							"click": "Clicar",
+							"hover": "Passar o mouse"
 						},
 						"title": "Selecione o método para ativar o menu de recursos"
 					},
-					"title": "Configurações do menu de recursos"
+					"title": "Opções do menu de recursos"
 				}
 			},
 			"forwardRewindButtons": {
@@ -237,32 +237,32 @@
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "As configurações foram exportadas com sucesso",
-					"title": "Exportar configurações para um arquivo JSON",
-					"value": "Exportar Configurações"
+					"success": "Opções exportadas com sucesso",
+					"title": "Exportar opções para arquivo JSON",
+					"value": "Exportar opções"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Erro ao importar as configurações. Por favor, verifique o formato do arquivo.\nUm erro desconhecido ocorreu.",
-						"validation": "Erro ao importar as configurações. Por favor, verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
+						"unknown": "Erro ao importar opções. Verifique o formato do arquivo.\nUm erro desconhecido ocorreu.",
+						"validation": "Erro ao importar opções. Verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Configurações importadas com sucesso",
-					"title": "Importar configurações de um arquivo JSON",
-					"value": "Importar Configurações"
+					"success": "Opções importadas com sucesso",
+					"title": "Importar opções de arquivo JSON",
+					"value": "Importar opções"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Linguagem",
-					"title": "A linguagem a ser usada para a extensão"
+					"label": "Idioma",
+					"title": "O idioma de exibição da extensão"
 				},
-				"title": "Linguagem"
+				"title": "Idioma"
 			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
 						"label": "Modo teatro automático",
-						"title": "Ativar automaticamente o modo teatro quando você carregar um vídeo"
+						"title": "Ativa automaticamente o modo teatro ao carregar um vídeo"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
@@ -293,7 +293,7 @@
 						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
 					"hideScrollbar": {
-						"label": "Ocultar a barra de rolagem",
+						"label": "Ocultar barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
 					"hideShorts": {
@@ -305,7 +305,7 @@
 						"title": "Hides 'Translate to Language' button under comments"
 					},
 					"loopButton": {
-						"label": "Botão de Repetir",
+						"label": "Botão de repetição",
 						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"
 					},
 					"maximizePlayerButton": {
