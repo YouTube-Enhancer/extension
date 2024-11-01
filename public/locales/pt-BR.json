@@ -155,7 +155,7 @@
 					"value": "Confirmar"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Abre as opções da extensão na próxima aba"
 				},
 				"reset": {
 					"title": "Redefine as opções para o padrão, clique em confirmar para salvar as mudanças",
@@ -165,15 +165,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minuto do tempo",
+						"decreasePlaybackSpeedButton": "Botão de diminuir velocidade",
+						"forwardButton": "Botão de acelerar velocidade",
+						"hideEndScreenCardsButton": "Ocultar botão de cards finais",
+						"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 						"loopButton": "Botão de repetição",
 						"maximizePlayerButton": "Botão de maximização",
 						"openTranscriptButton": "Abrir botão de transcrição",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Botão de retroceder",
 						"screenshotButton": "Botão de captura de tela",
 						"volumeBoostButton": "Botão de ganho de volume"
 					},
@@ -226,14 +226,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Ativar botões de avançar/retroceder",
+					"title": "Adiciona botões de avançar ou retroceder ao reprodutor de vídeo"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Avançar/retroceder tempo",
+					"title": "A quantidade de tempo para acelerar/retroceder o vídeo"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Opções de botão de acelerar/retroceder"
 			},
 			"importExportSettings": {
 				"exportButton": {
