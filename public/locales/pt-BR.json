@@ -165,7 +165,7 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minuto do tempo",
+						"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minuto do vídeo",
 						"decreasePlaybackSpeedButton": "Botão de diminuir velocidade",
 						"forwardButton": "Botão de acelerar velocidade",
 						"hideEndScreenCardsButton": "Ocultar botão de cards finais",
@@ -266,11 +266,11 @@
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Desativar legendas automaticamente",
-						"title": "Desabilita automaticamente as legendas fechadas quando você carrega um vídeo"
+						"title": "Desativa legendas automaticamente ao carregar um vídeo"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Botão para copiar a URL do vídeo com o tempo",
-						"title": "Copia a URL do vídeo com o tempo (?t=123)"
+						"label": "Copiar URL do vídeo com o botão de minuto do vídeo",
+						"title": "Copia o URL do vídeo com o minuto do vídeo (?t=123)"
 					},
 					"hideEndScreenCards": {
 						"label": "Ocultar cards finais",
