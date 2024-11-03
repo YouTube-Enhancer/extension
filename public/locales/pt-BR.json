@@ -278,31 +278,31 @@
 					},
 					"hideEndScreenCardsButton": {
 						"label": "Ocultar botão de cards finais",
-						"title": "Adiciona um botão para mostrar/ocultar os cartões no final do vídeo"
+						"title": "Adiciona um botão para exibir/ocultar cards finais"
 					},
 					"hideLiveStreamChat": {
-						"label": "Ocultar chat ao vivo da transmissão",
-						"title": "Oculta o chat da transmissão ao vivo"
+						"label": "Ocultar chat da transmissão",
+						"title": "Oculta o chat da transmissão"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Ocultar Vídeos de Artistas Oficiais",
-						"title": "Ocultar Vídeos de Artistas Oficiais da Página Inicial"
+						"label": "Ocultar vídeos de artistas originais",
+						"title": "Ocultar vídeos de artistas originais do início"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Ocultar banner de promoção paga",
-						"title": "Oculta o banner que aparece ao assistir a um vídeo que possui uma promoção paga"
+						"title": "Oculta o banner exibido ao assistir um vídeo com promoção paga"
 					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
 					"hideShorts": {
-						"label": "Ocultar Shorts",
-						"title": "Oculta todos os shorts"
+						"label": "Ocultar shorts",
+						"title": "Oculta os shorts"
 					},
 					"hideTranslateComment": {
-						"label": "Ocultar botão de traduzir comentário",
-						"title": "Oculta o botão \"Traduzir para o idioma\" abaixo dos comentários"
+						"label": "Ocultar botão de tradução",
+						"title": "Oculta o botão \"Traduzir para o idioma\" abaixo do comentário"
 					},
 					"loopButton": {
 						"label": "Botão de repetição",
@@ -321,8 +321,8 @@
 						"title": "Abre o menu de opções do YouTube ao passar o mouse sobre o botão de opções"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pausar players de fundo",
-						"title": "Pausa os reprodutores de vídeo em abas em segundo plano quando você inicia um novo reprodutor na aba em primeiro plano"
+						"label": "Parar reprodutores de fundo",
+						"title": "Para os reprodutores de abas de fundo quando você iniciar um novo reprodutor em uma aba em primeiro plano"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
@@ -333,20 +333,20 @@
 						"title": "Salva a intensidade do volume do vídeo anterior e o define ao abrir um novo vídeo"
 					},
 					"removeRedirect": {
-						"label": "Remover URLs do YouTube /redirect",
-						"title": "Substitui o redirecionamento do YouTube por URLs reais, pulando o diálogo de aviso de redirecionamento"
+						"label": "Remover URLs de redireção do YouTube",
+						"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
 					},
 					"shareShortener": {
-						"label": "Encurtar link de compartilhamento de vídeo do YouTube",
-						"title": "Encurta o link de compartilhamento de vídeo do YouTube (youtu.be) removendo os parâmetros si/feature dele"
+						"label": "Encurtar link de compartilhamento de vídeo",
+						"title": "Encurta os links de compartilhamento de vídeo (youtu.be) removendo os parâmetros si/recursos."
 					},
 					"shortsAutoScroll": {
-						"label": "Auto rolagem para Shorts",
-						"title": "Rola automáticamente para o próximo short"
+						"label": "Rolagem automática de shorts",
+						"title": "Rola automaticamente ao próximo short"
 					},
 					"skipContinueWatching": {
-						"label": "Ignora \"Vídeo está em pausa. Continuar assistindo?\"",
-						"title": "Ignora o diálogo de inatividade que pausa a reprodução do vídeo"
+						"label": "Pular \"O vídeo está pausado. Continuar assistindo?\"",
+						"title": "Pula o diálogo de ausência que pausa a reprodução do vídeo"
 					}
 				},
 				"title": "Diversos"
@@ -410,9 +410,9 @@
 					"label": "Botões de velocidade de reprodução",
 					"select": {
 						"label": "Velocidade dos botões de reprodução",
-						"title": "Quantidade de velocidade a ser alterada por clique"
+						"title": "Quantidade de velocidade para ser alterada por clique"
 					},
-					"title": "Adiciona botões para aumentar ou diminuir a velocidade de reprodução do vídeo que você está assistindo"
+					"title": "Adiciona botões para acelerar ou desacelerar a velocidade da reprodução do vídeo"
 				},
 				"select": {
 					"label": "Velocidade do reprodutor",
@@ -422,24 +422,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Exibir informações sobre a duração da playlist",
-					"title": "Exibe a duração total da playlist, quanto já foi assistido e quanto ainda resta."
+					"label": "Exibir informações de duração da playlist",
+					"title": "Exibe a duração da playlist, quantas vezes foi visualizada, e o tempo restante."
 				},
-				"title": "Configurações de comprimento da playlist",
+				"title": "Opções de duração da playlist",
 				"wayToGetLength": {
 					"select": {
-						"label": "Método para obter tamanho da lista de reprodução",
-						"title": "A forma de obter informações sobre a duração da playlist (o método da API retornará ao HTML se ocorrer um erro)"
+						"label": "Forma de obter a duração da playlist",
+						"title": "A forma de obter a duração da playlist (O método API voltará a HTML se ocorrer um erro)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Método para obter o tempo assistido",
+						"label": "Forma de obter o tempo assistido",
 						"options": {
-							"duration": "Duração do Vídeo",
-							"youtube": "Tempo Assistido do Vídeo"
+							"duration": "Duração do vídeo",
+							"youtube": "Tempo assistido do vídeo"
 						},
-						"title": "A forma de obter a quantidade de tempo assistido (tipo de duração do vídeo usado apenas na página de exibição)"
+						"title": "A forma de obter o tempo assistido (Tipo de duração do vídeo apenas usado na página de exibição)"
 					}
 				}
 			},
@@ -507,24 +507,24 @@
 				"title": "Opções de controle do volume na roda do mouse"
 			},
 			"settingSearch": {
-				"placeholder": "Procurar por uma configuração"
+				"placeholder": "Procurar opção"
 			},
 			"videoHistory": {
 				"enable": {
 					"label": "Rastrear vídeos assistidos",
-					"title": "Mantém o registro de onde você parou nos vídeos que estava assistindo e permite retomar a reprodução"
+					"title": "Registra o tempo do vídeo que você parou e permite retomar a reprodução "
 				},
 				"resumeType": {
 					"select": {
-						"label": "Tipo de resumo",
+						"label": "Tipo de retomada",
 						"options": {
 							"automatic": "Automático",
-							"prompt": "Alerta"
+							"prompt": "Perguntar"
 						},
-						"title": "Selecione como você deseja retomar os vídeos"
+						"title": "Selecione como deseja retomar os vídeos"
 					}
 				},
-				"title": "Configurações de histórico de vídeo"
+				"title": "Opções de histórico de vídeo"
 			},
 			"volumeBoost": {
 				"boostAmount": {
@@ -548,12 +548,12 @@
 				"title": "Opções de aumento de volume"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "Você pode obter uma daqui",
+				"getApiKeyLinkText": "Você pode obter daqui",
 				"input": {
-					"label": "Chave da API",
-					"title": "Insira sua chave da API Youtube Data API V3."
+					"label": "Chave API",
+					"title": "Insira sua chave API YouTube Data V3."
 				},
-				"title": "Chave Youtube Data API V3"
+				"title": "Chave API YouTube Data V3"
 			},
 			"youtubeDeepDark": {
 				"author": "Autor",
@@ -569,15 +569,15 @@
 					},
 					"hoverBackground": {
 						"label": "Cor de fundo ao passar o mouse",
-						"title": "Cor para o fundo ao passar o mouse"
+						"title": "Cor de fundo ao passar o mouse"
 					},
 					"mainBackground": {
-						"label": "Cor de fundo principal",
-						"title": "Cor para fundo principal"
+						"label": "Cor principal de fundo",
+						"title": "Cor principal para o fundo"
 					},
 					"mainColor": {
 						"label": "Cor de destaque",
-						"title": "Cor para destacar"
+						"title": "Cor para destaque"
 					},
 					"mainText": {
 						"label": "Cor do texto principal",
@@ -589,14 +589,14 @@
 					}
 				},
 				"enable": {
-					"label": "Habilitar o tema selecionado",
-					"title": "Ativar o tema selecionado para a página"
+					"label": "Ativar tema selecionado",
+					"title": "Ativar tema selecionado para a página"
 				},
 				"select": {
 					"label": "Selecionar tema",
-					"title": "Selecione um tema para ser aplicado à página"
+					"title": "Selecione um tema para a página"
 				},
-				"title": "Configurações de Escuro Profundo do YouTube"
+				"title": "Opções do fundo escuro do YouTube"
 			}
 		}
 	}
