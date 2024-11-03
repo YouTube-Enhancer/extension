@@ -548,7 +548,7 @@
 				"title": "Opções de aumento de volume"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "Você pode obter daqui",
+				"getApiKeyLinkText": "Você pode obter uma aqui",
 				"input": {
 					"label": "Chave API",
 					"title": "Insira sua chave API YouTube Data V3."
