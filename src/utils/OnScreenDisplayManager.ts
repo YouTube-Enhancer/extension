@@ -32,6 +32,12 @@ export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePla
 };
 
 export default class OnScreenDisplayManager<V extends ValueType> {
+	// Canvas element for the display.
+	protected canvas: HTMLCanvasElement;
+
+	// Context for the canvas element.
+	protected context: Nullable<CanvasRenderingContext2D> = null;
+
 	// Default font size for the display.
 	private readonly defaultFontSize = 48;
 
@@ -40,12 +46,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 	// Current value for the display.
 	private value?: Value<V>;
-
-	// Canvas element for the display.
-	protected canvas: HTMLCanvasElement;
-
-	// Context for the canvas element.
-	protected context: Nullable<CanvasRenderingContext2D> = null;
 	constructor(
 		// Options for the display.
 		protected options: DisplayOptions,

@@ -1,7 +1,7 @@
 import type { i18nInstanceType } from "./i18n";
 
 declare module "*.svg" {
-	import React = require("react");
+	import React from "react";
 	export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
 	const src: string;
 	export default src;
@@ -55,12 +55,12 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		viewerLivestreamJoinMediaTime: number;
 	}
 	interface YouTubePlayer {
-		unloadModule(moduleName: string): void;
-		loadModule(moduleName: string): void;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
+		loadModule(moduleName: string): void;
 		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
+		unloadModule(moduleName: string): void;
 	}
 }
 declare global {

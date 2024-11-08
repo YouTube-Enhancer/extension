@@ -1,7 +1,7 @@
 import type { Nullable } from "@/src/types";
 
-import eventManager from "@/src/utils/EventManager";
 import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
+import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { headerSelector, initializePlaylistLength, playlistItemsSelector } from "./utils";
@@ -31,7 +31,7 @@ export async function enablePlaylistLength() {
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
-	} catch (error) {
+	} catch (_error) {
 		documentObserver?.disconnect();
 		documentObserver = null;
 		documentObserver = await initializePlaylistLength({

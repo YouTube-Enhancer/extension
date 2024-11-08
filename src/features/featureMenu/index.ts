@@ -1,7 +1,7 @@
 import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { isNewYouTubeVideoLayout } from "../../utils/utilities";
 

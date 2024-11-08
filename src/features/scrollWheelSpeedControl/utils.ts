@@ -1,6 +1,5 @@
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
-import { youtubePlayerMinSpeed, type Selector } from "@/src/types";
-
+import { type Selector, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, round } from "@/src/utils/utilities";
 

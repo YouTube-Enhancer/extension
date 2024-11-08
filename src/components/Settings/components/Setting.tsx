@@ -3,15 +3,15 @@ import type { configurationId } from "@/src/types";
 import useSectionTitle from "@/src/hooks/useSectionTitle";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 
-import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
 import type { ColorPickerProps } from "../../Inputs/ColorPicker/ColorPicker";
+import type { CSSEditorProps } from "../../Inputs/CSSEditor/CSSEditor";
 import type { NumberInputProps } from "../../Inputs/Number/Number";
 import type { SelectProps } from "../../Inputs/Select/Select";
 import type { SliderProps } from "../../Inputs/Slider/Slider";
 import type { TextInputProps } from "../../Inputs/TextInput/TextInput";
 
-import { CSSEditor, Checkbox, ColorPicker, NumberInput, Select, Slider, TextInput } from "../../Inputs";
+import { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInput } from "../../Inputs";
 
 type SettingInputProps<ID extends configurationId> = {
 	id: ID;

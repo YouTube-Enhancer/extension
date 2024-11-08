@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable tailwindcss/enforces-shorthand */
-import type { AllButtonNames, Nullable, Path, configuration, configurationKeys } from "@/src/types";
+import type { AllButtonNames, configuration, configurationKeys, Nullable, Path } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
@@ -18,7 +17,7 @@ import { configurationImportSchema, defaultConfiguration as defaultSettings } fr
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Suspense, createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
@@ -751,20 +750,20 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						type="checkbox"
 						checked={settings.enable_hide_official_artist_videos_from_home_page?.toString() === "true"}
 						id="enable_hide_official_artist_videos_from_home_page"
 						label={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.label")}
 						onChange={setCheckboxOption("enable_hide_official_artist_videos_from_home_page")}
 						title={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.title")}
+						type="checkbox"
 					/>
 					<Setting
-						type="checkbox"
 						checked={settings.enable_automatically_disable_closed_captions?.toString() === "true"}
 						id="enable_automatically_disable_closed_captions"
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
+						type="checkbox"
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
@@ -1010,25 +1009,25 @@ export default function Settings() {
 						disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
 						id="player_speed"
 						label={t("settings.sections.playbackSpeed.select.label")}
-						onChange={setValueOption("player_speed")}
-						title={t("settings.sections.playbackSpeed.select.title")}
-						value={settings.player_speed}
 						max={youtubePlayerMaxSpeed}
 						min={youtubePlayerSpeedStep}
+						onChange={setValueOption("player_speed")}
 						step={youtubePlayerSpeedStep}
+						title={t("settings.sections.playbackSpeed.select.title")}
 						type="number"
+						value={settings.player_speed}
 					/>
 					<Setting
 						disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
 						id="playback_buttons_speed"
 						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.label")}
-						onChange={setValueOption("playback_buttons_speed")}
-						value={settings.playback_buttons_speed}
 						max={1}
 						min={youtubePlayerSpeedStep}
+						onChange={setValueOption("playback_buttons_speed")}
 						step={youtubePlayerSpeedStep}
 						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
 						type="number"
+						value={settings.playback_buttons_speed}
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.volumeBoost.title")}>
