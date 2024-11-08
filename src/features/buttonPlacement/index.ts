@@ -4,7 +4,7 @@ import type { AllButtonNames, ButtonPlacement, MultiButtonNames, SingleButtonFea
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
 import { findKeyByValue, removeTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { type ListenerType, getFeatureButtonId, makeFeatureButton, placeButton } from "./utils";
+import { getFeatureButtonId, type ListenerType, makeFeatureButton, placeButton } from "./utils";
 export const featuresInControls = new Set<AllButtonNames>();
 
 export async function addFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(

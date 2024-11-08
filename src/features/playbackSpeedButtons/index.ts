@@ -1,12 +1,11 @@
-import { youtubePlayerMinSpeed, type YouTubePlayerDiv } from "@/src/types";
-
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
+import { type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { createTooltip, isWatchPage, waitForSpecificMessage, round } from "@/src/utils/utilities";
+import { createTooltip, isWatchPage, round, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { type FeatureFuncRecord, featureButtonFunctions } from "@/src/features";
+import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
 import {
 	disableAutomaticallyDisableClosedCaptions,
 	enableAutomaticallyDisableClosedCaptions
@@ -69,20 +68,20 @@ import volumeBoost, {
 	removeVolumeBoostButton
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
-import { type ToggleFeatures, type ToggleIcon, getFeatureIcon, toggleFeatures } from "@/src/icons";
+import { getFeatureIcon, type ToggleFeatures, toggleFeatures, type ToggleIcon } from "@/src/icons";
 import {
 	type AllButtonNames,
 	type ButtonPlacement,
 	type ExtensionSendOnlyMessageMappings,
 	type FeatureToMultiButtonMap,
+	featureToMultiButtonsMap,
 	type KeysOfUnion,
 	type Messages,
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
 	type SingleButtonFeatureNames,
 	type SingleButtonNames,
-	type YouTubePlayerDiv,
-	featureToMultiButtonsMap
+	type YouTubePlayerDiv
 } from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
@@ -982,7 +981,6 @@ window.onbeforeunload = function () {
 window.addEventListener("error", (event) => {
 	event.preventDefault();
 	const {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		error: { stack: errorLine }
 	} = event;
 	browserColorLog(formatError(event.error) + "\nAt: " + errorLine, "FgRed");

@@ -1,4 +1,5 @@
 import type { YouTubePlayerDiv } from "@/src/types";
+
 import { isLivePage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 let captionsWhereEnabled = false;
 export async function enableAutomaticallyDisableClosedCaptions() {
