@@ -34,7 +34,7 @@ export async function setupRemainingTime() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
-	const timeDisplay = document.querySelector(".ytp-time-display > span:nth-of-type(2)");
+	const timeDisplay = document.querySelector(".ytp-time-display > span.ytp-time-wrapper");
 	if (!timeDisplay) return;
 	// Get the player element
 	const playerContainer =
