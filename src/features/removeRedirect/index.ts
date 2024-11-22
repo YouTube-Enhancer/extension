@@ -14,25 +14,21 @@ export default async function enableRemoveRedirect() {
 		".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string"
 	);
 	links.forEach((link: HTMLElement) => {
-		const href: null | string = link.getAttribute("href");
-		if (href && href.match(regex)) {
-			const urlParams: URLSearchParams = new URLSearchParams(href);
-			link.setAttribute("href", urlParams.get("q") || "");
-		}
+		const href: Nullable<string> = link.getAttribute("href");
+		if (!href || !href.match(regex)) return;
+		const urlParams: URLSearchParams = new URLSearchParams(href);
+		link.setAttribute("href", urlParams.get("q") || "");
 	});
 	const callback: MutationCallback = (mutationsList: MutationRecord[]) => {
 		for (const mutation of mutationsList) {
-			if (mutation.type === "childList") {
-				mutation.addedNodes.forEach((node: Nullable<Node>) => {
-					if (node instanceof Element && node.hasAttribute("href")) {
-						const href: null | string = node.getAttribute("href");
-						if (href !== null && href.match(regex)) {
-							const urlParams: URLSearchParams = new URLSearchParams(href);
-							node.setAttribute("href", urlParams.get("q") || "");
-						}
-					}
-				});
-			}
+			if (mutation.type !== "childList") return;
+			mutation.addedNodes.forEach((node: Nullable<Node>) => {
+				if (!(node instanceof Element) || !("href" in node)) return;
+				const href: Nullable<string> = node.getAttribute("href");
+				if (!href || !href.match(regex)) return;
+				const urlParams = new URLSearchParams(href);
+				node.setAttribute("href", urlParams.get("q") || "");
+			});
 		}
 	};
 	const observer: MutationObserver = new MutationObserver(callback);

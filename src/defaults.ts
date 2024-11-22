@@ -28,14 +28,13 @@ function setDefaultValues() {
 					JSON.parse(storedValueString)
 				:	storedValueString;
 			// Check if the parsed value is an object and has properties
-			if (typeof storedValue === "object" && storedValue !== null) {
-				// Deep merge missing keys with their default values
-				const updatedValue = deepMerge(defaultValue as Record<string, unknown>, storedValue as Record<string, unknown>);
-				// Set the updated value in localStorage
-				localStorage.setItem(option, JSON.stringify(updatedValue));
-				// Set the updated value in chrome storage
-				void chrome.storage.local.set({ [option]: updatedValue });
-			}
+			if (typeof storedValue !== "object" || storedValue === null) continue;
+			// Deep merge missing keys with their default values
+			const updatedValue = deepMerge(defaultValue as Record<string, unknown>, storedValue as Record<string, unknown>);
+			// Set the updated value in localStorage
+			localStorage.setItem(option, JSON.stringify(updatedValue));
+			// Set the updated value in chrome storage
+			void chrome.storage.local.set({ [option]: updatedValue });
 		} catch (error) {
 			// Handle errors during JSON parsing
 			console.error(`Error parsing stored value for option ${option}:`, error);

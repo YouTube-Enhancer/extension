@@ -16,8 +16,7 @@ export const addOpenTranscriptButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	function transcriptButtonClickerListener() {
 		const transcriptButton = document.querySelector<HTMLButtonElement>("ytd-video-description-transcript-section-renderer button");
-		if (!transcriptButton) return;
-		transcriptButton.click();
+		transcriptButton?.click();
 	}
 	await addFeatureButton(
 		"openTranscriptButton",

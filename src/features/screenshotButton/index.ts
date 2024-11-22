@@ -41,9 +41,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				listener();
 				const clipboardImage = new ClipboardItem({ "image/png": blob });
 				void navigator.clipboard.write([clipboardImage]);
-				setTimeout(() => {
-					remove();
-				}, 1200);
+				setTimeout(() => remove(), 1200);
 				break;
 			}
 			case "file": {
@@ -77,12 +75,8 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 			const videoElement = document.querySelector<HTMLVideoElement>("video");
 			// If video element is not available, return
 			if (!videoElement) return;
-			try {
-				// Take a screenshot
-				await takeScreenshot(videoElement);
-			} catch (error) {
-				console.error(error);
-			}
+			// Take a screenshot
+			await takeScreenshot(videoElement).catch(console.error);
 		})();
 	}
 	await addFeatureButton(

@@ -19,15 +19,11 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 	};
 	const createNotification: CreateNotification = (type, message, action) => {
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 5_000;
-		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
-		return notification;
+		return { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 	};
 	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (notification, removeAfterMs) => {
-		if (removeAfterMs) {
-			setTimeout(() => {
-				removeNotification(notification);
-			}, removeAfterMs);
-		}
+		if (!removeAfterMs) return;
+		setTimeout(() => removeNotification(notification), removeAfterMs);
 	};
 	const addNotification: AddNotification = (type, message, action) => {
 		const notification = createNotification(type, message, action);
@@ -58,7 +54,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		};
 		updateNotifications();
 		return () => {
-			if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+			if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		};
 	}, []);
 	const contextValue = { addNotification, notifications, removeNotification } satisfies NotificationsContextProps;

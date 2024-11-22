@@ -31,13 +31,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 		const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 		// If the settings panel menu is targeted return
 		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
-		const setOptionsData = async () => {
-			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
-		};
+		const setOptionsData = async () => (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		void (async () => {
-			if (!optionsData) {
-				return void (await setOptionsData());
-			}
+			if (!optionsData) return void (await setOptionsData());
 			const {
 				data: {
 					options: {
@@ -96,11 +92,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 					playerContainer: playerContainer
 				},
 				"yte-osd",
-				{
-					max: 100,
-					type: "volume",
-					value: newVolume
-				}
+				{ max: 100, type: "volume", value: newVolume }
 			);
 		})();
 	};

@@ -3,6 +3,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { isLivePage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export async function enableAutomaticTheaterMode() {
+	if (!isWatchPage()) return;
 	// Wait for the "options" message from the content script
 	const {
 		data: {
@@ -16,10 +17,7 @@ export async function enableAutomaticTheaterMode() {
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const { width } = await playerContainer.getSize();
-	const {
-		body: { clientWidth }
-	} = document;
-	const isTheaterMode = width === clientWidth;
+	const isTheaterMode = document.body.clientWidth === width;
 	// Get the size button
 	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	// If the size button is not available return

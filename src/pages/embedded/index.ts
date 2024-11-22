@@ -265,11 +265,10 @@ function handleSoftNavigate() {
 }
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
-		const response = await waitForSpecificMessage("language", "request_data", "content");
-		if (!response) return;
 		const {
 			data: { language }
-		} = response;
+		} = await waitForSpecificMessage("language", "request_data", "content");
+		if (!language) return;
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
 		if (isFirstLoad) {
@@ -335,16 +334,14 @@ window.addEventListener("DOMContentLoaded", function () {
 							if (volumeBoostMode === "global") {
 								await removeVolumeBoostButton();
 								await enableVolumeBoost();
-							} else {
-								disableVolumeBoost();
-								await addVolumeBoostButton();
+								break;
 							}
-						} else {
 							disableVolumeBoost();
-							if (volumeBoostMode === "per_video") {
-								await removeVolumeBoostButton();
-							}
+							await addVolumeBoostButton();
+							break;
 						}
+						disableVolumeBoost();
+						if (volumeBoostMode === "per_video") await removeVolumeBoostButton();
 						break;
 					}
 					case "volumeBoostAmountChange": {
@@ -353,8 +350,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						switch (volumeBoostMode) {
 							case "global": {
-								if (!volumeBoostEnabled) return;
-								applyVolumeBoost(volumeBoostAmount);
+								if (volumeBoostEnabled) applyVolumeBoost(volumeBoostAmount);
 								break;
 							}
 							case "per_video": {
@@ -367,9 +363,6 @@ window.addEventListener("DOMContentLoaded", function () {
 						break;
 					}
 					case "playerSpeedChange": {
-						const {
-							data: { enableForcedPlaybackSpeed, playerSpeed }
-						} = message;
 						const {
 							data: {
 								options: { playback_buttons_speed: playbackSpeedPerClick }
@@ -405,11 +398,8 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { screenshotButtonEnabled }
 						} = message;
-						if (screenshotButtonEnabled) {
-							await addScreenshotButton();
-						} else {
-							await removeScreenshotButton();
-						}
+						if (screenshotButtonEnabled) await addScreenshotButton();
+						else await removeScreenshotButton();
 						break;
 					}
 					case "hideEndScreenCardsChange": {
@@ -448,21 +438,19 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { maximizePlayerButtonEnabled }
 						} = message;
-						if (maximizePlayerButtonEnabled) {
-							await addMaximizePlayerButton();
-						} else {
-							await removeMaximizePlayerButton();
-							const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
-							if (!maximizePlayerButton) return;
-							// Get the video element
-							const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-							// If video element is not available, return
-							if (!videoElement) return;
-							const videoContainer = document.querySelector<YouTubePlayerDiv>("video.html5-main-video");
-							if (!videoContainer) return;
-							if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
-								maximizePlayer();
-							}
+						if (maximizePlayerButtonEnabled) return await addMaximizePlayerButton();
+
+						await removeMaximizePlayerButton();
+						const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
+						if (!maximizePlayerButton) return;
+						// Get the video element
+						const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+						// If video element is not available, return
+						if (!videoElement) return;
+						const videoContainer = document.querySelector<YouTubePlayerDiv>("video.html5-main-video");
+						if (!videoContainer) return;
+						if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
+							maximizePlayer();
 						}
 						break;
 					}
@@ -470,33 +458,24 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { videoHistoryEnabled }
 						} = message;
-						if (videoHistoryEnabled) {
-							await setupVideoHistory();
-						} else {
-							eventManager.removeEventListeners("videoHistory");
-						}
+						if (videoHistoryEnabled) await setupVideoHistory();
+						else eventManager.removeEventListeners("videoHistory");
 						break;
 					}
 					case "remainingTimeChange": {
 						const {
 							data: { remainingTimeEnabled }
 						} = message;
-						if (remainingTimeEnabled) {
-							await enableRemainingTime();
-						} else {
-							removeRemainingTimeDisplay();
-						}
+						if (remainingTimeEnabled) await enableRemainingTime();
+						else removeRemainingTimeDisplay();
 						break;
 					}
 					case "loopButtonChange": {
 						const {
 							data: { loopButtonEnabled }
 						} = message;
-						if (loopButtonEnabled) {
-							await addLoopButton();
-						} else {
-							await removeLoopButton();
-						}
+						if (loopButtonEnabled) await addLoopButton();
+						else await removeLoopButton();
 						break;
 					}
 					case "copyTimestampUrlButtonChange": {
@@ -580,33 +559,24 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { scrollWheelVolumeControlEnabled }
 						} = message;
-						if (scrollWheelVolumeControlEnabled) {
-							await adjustVolumeOnScrollWheel();
-						} else {
-							eventManager.removeEventListeners("scrollWheelVolumeControl");
-						}
+						if (scrollWheelVolumeControlEnabled) await adjustVolumeOnScrollWheel();
+						else eventManager.removeEventListeners("scrollWheelVolumeControl");
 						break;
 					}
 					case "scrollWheelSpeedControlChange": {
 						const {
 							data: { scrollWheelSpeedControlEnabled }
 						} = message;
-						if (scrollWheelSpeedControlEnabled) {
-							await adjustSpeedOnScrollWheel();
-						} else {
-							eventManager.removeEventListeners("scrollWheelSpeedControl");
-						}
+						if (scrollWheelSpeedControlEnabled) await adjustSpeedOnScrollWheel();
+						else eventManager.removeEventListeners("scrollWheelSpeedControl");
 						break;
 					}
 					case "rememberVolumeChange": {
 						const {
 							data: { rememberVolumeEnabled }
 						} = message;
-						if (rememberVolumeEnabled) {
-							await enableRememberVolume();
-						} else {
-							eventManager.removeEventListeners("rememberVolume");
-						}
+						if (rememberVolumeEnabled) await enableRememberVolume();
+						else eventManager.removeEventListeners("rememberVolume");
 						break;
 					}
 					case "hideTranslateCommentChange": {
@@ -622,26 +592,16 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { hideScrollBarEnabled }
 						} = message;
-						if (hideScrollBarEnabled) {
-							if (!scrollBarHidden) {
-								hideScrollBar();
-							}
-						} else {
-							if (scrollBarHidden) {
-								showScrollBar();
-							}
-						}
+						if (hideScrollBarEnabled && !scrollBarHidden) hideScrollBar();
+						if (!hideScrollBarEnabled && scrollBarHidden) showScrollBar();
 						break;
 					}
 					case "hideShortsChange": {
 						const {
 							data: { hideShortsEnabled }
 						} = message;
-						if (hideShortsEnabled) {
-							await enableHideShorts();
-						} else {
-							disableHideShorts();
-						}
+						if (hideShortsEnabled) await enableHideShorts();
+						else disableHideShorts();
 						break;
 					}
 					case "hideEndScreenCardsButtonChange": {
@@ -667,11 +627,8 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { hideLiveStreamChatEnabled }
 						} = message;
-						if (hideLiveStreamChatEnabled) {
-							await enableHideLiveStreamChat();
-						} else {
-							await disableHideLiveStreamChat();
-						}
+						if (hideLiveStreamChatEnabled) await enableHideLiveStreamChat();
+						else await disableHideLiveStreamChat();
 						break;
 					}
 					case "languageChange": {
@@ -694,7 +651,9 @@ window.addEventListener("DOMContentLoaded", function () {
 											updateFeatureMenuItemLabel(
 												feature,
 												window.i18nextInstance.t(
-													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<
+														FeatureToMultiButtonMap[typeof multiFeatureName]
+													>}.label`,
 													{
 														SPEED: options.playback_buttons_speed
 													}
@@ -723,31 +682,38 @@ window.addEventListener("DOMContentLoaded", function () {
 										toggleFeature,
 										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
 									);
-								} else {
-									if (featureToMultiButtonsMap.has(featureName)) {
-										const multiFeatureName = featureName as MultiButtonFeatureNames;
-										const multiButtonName = feature as MultiButtonNames;
-										switch (multiFeatureName) {
-											case "playbackSpeedButtons": {
-												updateFeatureMenuItemLabel(
-													feature,
-													window.i18nextInstance.t(
-														`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-														{
-															SPEED: options.playback_buttons_speed
-														}
-													)
-												);
-												break;
-											}
-										}
-									} else {
-										updateFeatureButtonTitle(
-											feature,
-											window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
-										);
-									}
+									return;
 								}
+
+								if (featureToMultiButtonsMap.has(featureName)) {
+									const multiFeatureName = featureName as MultiButtonFeatureNames;
+									const multiButtonName = feature as MultiButtonNames;
+									switch (multiFeatureName) {
+										case "playbackSpeedButtons": {
+											updateFeatureMenuItemLabel(
+												feature,
+												window.i18nextInstance.t(
+													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<
+														FeatureToMultiButtonMap[typeof multiFeatureName]
+													>}.label`,
+													{
+														SPEED: options.playback_buttons_speed
+													}
+												)
+											);
+											break;
+										}
+									}
+									return;
+								}
+								updateFeatureMenuItemLabel(
+									feature,
+									window.i18nextInstance.t(
+										featureToMultiButtonsMap.has(featureName) ?
+											`pages.content.features.${featureName as MultiButtonFeatureNames}.buttons.${feature as MultiButtonNames}.label`
+										:	`pages.content.features.${featureName as SingleButtonNames}.button.label`
+									)
+								);
 							}
 						}
 						break;
@@ -781,62 +747,46 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { openTranscriptButtonEnabled }
 						} = message;
-						if (openTranscriptButtonEnabled) {
-							await openTranscriptButton();
-						} else {
-							await removeOpenTranscriptButton();
-						}
+						if (openTranscriptButtonEnabled) await openTranscriptButton();
+						else await removeOpenTranscriptButton();
 						break;
 					}
 					case "openYTSettingsOnHoverChange": {
 						const {
 							data: { openYouTubeSettingsOnHoverEnabled }
 						} = message;
-						if (openYouTubeSettingsOnHoverEnabled) {
-							await enableOpenYouTubeSettingsOnHover();
-						} else {
-							disableOpenYouTubeSettingsOnHover();
-						}
+						if (openYouTubeSettingsOnHoverEnabled) await enableOpenYouTubeSettingsOnHover();
+						else disableOpenYouTubeSettingsOnHover();
 						break;
 					}
 					case "removeRedirectChange": {
 						const {
 							data: { removeRedirectEnabled }
 						} = message;
-						if (removeRedirectEnabled) {
-							await enableRemoveRedirect();
-						}
+						if (removeRedirectEnabled) await enableRemoveRedirect();
 						break;
 					}
 					case "pauseBackgroundPlayersChange": {
 						const {
 							data: { pauseBackgroundPlayersEnabled }
 						} = message;
-						if (pauseBackgroundPlayersEnabled) {
-							await enablePauseBackgroundPlayers();
-						} else {
-							disablePauseBackgroundPlayers();
-						}
+						if (pauseBackgroundPlayersEnabled) await enablePauseBackgroundPlayers();
+						else disablePauseBackgroundPlayers();
 						break;
 					}
 					case "shareShortenerChange": {
 						const {
 							data: { shareShortenerEnabled }
 						} = message;
-						if (shareShortenerEnabled) {
-							await enableShareShortener();
-						} else {
-							disableShareShortener();
-						}
+						if (shareShortenerEnabled) await enableShareShortener();
+						else disableShareShortener();
 						break;
 					}
 					case "skipContinueWatchingChange": {
 						const {
 							data: { skipContinueWatchingEnabled }
 						} = message;
-						if (skipContinueWatchingEnabled) {
-							await enableSkipContinueWatching();
-						}
+						if (skipContinueWatchingEnabled) await enableSkipContinueWatching();
 						break;
 					}
 					case "hidePaidPromotionBannerChange": {
@@ -854,32 +804,18 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { deepDarkCustomThemeColors, deepDarkPreset, deepDarkThemeEnabled }
 						} = message;
-						if (deepDarkThemeEnabled) {
-							if (deepDarkCSSExists()) {
-								updateDeepDarkCSS(
-									deepDarkPreset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkCustomThemeColors) : deepDarkPresets[deepDarkPreset]
-								);
-							} else {
-								await enableDeepDarkCSS();
-							}
-						} else {
-							disableDeepDarkCSS();
-						}
+						if (!deepDarkThemeEnabled) return disableDeepDarkCSS();
+						if (!deepDarkCSSExists()) return await enableDeepDarkCSS();
+						updateDeepDarkCSS(deepDarkPreset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkCustomThemeColors) : deepDarkPresets[deepDarkPreset]);
 						break;
 					}
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
 						} = message;
-						if (customCSSEnabled) {
-							if (customCSSExists()) {
-								updateCustomCSS({ custom_css_code: customCSSCode });
-							} else {
-								await enableCustomCSS();
-							}
-						} else {
-							disableCustomCSS();
-						}
+						if (!customCSSEnabled) return disableCustomCSS();
+						if (!customCSSExists()) return enableCustomCSS();
+						updateCustomCSS({ custom_css_code: customCSSCode });
 						break;
 					}
 					case "buttonPlacementChange": {
@@ -956,11 +892,8 @@ window.addEventListener("DOMContentLoaded", function () {
 						const {
 							data: { shortsAutoScrollEnabled }
 						} = message;
-						if (shortsAutoScrollEnabled) {
-							await enableShortsAutoScroll();
-						} else {
-							disableShortsAutoScroll();
-						}
+						if (shortsAutoScrollEnabled) await enableShortsAutoScroll();
+						else disableShortsAutoScroll();
 						break;
 					}
 					default: {

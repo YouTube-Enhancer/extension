@@ -10,7 +10,6 @@ type ElementVisibilityAction = (element: HTMLElement) => void;
 
 function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
 	const elements = document.querySelectorAll<HTMLDivElement>(selector);
-	if (elements.length === 0) return;
 	elements.forEach((element) => action(element));
 }
 
@@ -117,9 +116,7 @@ export function observeShortsElements() {
 		});
 
 		// Only call hideShorts if one of the mutations contains one of the selectors
-		if (containsShortsSelector) {
-			hideShorts();
-		}
+		if (containsShortsSelector) hideShorts();
 	});
 
 	observer.observe(document.body, observerOptions);

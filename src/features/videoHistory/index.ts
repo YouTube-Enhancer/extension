@@ -72,22 +72,16 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
 	const videoHistoryOneData = await waitForSpecificMessage("videoHistoryOne", "request_data", "content", { id: videoId });
-	if (!videoHistoryOneData) {
-		cb();
-		return;
-	}
+	if (!videoHistoryOneData) return cb();
+
 	const {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
-		if (video_history_resume_type === "automatic") {
-			void playerContainer.seekTo(video_history_entry.timestamp, true);
-			return cb();
-		}
-		createResumePrompt(video_history_entry, playerContainer, cb);
-	} else {
-		cb();
+		if (video_history_resume_type !== "automatic") return createResumePrompt(video_history_entry, playerContainer, cb);
+		void playerContainer.seekTo(video_history_entry.timestamp, true);
 	}
+	cb();
 }
 // Utility function to check if an element exists
 const elementExists = (elementId: string) => !!document.getElementById(elementId);
@@ -175,11 +169,8 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			const elapsed = round(timestamp - start);
 			const progress = round(Math.min(elapsed / (progressBarDuration * 1000), 1), 2);
 			progressBar.style.width = `${round((1 - progress) * 100, 2)}%`;
-			if (progress < 1) {
-				animationFrameId = requestAnimationFrame(updateResumeProgress);
-			} else {
-				hidePrompt();
-			}
+			if (progress < 1) animationFrameId = requestAnimationFrame(updateResumeProgress);
+			else hidePrompt();
 		}
 		animationFrameId = requestAnimationFrame(updateResumeProgress);
 	}
@@ -194,12 +185,10 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		void playerContainer.seekTo(videoHistoryEntry.timestamp, true);
 		cb();
 	}
-	if (!elementExists(progressBarId)) {
-		prompt.appendChild(progressBar);
-	}
-	if (!elementExists(closeButtonId)) {
-		prompt.appendChild(closeButton);
-	}
+
+	if (!elementExists(progressBarId)) prompt.appendChild(progressBar);
+	if (!elementExists(closeButtonId)) prompt.appendChild(closeButton);
+
 	const { listener: resumePromptCloseButtonMouseOverListener } = createTooltip({
 		element: closeButton,
 		featureName: "videoHistory",
@@ -209,16 +198,14 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	eventManager.removeEventListener(closeButton, "mouseover", "videoHistory");
 	eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");
 	startCountdown();
-	const closeListener = () => {
-		hidePrompt();
-	};
+
+	const closeListener = () => hidePrompt();
 	eventManager.removeEventListener(resumeButton, "click", "videoHistory");
 	eventManager.addEventListener(resumeButton, "click", resumeButtonClickListener, "videoHistory");
 	eventManager.removeEventListener(closeButton, "click", "videoHistory");
 	eventManager.addEventListener(closeButton, "click", closeListener, "videoHistory");
 	// Display the prompt
-	if (!elementExists(promptId)) {
-		prompt.appendChild(resumeButton);
-		playerContainer.appendChild(prompt);
-	}
+	if (elementExists(promptId)) return;
+	prompt.appendChild(resumeButton);
+	playerContainer.appendChild(prompt);
 }

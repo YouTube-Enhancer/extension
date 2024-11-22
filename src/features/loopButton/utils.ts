@@ -6,10 +6,8 @@ export function loopButtonClickListener(checked?: boolean) {
 	}
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
+
 	const loop = videoElement.hasAttribute("loop");
-	if (loop) {
-		videoElement.removeAttribute("loop");
-	} else {
-		videoElement.setAttribute("loop", "");
-	}
+	if (loop) videoElement.removeAttribute("loop");
+	else videoElement.setAttribute("loop", "");
 }

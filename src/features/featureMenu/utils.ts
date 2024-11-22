@@ -81,19 +81,15 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	menuItem.appendChild(menuItemLabel);
 	// If it's a toggle item, create the toggle elements
+	const menuItemContent = document.createElement("div");
+	menuItemContent.classList.add("ytp-menuitem-content");
 	if (isToggle) {
-		const menuItemContent = document.createElement("div");
-		menuItemContent.classList.add("ytp-menuitem-content");
 		const menuItemToggle = document.createElement("div");
 		menuItemToggle.classList.add("ytp-menuitem-toggle-checkbox");
 		menuItemContent.appendChild(menuItemToggle);
-		menuItem.appendChild(menuItemContent);
 		menuItem.ariaChecked = initialChecked ? "true" : "false";
-	} else {
-		const menuItemContent = document.createElement("div");
-		menuItemContent.classList.add("ytp-menuitem-content");
-		menuItem.appendChild(menuItemContent);
 	}
+	menuItem.appendChild(menuItemContent);
 	// Add the item to the feature menu panel
 	featureMenuPanel.appendChild(menuItem);
 	// Adjust the height and width of the feature menu
@@ -164,14 +160,10 @@ export function updateFeatureMenuTitle(title: string) {
  * @param buttonName the name of the button
  * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
  */
-export function getFeatureIds(buttonName: AllButtonNames): {
-	featureMenuItemIconId: FeatureMenuItemIconId;
-	featureMenuItemId: FeatureMenuItemId;
-	featureMenuItemLabelId: FeatureMenuItemLabelId;
-} {
-	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
-	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
-	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
+export function getFeatureIds<ButtonName extends AllButtonNames>(buttonName: ButtonName) {
+	const featureMenuItemIconId = `yte-${buttonName}-icon` as const;
+	const featureMenuItemId = `yte-feature-${buttonName}-menuitem` as const;
+	const featureMenuItemLabelId = `yte-${buttonName}-label` as const;
 	return {
 		featureMenuItemIconId,
 		featureMenuItemId,

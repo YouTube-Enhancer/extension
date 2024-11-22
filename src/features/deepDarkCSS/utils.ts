@@ -6,9 +6,7 @@ import { deepDarkCssID } from "@/src/features/deepDarkCSS";
 export function updateDeepDarkCSS(css_code: string) {
 	// Get the custom CSS style element
 	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
-	// Check if the custom CSS style element exists
-	if (!customCSSStyleElement) return;
-	customCSSStyleElement.replaceWith(createDeepDarkCSSElement(css_code));
+	customCSSStyleElement?.replaceWith(createDeepDarkCSSElement(css_code));
 }
 export function createDeepDarkCSSElement(css_code: string) {
 	// Create the custom CSS style element
@@ -21,8 +19,7 @@ export function deepDarkCSSExists() {
 	// Get the custom CSS style element
 	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
 	// Check if the custom CSS style element exists
-	if (!customCSSStyleElement) return false;
-	return true;
+	return customCSSStyleElement !== null;
 }
 
 export function getDeepDarkCustomThemeStyle({
