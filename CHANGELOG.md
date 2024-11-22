@@ -1,3 +1,45 @@
+# [1.27.0](https://github.com/YouTube-Enhancer/extension/compare/v1.26.0...v1.27.0) (2024-10-13)
+
+
+### Bug Fixes
+
+* add missing function call ([fb3fdfd](https://github.com/YouTube-Enhancer/extension/commit/fb3fdfd11e080e5bc5905f410fac97fc42dfb713))
+* Add shadow around on screen display to improve visibility [#591](https://github.com/YouTube-Enhancer/extension/issues/591) ([4a54256](https://github.com/YouTube-Enhancer/extension/commit/4a5425676daad69f72000d607931fce200871ec2))
+* disable playback speed buttons when live ([585adc9](https://github.com/YouTube-Enhancer/extension/commit/585adc9cb1b0453485a8b2978d5c2172a5b61024))
+* **eslint:** migrate to flat config ([9a086ad](https://github.com/YouTube-Enhancer/extension/commit/9a086adb86261cc6d3c943b188d315797ee07a05))
+* Features being enabled multiple times ([f758184](https://github.com/YouTube-Enhancer/extension/commit/f75818486332d9266e97ddc2d05f1c1cbddf0b5f))
+* features not working on '/live' page ([3759d7f](https://github.com/YouTube-Enhancer/extension/commit/3759d7f39efa31b2eb134cd287b38a3976b61776))
+* **hide scrollbar:** Failed to set the 'innerHTML' property on 'Element' [#621](https://github.com/YouTube-Enhancer/extension/issues/621) ([74a46b5](https://github.com/YouTube-Enhancer/extension/commit/74a46b52baa26e7642e720514bdef136ccabb33a))
+* **hide translate comment:** comment replies showed translate button [#471](https://github.com/YouTube-Enhancer/extension/issues/471) ([82a8104](https://github.com/YouTube-Enhancer/extension/commit/82a8104238660ecaf44ae10d93002b5279b584b0))
+* Make speed limit higher [#637](https://github.com/YouTube-Enhancer/extension/issues/637) ([35bcd4f](https://github.com/YouTube-Enhancer/extension/commit/35bcd4f689afb502b13f7a31af78db67000ee657))
+* playback speed buttons tooltip ([394b59f](https://github.com/YouTube-Enhancer/extension/commit/394b59fa8e77ce070dc0bf2037e020d0f362d52c))
+* **playback speed buttons:** decrease increasing speed ([5269f33](https://github.com/YouTube-Enhancer/extension/commit/5269f33e700134c1753999b0e0151f4dcc83617c))
+* **playback speed buttons:** label not updating when adjusting speed with scroll wheel ([a16cd44](https://github.com/YouTube-Enhancer/extension/commit/a16cd44d86424920ff8446960964087f959735a9))
+* **playback speed buttons:** label not updating when player speed changes ([a88d29d](https://github.com/YouTube-Enhancer/extension/commit/a88d29d1c3fdcb81f6b12b6a1cec531f4abb8b88))
+* video id obtaining ([8edf9a4](https://github.com/YouTube-Enhancer/extension/commit/8edf9a4e7d2adae048dc6047ecd66069e01070ba))
+
+
+### Features
+
+* automatically disable closed captions [#371](https://github.com/YouTube-Enhancer/extension/issues/371) ([00a4870](https://github.com/YouTube-Enhancer/extension/commit/00a4870f400b1897af1592b431708d7ed3ff7936))
+* copyTimestampUrlButton ([80c7685](https://github.com/YouTube-Enhancer/extension/commit/80c7685c27fad2c54d23f030ccff58b14f3bb48a))
+* hide official artist videos from home page ([7e202f1](https://github.com/YouTube-Enhancer/extension/commit/7e202f1d1108df515c9897c44a9b493784b9b4ef))
+* Playlist length bar [#542](https://github.com/YouTube-Enhancer/extension/issues/542) ([8ed563f](https://github.com/YouTube-Enhancer/extension/commit/8ed563ff360b08e8c28b5ec4cb064aa80dfd5716))
+* **playlist length:** watch time options ([6782340](https://github.com/YouTube-Enhancer/extension/commit/67823405e1610ae57a902fc63d90c7078232e14b))
+* **video history:** do not resume or track history on official artist channels ([60e7797](https://github.com/YouTube-Enhancer/extension/commit/60e7797e18de76e7009cd4bdfc4239a69168511c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.27.0-Chrome.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Chromium.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Edge.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Firefox.zip | 9899180b25e1e74fd251de0516fd442b1bcbdd277fd8b7c12629a618474a9b16 |
+
 # [1.26.0](https://github.com/YouTube-Enhancer/extension/compare/v1.25.0...v1.26.0) (2024-06-29)
 
 

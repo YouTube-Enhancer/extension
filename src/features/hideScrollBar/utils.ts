@@ -1,6 +1,6 @@
 export function hideScrollBar() {
 	const style = document.createElement("style");
-	style.innerHTML = `
+	style.textContent = `
 		::-webkit-scrollbar {
 			width: 0px;
 			height: 0px;
@@ -13,6 +13,9 @@ export function hideScrollBar() {
 	document.head.appendChild(style);
 }
 export function showScrollBar() {
-	const style = document.getElementById("yte-hide-scroll-bar");
-	style?.remove();
+	let style = document.getElementById("yte-hide-scroll-bar");
+	while (style) {
+		style.remove();
+		style = document.getElementById("yte-hide-scroll-bar");
+	}
 }

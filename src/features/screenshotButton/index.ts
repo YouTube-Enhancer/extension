@@ -12,16 +12,13 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		// Create a canvas element and get its context
 		const canvas = document.createElement("canvas");
 		const context = canvas.getContext("2d");
-
 		// Set the dimensions of the canvas to the video's dimensions
 		const { videoHeight, videoWidth } = videoElement;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
-
 		// Draw the video element onto the canvas
 		if (!context) return;
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
 		// Wait for the options message and get the format from it
 		const {
 			data: {
@@ -30,7 +27,6 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, "image/png"));
 		if (!blob) return;
-
 		switch (screenshot_save_as) {
 			case "clipboard": {
 				const screenshotButton = getFeatureButton("screenshotButton");
@@ -57,7 +53,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				break;
 			}
 		}
-	} catch (error) {}
+	} catch (_error) {}
 }
 
 export const addScreenshotButton: AddButtonFunction = async () => {
@@ -70,7 +66,6 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;
 	// Add a click event listener to the screenshot button

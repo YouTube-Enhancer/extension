@@ -1,9 +1,10 @@
 import type { SelectOption } from "./Select/Select";
 
-import { CSSEditor } from "./CSSEditor";
 import { Checkbox } from "./CheckBox";
 import { ColorPicker } from "./ColorPicker";
+import { CSSEditor } from "./CSSEditor";
 import { NumberInput } from "./Number";
 import { Select } from "./Select";
 import { Slider } from "./Slider";
-export { CSSEditor, Checkbox, ColorPicker, NumberInput, Select, type SelectOption, Slider };
+import { TextInput } from "./TextInput";
+export { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, type SelectOption, Slider, TextInput };

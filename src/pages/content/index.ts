@@ -3,15 +3,15 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
 	type AllButtonNames,
+	buttonNames,
 	type ButtonPlacement,
+	type configuration,
+	type configurationKeys,
 	type ContentSendOnlyMessageMappings,
 	type ContentToBackgroundSendOnlyMessageMappings,
 	type Messages,
 	type RememberedVolumes,
-	type StorageChanges,
-	buttonNames,
-	type configuration,
-	type configurationKeys
+	type StorageChanges
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
@@ -122,7 +122,6 @@ document.addEventListener("yte-message-from-youtube", () => {
 						});
 						break;
 					}
-
 					case "language": {
 						const language = await new Promise<AvailableLocales>((resolve) => {
 							chrome.storage.local.get("language", (o) => {
@@ -145,7 +144,6 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
-
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
 						window.onunload = () => chrome.storage.onChanged.removeListener(storageListeners);
@@ -194,36 +192,28 @@ const getStoredSettings = async (): Promise<configuration> => {
 			resolve(storedSettings as configuration);
 		});
 	});
-
 	return options;
 };
 const deepEqual = (a: unknown, b: unknown): boolean => {
 	if (a === b) return true;
-
 	if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
 		return false;
 	}
-
 	const keysA = Object.keys(a);
 	const keysB = Object.keys(b);
-
 	if (keysA.length !== keysB.length) return false;
-
 	for (const key of keysA) {
 		if (!keysB.includes(key)) return false;
 		if (!deepEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])) return false;
 	}
-
 	return true;
 };
 const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
 	if (change?.newValue === undefined || change?.oldValue === undefined) {
 		return false;
 	}
-
 	const parsedOldValue = parseStoredValue(change.oldValue as string);
 	const parsedNewValue = parseStoredValue(change.newValue as string);
-
 	return !deepEqual(parsedOldValue, parsedNewValue);
 };
 const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
@@ -274,6 +264,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
+		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
+				automaticallyDisableClosedCaptionsEnabled: newValue
+			});
+		},
+		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
+				copyTimestampUrlButtonEnabled: newValue
+			});
+		},
 		enable_custom_css: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
 		},
@@ -310,6 +310,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
 				hideLiveStreamChatEnabled: newValue
 			});
+		},
+		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
 		},
 		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
@@ -360,6 +363,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
 				playbackButtonsSpeed: options.playback_buttons_speed,
 				playbackSpeedButtonsEnabled: newValue
+			});
+		},
+		enable_playlist_length: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistLengthChange", {
+				playlistLengthEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {
@@ -444,6 +452,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
 				playerSpeed: newValue
 			});
+		},
+		playlist_length_get_method: () => {
+			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
+		},
+		playlist_watch_time_get_method: () => {
+			sendExtensionOnlyMessage("playlistWatchTimeGetMethodChange", undefined);
 		},
 		volume_boost_amount: (newValue) => {
 			sendExtensionOnlyMessage("volumeBoostAmountChange", {

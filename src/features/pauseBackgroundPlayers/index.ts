@@ -25,7 +25,6 @@ export async function enablePauseBackgroundPlayers() {
 	function detectPlaying() {
 		videoPlayerContainer?.addEventListener("playing", PauseBackgroundPlayers);
 	}
-
 	let debounceTimeout: Nullable<number> = null;
 	const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
 		if (debounceTimeout) clearTimeout(debounceTimeout);

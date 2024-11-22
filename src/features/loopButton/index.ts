@@ -29,7 +29,6 @@ export const addLoopButton: AddButtonFunction = async () => {
 	if (!volumeControl) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
-
 	await addFeatureButton(
 		"loopButton",
 		loopButtonPlacement,

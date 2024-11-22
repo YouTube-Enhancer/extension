@@ -1,6 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isLivePage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export async function enableAutomaticTheaterMode() {
 	if (!isWatchPage()) return;
@@ -13,7 +13,7 @@ export async function enableAutomaticTheaterMode() {
 	// If automatic theater mode isn't enabled return
 	if (!enable_automatic_theater_mode) return;
 	// Get the player element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const { width } = await playerContainer.getSize();

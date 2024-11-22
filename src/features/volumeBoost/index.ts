@@ -14,19 +14,23 @@ export default async function volumeBoost() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_volume_boost) return;
 	setupVolumeBoost();
+	if (volume_boost_mode === "per_video") await addVolumeBoostButton();
+	else if (volume_boost_mode === "global") applyVolumeBoost(volume_boost_amount);
+}
+export async function enableVolumeBoost() {
+	setupVolumeBoost();
+=======
 
 	if (volume_boost_mode === "per_video") await addVolumeBoostButton();
 	else if (volume_boost_mode === "global") applyVolumeBoost(volume_boost_amount);
 }
 export async function enableVolumeBoost() {
 	setupVolumeBoost();
-
 	const {
 		data: {
 			options: { volume_boost_amount }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-
 	applyVolumeBoost(volume_boost_amount);
 }
 function setupVolumeBoost() {

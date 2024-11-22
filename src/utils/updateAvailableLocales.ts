@@ -1,9 +1,8 @@
-import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync } from "fs";
 
 import { i18nDir, publicDir } from "./plugins/utils";
 function updateAvailableLocalesArray(code: string, updatedArray: string[]) {
 	const match = code.match(/export\s+const\s+availableLocales\s*=\s*\[([^\]]*)\]\s*as\s*const\s*;/);
-
 	if (match) {
 		const [, oldArrayPart] = match;
 		const newArrayPart = JSON.stringify(updatedArray, null, 2).replace(/^\[|\]$/g, "");

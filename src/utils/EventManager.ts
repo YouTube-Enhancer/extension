@@ -1,5 +1,6 @@
 export type FeatureName =
 	| "automaticTheaterMode"
+	| "copyTimestampUrlButton"
 	| "featureMenu"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"
@@ -12,6 +13,7 @@ export type FeatureName =
 	| "playbackSpeedButtons"
 	| "playerQuality"
 	| "playerSpeed"
+	| "playlistLength"
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"
@@ -20,6 +22,7 @@ export type FeatureName =
 	| "scrollWheelVolumeControl"
 	| "shareShortener"
 	| "shortsAutoScroll"
+	| "timestampPeek"
 	| "videoHistory"
 	| "volumeBoostButton";
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
@@ -92,10 +95,8 @@ export const eventManager: EventManager = {
 			);
 		}
 	},
-
 	// event listener info objects
-	listeners: new Map(),
-
+	listeners: new Map<string, TargetedListeners<keyof HTMLElementEventMap>>(),
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {
 		// Iterate over all registered listeners

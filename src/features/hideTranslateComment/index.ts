@@ -15,6 +15,7 @@ let translateCommentObserver: Nullable<MutationObserver> = null;
 let commentsPanelObserver: Nullable<MutationObserver> = null;
 type ObserverType = "commentsPanel" | "translateComment";
 export function setHideTranslateCommentObserver(observerType: ObserverType, observer: MutationObserver) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 	observerType === "translateComment" ? (translateCommentObserver = observer) : (commentsPanelObserver = observer);
 }
 export function cleanUpHideTranslateCommentObserver(observerType: ObserverType) {

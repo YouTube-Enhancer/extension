@@ -1,3 +1,5 @@
+import { getFormattedTimestamp } from "./utilities";
+
 type ColorType = "error" | "info" | "success" | "warning" | keyof typeof TerminalColors;
 function getColor(type: ColorType) {
 	switch (type) {
@@ -18,7 +20,7 @@ export function colorizeTerminalLog(message: string, type: ColorType = "FgBlack"
 	return `${color}${message}${TerminalColors.Reset}`;
 }
 export default function terminalColorLog(message: string, type?: ColorType) {
-	console.log(colorizeTerminalLog(`[YouTube Enhancer]`, "FgCyan"), colorizeTerminalLog(message, type));
+	console.log(colorizeTerminalLog(`[${getFormattedTimestamp()}] [YouTube Enhancer]`, "FgCyan"), colorizeTerminalLog(message, type));
 }
 
 const TerminalColors = {

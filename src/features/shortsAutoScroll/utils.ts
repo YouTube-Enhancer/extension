@@ -9,7 +9,6 @@ export const setupAutoScroll = (playerContainer: YouTubePlayerDiv, video: HTMLVi
 		const progressState = playerContainer.getProgressState();
 		const currentTime = Math.floor(progressState.current);
 		const duration = Math.floor(progressState.duration);
-
 		if (currentTime !== duration) return;
 		eventManager.removeEventListener(video, "timeupdate", "shortsAutoScroll");
 		const nextButton = document.querySelector<HTMLDivElement>("#navigation-button-down > ytd-button-renderer > yt-button-shape > button");

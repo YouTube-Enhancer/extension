@@ -21,7 +21,6 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 5_000;
 		return { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 	};
-
 	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (notification, removeAfterMs) => {
 		if (!removeAfterMs) return;
 		setTimeout(() => removeNotification(notification), removeAfterMs);
@@ -30,7 +29,6 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		const notification = createNotification(type, message, action);
 		const existingNotification = notifications.find((n) => notificationIsEqual(n, notification));
 		if (existingNotification) return;
-
 		setNotifications((notifications) => [notification, ...notifications]);
 		scheduleNotificationRemoval(notification, notification.removeAfterMs);
 	};

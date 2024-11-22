@@ -4,7 +4,7 @@ import type { AllButtonNames, ButtonPlacement, MultiButtonNames, SingleButtonFea
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
 import { findKeyByValue, removeTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { type ListenerType, getFeatureButtonId, makeFeatureButton, placeButton } from "./utils";
+import { getFeatureButtonId, type ListenerType, makeFeatureButton, placeButton } from "./utils";
 export const featuresInControls = new Set<AllButtonNames>();
 
 export async function addFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
@@ -36,14 +36,13 @@ export async function removeFeatureButton<Name extends AllButtonNames>(buttonNam
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	if (placement === undefined) {
 		// Wait for the "options" message from the content script
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		({
 			data: {
 				options: {
 					button_placements: { [buttonName]: placement }
 				}
 			}
-		} = optionsData);
+		} = await waitForSpecificMessage("options", "request_data", "content"));
 	}
 	switch (placement) {
 		case "feature_menu": {

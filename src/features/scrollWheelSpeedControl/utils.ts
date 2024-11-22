@@ -1,7 +1,7 @@
-import type { Selector, YouTubePlayerDiv } from "@/src/types";
-
+import { setPlayerSpeed } from "@/src/features/playerSpeed";
+import { type Selector, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, clamp, round, toDivisible } from "@/src/utils/utilities";
+import { browserColorLog, round } from "@/src/utils/utilities";
 
 /**
  * Adjust the speed based on the scroll direction.
@@ -11,22 +11,17 @@ import { browserColorLog, clamp, round, toDivisible } from "@/src/utils/utilitie
  * @param speedStep - The speed adjustment steps.
  * @returns Promise that resolves with the new speed.
  */
-export function adjustSpeed(
-	playerContainer: YouTubePlayerDiv,
-	scrollDelta: number,
-	speedStep: number
-): Promise<{ newSpeed: number; oldSpeed: number }> {
+export function adjustSpeed(scrollDelta: number, speedStep: number): Promise<{ newSpeed: number; oldSpeed: number }> {
 	return new Promise((resolve) => {
 		void (async () => {
-			if (!playerContainer.getPlaybackRate || !playerContainer.setPlaybackRate) return;
-			const video = playerContainer.querySelector("video");
-			if (!video) return;
-			const { playbackRate: speed } = video;
-			const newSpeed = round(clamp(toDivisible(parseFloat((speed + scrollDelta * speedStep).toFixed(2)), speedStep), 0.25, 4), 2);
-			browserColorLog(`Adjusting speed by ${speedStep} to ${newSpeed}. Old speed was ${speed}`, "FgMagenta");
-			await playerContainer.setPlaybackRate(newSpeed);
-			if (video) video.playbackRate = newSpeed;
-			resolve({ newSpeed, oldSpeed: speed });
+			const videoElement = document.querySelector<HTMLVideoElement>("video");
+			if (!videoElement) return;
+			const { playbackRate: currentPlaybackSpeed } = videoElement;
+			const adjustmentAmount = speedStep * scrollDelta;
+			if (currentPlaybackSpeed + adjustmentAmount > 16 || currentPlaybackSpeed + adjustmentAmount < youtubePlayerMinSpeed) return;
+			const speed = round(currentPlaybackSpeed + adjustmentAmount, 2);
+			await setPlayerSpeed(speed);
+			resolve({ newSpeed: speed, oldSpeed: currentPlaybackSpeed });
 		})();
 	});
 }

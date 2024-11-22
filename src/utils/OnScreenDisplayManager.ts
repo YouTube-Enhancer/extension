@@ -32,6 +32,12 @@ export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePla
 };
 
 export default class OnScreenDisplayManager<V extends ValueType> {
+	// Canvas element for the display.
+	protected canvas: HTMLCanvasElement;
+
+	// Context for the canvas element.
+	protected context: Nullable<CanvasRenderingContext2D> = null;
+
 	// Default font size for the display.
 	private readonly defaultFontSize = 48;
 
@@ -40,12 +46,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 	// Current value for the display.
 	private value?: Value<V>;
-
-	// Canvas element for the display.
-	protected canvas: HTMLCanvasElement;
-
-	// Context for the canvas element.
-	protected context: Nullable<CanvasRenderingContext2D> = null;
 	constructor(
 		// Options for the display.
 		protected options: DisplayOptions,
@@ -144,6 +144,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				this.canvas.width = width;
 				this.canvas.height = fontSize;
 				this.clearCanvas();
+				// Add a shadow effect around the text.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				this.setFont();
@@ -156,11 +161,16 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				const lineHeight = 5;
 				this.canvas.width = lineWidth;
 				this.canvas.height = lineHeight;
-				this.clearCanvas();
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				const lineX = (this.canvas.width - lineWidth) / 2;
 				const lineY = (this.canvas.height - lineHeight) / 2;
+				this.clearCanvas();
+				// Add a shadow effect around the line.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
 				break;
 			}
@@ -176,6 +186,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				const centerY = this.canvas.height / 2;
 				const startAngle = Math.PI + Math.PI * round(value / max, 2);
 				const endAngle = Math.PI - Math.PI * round(value / max, 2);
+				// Add a shadow effect around the circle.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.strokeStyle = displayColor;
 				this.context.lineWidth = lineWidth;
 				this.context.lineCap = "butt";
@@ -225,28 +240,23 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	// method to set up the canvas based on options.
 	private setupCanvas(): void {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return;
-
 		const {
 			options: {
 				playerContainer: { clientHeight: height, clientWidth: width }
 			}
 		} = this;
-
 		// Adjust displayPadding if it exceeds max width or height.
 		if (this.options.displayPadding > Math.max(width, height)) {
 			this.options.displayPadding = clamp(this.options.displayPadding, 0, Math.max(width, height));
 			browserColorLog(`Clamped display padding to ${this.options.displayPadding}`, "FgRed");
 		}
-
 		// Calculate font size based on canvas dimensions.
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
-
 		// Find elements for positioning the canvas.
 		const bottomElement: Nullable<HTMLDivElement> =
 			document.querySelector(
 				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 			) ?? document.querySelector(".ytp-chrome-bottom");
-
 		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
 		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
 		const heightExcludingMarginPadding =
@@ -258,10 +268,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
 				10
 			:	0;
-
 		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
-
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
 			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)
