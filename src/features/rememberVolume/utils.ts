@@ -29,13 +29,10 @@ export async function setupVolumeChangeListener() {
 			void (async () => {
 				if (!currentTarget) return;
 				const newVolume = await playerContainer.getVolume();
-				if (IsWatchPage || IsLivePage) {
-					// Send a "setVolume" message to the content script
-					sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
-				} else if (IsShortsPage) {
-					// Send a "setVolume" message to the content script
-					sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
-				}
+				// Send a "setVolume" message to the content script
+				if (IsWatchPage) sendContentOnlyMessage("setRememberedVolume", { watchPageVolume: newVolume });
+				// Send a "setVolume" message to the content script
+				else if (IsShortsPage) sendContentOnlyMessage("setRememberedVolume", { shortsPageVolume: newVolume });
 			})();
 		},
 		"rememberVolume"
@@ -55,16 +52,15 @@ export async function setRememberedVolume({
 	rememberedVolumes: configuration["remembered_volumes"];
 }) {
 	// If the remembered volume option is enabled, set the volume and draw the volume display
-	if (rememberedVolumes && enableRememberVolume) {
-		const { shortsPageVolume, watchPageVolume } = rememberedVolumes ?? {};
-		if (isWatchPage && watchPageVolume) {
-			// Log the message indicating whether the last volume is being restored or not
-			browserColorLog(`Restoring watch page volume to ${watchPageVolume}`, "FgMagenta");
-			await playerContainer.setVolume(watchPageVolume);
-		} else if (isShortsPage && shortsPageVolume) {
-			// Log the message indicating whether the last volume is being restored or not
-			browserColorLog(`Restoring shorts page volume to ${shortsPageVolume}`, "FgMagenta");
-			await playerContainer.setVolume(shortsPageVolume);
-		}
+	if (!rememberedVolumes || !enableRememberVolume) return;
+	const { shortsPageVolume, watchPageVolume } = rememberedVolumes ?? {};
+	if (isWatchPage && watchPageVolume) {
+		// Log the message indicating whether the last volume is being restored or not
+		browserColorLog(`Restoring watch page volume to ${watchPageVolume}`, "FgMagenta");
+		await playerContainer.setVolume(watchPageVolume);
+	} else if (isShortsPage && shortsPageVolume) {
+		// Log the message indicating whether the last volume is being restored or not
+		browserColorLog(`Restoring shorts page volume to ${shortsPageVolume}`, "FgMagenta");
+		await playerContainer.setVolume(shortsPageVolume);
 	}
 }

@@ -53,9 +53,7 @@ export async function setupRemainingTime() {
 	if (playerVideoData.isLive && !remainingTimeElementExists) return;
 	const remainingTimeElement = document.querySelector("span#ytp-time-remaining") ?? document.createElement("span");
 	// If the video is live return
-	if (playerVideoData.isLive && remainingTimeElementExists) {
-		remainingTimeElement.remove();
-	}
+	if (playerVideoData.isLive && remainingTimeElementExists) remainingTimeElement.remove();
 	if (!remainingTimeElementExists) {
 		remainingTimeElement.id = "ytp-time-remaining";
 		remainingTimeElement.textContent = remainingTime;

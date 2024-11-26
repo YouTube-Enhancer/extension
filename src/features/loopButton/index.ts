@@ -32,52 +32,53 @@ export const addLoopButton: AddButtonFunction = async () => {
 	await addFeatureButton(
 		"loopButton",
 		loopButtonPlacement,
-		loopButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.features.loopButton.button.label")
-		:	window.i18nextInstance.t("pages.content.features.loopButton.button.toggle.off"),
+		window.i18nextInstance.t(
+			loopButtonPlacement === "feature_menu" ?
+				"pages.content.features.loopButton.button.label"
+			:	"pages.content.features.loopButton.button.toggle.off"
+		),
 		getFeatureIcon("loopButton", loopButtonPlacement),
 		loopButtonClickListener,
 		true
 	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
 		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement);
-		for (const mutation of mutationList) {
-			if (mutation.type === "attributes") {
-				const { attributeName, target } = mutation;
-				if (attributeName === "loop") {
-					const { loop } = target as HTMLVideoElement;
-					const featureName: SingleButtonFeatureNames = "loopButton";
-					// Get the feature menu
-					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					// Check if the feature item already exists in the menu
-					const featureExistsInMenu =
-						featureMenu && featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`) !== null;
-					if (featureExistsInMenu) {
-						const menuItem = getFeatureButton(featureName);
-						if (!menuItem) return;
-						menuItem.ariaChecked = loop ? "true" : "false";
+		mutationList.forEach((mutation) => {
+			if (mutation.type !== "attributes") return;
+			const { attributeName, target } = mutation;
+			if (attributeName !== "loop") return;
+
+			const { loop } = target as HTMLVideoElement;
+			const featureName: SingleButtonFeatureNames = "loopButton";
+			// Get the feature menu
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			const featureItem = featureMenu?.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`) || null;
+			// Check if the feature item already exists in the menu
+			const featureExistsInMenu = featureMenu !== null && featureItem !== null;
+			if (featureExistsInMenu) {
+				const menuItem = getFeatureButton(featureName);
+				if (!menuItem) return;
+				menuItem.ariaChecked = loop ? "true" : "false";
+			}
+			const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
+			if (!button) return;
+			switch (loopButtonPlacement) {
+				case "feature_menu": {
+					if (loopSVG instanceof SVGSVGElement) {
+						button.firstChild?.replaceWith(loopSVG);
 					}
-					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
-					if (!button) return;
-					switch (loopButtonPlacement) {
-						case "feature_menu": {
-							if (loopSVG instanceof SVGSVGElement) {
-								button.firstChild?.replaceWith(loopSVG);
-							}
-							break;
-						}
-						case "below_player":
-						case "player_controls_left":
-						case "player_controls_right": {
-							if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
-								button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
-							}
-							break;
-						}
+					break;
+				}
+				case "below_player":
+				case "player_controls_left":
+				case "player_controls_right": {
+					if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
+						button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
 					}
+					break;
 				}
 			}
-		}
+		});
 	};
 	const loopChangeMutationObserver = new MutationObserver(loopChangedHandler);
 	loopChangeMutationObserver.observe(videoElement, { attributeFilter: ["loop"], attributes: true });

@@ -32,7 +32,7 @@ export function adjustSpeed(scrollDelta: number, speedStep: number): Promise<{ n
  * @param listener - The event listener function.
  */
 export function setupScrollListeners(selector: Selector, handleWheel: (event: Event) => void) {
-	const elements: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
+	const elements = document.querySelectorAll<HTMLDivElement>(selector);
 	if (!elements.length) return browserColorLog(`No elements found with selector ${selector}`, "FgRed");
 	for (const element of elements) {
 		eventManager.addEventListener(element, "wheel", handleWheel, "scrollWheelSpeedControl", { passive: false });

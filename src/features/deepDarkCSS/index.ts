@@ -13,8 +13,9 @@ export async function enableDeepDarkCSS() {
 	// Check if deep dark theme is enabled
 	if (!enable_deep_dark_theme) return;
 	if (deepDarkCSSExists()) {
-		updateDeepDarkCSS(deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset]);
-		return;
+		return updateDeepDarkCSS(
+			deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset]
+		);
 	}
 	// Create the deep dark theme style element
 	const deepDarkThemeStyleElement = createDeepDarkCSSElement(
@@ -27,8 +28,6 @@ export async function enableDeepDarkCSS() {
 export function disableDeepDarkCSS() {
 	// Get the deep dark theme style element
 	const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
-	// Check if the deep dark theme style element exists
-	if (!deepDarkThemeStyleElement) return;
 	// Remove the deep dark theme style element
-	deepDarkThemeStyleElement.remove();
+	deepDarkThemeStyleElement?.remove();
 }

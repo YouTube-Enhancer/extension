@@ -14,8 +14,7 @@ export async function enableHideLiveStreamChat() {
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
-	const playerData = await player.getVideoData();
-	if (!playerData.isLive) return;
+	if (!(await player.getVideoData()).isLive) return;
 	modifyElementsClassList("add", [
 		{
 			className: "yte-hide-live-stream-chat",
@@ -35,8 +34,7 @@ export async function enableHideLiveStreamChat() {
 export async function disableHideLiveStreamChat() {
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
-	const playerData = await player.getVideoData();
-	if (!playerData.isLive) return;
+	if (!(await player.getVideoData()).isLive) return;
 	modifyElementsClassList("remove", [
 		{
 			className: "yte-hide-live-stream-chat",

@@ -19,8 +19,6 @@ export async function enableHideShorts() {
 export function disableHideShorts() {
 	showShorts();
 	// Disconnect the observer
-	if (shortsObserver) {
-		shortsObserver.disconnect();
-		shortsObserver = null;
-	}
+	shortsObserver?.disconnect();
+	shortsObserver = null;
 }

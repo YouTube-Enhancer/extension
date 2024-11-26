@@ -227,8 +227,5 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		});
 	}
 	const observer = new MutationObserver(handleMutation);
-	observer.observe(playerContainer, {
-		childList: true,
-		subtree: true
-	});
+	observer.observe(playerContainer, { childList: true, subtree: true });
 }

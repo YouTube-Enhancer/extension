@@ -41,7 +41,7 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 	const { update } = createTooltip({
 		direction: placement === "below_player" ? "down" : "up",
 		element: button,
-		featureName,
+		featureName: "playbackSpeedButtons",
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
@@ -80,7 +80,7 @@ function playbackSpeedButtonClickListener(speedPerClick: number, direction: "dec
 						displayPadding: osd_display_padding,
 						displayPosition: osd_display_position,
 						displayType: "text", // TODO: support for line/round? currently buggy
-						playerContainer: playerContainer
+						playerContainer
 					},
 					"yte-osd",
 					{

@@ -41,7 +41,7 @@ export type EventManager = {
 	addEventListener: <K extends keyof HTMLElementEventMap>(
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
 		eventName: K,
-		callback: EventCallback<keyof HTMLElementEventMap>,
+		callback: EventCallback<K>,
 		featureName: FeatureName,
 		options?: AddEventListenerOptions | boolean
 	) => void;
@@ -75,16 +75,24 @@ export const eventManager: EventManager = {
 		const existingListener = existingListeners.find((listener) => listener.callback === callback);
 		// If the listener hasn't been added, add it
 		if (!existingListener) {
-			const listenerInfo: EventListenerInfo<keyof HTMLElementEventMap> = {
+			const listenerInfo: EventListenerInfo<typeof eventName> = {
 				callback,
 				eventName,
 				target
 			};
+			// @ts-expect-error see: https://github.com/microsoft/TypeScript/issues/27808
+			// TODO: Add a better way to handle the subtype constraints
 			existingListeners.push(listenerInfo);
 			eventListeners.set(eventName, existingListeners);
 			targetListeners.set(target, eventListeners);
 			this.listeners.set(featureName, targetListeners);
-			target.addEventListener(eventName, callback, options);
+			target.addEventListener(
+				eventName,
+				// @ts-expect-error The types are fucked in this one
+				// TODO: Let the future deal with it
+				callback,
+				options
+			);
 		}
 	},
 	// event listener info objects
