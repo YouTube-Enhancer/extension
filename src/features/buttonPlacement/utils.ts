@@ -149,6 +149,11 @@ export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement
 			if (!buttonContainer) return false;
 			return buttonContainer.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
 		}
+		case "feature_menu": {
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			if (!featureMenu) return false;
+			return featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
+		}
 		case "player_controls_left": {
 			const leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls");
 			if (!leftControls) return false;
@@ -158,11 +163,6 @@ export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement
 			const rightControls = document.querySelector<HTMLDivElement>(".ytp-right-controls");
 			if (!rightControls) return false;
 			return rightControls.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
-		}
-		case "feature_menu": {
-			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-			if (!featureMenu) return false;
-			return featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
 		}
 	}
 }

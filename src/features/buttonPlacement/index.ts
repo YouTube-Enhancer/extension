@@ -17,10 +17,6 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 	initialChecked: boolean = false
 ) {
 	switch (placement) {
-		case "feature_menu": {
-			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle, initialChecked);
-			break;
-		}
 		case "below_player":
 		case "player_controls_left":
 		case "player_controls_right": {
@@ -28,6 +24,10 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 			featuresInControls.add(buttonName);
 			const button = makeFeatureButton(buttonName, placement, label, icon, listener, isToggle, initialChecked);
 			placeButton(button, placement);
+			break;
+		}
+		case "feature_menu": {
+			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle, initialChecked);
 			break;
 		}
 	}
@@ -45,10 +45,6 @@ export async function removeFeatureButton<Name extends AllButtonNames>(buttonNam
 		} = await waitForSpecificMessage("options", "request_data", "content"));
 	}
 	switch (placement) {
-		case "feature_menu": {
-			removeFeatureItemFromMenu(buttonName);
-			break;
-		}
 		case "below_player":
 		case "player_controls_left":
 		case "player_controls_right": {
@@ -58,6 +54,10 @@ export async function removeFeatureButton<Name extends AllButtonNames>(buttonNam
 			if (!button) return;
 			button.remove();
 			removeTooltip(`yte-feature-${featureName}-tooltip`);
+			break;
+		}
+		case "feature_menu": {
+			removeFeatureItemFromMenu(buttonName);
 			break;
 		}
 	}
