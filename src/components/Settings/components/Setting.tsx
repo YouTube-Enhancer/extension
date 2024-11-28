@@ -33,6 +33,14 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			const { checked, className, id, label, onChange, title } = settingProps;
 			return <Checkbox checked={checked} className={className} id={id} label={label} onChange={onChange} title={title} />;
 		}
+		case "color-picker": {
+			const { className, disabled, id, label, onChange, title, value } = settingProps;
+			return <ColorPicker className={className} disabled={disabled} id={id} label={label} onChange={onChange} title={title} value={value} />;
+		}
+		case "css-editor": {
+			const { className, id, onChange, value } = settingProps;
+			return <CSSEditor className={className} id={id} onChange={onChange} value={value} />;
+		}
 		case "number": {
 			const { className, disabled, id, label, max, min, onChange, step, value } = settingProps;
 			return (
@@ -68,14 +76,6 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 		case "slider": {
 			const { initialValue, max, min, onChange, step } = settingProps;
 			return <Slider initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
-		}
-		case "css-editor": {
-			const { className, id, onChange, value } = settingProps;
-			return <CSSEditor className={className} id={id} onChange={onChange} value={value} />;
-		}
-		case "color-picker": {
-			const { className, disabled, id, label, onChange, title, value } = settingProps;
-			return <ColorPicker className={className} disabled={disabled} id={id} label={label} onChange={onChange} title={title} value={value} />;
 		}
 		case "text-input": {
 			const { className, id, input_type, label, onChange, title, value } = settingProps;

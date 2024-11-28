@@ -80,6 +80,23 @@ document.addEventListener("yte-message-from-youtube", () => {
 			}
 			case "request_data": {
 				switch (message.type) {
+					case "extensionURL": {
+						void sendExtensionMessage("extensionURL", "data_response", {
+							extensionURL: chrome.runtime.getURL("")
+						});
+						break;
+					}
+					case "language": {
+						const language = await new Promise<AvailableLocales>((resolve) => {
+							chrome.storage.local.get("language", (o) => {
+								resolve(o.language as AvailableLocales);
+							});
+						});
+						void sendExtensionMessage("language", "data_response", {
+							language
+						});
+						break;
+					}
 					case "options": {
 						/**
 						 * Retrieves the options from the local storage and sends them back to the youtube page.
@@ -99,6 +116,13 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void sendExtensionMessage("options", "data_response", { options });
 						break;
 					}
+					case "videoHistoryAll": {
+						const videoHistory = getVideoHistory();
+						void sendExtensionMessage("videoHistoryAll", "data_response", {
+							video_history_entries: videoHistory
+						});
+						break;
+					}
 					case "videoHistoryOne": {
 						const { data } = message;
 						if (!data) return;
@@ -109,46 +133,22 @@ document.addEventListener("yte-message-from-youtube", () => {
 						});
 						break;
 					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
-					case "extensionURL": {
-						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: chrome.runtime.getURL("")
-						});
-						break;
-					}
-					case "language": {
-						const language = await new Promise<AvailableLocales>((resolve) => {
-							chrome.storage.local.get("language", (o) => {
-								resolve(o.language as AvailableLocales);
-							});
-						});
-						void sendExtensionMessage("language", "data_response", {
-							language
-						});
-						break;
-					}
 				}
 				break;
 			}
 			case "send_data": {
 				switch (message.type) {
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
-						break;
-					}
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
 						window.onunload = () => {
 							chrome.storage.onChanged.removeListener(storageListeners);
 						};
+						break;
+					}
+					case "setRememberedVolume": {
+						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
+						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
+						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
 					case "videoHistoryOne": {
