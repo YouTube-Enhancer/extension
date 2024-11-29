@@ -9,8 +9,8 @@ const useClickOutside = <ElementType extends HTMLElementTagNameMap[keyof HTMLEle
 	handler: (event: FocusEvent | MouseEvent | TouchEvent) => void
 ) => {
 	useEffect(() => {
-		let startedInside: Nullable<RefObject<ElementType> | boolean> = false;
-		let startedWhenMounted: Nullable<RefObject<ElementType>["current"] | boolean> = false;
+		let startedInside: Nullable<boolean | RefObject<ElementType>> = false;
+		let startedWhenMounted: Nullable<boolean | RefObject<ElementType>["current"]> = false;
 		const listener = (event: FocusEvent | MouseEvent | TouchEvent) => {
 			// Do nothing if `mousedown` or `touchstart` started inside ref element
 			if (startedInside || !startedWhenMounted) return;

@@ -179,13 +179,13 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
-					automaticTheaterMode: {
-						label: "Automatic theater mode";
-						title: "Automatically enables theater mode when you load a video";
-					};
 					automaticallyDisableClosedCaptions: {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";
+					};
+					automaticTheaterMode: {
+						label: "Automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
 					};
 					copyTimestampUrlButton: {
 						label: "Copy video URL with timestamp button";

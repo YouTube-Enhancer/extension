@@ -1,4 +1,4 @@
-import type { PathValue, configuration, configurationId } from "@/src/types";
+import type { configuration, configurationId, PathValue } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 

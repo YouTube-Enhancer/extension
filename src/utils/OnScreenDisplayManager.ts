@@ -32,6 +32,12 @@ export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePla
 };
 
 export default class OnScreenDisplayManager<V extends ValueType> {
+	// Canvas element for the display.
+	protected canvas: HTMLCanvasElement;
+
+	// Context for the canvas element.
+	protected context: Nullable<CanvasRenderingContext2D> = null;
+
 	// Default font size for the display.
 	private readonly defaultFontSize = 48;
 
@@ -40,12 +46,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 	// Current value for the display.
 	private value?: Value<V>;
-
-	// Canvas element for the display.
-	protected canvas: HTMLCanvasElement;
-
-	// Context for the canvas element.
-	protected context: Nullable<CanvasRenderingContext2D> = null;
 	constructor(
 		// Options for the display.
 		protected options: DisplayOptions,
@@ -126,6 +126,53 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		} = this;
 
 		switch (displayType) {
+			case "circle": {
+				// Draw a circle shape on the canvas.
+				const lineWidth = 5;
+				const radius = 75 / 2 - lineWidth;
+				const circleWidth = radius * 2 + lineWidth * 2;
+				this.canvas.width = circleWidth;
+				this.canvas.height = circleWidth;
+				this.clearCanvas();
+				const centerX = this.canvas.width / 2;
+				const centerY = this.canvas.height / 2;
+				const startAngle = Math.PI + Math.PI * round(value / max, 2);
+				const endAngle = Math.PI - Math.PI * round(value / max, 2);
+				// Add a shadow effect around the circle.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
+				this.context.strokeStyle = displayColor;
+				this.context.lineWidth = lineWidth;
+				this.context.lineCap = "butt";
+				this.context.beginPath();
+				this.context.arc(centerX, centerY, radius, startAngle, endAngle, true);
+				this.context.stroke();
+				break;
+			}
+			case "line": {
+				// Draw a line on the canvas.
+				const lineWidth = Math.round(round(value / max, 2) * max);
+				const lineHeight = 5;
+				this.canvas.width = lineWidth;
+				this.canvas.height = lineHeight;
+				this.context.globalAlpha = displayOpacity / 100;
+				this.context.fillStyle = displayColor;
+				const lineX = (this.canvas.width - lineWidth) / 2;
+				const lineY = (this.canvas.height - lineHeight) / 2;
+				this.clearCanvas();
+				// Add a shadow effect around the line.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
+				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
+				break;
+			}
+			case "no_display":
+				// Do nothing for no_display type.
+				break;
 			case "text": {
 				// Draw text on the canvas.
 				let text: string = "";
@@ -155,53 +202,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 				break;
 			}
-			case "line": {
-				// Draw a line on the canvas.
-				const lineWidth = Math.round(round(value / max, 2) * max);
-				const lineHeight = 5;
-				this.canvas.width = lineWidth;
-				this.canvas.height = lineHeight;
-				this.context.globalAlpha = displayOpacity / 100;
-				this.context.fillStyle = displayColor;
-				const lineX = (this.canvas.width - lineWidth) / 2;
-				const lineY = (this.canvas.height - lineHeight) / 2;
-				this.clearCanvas();
-				// Add a shadow effect around the line.
-				this.context.shadowColor = "black";
-				this.context.shadowBlur = 10;
-				this.context.shadowOffsetX = 0;
-				this.context.shadowOffsetY = 0;
-				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
-				break;
-			}
-			case "circle": {
-				// Draw a circle shape on the canvas.
-				const lineWidth = 5;
-				const radius = 75 / 2 - lineWidth;
-				const circleWidth = radius * 2 + lineWidth * 2;
-				this.canvas.width = circleWidth;
-				this.canvas.height = circleWidth;
-				this.clearCanvas();
-				const centerX = this.canvas.width / 2;
-				const centerY = this.canvas.height / 2;
-				const startAngle = Math.PI + Math.PI * round(value / max, 2);
-				const endAngle = Math.PI - Math.PI * round(value / max, 2);
-				// Add a shadow effect around the circle.
-				this.context.shadowColor = "black";
-				this.context.shadowBlur = 10;
-				this.context.shadowOffsetX = 0;
-				this.context.shadowOffsetY = 0;
-				this.context.strokeStyle = displayColor;
-				this.context.lineWidth = lineWidth;
-				this.context.lineCap = "butt";
-				this.context.beginPath();
-				this.context.arc(centerX, centerY, radius, startAngle, endAngle, true);
-				this.context.stroke();
-				break;
-			}
-			case "no_display":
-				// Do nothing for no_display type.
-				break;
 			default:
 				this.handleError("Invalid display type");
 		}
