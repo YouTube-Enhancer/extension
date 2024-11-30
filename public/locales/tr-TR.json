@@ -550,17 +550,17 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
+					"label": "API Anahtarı",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 Anahtarı"
 			},
 			"youtubeDeepDark": {
 				"author": "Yazar",
 				"co-authors": "Co-authors",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
+						"label": "Gölge rengi",
 						"title": "Color for shadows"
 					},
 					"dimmerText": {
@@ -585,7 +585,7 @@
 					},
 					"secondBackground": {
 						"label": "İkincil arka plan rengi",
-						"title": "Color for secondary background"
+						"title": "İkincil arka plan rengi"
 					}
 				},
 				"enable": {
