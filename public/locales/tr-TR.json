@@ -22,7 +22,7 @@
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "{{TIME}} hızlı ileri sar"
 						},
 						"rewindButton": {
 							"label": "{{TIME}} kadar geri sar"
@@ -74,7 +74,7 @@
 					"increaseLimit": "Daha fazla artıramazsın ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Bazı videolar gizliyse veya tam uzunluğa ulaşmak için yeterli sayıda video yüklemediyseniz, toplam uzunluk doğru olmayabilir."
 				},
 				"screenshotButton": {
 					"button": {
@@ -131,12 +131,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Kalite geri dönüş stratejisi",
 						"options": {
 							"higher": "Daha yüksek",
 							"lower": "Daha düşük"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "Seçilen kalite mevcut değilse kullanılacak strateji"
 					}
 				},
 				"select": {
@@ -167,13 +167,13 @@
 					"buttonNames": {
 						"copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
 						"decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
-						"forwardButton": "Fast Forward button",
+						"forwardButton": "Hızlı İleri düğmesi",
 						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
 						"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
 						"openTranscriptButton": "Transkripti Aç butonu",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Geri sarma düğmesi",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
 						"volumeBoostButton": "Ses güçlendirme düğmesi"
 					},
@@ -230,10 +230,10 @@
 					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"time": {
-					"label": "Forward/rewind time",
+					"label": "İleri/geri sarma süresi",
 					"title": "The amount of time to forward/rewind the video by"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "İleri/geri sarma düğmesi ayarları"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -269,8 +269,8 @@
 						"title": "Automatically disables closed captions when you load a video"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
+						"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
 					},
 					"hideEndScreenCards": {
 						"label": "Bitiş ekranı kartlarını gizle",
@@ -285,12 +285,12 @@
 						"title": "Canlı yayın sohbetini gizler"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "Resmi Sanatçı Videolarını Gizle",
+						"title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
 					},
 					"hidePaidPromotionBanner": {
-						"label": "Hide paid promotion banner",
-						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+						"label": "Ücretli tanıtım afişini gizle",
+						"title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
@@ -302,7 +302,7 @@
 					},
 					"hideTranslateComment": {
 						"label": "Yorumu Çevir'i Gizle Butonu",
-						"title": "Hides 'Translate to Language' button under comments"
+						"title": "Yorumlar altındaki 'Dile Çevir' düğmesini gizler"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
@@ -389,7 +389,7 @@
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Ekran Üstü Görüntüleme Ayarları",
 				"type": {
 					"label": "Tür",
 					"options": {
@@ -423,23 +423,23 @@
 			"playlistLength": {
 				"enable": {
 					"label": "Çalma listesinin uzunluk bilgilerini göster",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"title": "Oynatma listesinin toplam, izlenen ve ne kalan uzunluğunu gösterir."
 				},
-				"title": "Playlist length settings",
+				"title": "Oynatma listesi uzunluk ayarları",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Oynatma listesi uzunluğunu alma yöntemi",
+						"title": "Oynatma listesi uzunluk bilgisi alma yolu (Bir hata oluşursa API yöntemi HTML'e geri dönecek)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "İzlenme süresini alma yöntemi",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Video Uzunluğu",
+							"youtube": "Video İzlenme Süresi"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
 					}
 				}
 			},
@@ -507,7 +507,7 @@
 				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "Bir ayar arayın"
 			},
 			"videoHistory": {
 				"enable": {
@@ -548,36 +548,36 @@
 				"title": "Ses güçlendirme ayarları"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Buradan bir tane alabilirsiniz",
 				"input": {
 					"label": "API Anahtarı",
-					"title": "Enter your Youtube Data API V3 key."
+					"title": "Youtube Veri API V3 anahtarınızı girin."
 				},
 				"title": "YouTube API V3 Anahtarı"
 			},
 			"youtubeDeepDark": {
 				"author": "Yazar",
-				"co-authors": "Co-authors",
+				"co-authors": "Ortak yazarlar",
 				"colors": {
 					"colorShadow": {
 						"label": "Gölge rengi",
-						"title": "Color for shadows"
+						"title": "Gölge rengi"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "İkincil metin rengi",
+						"title": "İkincil metin rengi"
 					},
 					"hoverBackground": {
 						"label": "Hover background color",
 						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Ana arka plan rengi",
+						"title": "Ana arka plan rengi"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Vurgulama rengi",
+						"title": "Vurgulama rengi"
 					},
 					"mainText": {
 						"label": "Ana metin rengi",
