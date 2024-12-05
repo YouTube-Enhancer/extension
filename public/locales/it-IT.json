@@ -264,6 +264,10 @@
 						"label": "Modalità teatro automatica",
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Disabilita automaticamente le didascalie chiuse",
 						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
