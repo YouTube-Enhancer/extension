@@ -1,5 +1,6 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
+import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
 import {
 	disableAutomaticallyDisableClosedCaptions,
 	enableAutomaticallyDisableClosedCaptions
@@ -191,7 +192,8 @@ const enableFeatures = () => {
 			enableHideTranslateComment(),
 			enableHideEndScreenCards(),
 			enablePlaylistLength(),
-			enableAutomaticallyDisableClosedCaptions()
+			enableAutomaticallyDisableClosedCaptions(),
+			enableAutomaticallyDisableAmbientMode()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -299,6 +301,17 @@ window.addEventListener("DOMContentLoaded", function () {
 				}
 				if (!message) return;
 				switch (message.type) {
+					case "automaticallyDisableAmbientModeChange": {
+						const {
+							data: { automaticallyDisableAmbientModeEnabled }
+						} = message;
+						if (automaticallyDisableAmbientModeEnabled) {
+							await enableAutomaticallyDisableAmbientMode();
+						} else {
+							await disableAutomaticallyDisableAmbientMode();
+						}
+						break;
+					}
 					case "automaticallyDisableClosedCaptionsChange": {
 						const {
 							data: { automaticallyDisableClosedCaptionsEnabled }

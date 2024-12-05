@@ -179,6 +179,10 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticallyDisableAmbientMode: {
+						label: "Automatically disable ambient mode";
+						title: "Automatically disables ambient mode when you load a video";
+					};
 					automaticallyDisableClosedCaptions: {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";

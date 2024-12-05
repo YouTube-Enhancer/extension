@@ -765,6 +765,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_automatically_disable_ambient_mode?.toString() === "true"}
+						id="enable_automatically_disable_ambient_mode"
+						label={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.label")}
+						onChange={setCheckboxOption("enable_automatically_disable_ambient_mode")}
+						title={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
