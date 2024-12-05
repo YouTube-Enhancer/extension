@@ -264,6 +264,10 @@
 						"label": "Включить автоматический режим кинотеатра",
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Автоматически отключать субтитры",
 						"title": "Автоматически отключает субтитры при загрузке видео"
