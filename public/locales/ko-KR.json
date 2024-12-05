@@ -264,6 +264,10 @@
 						"label": "자동 극장 모드",
 						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
 						"title": "Automatically disables closed captions when you load a video"
