@@ -265,8 +265,8 @@
 						"title": "載入影片時自動啟用劇院模式"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "自動停用微光效果",
+						"title": "載入影片時自動停用微光效果"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "自動停用字幕",
