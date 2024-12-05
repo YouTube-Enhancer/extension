@@ -264,6 +264,10 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "クローズドキャプションを自動にディセーブルする",
 						"title": "動画の読み込み時にクローズドキャプションを自動にディセーブルする"
