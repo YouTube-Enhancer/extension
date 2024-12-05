@@ -262,11 +262,11 @@
 				"features": {
 					"automaticTheaterMode": {
 						"label": "Otomatik tiyatro modu",
-						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+						"title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "Ortam modunu otomatik olarak devre dışı bırak",
+						"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
