@@ -271,6 +271,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
+		enable_automatically_disable_ambient_mode: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableAmbientModeChange", {
+				automaticallyDisableAmbientModeEnabled: newValue
+			});
+		},
 		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
 				automaticallyDisableClosedCaptionsEnabled: newValue
