@@ -264,6 +264,10 @@
 						"label": "Modo teatro automático",
 						"title": "Ativa automaticamente o modo teatro ao carregar um vídeo"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Desativar legendas automaticamente",
 						"title": "Desativa legendas automaticamente ao carregar um vídeo"
