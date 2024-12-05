@@ -265,8 +265,8 @@
 						"title": "当视频打开时，自动启用剧场模式"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "自动禁用氛围模式",
+						"title": "载入视频时自动禁用氛围模式"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "自动禁用隐藏式字幕",
