@@ -131,8 +131,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				const lineWidth = 5;
 				const radius = 75 / 2 - lineWidth;
 				const circleWidth = radius * 2 + lineWidth * 2;
-				this.canvas.width = circleWidth;
-				this.canvas.height = circleWidth;
+				this.canvas.width = circleWidth + 20;
+				this.canvas.height = circleWidth + 20;
 				this.clearCanvas();
 				const centerX = this.canvas.width / 2;
 				const centerY = this.canvas.height / 2;
@@ -155,8 +155,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				// Draw a line on the canvas.
 				const lineWidth = Math.round(round(value / max, 2) * max);
 				const lineHeight = 5;
-				this.canvas.width = lineWidth;
-				this.canvas.height = lineHeight;
+				this.canvas.width = lineWidth + 25;
+				this.canvas.height = lineHeight + 25;
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				const lineX = (this.canvas.width - lineWidth) / 2;
@@ -188,8 +188,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				}
 				this.setFont();
 				const { width } = this.context.measureText(text);
-				this.canvas.width = width;
-				this.canvas.height = fontSize;
+				this.canvas.width = width + 15;
+				this.canvas.height = fontSize + 15;
 				this.clearCanvas();
 				// Add a shadow effect around the text.
 				this.context.shadowColor = "black";
