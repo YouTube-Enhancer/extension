@@ -12,27 +12,22 @@ let currentPlaybackSpeed = 1;
 const maxSpeed = 16;
 
 function getMinSpeed(playbackSpeedPerClick: number) {
-	return playbackSpeedPerClick == 0.25
-		? 0.25
-		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09
-		? 0.07
-		: playbackSpeedPerClick == 0.1
-		? 0.01
-		: playbackSpeedPerClick == 1
-		? 1
-		: youtubePlayerMinSpeed;
+	return (
+		playbackSpeedPerClick == 0.25 ? 0.25
+		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
+		: playbackSpeedPerClick == 0.1 ? 0.01
+		: playbackSpeedPerClick == 1 ? 1
+		: youtubePlayerMinSpeed
+	);
 }
 
 export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	const calculatedSpeed =
-		speed >= maxSpeed && direction == "increase"
-			? maxSpeed
-			: (speed <= minSpeed || speed - playbackSpeedPerClick <= 0) && direction == "decrease"
-			? minSpeed
-			: direction == "decrease"
-			? speed - playbackSpeedPerClick
-			: speed + playbackSpeedPerClick;
+		speed >= maxSpeed && direction == "increase" ? maxSpeed
+		: (speed <= minSpeed || speed - playbackSpeedPerClick <= 0) && direction == "decrease" ? minSpeed
+		: direction == "decrease" ? speed - playbackSpeedPerClick
+		: speed + playbackSpeedPerClick;
 	return round(calculatedSpeed, 2);
 }
 export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
@@ -65,11 +60,9 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton"
-			? `pages.content.features.playbackSpeedButtons.increaseLimit`
-			: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton"
-			? `pages.content.features.playbackSpeedButtons.decreaseLimit`
-			: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
+		: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
+		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
 			SPEED: speed
 		}
@@ -154,9 +147,9 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		"increasePlaybackSpeedButton",
 		increasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
-			currentPlaybackSpeed == maxSpeed
-				? `pages.content.features.playbackSpeedButtons.increaseLimit`
-				: "pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label",
+			currentPlaybackSpeed == maxSpeed ?
+				`pages.content.features.playbackSpeedButtons.increaseLimit`
+			:	"pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
 			}
@@ -195,9 +188,9 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		"decreasePlaybackSpeedButton",
 		decreasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
-			currentPlaybackSpeed == minSpeed
-				? `pages.content.features.playbackSpeedButtons.decreaseLimit`
-				: "pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label",
+			currentPlaybackSpeed == minSpeed ?
+				`pages.content.features.playbackSpeedButtons.decreaseLimit`
+			:	"pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
 			}
