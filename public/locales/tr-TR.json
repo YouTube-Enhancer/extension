@@ -372,7 +372,7 @@
 				},
 				"hide": {
 					"label": "Gecikmeyi Gizle",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"title": "Ekran görüntüsünü otomatik olarak gizlemeden önce geçen süreyi milisaniye cinsinden belirtin"
 				},
 				"opacity": {
 					"label": "Saydamlık",
