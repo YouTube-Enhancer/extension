@@ -3,19 +3,18 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
 	type AllButtonNames,
-	buttonNames,
 	type ButtonPlacement,
-	type configuration,
-	type configurationKeys,
 	type ContentSendOnlyMessageMappings,
 	type ContentToBackgroundSendOnlyMessageMappings,
 	type Messages,
 	type RememberedVolumes,
-	type StorageChanges
+	type StorageChanges,
+	buttonNames,
+	type configuration,
+	type configurationKeys
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
-
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
@@ -80,23 +79,6 @@ document.addEventListener("yte-message-from-youtube", () => {
 			}
 			case "request_data": {
 				switch (message.type) {
-					case "extensionURL": {
-						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: chrome.runtime.getURL("")
-						});
-						break;
-					}
-					case "language": {
-						const language = await new Promise<AvailableLocales>((resolve) => {
-							chrome.storage.local.get("language", (o) => {
-								resolve(o.language as AvailableLocales);
-							});
-						});
-						void sendExtensionMessage("language", "data_response", {
-							language
-						});
-						break;
-					}
 					case "options": {
 						/**
 						 * Retrieves the options from the local storage and sends them back to the youtube page.
@@ -116,13 +98,6 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void sendExtensionMessage("options", "data_response", { options });
 						break;
 					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
 					case "videoHistoryOne": {
 						const { data } = message;
 						if (!data) return;
@@ -133,22 +108,46 @@ document.addEventListener("yte-message-from-youtube", () => {
 						});
 						break;
 					}
+					case "videoHistoryAll": {
+						const videoHistory = getVideoHistory();
+						void sendExtensionMessage("videoHistoryAll", "data_response", {
+							video_history_entries: videoHistory
+						});
+						break;
+					}
+					case "extensionURL": {
+						void sendExtensionMessage("extensionURL", "data_response", {
+							extensionURL: chrome.runtime.getURL("")
+						});
+						break;
+					}
+					case "language": {
+						const language = await new Promise<AvailableLocales>((resolve) => {
+							chrome.storage.local.get("language", (o) => {
+								resolve(o.language as AvailableLocales);
+							});
+						});
+						void sendExtensionMessage("language", "data_response", {
+							language
+						});
+						break;
+					}
 				}
 				break;
 			}
 			case "send_data": {
 				switch (message.type) {
+					case "setRememberedVolume": {
+						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
+						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
+						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
+						break;
+					}
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
 						window.onunload = () => {
 							chrome.storage.onChanged.removeListener(storageListeners);
 						};
-						break;
-					}
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
 					case "videoHistoryOne": {
@@ -271,16 +270,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
-		enable_automatically_disable_ambient_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableAmbientModeChange", {
-				automaticallyDisableAmbientModeEnabled: newValue
-			});
-		},
-		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
-				automaticallyDisableClosedCaptionsEnabled: newValue
-			});
-		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -323,9 +312,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideLiveStreamChatEnabled: newValue
 			});
 		},
-		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
-		},
 		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
 				hidePaidPromotionBannerEnabled: newValue
@@ -355,6 +341,9 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("maximizeButtonChange", {
 				maximizePlayerButtonEnabled: newValue
 			});
+		},
+		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
 		},
 		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
@@ -405,6 +394,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
 				scrollWheelSpeedControlEnabled: newValue
+			});
+		},
+		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
+				automaticallyDisableClosedCaptionsEnabled: newValue
 			});
 		},
 		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
@@ -483,7 +477,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostEnabled: options.enable_volume_boost,
 				volumeBoostMode: newValue
 			});
-		}
+        },
+		enable_hide_playlist: (__oldValue, newValue) => {
+            sendExtensionOnlyMessage("hidePlaylistChange", {
+                hidePlaylistEnabled: newValue,
+            })
+         }
 	};
 	Object.entries(castedChanges).forEach(([key, change]) => {
 		if (isValidChange(change)) {

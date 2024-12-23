@@ -179,17 +179,13 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
-					automaticallyDisableAmbientMode: {
-						label: "Automatically disable ambient mode";
-						title: "Automatically disables ambient mode when you load a video";
+					automaticTheaterMode: {
+						label: "Automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
 					};
 					automaticallyDisableClosedCaptions: {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";
-					};
-					automaticTheaterMode: {
-						label: "Automatic theater mode";
-						title: "Automatically enables theater mode when you load a video";
 					};
 					copyTimestampUrlButton: {
 						label: "Copy video URL with timestamp button";
@@ -259,6 +255,10 @@ interface EnUS {
 						label: 'Skip "Video is paused. Continue watching?"';
 						title: "Skips the idle dialog that pauses video playback";
 					};
+					"playlistRemover": {
+                        "label": "Enable the removal of playlists from homepage",
+                        "title": "Get rid of playlists"
+                    }
 				};
 				title: "Miscellaneous settings";
 			};

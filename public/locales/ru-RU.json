@@ -347,7 +347,11 @@
 					"skipContinueWatching": {
 						"label": "Пропускать \"Воспроизведение приостановлено. Продолжить?\"",
 						"title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
-					}
+					},
+					"playlistRemover": {
+                        "label": "Enable the removal of playlists from homepage",
+                        "title": "Get rid of playlists"
+                    }
 				},
 				"title": "Прочие параметры"
 			},

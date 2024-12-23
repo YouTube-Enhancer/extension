@@ -1,10 +1,10 @@
 import type { Nullable } from "@/src/types";
 
-import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
 import eventManager from "@/src/utils/EventManager";
+import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { getHeaderSelectors, initializePlaylistLength, playlistItemsSelector } from "./utils";
+import { headerSelector, initializePlaylistLength, playlistItemsSelector } from "./utils";
 let documentObserver: Nullable<MutationObserver> = null;
 export async function enablePlaylistLength() {
 	const IsWatchPage = isWatchPage();
@@ -21,8 +21,7 @@ export async function enablePlaylistLength() {
 	if (!enable_playlist_length) return;
 	const urlContainsListParameter = window.location.href.includes("list=");
 	if (!urlContainsListParameter) return;
-	const { playlist, watch } = getHeaderSelectors();
-	await waitForAllElements([isWatchPage() ? watch : playlist(), playlistItemsSelector()]);
+	await waitForAllElements([headerSelector(), playlistItemsSelector()]);
 	const apiKey = youtube_data_api_v3_key === "" ? YouTube_Enhancer_Public_Youtube_Data_API_V3_Key : youtube_data_api_v3_key;
 	const pageType = IsWatchPage ? "watch" : "playlist";
 	try {
@@ -32,7 +31,7 @@ export async function enablePlaylistLength() {
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
-	} catch (_error) {
+	} catch (error) {
 		documentObserver?.disconnect();
 		documentObserver = null;
 		documentObserver = await initializePlaylistLength({
@@ -42,25 +41,6 @@ export async function enablePlaylistLength() {
 			playlistWatchTimeGetMethod
 		});
 	}
-	window.addEventListener("resize", async () => {
-		try {
-			documentObserver = await initializePlaylistLength({
-				apiKey,
-				pageType,
-				playlistLengthGetMethod,
-				playlistWatchTimeGetMethod
-			});
-		} catch (_error) {
-			documentObserver?.disconnect();
-			documentObserver = null;
-			documentObserver = await initializePlaylistLength({
-				apiKey,
-				pageType,
-				playlistLengthGetMethod: "html",
-				playlistWatchTimeGetMethod
-			});
-		}
-	});
 }
 export function disablePlaylistLength() {
 	eventManager.removeEventListeners("playlistLength");
