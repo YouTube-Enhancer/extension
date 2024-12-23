@@ -114,7 +114,8 @@ export const defaultConfiguration = {
 	volume_boost_amount: 5,
 	volume_boost_mode: "global",
 	youtube_data_api_v3_key: "",
-	enable_automatically_disable_closed_captions: false
+	enable_automatically_disable_closed_captions: false,
+	enable_hide_playlist: false
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
@@ -211,7 +212,8 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostModes).optional(),
 	youtube_data_api_v3_key: z.string().optional(),
-	enable_automatically_disable_closed_captions: z.boolean().optional()
+	enable_automatically_disable_closed_captions: z.boolean().optional(),
+	enable_hide_playlist: z.boolean().optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

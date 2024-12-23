@@ -347,7 +347,11 @@
 					"skipContinueWatching": {
 						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
-					}
+					},
+					"playlistRemover": {
+                        "label": "Enable the removal of playlists from homepage",
+                        "title": "Get rid of playlists"
+                    }
 				},
 				"title": "Övriga inställningar"
 			},

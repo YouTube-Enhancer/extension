@@ -765,7 +765,15 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
-					/>
+					/>    
+					<Setting
+						checked={settings.enable_hide_playlist?.toString() === "true"}
+						id="enable_hide_playlist"
+						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
+						onChange={setCheckboxOption("enable_hide_playlist")}
+						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
+						type="checkbox"
+				 	 />
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
@@ -1258,6 +1266,7 @@ export default function Settings() {
 						selectedOption={getSelectedOption("playlist_watch_time_get_method")}
 						title={t("settings.sections.playlistLength.wayToGetWatchTime.select.title")}
 						type="select"
+						
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.youtubeDataApiV3Key.title")}>

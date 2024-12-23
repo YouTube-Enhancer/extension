@@ -255,6 +255,10 @@ interface EnUS {
 						label: 'Skip "Video is paused. Continue watching?"';
 						title: "Skips the idle dialog that pauses video playback";
 					};
+					"playlistRemover": {
+                        "label": "Enable the removal of playlists from homepage",
+                        "title": "Get rid of playlists"
+                    }
 				};
 				title: "Miscellaneous settings";
 			};
