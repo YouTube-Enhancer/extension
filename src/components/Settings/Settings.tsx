@@ -763,7 +763,7 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
-            type="checkbox"
+						type="checkbox"
 					/>
 					<Setting
 						checked={settings.enable_hide_playlist_recommendations_from_home_page?.toString() === "true"}
@@ -771,7 +771,7 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
 						onChange={setCheckboxOption("enable_hide_playlist_recommendations_from_home_page")}
 						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
-            type="checkbox"
+						type="checkbox"
 					/>
 					<Setting
 						checked={settings.enable_automatically_disable_ambient_mode?.toString() === "true"}

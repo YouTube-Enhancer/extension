@@ -330,6 +330,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hidePaidPromotionBannerEnabled: newValue
 			});
 		},
+		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
+				hidePlaylistRecommendationsFromHomePageEnabled: newValue
+			});
+		},
 		enable_hide_scrollbar: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideScrollBarChange", {
 				hideScrollBarEnabled: newValue
@@ -482,12 +487,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostEnabled: options.enable_volume_boost,
 				volumeBoostMode: newValue
 			});
-        },
-		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
-            sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
-                hidePlaylistRecommendationsFromHomePageEnabled: newValue,
-            })
-         }
+		}
 	};
 	Object.entries(castedChanges).forEach(([key, change]) => {
 		if (isValidChange(change)) {

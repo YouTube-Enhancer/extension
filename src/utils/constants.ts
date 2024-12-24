@@ -64,6 +64,7 @@ export const defaultConfiguration = {
 	enable_hide_live_stream_chat: false,
 	enable_hide_official_artist_videos_from_home_page: false,
 	enable_hide_paid_promotion_banner: false,
+	enable_hide_playlist_recommendations_from_home_page: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
 	enable_hide_translate_comment: false,
@@ -116,8 +117,7 @@ export const defaultConfiguration = {
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 5,
 	volume_boost_mode: "global",
-	youtube_data_api_v3_key: "",
-	enable_hide_playlist_recommendations_from_home_page: false
+	youtube_data_api_v3_key: ""
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
@@ -162,6 +162,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_hide_live_stream_chat: z.boolean().optional(),
 	enable_hide_official_artist_videos_from_home_page: z.boolean().optional(),
 	enable_hide_paid_promotion_banner: z.boolean().optional(),
+	enable_hide_playlist_recommendations_from_home_page: z.boolean().optional(),
 	enable_hide_scrollbar: z.boolean().optional(),
 	enable_hide_shorts: z.boolean().optional(),
 	enable_hide_translate_comment: z.boolean().optional(),
@@ -216,8 +217,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostModes).optional(),
-	youtube_data_api_v3_key: z.string().optional(),
-	enable_hide_playlist_recommendations_from_home_page: z.boolean().optional()
+	youtube_data_api_v3_key: z.string().optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

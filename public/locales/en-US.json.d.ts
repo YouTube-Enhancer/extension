@@ -238,6 +238,10 @@ interface EnUS {
 						label: "Pause background players";
 						title: "Pauses video players in background tabs when you start a new player in foreground tab";
 					};
+					playlistRemover: {
+						label: "Enable the removal of playlists from homepage";
+						title: "Get rid of playlists";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -258,10 +262,6 @@ interface EnUS {
 					skipContinueWatching: {
 						label: 'Skip "Video is paused. Continue watching?"';
 						title: "Skips the idle dialog that pauses video playback";
-					};
-					playlistRemover: {
-						label: "Enable the removal of playlists from homepage";
-						title: "Get rid of playlists";
 					};
 				};
 				title: "Miscellaneous settings";

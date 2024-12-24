@@ -29,6 +29,10 @@ import {
 	enableHideOfficialArtistVideosFromHomePage
 } from "@/src/features/hideOfficialArtistVideosFromHomePage";
 import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
+import {
+	disableHidePlaylistRecommendationsFromHomePage,
+	enableHidePlaylistRecommendationsFromHomePage
+} from "@/src/features/hidePlaylistRecommendationsFromHomePage";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -84,7 +88,6 @@ import {
 	type SingleButtonNames,
 	type YouTubePlayerDiv
 } from "@/src/types";
-import {enableHidePlaylistRecommendationsFromHomePage, disableHidePlaylistRecommendationsFromHomePage} from "@/src/features/hidePlaylist";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
@@ -569,6 +572,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+					case "hidePlaylistRecommendationsFromHomePageChange": {
+						const {
+							data: { hidePlaylistRecommendationsFromHomePageEnabled }
+						} = message;
+						if (hidePlaylistRecommendationsFromHomePageEnabled) {
+							await enableHidePlaylistRecommendationsFromHomePage();
+						} else {
+							disableHidePlaylistRecommendationsFromHomePage();
+						}
+						break;
+					}
 					case "hideScrollBarChange": {
 						const scrollBarHidden = document.getElementById("yte-hide-scroll-bar") !== null;
 						const {
@@ -980,16 +994,6 @@ window.addEventListener("DOMContentLoaded", function () {
 					}
 					default: {
 						return;
-					}
-					case "hidePlaylistRecommendationsFromHomePageChange": {
-						const {
-							data: { hidePlaylistRecommendationsFromHomePageEnabled }
-						} = message;
-						if (hidePlaylistRecommendationsFromHomePageEnabled) {
-							await enableHidePlaylistRecommendationsFromHomePage();
-						} else {
-							disableHidePlaylistRecommendationsFromHomePage();
-						}
 					}
 				}
 			})();
