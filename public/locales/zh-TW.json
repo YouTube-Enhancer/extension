@@ -351,6 +351,10 @@
 					"skipContinueWatching": {
 						"label": "跳過「影片已暫停，繼續觀看？」",
 						"title": "跳過暫停影片播放的閒置對話框"
+					},
+					"playlistRemover": {
+						"label": "Enable the removal of playlists from homepage",
+						"title": "Get rid of playlists"
 					}
 				},
 				"title": "其他設定"
