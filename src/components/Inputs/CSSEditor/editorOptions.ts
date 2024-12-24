@@ -4,8 +4,8 @@ export const editorOptions: editor.IStandaloneEditorConstructionOptions = {
 	acceptSuggestionOnEnter: "on",
 	accessibilitySupport: "auto",
 	autoIndent: "full",
-	autoSurround: "languageDefined",
 	automaticLayout: true,
+	autoSurround: "languageDefined",
 	bracketPairColorization: {
 		enabled: true,
 		independentColorPoolPerBracketType: true
@@ -59,9 +59,9 @@ export const editorOptions: editor.IStandaloneEditorConstructionOptions = {
 	rulers: [],
 	scrollBeyondLastColumn: 5,
 	scrollBeyondLastLine: false,
-	selectOnLineNumbers: true,
 	selectionClipboard: true,
 	selectionHighlight: true,
+	selectOnLineNumbers: true,
 	"semanticHighlighting.enabled": true,
 	showFoldingControls: "always",
 	smoothScrolling: true,

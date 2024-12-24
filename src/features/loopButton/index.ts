@@ -60,17 +60,17 @@ export const addLoopButton: AddButtonFunction = async () => {
 					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
 					if (!button) return;
 					switch (loopButtonPlacement) {
-						case "feature_menu": {
-							if (loopSVG instanceof SVGSVGElement) {
-								button.firstChild?.replaceWith(loopSVG);
-							}
-							break;
-						}
 						case "below_player":
 						case "player_controls_left":
 						case "player_controls_right": {
 							if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
 								button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
+							}
+							break;
+						}
+						case "feature_menu": {
+							if (loopSVG instanceof SVGSVGElement) {
+								button.firstChild?.replaceWith(loopSVG);
 							}
 							break;
 						}
