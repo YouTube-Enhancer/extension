@@ -351,6 +351,10 @@
 					"skipContinueWatching": {
 						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
+					},
+					"playlistRemover": {
+						"label": "Enable the removal of playlists from homepage",
+						"title": "Get rid of playlists"
 					}
 				},
 				"title": "Impostazioni varie"
