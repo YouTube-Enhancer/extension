@@ -347,7 +347,7 @@
 					"skipContinueWatching": {
 						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
-					}
+                    }
 				},
 				"title": "Impostazioni varie"
 			},

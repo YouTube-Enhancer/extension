@@ -425,6 +425,13 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ volumeBoostAmount: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
 	>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
+	automaticallyDisableClosedCaptionsChange: DataResponseMessage<
+		"automaticallyDisableClosedCaptionsChange",
+		{ automaticallyDisableClosedCaptionsEnabled: boolean 
+			
+		}
+	>;
+	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<"hidePlaylistRecommendationsFromHomePageChange", { hidePlaylistRecommendationsFromHomePageEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -452,6 +459,7 @@ export type MessageMappings = Prettify<{
 			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 	};
+
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
@@ -525,6 +533,7 @@ export type configuration = {
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
 	youtube_data_api_v3_key: string;
+	enable_hide_playlist_recommendations_from_home_page: boolean;
 };
 export type configurationKeys = keyof configuration;
 export type configurationId = Path<configuration>;
