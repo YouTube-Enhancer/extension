@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from "fs";
+import { readdirSync, readFileSync, writeFileSync } from "fs";
 
 import { i18nDir, publicDir } from "./plugins/utils";
 function updateAvailableLocalesArray(code: string, updatedArray: string[]) {

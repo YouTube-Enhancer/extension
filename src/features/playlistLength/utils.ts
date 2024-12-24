@@ -13,11 +13,25 @@ import {
 } from "@/src/utils/utilities";
 import { z } from "zod";
 
-export const headerSelector = () =>
-	isWatchPage() ?
-		isNewYouTubeVideoLayout() ? "#page-manager > ytd-watch-grid #playlist #header-contents"
+export const getHeaderSelectors = (): { playlist: () => string; watch: string } => ({
+	playlist: () => {
+		const noPaddingHeader = document.querySelector(
+			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding"
+		);
+		const cinematicHeader = document.querySelector(
+			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary"
+		);
+		if (noPaddingHeader && noPaddingHeader.clientWidth > 0)
+			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
+		if (cinematicHeader && cinematicHeader.clientWidth > 0)
+			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary div.page-header-view-model-wiz__page-header-content";
+		return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
+	},
+	watch:
+		isNewYouTubeVideoLayout() ?
+			"#page-manager > ytd-watch-grid #playlist #header-contents"
 		:	"#page-manager > ytd-watch-flexy #playlist #header-contents"
-	:	"ytd-playlist-header-renderer div.immersive-header-container div.immersive-header-content";
+});
 export const playlistItemsSelector = () =>
 	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -254,8 +268,9 @@ export function createPlaylistLengthUIElement(
 	};
 }
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement) {
-	await waitForAllElements([headerSelector()]);
-	const headerContents = document.querySelector(headerSelector());
+	const { playlist, watch } = getHeaderSelectors();
+	await waitForAllElements([isWatchPage() ? watch : playlist()]);
+	const headerContents = document.querySelector(isWatchPage() ? watch : playlist());
 	if (!headerContents) return null;
 	if (document.querySelector("#yte-playlist-length-ui") !== null) {
 		document.querySelector("#yte-playlist-length-ui")?.remove();
@@ -339,7 +354,8 @@ export async function initializePlaylistLength({
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
-	const playlistHeader = document.querySelector(headerSelector());
+	const { playlist, watch } = getHeaderSelectors();
+	const playlistHeader = document.querySelector(isWatchPage() ? watch : playlist());
 	if (!playlistHeader) return null;
 	let { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
 		apiKey,

@@ -4,10 +4,10 @@ import { cn, debounce } from "@/src/utils/utilities";
 import { Editor, type Monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import EditorProblems from "./EditorProblems";
-import ExpandButton from "./ExpandButton";
 import { editorOptions } from "./editorOptions";
+import EditorProblems from "./EditorProblems";
 import "./editorWorkerConfig";
+import ExpandButton from "./ExpandButton";
 
 export type CSSEditorProps = {
 	className?: string;

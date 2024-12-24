@@ -1,6 +1,6 @@
 import type { AvailableLocales } from "@/src/i18n/constants";
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from "fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import { join, resolve } from "path";
 

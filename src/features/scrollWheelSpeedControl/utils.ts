@@ -1,6 +1,5 @@
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
-import { youtubePlayerMinSpeed, type Selector } from "@/src/types";
-
+import { type Selector, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, round } from "@/src/utils/utilities";
 
@@ -21,7 +20,7 @@ export function adjustSpeed(scrollDelta: number, speedStep: number): Promise<{ n
 			const adjustmentAmount = speedStep * scrollDelta;
 			if (currentPlaybackSpeed + adjustmentAmount > 16 || currentPlaybackSpeed + adjustmentAmount < youtubePlayerMinSpeed) return;
 			const speed = round(currentPlaybackSpeed + adjustmentAmount, 2);
-			setPlayerSpeed(speed);
+			await setPlayerSpeed(speed);
 			resolve({ newSpeed: speed, oldSpeed: currentPlaybackSpeed });
 		})();
 	});

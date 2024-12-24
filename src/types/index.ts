@@ -7,7 +7,7 @@ import z, { ZodType } from "zod";
 import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n/constants";
 // #region Utility types
-export type Nullable<T> = T | null;
+export type Nullable<T> = null | T;
 export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
 export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 export type AnyFunction = (...args: any[]) => void;
@@ -61,7 +61,7 @@ type PathImpl<T, Key extends keyof T> =
 			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
 		:	Key
 	:	never;
-export type Path<T> = PathImpl<T, keyof T> | keyof T;
+export type Path<T> = keyof T | PathImpl<T, keyof T>;
 export type PathValue<T, P extends Path<T>> =
 	P extends `${infer Key}.${infer Rest}` ?
 		Key extends keyof T ?
@@ -181,7 +181,7 @@ const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 export const featureToMultiButtonsMap = new Map(
 	Object.keys(featureToMultiButtonMapEntries).map((key) => [
 		key,
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
 		Object.keys(featureToMultiButtonMapEntries[key]) as KeysOfUnion<FeatureToMultiButtonMap[typeof key]>[]
 	])
 );
@@ -353,6 +353,14 @@ export type ContentToBackgroundSendOnlyMessageMappings = {
 	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
 };
 export type ExtensionSendOnlyMessageMappings = {
+	automaticallyDisableAmbientModeChange: DataResponseMessage<
+		"automaticallyDisableAmbientModeChange",
+		{ automaticallyDisableAmbientModeEnabled: boolean }
+	>;
+	automaticallyDisableClosedCaptionsChange: DataResponseMessage<
+		"automaticallyDisableClosedCaptionsChange",
+		{ automaticallyDisableClosedCaptionsEnabled: boolean }
+	>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
@@ -369,14 +377,18 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
 	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
-	hidePaidPromotionBannerChange: DataResponseMessage<"hidePaidPromotionBannerChange", { hidePaidPromotionBannerEnabled: boolean }>;
-	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
-	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
-	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
 	hideOfficialArtistVideosFromHomePageChange: DataResponseMessage<
 		"hideOfficialArtistVideosFromHomePageChange",
 		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }
 	>;
+	hidePaidPromotionBannerChange: DataResponseMessage<"hidePaidPromotionBannerChange", { hidePaidPromotionBannerEnabled: boolean }>;
+	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<
+		"hidePlaylistRecommendationsFromHomePageChange",
+		{ hidePlaylistRecommendationsFromHomePageEnabled: boolean }
+	>;
+	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
+	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
+	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
@@ -410,19 +422,13 @@ export type ExtensionSendOnlyMessageMappings = {
 		}
 	>;
 	skipContinueWatchingChange: DataResponseMessage<"skipContinueWatchingChange", { skipContinueWatchingEnabled: boolean }>;
+	timestampPeekChange: DataResponseMessage<"timestampPeekChange", { timestampPeekEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	volumeBoostAmountChange: DataResponseMessage<
 		"volumeBoostAmountChange",
 		{ volumeBoostAmount: number; volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }
 	>;
 	volumeBoostChange: DataResponseMessage<"volumeBoostChange", { volumeBoostEnabled: boolean; volumeBoostMode: VolumeBoostMode }>;
-	automaticallyDisableClosedCaptionsChange: DataResponseMessage<
-		"automaticallyDisableClosedCaptionsChange",
-		{ automaticallyDisableClosedCaptionsEnabled: boolean 
-			
-		}
-	>;
-	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<"hidePlaylistRecommendationsFromHomePageChange", { hidePlaylistRecommendationsFromHomePageEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -450,7 +456,6 @@ export type MessageMappings = Prettify<{
 			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 	};
-
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
@@ -461,18 +466,20 @@ export type configuration = {
 	deep_dark_custom_theme_colors: DeepDarkCustomThemeColors;
 	deep_dark_preset: DeepDarkPreset;
 	enable_automatic_theater_mode: boolean;
+	enable_automatically_disable_ambient_mode: boolean;
+	enable_automatically_disable_closed_captions: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_copy_timestamp_url_button: boolean;
-	enable_automatically_disable_closed_captions: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
 	enable_hide_end_screen_cards: boolean;
-	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
+	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_paid_promotion_banner: boolean;
+	enable_hide_playlist_recommendations_from_home_page: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
 	enable_hide_translate_comment: boolean;
@@ -494,6 +501,7 @@ export type configuration = {
 	enable_share_shortener: boolean;
 	enable_shorts_auto_scroll: boolean;
 	enable_skip_continue_watching: boolean;
+	enable_timestamp_peek: boolean;
 	enable_video_history: boolean;
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;
@@ -522,7 +530,6 @@ export type configuration = {
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
 	youtube_data_api_v3_key: string;
-	enable_hide_playlist_recommendations_from_home_page: boolean;
 };
 export type configurationKeys = keyof configuration;
 export type configurationId = Path<configuration>;
