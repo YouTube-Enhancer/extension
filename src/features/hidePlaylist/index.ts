@@ -4,7 +4,7 @@ import { waitForSpecificMessage } from "@/src/utils/utilities";
 let recommendationsObserver: Nullable<MutationObserver> = null;
 let observerDisabled = false;
 
-export async function enableHidePlaylist() {
+export async function enableHidePlaylistRecommendationsFromHomePage() {
   const {
     data: {
       options: { enable_hide_playlist_recommendations_from_home_page },
@@ -17,7 +17,7 @@ export async function enableHidePlaylist() {
   observeHomePageRecommendations();
 }
 
-export function disableHidePlaylist() {
+export function disableHidePlaylistRecommendationsFromHomePage() {
   showRecommendations();
 
   if (recommendationsObserver) {

@@ -422,7 +422,7 @@ export type ExtensionSendOnlyMessageMappings = {
 			
 		}
 	>;
-		hidePlaylistChange: DataResponseMessage<"hidePlaylistChange", { hidePlaylistEnabled: boolean }>;
+	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<"hidePlaylistRecommendationsFromHomePageChange", { hidePlaylistRecommendationsFromHomePageEnabled: boolean }>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -450,10 +450,7 @@ export type MessageMappings = Prettify<{
 			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 	};
-	enable_hide_playlist_recommendations_from_home_page: {
-        request: RequestDataMessage<"enable_hide_playlist_recommendations_from_home_page", { status: "enable" | "disable" }>;
-        response: DataResponseMessage<"enable_hide_playlist_recommendations_from_home_page">;
-    };
+
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 // #endregion Extension Messaging Types
