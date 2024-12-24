@@ -207,7 +207,7 @@ Before you begin, ensure you have the following software installed on your syste
 Next, open your terminal (command prompt or shell) and navigate to the directory where you want to store the YouTube Enhancer extension project. Run the following command to clone the repository:
 
 ```bash
-git clone https://github.com/VampireChicken12/youtube-enhancer.git
+git clone https://github.com/YouTube-Enhancer/extension.git
 ```
 
 ### 3. Navigate to the Project Directory
@@ -312,6 +312,8 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mabra51"><img src="https://avatars.githubusercontent.com/u/12016338?v=4?s=100" width="100px;" alt="Mabra51"/><br /><sub><b>Mabra51</b></sub></a><br /><a href="#ideas-Mabra51" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a> <a href="#code-eduardozgz" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://notyasho.netlify.app/blogs"><img src="https://avatars.githubusercontent.com/u/90166733?v=4?s=100" width="100px;" alt="pyrix"/><br /><sub><b>pyrix</b></sub></a><br /><a href="#ideas-at-pyrix" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-at-pyrix" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CaiCheng-Li"><img src="https://avatars.githubusercontent.com/u/150627108?v=4?s=100" width="100px;" alt="CaiCheng-Li"/><br /><sub><b>CaiCheng-Li</b></sub></a><br /><a href="#bug-CaiCheng-Li" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://sites.google.com/u/0/d/1OdIAWachs1svsjOS4lT9jqwlE632B6rP"><img src="https://avatars.githubusercontent.com/u/121247693?v=4?s=100" width="100px;" alt="Lexiosity"/><br /><sub><b>Lexiosity</b></sub></a><br /><a href="#bug-Lexiosity" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

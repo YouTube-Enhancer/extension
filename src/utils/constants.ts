@@ -1,11 +1,10 @@
 import { z, ZodEnum, ZodObject } from "zod";
 
-import type { AllButtonNames, ButtonPlacement, TypeToPartialZodSchema, configuration } from "../types";
+import type { AllButtonNames, ButtonPlacement, configuration, TypeToPartialZodSchema } from "../types";
 
 import { deepDarkPreset } from "../deepDarkPresets";
 import { availableLocales } from "../i18n/constants";
 import {
-	PlayerQualityFallbackStrategy,
 	buttonNames,
 	buttonPlacements,
 	featureMenuOpenTypes,
@@ -13,6 +12,7 @@ import {
 	onScreenDisplayColors,
 	onScreenDisplayPositions,
 	onScreenDisplayTypes,
+	PlayerQualityFallbackStrategy,
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod,
 	screenshotFormats,
@@ -51,16 +51,18 @@ export const defaultConfiguration = {
 	},
 	deep_dark_preset: "Deep-Dark",
 	enable_automatic_theater_mode: false,
+	enable_automatically_disable_ambient_mode: false,
+	enable_automatically_disable_closed_captions: false,
 	enable_automatically_set_quality: false,
 	enable_copy_timestamp_url_button: false,
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
-	enable_hide_official_artist_videos_from_home_page: false,
 	enable_forced_playback_speed: false,
 	enable_forward_rewind_buttons: false,
 	enable_hide_end_screen_cards: false,
 	enable_hide_end_screen_cards_button: false,
 	enable_hide_live_stream_chat: false,
+	enable_hide_official_artist_videos_from_home_page: false,
 	enable_hide_paid_promotion_banner: false,
 	enable_hide_scrollbar: false,
 	enable_hide_shorts: false,
@@ -83,6 +85,7 @@ export const defaultConfiguration = {
 	enable_share_shortener: false,
 	enable_shorts_auto_scroll: false,
 	enable_skip_continue_watching: false,
+	enable_timestamp_peek: false,
 	enable_video_history: false,
 	enable_volume_boost: false,
 	feature_menu_open_type: "hover",
@@ -114,7 +117,6 @@ export const defaultConfiguration = {
 	volume_boost_amount: 5,
 	volume_boost_mode: "global",
 	youtube_data_api_v3_key: "",
-	enable_automatically_disable_closed_captions: false,
 	enable_hide_playlist_on_homepage: false
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
@@ -147,6 +149,8 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 		.optional(),
 	deep_dark_preset: z.enum(deepDarkPreset).optional(),
 	enable_automatic_theater_mode: z.boolean().optional(),
+	enable_automatically_disable_ambient_mode: z.boolean().optional(),
+	enable_automatically_disable_closed_captions: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_copy_timestamp_url_button: z.boolean().optional(),
 	enable_custom_css: z.boolean().optional(),
@@ -179,6 +183,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_share_shortener: z.boolean().optional(),
 	enable_shorts_auto_scroll: z.boolean().optional(),
 	enable_skip_continue_watching: z.boolean().optional(),
+	enable_timestamp_peek: z.boolean().optional(),
 	enable_video_history: z.boolean().optional(),
 	enable_volume_boost: z.boolean().optional(),
 	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),
@@ -212,7 +217,6 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostModes).optional(),
 	youtube_data_api_v3_key: z.string().optional(),
-	enable_automatically_disable_closed_captions: z.boolean().optional(),
 	enable_hide_playlist_on_homepage: z.boolean().optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
