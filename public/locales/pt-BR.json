@@ -351,6 +351,10 @@
 					"skipContinueWatching": {
 						"label": "Pular \"O vídeo está pausado. Continuar assistindo?\"",
 						"title": "Pula o diálogo de ausência que pausa a reprodução do vídeo"
+					},
+					"playlistRemover": {
+						"label": "Enable the removal of playlists from homepage",
+						"title": "Get rid of playlists"
 					}
 				},
 				"title": "Diversos"
