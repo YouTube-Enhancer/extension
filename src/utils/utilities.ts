@@ -6,14 +6,15 @@ import type {
 	AllButtonNames,
 	AnyFunction,
 	ButtonPlacementChange,
+	configuration,
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
 	DeepPartial,
 	ExtensionSendOnlyMessageMappings,
 	FeatureToMultiButtonMap,
 	MessageMappings,
-	MessageSource,
 	Messages,
+	MessageSource,
 	MultiButtonChange,
 	Nullable,
 	OnScreenDisplayPosition,
@@ -25,13 +26,12 @@ import type {
 	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
-	YoutubePlayerQualityLevel,
-	configuration
+	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
-import { type FeatureName, eventManager } from "./EventManager";
+import { eventManager, type FeatureName } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
@@ -483,7 +483,7 @@ export function parseStoredValue(value: string) {
 		if (typeof parsedValue === "boolean" || typeof parsedValue === "number" || typeof parsedValue === "object") {
 			return parsedValue; // Return the parsed value
 		}
-	} catch (error) {
+	} catch (_) {
 		// If parsing or type checking fails, return the original value as a string
 	}
 	// If parsing or type checking fails, return the original value as a string
@@ -610,7 +610,7 @@ export function createStyledElement<ID extends string, K extends keyof HTMLEleme
 	// Return the element
 	return element;
 }
-type SVGChildElement = SVGElement | SVGPathElement | SVGTSpanElement | SVGTextElement;
+type SVGChildElement = SVGElement | SVGPathElement | SVGTextElement | SVGTSpanElement;
 
 export function createSVGElement<K extends keyof SVGElementTagNameMap>(
 	tagName: K,
@@ -640,12 +640,6 @@ export function calculateCanvasPosition(displayPosition: OnScreenDisplayPosition
 	let styles: Partial<CSSStyleDeclaration> = {};
 
 	switch (displayPosition) {
-		case "top_left":
-			styles = { left: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
-			break;
-		case "top_right":
-			styles = { right: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
-			break;
 		case "bottom_left":
 			styles = { bottom: `${displayPadding + paddingBottom}px`, left: `${displayPadding}px` };
 			break;
@@ -654,6 +648,12 @@ export function calculateCanvasPosition(displayPosition: OnScreenDisplayPosition
 			break;
 		case "center":
 			styles = { left: "50%", top: "50%", transform: "translate(-50%, -50%)" };
+			break;
+		case "top_left":
+			styles = { left: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
+			break;
+		case "top_right":
+			styles = { right: `${displayPadding}px`, top: `${displayPadding + paddingTop}px` };
 			break;
 		default:
 			console.error("Invalid display position");
@@ -677,7 +677,6 @@ export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T
 
 	for (const key of keys) {
 		if (value && typeof value === "object" && key in value) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			({ [key]: value } = value);
 		} else {
 			console.error(`Invalid path: ${String(path)}`);
@@ -735,7 +734,7 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 				.flat()
 				.includes(buttonName)
 		)
-			// eslint-disable-next-line prefer-destructuring, @typescript-eslint/no-unnecessary-type-assertion
+			// eslint-disable-next-line prefer-destructuring
 			return (singleButtonChanges[buttonName as SingleButtonFeatureNames] = changes.buttonPlacement[buttonName]);
 		const multiButtonFeatureNames = findKeyByValue(buttonName as Exclude<AllButtonNames, SingleButtonFeatureNames>);
 		if (multiButtonFeatureNames === undefined) return;
