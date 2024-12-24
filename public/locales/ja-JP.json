@@ -347,10 +347,6 @@
 					"skipContinueWatching": {
 						"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
 						"title": "動画一時休止する休眠メッセージを抜かされます"
-					},
-					"playlistRemover": {
-                        "label": "Enable the removal of playlists from homepage",
-                        "title": "Get rid of playlists"
                     }
 				},
 				"title": "他の設定"

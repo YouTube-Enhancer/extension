@@ -84,7 +84,7 @@ import {
 	type YouTubePlayerDiv,
 	featureToMultiButtonsMap
 } from "@/src/types";
-import {enableHidePlaylist, disableHidePlaylist} from "@/src/features/Tester";
+import {enableHidePlaylist, disableHidePlaylist} from "@/src/features/hidePlaylist";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,

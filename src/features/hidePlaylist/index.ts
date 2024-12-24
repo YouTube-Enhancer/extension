@@ -2,22 +2,22 @@ import type { Nullable } from "@/src/types";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 let recommendationsObserver: Nullable<MutationObserver> = null;
-let disableObserver = false;
+let observerDisabled = false;
 
-async function enableHidePlaylist() {
+export async function enableHidePlaylist() {
   const {
     data: {
-      options: { enable_hide_playlist },
+      options: { enable_hide_playlist_on_homepage },
     },
   } = await waitForSpecificMessage("options", "request_data", "content");
 
-  if (!enable_hide_playlist) return;
+  if (!enable_hide_playlist_on_homepage) return;
 
   hideRecommendations();
   observeHomePageRecommendations();
 }
 
-function disableHidePlaylist() {
+export function disableHidePlaylist() {
   showRecommendations();
 
   if (recommendationsObserver) {
@@ -28,7 +28,7 @@ function disableHidePlaylist() {
 
 function observeHomePageRecommendations() {
   const homePageObserver = new MutationObserver((mutations) => {
-    if (disableObserver) return;
+    if (observerDisabled) return;
 
     mutations.forEach((mutation) => {
       if (mutation.addedNodes.length) {
@@ -60,7 +60,7 @@ function hideMixRecommendation(element: HTMLElement) {
 function toggleRecommendationsVisibility(recommendationsVisible: boolean) {
   // Use requestAnimationFrame to ensure synchronization
   requestAnimationFrame(() => {
-    disableObserver = !recommendationsVisible;
+    observerDisabled = !recommendationsVisible;
 
     const richItemRenderers = document.querySelectorAll<HTMLElement>("ytd-rich-item-renderer");
     richItemRenderers.forEach((item) => {

@@ -767,10 +767,10 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
 					/>    
 					<Setting
-						checked={settings.enable_hide_playlist?.toString() === "true"}
-						id="enable_hide_playlist"
+						checked={settings.enable_hide_playlist_on_homepage?.toString() === "true"}
+						id="enable_hide_playlist_on_homepage"
 						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
-						onChange={setCheckboxOption("enable_hide_playlist")}
+						onChange={setCheckboxOption("enable_hide_playlist_on_homepage")}
 						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
 						type="checkbox"
 				 	 />
