@@ -84,7 +84,7 @@ import {
 	type YouTubePlayerDiv,
 	featureToMultiButtonsMap
 } from "@/src/types";
-import {enableHidePlaylist, disableHidePlaylist} from "@/src/features/hidePlaylist";
+import {enableHidePlaylistRecommendationsFromHomePage, disableHidePlaylistRecommendationsFromHomePage} from "@/src/features/hidePlaylist";
 import eventManager from "@/utils/EventManager";
 import {
 	browserColorLog,
@@ -174,7 +174,7 @@ const enableFeatures = () => {
 			enableCustomCSS(),
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage(),
-			enableHidePlaylist()
+			enableHidePlaylistRecommendationsFromHomePage()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -969,14 +969,14 @@ window.addEventListener("DOMContentLoaded", function () {
 					default: {
 						return;
 					}
-					case "hidePlaylistChange": {
+					case "hidePlaylistRecommendationsFromHomePageChange": {
 						const {
-							data: { hidePlaylistEnabled }
+							data: { hidePlaylistRecommendationsFromHomePageEnabled }
 						} = message;
-						if (hidePlaylistEnabled) {
-							await enableHidePlaylist();
+						if (hidePlaylistRecommendationsFromHomePageEnabled) {
+							await enableHidePlaylistRecommendationsFromHomePage();
 						} else {
-							disableHidePlaylist();
+							disableHidePlaylistRecommendationsFromHomePage();
 						}
 					}
 				}
