@@ -478,7 +478,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostMode: newValue
 			});
         },
-		enable_hide_playlist_on_homepage: (__oldValue, newValue) => {
+		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
             sendExtensionOnlyMessage("hidePlaylistChange", {
                 hidePlaylistEnabled: newValue,
             })

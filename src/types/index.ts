@@ -450,9 +450,9 @@ export type MessageMappings = Prettify<{
 			| SendDataMessage<"send_data", "content", "videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 	};
-	enable_hide_playlist_on_homepage: {
-        request: RequestDataMessage<"enable_hide_playlist_on_homepage", { status: "enable" | "disable" }>;
-        response: DataResponseMessage<"enable_hide_playlist_on_homepage">;
+	enable_hide_playlist_recommendations_from_home_page: {
+        request: RequestDataMessage<"enable_hide_playlist_recommendations_from_home_page", { status: "enable" | "disable" }>;
+        response: DataResponseMessage<"enable_hide_playlist_recommendations_from_home_page">;
     };
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
@@ -525,7 +525,7 @@ export type configuration = {
 	volume_boost_amount: number;
 	volume_boost_mode: VolumeBoostMode;
 	youtube_data_api_v3_key: string;
-	enable_hide_playlist_on_homepage: boolean;
+	enable_hide_playlist_recommendations_from_home_page: boolean;
 };
 export type configurationKeys = keyof configuration;
 export type configurationId = Path<configuration>;

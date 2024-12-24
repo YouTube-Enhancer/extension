@@ -7,11 +7,11 @@ let observerDisabled = false;
 export async function enableHidePlaylist() {
   const {
     data: {
-      options: { enable_hide_playlist_on_homepage },
+      options: { enable_hide_playlist_recommendations_from_home_page },
     },
   } = await waitForSpecificMessage("options", "request_data", "content");
 
-  if (!enable_hide_playlist_on_homepage) return;
+  if (!enable_hide_playlist_recommendations_from_home_page) return;
 
   hideRecommendations();
   observeHomePageRecommendations();
