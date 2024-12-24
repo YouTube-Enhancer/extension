@@ -74,7 +74,7 @@
 					"increaseLimit": "Impossibile aumentare ulteriormente ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "La lunghezza totale può non essere accurata se alcuni video sono nascosti o se non hai caricato abbastanza video per ottenere la lunghezza completa."
 				},
 				"screenshotButton": {
 					"button": {
@@ -264,9 +264,13 @@
 						"label": "Modalità teatro automatica",
 						"title": "Attiva automaticamente la modalità teatro quando carichi un video"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Disabilita automaticamente la modalità ambiente",
+						"title": "Disabilita automaticamente la modalità ambiente quando si carica un video"
+					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Disabilita automaticamente le didascalie chiuse",
+						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -285,8 +289,8 @@
 						"title": "Nasconde la chat live stream"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "Nascondi video ufficiali dell'artista",
+						"title": "Nascondi video ufficiali dell'artista dalla pagina iniziale"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Nascondi banner promozioni a pagamento",
@@ -347,7 +351,11 @@
 					"skipContinueWatching": {
 						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
-                    }
+					},
+					"playlistRemover": {
+						"label": "Enable the removal of playlists from homepage",
+						"title": "Get rid of playlists"
+					}
 				},
 				"title": "Impostazioni varie"
 			},
@@ -422,24 +430,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Mostra informazioni lunghezza lista riproduzioni",
+					"title": "Mostra la lunghezza totale della lista riproduzioni, quanto è stato guardato e quanto ne rimane."
 				},
-				"title": "Playlist length settings",
+				"title": "Impostazioni lunghezza lista riproduzioni",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Metodo per ottenere la lunghezza della lista riproduzioni",
+						"title": "Il modo per ottenere informazioni sulla lunghezza della lista riproduzioni (il metodo API sarà ripiegato in HTML se si verificasse un errore)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Metodo per ottenere il tempo già riprodotto",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Durata del video",
+							"youtube": "Tempo in riproduzione"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
 			},
@@ -548,12 +556,12 @@
 				"title": "Impostazioni aumento volume"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Puoi ottenerne una da qui",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "Chiave API",
+					"title": "Inserisci la tua chiave Youtube API V3."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Chiave Youtube API V3"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",
