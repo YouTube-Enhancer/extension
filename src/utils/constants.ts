@@ -116,7 +116,8 @@ export const defaultConfiguration = {
 	volume_adjustment_steps: 5,
 	volume_boost_amount: 5,
 	volume_boost_mode: "global",
-	youtube_data_api_v3_key: ""
+	youtube_data_api_v3_key: "",
+	enable_hide_playlist_recommendations_from_home_page: false
 } satisfies configuration;
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
@@ -215,7 +216,8 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	volume_adjustment_steps: z.number().min(1).max(100).optional(),
 	volume_boost_amount: z.number().optional(),
 	volume_boost_mode: z.enum(volumeBoostModes).optional(),
-	youtube_data_api_v3_key: z.string().optional()
+	youtube_data_api_v3_key: z.string().optional(),
+	enable_hide_playlist_recommendations_from_home_page: z.boolean().optional()
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

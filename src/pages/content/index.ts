@@ -15,7 +15,6 @@ import {
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
-
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
@@ -483,7 +482,12 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostEnabled: options.enable_volume_boost,
 				volumeBoostMode: newValue
 			});
-		}
+        },
+		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
+            sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
+                hidePlaylistRecommendationsFromHomePageEnabled: newValue,
+            })
+         }
 	};
 	Object.entries(castedChanges).forEach(([key, change]) => {
 		if (isValidChange(change)) {

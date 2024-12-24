@@ -347,7 +347,7 @@
 					"skipContinueWatching": {
 						"label": "跳過「影片已暫停，繼續觀看？」",
 						"title": "跳過暫停影片播放的閒置對話框"
-					}
+                    }
 				},
 				"title": "其他設定"
 			},

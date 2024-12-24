@@ -347,7 +347,7 @@
 					"skipContinueWatching": {
 						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
-					}
+                    }
 				},
 				"title": "Övriga inställningar"
 			},

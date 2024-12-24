@@ -763,7 +763,15 @@ export default function Settings() {
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
-						type="checkbox"
+            type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_hide_playlist_recommendations_from_home_page?.toString() === "true"}
+						id="enable_hide_playlist_recommendations_from_home_page"
+						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
+						onChange={setCheckboxOption("enable_hide_playlist_recommendations_from_home_page")}
+						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
+            type="checkbox"
 					/>
 					<Setting
 						checked={settings.enable_automatically_disable_ambient_mode?.toString() === "true"}
@@ -1284,7 +1292,6 @@ export default function Settings() {
 						value={settings.custom_css_code}
 					/>
 				</SettingSection>
-
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"

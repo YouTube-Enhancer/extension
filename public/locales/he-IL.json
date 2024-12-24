@@ -347,7 +347,7 @@
 					"skipContinueWatching": {
 						"label": "Skip \"Video is paused. Continue watching?\"",
 						"title": "Skips the idle dialog that pauses video playback"
-					}
+                    }
 				},
 				"title": "Miscellaneous settings"
 			},
