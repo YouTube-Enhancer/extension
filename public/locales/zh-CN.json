@@ -351,6 +351,10 @@
 					"skipContinueWatching": {
 						"label": "跳过\"视频已暂停。继续观看吗？\"",
 						"title": "跳过暂停视频播放的闲置对话框"
+					},
+					"playlistRemover": {
+						"label": "Enable the removal of playlists from homepage",
+						"title": "Get rid of playlists"
 					}
 				},
 				"title": "其他设置"
