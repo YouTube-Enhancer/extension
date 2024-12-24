@@ -31,7 +31,6 @@
     "globals": "^15.11.0",
     "i18next": "^23.7.3",
     "monaco-editor": "^0.51.0",
-    "npm": "^10.9.2",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",
@@ -90,6 +89,7 @@
     "typescript-eslint": "^8.8.1",
     "vite": "^5.4.8",
     "zod": "^3.22.4",
-    "zod-error": "^1.5.0"
+    "zod-error": "^1.5.0",
+    "npm": "^10.9.2"
   }
 }
