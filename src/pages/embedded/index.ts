@@ -29,6 +29,10 @@ import {
 	enableHideOfficialArtistVideosFromHomePage
 } from "@/src/features/hideOfficialArtistVideosFromHomePage";
 import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
+import {
+	disableHidePlaylistRecommendationsFromHomePage,
+	enableHidePlaylistRecommendationsFromHomePage
+} from "@/src/features/hidePlaylistRecommendationsFromHomePage";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
@@ -174,6 +178,7 @@ const enableFeatures = () => {
 			enableCustomCSS(),
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage(),
+			enableHidePlaylistRecommendationsFromHomePage(),
 			enableTimestampPeek()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
@@ -577,6 +582,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableHidePaidPromotionBanner();
 						} else {
 							disableHidePaidPromotionBanner();
+						}
+						break;
+					}
+					case "hidePlaylistRecommendationsFromHomePageChange": {
+						const {
+							data: { hidePlaylistRecommendationsFromHomePageEnabled }
+						} = message;
+						if (hidePlaylistRecommendationsFromHomePageEnabled) {
+							await enableHidePlaylistRecommendationsFromHomePage();
+						} else {
+							disableHidePlaylistRecommendationsFromHomePage();
 						}
 						break;
 					}

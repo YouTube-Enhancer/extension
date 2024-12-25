@@ -382,6 +382,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }
 	>;
 	hidePaidPromotionBannerChange: DataResponseMessage<"hidePaidPromotionBannerChange", { hidePaidPromotionBannerEnabled: boolean }>;
+	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<
+		"hidePlaylistRecommendationsFromHomePageChange",
+		{ hidePlaylistRecommendationsFromHomePageEnabled: boolean }
+	>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
 	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
@@ -475,6 +479,7 @@ export type configuration = {
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_paid_promotion_banner: boolean;
+	enable_hide_playlist_recommendations_from_home_page: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
 	enable_hide_translate_comment: boolean;
