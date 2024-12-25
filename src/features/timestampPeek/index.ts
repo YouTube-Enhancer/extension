@@ -16,6 +16,8 @@ import {
 	waitForAllElements,
 	waitForSpecificMessage
 } from "@/src/utils/utilities";
+
+import "./index.css";
 let timestampElementObserver: Nullable<MutationObserver> = null;
 let commentsPanelObserver: Nullable<MutationObserver> = null;
 type ObserverType = "commentsPanel" | "timestampElement";
@@ -48,13 +50,8 @@ export async function enableTimestampPeek() {
 	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	const isNewVideoLayout = isNewYouTubeVideoLayout();
-	// Get the player element
-	const playerContainer = document.querySelector<HTMLDivElement>("div#movie_player");
-	// If player element is not available, return
-	if (!playerContainer) return;
 	const timestampLinkHref = getVideoHref();
 	if (!timestampLinkHref) return;
-	// FIXME: event listener for mouse leave/enter running more than once
 	if (isNewVideoLayout) {
 		await waitForAllElements([commentsPanelSelector]);
 		const commentsPanelElement = document.querySelector(commentsPanelSelector);

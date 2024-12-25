@@ -1,0 +1,27 @@
+.yte-timestamp-peek-video-container {
+	width: 400px !important;
+	height: 225px !important;
+	position: relative !important;
+	min-height: 225px !important;
+	max-height: 225px !important;
+	z-index: 2020 !important;
+}
+.yte-timestamp-peek-player-container-reset {
+	padding: 0px !important;
+	margin: 0px !important;
+}
+.yte-timestamp-peek-video {
+	position: relative !important;
+	width: 400px !important;
+	height: 225px !important;
+	object-fit: contain !important;
+	z-index: 2021 !important;
+	left: 0px !important;
+	top: 0px !important;
+}
+.yte-timestamp-peek-hidden {
+	display: none !important;
+}
+.yte-timestamp-peek-ytd-player-no-border-radius {
+	border-radius: 0px !important;
+}

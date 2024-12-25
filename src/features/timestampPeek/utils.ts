@@ -1,4 +1,4 @@
-import type { Nullable } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import { isNewYouTubeVideoLayout } from "@/src/utils/utilities";
@@ -29,44 +29,176 @@ function getTimestamps(): [HTMLElement, number][] {
 		])
 		.filter(([, timestamp]) => timestamp !== 0) as [HTMLElement, number][];
 }
-async function previewTimestamp(element: HTMLElement, timestamp: number) {
-	// TODO: figure out how to properly preview the timestamp when hover occurs.
-	const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-	if (!playerContainer) return;
-	playerContainer.style.position = "absolute";
-	playerContainer.style.top = `${element.getBoundingClientRect().top + window.scrollY}px`;
-	playerContainer.style.width = "200px";
-	playerContainer.style.maxWidth = "unset";
-	playerContainer.style.transform = "translateX(-50%)";
-	playerContainer.style.left = "50%";
-	const player = playerContainer.querySelector(".video-stream.html5-main-video") as HTMLVideoElement;
-	player.currentTime = timestamp;
-	await player.play();
+function toggleClassList(element: HTMLElement, classList: string, show: boolean) {
+	if (show) element.classList.add(classList);
+	else element.classList.remove(classList);
+}
+async function previewTimestamp({
+	isPlaying,
+	playerType,
+	showPreview,
+	timestamp,
+	timestampElement
+}: {
+	isPlaying: boolean;
+	playerType: "normal" | "theater";
+	showPreview: boolean;
+	timestamp: number;
+	timestampElement: HTMLElement;
+}) {
+	const commentThread = timestampElement.closest("#comment");
+	const playerContainer = document.querySelector<HTMLDivElement>("div#player-container:has(#movie_player)");
+	const moviePlayer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const fullBleedContainer = document.querySelector<HTMLDivElement>("#full-bleed-container");
+	const playerFullBleedContainer = document.querySelector<HTMLDivElement>("#player-full-bleed-container");
+	const playerContainerOuter = document.querySelector<HTMLDivElement>("#player-container-outer");
+	const playerContainerInner = document.querySelector<HTMLDivElement>("#player-container-inner");
+	const ytdPlayer = document.querySelector<HTMLDivElement>("#ytd-player");
+	const video = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
+	const ytpChromeBottom = document.querySelector<HTMLDivElement>(".ytp-chrome-bottom");
+	const ytpChromeTop = document.querySelector<HTMLButtonElement>(".ytp-chrome-top");
+	const ytpGradientBottom = document.querySelector<HTMLDivElement>(".ytp-gradient-bottom");
+	if (
+		!video ||
+		!ytpChromeBottom ||
+		!ytpChromeTop ||
+		!ytpGradientBottom ||
+		!moviePlayer ||
+		!playerContainer ||
+		!playerContainerOuter ||
+		!playerContainerInner ||
+		!fullBleedContainer ||
+		!playerFullBleedContainer ||
+		!commentThread ||
+		!ytdPlayer
+	)
+		return;
+	const { height: playerHeight, width: playerWidth } = await moviePlayer.getSize();
+	const commentThreadRect = commentThread.getBoundingClientRect();
+	const { left, top, width } = commentThreadRect;
+	const playerContainerPlaceholder = document.querySelector<HTMLDivElement>("#yte-timestamp-peek-video-container-placeholder");
+	const playerContainerPlaceholderExists = playerContainerPlaceholder !== null;
+	if (!playerContainerPlaceholderExists) {
+		const playerContainerPlaceholder = document.createElement("div");
+		playerContainerPlaceholder.style.height = `${playerHeight}px`;
+		playerContainerPlaceholder.style.width = `${playerWidth}px`;
+		playerContainerPlaceholder.id = "yte-timestamp-peek-video-container-placeholder";
+		if (playerType === "normal") playerContainerOuter.insertAdjacentElement("afterend", playerContainerPlaceholder);
+		else fullBleedContainer.insertAdjacentElement("afterend", playerContainerPlaceholder);
+	} else {
+		playerContainerPlaceholder.style.height = `${playerHeight}px`;
+		playerContainerPlaceholder.style.width = `${playerWidth}px`;
+		if (!showPreview) playerContainerPlaceholder.style.display = "none";
+		else playerContainerPlaceholder.style.display = "block";
+	}
+	if (playerType === "normal") {
+		toggleClassList(ytdPlayer, "yte-timestamp-peek-ytd-player-no-border-radius", showPreview);
+		if (showPreview) {
+			// FIXME: position the preview better in the left direction
+			playerContainerOuter.style.top = `${window.scrollY + top / 2}px`;
+			playerContainerOuter.style.left = `${left + width / 2}px`;
+		} else {
+			playerContainerOuter.style.top = "";
+			playerContainerOuter.style.left = "";
+		}
+		toggleClassList(playerContainerOuter, "yte-timestamp-peek-video-container", showPreview);
+		toggleClassList(playerContainerOuter, "yte-timestamp-peek-player-container-reset", showPreview);
+		toggleClassList(playerContainerInner, "yte-timestamp-peek-video-container", showPreview);
+		toggleClassList(playerContainerInner, "yte-timestamp-peek-player-container-reset", showPreview);
+	} else {
+		console.log(`Show preview: ${showPreview}`);
+		if (showPreview) {
+			// FIXME: position the preview better in the left direction
+			fullBleedContainer.style.top = `${window.scrollY + top / 2}px`;
+			fullBleedContainer.style.left = `${left + width / 2}px`;
+		} else {
+			fullBleedContainer.style.top = "";
+			fullBleedContainer.style.left = "";
+		}
+		toggleClassList(fullBleedContainer, "yte-timestamp-peek-video-container", showPreview);
+		toggleClassList(fullBleedContainer, "yte-timestamp-peek-player-container-reset", showPreview);
+		toggleClassList(playerFullBleedContainer, "yte-timestamp-peek-video-container", showPreview);
+		toggleClassList(playerFullBleedContainer, "yte-timestamp-peek-player-container-reset", showPreview);
+	}
+	// FIXME: full-bleed-container and player-full-bleed-container not having their classes removed when hiding preview
+	// FIXME: page jumping when hovering over timestamp
+	toggleClassList(video, "yte-timestamp-peek-video", showPreview);
+	toggleClassList(ytpChromeBottom, "yte-timestamp-peek-hidden", showPreview);
+	toggleClassList(ytpChromeTop, "yte-timestamp-peek-hidden", showPreview);
+	toggleClassList(ytpGradientBottom, "yte-timestamp-peek-hidden", showPreview);
+	toggleClassList(playerContainer, "yte-timestamp-peek-video-container", showPreview);
+	toggleClassList(playerContainer, "yte-timestamp-peek-player-container-reset", showPreview);
+	toggleClassList(moviePlayer, "yte-timestamp-peek-video-container", showPreview);
+	toggleClassList(moviePlayer, "yte-timestamp-peek-player-container-reset", showPreview);
+	const ytpPlayerContentElements = document.querySelectorAll<HTMLDivElement>(".ytp-player-content");
+	ytpPlayerContentElements.forEach((element) => {
+		toggleClassList(element, "yte-timestamp-peek-hidden", showPreview);
+	});
+	const ytpCeElements = document.querySelectorAll<HTMLDivElement>(".ytp-ce-element");
+	ytpCeElements.forEach((element) => {
+		toggleClassList(element, "yte-timestamp-peek-hidden", showPreview);
+	});
+	if (showPreview) {
+		await moviePlayer.seekTo(timestamp, true);
+		await moviePlayer.playVideo();
+	} else {
+		await moviePlayer.seekTo(timestamp, true);
+		if (!isPlaying) {
+			await moviePlayer.pauseVideo();
+		}
+	}
 }
 export function handleTimestampHover(element: HTMLElement, timestamp: number) {
-	const videoElement = document.querySelector<HTMLVideoElement>("video");
+	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 	if (!videoElement) return;
-	console.log("Timestamp hover", timestamp, element);
-	const { currentTime } = videoElement;
+	let { currentTime } = videoElement;
 	const isPlaying = !videoElement.paused;
 	eventManager.addEventListener(
 		element,
 		"mouseenter",
-		() => {
-			void (async () => {
-				await previewTimestamp(element, timestamp);
-			})();
+		async () => {
+			const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
+			if (!videoElement) return;
+			({ currentTime } = videoElement);
+			// Get the player element
+			const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+			// If player element is not available, return
+			if (!playerContainer) return;
+			const { width } = await playerContainer.getSize();
+			const {
+				body: { clientWidth }
+			} = document;
+			const isTheaterMode = width === clientWidth;
+			void previewTimestamp({
+				isPlaying: true,
+				playerType: isTheaterMode ? "theater" : "normal",
+				showPreview: true,
+				timestamp,
+				timestampElement: element
+			});
 		},
 		"timestampPeek"
 	);
 	eventManager.addEventListener(
 		element,
 		"mouseleave",
-		() => {
-			void (async () => {
-				videoElement.currentTime = currentTime;
-				if (isPlaying) await videoElement.play();
-			})();
+		async () => {
+			// Get the player element
+			const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+			// If player element is not available, return
+			if (!playerContainer) return;
+			const { width } = await playerContainer.getSize();
+			const {
+				body: { clientWidth }
+			} = document;
+			const isTheaterMode = width === clientWidth;
+			void previewTimestamp({
+				isPlaying,
+				playerType: isTheaterMode ? "theater" : "normal",
+				showPreview: false,
+				timestamp: currentTime,
+				timestampElement: element
+			});
 		},
 		"timestampPeek"
 	);
@@ -78,11 +210,13 @@ export function handleTimestampElementsHover() {
 		if (!commentElement) return;
 		const { textContent: commentText } = commentElement;
 		if (!commentText) return;
-		if (timestampsWithListeners.has(commentText)) return;
-		timestampsWithListeners.add(commentText);
+		const timestampedCommentText = `${commentText}-${timestamp}`;
+		if (timestampsWithListeners.has(timestampedCommentText)) return;
+		timestampsWithListeners.add(timestampedCommentText);
 		handleTimestampHover(element, timestamp);
 	});
 }
+// FIXME: not working properly
 export function observeTimestampElements(): Nullable<MutationObserver> {
 	const timestampLinkHref = getVideoHref();
 	if (!timestampLinkHref) return null;
@@ -111,9 +245,11 @@ export function observeTimestampElements(): Nullable<MutationObserver> {
 					if (!commentElement) return;
 					const { textContent: commentText } = commentElement;
 					if (!commentText) return;
-					if (timestampsWithListeners.has(commentText)) return;
-					timestampsWithListeners.add(commentText);
-					handleTimestampHover(timestampHrefElement as HTMLElement, getTimestampFromString(timestampHref));
+					const timestamp = getTimestampFromString(timestampHref);
+					const timestampedCommentText = `${commentText}-${timestamp}`;
+					if (timestampsWithListeners.has(timestampedCommentText)) return;
+					timestampsWithListeners.add(timestampedCommentText);
+					handleTimestampHover(timestampHrefElement as HTMLElement, timestamp);
 				});
 			});
 	});
