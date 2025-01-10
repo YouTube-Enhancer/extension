@@ -54,7 +54,7 @@
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.1.0",
     "@types/react": "^19.0.1",
-    "@types/react-dom": "^18.2.15",
+    "@types/react-dom": "^19.0.2",
     "@types/webextension-polyfill": "^0.12.1",
     "@types/youtube-player": "^5.5.10",
     "@typescript-eslint/eslint-plugin": "^8.8.1",
