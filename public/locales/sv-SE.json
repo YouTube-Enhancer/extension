@@ -354,7 +354,7 @@
 					},
 					"playlistRemover": {
 						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"title": "Ta bort spellistor"
 					}
 				},
 				"title": "Övriga inställningar"
