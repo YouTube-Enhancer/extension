@@ -265,7 +265,7 @@
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
+						"label": "Автоматическое отключение режима освещения",
 						"title": "Automatically disables ambient mode when you load a video"
 					},
 					"automaticallyDisableClosedCaptions": {
@@ -353,8 +353,8 @@
 						"title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Разрешить удаление плейлистов с домашней страницы",
+						"title": "Удаляет плейлисты"
 					}
 				},
 				"title": "Прочие параметры"
