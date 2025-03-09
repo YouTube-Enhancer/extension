@@ -266,7 +266,7 @@
 					},
 					"automaticallyDisableAmbientMode": {
 						"label": "Автоматическое отключение режима освещения",
-						"title": "Automatically disables ambient mode when you load a video"
+						"title": "Автоматически отключать режим освещения при загрузке видео"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Автоматически отключать субтитры",
