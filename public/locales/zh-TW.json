@@ -282,7 +282,7 @@
 					},
 					"hideEndScreenCardsButton": {
 						"label": "隱藏片尾資訊卡按鈕",
-						"title": "Adds a button to show/hide the cards at the end of the video"
+						"title": "在影片結束時新增顯示/隱藏卡片的按鈕"
 					},
 					"hideLiveStreamChat": {
 						"label": "隱藏直播聊天室",
@@ -325,8 +325,8 @@
 						"title": "鼠標懸浮在設定按鈕時開啟選單"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Pause background players",
-						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+						"label": "暫停背景播放程序",
+						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
@@ -417,7 +417,7 @@
 				"playbackSpeedButtons": {
 					"label": "播放速度按鈕",
 					"select": {
-						"label": "Playback buttons speed",
+						"label": "播放速率控制鈕",
 						"title": "每次按下時改變的速度"
 					},
 					"title": "加入加快或減慢播放速度按鈕"
@@ -576,7 +576,7 @@
 						"title": "次要文字的顏色"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
+						"label": "懸停背景色",
 						"title": "滑過背景顏色"
 					},
 					"mainBackground": {
