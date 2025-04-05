@@ -1,7 +1,7 @@
 /** @type {import("prettier").Config} */
 module.exports = {
 	arrowParens: "always",
-	endOfLine: "lf",
+	endOfLine: "crlf",
 	experimentalTernaries: true,
 	printWidth: 150,
 	semi: true,
