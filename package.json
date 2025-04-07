@@ -81,7 +81,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "semantic-release": "^24.0.0",
-    "tailwind-merge": "^2.0.0",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.3",
     "ts-json-as-const": "^1.0.7",
     "ts-node": "^10.9.1",
