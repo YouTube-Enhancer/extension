@@ -353,8 +353,8 @@
 						"title": "Skips the idle dialog that pauses video playback"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Ana sayfadan oynatma listelerinin kaldırılmasını etkinleştirin",
+						"title": "Oynatma listelerinden kurtulun"
 					}
 				},
 				"title": "Çeşitli ayarlar"
