@@ -265,8 +265,8 @@
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "Inaktivera biobelysning automatiskt",
+						"title": "Inaktiverar automatiskt biobelysning när du startar en video"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Inaktivera textning automatiskt",
@@ -353,8 +353,8 @@
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Aktivera borttagning av spellistor från startsidan",
+						"title": "Visa inte spellistor"
 					}
 				},
 				"title": "Övriga inställningar"

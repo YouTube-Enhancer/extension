@@ -265,8 +265,8 @@
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "シネマティック ライティングを自動的に無効にする",
+						"title": "動画の読み込み時にシネマティック ライティングを自動にディセーブルする"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "クローズドキャプションを自動にディセーブルする",
@@ -353,8 +353,8 @@
 						"title": "動画一時休止する休眠メッセージを抜かされます"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "ホームページでプレイリストを削除する",
+						"title": "プレイリストを削除する"
 					}
 				},
 				"title": "他の設定"
