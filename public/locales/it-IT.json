@@ -353,8 +353,8 @@
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Abilita la rimozione delle liste riproduzioni dalla pagina iniziale",
+						"title": "Sbarazzati delle liste riproduzioni"
 					}
 				},
 				"title": "Impostazioni varie"

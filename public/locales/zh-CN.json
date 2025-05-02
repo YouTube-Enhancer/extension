@@ -353,8 +353,8 @@
 						"title": "跳过暂停视频播放的闲置对话框"
 					},
 					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "启用从主页删除播放列表",
+						"title": "清除播放列表"
 					}
 				},
 				"title": "其他设置"
