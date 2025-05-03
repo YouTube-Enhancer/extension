@@ -11,7 +11,7 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Copiado!",
-						"label": "Copiar URL do vídeo com o minuto do vídeo"
+						"label": "Copiar URL do vídeo com a minutagem"
 					}
 				},
 				"featureMenu": {
@@ -43,7 +43,7 @@
 						"label": "Repetir",
 						"toggle": {
 							"off": "Repetição desativada",
-							"on": "Repetição ativa"
+							"on": "Repetição ativada"
 						}
 					}
 				},
@@ -64,10 +64,10 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Diminuir velocidade para {{SPEED}}"
+							"label": "Desacelerar para {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Aumentar velocidade para {{SPEED}}"
+							"label": "Acelerar para {{SPEED}}"
 						}
 					},
 					"decreaseLimit": "Não pode diminuir mais ({{SPEED}})",
