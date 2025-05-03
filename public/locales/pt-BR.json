@@ -70,17 +70,17 @@
 							"label": "Acelerar para {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Não pode diminuir mais ({{SPEED}})",
-					"increaseLimit": "Não pode aumentar mais ({{SPEED}})"
+					"decreaseLimit": "Impossível desacelerar mais ({{SPEED}})",
+					"increaseLimit": "Impossível acelerar mais ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "O comprimento total pode não ser preciso se alguns vídeos estiverem ocultos ou você não carregou vídeos o suficiente para obter o comprimento máximo."
+					"title": "O comprimento pode não ser exato se alguns vídeos estão ocultos ou se você não carregou vídeos o suficiente para obter o comprimento máximo."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Captura de tela"
+						"label": "Fazer captura de tela"
 					},
-					"copiedToClipboard": "Captura de tela copiada para a área de transferência"
+					"copiedToClipboard": "Captura copiada a área de transferência"
 				},
 				"videoHistory": {
 					"resumeButton": "Retomar",
@@ -104,8 +104,8 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "A tecla modificadora do controle de velocidade da rolagem não pode ser o mesmo que a tecla modificadora do controle de volume.",
-							"volumeControl": "A tecla modificadora do controle de volume não pode ser o mesmo que a tecla modificadora do controle de velocidade da rolagem."
+							"speedControl": "A tecla alternadora da velocidade de rolagem não pode ser a mesma que a tecla alternadora do volume.",
+							"volumeControl": "A tecla alternadora do volume não pode ser a mesma que a tecla alternadora da velocidade de rolagem."
 						}
 					}
 				},
