@@ -50,7 +50,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.6.0",
     "@types/archiver": "^6.0.1",
-    "@types/chrome": "^0.0.304",
+    "@types/chrome": "^0.0.319",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.1.0",
     "@types/react": "^19.0.1",
