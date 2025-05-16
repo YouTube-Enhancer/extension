@@ -1,16 +1,16 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "nl-NL",
+	"langName": "Nederlands(Nederland)",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "Video hervatten bij {{VIDEO_TIME}}",
+		"settingVolume": "Volume boost instellen op {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
+						"copied": "Gekopieerd!",
 						"label": "Copy video URL with timestamp"
 					}
 				},
