@@ -202,59 +202,59 @@
 			"customCSS": {
 				"editor": {
 					"collapse": "Verberg Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"expand": "Toon Editor",
+					"noProblems": "Geen problemen gevonden."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Aangepaste CSS inschakelen",
+					"title": "Maakt het mogelijk aangepaste CSS toe te passen op de pagina"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Gepersonaliseerde CSS Instellingen"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Menu Activatie Type",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Klik",
+							"hover": "Hang erboven met de muis"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Selecteer de methode om het feature menu te activeren"
 					},
-					"title": "Feature menu settings"
+					"title": "Feature menu instellingen"
 				}
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Schakel doorspoelen/terugspoelen knoppen in",
+					"title": "Voegt doorspoelen en terugspoelen knoppen toe aan de videospeler"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Tijd door/terugspoelen",
+					"title": "Het aantal tijd waarmee je de video doorspoelt / terugspoelt"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Doorspoel/terugspoel knop instellingen"
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Instellingen succesvol geëxporteerd",
+					"title": "Instellingen exporteren naar een JSON-bestand",
+					"value": "Instellingen exporteren"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Fout bij het importeren van instellingen. Kijk alstublieft het bestandsformaat na.\nEen onbekende fout is opgetreden.",
+						"validation": "Fout bij het importeren van instellingen. Kijk alstublieft het bestandsformaat na.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Instellingen succesvol geïmporteerd",
+					"title": "Instellingen importeren uit een JSON-bestand",
+					"value": "Instellingen Importeren"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Taal",
+					"title": "De taal voor de extensie"
 				},
 				"title": "Taal"
 			},
@@ -361,100 +361,100 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Kleur",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Blauw",
+						"green": "Groen",
+						"orange": "Oranje",
+						"pink": "Roze",
+						"purple": "Paars",
+						"red": "Rood",
+						"white": "Wit",
+						"yellow": "Geel"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Selecteer de kleur voor de schermweergave"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "Vertraging verbergen",
+					"title": "Specifieer de tijd, in milliseconden, voordat de schermweergave automatisch wordt verborgen"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Transparantie",
+					"title": "Transparantie van de schermweergave aanpassen"
 				},
 				"padding": {
 					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"title": "Het aantal pixels rond de schermweergave aanpassen. Dit geldt specifiek voor de hoek schermweergave."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Positie",
 					"options": {
-						"bottom_left": "Bottom Left",
-						"bottom_right": "Bottom Right",
-						"center": "Center",
-						"top_left": "Top Left",
-						"top_right": "Top Right"
+						"bottom_left": "Linksonder",
+						"bottom_right": "Rechtsonder",
+						"center": "Gecentreerd",
+						"top_left": "Linksboven",
+						"top_right": "Rechtsboven"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Selecteer de positie voor de schermweergave"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Schermweergave Instellingen",
 				"type": {
 					"label": "Type",
 					"options": {
-						"circle": "Circle",
-						"line": "Line",
-						"no_display": "No display",
-						"text": "Text"
+						"circle": "Cirkel",
+						"line": "Lijn",
+						"no_display": "Geen weergave",
+						"text": "Tekst"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Selecteer het type van de schermweergave"
 				}
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Forced playback speed",
-					"title": "Sets the video speed to what you choose below"
+					"label": "Geforceerde afspeelsnelheid",
+					"title": "Stelt de snelheid van de video in op wat u hieronder kiest"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Afspeelsnelheid knoppen",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "Snelheid afspeelsnelheid knoppen",
+						"title": "Hoeveelheid snelheid die gewijzigd wordt per klik"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "Voegt knoppen toe die de afspeelsnelheid van de huidige video verhoogt of verlaagt"
 				},
 				"select": {
-					"label": "Player speed",
-					"title": "The speed to set the video to"
+					"label": "Snelheid videospeler",
+					"title": "De snelheid waarop je de video zet"
 				},
-				"title": "Playback speed settings"
+				"title": "Afspeelsnelheid instellingen"
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Geef afspeellijst lengte informatie weer",
+					"title": "Toont de totale lengte van de afspeellijst, hoeveel bekeken is, en hoeveel er over schiet."
 				},
-				"title": "Playlist length settings",
+				"title": "Afspeellijst lengte instellingen",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Methode om afspeellijst lengte te verkrijgen",
+						"title": "De manier waarop de afspeellijst informatie (API methode zal terugvallen op HTML als een fout optreedt)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Methode om kijktijd te verkrijgen",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Videolengte",
+							"youtube": "Video kijktijd"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "De manier waarop je de hoeveelheid kijktijd verkrijgt (video lengtetype enkel gebruikt op kijk pagina)"
 					}
 				}
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Screenshot button",
-					"title": "Adds a button to the player to take a screenshot of the video"
+					"label": "Schermafbeelding knop",
+					"title": "Voegt een knop aan de speler toe om een schermafbeelding van de video te nemen"
 				},
 				"saveAs": {
 					"clipboard": "Klembord",
@@ -568,37 +568,37 @@
 				"co-authors": "Co-auteurs",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Schaduw kleur",
+						"title": "Kleur voor de schaduw"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Secondaire tekstkleur",
+						"title": "Kleur voor de secondaire tekst"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Achtergrondkleur zweven met de muis",
+						"title": "Kleur voor zweven achtergrond"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Hoofd achtergrondkleur",
+						"title": "Kleur voor de hoofdachtergrond"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Accent kleur",
+						"title": "Kleur voor accentueren"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Hoofd tekstkleur",
+						"title": "Kleur voor de hoofdtekst"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Secondaire achtergrondkleur",
+						"title": "Kleur voor de secondaire achtergrond"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Geselecteerd thema inschakelen",
+					"title": "Het geselecteerde thema voor de pagina inschakelen"
 				},
 				"select": {
 					"label": "Select theme",
