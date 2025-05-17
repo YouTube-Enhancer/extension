@@ -187,21 +187,21 @@
 							"value": "Feature menu"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "aan de linkerkant van de spelerinstellingen",
+							"value": "Linker Besturing"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "aan de rechterkant van de spelerinstellingen",
+							"value": "Rechter Bediening"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Plaats de {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Knop Plaatsing Instellingen"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
+					"collapse": "Verberg Editor",
 					"expand": "Expand Editor",
 					"noProblems": "No problems found."
 				},
