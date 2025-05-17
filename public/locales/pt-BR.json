@@ -110,7 +110,7 @@
 					}
 				},
 				"info": {
-					"reset": "Todas as opções foram redefinidas para seus valores padrão.\nAgora você pode salvar as mudanças clicando em \"Confirmar\" ou descarta-las por fechar esta página ou ignorar esta notificação."
+					"reset": "Opções redefinidas ao padrão.\nSalve as mudanças clicando em \"Confirmar\" ou desfaça delas fechando a página, ou esta notificação."
 				},
 				"success": {
 					"saved": "Opções salvas."
