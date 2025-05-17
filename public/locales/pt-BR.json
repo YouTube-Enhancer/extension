@@ -121,83 +121,83 @@
 	"settings": {
 		"clearData": {
 			"allDataDeleted": "Todos os dados foram excluídos.",
-			"confirmAlert": "Isso excluirá todos os dados da extensão relacionado às opções. Deseja continuar?"
+			"confirmAlert": "Fechar a página desfará todas as mudanças feitas. Prosseguir?"
 		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
-					"label": "Ajuste de resolução automático",
-					"title": "Ajusta automaticamente a resolução do vídeo para o nível selecionado."
+					"label": "Ajustador automático de resolução",
+					"title": "Define automaticamente a resolução do vídeo para o nível desejado."
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Estratégia de redução de resolução",
+						"label": "Sistema de redução de resolução",
 						"options": {
-							"higher": "Maior",
-							"lower": "Menor"
+							"higher": "Grande",
+							"lower": "Pequeno"
 						},
-						"title": "A estratégia é usada quando a qualidade selecionada não está disponível"
+						"title": "O sistema para usar quando a resolução definida estiver indisponível."
 					}
 				},
 				"select": {
-					"label": "Resolução do reprodutor",
-					"title": "A resolução para ser definida ao vídeo"
+					"label": "Resolução do player",
+					"title": "A resolução para definir no vídeo"
 				},
 				"title": "Opções de resolução automática"
 			},
 			"bottomButtons": {
 				"clear": {
-					"title": "Limpa todos os dados que esta extensão armazenou no seu computador",
+					"title": "Limpa todos os dados armazenados pela extensão",
 					"value": "Limpar dados"
 				},
 				"confirm": {
-					"title": "Confirma a redefinição de opções",
+					"title": "Confirma a redefinição de dados",
 					"value": "Confirmar"
 				},
 				"openTab": {
-					"title": "Abre as opções da extensão na próxima aba"
+					"title": "Abre as opções numa nova aba"
 				},
 				"reset": {
-					"title": "Redefine as opções para o padrão, clique em confirmar para salvar as mudanças",
+					"title": "Redefine as opções para o padrão, confirme para salvar as mudanças",
 					"value": "Redefinir"
 				}
 			},
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minuto do vídeo",
+						"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minutagem",
 						"decreasePlaybackSpeedButton": "Botão de diminuir velocidade",
 						"forwardButton": "Botão de acelerar velocidade",
 						"hideEndScreenCardsButton": "Ocultar botão de cards finais",
 						"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
-						"loopButton": "Botão de repetição",
-						"maximizePlayerButton": "Botão de maximização",
+						"loopButton": "Botão Repetir",
+						"maximizePlayerButton": "Botão Maximizar",
 						"openTranscriptButton": "Abrir botão de transcrição",
-						"rewindButton": "Botão de retroceder",
+						"rewindButton": "Botão Voltar",
 						"screenshotButton": "Botão de captura de tela",
 						"volumeBoostButton": "Botão de ganho de volume"
 					},
 					"options": {
 						"below_player": {
-							"placement": "abaixo dos controles do reprodutor",
-							"value": "Abaixo do reprodutor"
+							"placement": "abaixo dos controles do player",
+							"value": "Abaixo do player"
 						},
 						"feature_menu": {
 							"placement": "no menu de recursos",
 							"value": "Menu de recursos"
 						},
 						"player_controls_left": {
-							"placement": "no lado esquerdo dos controles do reprodutor",
+							"placement": "à esquerda dos controles do player",
 							"value": "Controles esquerdos"
 						},
 						"player_controls_right": {
-							"placement": "no lado direito dos controles do reprodutor",
+							"placement": "à direita dos controles do player",
 							"value": "Controles direitos"
 						}
 					},
 					"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
 				},
-				"title": "Opções de posição de botão"
+				"title": "Opções de colocação de botão"
 			},
 			"customCSS": {
 				"editor": {
@@ -214,47 +214,47 @@
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Tipo de ativação do menu",
+						"label": "Método de ativação do menu",
 						"options": {
 							"click": "Clicar",
-							"hover": "Passar o mouse"
+							"hover": "Passar o cursor"
 						},
-						"title": "Selecione o método para ativar o menu de recursos"
+						"title": "Define o método para ativar o menu de recursos"
 					},
 					"title": "Opções do menu de recursos"
 				}
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Ativar botões de avançar/retroceder",
-					"title": "Adiciona botões de avançar ou retroceder ao reprodutor de vídeo"
+					"label": "Ativar botões de avançar/voltar",
+					"title": "Adiciona botões de avançar/voltar ao player de vídeo"
 				},
 				"time": {
-					"label": "Avançar/retroceder tempo",
-					"title": "A quantidade de tempo para acelerar/retroceder o vídeo"
+					"label": "Avançar/voltar tempo",
+					"title": "O tanto de tempo para avançar/voltar"
 				},
-				"title": "Opções de botão de acelerar/retroceder"
+				"title": "Opções de avançar/voltar"
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Opções exportadas com sucesso",
+					"success": "Mudanças aplicadas!",
 					"title": "Exportar opções para arquivo JSON",
 					"value": "Exportar opções"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Erro ao importar opções. Verifique o formato do arquivo.\nUm erro desconhecido ocorreu.",
-						"validation": "Erro ao importar opções. Verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
+						"unknown": "Ocorreu um erro\nErro ao importar opções. Verifique o formato do arquivo importado.",
+						"validation": "Erro ao importar opções. Verifique o formato do arquivo importado.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Opções importadas com sucesso",
-					"title": "Importar opções de arquivo JSON",
+					"success": "Opções importadas com sucesso!",
+					"title": "Importe as opções dum arquivo JSON",
 					"value": "Importar opções"
 				}
 			},
 			"language": {
 				"select": {
 					"label": "Idioma",
-					"title": "O idioma de exibição da extensão"
+					"title": "O idioma da extensão"
 				},
 				"title": "Idioma"
 			},
@@ -270,11 +270,11 @@
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Desativar legendas automaticamente",
-						"title": "Desativa legendas automaticamente ao carregar um vídeo"
+						"title": "Desativa as legendas ao carregar um vídeo"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copiar URL do vídeo com o botão de minuto do vídeo",
-						"title": "Copia o URL do vídeo com o minuto do vídeo (?t=123)"
+						"label": "Copiar URL do vídeo com o botão de minutagem",
+						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
 					"hideEndScreenCards": {
 						"label": "Ocultar cards finais",
@@ -294,43 +294,43 @@
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Ocultar banner de promoção paga",
-						"title": "Oculta o banner exibido ao assistir um vídeo com promoção paga"
+						"title": "Oculta o banner ao assistir um vídeo com promoção paga incluída"
 					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
 					},
 					"hideShorts": {
-						"label": "Ocultar shorts",
-						"title": "Oculta os shorts"
+						"label": "Ocultar \"Shorts\"",
+						"title": "Oculta a função \"Shorts\""
 					},
 					"hideTranslateComment": {
-						"label": "Ocultar botão de tradução",
-						"title": "Oculta o botão \"Traduzir para o idioma\" abaixo do comentário"
+						"label": "Ocultar botão de traduzir comentário",
+						"title": "Oculta o botão de tradução de comentário"
 					},
 					"loopButton": {
-						"label": "Botão de repetição",
-						"title": "Adiciona um botão ao menu do recurso para repetir o vídeo que você está assistindo"
+						"label": "Botão Repetir",
+						"title": "Adiciona um botão para repetir o vídeo que está assistindo"
 					},
 					"maximizePlayerButton": {
-						"label": "Botão de maximização do reprodutor",
-						"title": "Adiciona um botão ao menu de recursos para maximizar o reprodutor"
+						"label": "Botão de maximizar player",
+						"title": "Adiciona um botão para maximizar o player"
 					},
 					"openTranscriptButton": {
 						"label": "Abrir botão de transcrição",
-						"title": "Adiciona um botão ao menu de recursos para abrir a transcrição do vídeo que você está assistindo"
+						"title": "Adiciona um botão para abrir a transcrição do vídeo que está assistindo"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Abrir opções do YouTube ao passar o mouse",
-						"title": "Abre o menu de opções do YouTube ao passar o mouse sobre o botão de opções"
+						"label": "Abrir opções do YouTube ao passar o cursor",
+						"title": "Abre as opções do YouTube ao passar o cursor sobre o botão Opções"
 					},
 					"pauseBackgroundPlayers": {
-						"label": "Parar reprodutores de fundo",
-						"title": "Para os reprodutores de abas de fundo quando você iniciar um novo reprodutor em uma aba em primeiro plano"
+						"label": "Pausar player em segundo plano",
+						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
-						"title": "Mostra o tempo restante do vídeo que você está assistindo"
+						"title": "Exibe o tempo restante do vídeo que está assistindo"
 					},
 					"rememberLastVolume": {
 						"label": "Salvar intensidade do volume",
@@ -341,19 +341,19 @@
 						"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
 					},
 					"shareShortener": {
-						"label": "Encurtar link de compartilhamento de vídeo",
-						"title": "Encurta os links de compartilhamento de vídeo (youtu.be) removendo os parâmetros si/recursos."
+						"label": "Encurtar link de compartilha de vídeo",
+						"title": "Encurta os links de compartilha de vídeo (youtu.be) removendo os parâmetros si/features."
 					},
 					"shortsAutoScroll": {
-						"label": "Rolagem automática de shorts",
-						"title": "Rola automaticamente ao próximo short"
+						"label": "Rolar automaticamente pelos Shorts",
+						"title": "Rola para o próximo Short automaticamente"
 					},
 					"skipContinueWatching": {
-						"label": "Pular \"O vídeo está pausado. Continuar assistindo?\"",
-						"title": "Pula o diálogo de ausência que pausa a reprodução do vídeo"
+						"label": "Pular aviso de ausência",
+						"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
 					},
 					"playlistRemover": {
-						"label": "Ativa a remoção das playlists na página inicial",
+						"label": "Ativa a remoção de playlists da página inicial",
 						"title": "Remover playlists da página inicial"
 					}
 				},
@@ -372,19 +372,19 @@
 						"white": "Branco",
 						"yellow": "Amarelo"
 					},
-					"title": "Define a cor para exibição na tela"
+					"title": "Define a cor para as informações em exibição"
 				},
 				"hide": {
 					"label": "Ocultar atraso",
-					"title": "Especifica o tempo, em milissegundos, antes de automaticamente ocultar a exibição na tela"
+					"title": "Especifica o tempo (em milissegundos) antes de ocultar automaticamente as informações em exibição"
 				},
 				"opacity": {
 					"label": "Opacidade",
-					"title": "Ajusta a transparência da exibição na tela"
+					"title": "Ajusta a transparência das informações em exibição"
 				},
 				"padding": {
 					"label": "Alinhamento",
-					"title": "Ajusta o alinhamento de exibição na tela em píxeis. Isso aplica especificamente para exibições no canto da tela"
+					"title": "Ajusta o alinhamento de informações em exibição (em píxeis)."
 				},
 				"position": {
 					"label": "Posição",
