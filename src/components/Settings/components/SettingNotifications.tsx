@@ -5,6 +5,17 @@ import { cn } from "@/src/utils/utilities";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { useSettings } from "../Settings";
+export default function SettingsNotifications() {
+	const { notifications } = useNotifications();
+	const [parentRef] = useAutoAnimate({ duration: 300 });
+	return (
+		<div id="notifications" ref={parentRef}>
+			{notifications.map((notification, index) => (
+				<ToastNotification key={index} notification={notification} />
+			))}
+		</div>
+	);
+}
 function NotificationCloseButton({ notification }: { notification: Notification }) {
 	const { removeNotification } = useNotifications();
 	return (
@@ -48,17 +59,6 @@ function ToastNotification({ key, notification }: { key: number; notification: N
 				key={key}
 				style={{ width: `${notification.progress ?? 100}%` }}
 			></div>
-		</div>
-	);
-}
-export default function SettingsNotifications() {
-	const { notifications } = useNotifications();
-	const [parentRef] = useAutoAnimate({ duration: 300 });
-	return (
-		<div id="notifications" ref={parentRef}>
-			{notifications.map((notification, index) => (
-				<ToastNotification key={index} notification={notification} />
-			))}
 		</div>
 	);
 }

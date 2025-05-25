@@ -3,6 +3,30 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
+// Restore the player speed to the last saved player speed
+export function restorePlayerSpeed() {
+	// Get the saved player speed from the local storage
+	const playerSpeed = window.localStorage.getItem("playerSpeed");
+	// If the player speed is not available, return
+	if (!playerSpeed) return;
+	// Get the player element
+	const playerContainer =
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null;
+	// If player element is not available, return
+	if (!playerContainer) return;
+	// If setPlaybackRate method is not available in the player, return
+	if (!playerContainer.setPlaybackRate) return;
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (!video) return;
+	// Log the message indicating the player speed being set
+	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
+	// Set the playback speed
+	void playerContainer.setPlaybackRate(Number(playerSpeed));
+	// Set the video playback speed
+	video.playbackRate = Number(playerSpeed);
+}
 /**
  * Sets the player speed based on the given speed.
  *
@@ -56,35 +80,11 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// Set the video playback speed
 	if (video) video.playbackRate = playerSpeed;
 }
-// Restore the player speed to the last saved player speed
-export function restorePlayerSpeed() {
-	// Get the saved player speed from the local storage
-	const playerSpeed = window.localStorage.getItem("playerSpeed");
-	// If the player speed is not available, return
-	if (!playerSpeed) return;
-	// Get the player element
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null;
-	// If player element is not available, return
-	if (!playerContainer) return;
-	// If setPlaybackRate method is not available in the player, return
-	if (!playerContainer.setPlaybackRate) return;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-	if (!video) return;
-	// Log the message indicating the player speed being set
-	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
-	// Set the playback speed
-	void playerContainer.setPlaybackRate(Number(playerSpeed));
-	// Set the video playback speed
-	video.playbackRate = Number(playerSpeed);
-}
 const speedValueRegex = /(?<!\d\.)([0-1](\.\d+)?|2)(?![\d.])/;
 export function setupPlaybackSpeedChangeListener() {
 	const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 	const speedMenuItemClickListener = (event: Event) => {
-		const { target: speedMenuItem } = event as { target: HTMLDivElement } & Event;
+		const { target: speedMenuItem } = event as Event & { target: HTMLDivElement };
 		if (!speedMenuItem) return;
 		const { textContent: speedValue } = speedMenuItem;
 		// If the playback speed is not available, return
@@ -101,7 +101,7 @@ export function setupPlaybackSpeedChangeListener() {
 	// Create an observer instance
 	const playerSpeedMenuObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
 		mutationsList.forEach((mutation) => {
-			const { target: targetElement } = mutation as { target: HTMLDivElement } & MutationRecord;
+			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
 			// Check if the target element has the desired structure
 			const panelHeader = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-header");
 			const panelMenu = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-menu");
@@ -131,7 +131,7 @@ export function setupPlaybackSpeedChangeListener() {
 	});
 	const customSpeedSliderObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
 		mutationsList.forEach((mutation) => {
-			const { target: targetElement } = mutation as { target: HTMLDivElement } & MutationRecord;
+			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
 			if (!targetElement.matches(".ytp-speedslider-text")) return;
 			const { textContent: speedValue } = targetElement;
 			// If the playback speed is not available, return

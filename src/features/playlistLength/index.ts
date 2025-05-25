@@ -6,6 +6,11 @@ import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/u
 
 import { getHeaderSelectors, initializePlaylistLength, playlistItemsSelector } from "./utils";
 let documentObserver: Nullable<MutationObserver> = null;
+export function disablePlaylistLength() {
+	eventManager.removeEventListeners("playlistLength");
+	if (documentObserver) documentObserver.disconnect();
+	document.querySelector("#yte-playlist-length-ui")?.remove();
+}
 export async function enablePlaylistLength() {
 	const IsWatchPage = isWatchPage();
 	const {
@@ -61,9 +66,4 @@ export async function enablePlaylistLength() {
 			});
 		}
 	});
-}
-export function disablePlaylistLength() {
-	eventManager.removeEventListeners("playlistLength");
-	if (documentObserver) documentObserver.disconnect();
-	document.querySelector("#yte-playlist-length-ui")?.remove();
 }

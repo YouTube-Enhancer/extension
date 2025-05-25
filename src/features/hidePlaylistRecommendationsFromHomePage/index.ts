@@ -5,6 +5,15 @@ import { waitForSpecificMessage } from "@/src/utils/utilities";
 let recommendationsObserver: Nullable<MutationObserver> = null;
 let observerDisabled = false;
 
+export function disableHidePlaylistRecommendationsFromHomePage() {
+	showRecommendations();
+
+	if (recommendationsObserver) {
+		recommendationsObserver.disconnect();
+		recommendationsObserver = null;
+	}
+}
+
 export async function enableHidePlaylistRecommendationsFromHomePage() {
 	const {
 		data: {
@@ -18,13 +27,18 @@ export async function enableHidePlaylistRecommendationsFromHomePage() {
 	observeHomePageRecommendations();
 }
 
-export function disableHidePlaylistRecommendationsFromHomePage() {
-	showRecommendations();
+function hasRecommendationsOnHomePage(): boolean {
+	return document.querySelector("ytd-rich-grid-renderer #contents ytd-rich-item-renderer") !== null;
+}
 
-	if (recommendationsObserver) {
-		recommendationsObserver.disconnect();
-		recommendationsObserver = null;
+function hideMixRecommendation(element: HTMLElement) {
+	if (element.querySelector("yt-collection-thumbnail-view-model")) {
+		element.style.display = "none";
 	}
+}
+
+function hideRecommendations() {
+	toggleRecommendationsVisibility(false);
 }
 
 function observeHomePageRecommendations() {
@@ -52,10 +66,8 @@ function observeHomePageRecommendations() {
 	recommendationsObserver = homePageObserver;
 }
 
-function hideMixRecommendation(element: HTMLElement) {
-	if (element.querySelector("yt-collection-thumbnail-view-model")) {
-		element.style.display = "none";
-	}
+function showRecommendations() {
+	toggleRecommendationsVisibility(true);
 }
 
 function toggleRecommendationsVisibility(recommendationsVisible: boolean) {
@@ -71,16 +83,4 @@ function toggleRecommendationsVisibility(recommendationsVisible: boolean) {
 			}
 		});
 	});
-}
-
-function hideRecommendations() {
-	toggleRecommendationsVisibility(false);
-}
-
-function showRecommendations() {
-	toggleRecommendationsVisibility(true);
-}
-
-function hasRecommendationsOnHomePage(): boolean {
-	return document.querySelector("ytd-rich-grid-renderer #contents ytd-rich-item-renderer") !== null;
 }

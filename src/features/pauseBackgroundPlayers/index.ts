@@ -6,6 +6,14 @@ const PauseBackgroundPlayers = () => {
 	});
 };
 
+export function disablePauseBackgroundPlayers() {
+	const videoPlayerContainer: HTMLElement | null = document.querySelector(".html5-main-video");
+	if (videoPlayerContainer) {
+		videoPlayerContainer.removeEventListener("playing", PauseBackgroundPlayers);
+	}
+	browserColorLog("Disabling pauseBackgroundPlayers", "FgMagenta");
+}
+
 export async function enablePauseBackgroundPlayers() {
 	const {
 		data: {
@@ -44,12 +52,4 @@ export async function enablePauseBackgroundPlayers() {
 		PauseBackgroundPlayers();
 	}
 	detectPlaying();
-}
-
-export function disablePauseBackgroundPlayers() {
-	const videoPlayerContainer: HTMLElement | null = document.querySelector(".html5-main-video");
-	if (videoPlayerContainer) {
-		videoPlayerContainer.removeEventListener("playing", PauseBackgroundPlayers);
-	}
-	browserColorLog("Disabling pauseBackgroundPlayers", "FgMagenta");
 }

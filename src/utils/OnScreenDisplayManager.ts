@@ -16,13 +16,13 @@ export const valueType = {
 	Speed: "speed",
 	Volume: "volume"
 } as const;
-type ValueType = (typeof valueType)[keyof typeof valueType];
-
 type Value<V extends ValueType> = {
 	max: number;
 	type: V;
 	value: number;
 };
+
+type ValueType = (typeof valueType)[keyof typeof valueType];
 
 export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePlayerDiv>): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {

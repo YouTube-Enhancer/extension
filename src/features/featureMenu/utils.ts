@@ -16,14 +16,6 @@ import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
 
 export const featuresInMenu = new Set<AllButtonNames>();
 
-function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
-	if (isToggle) {
-		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
-		listener(JSON.parse(menuItem.ariaChecked) as boolean);
-	} else {
-		listener();
-	}
-}
 /**
  * Adds a feature item to the feature menu.
  * @param buttonName The name of the button
@@ -106,6 +98,37 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	}
 }
 /**
+ * Gets the IDs for a feature item.
+ * @param buttonName the name of the button
+ * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
+ */
+export function getFeatureIds(buttonName: AllButtonNames): {
+	featureMenuItemIconId: FeatureMenuItemIconId;
+	featureMenuItemId: FeatureMenuItemId;
+	featureMenuItemLabelId: FeatureMenuItemLabelId;
+} {
+	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
+	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
+	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
+	return {
+		featureMenuItemIconId,
+		featureMenuItemId,
+		featureMenuItemLabelId
+	};
+}
+export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
+	return document.querySelector(`#yte-panel-menu > ${selector}`);
+}
+export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
+	return document.querySelector(selector);
+}
+export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
+	return document.querySelector(selector);
+}
+/**
  * Removes a feature item from the feature menu.
  * @param buttonName - The name of the button to remove.
  */
@@ -159,34 +182,11 @@ export function updateFeatureMenuTitle(title: string) {
 	if (!featureMenuButton) return;
 	featureMenuButton.dataset.title = title;
 }
-/**
- * Gets the IDs for a feature item.
- * @param buttonName the name of the button
- * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
- */
-export function getFeatureIds(buttonName: AllButtonNames): {
-	featureMenuItemIconId: FeatureMenuItemIconId;
-	featureMenuItemId: FeatureMenuItemId;
-	featureMenuItemLabelId: FeatureMenuItemLabelId;
-} {
-	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
-	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
-	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
-	return {
-		featureMenuItemIconId,
-		featureMenuItemId,
-		featureMenuItemLabelId
-	};
-}
-export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
-	return document.querySelector(selector);
-}
-export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
-	return document.querySelector(selector);
-}
-export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
-	return document.querySelector(`#yte-panel-menu > ${selector}`);
+function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
+	if (isToggle) {
+		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
+		listener(JSON.parse(menuItem.ariaChecked) as boolean);
+	} else {
+		listener();
+	}
 }

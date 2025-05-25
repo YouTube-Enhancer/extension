@@ -5,10 +5,10 @@ import { GetInstalledBrowsers } from "get-installed-browsers";
 import { join, resolve } from "path";
 
 import { outputFolderName } from "../../../src/utils/constants";
-export type LocaleValue = { [key: string]: LocaleValue } | string;
 export type LocaleFile = {
 	[key: string]: LocaleValue;
 };
+export type LocaleValue = string | { [key: string]: LocaleValue };
 export const rootDir = resolve(__dirname, "../../../");
 export const srcDir = resolve(rootDir, "src");
 export const outDir = resolve(rootDir, outputFolderName);

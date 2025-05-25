@@ -9,13 +9,6 @@ import terminalColorLog from "../log";
 import { browsers } from "./utils";
 
 const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
-function writeManifest(version: 2 | 3, browserName: string) {
-	const manifestPath = resolve(outDir, browserName, `manifest.json`);
-
-	writeFileSync(manifestPath, JSON.stringify(version === 2 ? manifestV2 : manifestV3, null, 2));
-
-	terminalColorLog(`Manifest file copy complete: ${manifestPath}`, "success");
-}
 export default function makeManifest(): PluginOption {
 	return {
 		closeBundle() {
@@ -28,4 +21,11 @@ export default function makeManifest(): PluginOption {
 		},
 		name: "make-manifest"
 	};
+}
+function writeManifest(version: 2 | 3, browserName: string) {
+	const manifestPath = resolve(outDir, browserName, `manifest.json`);
+
+	writeFileSync(manifestPath, JSON.stringify(version === 2 ? manifestV2 : manifestV3, null, 2));
+
+	terminalColorLog(`Manifest file copy complete: ${manifestPath}`, "success");
 }
