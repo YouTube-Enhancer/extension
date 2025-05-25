@@ -2,7 +2,7 @@ import type { ParseKeys, TOptions } from "i18next";
 import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
-import z, { ZodType } from "zod";
+import { type ZodArray, type ZodObject, type ZodOptional, type ZodOptionalType, ZodType } from "zod";
 
 import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n/constants";
@@ -28,9 +28,9 @@ export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 // #region Utility types
 export type Nullable<T> = null | T;
 export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodType }> = Override & {
-	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>
-	: Omit<Input, Omitted>[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
-	: z.ZodOptionalType<z.ZodType<Omit<Input, Omitted>[K]>>;
+	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? ZodOptionalType<ZodType<Omit<Input, Omitted>[K]>>
+	: Omit<Input, Omitted>[K] extends object ? ZodOptionalType<ZodObject<TypeToZod<Omit<Input, Omitted>[K]>>>
+	: ZodOptionalType<ZodType<Omit<Input, Omitted>[K]>>;
 };
 export type Path<T> = keyof T | PathImpl<T, keyof T>;
 export type PathValue<T, P extends Path<T>> =
@@ -50,18 +50,18 @@ export type TypeToPartialZodSchema<
 	Omitted extends keyof Input = never,
 	Override extends { [Key in Omitted]: ZodType } = never,
 	Omit = false
-> = z.ZodObject<
+> = ZodObject<
 	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
 	:	{
-			[K in keyof Input]: Input[K] extends any[] ? z.ZodOptionalType<z.ZodType<Input[K]>>
-			: Input[K] extends object ? z.ZodOptionalType<z.ZodObject<TypeToZod<Input[K]>>>
-			: z.ZodOptionalType<z.ZodType<Input[K]>>;
+			[K in keyof Input]: Input[K] extends any[] ? ZodOptionalType<ZodType<Input[K]>>
+			: Input[K] extends object ? ZodOptionalType<ZodObject<TypeToZod<Input[K]>>>
+			: ZodOptionalType<ZodType<Input[K]>>;
 		}
 >;
-export type TypeToZodSchema<T> = z.ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? z.ZodArray<z.ZodType<T[K][number]>>
-	: T[K] extends object ? z.ZodObject<TypeToZod<T[K]>>
-	: z.ZodType<T[K]>;
+export type TypeToZodSchema<T> = ZodObject<{
+	[K in keyof T]: T[K] extends any[] ? ZodArray<ZodType<T[K][number]>>
+	: T[K] extends object ? ZodObject<TypeToZod<T[K]>>
+	: ZodType<T[K]>;
 }>;
 export type WithId<S extends string> = `#${S}`;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -77,9 +77,9 @@ type PathImpl<T, Key extends keyof T> =
 type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
 		undefined extends T[K] ?
-			z.ZodOptional<z.ZodType<Exclude<T[K], undefined>>>
-		:	z.ZodType<T[K]>
-	:	z.ZodObject<TypeToZod<T[K]>>;
+			ZodOptional<ZodType<Exclude<T[K], undefined>>>
+		:	ZodType<T[K]>
+	:	ZodObject<TypeToZod<T[K]>>;
 };
 // #endregion Utility types
 // #region Constants

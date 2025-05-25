@@ -38,7 +38,7 @@ void (async () => {
 	 * @type {configuration}
 	 */
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((settings) => {
+		void chrome.storage.local.get((settings) => {
 			const storedSettings: Partial<configuration> = (
 				Object.keys(settings)
 					.filter((key) => typeof key === "string")
@@ -103,7 +103,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 						 * @type {configuration}
 						 */
 						const options: configuration = await new Promise((resolve) => {
-							chrome.storage.local.get((settings) => {
+							void chrome.storage.local.get((settings) => {
 								const storedSettings: Partial<configuration> = (
 									Object.keys(settings)
 										.filter((key) => typeof key === "string")
@@ -184,7 +184,7 @@ const castStorageChanges = (changes: StorageChanges) => {
 };
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((settings) => {
+		void chrome.storage.local.get((settings) => {
 			const storedSettings: Partial<configuration> = (
 				Object.keys(settings)
 					.filter((key) => typeof key === "string")
