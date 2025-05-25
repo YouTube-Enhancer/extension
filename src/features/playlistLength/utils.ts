@@ -286,68 +286,53 @@ export async function initializePlaylistLength({
 	const { playlist, watch } = getHeaderSelectors();
 	const playlistHeader = document.querySelector(isWatchPage() ? watch : playlist());
 	if (!playlistHeader) return null;
-	let { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
+	const videoElement = document.querySelector<HTMLVideoElement>("video");
+	const playlistItemsElement = document.querySelector(playlistItemsSelector());
+	if (!playlistItemsElement) return null;
+	const { playbackRate: playerSpeed = 1 } = videoElement || {};
+	const { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
 		apiKey,
 		pageType,
 		playlistLengthGetMethod,
 		playlistWatchTimeGetMethod
 	});
-	if (playlistHeader) {
+	const { element, update } = createPlaylistLengthUIElement(
+		{
+			totalTimeSeconds: Math.floor(totalTimeSeconds / playerSpeed),
+			watchedTimeSeconds: Math.floor(watchedTimeSeconds / playerSpeed)
+		},
+		pageType
+	);
+	await appendPlaylistLengthUIElement(element);
+	let lastUpdate = 0;
+	const throttleDelay = 500;
+	async function safeUpdate() {
+		const now = Date.now();
+		if (now - lastUpdate < throttleDelay) return;
+		lastUpdate = now;
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
-		const playlistItemsElement = document.querySelector(playlistItemsSelector());
-		if (!playlistItemsElement) return null;
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
-		const { element, update } = createPlaylistLengthUIElement(
-			{
-				totalTimeSeconds: Math.floor(totalTimeSeconds / playerSpeed),
-				watchedTimeSeconds: Math.floor(watchedTimeSeconds / playerSpeed)
-			},
-			pageType
-		);
-		await appendPlaylistLengthUIElement(element);
-		const documentObserver = new MutationObserver(() => {
-			void (async () => {
-				const videoElement = document.querySelector<HTMLVideoElement>("video");
-				const { playbackRate: playerSpeed = 1 } = videoElement || {};
-				({ totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
-					apiKey,
-					pageType,
-					playlistLengthGetMethod,
-					playlistWatchTimeGetMethod
-				}));
-				update({
-					totalTimeSeconds: Math.floor(totalTimeSeconds / playerSpeed),
-					watchedTimeSeconds: Math.floor(watchedTimeSeconds / playerSpeed)
-				});
-			})();
+		const data = await getDataForPlaylistLengthUIElement({
+			apiKey,
+			pageType,
+			playlistLengthGetMethod,
+			playlistWatchTimeGetMethod
 		});
-		documentObserver.observe(document.documentElement, { childList: true, subtree: true });
-		if (videoElement)
-			eventManager.addEventListener(
-				videoElement,
-				"timeupdate",
-				() => {
-					void (async () => {
-						const videoElement = document.querySelector<HTMLVideoElement>("video");
-						const { playbackRate: playerSpeed = 1 } = videoElement || {};
-						({ totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
-							apiKey,
-							pageType,
-							playlistLengthGetMethod,
-							playlistWatchTimeGetMethod
-						}));
-						update({
-							totalTimeSeconds: Math.floor(totalTimeSeconds / playerSpeed),
-							watchedTimeSeconds: Math.floor(watchedTimeSeconds / playerSpeed)
-						});
-					})();
-				},
-				"playlistLength"
-			);
-		return documentObserver;
+		update({
+			totalTimeSeconds: Math.floor(data.totalTimeSeconds / playerSpeed),
+			watchedTimeSeconds: Math.floor(data.watchedTimeSeconds / playerSpeed)
+		});
 	}
-	return null;
+	const documentObserver = new MutationObserver(() => {
+		void safeUpdate();
+	});
+	documentObserver.observe(document.documentElement, { childList: true, subtree: true });
+	if (videoElement) {
+		eventManager.addEventListener(videoElement, "timeupdate", () => void safeUpdate(), "playlistLength");
+	}
+	return documentObserver;
 }
+
 export function sliceArrayById(array: VideoDetails[], id: string): VideoDetails[] {
 	const index = findIndexById(array, id);
 	if (index === -1) {
