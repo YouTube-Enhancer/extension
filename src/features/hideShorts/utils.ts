@@ -8,64 +8,6 @@ export const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-styl
 
 type ElementVisibilityAction = (element: HTMLElement) => void;
 
-function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
-	const elements = document.querySelectorAll<HTMLDivElement>(selector);
-	if (elements.length === 0) return;
-	elements.forEach((element) => action(element));
-}
-
-function hideElement(element: HTMLElement) {
-	element.classList.add("yte-hide-shorts");
-}
-
-function showElement(element: HTMLElement) {
-	element.classList.remove("yte-hide-shorts");
-}
-
-function hideSideBarShortsButton() {
-	toggleElementVisibility(sideBarOpenedShortsButtonSelector, hideElement);
-	toggleElementVisibility(sideBarClosedShortsButtonSelector, hideElement);
-}
-
-function showSideBarShortsButton() {
-	toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
-	toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
-}
-function hideShortsTabOnSearchResultsPage() {
-	toggleElementVisibility(searchResultsShortsTabSelector, hideElement);
-}
-function showShortsTabOnSearchResultsPage() {
-	toggleElementVisibility(searchResultsShortsTabSelector, showElement);
-}
-function hideShortsSectionOnHomePage() {
-	toggleElementVisibility(homePageShortsSectionSelector, hideElement);
-}
-
-function showShortsSectionOnHomePage() {
-	toggleElementVisibility(homePageShortsSectionSelector, showElement);
-}
-
-function hideShortsSectionOnChannelHomePage() {
-	toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
-}
-
-function showShortsSectionOnChannelHomePage() {
-	toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
-}
-
-function hideShortsTabOnChannelPage() {
-	toggleElementVisibility(channelPageShortsTabSelector, hideElement);
-}
-
-function showShortsTabOnChannelPage() {
-	toggleElementVisibility(channelPageShortsTabSelector, showElement);
-}
-function hideShortsVideoRenderers() {
-	toggleElementVisibility(shortsVideoRendererSelector, hideElement);
-}
-function showShortsVideoRenderers() {
-	toggleElementVisibility(shortsVideoRendererSelector, showElement);
-}
 export function hideShorts() {
 	// Hide the shorts tab on the channel page
 	hideShortsTabOnChannelPage();
@@ -79,20 +21,6 @@ export function hideShorts() {
 	hideSideBarShortsButton();
 	// Hide the shorts video renderers
 	hideShortsVideoRenderers();
-}
-export function showShorts() {
-	// Show the shorts sidebar items
-	showSideBarShortsButton();
-	// Show the shorts section on the homepage
-	showShortsSectionOnHomePage();
-	// Show the shorts section on the channel home page
-	showShortsSectionOnChannelHomePage();
-	// Show the shorts tab on the channel page
-	showShortsTabOnChannelPage();
-	// Show the shorts tab on the search results page
-	showShortsTabOnSearchResultsPage();
-	// Show the shorts video renderers
-	showShortsVideoRenderers();
 }
 
 export function observeShortsElements() {
@@ -126,4 +54,76 @@ export function observeShortsElements() {
 
 	// Return the observer so it can be disconnected later
 	return observer;
+}
+
+export function showShorts() {
+	// Show the shorts sidebar items
+	showSideBarShortsButton();
+	// Show the shorts section on the homepage
+	showShortsSectionOnHomePage();
+	// Show the shorts section on the channel home page
+	showShortsSectionOnChannelHomePage();
+	// Show the shorts tab on the channel page
+	showShortsTabOnChannelPage();
+	// Show the shorts tab on the search results page
+	showShortsTabOnSearchResultsPage();
+	// Show the shorts video renderers
+	showShortsVideoRenderers();
+}
+
+function hideElement(element: HTMLElement) {
+	element.classList.add("yte-hide-shorts");
+}
+
+function hideShortsSectionOnChannelHomePage() {
+	toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
+}
+function hideShortsSectionOnHomePage() {
+	toggleElementVisibility(homePageShortsSectionSelector, hideElement);
+}
+function hideShortsTabOnChannelPage() {
+	toggleElementVisibility(channelPageShortsTabSelector, hideElement);
+}
+function hideShortsTabOnSearchResultsPage() {
+	toggleElementVisibility(searchResultsShortsTabSelector, hideElement);
+}
+
+function hideShortsVideoRenderers() {
+	toggleElementVisibility(shortsVideoRendererSelector, hideElement);
+}
+
+function hideSideBarShortsButton() {
+	toggleElementVisibility(sideBarOpenedShortsButtonSelector, hideElement);
+	toggleElementVisibility(sideBarClosedShortsButtonSelector, hideElement);
+}
+
+function showElement(element: HTMLElement) {
+	element.classList.remove("yte-hide-shorts");
+}
+
+function showShortsSectionOnChannelHomePage() {
+	toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
+}
+
+function showShortsSectionOnHomePage() {
+	toggleElementVisibility(homePageShortsSectionSelector, showElement);
+}
+function showShortsTabOnChannelPage() {
+	toggleElementVisibility(channelPageShortsTabSelector, showElement);
+}
+function showShortsTabOnSearchResultsPage() {
+	toggleElementVisibility(searchResultsShortsTabSelector, showElement);
+}
+function showShortsVideoRenderers() {
+	toggleElementVisibility(shortsVideoRendererSelector, showElement);
+}
+function showSideBarShortsButton() {
+	toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
+	toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
+}
+
+function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
+	const elements = document.querySelectorAll<HTMLDivElement>(selector);
+	if (elements.length === 0) return;
+	elements.forEach((element) => action(element));
 }

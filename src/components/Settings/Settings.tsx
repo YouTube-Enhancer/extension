@@ -28,105 +28,11 @@ import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
-async function getLanguageOptions() {
-	const promises = availableLocales.map(async (locale) => {
-		try {
-			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
-			const localeData = await response.json();
-			const languageOption: SelectOption<"language"> = {
-				label: `${(localeData as EnUS).langName} (${localePercentages[locale] ?? 0}%)`,
-				value: locale
-			};
-			return Promise.resolve(languageOption);
-		} catch (err) {
-			return Promise.reject(err);
-		}
-	});
-
-	const results = await Promise.allSettled(promises);
-
-	const languageOptions: SelectOption<"language">[] = results
-		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
-		.map((result) => result.value);
-
-	return languageOptions;
-}
-function LanguageOptions({
-	selectedLanguage,
-	setValueOption,
-	t
-}: {
-	selectedLanguage: string | undefined;
-	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-	t: i18nInstanceType["t"];
-}) {
-	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
-	const [languagesLoading, setLanguagesLoading] = useState(true);
-	useEffect(() => {
-		void (async () => {
-			try {
-				const languages = await getLanguageOptions();
-				setLanguageOptions(languages);
-				setLanguagesLoading(false);
-			} catch (_) {
-				setLanguagesLoading(false);
-			}
-		})();
-	}, []);
-	return (
-		<SettingSection title={t("settings.sections.language.title")}>
-			<SettingTitle />
-			<Setting
-				disabled={false}
-				id="language"
-				label={t("settings.sections.language.select.label")}
-				loading={languagesLoading}
-				onChange={setValueOption("language")}
-				options={languageOptions}
-				selectedOption={selectedLanguage}
-				title={t("settings.sections.language.select.title")}
-				type="select"
-			/>
-		</SettingSection>
-	);
-}
-function getSettings(): Promise<configuration> {
-	return new Promise((resolve, reject) => {
-		chrome.storage.local.get((settings) => {
-			try {
-				const storedSettings: Partial<configuration> = (
-					Object.keys(settings)
-						.filter((key) => typeof key === "string")
-						.filter((key) => Object.keys(defaultSettings).includes(key as unknown as string)) as configurationKeys[]
-				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-				const castedSettings = storedSettings as configuration;
-				resolve(castedSettings);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	});
-}
-async function fetchSettings() {
-	try {
-		const settings = await getSettings();
-		return settings;
-	} catch (error) {
-		console.error("Failed to get settings:", error);
-		throw new Error("Failed to fetch settings");
-	}
-}
-async function setSettings(settings: configuration) {
-	for (const key of Object.keys(settings)) {
-		if (typeof settings[key] !== "string") {
-			localStorage.setItem(key, JSON.stringify(settings[key]));
-			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
-		} else {
-			localStorage.setItem(key, settings[key]);
-			await chrome.storage.local.set({ [key]: settings[key] });
-		}
-	}
-}
+type SettingsContextProps = {
+	direction: "ltr" | "rtl";
+	i18nInstance: i18nInstanceType;
+	settings: configuration;
+};
 export default function Settings() {
 	const queryClient = useQueryClient();
 	const { data: settings } = useQuery({
@@ -1368,11 +1274,105 @@ export default function Settings() {
 		</SettingsContext.Provider>
 	);
 }
-type SettingsContextProps = {
-	direction: "ltr" | "rtl";
-	i18nInstance: i18nInstanceType;
-	settings: configuration;
-};
+async function fetchSettings() {
+	try {
+		const settings = await getSettings();
+		return settings;
+	} catch (error) {
+		console.error("Failed to get settings:", error);
+		throw new Error("Failed to fetch settings");
+	}
+}
+async function getLanguageOptions() {
+	const promises = availableLocales.map(async (locale) => {
+		try {
+			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+			const localeData = await response.json();
+			const languageOption: SelectOption<"language"> = {
+				label: `${(localeData as EnUS).langName} (${localePercentages[locale] ?? 0}%)`,
+				value: locale
+			};
+			return Promise.resolve(languageOption);
+		} catch (err) {
+			return Promise.reject(err);
+		}
+	});
+
+	const results = await Promise.allSettled(promises);
+
+	const languageOptions: SelectOption<"language">[] = results
+		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
+		.map((result) => result.value);
+
+	return languageOptions;
+}
+function getSettings(): Promise<configuration> {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get((settings) => {
+			try {
+				const storedSettings: Partial<configuration> = (
+					Object.keys(settings)
+						.filter((key) => typeof key === "string")
+						.filter((key) => Object.keys(defaultSettings).includes(key as unknown as string)) as configurationKeys[]
+				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const castedSettings = storedSettings as configuration;
+				resolve(castedSettings);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	});
+}
+function LanguageOptions({
+	selectedLanguage,
+	setValueOption,
+	t
+}: {
+	selectedLanguage: string | undefined;
+	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+	t: i18nInstanceType["t"];
+}) {
+	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
+	const [languagesLoading, setLanguagesLoading] = useState(true);
+	useEffect(() => {
+		void (async () => {
+			try {
+				const languages = await getLanguageOptions();
+				setLanguageOptions(languages);
+				setLanguagesLoading(false);
+			} catch (_) {
+				setLanguagesLoading(false);
+			}
+		})();
+	}, []);
+	return (
+		<SettingSection title={t("settings.sections.language.title")}>
+			<SettingTitle />
+			<Setting
+				disabled={false}
+				id="language"
+				label={t("settings.sections.language.select.label")}
+				loading={languagesLoading}
+				onChange={setValueOption("language")}
+				options={languageOptions}
+				selectedOption={selectedLanguage}
+				title={t("settings.sections.language.select.title")}
+				type="select"
+			/>
+		</SettingSection>
+	);
+}
+async function setSettings(settings: configuration) {
+	for (const key of Object.keys(settings)) {
+		if (typeof settings[key] !== "string") {
+			localStorage.setItem(key, JSON.stringify(settings[key]));
+			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
+		} else {
+			localStorage.setItem(key, settings[key]);
+			await chrome.storage.local.set({ [key]: settings[key] });
+		}
+	}
+}
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
 export const useSettings = () => {
 	const context = useContext(SettingsContext);

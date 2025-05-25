@@ -9,18 +9,11 @@ import React, { useRef } from "react";
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
 
-interface SelectOptionProps {
-	children: React.ReactNode;
-	className?: string;
-	id?: string;
-	value: string;
-}
 export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;
 	label: string;
 	value: Extract<PathValue<configuration, Key>, string>;
 };
-
 export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
@@ -32,6 +25,13 @@ export type SelectProps<Key extends configurationId> = {
 	selectedOption: string | undefined;
 	title: string;
 };
+
+interface SelectOptionProps {
+	children: React.ReactNode;
+	className?: string;
+	id?: string;
+	value: string;
+}
 
 const Select = <Key extends configurationId>({
 	className,

@@ -6,6 +6,26 @@ import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
+export function applyVolumeBoost(volume_boost_amount: number) {
+	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
+	if (!window.gainNode) setupVolumeBoost();
+	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
+}
+export function disableVolumeBoost() {
+	if (window.gainNode) {
+		browserColorLog(`Disabling volume boost`, "FgMagenta");
+		window.gainNode.gain.value = 1; // Set gain back to default
+	}
+}
+export async function enableVolumeBoost() {
+	setupVolumeBoost();
+	const {
+		data: {
+			options: { volume_boost_amount }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	applyVolumeBoost(volume_boost_amount);
+}
 export default async function volumeBoost() {
 	const {
 		data: {
@@ -19,15 +39,6 @@ export default async function volumeBoost() {
 	} else if (volume_boost_mode === "global") {
 		applyVolumeBoost(volume_boost_amount);
 	}
-}
-export async function enableVolumeBoost() {
-	setupVolumeBoost();
-	const {
-		data: {
-			options: { volume_boost_amount }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	applyVolumeBoost(volume_boost_amount);
 }
 function setupVolumeBoost() {
 	if (!window.audioCtx || !window.gainNode) {
@@ -45,17 +56,6 @@ function setupVolumeBoost() {
 			browserColorLog(`Failed to enable volume boost: ${formatError(error)}`, "FgRed");
 		}
 	}
-}
-export function disableVolumeBoost() {
-	if (window.gainNode) {
-		browserColorLog(`Disabling volume boost`, "FgMagenta");
-		window.gainNode.gain.value = 1; // Set gain back to default
-	}
-}
-export function applyVolumeBoost(volume_boost_amount: number) {
-	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
-	if (!window.gainNode) setupVolumeBoost();
-	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
 }
 export const addVolumeBoostButton: AddButtonFunction = async () => {
 	const {

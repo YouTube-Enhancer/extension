@@ -6,22 +6,37 @@ import { createStyledElement, createTooltip, findKeyByValue } from "@/src/utils/
 
 export type ListenerType<Toggle extends boolean> = Toggle extends true ? (checked?: boolean) => void : () => void;
 
-function buttonClickListener<Placement extends ButtonPlacement, Name extends AllButtonNames, Toggle extends boolean>(
-	button: HTMLButtonElement,
-	icon: GetIconType<Name, Placement>,
-	listener: ListenerType<Toggle>,
-	isToggle: boolean
-) {
-	if (!isToggle) return listener();
-	button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
-	if (typeof icon === "object" && "off" in icon && "on" in icon) {
-		updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
-	} else if (icon instanceof SVGSVGElement) {
-		updateFeatureButtonIcon(button, icon);
+export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): boolean {
+	switch (placement) {
+		case "below_player": {
+			const buttonContainer = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
+			if (!buttonContainer) return false;
+			return buttonContainer.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
+		}
+		case "feature_menu": {
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			if (!featureMenu) return false;
+			return featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
+		}
+		case "player_controls_left": {
+			const leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls");
+			if (!leftControls) return false;
+			return leftControls.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
+		}
+		case "player_controls_right": {
+			const rightControls = document.querySelector<HTMLDivElement>(".ytp-right-controls");
+			if (!rightControls) return false;
+			return rightControls.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
+		}
 	}
-	listener(JSON.parse(button.ariaChecked) as boolean);
 }
 
+export function getFeatureButton(buttonName: AllButtonNames) {
+	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+}
+export function getFeatureButtonId(buttonName: AllButtonNames) {
+	return `yte-feature-${buttonName}-button` as const;
+}
 export function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
 	buttonName: Name,
 	placement: Placement,
@@ -97,16 +112,6 @@ export function makeFeatureButton<Name extends AllButtonNames, Placement extends
 	);
 	return button;
 }
-export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
-	if (button.firstChild) {
-		button.firstChild.replaceWith(icon);
-	}
-}
-export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
-	if (!button) return;
-	button.dataset.title = title;
-}
 export function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonPlacement, "feature_menu">) {
 	switch (placement) {
 		case "below_player": {
@@ -142,34 +147,29 @@ export function placeButton(button: HTMLButtonElement, placement: Exclude<Button
 		}
 	}
 }
-export function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): boolean {
-	switch (placement) {
-		case "below_player": {
-			const buttonContainer = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-			if (!buttonContainer) return false;
-			return buttonContainer.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
-		}
-		case "feature_menu": {
-			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-			if (!featureMenu) return false;
-			return featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
-		}
-		case "player_controls_left": {
-			const leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls");
-			if (!leftControls) return false;
-			return leftControls.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
-		}
-		case "player_controls_right": {
-			const rightControls = document.querySelector<HTMLDivElement>(".ytp-right-controls");
-			if (!rightControls) return false;
-			return rightControls.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`) !== null;
-		}
+export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
+	if (button.firstChild) {
+		button.firstChild.replaceWith(icon);
 	}
 }
-export function getFeatureButtonId(buttonName: AllButtonNames) {
-	return `yte-feature-${buttonName}-button` as const;
+export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+	if (!button) return;
+	button.dataset.title = title;
 }
-export function getFeatureButton(buttonName: AllButtonNames) {
-	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+function buttonClickListener<Placement extends ButtonPlacement, Name extends AllButtonNames, Toggle extends boolean>(
+	button: HTMLButtonElement,
+	icon: GetIconType<Name, Placement>,
+	listener: ListenerType<Toggle>,
+	isToggle: boolean
+) {
+	if (!isToggle) return listener();
+	button.ariaChecked = button.ariaChecked ? (!JSON.parse(button.ariaChecked)).toString() : "false";
+	if (typeof icon === "object" && "off" in icon && "on" in icon) {
+		updateFeatureButtonIcon(button, JSON.parse(button.ariaChecked) ? icon.on : icon.off);
+	} else if (icon instanceof SVGSVGElement) {
+		updateFeatureButtonIcon(button, icon);
+	}
+	listener(JSON.parse(button.ariaChecked) as boolean);
 }
 export const buttonContainerId = "yte-button-container";

@@ -5,21 +5,11 @@ import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { createTooltip, isWatchPage, isLivePage, round, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, isLivePage, isWatchPage, round, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;
 const maxSpeed = 16;
-
-function getMinSpeed(playbackSpeedPerClick: number) {
-	return (
-		playbackSpeedPerClick == 0.25 ? 0.25
-		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
-		: playbackSpeedPerClick == 0.1 ? 0.01
-		: playbackSpeedPerClick == 1 ? 1
-		: youtubePlayerMinSpeed
-	);
-}
 
 export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
@@ -30,6 +20,7 @@ export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClic
 		: speed + playbackSpeedPerClick;
 	return round(calculatedSpeed, 2);
 }
+
 export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
 	buttonName: ButtonName,
 	speed: number
@@ -68,6 +59,15 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		}
 	);
 	update();
+}
+function getMinSpeed(playbackSpeedPerClick: number) {
+	return (
+		playbackSpeedPerClick == 0.25 ? 0.25
+		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
+		: playbackSpeedPerClick == 0.1 ? 0.01
+		: playbackSpeedPerClick == 1 ? 1
+		: youtubePlayerMinSpeed
+	);
 }
 
 function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, direction: "decrease" | "increase"): () => void {

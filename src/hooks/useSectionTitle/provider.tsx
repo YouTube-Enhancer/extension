@@ -2,10 +2,10 @@ import { cn } from "@/src/utils/utilities";
 
 import { SectionTitleContext, type SectionTitleContextProps } from "./context";
 export const SectionTitleProvider = (
-	context: {
+	context: SectionTitleContextProps & {
 		children: React.ReactNode;
 		className: string;
-	} & SectionTitleContextProps
+	}
 ) => {
 	return (
 		<SectionTitleContext.Provider value={{ title: context.title }}>

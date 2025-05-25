@@ -10,6 +10,39 @@ export type StorageArea = "local" | "sync";
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
 /**
+ * Retrieves value from chrome storage area
+ *
+ * @param key
+ * @param area - defaults to local
+ */
+export async function readStorage<T>(key: string, area: StorageArea = "local"): Promise<T | undefined> {
+	try {
+		const result = await chrome.storage[area].get(key);
+		return result?.[key] as unknown as T;
+	} catch (error) {
+		console.warn(`Error reading ${area} storage key "${key}":`, error);
+		return undefined;
+	}
+}
+
+/**
+ * Sets object in chrome storage area
+ *
+ * @param key
+ * @param value - value to be saved
+ * @param area - defaults to local
+ */
+export async function setStorage<T>(key: string, value: T, area: StorageArea = "local"): Promise<boolean> {
+	try {
+		await chrome.storage[area].set({ [key]: value });
+		return true;
+	} catch (error) {
+		console.warn(`Error setting ${area} storage key "${key}":`, error);
+		return false;
+	}
+}
+
+/**
  * Returns a stateful value from storage, and a function to update it.
  */
 export function useStorage<T>(key: string, initialValue: T, area: StorageArea = "local"): [T, SetValue<T>] {
@@ -46,37 +79,4 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 	// ... persists the new value to storage.
 	const setValue: SetValue<T> = useCallback((value) => setValueRef.current?.(value), []);
 	return [storedValue, setValue];
-}
-
-/**
- * Retrieves value from chrome storage area
- *
- * @param key
- * @param area - defaults to local
- */
-export async function readStorage<T>(key: string, area: StorageArea = "local"): Promise<T | undefined> {
-	try {
-		const result = await chrome.storage[area].get(key);
-		return result?.[key] as unknown as T;
-	} catch (error) {
-		console.warn(`Error reading ${area} storage key "${key}":`, error);
-		return undefined;
-	}
-}
-
-/**
- * Sets object in chrome storage area
- *
- * @param key
- * @param value - value to be saved
- * @param area - defaults to local
- */
-export async function setStorage<T>(key: string, value: T, area: StorageArea = "local"): Promise<boolean> {
-	try {
-		await chrome.storage[area].set({ [key]: value });
-		return true;
-	} catch (error) {
-		console.warn(`Error setting ${area} storage key "${key}":`, error);
-		return false;
-	}
 }

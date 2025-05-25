@@ -28,15 +28,15 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 type VersionString = `${string}.${string}.${string}`;
 
-function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString) {
-	const [, oldMinorVersion] = oldVersion.split(".");
-	const [, newMinorVersion] = newVersion.split(".");
-	return oldMinorVersion !== newMinorVersion;
-}
 function isNewMajorVersion(oldVersion: VersionString, newVersion: VersionString) {
 	const [oldMajorVersion] = oldVersion.split(".");
 	const [newMajorVersion] = newVersion.split(".");
 	return oldMajorVersion !== newMajorVersion;
+}
+function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString) {
+	const [, oldMinorVersion] = oldVersion.split(".");
+	const [, newMinorVersion] = newVersion.split(".");
+	return oldMinorVersion !== newMinorVersion;
 }
 chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]) => {
 	switch (message.type) {

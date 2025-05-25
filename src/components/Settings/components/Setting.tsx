@@ -18,14 +18,29 @@ type SettingInputProps<ID extends configurationId> = {
 	label?: string;
 	title?: string;
 } & (
-	| ({ type: "checkbox" } & CheckboxProps)
-	| ({ type: "color-picker" } & ColorPickerProps)
-	| ({ type: "css-editor" } & CSSEditorProps)
-	| ({ type: "number" } & NumberInputProps)
-	| ({ type: "select" } & SelectProps<ID>)
-	| ({ type: "slider" } & SliderProps)
-	| ({ type: "text-input" } & TextInputProps)
+	| (CheckboxProps & { type: "checkbox" })
+	| (ColorPickerProps & { type: "color-picker" })
+	| (CSSEditorProps & { type: "css-editor" })
+	| (NumberInputProps & { type: "number" })
+	| (SelectProps<ID> & { type: "select" })
+	| (SliderProps & { type: "slider" })
+	| (TextInputProps & { type: "text-input" })
 );
+export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
+	const { filter } = useSettingsFilter();
+	const { title } = useSectionTitle();
+	const shouldSettingBeVisible =
+		filter === "" ? true : (
+			(title && title.toLowerCase().includes(filter.toLowerCase())) ||
+			(settingProps.title !== undefined && settingProps.title.toLowerCase().includes(filter.toLowerCase())) ||
+			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
+		);
+	return shouldSettingBeVisible ?
+			<div className="mx-2 mb-1" title={settingProps.title}>
+				<SettingInput {...settingProps} />
+			</div>
+		:	null;
+}
 function SettingInput<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	const { type } = settingProps;
 	switch (type) {
@@ -82,19 +97,4 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			return <TextInput className={className} id={id} input_type={input_type} label={label} onChange={onChange} title={title} value={value} />;
 		}
 	}
-}
-export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
-	const { filter } = useSettingsFilter();
-	const { title } = useSectionTitle();
-	const shouldSettingBeVisible =
-		filter === "" ? true : (
-			(title && title.toLowerCase().includes(filter.toLowerCase())) ||
-			(settingProps.title !== undefined && settingProps.title.toLowerCase().includes(filter.toLowerCase())) ||
-			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
-		);
-	return shouldSettingBeVisible ?
-			<div className="mx-2 mb-1" title={settingProps.title}>
-				<SettingInput {...settingProps} />
-			</div>
-		:	null;
 }

@@ -8,6 +8,12 @@ import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+export async function disableHideEndScreenCards() {
+	if (!isWatchPage()) return;
+	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	showEndScreenCards();
+}
+
 export async function enableHideEndScreenCards() {
 	const {
 		data: {
@@ -18,12 +24,6 @@ export async function enableHideEndScreenCards() {
 	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	hideEndScreenCards();
-}
-
-export async function disableHideEndScreenCards() {
-	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-	showEndScreenCards();
 }
 export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	const {
@@ -75,6 +75,10 @@ export const removeHideEndScreenCardsButton: RemoveButtonFunction = async (place
 	await removeFeatureButton("hideEndScreenCardsButton", placement);
 	eventManager.removeEventListeners("hideEndScreenCardsButton");
 };
+export function isEndScreenCardsHidden(): boolean {
+	const endCards = document.querySelectorAll(".ytp-ce-element.yte-hide-end-screen-cards");
+	return endCards.length > 0;
+}
 function hideEndScreenCards() {
 	modifyElementsClassList(
 		"add",
@@ -92,8 +96,4 @@ function showEndScreenCards() {
 			element
 		}))
 	);
-}
-export function isEndScreenCardsHidden(): boolean {
-	const endCards = document.querySelectorAll(".ytp-ce-element.yte-hide-end-screen-cards");
-	return endCards.length > 0;
 }

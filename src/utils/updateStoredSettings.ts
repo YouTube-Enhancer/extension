@@ -30,14 +30,6 @@ export async function updateStoredSettings() {
 	}
 }
 
-async function setModifiedSettings(settings: Partial<configuration>) {
-	const updates: Record<string, string> = {};
-	for (const [key, value] of Object.entries(settings)) {
-		updates[key] = typeof value !== "string" ? JSON.stringify(value) : value;
-	}
-	await chrome.storage.local.set(updates);
-}
-
 async function getStoredSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.get((settings) => {
@@ -54,4 +46,12 @@ async function getStoredSettings(): Promise<configuration> {
 			}
 		});
 	});
+}
+
+async function setModifiedSettings(settings: Partial<configuration>) {
+	const updates: Record<string, string> = {};
+	for (const [key, value] of Object.entries(settings)) {
+		updates[key] = typeof value !== "string" ? JSON.stringify(value) : value;
+	}
+	await chrome.storage.local.set(updates);
 }
