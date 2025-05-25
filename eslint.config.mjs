@@ -11,6 +11,7 @@ import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import eslintPluginTailwindCSS from "eslint-plugin-tailwindcss";
 import globals from "globals";
 import typescriptEslint from "typescript-eslint";
+
 export default [
 	{
 		ignores: ["**/watch.js", "dist/**/*", "releases/**/*"]
@@ -24,6 +25,7 @@ export default [
 	eslintPluginPrettier,
 	eslintPluginPerfectionist.configs["recommended-natural"],
 	{
+		files: ["**/*.ts", "**/*.tsx"],
 		languageOptions: {
 			ecmaVersion: "latest",
 			globals: {
@@ -89,9 +91,13 @@ export default [
 		}
 	},
 	{
-		files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/.d.ts", "**/.spec.ts"],
+		files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
 		languageOptions: {
-			parser: eslintTypeScriptParser
+			ecmaVersion: "latest",
+			globals: {
+				...globals.node
+			},
+			sourceType: "module"
 		}
 	}
 ];
