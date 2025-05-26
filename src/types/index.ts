@@ -167,7 +167,7 @@ export type SingleButtonFeatureNames = Exclude<
 	"featureMenu"
 >;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
-export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 	forwardRewindButtons: {
 		forwardButton: "",

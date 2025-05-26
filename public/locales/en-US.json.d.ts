@@ -71,15 +71,6 @@ interface EnUS {
 			allDataDeleted: "All data has been deleted.";
 			confirmAlert: "This will delete all extension data related to options. Continue?";
 		};
-		optionDisabled: {
-			either: { label: "Enable {{OPTIONS}} to configure this option"; separator: " or " };
-			plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };
-			singular: "Enable '{{OPTION}}' to configure this option";
-			specificOption: {
-				deepDarkCustomTheme: "Set theme to 'Custom' to configure this option.";
-				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
-			};
-		};
 		sections: {
 			automaticQuality: {
 				enable: {
@@ -139,7 +130,10 @@ interface EnUS {
 					expand: "Expand Editor";
 					noProblems: "No problems found.";
 				};
-				enable: { label: "Custom CSS"; title: "Enables custom CSS to be applied to the page" };
+				enable: {
+					label: "Enable custom CSS";
+					title: "Enables custom CSS to be applied to the page";
+				};
 				title: "Custom CSS Settings";
 			};
 			featureMenu: {
@@ -154,7 +148,7 @@ interface EnUS {
 			};
 			forwardRewindButtons: {
 				enable: {
-					label: "Forward/rewind buttons";
+					label: "Enable forward/rewind buttons";
 					title: "Adds forward and rewind buttons to the video player";
 				};
 				time: {
@@ -244,7 +238,10 @@ interface EnUS {
 						label: "Pause background players";
 						title: "Pauses video players in background tabs when you start a new player in foreground tab";
 					};
-					playlistRemover: { label: "The removal of playlists from homepage"; title: "Get rid of playlists" };
+					playlistRemover: {
+						label: "Enable the removal of playlists from homepage";
+						title: "Get rid of playlists";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -378,7 +375,7 @@ interface EnUS {
 				};
 				holdModifierKey: {
 					enable: {
-						label: "When holding modifier key";
+						label: "Enable when holding modifier key";
 						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
 					};
 					optionLabel: "{{KEY}} key";
@@ -386,7 +383,7 @@ interface EnUS {
 				};
 				holdRightClick: {
 					enable: {
-						label: "When holding right click";
+						label: "Enable when holding right click";
 						title: "Hold right click to enable scroll wheel volume control";
 					};
 				};
@@ -436,7 +433,10 @@ interface EnUS {
 					mainText: { label: "Main text color"; title: "Color for main text" };
 					secondBackground: { label: "Secondary background color"; title: "Color for secondary background" };
 				};
-				enable: { label: "Deep Dark Theme"; title: "Activate the selected theme for the page" };
+				enable: {
+					label: "Enable selected theme";
+					title: "Activate the selected theme for the page";
+				};
 				select: { label: "Select theme"; title: "Select a theme to be applied to the page" };
 				title: "YouTube Deep Dark Settings";
 			};

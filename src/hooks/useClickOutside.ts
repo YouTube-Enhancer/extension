@@ -5,7 +5,7 @@ import { type RefObject, useEffect } from "react";
 // Improved version of https://usehooks.com/useOnClickOutside/
 
 const useClickOutside = <ElementType extends HTMLElementTagNameMap[keyof HTMLElementTagNameMap]>(
-	ref: RefObject<Nullable<ElementType>>,
+	ref: RefObject<ElementType>,
 	handler: (event: FocusEvent | MouseEvent | TouchEvent) => void
 ) => {
 	useEffect(() => {

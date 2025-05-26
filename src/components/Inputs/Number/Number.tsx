@@ -48,10 +48,11 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 	};
 
 	const disabledButtonClasses = {
-		"!text-[#4b5563]": disabled,
-		"cursor-not-allowed": disabled,
 		"cursor-pointer": !disabled,
-		"dark:!text-[#4b5563]": disabled
+		"dark:hover:bg-transparent": disabled,
+		"dark:text-[#4b5563]": disabled,
+		"hover:bg-transparent": disabled,
+		"text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	const buttonClasses =
 		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
@@ -65,7 +66,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					aria-hidden={true}
 					className={cn(
 						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
-						disabledButtonClasses
+						{ "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled }
 					)}
 					disabled={disabled}
 					id={id}
