@@ -125,17 +125,17 @@
 		},
 		"optionDisabled": {
 			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+				"separator": " veya "
 			},
 			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
+				"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+				"separator": " ve "
 			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
+			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
-				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+				"deepDarkCustomTheme": "Bu seçeneği yapılandırmak için temayı 'Özel' olarak ayarlayın.",
+				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın."
 			}
 		},
 		"sections": {
@@ -241,7 +241,7 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Forward/rewind buttons",
+					"label": "İleri/geri sarma düğmeleri",
 					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"time": {
@@ -591,8 +591,8 @@
 						"title": "İkincil metin rengi"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Üzerine gelindiğindeki arka plan rengi",
+						"title": "Üzerine gelindiğindeki arka plan rengi"
 					},
 					"mainBackground": {
 						"label": "Ana arka plan rengi",
