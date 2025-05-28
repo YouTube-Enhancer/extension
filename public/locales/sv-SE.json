@@ -129,7 +129,7 @@
 				"separator": " or "
 			},
 			"plural": {
-				"label": "Enable {{OPTIONS}} to configure these option",
+				"label": "Enable {{OPTIONS}} to configure this option",
 				"separator": " and "
 			},
 			"singular": "Enable '{{OPTION}}' to configure this option",
