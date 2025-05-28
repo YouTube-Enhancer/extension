@@ -2,7 +2,7 @@
 	"langCode": "pl-PL",
 	"langName": "Polish",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
+		"resumingVideo": "Wznowienie wideo za {{VIDEO_TIME}}",
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
@@ -10,7 +10,7 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
+						"copied": "Skopiowano!",
 						"label": "Copy video URL with timestamp"
 					}
 				},
