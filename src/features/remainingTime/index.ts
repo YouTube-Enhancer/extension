@@ -20,8 +20,6 @@ export async function setupRemainingTime() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
-	const timeDisplay = document.querySelector(".ytp-time-display > span.ytp-time-wrapper");
-	if (!timeDisplay) return;
 	// Get the player element
 	const playerContainer =
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
@@ -29,6 +27,8 @@ export async function setupRemainingTime() {
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
+	const timeDisplay = playerContainer.querySelector(".ytp-time-display > span.ytp-time-wrapper > .ytp-time-contents");
+	if (!timeDisplay) return;
 	// Get the video element
 	const videoElement = playerContainer.querySelector("video");
 	// If video element is not available, return
