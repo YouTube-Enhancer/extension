@@ -123,6 +123,21 @@
 			"allDataDeleted": "모든 데이터가 삭제되었습니다.",
 			"confirmAlert": "모든 데이터가 삭제됩니다. 진행할까요?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure these option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "백그라운드 플레이어 일시 중지",
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
+					"playlistRemover": {
+						"label": "The removal of playlists from homepage",
+						"title": "Get rid of playlists"
+					},
 					"remainingTime": {
 						"label": "남은 시간 표시",
 						"title": "현재 동영상의 남은 시간을 표시합니다."
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업 스킵",
 						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
-					},
-					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
 					}
 				},
 				"title": "기타 설정"

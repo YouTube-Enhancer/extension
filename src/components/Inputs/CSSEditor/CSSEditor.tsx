@@ -11,6 +11,7 @@ import ExpandButton from "./ExpandButton";
 
 export type CSSEditorProps = {
 	className?: string;
+	disabled: boolean;
 	id: string;
 	onChange: (value: string) => void;
 	value: string;
@@ -22,7 +23,7 @@ type ScrollPosition = {
 
 // TODO: add share custom css button with integration with yt-enhancer.dev
 
-const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value }) => {
+const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, id, onChange, value }) => {
 	const editorRef = useRef<Nullable<editor.IStandaloneCodeEditor>>(null);
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
@@ -113,19 +114,21 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, id, onChange, value })
 				ref={expandButtonRef}
 			/>
 			<Editor
-				className={"size-full grow"}
+				className={cn("size-full grow", { "cursor-not-allowed": disabled, "pointer-events-none": disabled })}
 				height={isEditorExpanded ? expandedEditorHeight : 400}
 				language="css"
-				onChange={setEditorValueCallback}
+				onChange={disabled ? () => void 0 : setEditorValueCallback}
 				onMount={handleEditorDidMount}
 				onValidate={setProblems}
 				options={editorOptions}
 				theme="vs-dark"
 				value={editorValue}
 				width={isEditorExpanded ? window.document.documentElement.clientWidth : 500}
+				wrapperProps={{ className: cn({ "cursor-not-allowed": disabled }) }}
 			/>
 			<EditorProblems
 				className={cn("max-h-32 w-[500px] overflow-y-auto", {
+					"cursor-not-allowed": disabled,
 					"fixed bottom-0 left-0 w-full": isEditorExpanded
 				})}
 				editor={editorRef.current}

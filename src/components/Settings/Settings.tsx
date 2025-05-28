@@ -24,7 +24,7 @@ import { generateErrorMessage } from "zod-error";
 import type { SelectOption } from "../Inputs";
 
 import Loader from "../Loader";
-import Setting from "./components/Setting";
+import Setting, { type parentSetting } from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
@@ -422,6 +422,47 @@ export default function Settings() {
 		settings.enable_scroll_wheel_volume_control?.toString() !== "true" &&
 		settings.enable_scroll_wheel_speed_control?.toString() !== "true" &&
 		settings.enable_playback_speed_buttons?.toString() !== "true";
+	const isDeepDarkThemeDisabled = settings.enable_deep_dark_theme?.toString() !== "true";
+	const isDeepDarkThemeCustom = settings.deep_dark_preset === "Custom";
+	const isDeepDarkThemeColorPickerDisabled = isDeepDarkThemeDisabled || (!isDeepDarkThemeDisabled && !isDeepDarkThemeCustom);
+	const deepDarkThemeColorPickerParentSetting = (
+		(isDeepDarkThemeDisabled && !isDeepDarkThemeCustom) || (isDeepDarkThemeDisabled && isDeepDarkThemeCustom) ?
+			{
+				type: "singular",
+				value: "settings.sections.youtubeDeepDark.enable.label"
+			}
+		:	{
+				type: "specificOption",
+				value: "settings.optionDisabled.specificOption.deepDarkCustomTheme"
+			}) satisfies parentSetting;
+	const osdParentSetting = {
+		type: "either",
+		value: ["settings.sections.scrollWheelVolumeControl.enable.label", "settings.sections.scrollWheelSpeedControl.enable.label"]
+	} satisfies parentSetting;
+	const scrollWheelSpeedControlParentSetting = {
+		type: "singular",
+		value: "settings.sections.scrollWheelSpeedControl.enable.label"
+	} satisfies parentSetting;
+	const scrollWheelVolumeControlParentSetting = {
+		type: "singular",
+		value: "settings.sections.scrollWheelVolumeControl.enable.label"
+	} satisfies parentSetting;
+	const automaticQualityParentSetting = {
+		type: "singular",
+		value: "settings.sections.automaticQuality.enable.label"
+	} satisfies parentSetting;
+	const volumeBoostParentSetting = {
+		type: "singular",
+		value: "settings.sections.volumeBoost.enable.label"
+	} satisfies parentSetting;
+	const screenshotButtonParentSetting = {
+		type: "singular",
+		value: "settings.sections.screenshotButton.enable.label"
+	} satisfies parentSetting;
+	const playlistLengthParentSetting = {
+		type: "singular",
+		value: "settings.sections.playlistLength.enable.label"
+	} satisfies parentSetting;
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider value={{ direction: localeDirection[settings.language], i18nInstance, settings }}>
@@ -448,6 +489,10 @@ export default function Settings() {
 							{ label: t("settings.sections.featureMenu.openType.select.options.hover"), value: "hover" },
 							{ label: t("settings.sections.featureMenu.openType.select.options.click"), value: "click" }
 						]}
+						parentSetting={{
+							type: "specificOption",
+							value: "settings.optionDisabled.specificOption.featureMenu"
+						}}
 						selectedOption={getSelectedOption("feature_menu_open_type")}
 						title={t("settings.sections.featureMenu.openType.select.title")}
 						type="select"
@@ -483,6 +528,10 @@ export default function Settings() {
 									}
 								}}
 								options={buttonPlacementOptions}
+								parentSetting={{
+									type: "singular",
+									value: `settings.sections.buttonPlacement.select.buttonNames.${feature}`
+								}}
 								selectedOption={getSelectedOption(`button_placements.${feature}`)}
 								title={t(`settings.sections.buttonPlacement.select.title`, {
 									BUTTON_NAME: label.toLowerCase(),
@@ -500,6 +549,7 @@ export default function Settings() {
 						id="enable_remember_last_volume"
 						label={t("settings.sections.miscellaneous.features.rememberLastVolume.label")}
 						onChange={setCheckboxOption("enable_remember_last_volume")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.rememberLastVolume.title")}
 						type="checkbox"
 					/>
@@ -508,6 +558,7 @@ export default function Settings() {
 						id="enable_maximize_player_button"
 						label={t("settings.sections.miscellaneous.features.maximizePlayerButton.label")}
 						onChange={setCheckboxOption("enable_maximize_player_button")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.maximizePlayerButton.title")}
 						type="checkbox"
 					/>
@@ -516,6 +567,7 @@ export default function Settings() {
 						id="enable_remaining_time"
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.remainingTime.title")}
 						type="checkbox"
 					/>
@@ -524,6 +576,7 @@ export default function Settings() {
 						id="enable_pausing_background_players"
 						label={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.label")}
 						onChange={setCheckboxOption("enable_pausing_background_players")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.pauseBackgroundPlayers.title")}
 						type="checkbox"
 					/>
@@ -532,6 +585,7 @@ export default function Settings() {
 						id="enable_loop_button"
 						label={t("settings.sections.miscellaneous.features.loopButton.label")}
 						onChange={setCheckboxOption("enable_loop_button")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.loopButton.title")}
 						type="checkbox"
 					/>
@@ -540,6 +594,7 @@ export default function Settings() {
 						id="enable_copy_timestamp_url_button"
 						label={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.label")}
 						onChange={setCheckboxOption("enable_copy_timestamp_url_button")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.copyTimestampUrlButton.title")}
 						type="checkbox"
 					/>
@@ -548,6 +603,7 @@ export default function Settings() {
 						id="enable_hide_scrollbar"
 						label={t("settings.sections.miscellaneous.features.hideScrollbar.label")}
 						onChange={setCheckboxOption("enable_hide_scrollbar")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideScrollbar.title")}
 						type="checkbox"
 					/>
@@ -556,6 +612,7 @@ export default function Settings() {
 						id="enable_automatic_theater_mode"
 						label={t("settings.sections.miscellaneous.features.automaticTheaterMode.label")}
 						onChange={setCheckboxOption("enable_automatic_theater_mode")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.automaticTheaterMode.title")}
 						type="checkbox"
 					/>
@@ -564,6 +621,7 @@ export default function Settings() {
 						id="enable_open_transcript_button"
 						label={t("settings.sections.miscellaneous.features.openTranscriptButton.label")}
 						onChange={setCheckboxOption("enable_open_transcript_button")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.openTranscriptButton.title")}
 						type="checkbox"
 					/>
@@ -572,6 +630,7 @@ export default function Settings() {
 						id="enable_open_youtube_settings_on_hover"
 						label={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.label")}
 						onChange={setCheckboxOption("enable_open_youtube_settings_on_hover")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.openYouTubeSettingsOnHover.title")}
 						type="checkbox"
 					/>
@@ -580,6 +639,7 @@ export default function Settings() {
 						id="enable_redirect_remover"
 						label={t("settings.sections.miscellaneous.features.removeRedirect.label")}
 						onChange={setCheckboxOption("enable_redirect_remover")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.removeRedirect.title")}
 						type="checkbox"
 					/>
@@ -588,6 +648,7 @@ export default function Settings() {
 						id="enable_share_shortener"
 						label={t("settings.sections.miscellaneous.features.shareShortener.label")}
 						onChange={setCheckboxOption("enable_share_shortener")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.shareShortener.title")}
 						type="checkbox"
 					/>
@@ -596,6 +657,7 @@ export default function Settings() {
 						id="enable_skip_continue_watching"
 						label={t("settings.sections.miscellaneous.features.skipContinueWatching.label")}
 						onChange={setCheckboxOption("enable_skip_continue_watching")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.skipContinueWatching.title")}
 						type="checkbox"
 					/>
@@ -604,6 +666,7 @@ export default function Settings() {
 						id="enable_shorts_auto_scroll"
 						label={t("settings.sections.miscellaneous.features.shortsAutoScroll.label")}
 						onChange={setCheckboxOption("enable_shorts_auto_scroll")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.shortsAutoScroll.title")}
 						type="checkbox"
 					/>
@@ -612,6 +675,7 @@ export default function Settings() {
 						id="enable_hide_shorts"
 						label={t("settings.sections.miscellaneous.features.hideShorts.label")}
 						onChange={setCheckboxOption("enable_hide_shorts")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideShorts.title")}
 						type="checkbox"
 					/>
@@ -620,6 +684,7 @@ export default function Settings() {
 						id="enable_hide_live_stream_chat"
 						label={t("settings.sections.miscellaneous.features.hideLiveStreamChat.label")}
 						onChange={setCheckboxOption("enable_hide_live_stream_chat")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideLiveStreamChat.title")}
 						type="checkbox"
 					/>
@@ -628,6 +693,7 @@ export default function Settings() {
 						id="enable_hide_translate_comment"
 						label={t("settings.sections.miscellaneous.features.hideTranslateComment.label")}
 						onChange={setCheckboxOption("enable_hide_translate_comment")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideTranslateComment.title")}
 						type="checkbox"
 					/>
@@ -636,6 +702,7 @@ export default function Settings() {
 						id="enable_hide_end_screen_cards"
 						label={t("settings.sections.miscellaneous.features.hideEndScreenCards.label")}
 						onChange={setCheckboxOption("enable_hide_end_screen_cards")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideEndScreenCards.title")}
 						type="checkbox"
 					/>
@@ -644,6 +711,7 @@ export default function Settings() {
 						id="enable_hide_end_screen_cards_button"
 						label={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.label")}
 						onChange={setCheckboxOption("enable_hide_end_screen_cards_button")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideEndScreenCardsButton.title")}
 						type="checkbox"
 					/>
@@ -652,6 +720,7 @@ export default function Settings() {
 						id="enable_hide_paid_promotion_banner"
 						label={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.label")}
 						onChange={setCheckboxOption("enable_hide_paid_promotion_banner")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hidePaidPromotionBanner.title")}
 						type="checkbox"
 					/>
@@ -660,6 +729,7 @@ export default function Settings() {
 						id="enable_hide_official_artist_videos_from_home_page"
 						label={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.label")}
 						onChange={setCheckboxOption("enable_hide_official_artist_videos_from_home_page")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.hideOfficialArtistVideosFromHomePage.title")}
 						type="checkbox"
 					/>
@@ -668,6 +738,7 @@ export default function Settings() {
 						id="enable_automatically_disable_closed_captions"
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
 						type="checkbox"
 					/>
@@ -676,6 +747,7 @@ export default function Settings() {
 						id="enable_hide_playlist_recommendations_from_home_page"
 						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
 						onChange={setCheckboxOption("enable_hide_playlist_recommendations_from_home_page")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
 						type="checkbox"
 					/>
@@ -684,6 +756,7 @@ export default function Settings() {
 						id="enable_automatically_disable_ambient_mode"
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_ambient_mode")}
+						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.title")}
 						type="checkbox"
 					/>
@@ -695,14 +768,20 @@ export default function Settings() {
 						id="enable_video_history"
 						label={t("settings.sections.videoHistory.enable.label")}
 						onChange={setCheckboxOption("enable_video_history")}
+						parentSetting={null}
 						title={t("settings.sections.videoHistory.enable.title")}
 						type="checkbox"
 					/>
 					<Setting
+						disabled={settings.enable_video_history?.toString() !== "true"}
 						id="video_history_resume_type"
 						label={t("settings.sections.videoHistory.resumeType.select.label")}
 						onChange={setValueOption("video_history_resume_type")}
 						options={videoHistoryResumeTypeOptions}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.videoHistory.enable.label"
+						}}
 						selectedOption={getSelectedOption("video_history_resume_type")}
 						title={t("settings.sections.videoHistory.resumeType.select.title")}
 						type="select"
@@ -716,6 +795,7 @@ export default function Settings() {
 						label={t("settings.sections.onScreenDisplaySettings.color.label")}
 						onChange={setValueOption("osd_display_color")}
 						options={colorOptions}
+						parentSetting={osdParentSetting}
 						selectedOption={getSelectedOption("osd_display_color")}
 						title={t("settings.sections.onScreenDisplaySettings.color.title")}
 						type="select"
@@ -728,6 +808,7 @@ export default function Settings() {
 						label={t("settings.sections.onScreenDisplaySettings.type.label")}
 						onChange={setValueOption("osd_display_type")}
 						options={OSD_DisplayTypeOptions}
+						parentSetting={osdParentSetting}
 						selectedOption={getSelectedOption("osd_display_type")}
 						title={t("settings.sections.onScreenDisplaySettings.type.title")}
 						type="select"
@@ -738,6 +819,7 @@ export default function Settings() {
 						label={t("settings.sections.onScreenDisplaySettings.position.label")}
 						onChange={setValueOption("osd_display_position")}
 						options={OSD_PositionOptions}
+						parentSetting={osdParentSetting}
 						selectedOption={getSelectedOption("osd_display_position")}
 						title={t("settings.sections.onScreenDisplaySettings.position.title")}
 						type="select"
@@ -749,6 +831,7 @@ export default function Settings() {
 						max={100}
 						min={1}
 						onChange={setValueOption("osd_display_opacity")}
+						parentSetting={osdParentSetting}
 						title={t("settings.sections.onScreenDisplaySettings.opacity.title")}
 						type="number"
 						value={settings.osd_display_opacity}
@@ -759,6 +842,7 @@ export default function Settings() {
 						label={t("settings.sections.onScreenDisplaySettings.hide.label")}
 						min={1}
 						onChange={setValueOption("osd_display_hide_time")}
+						parentSetting={osdParentSetting}
 						title={t("settings.sections.onScreenDisplaySettings.hide.title")}
 						type="number"
 						value={settings.osd_display_hide_time}
@@ -769,6 +853,7 @@ export default function Settings() {
 						label={t("settings.sections.onScreenDisplaySettings.padding.label")}
 						min={0}
 						onChange={setValueOption("osd_display_padding")}
+						parentSetting={osdParentSetting}
 						title={t("settings.sections.onScreenDisplaySettings.padding.title")}
 						type="number"
 						value={settings.osd_display_padding}
@@ -781,6 +866,7 @@ export default function Settings() {
 						id="enable_scroll_wheel_speed_control"
 						label={t("settings.sections.scrollWheelSpeedControl.enable.label")}
 						onChange={setCheckboxOption("enable_scroll_wheel_speed_control")}
+						parentSetting={null}
 						title={t("settings.sections.scrollWheelSpeedControl.enable.title")}
 						type="checkbox"
 					/>
@@ -802,6 +888,7 @@ export default function Settings() {
 							setValueOption("scroll_wheel_speed_control_modifier_key")(value);
 						}}
 						options={scrollWheelControlModifierKeyOptions}
+						parentSetting={scrollWheelSpeedControlParentSetting}
 						selectedOption={getSelectedOption("scroll_wheel_speed_control_modifier_key")}
 						title={t("settings.sections.scrollWheelSpeedControl.select.title")}
 						type="select"
@@ -813,6 +900,7 @@ export default function Settings() {
 						max={1}
 						min={0.05}
 						onChange={setValueOption("speed_adjustment_steps")}
+						parentSetting={scrollWheelSpeedControlParentSetting}
 						step={0.05}
 						title={t("settings.sections.scrollWheelSpeedControl.adjustmentSteps.title")}
 						type="number"
@@ -826,6 +914,7 @@ export default function Settings() {
 						id="enable_scroll_wheel_volume_control"
 						label={t("settings.sections.scrollWheelVolumeControl.enable.label")}
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control")}
+						parentSetting={scrollWheelVolumeControlParentSetting}
 						title={t("settings.sections.scrollWheelVolumeControl.enable.title")}
 						type="checkbox"
 					/>
@@ -834,6 +923,7 @@ export default function Settings() {
 						id="enable_scroll_wheel_volume_control_hold_modifier_key"
 						label={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.enable.label")}
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_modifier_key")}
+						parentSetting={scrollWheelVolumeControlParentSetting}
 						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.enable.title")}
 						type="checkbox"
 					/>
@@ -842,6 +932,7 @@ export default function Settings() {
 						id="enable_scroll_wheel_volume_control_hold_right_click"
 						label={t("settings.sections.scrollWheelVolumeControl.holdRightClick.enable.label")}
 						onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_right_click")}
+						parentSetting={scrollWheelVolumeControlParentSetting}
 						title={t("settings.sections.scrollWheelVolumeControl.holdRightClick.enable.title")}
 						type="checkbox"
 					/>
@@ -863,6 +954,7 @@ export default function Settings() {
 							setValueOption("scroll_wheel_volume_control_modifier_key")(value);
 						}}
 						options={scrollWheelControlModifierKeyOptions}
+						parentSetting={scrollWheelVolumeControlParentSetting}
 						selectedOption={getSelectedOption("scroll_wheel_volume_control_modifier_key")}
 						title={t("settings.sections.scrollWheelVolumeControl.holdModifierKey.select.title")}
 						type="select"
@@ -873,6 +965,7 @@ export default function Settings() {
 						label={t("settings.sections.scrollWheelVolumeControl.adjustmentSteps.label")}
 						min={1}
 						onChange={setValueOption("volume_adjustment_steps")}
+						parentSetting={scrollWheelVolumeControlParentSetting}
 						title={t("settings.sections.scrollWheelVolumeControl.adjustmentSteps.title")}
 						type="number"
 						value={settings.volume_adjustment_steps}
@@ -885,6 +978,7 @@ export default function Settings() {
 						id="enable_automatically_set_quality"
 						label={t("settings.sections.automaticQuality.enable.label")}
 						onChange={setCheckboxOption("enable_automatically_set_quality")}
+						parentSetting={null}
 						title={t("settings.sections.automaticQuality.enable.title")}
 						type="checkbox"
 					/>
@@ -894,6 +988,7 @@ export default function Settings() {
 						label={t("settings.sections.automaticQuality.select.label")}
 						onChange={setValueOption("player_quality")}
 						options={YouTubePlayerQualityOptions}
+						parentSetting={automaticQualityParentSetting}
 						selectedOption={getSelectedOption("player_quality")}
 						title={t("settings.sections.automaticQuality.select.title")}
 						type="select"
@@ -904,6 +999,7 @@ export default function Settings() {
 						label={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.label")}
 						onChange={setValueOption("player_quality_fallback_strategy")}
 						options={PlayerQualityFallbackStrategyOptions}
+						parentSetting={automaticQualityParentSetting}
 						selectedOption={getSelectedOption("player_quality_fallback_strategy")}
 						title={t("settings.sections.automaticQuality.fallbackQualityStrategy.select.title")}
 						type="select"
@@ -916,6 +1012,7 @@ export default function Settings() {
 						id="enable_forced_playback_speed"
 						label={t("settings.sections.playbackSpeed.enable.label")}
 						onChange={setCheckboxOption("enable_forced_playback_speed")}
+						parentSetting={null}
 						title={t("settings.sections.playbackSpeed.enable.title")}
 						type="checkbox"
 					/>
@@ -924,6 +1021,7 @@ export default function Settings() {
 						id="enable_playback_speed_buttons"
 						label={t("settings.sections.playbackSpeed.playbackSpeedButtons.label")}
 						onChange={setCheckboxOption("enable_playback_speed_buttons")}
+						parentSetting={null}
 						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.title")}
 						type="checkbox"
 					/>
@@ -934,6 +1032,10 @@ export default function Settings() {
 						max={youtubePlayerMaxSpeed}
 						min={youtubePlayerSpeedStep}
 						onChange={setValueOption("player_speed")}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.playbackSpeed.enable.label"
+						}}
 						step={youtubePlayerSpeedStep}
 						title={t("settings.sections.playbackSpeed.select.title")}
 						type="number"
@@ -946,6 +1048,10 @@ export default function Settings() {
 						max={1}
 						min={youtubePlayerSpeedStep}
 						onChange={setValueOption("playback_buttons_speed")}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.playbackSpeed.playbackSpeedButtons.label"
+						}}
 						step={youtubePlayerSpeedStep}
 						title={t("settings.sections.playbackSpeed.playbackSpeedButtons.select.title")}
 						type="number"
@@ -959,6 +1065,7 @@ export default function Settings() {
 						id="enable_volume_boost"
 						label={t("settings.sections.volumeBoost.enable.label")}
 						onChange={setCheckboxOption("enable_volume_boost")}
+						parentSetting={null}
 						title={t("settings.sections.volumeBoost.enable.title")}
 						type="checkbox"
 					/>
@@ -968,6 +1075,7 @@ export default function Settings() {
 						label={t("settings.sections.volumeBoost.mode.select.label")}
 						onChange={setValueOption("volume_boost_mode")}
 						options={VolumeBoostModeOptions}
+						parentSetting={volumeBoostParentSetting}
 						selectedOption={getSelectedOption("volume_boost_mode")}
 						title={t("settings.sections.volumeBoost.mode.select.title")}
 						type="select"
@@ -979,6 +1087,7 @@ export default function Settings() {
 						max={100}
 						min={1}
 						onChange={setValueOption("volume_boost_amount")}
+						parentSetting={volumeBoostParentSetting}
 						title={t("settings.sections.volumeBoost.boostAmount.title")}
 						type="number"
 						value={settings.volume_boost_amount}
@@ -991,6 +1100,7 @@ export default function Settings() {
 						id="enable_screenshot_button"
 						label={t("settings.sections.screenshotButton.enable.label")}
 						onChange={setCheckboxOption("enable_screenshot_button")}
+						parentSetting={null}
 						title={t("settings.sections.screenshotButton.enable.title")}
 						type="checkbox"
 					/>
@@ -1000,6 +1110,7 @@ export default function Settings() {
 						label={t("settings.sections.screenshotButton.selectSaveAs.label")}
 						onChange={setValueOption("screenshot_save_as")}
 						options={ScreenshotSaveAsOptions}
+						parentSetting={screenshotButtonParentSetting}
 						selectedOption={getSelectedOption("screenshot_save_as")}
 						title={t("settings.sections.screenshotButton.selectSaveAs.title")}
 						type="select"
@@ -1010,6 +1121,7 @@ export default function Settings() {
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
 						options={ScreenshotFormatOptions}
+						parentSetting={screenshotButtonParentSetting}
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
@@ -1022,6 +1134,7 @@ export default function Settings() {
 						id="enable_forward_rewind_buttons"
 						label={t("settings.sections.forwardRewindButtons.enable.label")}
 						onChange={setCheckboxOption("enable_forward_rewind_buttons")}
+						parentSetting={null}
 						title={t("settings.sections.forwardRewindButtons.enable.title")}
 						type="checkbox"
 					/>
@@ -1030,6 +1143,10 @@ export default function Settings() {
 						id="forward_rewind_buttons_time"
 						label={t("settings.sections.forwardRewindButtons.time.label")}
 						onChange={setValueOption("forward_rewind_buttons_time")}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.forwardRewindButtons.enable.label"
+						}}
 						title={t("settings.sections.forwardRewindButtons.time.title")}
 						type="number"
 						value={settings.forward_rewind_buttons_time}
@@ -1042,6 +1159,7 @@ export default function Settings() {
 						id="enable_playlist_length"
 						label={t("settings.sections.playlistLength.enable.label")}
 						onChange={setCheckboxOption("enable_playlist_length")}
+						parentSetting={null}
 						title={t("settings.sections.playlistLength.enable.title")}
 						type="checkbox"
 					/>
@@ -1051,6 +1169,7 @@ export default function Settings() {
 						label={t("settings.sections.playlistLength.wayToGetLength.select.label")}
 						onChange={setValueOption("playlist_length_get_method")}
 						options={playlistLengthGetMethodOptions}
+						parentSetting={playlistLengthParentSetting}
 						selectedOption={getSelectedOption("playlist_length_get_method")}
 						title={t("settings.sections.playlistLength.wayToGetLength.select.title")}
 						type="select"
@@ -1061,6 +1180,7 @@ export default function Settings() {
 						label={t("settings.sections.playlistLength.wayToGetWatchTime.select.label")}
 						onChange={setValueOption("playlist_watch_time_get_method")}
 						options={playlistWatchTimeGetMethodOptions}
+						parentSetting={playlistLengthParentSetting}
 						selectedOption={getSelectedOption("playlist_watch_time_get_method")}
 						title={t("settings.sections.playlistLength.wayToGetWatchTime.select.title")}
 						type="select"
@@ -1069,10 +1189,12 @@ export default function Settings() {
 				<SettingSection title={t("settings.sections.youtubeDataApiV3Key.title")}>
 					<SettingTitle />
 					<Setting
+						disabled={false}
 						id="youtube_data_api_v3_key"
 						input_type="password"
 						label={t("settings.sections.youtubeDataApiV3Key.input.label")}
 						onChange={setValueOption("youtube_data_api_v3_key")}
+						parentSetting={null}
 						title={t("settings.sections.youtubeDataApiV3Key.input.title")}
 						type="text-input"
 						value={settings.youtube_data_api_v3_key}
@@ -1100,6 +1222,7 @@ export default function Settings() {
 						id="enable_deep_dark_theme"
 						label={t("settings.sections.youtubeDeepDark.enable.label")}
 						onChange={setCheckboxOption("enable_deep_dark_theme")}
+						parentSetting={null}
 						title={t("settings.sections.youtubeDeepDark.enable.title")}
 						type="checkbox"
 					/>
@@ -1109,69 +1232,80 @@ export default function Settings() {
 						label={t("settings.sections.youtubeDeepDark.select.label")}
 						onChange={setValueOption("deep_dark_preset")}
 						options={youtubeDeepDarkThemeOptions}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.youtubeDeepDark.enable.label"
+						}}
 						selectedOption={getSelectedOption("deep_dark_preset")}
 						title={t("settings.sections.youtubeDeepDark.select.title")}
 						type="select"
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.mainColor"}
 						label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.mainColor}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.mainBackground"}
 						label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.mainBackground}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.secondBackground"}
 						label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.secondBackground}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.hoverBackground"}
 						label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.hoverBackground}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.mainText"}
 						label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.mainText}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.dimmerText"}
 						label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.dimmerText}
 					/>
 					<Setting
-						disabled={settings.deep_dark_preset !== "Custom"}
+						disabled={isDeepDarkThemeColorPickerDisabled}
 						id={"deep_dark_custom_theme_colors.colorShadow"}
 						label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
 						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
+						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
 						type="color-picker"
 						value={settings.deep_dark_custom_theme_colors.colorShadow}
@@ -1184,15 +1318,21 @@ export default function Settings() {
 						id="enable_custom_css"
 						label={t("settings.sections.customCSS.enable.label")}
 						onChange={setCheckboxOption("enable_custom_css")}
+						parentSetting={null}
 						title={t("settings.sections.customCSS.enable.title")}
 						type="checkbox"
 					/>
 					<Setting
+						disabled={settings.enable_custom_css?.toString() !== "true"}
 						id="custom_css_code"
 						onChange={(value) => {
 							if (value !== undefined) {
 								setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 							}
+						}}
+						parentSetting={{
+							type: "singular",
+							value: "settings.sections.customCSS.enable.label"
 						}}
 						type="css-editor"
 						value={settings.custom_css_code}
@@ -1355,6 +1495,7 @@ function LanguageOptions({
 				loading={languagesLoading}
 				onChange={setValueOption("language")}
 				options={languageOptions}
+				parentSetting={null}
 				selectedOption={selectedLanguage}
 				title={t("settings.sections.language.select.title")}
 				type="select"
