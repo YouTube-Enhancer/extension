@@ -419,9 +419,7 @@ export default function Settings() {
 		void chrome.tabs.create({ url });
 	};
 	const isOSDDisabled =
-		settings.enable_scroll_wheel_volume_control?.toString() !== "true" &&
-		settings.enable_scroll_wheel_speed_control?.toString() !== "true" &&
-		settings.enable_playback_speed_buttons?.toString() !== "true";
+		settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true";
 	const isDeepDarkThemeDisabled = settings.enable_deep_dark_theme?.toString() !== "true";
 	const isDeepDarkThemeCustom = settings.deep_dark_preset === "Custom";
 	const isDeepDarkThemeColorPickerDisabled = isDeepDarkThemeDisabled || (!isDeepDarkThemeDisabled && !isDeepDarkThemeCustom);
@@ -801,9 +799,7 @@ export default function Settings() {
 						type="select"
 					/>
 					<Setting
-						disabled={
-							settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true"
-						}
+						disabled={isOSDDisabled}
 						id="osd_display_type"
 						label={t("settings.sections.onScreenDisplaySettings.type.label")}
 						onChange={setValueOption("osd_display_type")}
