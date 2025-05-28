@@ -123,6 +123,21 @@
 			"allDataDeleted": "Tüm veriler silindi.",
 			"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -226,7 +241,7 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
+					"label": "Forward/rewind buttons",
 					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"time": {
@@ -328,6 +343,10 @@
 						"label": "Arka plan oynatıcılarını duraklat",
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
+					"playlistRemover": {
+						"label": "Ana sayfadan oynatma listelerinin kaldırılmasını etkinleştirin",
+						"title": "Oynatma listelerinden kurtulun"
+					},
 					"remainingTime": {
 						"label": "Kalan süre",
 						"title": "İzlediğiniz videonun kalan süresini gösterir"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
 						"title": "Skips the idle dialog that pauses video playback"
-					},
-					"playlistRemover": {
-						"label": "Ana sayfadan oynatma listelerinin kaldırılmasını etkinleştirin",
-						"title": "Oynatma listelerinden kurtulun"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -497,7 +512,7 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
+						"label": "When holding modifier key",
 						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
 					},
 					"optionLabel": "{{KEY}} anahtarı",

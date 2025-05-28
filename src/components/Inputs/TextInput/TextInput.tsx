@@ -7,6 +7,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 export type TextInputProps = {
 	className?: string;
+	disabled: boolean;
 	id: string;
 	input_type: "password" | "text";
 	label: string;
@@ -15,7 +16,7 @@ export type TextInputProps = {
 	value: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({ className, id, input_type, label, onChange, title, value }) => {
+const TextInput: React.FC<TextInputProps> = ({ className, disabled, id, input_type, label, onChange, title, value }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const inputRef = useRef<Nullable<HTMLInputElement>>(null);
 	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +33,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, id, input_type, label,
 	const handleInputWrapperClick = () => {
 		inputRef.current?.focus();
 	};
+	const disabledInputClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
 	return (
 		<div aria-valuetext={value} className={cn("relative flex flex-row items-center justify-between gap-4", className)} id={id} title={title}>
 			<label htmlFor={id}>{label}</label>
@@ -41,7 +43,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, id, input_type, label,
 			>
 				{input_type === "password" && (
 					<button
-						className="text-black hover:text-black dark:text-white dark:hover:text-white"
+						className={cn("text-black hover:text-black dark:text-white dark:hover:text-white", disabledInputClasses)}
 						onClick={() => setShowPassword(!showPassword)}
 						type="button"
 					>
@@ -51,7 +53,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, id, input_type, label,
 					</button>
 				)}
 				<input
-					className="!m-0 h-fit w-[118px] bg-transparent !p-0 !text-sm focus:outline-none"
+					className={cn("!m-0 h-fit w-[118px] bg-transparent !p-0 !text-sm focus:outline-none", disabledInputClasses)}
 					id={id}
 					onChange={handleInputChange}
 					ref={inputRef}

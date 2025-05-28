@@ -123,6 +123,21 @@
 			"allDataDeleted": "All data har tagits bort.",
 			"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "Pausa spelare i bakgrunden",
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
+					"playlistRemover": {
+						"label": "Aktivera borttagning av spellistor från startsidan",
+						"title": "Visa inte spellistor"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
-					},
-					"playlistRemover": {
-						"label": "Aktivera borttagning av spellistor från startsidan",
-						"title": "Visa inte spellistor"
 					}
 				},
 				"title": "Övriga inställningar"

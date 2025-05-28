@@ -123,6 +123,21 @@
 			"allDataDeleted": "Tutti i dati sono stati eliminati.",
 			"confirmAlert": "Questo eliminerà tutti i dati delle estensioni relativi alle opzioni. Continuare?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "Metti in pausa riproduttori in secondo piano",
 						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
 					},
+					"playlistRemover": {
+						"label": "Abilita la rimozione delle liste riproduzioni dalla pagina iniziale",
+						"title": "Sbarazzati delle liste riproduzioni"
+					},
 					"remainingTime": {
 						"label": "Tempo rimanente",
 						"title": "Mostra il tempo rimanente per il video che stai guardando"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
-					},
-					"playlistRemover": {
-						"label": "Abilita la rimozione delle liste riproduzioni dalla pagina iniziale",
-						"title": "Sbarazzati delle liste riproduzioni"
 					}
 				},
 				"title": "Impostazioni varie"
