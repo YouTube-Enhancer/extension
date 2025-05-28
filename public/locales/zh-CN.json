@@ -123,6 +123,21 @@
 			"allDataDeleted": "所有数据已删除。",
 			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure these option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "暂停后台播放",
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
+					"playlistRemover": {
+						"label": "启用从主页删除播放列表",
+						"title": "清除播放列表"
+					},
 					"remainingTime": {
 						"label": "剩余时间",
 						"title": "显示您观看的视频的剩余时间"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "跳过\"视频已暂停。继续观看吗？\"",
 						"title": "跳过暂停视频播放的闲置对话框"
-					},
-					"playlistRemover": {
-						"label": "启用从主页删除播放列表",
-						"title": "清除播放列表"
 					}
 				},
 				"title": "其他设置"

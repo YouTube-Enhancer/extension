@@ -123,6 +123,21 @@
 			"allDataDeleted": "Todos los datos han sido eliminados.",
 			"confirmAlert": "Esto eliminará todos los datos de la extensión relacionados con las opciones. ¿Continuar?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure these option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -226,7 +241,7 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
+					"label": "Forward/rewind buttons",
 					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"time": {
@@ -328,6 +343,10 @@
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
+					"playlistRemover": {
+						"label": "The removal of playlists from homepage",
+						"title": "Get rid of playlists"
+					},
 					"remainingTime": {
 						"label": "Tiempo restante",
 						"title": "Muestra el tiempo restante del vídeo que estás viendo"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "Skip \"Video is paused. Continue watching?\"",
 						"title": "Skips the idle dialog that pauses video playback"
-					},
-					"playlistRemover": {
-						"label": "Enable the removal of playlists from homepage",
-						"title": "Get rid of playlists"
 					}
 				},
 				"title": "Ajustes varios"
@@ -597,7 +612,7 @@
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
+					"label": "Deep Dark Theme",
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {

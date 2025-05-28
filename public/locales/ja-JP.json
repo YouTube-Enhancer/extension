@@ -123,6 +123,21 @@
 			"allDataDeleted": "すべてのデータが削除されました。",
 			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure these option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "背後タブのビデオプレイヤーを一時停止",
 						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
 					},
+					"playlistRemover": {
+						"label": "ホームページでプレイリストを削除する",
+						"title": "プレイリストを削除する"
+					},
 					"remainingTime": {
 						"label": "残り時間",
 						"title": "動画の残り時間を表示します"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
 						"title": "動画一時休止する休眠メッセージを抜かされます"
-					},
-					"playlistRemover": {
-						"label": "ホームページでプレイリストを削除する",
-						"title": "プレイリストを削除する"
 					}
 				},
 				"title": "他の設定"

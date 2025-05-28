@@ -55,7 +55,7 @@ const Select = <Key extends configurationId>({
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
-	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
+	const disabledButtonClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled } satisfies ClassValue;
 	return (
 		<div
 			aria-valuetext={selectedOption}

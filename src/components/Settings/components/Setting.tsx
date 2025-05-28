@@ -1,5 +1,6 @@
-import type { configurationId } from "@/src/types";
+import type { configurationId, Nullable, TOptionsKeys } from "@/src/types";
 
+import { useSettings } from "@/src/components/Settings/Settings";
 import useSectionTitle from "@/src/hooks/useSectionTitle";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 
@@ -12,10 +13,23 @@ import type { SliderProps } from "../../Inputs/Slider/Slider";
 import type { TextInputProps } from "../../Inputs/TextInput/TextInput";
 
 import { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInput } from "../../Inputs";
-
+export type parentSetting =
+	| {
+			type: "either" | "plural";
+			value: TOptionsKeys[];
+	  }
+	| {
+			type: "singular";
+			value: TOptionsKeys;
+	  }
+	| {
+			type: "specificOption";
+			value: TOptionsKeys;
+	  };
 type SettingInputProps<ID extends configurationId> = {
 	id: ID;
 	label?: string;
+	parentSetting: Nullable<parentSetting>;
 	title?: string;
 } & (
 	| (CheckboxProps & { type: "checkbox" })
@@ -27,6 +41,8 @@ type SettingInputProps<ID extends configurationId> = {
 	| (TextInputProps & { type: "text-input" })
 );
 export default function Setting<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
+	const { i18nInstance } = useSettings();
+	const { t } = i18nInstance;
 	const { filter } = useSettingsFilter();
 	const { title } = useSectionTitle();
 	const shouldSettingBeVisible =
@@ -36,7 +52,28 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
 		);
 	return shouldSettingBeVisible ?
-			<div className="mx-2 mb-1" title={settingProps.title}>
+			<div
+				className="mx-2 mb-1"
+				title={(() => {
+					const { type: settingType } = settingProps;
+					if ((settingType !== "checkbox" && !settingProps.disabled) || !settingProps.parentSetting) {
+						return settingProps.title;
+					}
+					const {
+						parentSetting: { type, value }
+					} = settingProps;
+					if (type === "singular") {
+						return t("settings.optionDisabled.singular", {
+							OPTION: t(value)
+						});
+					}
+					if (type === "specificOption") {
+						return t(value);
+					}
+					const options = value.map((option) => `'${t(option)}'`).join(t(`settings.optionDisabled.${type}.separator`));
+					return t(`settings.optionDisabled.${type}.label`, { OPTIONS: options });
+				})()}
+			>
 				<SettingInput {...settingProps} />
 			</div>
 		:	null;
@@ -53,8 +90,8 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			return <ColorPicker className={className} disabled={disabled} id={id} label={label} onChange={onChange} title={title} value={value} />;
 		}
 		case "css-editor": {
-			const { className, id, onChange, value } = settingProps;
-			return <CSSEditor className={className} id={id} onChange={onChange} value={value} />;
+			const { className, disabled, id, onChange, value } = settingProps;
+			return <CSSEditor className={className} disabled={disabled} id={id} onChange={onChange} value={value} />;
 		}
 		case "number": {
 			const { className, disabled, id, label, max, min, onChange, step, value } = settingProps;
@@ -89,12 +126,23 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			);
 		}
 		case "slider": {
-			const { initialValue, max, min, onChange, step } = settingProps;
-			return <Slider initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
+			const { disabled, initialValue, max, min, onChange, step } = settingProps;
+			return <Slider disabled={disabled} initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
 		}
 		case "text-input": {
-			const { className, id, input_type, label, onChange, title, value } = settingProps;
-			return <TextInput className={className} id={id} input_type={input_type} label={label} onChange={onChange} title={title} value={value} />;
+			const { className, disabled, id, input_type, label, onChange, title, value } = settingProps;
+			return (
+				<TextInput
+					className={className}
+					disabled={disabled}
+					id={id}
+					input_type={input_type}
+					label={label}
+					onChange={onChange}
+					title={title}
+					value={value}
+				/>
+			);
 		}
 	}
 }
