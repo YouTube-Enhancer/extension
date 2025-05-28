@@ -60,8 +60,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 			}
 		});
 	}, [area, key]);
-	const setValueRef = useRef<SetValue<T>>();
-	setValueRef.current = (value) => {
+	const setValueRef = useRef<SetValue<T>>((value) => {
 		// Allow value to be a function, so we have the same API as useState
 		const newValue = value instanceof Function ? value(storedValue) : value;
 		// Save to storage
@@ -74,7 +73,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 				.catch((error) => console.error(error));
 			return newValue;
 		});
-	};
+	});
 	// Return a wrapped version of useState's setter function that ...
 	// ... persists the new value to storage.
 	const setValue: SetValue<T> = useCallback((value) => setValueRef.current?.(value), []);

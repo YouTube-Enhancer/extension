@@ -1308,7 +1308,7 @@ async function getLanguageOptions() {
 }
 function getSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
-		void chrome.storage.local.get((settings) => {
+		void chrome.storage.local.get<configuration>((settings) => {
 			try {
 				const storedSettings: Partial<configuration> = (
 					Object.keys(settings)
