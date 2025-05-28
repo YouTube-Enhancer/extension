@@ -123,6 +123,21 @@
 			"allDataDeleted": "所有資料已重置。",
 			"confirmAlert": "將會清除這個擴充套件的相關選項，繼續？"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "暫停背景播放程序",
 						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
 					},
+					"playlistRemover": {
+						"label": "啟用在主頁移除播放清單",
+						"title": "移除播放清單"
+					},
 					"remainingTime": {
 						"label": "剩餘時間",
 						"title": "顥示現時影片的剩餘時間"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "跳過「影片已暫停，繼續觀看？」",
 						"title": "跳過暫停影片播放的閒置對話框"
-					},
-					"playlistRemover": {
-						"label": "啟用在主頁移除播放清單",
-						"title": "移除播放清單"
 					}
 				},
 				"title": "其他設定"
