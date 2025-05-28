@@ -123,6 +123,21 @@
 			"allDataDeleted": "Alle data werd verwijderd.",
 			"confirmAlert": "Dit zal alle extensie data gerelateerd aan de opties verwijderen. Wil je verdergaan?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "Achtergrondafspelers pauzeren",
 						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
 					},
+					"playlistRemover": {
+						"label": "Verwijder afspeellijsten van de thuispagina",
+						"title": "Verwijder afspeellijsten"
+					},
 					"remainingTime": {
 						"label": "Resterende tijd",
 						"title": "Toont de resterende tijd van de huidige video"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "Sla \"video is gepauzeerd. Hervatten?\" over",
 						"title": "Slaat het afwezig dialoog die het afspelen pauzeert over"
-					},
-					"playlistRemover": {
-						"label": "Verwijder afspeellijsten van de thuispagina",
-						"title": "Verwijder afspeellijsten"
 					}
 				},
 				"title": "Overige instellingen"
