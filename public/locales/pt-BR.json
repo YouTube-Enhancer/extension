@@ -123,6 +123,21 @@
 			"allDataDeleted": "Todos os dados foram excluídos.",
 			"confirmAlert": "Fechar a página desfará todas as mudanças feitas. Prosseguir?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -328,6 +343,10 @@
 						"label": "Pausar player em segundo plano",
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
+					"playlistRemover": {
+						"label": "Ativa a remoção de playlists da página inicial",
+						"title": "Remover playlists da página inicial"
+					},
 					"remainingTime": {
 						"label": "Tempo restante",
 						"title": "Exibe o tempo restante do vídeo que está assistindo"
@@ -351,10 +370,6 @@
 					"skipContinueWatching": {
 						"label": "Pular aviso de ausência",
 						"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
-					},
-					"playlistRemover": {
-						"label": "Ativa a remoção de playlists da página inicial",
-						"title": "Remover playlists da página inicial"
 					}
 				},
 				"title": "Diversos"
