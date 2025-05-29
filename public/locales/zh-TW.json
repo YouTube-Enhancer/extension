@@ -291,6 +291,10 @@
 						"label": "複製目前播放時間的影片網址按鈕",
 						"title": "複製目前播放時間的影片網址 (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "隱藏片尾資訊卡",
 						"title": "隱藏影片片尾的資訊卡"

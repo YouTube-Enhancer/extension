@@ -291,6 +291,10 @@
 						"label": "Copiar URL do vídeo com o botão de minutagem",
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Ocultar cards finais",
 						"title": "Oculta os cards no final do vídeo"

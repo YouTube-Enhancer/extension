@@ -291,6 +291,10 @@
 						"label": "Кнопка «Копировать URL видео с таймкодом»",
 						"title": "Копирует ссылку видео с меткой времени (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Скрыть заставки следующих видео",
 						"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"

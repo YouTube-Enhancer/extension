@@ -291,6 +291,10 @@
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
 						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Dölj slutskärmskort",
 						"title": "Döljer korten i slutet av videon"

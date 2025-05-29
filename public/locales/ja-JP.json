@@ -291,6 +291,10 @@
 						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "終了画面のカードを非表示にする",
 						"title": "動画の終了で画面カードを非表示にする"

@@ -291,6 +291,10 @@
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Nascondi le schede finali",
 						"title": "Nasconde le schede alla fine del video"
