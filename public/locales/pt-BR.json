@@ -311,6 +311,10 @@
 						"label": "Ocultar banner de promoção paga",
 						"title": "Oculta o banner ao assistir um vídeo com promoção paga incluída"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
