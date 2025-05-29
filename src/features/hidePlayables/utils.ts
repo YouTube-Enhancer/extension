@@ -1,6 +1,6 @@
-const playablesSelector = "ytd-rich-section-renderer:has(a[href='/playables'])";
+import { toggleElementVisibility } from "@/src/utils/utilities";
 
-type ElementVisibilityAction = (element: HTMLElement) => void;
+const playablesSelector = "ytd-rich-section-renderer:has(a[href='/playables'])";
 export function hidePlayables() {
 	toggleElementVisibility(playablesSelector, hideElement);
 }
@@ -22,9 +22,4 @@ function hideElement(element: HTMLElement) {
 }
 function showElement(element: HTMLElement) {
 	element.classList.remove("yte-hide-playables");
-}
-function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
-	const elements = document.querySelectorAll<HTMLDivElement>(selector);
-	if (elements.length === 0) return;
-	elements.forEach((element) => action(element));
 }

@@ -10,6 +10,7 @@ import type {
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
 	DeepPartial,
+	ElementVisibilityAction,
 	ExtensionSendOnlyMessageMappings,
 	FeatureToMultiButtonMap,
 	MessageMappings,
@@ -680,6 +681,11 @@ export function timeStringToSeconds(timeString: string): number {
 	}
 	return seconds;
 }
+export function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
+	const elements = document.querySelectorAll<HTMLDivElement>(selector);
+	if (elements.length === 0) return;
+	elements.forEach((element) => action(element));
+}
 /**
  * Wait for all elements to appear in the document.
  *
@@ -799,6 +805,7 @@ function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: s
 		styling: [style, BrowserColors.Reset]
 	};
 }
+
 /**
  * Extracts the first section from a YouTube URL path.
  * @param {string} url - The YouTube URL.
@@ -813,7 +820,6 @@ function extractFirstSectionFromYouTubeURL(url: string): null | string {
 
 	return sections.length > 0 ? sections[0] : null;
 }
-
 function getColor(type: ColorType) {
 	switch (type) {
 		case "error":
@@ -828,6 +834,7 @@ function getColor(type: ColorType) {
 			return BrowserColors[type];
 	}
 }
+
 /**
  * Group multiple log messages into a single message with combined styling.
  *

@@ -1,3 +1,4 @@
+import { toggleElementVisibility } from "@/src/utils/utilities";
 export const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
 export const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
 export const homePageShortsSectionSelector = "[is-shorts]";
@@ -5,8 +6,6 @@ export const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has
 export const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
 export const searchResultsShortsTabSelector = "yt-chip-cloud-chip-renderer:has(yt-formatted-string[title=Shorts])";
 export const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-style=SHORTS])";
-
-type ElementVisibilityAction = (element: HTMLElement) => void;
 
 export function hideShorts() {
 	// Hide the shorts tab on the channel page
@@ -120,10 +119,4 @@ function showShortsVideoRenderers() {
 function showSideBarShortsButton() {
 	toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
 	toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
-}
-
-function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
-	const elements = document.querySelectorAll<HTMLDivElement>(selector);
-	if (elements.length === 0) return;
-	elements.forEach((element) => action(element));
 }
