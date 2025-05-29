@@ -1,6 +1,6 @@
 {
 	"langCode": "uk-UA",
-	"langName": "Англійська (США)",
+	"langName": "English (US)",
 	"messages": {
 		"resumingVideo": "Продовжити відео з {{VIDEO_TIME}}",
 		"settingVolume": "Посилити гучність до {{VOLUME_BOOST_AMOUNT}}"
@@ -10,8 +10,8 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Скопійовано!",
+						"label": "Скопіювати URL відео з міткою часу"
 					}
 				},
 				"featureMenu": {
@@ -74,7 +74,7 @@
 					"increaseLimit": "Неможливо збільшити далі ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Загальна довжина може бути неточною, якщо деякі відео приховані або якщо ви ще не завантажили достатньо відео, щоб отримати повну довжину."
 				},
 				"screenshotButton": {
 					"button": {
@@ -123,6 +123,21 @@
 			"allDataDeleted": "Усі дані скинуто.",
 			"confirmAlert": "Це видалить всі дані розширення, пов'язані з налаштуваннями. Продовжити?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -165,104 +180,108 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "Кнопка скопіювати URL відео за допомогою часової мітки",
 						"decreasePlaybackSpeedButton": "Кнопка зменшення швидкості",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"rewindButton": "Rewind button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"forwardButton": "Кнопка перемотки",
+						"hideEndScreenCardsButton": "Кнопка приховати картки наприкінці відео",
+						"increasePlaybackSpeedButton": "Кнопка пришвидшення",
+						"loopButton": "Кнопка зациклення",
+						"maximizePlayerButton": "Кнопка Розгорнути",
+						"openTranscriptButton": "Кнопка відкрити транскрипт",
+						"rewindButton": "Кнопка відмотки",
+						"screenshotButton": "Кнопка для скріншота",
+						"volumeBoostButton": "Кнопка збільшення гучності"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "під управлінням плеєром",
+							"value": "Під плеєром"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "в меню функцій",
+							"value": "Меню функцій"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "ліворуч від елементів керування плеєра",
+							"value": "Ліворуч"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "праворуч від елементів керування плеєра",
+							"value": "Праворуч"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Розмістити {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Параметри розміщення кнопки"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "Згорнути редактор",
+					"expand": "Розгорнути редактор",
+					"noProblems": "Проблем не виявлено."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Увімкнути користувацький CSS",
+					"title": "Дозволяє використовувати користувацький CSS для сторінки"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Власні налаштування CSS"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Тип активації меню",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Клацання",
+							"hover": "Наведення"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Виберіть спосіб активувати меню функцій"
 					},
-					"title": "Feature menu settings"
+					"title": "Налаштування меню функцій"
 				}
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Увімкнути кнопки вперед/назад",
+					"title": "Додає кнопки перемотування до відео плеєра"
 				},
 				"time": {
-					"label": "Forward/rewind time",
-					"title": "The amount of time to forward/rewind the video by"
+					"label": "Час вперед/назад",
+					"title": "Часовий крок перемотки відео вперед/назад"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Налаштування кнопки вперед/назад"
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Налаштування вдало експортовано",
+					"title": "Експортувати налаштування у файл JSON",
+					"value": "Експортувати налаштування"
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+						"unknown": "Помилка імпорту налаштувань. Перевірте формат файлу. \nВідбулась невідома помилка.",
+						"validation": "Помилка імпорту налаштувань. Перевірте формат файлу.\n{{ERROR_MESSAGE}}"
 					},
-					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"success": "Налаштування успішно імпортовано",
+					"title": "Імпортувати налаштування з файлу JSON",
+					"value": "Імпортувати параметри"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Мова",
+					"title": "Мова для використання у розширенні"
 				},
-				"title": "Language"
+				"title": "Мова"
 			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
 						"label": "Automatic theater mode",
 						"title": "Automatically enables theater mode when you load a video"
+					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
@@ -291,6 +310,10 @@
 					"hidePaidPromotionBanner": {
 						"label": "Hide paid promotion banner",
 						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Hide scrollbar",
@@ -323,6 +346,10 @@
 					"pauseBackgroundPlayers": {
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+					},
+					"playlistRemover": {
+						"label": "The removal of playlists from homepage",
+						"title": "Get rid of playlists"
 					},
 					"remainingTime": {
 						"label": "Remaining time",
@@ -359,27 +386,27 @@
 						"green": "Green",
 						"orange": "Orange",
 						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"purple": "Фіолетовий",
+						"red": "Червоний",
+						"white": "Білий",
+						"yellow": "Жовтий"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Вибирає колір екранного зображення"
 				},
 				"hide": {
-					"label": "Hide Delay",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"label": "Затримка приховування",
+					"title": "Вказує час у мілісекундах перед автоматичним приховуванням екранного зображення"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Прозорість",
+					"title": "Регулювання прозорості екранного зображення"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "Відступ",
+					"title": "Регулює відступи навколо екранного зображення в пікселях. Застосовується спеціально для екранного зображення в кутах."
 				},
 				"position": {
-					"label": "Position",
+					"label": "Розташування",
 					"options": {
 						"bottom_left": "Bottom Left",
 						"bottom_right": "Bottom Right",
@@ -489,7 +516,7 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
+						"label": "When holding modifier key",
 						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"optionLabel": "{{KEY}} key",
@@ -500,7 +527,7 @@
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "Enable when holding right click",
+						"label": "When holding right click",
 						"title": "Hold right click to enable scroll wheel volume control"
 					}
 				},
@@ -589,7 +616,7 @@
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
+					"label": "Deep Dark Theme",
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {

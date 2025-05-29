@@ -398,3 +398,4 @@ package-lock.json
 /playwright/.cache/
 /playwright-data/
 /playwright-downloads/
+.VSCodeCounter/

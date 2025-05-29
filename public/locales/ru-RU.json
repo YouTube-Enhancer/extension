@@ -74,7 +74,7 @@
 					"increaseLimit": "Невозможно увеличить ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Общая длина может быть неточной, если некоторые видео скрыты или недостаточно видео прогружено, чтобы получить полную длину."
 				},
 				"screenshotButton": {
 					"button": {
@@ -122,6 +122,21 @@
 		"clearData": {
 			"allDataDeleted": "Все данные были удалены.",
 			"confirmAlert": "Это приведет к удалению всех данных расширения, связанных с настройками. Продолжить?"
+		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
 		},
 		"sections": {
 			"automaticQuality": {
@@ -264,9 +279,13 @@
 						"label": "Включить автоматический режим кинотеатра",
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Автоматическое отключение режима освещения",
+						"title": "Автоматически отключать режим освещения при загрузке видео"
+					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Автоматически отключать субтитры",
+						"title": "Автоматически отключает субтитры при загрузке видео"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Кнопка «Копировать URL видео с таймкодом»",
@@ -285,12 +304,16 @@
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "Скрывать официальные видео исполнителя",
+						"title": "Скрывает официальные видео исполнителя с домашней страницы"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Скрыть \"Содержит прямую рекламу\"",
 						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -323,6 +346,10 @@
 					"pauseBackgroundPlayers": {
 						"label": "Ставить на паузу видео в фоновых вкладках",
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
+					},
+					"playlistRemover": {
+						"label": "Разрешить удаление плейлистов с домашней страницы",
+						"title": "Удаляет плейлисты"
 					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
@@ -422,24 +449,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Отображать информацию о длине плейлиста",
+					"title": "Отображает общую временную длину плейлиста, сколько было просмотрено и сколько осталось."
 				},
-				"title": "Playlist length settings",
+				"title": "Настройки длины плейлиста",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Способ получения длины плейлиста",
+						"title": "Способ получения информации о длине плейлиста (метод API будет переключаться обратно к HTML, если возникнет ошибка)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Метод получения времени просмотра",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Продолжительность видео",
+							"youtube": "Время просмотра видео"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Способ получения количества времени просмотра (тип длины видео используется только на странице просмотра)"
 					}
 				}
 			},
@@ -548,12 +575,12 @@
 				"title": "Настройки усиления громкости"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Вы можете получить ключ здесь",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API ключ",
+					"title": "Введите ваш ключ Youtube Data API V3."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Ключ YouTube API V3"
 			},
 			"youtubeDeepDark": {
 				"author": "Автор",

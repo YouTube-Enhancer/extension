@@ -1,4 +1,4 @@
-import type { PathValue, configuration, configurationId } from "@/src/types";
+import type { configuration, configurationId, PathValue } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
@@ -9,18 +9,11 @@ import React, { useRef } from "react";
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
 
-interface SelectOptionProps {
-	children: React.ReactNode;
-	className?: string;
-	id?: string;
-	value: string;
-}
 export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;
 	label: string;
 	value: Extract<PathValue<configuration, Key>, string>;
 };
-
 export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
@@ -32,6 +25,13 @@ export type SelectProps<Key extends configurationId> = {
 	selectedOption: string | undefined;
 	title: string;
 };
+
+interface SelectOptionProps {
+	children: React.ReactNode;
+	className?: string;
+	id?: string;
+	value: string;
+}
 
 const Select = <Key extends configurationId>({
 	className,
@@ -55,7 +55,7 @@ const Select = <Key extends configurationId>({
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
-	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
+	const disabledButtonClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled } satisfies ClassValue;
 	return (
 		<div
 			aria-valuetext={selectedOption}

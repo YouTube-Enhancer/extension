@@ -3,19 +3,18 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
 	type AllButtonNames,
+	buttonNames,
 	type ButtonPlacement,
+	type configuration,
+	type configurationKeys,
 	type ContentSendOnlyMessageMappings,
 	type ContentToBackgroundSendOnlyMessageMappings,
 	type Messages,
 	type RememberedVolumes,
-	type StorageChanges,
-	buttonNames,
-	type configuration,
-	type configurationKeys
+	type StorageChanges
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
-
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
@@ -39,7 +38,7 @@ void (async () => {
 	 * @type {configuration}
 	 */
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((settings) => {
+		void chrome.storage.local.get<configuration>((settings) => {
 			const storedSettings: Partial<configuration> = (
 				Object.keys(settings)
 					.filter((key) => typeof key === "string")
@@ -80,42 +79,6 @@ document.addEventListener("yte-message-from-youtube", () => {
 			}
 			case "request_data": {
 				switch (message.type) {
-					case "options": {
-						/**
-						 * Retrieves the options from the local storage and sends them back to the youtube page.
-						 *
-						 * @type {configuration}
-						 */
-						const options: configuration = await new Promise((resolve) => {
-							chrome.storage.local.get((settings) => {
-								const storedSettings: Partial<configuration> = (
-									Object.keys(settings)
-										.filter((key) => typeof key === "string")
-										.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-								).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-								resolve(storedSettings as configuration);
-							});
-						});
-						void sendExtensionMessage("options", "data_response", { options });
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { id } = data;
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryOne", "data_response", {
-							video_history_entry: videoHistory[id]
-						});
-						break;
-					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
 					case "extensionURL": {
 						void sendExtensionMessage("extensionURL", "data_response", {
 							extensionURL: chrome.runtime.getURL("")
@@ -133,22 +96,58 @@ document.addEventListener("yte-message-from-youtube", () => {
 						});
 						break;
 					}
+					case "options": {
+						/**
+						 * Retrieves the options from the local storage and sends them back to the youtube page.
+						 *
+						 * @type {configuration}
+						 */
+						const options: configuration = await new Promise((resolve) => {
+							void chrome.storage.local.get<configuration>((settings) => {
+								const storedSettings: Partial<configuration> = (
+									Object.keys(settings)
+										.filter((key) => typeof key === "string")
+										.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
+								).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+								resolve(storedSettings as configuration);
+							});
+						});
+						void sendExtensionMessage("options", "data_response", { options });
+						break;
+					}
+					case "videoHistoryAll": {
+						const videoHistory = getVideoHistory();
+						void sendExtensionMessage("videoHistoryAll", "data_response", {
+							video_history_entries: videoHistory
+						});
+						break;
+					}
+					case "videoHistoryOne": {
+						const { data } = message;
+						if (!data) return;
+						const { id } = data;
+						const videoHistory = getVideoHistory();
+						void sendExtensionMessage("videoHistoryOne", "data_response", {
+							video_history_entry: videoHistory[id]
+						});
+						break;
+					}
 				}
 				break;
 			}
 			case "send_data": {
 				switch (message.type) {
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
-						break;
-					}
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
 						window.onunload = () => {
 							chrome.storage.onChanged.removeListener(storageListeners);
 						};
+						break;
+					}
+					case "setRememberedVolume": {
+						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
+						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
+						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
 					case "videoHistoryOne": {
@@ -185,7 +184,7 @@ const castStorageChanges = (changes: StorageChanges) => {
 };
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
-		chrome.storage.local.get((settings) => {
+		void chrome.storage.local.get<configuration>((settings) => {
 			const storedSettings: Partial<configuration> = (
 				Object.keys(settings)
 					.filter((key) => typeof key === "string")
@@ -271,6 +270,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticTheaterModeEnabled: newValue
 			});
 		},
+		enable_automatically_disable_ambient_mode: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableAmbientModeChange", {
+				automaticallyDisableAmbientModeEnabled: newValue
+			});
+		},
+		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
+				automaticallyDisableClosedCaptionsEnabled: newValue
+			});
+		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -313,9 +322,22 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideLiveStreamChatEnabled: newValue
 			});
 		},
+		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
+		},
 		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
 				hidePaidPromotionBannerEnabled: newValue
+			});
+		},
+		enable_hide_playables: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePlayablesChange", {
+				hidePlayablesEnabled: newValue
+			});
+		},
+		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
+				hidePlaylistRecommendationsFromHomePageEnabled: newValue
 			});
 		},
 		enable_hide_scrollbar: (__oldValue, newValue) => {
@@ -342,9 +364,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			sendExtensionOnlyMessage("maximizeButtonChange", {
 				maximizePlayerButtonEnabled: newValue
 			});
-		},
-		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
 		},
 		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
@@ -395,11 +414,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
 				scrollWheelSpeedControlEnabled: newValue
-			});
-		},
-		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
-				automaticallyDisableClosedCaptionsEnabled: newValue
 			});
 		},
 		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {

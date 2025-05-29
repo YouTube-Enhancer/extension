@@ -1,11 +1,14 @@
+import type { ClassValue } from "clsx";
+
 import { useComponentVisible } from "@/src/hooks";
 import useClickOutside from "@/src/hooks/useClickOutside";
 import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent, useRef } from "react";
-import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
-import { useDebouncyFn } from "use-debouncy";
 
 import "./index.css";
+
+import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
+import { useDebouncyFn } from "use-debouncy";
 export type ColorPickerProps = {
 	className?: string;
 	disabled: boolean;
@@ -15,7 +18,7 @@ export type ColorPickerProps = {
 	title: string;
 	value: string;
 };
-const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, label, onChange, title, value }) => {
+const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, label, onChange, value }) => {
 	const handleChange = useDebouncyFn((value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>), 200);
 	const colorPickerRef = useRef(null);
 	const { isComponentVisible: isColorPickerVisible, setIsComponentVisible: setIsColorPickerVisible } = useComponentVisible<HTMLDivElement>(
@@ -24,8 +27,12 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, labe
 	);
 	const togglePickerVisibility = () => setIsColorPickerVisible(!isColorPickerVisible);
 	useClickOutside(colorPickerRef, () => (isColorPickerVisible ? togglePickerVisibility() : void 0));
+	const disabledPickerClasses = {
+		"cursor-not-allowed": disabled,
+		"cursor-pointer": !disabled
+	} satisfies ClassValue;
 	return (
-		<div aria-valuetext={value} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id} title={title}>
+		<div aria-valuetext={value} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} id={id}>
 			<label
 				htmlFor={id}
 				style={{
@@ -37,7 +44,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, id, labe
 			<div ref={colorPickerRef}>
 				<>
 					<button
-						className="flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-1 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']"
+						className={cn(
+							"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-1 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
+							disabledPickerClasses
+						)}
 						disabled={disabled}
 						onClick={disabled ? () => void 0 : togglePickerVisibility}
 						type="button"
