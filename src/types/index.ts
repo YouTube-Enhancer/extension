@@ -248,6 +248,7 @@ export type configuration = {
 	enable_hide_live_stream_chat: boolean;
 	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_paid_promotion_banner: boolean;
+	enable_hide_playables: boolean;
 	enable_hide_playlist_recommendations_from_home_page: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
@@ -387,6 +388,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }
 	>;
 	hidePaidPromotionBannerChange: DataResponseMessage<"hidePaidPromotionBannerChange", { hidePaidPromotionBannerEnabled: boolean }>;
+	hidePlayablesChange: DataResponseMessage<"hidePlayablesChange", { hidePlayablesEnabled: boolean }>;
 	hidePlaylistRecommendationsFromHomePageChange: DataResponseMessage<
 		"hidePlaylistRecommendationsFromHomePageChange",
 		{ hidePlaylistRecommendationsFromHomePageEnabled: boolean }

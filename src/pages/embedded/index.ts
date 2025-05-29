@@ -29,6 +29,7 @@ import {
 	enableHideOfficialArtistVideosFromHomePage
 } from "@/src/features/hideOfficialArtistVideosFromHomePage";
 import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
+import { disableHidePlayables, enableHidePlayables } from "@/src/features/hidePlayables";
 import {
 	disableHidePlaylistRecommendationsFromHomePage,
 	enableHidePlaylistRecommendationsFromHomePage
@@ -169,6 +170,7 @@ const enableFeatures = () => {
 		void Promise.all([
 			enableHidePaidPromotionBanner(),
 			enableHideShorts(),
+			enableHidePlayables(),
 			enableRemoveRedirect(),
 			enableShareShortener(),
 			enableSkipContinueWatching(),
@@ -569,6 +571,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							await enableHidePaidPromotionBanner();
 						} else {
 							disableHidePaidPromotionBanner();
+						}
+						break;
+					}
+					case "hidePlayablesChange": {
+						const {
+							data: { hidePlayablesEnabled }
+						} = message;
+						if (hidePlayablesEnabled) {
+							await enableHidePlayables();
+						} else {
+							disableHidePlayables();
 						}
 						break;
 					}

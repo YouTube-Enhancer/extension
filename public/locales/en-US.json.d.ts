@@ -218,6 +218,7 @@ interface EnUS {
 						label: "Hide paid promotion banner";
 						title: "Hides the banner that appears when you watch a video that has a paid promotion";
 					};
+					hidePlayables: { label: "Hide playables"; title: "Hides all playables" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					hideTranslateComment: {

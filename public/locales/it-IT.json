@@ -125,17 +125,17 @@
 		},
 		"optionDisabled": {
 			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"label": "Abilita {{OPTIONS}} per configurare questa opzione",
+				"separator": " o "
 			},
 			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
+				"label": "Abilita {{OPTIONS}} per configurare questa opzione",
+				"separator": " e "
 			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
+			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
-				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+				"deepDarkCustomTheme": "Imposta il tema a 'Personalizzato' per configurare questa opzione.",
+				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione."
 			}
 		},
 		"sections": {
@@ -310,6 +310,10 @@
 					"hidePaidPromotionBanner": {
 						"label": "Nascondi banner promozioni a pagamento",
 						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
