@@ -291,6 +291,10 @@
 						"label": "复制带有时间戳的视频 URL 按钮",
 						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "隐藏结束界面卡片",
 						"title": "隐藏视频末尾的卡片"
