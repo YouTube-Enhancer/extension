@@ -306,6 +306,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				forwardRewindButtonsEnabled: newValue
 			});
 		},
+		enable_hide_artificial_intelligence_summary: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideArtificialIntelligenceSummaryChange", {
+				hideArtificialIntelligenceSummaryEnabled: newValue
+			});
+		},
 		enable_hide_end_screen_cards: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
 				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],

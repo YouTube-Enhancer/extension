@@ -16,6 +16,7 @@ import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } fro
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
+import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
 import {
 	addHideEndScreenCardsButton,
 	disableHideEndScreenCards,
@@ -498,6 +499,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} else {
 							await removeRewindButton();
 							await removeForwardButton();
+						}
+						break;
+					}
+					case "hideArtificialIntelligenceSummaryChange": {
+						const {
+							data: { hideArtificialIntelligenceSummaryEnabled }
+						} = message;
+						if (hideArtificialIntelligenceSummaryEnabled) {
+							await enableHideArtificialIntelligenceSummary();
+						} else {
+							disableHideArtificialIntelligenceSummary();
 						}
 						break;
 					}
