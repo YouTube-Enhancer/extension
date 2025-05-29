@@ -292,8 +292,8 @@
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "Ocultar resumo IA",
+						"title": "Oculta a aba de resumo IA abaixo dos vídeos"
 					},
 					"hideEndScreenCards": {
 						"label": "Ocultar cards finais",
@@ -316,8 +316,8 @@
 						"title": "Oculta o banner ao assistir um vídeo com promoção paga incluída"
 					},
 					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
+						"label": "Ocultar jogáveis",
+						"title": "Oculta a seção de jogáveis"
 					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
