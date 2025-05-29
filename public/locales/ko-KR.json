@@ -291,6 +291,10 @@
 						"label": "현재 시간 주소 복사 버튼",
 						"title": "현재 시간 주소 복사 (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "최종 화면 숨기기",
 						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨깁니다."

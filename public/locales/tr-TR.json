@@ -291,6 +291,10 @@
 						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
 						"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Bitiş ekranı kartlarını gizle",
 						"title": "Video'nun sonundaki kartları gizler"

@@ -291,6 +291,10 @@
 						"label": "Kopieer video URL met tijdstempel knop",
 						"title": "Kopieer video URL met tijdstempel (?t=123)"
 					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
 					"hideEndScreenCards": {
 						"label": "Eindscherm elementen verbergen",
 						"title": "Maakt de elementen aan het eind van een video onzichtbaar"
