@@ -312,6 +312,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mabra51"><img src="https://avatars.githubusercontent.com/u/12016338?v=4?s=100" width="100px;" alt="Mabra51"/><br /><sub><b>Mabra51</b></sub></a><br /><a href="#ideas-Mabra51" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a> <a href="#code-eduardozgz" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://notyasho.netlify.app/blogs"><img src="https://avatars.githubusercontent.com/u/90166733?v=4?s=100" width="100px;" alt="pyrix"/><br /><sub><b>pyrix</b></sub></a><br /><a href="#ideas-at-pyrix" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-at-pyrix" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TheMajor-GitHub"><img src="https://avatars.githubusercontent.com/u/94167392?v=4?s=100" width="100px;" alt="The Major"/><br /><sub><b>The Major</b></sub></a><br /><a href="#ideas-TheMajor-GitHub" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
