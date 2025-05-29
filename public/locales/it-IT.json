@@ -311,6 +311,10 @@
 						"label": "Nascondi banner promozioni a pagamento",
 						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
 						"title": "Nasconde la barra di scorrimento delle pagine"
