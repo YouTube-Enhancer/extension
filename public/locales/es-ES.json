@@ -311,6 +311,10 @@
 						"label": "Hide paid promotion banner",
 						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de desplazamiento",
 						"title": "Oculta la barra de desplazamiento de la página"
