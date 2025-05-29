@@ -311,6 +311,10 @@
 						"label": "有料プロモーションバナーを隠す",
 						"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
 						"title": "ページのスクロールバーを隠す"
