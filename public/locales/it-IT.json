@@ -292,8 +292,8 @@
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "Nascondi riepilogo IA",
+						"title": "Nasconde il riepilogo dell'intelligenza artificiale sotto i video"
 					},
 					"hideEndScreenCards": {
 						"label": "Nascondi le schede finali",
@@ -316,8 +316,8 @@
 						"title": "Nasconde il banner con promozioni a pagamento che appare quando si guarda un video"
 					},
 					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
+						"label": "Nascondi giocabili",
+						"title": "Nasconde tutti i giocabili"
 					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
