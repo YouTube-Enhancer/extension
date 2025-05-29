@@ -311,6 +311,10 @@
 						"label": "Ücretli tanıtım afişini gizle",
 						"title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 						"title": "Sayfa kaydırma çubuğunu gizler"
