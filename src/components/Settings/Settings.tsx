@@ -687,6 +687,15 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_hide_artificial_intelligence_summary?.toString() === "true"}
+						id="enable_hide_artificial_intelligence_summary"
+						label={t("settings.sections.miscellaneous.features.hideArtificialIntelligenceSummary.label")}
+						onChange={setCheckboxOption("enable_hide_artificial_intelligence_summary")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.hideArtificialIntelligenceSummary.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_hide_live_stream_chat?.toString() === "true"}
 						id="enable_hide_live_stream_chat"
 						label={t("settings.sections.miscellaneous.features.hideLiveStreamChat.label")}

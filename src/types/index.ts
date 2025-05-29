@@ -243,6 +243,7 @@ export type configuration = {
 	enable_deep_dark_theme: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
+	enable_hide_artificial_intelligence_summary: boolean;
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
@@ -358,6 +359,7 @@ export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
 		type: Type;
 	}
 >;
+export type ElementVisibilityAction = (element: HTMLElement) => void;
 export type ExtensionSendOnlyMessageMappings = {
 	automaticallyDisableAmbientModeChange: DataResponseMessage<
 		"automaticallyDisableAmbientModeChange",
@@ -377,6 +379,10 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	forwardRewindButtonsChange: DataResponseMessage<"forwardRewindButtonsChange", { forwardRewindButtonsEnabled: boolean }>;
+	hideArtificialIntelligenceSummaryChange: DataResponseMessage<
+		"hideArtificialIntelligenceSummaryChange",
+		{ hideArtificialIntelligenceSummaryEnabled: boolean }
+	>;
 	hideEndScreenCardsButtonChange: DataResponseMessage<"hideEndScreenCardsButtonChange", { hideEndScreenCardsButtonEnabled: boolean }>;
 	hideEndScreenCardsChange: DataResponseMessage<
 		"hideEndScreenCardsChange",
@@ -439,6 +445,7 @@ export type ExtensionSendOnlyMessageMappings = {
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
 };
+
 // #endregion Constants
 // #region Extension Messaging Types
 export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
@@ -467,7 +474,6 @@ export type MessageMappings = Prettify<{
 		response: DataResponseMessage<"videoHistoryOne", { video_history_entry: VideoHistoryEntry }>;
 	};
 }>;
-
 export type Messages = MessageMappings[keyof MessageMappings];
 export type MessageSource = "content" | "extension";
 export type Notification = {
@@ -480,8 +486,8 @@ export type Notification = {
 };
 export type NotificationAction = "reset_settings" | undefined;
 export type NotificationType = "error" | "info" | "success" | "warning";
-export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 
+export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"request_data", "content"> & {
 		data: D;
@@ -489,13 +495,13 @@ export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 	}
 >;
 export type Selector = string;
+
 export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
 	BaseMessage<T, S> & {
 		data: D;
 		type: Type;
 	}
 >;
-
 export type StorageChanges = { [key: string]: chrome.storage.StorageChange };
 export type VideoDetails = {
 	duration: number;
@@ -531,7 +537,8 @@ export type YouTubeVideoItem = {
 		duration: string; // ISO 8601 duration format
 	};
 };
+// #endregion Configuration types
+
 export type YouTubeVideoResponse = {
 	items: YouTubeVideoItem[];
 };
-// #endregion Configuration types

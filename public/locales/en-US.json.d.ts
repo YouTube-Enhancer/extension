@@ -201,6 +201,10 @@ interface EnUS {
 						label: "Copy video URL with timestamp button";
 						title: "Copies video URL with timestamp (?t=123)";
 					};
+					hideArtificialIntelligenceSummary: {
+						label: "Hide AI summary";
+						title: "Hides the artificial intelligence summary below videos";
+					};
 					hideEndScreenCards: {
 						label: "Hide end screen cards";
 						title: "Hides the cards at the end of the video";
