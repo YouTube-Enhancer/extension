@@ -311,6 +311,10 @@
 						"label": "Dölj betald marknadsföringsbanner",
 						"title": "Döljer bannern som visas när du tittar på en video som har betald marknadsföring"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
 						"title": "Döljer sidornas rullningsfält"

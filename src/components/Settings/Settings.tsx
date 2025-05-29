@@ -678,6 +678,15 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_hide_playables?.toString() === "true"}
+						id="enable_hide_playables"
+						label={t("settings.sections.miscellaneous.features.hidePlayables.label")}
+						onChange={setCheckboxOption("enable_hide_playables")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.hidePlayables.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_hide_live_stream_chat?.toString() === "true"}
 						id="enable_hide_live_stream_chat"
 						label={t("settings.sections.miscellaneous.features.hideLiveStreamChat.label")}

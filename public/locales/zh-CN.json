@@ -311,6 +311,10 @@
 						"label": "隐藏付费推广横幅",
 						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"

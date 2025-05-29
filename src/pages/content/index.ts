@@ -330,6 +330,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hidePaidPromotionBannerEnabled: newValue
 			});
 		},
+		enable_hide_playables: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hidePlayablesChange", {
+				hidePlayablesEnabled: newValue
+			});
+		},
 		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
 				hidePlaylistRecommendationsFromHomePageEnabled: newValue

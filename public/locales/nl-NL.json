@@ -311,6 +311,10 @@
 						"label": "Verberg betaalde promotie banner",
 						"title": "Verbergt de banner die verschijnt wanneer je een video bekijkt die een betaalde promotie heeft"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "Verberg scrollbar",
 						"title": "Verbergt de scrollbar op de pagina"

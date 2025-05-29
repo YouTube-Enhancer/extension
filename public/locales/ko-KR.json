@@ -311,6 +311,10 @@
 						"label": "유료 광고 배너 숨기기",
 						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
 						"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"

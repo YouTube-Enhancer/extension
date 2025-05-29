@@ -311,6 +311,10 @@
 						"label": "隱藏付費推廣橫幅",
 						"title": "隱藏當影片帶有付費推廣時顯示的橫幅"
 					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"
