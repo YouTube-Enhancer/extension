@@ -258,7 +258,7 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Ocorreu um erro\nErro ao importar opções. Verifique o formato do arquivo importado.",
+						"unknown": "Ocorreu um erro ao importar opções. Verifique o formato do arquivo importado.",
 						"validation": "Erro ao importar opções. Verifique o formato do arquivo importado.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Opções importadas com sucesso!",
