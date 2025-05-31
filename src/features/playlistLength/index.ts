@@ -24,8 +24,8 @@ export async function enablePlaylistLength() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playlist_length) return;
-	const urlContainsListParameter = window.location.href.includes("list=");
-	if (!urlContainsListParameter) return;
+	const pageContainsPlaylistRenderer = document.querySelector(playlistItemsSelector()) !== null;
+	if (!pageContainsPlaylistRenderer) return;
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist(), playlistItemsSelector()]);
 	const apiKey = youtube_data_api_v3_key === "" ? YouTube_Enhancer_Public_Youtube_Data_API_V3_Key : youtube_data_api_v3_key;
