@@ -196,22 +196,22 @@ export async function getDataForPlaylistLengthUIElement({
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<VideoTimeState> {
-	const playlistId = getPlaylistId();
-	if (!playlistId) return { totalTimeSeconds: 0, watchedTimeSeconds: 0 };
-	// Check cache
-	if (playlistLengthGetMethod === "api" && window.cachedPlaylistDuration && window.cachedPlaylistDuration.playlistId === playlistId) {
-		const {
-			cachedPlaylistDuration: { totalTimeSeconds }
-		} = window;
-		const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
-		const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
-		const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
-		return { totalTimeSeconds, watchedTimeSeconds };
-	}
 	const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
 	const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
 	let totalTimeSeconds: number;
 	if (playlistLengthGetMethod === "api") {
+		const playlistId = getPlaylistId();
+		if (!playlistId) return { totalTimeSeconds: 0, watchedTimeSeconds: 0 };
+		// Check cache
+		if (playlistLengthGetMethod === "api" && window.cachedPlaylistDuration && window.cachedPlaylistDuration.playlistId === playlistId) {
+			const {
+				cachedPlaylistDuration: { totalTimeSeconds }
+			} = window;
+			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
+			const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
+			return { totalTimeSeconds, watchedTimeSeconds };
+		}
 		totalTimeSeconds = await getDurationFromAPI(playlistId, apiKey);
 		// Cache the duration
 		window.cachedPlaylistDuration = { playlistId, totalTimeSeconds };
