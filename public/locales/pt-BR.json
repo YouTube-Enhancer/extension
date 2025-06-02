@@ -138,6 +138,7 @@
 				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção."
 			}
 		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -258,7 +259,7 @@
 				},
 				"importButton": {
 					"error": {
-						"unknown": "Ocorreu um erro\nErro ao importar opções. Verifique o formato do arquivo importado.",
+						"unknown": "Ocorreu um erro ao importar opções. Verifique o formato do arquivo importado.",
 						"validation": "Erro ao importar opções. Verifique o formato do arquivo importado.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Opções importadas com sucesso!",
@@ -292,8 +293,8 @@
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "Ocultar resumo IA",
+						"title": "Oculta a seção de resumo IA de um vídeo"
 					},
 					"hideEndScreenCards": {
 						"label": "Ocultar cards finais",
@@ -316,8 +317,8 @@
 						"title": "Oculta o banner ao assistir um vídeo com promoção paga incluída"
 					},
 					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
+						"label": "Ocultar jogáveis",
+						"title": "Oculta a seção de jogáveis"
 					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
@@ -360,8 +361,8 @@
 						"title": "Exibe o tempo restante do vídeo que está assistindo"
 					},
 					"rememberLastVolume": {
-						"label": "Salvar intensidade do volume",
-						"title": "Salva a intensidade do volume do vídeo anterior e o define ao abrir um novo vídeo"
+						"label": "Lembrar volume anterior",
+						"title": "Lembra do aumento de volume do vídeo anterior e aplica-o ao novo vídeo."
 					},
 					"removeRedirect": {
 						"label": "Remover URLs de redireção do YouTube",
@@ -434,22 +435,22 @@
 			},
 			"playbackSpeed": {
 				"enable": {
-					"label": "Velocidade de reprodução forçada",
-					"title": "Define a velocidade do vídeo para o que você escolher abaixo"
+					"label": "Velocidade de playback forçada",
+					"title": "Define a velocidade do vídeo ao valor que você inserir"
 				},
 				"playbackSpeedButtons": {
-					"label": "Botões de velocidade de reprodução",
+					"label": "Velocidade de playback",
 					"select": {
-						"label": "Velocidade dos botões de reprodução",
-						"title": "Quantidade de velocidade para ser alterada por clique"
+						"label": "Velocidade do playback",
+						"title": "O tanto de velocidade a ser pulado num clique"
 					},
-					"title": "Adiciona botões para acelerar ou desacelerar a velocidade da reprodução do vídeo"
+					"title": "Adiciona botões para acelerar/desacelerar o playback do vídeo"
 				},
 				"select": {
-					"label": "Velocidade do reprodutor",
-					"title": "A velocidade a ser definida para o vídeo"
+					"label": "Velocidade do player",
+					"title": "A velocidade definida para o vídeo"
 				},
-				"title": "Opções de velocidade de reprodução"
+				"title": "Opções de playback"
 			},
 			"playlistLength": {
 				"enable": {
@@ -504,8 +505,8 @@
 				},
 				"optionLabel": "Tecla {{KEY}}",
 				"select": {
-					"label": "Tecla modificadora",
-					"title": "A tecla modificadora para usar"
+					"label": "Tecla de modificação",
+					"title": "A tecla de modificação para uso"
 				},
 				"title": "Opções de controle do volume na roda do mouse"
 			},
@@ -515,35 +516,35 @@
 					"title": "Ajusta a mudança de volume por rolagem"
 				},
 				"enable": {
-					"label": "Controle do volume na roda do mouse",
-					"title": "Permite usar a roda do mouse para controlar o volume do vídeo"
+					"label": "Ajustar volume com a roda",
+					"title": "Deixa-o utilizar a roda do cursor para ajustar o volume do vídeo"
 				},
 				"holdModifierKey": {
 					"enable": {
 						"label": "Ao segurar a tecla de modificação",
-						"title": "Pressione uma tecla modificadora para ativar o ajuste de volume com a roda do mouse."
+						"title": "Segure a tecla de modificação para ajustar o volume com a roda do cursor."
 					},
 					"optionLabel": "Tecla {{KEY}}",
 					"select": {
-						"label": "Tecla modificadora",
-						"title": "A tecla modificadora para usar"
+						"label": "Tecla de modificação",
+						"title": "A tecla de modificação para uso"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
 						"label": "Ao segurar o botão direito",
-						"title": "Segure o botão direito para ativar o controle de volume da roda do mouse"
+						"title": "Segure o botão direito para ajustar o volume pela roda."
 					}
 				},
-				"title": "Opções de controle do volume na roda do mouse"
+				"title": "Opções de ajuste de volume pela roda"
 			},
 			"settingSearch": {
-				"placeholder": "Procurar opção"
+				"placeholder": "Buscar por ajustes"
 			},
 			"videoHistory": {
 				"enable": {
 					"label": "Rastrear vídeos assistidos",
-					"title": "Registra o tempo do vídeo que você parou e permite retomar a reprodução "
+					"title": "Registrar a minutagem do vídeo em que parou e permite a retomada do playback"
 				},
 				"resumeType": {
 					"select": {
@@ -599,11 +600,11 @@
 						"title": "Cor para texto secundário"
 					},
 					"hoverBackground": {
-						"label": "Cor de fundo ao passar o mouse",
-						"title": "Cor de fundo ao passar o mouse"
+						"label": "Cor de fundo ao passar o cursor",
+						"title": "Cor de fundo ao passar o cursor"
 					},
 					"mainBackground": {
-						"label": "Cor principal de fundo",
+						"label": "Cor de fundo principal",
 						"title": "Cor principal para o fundo"
 					},
 					"mainColor": {
