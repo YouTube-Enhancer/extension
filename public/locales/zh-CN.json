@@ -125,20 +125,19 @@
 		},
 		"optionDisabled": {
 			"either": {
-				"label": "启用 {{OPTIONS}} 以配置此选项",
-				"separator": " 或 "
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
 			},
 			"plural": {
-				"label": "启用 {{OPTIONS}} 以配置此选项",
-				"separator": " 和 "
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
 			},
-			"singular": "启用 '{{OPTION}}' 以配置此选项",
+			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
-				"deepDarkCustomTheme": "将主题设置为“自定义”以配置此选项。",
-				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。"
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -293,8 +292,8 @@
 						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "隐藏 AI 摘要",
-						"title": "隐藏视频下方的人工智能摘要"
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
 						"label": "隐藏结束界面卡片",
@@ -317,8 +316,8 @@
 						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
 					},
 					"hidePlayables": {
-						"label": "隐藏可播放内容",
-						"title": "隐藏所有可播放内容"
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",

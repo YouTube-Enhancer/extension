@@ -138,7 +138,6 @@
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın."
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -317,8 +316,8 @@
 						"title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
 					},
 					"hidePlayables": {
-						"label": "Oynatılabilirleri gizle",
-						"title": "Tüm oynatılabilir öğeleri gizle"
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
@@ -419,7 +418,7 @@
 						"top_left": "Sol Üst",
 						"top_right": "Sağ Üst"
 					},
-					"title": "Ekran görüntüleme konumunu seçin"
+					"title": "Select the position of the On-Screen Display"
 				},
 				"title": "Ekran Üstü Görüntüleme Ayarları",
 				"type": {
@@ -430,7 +429,7 @@
 						"no_display": "Ekran yok",
 						"text": "Metin"
 					},
-					"title": "Ekran görüntüleme türünü seçin"
+					"title": "Select the type of On-Screen Display"
 				}
 			},
 			"playbackSpeed": {
@@ -442,7 +441,7 @@
 					"label": "Oynatma hızı ayarları",
 					"select": {
 						"label": "Oynatma düğmelerinin hızı",
-						"title": "Tıklama başına değiştirilecek hız miktarı"
+						"title": "Amount of speed to be changed per click"
 					},
 					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 				},
@@ -508,7 +507,7 @@
 					"label": "Düzenleyici anahtar",
 					"title": "Kullanılacak kısayol düğmesi"
 				},
-				"title": "Kaydırma tekerleği için hız kontrolü ayarları"
+				"title": "Scroll wheel speed control settings"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
@@ -521,7 +520,7 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Değiştirici tuşa basılı tutulduğunda",
+						"label": "When holding modifier key",
 						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
