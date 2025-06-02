@@ -138,6 +138,7 @@
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
 			}
 		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
