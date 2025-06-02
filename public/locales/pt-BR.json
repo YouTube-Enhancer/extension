@@ -138,6 +138,7 @@
 				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção."
 			}
 		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
