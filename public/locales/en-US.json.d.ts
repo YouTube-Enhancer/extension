@@ -80,6 +80,7 @@ interface EnUS {
 				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
 			};
 		};
+		scrollForMoreSettings: "Scroll for more settings";
 		sections: {
 			automaticQuality: {
 				enable: {
@@ -185,6 +186,10 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticTheaterMode: {
+						label: "Automatic theater mode";
+						title: "Automatically enables theater mode when you load a video";
+					};
 					automaticallyDisableAmbientMode: {
 						label: "Automatically disable ambient mode";
 						title: "Automatically disables ambient mode when you load a video";
@@ -192,10 +197,6 @@ interface EnUS {
 					automaticallyDisableClosedCaptions: {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";
-					};
-					automaticTheaterMode: {
-						label: "Automatic theater mode";
-						title: "Automatically enables theater mode when you load a video";
 					};
 					copyTimestampUrlButton: {
 						label: "Copy video URL with timestamp button";

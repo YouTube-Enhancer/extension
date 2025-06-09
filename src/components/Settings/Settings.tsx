@@ -18,7 +18,7 @@ import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
-import { MdOutlineOpenInNew } from "react-icons/md";
+import { MdOutlineExpandMore, MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
@@ -48,6 +48,18 @@ export default function Settings() {
 			addNotification("success", "pages.options.notifications.success.saved");
 		}
 	});
+	const [canScroll, setCanScroll] = useState<boolean>(true);
+	useEffect(() => {
+		const handleScroll = () => {
+			const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+			setCanScroll(window.scrollY < scrollableHeight);
+		};
+		window.addEventListener("scroll", handleScroll);
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, []);
+
 	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const { addNotification, notifications, removeNotification } = useNotifications();
@@ -1352,6 +1364,14 @@ export default function Settings() {
 						value={settings.custom_css_code}
 					/>
 				</SettingSection>
+				{!isPopup && canScroll && (
+					<div
+						className="z-100 fixed bottom-0 right-0 mb-4 mr-4 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]"
+						title={t("settings.scrollForMoreSettings")}
+					>
+						<MdOutlineExpandMore className="h-10 w-10 text-gray-500 dark:text-gray-300" />
+					</div>
+				)}
 				<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 dark:bg-[#181a1b]">
 					<input
 						className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
@@ -1421,6 +1441,11 @@ export default function Settings() {
 							value={t("settings.sections.bottomButtons.reset.value")}
 						/>
 					}
+					{isPopup && canScroll && (
+						<div className="w-10items-center flex h-10 justify-center" title={t("settings.scrollForMoreSettings")}>
+							<MdOutlineExpandMore className="h-10 w-10 text-gray-500 dark:text-gray-300" />
+						</div>
+					)}
 				</div>
 				<SettingsNotifications />
 				<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />
