@@ -8,7 +8,7 @@ export const SectionTitleProvider = (
 	}
 ) => {
 	return (
-		<SectionTitleContext.Provider value={{ title: context.title }}>
+		<SectionTitleContext.Provider value={{ shouldBeVisible: context.shouldBeVisible, title: context.title }}>
 			<fieldset className={cn("mx-1", context.className)}>{context.children}</fieldset>
 		</SectionTitleContext.Provider>
 	);

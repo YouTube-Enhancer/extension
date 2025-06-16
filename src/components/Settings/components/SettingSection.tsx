@@ -6,27 +6,20 @@ interface SettingSectionProps {
 	className?: string;
 	title: string;
 }
-export default function SettingSection({ children, className = "", title: sectionTitle = "" }: SettingSectionProps) {
+export default function SettingSection({ children, className = "", title: sectionTitle }: SettingSectionProps) {
 	const { filter } = useSettingsFilter();
-	if (children.length === 0) return null;
-	if (filter === "")
-		return (
-			<SectionTitleProvider className={className} title={sectionTitle}>
-				{children}
-			</SectionTitleProvider>
-		);
 	const shouldSectionBeVisible =
+		filter === "" ||
 		(sectionTitle && sectionTitle.toLowerCase().includes(filter.toLowerCase())) ||
-		(children as React.ReactElement<{ label?: string; title?: string }>[]).filter((child) => {
-			if (!child) return false;
-			if (!child.props) return false;
+		(children as React.ReactElement<{ label?: string; title?: string }>[]).some((child) => {
+			const { label, title } = child.props ?? {};
 			return (
-				(child.props.label !== undefined && child.props.label.toLowerCase().includes(filter.toLowerCase())) ||
-				(child.props.title !== undefined && child.props.title.toLowerCase().includes(filter.toLowerCase()))
+				(label !== undefined && label.toLowerCase().includes(filter.toLowerCase())) ||
+				(title !== undefined && title.toLowerCase().includes(filter.toLowerCase()))
 			);
-		}).length > 0;
+		});
 	return shouldSectionBeVisible ?
-			<SectionTitleProvider className={className} title={sectionTitle}>
+			<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
 				{children}
 			</SectionTitleProvider>
 		:	null;
