@@ -1,7 +1,6 @@
 import type { configurationId, Nullable, TOptionsKeys } from "@/src/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
-import useSectionTitle from "@/src/hooks/useSectionTitle";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 
 import type { CheckboxProps } from "../../Inputs/CheckBox/CheckBox";
@@ -44,13 +43,7 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 	const { i18nInstance } = useSettings();
 	const { t } = i18nInstance;
 	const { filter } = useSettingsFilter();
-	const { title } = useSectionTitle();
-	const shouldSettingBeVisible =
-		filter === "" ? true : (
-			(title && title.toLowerCase().includes(filter.toLowerCase())) ||
-			(settingProps.title !== undefined && settingProps.title.toLowerCase().includes(filter.toLowerCase())) ||
-			(settingProps.label !== undefined && settingProps.label.toLowerCase().includes(filter.toLowerCase()))
-		);
+	const shouldSettingBeVisible = [settingProps.title, settingProps.label].some((text) => text?.toLowerCase().includes(filter.toLowerCase()));
 	return shouldSettingBeVisible ?
 			<div
 				className="mx-2 mb-1"
