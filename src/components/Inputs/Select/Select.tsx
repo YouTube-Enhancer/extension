@@ -17,7 +17,7 @@ export type SelectOption<Key extends configurationId> = {
 export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
-	id?: string;
+	id: Key;
 	label: string;
 	loading?: boolean;
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
@@ -29,14 +29,13 @@ export type SelectProps<Key extends configurationId> = {
 interface SelectOptionProps {
 	children: React.ReactNode;
 	className?: string;
-	id?: string;
+	id: string;
 	value: string;
 }
 
 const Select = <Key extends configurationId>({
 	className,
 	disabled = false,
-	id,
 	label,
 	loading = false,
 	onChange,
@@ -62,11 +61,8 @@ const Select = <Key extends configurationId>({
 			className={cn("relative flex flex-row justify-between gap-4", className, {
 				"items-baseline": !isSelectVisible
 			})}
-			id={id}
 		>
-			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={id}>
-				{label}
-			</label>
+			<label className={cn(className, { "mt-2": isSelectVisible })}>{label}</label>
 			<div ref={selectRef}>
 				<>
 					<button

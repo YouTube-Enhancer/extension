@@ -26,7 +26,6 @@ export type parentSetting =
 			value: TOptionsKeys;
 	  };
 type SettingInputProps<ID extends configurationId> = {
-	id: ID;
 	label?: string;
 	parentSetting: Nullable<parentSetting>;
 	title?: string;
@@ -75,31 +74,21 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
-			const { checked, className, id, label, onChange, title } = settingProps;
-			return <Checkbox checked={checked} className={className} id={id} label={label} onChange={onChange} title={title} />;
+			const { checked, className, label, onChange, title } = settingProps;
+			return <Checkbox checked={checked} className={className} label={label} onChange={onChange} title={title} />;
 		}
 		case "color-picker": {
-			const { className, disabled, id, label, onChange, title, value } = settingProps;
-			return <ColorPicker className={className} disabled={disabled} id={id} label={label} onChange={onChange} title={title} value={value} />;
+			const { className, disabled, label, onChange, title, value } = settingProps;
+			return <ColorPicker className={className} disabled={disabled} label={label} onChange={onChange} title={title} value={value} />;
 		}
 		case "css-editor": {
-			const { className, disabled, id, onChange, value } = settingProps;
-			return <CSSEditor className={className} disabled={disabled} id={id} onChange={onChange} value={value} />;
+			const { className, disabled, onChange, value } = settingProps;
+			return <CSSEditor className={className} disabled={disabled} onChange={onChange} value={value} />;
 		}
 		case "number": {
-			const { className, disabled, id, label, max, min, onChange, step, value } = settingProps;
+			const { className, disabled, label, max, min, onChange, step, value } = settingProps;
 			return (
-				<NumberInput
-					className={className}
-					disabled={disabled}
-					id={id}
-					label={label}
-					max={max}
-					min={min}
-					onChange={onChange}
-					step={step}
-					value={value}
-				/>
+				<NumberInput className={className} disabled={disabled} label={label} max={max} min={min} onChange={onChange} step={step} value={value} />
 			);
 		}
 		case "select": {
@@ -123,18 +112,9 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			return <Slider disabled={disabled} initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />;
 		}
 		case "text-input": {
-			const { className, disabled, id, input_type, label, onChange, title, value } = settingProps;
+			const { className, disabled, input_type, label, onChange, title, value } = settingProps;
 			return (
-				<TextInput
-					className={className}
-					disabled={disabled}
-					id={id}
-					input_type={input_type}
-					label={label}
-					onChange={onChange}
-					title={title}
-					value={value}
-				/>
+				<TextInput className={className} disabled={disabled} input_type={input_type} label={label} onChange={onChange} title={title} value={value} />
 			);
 		}
 	}

@@ -12,7 +12,6 @@ import ExpandButton from "./ExpandButton";
 export type CSSEditorProps = {
 	className?: string;
 	disabled: boolean;
-	id: string;
 	onChange: (value: string) => void;
 	value: string;
 };
@@ -23,7 +22,7 @@ type ScrollPosition = {
 
 // TODO: add share custom css button with integration with yt-enhancer.dev
 
-const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, id, onChange, value }) => {
+const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, value }) => {
 	const editorRef = useRef<Nullable<editor.IStandaloneCodeEditor>>(null);
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
@@ -103,7 +102,6 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, id, onChange
 				"fixed top-0 left-0 z-[1000] w-screen h-screen bg-[#23272a] flex flex-col": isEditorExpanded,
 				"w-full flex flex-col": !isEditorExpanded
 			})}
-			id={id}
 		>
 			<ExpandButton
 				isExpanded={isEditorExpanded}
