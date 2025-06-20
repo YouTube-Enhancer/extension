@@ -11,9 +11,9 @@ export type Nullable<T> = T | null;
 export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
 export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 export type AnyFunction = (...args: any[]) => void;
-export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] }
+export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> }
+export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> }
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type WithId<S extends string> = `#${S}`;
 export type Prettify<T> = {
@@ -420,6 +420,12 @@ export type ExtensionSendOnlyMessageMappings = {
 		"automaticallyDisableClosedCaptionsChange",
 		{ automaticallyDisableClosedCaptionsEnabled: boolean }
 	>;
+	doubleClickToLikeShortsChange: DataResponseMessage<
+		"doubleClickToLikeShortsChange",
+		{
+			doubleClickToLikeShortsEnabled: boolean;
+		}
+	>;
 };
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -462,6 +468,7 @@ export type configuration = {
 	enable_automatically_disable_closed_captions: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
+	enable_double_click_to_like_shorts: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
 	enable_hide_end_screen_cards: boolean;
