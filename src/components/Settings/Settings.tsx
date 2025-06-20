@@ -711,6 +711,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_double_click_to_like_shorts?.toString() === "true"}
+						id="enable_double_click_to_like_shorts"
+						label={t("settings.sections.miscellaneous.features.doubleClickToLikeShorts.label")}
+						onChange={setCheckboxOption("enable_double_click_to_like_shorts")}
+						title={t("settings.sections.miscellaneous.features.doubleClickToLikeShorts.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_hide_live_stream_chat?.toString() === "true"}
 						id="enable_hide_live_stream_chat"
 						label={t("settings.sections.miscellaneous.features.hideLiveStreamChat.label")}

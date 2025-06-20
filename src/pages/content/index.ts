@@ -478,6 +478,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostEnabled: options.enable_volume_boost,
 				volumeBoostMode: newValue
 			});
+		},
+		enable_double_click_to_like_shorts: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("doubleClickToLikeShortsChange", {
+				doubleClickToLikeShortsEnabled: newValue
+			});
 		}
 	};
 	Object.entries(castedChanges).forEach(([key, change]) => {

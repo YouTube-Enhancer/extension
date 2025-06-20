@@ -1,6 +1,7 @@
 export type FeatureName =
 	| "automaticTheaterMode"
 	| "copyTimestampUrlButton"
+	| "doubleClickToLikeShorts"
 	| "featureMenu"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"

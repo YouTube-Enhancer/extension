@@ -12,6 +12,7 @@ import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/f
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
+import { disableDoubleClickToLikeShorts, enableDoubleClickToLikeShorts } from "@/src/features/doubleClickToLikeShorts";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
@@ -165,6 +166,7 @@ const enableFeatures = () => {
 		void Promise.all([
 			enableHidePaidPromotionBanner(),
 			enableHideShorts(),
+			enableDoubleClickToLikeShorts(),
 			enableRemoveRedirect(),
 			enableShareShortener(),
 			enableSkipContinueWatching(),
