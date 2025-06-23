@@ -13,8 +13,10 @@ export default function SettingSection({ children, className = "", title: sectio
 		(sectionTitle && sectionTitle.toLowerCase().includes(filter.toLowerCase())) ||
 		(children as React.ReactElement<{ label?: string; title?: string }>[]).some((child) => {
 			const { label, title } = child.props ?? {};
-			if (!label || !title) return false;
-			return label.toLowerCase().includes(filter.toLowerCase()) || title.toLowerCase().includes(filter.toLowerCase());
+			return (
+				(label !== undefined && label.toLowerCase().includes(filter.toLowerCase())) ||
+				(title !== undefined && title.toLowerCase().includes(filter.toLowerCase()))
+			);
 		});
 	return shouldSectionBeVisible ?
 			<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>

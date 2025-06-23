@@ -1292,7 +1292,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						alwaysVisible
 						disabled={settings.enable_custom_css?.toString() !== "true"}
 						onChange={(value) => {
 							if (value !== undefined) {
