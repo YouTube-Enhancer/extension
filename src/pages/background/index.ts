@@ -6,7 +6,6 @@ import { version } from "../../../package.json";
 
 chrome.runtime.onInstalled.addListener((details) => {
 	const { previousVersion, reason } = details;
-	if (!previousVersion) return;
 	switch (reason) {
 		case chrome.runtime.OnInstalledReason.INSTALL: {
 			// Open the options page after install
@@ -14,6 +13,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 			break;
 		}
 		case chrome.runtime.OnInstalledReason.UPDATE: {
+			if (!previousVersion) return;
 			if (
 				isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
 				isNewMinorVersion(previousVersion as VersionString, version as VersionString)
