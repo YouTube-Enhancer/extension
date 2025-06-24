@@ -4,7 +4,7 @@ import { createInstance, type Resource } from "i18next";
 import { waitForSpecificMessage } from "../utils/utilities";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
-export async function i18nService(locale: AvailableLocales) {
+export async function i18nService(locale: AvailableLocales = "en-US") {
 	let extensionURL;
 	const isYouTube = window.location.hostname.includes("youtube.com");
 	if (isYouTube) {
