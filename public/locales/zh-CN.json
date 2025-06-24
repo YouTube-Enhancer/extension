@@ -138,7 +138,7 @@
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "滚动以查看更多设置",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
