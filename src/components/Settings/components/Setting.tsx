@@ -26,6 +26,7 @@ export type parentSetting =
 			value: TOptionsKeys;
 	  };
 type SettingInputProps<ID extends configurationId> = {
+	alwaysVisible?: boolean;
 	label?: string;
 	parentSetting: Nullable<parentSetting>;
 	title?: string;
@@ -42,7 +43,8 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 	const { i18nInstance } = useSettings();
 	const { t } = i18nInstance;
 	const { filter } = useSettingsFilter();
-	const shouldSettingBeVisible = [settingProps.title, settingProps.label].some((text) => text?.toLowerCase().includes(filter.toLowerCase()));
+	const shouldSettingBeVisible =
+		settingProps.alwaysVisible ?? [settingProps.title, settingProps.label].some((text) => text?.toLowerCase().includes(filter.toLowerCase()));
 	return shouldSettingBeVisible ?
 			<div
 				className="mx-2 mb-1"
