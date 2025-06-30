@@ -52,7 +52,7 @@
     "@types/archiver": "^6.0.1",
     "@types/chrome": "^0.0.323",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.1.0",
+    "@types/node": "^24.0.7",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
     "@types/webextension-polyfill": "^0.12.1",
