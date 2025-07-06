@@ -762,6 +762,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_default_to_original_audio_track?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.defaultToOriginalAudioTrack.label")}
+						onChange={setCheckboxOption("enable_default_to_original_audio_track")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.defaultToOriginalAudioTrack.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
