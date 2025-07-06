@@ -293,8 +293,8 @@
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "Retornar à faixa de vídeo original",
+						"title": "Sempre retornar à faixa de vídeo original"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
