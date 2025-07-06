@@ -292,6 +292,10 @@
 						"label": "현재 시간 주소 복사 버튼",
 						"title": "현재 시간 주소 복사 (?t=123)"
 					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
