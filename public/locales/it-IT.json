@@ -292,6 +292,10 @@
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
 					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Traccia audio originale predefinita",
+						"title": "Traccia audio originale sempre predefinita"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
 						"title": "Nasconde il riepilogo dell'intelligenza artificiale sotto i video"
