@@ -13,6 +13,13 @@ declare module "*.json" {
 }
 
 declare module "node_modules/@types/youtube-player/dist/types" {
+	interface audioTrack {
+		Y2: {
+			id: string;
+			isDefault: boolean;
+			name: string;
+		};
+	}
 	interface ProgressState {
 		airingEnd: number;
 		airingStart: number;
@@ -55,10 +62,13 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		video_quality_features: string[];
 	}
 	interface YouTubePlayer {
+		getAudioTrack(): Promise<audioTrack>;
+		getAvailableAudioTracks(): Promise<audioTrack[]>;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
 		loadModule(moduleName: string): void;
+		setAudioTrack(audioTrack: audioTrack): Promise<void>;
 		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
 		unloadModule(moduleName: string): void;
 	}

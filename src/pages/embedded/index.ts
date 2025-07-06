@@ -13,6 +13,7 @@ import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
+import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
@@ -201,7 +202,8 @@ const enableFeatures = () => {
 			enableHideEndScreenCards(),
 			enablePlaylistLength(),
 			enableAutomaticallyDisableClosedCaptions(),
-			enableAutomaticallyDisableAmbientMode()
+			enableAutomaticallyDisableAmbientMode(),
+			enableDefaultToOriginalAudioTrack()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -419,6 +421,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						}
 						break;
 					}
+
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -459,6 +462,17 @@ window.addEventListener("DOMContentLoaded", function () {
 							}
 						} else {
 							disableDeepDarkCSS();
+						}
+						break;
+					}
+					case "defaultToOriginalAudioTrackChange": {
+						const {
+							data: { defaultToOriginalAudioTrackEnabled }
+						} = message;
+						if (defaultToOriginalAudioTrackEnabled) {
+							await enableDefaultToOriginalAudioTrack();
+						} else {
+							await disableDefaultToOriginalAudioTrack();
 						}
 						break;
 					}

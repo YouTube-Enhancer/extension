@@ -202,6 +202,10 @@ interface EnUS {
 						label: "Copy video URL with timestamp button";
 						title: "Copies video URL with timestamp (?t=123)";
 					};
+					defaultToOriginalAudioTrack: {
+						label: "Default to original audio track";
+						title: "Always default to the original audio track";
+					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
 						title: "Hides the artificial intelligence summary below videos";

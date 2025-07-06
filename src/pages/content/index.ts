@@ -295,6 +295,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				deepDarkThemeEnabled: newValue
 			});
 		},
+		enable_default_to_original_audio_track(__oldValue, newValue) {
+			sendExtensionOnlyMessage("defaultToOriginalAudioTrackChange", {
+				defaultToOriginalAudioTrackEnabled: newValue
+			});
+		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: newValue,
@@ -492,6 +497,7 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				volumeBoostMode: options.volume_boost_mode
 			});
 		},
+
 		volume_boost_mode: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("volumeBoostChange", {
 				volumeBoostEnabled: options.enable_volume_boost,
