@@ -292,6 +292,10 @@
 						"label": "复制带有时间戳的视频 URL 按钮",
 						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "隐藏 AI 摘要",
 						"title": "隐藏视频下方的人工智能摘要"
