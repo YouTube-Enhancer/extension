@@ -4,6 +4,7 @@ import eventManager from "@/src/utils/EventManager";
 import {
 	conditionalStyles,
 	createStyledElement,
+	delay,
 	formatDuration,
 	isNewYouTubeVideoLayout,
 	isWatchPage,
@@ -34,7 +35,6 @@ export const getHeaderSelectors = (): { playlist: () => string; watch: string } 
 });
 export const playlistItemsSelector = () =>
 	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const youtubePlaylistResponseSchema = z.object({
 	items: z.array(z.object({ contentDetails: z.object({ videoId: z.string() }) })),
 	nextPageToken: z.string().optional()
