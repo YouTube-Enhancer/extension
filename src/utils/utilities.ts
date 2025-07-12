@@ -44,7 +44,7 @@ export const stopPropagation = (e: Event) => e.stopPropagation();
 export const removeSpecialCharacters = (value: string) => {
 	return value.replace(/[<>:"|?*]/g, "");
 };
-
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const unique = (values: string[]) => [...new Set(values)];
 
 export const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
