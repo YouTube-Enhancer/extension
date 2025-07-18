@@ -1,4 +1,5 @@
 import type { Nullable } from "@/src/types";
+
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
 let intervalId: Nullable<NodeJS.Timeout> = null;
