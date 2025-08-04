@@ -1,5 +1,6 @@
 import { fixupPluginRules } from "@eslint/compat";
 import eslintJavascript from "@eslint/js";
+import eslintTypeScriptParser from "@typescript-eslint/parser";
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginNoSecrets from "eslint-plugin-no-secrets";
 import eslintPluginPerfectionist from "eslint-plugin-perfectionist";
@@ -9,7 +10,6 @@ import eslintPluginReact from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import eslintPluginTailwindCSS from "eslint-plugin-tailwindcss";
 import globals from "globals";
-// eslint-disable-next-line import/no-unresolved
 import typescriptEslint from "typescript-eslint";
 
 export default [
@@ -33,7 +33,7 @@ export default [
 				...globals.node,
 				chrome: "readonly"
 			},
-			parser: typescriptEslint.parser,
+			parser: eslintTypeScriptParser,
 			parserOptions: {
 				ecmaFeatures: {
 					jsx: true
