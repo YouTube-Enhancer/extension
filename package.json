@@ -12,7 +12,7 @@
     "url": "https://github.com/YouTube-Enhancer/extension.git"
   },
   "scripts": {
-    "build": "concurrently \"vite build\" \"eslint --fix src/i18n/constants.ts\"",
+    "build": "concurrently \"vite build\" \"node node_modules/ts-json-as-const/index.js public/locales/en-US.json\" \"eslint --fix public/locales/en-US.json.d.ts\" \"eslint --fix src/i18n/constants.ts\"",
     "dev": "nodemon",
     "format": "prettier --write .",
     "lint": "eslint .",
@@ -20,8 +20,7 @@
   },
   "type": "module",
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.14.3",
-    "ts-json-as-const": "^1.0.7"
+    "@rollup/rollup-linux-x64-gnu": "^4.14.3"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
@@ -57,8 +56,6 @@
     "@types/react-dom": "^19.0.2",
     "@types/webextension-polyfill": "^0.12.1",
     "@types/youtube-player": "^5.5.10",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "@typescript-eslint/parser": "^8.8.1",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.16",
