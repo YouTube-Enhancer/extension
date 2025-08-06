@@ -194,6 +194,15 @@
         "ideas",
         "design"
       ]
+    },
+    {
+      "login": "dnicolson",
+      "name": "Dave Nicolson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2276355?v=4",
+      "profile": "https://github.com/dnicolson",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
