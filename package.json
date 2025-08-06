@@ -12,7 +12,7 @@
     "url": "https://github.com/YouTube-Enhancer/extension.git"
   },
   "scripts": {
-    "build": "concurrently \"vite build\" \"eslint --fix src/i18n/constants.ts\"",
+    "build": "concurrently \"vite build\" \"node node_modules/ts-json-as-const/index.js public/locales/en-US.json\" \"eslint --fix public/locales/en-US.json.d.ts\" \"eslint --fix src/i18n/constants.ts\"",
     "dev": "nodemon",
     "format": "prettier --write .",
     "lint": "eslint .",
