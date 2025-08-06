@@ -2,7 +2,7 @@
 	"env": {
 		"__DEV__": "true"
 	},
-	"exec": "concurrently \"vite build\" \"ts-json-as-const public/locales/en-US.json\" \"eslint --fix public/locales/en-US.json.d.ts\" \"eslint --fix src/i18n/constants.ts\"",
+	"exec": "npm run build",
 	"ext": "ts,tsx,css,html,json",
 	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts"],
 	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"]
