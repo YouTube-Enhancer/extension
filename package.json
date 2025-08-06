@@ -57,8 +57,6 @@
     "@types/react-dom": "^19.0.2",
     "@types/webextension-polyfill": "^0.12.1",
     "@types/youtube-player": "^5.5.10",
-    "@typescript-eslint/eslint-plugin": "^8.8.1",
-    "@typescript-eslint/parser": "^8.8.1",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.16",
