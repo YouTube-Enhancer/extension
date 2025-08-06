@@ -20,8 +20,7 @@
   },
   "type": "module",
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.14.3",
-    "ts-json-as-const": "^1.0.7"
+    "@rollup/rollup-linux-x64-gnu": "^4.14.3"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
