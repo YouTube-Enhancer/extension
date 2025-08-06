@@ -1,12 +1,12 @@
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
-import { type Resource, createInstance } from "i18next";
+import { createInstance, type Resource } from "i18next";
 
 import { waitForSpecificMessage } from "../utils/utilities";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
-export async function i18nService(locale: AvailableLocales) {
+export async function i18nService(locale: AvailableLocales = "en-US") {
 	let extensionURL;
-	const isYouTube = window.location.hostname === "www.youtube.com";
+	const isYouTube = window.location.hostname.includes("youtube.com");
 	if (isYouTube) {
 		const extensionURLResponse = await waitForSpecificMessage("extensionURL", "request_data", "content");
 		if (!extensionURLResponse) throw new Error("Failed to get extension URL");

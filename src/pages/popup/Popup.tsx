@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import Settings from "@/src/components/Settings/Settings";
 import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
 import { SettingsFilterProvider } from "@/src/hooks/useSettingsFilter/provider";

@@ -4,19 +4,12 @@ import { modifyElementsClassList, waitForAllElements, waitForSpecificMessage } f
 
 import "./index.css";
 
-export async function enableHideLiveStreamChat() {
-	const {
-		data: {
-			options: { enable_hide_live_stream_chat: enableHideLiveStreamChat }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideLiveStreamChat) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+export async function disableHideLiveStreamChat() {
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();
 	if (!playerData.isLive) return;
-	modifyElementsClassList("add", [
+	modifyElementsClassList("remove", [
 		{
 			className: "yte-hide-live-stream-chat",
 			element: document.querySelector("div#chat-container")
@@ -32,12 +25,19 @@ export async function enableHideLiveStreamChat() {
 	]);
 }
 
-export async function disableHideLiveStreamChat() {
+export async function enableHideLiveStreamChat() {
+	const {
+		data: {
+			options: { enable_hide_live_stream_chat: enableHideLiveStreamChat }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	if (!enableHideLiveStreamChat) return;
+	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();
 	if (!playerData.isLive) return;
-	modifyElementsClassList("remove", [
+	modifyElementsClassList("add", [
 		{
 			className: "yte-hide-live-stream-chat",
 			element: document.querySelector("div#chat-container")

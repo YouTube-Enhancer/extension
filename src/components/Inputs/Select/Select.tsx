@@ -1,4 +1,4 @@
-import type { PathValue, configuration, configurationId } from "@/src/types";
+import type { configuration, configurationId, PathValue } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
@@ -9,22 +9,15 @@ import React, { useRef } from "react";
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
 
-interface SelectOptionProps {
-	children: React.ReactNode;
-	className?: string;
-	id?: string;
-	value: string;
-}
 export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;
 	label: string;
 	value: Extract<PathValue<configuration, Key>, string>;
 };
-
 export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
-	id?: string;
+	id: Key;
 	label: string;
 	loading?: boolean;
 	onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
@@ -33,10 +26,16 @@ export type SelectProps<Key extends configurationId> = {
 	title: string;
 };
 
+interface SelectOptionProps {
+	children: React.ReactNode;
+	className?: string;
+	id: string;
+	value: string;
+}
+
 const Select = <Key extends configurationId>({
 	className,
 	disabled = false,
-	id,
 	label,
 	loading = false,
 	onChange,
@@ -55,18 +54,15 @@ const Select = <Key extends configurationId>({
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
-	const disabledButtonClasses = { "dark:text-[#4b5563] text-[#4b5563]": disabled } satisfies ClassValue;
+	const disabledButtonClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled } satisfies ClassValue;
 	return (
 		<div
 			aria-valuetext={selectedOption}
 			className={cn("relative flex flex-row justify-between gap-4", className, {
 				"items-baseline": !isSelectVisible
 			})}
-			id={id}
 		>
-			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={id}>
-				{label}
-			</label>
+			<label className={cn(className, { "mt-2": isSelectVisible })}>{label}</label>
 			<div ref={selectRef}>
 				<>
 					<button

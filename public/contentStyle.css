@@ -68,3 +68,7 @@ body.no-scroll .yte-button-tooltip {
 .yte-hide-shorts {
 	display: none !important;
 }
+
+.yte-hide-playables {
+	display: none !important;
+}

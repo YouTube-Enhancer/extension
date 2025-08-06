@@ -74,7 +74,7 @@
 					"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "一部の動画が非表示になっている場合、または完全な長さを得るために十分な動画を読み込んでいない場合、合計長さが正確でない可能性があります。"
 				},
 				"screenshotButton": {
 					"button": {
@@ -123,6 +123,22 @@
 			"allDataDeleted": "すべてのデータが削除されました。",
 			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -264,13 +280,25 @@
 						"label": "自動シアターモード",
 						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "シネマティック ライティングを自動的に無効にする",
+						"title": "動画の読み込み時にシネマティック ライティングを自動にディセーブルする"
+					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "クローズドキャプションを自動にディセーブルする",
+						"title": "動画の読み込み時にクローズドキャプションを自動にディセーブルする"
 					},
 					"copyTimestampUrlButton": {
 						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
 						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
 						"label": "終了画面のカードを非表示にする",
@@ -285,12 +313,16 @@
 						"title": "配信チャットを隠する"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "公式アーティストの動画を隠する",
+						"title": "ホームページから公式アーティストの動画を隠する"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "有料プロモーションバナーを隠す",
 						"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "スクロールバー隠す機能",
@@ -323,6 +355,10 @@
 					"pauseBackgroundPlayers": {
 						"label": "背後タブのビデオプレイヤーを一時停止",
 						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
+					},
+					"playlistRemover": {
+						"label": "ホームページでプレイリストを削除する",
+						"title": "プレイリストを削除する"
 					},
 					"remainingTime": {
 						"label": "残り時間",
@@ -422,24 +458,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "プレイリストの長さ情報を表示",
+					"title": "プレイリストの長さ全額、視聴時間量、と残り時間を見せてしまいます。"
 				},
-				"title": "Playlist length settings",
+				"title": "プレイリストの長さ設定",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "プレイリストの長さを取得する方法",
+						"title": "プレイリストの長さ情報を取得する方法 (エラーが発生した場合、APIメソッドはHTMLにフォールバックします)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "動画の視聴時間の取り出す方法",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "動画の長さ",
+							"youtube": "動画の視聴時間"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "視聴時間の長さを取得する方法 (動画の長さタイプはウォッチページでのみ使用)"
 					}
 				}
 			},
@@ -548,12 +584,12 @@
 				"title": "音量ブーストの設定"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "APIキーがここで取得をします。",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "APIキー",
+					"title": "YouTube API V3キーを入力してください。"
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3キー"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
