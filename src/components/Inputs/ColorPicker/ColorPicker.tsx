@@ -1,14 +1,15 @@
 import type { ClassValue } from "clsx";
 
-import { useComponentVisible } from "@/src/hooks";
-import useClickOutside from "@/src/hooks/useClickOutside";
-import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent, useRef } from "react";
+import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
+import { useDebouncyFn } from "use-debouncy";
+
+import { useComponentVisible } from "@/src/hooks";
 
 import "./index.css";
 
-import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
-import { useDebouncyFn } from "use-debouncy";
+import useClickOutside from "@/src/hooks/useClickOutside";
+import { cn } from "@/src/utils/utilities";
 export type ColorPickerProps = {
 	className?: string;
 	disabled: boolean;

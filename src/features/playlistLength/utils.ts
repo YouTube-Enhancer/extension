@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import type { Nullable, PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod, VideoDetails, YouTubePlaylistItem } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
@@ -12,7 +14,6 @@ import {
 	timeStringToSeconds,
 	waitForAllElements
 } from "@/src/utils/utilities";
-import { z } from "zod";
 
 export const getHeaderSelectors = (): { playlist: () => string; watch: string } => ({
 	playlist: () => {
