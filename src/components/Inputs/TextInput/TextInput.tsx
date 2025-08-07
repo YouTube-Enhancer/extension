@@ -1,9 +1,11 @@
-import type { Nullable } from "@/src/types";
 import type { ChangeEvent } from "react";
 
-import { cn } from "@/src/utils/utilities";
 import React, { useRef, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
+
+import type { Nullable } from "@/src/types";
+
+import { cn } from "@/src/utils/utilities";
 
 export type TextInputProps = {
 	className?: string;

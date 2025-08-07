@@ -1,7 +1,8 @@
+import { type ReactElement, useEffect, useState } from "react";
+
 import type { Notification } from "@/src/types";
 
 import { isNotStrictEqual } from "@/src/utils/utilities";
-import { type ReactElement, useEffect, useState } from "react";
 
 import {
 	type AddNotification,

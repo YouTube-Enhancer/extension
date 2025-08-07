@@ -1,6 +1,6 @@
-import type { Nullable } from "@/src/types";
-
 import { type RefObject, useEffect } from "react";
+
+import type { Nullable } from "@/src/types";
 
 // Improved version of https://usehooks.com/useOnClickOutside/
 

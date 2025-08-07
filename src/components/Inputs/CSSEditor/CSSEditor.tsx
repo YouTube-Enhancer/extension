@@ -1,8 +1,9 @@
+import { Editor, type Monaco } from "@monaco-editor/react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+
 import { type Nullable } from "@/src/types";
 import { type editor } from "@/src/utils/monaco";
 import { cn, debounce } from "@/src/utils/utilities";
-import { Editor, type Monaco } from "@monaco-editor/react";
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { editorOptions } from "./editorOptions";
 import EditorProblems from "./EditorProblems";

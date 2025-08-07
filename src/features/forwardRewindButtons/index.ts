@@ -1,10 +1,11 @@
+import { Measure, seconds } from "safe-units";
+
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
-import { Measure, seconds } from "safe-units";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 const speedButtonListener = async (direction: "backward" | "forward", timeAdjustment: number) => {

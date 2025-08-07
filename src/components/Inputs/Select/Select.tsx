@@ -1,10 +1,12 @@
-import type { configuration, configurationId, PathValue } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
+import React, { useRef } from "react";
+
+import type { configuration, configurationId, PathValue } from "@/src/types";
+
 import { useComponentVisible } from "@/hooks";
 import { cn } from "@/src/utils/utilities";
-import React, { useRef } from "react";
 
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";

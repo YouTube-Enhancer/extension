@@ -1,11 +1,18 @@
 /* eslint-disable tailwindcss/enforces-shorthand */
-import type { AllButtonNames, configuration, configurationKeys, Nullable, Path } from "@/src/types";
 import type { ClassValue } from "clsx";
 import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
+import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
+import { MdOutlineExpandMore, MdOutlineOpenInNew } from "react-icons/md";
+import { generateErrorMessage } from "zod-error";
+
+import type { AllButtonNames, configuration, configurationKeys, Nullable, Path } from "@/src/types";
+
 import { useNotifications } from "@/hooks";
 import Link from "@/src/components/Link";
 import SettingSearch from "@/src/components/Settings/components/SettingSearch";
@@ -16,10 +23,6 @@ import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerSpeedStep } from "@/sr
 import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
-import { MdOutlineExpandMore, MdOutlineOpenInNew } from "react-icons/md";
-import { generateErrorMessage } from "zod-error";
 
 import type { SelectOption } from "../Inputs";
 

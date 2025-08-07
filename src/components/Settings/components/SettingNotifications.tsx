@@ -1,8 +1,9 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import type { Notification } from "@/src/types";
 
 import { useNotifications } from "@/src/hooks";
 import { cn } from "@/src/utils/utilities";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { useSettings } from "../Settings";
 export default function SettingsNotifications() {
