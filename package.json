@@ -56,7 +56,7 @@
     "@types/react-dom": "^19.0.2",
     "@types/webextension-polyfill": "^0.12.1",
     "@types/youtube-player": "^5.5.10",
-    "@vitejs/plugin-react-swc": "^3.4.1",
+    "@vitejs/plugin-react-swc": "^4.0.0",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.16",
     "clsx": "^2.0.0",
