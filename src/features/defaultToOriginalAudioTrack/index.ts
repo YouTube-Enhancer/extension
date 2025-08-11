@@ -1,5 +1,6 @@
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import type { audioTrack } from "node_modules/@types/youtube-player/dist/types";
+
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 let originalAudioTrack: Nullable<audioTrack> = null;

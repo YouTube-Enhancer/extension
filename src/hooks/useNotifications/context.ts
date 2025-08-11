@@ -1,6 +1,6 @@
-import type { Notification, NotificationAction, NotificationType } from "@/src/types";
-
 import { createContext } from "react";
+
+import type { Notification, NotificationAction, NotificationType } from "@/src/types";
 
 export type AddNotification = (type: NotificationType, message: Notification["message"], action?: NotificationAction) => void;
 

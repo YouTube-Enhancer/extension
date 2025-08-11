@@ -1,5 +1,6 @@
-import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent, useState } from "react";
+
+import { cn } from "@/src/utils/utilities";
 
 export type SliderProps = {
 	disabled: boolean;

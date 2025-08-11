@@ -1,5 +1,6 @@
-import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 import { createInstance, type Resource } from "i18next";
+
+import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 
 import { waitForSpecificMessage } from "../utils/utilities";
 export type i18nInstanceType = ReturnType<typeof createInstance>;

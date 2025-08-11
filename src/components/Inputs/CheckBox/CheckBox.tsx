@@ -1,5 +1,6 @@
-import { cn } from "@/src/utils/utilities";
 import React, { type ChangeEvent } from "react";
+
+import { cn } from "@/src/utils/utilities";
 
 import { useSettings } from "../../Settings/Settings";
 

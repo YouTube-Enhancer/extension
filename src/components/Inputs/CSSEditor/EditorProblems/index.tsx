@@ -1,8 +1,9 @@
+import React, { forwardRef } from "react";
+
 import { useSettings } from "@/src/components/Settings/Settings";
 import { type Nullable } from "@/src/types";
 import { type editor, MarkerSeverity } from "@/src/utils/monaco";
 import { cn } from "@/src/utils/utilities";
-import React, { forwardRef } from "react";
 
 import "./index.css";
 type EditorProblemsProps = {
