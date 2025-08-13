@@ -49,36 +49,36 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Powiększ okno",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Wyłącz powiększenie",
+							"on": "Włącz powiększenie"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Otwórz transkrypcję"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Zmniejsz szybkość do {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Zwiększ szybkość do {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Nie można zmniejszać dalej ({{SPEED}})",
+					"increaseLimit": "Nie można zwiększać dalej ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Całkowita długość może być niedokładna, jeśli niektóre filmy są ukryte lub jeśli nie załadowałeś wystarczającej liczby filmów, aby uzyskać pełny czas."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Zrzut ekranu"
 					},
 					"copiedToClipboard": "Zrzut ekranu skopiowany do schowka"
 				},
@@ -90,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Zwiększ głośność",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Zwiększenie głośności wyłączone",
+							"on": "Zwiększenie głośności włączone"
 						}
 					}
 				}
@@ -104,7 +104,7 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"speedControl": "Ustawiony klawisz zmiany prędkości przewijania nie może być taki sam, jak klawisz zmiany głośności przewijania kółka.",
 							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
 						}
 					}
