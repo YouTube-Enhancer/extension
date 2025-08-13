@@ -3,7 +3,7 @@
 	"langName": "Polish",
 	"messages": {
 		"resumingVideo": "Wznowienie wideo za {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"settingVolume": "Ustawianie wzmocnienia głośności do {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
@@ -11,39 +11,39 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Skopiowano!",
-						"label": "Copy video URL with timestamp"
+						"label": "Kopiuj adres URL filmu ze znacznikiem czasu"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menu funkcji"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Przyspieszenie do przodu o {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Cofnięcie o {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Ukryj elementy końcowe filmu",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Pokaż elementy końcowe filmu",
+							"on": "Ukryj elementy końcowe filmu"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Zapętl",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Wyłącz zapętlenie",
+							"on": "Włącz zapętlenie"
 						}
 					}
 				},
