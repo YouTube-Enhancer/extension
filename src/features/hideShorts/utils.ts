@@ -1,10 +1,13 @@
 import { toggleElementVisibility } from "@/src/utils/utilities";
 export const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
 export const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
-export const homePageShortsSectionSelector = "[is-shorts]";
+export const homePageShortsSectionSelector = "ytd-rich-shelf-renderer[is-shorts]";
 export const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has(#title-container)";
 export const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
 export const searchResultsShortsTabSelector = "yt-chip-cloud-chip-renderer:has(yt-formatted-string[title=Shorts])";
+const shortsIconD =
+	"m19.45,3.88c1.12,1.82.48,4.15-1.42,5.22l-1.32.74.94.41c1.36.58,2.27,1.85,2.35,3.27.08,1.43-.68,2.77-1.97,3.49l-8,4.47c-1.91,1.06-4.35.46-5.48-1.35-1.12-1.82-.48-4.15,1.42-5.22l1.33-.74-.94-.41c-1.36-.58-2.27-1.85-2.35-3.27-.08-1.43.68-2.77,1.97-3.49l8-4.47c1.91-1.06,4.35-.46,5.48,1.35Z";
+export const searchResultsShortsGridShelfSelector = `grid-shelf-view-model:has([d='${shortsIconD}'])`;
 export const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-style=SHORTS])";
 
 export function hideShorts() {
@@ -12,6 +15,8 @@ export function hideShorts() {
 	hideShortsTabOnChannelPage();
 	// Hide the shorts tab on the search results page
 	hideShortsTabOnSearchResultsPage();
+	// Hide the shorts grid shelves on the search results page
+	hideShortsGridShelves();
 	// Hide the shorts section on the homepage
 	hideShortsSectionOnHomePage();
 	// Hide the shorts section on the channel home page
@@ -39,7 +44,8 @@ export function observeShortsElements() {
 					mutation.target.matches(channelHomePageShortsSectionSelector) ||
 					mutation.target.matches(channelPageShortsTabSelector) ||
 					mutation.target.matches(searchResultsShortsTabSelector) ||
-					mutation.target.matches(shortsVideoRendererSelector))
+					mutation.target.matches(shortsVideoRendererSelector) ||
+					mutation.target.matches(searchResultsShortsGridShelfSelector))
 			);
 		});
 
@@ -66,6 +72,8 @@ export function showShorts() {
 	showShortsTabOnChannelPage();
 	// Show the shorts tab on the search results page
 	showShortsTabOnSearchResultsPage();
+	// Show the shorts grid shelves on the search results page
+	showShortsGridShelves();
 	// Show the shorts video renderers
 	showShortsVideoRenderers();
 }
@@ -74,6 +82,9 @@ function hideElement(element: HTMLElement) {
 	element.classList.add("yte-hide-shorts");
 }
 
+function hideShortsGridShelves() {
+	toggleElementVisibility(searchResultsShortsGridShelfSelector, hideElement);
+}
 function hideShortsSectionOnChannelHomePage() {
 	toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
 }
@@ -100,10 +111,13 @@ function showElement(element: HTMLElement) {
 	element.classList.remove("yte-hide-shorts");
 }
 
+function showShortsGridShelves() {
+	toggleElementVisibility(searchResultsShortsGridShelfSelector, showElement);
+}
+
 function showShortsSectionOnChannelHomePage() {
 	toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
 }
-
 function showShortsSectionOnHomePage() {
 	toggleElementVisibility(homePageShortsSectionSelector, showElement);
 }
