@@ -22,7 +22,7 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 		case "player_controls_right": {
 			// Add the feature name to the set of features in the controls
 			featuresInControls.add(buttonName);
-			const button = makeFeatureButton(buttonName, placement, label, icon, listener, isToggle, initialChecked);
+			const button = await makeFeatureButton(buttonName, placement, label, icon, listener, isToggle, initialChecked);
 			placeButton(button, placement);
 			break;
 		}
