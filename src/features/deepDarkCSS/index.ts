@@ -1,8 +1,8 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
+import { deepDarkCssID } from "@/src/utils/constants";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { createDeepDarkCSSElement, deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "./utils";
-export const deepDarkCssID = "yte-deep-dark-css";
 export function disableDeepDarkCSS() {
 	// Get the deep dark theme style element
 	const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);

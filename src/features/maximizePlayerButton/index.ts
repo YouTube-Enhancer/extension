@@ -2,7 +2,7 @@ import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -47,7 +47,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 	const pipElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-pip-button");
 	const sizeElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-size-button");
 	const miniPlayerElement: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-miniplayer-button");
-	function otherElementClickListener() {
+	async function otherElementClickListener() {
 		// Get the video element
 		const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
 		// If video element is not available, return
@@ -62,7 +62,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			const button = getFeatureButton("maximizePlayerButton");
 			const icon = getFeatureIcon("maximizePlayerButton", "below_player");
 			if (button && button instanceof HTMLButtonElement) {
-				if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, icon.off);
+				if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
 				updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
 			}
 		}

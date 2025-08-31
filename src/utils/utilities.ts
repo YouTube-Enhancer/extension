@@ -31,6 +31,8 @@ import type {
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
 
+import { deepDarkPresets } from "../deepDarkPresets";
+import { getDeepDarkCustomThemeStyle } from "../features/deepDarkCSS/utils";
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { eventManager, type FeatureName } from "./EventManager";
 
@@ -399,6 +401,40 @@ export function formatError(error: unknown) {
 		return "Unknown error";
 	}
 }
+export async function getButtonColor() {
+	const {
+		data: {
+			options: { deep_dark_custom_theme_colors, deep_dark_preset, enable_deep_dark_theme }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	const isDarkMode = IsDarkMode();
+	const colors = deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset];
+	const mainBackgroundColor = parseMainBackgroundColor(colors);
+	const contrastWithWhite = getContrast(mainBackgroundColor, "#FFFFFF");
+	const contrastWithBlack = getContrast(mainBackgroundColor, "#000000");
+	const buttonColor = contrastWithWhite > contrastWithBlack ? "#FFFFFF" : "#000000";
+
+	return (
+		enable_deep_dark_theme ? buttonColor
+		: isDarkMode ? "#FFFFFF"
+		: "#000000"
+	);
+}
+export function getContrast(color1: string, color2: string): number {
+	const color1Rgb = hexToRgb(color1);
+	const color2Rgb = hexToRgb(color2);
+	if (!color1Rgb || !color2Rgb) {
+		return 0;
+	}
+	const lum1 = getLuminance(color1Rgb);
+	const lum2 = getLuminance(color2Rgb);
+
+	const brightest = Math.max(lum1, lum2);
+	const darkest = Math.min(lum1, lum2);
+
+	return (brightest + 0.05) / (darkest + 0.05);
+}
+
 export function getFormattedTimestamp() {
 	const now = new Date();
 
@@ -471,6 +507,10 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 			return settings[settingName] === false;
 		}
 	}
+}
+export function IsDarkMode() {
+	const darkMode = document.documentElement.hasAttribute("dark");
+	return darkMode;
 }
 export function isLivePage() {
 	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
@@ -834,6 +874,17 @@ function getColor(type: ColorType) {
 			return BrowserColors[type];
 	}
 }
+function getLuminance(rgb: { b: number; g: number; r: number }): number {
+	const r = rgb.r / 255;
+	const g = rgb.g / 255;
+	const b = rgb.b / 255;
+
+	const r2 = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+	const g2 = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+	const b2 = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+
+	return 0.2126 * r2 + 0.7152 * g2 + 0.0722 * b2;
+}
 
 /**
  * Group multiple log messages into a single message with combined styling.
@@ -845,4 +896,24 @@ function groupMessages(messages: { message: string; styling: string[] }[]): Arra
 	const message = messages.map((m) => m.message).join(" ");
 	const styling = messages.map((m) => m.styling).flat();
 	return [message, ...styling];
+}
+function hexToRgb(hex: string) {
+	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+	const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+	hex = hex.replace(shorthandRegex, (_m, r, g, b) => {
+		return r + r + g + g + b + b;
+	});
+
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ?
+			{
+				b: parseInt(result[3], 16),
+				g: parseInt(result[2], 16),
+				r: parseInt(result[1], 16)
+			}
+		:	null;
+}
+function parseMainBackgroundColor(text: string) {
+	const match = text.match(/--main-background:\s*([^;]+);/);
+	return match ? match[1].trim() : "";
 }

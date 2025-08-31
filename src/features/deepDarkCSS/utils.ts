@@ -1,7 +1,7 @@
 import type { DeepDarkCustomThemeColors } from "@/src/types";
 
-import { deepDarkMaterial } from "@/src/deepDarkMaterialCSS";
-import { deepDarkCssID } from "@/src/features/deepDarkCSS";
+import { deepDarkMaterial } from "../../deepDarkMaterialCSS";
+import { deepDarkCssID } from "../../utils/constants";
 
 export function createDeepDarkCSSElement(css_code: string) {
 	// Create the custom CSS style element

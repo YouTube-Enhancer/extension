@@ -7,7 +7,7 @@ import {
 } from "@/src/features/automaticallyDisableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
@@ -463,6 +463,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						} else {
 							disableDeepDarkCSS();
 						}
+						updateButtonsIconColor();
 						break;
 					}
 					case "defaultToOriginalAudioTrackChange": {
