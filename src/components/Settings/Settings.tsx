@@ -352,7 +352,7 @@ export default function Settings() {
 					const result = configurationImportSchema.safeParse(importedSettings);
 					if (!result.success) {
 						const { error } = result;
-						const errorMessage = generateErrorMessage(error.issues);
+						const errorMessage = generateErrorMessage(error.errors);
 						window.alert(
 							t("settings.sections.importExportSettings.importButton.error.validation", {
 								ERROR_MESSAGE: errorMessage

@@ -128,7 +128,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	"button_placements",
 	{
 		button_placements: ZodObject<{
-			[K in AllButtonNames]: ZodEnum<{ [K in ButtonPlacement]: K }>;
+			[K in AllButtonNames]: ZodEnum<[ButtonPlacement]>;
 		}>;
 	},
 	true
@@ -136,7 +136,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	button_placements: z.object({
 		...buttonNames.reduce(
 			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements).optional() }),
-			{} as Record<AllButtonNames, ZodEnum<{ [K in ButtonPlacement]: K }>>
+			{} as Record<AllButtonNames, ZodEnum<[ButtonPlacement]>>
 		)
 	}),
 	custom_css_code: z.string().optional(),

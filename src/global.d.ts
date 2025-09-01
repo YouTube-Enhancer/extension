@@ -1,5 +1,3 @@
-import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
-
 import type { i18nInstanceType } from "./i18n";
 
 declare module "*.svg" {
@@ -88,9 +86,5 @@ declare global {
 		webkitAudioContext: AudioContext;
 	}
 }
-// Override zod-error generateErrorMessage function type
-declare module "zod-error/lib/functions/generate-error-message/index" {
-	import type { ErrorMessageOptions } from "zod-error";
-	export function generateErrorMessage(issues: $ZodIssue[], options?: ErrorMessageOptions): string;
-}
+
 export {};

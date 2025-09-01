@@ -1,7 +1,7 @@
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
-import React, { useRef } from "react";
+import React, { useId, useRef } from "react";
 
 import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/utilities";
@@ -23,6 +23,7 @@ export type NumberInputProps = {
 const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, max = undefined, min = 0, onChange, step = 1, value }) => {
 	const inputElement = useRef<Nullable<HTMLInputElement>>(null);
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
+	const id = useId();
 	const { direction } = useSettings();
 	const NumberPlus = () => {
 		if (inputElement.current) {
@@ -57,7 +58,9 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
 	return (
 		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
-			<label className="mb-1">{label}</label>
+			<label className="mb-1" htmlFor={id}>
+				{label}
+			</label>
 			<div className="relative flex flex-row">
 				<input
 					aria-hidden={true}
@@ -66,6 +69,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						disabledButtonClasses
 					)}
 					disabled={disabled}
+					id={id}
 					max={max}
 					min={min}
 					onChange={(e) => handleChange(e.currentTarget.value)}
