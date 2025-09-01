@@ -239,6 +239,10 @@ export async function getPlaylistDuration(playlistVideos: YouTubePlaylistItem[],
 		throw new Error(`Error fetching playlist duration: ${error}`);
 	}
 }
+export function getPlaylistId(): null | string {
+	const playlistId = new URLSearchParams(window.location.search).get("list");
+	return playlistId;
+}
 export function getPlaylistItemsFromPlaylistPage() {
 	const playlistItems = document.querySelector("ytd-playlist-video-list-renderer div#contents");
 	if (!playlistItems) return [];
@@ -375,10 +379,6 @@ function getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, pl
 async function getDurationFromAPI(playlistId: string, apiKey: string): Promise<number> {
 	const playlistVideos = await fetchPlaylistVideos(playlistId, apiKey);
 	return getPlaylistDuration(playlistVideos, apiKey);
-}
-function getPlaylistId() {
-	const playlistId = new URLSearchParams(window.location.search).get("list");
-	return playlistId;
 }
 function getVideoDetails(videoElement: Element): VideoDetails {
 	const videoId = getVideoId(videoElement);
