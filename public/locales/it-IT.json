@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Abilita pulsanti gestione playlist",
+						"title": "Aggiunge pulsanti agli elementi della playlist per rimuovere video dalla playlist o contrassegnarli come non visti"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
 						"title": "Nasconde il riepilogo dell'intelligenza artificiale sotto i video"

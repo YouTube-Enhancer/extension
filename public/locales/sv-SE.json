@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Aktivera spellisthanteringsknappar",
+						"title": "Lägger till knappar i objekt i spellistan för att ta bort videor från spellistan eller markera dem som osedda"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
