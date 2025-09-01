@@ -7,6 +7,8 @@ import { Innertube } from "youtubei.js/web";
 import "./index.css";
 import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
+import { getPlaylistId } from "../playlistLength/utils";
+
 interface YTDPlaylistVideoRenderer extends HTMLElement {
 	playlistVideoId: string;
 }
@@ -59,7 +61,7 @@ export async function enablePlaylistManagementButtons() {
 			removeButton.title = "Remove video";
 			removeButton.onclick = async () => {
 				try {
-					const playlistId = new URLSearchParams(window.location.search).get("list") as string;
+					const playlistId = getPlaylistId()!;
 					await youtube.playlist.removeVideos(playlistId, [setVideoId]);
 					item.remove();
 				} catch (err) {
