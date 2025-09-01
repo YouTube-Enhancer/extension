@@ -24,6 +24,7 @@ import {
 	youtubePlayerSpeedStep
 } from "../types";
 
+export const deepDarkCssID = "yte-deep-dark-css";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
 	button_placements: {
