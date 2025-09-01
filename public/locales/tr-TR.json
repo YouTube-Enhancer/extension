@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Çalma listesi yönetim düğmelerini etkinleştir",
+						"title": "Çalma listesi öğelerine videoları çalma listesinden kaldırmak veya izlenmemiş olarak işaretlemek için düğmeler ekler"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"

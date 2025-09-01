@@ -773,6 +773,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.defaultToOriginalAudioTrack.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_playlist_management_buttons?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.label")}
+						onChange={setCheckboxOption("enable_playlist_management_buttons")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />

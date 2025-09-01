@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "启用播放列表管理按钮",
+						"title": "为播放列表项添加按钮，用于从播放列表中删除视频或将其标记为未观看"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "隐藏 AI 摘要",
 						"title": "隐藏视频下方的人工智能摘要"

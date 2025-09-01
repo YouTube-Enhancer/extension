@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "प्लेलिस्ट प्रबंधन बटन सक्षम करें",
+						"title": "प्लेलिस्ट आइटम में ऐसे बटन जोड़ता है जिनसे वीडियो को प्लेलिस्ट से हटाया जा सके या उन्हें 'न देखा हुआ' के रूप में चिह्नित किया जा सके"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
