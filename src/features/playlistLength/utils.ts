@@ -146,13 +146,16 @@ export function createPlaylistLengthUIElement(
 	percentageWatched.textContent = `0%`;
 	wrapper.append(watchedProgressBar, percentageWatched, videoTimeDisplay);
 	const updateElement = ({ totalTimeSeconds, watchedTimeSeconds }: VideoTimeState) => {
-		const watchedPercentage =
+		const newWatchedPercentage =
 			Number.isNaN(Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100)) ? 0
 			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100) === Infinity ? 0
 			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100);
-		watchedProgressBar.style.width = `${watchedPercentage}%`;
+		const oldWatchedPercentage = Number(percentageWatched.textContent.replace("%", ""));
+		if (oldWatchedPercentage !== newWatchedPercentage) {
+			watchedProgressBar.style.width = `${newWatchedPercentage}%`;
+			percentageWatched.textContent = `${newWatchedPercentage}%`;
+		}
 		videoTimeDisplay.textContent = `${formatDuration(watchedTimeSeconds)} / ${formatDuration(totalTimeSeconds)} (- ${formatDuration(totalTimeSeconds - watchedTimeSeconds)})`;
-		percentageWatched.textContent = `${watchedPercentage}%`;
 	};
 	wrapper.title = window.i18nextInstance.t("pages.content.features.playlistLength.title");
 	updateElement(initialState);
@@ -238,10 +241,6 @@ export async function getPlaylistDuration(playlistVideos: YouTubePlaylistItem[],
 	} catch (error) {
 		throw new Error(`Error fetching playlist duration: ${error}`);
 	}
-}
-export function getPlaylistId(): null | string {
-	const playlistId = new URLSearchParams(window.location.search).get("list");
-	return playlistId;
 }
 export function getPlaylistItemsFromPlaylistPage() {
 	const playlistItems = document.querySelector("ytd-playlist-video-list-renderer div#contents");
@@ -379,6 +378,10 @@ function getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, pl
 async function getDurationFromAPI(playlistId: string, apiKey: string): Promise<number> {
 	const playlistVideos = await fetchPlaylistVideos(playlistId, apiKey);
 	return getPlaylistDuration(playlistVideos, apiKey);
+}
+function getPlaylistId() {
+	const playlistId = new URLSearchParams(window.location.search).get("list");
+	return playlistId;
 }
 function getVideoDetails(videoElement: Element): VideoDetails {
 	const videoId = getVideoId(videoElement);
