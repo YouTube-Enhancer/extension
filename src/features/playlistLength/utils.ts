@@ -146,13 +146,16 @@ export function createPlaylistLengthUIElement(
 	percentageWatched.textContent = `0%`;
 	wrapper.append(watchedProgressBar, percentageWatched, videoTimeDisplay);
 	const updateElement = ({ totalTimeSeconds, watchedTimeSeconds }: VideoTimeState) => {
-		const watchedPercentage =
+		const newWatchedPercentage =
 			Number.isNaN(Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100)) ? 0
 			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100) === Infinity ? 0
 			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100);
-		watchedProgressBar.style.width = `${watchedPercentage}%`;
+		const oldWatchedPercentage = Number(percentageWatched.textContent.replace("%", ""));
+		if (oldWatchedPercentage !== newWatchedPercentage) {
+			watchedProgressBar.style.width = `${newWatchedPercentage}%`;
+			percentageWatched.textContent = `${newWatchedPercentage}%`;
+		}
 		videoTimeDisplay.textContent = `${formatDuration(watchedTimeSeconds)} / ${formatDuration(totalTimeSeconds)} (- ${formatDuration(totalTimeSeconds - watchedTimeSeconds)})`;
-		percentageWatched.textContent = `${watchedPercentage}%`;
 	};
 	wrapper.title = window.i18nextInstance.t("pages.content.features.playlistLength.title");
 	updateElement(initialState);
