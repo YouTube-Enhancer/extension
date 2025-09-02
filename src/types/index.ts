@@ -2,7 +2,7 @@ import type { ParseKeys, TOptions } from "i18next";
 import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
-import { type ZodArray, type ZodObject, type ZodOptional, type ZodOptionalType, ZodType } from "zod";
+import { type ZodArray, type ZodObject, type ZodOptional, ZodType } from "zod";
 
 import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n/constants";
@@ -65,6 +65,7 @@ export type TypeToZodSchema<T> = ZodObject<{
 }>;
 export type WithId<S extends string> = `#${S}`;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+export type ZodOptionalType<T extends ZodType> = ZodOptional<T>;
 type PathImpl<T, Key extends keyof T> =
 	Key extends string ?
 		T[Key] extends Record<string, any> ?
