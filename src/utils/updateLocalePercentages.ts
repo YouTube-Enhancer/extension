@@ -87,7 +87,7 @@ async function getLocalePercentagesFromCrowdin() {
 			return localePercentages;
 		} else if (!crowdinLanguageProgressResponseParsed.success) {
 			const { error } = crowdinLanguageProgressResponseParsed;
-			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.errors)}`);
+			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`);
 		}
 	} catch (error) {
 		throw new Error(formatError(error));
