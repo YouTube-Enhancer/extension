@@ -88,8 +88,8 @@ export function createPlaylistLengthUIElement(
 		elementId: "yte-playlist-length-ui",
 		elementType: "div",
 		styles: {
-			backgroundColor: "rgb(43, 43, 43)",
-			border: "2px solid rgb(84, 84, 84)",
+			backgroundColor: "var(--yt-spec-badge-chip-background)",
+			border: "1px solid var(--yt-spec-10-percent-layer)",
 			borderRadius: "10px",
 			height: "48px",
 			marginBottom: "10px",
@@ -113,7 +113,7 @@ export function createPlaylistLengthUIElement(
 	const watchedProgressBar = createStyledElement({
 		elementId: "yte-playlist-length-ui-watchedProgressBar",
 		elementType: "div",
-		styles: { backgroundColor: "#522628", borderRadius: "8px", height: "100%" }
+		styles: { backgroundColor: "#9E2A2A", borderRadius: "8px", height: "100%" }
 	});
 	const videoTimeDisplay = createStyledElement({
 		elementId: "yte-playlist-length-ui-times",
@@ -131,7 +131,8 @@ export function createPlaylistLengthUIElement(
 		elementId: "yte-playlist-length-ui-percentageWatched",
 		elementType: "div",
 		styles: {
-			backgroundColor: "#3f3f3f",
+			backgroundColor: "var(--yt-spec-brand-background-primary)",
+			border: "1px solid var(--yt-spec-10-percent-layer)",
 			borderRadius: "6px",
 			bottom: "0px",
 			color: "var(--yt-spec-text-primary)",
