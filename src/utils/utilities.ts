@@ -734,7 +734,7 @@ export function toggleElementVisibility(selector: string, action: ElementVisibil
  * @param interval - Retry interval (ms). Default: 250ms.
  * @returns Promise that resolves with an array of the matching elements.
  */
-export function waitForAllElements(selectors: Selector[], timeout = 10000, interval = 250): Promise<Element[]> {
+export function waitForAllElements(selectors: Selector[], timeout = 15000, interval = 250): Promise<Element[]> {
 	return new Promise((resolve, reject) => {
 		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 
@@ -760,7 +760,7 @@ export function waitForAllElements(selectors: Selector[], timeout = 10000, inter
 		check();
 	});
 }
-export async function waitForElement<T extends Element>(selector: string, timeout = 500, step = 25): Promise<null | T> {
+export async function waitForElement<T extends Element>(selector: string, timeout = 2500, step = 250): Promise<null | T> {
 	const start = performance.now();
 	while (performance.now() - start < timeout) {
 		const el = document.querySelector<T>(selector);
