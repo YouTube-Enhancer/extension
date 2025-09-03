@@ -16,7 +16,7 @@ declare module "*.json" {
 
 declare module "node_modules/@types/youtube-player/dist/types" {
 	interface audioTrack {
-		Y2: {
+		tq: {
 			id: string;
 			isDefault: boolean;
 			name: string;
