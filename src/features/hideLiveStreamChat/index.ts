@@ -1,11 +1,11 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { modifyElementsClassList, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
 
 export async function disableHideLiveStreamChat() {
-	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();
 	if (!playerData.isLive) return;
@@ -32,8 +32,7 @@ export async function enableHideLiveStreamChat() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideLiveStreamChat) return;
-	await waitForAllElements(["div#player", "div#player-container"]);
-	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();
 	if (!playerData.isLive) return;

@@ -15,8 +15,8 @@ import {
 	waitForAllElements
 } from "@/src/utils/utilities";
 
-export const getHeaderSelectors = (): { playlist: () => string; watch: string } => ({
-	playlist: () => {
+export const getHeaderSelectors = (): { playlist: string; watch: string } => ({
+	playlist: (() => {
 		const noPaddingHeader = document.querySelector(
 			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding"
 		);
@@ -28,7 +28,7 @@ export const getHeaderSelectors = (): { playlist: () => string; watch: string } 
 		if (cinematicHeader && cinematicHeader.clientWidth > 0)
 			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary div.page-header-view-model-wiz__page-header-content";
 		return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
-	},
+	})(),
 	watch:
 		isNewYouTubeVideoLayout() ?
 			"#page-manager > ytd-watch-grid #playlist #header-contents"
@@ -69,8 +69,8 @@ type WatchTimeParameters = {
 };
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement) {
 	const { playlist, watch } = getHeaderSelectors();
-	await waitForAllElements([isWatchPage() ? watch : playlist()]);
-	const headerContents = document.querySelector(isWatchPage() ? watch : playlist());
+	await waitForAllElements([isWatchPage() ? watch : playlist]);
+	const headerContents = document.querySelector(isWatchPage() ? watch : playlist);
 	if (!headerContents) return null;
 	if (document.querySelector("#yte-playlist-length-ui") !== null) {
 		document.querySelector("#yte-playlist-length-ui")?.remove();
@@ -289,7 +289,7 @@ export async function initializePlaylistLength({
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
 	const { playlist, watch } = getHeaderSelectors();
-	const playlistHeader = document.querySelector(isWatchPage() ? watch : playlist());
+	const playlistHeader = document.querySelector(isWatchPage() ? watch : playlist);
 	if (!playlistHeader) return null;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	const playlistItemsElement = document.querySelector(playlistItemsSelector());
