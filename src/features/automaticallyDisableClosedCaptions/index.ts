@@ -3,7 +3,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { isLivePage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 let captionsWhereEnabled = false;
 export async function disableAutomaticallyDisableClosedCaptions() {
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	// Get the player element
 	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	// If player element is not available, return
@@ -20,7 +20,7 @@ export async function enableAutomaticallyDisableClosedCaptions() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_automatically_disable_closed_captions) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	// Get the player element
 	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
 	const subtitlesButton = document.querySelector("button.ytp-subtitles-button");

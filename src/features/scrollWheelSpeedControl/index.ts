@@ -17,8 +17,9 @@ export default async function adjustSpeedOnScrollWheel() {
 	} = optionsData;
 	// If scroll wheel speed control is disabled, return
 	if (!enableScrollWheelSpeedControl) return;
+	const containerSelectors = ["div#player", "div#player-container"];
 	// Wait for the specified container selectors to be available on the page
-	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(containerSelectors);
 	// Get the player element
 	const playerContainer =
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")

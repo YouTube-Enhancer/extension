@@ -11,7 +11,7 @@ let originalAudioTrack: Nullable<audioTrack> = null;
 export async function disableDefaultToOriginalAudioTrack() {
 	if (!isWatchPage()) return;
 	// Wait for the player container to be available
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	// If the original audio track is not stored, do nothing
@@ -33,7 +33,7 @@ export async function enableDefaultToOriginalAudioTrack() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!defaultToOriginalAudioTrack) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const audioTracks = await playerContainer.getAvailableAudioTracks();

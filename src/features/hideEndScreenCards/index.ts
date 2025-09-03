@@ -10,7 +10,7 @@ import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForSpecif
 import "./index.css";
 export async function disableHideEndScreenCards() {
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	showEndScreenCards();
 }
 
@@ -22,7 +22,7 @@ export async function enableHideEndScreenCards() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCards) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	hideEndScreenCards();
 }
 export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
@@ -36,7 +36,7 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCardsButton) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	// Get the player container element
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
