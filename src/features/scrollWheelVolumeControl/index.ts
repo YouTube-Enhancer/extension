@@ -23,8 +23,9 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	} = optionsData;
 	// If scroll wheel volume control is disabled, return
 	if (!enableScrollWheelVolumeControl) return;
+	const containerSelectors = ["div#player", "div#player-container"];
 	// Wait for the specified container selectors to be available on the page
-	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(containerSelectors);
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {

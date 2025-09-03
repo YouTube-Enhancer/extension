@@ -32,7 +32,7 @@ export async function enableHideLiveStreamChat() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideLiveStreamChat) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();
