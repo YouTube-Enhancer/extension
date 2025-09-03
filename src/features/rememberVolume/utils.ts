@@ -1,7 +1,15 @@
 import type { configuration, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, isLivePage, isShortsPage, isWatchPage, sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/utilities";
+import {
+	browserColorLog,
+	isLivePage,
+	isShortsPage,
+	isWatchPage,
+	sendContentOnlyMessage,
+	waitForElement,
+	waitForSpecificMessage
+} from "@/src/utils/utilities";
 export async function setRememberedVolume({
 	enableRememberVolume,
 	isShortsPage,
@@ -43,8 +51,8 @@ export async function setupVolumeChangeListener() {
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
 	const playerContainer =
-		IsWatchPage || IsLivePage ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: IsShortsPage ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		IsWatchPage || IsLivePage ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: IsShortsPage ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	if (!playerContainer) return;
 	const videoElement = playerContainer.querySelector<HTMLVideoElement>("div > video");

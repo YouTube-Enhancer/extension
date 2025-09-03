@@ -5,7 +5,7 @@ import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlac
 import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
 export async function disableHideEndScreenCards() {
@@ -36,9 +36,8 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCardsButton) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-container"]);
 	// Get the player container element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const videoData = await playerContainer.getVideoData();
 	if (videoData.isLive) return;

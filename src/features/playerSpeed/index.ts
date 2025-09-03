@@ -1,24 +1,24 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { browserColorLog, isShortsPage, isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 // Restore the player speed to the last saved player speed
-export function restorePlayerSpeed() {
+export async function restorePlayerSpeed() {
 	// Get the saved player speed from the local storage
 	const playerSpeed = window.localStorage.getItem("playerSpeed");
 	// If the player speed is not available, return
 	if (!playerSpeed) return;
 	// Get the player element
 	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
 	// Log the message indicating the player speed being set
 	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
@@ -62,12 +62,12 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	if (!enablePlayerSpeed) return;
 	// Get the player element
 	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video");
 	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -81,8 +81,8 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	if (video) video.playbackRate = playerSpeed;
 }
 const speedValueRegex = /(?<!\d\.)([0-1](\.\d+)?|2)(?![\d.])/;
-export function setupPlaybackSpeedChangeListener() {
-	const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+export async function setupPlaybackSpeedChangeListener() {
+	const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 	const speedMenuItemClickListener = (event: Event) => {
 		const { target: speedMenuItem } = event as Event & { target: HTMLDivElement };
 		if (!speedMenuItem) return;
@@ -149,7 +149,7 @@ export function setupPlaybackSpeedChangeListener() {
 			childList: true,
 			subtree: true
 		});
-		const speedMenuItem = document.querySelector(
+		const speedMenuItem = await waitForElement(
 			".ytp-menuitem:has(.ytp-menuitem-icon svg path[d='M10,8v8l6-4L10,8L10,8z M6.3,5L5.7,4.2C7.2,3,9,2.2,11,2l0.1,1C9.3,3.2,7.7,3.9,6.3,5z            M5,6.3L4.2,5.7C3,7.2,2.2,9,2,11 l1,.1C3.2,9.3,3.9,7.7,5,6.3z            M5,17.7c-1.1-1.4-1.8-3.1-2-4.8L2,13c0.2,2,1,3.8,2.2,5.4L5,17.7z            M11.1,21c-1.8-0.2-3.4-0.9-4.8-2 l-0.6,.8C7.2,21,9,21.8,11,22L11.1,21z            M22,12c0-5.2-3.9-9.4-9-10l-0.1,1c4.6,.5,8.1,4.3,8.1,9s-3.5,8.5-8.1,9l0.1,1 C18.2,21.5,22,17.2,22,12z'])"
 		);
 		if (!speedMenuItem) return;

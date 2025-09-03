@@ -5,7 +5,7 @@ import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { createTooltip, isLivePage, isWatchPage, round, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, isLivePage, isWatchPage, round, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import type { AddButtonFunction, RemoveButtonFunction } from "../index";
 let currentPlaybackSpeed = 1;
@@ -85,7 +85,7 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 					currentPlaybackSpeed + adjustmentAmount <= 0
 				)
 					return;
-				const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 				if (!playerContainer) return;
 				const {
 					data: {
@@ -121,6 +121,7 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 }
 
 export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
+	if (!(isWatchPage() || isLivePage())) return;
 	const {
 		data: {
 			options: {
@@ -134,7 +135,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement)) {
@@ -160,6 +161,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 };
 
 export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
+	if (!(isWatchPage() || isLivePage())) return;
 	const {
 		data: {
 			options: {
@@ -174,7 +176,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	if (!videoElement) return;
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player") : null;
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive && checkIfFeatureButtonExists("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement)) {

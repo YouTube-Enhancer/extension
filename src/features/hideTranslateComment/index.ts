@@ -6,7 +6,7 @@ import {
 	observeTranslateComment,
 	translateButtonSelector
 } from "@/src/features/hideTranslateComment/utils";
-import { isNewYouTubeVideoLayout, modifyElementClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isNewYouTubeVideoLayout, modifyElementClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
 export const commentsPanelSelector = "ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section']";
@@ -28,8 +28,7 @@ export async function disableHideTranslateComment() {
 	cleanUpHideTranslateCommentObserver("translateComment");
 	const isNewVideLayout = isNewYouTubeVideoLayout();
 	if (isNewVideLayout) {
-		await waitForAllElements([commentsPanelSelector]);
-		const commentsPanelElement = document.querySelector(commentsPanelSelector);
+		const commentsPanelElement = await waitForElement(commentsPanelSelector);
 		if (
 			commentsPanelElement &&
 			(commentsPanelElement.getAttribute("visibility") as EngagementPanelVisibility) === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"
@@ -49,8 +48,7 @@ export async function enableHideTranslateComment() {
 	if (!enable_hide_translate_comment) return;
 	const isNewVideLayout = isNewYouTubeVideoLayout();
 	if (isNewVideLayout) {
-		await waitForAllElements([commentsPanelSelector]);
-		const commentsPanelElement = document.querySelector(commentsPanelSelector);
+		const commentsPanelElement = await waitForElement(commentsPanelSelector);
 		if (
 			commentsPanelElement &&
 			(commentsPanelElement.getAttribute("visibility") as EngagementPanelVisibility) === "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"

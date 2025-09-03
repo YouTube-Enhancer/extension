@@ -868,7 +868,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							);
 							await setPlayerSpeed(Number(playerSpeed));
 						} else if (!enableForcedPlaybackSpeed) {
-							restorePlayerSpeed();
+							await restorePlayerSpeed();
 							const videoElement = document.querySelector<HTMLVideoElement>("video");
 							if (!videoElement) return;
 							const { playbackRate: currentSpeed } = videoElement;
@@ -907,7 +907,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (remainingTimeEnabled) {
 							await enableRemainingTime();
 						} else {
-							removeRemainingTimeDisplay();
+							await removeRemainingTimeDisplay();
 						}
 						break;
 					}

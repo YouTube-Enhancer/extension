@@ -2,7 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { setupAutoScroll } from "@/src/features/shortsAutoScroll/utils";
 import eventManager from "@/src/utils/EventManager";
-import { isShortsPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isShortsPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 export function disableShortsAutoScroll() {
 	eventManager.removeEventListeners("shortsAutoScroll");
@@ -17,9 +17,8 @@ export async function enableShortsAutoScroll() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the shorts auto scroll option is disabled, return
 	if (!enable_shorts_auto_scroll) return;
-	await waitForAllElements(["#shorts-player"]);
 	// Get the shorts container
-	const shortsContainer = document.querySelector<YouTubePlayerDiv>("#shorts-player");
+	const shortsContainer = await waitForElement<YouTubePlayerDiv>("#shorts-player");
 	// If shorts container is not available, return
 	if (!shortsContainer) return;
 	// Get the video element
