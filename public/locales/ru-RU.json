@@ -372,6 +372,10 @@
 						"label": "Убрать YouTube /redirect ссылки",
 						"title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "Укоротить ссылку с кнопки \"Поделиться\"",
 						"title": "Укорачивает ссылку с кнопки \"Поделиться\" (youtu.be), убирая параметры si/feature из нее"
