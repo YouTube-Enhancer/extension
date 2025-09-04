@@ -357,8 +357,8 @@
 						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
 					},
 					"playlistRemover": {
-						"label": "ホームページでプレイリストを削除する",
-						"title": "プレイリストを削除する"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "残り時間",
