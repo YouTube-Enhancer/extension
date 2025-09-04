@@ -372,6 +372,10 @@
 						"label": "Rimuovi URL /redirect di YouTube",
 						"title": "Rimpiazza il reindirizzamento di YouTube con gli URL attuali saltando il dialogo di avviso di reindirizzamento"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "Abbrevia il collegamento di condivisione video di YouTube",
 						"title": "Riduce il collegamento di condivisione video di YouTube (youtu.be) eliminando da esso i parametri si/feature"
