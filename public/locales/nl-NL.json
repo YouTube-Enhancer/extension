@@ -372,6 +372,10 @@
 						"label": "Verwijdert YouTube /redirect URLs",
 						"title": "Vervangt YouTube doorverwijzing door echte URLs die de doorverwijzing waarschuwing niet geven"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "Maak Youtube deel links korter",
 						"title": "Maakt YouTube video deel links (youtu.be) korter door si en andere feature parameters af te knippen"
