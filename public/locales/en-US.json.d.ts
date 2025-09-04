@@ -254,7 +254,10 @@ interface EnUS {
 						label: "Pause background players";
 						title: "Pauses video players in background tabs when you start a new player in foreground tab";
 					};
-					playlistRemover: { label: "The removal of playlists from homepage"; title: "Get rid of playlists" };
+					playlistRemover: {
+						label: "Hide playlists from homepage";
+						title: "Get rid of playlists from homepage";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
