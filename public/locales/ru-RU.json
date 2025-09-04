@@ -357,8 +357,8 @@
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 					},
 					"playlistRemover": {
-						"label": "Разрешить удаление плейлистов с домашней страницы",
-						"title": "Удаляет плейлисты"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
