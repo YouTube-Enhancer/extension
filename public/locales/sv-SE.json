@@ -372,6 +372,10 @@
 						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",
 						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
