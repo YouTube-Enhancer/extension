@@ -372,6 +372,10 @@
 						"label": "Remover URLs de redireção do YouTube",
 						"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "Encurtar link de compartilha de vídeo",
 						"title": "Encurta os links de compartilha de vídeo (youtu.be) removendo os parâmetros si/features."
