@@ -357,8 +357,8 @@
 						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
 					},
 					"playlistRemover": {
-						"label": "啟用在主頁移除播放清單",
-						"title": "移除播放清單"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
