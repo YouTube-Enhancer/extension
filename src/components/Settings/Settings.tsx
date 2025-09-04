@@ -781,6 +781,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_restore_fullscreen_scrolling?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.label")}
+						onChange={setCheckboxOption("enable_restore_fullscreen_scrolling")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />

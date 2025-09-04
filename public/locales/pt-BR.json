@@ -293,8 +293,8 @@
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "Retornar à faixa de vídeo original",
+						"title": "Sempre retornar à faixa de vídeo original"
 					},
 					"enablePlaylistManagementButtons": {
 						"label": "Ativar botões de gerenciamento de playlist",
@@ -361,8 +361,8 @@
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
 					"playlistRemover": {
-						"label": "Remoção de playlists da página inicial",
-						"title": "Remover playlists da página inicial"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "Remover URLs de redireção do YouTube",
 						"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Encurtar link de compartilha de vídeo",

@@ -361,8 +361,8 @@
 						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
 					},
 					"playlistRemover": {
-						"label": "Verwijder afspeellijsten van de thuispagina",
-						"title": "Verwijder afspeellijsten"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Resterende tijd",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "Verwijdert YouTube /redirect URLs",
 						"title": "Vervangt YouTube doorverwijzing door echte URLs die de doorverwijzing waarschuwing niet geven"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Maak Youtube deel links korter",

@@ -293,8 +293,8 @@
 						"title": "复制带有时间戳的视频 URL (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "默认设置为原始音轨",
+						"title": "总是默认原始音轨"
 					},
 					"enablePlaylistManagementButtons": {
 						"label": "启用播放列表管理按钮",
@@ -361,8 +361,8 @@
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
 					"playlistRemover": {
-						"label": "启用从主页删除播放列表",
-						"title": "清除播放列表"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "屏蔽YouTube重定向链接",
 						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "缩短YouTube视频分享链接",

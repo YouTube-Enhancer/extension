@@ -3,7 +3,7 @@
 	"langName": "Polish",
 	"messages": {
 		"resumingVideo": "Wznowienie wideo za {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"settingVolume": "Ustawianie wzmocnienia głośności do {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
@@ -11,74 +11,74 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Skopiowano!",
-						"label": "Copy video URL with timestamp"
+						"label": "Kopiuj adres URL filmu ze znacznikiem czasu"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menu funkcji"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Przyspieszenie do przodu o {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Cofnięcie o {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Ukryj elementy końcowe filmu",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Pokaż elementy końcowe filmu",
+							"on": "Ukryj elementy końcowe filmu"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Zapętl",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Wyłącz zapętlenie",
+							"on": "Włącz zapętlenie"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Powiększ okno",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Wyłącz powiększenie",
+							"on": "Włącz powiększenie"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Otwórz transkrypcję"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Zmniejsz szybkość do {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Zwiększ szybkość do {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "Nie można zmniejszać dalej ({{SPEED}})",
+					"increaseLimit": "Nie można zwiększać dalej ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Całkowita długość może być niedokładna, jeśli niektóre filmy są ukryte lub jeśli nie załadowałeś wystarczającej liczby filmów, aby uzyskać pełny czas."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Zrzut ekranu"
 					},
 					"copiedToClipboard": "Zrzut ekranu skopiowany do schowka"
 				},
@@ -90,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Zwiększ głośność",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Zwiększenie głośności wyłączone",
+							"on": "Zwiększenie głośności włączone"
 						}
 					}
 				}
@@ -104,7 +104,7 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"speedControl": "Ustawiony klawisz zmiany prędkości przewijania nie może być taki sam, jak klawisz zmiany głośności przewijania kółka.",
 							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
 						}
 					}
@@ -361,8 +361,8 @@
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
 					"playlistRemover": {
-						"label": "The removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Remaining time",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Shorten YouTube video share link",

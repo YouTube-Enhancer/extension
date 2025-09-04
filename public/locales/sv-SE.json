@@ -361,8 +361,8 @@
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
 					"playlistRemover": {
-						"label": "Aktivera borttagning av spellistor från startsidan",
-						"title": "Visa inte spellistor"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Återstående tid",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",

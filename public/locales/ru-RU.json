@@ -361,8 +361,8 @@
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 					},
 					"playlistRemover": {
-						"label": "Разрешить удаление плейлистов с домашней страницы",
-						"title": "Удаляет плейлисты"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
@@ -375,6 +375,10 @@
 					"removeRedirect": {
 						"label": "Убрать YouTube /redirect ссылки",
 						"title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Укоротить ссылку с кнопки \"Поделиться\"",
