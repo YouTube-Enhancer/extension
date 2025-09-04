@@ -372,6 +372,10 @@
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "YouTube video paylaşım bağlantısını kısalt",
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
