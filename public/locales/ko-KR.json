@@ -357,8 +357,8 @@
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
 					"playlistRemover": {
-						"label": "The removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "남은 시간 표시",
