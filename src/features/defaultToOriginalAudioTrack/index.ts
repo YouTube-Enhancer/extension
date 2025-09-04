@@ -2,7 +2,7 @@ import type { audioTrack } from "node_modules/@types/youtube-player/dist/types";
 
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
-import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 let originalAudioTrack: Nullable<audioTrack> = null;
 /**
  * Reverts the audio track to the one that was selected by the user
@@ -10,9 +10,7 @@ let originalAudioTrack: Nullable<audioTrack> = null;
  */
 export async function disableDefaultToOriginalAudioTrack() {
 	if (!isWatchPage()) return;
-	// Wait for the player container to be available
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	// If the original audio track is not stored, do nothing
 	if (!originalAudioTrack) return;
@@ -33,17 +31,16 @@ export async function enableDefaultToOriginalAudioTrack() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!defaultToOriginalAudioTrack) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const audioTracks = await playerContainer.getAvailableAudioTracks();
-	const defaultAudioTrack = audioTracks.find((track) => track.Y2.isDefault === true);
+	const defaultAudioTrack = audioTracks.find((track) => track.tq.name.toLowerCase().includes("original"));
 	if (!defaultAudioTrack) return;
 	const currentAudioTrack = await playerContainer.getAudioTrack();
 	// Store the original audio track in the "originalAudioTrack" variable
 	if (!originalAudioTrack) originalAudioTrack = currentAudioTrack;
 	// If the current audio track is the same as the default audio track, do nothing
-	if (defaultAudioTrack.Y2.name === currentAudioTrack.Y2.name) return;
+	if (defaultAudioTrack.tq.name === currentAudioTrack.tq.name) return;
 	// Set the audio track to the default audio track
 	await playerContainer.setAudioTrack(defaultAudioTrack);
 }

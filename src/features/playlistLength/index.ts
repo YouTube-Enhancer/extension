@@ -27,7 +27,7 @@ export async function enablePlaylistLength() {
 	const pageContainsPlaylistRenderer = document.querySelector(playlistItemsSelector()) !== null;
 	if (!pageContainsPlaylistRenderer) return;
 	const { playlist, watch } = getHeaderSelectors();
-	await waitForAllElements([isWatchPage() ? watch : playlist(), playlistItemsSelector()]);
+	await waitForAllElements([isWatchPage() ? watch : playlist, playlistItemsSelector()]);
 	const apiKey = youtube_data_api_v3_key === "" ? YouTube_Enhancer_Public_Youtube_Data_API_V3_Key : youtube_data_api_v3_key;
 	const pageType = IsWatchPage ? "watch" : "playlist";
 	try {

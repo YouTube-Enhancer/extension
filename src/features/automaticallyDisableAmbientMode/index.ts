@@ -1,6 +1,6 @@
 import type { Nullable } from "@/src/types";
 
-import { delay, isShortsPage, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { delay, isShortsPage, isWatchPage, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 let ambientModeWasEnabled = false;
 
@@ -24,13 +24,7 @@ export async function enableAutomaticallyDisableAmbientMode(): Promise<void> {
 
 async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 	if (isWatchPage()) {
-		await waitForAllElements([
-			"div#player",
-			"div#player-wide-container",
-			"div#video-container",
-			"div#player-container",
-			"div.ytp-settings-menu:not(#yte-feature-menu)"
-		]);
+		await waitForAllElements(["div#player", "div#player-container", "div.ytp-settings-menu:not(#yte-feature-menu)"]);
 		const settingsButton: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-settings-button");
 		const settingsMenu: Nullable<HTMLDivElement> = document.querySelector("div.ytp-settings-menu:not(#yte-feature-menu)");
 		if (!settingsMenu) return;
@@ -56,30 +50,48 @@ async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 		settingsMenu.classList.remove("hidden");
 	} else if (isShortsPage()) {
 		await waitForAllElements(["#shorts-player"]);
-		const menuButton = document.querySelector<HTMLButtonElement>("div#menu-button ytd-menu-renderer yt-button-shape button");
+		const menuButton = await waitForElement<HTMLButtonElement>("div#menu-button ytd-menu-renderer yt-button-shape button");
 		if (!menuButton) return console.log("Menu button not found");
-		const popupContainer = document.querySelector<HTMLDivElement>("ytd-popup-container");
+		const popupContainer = await waitForElement<HTMLDivElement>("ytd-popup-container");
 		if (!popupContainer) return console.log("Popup container not found");
+		const {
+			style: { display: originalDisplay }
+		} = popupContainer;
 		popupContainer.style.display = "none";
+		// Click menu button to hydrate the menu
 		menuButton.click();
-		await delay(25);
-		const popup = document.querySelector<HTMLDivElement>("ytd-popup-container tp-yt-iron-dropdown");
-		if (!popup) return console.log("Popup not found");
-		await delay(25);
-		const ambientModeItem = popup.querySelector<HTMLButtonElement>(
-			"div ytd-menu-popup-renderer tp-yt-paper-listbox > :has(tp-yt-paper-item svg path[d='M21 7v10H3V7h18m1-1H2v12h20V6zM11.5 2v3h1V2h-1zm1 17h-1v3h1v-3zM3.79 3 6 5.21l.71-.71L4.5 2.29 3.79 3zm2.92 16.5L6 18.79 3.79 21l.71.71 2.21-2.21zM19.5 2.29 17.29 4.5l.71.71L20.21 3l-.71-.71zm0 19.42.71-.71L18 18.79l-.71.71 2.21 2.21z'])"
+		// Wait for the popup to appear
+		const popup = await waitForElement<HTMLDivElement>("ytd-popup-container tp-yt-iron-dropdown");
+		if (!popup) {
+			popupContainer.style.display = originalDisplay;
+			return console.log("Popup not found");
+		}
+		// Wait for ambient mode item
+		const ambientModeItem = await waitForElement<HTMLButtonElement>(
+			`div ytd-menu-popup-renderer tp-yt-paper-listbox > :has(tp-yt-paper-item svg ${AMBIENT_MODE_PATH_SELECTOR})`
 		);
-		if (!ambientModeItem) return console.log("Ambient mode item not found");
-		await delay(25);
-		const ambientModeItemToggle = ambientModeItem.querySelector<HTMLInputElement>("tp-yt-paper-toggle-button");
-		if (!ambientModeItemToggle) return console.log("Ambient mode item toggle not found");
+		if (!ambientModeItem) {
+			popupContainer.style.display = originalDisplay;
+			return console.log("Ambient mode item not found");
+		}
+		// Wait for the toggle inside the ambient mode item
+		const ambientModeItemToggle = await waitForElement<HTMLInputElement>("tp-yt-paper-toggle-button");
+		if (!ambientModeItemToggle) {
+			popupContainer.style.display = originalDisplay;
+			return console.log("Ambient mode item toggle not found");
+		}
+		// Determine current state
 		const ambientModeEnabled = ambientModeItemToggle.getAttribute("checked") === "";
 		if (!desiredState) ambientModeWasEnabled = ambientModeEnabled;
+		// Toggle if needed
 		if (ambientModeEnabled !== desiredState) {
 			ambientModeItem.click();
 			await delay(25);
 			menuButton.click();
-			popupContainer.style.display = "";
+		} else {
+			menuButton.click();
+			// Restore display
+			popupContainer.style.display = originalDisplay || "";
 		}
 	}
 }

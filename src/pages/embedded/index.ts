@@ -159,18 +159,29 @@ const alwaysShowProgressBar = async function () {
 function shouldEnableFeaturesFuncReturn() {
 	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
 }
-const enableFeatures = () => {
+let isEnablingFeatures = false;
+let enableFeaturesTimeout: null | ReturnType<typeof setTimeout> = null;
+function scheduleEnableFeatures() {
+	if (enableFeaturesTimeout) clearTimeout(enableFeaturesTimeout);
+	enableFeaturesTimeout = setTimeout(() => {
+		void enableFeatures();
+	}, 200);
+}
+const enableFeatures = async () => {
+	// Don't enable features if already enabling
+	if (isEnablingFeatures) return;
+	isEnablingFeatures = true;
 	browserColorLog(`Enabling features...`, "FgMagenta");
-	void (async () => {
+	try {
 		const {
 			data: {
 				options: { button_placements }
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		// Wait for the specified container selectors to be available on the page
-		await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+		await waitForAllElements(["div#player", "div#player-container"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
-		void Promise.all([
+		await Promise.all([
 			enableHidePaidPromotionBanner(),
 			enableHideShorts(),
 			enableHidePlayables(),
@@ -186,7 +197,7 @@ const enableFeatures = () => {
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
-		void Promise.all([
+		await Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
@@ -254,7 +265,9 @@ const enableFeatures = () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
-	})();
+	} finally {
+		isEnablingFeatures = false;
+	}
 };
 const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
 	const { [featureName]: featureFunctions } = featureButtonFunctions;
@@ -271,11 +284,11 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 };
 function handleSoftNavigate() {
 	// Remove existing listeners
-	document.removeEventListener("yt-navigate-finish", enableFeatures);
-	document.removeEventListener("yt-player-updated", enableFeatures);
+	document.removeEventListener("yt-navigate-finish", scheduleEnableFeatures);
+	document.removeEventListener("yt-player-updated", scheduleEnableFeatures);
 	// Add listeners
-	document.addEventListener("yt-navigate-finish", enableFeatures);
-	document.addEventListener("yt-player-updated", enableFeatures);
+	document.addEventListener("yt-navigate-finish", scheduleEnableFeatures);
+	document.addEventListener("yt-player-updated", scheduleEnableFeatures);
 }
 window.addEventListener("DOMContentLoaded", function () {
 	void (async () => {
@@ -287,7 +300,7 @@ window.addEventListener("DOMContentLoaded", function () {
 		const i18nextInstance = await i18nService(language);
 		window.i18nextInstance = i18nextInstance;
 		if (isFirstLoad) {
-			enableFeatures();
+			void enableFeatures();
 			handleSoftNavigate();
 		} else if (!isFirstLoad) {
 			handleSoftNavigate();
@@ -857,7 +870,7 @@ window.addEventListener("DOMContentLoaded", function () {
 							);
 							await setPlayerSpeed(Number(playerSpeed));
 						} else if (!enableForcedPlaybackSpeed) {
-							restorePlayerSpeed();
+							await restorePlayerSpeed();
 							const videoElement = document.querySelector<HTMLVideoElement>("video");
 							if (!videoElement) return;
 							const { playbackRate: currentSpeed } = videoElement;
@@ -907,7 +920,7 @@ window.addEventListener("DOMContentLoaded", function () {
 						if (remainingTimeEnabled) {
 							await enableRemainingTime();
 						} else {
-							removeRemainingTimeDisplay();
+							await removeRemainingTimeDisplay();
 						}
 						break;
 					}

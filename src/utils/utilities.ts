@@ -730,69 +730,44 @@ export function toggleElementVisibility(selector: string, action: ElementVisibil
  * Wait for all elements to appear in the document.
  *
  * @param selectors - Array of CSS selectors for the elements to wait for.
+ * @param timeout - Max time (ms) to wait before giving up. Default: 10s.
+ * @param interval - Retry interval (ms). Default: 250ms.
  * @returns Promise that resolves with an array of the matching elements.
  */
-export function waitForAllElements(selectors: Selector[]): Promise<Selector[]> {
-	// Create a promise that will resolve when all of the target elements are found.
-	return new Promise((resolve) => {
-		// Log a message to the console to let the user know what's happening.
+export function waitForAllElements(selectors: Selector[], timeout = 15000, interval = 250): Promise<Element[]> {
+	return new Promise((resolve, reject) => {
 		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
-		// Create a Map to store the elements as they are found.
-		const elementsMap = new Map<string, Nullable<Element>>();
-		// Get the number of selectors in the array so we know how many elements we are waiting for.
-		const { length: selectorsCount } = selectors;
-		// Create a counter for the number of elements that have been found.
-		let resolvedCount = 0;
-		// Create a MutationObserver to watch for changes in the DOM.
-		const observer = new MutationObserver(() => {
-			// Loop through each of the selectors.
-			selectors.forEach((selector) => {
-				// Get the element that matches the selector.
-				const element = document.querySelector(selector);
-				// Add the element to the Map.
-				elementsMap.set(selector, element);
-				// If the element is not found, return early.
-				if (!element) {
-					return;
-				}
-				// Increase the counter by 1.
-				resolvedCount++;
-				// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
-				if (resolvedCount === selectorsCount) {
-					// Disconnect the observer so it doesn't keep running.
-					observer.disconnect();
-					// Get an array of the resolved elements.
-					const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
-					// Resolve the promise with the array of resolved elements.
-					resolve(resolvedElements);
-				}
-			});
-		});
-		// Start listening for changes to the DOM.
-		observer.observe(document, { childList: true, subtree: true });
-		// Loop through each of the selectors.
-		selectors.forEach((selector) => {
-			// Get the element that matches the selector.
-			const element = document.querySelector(selector);
-			// Add the element to the Map.
-			elementsMap.set(selector, element);
-			// If the element is not found, return early.
-			if (!element) {
+
+		const start = Date.now();
+
+		const check = () => {
+			const found = selectors.map((sel) => document.querySelector(sel));
+			const allPresent = found.every(Boolean);
+
+			if (allPresent) {
+				resolve(found as Element[]);
 				return;
 			}
-			// Increase the counter by 1.
-			resolvedCount++;
-			// If the number of resolved elements is equal to the number of selectors in the array, all of the elements have been found.
-			if (resolvedCount === selectorsCount) {
-				// Disconnect the observer so it doesn't keep running.
-				observer.disconnect();
-				// Get an array of the resolved elements.
-				const resolvedElements = selectors.map((selector) => (elementsMap.get(selector) ? selector : undefined)).filter(Boolean);
-				// Resolve the promise with the array of resolved elements.
-				resolve(resolvedElements);
+
+			if (Date.now() - start >= timeout) {
+				reject(new Error(`Timeout: Not all elements appeared (${selectors.join(", ")})`));
+				return;
 			}
-		});
+
+			setTimeout(check, interval);
+		};
+
+		check();
 	});
+}
+export async function waitForElement<T extends Element>(selector: string, timeout = 2500, step = 250): Promise<null | T> {
+	const start = performance.now();
+	while (performance.now() - start < timeout) {
+		const el = document.querySelector<T>(selector);
+		if (el) return el;
+		await delay(step);
+	}
+	return null;
 }
 /**
  * Waits for a specific message of the given type, action, source, and data.
