@@ -357,8 +357,8 @@
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
 					"playlistRemover": {
-						"label": "Ana sayfadan oynatma listelerinin kaldırılmasını etkinleştirin",
-						"title": "Oynatma listelerinden kurtulun"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
