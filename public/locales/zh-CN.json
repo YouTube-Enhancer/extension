@@ -372,6 +372,10 @@
 						"label": "屏蔽YouTube重定向链接",
 						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "缩短YouTube视频分享链接",
 						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
