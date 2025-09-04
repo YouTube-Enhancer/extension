@@ -357,8 +357,8 @@
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
 					"playlistRemover": {
-						"label": "Aktivera borttagning av spellistor från startsidan",
-						"title": "Visa inte spellistor"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Återstående tid",
