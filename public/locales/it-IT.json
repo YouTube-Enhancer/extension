@@ -293,8 +293,8 @@
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "Traccia audio originale predefinita",
+						"title": "Traccia audio originale sempre predefinita"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
@@ -357,8 +357,8 @@
 						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
 					},
 					"playlistRemover": {
-						"label": "Abilita la rimozione delle liste riproduzioni dalla pagina iniziale",
-						"title": "Sbarazzati delle liste riproduzioni"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Tempo rimanente",
@@ -371,6 +371,10 @@
 					"removeRedirect": {
 						"label": "Rimuovi URL /redirect di YouTube",
 						"title": "Rimpiazza il reindirizzamento di YouTube con gli URL attuali saltando il dialogo di avviso di reindirizzamento"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Abbrevia il collegamento di condivisione video di YouTube",

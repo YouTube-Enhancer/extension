@@ -104,8 +104,8 @@
 				"error": {
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Kaydırma tekerleği hız kontrolü için kullanılan değiştirici tuş, kaydırma tekerleği ses kontrolü için kullanılan değiştirici tuşla aynı olamaz.",
+							"volumeControl": "Kaydırma tekerleği ile ses düzeyi kontrolü için kullanılan değiştirici tuş, kaydırma hızı kontrolü için kullanılan değiştirici tuşla aynı olamaz."
 						}
 					}
 				},
@@ -211,7 +211,7 @@
 							"value": "Sağ Kontroller"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 				},
 				"title": "Düğme Yerleşim Ayarları"
 			},
@@ -243,11 +243,11 @@
 			"forwardRewindButtons": {
 				"enable": {
 					"label": "İleri/geri sarma düğmeleri",
-					"title": "Adds forward and rewind buttons to the video player"
+					"title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
 				},
 				"time": {
 					"label": "İleri/geri sarma süresi",
-					"title": "The amount of time to forward/rewind the video by"
+					"title": "Videoyu ileri/geri sarmak için atlanacak süre"
 				},
 				"title": "İleri/geri sarma düğmesi ayarları"
 			},
@@ -285,20 +285,20 @@
 						"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
 					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
+						"title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
 						"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "Varsayılan olarak orijinal ses parçasına dön",
+						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "AI özetini gizle",
+						"title": "Videoların altındaki yapay zeka özetini gizler"
 					},
 					"hideEndScreenCards": {
 						"label": "Bitiş ekranı kartlarını gizle",
@@ -357,8 +357,8 @@
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
 					"playlistRemover": {
-						"label": "Ana sayfadan oynatma listelerinin kaldırılmasını etkinleştirin",
-						"title": "Oynatma listelerinden kurtulun"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
@@ -372,6 +372,10 @@
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
 					"shareShortener": {
 						"label": "YouTube video paylaşım bağlantısını kısalt",
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
@@ -382,7 +386,7 @@
 					},
 					"skipContinueWatching": {
 						"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
-						"title": "Skips the idle dialog that pauses video playback"
+						"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -408,7 +412,7 @@
 				},
 				"opacity": {
 					"label": "Saydamlık",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"title": "Ekrandaki gösterimin saydamlığını ayarlayın"
 				},
 				"padding": {
 					"label": "İç Boşluk",
@@ -448,7 +452,7 @@
 						"label": "Oynatma düğmelerinin hızı",
 						"title": "Tıklama başına değiştirilecek hız miktarı"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "İzlediğiniz videonun oynatma hızını artırmak veya azaltmak için düğmeler ekler"
 				},
 				"select": {
 					"label": "Oynatma hızı",
@@ -555,7 +559,7 @@
 						"label": "Devam etme türü",
 						"options": {
 							"automatic": "Otomatik",
-							"prompt": "Prompt"
+							"prompt": "İpucu"
 						},
 						"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
 					}

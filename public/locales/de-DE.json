@@ -357,8 +357,8 @@
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
 					"playlistRemover": {
-						"label": "The removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Verbleibende Zeit",
@@ -371,6 +371,10 @@
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Shorten YouTube video share link",

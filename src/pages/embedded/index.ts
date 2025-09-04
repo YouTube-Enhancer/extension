@@ -61,6 +61,7 @@ import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/play
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
+import { disableRestoreFullscreenScrolling, enableRestoreFullscreenScrolling } from "@/src/features/restoreFullscreenScrolling";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
@@ -214,7 +215,8 @@ const enableFeatures = async () => {
 			enablePlaylistLength(),
 			enableAutomaticallyDisableClosedCaptions(),
 			enableAutomaticallyDisableAmbientMode(),
-			enableDefaultToOriginalAudioTrack()
+			enableDefaultToOriginalAudioTrack(),
+			enableRestoreFullscreenScrolling()
 		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
@@ -928,6 +930,17 @@ window.addEventListener("DOMContentLoaded", function () {
 						} = message;
 						if (removeRedirectEnabled) {
 							await enableRemoveRedirect();
+						}
+						break;
+					}
+					case "restoreFullscreenScrollingChange": {
+						const {
+							data: { restoreFullscreenScrollingEnabled }
+						} = message;
+						if (restoreFullscreenScrollingEnabled) {
+							await enableRestoreFullscreenScrolling();
+						} else {
+							disableRestoreFullscreenScrolling();
 						}
 						break;
 					}

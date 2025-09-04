@@ -270,6 +270,10 @@ interface EnUS {
 						label: "Remove YouTube /redirect URLs";
 						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
 					};
+					restoreFullscreenScrolling: {
+						label: "Restore fullscreen scrolling";
+						title: "Restores scrolling in fullscreen mode";
+					};
 					shareShortener: {
 						label: "Shorten YouTube video share link";
 						title: "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it";

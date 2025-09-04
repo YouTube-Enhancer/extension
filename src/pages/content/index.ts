@@ -416,6 +416,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				rememberVolumeEnabled: newValue
 			});
 		},
+		enable_restore_fullscreen_scrolling: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("restoreFullscreenScrollingChange", {
+				restoreFullscreenScrollingEnabled: newValue
+			});
+		},
 		enable_screenshot_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("screenshotButtonChange", {
 				screenshotButtonEnabled: newValue

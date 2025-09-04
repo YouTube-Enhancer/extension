@@ -357,8 +357,8 @@
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
 					"playlistRemover": {
-						"label": "The removal of playlists from homepage",
-						"title": "Get rid of playlists"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "남은 시간 표시",
@@ -371,6 +371,10 @@
 					"removeRedirect": {
 						"label": "유튜브 / 리디렉션 URL 제거",
 						"title": "리디렉션 경고 대화를 건너뛰고 실제 URL로 유튜브 리디렉션을 대체합니다."
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "유튜브 동영상 공유 링크 짧게하기",

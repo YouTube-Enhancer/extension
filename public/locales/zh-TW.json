@@ -357,8 +357,8 @@
 						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
 					},
 					"playlistRemover": {
-						"label": "啟用在主頁移除播放清單",
-						"title": "移除播放清單"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
@@ -371,6 +371,10 @@
 					"removeRedirect": {
 						"label": "移除 YouTube 重新導向網址",
 						"title": "以真正網址取代 YouTube 重新導向網址，跳過重新導向警告對話框"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "縮短 YouTube 影片共享連結",
