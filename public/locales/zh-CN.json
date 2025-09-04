@@ -357,8 +357,8 @@
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
 					"playlistRemover": {
-						"label": "启用从主页删除播放列表",
-						"title": "清除播放列表"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
