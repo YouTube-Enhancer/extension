@@ -357,8 +357,8 @@
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
 					"playlistRemover": {
-						"label": "Remoção de playlists da página inicial",
-						"title": "Remover playlists da página inicial"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
