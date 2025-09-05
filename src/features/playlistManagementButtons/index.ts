@@ -19,6 +19,8 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	});
 }
 
+const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-panel-video-renderer, ytd-playlist-video-renderer";
+
 let playlistObserver: MutationObserver | null = null;
 
 export async function disablePlaylistManagementButtons() {
@@ -27,7 +29,7 @@ export async function disablePlaylistManagementButtons() {
 		playlistObserver = null;
 	}
 
-	const playlistItems = document.querySelectorAll("ytd-playlist-panel-video-renderer, ytd-playlist-video-renderer");
+	const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 	playlistItems.forEach((item) => {
 		item.querySelectorAll(".yte-remove-button, .yte-reset-button").forEach((btn) => btn.remove());
 	});
@@ -50,9 +52,9 @@ export async function enablePlaylistManagementButtons() {
 	});
 
 	function addButtonToPlaylistItems() {
-		const playlistItems = document.querySelectorAll("ytd-playlist-panel-video-renderer, ytd-playlist-video-renderer");
+		const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 		playlistItems.forEach((item) => {
-			if (item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
+			if (!item.querySelector("#index-container") || item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
 				return;
 			}
 
