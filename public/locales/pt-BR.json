@@ -296,6 +296,10 @@
 						"label": "Retornar à faixa de vídeo original",
 						"title": "Sempre retornar à faixa de vídeo original"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Ativar botões de gerenciamento de playlist",
+						"title": "Adiciona botões aos itens da playlist para remover vídeos da playlist ou marcá-los como não assistidos"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
 						"title": "Oculta a seção de resumo IA de um vídeo"
