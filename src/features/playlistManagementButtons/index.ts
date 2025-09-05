@@ -13,6 +13,12 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 	playlistVideoId: string;
 }
 
+if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
+	window.trustedTypes.createPolicy("default", {
+		createHTML: (input: string) => input
+	});
+}
+
 let playlistObserver: MutationObserver | null = null;
 
 export async function disablePlaylistManagementButtons() {
@@ -56,7 +62,7 @@ export async function enablePlaylistManagementButtons() {
 			}
 
 			const removeButton = document.createElement("button");
-			removeButton.insertAdjacentHTML("afterbegin", renderToString(React.createElement(FaTrash, { color: "red", size: 18 })));
+			removeButton.innerHTML = renderToString(React.createElement(FaTrash, { color: "red", size: 18 }));
 			removeButton.className = "yte-remove-button";
 			removeButton.title = "Remove video";
 			removeButton.onclick = async () => {
@@ -70,7 +76,7 @@ export async function enablePlaylistManagementButtons() {
 			};
 
 			const resetButton = document.createElement("button");
-			resetButton.insertAdjacentHTML("afterbegin", renderToString(React.createElement(FaUndoAlt, { color: "red", size: 18 })));
+			resetButton.innerHTML = renderToString(React.createElement(FaUndoAlt, { color: "red", size: 18 }));
 			resetButton.className = "yte-reset-button";
 			resetButton.title = "Mark as unwatched";
 			resetButton.onclick = async () => {
