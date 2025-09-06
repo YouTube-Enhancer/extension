@@ -290,7 +290,7 @@ function handleSoftNavigate() {
 	document.addEventListener("yt-navigate-finish", scheduleEnableFeatures);
 	document.addEventListener("yt-player-updated", scheduleEnableFeatures);
 }
-window.addEventListener("DOMContentLoaded", function () {
+const initialize = function () {
 	void (async () => {
 		const response = await waitForSpecificMessage("language", "request_data", "content");
 		if (!response) return;
@@ -1066,7 +1066,14 @@ window.addEventListener("DOMContentLoaded", function () {
 		});
 		sendContentOnlyMessage("pageLoaded", undefined);
 	})();
-});
+};
+
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", initialize);
+} else {
+	initialize();
+}
+
 window.onbeforeunload = function () {
 	eventManager.removeAllEventListeners();
 	element.remove();
