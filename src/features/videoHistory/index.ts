@@ -13,44 +13,6 @@ import {
 	waitForAllElements,
 	waitForSpecificMessage
 } from "@/utils/utilities";
-export async function setupVideoHistory() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: { enable_video_history: enableVideoHistory }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableVideoHistory) return;
-	if (!isWatchPage()) return;
-	// Get the player container element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-	// If player container is not available, return
-	if (!playerContainer) return;
-	const playerVideoData = await playerContainer.getVideoData();
-	// If the video is live return
-	if (playerVideoData.isLive) return;
-	const { video_id: videoId } = await playerContainer.getVideoData();
-	if (!videoId) return;
-	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
-	if (!videoElement) return;
-	await waitForAllElements(["#owner #upload-info #channel-name"]);
-	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
-	if (isOfficialArtistChannel) return;
-	const videoPlayerTimeUpdateListener = () => {
-		void (async () => {
-			const currentTime = await playerContainer.getCurrentTime();
-			const duration = await playerContainer.getDuration();
-			void sendContentMessage("videoHistoryOne", "send_data", {
-				video_history_entry: {
-					id: videoId,
-					status: Math.ceil(duration) === Math.ceil(currentTime) ? "watched" : "watching",
-					timestamp: currentTime
-				}
-			});
-		})();
-	};
-	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
-}
 export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
 	const {
@@ -88,6 +50,44 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	} else {
 		cb();
 	}
+}
+export async function setupVideoHistory() {
+	// Wait for the "options" message from the content script
+	const {
+		data: {
+			options: { enable_video_history: enableVideoHistory }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	if (!enableVideoHistory) return;
+	if (!isWatchPage()) return;
+	// Get the player container element
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	// If player container is not available, return
+	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	// If the video is live return
+	if (playerVideoData.isLive) return;
+	const { video_id: videoId } = await playerContainer.getVideoData();
+	if (!videoId) return;
+	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
+	if (!videoElement) return;
+	await waitForAllElements(["#owner #upload-info #channel-name"]);
+	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	if (isOfficialArtistChannel) return;
+	const videoPlayerTimeUpdateListener = () => {
+		void (async () => {
+			const currentTime = await playerContainer.getCurrentTime();
+			const duration = await playerContainer.getDuration();
+			void sendContentMessage("videoHistoryOne", "send_data", {
+				video_history_entry: {
+					id: videoId,
+					status: Math.ceil(duration) === Math.ceil(currentTime) ? "watched" : "watching",
+					timestamp: currentTime
+				}
+			});
+		})();
+	};
+	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "videoHistory");
 }
 // Utility function to check if an element exists
 const elementExists = (elementId: string) => !!document.getElementById(elementId);

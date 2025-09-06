@@ -1,24 +1,24 @@
 import type { AllButtonNames, ButtonPlacement } from "./types";
 
 import { createSVGElement } from "./utils/utilities";
-export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export type BasicIcon = SVGSVGElement;
+export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export const toggleFeatures = Object.keys({
 	hideEndScreenCardsButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
 	volumeBoostButton: ""
 } satisfies Partial<Record<AllButtonNames, "">>);
-export type ToggleFeatures = (typeof toggleFeatures)[number];
-export type IconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
-export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
-export type GetIconType<Name extends AllButtonNames, Placement extends ButtonPlacement> = FeatureIconMap[Name][GetPlacementKey<Placement>];
 export type FeatureIconMap = {
 	[ButtonName in AllButtonNames]: {
 		feature_menu: BasicIcon;
 		shared_icon_position: IconType<ButtonName>;
 	};
 };
+export type GetIconType<Name extends AllButtonNames, Placement extends ButtonPlacement> = FeatureIconMap[Name][GetPlacementKey<Placement>];
+export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
+export type IconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
+export type ToggleFeatures = (typeof toggleFeatures)[number];
 
 const loopOnSVG = createSVGElement(
 	"svg",

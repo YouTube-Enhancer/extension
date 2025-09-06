@@ -1,12 +1,22 @@
 import type { Nullable } from "@/src/types";
-import "./index.css";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+
 import {
 	hideOfficialArtistVideosFromHomePage,
 	observeOfficialArtistVideosFromHomePage,
 	showOfficialArtistVideosFromHomePage
 } from "@/src/features/hideOfficialArtistVideosFromHomePage/utils";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
+
+import "./index.css";
 let officialArtistVideosObserver: Nullable<MutationObserver> = null;
+export function disableHideOfficialArtistVideosFromHomePage() {
+	showOfficialArtistVideosFromHomePage();
+	if (officialArtistVideosObserver) {
+		officialArtistVideosObserver.disconnect();
+		officialArtistVideosObserver = null;
+	}
+}
+
 export async function enableHideOfficialArtistVideosFromHomePage() {
 	// Wait for the "options" message from the content script
 	const {
@@ -18,12 +28,4 @@ export async function enableHideOfficialArtistVideosFromHomePage() {
 	hideOfficialArtistVideosFromHomePage();
 	if (officialArtistVideosObserver) officialArtistVideosObserver.disconnect();
 	officialArtistVideosObserver = observeOfficialArtistVideosFromHomePage();
-}
-
-export function disableHideOfficialArtistVideosFromHomePage() {
-	showOfficialArtistVideosFromHomePage();
-	if (officialArtistVideosObserver) {
-		officialArtistVideosObserver.disconnect();
-		officialArtistVideosObserver = null;
-	}
 }

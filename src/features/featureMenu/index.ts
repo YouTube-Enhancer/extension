@@ -1,95 +1,9 @@
 import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { isNewYouTubeVideoLayout } from "../../utils/utilities";
-
-function createFeatureMenu() {
-	// Create the feature menu div
-	const featureMenu = createStyledElement({
-		classlist: ["ytp-popup", "ytp-settings-menu"],
-		elementId: "yte-feature-menu",
-		elementType: "div",
-		styles: {
-			display: "none",
-			zIndex: "2050"
-		}
-	});
-	// Create the feature menu panel
-	const featureMenuPanel = createStyledElement({
-		classlist: ["ytp-panel"],
-		elementId: "yte-feature-menu-panel",
-		elementType: "div",
-		styles: {
-			display: "contents"
-		}
-	});
-	// Append the panel to the menu
-	featureMenu.appendChild(featureMenuPanel);
-	// Create the panel menu
-	const featureMenuPanelMenu = createStyledElement({
-		classlist: ["ytp-panel-menu"],
-		elementId: "yte-panel-menu",
-		elementType: "div"
-	});
-	featureMenuPanel.appendChild(featureMenuPanelMenu);
-	return featureMenu;
-}
-
-async function createFeatureMenuButton() {
-	// Check if the feature menu already exists
-	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
-	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
-	// Create the feature menu button
-	const featureMenuButton = createStyledElement({
-		classlist: ["ytp-button"],
-		elementId: "yte-feature-menu-button",
-		elementType: "button",
-		styles: { display: "none" }
-	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
-	// Create the SVG icon for the button
-	const featureButtonSVG = makeFeatureMenuIcon();
-	featureMenuButton.appendChild(featureButtonSVG);
-	// Get references to various elements and check their existence
-	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
-	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ?
-			document.querySelector<HTMLDivElement>(
-				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-			)
-		:	null;
-	if (!playerContainer) return;
-	// Insert the feature menu button and feature menu itself
-	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
-	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: { feature_menu_open_type: featureMenuOpenType }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
-	setupFeatureMenuEventListeners(featureMenuOpenType);
-}
-function makeFeatureMenuIcon() {
-	const featureButtonSVG = createSVGElement(
-		"svg",
-		{
-			fill: "white",
-			height: "48px",
-			viewBox: "0 0 36 36",
-			width: "48px"
-		},
-		createSVGElement("path", {
-			d: "M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z",
-			fill: "white"
-		})
-	);
-	return featureButtonSVG;
-}
 
 // Function to enable the feature menu
 export async function enableFeatureMenu() {
@@ -97,14 +11,7 @@ export async function enableFeatureMenu() {
 	if (featureMenuButtonExists) return;
 	await createFeatureMenuButton();
 }
-function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
-	if (!adsContainer) return;
-	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
-	if (!adsSpan) return;
-	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
-	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
-}
+
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
@@ -231,4 +138,97 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		childList: true,
 		subtree: true
 	});
+}
+function adjustAdsContainerStyles(featureMenuOpen: boolean) {
+	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
+	if (!adsContainer) return;
+	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+	if (!adsSpan) return;
+	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
+	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
+}
+
+function createFeatureMenu() {
+	// Create the feature menu div
+	const featureMenu = createStyledElement({
+		classlist: ["ytp-popup", "ytp-settings-menu"],
+		elementId: "yte-feature-menu",
+		elementType: "div",
+		styles: {
+			display: "none",
+			zIndex: "2050"
+		}
+	});
+	// Create the feature menu panel
+	const featureMenuPanel = createStyledElement({
+		classlist: ["ytp-panel"],
+		elementId: "yte-feature-menu-panel",
+		elementType: "div",
+		styles: {
+			display: "contents"
+		}
+	});
+	// Append the panel to the menu
+	featureMenu.appendChild(featureMenuPanel);
+	// Create the panel menu
+	const featureMenuPanelMenu = createStyledElement({
+		classlist: ["ytp-panel-menu"],
+		elementId: "yte-panel-menu",
+		elementType: "div"
+	});
+	featureMenuPanel.appendChild(featureMenuPanelMenu);
+	return featureMenu;
+}
+async function createFeatureMenuButton() {
+	// Check if the feature menu already exists
+	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
+	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
+	// Create the feature menu button
+	const featureMenuButton = createStyledElement({
+		classlist: ["ytp-button"],
+		elementId: "yte-feature-menu-button",
+		elementType: "button",
+		styles: { display: "none" }
+	});
+	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
+	// Create the SVG icon for the button
+	const featureButtonSVG = makeFeatureMenuIcon();
+	featureMenuButton.appendChild(featureButtonSVG);
+	// Get references to various elements and check their existence
+	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+	if (!settingsButton) return;
+	const playerContainer =
+		isWatchPage() ?
+			document.querySelector<HTMLDivElement>(
+				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
+			)
+		:	null;
+	if (!playerContainer) return;
+	// Insert the feature menu button and feature menu itself
+	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
+	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
+	// Wait for the "options" message from the content script
+	const {
+		data: {
+			options: { feature_menu_open_type: featureMenuOpenType }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
+	setupFeatureMenuEventListeners(featureMenuOpenType);
+}
+function makeFeatureMenuIcon() {
+	const featureButtonSVG = createSVGElement(
+		"svg",
+		{
+			fill: "white",
+			height: "48px",
+			viewBox: "0 0 36 36",
+			width: "48px"
+		},
+		createSVGElement("path", {
+			d: "M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z",
+			fill: "white"
+		})
+	);
+	return featureButtonSVG;
 }

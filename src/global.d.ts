@@ -1,7 +1,7 @@
 import type { i18nInstanceType } from "./i18n";
 
 declare module "*.svg" {
-	import React = require("react");
+	import React from "react";
 	export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
 	const src: string;
 	export default src;
@@ -13,6 +13,23 @@ declare module "*.json" {
 }
 
 declare module "node_modules/@types/youtube-player/dist/types" {
+	interface ProgressState {
+		airingEnd: number;
+		airingStart: number;
+		allowSeeking: boolean;
+		clipEnd: null | number;
+		clipStart: number;
+		current: number;
+		displayedStart: number;
+		duration: number;
+		ingestionTime: null;
+		isAtLiveHead: boolean;
+		loaded: number;
+		offset: number;
+		seekableEnd: number;
+		seekableStart: number;
+		viewerLivestreamJoinMediaTime: number;
+	}
 	interface VideoData {
 		allowLiveDvr: boolean;
 		author: string;
@@ -37,30 +54,13 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		video_quality: string;
 		video_quality_features: string[];
 	}
-	interface ProgressState {
-		airingEnd: number;
-		airingStart: number;
-		allowSeeking: boolean;
-		clipEnd: null | number;
-		clipStart: number;
-		current: number;
-		displayedStart: number;
-		duration: number;
-		ingestionTime: null;
-		isAtLiveHead: boolean;
-		loaded: number;
-		offset: number;
-		seekableEnd: number;
-		seekableStart: number;
-		viewerLivestreamJoinMediaTime: number;
-	}
 	interface YouTubePlayer {
-		unloadModule(moduleName: string): void;
-		loadModule(moduleName: string): void;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
+		loadModule(moduleName: string): void;
 		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
+		unloadModule(moduleName: string): void;
 	}
 }
 declare global {
@@ -70,7 +70,7 @@ declare global {
 	}
 	interface Window {
 		audioCtx: AudioContext;
-		cachedPlaylistDuration: { playlistId: string; totalTimeSeconds: number } | null;
+		cachedPlaylistDuration: null | { playlistId: string; totalTimeSeconds: number };
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;
 		webkitAudioContext: AudioContext;

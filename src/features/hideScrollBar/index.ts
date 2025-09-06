@@ -11,5 +11,6 @@ export async function enableHideScrollBar() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the hide scroll bar option is disabled, return
 	if (!enable_hide_scrollbar) return;
+	if (document.getElementById("yte-hide-scroll-bar")) return;
 	hideScrollBar();
 }

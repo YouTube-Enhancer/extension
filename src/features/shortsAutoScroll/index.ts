@@ -4,6 +4,9 @@ import { setupAutoScroll } from "@/src/features/shortsAutoScroll/utils";
 import eventManager from "@/src/utils/EventManager";
 import { isShortsPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
+export function disableShortsAutoScroll() {
+	eventManager.removeEventListeners("shortsAutoScroll");
+}
 export async function enableShortsAutoScroll() {
 	if (!isShortsPage()) return;
 	// Wait for the "options" message from the content script
@@ -25,7 +28,4 @@ export async function enableShortsAutoScroll() {
 	if (!video) return;
 	// Setup auto scroll
 	setupAutoScroll(shortsContainer, video);
-}
-export function disableShortsAutoScroll() {
-	eventManager.removeEventListeners("shortsAutoScroll");
 }
