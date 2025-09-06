@@ -1082,14 +1082,13 @@ window.onbeforeunload = function () {
 // Error handling
 window.addEventListener("error", (event) => {
 	event.preventDefault();
-	const {
-		error: { stack: errorLine }
-	} = event;
-	browserColorLog(formatError(event.error) + "\nAt: " + errorLine, "FgRed");
+	const errorLine = event.error?.stack || `${event.filename}:${event.lineno}:${event.colno}`;
+	const errorMessage = event.error ? formatError(event.error) : event.message || "Unknown error";
+	browserColorLog(errorMessage + "\nAt: " + errorLine, "FgRed");
 });
 
 window.addEventListener("unhandledrejection", (event) => {
 	event.preventDefault();
-	const errorLine = event.reason instanceof Error ? event?.reason?.stack : "Stack trace not available";
+	const errorLine = event.reason instanceof Error && event.reason?.stack ? event.reason.stack : "Stack trace not available";
 	browserColorLog(`Unhandled rejection: ${event.reason}\nAt: ${errorLine}`, "FgRed");
 });
