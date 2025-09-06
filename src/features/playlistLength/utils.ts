@@ -14,26 +14,23 @@ import {
 	timeStringToSeconds,
 	waitForAllElements
 } from "@/src/utils/utilities";
-
-export const getHeaderSelectors = (): { playlist: string; watch: string } => ({
-	playlist: (() => {
-		const noPaddingHeader = document.querySelector(
-			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding"
-		);
-		const cinematicHeader = document.querySelector(
-			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary"
-		);
-		if (noPaddingHeader && noPaddingHeader.clientWidth > 0)
-			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
-		if (cinematicHeader && cinematicHeader.clientWidth > 0)
-			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary div.page-header-view-model-wiz__page-header-content";
-		return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
-	})(),
-	watch:
-		isNewYouTubeVideoLayout() ?
-			"#page-manager > ytd-watch-grid #playlist #header-contents"
-		:	"#page-manager > ytd-watch-flexy #playlist #header-contents"
-});
+const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
+const CINEMATIC_HEADER_SELECTOR =
+	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
+export const getHeaderSelectors = () =>
+	({
+		playlist: (() => {
+			const noPaddingHeader = document.querySelector(NO_PADDING_HEADER_SELECTOR);
+			const cinematicHeader = document.querySelector(CINEMATIC_HEADER_SELECTOR);
+			if (noPaddingHeader && noPaddingHeader.clientWidth > 0) return NO_PADDING_HEADER_SELECTOR;
+			if (cinematicHeader && cinematicHeader.clientWidth > 0) return `${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`;
+			return NO_PADDING_HEADER_SELECTOR;
+		})(),
+		watch:
+			isNewYouTubeVideoLayout() ?
+				"#page-manager > ytd-watch-grid #playlist #header-contents"
+			:	"#page-manager > ytd-watch-flexy #playlist #header-contents"
+	}) as const satisfies { playlist: string; watch: string };
 export const playlistItemsSelector = () =>
 	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
 const youtubePlaylistResponseSchema = z.object({
@@ -54,13 +51,13 @@ const youtubeDataAPIErrorSchema = z.object({
 		message: z.string()
 	})
 });
-type PageType = "playlist" | "watch";
-type PlaylistLengthParameters = {
+export type PlaylistLengthParameters = {
 	apiKey: string;
 	pageType: PageType;
 	playlistLengthGetMethod: PlaylistLengthGetMethod;
 	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod;
 };
+type PageType = "playlist" | "watch";
 type VideoTimeState = { totalTimeSeconds: number; watchedTimeSeconds: number };
 type WatchTimeParameters = {
 	pageType: PageType;
@@ -70,7 +67,8 @@ type WatchTimeParameters = {
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement) {
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist]);
-	const headerContents = document.querySelector(isWatchPage() ? watch : playlist);
+	const headerContents =
+		isWatchPage() ? document.querySelector(watch) : Array.from(document.querySelectorAll(playlist))?.find((el) => el.clientWidth > 0);
 	if (!headerContents) return null;
 	if (document.querySelector("#yte-playlist-length-ui") !== null) {
 		document.querySelector("#yte-playlist-length-ui")?.remove();
@@ -290,8 +288,9 @@ export async function initializePlaylistLength({
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
 	const { playlist, watch } = getHeaderSelectors();
-	const playlistHeader = document.querySelector(isWatchPage() ? watch : playlist);
-	if (!playlistHeader) return null;
+	const headerContents =
+		isWatchPage() ? document.querySelector(watch) : Array.from(document.querySelectorAll(playlist))?.find((el) => el.clientWidth > 0);
+	if (!headerContents) return null;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	const playlistItemsElement = document.querySelector(playlistItemsSelector());
 	if (!playlistItemsElement) return null;
