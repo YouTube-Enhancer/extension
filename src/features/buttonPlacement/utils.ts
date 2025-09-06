@@ -58,10 +58,8 @@ export async function makeFeatureButton<Name extends AllButtonNames, Placement e
 			alignContent: "center",
 			display: "flex",
 			flexWrap: "wrap",
-			height: "48px",
 			justifyContent: "center",
 			padding: "0px 4px",
-			width: "48px",
 			zIndex: "0"
 		}
 	});
@@ -144,6 +142,7 @@ export function placeButton(button: HTMLButtonElement, placement: Exclude<Button
 				elementType: "div",
 				styles: {
 					display: "flex",
+					height: "48px",
 					justifyContent: "center"
 				}
 			});
