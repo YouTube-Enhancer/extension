@@ -3,7 +3,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import { setupScrollListeners } from "@/src/features/scrollWheelVolumeControl/utils";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { adjustSpeed } from "./utils";
 
@@ -17,12 +17,13 @@ export default async function adjustSpeedOnScrollWheel() {
 	} = optionsData;
 	// If scroll wheel speed control is disabled, return
 	if (!enableScrollWheelSpeedControl) return;
+	const containerSelectors = ["div#player", "div#player-container"];
 	// Wait for the specified container selectors to be available on the page
-	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(containerSelectors);
 	// Get the player element
 	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
@@ -64,8 +65,8 @@ export default async function adjustSpeedOnScrollWheel() {
 			await setOptionsData();
 			// Get the player element
 			const playerContainer =
-				isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-				: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+				: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;

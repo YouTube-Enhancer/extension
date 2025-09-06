@@ -5,9 +5,14 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
     target-branch: "dev"
     versioning-strategy: "increase-if-necessary"
+    ignore:
+      - dependency-name: "tailwindcss"
+      - dependency-name: "eslint-plugin-tailwindcss"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"

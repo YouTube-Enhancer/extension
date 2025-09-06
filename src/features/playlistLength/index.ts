@@ -1,13 +1,22 @@
 import type { Nullable } from "@/src/types";
 
-import eventManager from "@/src/utils/EventManager";
 import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
+import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { headerSelector, initializePlaylistLength, playlistItemsSelector } from "./utils";
+import { getHeaderSelectors, initializePlaylistLength, playlistItemsSelector, type PlaylistLengthParameters } from "./utils";
 let documentObserver: Nullable<MutationObserver> = null;
+let resizeObserver: Nullable<ResizeObserver> = null;
+export function disablePlaylistLength() {
+	eventManager.removeEventListeners("playlistLength");
+	documentObserver?.disconnect();
+	documentObserver = null;
+	resizeObserver?.disconnect();
+	resizeObserver = null;
+	document.querySelector("#yte-playlist-length-ui")?.remove();
+}
 export async function enablePlaylistLength() {
-	const IsWatchPage = isWatchPage();
+	const isWatchPageFlag = isWatchPage();
 	const {
 		data: {
 			options: {
@@ -19,31 +28,50 @@ export async function enablePlaylistLength() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_playlist_length) return;
-	const urlContainsListParameter = window.location.href.includes("list=");
-	if (!urlContainsListParameter) return;
-	await waitForAllElements([headerSelector(), playlistItemsSelector()]);
-	const apiKey = youtube_data_api_v3_key === "" ? YouTube_Enhancer_Public_Youtube_Data_API_V3_Key : youtube_data_api_v3_key;
-	const pageType = IsWatchPage ? "watch" : "playlist";
-	try {
-		documentObserver = await initializePlaylistLength({
+	if (!document.querySelector(playlistItemsSelector())) return;
+	const { playlist, watch } = getHeaderSelectors();
+	await waitForAllElements([isWatchPageFlag ? watch : playlist, playlistItemsSelector()]);
+	const apiKey = youtube_data_api_v3_key || YouTube_Enhancer_Public_Youtube_Data_API_V3_Key;
+	const pageType = isWatchPageFlag ? "watch" : "playlist";
+	documentObserver = await initPlaylistLength({
+		apiKey,
+		pageType,
+		playlistLengthGetMethod,
+		playlistWatchTimeGetMethod
+	});
+	resizeObserver?.disconnect();
+	resizeObserver = new ResizeObserver(async () => {
+		documentObserver = await initPlaylistLength({
 			apiKey,
 			pageType,
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
-	} catch (error) {
-		documentObserver?.disconnect();
-		documentObserver = null;
-		documentObserver = await initializePlaylistLength({
+	});
+	resizeObserver.observe(document.documentElement);
+}
+async function initPlaylistLength({
+	apiKey,
+	pageType,
+	playlistLengthGetMethod,
+	playlistWatchTimeGetMethod
+}: PlaylistLengthParameters): Promise<MutationObserver | null> {
+	documentObserver?.disconnect();
+	try {
+		return await initializePlaylistLength({
 			apiKey,
 			pageType,
-			playlistLengthGetMethod: "html",
+			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
+	} catch {
+		return playlistLengthGetMethod === "html" ? null : (
+				initPlaylistLength({
+					apiKey,
+					pageType,
+					playlistLengthGetMethod: "html",
+					playlistWatchTimeGetMethod
+				})
+			);
 	}
-}
-export function disablePlaylistLength() {
-	eventManager.removeEventListeners("playlistLength");
-	if (documentObserver) documentObserver.disconnect();
-	document.querySelector("#yte-playlist-length-ui")?.remove();
 }

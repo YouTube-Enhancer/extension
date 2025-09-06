@@ -5,9 +5,15 @@ import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlac
 import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+export async function disableHideEndScreenCards() {
+	if (!isWatchPage()) return;
+	await waitForAllElements(["div#player", "div#player-container"]);
+	showEndScreenCards();
+}
+
 export async function enableHideEndScreenCards() {
 	const {
 		data: {
@@ -16,14 +22,8 @@ export async function enableHideEndScreenCards() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCards) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container"]);
 	hideEndScreenCards();
-}
-
-export async function disableHideEndScreenCards() {
-	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
-	showEndScreenCards();
 }
 export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	const {
@@ -36,9 +36,8 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCardsButton) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
 	// Get the player container element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const videoData = await playerContainer.getVideoData();
 	if (videoData.isLive) return;
@@ -75,6 +74,10 @@ export const removeHideEndScreenCardsButton: RemoveButtonFunction = async (place
 	await removeFeatureButton("hideEndScreenCardsButton", placement);
 	eventManager.removeEventListeners("hideEndScreenCardsButton");
 };
+export function isEndScreenCardsHidden(): boolean {
+	const endCards = document.querySelectorAll(".ytp-ce-element.yte-hide-end-screen-cards");
+	return endCards.length > 0;
+}
 function hideEndScreenCards() {
 	modifyElementsClassList(
 		"add",
@@ -92,8 +95,4 @@ function showEndScreenCards() {
 			element
 		}))
 	);
-}
-export function isEndScreenCardsHidden(): boolean {
-	const endCards = document.querySelectorAll(".ytp-ce-element.yte-hide-end-screen-cards");
-	return endCards.length > 0;
 }

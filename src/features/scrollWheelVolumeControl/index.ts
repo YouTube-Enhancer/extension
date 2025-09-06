@@ -1,7 +1,15 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { isLivePage, isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import {
+	isLivePage,
+	isShortsPage,
+	isWatchPage,
+	preventScroll,
+	waitForAllElements,
+	waitForElement,
+	waitForSpecificMessage
+} from "@/src/utils/utilities";
 
 import { adjustVolume, setupScrollListeners } from "./utils";
 
@@ -23,12 +31,13 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	} = optionsData;
 	// If scroll wheel volume control is disabled, return
 	if (!enableScrollWheelVolumeControl) return;
+	const containerSelectors = ["div#player", "div#player-container"];
 	// Wait for the specified container selectors to be available on the page
-	const containerSelectors = await waitForAllElements(["div#player", "div#player-wide-container", "div#video-container", "div#player-container"]);
+	await waitForAllElements(containerSelectors);
 
 	// Define the event handler for the scroll wheel events
-	const handleWheel = (event: Event) => {
-		const settingsPanelMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+	const handleWheel = async (event: Event) => {
+		const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 		// If the settings panel menu is targeted return
 		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
 		const setOptionsData = async () => {
@@ -66,7 +75,7 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
 			// If the right click is required and is pressed hide the context menu
 			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
-				const contextMenu = document.querySelector<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
+				const contextMenu = await waitForElement<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
 				if (contextMenu) contextMenu.style.display = "none";
 			}
 			// Only prevent default scroll wheel behavior
@@ -76,8 +85,8 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 			await setOptionsData();
 			// Get the player element
 			const playerContainer =
-				isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-				: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+				: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 				: null;
 			// If player element is not available, return
 			if (!playerContainer) return;

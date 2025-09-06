@@ -1,15 +1,8 @@
 import type { DeepDarkCustomThemeColors } from "@/src/types";
 
-import { deepDarkMaterial } from "@/src/deepDarkMaterialCSS";
-import { deepDarkCssID } from "@/src/features/deepDarkCSS";
+import { deepDarkMaterial } from "../../deepDarkMaterialCSS";
+import { deepDarkCssID } from "../../utils/constants";
 
-export function updateDeepDarkCSS(css_code: string) {
-	// Get the custom CSS style element
-	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
-	// Check if the custom CSS style element exists
-	if (!customCSSStyleElement) return;
-	customCSSStyleElement.replaceWith(createDeepDarkCSSElement(css_code));
-}
 export function createDeepDarkCSSElement(css_code: string) {
 	// Create the custom CSS style element
 	const customCSSStyleElement = document.createElement("style");
@@ -24,7 +17,6 @@ export function deepDarkCSSExists() {
 	if (!customCSSStyleElement) return false;
 	return true;
 }
-
 export function getDeepDarkCustomThemeStyle({
 	colorShadow,
 	dimmerText,
@@ -43,4 +35,12 @@ export function getDeepDarkCustomThemeStyle({
 		--dimmer-text: ${dimmerText};
 		--shadow: 0 1px 0.5px ${colorShadow};
 	}`;
+}
+
+export function updateDeepDarkCSS(css_code: string) {
+	// Get the custom CSS style element
+	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
+	// Check if the custom CSS style element exists
+	if (!customCSSStyleElement) return;
+	customCSSStyleElement.replaceWith(createDeepDarkCSSElement(css_code));
 }

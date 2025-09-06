@@ -123,6 +123,22 @@
 			"allDataDeleted": "Die Daten wurden gelöscht.",
 			"confirmAlert": "Dies löscht alle Erweiterungsdaten zu Optionen. Fortfahren?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -206,7 +222,7 @@
 					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Enable custom CSS",
+					"label": "Custom CSS",
 					"title": "Enables custom CSS to be applied to the page"
 				},
 				"title": "Custom CSS Settings"
@@ -226,7 +242,7 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Enable forward/rewind buttons",
+					"label": "Forward/rewind buttons",
 					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"time": {
@@ -264,6 +280,10 @@
 						"label": "Automatischer Theatermodus",
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
 						"title": "Automatically disables closed captions when you load a video"
@@ -271,6 +291,14 @@
 					"copyTimestampUrlButton": {
 						"label": "Copy video URL with timestamp button",
 						"title": "Copies video URL with timestamp (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
 						"label": "Hide end screen cards",
@@ -291,6 +319,10 @@
 					"hidePaidPromotionBanner": {
 						"label": "Hide paid promotion banner",
 						"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Scrollbar ausblenden",
@@ -324,6 +356,10 @@
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
+					"playlistRemover": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"remainingTime": {
 						"label": "Verbleibende Zeit",
 						"title": "Zeigt die verbleibende Zeit des Videos, das du siehst"
@@ -335,6 +371,10 @@
 					"removeRedirect": {
 						"label": "Remove YouTube /redirect URLs",
 						"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Shorten YouTube video share link",
@@ -589,7 +629,7 @@
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
+					"label": "Deep Dark Theme",
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {

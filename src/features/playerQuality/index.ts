@@ -1,6 +1,14 @@
 import type { YouTubePlayerDiv, YoutubePlayerQualityLevel } from "@/src/types";
 
-import { browserColorLog, chooseClosestQuality, isLivePage, isShortsPage, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import {
+	browserColorLog,
+	chooseClosestQuality,
+	isLivePage,
+	isShortsPage,
+	isWatchPage,
+	waitForElement,
+	waitForSpecificMessage
+} from "@/src/utils/utilities";
 
 /**
  * Sets the player quality based on the options received from a specific message.
@@ -21,8 +29,8 @@ export default async function setPlayerQuality(): Promise<void> {
 	if (!player_quality) return;
 	// Get the player element
 	const playerContainer =
-		isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
 		: null;
 	// If player element is not available, return
 	if (!playerContainer) return;

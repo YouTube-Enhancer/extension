@@ -1,7 +1,10 @@
+import type { JSX } from "react";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import Settings from "@/src/components/Settings/Settings";
 import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
 import { SettingsFilterProvider } from "@/src/hooks/useSettingsFilter/provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function Options(): JSX.Element {
 	const client = new QueryClient({

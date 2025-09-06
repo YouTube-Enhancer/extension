@@ -55,7 +55,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				break;
 			}
 		}
-	} catch (error) {}
+	} catch (_error) {}
 }
 
 export const addScreenshotButton: AddButtonFunction = async () => {

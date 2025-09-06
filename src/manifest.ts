@@ -3,7 +3,7 @@ import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
 import { availableLocales } from "./i18n/constants";
 const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
-const hostPermissions: Manifest.MatchPattern[] = ["https://www.youtube.com/*"];
+const hostPermissions: Manifest.MatchPattern[] = ["https://*.youtube.com/*"];
 const resources = [
 	"contentStyle.css",
 	"/icons/icon_128.png",
@@ -36,7 +36,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 			all_frames: true,
 			css: ["contentStyle.css"],
 			js: ["src/pages/content/index.js"],
-			matches: ["https://www.youtube.com/*"],
+			matches: ["https://*.youtube.com/*"],
 			run_at: "document_start"
 		}
 	],
@@ -52,7 +52,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 	version: pkg.version,
 	web_accessible_resources: [
 		{
-			matches: ["https://www.youtube.com/*"],
+			matches: ["https://*.youtube.com/*"],
 			resources
 		}
 	]
@@ -72,7 +72,7 @@ const manifestV2: Manifest.WebExtensionManifest = {
 		{
 			css: ["contentStyle.css"],
 			js: ["src/pages/content/index.js"],
-			matches: ["https://www.youtube.com/*"],
+			matches: ["https://*.youtube.com/*"],
 			run_at: "document_start"
 		}
 	],
