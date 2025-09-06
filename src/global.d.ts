@@ -85,6 +85,10 @@ declare global {
 		cachedPlaylistDuration: null | { playlistId: string; totalTimeSeconds: number };
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;
+		trustedTypes?: {
+			createPolicy(name: string, options: { createHTML: (input: string) => string });
+			defaultPolicy;
+		};
 		webkitAudioContext: AudioContext;
 	}
 }

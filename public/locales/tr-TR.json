@@ -296,6 +296,10 @@
 						"label": "Varsayılan olarak orijinal ses parçasına dön",
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Çalma listesi yönetim düğmelerini etkinleştir",
+						"title": "Çalma listesi öğelerine videoları çalma listesinden kaldırmak veya izlenmemiş olarak işaretlemek için düğmeler ekler"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "AI özetini gizle",
 						"title": "Videoların altındaki yapay zeka özetini gizler"
