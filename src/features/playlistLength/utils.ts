@@ -14,20 +14,16 @@ import {
 	timeStringToSeconds,
 	waitForAllElements
 } from "@/src/utils/utilities";
-
+const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
+const CINEMATIC_HEADER_SELECTOR =
+	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
 export const getHeaderSelectors = (): { playlist: string; watch: string } => ({
 	playlist: (() => {
-		const noPaddingHeader = document.querySelector(
-			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding"
-		);
-		const cinematicHeader = document.querySelector(
-			"yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary"
-		);
-		if (noPaddingHeader && noPaddingHeader.clientWidth > 0)
-			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
-		if (cinematicHeader && cinematicHeader.clientWidth > 0)
-			return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--cinematic-container-overflow-boundary div.page-header-view-model-wiz__page-header-content";
-		return "yt-page-header-renderer yt-page-header-view-model.page-header-view-model-wiz.page-header-view-model-wiz--no-padding div.page-header-view-model-wiz__page-header-content";
+		const noPaddingHeader = document.querySelector(NO_PADDING_HEADER_SELECTOR);
+		const cinematicHeader = document.querySelector(CINEMATIC_HEADER_SELECTOR);
+		if (noPaddingHeader && noPaddingHeader.clientWidth > 0) return NO_PADDING_HEADER_SELECTOR;
+		if (cinematicHeader && cinematicHeader.clientWidth > 0) return `${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`;
+		return NO_PADDING_HEADER_SELECTOR;
 	})(),
 	watch:
 		isNewYouTubeVideoLayout() ?
