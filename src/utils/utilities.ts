@@ -741,20 +741,22 @@ export function waitForAllElements(selectors: Selector[], timeout = 15000, inter
 		const start = Date.now();
 
 		const check = () => {
-			const found = selectors.map((sel) => document.querySelector(sel));
-			const allPresent = found.every(Boolean);
+			requestAnimationFrame(() => {
+				const found = selectors.map((sel) => document.querySelector(sel));
+				const allPresent = found.every(Boolean);
 
-			if (allPresent) {
-				resolve(found as Element[]);
-				return;
-			}
+				if (allPresent) {
+					resolve(found as Element[]);
+					return;
+				}
 
-			if (Date.now() - start >= timeout) {
-				reject(new Error(`Timeout: Not all elements appeared (${selectors.join(", ")})`));
-				return;
-			}
+				if (Date.now() - start >= timeout) {
+					reject(new Error(`Timeout: Not all elements appeared (${selectors.join(", ")})`));
+					return;
+				}
 
-			setTimeout(check, interval);
+				setTimeout(check, interval);
+			});
 		};
 
 		check();
