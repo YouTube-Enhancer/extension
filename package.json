@@ -23,7 +23,7 @@
     "@rollup/rollup-linux-x64-gnu": "^4.14.3"
   },
   "dependencies": {
-    "@formkit/auto-animate": "^0.8.1",
+    "@formkit/auto-animate": "^0.9.0",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-query": "^5.18.0",
     "dotenv": "^17.2.1",
