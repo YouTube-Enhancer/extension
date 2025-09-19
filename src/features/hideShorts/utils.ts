@@ -10,21 +10,21 @@ const shortsIconD =
 export const searchResultsShortsGridShelfSelector = `grid-shelf-view-model:has([d='${shortsIconD}'])`;
 export const shortsVideoRendererSelector = "ytd-video-renderer:has([overlay-style=SHORTS])";
 
-export function hideShorts() {
+export async function hideShorts() {
 	// Hide the shorts tab on the channel page
-	hideShortsTabOnChannelPage();
+	await hideShortsTabOnChannelPage();
 	// Hide the shorts tab on the search results page
-	hideShortsTabOnSearchResultsPage();
+	await hideShortsTabOnSearchResultsPage();
 	// Hide the shorts grid shelves on the search results page
-	hideShortsGridShelves();
+	await hideShortsGridShelves();
 	// Hide the shorts section on the homepage
-	hideShortsSectionOnHomePage();
+	await hideShortsSectionOnHomePage();
 	// Hide the shorts section on the channel home page
-	hideShortsSectionOnChannelHomePage();
+	await hideShortsSectionOnChannelHomePage();
 	//  Hide the shorts sidebar items
-	hideSideBarShortsButton();
+	await hideSideBarShortsButton();
 	// Hide the shorts video renderers
-	hideShortsVideoRenderers();
+	await hideShortsVideoRenderers();
 }
 
 export function observeShortsElements() {
@@ -33,7 +33,7 @@ export function observeShortsElements() {
 		subtree: true
 	};
 
-	const observer = new MutationObserver((mutations) => {
+	const observer = new MutationObserver(async (mutations) => {
 		// Check if any mutation contains one of the specified selectors
 		const containsShortsSelector = mutations.some((mutation) => {
 			return (
@@ -51,7 +51,7 @@ export function observeShortsElements() {
 
 		// Only call hideShorts if one of the mutations contains one of the selectors
 		if (containsShortsSelector) {
-			hideShorts();
+			await hideShorts();
 		}
 	});
 
@@ -61,76 +61,76 @@ export function observeShortsElements() {
 	return observer;
 }
 
-export function showShorts() {
+export async function showShorts() {
 	// Show the shorts sidebar items
-	showSideBarShortsButton();
+	await showSideBarShortsButton();
 	// Show the shorts section on the homepage
-	showShortsSectionOnHomePage();
+	await showShortsSectionOnHomePage();
 	// Show the shorts section on the channel home page
-	showShortsSectionOnChannelHomePage();
+	await showShortsSectionOnChannelHomePage();
 	// Show the shorts tab on the channel page
-	showShortsTabOnChannelPage();
+	await showShortsTabOnChannelPage();
 	// Show the shorts tab on the search results page
-	showShortsTabOnSearchResultsPage();
+	await showShortsTabOnSearchResultsPage();
 	// Show the shorts grid shelves on the search results page
-	showShortsGridShelves();
+	await showShortsGridShelves();
 	// Show the shorts video renderers
-	showShortsVideoRenderers();
+	await showShortsVideoRenderers();
 }
 
 function hideElement(element: HTMLElement) {
 	element.classList.add("yte-hide-shorts");
 }
 
-function hideShortsGridShelves() {
-	toggleElementVisibility(searchResultsShortsGridShelfSelector, hideElement);
+async function hideShortsGridShelves() {
+	await toggleElementVisibility(searchResultsShortsGridShelfSelector, hideElement);
 }
-function hideShortsSectionOnChannelHomePage() {
-	toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
+async function hideShortsSectionOnChannelHomePage() {
+	await toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
 }
-function hideShortsSectionOnHomePage() {
-	toggleElementVisibility(homePageShortsSectionSelector, hideElement);
+async function hideShortsSectionOnHomePage() {
+	await toggleElementVisibility(homePageShortsSectionSelector, hideElement);
 }
-function hideShortsTabOnChannelPage() {
-	toggleElementVisibility(channelPageShortsTabSelector, hideElement);
+async function hideShortsTabOnChannelPage() {
+	await toggleElementVisibility(channelPageShortsTabSelector, hideElement);
 }
-function hideShortsTabOnSearchResultsPage() {
-	toggleElementVisibility(searchResultsShortsTabSelector, hideElement);
-}
-
-function hideShortsVideoRenderers() {
-	toggleElementVisibility(shortsVideoRendererSelector, hideElement);
+async function hideShortsTabOnSearchResultsPage() {
+	await toggleElementVisibility(searchResultsShortsTabSelector, hideElement);
 }
 
-function hideSideBarShortsButton() {
-	toggleElementVisibility(sideBarOpenedShortsButtonSelector, hideElement);
-	toggleElementVisibility(sideBarClosedShortsButtonSelector, hideElement);
+async function hideShortsVideoRenderers() {
+	await toggleElementVisibility(shortsVideoRendererSelector, hideElement);
+}
+
+async function hideSideBarShortsButton() {
+	await toggleElementVisibility(sideBarOpenedShortsButtonSelector, hideElement);
+	await toggleElementVisibility(sideBarClosedShortsButtonSelector, hideElement);
 }
 
 function showElement(element: HTMLElement) {
 	element.classList.remove("yte-hide-shorts");
 }
 
-function showShortsGridShelves() {
-	toggleElementVisibility(searchResultsShortsGridShelfSelector, showElement);
+async function showShortsGridShelves() {
+	await toggleElementVisibility(searchResultsShortsGridShelfSelector, showElement);
 }
 
-function showShortsSectionOnChannelHomePage() {
-	toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
+async function showShortsSectionOnChannelHomePage() {
+	await toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
 }
-function showShortsSectionOnHomePage() {
-	toggleElementVisibility(homePageShortsSectionSelector, showElement);
+async function showShortsSectionOnHomePage() {
+	await toggleElementVisibility(homePageShortsSectionSelector, showElement);
 }
-function showShortsTabOnChannelPage() {
-	toggleElementVisibility(channelPageShortsTabSelector, showElement);
+async function showShortsTabOnChannelPage() {
+	await toggleElementVisibility(channelPageShortsTabSelector, showElement);
 }
-function showShortsTabOnSearchResultsPage() {
-	toggleElementVisibility(searchResultsShortsTabSelector, showElement);
+async function showShortsTabOnSearchResultsPage() {
+	await toggleElementVisibility(searchResultsShortsTabSelector, showElement);
 }
-function showShortsVideoRenderers() {
-	toggleElementVisibility(shortsVideoRendererSelector, showElement);
+async function showShortsVideoRenderers() {
+	await toggleElementVisibility(shortsVideoRendererSelector, showElement);
 }
-function showSideBarShortsButton() {
-	toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
-	toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
+async function showSideBarShortsButton() {
+	await toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
+	await toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
 }
