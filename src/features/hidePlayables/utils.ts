@@ -1,21 +1,21 @@
 import { toggleElementVisibility } from "@/src/utils/utilities";
 
 const playablesSelector = "ytd-rich-section-renderer:has(a[href='/playables'])";
-export function hidePlayables() {
-	toggleElementVisibility(playablesSelector, hideElement);
+export async function hidePlayables() {
+	await toggleElementVisibility(playablesSelector, hideElement);
 }
 export function observePlayables() {
-	const observer = new MutationObserver((mutations) => {
+	const observer = new MutationObserver(async (mutations) => {
 		const containsPlayables = mutations.some((mutation) => mutation.target instanceof Element && mutation.target.matches(playablesSelector));
 		if (containsPlayables) {
-			hidePlayables();
+			await hidePlayables();
 		}
 	});
 	observer.observe(document.body, { childList: true, subtree: true });
 	return observer;
 }
-export function showPlayables() {
-	toggleElementVisibility(playablesSelector, showElement);
+export async function showPlayables() {
+	await toggleElementVisibility(playablesSelector, showElement);
 }
 function hideElement(element: HTMLElement) {
 	element.classList.add("yte-hide-playables");

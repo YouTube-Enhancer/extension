@@ -721,7 +721,8 @@ export function timeStringToSeconds(timeString: string): number {
 	}
 	return seconds;
 }
-export function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
+export async function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
+	await waitForAllElements([selector], 5000);
 	const elements = document.querySelectorAll<HTMLDivElement>(selector);
 	if (elements.length === 0) return;
 	elements.forEach((element) => action(element));

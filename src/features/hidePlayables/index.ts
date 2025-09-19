@@ -4,8 +4,8 @@ import { hidePlayables, observePlayables, showPlayables } from "@/src/features/h
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 let playablesObserver: Nullable<MutationObserver> = null;
-export function disableHidePlayables() {
-	showPlayables();
+export async function disableHidePlayables() {
+	await showPlayables();
 	// Disconnect the observer
 	if (playablesObserver) {
 		playablesObserver.disconnect();
@@ -20,7 +20,7 @@ export async function enableHidePlayables() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHidePlayables) return;
-	hidePlayables();
+	await hidePlayables();
 	if (playablesObserver) playablesObserver.disconnect();
 	playablesObserver = observePlayables();
 }

@@ -539,7 +539,7 @@ const initialize = function () {
 						if (hideArtificialIntelligenceSummaryEnabled) {
 							await enableHideArtificialIntelligenceSummary();
 						} else {
-							disableHideArtificialIntelligenceSummary();
+							await disableHideArtificialIntelligenceSummary();
 						}
 						break;
 					}
@@ -623,7 +623,7 @@ const initialize = function () {
 						if (hidePlayablesEnabled) {
 							await enableHidePlayables();
 						} else {
-							disableHidePlayables();
+							await disableHidePlayables();
 						}
 						break;
 					}
@@ -661,7 +661,7 @@ const initialize = function () {
 						if (hideShortsEnabled) {
 							await enableHideShorts();
 						} else {
-							disableHideShorts();
+							await disableHideShorts();
 						}
 						break;
 					}

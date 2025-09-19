@@ -8,8 +8,8 @@ import {
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 let playablesObserver: Nullable<MutationObserver> = null;
-export function disableHideArtificialIntelligenceSummary() {
-	showArtificialIntelligenceSummary();
+export async function disableHideArtificialIntelligenceSummary() {
+	await showArtificialIntelligenceSummary();
 	// Disconnect the observer
 	if (playablesObserver) {
 		playablesObserver.disconnect();
@@ -24,7 +24,7 @@ export async function enableHideArtificialIntelligenceSummary() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideArtificialIntelligenceSummary) return;
-	hideArtificialIntelligenceSummary();
+	await hideArtificialIntelligenceSummary();
 	if (playablesObserver) playablesObserver.disconnect();
-	playablesObserver = observeArtificialIntelligenceSummary();
+	playablesObserver = await observeArtificialIntelligenceSummary();
 }
