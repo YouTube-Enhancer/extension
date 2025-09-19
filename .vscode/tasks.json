@@ -6,9 +6,23 @@
 			"problemMatcher": ["$eslint-stylish"],
 			"label": "eslint: lint whole folder",
 			"options": {
-				"shell": {
-					"executable": "cmd.exe",
-					"args": ["/d", "/c"]
+				"windows": {
+					"shell": {
+						"executable": "cmd.exe",
+						"args": ["/d", "/c"]
+					}
+				},
+				"linux": {
+					"shell": {
+						"executable": "/bin/bash",
+						"args": ["-c"]
+					}
+				},
+				"osx": {
+					"shell": {
+						"executable": "/bin/bash",
+						"args": ["-c"]
+					}
 				}
 			}
 		}
