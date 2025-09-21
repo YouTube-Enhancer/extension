@@ -10,7 +10,6 @@ import type {
 	ContentSendOnlyMessageMappings,
 	ContentToBackgroundSendOnlyMessageMappings,
 	DeepPartial,
-	ElementVisibilityAction,
 	ExtensionSendOnlyMessageMappings,
 	FeatureToMultiButtonMap,
 	MessageMappings,
@@ -714,12 +713,6 @@ export function timeStringToSeconds(timeString: string): number {
 		seconds += parseInt(parts[i], 10) * Math.pow(60, i);
 	}
 	return seconds;
-}
-export async function toggleElementVisibility(selector: string, action: ElementVisibilityAction) {
-	await waitForAllElements([selector], 5000);
-	const elements = document.querySelectorAll<HTMLDivElement>(selector);
-	if (elements.length === 0) return;
-	elements.forEach((element) => action(element));
 }
 /**
  * Wait for all elements to appear in the document.

@@ -1,3 +1,4 @@
+import "./index.css";
 import { hideShorts, observeShortsElements, showShorts } from "@/src/features/hideShorts/utils";
 import { type Nullable } from "@/src/types";
 import { waitForSpecificMessage } from "@/src/utils/utilities";

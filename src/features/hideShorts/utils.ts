@@ -1,4 +1,4 @@
-import { toggleElementVisibility } from "@/src/utils/utilities";
+import { modifyElementsClassList } from "@/src/utils/utilities";
 export const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
 export const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
 export const homePageShortsSectionSelector = "ytd-rich-shelf-renderer[is-shorts]";
@@ -77,60 +77,98 @@ export async function showShorts() {
 	// Show the shorts video renderers
 	await showShortsVideoRenderers();
 }
-
-function hideElement(element: HTMLElement) {
-	element.classList.add("yte-hide-shorts");
-}
-
 async function hideShortsGridShelves() {
-	await toggleElementVisibility(searchResultsShortsGridShelfSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(searchResultsShortsGridShelfSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function hideShortsSectionOnChannelHomePage() {
-	await toggleElementVisibility(channelHomePageShortsSectionSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(channelHomePageShortsSectionSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function hideShortsSectionOnHomePage() {
-	await toggleElementVisibility(homePageShortsSectionSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(homePageShortsSectionSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function hideShortsTabOnChannelPage() {
-	await toggleElementVisibility(channelPageShortsTabSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(channelPageShortsTabSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function hideShortsTabOnSearchResultsPage() {
-	await toggleElementVisibility(searchResultsShortsTabSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(searchResultsShortsTabSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 
 async function hideShortsVideoRenderers() {
-	await toggleElementVisibility(shortsVideoRendererSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(shortsVideoRendererSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 
 async function hideSideBarShortsButton() {
-	await toggleElementVisibility(sideBarOpenedShortsButtonSelector, hideElement);
-	await toggleElementVisibility(sideBarClosedShortsButtonSelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(sideBarOpenedShortsButtonSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(sideBarClosedShortsButtonSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
-
-function showElement(element: HTMLElement) {
-	element.classList.remove("yte-hide-shorts");
-}
-
 async function showShortsGridShelves() {
-	await toggleElementVisibility(searchResultsShortsGridShelfSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(searchResultsShortsGridShelfSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 
 async function showShortsSectionOnChannelHomePage() {
-	await toggleElementVisibility(channelHomePageShortsSectionSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(channelHomePageShortsSectionSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function showShortsSectionOnHomePage() {
-	await toggleElementVisibility(homePageShortsSectionSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(homePageShortsSectionSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function showShortsTabOnChannelPage() {
-	await toggleElementVisibility(channelPageShortsTabSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(channelPageShortsTabSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function showShortsTabOnSearchResultsPage() {
-	await toggleElementVisibility(searchResultsShortsTabSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(searchResultsShortsTabSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function showShortsVideoRenderers() {
-	await toggleElementVisibility(shortsVideoRendererSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(shortsVideoRendererSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
 async function showSideBarShortsButton() {
-	await toggleElementVisibility(sideBarOpenedShortsButtonSelector, showElement);
-	await toggleElementVisibility(sideBarClosedShortsButtonSelector, showElement);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(sideBarOpenedShortsButtonSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(sideBarClosedShortsButtonSelector)).map((element) => ({ className: "yte-hide-shorts", element }))
+	);
 }
