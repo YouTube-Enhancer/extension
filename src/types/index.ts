@@ -362,7 +362,6 @@ export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
 		type: Type;
 	}
 >;
-export type ElementVisibilityAction = (element: HTMLElement) => void;
 export type ExtensionSendOnlyMessageMappings = {
 	automaticallyDisableAmbientModeChange: DataResponseMessage<
 		"automaticallyDisableAmbientModeChange",

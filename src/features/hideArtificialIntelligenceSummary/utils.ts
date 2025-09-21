@@ -1,9 +1,12 @@
-import { toggleElementVisibility } from "@/src/utils/utilities";
+import { modifyElementsClassList } from "@/src/utils/utilities";
 
 const artificialIntelligenceSummarySelector = "#expandable-metadata [has-video-summary]";
 
 export async function hideArtificialIntelligenceSummary() {
-	await toggleElementVisibility(artificialIntelligenceSummarySelector, hideElement);
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(artificialIntelligenceSummarySelector)).map((element) => ({ className: "yte-hide-playables", element }))
+	);
 }
 export async function observeArtificialIntelligenceSummary() {
 	const observer = new MutationObserver(async (mutations) => {
@@ -18,11 +21,8 @@ export async function observeArtificialIntelligenceSummary() {
 	return observer;
 }
 export async function showArtificialIntelligenceSummary() {
-	await toggleElementVisibility(artificialIntelligenceSummarySelector, showElement);
-}
-function hideElement(element: HTMLElement) {
-	element.classList.add("yte-hide-playables");
-}
-function showElement(element: HTMLElement) {
-	element.classList.remove("yte-hide-playables");
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(artificialIntelligenceSummarySelector)).map((element) => ({ className: "yte-hide-playables", element }))
+	);
 }

@@ -1,3 +1,4 @@
+import "./index.css";
 import type { Nullable } from "@/src/types";
 
 import { hidePlayables, observePlayables, showPlayables } from "@/src/features/hidePlayables/utils";
