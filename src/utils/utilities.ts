@@ -594,7 +594,6 @@ export function removeTooltip(id: `yte-feature-${FeatureName}-tooltip`) {
 }
 /**
  * Sends a message from the content
- *
  * @param type - The type of the message to send.
  * @param action - The action of the message
  * @param data - The message data.
@@ -621,7 +620,6 @@ export function sendContentMessage<T extends keyof MessageMappings, D>(
 }
 /**
  * Sends a content send-only message.
- *
  * @param type - The type of the message to send.
  * @param data - The message data.
  */
@@ -633,10 +631,9 @@ export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMap
 		type
 	};
 	const element = document.getElementById("yte-message-from-youtube");
-	if (element) {
-		element.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
-	}
+	if (!element) return;
+	element.textContent = JSON.stringify(message);
+	document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
 }
 /**
  * Sends a content message to the background.
@@ -665,7 +662,6 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 }
 /**
  * Sends a message from the extension
- *
  * @param type - The type of the message to send.
  * @param action - The action of the message
  * @param data - The message data.
@@ -692,7 +688,6 @@ export function sendExtensionMessage<T extends keyof MessageMappings, D>(
 }
 /**
  * Sends an extension send-only message.
- *
  * @param type - The type of the message to send.
  * @param data - The message data.
  */
@@ -707,10 +702,9 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 		type
 	};
 	const element = document.getElementById("yte-message-from-extension");
-	if (element) {
-		element.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
-	}
+	if (!element) return;
+	element.textContent = JSON.stringify(message);
+	document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
 }
 
 export function timeStringToSeconds(timeString: string): number {
@@ -763,14 +757,23 @@ export function waitForAllElements(selectors: Selector[], timeout = 15000, inter
 		check();
 	});
 }
-export async function waitForElement<T extends Element>(selector: string, timeout = 2500, step = 250): Promise<null | T> {
-	const start = performance.now();
-	while (performance.now() - start < timeout) {
-		const el = document.querySelector<T>(selector);
-		if (el) return el;
-		await delay(step);
-	}
-	return null;
+export function waitForElement<T extends Element>(selector: string, timeout = 2500): Promise<null | T> {
+	return new Promise((resolve) => {
+		const start = performance.now();
+		function check() {
+			const el = document.querySelector<T>(selector);
+			if (el) {
+				resolve(el);
+				return;
+			}
+			if (performance.now() - start >= timeout) {
+				resolve(null);
+				return;
+			}
+			requestAnimationFrame(check);
+		}
+		check();
+	});
 }
 /**
  * Waits for a specific message of the given type, action, source, and data.
@@ -778,7 +781,7 @@ export async function waitForElement<T extends Element>(selector: string, timeou
  * @param type - The type of the message to wait for.
  * @param action - The action of the message.
  * @param source - The source of the message.
- * @param data - The message data.
+ * @param data - Optional message data.
  */
 export function waitForSpecificMessage<T extends keyof MessageMappings, S extends MessageSource, D>(
 	type: T,
@@ -786,26 +789,25 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 	source: S,
 	data?: D
 ): Promise<MessageMappings[T]["response"]> {
-	const message = {
-		action,
-		data,
-		source,
-		type
-	};
+	const requestMessage = { action, data, source, type };
 	return new Promise<MessageMappings[T]["response"]>((resolve) => {
-		document.addEventListener("yte-message-from-extension", () => {
+		const listener = () => {
 			const provider = document.getElementById("yte-message-from-extension");
-			if (!provider) return;
-			if (!provider.textContent) return;
-			const message = JSON.parse(provider.textContent) as Messages["response"];
-			if (message && message?.type === type) {
-				resolve(message);
+			if (!provider?.textContent) return;
+			try {
+				const response = JSON.parse(provider.textContent) as Messages["response"];
+				if (response?.type === type) {
+					document.removeEventListener("yte-message-from-extension", listener);
+					resolve(response);
+				}
+			} catch {
+				// Ignore invalid JSON
 			}
-		});
+		};
+		document.addEventListener("yte-message-from-extension", listener);
 		const provider = document.getElementById("yte-message-from-youtube");
 		if (!provider) return;
-		provider.textContent = JSON.stringify(message);
-
+		provider.textContent = JSON.stringify(requestMessage);
 		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
 	});
 }
