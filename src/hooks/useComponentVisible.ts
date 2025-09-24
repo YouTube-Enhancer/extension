@@ -1,7 +1,9 @@
 import { type RefObject, useCallback, useEffect, useState } from "react";
 
+import type { Nullable } from "@/src/types";
+
 export default function useComponentVisible<ElementType extends HTMLElementTagNameMap[keyof HTMLElementTagNameMap]>(
-	ref: RefObject<ElementType>,
+	ref: RefObject<Nullable<ElementType>>,
 	initialIsVisible: boolean
 ) {
 	const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);

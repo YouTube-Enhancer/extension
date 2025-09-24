@@ -74,7 +74,7 @@
 					"increaseLimit": "Det går inte att höja mer ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Total längd kanske inte är korrekt om vissa videor är dolda eller om du inte har laddat tillräckligt med videor för att få hela längden."
 				},
 				"screenshotButton": {
 					"button": {
@@ -123,6 +123,22 @@
 			"allDataDeleted": "All data har tagits bort.",
 			"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -264,13 +280,25 @@
 						"label": "Automatiskt teaterläge",
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Inaktivera biobelysning automatiskt",
+						"title": "Inaktiverar automatiskt biobelysning när du startar en video"
+					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Inaktivera textning automatiskt",
+						"title": "Inaktiverar textning automatiskt när du laddar en video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
 						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
 						"label": "Dölj slutskärmskort",
@@ -285,12 +313,16 @@
 						"title": "Döljer direktströmschatten"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
+						"label": "Dölj officiella artistvideor",
+						"title": "Dölj officiella artistvideor från startsidan"
 					},
 					"hidePaidPromotionBanner": {
 						"label": "Dölj betald marknadsföringsbanner",
 						"title": "Döljer bannern som visas när du tittar på en video som har betald marknadsföring"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
@@ -324,6 +356,10 @@
 						"label": "Pausa spelare i bakgrunden",
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
+					"playlistRemover": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -335,6 +371,10 @@
 					"removeRedirect": {
 						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",
@@ -422,24 +462,24 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Visa information om spellistans längd",
+					"title": "Visar spellistans totala längd och hur mycket som har tittats på och hur mycket som återstår."
 				},
-				"title": "Playlist length settings",
+				"title": "Inställningar för spellistans längd",
 				"wayToGetLength": {
 					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+						"label": "Metod för att få spellistans längd",
+						"title": "Sättet att få information om spellista längd (API-metoden kommer att falla tillbaka till HTML om ett fel inträffar)"
 					}
 				},
 				"wayToGetWatchTime": {
 					"select": {
-						"label": "Method to get watched time",
+						"label": "Metod för att hämta tittad tid",
 						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
+							"duration": "Videolängd",
+							"youtube": "Tittad videolängd"
 						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
 			},
@@ -548,12 +588,12 @@
 				"title": "Inställningar för volymökning"
 			},
 			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
+				"getApiKeyLinkText": "Du kan hämta en härifrån",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API-nyckel",
+					"title": "Ange din Youtube Data API V3-nyckel."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3-nyckel"
 			},
 			"youtubeDeepDark": {
 				"author": "Skapare",

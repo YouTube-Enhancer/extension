@@ -5,33 +5,6 @@ import eventManager from "@/src/utils/EventManager";
 let wasInTheatreMode = false;
 let setToTheatreMode = false;
 
-// TODO: get played progress bar to be accurate when maximized from default view
-// TODO: Add event listener that updates scrubber position when maximize button is clicked
-export function updateProgressBarPositions() {
-	const seekBar = document.querySelector<HTMLDivElement>("div.ytp-progress-bar");
-	const scrubber = document.querySelector<HTMLDivElement>("div.ytp-scrubber-container");
-	const hoverProgress = document.querySelector<HTMLDivElement>("div.ytp-hover-progress");
-	if (!seekBar) return;
-	if (!scrubber) return;
-	if (!hoverProgress) return;
-	const elapsedTime = parseInt(seekBar?.ariaValueNow ?? "0") ?? 0;
-	const duration = parseInt(seekBar?.ariaValueMax ?? "0") ?? 0;
-	const seekBarWidth = seekBar?.clientWidth ?? 0;
-
-	const scrubberPosition = parseFloat(Math.min((elapsedTime / duration) * seekBarWidth, seekBarWidth).toFixed(3));
-	// TODO: get this working when video is playing
-	scrubber.style.transform = `translateX(${scrubberPosition}px)`;
-	// TODO: get all progress bar lists updated when video is playing
-	hoverProgress.style.left = `${scrubberPosition}px`;
-}
-export function setupVideoPlayerTimeUpdate() {
-	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
-	if (!videoElement) return;
-	const videoPlayerTimeUpdateListener = () => {
-		updateProgressBarPositions();
-	};
-	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "maximizePlayerButton");
-}
 export function maximizePlayer() {
 	// Get the video element
 	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
@@ -55,12 +28,12 @@ export function maximizePlayer() {
 		pathD: "m 28,11 0,14 -20,0 0,-14 z m -18,2 16,0 0,10 -16,0 0,-10 z",
 		title: "Theater mode (t)"
 	};
-	const defaultModeVariables = {
-		ariaLabel: "Default view keyboard shortcut t",
-		dataTitleNoTooltip: "Default view",
-		pathD: "m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z",
-		title: "Default view (t)"
-	};
+	// const defaultModeVariables = {
+	// 	ariaLabel: "Default view keyboard shortcut t",
+	// 	dataTitleNoTooltip: "Default view",
+	// 	pathD: "m 26,13 0,10 -16,0 0,-10 z m -14,2 12,0 0,6 -12,0 0,-6 z",
+	// 	title: "Default view (t)"
+	// };
 	const {
 		childNodes: [, svgPath]
 	} = svgElement;
@@ -120,4 +93,31 @@ export function maximizePlayer() {
 		controlsElement.classList.add("maximized_controls");
 		featureMenu.style.bottom = "-14px";
 	}
+}
+export function setupVideoPlayerTimeUpdate() {
+	const videoElement = document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
+	if (!videoElement) return;
+	const videoPlayerTimeUpdateListener = () => {
+		updateProgressBarPositions();
+	};
+	eventManager.addEventListener(videoElement, "timeupdate", videoPlayerTimeUpdateListener, "maximizePlayerButton");
+}
+// TODO: get played progress bar to be accurate when maximized from default view
+// TODO: Add event listener that updates scrubber position when maximize button is clicked
+export function updateProgressBarPositions() {
+	const seekBar = document.querySelector<HTMLDivElement>("div.ytp-progress-bar");
+	const scrubber = document.querySelector<HTMLDivElement>("div.ytp-scrubber-container");
+	const hoverProgress = document.querySelector<HTMLDivElement>("div.ytp-hover-progress");
+	if (!seekBar) return;
+	if (!scrubber) return;
+	if (!hoverProgress) return;
+	const elapsedTime = parseInt(seekBar?.ariaValueNow ?? "0") ?? 0;
+	const duration = parseInt(seekBar?.ariaValueMax ?? "0") ?? 0;
+	const seekBarWidth = seekBar?.clientWidth ?? 0;
+
+	const scrubberPosition = parseFloat(Math.min((elapsedTime / duration) * seekBarWidth, seekBarWidth).toFixed(3));
+	// TODO: get this working when video is playing
+	scrubber.style.transform = `translateX(${scrubberPosition}px)`;
+	// TODO: get all progress bar lists updated when video is playing
+	hoverProgress.style.left = `${scrubberPosition}px`;
 }

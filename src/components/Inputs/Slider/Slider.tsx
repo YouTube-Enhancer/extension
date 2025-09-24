@@ -1,6 +1,9 @@
 import React, { type ChangeEvent, useState } from "react";
 
+import { cn } from "@/src/utils/utilities";
+
 export type SliderProps = {
+	disabled: boolean;
 	initialValue?: number;
 	max: number;
 	min: number;
@@ -8,7 +11,7 @@ export type SliderProps = {
 	step: number;
 };
 
-const Slider: React.FC<SliderProps> = ({ initialValue, max, min, onChange, step }) => {
+const Slider: React.FC<SliderProps> = ({ disabled, initialValue, max, min, onChange, step }) => {
 	const [value, setValue] = useState(initialValue ?? 1);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,11 +19,11 @@ const Slider: React.FC<SliderProps> = ({ initialValue, max, min, onChange, step 
 		setValue(newValue);
 		onChange(event);
 	};
-
+	const disabledSliderClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
 	return (
 		<div className="flex items-center">
 			<input
-				className="slider-thumb h-3 w-full appearance-none rounded bg-gray-300 outline-none"
+				className={cn("slider-thumb h-3 w-full appearance-none rounded bg-gray-300 outline-none", disabledSliderClasses)}
 				max={max}
 				min={min}
 				onChange={handleChange}

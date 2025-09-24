@@ -1,9 +1,31 @@
+import type { Nullable } from "@/src/types";
+
 import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
-let intervalId: NodeJS.Timeout | null = null;
-let input: HTMLInputElement | null;
-function cleanUrl(url: string): string {
-	return url.replace(regexp, "");
+let intervalId: Nullable<NodeJS.Timeout> = null;
+let input: Nullable<HTMLInputElement>;
+let inputObserver: Nullable<MutationObserver> = null;
+export function disableShareShortener() {
+	browserColorLog(`Disabling share shortener`, "FgMagenta");
+	if (inputObserver) {
+		inputObserver.disconnect();
+		inputObserver = null;
+	}
+	if (intervalId) {
+		clearInterval(intervalId);
+		intervalId = null;
+	}
+}
+
+export async function enableShareShortener() {
+	const {
+		data: {
+			options: { enable_share_shortener }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	if (!enable_share_shortener) return;
+	cleanSearchPage(window.location.href);
+	observeShareURLInput();
 }
 
 function cleanAndUpdateUrl() {
@@ -34,30 +56,19 @@ function cleanSearchPage(url: string) {
 	});
 }
 
-function handleInput(event: MouseEvent) {
-	const element = event.target as Element;
-	if (!element.classList.contains("yt-spec-touch-feedback-shape__fill")) {
-		return;
-	}
-	cleanAndUpdateUrl();
+function cleanUrl(url: string): string {
+	return url.replace(regexp, "");
 }
 
-export async function enableShareShortener() {
-	const {
-		data: {
-			options: { enable_share_shortener }
+function observeShareURLInput() {
+	const observer = new MutationObserver(() => {
+		const shareInput = document.querySelector<HTMLInputElement>("#share-url");
+		if (shareInput && shareInput.value.match(regexp)) {
+			shareInput.value = cleanUrl(shareInput.value);
+			observer.disconnect();
+			cleanAndUpdateUrl();
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_share_shortener) return;
-	cleanSearchPage(window.location.href);
-	document.addEventListener("click", handleInput);
-}
+	});
 
-export function disableShareShortener() {
-	browserColorLog(`Disabling share shortener`, "FgMagenta");
-	document.removeEventListener("click", handleInput);
-	if (intervalId) {
-		clearInterval(intervalId);
-		intervalId = null;
-	}
+	observer.observe(document.body, { childList: true, subtree: true });
 }

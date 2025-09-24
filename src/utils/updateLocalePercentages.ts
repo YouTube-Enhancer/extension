@@ -52,16 +52,6 @@ const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProg
 	})
 });
 
-function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
-	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
-	if (match) {
-		const [, oldObjectPart] = match;
-		const newObjectPart = JSON.stringify(updatedObject, null, 2);
-		return code.replace(oldObjectPart, newObjectPart);
-	} else {
-		return null;
-	}
-}
 export default async function updateLocalePercentages() {
 	const localePercentages = await getLocalePercentagesFromCrowdin();
 	if (!localePercentages) return;
@@ -97,9 +87,19 @@ async function getLocalePercentagesFromCrowdin() {
 			return localePercentages;
 		} else if (!crowdinLanguageProgressResponseParsed.success) {
 			const { error } = crowdinLanguageProgressResponseParsed;
-			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.errors)}`);
+			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`);
 		}
 	} catch (error) {
 		throw new Error(formatError(error));
+	}
+}
+function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
+	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
+	if (match) {
+		const [, oldObjectPart] = match;
+		const newObjectPart = JSON.stringify(updatedObject, null, 2);
+		return code.replace(oldObjectPart, newObjectPart);
+	} else {
+		return null;
 	}
 }

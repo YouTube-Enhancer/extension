@@ -3,6 +3,9 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { isNewYouTubeVideoLayout, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
+export function disableOpenYouTubeSettingsOnHover() {
+	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
+}
 export async function enableOpenYouTubeSettingsOnHover() {
 	// Wait for the "options" message from the content script
 	const {
@@ -47,7 +50,4 @@ export async function enableOpenYouTubeSettingsOnHover() {
 	eventManager.addEventListener(settingsButton, "mouseleave", settingsButtonMouseLeaveListener, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(settingsMenu, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(playerContainer, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
-}
-export function disableOpenYouTubeSettingsOnHover() {
-	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
 }

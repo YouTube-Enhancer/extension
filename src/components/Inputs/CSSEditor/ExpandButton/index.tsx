@@ -1,6 +1,7 @@
+import { forwardRef } from "react";
+
 import { useSettings } from "@/src/components/Settings/Settings";
 import { cn } from "@/src/utils/utilities";
-import { forwardRef } from "react";
 type ExpandButtonProps = {
 	isExpanded: boolean;
 	onToggle: () => void;

@@ -1,9 +1,10 @@
+import { type ChangeEvent, useRef } from "react";
+import { MdOutlineSearch } from "react-icons/md";
+
 import type { i18nInstanceType } from "@/src/i18n";
 
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
-import { type ChangeEvent, useRef } from "react";
-import { MdOutlineSearch } from "react-icons/md";
 
 export default function SettingSearch({ i18nInstance }: { i18nInstance: i18nInstanceType }) {
 	const { filter, setFilter } = useSettingsFilter();

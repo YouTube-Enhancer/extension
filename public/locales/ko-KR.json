@@ -123,6 +123,22 @@
 			"allDataDeleted": "모든 데이터가 삭제되었습니다.",
 			"confirmAlert": "모든 데이터가 삭제됩니다. 진행할까요?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+			}
+		},
+		"scrollForMoreSettings": "Scroll for more settings",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -264,6 +280,10 @@
 						"label": "자동 극장 모드",
 						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatically disable ambient mode",
+						"title": "Automatically disables ambient mode when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
 						"title": "Automatically disables closed captions when you load a video"
@@ -271,6 +291,14 @@
 					"copyTimestampUrlButton": {
 						"label": "현재 시간 주소 복사 버튼",
 						"title": "현재 시간 주소 복사 (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
 						"label": "최종 화면 숨기기",
@@ -291,6 +319,10 @@
 					"hidePaidPromotionBanner": {
 						"label": "유료 광고 배너 숨기기",
 						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
 					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
@@ -324,6 +356,10 @@
 						"label": "백그라운드 플레이어 일시 중지",
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
+					"playlistRemover": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"remainingTime": {
 						"label": "남은 시간 표시",
 						"title": "현재 동영상의 남은 시간을 표시합니다."
@@ -335,6 +371,10 @@
 					"removeRedirect": {
 						"label": "유튜브 / 리디렉션 URL 제거",
 						"title": "리디렉션 경고 대화를 건너뛰고 실제 URL로 유튜브 리디렉션을 대체합니다."
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "유튜브 동영상 공유 링크 짧게하기",

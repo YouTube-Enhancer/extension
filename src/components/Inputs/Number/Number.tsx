@@ -1,9 +1,10 @@
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
+import React, { useId, useRef } from "react";
+
 import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/utilities";
-import React, { useRef } from "react";
 
 import { useSettings } from "../../Settings/Settings";
 import Arrow from "./Arrow";
@@ -11,7 +12,6 @@ import "./Number.css";
 export type NumberInputProps = {
 	className?: string;
 	disabled: boolean;
-	id?: string;
 	label: string;
 	max?: number;
 	min?: number;
@@ -20,9 +20,10 @@ export type NumberInputProps = {
 	value: number;
 };
 
-const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, label, max = undefined, min = 0, onChange, step = 1, value }) => {
+const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, max = undefined, min = 0, onChange, step = 1, value }) => {
 	const inputElement = useRef<Nullable<HTMLInputElement>>(null);
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
+	const id = useId();
 	const { direction } = useSettings();
 	const NumberPlus = () => {
 		if (inputElement.current) {
@@ -48,11 +49,10 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 	};
 
 	const disabledButtonClasses = {
+		"!text-[#4b5563]": disabled,
+		"cursor-not-allowed": disabled,
 		"cursor-pointer": !disabled,
-		"dark:hover:bg-transparent": disabled,
-		"dark:text-[#4b5563]": disabled,
-		"hover:bg-transparent": disabled,
-		"text-[#4b5563]": disabled
+		"dark:!text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	const buttonClasses =
 		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
@@ -66,7 +66,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, id, labe
 					aria-hidden={true}
 					className={cn(
 						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
-						{ "dark:text-[#4b5563]": disabled, "text-[#4b5563]": disabled }
+						disabledButtonClasses
 					)}
 					disabled={disabled}
 					id={id}
