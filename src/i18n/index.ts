@@ -7,7 +7,9 @@ export type i18nInstanceType = ReturnType<typeof createInstance>;
 
 export async function i18nService(locale: AvailableLocales = "en-US") {
 	let extensionURL;
-	const hostname = window.location.hostname;
+	const {
+		location: { hostname }
+	} = window;
 	const isYouTube = hostname === "youtube.com" || hostname.endsWith(".youtube.com");
 	if (isYouTube) {
 		const extensionURLResponse = await waitForSpecificMessage("extensionURL", "request_data", "content");

@@ -197,27 +197,6 @@ const enableFeatures = async () => {
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
-		await Promise.all([
-			promptUserToResumeVideo(() => void setupVideoHistory()),
-			setupPlaybackSpeedChangeListener(),
-			enableShortsAutoScroll(),
-			enableOpenYouTubeSettingsOnHover(),
-			enableHideLiveStreamChat(),
-			enableRememberVolume(),
-			enableAutomaticTheaterMode(),
-			enableRemainingTime(),
-			setPlayerQuality(),
-			setPlayerSpeed(),
-			adjustVolumeOnScrollWheel(),
-			adjustSpeedOnScrollWheel(),
-			enableHideTranslateComment(),
-			enableHideEndScreenCards(),
-			enablePlaylistLength(),
-			enableAutomaticallyDisableClosedCaptions(),
-			enableAutomaticallyDisableAmbientMode(),
-			enableDefaultToOriginalAudioTrack(),
-			enableRestoreFullscreenScrolling()
-		]);
 		// Enable feature menu before calling button functions
 		await enableFeatureMenu();
 		for (const multiButtonFeatureName of featureToMultiButtonsMap.keys()) {
@@ -265,6 +244,27 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await Promise.all([
+			promptUserToResumeVideo(() => void setupVideoHistory()),
+			setupPlaybackSpeedChangeListener(),
+			enableShortsAutoScroll(),
+			enableOpenYouTubeSettingsOnHover(),
+			enableHideLiveStreamChat(),
+			enableRememberVolume(),
+			enableAutomaticTheaterMode(),
+			enableRemainingTime(),
+			setPlayerQuality(),
+			setPlayerSpeed(),
+			adjustVolumeOnScrollWheel(),
+			adjustSpeedOnScrollWheel(),
+			enableHideTranslateComment(),
+			enableHideEndScreenCards(),
+			enablePlaylistLength(),
+			enableAutomaticallyDisableClosedCaptions(),
+			enableAutomaticallyDisableAmbientMode(),
+			enableDefaultToOriginalAudioTrack(),
+			enableRestoreFullscreenScrolling()
+		]);
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -940,7 +940,7 @@ const initialize = function () {
 						if (restoreFullscreenScrollingEnabled) {
 							await enableRestoreFullscreenScrolling();
 						} else {
-							disableRestoreFullscreenScrolling();
+							await disableRestoreFullscreenScrolling();
 						}
 						break;
 					}
