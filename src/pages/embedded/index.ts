@@ -940,7 +940,7 @@ const initialize = function () {
 						if (restoreFullscreenScrollingEnabled) {
 							await enableRestoreFullscreenScrolling();
 						} else {
-							disableRestoreFullscreenScrolling();
+							await disableRestoreFullscreenScrolling();
 						}
 						break;
 					}
