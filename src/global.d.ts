@@ -75,6 +75,29 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 		unloadModule(moduleName: string): void;
 	}
 }
+declare module "node_modules/@types/webextension-polyfill/namespaces/manifest.d.ts" {
+	type CollectionPermission =
+		| "authenticationInfo"
+		| "bookmarksInfo"
+		| "browsingActivity"
+		| "financialAndPaymentInfo"
+		| "healthInfo"
+		| "locationInfo"
+		| "none"
+		| "personalCommunications"
+		| "personallyIdentifyingInfo"
+		| "searchTerms"
+		| "websiteActivity"
+		| "websiteContent";
+	export namespace Manifest {
+		interface FirefoxSpecificProperties {
+			data_collection_permissions: {
+				optional?: CollectionPermission[];
+				required: CollectionPermission[];
+			};
+		}
+	}
+}
 declare global {
 	interface ObjectConstructor {
 		entries<T>(o: { [K in keyof T]: T[K] }): [keyof T, T[keyof T]][];
