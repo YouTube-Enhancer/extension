@@ -296,6 +296,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "재생목록 관리 버튼",
+						"title": "재생목록 항목에 버튼을 추가하여 재생목록에서 동영상을 제거하거나 시청하지 않음으로 표시할 수 있습니다"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"

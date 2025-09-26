@@ -296,6 +296,10 @@
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Aktivera spellisthanteringsknappar",
+						"title": "Lägger till knappar i objekt i spellistan för att ta bort videor från spellistan eller markera dem som osedda"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Dölj AI-sammanfattning",
 						"title": "Döljer sammanfattningen av artificiell intelligens under videorna"
