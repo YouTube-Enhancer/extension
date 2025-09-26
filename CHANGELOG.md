@@ -1,3 +1,22 @@
+## [1.28.1](https://github.com/YouTube-Enhancer/extension/compare/v1.28.0...v1.28.1) (2025-09-25)
+
+
+### Bug Fixes
+
+* **restore fullscreen scrolling:** youtube changed how they stopped scrolling ([d7e8281](https://github.com/YouTube-Enhancer/extension/commit/d7e8281db5e92d62edba87962f419d169f207080))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.28.1-Chrome.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Chromium.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Edge.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Firefox.zip | b5f17e32bde3ba97940c7b1e969af1edba6e78203f414dd56456706d2c96d034 |
+
 # [1.28.0](https://github.com/YouTube-Enhancer/extension/compare/v1.27.0...v1.28.0) (2025-09-24)
 
 
