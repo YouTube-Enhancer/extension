@@ -135,7 +135,8 @@
 			"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 			"specificOption": {
 				"deepDarkCustomTheme": "Defina o tema para 'Personalizado' para configurar esta opção.",
-				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção."
+				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Role para mais opções",
