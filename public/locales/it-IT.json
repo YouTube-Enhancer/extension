@@ -361,8 +361,8 @@
 						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
 					},
 					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
+						"label": "Nascondi liste riproduzioni dalla pagina iniziale",
+						"title": "Elimina le liste riproduzioni dalla pagina iniziale"
 					},
 					"remainingTime": {
 						"label": "Tempo rimanente",
@@ -377,8 +377,8 @@
 						"title": "Rimpiazza il reindirizzamento di YouTube con gli URL attuali saltando il dialogo di avviso di reindirizzamento"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "Ripristina scorrimento a schermo intero",
+						"title": "Ripristina lo scorrimento nella modalità schermo intero"
 					},
 					"shareShortener": {
 						"label": "Abbrevia il collegamento di condivisione video di YouTube",

@@ -1,9 +1,10 @@
+import "./index.css";
 import { hideShorts, observeShortsElements, showShorts } from "@/src/features/hideShorts/utils";
 import { type Nullable } from "@/src/types";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 let shortsObserver: Nullable<MutationObserver> = null;
-export function disableHideShorts() {
-	showShorts();
+export async function disableHideShorts() {
+	await showShorts();
 	// Disconnect the observer
 	if (shortsObserver) {
 		shortsObserver.disconnect();
@@ -20,7 +21,7 @@ export async function enableHideShorts() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the hide shorts option is disabled, return
 	if (!enable_hide_shorts) return;
-	hideShorts();
+	await hideShorts();
 	// Observe changes to the short sections and hides them
 	shortsObserver = observeShortsElements();
 }

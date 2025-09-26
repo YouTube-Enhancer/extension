@@ -9,9 +9,12 @@ import eslintPluginReact from "eslint-plugin-react";
 import eslintPluginReactHooks from "eslint-plugin-react-hooks";
 import eslintPluginTailwindCSS from "eslint-plugin-tailwindcss";
 import globals from "globals";
+import { dirname } from "path";
 // eslint-disable-next-line import/no-unresolved
 import typescriptEslint from "typescript-eslint";
-
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 export default [
 	{
 		ignores: ["**/watch.js", "dist/**/*", "releases/**/*"]
@@ -39,7 +42,7 @@ export default [
 					jsx: true
 				},
 				project: "./tsconfig.json",
-				tsconfigRootDir: "."
+				tsconfigRootDir: __dirname
 			},
 			sourceType: "module"
 		},

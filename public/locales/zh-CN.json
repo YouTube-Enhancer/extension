@@ -361,8 +361,8 @@
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
 					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
+						"label": "从主页隐藏播放列表",
+						"title": "从主页去除播放列表"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
@@ -377,8 +377,8 @@
 						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "恢复全屏滚动",
+						"title": "在全屏模式下恢复滚动"
 					},
 					"shareShortener": {
 						"label": "缩短YouTube视频分享链接",
