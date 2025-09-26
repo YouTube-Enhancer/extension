@@ -472,6 +472,10 @@ export default function Settings() {
 		type: "singular",
 		value: "settings.sections.screenshotButton.enable.label"
 	} satisfies parentSetting;
+	const screenshotButtonSaveAsClipboardParentSetting = {
+		type: "specificOption",
+		value: "settings.optionDisabled.specificOption.screenshotButtonFileFormat"
+	} satisfies parentSetting;
 	const playlistLengthParentSetting = {
 		type: "singular",
 		value: "settings.sections.playlistLength.enable.label"
@@ -1122,7 +1126,11 @@ export default function Settings() {
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
 						options={ScreenshotFormatOptions}
-						parentSetting={screenshotButtonParentSetting}
+						parentSetting={
+							settings.enable_screenshot_button?.toString() === "true" && settings.screenshot_save_as?.toString() === "clipboard" ?
+								screenshotButtonSaveAsClipboardParentSetting
+							:	screenshotButtonParentSetting
+						}
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
