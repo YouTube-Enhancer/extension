@@ -136,7 +136,7 @@
 			"specificOption": {
 				"deepDarkCustomTheme": "将主题设置为“自定义”以配置此选项。",
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”以配置此选项"
 			}
 		},
 		"scrollForMoreSettings": "滚动以查看更多设置",
