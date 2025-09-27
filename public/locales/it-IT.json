@@ -136,7 +136,7 @@
 			"specificOption": {
 				"deepDarkCustomTheme": "Imposta il tema a 'Personalizzato' per configurare questa opzione.",
 				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata come 'File' per configurare questa opzione"
 			}
 		},
 		"scrollForMoreSettings": "Scorri per altre impostazioni",
