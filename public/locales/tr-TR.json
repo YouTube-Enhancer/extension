@@ -136,7 +136,7 @@
 			"specificOption": {
 				"deepDarkCustomTheme": "Bu seçeneği yapılandırmak için temayı 'Özel' olarak ayarlayın.",
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Bu seçeneği yapılandırmak için ekran görüntüsü kaydetme türünü 'File' olarak ayarlayın"
 			}
 		},
 		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -358,8 +358,8 @@
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
 					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
+						"label": "Ana sayfadaki oynatma listelerini gizle",
+						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
@@ -374,8 +374,8 @@
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "Tam ekran kaydırmayı geri yükle",
+						"title": "Tam ekran modunda kaydırmayı geri yükler"
 					},
 					"shareShortener": {
 						"label": "YouTube video paylaşım bağlantısını kısalt",
