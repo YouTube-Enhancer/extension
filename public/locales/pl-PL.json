@@ -223,10 +223,10 @@
 					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Custom CSS",
+					"label": "Własny CSS",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Własne ustawienia CSS"
 			},
 			"featureMenu": {
 				"openType": {
@@ -270,10 +270,10 @@
 			},
 			"language": {
 				"select": {
-					"label": "Language",
+					"label": "Język",
 					"title": "The language to use for the extension"
 				},
-				"title": "Language"
+				"title": "Język"
 			},
 			"miscellaneous": {
 				"features": {
@@ -394,16 +394,16 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Kolor",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Niebieski",
+						"green": "Zielony",
+						"orange": "Pomarańczowy",
+						"pink": "Różowy",
+						"purple": "Fioletowy",
+						"red": "Czerwony",
+						"white": "Biały",
+						"yellow": "Żółty"
 					},
 					"title": "Select the color for the On-Screen Display"
 				},
@@ -591,14 +591,14 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
+					"label": "Klucz API",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Klucz YouTube API V3"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Autor",
+				"co-authors": "Współautorzy",
 				"colors": {
 					"colorShadow": {
 						"label": "Shadow color",
