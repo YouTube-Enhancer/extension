@@ -19,7 +19,8 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	});
 }
 
-const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-panel-video-renderer, ytd-playlist-video-renderer";
+const PLAYLIST_ITEM_SELECTOR =
+	"ytd-playlist-video-list-renderer ytd-playlist-panel-video-renderer, ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
 
 let playlistObserver: MutationObserver | null = null;
 
