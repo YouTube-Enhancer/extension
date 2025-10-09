@@ -17,11 +17,15 @@ import {
 const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
+const IMMERSIVE_HEADER_SELECTOR =
+	"ytd-playlist-header-renderer .immersive-header-container .immersive-header-content .thumbnail-and-metadata-wrapper";
 export const getHeaderSelectors = () =>
 	({
 		playlist: (() => {
 			const noPaddingHeader = document.querySelector(NO_PADDING_HEADER_SELECTOR);
 			const cinematicHeader = document.querySelector(CINEMATIC_HEADER_SELECTOR);
+			const immersiveHeader = document.querySelector(IMMERSIVE_HEADER_SELECTOR);
+			if (immersiveHeader && immersiveHeader.clientWidth > 0) return IMMERSIVE_HEADER_SELECTOR;
 			if (noPaddingHeader && noPaddingHeader.clientWidth > 0) return NO_PADDING_HEADER_SELECTOR;
 			if (cinematicHeader && cinematicHeader.clientWidth > 0) return `${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`;
 			return NO_PADDING_HEADER_SELECTOR;

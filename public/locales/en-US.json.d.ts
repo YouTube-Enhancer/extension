@@ -206,10 +206,6 @@ interface EnUS {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
 					};
-					enablePlaylistManagementButtons: {
-						label: "Enable playlist management buttons";
-						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
-					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
 						title: "Hides the artificial intelligence summary below videos";
