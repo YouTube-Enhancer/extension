@@ -134,7 +134,6 @@
 			},
 			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
-				"deepDarkCustomTheme": "Bu seçeneği yapılandırmak için temayı 'Özel' olarak ayarlayın.",
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın."
 			}
 		},

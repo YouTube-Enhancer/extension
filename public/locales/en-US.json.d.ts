@@ -76,8 +76,8 @@ interface EnUS {
 			plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };
 			singular: "Enable '{{OPTION}}' to configure this option";
 			specificOption: {
-				deepDarkCustomTheme: "Set theme to 'Custom' to configure this option.";
 				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
+				screenshotButtonFileFormat: "Set screenshot save type to 'File' to configure this option";
 			};
 		};
 		scrollForMoreSettings: "Scroll for more settings";

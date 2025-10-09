@@ -437,17 +437,10 @@ export default function Settings() {
 		settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true";
 	const isDeepDarkThemeDisabled = settings.enable_deep_dark_theme?.toString() !== "true";
 	const isDeepDarkThemeCustom = settings.deep_dark_preset === "Custom";
-	const isDeepDarkThemeColorPickerDisabled = isDeepDarkThemeDisabled || (!isDeepDarkThemeDisabled && !isDeepDarkThemeCustom);
-	const deepDarkThemeColorPickerParentSetting = (
-		(isDeepDarkThemeDisabled && !isDeepDarkThemeCustom) || (isDeepDarkThemeDisabled && isDeepDarkThemeCustom) ?
-			{
-				type: "singular",
-				value: "settings.sections.youtubeDeepDark.enable.label"
-			}
-		:	{
-				type: "specificOption",
-				value: "settings.optionDisabled.specificOption.deepDarkCustomTheme"
-			}) satisfies parentSetting;
+	const deepDarkThemeColorPickerParentSetting = {
+		type: "singular",
+		value: "settings.sections.youtubeDeepDark.enable.label"
+	} satisfies parentSetting;
 	const osdParentSetting = {
 		type: "either",
 		value: ["settings.sections.scrollWheelVolumeControl.enable.label", "settings.sections.scrollWheelSpeedControl.enable.label"]
@@ -471,6 +464,10 @@ export default function Settings() {
 	const screenshotButtonParentSetting = {
 		type: "singular",
 		value: "settings.sections.screenshotButton.enable.label"
+	} satisfies parentSetting;
+	const screenshotButtonSaveAsClipboardParentSetting = {
+		type: "specificOption",
+		value: "settings.optionDisabled.specificOption.screenshotButtonFileFormat"
 	} satisfies parentSetting;
 	const playlistLengthParentSetting = {
 		type: "singular",
@@ -1130,7 +1127,11 @@ export default function Settings() {
 						label={t("settings.sections.screenshotButton.selectFormat.label")}
 						onChange={setValueOption("screenshot_format")}
 						options={ScreenshotFormatOptions}
-						parentSetting={screenshotButtonParentSetting}
+						parentSetting={
+							settings.enable_screenshot_button?.toString() === "true" && settings.screenshot_save_as?.toString() === "clipboard" ?
+								screenshotButtonSaveAsClipboardParentSetting
+							:	screenshotButtonParentSetting
+						}
 						selectedOption={getSelectedOption("screenshot_format")}
 						title={t("settings.sections.screenshotButton.selectFormat.title")}
 						type="select"
@@ -1244,69 +1245,73 @@ export default function Settings() {
 						title={t("settings.sections.youtubeDeepDark.select.title")}
 						type="select"
 					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainColor}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainBackground}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.secondBackground}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.hoverBackground}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainText}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.dimmerText}
-					/>
-					<Setting
-						disabled={isDeepDarkThemeColorPickerDisabled}
-						label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
-						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
-						parentSetting={deepDarkThemeColorPickerParentSetting}
-						title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
-						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.colorShadow}
-					/>
+					{isDeepDarkThemeCustom && (
+						<>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.mainColor.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.mainColor.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.mainColor}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.mainBackground.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.mainBackground.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.mainBackground}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.secondBackground.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.secondBackground.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.secondBackground}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.hoverBackground.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.hoverBackground.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.hoverBackground}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.mainText.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.mainText.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.mainText}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.dimmerText.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.dimmerText.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.dimmerText}
+							/>
+							<Setting
+								disabled={isDeepDarkThemeDisabled}
+								label={t("settings.sections.youtubeDeepDark.colors.colorShadow.label")}
+								onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
+								parentSetting={deepDarkThemeColorPickerParentSetting}
+								title={t("settings.sections.youtubeDeepDark.colors.colorShadow.title")}
+								type="color-picker"
+								value={settings.deep_dark_custom_theme_colors.colorShadow}
+							/>
+						</>
+					)}
 				</SettingSection>
 				<SettingSection title={t("settings.sections.customCSS.title")}>
 					<SettingTitle />
