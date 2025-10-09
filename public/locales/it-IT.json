@@ -134,7 +134,6 @@
 			},
 			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
-				"deepDarkCustomTheme": "Imposta il tema a 'Personalizzato' per configurare questa opzione.",
 				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
 				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata come 'File' per configurare questa opzione"
 			}
