@@ -134,7 +134,6 @@
 			},
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
-				"deepDarkCustomTheme": "Sätt tema till 'Anpassad' för att konfigurera detta alternativ.",
 				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
 				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
 			}
