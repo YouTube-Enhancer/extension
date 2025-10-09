@@ -55,7 +55,7 @@ export async function enablePlaylistManagementButtons() {
 	function addButtonToPlaylistItems() {
 		const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 		playlistItems.forEach((item) => {
-			if (!item.querySelector("#index-container") || item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
+			if (item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
 				return;
 			}
 
