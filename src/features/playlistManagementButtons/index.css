@@ -1,0 +1,16 @@
+.yte-remove-button,
+.yte-reset-button {
+	background: none;
+	border-radius: 50%;
+	border: none;
+	cursor: pointer;
+	margin-right: 18px;
+	padding: 12px;
+	vertical-align: top;
+}
+
+.yte-remove-button:hover,
+.yte-reset-button:hover {
+  background: black;
+  transition: background 0.2s;
+}

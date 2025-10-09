@@ -134,7 +134,6 @@
 			},
 			"singular": "启用 '{{OPTION}}' 以配置此选项",
 			"specificOption": {
-				"deepDarkCustomTheme": "将主题设置为“自定义”以配置此选项。",
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。"
 			}
 		},
@@ -295,6 +294,10 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "默认设置为原始音轨",
 						"title": "总是默认原始音轨"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "启用播放列表管理按钮",
+						"title": "为播放列表项添加按钮，用于从播放列表中删除视频或将其标记为未观看"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "隐藏 AI 摘要",

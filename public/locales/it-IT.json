@@ -134,7 +134,6 @@
 			},
 			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
-				"deepDarkCustomTheme": "Imposta il tema a 'Personalizzato' per configurare questa opzione.",
 				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione."
 			}
 		},
@@ -295,6 +294,10 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Abilita pulsanti gestione playlist",
+						"title": "Aggiunge pulsanti agli elementi della playlist per rimuovere video dalla playlist o contrassegnarli come non visti"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",

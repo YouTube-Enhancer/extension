@@ -76,7 +76,6 @@ interface EnUS {
 			plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };
 			singular: "Enable '{{OPTION}}' to configure this option";
 			specificOption: {
-				deepDarkCustomTheme: "Set theme to 'Custom' to configure this option.";
 				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
 				screenshotButtonFileFormat: "Set screenshot save type to 'File' to configure this option";
 			};
@@ -206,6 +205,10 @@ interface EnUS {
 					defaultToOriginalAudioTrack: {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
+					};
+					enablePlaylistManagementButtons: {
+						label: "Enable playlist management buttons";
+						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
 					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
