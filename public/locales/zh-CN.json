@@ -134,7 +134,6 @@
 			},
 			"singular": "启用 '{{OPTION}}' 以配置此选项",
 			"specificOption": {
-				"deepDarkCustomTheme": "将主题设置为“自定义”以配置此选项。",
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
 				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”以配置此选项"
 			}
