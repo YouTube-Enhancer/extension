@@ -102,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "滾輪播放速度輔助按鍵不能跟音量增強輔助按鍵相同。",
@@ -287,6 +288,10 @@
 					"automaticallyDisableClosedCaptions": {
 						"label": "自動停用字幕",
 						"title": "載入影片時自動停用字幕"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "複製目前播放時間的影片網址按鈕",
