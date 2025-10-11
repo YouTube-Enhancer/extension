@@ -52,6 +52,7 @@ interface EnUS {
 		options: {
 			notifications: {
 				error: {
+					optionConflict: "This option cannot be enabled while '{{OPTION}}' is enabled.";
 					scrollWheelHoldModifierKey: {
 						sameKey: {
 							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.";
@@ -193,6 +194,10 @@ interface EnUS {
 					automaticallyDisableClosedCaptions: {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";
+					};
+					automaticallyEnableClosedCaptions: {
+						label: "Automatically enable closed captions";
+						title: "Automatically enables closed captions when you load a video";
 					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
