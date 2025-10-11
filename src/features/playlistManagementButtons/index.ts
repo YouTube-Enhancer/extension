@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa6";
 import { Innertube } from "youtubei.js/web";
 
 import "./index.css";
-import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip, isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
 
@@ -75,6 +75,13 @@ export async function enablePlaylistManagementButtons() {
 					item.remove();
 				} catch (err) {
 					console.error("Failed to remove video:", err);
+					const { listener } = createTooltip({
+						element: removeButton,
+						featureName: "playlistManagementButtons",
+						id: "yte-feature-playlistManagementButtons-tooltip",
+						text: `Failed to remove video: ${err instanceof Error ? err.message : String(err)}`
+					});
+					listener();
 				}
 			};
 
@@ -89,6 +96,13 @@ export async function enablePlaylistManagementButtons() {
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
 				} catch (err) {
 					console.error("Failed to reset video:", err);
+					const { listener } = createTooltip({
+						element: resetButton,
+						featureName: "playlistManagementButtons",
+						id: "yte-feature-playlistManagementButtons-tooltip",
+						text: `Failed to reset video: ${err instanceof Error ? err.message : String(err)}`
+					});
+					listener();
 				}
 			};
 
