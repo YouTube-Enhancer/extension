@@ -102,7 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Questa opzione non può essere abilitata mentre '{{OPTION}}' è abilitato.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Il tasto per modificare la velocità della rotellina del mouse non può essere lo stesso che modifica il volume con la rotellina del mouse.",
@@ -290,8 +290,8 @@
 						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Abilita automaticamente le didascalie chiuse",
+						"title": "Abilita automaticamente le didascalie chiuse quando si carica un video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
