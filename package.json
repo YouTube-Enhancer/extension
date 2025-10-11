@@ -37,7 +37,8 @@
     "safe-units": "^2.0.1",
     "tailwindcss-multi": "^0.4.0",
     "vite-plugin-css-injected-by-js": "^3.3.0",
-    "webextension-polyfill": "^0.12.0"
+    "webextension-polyfill": "^0.12.0",
+    "youtubei.js": "^15.0.1"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.0",
