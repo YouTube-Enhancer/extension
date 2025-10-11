@@ -43,7 +43,7 @@ export async function enablePlaylistManagementButtons() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_playlist_management_buttons || !isPlaylistPage()) {
+	if (!enable_playlist_management_buttons || !isPlaylistPage() || getPlaylistId() === "LL") {
 		return;
 	}
 
