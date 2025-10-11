@@ -740,10 +740,26 @@ export default function Settings() {
 					/>
 					<Setting
 						checked={settings.enable_automatically_disable_closed_captions?.toString() === "true"}
+						disabled={settings.enable_automatically_enable_closed_captions?.toString() === "true"}
+						disabledReason={t("pages.options.notifications.error.optionConflict", {
+							OPTION: t("settings.sections.miscellaneous.features.automaticallyEnableClosedCaptions.label")
+						})}
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_closed_captions")}
 						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_automatically_enable_closed_captions?.toString() === "true"}
+						disabled={settings.enable_automatically_disable_closed_captions?.toString() === "true"}
+						disabledReason={t("pages.options.notifications.error.optionConflict", {
+							OPTION: t("settings.sections.miscellaneous.features.automaticallyDisableClosedCaptions.label")
+						})}
+						label={t("settings.sections.miscellaneous.features.automaticallyEnableClosedCaptions.label")}
+						onChange={setCheckboxOption("enable_automatically_enable_closed_captions")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyEnableClosedCaptions.title")}
 						type="checkbox"
 					/>
 					<Setting
