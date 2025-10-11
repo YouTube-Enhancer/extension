@@ -102,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Клавіша для керування швидкістю прокрутки компʼютерною мишею не може бути тією ж, що й клавіша для регулювання гучності.",
@@ -287,6 +288,10 @@
 					"automaticallyDisableClosedCaptions": {
 						"label": "Automatically disable closed captions",
 						"title": "Automatically disables closed captions when you load a video"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Copy video URL with timestamp button",
