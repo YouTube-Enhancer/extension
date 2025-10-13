@@ -303,7 +303,7 @@
 					},
 					"enablePlaylistManagementButtons": {
 						"label": "प्लेलिस्ट प्रबंधन बटन सक्षम करें",
-						"title": "प्लेलिस्ट आइटम में ऐसे बटन जोड़ता है जिनसे वीडियो को प्लेलिस्ट से हटाया जा सके या उन्हें 'न देखा हुआ' के रूप में चिह्नित किया जा सके"
+						"title": "प्लेलिस्ट आइटम में ऐसे बटन जोड़ता है जिनसे वीडियो को प्लेलिस्ट से हटाया जा सके या उन्हें 'न देखा हुआ' के रूप में चिह्नित किया जा सके"x
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
@@ -491,6 +491,14 @@
 						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "वीडियो हटाएं",
+				"removingVideo": "वीडियो हटाया जा रहा है…",
+				"failedToRemoveVideo": "वीडियो हटाने में विफल",
+				"markAsUnwatched": "अनदेखा के रूप में चिह्नित करें",
+				"markingAsUnwatched": "अनदेखा के रूप में चिह्नित किया जा रहा है…",
+				"failedToMarkAsUnwatched": "अनदेखा के रूप में चिह्नित करने में विफल"
 			},
 			"screenshotButton": {
 				"enable": {

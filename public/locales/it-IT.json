@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Rimuovi video",
+				"removingVideo": "Rimozione del video in corso…",
+				"failedToRemoveVideo": "Impossibile rimuovere il video",
+				"markAsUnwatched": "Segna come non visto",
+				"markingAsUnwatched": "Contrassegno come non visto in corso…",
+				"failedToMarkAsUnwatched": "Impossibile contrassegnare come non visto"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Pulsante Schermata",

@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "הסר וידאו",
+				"removingVideo": "מסיר וידאו…",
+				"failedToRemoveVideo": "נכשל בהסרת הווידאו",
+				"markAsUnwatched": "סמן כלא נצפה",
+				"markingAsUnwatched": "מסמן כלא נצפה…",
+				"failedToMarkAsUnwatched": "נכשל בסימון כלא נצפה"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

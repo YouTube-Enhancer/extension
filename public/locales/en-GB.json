@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"failedToMarkAsUnwatched": "Failed to mark as unwatched"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

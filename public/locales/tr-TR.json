@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Videoyu kaldır",
+				"removingVideo": "Video kaldırılıyor…",
+				"failedToRemoveVideo": "Video kaldırılamadı",
+				"markAsUnwatched": "İzlenmedi olarak işaretle",
+				"markingAsUnwatched": "İzlenmedi olarak işaretleniyor…",
+				"failedToMarkAsUnwatched": "İzlenmedi olarak işaretlenemedi"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Ekran görüntüsü tuşunu etkinleştir",

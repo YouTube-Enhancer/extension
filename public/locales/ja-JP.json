@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "動画を削除する",
+				"removingVideo": "動画を削除中…",
+				"failedToRemoveVideo": "動画を削除できませんでした",
+				"markAsUnwatched": "未視聴としてマークする",
+				"markingAsUnwatched": "未視聴としてマーク中…",
+				"failedToMarkAsUnwatched": "未視聴としてマークできませんでした"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "スクリーンショットボタン",

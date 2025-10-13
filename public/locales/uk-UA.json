@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Видалити відео",
+				"removingVideo": "Видалення відео…",
+				"failedToRemoveVideo": "Не вдалося видалити відео",
+				"markAsUnwatched": "Позначити як не переглянуте",
+				"markingAsUnwatched": "Позначення як не переглянуте…",
+				"failedToMarkAsUnwatched": "Не вдалося позначити як не переглянуте"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

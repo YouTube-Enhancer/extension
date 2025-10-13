@@ -21,6 +21,7 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 
 const PLAYLIST_ITEM_SELECTOR =
 	"ytd-playlist-video-list-renderer ytd-playlist-panel-video-renderer, ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
+const TRANSLATION_KEY_PREFIX = "settings.sections.playlistManagementButtons";
 
 let playlistObserver: MutationObserver | null = null;
 
@@ -67,11 +68,11 @@ export async function enablePlaylistManagementButtons() {
 			const removeButton = document.createElement("button");
 			removeButton.innerHTML = renderToString(React.createElement(FaTrash, { color: "red", size: 18 }));
 			removeButton.className = "yte-remove-button";
-			removeButton.title = "Remove video";
+			removeButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.removeVideo`);
 			removeButton.onclick = async () => {
 				const { innerHTML: originalHTML, title: originalTitle } = removeButton;
 				removeButton.disabled = true;
-				removeButton.title = "Removing video...";
+				removeButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.removingVideo`);
 				removeButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
 				removeButton.classList.add("yte-spinning");
 				try {
@@ -79,12 +80,11 @@ export async function enablePlaylistManagementButtons() {
 					await youtube.playlist.removeVideos(playlistId, [setVideoId]);
 					item.remove();
 				} catch (err) {
-					console.error("Failed to remove video:", err);
 					const { listener } = createTooltip({
 						element: removeButton,
 						featureName: "playlistManagementButtons",
 						id: "yte-feature-playlistManagementButtons-tooltip",
-						text: `Failed to remove video: ${err instanceof Error ? err.message : String(err)}`
+						text: `${window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`)}: ${err instanceof Error ? err.message : String(err)}`
 					});
 					listener();
 				} finally {
@@ -98,11 +98,11 @@ export async function enablePlaylistManagementButtons() {
 			const resetButton = document.createElement("button");
 			resetButton.innerHTML = renderToString(React.createElement(FaUndoAlt, { color: "red", size: 18 }));
 			resetButton.className = "yte-reset-button";
-			resetButton.title = "Mark as unwatched";
+			resetButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.markAsUnwatched`);
 			resetButton.onclick = async () => {
 				const { innerHTML: originalHTML, title: originalTitle } = resetButton;
 				resetButton.disabled = true;
-				resetButton.title = "Marking as unwatched...";
+				resetButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`);
 				resetButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
 				resetButton.classList.add("yte-spinning");
 
@@ -111,12 +111,11 @@ export async function enablePlaylistManagementButtons() {
 					await history.removeVideo(setVideoId, 5);
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
 				} catch (err) {
-					console.error("Failed to reset video:", err);
 					const { listener } = createTooltip({
 						element: resetButton,
 						featureName: "playlistManagementButtons",
 						id: "yte-feature-playlistManagementButtons-tooltip",
-						text: `Failed to reset video: ${err instanceof Error ? err.message : String(err)}`
+						text: `${window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`)}: ${err instanceof Error ? err.message : String(err)}`
 					});
 					listener();
 				} finally {

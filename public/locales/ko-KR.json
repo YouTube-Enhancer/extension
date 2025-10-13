@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "동영상 제거",
+				"removingVideo": "동영상을 제거하는 중…",
+				"failedToRemoveVideo": "동영상을 제거하지 못했습니다",
+				"markAsUnwatched": "시청하지 않음으로 표시",
+				"markingAsUnwatched": "시청하지 않음으로 표시 중…",
+				"failedToMarkAsUnwatched": "시청하지 않음으로 표시하지 못했습니다"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "스크린샷 버튼",
