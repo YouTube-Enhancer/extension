@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "حذف ویدیو",
+				"removingVideo": "در حال حذف ویدیو…",
+				"failedToRemoveVideo": "حذف ویدیو ناموفق بود",
+				"markAsUnwatched": "علامت‌گذاری به‌عنوان دیده‌نشده",
+				"markingAsUnwatched": "در حال علامت‌گذاری به‌عنوان دیده‌نشده…",
+				"failedToMarkAsUnwatched": "علامت‌گذاری به‌عنوان دیده‌نشده ناموفق بود"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Video verwijderen",
+				"removingVideo": "Video wordt verwijderd…",
+				"failedToRemoveVideo": "Video verwijderen mislukt",
+				"markAsUnwatched": "Markeren als niet bekeken",
+				"markingAsUnwatched": "Markeren als niet bekeken…",
+				"failedToMarkAsUnwatched": "Markeren als niet bekeken mislukt"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Schermafbeelding knop",

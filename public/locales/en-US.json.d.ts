@@ -373,6 +373,14 @@ interface EnUS {
 					};
 				};
 			};
+			playlistManagementButtons: {
+				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
+				failedToRemoveVideo: "Failed to remove video";
+				markAsUnwatched: "Mark as unwatched";
+				markingAsUnwatched: "Marking as unwatched…";
+				removeVideo: "Remove video";
+				removingVideo: "Removing video…";
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";

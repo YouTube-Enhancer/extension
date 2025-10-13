@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Eliminar vídeo",
+				"removingVideo": "Eliminant vídeo…",
+				"failedToRemoveVideo": "No s'ha pogut eliminar el vídeo",
+				"markAsUnwatched": "Marca com a no vist",
+				"markingAsUnwatched": "Marcant com a no vist…",
+				"failedToMarkAsUnwatched": "No s'ha pogut marcar com a no vist"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

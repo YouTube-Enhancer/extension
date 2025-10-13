@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "移除影片",
+				"removingVideo": "正在移除影片…",
+				"failedToRemoveVideo": "移除影片失敗",
+				"markAsUnwatched": "標記為未觀看",
+				"markingAsUnwatched": "正在標記為未觀看…",
+				"failedToMarkAsUnwatched": "標記為未觀看失敗"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "螢幕截圖按鈕",

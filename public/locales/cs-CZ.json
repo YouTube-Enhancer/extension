@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Odstranit video",
+				"removingVideo": "Odstraňování videa…",
+				"failedToRemoveVideo": "Nepodařilo se odstranit video",
+				"markAsUnwatched": "Označit jako neshlédnuté",
+				"markingAsUnwatched": "Označování jako neshlédnuté…",
+				"failedToMarkAsUnwatched": "Nepodařilo se označit jako neshlédnuté"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

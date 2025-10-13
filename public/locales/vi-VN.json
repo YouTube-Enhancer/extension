@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Xóa video",
+				"removingVideo": "Đang xóa video…",
+				"failedToRemoveVideo": "Không thể xóa video",
+				"markAsUnwatched": "Đánh dấu là chưa xem",
+				"markingAsUnwatched": "Đang đánh dấu là chưa xem…",
+				"failedToMarkAsUnwatched": "Không thể đánh dấu là chưa xem"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",

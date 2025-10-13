@@ -492,6 +492,14 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Удалить видео",
+				"removingVideo": "Удаление видео…",
+				"failedToRemoveVideo": "Не удалось удалить видео",
+				"markAsUnwatched": "Отметить как непросмотренное",
+				"markingAsUnwatched": "Отмечаю как непросмотренное…",
+				"failedToMarkAsUnwatched": "Не удалось отметить как непросмотренное"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Включить кнопку «Скриншот»",
