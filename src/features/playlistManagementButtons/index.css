@@ -1,16 +1,29 @@
 .yte-remove-button,
 .yte-reset-button {
-	background: none;
-	border-radius: 50%;
-	border: none;
-	cursor: pointer;
-	margin-right: 18px;
-	padding: 12px;
-	vertical-align: top;
+  background: none;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  margin-right: 18px;
+  padding: 12px;
+  vertical-align: top;
 }
 
 .yte-remove-button:hover,
 .yte-reset-button:hover {
   background: black;
   transition: background 0.2s;
+}
+
+@keyframes yte-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.yte-spinning {
+  animation: yte-spin 2s linear infinite;
 }

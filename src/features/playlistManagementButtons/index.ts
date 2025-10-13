@@ -1,6 +1,6 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { FaUndoAlt } from "react-icons/fa";
+import { FaSpinner, FaUndoAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { Innertube } from "youtubei.js/web";
 
@@ -69,6 +69,11 @@ export async function enablePlaylistManagementButtons() {
 			removeButton.className = "yte-remove-button";
 			removeButton.title = "Remove video";
 			removeButton.onclick = async () => {
+				const { innerHTML: originalHTML, title: originalTitle } = removeButton;
+				removeButton.disabled = true;
+				removeButton.title = "Removing video...";
+				removeButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
+				removeButton.classList.add("yte-spinning");
 				try {
 					const playlistId = getPlaylistId()!;
 					await youtube.playlist.removeVideos(playlistId, [setVideoId]);
@@ -82,6 +87,11 @@ export async function enablePlaylistManagementButtons() {
 						text: `Failed to remove video: ${err instanceof Error ? err.message : String(err)}`
 					});
 					listener();
+				} finally {
+					removeButton.disabled = false;
+					removeButton.innerHTML = originalHTML;
+					removeButton.title = originalTitle;
+					removeButton.classList.remove("yte-spinning");
 				}
 			};
 
@@ -90,6 +100,12 @@ export async function enablePlaylistManagementButtons() {
 			resetButton.className = "yte-reset-button";
 			resetButton.title = "Mark as unwatched";
 			resetButton.onclick = async () => {
+				const { innerHTML: originalHTML, title: originalTitle } = resetButton;
+				resetButton.disabled = true;
+				resetButton.title = "Marking as unwatched...";
+				resetButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
+				resetButton.classList.add("yte-spinning");
+
 				try {
 					const history = await youtube.getHistory();
 					await history.removeVideo(setVideoId, 5);
@@ -103,6 +119,11 @@ export async function enablePlaylistManagementButtons() {
 						text: `Failed to reset video: ${err instanceof Error ? err.message : String(err)}`
 					});
 					listener();
+				} finally {
+					resetButton.disabled = false;
+					resetButton.innerHTML = originalHTML;
+					resetButton.title = originalTitle;
+					resetButton.classList.remove("yte-spinning");
 				}
 			};
 
