@@ -91,26 +91,9 @@ export async function enablePlaylistManagementButtons() {
 			resetButton.title = "Mark as unwatched";
 			resetButton.onclick = async () => {
 				try {
-					let pagesToLoad = 5;
-					let history = await youtube.getHistory();
-
-					while (pagesToLoad > 0) {
-						try {
-							await history.removeVideo(setVideoId);
-							item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
-							break;
-						} catch (err) {
-							if (err instanceof Error && /Failed to get feedback token/.test(err.message)) {
-								if (--pagesToLoad > 0) {
-									history = await history.getContinuation();
-								} else {
-									throw new Error(`Failed to find video in history after checking 5 pages`);
-								}
-							} else {
-								throw err;
-							}
-						}
-					}
+					const history = await youtube.getHistory();
+					await history.removeVideo(setVideoId, 5);
+					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
 				} catch (err) {
 					console.error("Failed to reset video:", err);
 					const { listener } = createTooltip({
