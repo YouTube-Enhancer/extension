@@ -246,10 +246,11 @@ export function createTooltip({
 	update: () => void;
 } {
 	function makeTooltip() {
+		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
-			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-rounded-tooltip", "ytp-bottom"],
+			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-bottom"],
 			elementId: id,
 			elementType: "div",
 			styles: {
@@ -259,7 +260,7 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${rect.top - 2}px`
+					top: `${rect.top - (isBigMode ? 20 : 6)}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -297,7 +298,13 @@ export function createTooltip({
 				tooltip.remove();
 			}
 			const tooltip = makeTooltip();
-			document.body.appendChild(tooltip);
+			const isButtonBelowPlayer = element?.parentElement?.id === "yte-button-container";
+			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
+			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
+			else {
+				if (playerContainer) playerContainer.appendChild(tooltip);
+				else document.body.appendChild(tooltip);
+			}
 		},
 		remove: () => {
 			const tooltip = document.getElementById(id);
