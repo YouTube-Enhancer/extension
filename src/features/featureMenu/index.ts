@@ -3,8 +3,6 @@ import type { FeatureMenuOpenType } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { isNewYouTubeVideoLayout } from "../../utils/utilities";
-
 // Function to enable the feature menu
 export async function enableFeatureMenu() {
 	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
@@ -16,12 +14,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ?
-			document.querySelector<HTMLDivElement>(
-				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-			)
-		:	null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
@@ -197,12 +190,7 @@ async function createFeatureMenuButton() {
 	// Get references to various elements and check their existence
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ?
-			document.querySelector<HTMLDivElement>(
-				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-			)
-		:	null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return;
 	// Insert the feature menu button and feature menu itself
 	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
@@ -221,12 +209,12 @@ function makeFeatureMenuIcon() {
 		"svg",
 		{
 			fill: "white",
-			height: "48px",
-			viewBox: "0 0 36 36",
-			width: "48px"
+			height: "24px",
+			viewBox: "0 0 24 24",
+			width: "24px"
 		},
 		createSVGElement("path", {
-			d: "M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z",
+			d: "M 3.1273593,7.5636797 H 7.5636797 V 3.1273593 H 3.1273593 Z M 9.7818397,20.872641 H 14.21816 V 16.43632 H 9.7818397 Z m -6.6544804,0 H 7.5636797 V 16.43632 H 3.1273593 Z m 0,-6.654481 H 7.5636797 V 9.7818397 H 3.1273593 Z m 6.6544804,0 H 14.21816 V 9.7818397 H 9.7818397 Z M 16.43632,3.1273593 v 4.4363204 h 4.436321 V 3.1273593 Z M 9.7818397,7.5636797 H 14.21816 V 3.1273593 H 9.7818397 Z M 16.43632,14.21816 h 4.436321 V 9.7818397 H 16.43632 Z m 0,6.654481 h 4.436321 V 16.43632 H 16.43632 Z",
 			fill: "white"
 		})
 	);
