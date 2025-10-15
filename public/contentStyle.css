@@ -1,22 +1,22 @@
 .yte-button-tooltip {
-	font-size: 13px !important;
-	font-weight: 500 !important;
-	line-height: 15px !important;
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 15px;
 	position: fixed !important;
+	-webkit-backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px)) !important;
+	backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px)) !important;
 	padding: 5px 9px;
 	transform: translate(-50%, -150%) !important;
 	pointer-events: none !important;
 	color: #eee !important;
-	border-radius: 2px !important;
-	background-color: rgba(28, 28, 28, 0.9) !important;
-	text-shadow: 0 0 2px rgb(0, 0, 0, 0.5) !important;
+	border-radius: 8px !important;
+	background-color: var(--yt-spec-overlay-background-medium-light, rgba(0, 0, 0, .3)) !important;
+	text-shadow: 0 0 2px #000 !important;
 }
 
-body.no-scroll .yte-button-tooltip {
-	font-size: 20px !important;
+.ytp-big-mode .yte-button-tooltip {
 	line-height: 22px !important;
-	padding: 8px 9px !important;
-	transform: translate(-50%, -75%) !important;
+	font: 20px !important
 }
 
 .maximized_chapter {
