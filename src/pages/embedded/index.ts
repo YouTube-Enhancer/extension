@@ -5,7 +5,6 @@ import {
 	disableAutomaticallyDisableClosedCaptions,
 	enableAutomaticallyDisableClosedCaptions
 } from "@/src/features/automaticallyDisableClosedCaptions";
-import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -59,7 +58,6 @@ import {
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
-import { disablePlaylistManagementButtons, enablePlaylistManagementButtons } from "@/src/features/playlistManagementButtons";
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
@@ -263,11 +261,9 @@ const enableFeatures = async () => {
 			enableHideEndScreenCards(),
 			enablePlaylistLength(),
 			enableAutomaticallyDisableClosedCaptions(),
-			enableAutomaticallyEnableClosedCaptions(),
 			enableAutomaticallyDisableAmbientMode(),
 			enableDefaultToOriginalAudioTrack(),
-			enableRestoreFullscreenScrolling(),
-			enablePlaylistManagementButtons()
+			enableRestoreFullscreenScrolling()
 		]);
 	} finally {
 		isEnablingFeatures = false;
@@ -349,17 +345,6 @@ const initialize = function () {
 							await enableAutomaticallyDisableClosedCaptions();
 						} else {
 							await disableAutomaticallyDisableClosedCaptions();
-						}
-						break;
-					}
-					case "automaticallyEnableClosedCaptionsChange": {
-						const {
-							data: { automaticallyEnableClosedCaptionsEnabled }
-						} = message;
-						if (automaticallyEnableClosedCaptionsEnabled) {
-							await enableAutomaticallyEnableClosedCaptions();
-						} else {
-							await disableAutomaticallyEnableClosedCaptions();
 						}
 						break;
 					}
@@ -915,17 +900,6 @@ const initialize = function () {
 					case "playlistWatchTimeGetMethodChange": {
 						disablePlaylistLength();
 						await enablePlaylistLength();
-						break;
-					}
-					case "playlistManagementButtonsChange": {
-						const {
-							data: { playlistManagementButtonsEnabled }
-						} = message;
-						if (playlistManagementButtonsEnabled) {
-							await enablePlaylistManagementButtons();
-						} else {
-							await disablePlaylistManagementButtons();
-						}
 						break;
 					}
 					case "remainingTimeChange": {

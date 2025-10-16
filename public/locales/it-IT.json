@@ -102,7 +102,6 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Il tasto per modificare la velocità della rotellina del mouse non può essere lo stesso che modifica il volume con la rotellina del mouse.",
@@ -135,8 +134,8 @@
 			},
 			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
-				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata come 'File' per configurare questa opzione"
+				"deepDarkCustomTheme": "Imposta il tema a 'Personalizzato' per configurare questa opzione.",
+				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione."
 			}
 		},
 		"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -289,10 +288,6 @@
 						"label": "Disabilita automaticamente le didascalie chiuse",
 						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
 					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
@@ -300,10 +295,6 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
-					},
-					"enablePlaylistManagementButtons": {
-						"label": "Abilita pulsanti gestione playlist",
-						"title": "Aggiunge pulsanti agli elementi della playlist per rimuovere video dalla playlist o contrassegnarli come non visti"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
@@ -491,14 +482,6 @@
 						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
-			},
-			"playlistManagementButtons": {
-				"removeVideo": "Rimuovi video",
-				"removingVideo": "Rimozione del video in corso…",
-				"failedToRemoveVideo": "Impossibile rimuovere il video",
-				"markAsUnwatched": "Segna come non visto",
-				"markingAsUnwatched": "Contrassegno come non visto in corso…",
-				"failedToMarkAsUnwatched": "Impossibile contrassegnare come non visto"
 			},
 			"screenshotButton": {
 				"enable": {

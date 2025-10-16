@@ -102,7 +102,6 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Kaydırma tekerleği hız kontrolü için kullanılan değiştirici tuş, kaydırma tekerleği ses kontrolü için kullanılan değiştirici tuşla aynı olamaz.",
@@ -135,8 +134,8 @@
 			},
 			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
-				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-				"screenshotButtonFileFormat": "Bu seçeneği yapılandırmak için ekran görüntüsü kaydetme türünü 'File' olarak ayarlayın"
+				"deepDarkCustomTheme": "Bu seçeneği yapılandırmak için temayı 'Özel' olarak ayarlayın.",
+				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın."
 			}
 		},
 		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -289,10 +288,6 @@
 						"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
 						"title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
 					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
 					"copyTimestampUrlButton": {
 						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
 						"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
@@ -300,10 +295,6 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Varsayılan olarak orijinal ses parçasına dön",
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
-					},
-					"enablePlaylistManagementButtons": {
-						"label": "Çalma listesi yönetim düğmelerini etkinleştir",
-						"title": "Çalma listesi öğelerine videoları çalma listesinden kaldırmak veya izlenmemiş olarak işaretlemek için düğmeler ekler"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "AI özetini gizle",
@@ -366,8 +357,8 @@
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
 					"playlistRemover": {
-						"label": "Ana sayfadaki oynatma listelerini gizle",
-						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
@@ -382,8 +373,8 @@
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Tam ekran kaydırmayı geri yükle",
-						"title": "Tam ekran modunda kaydırmayı geri yükler"
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
 						"label": "YouTube video paylaşım bağlantısını kısalt",
@@ -491,14 +482,6 @@
 						"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
 					}
 				}
-			},
-			"playlistManagementButtons": {
-				"removeVideo": "Videoyu kaldır",
-				"removingVideo": "Video kaldırılıyor…",
-				"failedToRemoveVideo": "Video kaldırılamadı",
-				"markAsUnwatched": "İzlenmedi olarak işaretle",
-				"markingAsUnwatched": "İzlenmedi olarak işaretleniyor…",
-				"failedToMarkAsUnwatched": "İzlenmedi olarak işaretlenemedi"
 			},
 			"screenshotButton": {
 				"enable": {

@@ -280,11 +280,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyDisableClosedCaptionsEnabled: newValue
 			});
 		},
-		enable_automatically_enable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyEnableClosedCaptionsChange", {
-				automaticallyEnableClosedCaptionsEnabled: newValue
-			});
-		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -404,11 +399,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_playlist_length: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playlistLengthChange", {
 				playlistLengthEnabled: newValue
-			});
-		},
-		enable_playlist_management_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistManagementButtonsChange", {
-				playlistManagementButtonsEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {

@@ -52,7 +52,6 @@ interface EnUS {
 		options: {
 			notifications: {
 				error: {
-					optionConflict: "This option cannot be enabled while '{{OPTION}}' is enabled.";
 					scrollWheelHoldModifierKey: {
 						sameKey: {
 							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.";
@@ -77,8 +76,8 @@ interface EnUS {
 			plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };
 			singular: "Enable '{{OPTION}}' to configure this option";
 			specificOption: {
+				deepDarkCustomTheme: "Set theme to 'Custom' to configure this option.";
 				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
-				screenshotButtonFileFormat: "Set screenshot save type to 'File' to configure this option";
 			};
 		};
 		scrollForMoreSettings: "Scroll for more settings";
@@ -195,10 +194,6 @@ interface EnUS {
 						label: "Automatically disable closed captions";
 						title: "Automatically disables closed captions when you load a video";
 					};
-					automaticallyEnableClosedCaptions: {
-						label: "Automatically enable closed captions";
-						title: "Automatically enables closed captions when you load a video";
-					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
@@ -210,10 +205,6 @@ interface EnUS {
 					defaultToOriginalAudioTrack: {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
-					};
-					enablePlaylistManagementButtons: {
-						label: "Enable playlist management buttons";
-						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
 					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
@@ -372,14 +363,6 @@ interface EnUS {
 						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
 					};
 				};
-			};
-			playlistManagementButtons: {
-				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
-				failedToRemoveVideo: "Failed to remove video";
-				markAsUnwatched: "Mark as unwatched";
-				markingAsUnwatched: "Marking as unwatched…";
-				removeVideo: "Remove video";
-				removingVideo: "Removing video…";
 			};
 			screenshotButton: {
 				enable: {

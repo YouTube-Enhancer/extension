@@ -102,7 +102,6 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "A tecla alternadora da velocidade de rolagem não pode ser a mesma que a tecla alternadora do volume.",
@@ -135,8 +134,8 @@
 			},
 			"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 			"specificOption": {
-				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"deepDarkCustomTheme": "Defina o tema para 'Personalizado' para configurar esta opção.",
+				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção."
 			}
 		},
 		"scrollForMoreSettings": "Role para mais opções",
@@ -289,10 +288,6 @@
 						"label": "Desativar legendas automaticamente",
 						"title": "Desativa as legendas ao carregar um vídeo"
 					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
 					"copyTimestampUrlButton": {
 						"label": "Copiar URL do vídeo com o botão de minutagem",
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
@@ -300,10 +295,6 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Retornar à faixa de vídeo original",
 						"title": "Sempre retornar à faixa de vídeo original"
-					},
-					"enablePlaylistManagementButtons": {
-						"label": "Ativar botões de gerenciamento de playlist",
-						"title": "Adiciona botões aos itens da playlist para remover vídeos da playlist ou marcá-los como não assistidos"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
@@ -491,14 +482,6 @@
 						"title": "A forma de obter o tempo assistido (Tipo de duração do vídeo apenas usado na página de exibição)"
 					}
 				}
-			},
-			"playlistManagementButtons": {
-				"removeVideo": "Remover vídeo",
-				"removingVideo": "Removendo vídeo…",
-				"failedToRemoveVideo": "Falha ao remover vídeo",
-				"markAsUnwatched": "Marcar como não assistido",
-				"markingAsUnwatched": "Marcando como não assistido…",
-				"failedToMarkAsUnwatched": "Falha ao marcar como não assistido"
 			},
 			"screenshotButton": {
 				"enable": {

@@ -102,7 +102,6 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Rullningshjulets modifieringstangent för hastighetsreglering kan inte vara densamma modifieringstangent som rullningshjulets volymreglering.",
@@ -135,8 +134,8 @@
 			},
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
-				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"deepDarkCustomTheme": "Sätt tema till 'Anpassad' för att konfigurera detta alternativ.",
+				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet."
 			}
 		},
 		"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -289,10 +288,6 @@
 						"label": "Inaktivera textning automatiskt",
 						"title": "Inaktiverar textning automatiskt när du laddar en video"
 					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
 						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
@@ -300,10 +295,6 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
-					},
-					"enablePlaylistManagementButtons": {
-						"label": "Aktivera spellisthanteringsknappar",
-						"title": "Lägger till knappar i objekt i spellistan för att ta bort videor från spellistan eller markera dem som osedda"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Dölj AI-sammanfattning",
@@ -491,14 +482,6 @@
 						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
-			},
-			"playlistManagementButtons": {
-				"removeVideo": "Ta bort video",
-				"removingVideo": "Tar bort video…",
-				"failedToRemoveVideo": "Kunde inte ta bort video",
-				"markAsUnwatched": "Markera som osedd",
-				"markingAsUnwatched": "Markerar som osedd…",
-				"failedToMarkAsUnwatched": "Kunde inte markera som osedd"
 			},
 			"screenshotButton": {
 				"enable": {
