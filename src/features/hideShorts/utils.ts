@@ -1,7 +1,7 @@
 import { modifyElementsClassList } from "@/src/utils/utilities";
 export const sideBarOpenedShortsButtonSelector = "ytd-guide-entry-renderer:has(a[title=Shorts])";
 export const sideBarClosedShortsButtonSelector = "ytd-mini-guide-entry-renderer:has(a[title=Shorts])";
-export const homePageShortsSectionSelector = "ytd-rich-shelf-renderer[is-shorts]";
+export const homePageShortsSectionSelector = "ytd-rich-section-renderer:has([is-shorts])";
 export const channelHomePageShortsSectionSelector = "ytd-reel-shelf-renderer:has(#title-container)";
 export const channelPageShortsTabSelector = "yt-tab-shape[tab-title=Shorts]";
 export const searchResultsShortsTabSelector = "yt-chip-cloud-chip-renderer:has(yt-formatted-string[title=Shorts])";

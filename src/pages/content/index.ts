@@ -280,6 +280,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyDisableClosedCaptionsEnabled: newValue
 			});
 		},
+		enable_automatically_enable_closed_captions: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyEnableClosedCaptionsChange", {
+				automaticallyEnableClosedCaptionsEnabled: newValue
+			});
+		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue

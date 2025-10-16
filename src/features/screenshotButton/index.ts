@@ -25,7 +25,8 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				options: { screenshot_format, screenshot_save_as }
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
-		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, "image/png"));
+		const mimeType = screenshot_save_as === "file" ? `image/${screenshot_format}` : "image/png";
+		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
 		if (!blob) return;
 		switch (screenshot_save_as) {
 			case "clipboard": {
@@ -39,11 +40,16 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 					text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
 				});
 				listener();
-				const clipboardImage = new ClipboardItem({ "image/png": blob });
-				void navigator.clipboard.write([clipboardImage]);
-				setTimeout(() => {
+				try {
+					const clipboardImage = new ClipboardItem({ [mimeType]: blob });
+					await navigator.clipboard.write([clipboardImage]);
+					setTimeout(() => {
+						remove();
+					}, 1200);
+				} catch (err) {
 					remove();
-				}, 1200);
+					console.log(err);
+				}
 				break;
 			}
 			case "file": {
