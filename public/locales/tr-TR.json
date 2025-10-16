@@ -301,6 +301,10 @@
 						"label": "Varsayılan olarak orijinal ses parçasına dön",
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Çalma listesi yönetim düğmelerini etkinleştir",
+						"title": "Çalma listesi öğelerine videoları çalma listesinden kaldırmak veya izlenmemiş olarak işaretlemek için düğmeler ekler"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "AI özetini gizle",
 						"title": "Videoların altındaki yapay zeka özetini gizler"
@@ -487,6 +491,14 @@
 						"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "Videoyu kaldır",
+				"removingVideo": "Video kaldırılıyor…",
+				"failedToRemoveVideo": "Video kaldırılamadı",
+				"markAsUnwatched": "İzlenmedi olarak işaretle",
+				"markingAsUnwatched": "İzlenmedi olarak işaretleniyor…",
+				"failedToMarkAsUnwatched": "İzlenmedi olarak işaretlenemedi"
 			},
 			"screenshotButton": {
 				"enable": {

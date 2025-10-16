@@ -301,6 +301,10 @@
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Aktivera spellisthanteringsknappar",
+						"title": "Lägger till knappar i objekt i spellistan för att ta bort videor från spellistan eller markera dem som osedda"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Dölj AI-sammanfattning",
 						"title": "Döljer sammanfattningen av artificiell intelligens under videorna"
@@ -487,6 +491,14 @@
 						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "Ta bort video",
+				"removingVideo": "Tar bort video…",
+				"failedToRemoveVideo": "Kunde inte ta bort video",
+				"markAsUnwatched": "Markera som osedd",
+				"markingAsUnwatched": "Markerar som osedd…",
+				"failedToMarkAsUnwatched": "Kunde inte markera som osedd"
 			},
 			"screenshotButton": {
 				"enable": {

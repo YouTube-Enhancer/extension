@@ -301,6 +301,10 @@
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Abilita pulsanti gestione playlist",
+						"title": "Aggiunge pulsanti agli elementi della playlist per rimuovere video dalla playlist o contrassegnarli come non visti"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
 						"title": "Nasconde il riepilogo dell'intelligenza artificiale sotto i video"
@@ -487,6 +491,14 @@
 						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "Rimuovi video",
+				"removingVideo": "Rimozione del video in corso…",
+				"failedToRemoveVideo": "Impossibile rimuovere il video",
+				"markAsUnwatched": "Segna come non visto",
+				"markingAsUnwatched": "Contrassegno come non visto in corso…",
+				"failedToMarkAsUnwatched": "Impossibile contrassegnare come non visto"
 			},
 			"screenshotButton": {
 				"enable": {
