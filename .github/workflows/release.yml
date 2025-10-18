@@ -1,21 +1,39 @@
 name: Release
-"on":
+
+on:
   push:
     branches:
       - main
+
+concurrency:
+  group: release
+  cancel-in-progress: true
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
     permissions: write-all
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run Semantic Release
         run: |
           touch .env
@@ -24,21 +42,36 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CROWDIN_TOKEN: "${{ secrets.CROWDIN_TOKEN }}"
-      - name: Push changes to main branch
+
+      - name: Configure Git identity
         run: |
-          # Ensure we are on the main branch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Push changes to main branch
+        if: success()
+        run: |
           git checkout main
           git add ./src/i18n/index.ts
-          git commit -m "Update i18n"
-          # Push local changes to the main branch
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit on main."
+          else
+            git commit -m "Update i18n" --no-verify
+            git push origin main
+          fi
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Merge changes from main into dev
+        if: success()
         run: |
-          # Switch to the dev branch
           git checkout dev
-
-          # Merge changes from the main branch into dev
-          git merge main
-
-          # Push changes to the dev branch
+          git pull --rebase origin dev
+          git merge origin/main --no-edit || echo "No merge necessary"
           git push origin dev
