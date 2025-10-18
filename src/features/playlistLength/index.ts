@@ -1,6 +1,5 @@
 import type { Nullable } from "@/src/types";
 
-import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
