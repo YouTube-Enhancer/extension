@@ -17,8 +17,7 @@ import {
 const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
-const IMMERSIVE_HEADER_SELECTOR =
-	"ytd-playlist-header-renderer .immersive-header-container .immersive-header-content .thumbnail-and-metadata-wrapper";
+const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
 export const getHeaderSelectors = () =>
 	({
 		playlist: (() => {
