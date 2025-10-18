@@ -545,28 +545,6 @@ export function modifyElementClassList(action: ModifyElementAction, elementPair:
 export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]) {
 	elements.forEach((element) => modifyElementClassList(action, element));
 }
-/**
- * Parses an ISO 8601 duration string and returns the total number of seconds.
- *
- * @param {string} duration - The ISO 8601 duration string to parse.
- * @return {number} The total number of seconds represented by the duration string.
- */
-export function parseISO8601Duration(duration: string): number {
-	// Regular expression to match ISO 8601 duration format
-	const regex = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
-	// Extract hours, minutes, and seconds from the duration string
-	const matches = regex.exec(duration);
-	// If the duration string does not match the expected format, return 0
-	if (!matches) return 0;
-
-	// Parse the hours, minutes, and seconds from the matches array
-	const hours = parseInt(matches[1] || "0", 10);
-	const minutes = parseInt(matches[2] || "0", 10);
-	const seconds = parseInt(matches[3] || "0", 10);
-
-	// Calculate the total number of seconds by multiplying hours, minutes, and seconds
-	return hours * 3600 + minutes * 60 + seconds;
-}
 export function parseStoredValue(value: string) {
 	try {
 		// Attempt to parse the value as JSON
