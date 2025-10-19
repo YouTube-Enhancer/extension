@@ -44,6 +44,7 @@ export type FeatureName =
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"
+	| "saveToWatchLaterButton"
 	| "screenshotButton"
 	| "scrollWheelSpeedControl"
 	| "scrollWheelVolumeControl"

@@ -426,6 +426,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				restoreFullscreenScrollingEnabled: newValue
 			});
 		},
+		enable_save_to_watch_later_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("saveToWatchLaterButtonChange", {
+				saveToWatchLaterButtonEnabled: newValue
+			});
+		},
 		enable_screenshot_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("screenshotButtonChange", {
 				screenshotButtonEnabled: newValue
