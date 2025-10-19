@@ -211,6 +211,10 @@ interface EnUS {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
 					};
+					enableSaveToWatchLaterButton: {
+						label: "Enable save to Watch Later button";
+						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
+					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
 						title: "Hides the artificial intelligence summary below videos";
@@ -369,6 +373,7 @@ interface EnUS {
 					};
 				};
 			};
+			saveToWatchLaterButton: { error: "Failed to add video to Watch Later"; save: "Save to Watch Later" };
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";

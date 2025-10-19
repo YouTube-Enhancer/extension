@@ -794,6 +794,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_save_to_watch_later_button?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.label")}
+						onChange={setCheckboxOption("enable_save_to_watch_later_button")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />
