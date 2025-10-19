@@ -5,6 +5,7 @@ import {
 	disableAutomaticallyDisableClosedCaptions,
 	enableAutomaticallyDisableClosedCaptions
 } from "@/src/features/automaticallyDisableClosedCaptions";
+import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -261,6 +262,7 @@ const enableFeatures = async () => {
 			enableHideEndScreenCards(),
 			enablePlaylistLength(),
 			enableAutomaticallyDisableClosedCaptions(),
+			enableAutomaticallyEnableClosedCaptions(),
 			enableAutomaticallyDisableAmbientMode(),
 			enableDefaultToOriginalAudioTrack(),
 			enableRestoreFullscreenScrolling()
@@ -345,6 +347,17 @@ const initialize = function () {
 							await enableAutomaticallyDisableClosedCaptions();
 						} else {
 							await disableAutomaticallyDisableClosedCaptions();
+						}
+						break;
+					}
+					case "automaticallyEnableClosedCaptionsChange": {
+						const {
+							data: { automaticallyEnableClosedCaptionsEnabled }
+						} = message;
+						if (automaticallyEnableClosedCaptionsEnabled) {
+							await enableAutomaticallyEnableClosedCaptions();
+						} else {
+							await disableAutomaticallyEnableClosedCaptions();
 						}
 						break;
 					}

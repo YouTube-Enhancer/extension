@@ -1,6 +1,5 @@
 import type { Nullable } from "@/src/types";
 
-import { YouTube_Enhancer_Public_Youtube_Data_API_V3_Key } from "@/src/utils/constants";
 import eventManager from "@/src/utils/EventManager";
 import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -22,8 +21,7 @@ export async function enablePlaylistLength() {
 			options: {
 				enable_playlist_length,
 				playlist_length_get_method: playlistLengthGetMethod,
-				playlist_watch_time_get_method: playlistWatchTimeGetMethod,
-				youtube_data_api_v3_key
+				playlist_watch_time_get_method: playlistWatchTimeGetMethod
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
@@ -31,10 +29,8 @@ export async function enablePlaylistLength() {
 	if (!document.querySelector(playlistItemsSelector())) return;
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPageFlag ? watch : playlist, playlistItemsSelector()]);
-	const apiKey = youtube_data_api_v3_key || YouTube_Enhancer_Public_Youtube_Data_API_V3_Key;
 	const pageType = isWatchPageFlag ? "watch" : "playlist";
 	documentObserver = await initPlaylistLength({
-		apiKey,
 		pageType,
 		playlistLengthGetMethod,
 		playlistWatchTimeGetMethod
@@ -42,7 +38,6 @@ export async function enablePlaylistLength() {
 	resizeObserver?.disconnect();
 	resizeObserver = new ResizeObserver(async () => {
 		documentObserver = await initPlaylistLength({
-			apiKey,
 			pageType,
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
@@ -51,7 +46,6 @@ export async function enablePlaylistLength() {
 	resizeObserver.observe(document.documentElement);
 }
 async function initPlaylistLength({
-	apiKey,
 	pageType,
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod
@@ -59,7 +53,6 @@ async function initPlaylistLength({
 	documentObserver?.disconnect();
 	try {
 		return await initializePlaylistLength({
-			apiKey,
 			pageType,
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
@@ -67,7 +60,6 @@ async function initPlaylistLength({
 	} catch {
 		return playlistLengthGetMethod === "html" ? null : (
 				initPlaylistLength({
-					apiKey,
 					pageType,
 					playlistLengthGetMethod: "html",
 					playlistWatchTimeGetMethod

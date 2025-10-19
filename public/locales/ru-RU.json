@@ -102,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Клавиша-модификатор для управления скоростью воспроизведения с помощью колеса мыши не может совпадать с клавишей-модификатором для управления громкостью.",
@@ -125,20 +126,20 @@
 		},
 		"optionDisabled": {
 			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"label": "Включите {{OPTIONS}} для настройки этого параметра",
+				"separator": " или "
 			},
 			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
+				"label": "Включите {{OPTIONS}} для настройки этого параметра",
+				"separator": " и "
 			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
+			"singular": "Включите '{{OPTION}}' для настройки этого параметра",
 			"specificOption": {
-				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+				"featureMenu": "Включите по крайней мере одну кнопку, которая будет размещена в меню функций для настройки этой опции.",
+				"screenshotButtonFileFormat": "Установите тип сохранения скриншота «Файл» для настройки этого параметра"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "Прокрутите для других настроек",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -288,17 +289,21 @@
 						"label": "Автоматически отключать субтитры",
 						"title": "Автоматически отключает субтитры при загрузке видео"
 					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Кнопка «Копировать URL видео с таймкодом»",
 						"title": "Копирует ссылку видео с меткой времени (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "Выставлять оригинальную звуковую дорожку по умолчанию",
+						"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "Прятать краткое содержание от ИИ",
+						"title": "Прячет краткое содержание видео от ИИ под описанием"
 					},
 					"hideEndScreenCards": {
 						"label": "Скрыть заставки следующих видео",
@@ -321,8 +326,8 @@
 						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
 					},
 					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
+						"label": "Спрятать игры",
+						"title": "Прячет все игры (playables)"
 					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
@@ -357,8 +362,8 @@
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 					},
 					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
+						"label": "Спрятать плейлисты на главной",
+						"title": "Прячет плейлисты на главной (домашней) странице"
 					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
@@ -373,8 +378,8 @@
 						"title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "Включить прокрутку в полноэкранном режиме",
+						"title": "Восстанавливает возможность прокрутки в полноэкранном режиме"
 					},
 					"shareShortener": {
 						"label": "Укоротить ссылку с кнопки \"Поделиться\"",

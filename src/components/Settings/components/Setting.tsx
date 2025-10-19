@@ -76,8 +76,18 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
-			const { checked, className, label, onChange, title } = settingProps;
-			return <Checkbox checked={checked} className={className} label={label} onChange={onChange} title={title} />;
+			const { checked, className, disabled, disabledReason, label, onChange, title } = settingProps;
+			return (
+				<Checkbox
+					checked={checked}
+					className={className}
+					disabled={disabled}
+					disabledReason={disabledReason}
+					label={label}
+					onChange={onChange}
+					title={title}
+				/>
+			);
 		}
 		case "color-picker": {
 			const { className, disabled, label, onChange, title, value } = settingProps;
