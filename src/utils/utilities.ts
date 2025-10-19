@@ -686,6 +686,9 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 
 export function timeStringToSeconds(timeString: string): number {
 	const parts = timeString.split(":").reverse();
+	if (parts.length === 1) {
+		return 0;
+	}
 	let seconds = 0;
 	for (let i = 0; i < parts.length; i++) {
 		seconds += parseInt(parts[i], 10) * Math.pow(60, i);
