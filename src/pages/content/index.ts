@@ -285,11 +285,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyEnableClosedCaptionsEnabled: newValue
 			});
 		},
-		enable_automatically_maximize_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyMaximizePlayerChange", {
-				automaticallyMaximizePlayerEnabled: newValue
-			});
-		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue

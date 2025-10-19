@@ -6,10 +6,9 @@ import {
 	enableAutomaticallyDisableClosedCaptions
 } from "@/src/features/automaticallyDisableClosedCaptions";
 import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
-import { disableAutomaticallyMaximizePlayer, enableAutomaticallyMaximizePlayer } from "@/src/features/automaticallyMaximizePlayer";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
@@ -25,8 +24,7 @@ import {
 	disableHideEndScreenCards,
 	enableHideEndScreenCards,
 	isEndScreenCardsHidden,
-	removeHideEndScreenCardsButton,
-	updateHideEndScreenCardsButtonState
+	removeHideEndScreenCardsButton
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import {
@@ -45,7 +43,7 @@ import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
 import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
-import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
+import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -80,7 +78,7 @@ import volumeBoost, {
 	removeVolumeBoostButton
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
-import { getFeatureIcon, type ToggleFeatures, toggleFeatures } from "@/src/icons";
+import { getFeatureIcon, type ToggleFeatures, toggleFeatures, type ToggleIcon } from "@/src/icons";
 import {
 	type AllButtonNames,
 	type ButtonPlacement,
@@ -239,6 +237,14 @@ const enableFeatures = async () => {
 				}
 			}
 		}
+		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addHideEndScreenCardsButton();
+		await addScreenshotButton();
+		await openTranscriptButton();
+		await addMaximizePlayerButton();
+		await addLoopButton();
+		await addCopyTimestampUrlButton();
+		await volumeBoost();
 		await Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
@@ -259,17 +265,8 @@ const enableFeatures = async () => {
 			enableAutomaticallyEnableClosedCaptions(),
 			enableAutomaticallyDisableAmbientMode(),
 			enableDefaultToOriginalAudioTrack(),
-			enableRestoreFullscreenScrolling(),
-			enableAutomaticallyMaximizePlayer()
+			enableRestoreFullscreenScrolling()
 		]);
-		// Features that add buttons should be put below and be ordered in the order those buttons should appear
-		await addHideEndScreenCardsButton();
-		await addScreenshotButton();
-		await openTranscriptButton();
-		await addMaximizePlayerButton();
-		await addLoopButton();
-		await addCopyTimestampUrlButton();
-		await volumeBoost();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -362,14 +359,6 @@ const initialize = function () {
 						} else {
 							await disableAutomaticallyEnableClosedCaptions();
 						}
-						break;
-					}
-					case "automaticallyMaximizePlayerChange": {
-						const {
-							data: { automaticallyMaximizePlayerEnabled }
-						} = message;
-						if (automaticallyMaximizePlayerEnabled) await enableAutomaticallyMaximizePlayer();
-						else disableAutomaticallyMaximizePlayer();
 						break;
 					}
 					case "automaticTheaterModeChange": {
@@ -579,15 +568,31 @@ const initialize = function () {
 						const {
 							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
 						} = message;
-						const endScreenCardsHidden = await isEndScreenCardsHidden();
+						const updateHideEndScreenCardsButtonState = (icon: ToggleIcon, checked: boolean) => {
+							if (hideEndScreenCardsPlacement === "feature_menu") {
+								const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
+								if (!hideEndScreenCardsMenuItem) return;
+								hideEndScreenCardsMenuItem.ariaChecked = checked ? "false" : "true";
+							} else {
+								const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
+								if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
+								updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
+								updateFeatureButtonTitle(
+									"hideEndScreenCardsButton",
+									i18nextInstance.t(`pages.content.features.hideEndScreenCardsButton.button.toggle.${checked ? "on" : "off"}`)
+								);
+								hideEndScreenCardsButton.ariaChecked = checked ? "true" : "false";
+							}
+						};
+						const endScreenCardsHidden = isEndScreenCardsHidden();
 						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
 						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
 						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
 							await enableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, false);
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, false);
 						} else if (!hideEndScreenCardsEnabled && endScreenCardsHidden) {
 							await disableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, true);
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, true);
 						}
 						break;
 					}
@@ -778,7 +783,17 @@ const initialize = function () {
 							await addMaximizePlayerButton();
 						} else {
 							await removeMaximizePlayerButton();
-							minimizePlayer();
+							const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
+							if (!maximizePlayerButton) return;
+							// Get the video element
+							const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+							// If video element is not available, return
+							if (!videoElement) return;
+							const videoContainer = document.querySelector<YouTubePlayerDiv>("video.html5-main-video");
+							if (!videoContainer) return;
+							if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
+								maximizePlayer();
+							}
 						}
 						break;
 					}
