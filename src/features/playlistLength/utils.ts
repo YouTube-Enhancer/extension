@@ -299,16 +299,18 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 
 		let totalSeconds = 0;
 		for (const video of playlist.videos) {
-			if ((video as PlaylistVideo).duration) {
-				totalSeconds += (video as PlaylistVideo).duration.seconds;
+			const playlistVideo = video as PlaylistVideo;
+			if (playlistVideo?.duration?.seconds) {
+				totalSeconds += playlistVideo.duration.seconds;
 			}
 		}
 
 		while (playlist.has_continuation) {
 			const continuation = await playlist.getContinuation();
 			for (const video of continuation.videos) {
-				if ((video as PlaylistVideo).duration) {
-					totalSeconds += (video as PlaylistVideo).duration.seconds;
+				const playlistVideo = video as PlaylistVideo;
+				if (playlistVideo?.duration?.seconds) {
+					totalSeconds += playlistVideo.duration.seconds;
 				}
 			}
 		}
