@@ -519,13 +519,6 @@ export type VideoHistoryEntry = {
 };
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
-export type YouTubeAPIQuotaError = {
-	error: {
-		code: number;
-		errors: { domain: string; message: string; reason: string }[];
-		message: string;
-	};
-};
 export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
 export type YouTubePlaylistItem = {
 	contentDetails: {
