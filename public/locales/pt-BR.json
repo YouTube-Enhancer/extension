@@ -301,6 +301,10 @@
 						"label": "Retornar à faixa de vídeo original",
 						"title": "Sempre retornar à faixa de vídeo original"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Ativar botões de gerenciamento de playlist",
+						"title": "Adiciona botões aos itens da playlist para remover vídeos da playlist ou marcá-los como não assistidos"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
 						"title": "Oculta a seção de resumo IA de um vídeo"
@@ -487,6 +491,14 @@
 						"title": "A forma de obter o tempo assistido (Tipo de duração do vídeo apenas usado na página de exibição)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "Remover vídeo",
+				"removingVideo": "Removendo vídeo…",
+				"failedToRemoveVideo": "Falha ao remover vídeo",
+				"markAsUnwatched": "Marcar como não assistido",
+				"markingAsUnwatched": "Marcando como não assistido…",
+				"failedToMarkAsUnwatched": "Falha ao marcar como não assistido"
 			},
 			"screenshotButton": {
 				"enable": {
