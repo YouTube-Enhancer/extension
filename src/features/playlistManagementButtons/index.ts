@@ -139,8 +139,11 @@ export async function enablePlaylistManagementButtons() {
 
 	function observePlaylist() {
 		addButtonToPlaylistItems();
-		playlistObserver = new MutationObserver(addButtonToPlaylistItems);
-		playlistObserver.observe(document.body, { childList: true, subtree: true });
+		const container = document.querySelector("ytd-playlist-video-list-renderer");
+		if (container) {
+			playlistObserver = new MutationObserver(addButtonToPlaylistItems);
+			playlistObserver.observe(container, { childList: true, subtree: true });
+		}
 	}
 
 	window.addEventListener("DOMContentLoaded", observePlaylist);
