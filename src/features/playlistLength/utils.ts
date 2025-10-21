@@ -224,12 +224,23 @@ export async function initializePlaylistLength({
 	await appendPlaylistLengthUIElement(element);
 	let lastUpdate = 0;
 	const throttleDelay = 500;
+	let lastPlaylistLength: null | number = null;
 	async function safeUpdate() {
 		const now = Date.now();
 		if (now - lastUpdate < throttleDelay) return;
 		lastUpdate = now;
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
+		if (playlistLengthGetMethod === "api") {
+			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const { length: currentLength } = playlistItems;
+			if (lastPlaylistLength === null) {
+				lastPlaylistLength = currentLength;
+			} else if (currentLength !== lastPlaylistLength) {
+				window.cachedPlaylistDuration = null;
+				lastPlaylistLength = currentLength;
+			}
+		}
 		const data = await getDataForPlaylistLengthUIElement({
 			pageType,
 			playlistLengthGetMethod,
