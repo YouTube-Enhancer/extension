@@ -111,10 +111,10 @@
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Wszystkie opcje zostały przywrócone do domyślnych wartości. Możesz teraz zapisać zmiany, klikając przycisk \"Potwierdź\" bądź odrzucić, je zamykając tę stronę lub ignorując to powiadomienie."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "Zapisano opcje."
 				}
 			}
 		}
@@ -122,12 +122,12 @@
 	"settings": {
 		"clearData": {
 			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"confirmAlert": "Usunie to wszystkie dane rozszerzenia związane z opcjami. Kontynuować?"
 		},
 		"optionDisabled": {
 			"either": {
 				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"separator": " albo "
 			},
 			"plural": {
 				"label": "Enable {{OPTIONS}} to configure this option",
@@ -136,10 +136,10 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Aby skonfigurować tę opcję, ustaw typ zapisu zrzutu ekranu na „Plik”"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -150,26 +150,26 @@
 					"select": {
 						"label": "Quality fallback strategy",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Wyżej",
+							"lower": "Niżej"
 						},
 						"title": "The strategy to use when the selected quality is not available"
 					}
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "Jakość odtwarzacza",
 					"title": "The quality to set the video to"
 				},
-				"title": "Automatic quality settings"
+				"title": "Opcje automatycznej jakości"
 			},
 			"bottomButtons": {
 				"clear": {
 					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"value": "Wyczyść dane"
 				},
 				"confirm": {
 					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"value": "Potwierdź"
 				},
 				"openTab": {
 					"title": "Open extension settings in a new tab"
@@ -182,22 +182,22 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"copyTimestampUrlButton": "Kopiuj adres URL bieżącego momentu",
+						"decreasePlaybackSpeedButton": "Przycisk Zmniejszania Prędkości Odtwarzania",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
+						"increasePlaybackSpeedButton": "Przycisk Zwiększania Prędkości Odtwarzania",
+						"loopButton": "Przycisk Zapętlania",
 						"maximizePlayerButton": "Maximize button",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"screenshotButton": "Przycisk Zrzutu Ekranu",
+						"volumeBoostButton": "Przycisk Zwiększania Głośności"
 					},
 					"options": {
 						"below_player": {
 							"placement": "below the player controls",
-							"value": "Below Player"
+							"value": "Poniżej Odtwarzacza"
 						},
 						"feature_menu": {
 							"placement": "in the feature menu",
@@ -205,11 +205,11 @@
 						},
 						"player_controls_left": {
 							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"value": "Lewostronne Sterowanie"
 						},
 						"player_controls_right": {
 							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"value": "Prawostronne Sterowanie"
 						}
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
@@ -233,8 +233,8 @@
 					"select": {
 						"label": "Menu Activation Type",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Kliknięcie",
+							"hover": "Najechanie kursorem"
 						},
 						"title": "Select the method to activate the feature menu"
 					},
@@ -254,9 +254,9 @@
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Ustawienia zostały pomyślnie wyeksportowane",
+					"title": "Eksportuj ustawienia do pliku JSON",
+					"value": "Eksportuj Ustawienia"
 				},
 				"importButton": {
 					"error": {
@@ -264,14 +264,14 @@
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"title": "Importuj ustawienia z pliku JSON",
+					"value": "Importowanie Ustawień"
 				}
 			},
 			"language": {
 				"select": {
 					"label": "Język",
-					"title": "The language to use for the extension"
+					"title": "Język rozszerzenia"
 				},
 				"title": "Język"
 			},
@@ -302,7 +302,7 @@
 						"title": "Always default to the original audio track"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
+						"label": "Ukryj podsumowanie AI",
 						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
@@ -334,8 +334,8 @@
 						"title": "Hides the pages scrollbar"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Ukryj szorty",
+						"title": "Ukrywa wszystkie szorty"
 					},
 					"hideTranslateComment": {
 						"label": "Hide translate comment button",
@@ -354,7 +354,7 @@
 						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
+						"label": "Otwórz ustawienia YouTube po najechaniu kursorem",
 						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"pauseBackgroundPlayers": {
@@ -630,18 +630,18 @@
 					},
 					"secondBackground": {
 						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"title": "Kolor tła wtórnego"
 					}
 				},
 				"enable": {
-					"label": "Deep Dark Theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Motyw Deep Dark",
+					"title": "Aktywuj wybrany motyw dla strony"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Wybierz motyw",
+					"title": "Wybierz motyw, który ma zostać zastosowany na stronie"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "Ustawienia motywu YouTube Deep Dark"
 			}
 		}
 	}
