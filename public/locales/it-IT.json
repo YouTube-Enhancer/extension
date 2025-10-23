@@ -293,6 +293,10 @@
 						"label": "Abilita automaticamente le didascalie chiuse",
 						"title": "Abilita automaticamente le didascalie chiuse quando si carica un video"
 					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
