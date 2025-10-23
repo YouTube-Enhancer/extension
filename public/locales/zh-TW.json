@@ -301,6 +301,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "啟用播放清單管理按鈕",
+						"title": "為播放清單項目添加按鈕，用於從播放清單中刪除影片或將其標記為未觀看"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
@@ -487,6 +491,14 @@
 						"title": "取得已觀看時間的方法(影片長度方式只用於觀看頁)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "移除影片",
+				"removingVideo": "正在移除影片…",
+				"failedToRemoveVideo": "移除影片失敗",
+				"markAsUnwatched": "標記為未觀看",
+				"markingAsUnwatched": "正在標記為未觀看…",
+				"failedToMarkAsUnwatched": "標記為未觀看失敗"
 			},
 			"screenshotButton": {
 				"enable": {

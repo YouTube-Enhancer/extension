@@ -301,6 +301,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Afspeellijstbeheerknoppen inschakelen",
+						"title": "Voegt knoppen toe aan afspeellijstitems om video's uit de afspeellijst te verwijderen of als onbe­ke­ken te markeren"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
@@ -487,6 +491,14 @@
 						"title": "De manier waarop je de hoeveelheid kijktijd verkrijgt (video lengtetype enkel gebruikt op kijk pagina)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "Video verwijderen",
+				"removingVideo": "Video wordt verwijderd…",
+				"failedToRemoveVideo": "Video verwijderen mislukt",
+				"markAsUnwatched": "Markeren als niet bekeken",
+				"markingAsUnwatched": "Markeren als niet bekeken…",
+				"failedToMarkAsUnwatched": "Markeren als niet bekeken mislukt"
 			},
 			"screenshotButton": {
 				"enable": {

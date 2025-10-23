@@ -1,0 +1,21 @@
+.yte-maximized-video {
+	width: 100vw !important;
+	height: 100vh !important;
+	left: 0 !important;
+	top: 0 !important;
+	object-fit: contain !important;
+	background: black !important;
+}
+
+.yte-maximized-video-container {
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
+	z-index: 2020 !important;
+}
+
+.yte-maximized-width {
+	width: calc(99vw - 13px) !important;
+}

@@ -1,0 +1,26 @@
+.yte-button-player-controls-left {
+	margin: var(--yt-delhi-pill-top-height, 12px) 0 var(--yt-delhi-pill-top-height, 12px) 12px;
+	height: var(--yt-delhi-pill-height, 48px) !important;
+	border-radius: 28px;
+	-webkit-backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px)) !important;
+	backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px));
+	background: var(--yt-spec-overlay-background-medium-light, rgba(0, 0, 0, 0.3)) !important;
+	text-shadow: 0 0 2px #000;
+	padding: 0;
+	position: relative;
+}
+
+.ytp-delhi-modern.ytp-big-mode .yte-button-player-controls-left {
+	margin-top: calc((var(--yt-delhi-big-mode-bottom-controls-height, 96px) - var(--yt-delhi-big-mode-pill-height, 56px)) / 2) !important;
+	height: var(--yt-delhi-big-mode-pill-height, 56px) !important;
+	width: 56px !important;
+}
+
+.yte-button-below-player {
+	place-content: center;
+	display: flex;
+	flex-wrap: wrap;
+	z-index: 0;
+	height: 48px;
+	width: 48px;
+}
