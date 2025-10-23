@@ -305,6 +305,14 @@
 						"label": "Выставлять оригинальную звуковую дорожку по умолчанию",
 						"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Прятать краткое содержание от ИИ",
 						"title": "Прячет краткое содержание видео от ИИ под описанием"
@@ -491,6 +499,18 @@
 						"title": "Способ получения количества времени просмотра (тип длины видео используется только на странице просмотра)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Failed to add video to Watch Later",
+				"save": "Save to Watch Later"
 			},
 			"screenshotButton": {
 				"enable": {
