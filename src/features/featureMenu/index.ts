@@ -3,8 +3,6 @@ import type { FeatureMenuOpenType } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
 import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { isNewYouTubeVideoLayout } from "../../utils/utilities";
-
 // Function to enable the feature menu
 export async function enableFeatureMenu() {
 	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
@@ -16,12 +14,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ?
-			document.querySelector<HTMLDivElement>(
-				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-			)
-		:	null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
@@ -197,12 +190,7 @@ async function createFeatureMenuButton() {
 	// Get references to various elements and check their existence
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer =
-		isWatchPage() ?
-			document.querySelector<HTMLDivElement>(
-				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-			)
-		:	null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return;
 	// Insert the feature menu button and feature menu itself
 	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
