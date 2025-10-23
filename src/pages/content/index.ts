@@ -411,6 +411,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playlistLengthEnabled: newValue
 			});
 		},
+		enable_playlist_management_buttons: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistManagementButtonsChange", {
+				playlistManagementButtonsEnabled: newValue
+			});
+		},
 		enable_redirect_remover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("removeRedirectChange", {
 				removeRedirectEnabled: newValue

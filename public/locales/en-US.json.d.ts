@@ -215,6 +215,9 @@ interface EnUS {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
 					};
+					enablePlaylistManagementButtons: {
+						label: "Enable playlist management buttons";
+						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
 					enableSaveToWatchLaterButton: {
 						label: "Enable save to Watch Later button";
 						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
@@ -376,6 +379,14 @@ interface EnUS {
 						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
 					};
 				};
+			};
+			playlistManagementButtons: {
+				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
+				failedToRemoveVideo: "Failed to remove video";
+				markAsUnwatched: "Mark as unwatched";
+				markingAsUnwatched: "Marking as unwatched…";
+				removeVideo: "Remove video";
+				removingVideo: "Removing video…";
 			};
 			saveToWatchLaterButton: { error: "Failed to add video to Watch Later"; save: "Save to Watch Later" };
 			screenshotButton: {

@@ -795,6 +795,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_playlist_management_buttons?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.label")}
+						onChange={setCheckboxOption("enable_playlist_management_buttons")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_restore_fullscreen_scrolling?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.label")}
 						onChange={setCheckboxOption("enable_restore_fullscreen_scrolling")}

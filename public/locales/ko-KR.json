@@ -301,6 +301,10 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "재생목록 관리 버튼",
+						"title": "재생목록 항목에 버튼을 추가하여 재생목록에서 동영상을 제거하거나 시청하지 않음으로 표시할 수 있습니다"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Hide AI summary",
 						"title": "Hides the artificial intelligence summary below videos"
@@ -487,6 +491,14 @@
 						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"removeVideo": "동영상 제거",
+				"removingVideo": "동영상을 제거하는 중…",
+				"failedToRemoveVideo": "동영상을 제거하지 못했습니다",
+				"markAsUnwatched": "시청하지 않음으로 표시",
+				"markingAsUnwatched": "시청하지 않음으로 표시 중…",
+				"failedToMarkAsUnwatched": "시청하지 않음으로 표시하지 못했습니다"
 			},
 			"screenshotButton": {
 				"enable": {

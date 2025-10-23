@@ -61,6 +61,7 @@ import {
 import setPlayerQuality from "@/src/features/playerQuality";
 import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
 import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
+import { disablePlaylistManagementButtons, enablePlaylistManagementButtons } from "@/src/features/playlistManagementButtons";
 import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
@@ -262,6 +263,7 @@ const enableFeatures = async () => {
 			enableAutomaticallyDisableAmbientMode(),
 			enableDefaultToOriginalAudioTrack(),
 			enableRestoreFullscreenScrolling(),
+			enablePlaylistManagementButtons(),
 			enableAutomaticallyMaximizePlayer()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
@@ -900,6 +902,17 @@ const initialize = function () {
 					case "playlistWatchTimeGetMethodChange": {
 						disablePlaylistLength();
 						await enablePlaylistLength();
+						break;
+					}
+					case "playlistManagementButtonsChange": {
+						const {
+							data: { playlistManagementButtonsEnabled }
+						} = message;
+						if (playlistManagementButtonsEnabled) {
+							await enablePlaylistManagementButtons();
+						} else {
+							await disablePlaylistManagementButtons();
+						}
 						break;
 					}
 					case "remainingTimeChange": {

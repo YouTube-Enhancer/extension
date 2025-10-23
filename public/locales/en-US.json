@@ -305,6 +305,9 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
 						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
@@ -496,6 +499,13 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"failedToRemoveVideo": "Failed to remove video",
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched"
 			"saveToWatchLaterButton": {
 				"save": "Save to Watch Later",
 				"error": "Failed to add video to Watch Later"
