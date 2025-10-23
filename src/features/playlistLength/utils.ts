@@ -1,27 +1,30 @@
-import { z } from "zod";
+import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVideo";
 
-import type { Nullable, PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod, VideoDetails, YouTubePlaylistItem } from "@/src/types";
+import { Innertube } from "youtubei.js/web";
+
+import type { Nullable, PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod, VideoDetails } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import {
 	conditionalStyles,
 	createStyledElement,
-	delay,
 	formatDuration,
 	isNewYouTubeVideoLayout,
 	isWatchPage,
-	parseISO8601Duration,
 	timeStringToSeconds,
 	waitForAllElements
 } from "@/src/utils/utilities";
 const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
+const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
 export const getHeaderSelectors = () =>
 	({
 		playlist: (() => {
 			const noPaddingHeader = document.querySelector(NO_PADDING_HEADER_SELECTOR);
 			const cinematicHeader = document.querySelector(CINEMATIC_HEADER_SELECTOR);
+			const immersiveHeader = document.querySelector(IMMERSIVE_HEADER_SELECTOR);
+			if (immersiveHeader && immersiveHeader.clientWidth > 0) return IMMERSIVE_HEADER_SELECTOR;
 			if (noPaddingHeader && noPaddingHeader.clientWidth > 0) return NO_PADDING_HEADER_SELECTOR;
 			if (cinematicHeader && cinematicHeader.clientWidth > 0) return `${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`;
 			return NO_PADDING_HEADER_SELECTOR;
@@ -33,26 +36,7 @@ export const getHeaderSelectors = () =>
 	}) as const satisfies { playlist: string; watch: string };
 export const playlistItemsSelector = () =>
 	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
-const youtubePlaylistResponseSchema = z.object({
-	items: z.array(z.object({ contentDetails: z.object({ videoId: z.string() }) })),
-	nextPageToken: z.string().optional()
-});
-const youtubeVideoDurationResponseSchema = z.object({
-	items: z.array(z.object({ contentDetails: z.object({ duration: z.string() }) }))
-});
-const youtubeDataAPIErrorSchema = z.object({
-	error: z.object({
-		code: z.number(),
-		errors: z.array(
-			z.object({
-				reason: z.string()
-			})
-		),
-		message: z.string()
-	})
-});
 export type PlaylistLengthParameters = {
-	apiKey: string;
 	pageType: PageType;
 	playlistLengthGetMethod: PlaylistLengthGetMethod;
 	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod;
@@ -159,39 +143,7 @@ export function createPlaylistLengthUIElement(
 		update: updateElement
 	};
 }
-export async function fetchPlaylistVideos(playlistId: string, apiKey: string): Promise<YouTubePlaylistItem[]> {
-	const playlistItemsUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&fields=items/contentDetails/videoId,nextPageToken&key=${apiKey}&playlistId=${playlistId}`;
-	let nextPageToken: string | undefined = undefined;
-	const allVideos: YouTubePlaylistItem[] = [];
-	try {
-		do {
-			const playlistResponse = await fetch(`${playlistItemsUrl}${nextPageToken ? `&pageToken=${nextPageToken}` : ""}`);
-			const data = await playlistResponse.json();
-			const youtubeDataAPIParsed = youtubeDataAPIErrorSchema.safeParse(data);
-			if (youtubeDataAPIParsed.success && youtubeDataAPIParsed.data.error) {
-				switch (youtubeDataAPIParsed.data.error.code) {
-					case 403:
-						throw new Error("YouTube Enhancer (YouTube Data API V3): Quota exceeded. Please try again later.");
-					case 404:
-						throw new Error("YouTube Enhancer (YouTube Data API V3): Playlist not found. Please try again later.");
-					default:
-						throw new Error("YouTube Enhancer (YouTube Data API V3): Unknown error. Please try again later.");
-				}
-			}
-			const parsedData = youtubePlaylistResponseSchema.safeParse(data);
-			if (!parsedData.success) throw new Error("Failed to parse playlist response.");
-			if (parsedData.data.items && parsedData.data.items.length === 0) throw new Error("No items found in playlist.");
-			nextPageToken = parsedData.data.nextPageToken || "";
-			allVideos.push(...parsedData.data.items);
-			await delay(40); // Adding delay between requests to avoid rate limiting
-		} while (nextPageToken);
-		return allVideos;
-	} catch (error) {
-		throw new Error(`Error fetching playlist videos: ${error}`);
-	}
-}
 export async function getDataForPlaylistLengthUIElement({
-	apiKey,
 	pageType,
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod
@@ -212,7 +164,7 @@ export async function getDataForPlaylistLengthUIElement({
 			const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
 			return { totalTimeSeconds, watchedTimeSeconds };
 		}
-		totalTimeSeconds = await getDurationFromAPI(playlistId, apiKey);
+		totalTimeSeconds = await getDurationFromAPI(playlistId);
 		// Cache the duration
 		window.cachedPlaylistDuration = { playlistId, totalTimeSeconds };
 	} else if (playlistLengthGetMethod === "html") {
@@ -222,20 +174,6 @@ export async function getDataForPlaylistLengthUIElement({
 	}
 	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
 	return { totalTimeSeconds, watchedTimeSeconds };
-}
-export async function getPlaylistDuration(playlistVideos: YouTubePlaylistItem[], apiKey: string) {
-	const videoIds = playlistVideos.map((video) => video.contentDetails.videoId);
-	try {
-		const videoDurationPromises = videoIds.map(async (videoId) => {
-			await delay(1); // Adding delay between requests to avoid rate limiting
-			return getVideoDuration(videoId, apiKey);
-		});
-		const videoDurations = await Promise.all(videoDurationPromises);
-		const totalDuration = videoDurations.reduce((acc, duration) => acc + duration, 0);
-		return totalDuration;
-	} catch (error) {
-		throw new Error(`Error fetching playlist duration: ${error}`);
-	}
 }
 export function getPlaylistId(): null | string {
 	const playlistId = new URLSearchParams(window.location.search).get("list");
@@ -258,31 +196,7 @@ export function getPlaylistItemsFromWatchPage() {
 export function getPlaylistItemsWatchedProgress(playlistItems: HTMLElement[]): VideoDetails[] {
 	return playlistItems.map(getVideoDetails);
 }
-export async function getVideoDuration(videoId: string, apiKey: string) {
-	const videoDetailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&fields=items/contentDetails/duration&key=${apiKey}&id=${videoId}`;
-	try {
-		const videoResponse = await fetch(videoDetailsUrl);
-		const data = await videoResponse.json();
-		const youtubeDataAPIParsed = youtubeDataAPIErrorSchema.safeParse(data);
-		const parsedData = youtubeVideoDurationResponseSchema.safeParse(data);
-		if (!parsedData.success) throw new Error("Failed to parse video duration response.");
-		if (
-			youtubeDataAPIParsed.success &&
-			youtubeDataAPIParsed.data.error &&
-			youtubeDataAPIParsed.data.error.code === 403 &&
-			youtubeDataAPIParsed.data.error.errors.find((e) => e.reason === "quotaExceeded")
-		) {
-			throw new Error("Quota exceeded. Please try again later.");
-		}
-		const videoDuration = parsedData.data.items.at(0)?.contentDetails?.duration;
-		if (!videoDuration) throw new Error("Failed to get video duration.");
-		return parseISO8601Duration(videoDuration);
-	} catch (error) {
-		throw new Error(`Error getting video duration: ${error}`);
-	}
-}
 export async function initializePlaylistLength({
-	apiKey,
 	pageType,
 	playlistLengthGetMethod,
 	playlistWatchTimeGetMethod
@@ -296,7 +210,6 @@ export async function initializePlaylistLength({
 	if (!playlistItemsElement) return null;
 	const { playbackRate: playerSpeed = 1 } = videoElement || {};
 	const { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
-		apiKey,
 		pageType,
 		playlistLengthGetMethod,
 		playlistWatchTimeGetMethod
@@ -311,14 +224,24 @@ export async function initializePlaylistLength({
 	await appendPlaylistLengthUIElement(element);
 	let lastUpdate = 0;
 	const throttleDelay = 500;
+	let lastPlaylistLength: null | number = null;
 	async function safeUpdate() {
 		const now = Date.now();
 		if (now - lastUpdate < throttleDelay) return;
 		lastUpdate = now;
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
+		if (playlistLengthGetMethod === "api") {
+			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const { length: currentLength } = playlistItems;
+			if (lastPlaylistLength === null) {
+				lastPlaylistLength = currentLength;
+			} else if (currentLength !== lastPlaylistLength) {
+				window.cachedPlaylistDuration = null;
+				lastPlaylistLength = currentLength;
+			}
+		}
 		const data = await getDataForPlaylistLengthUIElement({
-			apiKey,
 			pageType,
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
@@ -375,9 +298,37 @@ function getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, pl
 	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
 	return { totalTimeSeconds, watchedTimeSeconds };
 }
-async function getDurationFromAPI(playlistId: string, apiKey: string): Promise<number> {
-	const playlistVideos = await fetchPlaylistVideos(playlistId, apiKey);
-	return getPlaylistDuration(playlistVideos, apiKey);
+async function getDurationFromAPI(playlistId: string): Promise<number> {
+	const youtube = await Innertube.create({
+		cookie: document.cookie,
+		fetch: (...args) => fetch(...args)
+	});
+
+	try {
+		const playlist = await youtube.getPlaylist(playlistId);
+
+		let totalSeconds = 0;
+		for (const video of playlist.videos) {
+			const playlistVideo = video as PlaylistVideo;
+			if (playlistVideo?.duration?.seconds) {
+				totalSeconds += playlistVideo.duration.seconds;
+			}
+		}
+
+		while (playlist.has_continuation) {
+			const continuation = await playlist.getContinuation();
+			for (const video of continuation.videos) {
+				const playlistVideo = video as PlaylistVideo;
+				if (playlistVideo?.duration?.seconds) {
+					totalSeconds += playlistVideo.duration.seconds;
+				}
+			}
+		}
+
+		return totalSeconds;
+	} catch (error) {
+		throw new Error(`Error fetching playlist duration: ${error}`);
+	}
 }
 function getVideoDetails(videoElement: Element): VideoDetails {
 	const videoId = getVideoId(videoElement);

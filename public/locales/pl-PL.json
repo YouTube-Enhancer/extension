@@ -102,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Ustawiony klawisz zmiany prędkości przewijania nie może być taki sam, jak klawisz zmiany głośności przewijania kółka.",
@@ -110,10 +111,10 @@
 					}
 				},
 				"info": {
-					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
+					"reset": "Wszystkie opcje zostały przywrócone do domyślnych wartości. Możesz teraz zapisać zmiany, klikając przycisk \"Potwierdź\" bądź odrzucić, je zamykając tę stronę lub ignorując to powiadomienie."
 				},
 				"success": {
-					"saved": "Options saved."
+					"saved": "Zapisano opcje."
 				}
 			}
 		}
@@ -121,12 +122,12 @@
 	"settings": {
 		"clearData": {
 			"allDataDeleted": "All data has been deleted.",
-			"confirmAlert": "This will delete all extension data related to options. Continue?"
+			"confirmAlert": "Usunie to wszystkie dane rozszerzenia związane z opcjami. Kontynuować?"
 		},
 		"optionDisabled": {
 			"either": {
 				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"separator": " albo "
 			},
 			"plural": {
 				"label": "Enable {{OPTIONS}} to configure this option",
@@ -134,11 +135,11 @@
 			},
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
-				"deepDarkCustomTheme": "Set theme to 'Custom' to configure this option.",
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option."
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+				"screenshotButtonFileFormat": "Aby skonfigurować tę opcję, ustaw typ zapisu zrzutu ekranu na „Plik”"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -149,26 +150,26 @@
 					"select": {
 						"label": "Quality fallback strategy",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Wyżej",
+							"lower": "Niżej"
 						},
 						"title": "The strategy to use when the selected quality is not available"
 					}
 				},
 				"select": {
-					"label": "Player quality",
+					"label": "Jakość odtwarzacza",
 					"title": "The quality to set the video to"
 				},
-				"title": "Automatic quality settings"
+				"title": "Opcje automatycznej jakości"
 			},
 			"bottomButtons": {
 				"clear": {
 					"title": "Clears all data this extension has stored on your machine",
-					"value": "Clear Data"
+					"value": "Wyczyść dane"
 				},
 				"confirm": {
 					"title": "Confirm setting reset",
-					"value": "Confirm"
+					"value": "Potwierdź"
 				},
 				"openTab": {
 					"title": "Open extension settings in a new tab"
@@ -181,22 +182,22 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
+						"copyTimestampUrlButton": "Kopiuj adres URL bieżącego momentu",
+						"decreasePlaybackSpeedButton": "Przycisk Zmniejszania Prędkości Odtwarzania",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
+						"increasePlaybackSpeedButton": "Przycisk Zwiększania Prędkości Odtwarzania",
+						"loopButton": "Przycisk Zapętlania",
 						"maximizePlayerButton": "Maximize button",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"screenshotButton": "Przycisk Zrzutu Ekranu",
+						"volumeBoostButton": "Przycisk Zwiększania Głośności"
 					},
 					"options": {
 						"below_player": {
 							"placement": "below the player controls",
-							"value": "Below Player"
+							"value": "Poniżej Odtwarzacza"
 						},
 						"feature_menu": {
 							"placement": "in the feature menu",
@@ -204,11 +205,11 @@
 						},
 						"player_controls_left": {
 							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"value": "Lewostronne Sterowanie"
 						},
 						"player_controls_right": {
 							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"value": "Prawostronne Sterowanie"
 						}
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
@@ -222,18 +223,18 @@
 					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Custom CSS",
+					"label": "Własny CSS",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Custom CSS Settings"
+				"title": "Własne ustawienia CSS"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
 						"label": "Menu Activation Type",
 						"options": {
-							"click": "Click",
-							"hover": "Hover"
+							"click": "Kliknięcie",
+							"hover": "Najechanie kursorem"
 						},
 						"title": "Select the method to activate the feature menu"
 					},
@@ -253,9 +254,9 @@
 			},
 			"importExportSettings": {
 				"exportButton": {
-					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
-					"value": "Export Settings"
+					"success": "Ustawienia zostały pomyślnie wyeksportowane",
+					"title": "Eksportuj ustawienia do pliku JSON",
+					"value": "Eksportuj Ustawienia"
 				},
 				"importButton": {
 					"error": {
@@ -263,16 +264,16 @@
 						"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Settings imported successfully",
-					"title": "Import settings from a JSON file",
-					"value": "Import Settings"
+					"title": "Importuj ustawienia z pliku JSON",
+					"value": "Importuj Ustawienia"
 				}
 			},
 			"language": {
 				"select": {
-					"label": "Language",
-					"title": "The language to use for the extension"
+					"label": "Język",
+					"title": "Język rozszerzenia"
 				},
-				"title": "Language"
+				"title": "Język"
 			},
 			"miscellaneous": {
 				"features": {
@@ -288,6 +289,14 @@
 						"label": "Automatically disable closed captions",
 						"title": "Automatically disables closed captions when you load a video"
 					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Copy video URL with timestamp button",
 						"title": "Copies video URL with timestamp (?t=123)"
@@ -296,8 +305,16 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
+						"label": "Ukryj podsumowanie AI",
 						"title": "Hides the artificial intelligence summary below videos"
 					},
 					"hideEndScreenCards": {
@@ -329,8 +346,8 @@
 						"title": "Hides the pages scrollbar"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Ukryj szorty",
+						"title": "Ukrywa wszystkie szorty"
 					},
 					"hideTranslateComment": {
 						"label": "Hide translate comment button",
@@ -349,7 +366,7 @@
 						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
+						"label": "Otwórz ustawienia YouTube po najechaniu kursorem",
 						"title": "Opens the YouTube settings menu when you hover over the settings button"
 					},
 					"pauseBackgroundPlayers": {
@@ -393,16 +410,16 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Kolor",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
-						"orange": "Orange",
-						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"blue": "Niebieski",
+						"green": "Zielony",
+						"orange": "Pomarańczowy",
+						"pink": "Różowy",
+						"purple": "Fioletowy",
+						"red": "Czerwony",
+						"white": "Biały",
+						"yellow": "Żółty"
 					},
 					"title": "Select the color for the On-Screen Display"
 				},
@@ -483,6 +500,18 @@
 					}
 				}
 			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Failed to add video to Watch Later",
+				"save": "Save to Watch Later"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Screenshot button",
@@ -508,15 +537,15 @@
 					"title": "Adjust the speed change per scroll"
 				},
 				"enable": {
-					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"label": "Sterowanie prędkością kółka myszy",
+					"title": "Naciśnij klawisz modyfikujący, aby włączyć regulację prędkości za pomocą kółka myszy."
 				},
-				"optionLabel": "{{KEY}} key",
+				"optionLabel": "Klawisz {{KEY}}",
 				"select": {
-					"label": "Modifier key",
-					"title": "The modifier key to use"
+					"label": "Klawisz modyfikujący",
+					"title": "Klawisz modyfikujący, którego należy użyć"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "Ustawienia kontroli prędkości kółka myszy"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
@@ -524,30 +553,30 @@
 					"title": "Adjust the volume change per scroll"
 				},
 				"enable": {
-					"label": "Scroll wheel volume control",
-					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
+					"label": "Regulacja głośności za pomocą kółka myszy",
+					"title": "Umożliwia sterowanie głośnością oglądanego filmu za pomocą kółka myszy"
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "When holding modifier key",
-						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+						"label": "Podczas przytrzymywania klawisza modyfikującego",
+						"title": "Naciśnij klawisz modyfikujący, aby włączyć regulację głośności za pomocą kółka myszy."
 					},
-					"optionLabel": "{{KEY}} key",
+					"optionLabel": "Klawisz {{KEY}}",
 					"select": {
-						"label": "Modifier key",
-						"title": "The modifier key to use"
+						"label": "Klawisz modyfikujący",
+						"title": "Klawisz modyfikujący, którego należy użyć"
 					}
 				},
 				"holdRightClick": {
 					"enable": {
-						"label": "When holding right click",
-						"title": "Hold right click to enable scroll wheel volume control"
+						"label": "Przytrzymując prawy przycisk myszy",
+						"title": "Przytrzymaj prawy przycisk myszy, aby włączyć regulację głośności za pomocą kółka myszy"
 					}
 				},
-				"title": "Scroll wheel volume control settings"
+				"title": "Ustawienia regulacji głośności za pomocą kółka myszy"
 			},
 			"settingSearch": {
-				"placeholder": "Search for a setting"
+				"placeholder": "Szukaj ustawienia"
 			},
 			"videoHistory": {
 				"enable": {
@@ -556,87 +585,87 @@
 				},
 				"resumeType": {
 					"select": {
-						"label": "Resume type",
+						"label": "Typ wznowienia filmu",
 						"options": {
-							"automatic": "Automatic",
-							"prompt": "Prompt"
+							"automatic": "Automatyczne",
+							"prompt": "Podpowiedź"
 						},
-						"title": "Select how you want to resume videos"
+						"title": "Wybierz sposób wznawiania filmów"
 					}
 				},
 				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"boostAmount": {
-					"label": "Volume boost amount (dB)",
-					"title": "The amount to boost the volume by"
+					"label": "Wartość zwiększenia głośności (dB)",
+					"title": "O ile należy zwiększyć głośność"
 				},
 				"enable": {
-					"label": "Volume boost",
-					"title": "Enable volume boost"
+					"label": "Zwiększenie głośności",
+					"title": "Włącz zwiększenie głośności"
 				},
 				"mode": {
 					"select": {
-						"label": "Volume boost mode",
+						"label": "Tryb zwiększenia głośności",
 						"options": {
-							"global": "Global",
-							"perVideo": "Per video"
+							"global": "Globalne",
+							"perVideo": "Osobno"
 						},
-						"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+						"title": "Wybierz sposób wzmocnienia głośności. Opcja „Osobno” umożliwia włączenie wzmocnienia dla każdego filmu osobno w menu funkcji. Opcja „Globalne” stosuje wzmocnienie do wszystkich filmów po włączeniu zwiększenia głośności."
 					}
 				},
-				"title": "Volume boost settings"
+				"title": "Ustawienia zwiększenia głośności"
 			},
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "Klucz API",
+					"title": "Wpisz swój klucz API V3."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Klucz YouTube API V3"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Autor",
+				"co-authors": "Współautorzy",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Kolor cienia",
+						"title": "Kolor dla cieni"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Kolor tekstu dodatkowego",
+						"title": "Kolor dla tekstu dodatkowego"
 					},
 					"hoverBackground": {
 						"label": "Hover background color",
 						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Kolor głównego tła",
+						"title": "Kolor dla głównego tła"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Kolor akcentowy",
+						"title": "Kolor akcentowy"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Kolor głównego tekstu",
+						"title": "Kolor dla głównego tekstu"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Kolor dodatkowego tła",
+						"title": "Kolor tła dodatkowego"
 					}
 				},
 				"enable": {
-					"label": "Deep Dark Theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Motyw Deep Dark",
+					"title": "Aktywuj wybrany motyw dla strony"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Wybierz motyw",
+					"title": "Wybierz motyw, który ma zostać zastosowany na stronie"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "Ustawienia motywu YouTube Deep Dark"
 			}
 		}
 	}

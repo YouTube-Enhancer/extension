@@ -238,6 +238,8 @@ export type configuration = {
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_disable_ambient_mode: boolean;
 	enable_automatically_disable_closed_captions: boolean;
+	enable_automatically_enable_closed_captions: boolean;
+	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
@@ -263,10 +265,12 @@ export type configuration = {
 	enable_pausing_background_players: boolean;
 	enable_playback_speed_buttons: boolean;
 	enable_playlist_length: boolean;
+	enable_playlist_management_buttons: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_restore_fullscreen_scrolling: boolean;
+	enable_save_to_watch_later_button: boolean;
 	enable_screenshot_button: boolean;
 	enable_scroll_wheel_speed_control: boolean;
 	enable_scroll_wheel_volume_control: boolean;
@@ -371,6 +375,11 @@ export type ExtensionSendOnlyMessageMappings = {
 		"automaticallyDisableClosedCaptionsChange",
 		{ automaticallyDisableClosedCaptionsEnabled: boolean }
 	>;
+	automaticallyEnableClosedCaptionsChange: DataResponseMessage<
+		"automaticallyEnableClosedCaptionsChange",
+		{ automaticallyEnableClosedCaptionsEnabled: boolean }
+	>;
+	automaticallyMaximizePlayerChange: DataResponseMessage<"automaticallyMaximizePlayerChange", { automaticallyMaximizePlayerEnabled: boolean }>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
@@ -423,11 +432,13 @@ export type ExtensionSendOnlyMessageMappings = {
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	playlistLengthChange: DataResponseMessage<"playlistLengthChange", { playlistLengthEnabled: boolean }>;
 	playlistLengthGetMethodChange: DataResponseMessage<"playlistLengthGetMethodChange", undefined>;
+	playlistManagementButtonsChange: DataResponseMessage<"playlistManagementButtonsChange", { playlistManagementButtonsEnabled: boolean }>;
 	playlistWatchTimeGetMethodChange: DataResponseMessage<"playlistWatchTimeGetMethodChange", undefined>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	removeRedirectChange: DataResponseMessage<"removeRedirectChange", { removeRedirectEnabled: boolean }>;
 	restoreFullscreenScrollingChange: DataResponseMessage<"restoreFullscreenScrollingChange", { restoreFullscreenScrollingEnabled: boolean }>;
+	saveToWatchLaterButtonChange: DataResponseMessage<"saveToWatchLaterButtonChange", { saveToWatchLaterButtonEnabled: boolean }>;
 	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
 	scrollWheelSpeedControlChange: DataResponseMessage<"scrollWheelSpeedControlChange", { scrollWheelSpeedControlEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;
@@ -519,13 +530,6 @@ export type VideoHistoryEntry = {
 };
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
-export type YouTubeAPIQuotaError = {
-	error: {
-		code: number;
-		errors: { domain: string; message: string; reason: string }[];
-		message: string;
-	};
-};
 export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
 export type YouTubePlaylistItem = {
 	contentDetails: {

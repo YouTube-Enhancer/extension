@@ -1,3 +1,4 @@
+import "./index.css";
 import type { GetIconType } from "@/src/icons";
 import type { AllButtonNames, ButtonPlacement, MultiButtonNames, SingleButtonFeatureNames } from "@/src/types";
 
