@@ -571,6 +571,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_automatically_maximize_player.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.label")}
+						onChange={setCheckboxOption("enable_automatically_maximize_player")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_remaining_time?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}
@@ -800,6 +808,14 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_restore_fullscreen_scrolling")}
 						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_save_to_watch_later_button?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.label")}
+						onChange={setCheckboxOption("enable_save_to_watch_later_button")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.title")}
 						type="checkbox"
 					/>
 				</SettingSection>

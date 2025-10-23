@@ -199,6 +199,10 @@ interface EnUS {
 						label: "Automatically enable closed captions";
 						title: "Automatically enables closed captions when you load a video";
 					};
+					automaticallyMaximizePlayer: {
+						label: "Automatically maximize player";
+						title: "Automatically maximizes the player when you load a video";
+					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
@@ -214,6 +218,9 @@ interface EnUS {
 					enablePlaylistManagementButtons: {
 						label: "Enable playlist management buttons";
 						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
+					enableSaveToWatchLaterButton: {
+						label: "Enable save to Watch Later button";
+						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
 					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
@@ -381,6 +388,7 @@ interface EnUS {
 				removeVideo: "Remove video";
 				removingVideo: "Removing video…";
 			};
+			saveToWatchLaterButton: { error: "Failed to add video to Watch Later"; save: "Save to Watch Later" };
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";

@@ -285,6 +285,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyEnableClosedCaptionsEnabled: newValue
 			});
 		},
+		enable_automatically_maximize_player: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("automaticallyMaximizePlayerChange", {
+				automaticallyMaximizePlayerEnabled: newValue
+			});
+		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -429,6 +434,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_restore_fullscreen_scrolling: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("restoreFullscreenScrollingChange", {
 				restoreFullscreenScrollingEnabled: newValue
+			});
+		},
+		enable_save_to_watch_later_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("saveToWatchLaterButtonChange", {
+				saveToWatchLaterButtonEnabled: newValue
 			});
 		},
 		enable_screenshot_button: (__oldValue, newValue) => {

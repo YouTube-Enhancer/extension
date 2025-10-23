@@ -51,16 +51,17 @@ export async function makeFeatureButton<Name extends AllButtonNames, Placement e
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const buttonExists = document.querySelector(`button#${getFeatureButtonId(buttonName)}`) !== null;
 	const button = createStyledElement({
-		classlist: ["ytp-button"],
+		classlist: [
+			"ytp-button",
+			placement === "below_player" ? "yte-button-below-player"
+			: placement === "player_controls_right" ? "yte-button-player-controls-right"
+			: "yte-button-player-controls-left"
+		],
 		elementId: `${getFeatureButtonId(buttonName)}`,
 		elementType: "button",
 		styles: {
-			alignContent: "center",
-			display: "flex",
-			flexWrap: "wrap",
-			justifyContent: "center",
-			padding: "0px 4px",
-			zIndex: "0"
+			alignItems: "center",
+			display: "flex"
 		}
 	});
 	button.dataset.title = label;

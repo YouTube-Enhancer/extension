@@ -1,0 +1,12 @@
+@keyframes yte-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.yte-spinning {
+  animation: yte-spin 2s linear infinite;
+}

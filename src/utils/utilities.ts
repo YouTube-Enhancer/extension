@@ -246,10 +246,11 @@ export function createTooltip({
 	update: () => void;
 } {
 	function makeTooltip() {
+		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
-			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-rounded-tooltip", "ytp-bottom"],
+			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-bottom"],
 			elementId: id,
 			elementType: "div",
 			styles: {
@@ -259,7 +260,7 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${rect.top - 2}px`
+					top: `${rect.top - (isBigMode ? 20 : 6)}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -297,7 +298,13 @@ export function createTooltip({
 				tooltip.remove();
 			}
 			const tooltip = makeTooltip();
-			document.body.appendChild(tooltip);
+			const isButtonBelowPlayer = element?.parentElement?.id === "yte-button-container";
+			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
+			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
+			else {
+				if (playerContainer) playerContainer.appendChild(tooltip);
+				else document.body.appendChild(tooltip);
+			}
 		},
 		remove: () => {
 			const tooltip = document.getElementById(id);
@@ -511,8 +518,12 @@ export function IsDarkMode() {
 	const darkMode = document.documentElement.hasAttribute("dark");
 	return darkMode;
 }
+export function isHomePage() {
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection === undefined;
+}
 export function isLivePage() {
-	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "live";
 }
 export function isNewYouTubeVideoLayout(): boolean {
@@ -526,15 +537,19 @@ export function isNewYouTubeVideoLayout(): boolean {
 	}
 }
 export function isPlaylistPage() {
-	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "playlist";
 }
 export function isShortsPage() {
-	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "shorts";
 }
+export function isSubscriptionsPage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection === "feed" && secondSection === "subscriptions";
+}
 export function isWatchPage() {
-	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
+	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "watch";
 }
 
@@ -686,6 +701,9 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 
 export function timeStringToSeconds(timeString: string): number {
 	const parts = timeString.split(":").reverse();
+	if (parts.length === 1) {
+		return 0;
+	}
 	let seconds = 0;
 	for (let i = 0; i < parts.length; i++) {
 		seconds += parseInt(parts[i], 10) * Math.pow(60, i);
@@ -798,18 +816,16 @@ function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: s
 }
 
 /**
- * Extracts the first section from a YouTube URL path.
+ * Extracts all sections from a YouTube URL path.
  * @param {string} url - The YouTube URL.
- * @returns {string|null} The first section of the URL path, or null if not found.
+ * @returns {string[]} An array of all sections of the URL path.
  */
-function extractFirstSectionFromYouTubeURL(url: string): null | string {
+function extractSectionsFromYouTubeURL(url: string): string[] {
 	// Parse the URL into its components
 	const { pathname: path } = new URL(url);
 
 	// Split the path into an array of sections
-	const sections = path.split("/").filter((section) => section !== "");
-
-	return sections.length > 0 ? sections[0] : null;
+	return path.split("/").filter((section) => section !== "");
 }
 function getColor(type: ColorType) {
 	switch (type) {
