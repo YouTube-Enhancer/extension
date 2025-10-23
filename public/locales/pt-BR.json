@@ -293,6 +293,10 @@
 						"label": "Automatically enable closed captions",
 						"title": "Automatically enables closed captions when you load a video"
 					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Copiar URL do vídeo com o botão de minutagem",
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
@@ -302,8 +306,12 @@
 						"title": "Sempre retornar à faixa de vídeo original"
 					},
 					"enablePlaylistManagementButtons": {
-						"label": "Ativar botões de gerenciamento de playlist",
-						"title": "Adiciona botões aos itens da playlist para remover vídeos da playlist ou marcá-los como não assistidos"
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
@@ -493,12 +501,16 @@
 				}
 			},
 			"playlistManagementButtons": {
-				"removeVideo": "Remover vídeo",
-				"removingVideo": "Removendo vídeo…",
-				"failedToRemoveVideo": "Falha ao remover vídeo",
-				"markAsUnwatched": "Marcar como não assistido",
-				"markingAsUnwatched": "Marcando como não assistido…",
-				"failedToMarkAsUnwatched": "Falha ao marcar como não assistido"
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Failed to add video to Watch Later",
+				"save": "Save to Watch Later"
 			},
 			"screenshotButton": {
 				"enable": {
