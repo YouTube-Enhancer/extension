@@ -8,7 +8,7 @@ import {
 import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
 import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
 import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
@@ -24,7 +24,8 @@ import {
 	disableHideEndScreenCards,
 	enableHideEndScreenCards,
 	isEndScreenCardsHidden,
-	removeHideEndScreenCardsButton
+	removeHideEndScreenCardsButton,
+	updateHideEndScreenCardsButtonState
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
 import {
@@ -78,7 +79,7 @@ import volumeBoost, {
 	removeVolumeBoostButton
 } from "@/src/features/volumeBoost";
 import { i18nService } from "@/src/i18n";
-import { getFeatureIcon, type ToggleFeatures, toggleFeatures, type ToggleIcon } from "@/src/icons";
+import { getFeatureIcon, type ToggleFeatures, toggleFeatures } from "@/src/icons";
 import {
 	type AllButtonNames,
 	type ButtonPlacement,
@@ -237,14 +238,6 @@ const enableFeatures = async () => {
 				}
 			}
 		}
-		// Features that add buttons should be put below and be ordered in the order those buttons should appear
-		await addHideEndScreenCardsButton();
-		await addScreenshotButton();
-		await openTranscriptButton();
-		await addMaximizePlayerButton();
-		await addLoopButton();
-		await addCopyTimestampUrlButton();
-		await volumeBoost();
 		await Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
 			setupPlaybackSpeedChangeListener(),
@@ -267,6 +260,14 @@ const enableFeatures = async () => {
 			enableDefaultToOriginalAudioTrack(),
 			enableRestoreFullscreenScrolling()
 		]);
+		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addHideEndScreenCardsButton();
+		await addScreenshotButton();
+		await openTranscriptButton();
+		await addMaximizePlayerButton();
+		await addLoopButton();
+		await addCopyTimestampUrlButton();
+		await volumeBoost();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -568,31 +569,15 @@ const initialize = function () {
 						const {
 							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
 						} = message;
-						const updateHideEndScreenCardsButtonState = (icon: ToggleIcon, checked: boolean) => {
-							if (hideEndScreenCardsPlacement === "feature_menu") {
-								const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
-								if (!hideEndScreenCardsMenuItem) return;
-								hideEndScreenCardsMenuItem.ariaChecked = checked ? "false" : "true";
-							} else {
-								const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
-								if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
-								updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
-								updateFeatureButtonTitle(
-									"hideEndScreenCardsButton",
-									i18nextInstance.t(`pages.content.features.hideEndScreenCardsButton.button.toggle.${checked ? "on" : "off"}`)
-								);
-								hideEndScreenCardsButton.ariaChecked = checked ? "true" : "false";
-							}
-						};
-						const endScreenCardsHidden = isEndScreenCardsHidden();
+						const endScreenCardsHidden = await isEndScreenCardsHidden();
 						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
 						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
 						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
 							await enableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, false);
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, false);
 						} else if (!hideEndScreenCardsEnabled && endScreenCardsHidden) {
 							await disableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsIcon, true);
+							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, true);
 						}
 						break;
 					}
