@@ -294,8 +294,8 @@
 						"title": "Abilita automaticamente le didascalie chiuse quando si carica un video"
 					},
 					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
-						"title": "Automatically maximizes the player when you load a video"
+						"label": "Massimizza automaticamente il riproduttore",
+						"title": "Massimizza automaticamente il riproduttore quando carichi un video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -304,6 +304,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Abilita i pulsanti di gestione della lista riproduzioni",
+						"title": "Aggiunge pulsanti agli elementi della lista riproduzioni per rimuovere i video dalla lista riproduzioni o contrassegnarli come non visti"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
+						"title": "Aggiunge un pulsante ai video Home e Abbonamenti per salvare il video nella lista riproduzioni 'Guarda più tardi'"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
@@ -491,6 +499,18 @@
 						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Impossibile contrassegnare il video come non visto",
+				"failedToRemoveVideo": "Impossibile rimuovere il video",
+				"markAsUnwatched": "Contrassegna come non visto",
+				"markingAsUnwatched": "Contrassegno come non visto…",
+				"removeVideo": "Rimuovi video",
+				"removingVideo": "Rimozione video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Impossibile aggiungere il video a Guarda più tardi",
+				"save": "Salva per guardare più tardi"
 			},
 			"screenshotButton": {
 				"enable": {
