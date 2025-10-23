@@ -83,11 +83,10 @@ export async function enableSaveToWatchLaterButton() {
 				}
 			});
 
-			const buttons = video.querySelector("button-view-model");
-			if (buttons) {
-				const title = video.querySelector(".yt-lockup-metadata-view-model__title") as HTMLElement;
-				const paddingRight = parseInt(getComputedStyle(title).paddingRight, 10);
-				title.style.paddingRight = `${paddingRight + 40}px`;
+			const heading = video.querySelector("h3") as HTMLElement;
+			const buttons = video.querySelector("button-view-model") as HTMLElement;
+			if (heading && buttons) {
+				heading.style.paddingRight = "40px";
 				const buttonClasses = Array.from(buttons.children[0].classList).join(" ");
 				saveButton.className += " " + buttonClasses;
 				buttons.prepend(saveButton);
@@ -114,8 +113,7 @@ export async function enableSaveToWatchLaterButton() {
 }
 
 function removeSaveToWatchLaterButton(button: HTMLElement) {
-	const title = button.closest("yt-lockup-view-model")!.querySelector(".yt-lockup-metadata-view-model__title") as HTMLElement;
-	const paddingRight = parseInt(getComputedStyle(title).paddingRight, 10);
-	title.style.paddingRight = `${paddingRight - 40}px`;
+	const heading = button.closest("yt-lockup-view-model")!.querySelector("h3") as HTMLElement;
+	heading.style.paddingRight = "0";
 	button.style.display = "none";
 }
