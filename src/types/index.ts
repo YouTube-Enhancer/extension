@@ -269,6 +269,7 @@ export type configuration = {
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
 	enable_restore_fullscreen_scrolling: boolean;
+	enable_save_to_watch_later_button: boolean;
 	enable_screenshot_button: boolean;
 	enable_scroll_wheel_speed_control: boolean;
 	enable_scroll_wheel_volume_control: boolean;
@@ -435,6 +436,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;
 	removeRedirectChange: DataResponseMessage<"removeRedirectChange", { removeRedirectEnabled: boolean }>;
 	restoreFullscreenScrollingChange: DataResponseMessage<"restoreFullscreenScrollingChange", { restoreFullscreenScrollingEnabled: boolean }>;
+	saveToWatchLaterButtonChange: DataResponseMessage<"saveToWatchLaterButtonChange", { saveToWatchLaterButtonEnabled: boolean }>;
 	screenshotButtonChange: DataResponseMessage<"screenshotButtonChange", { screenshotButtonEnabled: boolean }>;
 	scrollWheelSpeedControlChange: DataResponseMessage<"scrollWheelSpeedControlChange", { scrollWheelSpeedControlEnabled: boolean }>;
 	scrollWheelVolumeControlChange: DataResponseMessage<"scrollWheelVolumeControlChange", { scrollWheelVolumeControlEnabled: boolean }>;

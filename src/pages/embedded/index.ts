@@ -65,6 +65,7 @@ import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay }
 import enableRememberVolume from "@/src/features/rememberVolume";
 import enableRemoveRedirect from "@/src/features/removeRedirect";
 import { disableRestoreFullscreenScrolling, enableRestoreFullscreenScrolling } from "@/src/features/restoreFullscreenScrolling";
+import { disableSaveToWatchLaterButton, enableSaveToWatchLaterButton } from "@/src/features/saveToWatchLaterButton";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
 import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
@@ -196,7 +197,8 @@ const enableFeatures = async () => {
 			enableCustomCSS(),
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage(),
-			enableHidePlaylistRecommendationsFromHomePage()
+			enableHidePlaylistRecommendationsFromHomePage(),
+			enableSaveToWatchLaterButton()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -939,6 +941,17 @@ const initialize = function () {
 							await enableRestoreFullscreenScrolling();
 						} else {
 							await disableRestoreFullscreenScrolling();
+						}
+						break;
+					}
+					case "saveToWatchLaterButtonChange": {
+						const {
+							data: { saveToWatchLaterButtonEnabled }
+						} = message;
+						if (saveToWatchLaterButtonEnabled) {
+							await enableSaveToWatchLaterButton();
+						} else {
+							await disableSaveToWatchLaterButton();
 						}
 						break;
 					}
