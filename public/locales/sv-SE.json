@@ -293,6 +293,10 @@
 						"label": "Automatically enable closed captions",
 						"title": "Automatically enables closed captions when you load a video"
 					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
 						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
