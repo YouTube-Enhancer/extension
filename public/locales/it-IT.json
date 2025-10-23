@@ -102,7 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Questa opzione non può essere abilitata mentre '{{OPTION}}' è abilitato.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Il tasto per modificare la velocità della rotellina del mouse non può essere lo stesso che modifica il volume con la rotellina del mouse.",
@@ -290,8 +290,12 @@
 						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Abilita automaticamente le didascalie chiuse",
+						"title": "Abilita automaticamente le didascalie chiuse quando si carica un video"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Massimizza automaticamente il riproduttore",
+						"title": "Massimizza automaticamente il riproduttore quando carichi un video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -302,8 +306,12 @@
 						"title": "Traccia audio originale sempre predefinita"
 					},
 					"enablePlaylistManagementButtons": {
-						"label": "Abilita pulsanti gestione playlist",
-						"title": "Aggiunge pulsanti agli elementi della playlist per rimuovere video dalla playlist o contrassegnarli come non visti"
+						"label": "Abilita i pulsanti di gestione della lista riproduzioni",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
@@ -493,12 +501,16 @@
 				}
 			},
 			"playlistManagementButtons": {
-				"removeVideo": "Rimuovi video",
-				"removingVideo": "Rimozione del video in corso…",
-				"failedToRemoveVideo": "Impossibile rimuovere il video",
-				"markAsUnwatched": "Segna come non visto",
-				"markingAsUnwatched": "Contrassegno come non visto in corso…",
-				"failedToMarkAsUnwatched": "Impossibile contrassegnare come non visto"
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Failed to add video to Watch Later",
+				"save": "Save to Watch Later"
 			},
 			"screenshotButton": {
 				"enable": {
