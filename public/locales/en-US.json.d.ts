@@ -218,6 +218,7 @@ interface EnUS {
 					enablePlaylistManagementButtons: {
 						label: "Enable playlist management buttons";
 						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
+					};
 					enableSaveToWatchLaterButton: {
 						label: "Enable save to Watch Later button";
 						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
