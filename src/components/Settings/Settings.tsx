@@ -571,6 +571,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_automatically_maximize_player.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.label")}
+						onChange={setCheckboxOption("enable_automatically_maximize_player")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_remaining_time?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}

@@ -6,6 +6,7 @@ import {
 	enableAutomaticallyDisableClosedCaptions
 } from "@/src/features/automaticallyDisableClosedCaptions";
 import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
+import { disableAutomaticallyMaximizePlayer, enableAutomaticallyMaximizePlayer } from "@/src/features/automaticallyMaximizePlayer";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -258,7 +259,8 @@ const enableFeatures = async () => {
 			enableAutomaticallyEnableClosedCaptions(),
 			enableAutomaticallyDisableAmbientMode(),
 			enableDefaultToOriginalAudioTrack(),
-			enableRestoreFullscreenScrolling()
+			enableRestoreFullscreenScrolling(),
+			enableAutomaticallyMaximizePlayer()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -360,6 +362,14 @@ const initialize = function () {
 						} else {
 							await disableAutomaticallyEnableClosedCaptions();
 						}
+						break;
+					}
+					case "automaticallyMaximizePlayerChange": {
+						const {
+							data: { automaticallyMaximizePlayerEnabled }
+						} = message;
+						if (automaticallyMaximizePlayerEnabled) await enableAutomaticallyMaximizePlayer();
+						else disableAutomaticallyMaximizePlayer();
 						break;
 					}
 					case "automaticTheaterModeChange": {
