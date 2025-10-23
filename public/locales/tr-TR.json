@@ -305,6 +305,14 @@
 						"label": "Varsayılan olarak orijinal ses parçasına dön",
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "AI özetini gizle",
 						"title": "Videoların altındaki yapay zeka özetini gizler"
@@ -491,6 +499,18 @@
 						"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
 					}
 				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"error": "Failed to add video to Watch Later",
+				"save": "Save to Watch Later"
 			},
 			"screenshotButton": {
 				"enable": {
