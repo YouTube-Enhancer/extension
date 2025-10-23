@@ -1,3 +1,37 @@
+# [1.29.0](https://github.com/YouTube-Enhancer/extension/compare/v1.28.1...v1.29.0) (2025-10-23)
+
+
+### Bug Fixes
+
+* **automatically disable ambient mode:** update code for Modern Delhi UI ([a87d68a](https://github.com/YouTube-Enhancer/extension/commit/a87d68a0967ffc3e1d293f28b18448138f6c4589))
+* **deep dark theme:** Make color options only show if theme is 'Custom' ([5f951d3](https://github.com/YouTube-Enhancer/extension/commit/5f951d3ad7db554d0ce7ce663d72550e70392932))
+* **hide end screen cards:** Hide 'show/hide' button and inconsistent hiding behavior [#1006](https://github.com/YouTube-Enhancer/extension/issues/1006) ([9492c08](https://github.com/YouTube-Enhancer/extension/commit/9492c08077dfd2321fba49122ffc19c47771f2ac))
+* **hide shorts:** improper selector was causing gaps in home page at times ([14490c9](https://github.com/YouTube-Enhancer/extension/commit/14490c9cfd36f9ddf2c5c9cf308eaa6a28914bbf))
+* Make player buttons match new layout ([8e8dc26](https://github.com/YouTube-Enhancer/extension/commit/8e8dc26dc2b79b58808d950048d0749d5a45256d))
+* **maximize player button:** New layout and fix positioning [#738](https://github.com/YouTube-Enhancer/extension/issues/738) [#1013](https://github.com/YouTube-Enhancer/extension/issues/1013) ([5e0798e](https://github.com/YouTube-Enhancer/extension/commit/5e0798ecda3126d4bea73444badd82da58342e50))
+* **playlist length:** Add support for immersive header layout ([0937fa6](https://github.com/YouTube-Enhancer/extension/commit/0937fa63a44c1fce724031b502c6f013af694195))
+* **screenshot button:** File mimeType not matching file extension ([a78eb16](https://github.com/YouTube-Enhancer/extension/commit/a78eb165c86e44d0c819235afdafe1e885260459))
+* update feature menu for Modern Delhi player [#1017](https://github.com/YouTube-Enhancer/extension/issues/1017) ([b4dea7d](https://github.com/YouTube-Enhancer/extension/commit/b4dea7d9d41e57cf89770f2ad654000c2ade2aa5))
+* update tooltip for Modern Delhi player ([4d0e4c6](https://github.com/YouTube-Enhancer/extension/commit/4d0e4c64bab2ec8807cddfbc4465eb0907e6653a))
+
+
+### Features
+
+* Automatically enable closed captions [#989](https://github.com/YouTube-Enhancer/extension/issues/989) ([3af50d1](https://github.com/YouTube-Enhancer/extension/commit/3af50d112fbc605280e6598b7da6e4ee9714e6d5))
+* automatically maximize player [#163](https://github.com/YouTube-Enhancer/extension/issues/163) ([cc2b903](https://github.com/YouTube-Enhancer/extension/commit/cc2b903340f0669ef5401706cb37d0806e9d3c19))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.29.0-Chrome.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Chromium.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Edge.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Firefox.zip | dddef3a594d2cce5d7466bc6d406f3126200208daf4d4ebcc382a76e13e83a64 |
+
 ## [1.28.1](https://github.com/YouTube-Enhancer/extension/compare/v1.28.0...v1.28.1) (2025-09-25)
 
 
