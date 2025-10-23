@@ -199,6 +199,10 @@ interface EnUS {
 						label: "Automatically enable closed captions";
 						title: "Automatically enables closed captions when you load a video";
 					};
+					automaticallyMaximizePlayer: {
+						label: "Automatically maximize player";
+						title: "Automatically maximizes the player when you load a video";
+					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";

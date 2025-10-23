@@ -239,6 +239,7 @@ export type configuration = {
 	enable_automatically_disable_ambient_mode: boolean;
 	enable_automatically_disable_closed_captions: boolean;
 	enable_automatically_enable_closed_captions: boolean;
+	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
@@ -376,6 +377,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"automaticallyEnableClosedCaptionsChange",
 		{ automaticallyEnableClosedCaptionsEnabled: boolean }
 	>;
+	automaticallyMaximizePlayerChange: DataResponseMessage<"automaticallyMaximizePlayerChange", { automaticallyMaximizePlayerEnabled: boolean }>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;

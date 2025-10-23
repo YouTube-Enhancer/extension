@@ -20,12 +20,13 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the maximize player button option is disabled, return
 	if (!enableMaximizePlayerButton) return;
+	const isPlayerMaximized = document.body.getAttribute("yte-maximized") === "";
 	await addFeatureButton(
 		"maximizePlayerButton",
 		maximizePlayerButtonPlacement,
 		maximizePlayerButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.label")
-		:	window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"),
+		:	window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.button.toggle.${isPlayerMaximized ? "on" : "off"}`),
 		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement),
 		(checked) => {
 			if (checked === undefined) return;
@@ -49,7 +50,8 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 				minimizePlayer();
 			}
 		},
-		true
+		true,
+		isPlayerMaximized
 	);
 };
 export const removeMaximizePlayerButton: RemoveButtonFunction = async (placement) => {
