@@ -43,7 +43,7 @@ import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
 import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
-import { maximizePlayer } from "@/src/features/maximizePlayerButton/utils";
+import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -783,17 +783,7 @@ const initialize = function () {
 							await addMaximizePlayerButton();
 						} else {
 							await removeMaximizePlayerButton();
-							const maximizePlayerButton = document.querySelector<HTMLButtonElement>("video.html5-main-video");
-							if (!maximizePlayerButton) return;
-							// Get the video element
-							const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-							// If video element is not available, return
-							if (!videoElement) return;
-							const videoContainer = document.querySelector<YouTubePlayerDiv>("video.html5-main-video");
-							if (!videoContainer) return;
-							if (videoContainer.classList.contains("maximized_video_container") && videoElement.classList.contains("maximized_video")) {
-								maximizePlayer();
-							}
+							minimizePlayer();
 						}
 						break;
 					}
