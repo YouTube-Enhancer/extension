@@ -389,7 +389,11 @@ interface EnUS {
 				removeVideo: "Remove video";
 				removingVideo: "Removing video…";
 			};
-			saveToWatchLaterButton: { error: "Failed to add video to Watch Later"; save: "Save to Watch Later" };
+			saveToWatchLaterButton: {
+				failedToSaveVideo: "Failed to save video to Watch Later";
+				saveVideo: "Save to Watch Later";
+				savingVideo: "Saving to Watch Later…";
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";
