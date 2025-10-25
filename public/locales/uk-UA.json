@@ -1,6 +1,6 @@
 {
 	"langCode": "uk-UA",
-	"langName": "English (US)",
+	"langName": "Українська (UA)",
 	"messages": {
 		"resumingVideo": "Продовжити відео з {{VIDEO_TIME}}",
 		"settingVolume": "Посилити гучність до {{VOLUME_BOOST_AMOUNT}}"
