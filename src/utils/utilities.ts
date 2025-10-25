@@ -557,8 +557,42 @@ export function modifyElementClassList(action: ModifyElementAction, elementPair:
 	const { className, element } = elementPair;
 	element?.classList[action](className);
 }
-export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]) {
-	elements.forEach((element) => modifyElementClassList(action, element));
+
+export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, selectors: string[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: Nullable<Element>[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: NodeListOf<Element>): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	classNameOrPairs: ElementClassPair[] | string,
+	selectors?: NodeListOf<Element> | Nullable<Element>[] | string[]
+): void {
+	let elements: ElementClassPair[] = [];
+	if (Array.isArray(classNameOrPairs) && classNameOrPairs.every((x) => "element" in x)) {
+		// Case 1: Array of ElementClassPair
+		elements = classNameOrPairs;
+	} else if (typeof classNameOrPairs === "string") {
+		if (Array.isArray(selectors) && typeof selectors[0] === "string") {
+			// Case 2: Array of selector strings
+			elements = (selectors as string[]).map((selector) => ({
+				className: classNameOrPairs,
+				element: document.querySelector(selector)
+			}));
+		} else if (selectors instanceof NodeList) {
+			// Case 3: NodeList
+			elements = Array.from(selectors).map((element) => ({
+				className: classNameOrPairs,
+				element
+			}));
+		} else if (Array.isArray(selectors) && selectors[0] instanceof Element) {
+			// Case 4: Array of Elements
+			elements = (selectors as Element[]).map((element) => ({
+				className: classNameOrPairs,
+				element
+			}));
+		}
+	}
+	elements.forEach((pair) => modifyElementClassList(action, pair));
 }
 export function parseStoredValue(value: string) {
 	try {
