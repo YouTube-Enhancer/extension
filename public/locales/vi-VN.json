@@ -1,6 +1,6 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "vi-VN",
+	"langName": "Tiếng Việt",
 	"messages": {
 		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
