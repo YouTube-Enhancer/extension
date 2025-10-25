@@ -2,10 +2,7 @@ import { modifyElementsClassList } from "@/src/utils/utilities";
 
 const playablesSelector = "ytd-rich-section-renderer:has(a[href='/playables'])";
 export async function hidePlayables() {
-	modifyElementsClassList(
-		"add",
-		Array.from(document.querySelectorAll(playablesSelector)).map((element) => ({ className: "yte-hide-playables", element }))
-	);
+	modifyElementsClassList("add", "yte-hide-playables", document.querySelectorAll(playablesSelector));
 }
 export function observePlayables() {
 	const observer = new MutationObserver(async (mutations) => {
@@ -18,8 +15,5 @@ export function observePlayables() {
 	return observer;
 }
 export async function showPlayables() {
-	modifyElementsClassList(
-		"remove",
-		Array.from(document.querySelectorAll(playablesSelector)).map((element) => ({ className: "yte-hide-playables", element }))
-	);
+	modifyElementsClassList("remove", "yte-hide-playables", document.querySelectorAll(playablesSelector));
 }

@@ -80,33 +80,15 @@ export function isEndScreenCardsHidden(): boolean {
 	return endCards.length > 0;
 }
 function hideEndScreenCards() {
-	modifyElementsClassList(
-		"add",
-		Array.from(document.querySelectorAll(".ytp-ce-element")).map((element) => ({
-			className: "yte-hide-end-screen-cards",
-			element
-		}))
-	);
-	modifyElementsClassList("add", [
-		{
-			className: "yte-hide-end-screen-cards",
-			element: document.querySelector(".ytp-ce-hide-button-container")
-		}
+	modifyElementsClassList("add", "yte-hide-end-screen-cards", [
+		document.querySelector(".ytp-ce-hide-button-container"),
+		...document.querySelectorAll(".ytp-ce-element")
 	]);
 }
 function showEndScreenCards() {
-	modifyElementsClassList(
-		"remove",
-		Array.from(document.querySelectorAll(".ytp-ce-element")).map((element) => ({
-			className: "yte-hide-end-screen-cards",
-			element
-		}))
-	);
-	modifyElementsClassList("remove", [
-		{
-			className: "yte-hide-end-screen-cards",
-			element: document.querySelector(".ytp-ce-hide-button-container")
-		}
+	modifyElementsClassList("remove", "yte-hide-end-screen-cards", [
+		document.querySelector(".ytp-ce-hide-button-container"),
+		...document.querySelectorAll(".ytp-ce-element")
 	]);
 }
 export const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icon: ToggleIcon, checked: boolean) => {
