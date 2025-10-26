@@ -51,7 +51,11 @@ export async function enableSaveToWatchLaterButton() {
 
 	function addButtonToVideoItems() {
 		document.querySelectorAll("yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))").forEach((video) => {
-			const { contentId: videoId } = (video as YTLockupViewModel).rawProps.data();
+			const { rawProps } = video as YTLockupViewModel;
+			if (!rawProps.data) {
+				return;
+			}
+			const { contentId: videoId } = rawProps.data();
 
 			const saveButton = createActionButton({
 				className: "yte-save-to-watch-later-button",
