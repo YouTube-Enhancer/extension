@@ -329,6 +329,10 @@
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "隐藏音乐人官方视频",
 						"title": "从主页上隐藏来自音乐人官方频道的视频"
@@ -404,10 +408,6 @@
 					"skipContinueWatching": {
 						"label": "跳过\"视频已暂停。继续观看吗？\"",
 						"title": "跳过暂停视频播放的闲置对话框"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "其他设置"
@@ -513,8 +513,6 @@
 				"removingVideo": "正在移除视频…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "将视频添加到稍后观看失败",
-				"save": "保存至稍后观看",
 				"failedToSaveVideo": "Failed to save video to Watch Later",
 				"saveVideo": "Save to Watch Later",
 				"savingVideo": "Saving to Watch Later…"

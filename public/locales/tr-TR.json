@@ -329,6 +329,10 @@
 						"label": "Canlı yayın sohbetini gizle",
 						"title": "Canlı yayın sohbetini gizler"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Resmi Sanatçı Videolarını Gizle",
 						"title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
@@ -404,10 +408,6 @@
 					"skipContinueWatching": {
 						"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
 						"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -513,8 +513,6 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later",
 				"failedToSaveVideo": "Failed to save video to Watch Later",
 				"saveVideo": "Save to Watch Later",
 				"savingVideo": "Saving to Watch Later…"

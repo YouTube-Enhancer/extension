@@ -329,6 +329,10 @@
 						"label": "Livestream chat verbergen",
 						"title": "Verbergt de livestream chat"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Verberg Officiële Artiest Video's",
 						"title": "Verberg Officiële Artiest Video's op de homepagina"
@@ -404,10 +408,6 @@
 					"skipContinueWatching": {
 						"label": "Sla \"video is gepauzeerd. Hervatten?\" over",
 						"title": "Slaat het afwezig dialoog die het afspelen pauzeert over"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "Overige instellingen"
@@ -513,8 +513,6 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later",
 				"failedToSaveVideo": "Failed to save video to Watch Later",
 				"saveVideo": "Save to Watch Later",
 				"savingVideo": "Saving to Watch Later…"
