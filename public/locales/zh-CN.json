@@ -509,8 +509,9 @@
 				"removingVideo": "正在移除视频…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "将视频添加到稍后观看失败",
-				"save": "保存至稍后观看"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
