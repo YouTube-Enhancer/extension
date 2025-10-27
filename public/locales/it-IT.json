@@ -509,8 +509,9 @@
 				"removingVideo": "Rimozione video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Impossibile aggiungere il video a Guarda più tardi",
-				"save": "Salva per guardare più tardi"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
