@@ -329,6 +329,10 @@
 						"label": "Dölj direktströmschatt",
 						"title": "Döljer direktströmschatten"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Dölj officiella artistvideor",
 						"title": "Dölj officiella artistvideor från startsidan"
