@@ -342,6 +342,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideLiveStreamChatEnabled: newValue
 			});
 		},
+		enable_hide_members_only_videos: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideMembersOnlyVideosChange", {
+				hideMembersOnlyVideosEnabled: newValue
+			});
+		},
 		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
 		},

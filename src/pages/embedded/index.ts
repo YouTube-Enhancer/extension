@@ -29,6 +29,7 @@ import {
 	updateHideEndScreenCardsButtonState
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import { disableHideMembersOnlyVideos, enableHideMembersOnlyVideos } from "@/src/features/hideMembersOnlyVideos";
 import {
 	disableHideOfficialArtistVideosFromHomePage,
 	enableHideOfficialArtistVideosFromHomePage
@@ -188,6 +189,7 @@ const enableFeatures = async () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		await Promise.all([
 			enableHidePaidPromotionBanner(),
+			enableHideMembersOnlyVideos(),
 			enableHideShorts(),
 			enableHidePlayables(),
 			enableRemoveRedirect(),
@@ -603,6 +605,17 @@ const initialize = function () {
 							await enableHideLiveStreamChat();
 						} else {
 							await disableHideLiveStreamChat();
+						}
+						break;
+					}
+					case "hideMembersOnlyVideosChange": {
+						const {
+							data: { hideMembersOnlyVideosEnabled }
+						} = message;
+						if (hideMembersOnlyVideosEnabled) {
+							await enableHideMembersOnlyVideos();
+						} else {
+							await disableHideMembersOnlyVideos();
 						}
 						break;
 					}
