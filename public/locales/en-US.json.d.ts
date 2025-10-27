@@ -203,6 +203,10 @@ interface EnUS {
 						label: "Automatically maximize player";
 						title: "Automatically maximizes the player when you load a video";
 					};
+					automaticallyShowMoreVideosOnEndScreen: {
+						label: "Automatically show more videos on end screen";
+						title: "Automatically shows more videos on end screen when you load a video";
+					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";

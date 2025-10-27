@@ -297,6 +297,10 @@
 						"label": "自动最大化播放器",
 						"title": "当视频打开时，自动最大化播放器"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "复制带有时间戳的视频 URL 按钮",
 						"title": "复制带有时间戳的视频 URL (?t=123)"

@@ -290,6 +290,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyMaximizePlayerEnabled: newValue
 			});
 		},
+		enable_automatically_show_more_videos_on_end_screen: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
+				hideEndScreenCardsButtonEnabled: newValue
+			});
+		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue

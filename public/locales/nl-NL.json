@@ -297,6 +297,10 @@
 						"label": "Automatically maximize player",
 						"title": "Automatically maximizes the player when you load a video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Kopieer video URL met tijdstempel knop",
 						"title": "Kopieer video URL met tijdstempel (?t=123)"
