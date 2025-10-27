@@ -329,6 +329,10 @@
 						"label": "隐藏直播聊天",
 						"title": "隐藏直播聊天"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "隐藏音乐人官方视频",
 						"title": "从主页上隐藏来自音乐人官方频道的视频"
