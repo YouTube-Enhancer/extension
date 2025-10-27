@@ -329,6 +329,10 @@
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "公式アーティストの動画を隠する",
 						"title": "ホームページから公式アーティストの動画を隠する"
