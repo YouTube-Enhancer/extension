@@ -514,6 +514,17 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 		}
 	}
 }
+export function isChannelHomePage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return (
+		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === undefined) ||
+		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === "featured")
+	);
+}
+export function isChannelVideosPage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "videos";
+}
 export function IsDarkMode() {
 	const darkMode = document.documentElement.hasAttribute("dark");
 	return darkMode;

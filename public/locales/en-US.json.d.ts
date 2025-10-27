@@ -236,6 +236,10 @@ interface EnUS {
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hideMembersOnlyVideos: {
+						label: "Hide members-only videos";
+						title: "Hides videos that are only visible to members";
+					};
 					hideOfficialArtistVideosFromHomePage: {
 						label: "Hide Official Artist Videos";
 						title: "Hide Official Artist Videos from Home Page";

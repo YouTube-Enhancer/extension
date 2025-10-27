@@ -251,6 +251,7 @@ export type configuration = {
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
+	enable_hide_members_only_videos: boolean;
 	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_paid_promotion_banner: boolean;
 	enable_hide_playables: boolean;
@@ -401,6 +402,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
 	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
+	hideMembersOnlyVideosChange: DataResponseMessage<"hideMembersOnlyVideosChange", { hideMembersOnlyVideosEnabled: boolean }>;
 	hideOfficialArtistVideosFromHomePageChange: DataResponseMessage<
 		"hideOfficialArtistVideosFromHomePageChange",
 		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }
