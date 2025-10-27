@@ -329,6 +329,10 @@
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Nascondi video ufficiali dell'artista",
 						"title": "Nascondi video ufficiali dell'artista dalla pagina iniziale"
