@@ -329,6 +329,10 @@
 						"label": "Спрятать чат прямого эфира",
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Скрывать официальные видео исполнителя",
 						"title": "Скрывает официальные видео исполнителя с домашней страницы"
