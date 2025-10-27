@@ -329,6 +329,10 @@
 						"label": "Спрятать чат прямого эфира",
 						"title": "Прячет чат прямого эфира (стрима)"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Скрывать официальные видео исполнителя",
 						"title": "Скрывает официальные видео исполнителя с домашней страницы"
@@ -404,10 +408,6 @@
 					"skipContinueWatching": {
 						"label": "Пропускать \"Воспроизведение приостановлено. Продолжить?\"",
 						"title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "Прочие параметры"
@@ -513,8 +513,6 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later",
 				"failedToSaveVideo": "Failed to save video to Watch Later",
 				"saveVideo": "Save to Watch Later",
 				"savingVideo": "Saving to Watch Later…"

@@ -329,6 +329,10 @@
 						"label": "配信チャットを隠す",
 						"title": "配信チャットを隠する"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "公式アーティストの動画を隠する",
 						"title": "ホームページから公式アーティストの動画を隠する"
@@ -404,10 +408,6 @@
 					"skipContinueWatching": {
 						"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
 						"title": "動画一時休止する休眠メッセージを抜かされます"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "他の設定"
@@ -513,8 +513,6 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later",
 				"failedToSaveVideo": "Failed to save video to Watch Later",
 				"saveVideo": "Save to Watch Later",
 				"savingVideo": "Saving to Watch Later…"
