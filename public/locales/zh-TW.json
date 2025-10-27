@@ -404,6 +404,10 @@
 					"skipContinueWatching": {
 						"label": "跳過「影片已暫停，繼續觀看？」",
 						"title": "跳過暫停影片播放的閒置對話框"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "其他設定"
@@ -510,7 +514,10 @@
 			},
 			"saveToWatchLaterButton": {
 				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"save": "Save to Watch Later",
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
