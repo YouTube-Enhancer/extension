@@ -329,6 +329,10 @@
 						"label": "Ocultar chat da transmissão",
 						"title": "Oculta o chat da transmissão"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Ocultar vídeos de artistas originais",
 						"title": "Ocultar vídeos de artistas originais do início"
