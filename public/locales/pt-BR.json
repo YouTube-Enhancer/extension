@@ -404,6 +404,10 @@
 					"skipContinueWatching": {
 						"label": "Pular aviso de ausência",
 						"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "Diversos"
@@ -510,7 +514,10 @@
 			},
 			"saveToWatchLaterButton": {
 				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"save": "Save to Watch Later",
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

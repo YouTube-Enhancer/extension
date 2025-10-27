@@ -404,6 +404,10 @@
 					"skipContinueWatching": {
 						"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
 						"title": "動画一時休止する休眠メッセージを抜かされます"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "他の設定"
@@ -510,7 +514,10 @@
 			},
 			"saveToWatchLaterButton": {
 				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"save": "Save to Watch Later",
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

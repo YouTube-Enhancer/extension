@@ -404,6 +404,10 @@
 					"skipContinueWatching": {
 						"label": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업 스킵",
 						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					}
 				},
 				"title": "기타 설정"
@@ -510,7 +514,10 @@
 			},
 			"saveToWatchLaterButton": {
 				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"save": "Save to Watch Later",
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
