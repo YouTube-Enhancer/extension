@@ -298,8 +298,8 @@
 						"title": "Massimizza automaticamente il riproduttore quando carichi un video"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
+						"label": "Mostra automaticamente altri video sulla schermata finale",
+						"title": "Mostra automaticamente più video sulla schermata finale quando si carica un video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -335,7 +335,7 @@
 					},
 					"hideMembersOnlyVideos": {
 						"label": "Nascondi i video dei membri",
-						"title": "Hides videos that are only visible to members"
+						"title": "Nasconde i video che sono visibili solo ai membri"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Nascondi video ufficiali dell'artista",
