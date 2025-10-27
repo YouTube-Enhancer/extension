@@ -329,6 +329,10 @@
 						"label": "Canlı yayın sohbetini gizle",
 						"title": "Canlı yayın sohbetini gizler"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Resmi Sanatçı Videolarını Gizle",
 						"title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
