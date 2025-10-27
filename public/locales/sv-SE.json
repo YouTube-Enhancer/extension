@@ -509,8 +509,9 @@
 				"removingVideo": "Tar bort video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Det gick inte att lägga till video till titta på senare",
-				"save": "Spara till titta senare"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
