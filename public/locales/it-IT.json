@@ -297,6 +297,10 @@
 						"label": "Massimizza automaticamente il riproduttore",
 						"title": "Massimizza automaticamente il riproduttore quando carichi un video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"

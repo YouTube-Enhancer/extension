@@ -826,6 +826,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_automatically_show_more_videos_on_end_screen?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.label")}
+						onChange={setCheckboxOption("enable_automatically_show_more_videos_on_end_screen")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />

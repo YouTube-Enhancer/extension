@@ -297,6 +297,10 @@
 						"label": "Maximera spelaren automatiskt",
 						"title": "Maximera spelaren automatiskt när du laddar en video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
 						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
