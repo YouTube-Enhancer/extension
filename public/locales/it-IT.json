@@ -334,7 +334,7 @@
 						"title": "Nasconde la chat live stream"
 					},
 					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
+						"label": "Nascondi i video dei membri",
 						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -517,9 +517,9 @@
 				"removingVideo": "Rimozione video…"
 			},
 			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
+				"failedToSaveVideo": "Impossibile salvare il video in Guarda più tardi",
+				"saveVideo": "Salva per guardare più tardi",
+				"savingVideo": "Salvataggio per guardare più tardi…"
 			},
 			"screenshotButton": {
 				"enable": {
