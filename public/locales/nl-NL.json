@@ -329,6 +329,10 @@
 						"label": "Livestream chat verbergen",
 						"title": "Verbergt de livestream chat"
 					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Verberg Officiële Artiest Video's",
 						"title": "Verberg Officiële Artiest Video's op de homepagina"
