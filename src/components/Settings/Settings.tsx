@@ -571,14 +571,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_automatically_maximize_player.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.label")}
-						onChange={setCheckboxOption("enable_automatically_maximize_player")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.automaticallyMaximizePlayer.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_remaining_time?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.remainingTime.label")}
 						onChange={setCheckboxOption("enable_remaining_time")}
@@ -779,14 +771,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_hide_members_only_videos?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.hideMembersOnlyVideos.label")}
-						onChange={setCheckboxOption("enable_hide_members_only_videos")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.hideMembersOnlyVideos.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_automatically_disable_ambient_mode?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_ambient_mode")}
@@ -803,35 +787,11 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_playlist_management_buttons?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.label")}
-						onChange={setCheckboxOption("enable_playlist_management_buttons")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_restore_fullscreen_scrolling?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.label")}
 						onChange={setCheckboxOption("enable_restore_fullscreen_scrolling")}
 						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.title")}
-						type="checkbox"
-					/>
-					<Setting
-						checked={settings.enable_save_to_watch_later_button?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.label")}
-						onChange={setCheckboxOption("enable_save_to_watch_later_button")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.title")}
-						type="checkbox"
-					/>
-					<Setting
-						checked={settings.enable_automatically_show_more_videos_on_end_screen?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.label")}
-						onChange={setCheckboxOption("enable_automatically_show_more_videos_on_end_screen")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.title")}
 						type="checkbox"
 					/>
 				</SettingSection>

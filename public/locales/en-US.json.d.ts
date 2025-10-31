@@ -199,14 +199,6 @@ interface EnUS {
 						label: "Automatically enable closed captions";
 						title: "Automatically enables closed captions when you load a video";
 					};
-					automaticallyMaximizePlayer: {
-						label: "Automatically maximize player";
-						title: "Automatically maximizes the player when you load a video";
-					};
-					automaticallyShowMoreVideosOnEndScreen: {
-						label: "Automatically show more videos on end screen";
-						title: "Automatically shows more videos on end screen when you load a video";
-					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
@@ -218,14 +210,6 @@ interface EnUS {
 					defaultToOriginalAudioTrack: {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
-					};
-					enablePlaylistManagementButtons: {
-						label: "Enable playlist management buttons";
-						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
-					};
-					enableSaveToWatchLaterButton: {
-						label: "Enable save to Watch Later button";
-						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
 					};
 					hideArtificialIntelligenceSummary: {
 						label: "Hide AI summary";
@@ -240,10 +224,6 @@ interface EnUS {
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
-					hideMembersOnlyVideos: {
-						label: "Hide members-only videos";
-						title: "Hides videos that are only visible to members";
-					};
 					hideOfficialArtistVideosFromHomePage: {
 						label: "Hide Official Artist Videos";
 						title: "Hide Official Artist Videos from Home Page";
@@ -388,19 +368,6 @@ interface EnUS {
 						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
 					};
 				};
-			};
-			playlistManagementButtons: {
-				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
-				failedToRemoveVideo: "Failed to remove video";
-				markAsUnwatched: "Mark as unwatched";
-				markingAsUnwatched: "Marking as unwatched…";
-				removeVideo: "Remove video";
-				removingVideo: "Removing video…";
-			};
-			saveToWatchLaterButton: {
-				failedToSaveVideo: "Failed to save video to Watch Later";
-				saveVideo: "Save to Watch Later";
-				savingVideo: "Saving to Watch Later…";
 			};
 			screenshotButton: {
 				enable: {

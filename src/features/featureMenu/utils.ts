@@ -59,7 +59,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	const menuItem = document.createElement("div");
 	menuItem.classList.add("ytp-menuitem");
 	menuItem.id = featureMenuItemId;
-	menuItem.style.height = "40px";
 	// Create the menu item icon element
 	const menuItemIcon = document.createElement("div");
 	menuItemIcon.id = featureMenuItemIconId;
@@ -95,7 +94,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	// Show the feature menu button since an item has been added
 	const featureMenuButton = document.querySelector<HTMLDivElement>("#yte-feature-menu-button");
 	if (featureMenuButton) {
-		featureMenuButton.style.display = "flex";
+		featureMenuButton.style.display = "initial";
 	}
 }
 /**

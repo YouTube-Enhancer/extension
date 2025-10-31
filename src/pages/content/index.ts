@@ -285,16 +285,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				automaticallyEnableClosedCaptionsEnabled: newValue
 			});
 		},
-		enable_automatically_maximize_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyMaximizePlayerChange", {
-				automaticallyMaximizePlayerEnabled: newValue
-			});
-		},
-		enable_automatically_show_more_videos_on_end_screen: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
-				hideEndScreenCardsButtonEnabled: newValue
-			});
-		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -345,11 +335,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_hide_live_stream_chat: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
 				hideLiveStreamChatEnabled: newValue
-			});
-		},
-		enable_hide_members_only_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideMembersOnlyVideosChange", {
-				hideMembersOnlyVideosEnabled: newValue
 			});
 		},
 		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
@@ -421,11 +406,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playlistLengthEnabled: newValue
 			});
 		},
-		enable_playlist_management_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistManagementButtonsChange", {
-				playlistManagementButtonsEnabled: newValue
-			});
-		},
 		enable_redirect_remover: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("removeRedirectChange", {
 				removeRedirectEnabled: newValue
@@ -444,11 +424,6 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_restore_fullscreen_scrolling: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("restoreFullscreenScrollingChange", {
 				restoreFullscreenScrollingEnabled: newValue
-			});
-		},
-		enable_save_to_watch_later_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("saveToWatchLaterButtonChange", {
-				saveToWatchLaterButtonEnabled: newValue
 			});
 		},
 		enable_screenshot_button: (__oldValue, newValue) => {

@@ -3,7 +3,10 @@ import { modifyElementsClassList } from "@/src/utils/utilities";
 const artificialIntelligenceSummarySelector = "#expandable-metadata [has-video-summary]";
 
 export async function hideArtificialIntelligenceSummary() {
-	modifyElementsClassList("add", "yte-hide-playables", document.querySelectorAll(artificialIntelligenceSummarySelector));
+	modifyElementsClassList(
+		"add",
+		Array.from(document.querySelectorAll(artificialIntelligenceSummarySelector)).map((element) => ({ className: "yte-hide-playables", element }))
+	);
 }
 export async function observeArtificialIntelligenceSummary() {
 	const observer = new MutationObserver(async (mutations) => {
@@ -18,5 +21,8 @@ export async function observeArtificialIntelligenceSummary() {
 	return observer;
 }
 export async function showArtificialIntelligenceSummary() {
-	modifyElementsClassList("remove", "yte-hide-playables", document.querySelectorAll(artificialIntelligenceSummarySelector));
+	modifyElementsClassList(
+		"remove",
+		Array.from(document.querySelectorAll(artificialIntelligenceSummarySelector)).map((element) => ({ className: "yte-hide-playables", element }))
+	);
 }

@@ -246,11 +246,10 @@ export function createTooltip({
 	update: () => void;
 } {
 	function makeTooltip() {
-		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
-			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-bottom"],
+			classlist: ["yte-button-tooltip", "ytp-tooltip", "ytp-rounded-tooltip", "ytp-bottom"],
 			elementId: id,
 			elementType: "div",
 			styles: {
@@ -260,7 +259,7 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${rect.top - (isBigMode ? 20 : 6)}px`
+					top: `${rect.top - 2}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -298,13 +297,7 @@ export function createTooltip({
 				tooltip.remove();
 			}
 			const tooltip = makeTooltip();
-			const isButtonBelowPlayer = element?.parentElement?.id === "yte-button-container";
-			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
-			else {
-				if (playerContainer) playerContainer.appendChild(tooltip);
-				else document.body.appendChild(tooltip);
-			}
+			document.body.appendChild(tooltip);
 		},
 		remove: () => {
 			const tooltip = document.getElementById(id);
@@ -514,27 +507,12 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 		}
 	}
 }
-export function isChannelHomePage() {
-	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
-	return (
-		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === undefined) ||
-		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === "featured")
-	);
-}
-export function isChannelVideosPage() {
-	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
-	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "videos";
-}
 export function IsDarkMode() {
 	const darkMode = document.documentElement.hasAttribute("dark");
 	return darkMode;
 }
-export function isHomePage() {
-	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
-	return firstSection === undefined;
-}
 export function isLivePage() {
-	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "live";
 }
 export function isNewYouTubeVideoLayout(): boolean {
@@ -548,19 +526,15 @@ export function isNewYouTubeVideoLayout(): boolean {
 	}
 }
 export function isPlaylistPage() {
-	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "playlist";
 }
 export function isShortsPage() {
-	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "shorts";
 }
-export function isSubscriptionsPage() {
-	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
-	return firstSection === "feed" && secondSection === "subscriptions";
-}
 export function isWatchPage() {
-	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
+	const firstSection = extractFirstSectionFromYouTubeURL(window.location.href);
 	return firstSection === "watch";
 }
 
@@ -568,42 +542,8 @@ export function modifyElementClassList(action: ModifyElementAction, elementPair:
 	const { className, element } = elementPair;
 	element?.classList[action](className);
 }
-
-export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, selectors: string[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: Nullable<Element>[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: NodeListOf<Element>): void;
-export function modifyElementsClassList(
-	action: ModifyElementAction,
-	classNameOrPairs: ElementClassPair[] | string,
-	selectors?: NodeListOf<Element> | Nullable<Element>[] | string[]
-): void {
-	let elements: ElementClassPair[] = [];
-	if (Array.isArray(classNameOrPairs) && classNameOrPairs.every((x) => "element" in x)) {
-		// Case 1: Array of ElementClassPair
-		elements = classNameOrPairs;
-	} else if (typeof classNameOrPairs === "string") {
-		if (Array.isArray(selectors) && typeof selectors[0] === "string") {
-			// Case 2: Array of selector strings
-			elements = (selectors as string[]).map((selector) => ({
-				className: classNameOrPairs,
-				element: document.querySelector(selector)
-			}));
-		} else if (selectors instanceof NodeList) {
-			// Case 3: NodeList
-			elements = Array.from(selectors).map((element) => ({
-				className: classNameOrPairs,
-				element
-			}));
-		} else if (Array.isArray(selectors) && selectors[0] instanceof Element) {
-			// Case 4: Array of Elements
-			elements = (selectors as Element[]).map((element) => ({
-				className: classNameOrPairs,
-				element
-			}));
-		}
-	}
-	elements.forEach((pair) => modifyElementClassList(action, pair));
+export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]) {
+	elements.forEach((element) => modifyElementClassList(action, element));
 }
 export function parseStoredValue(value: string) {
 	try {
@@ -746,9 +686,6 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 
 export function timeStringToSeconds(timeString: string): number {
 	const parts = timeString.split(":").reverse();
-	if (parts.length === 1) {
-		return 0;
-	}
 	let seconds = 0;
 	for (let i = 0; i < parts.length; i++) {
 		seconds += parseInt(parts[i], 10) * Math.pow(60, i);
@@ -861,16 +798,18 @@ function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: s
 }
 
 /**
- * Extracts all sections from a YouTube URL path.
+ * Extracts the first section from a YouTube URL path.
  * @param {string} url - The YouTube URL.
- * @returns {string[]} An array of all sections of the URL path.
+ * @returns {string|null} The first section of the URL path, or null if not found.
  */
-function extractSectionsFromYouTubeURL(url: string): string[] {
+function extractFirstSectionFromYouTubeURL(url: string): null | string {
 	// Parse the URL into its components
 	const { pathname: path } = new URL(url);
 
 	// Split the path into an array of sections
-	return path.split("/").filter((section) => section !== "");
+	const sections = path.split("/").filter((section) => section !== "");
+
+	return sections.length > 0 ? sections[0] : null;
 }
 function getColor(type: ColorType) {
 	switch (type) {
