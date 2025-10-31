@@ -104,7 +104,7 @@ fieldset > p:last-of-type {
 
 legend {
 	margin-left: -9px !important;
-	padding: 0 8px !important;
+	padding: 0 10px !important;
 	font-weight: bold !important;
 }
 
@@ -185,7 +185,6 @@ hr {
 }
 
 /* inputs */
-input[type="text"],
 input[type="button"],
 button[id="openinnewtab_button"],
 select {
@@ -194,7 +193,6 @@ select {
 	font-size: 12px;
 }
 
-input[type="text"],
 button[id="openinnewtab_button"],
 select {
 	border: 0;

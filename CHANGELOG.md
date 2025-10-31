@@ -1,3 +1,233 @@
+# [1.29.0](https://github.com/YouTube-Enhancer/extension/compare/v1.28.1...v1.29.0) (2025-10-23)
+
+
+### Bug Fixes
+
+* **automatically disable ambient mode:** update code for Modern Delhi UI ([a87d68a](https://github.com/YouTube-Enhancer/extension/commit/a87d68a0967ffc3e1d293f28b18448138f6c4589))
+* **deep dark theme:** Make color options only show if theme is 'Custom' ([5f951d3](https://github.com/YouTube-Enhancer/extension/commit/5f951d3ad7db554d0ce7ce663d72550e70392932))
+* **hide end screen cards:** Hide 'show/hide' button and inconsistent hiding behavior [#1006](https://github.com/YouTube-Enhancer/extension/issues/1006) ([9492c08](https://github.com/YouTube-Enhancer/extension/commit/9492c08077dfd2321fba49122ffc19c47771f2ac))
+* **hide shorts:** improper selector was causing gaps in home page at times ([14490c9](https://github.com/YouTube-Enhancer/extension/commit/14490c9cfd36f9ddf2c5c9cf308eaa6a28914bbf))
+* Make player buttons match new layout ([8e8dc26](https://github.com/YouTube-Enhancer/extension/commit/8e8dc26dc2b79b58808d950048d0749d5a45256d))
+* **maximize player button:** New layout and fix positioning [#738](https://github.com/YouTube-Enhancer/extension/issues/738) [#1013](https://github.com/YouTube-Enhancer/extension/issues/1013) ([5e0798e](https://github.com/YouTube-Enhancer/extension/commit/5e0798ecda3126d4bea73444badd82da58342e50))
+* **playlist length:** Add support for immersive header layout ([0937fa6](https://github.com/YouTube-Enhancer/extension/commit/0937fa63a44c1fce724031b502c6f013af694195))
+* **screenshot button:** File mimeType not matching file extension ([a78eb16](https://github.com/YouTube-Enhancer/extension/commit/a78eb165c86e44d0c819235afdafe1e885260459))
+* update feature menu for Modern Delhi player [#1017](https://github.com/YouTube-Enhancer/extension/issues/1017) ([b4dea7d](https://github.com/YouTube-Enhancer/extension/commit/b4dea7d9d41e57cf89770f2ad654000c2ade2aa5))
+* update tooltip for Modern Delhi player ([4d0e4c6](https://github.com/YouTube-Enhancer/extension/commit/4d0e4c64bab2ec8807cddfbc4465eb0907e6653a))
+
+
+### Features
+
+* Automatically enable closed captions [#989](https://github.com/YouTube-Enhancer/extension/issues/989) ([3af50d1](https://github.com/YouTube-Enhancer/extension/commit/3af50d112fbc605280e6598b7da6e4ee9714e6d5))
+* automatically maximize player [#163](https://github.com/YouTube-Enhancer/extension/issues/163) ([cc2b903](https://github.com/YouTube-Enhancer/extension/commit/cc2b903340f0669ef5401706cb37d0806e9d3c19))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.29.0-Chrome.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Chromium.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Edge.zip | 5445ce55c3d41e778d3ff12551f3de2b12a6ff19b348d0784f2aee0425c032cc |
+| youtube-enhancer-v1.29.0-Firefox.zip | dddef3a594d2cce5d7466bc6d406f3126200208daf4d4ebcc382a76e13e83a64 |
+
+## [1.28.1](https://github.com/YouTube-Enhancer/extension/compare/v1.28.0...v1.28.1) (2025-09-25)
+
+
+### Bug Fixes
+
+* **restore fullscreen scrolling:** youtube changed how they stopped scrolling ([d7e8281](https://github.com/YouTube-Enhancer/extension/commit/d7e8281db5e92d62edba87962f419d169f207080))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.28.1-Chrome.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Chromium.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Edge.zip | 27cfc56bbc9dd212b472b0f191faf8e95fb9e4d7640ad1a2caa1edeca900574c |
+| youtube-enhancer-v1.28.1-Firefox.zip | b5f17e32bde3ba97940c7b1e969af1edba6e78203f414dd56456706d2c96d034 |
+
+# [1.28.0](https://github.com/YouTube-Enhancer/extension/compare/v1.27.0...v1.28.0) (2025-09-24)
+
+
+### Bug Fixes
+
+* [#745](https://github.com/YouTube-Enhancer/extension/issues/745) ([b6e2039](https://github.com/YouTube-Enhancer/extension/commit/b6e2039539e40be1070e2bea978dba952cefa1da))
+* **auto disable ambient mode:** Add support for shorts [#856](https://github.com/YouTube-Enhancer/extension/issues/856) ([6e1ea1e](https://github.com/YouTube-Enhancer/extension/commit/6e1ea1e8ec681ff2d4110291964f95c935c58feb))
+* **auto disable ambient mode:** not enabling properly ([3193c3f](https://github.com/YouTube-Enhancer/extension/commit/3193c3fa98d95c03f6ec47dacfca7600a5d37ea9))
+* boolean logic for isOSDDisabled ([34bc253](https://github.com/YouTube-Enhancer/extension/commit/34bc25360dbaf8ddc8cea65093787666343b06f8))
+* **button placement:** button sizing wasn't correct in theater/fullscreen mode ([d00fcf3](https://github.com/YouTube-Enhancer/extension/commit/d00fcf352556b59f01f0af32e050db432f2c2c8d))
+* **button placement:** Buttons not visible on light mode [#937](https://github.com/YouTube-Enhancer/extension/issues/937) ([6411415](https://github.com/YouTube-Enhancer/extension/commit/64114156a1913d72219eccb2ffd3eff803b961f7))
+* chrome.runtime.getURL error ([f22b364](https://github.com/YouTube-Enhancer/extension/commit/f22b364716502f5ce99d0695ab3d3489a8092088))
+* **default original audio track:** not working ([0e4397b](https://github.com/YouTube-Enhancer/extension/commit/0e4397bd70429ff6b7f7fef202d62f4c7c8da376))
+* dependabot.yml ([5756c01](https://github.com/YouTube-Enhancer/extension/commit/5756c01ae1544e1cd5b201ef19dbd21217fe310c))
+* dupe hide scroll bar elements ([8c58787](https://github.com/YouTube-Enhancer/extension/commit/8c58787e5c200f3d9be7f9f273e7c28c00208322))
+* eslint tsconfigRootDir error ([c8f993e](https://github.com/YouTube-Enhancer/extension/commit/c8f993e1b65f38c20b7e2e6d54acaea78ec6239d))
+* expand OSD canvas for shadow ([0d3e3fc](https://github.com/YouTube-Enhancer/extension/commit/0d3e3fc2cb5f721b8a4544332b1054f85a5c7d24))
+* features enabling more than once ([e83367a](https://github.com/YouTube-Enhancer/extension/commit/e83367aa90401eae91e0d9de5b630714efb20730))
+* **gitattributes:** enforce binary handling for images ([3b2c592](https://github.com/YouTube-Enhancer/extension/commit/3b2c592f654b5c8b02dabd18b4abef0cf2f248a8))
+* **hide official artist videos:** Not working ([d5fad3f](https://github.com/YouTube-Enhancer/extension/commit/d5fad3f7db6c5b626d8425102dcf470c790b70c8))
+* hide shorts [#930](https://github.com/YouTube-Enhancer/extension/issues/930) [#931](https://github.com/YouTube-Enhancer/extension/issues/931) ([3dc4d48](https://github.com/YouTube-Enhancer/extension/commit/3dc4d486887b4098b4448bb615157a6ec67bcc36))
+* hide shorts was hiding community posts ([0e05c95](https://github.com/YouTube-Enhancer/extension/commit/0e05c95e12fe96461ffb44b3d9efa67cc5d5ca49))
+* improve tasks OS cross compatibility ([ef99734](https://github.com/YouTube-Enhancer/extension/commit/ef99734310801a42072bd988c9097a41da15b8f1))
+* npm install could not resolve dependency errors ([5707045](https://github.com/YouTube-Enhancer/extension/commit/5707045d666f28c9672c857f5fbfc07cd5e2ceb3))
+* options page not opening on fresh install ([5ae052c](https://github.com/YouTube-Enhancer/extension/commit/5ae052c13b36bda469adeb2b98d6fb6f6ca4dca3))
+* page progress bar color not right [#662](https://github.com/YouTube-Enhancer/extension/issues/662) ([e0773bd](https://github.com/YouTube-Enhancer/extension/commit/e0773bd7c5e5df9de3f6c7ca7eee45d489fb8a23))
+* playbackSpeedButtons ([f30f1d2](https://github.com/YouTube-Enhancer/extension/commit/f30f1d26e09e18dc6b4f5254d48dcba8c97327e0))
+* **playerSpeed:** playback speed change listener was broken ([ec6e82c](https://github.com/YouTube-Enhancer/extension/commit/ec6e82ccb0f15c7b6f336d4fed7ae624e3863bdd))
+* playlist length causing page hangs [#830](https://github.com/YouTube-Enhancer/extension/issues/830) ([a848336](https://github.com/YouTube-Enhancer/extension/commit/a848336513f4769748c78d03c8ffc2ca0a060337))
+* **playlist length:** Improve light mode visibility ([98d42c1](https://github.com/YouTube-Enhancer/extension/commit/98d42c1acee5444a55d53397e193c13f9bcbb36c))
+* **playlist length:** Not enabling on playlist page ([4d2f2a7](https://github.com/YouTube-Enhancer/extension/commit/4d2f2a772ab4fde3ba137381dfcbbb113c5bedd0))
+* **playlist length:** not showing on playlist page ([c2e318f](https://github.com/YouTube-Enhancer/extension/commit/c2e318f8b9a5f72d3009f159b16cf59a2734c8c0))
+* remaining time bug ([584d72d](https://github.com/YouTube-Enhancer/extension/commit/584d72d63e97c57531620396a96e45cb235eab65))
+* **remaining time:** not appearing properly ([718ea39](https://github.com/YouTube-Enhancer/extension/commit/718ea393cc2cb1f5a34f81115028f462b852af8f))
+* saving on every stroke, not restoring cursor position on save ([4131f67](https://github.com/YouTube-Enhancer/extension/commit/4131f6709fa2082c1d63b9b21d61fc6186541cbc))
+* set locale to en-US for fallback ([25f08db](https://github.com/YouTube-Enhancer/extension/commit/25f08db07e8a73d22b4f1444626a4147be540810))
+* **share shortener:** Improve functionality [#899](https://github.com/YouTube-Enhancer/extension/issues/899) ([b608e14](https://github.com/YouTube-Enhancer/extension/commit/b608e14ad7c4bafabf451188435a4cb5831f387a))
+* stub type def ([485e419](https://github.com/YouTube-Enhancer/extension/commit/485e41997bdb1bbc1edb00f829b4f2415aab16b3))
+* type errors ([2c33145](https://github.com/YouTube-Enhancer/extension/commit/2c331458f1743247beba102c6ba9a877bb0ca1e4))
+* zod type errors ([4fdb464](https://github.com/YouTube-Enhancer/extension/commit/4fdb464cf7201637b48500e70944171acde43ea1))
+
+
+### Features
+
+* Add support for youtube mobile ([65f317b](https://github.com/YouTube-Enhancer/extension/commit/65f317b70fa41dc4a24f1fd9368ad02f02f2704b))
+* automatically disable ambient mode [#708](https://github.com/YouTube-Enhancer/extension/issues/708) ([33ff22c](https://github.com/YouTube-Enhancer/extension/commit/33ff22c863da57866c97a38405fb5f23c45c14af))
+* Default to Original Audio Track [#808](https://github.com/YouTube-Enhancer/extension/issues/808) ([0783c05](https://github.com/YouTube-Enhancer/extension/commit/0783c059df0ef421c7c3b3f4abc10ee2e05e3b22))
+* hide AI summary [#729](https://github.com/YouTube-Enhancer/extension/issues/729) ([648a409](https://github.com/YouTube-Enhancer/extension/commit/648a409dcea08cbc7473584df8a8cb7c18a891fc))
+* Hide playables [#739](https://github.com/YouTube-Enhancer/extension/issues/739) ([aab3869](https://github.com/YouTube-Enhancer/extension/commit/aab3869df5b13255038b46fbe92d50629eb9e369))
+* Improve user experience by making section title visible when an option underneath is visible. ([48f3a85](https://github.com/YouTube-Enhancer/extension/commit/48f3a85c0c0baefd6549fd526f5337eaa408cd8b))
+* **playlist length:** add support for queue playlist type [#814](https://github.com/YouTube-Enhancer/extension/issues/814) ([1b845da](https://github.com/YouTube-Enhancer/extension/commit/1b845da7cfae2bdb5789dd29e7a8f4125130d710))
+* Restore fullscreen scrolling [#953](https://github.com/YouTube-Enhancer/extension/issues/953) ([569e335](https://github.com/YouTube-Enhancer/extension/commit/569e33547c2f019acad7905aaea3b53dc3b8ee24))
+* Visual indicator that more settings exist [#807](https://github.com/YouTube-Enhancer/extension/issues/807) ([4051abe](https://github.com/YouTube-Enhancer/extension/commit/4051abe0470538ecb4b6ad714916938a0db79883))
+
+
+### Reverts
+
+* d417b7d ([eb0e585](https://github.com/YouTube-Enhancer/extension/commit/eb0e5852a277ac0a83ae26e783a8b038ed32ddb6))
+* version increment ([6a16c80](https://github.com/YouTube-Enhancer/extension/commit/6a16c80de123410628c1b66cb47b9d3033fbfa0c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.28.0-Chrome.zip | 2aefc7868b5986d698933e9dc0ad80fa2d19240904e4d77fdc4854b6a617babe |
+| youtube-enhancer-v1.28.0-Chromium.zip | 2aefc7868b5986d698933e9dc0ad80fa2d19240904e4d77fdc4854b6a617babe |
+| youtube-enhancer-v1.28.0-Edge.zip | 2aefc7868b5986d698933e9dc0ad80fa2d19240904e4d77fdc4854b6a617babe |
+| youtube-enhancer-v1.28.0-Firefox.zip | 7f89ee8d131892f9b18d16d8b94adc5f135d697012ac09b2e6aa54bad23891a7 |
+
+# [1.27.0](https://github.com/YouTube-Enhancer/extension/compare/v1.26.0...v1.27.0) (2024-10-13)
+
+
+### Bug Fixes
+
+* add missing function call ([fb3fdfd](https://github.com/YouTube-Enhancer/extension/commit/fb3fdfd11e080e5bc5905f410fac97fc42dfb713))
+* Add shadow around on screen display to improve visibility [#591](https://github.com/YouTube-Enhancer/extension/issues/591) ([4a54256](https://github.com/YouTube-Enhancer/extension/commit/4a5425676daad69f72000d607931fce200871ec2))
+* disable playback speed buttons when live ([585adc9](https://github.com/YouTube-Enhancer/extension/commit/585adc9cb1b0453485a8b2978d5c2172a5b61024))
+* **eslint:** migrate to flat config ([9a086ad](https://github.com/YouTube-Enhancer/extension/commit/9a086adb86261cc6d3c943b188d315797ee07a05))
+* Features being enabled multiple times ([f758184](https://github.com/YouTube-Enhancer/extension/commit/f75818486332d9266e97ddc2d05f1c1cbddf0b5f))
+* features not working on '/live' page ([3759d7f](https://github.com/YouTube-Enhancer/extension/commit/3759d7f39efa31b2eb134cd287b38a3976b61776))
+* **hide scrollbar:** Failed to set the 'innerHTML' property on 'Element' [#621](https://github.com/YouTube-Enhancer/extension/issues/621) ([74a46b5](https://github.com/YouTube-Enhancer/extension/commit/74a46b52baa26e7642e720514bdef136ccabb33a))
+* **hide translate comment:** comment replies showed translate button [#471](https://github.com/YouTube-Enhancer/extension/issues/471) ([82a8104](https://github.com/YouTube-Enhancer/extension/commit/82a8104238660ecaf44ae10d93002b5279b584b0))
+* Make speed limit higher [#637](https://github.com/YouTube-Enhancer/extension/issues/637) ([35bcd4f](https://github.com/YouTube-Enhancer/extension/commit/35bcd4f689afb502b13f7a31af78db67000ee657))
+* playback speed buttons tooltip ([394b59f](https://github.com/YouTube-Enhancer/extension/commit/394b59fa8e77ce070dc0bf2037e020d0f362d52c))
+* **playback speed buttons:** decrease increasing speed ([5269f33](https://github.com/YouTube-Enhancer/extension/commit/5269f33e700134c1753999b0e0151f4dcc83617c))
+* **playback speed buttons:** label not updating when adjusting speed with scroll wheel ([a16cd44](https://github.com/YouTube-Enhancer/extension/commit/a16cd44d86424920ff8446960964087f959735a9))
+* **playback speed buttons:** label not updating when player speed changes ([a88d29d](https://github.com/YouTube-Enhancer/extension/commit/a88d29d1c3fdcb81f6b12b6a1cec531f4abb8b88))
+* video id obtaining ([8edf9a4](https://github.com/YouTube-Enhancer/extension/commit/8edf9a4e7d2adae048dc6047ecd66069e01070ba))
+
+
+### Features
+
+* automatically disable closed captions [#371](https://github.com/YouTube-Enhancer/extension/issues/371) ([00a4870](https://github.com/YouTube-Enhancer/extension/commit/00a4870f400b1897af1592b431708d7ed3ff7936))
+* copyTimestampUrlButton ([80c7685](https://github.com/YouTube-Enhancer/extension/commit/80c7685c27fad2c54d23f030ccff58b14f3bb48a))
+* hide official artist videos from home page ([7e202f1](https://github.com/YouTube-Enhancer/extension/commit/7e202f1d1108df515c9897c44a9b493784b9b4ef))
+* Playlist length bar [#542](https://github.com/YouTube-Enhancer/extension/issues/542) ([8ed563f](https://github.com/YouTube-Enhancer/extension/commit/8ed563ff360b08e8c28b5ec4cb064aa80dfd5716))
+* **playlist length:** watch time options ([6782340](https://github.com/YouTube-Enhancer/extension/commit/67823405e1610ae57a902fc63d90c7078232e14b))
+* **video history:** do not resume or track history on official artist channels ([60e7797](https://github.com/YouTube-Enhancer/extension/commit/60e7797e18de76e7009cd4bdfc4239a69168511c))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.27.0-Chrome.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Chromium.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Edge.zip | 18f54c95d20543efa191d0438daf9362b7a0b9a6060f3f011a6c699d6cbfb353 |
+| youtube-enhancer-v1.27.0-Firefox.zip | 9899180b25e1e74fd251de0516fd442b1bcbdd277fd8b7c12629a618474a9b16 |
+
+# [1.26.0](https://github.com/YouTube-Enhancer/extension/compare/v1.25.0...v1.26.0) (2024-06-29)
+
+
+### Bug Fixes
+
+* broken features ([742be90](https://github.com/YouTube-Enhancer/extension/commit/742be90f71ad12de28deff895ec41e49025b2e0a))
+* Button placement change causing multi buttons to stop working. ([caed598](https://github.com/YouTube-Enhancer/extension/commit/caed5987c09349bff7a7d906fe5053aa75096d4b))
+* color pickers opening when they shouldn't ([b53edd7](https://github.com/YouTube-Enhancer/extension/commit/b53edd7cfe4e6802bc28a3155a6625d125c15cf6))
+* continue when old and new placement is the same ([dd9b089](https://github.com/YouTube-Enhancer/extension/commit/dd9b089b68fd3fd750025439cd88536b4c0b8382))
+* deep dark author/co author title ([a3503d5](https://github.com/YouTube-Enhancer/extension/commit/a3503d5cda2002cab329b73507be13f9f8242776))
+* features with multi buttons placement issue ([50014cb](https://github.com/YouTube-Enhancer/extension/commit/50014cb2fa3b8ed0510c40dc217b2e0b3bfed8b3))
+* object type not being handled properly ([b34b86e](https://github.com/YouTube-Enhancer/extension/commit/b34b86e4209d7b1438a8bf6d85ba91f6f00ac526))
+* old button placement not being removed ([b995911](https://github.com/YouTube-Enhancer/extension/commit/b995911ef71f7362a04fdee1f4af507281bf14f5))
+* playback speed button order issue ([186c4c5](https://github.com/YouTube-Enhancer/extension/commit/186c4c5620c6f6256b2b94916ce27af260ae1794))
+
+
+### Features
+
+* **automatic quality:** Fallback strategy [#461](https://github.com/YouTube-Enhancer/extension/issues/461) ([c621580](https://github.com/YouTube-Enhancer/extension/commit/c6215801845cc9569e389300246a7f7230a7b94e))
+* Disable button's placement select when button isn't enabled [#504](https://github.com/YouTube-Enhancer/extension/issues/504) ([916b39c](https://github.com/YouTube-Enhancer/extension/commit/916b39c034cab3a5e4467c305346410f1b22d2d1))
+* forward rewind buttons [#486](https://github.com/YouTube-Enhancer/extension/issues/486) ([1a80122](https://github.com/YouTube-Enhancer/extension/commit/1a801220fffcfab9ded603b99990e120f276cdec))
+* Hide end screen cards button [#484](https://github.com/YouTube-Enhancer/extension/issues/484) ([5e047c5](https://github.com/YouTube-Enhancer/extension/commit/5e047c518b574ae8aaa40342f078d8d2d769d920))
+* hide paid promotion banner [#519](https://github.com/YouTube-Enhancer/extension/issues/519) ([5356f8d](https://github.com/YouTube-Enhancer/extension/commit/5356f8deafbb977f9c24b63797d0daa4d5cd02db))
+* Setting search bar ([013ce19](https://github.com/YouTube-Enhancer/extension/commit/013ce19e02f31e158c37377fc32220054f7969e2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.26.0-Chrome.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Chromium.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Edge.zip | a97eca36b647d176c303bd30096509052695a70152c0f56550a319762e9827a3 |
+| youtube-enhancer-v1.26.0-Firefox.zip | 0eee8b8088e4fdbe87b997d252851e4b6918f20180c83574f3405ce2126955fb |
+
+# [1.25.0](https://github.com/YouTube-Enhancer/extension/compare/v1.24.2...v1.25.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* false pause on channel page ([22aadaa](https://github.com/YouTube-Enhancer/extension/commit/22aadaabff895b5a6e0f77de9b291b9924b4c6e3))
+
+
+### Features
+
+* hide end screen cards [#373](https://github.com/YouTube-Enhancer/extension/issues/373) ([d414119](https://github.com/YouTube-Enhancer/extension/commit/d414119722b1ffe2b723d2e7a9fef313af87cc66))
+* Hide live stream chat [#452](https://github.com/YouTube-Enhancer/extension/issues/452) ([e823cb5](https://github.com/YouTube-Enhancer/extension/commit/e823cb539bd1d3014ecbcdc50dc4fa5a602621e8))
+* hide translate comment [#471](https://github.com/YouTube-Enhancer/extension/issues/471) ([7e86d00](https://github.com/YouTube-Enhancer/extension/commit/7e86d00839d7d38fe06fa1aaeca636554c3fa386))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.25.0-Chrome.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Chromium.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Edge.zip | 28c7211cd2265b44e183f09dded9a391d14d81ecfd0b8c4949b5bf648772b990 |
+| youtube-enhancer-v1.25.0-Firefox.zip | 20617e0111eb1fefd15260dcd66799e731dfbd5762be880de96ede78493fb9d0 |
+
 ## [1.24.2](https://github.com/YouTube-Enhancer/extension/compare/v1.24.1...v1.24.2) (2024-04-25)
 
 

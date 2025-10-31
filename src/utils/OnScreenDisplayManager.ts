@@ -16,13 +16,13 @@ export const valueType = {
 	Speed: "speed",
 	Volume: "volume"
 } as const;
-type ValueType = (typeof valueType)[keyof typeof valueType];
-
 type Value<V extends ValueType> = {
 	max: number;
 	type: V;
 	value: number;
 };
+
+type ValueType = (typeof valueType)[keyof typeof valueType];
 
 export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePlayerDiv>): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {
@@ -32,6 +32,12 @@ export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePla
 };
 
 export default class OnScreenDisplayManager<V extends ValueType> {
+	// Canvas element for the display.
+	protected canvas: HTMLCanvasElement;
+
+	// Context for the canvas element.
+	protected context: Nullable<CanvasRenderingContext2D> = null;
+
 	// Default font size for the display.
 	private readonly defaultFontSize = 48;
 
@@ -40,12 +46,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 	// Current value for the display.
 	private value?: Value<V>;
-
-	// Canvas element for the display.
-	protected canvas: HTMLCanvasElement;
-
-	// Context for the canvas element.
-	protected context: Nullable<CanvasRenderingContext2D> = null;
 	constructor(
 		// Options for the display.
 		protected options: DisplayOptions,
@@ -126,6 +126,53 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		} = this;
 
 		switch (displayType) {
+			case "circle": {
+				// Draw a circle shape on the canvas.
+				const lineWidth = 5;
+				const radius = 75 / 2 - lineWidth;
+				const circleWidth = radius * 2 + lineWidth * 2;
+				this.canvas.width = circleWidth + 20;
+				this.canvas.height = circleWidth + 20;
+				this.clearCanvas();
+				const centerX = this.canvas.width / 2;
+				const centerY = this.canvas.height / 2;
+				const startAngle = Math.PI + Math.PI * round(value / max, 2);
+				const endAngle = Math.PI - Math.PI * round(value / max, 2);
+				// Add a shadow effect around the circle.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
+				this.context.strokeStyle = displayColor;
+				this.context.lineWidth = lineWidth;
+				this.context.lineCap = "butt";
+				this.context.beginPath();
+				this.context.arc(centerX, centerY, radius, startAngle, endAngle, true);
+				this.context.stroke();
+				break;
+			}
+			case "line": {
+				// Draw a line on the canvas.
+				const lineWidth = Math.round(round(value / max, 2) * max);
+				const lineHeight = 5;
+				this.canvas.width = lineWidth + 25;
+				this.canvas.height = lineHeight + 25;
+				this.context.globalAlpha = displayOpacity / 100;
+				this.context.fillStyle = displayColor;
+				const lineX = (this.canvas.width - lineWidth) / 2;
+				const lineY = (this.canvas.height - lineHeight) / 2;
+				this.clearCanvas();
+				// Add a shadow effect around the line.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
+				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
+				break;
+			}
+			case "no_display":
+				// Do nothing for no_display type.
+				break;
 			case "text": {
 				// Draw text on the canvas.
 				let text: string = "";
@@ -141,52 +188,20 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				}
 				this.setFont();
 				const { width } = this.context.measureText(text);
-				this.canvas.width = width;
-				this.canvas.height = fontSize;
+				this.canvas.width = width + 15;
+				this.canvas.height = fontSize + 15;
 				this.clearCanvas();
+				// Add a shadow effect around the text.
+				this.context.shadowColor = "black";
+				this.context.shadowBlur = 10;
+				this.context.shadowOffsetX = 0;
+				this.context.shadowOffsetY = 0;
 				this.context.globalAlpha = displayOpacity / 100;
 				this.context.fillStyle = displayColor;
 				this.setFont();
 				this.context.fillText(text, this.canvas.width / 2, this.canvas.height / 2);
 				break;
 			}
-			case "line": {
-				// Draw a line on the canvas.
-				const lineWidth = Math.round(round(value / max, 2) * max);
-				const lineHeight = 5;
-				this.canvas.width = lineWidth;
-				this.canvas.height = lineHeight;
-				this.clearCanvas();
-				this.context.globalAlpha = displayOpacity / 100;
-				this.context.fillStyle = displayColor;
-				const lineX = (this.canvas.width - lineWidth) / 2;
-				const lineY = (this.canvas.height - lineHeight) / 2;
-				this.context.fillRect(lineX, lineY, lineWidth, lineHeight);
-				break;
-			}
-			case "circle": {
-				// Draw a circle shape on the canvas.
-				const lineWidth = 5;
-				const radius = 75 / 2 - lineWidth;
-				const circleWidth = radius * 2 + lineWidth * 2;
-				this.canvas.width = circleWidth;
-				this.canvas.height = circleWidth;
-				this.clearCanvas();
-				const centerX = this.canvas.width / 2;
-				const centerY = this.canvas.height / 2;
-				const startAngle = Math.PI + Math.PI * round(value / max, 2);
-				const endAngle = Math.PI - Math.PI * round(value / max, 2);
-				this.context.strokeStyle = displayColor;
-				this.context.lineWidth = lineWidth;
-				this.context.lineCap = "butt";
-				this.context.beginPath();
-				this.context.arc(centerX, centerY, radius, startAngle, endAngle, true);
-				this.context.stroke();
-				break;
-			}
-			case "no_display":
-				// Do nothing for no_display type.
-				break;
 			default:
 				this.handleError("Invalid display type");
 		}
@@ -225,28 +240,23 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	// method to set up the canvas based on options.
 	private setupCanvas(): void {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return;
-
 		const {
 			options: {
 				playerContainer: { clientHeight: height, clientWidth: width }
 			}
 		} = this;
-
 		// Adjust displayPadding if it exceeds max width or height.
 		if (this.options.displayPadding > Math.max(width, height)) {
 			this.options.displayPadding = clamp(this.options.displayPadding, 0, Math.max(width, height));
 			browserColorLog(`Clamped display padding to ${this.options.displayPadding}`, "FgRed");
 		}
-
 		// Calculate font size based on canvas dimensions.
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
-
 		// Find elements for positioning the canvas.
 		const bottomElement: Nullable<HTMLDivElement> =
 			document.querySelector(
 				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
 			) ?? document.querySelector(".ytp-chrome-bottom");
-
 		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
 		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
 		const heightExcludingMarginPadding =
@@ -258,10 +268,8 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
 				10
 			:	0;
-
 		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
 		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
-
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
 			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)

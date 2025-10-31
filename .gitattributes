@@ -1,1 +1,4 @@
 /assets export-ignore
+
+* text=auto eol=lf 
+*.{png,jpg,jpeg,gif,bmp,tif,tiff,webp,svg,ico,heic,heif,avif} binary

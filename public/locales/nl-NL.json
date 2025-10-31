@@ -1,0 +1,681 @@
+{
+	"langCode": "nl-NL",
+	"langName": "Nederlands(Nederland)",
+	"messages": {
+		"resumingVideo": "Video hervatten bij {{VIDEO_TIME}}",
+		"settingVolume": "Volume boost instellen op {{VOLUME_BOOST_AMOUNT}}"
+	},
+	"pages": {
+		"content": {
+			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Gekopieerd!",
+						"label": "Kopieer video URL met tijdstempel"
+					}
+				},
+				"featureMenu": {
+					"button": {
+						"label": "Functies menu"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "{{TIME}} doorspoelen"
+						},
+						"rewindButton": {
+							"label": "{{TIME}} terugspoelen"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Eindscherm elementen verbergen",
+						"toggle": {
+							"off": "Eindscherm elementen tonen",
+							"on": "Eindscherm elementen verbergen"
+						}
+					}
+				},
+				"loopButton": {
+					"button": {
+						"label": "Loop",
+						"toggle": {
+							"off": "Loop uit",
+							"on": "Loop aan"
+						}
+					}
+				},
+				"maximizePlayerButton": {
+					"button": {
+						"label": "Maximaliseren",
+						"toggle": {
+							"off": "Maximaliseren uit",
+							"on": "Maximaliseren aan"
+						}
+					}
+				},
+				"openTranscriptButton": {
+					"button": {
+						"label": "Open ondertitels"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Verlaag de afspeelsnelheid naar {{SPEED}}"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Verhoog de afspeelsnelheid naar {{SPEED}}"
+						}
+					},
+					"decreaseLimit": "Kan de snelheid niet langer verlagen ({{SPEED}})",
+					"increaseLimit": "Kan de snelheid niet langer verhogen ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "De totale lengte kan inaccuraat zijn als enkele video's verborgen zijn of als je niet genoeg video's hebt ingeladen om de totale lengte te krijgen."
+				},
+				"screenshotButton": {
+					"button": {
+						"label": "Schermafbeelding"
+					},
+					"copiedToClipboard": "Schermafbeelding gekopieerd naar het klembord"
+				},
+				"videoHistory": {
+					"resumeButton": "Hervatten",
+					"resumePrompt": {
+						"close": "Sluiten"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Volume boost",
+						"toggle": {
+							"off": "Volume boost uit",
+							"on": "Volume boost aan"
+						}
+					}
+				}
+			}
+		},
+		"options": {
+			"notifications": {
+				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "De snelheid van de scrollwiel snelheid controleknop kan niet dezelfde zijn als de scrollwiel volume controleknop.",
+							"volumeControl": "De scrollwiel volume controleknop kan niet dezelfde zijn als de scrollwiel snelheid controleknop."
+						}
+					}
+				},
+				"info": {
+					"reset": "Alle opties zijn teruggezet op hun standaardwaarden. Je kan je veranderingen opslaan door op de \"Bevestig\" knop te drukken of ze negeren door deze pagina te sluiten of deze melding te negeren."
+				},
+				"success": {
+					"saved": "Opties opgeslagen."
+				}
+			}
+		}
+	},
+	"settings": {
+		"clearData": {
+			"allDataDeleted": "Alle data werd verwijderd.",
+			"confirmAlert": "Dit zal alle extensie data gerelateerd aan de opties verwijderen. Wil je verdergaan?"
+		},
+		"optionDisabled": {
+			"either": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " or "
+			},
+			"plural": {
+				"label": "Enable {{OPTIONS}} to configure this option",
+				"separator": " and "
+			},
+			"singular": "Enable '{{OPTION}}' to configure this option",
+			"specificOption": {
+				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+			}
+		},
+		"scrollForMoreSettings": "Scroll for more settings",
+		"sections": {
+			"automaticQuality": {
+				"enable": {
+					"label": "Automatische kwaliteitsaanpassing",
+					"title": "Past automatisch de videokwaliteit aan naar het geselecteerde niveau."
+				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Kwaliteitsterugvalstrategie",
+						"options": {
+							"higher": "Hoger",
+							"lower": "Lager"
+						},
+						"title": "De strategie die gebruikt wordt wanneer de geselecteerde kwaliteit niet beschikbaar is"
+					}
+				},
+				"select": {
+					"label": "Afspeelkwaliteit",
+					"title": "De kwaliteit waarop je de video zet"
+				},
+				"title": "Automatische kwaliteitsinstellingen"
+			},
+			"bottomButtons": {
+				"clear": {
+					"title": "Wist alle gegevens die de extensie op uw machine heeft gezet",
+					"value": "Gegevens wissen"
+				},
+				"confirm": {
+					"title": "Opnieuw instellen bevestigen",
+					"value": "Bevestig"
+				},
+				"openTab": {
+					"title": "Open extensie instellingen in een nieuw tabblad"
+				},
+				"reset": {
+					"title": "Reset alle instellingen naar hun standaardwaarden, klik op de \"Bevestig\" knop om wijzigingen op te slaan",
+					"value": "Reset"
+				}
+			},
+			"buttonPlacement": {
+				"select": {
+					"buttonNames": {
+						"copyTimestampUrlButton": "Kopieer video URL met tijdstempel knop",
+						"decreasePlaybackSpeedButton": "Verlaag snelheidsknop",
+						"forwardButton": "Doorspoelknop",
+						"hideEndScreenCardsButton": "Verberg eindschermelementen knop",
+						"increasePlaybackSpeedButton": "Verhoog snelheid knop",
+						"loopButton": "Loop knop",
+						"maximizePlayerButton": "Maximaliseer knop",
+						"openTranscriptButton": "Open ondertitels knop",
+						"rewindButton": "Terugspoelknop",
+						"screenshotButton": "Schermafbeelding knop",
+						"volumeBoostButton": "Volume boost knop"
+					},
+					"options": {
+						"below_player": {
+							"placement": "onder de speler instellingen",
+							"value": "Onder speler"
+						},
+						"feature_menu": {
+							"placement": "in het feature menu",
+							"value": "Feature menu"
+						},
+						"player_controls_left": {
+							"placement": "aan de linkerkant van de spelerinstellingen",
+							"value": "Linker Besturing"
+						},
+						"player_controls_right": {
+							"placement": "aan de rechterkant van de spelerinstellingen",
+							"value": "Rechter Bediening"
+						}
+					},
+					"title": "Plaats de {{BUTTON_NAME}} {{PLACEMENT}}"
+				},
+				"title": "Knop Plaatsing Instellingen"
+			},
+			"customCSS": {
+				"editor": {
+					"collapse": "Verberg Editor",
+					"expand": "Toon Editor",
+					"noProblems": "Geen problemen gevonden."
+				},
+				"enable": {
+					"label": "Aangepaste CSS inschakelen",
+					"title": "Maakt het mogelijk aangepaste CSS toe te passen op de pagina"
+				},
+				"title": "Gepersonaliseerde CSS Instellingen"
+			},
+			"featureMenu": {
+				"openType": {
+					"select": {
+						"label": "Menu Activatie Type",
+						"options": {
+							"click": "Klik",
+							"hover": "Hang erboven met de muis"
+						},
+						"title": "Selecteer de methode om het feature menu te activeren"
+					},
+					"title": "Feature menu instellingen"
+				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Schakel doorspoelen/terugspoelen knoppen in",
+					"title": "Voegt doorspoelen en terugspoelen knoppen toe aan de videospeler"
+				},
+				"time": {
+					"label": "Tijd door/terugspoelen",
+					"title": "Het aantal tijd waarmee je de video doorspoelt / terugspoelt"
+				},
+				"title": "Doorspoel/terugspoel knop instellingen"
+			},
+			"importExportSettings": {
+				"exportButton": {
+					"success": "Instellingen succesvol geëxporteerd",
+					"title": "Instellingen exporteren naar een JSON-bestand",
+					"value": "Instellingen exporteren"
+				},
+				"importButton": {
+					"error": {
+						"unknown": "Fout bij het importeren van instellingen. Kijk alstublieft het bestandsformaat na.\nEen onbekende fout is opgetreden.",
+						"validation": "Fout bij het importeren van instellingen. Kijk alstublieft het bestandsformaat na.\n{{ERROR_MESSAGE}}"
+					},
+					"success": "Instellingen succesvol geïmporteerd",
+					"title": "Instellingen importeren uit een JSON-bestand",
+					"value": "Instellingen Importeren"
+				}
+			},
+			"language": {
+				"select": {
+					"label": "Taal",
+					"title": "De taal voor de extensie"
+				},
+				"title": "Taal"
+			},
+			"miscellaneous": {
+				"features": {
+					"automaticTheaterMode": {
+						"label": "Automatisch theatermodus",
+						"title": "Zet de video automatisch in theatermodus wanneer je deze inlaadt"
+					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Automatisch uitschakelen omgevingsmodus",
+						"title": "Schakel de omgevingsmodus automatisch uit bij het laden van een video"
+					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Automatisch ondertiteling uitschakelen",
+						"title": "Automatisch ondertiteling uitzetten wanneer je een video inlaadt"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Kopieer video URL met tijdstempel knop",
+						"title": "Kopieer video URL met tijdstempel (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Default to original audio track",
+						"title": "Always default to the original audio track"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Hide AI summary",
+						"title": "Hides the artificial intelligence summary below videos"
+					},
+					"hideEndScreenCards": {
+						"label": "Eindscherm elementen verbergen",
+						"title": "Maakt de elementen aan het eind van een video onzichtbaar"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Eindscherm elementen verbergen knop",
+						"title": "Voegt een knop toe die de eindscherm elementen toont/verbergt"
+					},
+					"hideLiveStreamChat": {
+						"label": "Livestream chat verbergen",
+						"title": "Verbergt de livestream chat"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Verberg Officiële Artiest Video's",
+						"title": "Verberg Officiële Artiest Video's op de homepagina"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Verberg betaalde promotie banner",
+						"title": "Verbergt de banner die verschijnt wanneer je een video bekijkt die een betaalde promotie heeft"
+					},
+					"hidePlayables": {
+						"label": "Hide playables",
+						"title": "Hides all playables"
+					},
+					"hideScrollbar": {
+						"label": "Verberg scrollbar",
+						"title": "Verbergt de scrollbar op de pagina"
+					},
+					"hideShorts": {
+						"label": "Shorts verbergen",
+						"title": "Verbergt alle shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Verberg vertaal reactie knop",
+						"title": "Verbergt \"Vertaal naar Taal\" knop onder reacties"
+					},
+					"loopButton": {
+						"label": "Loop knop",
+						"title": "Voegt een knop toe aan het feature menu om de huidige video te loopen"
+					},
+					"maximizePlayerButton": {
+						"label": "Maximaliseer speler knop",
+						"title": "Voegt een knop toe aan het feature menu die de speler maximaliseert"
+					},
+					"openTranscriptButton": {
+						"label": "Open ondertitels knop",
+						"title": "Voegt een knop toe aan het feature menu die het transcript van de huidige video opent"
+					},
+					"openYouTubeSettingsOnHover": {
+						"label": "Open youtube instellingen bij overgang met de muis",
+						"title": "Opent YouTube instellingen wanner je met je muis over de instellingen knop gaat"
+					},
+					"pauseBackgroundPlayers": {
+						"label": "Achtergrondafspelers pauzeren",
+						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
+					},
+					"playlistRemover": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
+					"remainingTime": {
+						"label": "Resterende tijd",
+						"title": "Toont de resterende tijd van de huidige video"
+					},
+					"rememberLastVolume": {
+						"label": "Onthoud vorig volume",
+						"title": "Onthoudt het volume van de vorige video en stelt het in op een nieuwe video"
+					},
+					"removeRedirect": {
+						"label": "Verwijdert YouTube /redirect URLs",
+						"title": "Vervangt YouTube doorverwijzing door echte URLs die de doorverwijzing waarschuwing niet geven"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Restore fullscreen scrolling",
+						"title": "Restores scrolling in fullscreen mode"
+					},
+					"shareShortener": {
+						"label": "Maak Youtube deel links korter",
+						"title": "Maakt YouTube video deel links (youtu.be) korter door si en andere feature parameters af te knippen"
+					},
+					"shortsAutoScroll": {
+						"label": "Shorts autoscroll",
+						"title": "Scrollt automatisch naar de volgende short"
+					},
+					"skipContinueWatching": {
+						"label": "Sla \"video is gepauzeerd. Hervatten?\" over",
+						"title": "Slaat het afwezig dialoog die het afspelen pauzeert over"
+					}
+				},
+				"title": "Overige instellingen"
+			},
+			"onScreenDisplaySettings": {
+				"color": {
+					"label": "Kleur",
+					"options": {
+						"blue": "Blauw",
+						"green": "Groen",
+						"orange": "Oranje",
+						"pink": "Roze",
+						"purple": "Paars",
+						"red": "Rood",
+						"white": "Wit",
+						"yellow": "Geel"
+					},
+					"title": "Selecteer de kleur voor de schermweergave"
+				},
+				"hide": {
+					"label": "Vertraging verbergen",
+					"title": "Specifieer de tijd, in milliseconden, voordat de schermweergave automatisch wordt verborgen"
+				},
+				"opacity": {
+					"label": "Transparantie",
+					"title": "Transparantie van de schermweergave aanpassen"
+				},
+				"padding": {
+					"label": "Padding",
+					"title": "Het aantal pixels rond de schermweergave aanpassen. Dit geldt specifiek voor de hoek schermweergave."
+				},
+				"position": {
+					"label": "Positie",
+					"options": {
+						"bottom_left": "Linksonder",
+						"bottom_right": "Rechtsonder",
+						"center": "Gecentreerd",
+						"top_left": "Linksboven",
+						"top_right": "Rechtsboven"
+					},
+					"title": "Selecteer de positie voor de schermweergave"
+				},
+				"title": "Schermweergave Instellingen",
+				"type": {
+					"label": "Type",
+					"options": {
+						"circle": "Cirkel",
+						"line": "Lijn",
+						"no_display": "Geen weergave",
+						"text": "Tekst"
+					},
+					"title": "Selecteer het type van de schermweergave"
+				}
+			},
+			"playbackSpeed": {
+				"enable": {
+					"label": "Geforceerde afspeelsnelheid",
+					"title": "Stelt de snelheid van de video in op wat u hieronder kiest"
+				},
+				"playbackSpeedButtons": {
+					"label": "Afspeelsnelheid knoppen",
+					"select": {
+						"label": "Snelheid afspeelsnelheid knoppen",
+						"title": "Hoeveelheid snelheid die gewijzigd wordt per klik"
+					},
+					"title": "Voegt knoppen toe die de afspeelsnelheid van de huidige video verhoogt of verlaagt"
+				},
+				"select": {
+					"label": "Snelheid videospeler",
+					"title": "De snelheid waarop je de video zet"
+				},
+				"title": "Afspeelsnelheid instellingen"
+			},
+			"playlistLength": {
+				"enable": {
+					"label": "Geef afspeellijst lengte informatie weer",
+					"title": "Toont de totale lengte van de afspeellijst, hoeveel bekeken is, en hoeveel er over schiet."
+				},
+				"title": "Afspeellijst lengte instellingen",
+				"wayToGetLength": {
+					"select": {
+						"label": "Methode om afspeellijst lengte te verkrijgen",
+						"title": "De manier waarop de afspeellijst informatie (API methode zal terugvallen op HTML als een fout optreedt)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Methode om kijktijd te verkrijgen",
+						"options": {
+							"duration": "Videolengte",
+							"youtube": "Video kijktijd"
+						},
+						"title": "De manier waarop je de hoeveelheid kijktijd verkrijgt (video lengtetype enkel gebruikt op kijk pagina)"
+					}
+				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Schermafbeelding knop",
+					"title": "Voegt een knop aan de speler toe om een schermafbeelding van de video te nemen"
+				},
+				"saveAs": {
+					"clipboard": "Klembord",
+					"file": "Bestand"
+				},
+				"selectFormat": {
+					"label": "Schermafbeelding formaat",
+					"title": "Het formaat waarin je de schermafbeelding opslaat"
+				},
+				"selectSaveAs": {
+					"label": "Schermafbeelding opslaantype",
+					"title": "Het type van de opgeslagen schermafbeelding"
+				},
+				"title": "Schermafbeelding instellingen"
+			},
+			"scrollWheelSpeedControl": {
+				"adjustmentSteps": {
+					"label": "Snelheidsverandering per scroll",
+					"title": "Wijzig de snelheidsverandering per scroll"
+				},
+				"enable": {
+					"label": "Scrollwiel snelheidscontrole",
+					"title": "Klik op een aanpassingsknop om snelheidsverandering met het scrollwiel aan te zetten."
+				},
+				"optionLabel": "{{KEY}} sleutel",
+				"select": {
+					"label": "Aanpassing knop",
+					"title": "De aanpassing knop om te gebruiken"
+				},
+				"title": "Scrollwiel snelheidscontrole instellingen"
+			},
+			"scrollWheelVolumeControl": {
+				"adjustmentSteps": {
+					"label": "Volumeverandering per scroll",
+					"title": "Verandert het volume per scroll"
+				},
+				"enable": {
+					"label": "Scrollwiel volumecontrole",
+					"title": "Laat toe om het scrollwiel te gebruiken om het volume van de huidige video aan te passen"
+				},
+				"holdModifierKey": {
+					"enable": {
+						"label": "Inschakelen bij het vasthouden van aanpassingsknop",
+						"title": "Klik op een aanpassingsknop om het scrollwiel het volume laten aan te passen."
+					},
+					"optionLabel": "{{KEY}} knop",
+					"select": {
+						"label": "Aanpassingsknop",
+						"title": "De aanpassingsknop om te gebruiken"
+					}
+				},
+				"holdRightClick": {
+					"enable": {
+						"label": "Inschakelen bij vasthouden rechtermuisklik",
+						"title": "Houd rechtermuisknop ingedrukt om volumeregeling voor scrollwiel in te schakelen"
+					}
+				},
+				"title": "Scrollwiel volume aanpassing instellingen"
+			},
+			"settingSearch": {
+				"placeholder": "Zoek naar instellingen"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "Houd afgespeelde video's bij",
+					"title": "Houdt bij waar je gestopt was bij het kijken van een video en laat toe om verder te kijken"
+				},
+				"resumeType": {
+					"select": {
+						"label": "Hervatten type",
+						"options": {
+							"automatic": "Automatisch",
+							"prompt": "Vraag"
+						},
+						"title": "Selecteer hoe je video's wilt hervatten"
+					}
+				},
+				"title": "Videogeschiedenis instellingen"
+			},
+			"volumeBoost": {
+				"boostAmount": {
+					"label": "Volume boost hoeveelheid (dB)",
+					"title": "De hoeveelheid waarmee je video's wilt boosten"
+				},
+				"enable": {
+					"label": "Volume boost",
+					"title": "Volume boost inschakelen"
+				},
+				"mode": {
+					"select": {
+						"label": "Volume boost modus",
+						"options": {
+							"global": "Globaal",
+							"perVideo": "Per video"
+						},
+						"title": "Kies hoe volume wordt toegepast. \"Per video\" voegt de boost optie toe aan het feature menu individueel per video. \"Globaal\" gaat over elke video wanneer volume boost is ingeschakeld."
+					}
+				},
+				"title": "Volume boost instellingen"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "Je kan één gier verkrijgen",
+				"input": {
+					"label": "API sleutel",
+					"title": "Voer uw Youtube Data API V3 sleutel in."
+				},
+				"title": "YouTube API V3 Sleutel"
+			},
+			"youtubeDeepDark": {
+				"author": "Auteur",
+				"co-authors": "Co-auteurs",
+				"colors": {
+					"colorShadow": {
+						"label": "Schaduw kleur",
+						"title": "Kleur voor de schaduw"
+					},
+					"dimmerText": {
+						"label": "Secondaire tekstkleur",
+						"title": "Kleur voor de secondaire tekst"
+					},
+					"hoverBackground": {
+						"label": "Achtergrondkleur zweven met de muis",
+						"title": "Kleur voor zweven achtergrond"
+					},
+					"mainBackground": {
+						"label": "Hoofd achtergrondkleur",
+						"title": "Kleur voor de hoofdachtergrond"
+					},
+					"mainColor": {
+						"label": "Accent kleur",
+						"title": "Kleur voor accentueren"
+					},
+					"mainText": {
+						"label": "Hoofd tekstkleur",
+						"title": "Kleur voor de hoofdtekst"
+					},
+					"secondBackground": {
+						"label": "Secondaire achtergrondkleur",
+						"title": "Kleur voor de secondaire achtergrond"
+					}
+				},
+				"enable": {
+					"label": "Geselecteerd thema inschakelen",
+					"title": "Het geselecteerde thema voor de pagina inschakelen"
+				},
+				"select": {
+					"label": "Select theme",
+					"title": "Select a theme to be applied to the page"
+				},
+				"title": "YouTube Deep Dark Settings"
+			}
+		}
+	}
+}

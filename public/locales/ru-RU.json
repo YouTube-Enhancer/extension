@@ -8,9 +8,34 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Скопировано!",
+						"label": "Копировать URL видео с таймкодом"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Меню функций"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Перемотка вперёд на {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Перемотка назад на {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Скрыть заставки следующих видео",
+						"toggle": {
+							"off": "Показать заставки следующих видео",
+							"on": "Скрыть заставки следующих видео"
+						}
 					}
 				},
 				"loopButton": {
@@ -44,7 +69,12 @@
 						"increasePlaybackSpeedButton": {
 							"label": "Увеличить скорость на {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Невозможно уменьшить ({{SPEED}})",
+					"increaseLimit": "Невозможно увеличить ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Общая длина может быть неточной, если некоторые видео скрыты или недостаточно видео прогружено, чтобы получить полную длину."
 				},
 				"screenshotButton": {
 					"button": {
@@ -72,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Клавиша-модификатор для управления скоростью воспроизведения с помощью колеса мыши не может совпадать с клавишей-модификатором для управления громкостью.",
@@ -93,11 +124,37 @@
 			"allDataDeleted": "Все данные были удалены.",
 			"confirmAlert": "Это приведет к удалению всех данных расширения, связанных с настройками. Продолжить?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Включите {{OPTIONS}} для настройки этого параметра",
+				"separator": " или "
+			},
+			"plural": {
+				"label": "Включите {{OPTIONS}} для настройки этого параметра",
+				"separator": " и "
+			},
+			"singular": "Включите '{{OPTION}}' для настройки этого параметра",
+			"specificOption": {
+				"featureMenu": "Включите по крайней мере одну кнопку, которая будет размещена в меню функций для настройки этой опции.",
+				"screenshotButtonFileFormat": "Установите тип сохранения скриншота «Файл» для настройки этого параметра"
+			}
+		},
+		"scrollForMoreSettings": "Прокрутите для других настроек",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
 					"label": "Включить автоматическую регулировку качества",
 					"title": "Автоматически настраивает качество видео на выбранный уровень."
+				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Стратегия восстановления качества",
+						"options": {
+							"higher": "Выше",
+							"lower": "Ниже"
+						},
+						"title": "Какую стратегию использовать, когда выбранное качество недоступно"
+					}
 				},
 				"select": {
 					"label": "Качество проигрывателя",
@@ -125,11 +182,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Кнопка «Копировать URL видео с таймкодом»",
 						"decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
+						"forwardButton": "Кнопка перемотки вперёд",
+						"hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
+						"rewindButton": "Кнопка перемотки назад",
 						"screenshotButton": "Кнопка «Скриншот»",
 						"volumeBoostButton": "Кнопка «Усиление громкости»"
 					},
@@ -180,6 +241,17 @@
 					"title": "Настройки меню функций"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Включить кнопки перемотки вперёд/назад",
+					"title": "Добавляет кнопки перемотки вперёд/назад в проигрыватель"
+				},
+				"time": {
+					"label": "Время перемотки",
+					"title": "Кол-во времени, на которое будет перематываться видео"
+				},
+				"title": "Настройки кнопок перемотки вперёд/назад"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Настройки успешно экспортированы",
@@ -209,6 +281,74 @@
 						"label": "Включить автоматический режим кинотеатра",
 						"title": "Автоматически включать режим кинотеатра при загрузке видео"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Автоматическое отключение режима освещения",
+						"title": "Автоматически отключать режим освещения при загрузке видео"
+					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Автоматически отключать субтитры",
+						"title": "Автоматически отключает субтитры при загрузке видео"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Automatically enable closed captions",
+						"title": "Automatically enables closed captions when you load a video"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Кнопка «Копировать URL видео с таймкодом»",
+						"title": "Копирует ссылку видео с меткой времени (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Выставлять оригинальную звуковую дорожку по умолчанию",
+						"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Прятать краткое содержание от ИИ",
+						"title": "Прячет краткое содержание видео от ИИ под описанием"
+					},
+					"hideEndScreenCards": {
+						"label": "Скрыть заставки следующих видео",
+						"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Кнопка «Скрыть заставки следующих видео»",
+						"title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
+					},
+					"hideLiveStreamChat": {
+						"label": "Спрятать чат прямого эфира",
+						"title": "Прячет чат прямого эфира (стрима)"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Скрывать официальные видео исполнителя",
+						"title": "Скрывает официальные видео исполнителя с домашней страницы"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Скрыть \"Содержит прямую рекламу\"",
+						"title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
+					},
+					"hidePlayables": {
+						"label": "Спрятать игры",
+						"title": "Прячет все игры (playables)"
+					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
 						"title": "Скрывает полосу прокрутки страницы"
@@ -216,6 +356,10 @@
 					"hideShorts": {
 						"label": "Скрыть Shorts",
 						"title": "Скрывает все Shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Спрятать кнопку 'Перевести на...'",
+						"title": "Прячет кнопку 'Перевести на русский' под комментарием"
 					},
 					"loopButton": {
 						"label": "Включить кнопку «Зациклить»",
@@ -237,6 +381,10 @@
 						"label": "Ставить на паузу видео в фоновых вкладках",
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 					},
+					"playlistRemover": {
+						"label": "Спрятать плейлисты на главной",
+						"title": "Прячет плейлисты на главной (домашней) странице"
+					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
 						"title": "Показывает оставшееся время просмотра видео"
@@ -248,6 +396,10 @@
 					"removeRedirect": {
 						"label": "Убрать YouTube /redirect ссылки",
 						"title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "Включить прокрутку в полноэкранном режиме",
+						"title": "Восстанавливает возможность прокрутки в полноэкранном режиме"
 					},
 					"shareShortener": {
 						"label": "Укоротить ссылку с кнопки \"Поделиться\"",
@@ -333,6 +485,42 @@
 				},
 				"title": "Настройки скорости воспроизведения"
 			},
+			"playlistLength": {
+				"enable": {
+					"label": "Отображать информацию о длине плейлиста",
+					"title": "Отображает общую временную длину плейлиста, сколько было просмотрено и сколько осталось."
+				},
+				"title": "Настройки длины плейлиста",
+				"wayToGetLength": {
+					"select": {
+						"label": "Способ получения длины плейлиста",
+						"title": "Способ получения информации о длине плейлиста (метод API будет переключаться обратно к HTML, если возникнет ошибка)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Метод получения времени просмотра",
+						"options": {
+							"duration": "Продолжительность видео",
+							"youtube": "Время просмотра видео"
+						},
+						"title": "Способ получения количества времени просмотра (тип длины видео используется только на странице просмотра)"
+					}
+				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "Включить кнопку «Скриншот»",
@@ -396,6 +584,9 @@
 				},
 				"title": "Настройки управления громкостью с помощью колеса мыши"
 			},
+			"settingSearch": {
+				"placeholder": "Поиск настроек"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Отслеживание таймкода просматриваемого видео",
@@ -433,6 +624,14 @@
 					}
 				},
 				"title": "Настройки усиления громкости"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "Вы можете получить ключ здесь",
+				"input": {
+					"label": "API ключ",
+					"title": "Введите ваш ключ Youtube Data API V3."
+				},
+				"title": "Ключ YouTube API V3"
 			},
 			"youtubeDeepDark": {
 				"author": "Автор",

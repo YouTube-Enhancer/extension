@@ -1,89 +1,7 @@
 import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { createSVGElement, createStyledElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
-
-function createFeatureMenu() {
-	// Create the feature menu div
-	const featureMenu = createStyledElement({
-		classlist: ["ytp-popup", "ytp-settings-menu"],
-		elementId: "yte-feature-menu",
-		elementType: "div",
-		styles: {
-			display: "none",
-			zIndex: "2050"
-		}
-	});
-	// Create the feature menu panel
-	const featureMenuPanel = createStyledElement({
-		classlist: ["ytp-panel"],
-		elementId: "yte-feature-menu-panel",
-		elementType: "div",
-		styles: {
-			display: "contents"
-		}
-	});
-	// Append the panel to the menu
-	featureMenu.appendChild(featureMenuPanel);
-	// Create the panel menu
-	const featureMenuPanelMenu = createStyledElement({
-		classlist: ["ytp-panel-menu"],
-		elementId: "yte-panel-menu",
-		elementType: "div"
-	});
-	featureMenuPanel.appendChild(featureMenuPanelMenu);
-	return featureMenu;
-}
-
-async function createFeatureMenuButton() {
-	// Check if the feature menu already exists
-	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
-	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
-	// Create the feature menu button
-	const featureMenuButton = createStyledElement({
-		classlist: ["ytp-button"],
-		elementId: "yte-feature-menu-button",
-		elementType: "button",
-		styles: { display: "none" }
-	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
-	// Create the SVG icon for the button
-	const featureButtonSVG = makeFeatureMenuIcon();
-	featureMenuButton.appendChild(featureButtonSVG);
-	// Get references to various elements and check their existence
-	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
-	if (!settingsButton) return;
-	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("div#player-container.ytd-watch-flexy") : null;
-	if (!playerContainer) return;
-	// Insert the feature menu button and feature menu itself
-	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
-	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	const {
-		data: {
-			options: { feature_menu_open_type: featureMenuOpenType }
-		}
-	} = optionsData;
-	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
-	setupFeatureMenuEventListeners(featureMenuOpenType);
-}
-function makeFeatureMenuIcon() {
-	const featureButtonSVG = createSVGElement(
-		"svg",
-		{
-			fill: "white",
-			height: "48px",
-			viewBox: "0 0 36 36",
-			width: "48px"
-		},
-		createSVGElement("path", {
-			d: "M 9.1273596,13.56368 H 13.56368 V 9.1273596 H 9.1273596 Z M 15.78184,26.872641 h 4.43632 V 22.43632 h -4.43632 z m -6.6544804,0 H 13.56368 V 22.43632 H 9.1273596 Z m 0,-6.654481 H 13.56368 V 15.78184 H 9.1273596 Z m 6.6544804,0 h 4.43632 V 15.78184 H 15.78184 Z M 22.43632,9.1273596 V 13.56368 h 4.436321 V 9.1273596 Z M 15.78184,13.56368 h 4.43632 V 9.1273596 h -4.43632 z m 6.65448,6.65448 h 4.436321 V 15.78184 H 22.43632 Z m 0,6.654481 h 4.436321 V 22.43632 H 22.43632 Z",
-			fill: "white"
-		})
-	);
-	return featureButtonSVG;
-}
+import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
 // Function to enable the feature menu
 export async function enableFeatureMenu() {
@@ -91,21 +9,12 @@ export async function enableFeatureMenu() {
 	if (featureMenuButtonExists) return;
 	await createFeatureMenuButton();
 }
-function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
-	if (adsContainer) {
-		const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
-		if (adsSpan) {
-			adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
-			adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
-		}
-	}
-}
+
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	if (!settingsButton) return;
-	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("div#player-container.ytd-watch-flexy") : null;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!bottomControls) return;
@@ -140,9 +49,8 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		if (!featureMenuButton) return;
 		if (event.target === featureMenuButton) return;
 		if (event.target === featureMenu) return;
-		if (!featureMenu.contains(event.target as Node)) {
-			hideFeatureMenu();
-		}
+		if (featureMenu.contains(event.target as Node)) return;
+		hideFeatureMenu();
 	};
 
 	switch (featureMenuOpenType) {
@@ -153,11 +61,8 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				"click",
 				() => {
 					const featureMenuVisible = featureMenu.style.display === "block";
-					if (featureMenuVisible) {
-						hideFeatureMenu();
-					} else {
-						showFeatureMenu();
-					}
+					if (featureMenuVisible) return hideFeatureMenu();
+					showFeatureMenu();
 				},
 				"featureMenu"
 			);
@@ -180,10 +85,9 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 				featureMenuButton,
 				"mouseleave",
 				(event) => {
-					if (![featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) {
-						removeFeatureMenuTooltip();
-						hideFeatureMenu();
-					}
+					if ([featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) return;
+					removeFeatureMenuTooltip();
+					hideFeatureMenu();
 				},
 				"featureMenu"
 			);
@@ -211,18 +115,15 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	}
 	function handleMutation(mutations: MutationRecord[]) {
 		mutations.forEach((mutation) => {
-			if (mutation.type === "childList") {
-				const addedNodes = Array.from(mutation.addedNodes);
-				const isAdsElementAdded = addedNodes.some(
-					(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
-				);
-				if (isAdsElementAdded) {
-					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					if (featureMenu) {
-						adjustAdsContainerStyles(featureMenu.style.display === "block");
-					}
-				}
-			}
+			if (mutation.type !== "childList") return;
+			const addedNodes = Array.from(mutation.addedNodes);
+			const isAdsElementAdded = addedNodes.some(
+				(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
+			);
+			if (!isAdsElementAdded) return;
+			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
+			if (!featureMenu) return;
+			adjustAdsContainerStyles(featureMenu.style.display === "block");
 		});
 	}
 	const observer = new MutationObserver(handleMutation);
@@ -230,4 +131,92 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		childList: true,
 		subtree: true
 	});
+}
+function adjustAdsContainerStyles(featureMenuOpen: boolean) {
+	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
+	if (!adsContainer) return;
+	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+	if (!adsSpan) return;
+	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
+	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
+}
+
+function createFeatureMenu() {
+	// Create the feature menu div
+	const featureMenu = createStyledElement({
+		classlist: ["ytp-popup", "ytp-settings-menu"],
+		elementId: "yte-feature-menu",
+		elementType: "div",
+		styles: {
+			display: "none",
+			zIndex: "2050"
+		}
+	});
+	// Create the feature menu panel
+	const featureMenuPanel = createStyledElement({
+		classlist: ["ytp-panel"],
+		elementId: "yte-feature-menu-panel",
+		elementType: "div",
+		styles: {
+			display: "contents"
+		}
+	});
+	// Append the panel to the menu
+	featureMenu.appendChild(featureMenuPanel);
+	// Create the panel menu
+	const featureMenuPanelMenu = createStyledElement({
+		classlist: ["ytp-panel-menu"],
+		elementId: "yte-panel-menu",
+		elementType: "div"
+	});
+	featureMenuPanel.appendChild(featureMenuPanelMenu);
+	return featureMenu;
+}
+async function createFeatureMenuButton() {
+	// Check if the feature menu already exists
+	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
+	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
+	// Create the feature menu button
+	const featureMenuButton = createStyledElement({
+		classlist: ["ytp-button"],
+		elementId: "yte-feature-menu-button",
+		elementType: "button",
+		styles: { display: "none" }
+	});
+	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
+	// Create the SVG icon for the button
+	const featureButtonSVG = makeFeatureMenuIcon();
+	featureMenuButton.appendChild(featureButtonSVG);
+	// Get references to various elements and check their existence
+	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+	if (!settingsButton) return;
+	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
+	if (!playerContainer) return;
+	// Insert the feature menu button and feature menu itself
+	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
+	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
+	// Wait for the "options" message from the content script
+	const {
+		data: {
+			options: { feature_menu_open_type: featureMenuOpenType }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
+	setupFeatureMenuEventListeners(featureMenuOpenType);
+}
+function makeFeatureMenuIcon() {
+	const featureButtonSVG = createSVGElement(
+		"svg",
+		{
+			fill: "white",
+			height: "24px",
+			viewBox: "0 0 24 24",
+			width: "24px"
+		},
+		createSVGElement("path", {
+			d: "M 3.1273593,7.5636797 H 7.5636797 V 3.1273593 H 3.1273593 Z M 9.7818397,20.872641 H 14.21816 V 16.43632 H 9.7818397 Z m -6.6544804,0 H 7.5636797 V 16.43632 H 3.1273593 Z m 0,-6.654481 H 7.5636797 V 9.7818397 H 3.1273593 Z m 6.6544804,0 H 14.21816 V 9.7818397 H 9.7818397 Z M 16.43632,3.1273593 v 4.4363204 h 4.436321 V 3.1273593 Z M 9.7818397,7.5636797 H 14.21816 V 3.1273593 H 9.7818397 Z M 16.43632,14.21816 h 4.436321 V 9.7818397 H 16.43632 Z m 0,6.654481 h 4.436321 V 16.43632 H 16.43632 Z",
+			fill: "white"
+		})
+	);
+	return featureButtonSVG;
 }

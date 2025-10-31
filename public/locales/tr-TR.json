@@ -8,9 +8,34 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Kopyalandı!",
+						"label": "Geçerli zamana ait video URL'sini kopyala"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Özellik menüsü"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "{{TIME}} hızlı ileri sar"
+						},
+						"rewindButton": {
+							"label": "{{TIME}} kadar geri sar"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Bitiş ekranı kartlarını gizle",
+						"toggle": {
+							"off": "Bitiş ekranı kartlarını göster",
+							"on": "Bitiş ekranı kartlarını gizle"
+						}
 					}
 				},
 				"loopButton": {
@@ -33,22 +58,27 @@
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Transkripti Aç"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Hızı {{SPEED}} değerine düşür"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Hızı {{SPEED}} değerine çıkar"
 						}
-					}
+					},
+					"decreaseLimit": "Daha fazla düşüremezsin ({{SPEED}})",
+					"increaseLimit": "Daha fazla artıramazsın ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Bazı videolar gizliyse veya tam uzunluğa ulaşmak için yeterli sayıda video yüklemediyseniz, toplam uzunluk doğru olmayabilir."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Ekran görüntüsü"
 					},
 					"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
 				},
@@ -60,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Ses Yükseltici",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Ses Yükseltici Devredışı",
+							"on": "Ses Yükseltici Aktif"
 						}
 					}
 				}
@@ -72,10 +102,11 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "Kaydırma tekerleği hız kontrolü için kullanılan değiştirici tuş, kaydırma tekerleği ses kontrolü için kullanılan değiştirici tuşla aynı olamaz.",
+							"volumeControl": "Kaydırma tekerleği ile ses düzeyi kontrolü için kullanılan değiştirici tuş, kaydırma hızı kontrolü için kullanılan değiştirici tuşla aynı olamaz."
 						}
 					}
 				},
@@ -93,11 +124,37 @@
 			"allDataDeleted": "Tüm veriler silindi.",
 			"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+				"separator": " veya "
+			},
+			"plural": {
+				"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+				"separator": " ve "
+			},
+			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
+			"specificOption": {
+				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
+				"screenshotButtonFileFormat": "Bu seçeneği yapılandırmak için ekran görüntüsü kaydetme türünü 'File' olarak ayarlayın"
+			}
+		},
+		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
 					"label": "Otomatik kalite ayarlamayı etkinleştir",
 					"title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
+				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Kalite geri dönüş stratejisi",
+						"options": {
+							"higher": "Daha yüksek",
+							"lower": "Daha düşük"
+						},
+						"title": "Seçilen kalite mevcut değilse kullanılacak strateji"
+					}
 				},
 				"select": {
 					"label": "Oynatma kalitesi",
@@ -125,11 +182,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
+						"decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
+						"forwardButton": "Hızlı İleri düğmesi",
+						"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
+						"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
-						"openTranscriptButton": "Open Transcript button",
+						"openTranscriptButton": "Transkripti Aç butonu",
+						"rewindButton": "Geri sarma düğmesi",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
 						"volumeBoostButton": "Ses güçlendirme düğmesi"
 					},
@@ -151,7 +212,7 @@
 							"value": "Sağ Kontroller"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 				},
 				"title": "Düğme Yerleşim Ayarları"
 			},
@@ -180,6 +241,17 @@
 					"title": "Özellik menüsü ayarları"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "İleri/geri sarma düğmeleri",
+					"title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
+				},
+				"time": {
+					"label": "İleri/geri sarma süresi",
+					"title": "Videoyu ileri/geri sarmak için atlanacak süre"
+				},
+				"title": "İleri/geri sarma düğmesi ayarları"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Ayarlar başarıyla dışa aktarıldı",
@@ -207,7 +279,75 @@
 				"features": {
 					"automaticTheaterMode": {
 						"label": "Otomatik tiyatro modu",
-						"title": "Video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+						"title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Ortam modunu otomatik olarak devre dışı bırak",
+						"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
+					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
+						"title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Kapalı altyazıları otomatik olarak etkinleştir",
+						"title": "Bir videoyu yüklediğinizde altyazıları otomatik olarak etkinleştirir"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Automatically maximize player",
+						"title": "Automatically maximizes the player when you load a video"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
+						"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Varsayılan olarak orijinal ses parçasına dön",
+						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Enable playlist management buttons",
+						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Enable save to Watch Later button",
+						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "AI özetini gizle",
+						"title": "Videoların altındaki yapay zeka özetini gizler"
+					},
+					"hideEndScreenCards": {
+						"label": "Bitiş ekranı kartlarını gizle",
+						"title": "Video'nun sonundaki kartları gizler"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Bitiş ekranı kartlarını gizleme düğmesi",
+						"title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
+					},
+					"hideLiveStreamChat": {
+						"label": "Canlı yayın sohbetini gizle",
+						"title": "Canlı yayın sohbetini gizler"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Resmi Sanatçı Videolarını Gizle",
+						"title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Ücretli tanıtım afişini gizle",
+						"title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
+					},
+					"hidePlayables": {
+						"label": "Oynatılabilirleri gizle",
+						"title": "Tüm oynatılabilir öğeleri gizle"
 					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
@@ -216,6 +356,10 @@
 					"hideShorts": {
 						"label": "Kısa videoları gizle",
 						"title": "Tüm kısa videoları gizler"
+					},
+					"hideTranslateComment": {
+						"label": "Yorumu Çevir'i Gizle Butonu",
+						"title": "Yorumlar altındaki 'Dile Çevir' düğmesini gizler"
 					},
 					"loopButton": {
 						"label": "Tekrarlama düğmesi",
@@ -237,6 +381,10 @@
 						"label": "Arka plan oynatıcılarını duraklat",
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
+					"playlistRemover": {
+						"label": "Ana sayfadaki oynatma listelerini gizle",
+						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
+					},
 					"remainingTime": {
 						"label": "Kalan süre",
 						"title": "İzlediğiniz videonun kalan süresini gösterir"
@@ -249,6 +397,10 @@
 						"label": "YouTube yönlendirme bağlantılarını kaldır",
 						"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Tam ekran kaydırmayı geri yükle",
+						"title": "Tam ekran modunda kaydırmayı geri yükler"
+					},
 					"shareShortener": {
 						"label": "YouTube video paylaşım bağlantısını kısalt",
 						"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
@@ -258,8 +410,8 @@
 						"title": "Bir sonraki kısa videoya otomatik kaydır"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
+						"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
 					}
 				},
 				"title": "Çeşitli ayarlar"
@@ -281,11 +433,11 @@
 				},
 				"hide": {
 					"label": "Gecikmeyi Gizle",
-					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+					"title": "Ekran görüntüsünü otomatik olarak gizlemeden önce geçen süreyi milisaniye cinsinden belirtin"
 				},
 				"opacity": {
 					"label": "Saydamlık",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"title": "Ekrandaki gösterimin saydamlığını ayarlayın"
 				},
 				"padding": {
 					"label": "İç Boşluk",
@@ -300,18 +452,18 @@
 						"top_left": "Sol Üst",
 						"top_right": "Sağ Üst"
 					},
-					"title": "Select the position of the On-Screen Display"
+					"title": "Ekran görüntüleme konumunu seçin"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "Ekran Üstü Görüntüleme Ayarları",
 				"type": {
 					"label": "Tür",
 					"options": {
-						"circle": "Circle",
+						"circle": "Daire",
 						"line": "Satır",
 						"no_display": "Ekran yok",
 						"text": "Metin"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Ekran görüntüleme türünü seçin"
 				}
 			},
 			"playbackSpeed": {
@@ -320,18 +472,54 @@
 					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
 				},
 				"playbackSpeedButtons": {
-					"label": "Playback speed buttons",
+					"label": "Oynatma hızı ayarları",
 					"select": {
-						"label": "Playback buttons speed",
-						"title": "Amount of speed to be changed per click"
+						"label": "Oynatma düğmelerinin hızı",
+						"title": "Tıklama başına değiştirilecek hız miktarı"
 					},
-					"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					"title": "İzlediğiniz videonun oynatma hızını artırmak veya azaltmak için düğmeler ekler"
 				},
 				"select": {
 					"label": "Oynatma hızı",
 					"title": "Video oynatma hızını ayarlar"
 				},
 				"title": "Oynatma hızı ayarları"
+			},
+			"playlistLength": {
+				"enable": {
+					"label": "Çalma listesinin uzunluk bilgilerini göster",
+					"title": "Oynatma listesinin toplam, izlenen ve ne kalan uzunluğunu gösterir."
+				},
+				"title": "Oynatma listesi uzunluk ayarları",
+				"wayToGetLength": {
+					"select": {
+						"label": "Oynatma listesi uzunluğunu alma yöntemi",
+						"title": "Oynatma listesi uzunluk bilgisi alma yolu (Bir hata oluşursa API yöntemi HTML'e geri dönecek)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "İzlenme süresini alma yöntemi",
+						"options": {
+							"duration": "Video Uzunluğu",
+							"youtube": "Video İzlenme Süresi"
+						},
+						"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
+					}
+				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToRemoveVideo": "Failed to remove video",
+				"markAsUnwatched": "Mark as unwatched",
+				"markingAsUnwatched": "Marking as unwatched…",
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
+			},
+			"saveToWatchLaterButton": {
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -366,7 +554,7 @@
 					"label": "Düzenleyici anahtar",
 					"title": "Kullanılacak kısayol düğmesi"
 				},
-				"title": "Scroll wheel speed control settings"
+				"title": "Kaydırma tekerleği için hız kontrolü ayarları"
 			},
 			"scrollWheelVolumeControl": {
 				"adjustmentSteps": {
@@ -379,7 +567,7 @@
 				},
 				"holdModifierKey": {
 					"enable": {
-						"label": "Enable when holding modifier key",
+						"label": "Değiştirici tuşa basılı tutulduğunda",
 						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
 					},
 					"optionLabel": "{{KEY}} anahtarı",
@@ -396,6 +584,9 @@
 				},
 				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
 			},
+			"settingSearch": {
+				"placeholder": "Bir ayar arayın"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "İzlenen videoları takip edin",
@@ -406,7 +597,7 @@
 						"label": "Devam etme türü",
 						"options": {
 							"automatic": "Otomatik",
-							"prompt": "Prompt"
+							"prompt": "İpucu"
 						},
 						"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
 					}
@@ -434,48 +625,56 @@
 				},
 				"title": "Ses güçlendirme ayarları"
 			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "Buradan bir tane alabilirsiniz",
+				"input": {
+					"label": "API Anahtarı",
+					"title": "Youtube Veri API V3 anahtarınızı girin."
+				},
+				"title": "YouTube API V3 Anahtarı"
+			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Yazar",
+				"co-authors": "Ortak yazarlar",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Gölge rengi",
+						"title": "Gölge rengi"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "İkincil metin rengi",
+						"title": "İkincil metin rengi"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Üzerine gelindiğindeki arka plan rengi",
+						"title": "Üzerine gelindiğindeki arka plan rengi"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Ana arka plan rengi",
+						"title": "Ana arka plan rengi"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Vurgulama rengi",
+						"title": "Vurgulama rengi"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Ana metin rengi",
+						"title": "Ana metin için renk"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "İkincil arka plan rengi",
+						"title": "İkincil arka plan rengi"
 					}
 				},
 				"enable": {
-					"label": "Enable selected theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Seçilen temayı etkinleştir",
+					"title": "Sayfa için seçilen temayı etkinleştirin"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Tema seç",
+					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTube Deep Dark Ayarları"
 			}
 		}
 	}

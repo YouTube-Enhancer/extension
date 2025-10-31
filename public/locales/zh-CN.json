@@ -8,9 +8,34 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "复制成功！",
+						"label": "复制带有时间戳的视频 URL"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "功能菜单"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "向前快进 {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "向后快退 {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "隐藏结束界面卡片",
+						"toggle": {
+							"off": "显示结束界面卡片",
+							"on": "隐藏结束界面卡片"
+						}
 					}
 				},
 				"loopButton": {
@@ -44,7 +69,12 @@
 						"increasePlaybackSpeedButton": {
 							"label": "增加播放速度至 {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "不能继续降低({{SPEED}})",
+					"increaseLimit": "不能继续增加({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "如果某些视频被隐藏，或者您没有加载足够的视频来获取全部长度，总长度可能不准确。"
 				},
 				"screenshotButton": {
 					"button": {
@@ -72,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "滚轮控制播放速度键位与控制音量冲突。",
@@ -93,11 +124,37 @@
 			"allDataDeleted": "所有数据已删除。",
 			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "启用 {{OPTIONS}} 以配置此选项",
+				"separator": " 或 "
+			},
+			"plural": {
+				"label": "启用 {{OPTIONS}} 以配置此选项",
+				"separator": " 和 "
+			},
+			"singular": "启用 '{{OPTION}}' 以配置此选项",
+			"specificOption": {
+				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
+				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”以配置此选项"
+			}
+		},
+		"scrollForMoreSettings": "滚动以查看更多设置",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
 					"label": "自动质量调整",
 					"title": "自动调整视频质量到所选等级。"
+				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "质量回退策略",
+						"options": {
+							"higher": "升高",
+							"lower": "降低"
+						},
+						"title": "当所选质量不可用时使用的策略"
+					}
 				},
 				"select": {
 					"label": "播放质量",
@@ -125,11 +182,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 						"decreasePlaybackSpeedButton": "降低速度按钮",
+						"forwardButton": "快进按钮",
+						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
 						"openTranscriptButton": "转写文稿按钮",
+						"rewindButton": "快退按钮",
 						"screenshotButton": "屏幕截图按钮",
 						"volumeBoostButton": "音量增强按钮"
 					},
@@ -180,6 +241,17 @@
 					"title": "功能菜单设置"
 				}
 			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "启用快进/快退按钮",
+					"title": "给视频播放器添加快进/快退按钮"
+				},
+				"time": {
+					"label": "快进/快退时间",
+					"title": "快进/快退视频的时间长度"
+				},
+				"title": "快进/快退按钮设置"
+			},
 			"importExportSettings": {
 				"exportButton": {
 					"success": "导出配置成功",
@@ -209,6 +281,74 @@
 						"label": "自动启用剧场模式",
 						"title": "当视频打开时，自动启用剧场模式"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "自动禁用氛围模式",
+						"title": "载入视频时自动禁用氛围模式"
+					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "自动禁用隐藏式字幕",
+						"title": "载入视频时自动禁用隐藏式字幕"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "自动启用隐藏式字幕",
+						"title": "载入视频时自动启用隐藏式字幕"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "自动最大化播放器",
+						"title": "当视频打开时，自动最大化播放器"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "复制带有时间戳的视频 URL 按钮",
+						"title": "复制带有时间戳的视频 URL (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "默认设置为原始音轨",
+						"title": "总是默认原始音轨"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "启用播放列表管理按钮",
+						"title": "添加播放列表项目按钮从播放列表中删除视频或将其标记为未观看视频"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "启用保存到稍后观看按钮",
+						"title": "在主页和订阅视频中添加一个按钮，将视频保存到“稍后观看”播放列表"
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "隐藏 AI 摘要",
+						"title": "隐藏视频下方的人工智能摘要"
+					},
+					"hideEndScreenCards": {
+						"label": "隐藏结束界面卡片",
+						"title": "隐藏视频末尾的卡片"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "隐藏结束界面卡片按钮",
+						"title": "添加按钮以显示/隐藏视频末尾的卡片"
+					},
+					"hideLiveStreamChat": {
+						"label": "隐藏直播聊天",
+						"title": "隐藏直播聊天"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "隐藏音乐人官方视频",
+						"title": "从主页上隐藏来自音乐人官方频道的视频"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "隐藏付费推广横幅",
+						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
+					},
+					"hidePlayables": {
+						"label": "隐藏可播放内容",
+						"title": "隐藏所有可播放内容"
+					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"
@@ -216,6 +356,10 @@
 					"hideShorts": {
 						"label": "隐藏短视频",
 						"title": "隐藏所有短视频"
+					},
+					"hideTranslateComment": {
+						"label": "隐藏翻译评论按钮",
+						"title": "隐藏评论下方的“翻译至当前语言”按钮"
 					},
 					"loopButton": {
 						"label": "循环按钮",
@@ -237,6 +381,10 @@
 						"label": "暂停后台播放",
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
+					"playlistRemover": {
+						"label": "从主页隐藏播放列表",
+						"title": "从主页去除播放列表"
+					},
 					"remainingTime": {
 						"label": "剩余时间",
 						"title": "显示您观看的视频的剩余时间"
@@ -248,6 +396,10 @@
 					"removeRedirect": {
 						"label": "屏蔽YouTube重定向链接",
 						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
+					},
+					"restoreFullscreenScrolling": {
+						"label": "恢复全屏滚动",
+						"title": "在全屏模式下恢复滚动"
 					},
 					"shareShortener": {
 						"label": "缩短YouTube视频分享链接",
@@ -333,6 +485,42 @@
 				},
 				"title": "播放速度设置"
 			},
+			"playlistLength": {
+				"enable": {
+					"label": "显示播放列表长度信息",
+					"title": "显示播放列表的总长度，已观看多少，以及还剩多少。"
+				},
+				"title": "播放列表长度设置",
+				"wayToGetLength": {
+					"select": {
+						"label": "获取播放列表长度的方法",
+						"title": "获取播放列表长度信息的方式 (如果发生错误，API 方法将回退到 HTML)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "获取已观看时间的方法",
+						"options": {
+							"duration": "视频长度",
+							"youtube": "视频观看时间"
+						},
+						"title": "获取已观看时间长度的方法 (“视频长度”方法仅会在观看页面使用)"
+					}
+				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "将视频标记为未观看失败",
+				"failedToRemoveVideo": "移除视频失败",
+				"markAsUnwatched": "标记为未观看",
+				"markingAsUnwatched": "正在标记为未观看…",
+				"removeVideo": "删除视频",
+				"removingVideo": "正在移除视频…"
+			},
+			"saveToWatchLaterButton": {
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
+			},
 			"screenshotButton": {
 				"enable": {
 					"label": "屏幕截图按钮",
@@ -396,6 +584,9 @@
 				},
 				"title": "滚轮控制音量设置"
 			},
+			"settingSearch": {
+				"placeholder": "搜索设置"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "记录已观看视频",
@@ -433,6 +624,14 @@
 					}
 				},
 				"title": "音量增强设置"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "您可以从这里获取一个",
+				"input": {
+					"label": "API 密钥",
+					"title": "输入您的 Youtube 数据 API V3 密钥。"
+				},
+				"title": "YouTube API V3 密钥"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",

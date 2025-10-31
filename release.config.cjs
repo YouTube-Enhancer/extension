@@ -1,14 +1,15 @@
 module.exports = {
+	branches: ["main", "dev"],
 	plugins: [
 		[
 			"@semantic-release/commit-analyzer",
 			{
 				preset: "angular",
 				releaseRules: [
-					{ type: "translations", release: "patch" },
+					{ release: "patch", type: "translations" },
 					{
-						type: "refactor",
-						release: "patch"
+						release: "patch",
+						type: "refactor"
 					}
 				]
 			}
@@ -35,12 +36,10 @@ module.exports = {
 		[
 			"@semantic-release/exec",
 			{
-				verifyReleaseCmd:
-					"node -e \"let packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));packageJson.version = '${nextRelease.version}';fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));\";npm run build",
-				generateNotesCmd: "bash generateReleaseHashes.sh"
+				generateNotesCmd: "node scripts/generateReleaseHashes.js",
+				verifyReleaseCmd: "node scripts/updateVersionAndBuild.js ${nextRelease.version}"
 			}
 		]
 	],
-	preset: "angular",
-	branches: ["main", "dev"]
+	preset: "angular"
 };

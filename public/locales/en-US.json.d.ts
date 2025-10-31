@@ -8,7 +8,20 @@ interface EnUS {
 	pages: {
 		content: {
 			features: {
+				copyTimestampUrlButton: { button: { copied: "Copied!"; label: "Copy video URL with timestamp" } };
 				featureMenu: { button: { label: "Feature menu" } };
+				forwardRewindButtons: {
+					buttons: {
+						forwardButton: { label: "Fast forward by {{TIME}}" };
+						rewindButton: { label: "Rewind by {{TIME}}" };
+					};
+				};
+				hideEndScreenCardsButton: {
+					button: {
+						label: "Hide end screen cards";
+						toggle: { off: "Show end screen cards"; on: "Hide end screen cards" };
+					};
+				};
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				openTranscriptButton: { button: { label: "Open transcript" } };
@@ -17,6 +30,11 @@ interface EnUS {
 						decreasePlaybackSpeedButton: { label: "Decrease Speed to {{SPEED}}" };
 						increasePlaybackSpeedButton: { label: "Increase Speed to {{SPEED}}" };
 					};
+					decreaseLimit: "Can't decrease further ({{SPEED}})";
+					increaseLimit: "Can't increase further ({{SPEED}})";
+				};
+				playlistLength: {
+					title: "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length.";
 				};
 				screenshotButton: {
 					button: { label: "Screenshot" };
@@ -34,6 +52,7 @@ interface EnUS {
 		options: {
 			notifications: {
 				error: {
+					optionConflict: "This option cannot be enabled while '{{OPTION}}' is enabled.";
 					scrollWheelHoldModifierKey: {
 						sameKey: {
 							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.";
@@ -53,11 +72,28 @@ interface EnUS {
 			allDataDeleted: "All data has been deleted.";
 			confirmAlert: "This will delete all extension data related to options. Continue?";
 		};
+		optionDisabled: {
+			either: { label: "Enable {{OPTIONS}} to configure this option"; separator: " or " };
+			plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };
+			singular: "Enable '{{OPTION}}' to configure this option";
+			specificOption: {
+				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
+				screenshotButtonFileFormat: "Set screenshot save type to 'File' to configure this option";
+			};
+		};
+		scrollForMoreSettings: "Scroll for more settings";
 		sections: {
 			automaticQuality: {
 				enable: {
 					label: "Automatic quality adjustment";
 					title: "Automatically adjusts the video quality to the selected level.";
+				};
+				fallbackQualityStrategy: {
+					select: {
+						label: "Quality fallback strategy";
+						options: { higher: "Higher"; lower: "Lower" };
+						title: "The strategy to use when the selected quality is not available";
+					};
 				};
 				select: { label: "Player quality"; title: "The quality to set the video to" };
 				title: "Automatic quality settings";
@@ -77,11 +113,15 @@ interface EnUS {
 			buttonPlacement: {
 				select: {
 					buttonNames: {
+						copyTimestampUrlButton: "Copy video URL with timestamp button";
 						decreasePlaybackSpeedButton: "Decrease Speed button";
+						forwardButton: "Fast Forward button";
+						hideEndScreenCardsButton: "Hide end screen cards button";
 						increasePlaybackSpeedButton: "Increase Speed button";
 						loopButton: "Loop button";
 						maximizePlayerButton: "Maximize button";
 						openTranscriptButton: "Open Transcript button";
+						rewindButton: "Rewind button";
 						screenshotButton: "Screenshot button";
 						volumeBoostButton: "Volume Boost button";
 					};
@@ -101,10 +141,7 @@ interface EnUS {
 					expand: "Expand Editor";
 					noProblems: "No problems found.";
 				};
-				enable: {
-					label: "Enable custom CSS";
-					title: "Enables custom CSS to be applied to the page";
-				};
+				enable: { label: "Custom CSS"; title: "Enables custom CSS to be applied to the page" };
 				title: "Custom CSS Settings";
 			};
 			featureMenu: {
@@ -116,6 +153,17 @@ interface EnUS {
 					};
 					title: "Feature menu settings";
 				};
+			};
+			forwardRewindButtons: {
+				enable: {
+					label: "Forward/rewind buttons";
+					title: "Adds forward and rewind buttons to the video player";
+				};
+				time: {
+					label: "Forward/rewind time";
+					title: "The amount of time to forward/rewind the video by";
+				};
+				title: "Forward/rewind button settings";
 			};
 			importExportSettings: {
 				exportButton: {
@@ -139,12 +187,78 @@ interface EnUS {
 			};
 			miscellaneous: {
 				features: {
+					automaticallyDisableAmbientMode: {
+						label: "Automatically disable ambient mode";
+						title: "Automatically disables ambient mode when you load a video";
+					};
+					automaticallyDisableClosedCaptions: {
+						label: "Automatically disable closed captions";
+						title: "Automatically disables closed captions when you load a video";
+					};
+					automaticallyEnableClosedCaptions: {
+						label: "Automatically enable closed captions";
+						title: "Automatically enables closed captions when you load a video";
+					};
+					automaticallyMaximizePlayer: {
+						label: "Automatically maximize player";
+						title: "Automatically maximizes the player when you load a video";
+					};
+					automaticallyShowMoreVideosOnEndScreen: {
+						label: "Automatically show more videos on end screen";
+						title: "Automatically shows more videos on end screen when you load a video";
+					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
 					};
+					copyTimestampUrlButton: {
+						label: "Copy video URL with timestamp button";
+						title: "Copies video URL with timestamp (?t=123)";
+					};
+					defaultToOriginalAudioTrack: {
+						label: "Default to original audio track";
+						title: "Always default to the original audio track";
+					};
+					enablePlaylistManagementButtons: {
+						label: "Enable playlist management buttons";
+						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
+					};
+					enableSaveToWatchLaterButton: {
+						label: "Enable save to Watch Later button";
+						title: "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist";
+					};
+					hideArtificialIntelligenceSummary: {
+						label: "Hide AI summary";
+						title: "Hides the artificial intelligence summary below videos";
+					};
+					hideEndScreenCards: {
+						label: "Hide end screen cards";
+						title: "Hides the cards at the end of the video";
+					};
+					hideEndScreenCardsButton: {
+						label: "Hide end screen cards button";
+						title: "Adds a button to show/hide the cards at the end of the video";
+					};
+					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hideMembersOnlyVideos: {
+						label: "Hide members-only videos";
+						title: "Hides videos that are only visible to members";
+					};
+					hideOfficialArtistVideosFromHomePage: {
+						label: "Hide Official Artist Videos";
+						title: "Hide Official Artist Videos from Home Page";
+					};
+					hidePaidPromotionBanner: {
+						label: "Hide paid promotion banner";
+						title: "Hides the banner that appears when you watch a video that has a paid promotion";
+					};
+					hidePlayables: { label: "Hide playables"; title: "Hides all playables" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
+					hideTranslateComment: {
+						label: "Hide translate comment button";
+						title: "Hides 'Translate to Language' button under comments";
+					};
 					loopButton: {
 						label: "Loop button";
 						title: "Adds a button to the feature menu to loop the video you're watching";
@@ -165,6 +279,10 @@ interface EnUS {
 						label: "Pause background players";
 						title: "Pauses video players in background tabs when you start a new player in foreground tab";
 					};
+					playlistRemover: {
+						label: "Hide playlists from homepage";
+						title: "Get rid of playlists from homepage";
+					};
 					remainingTime: {
 						label: "Remaining time";
 						title: "Shows the remaining time of the video you're watching";
@@ -176,6 +294,10 @@ interface EnUS {
 					removeRedirect: {
 						label: "Remove YouTube /redirect URLs";
 						title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
+					};
+					restoreFullscreenScrolling: {
+						label: "Restore fullscreen scrolling";
+						title: "Restores scrolling in fullscreen mode";
 					};
 					shareShortener: {
 						label: "Shorten YouTube video share link";
@@ -247,6 +369,39 @@ interface EnUS {
 				select: { label: "Player speed"; title: "The speed to set the video to" };
 				title: "Playback speed settings";
 			};
+			playlistLength: {
+				enable: {
+					label: "Display playlist length information";
+					title: "Shows the total length of the playlist, how much has been watched, and how much remains.";
+				};
+				title: "Playlist length settings";
+				wayToGetLength: {
+					select: {
+						label: "Method to get playlist length";
+						title: "The way to get playlist length information (API method will fallback to HTML if an error occurs)";
+					};
+				};
+				wayToGetWatchTime: {
+					select: {
+						label: "Method to get watched time";
+						options: { duration: "Video Length"; youtube: "Video Watch Time" };
+						title: "The way to get the amount of time watched (Video Length type only used on watch page)";
+					};
+				};
+			};
+			playlistManagementButtons: {
+				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
+				failedToRemoveVideo: "Failed to remove video";
+				markAsUnwatched: "Mark as unwatched";
+				markingAsUnwatched: "Marking as unwatched…";
+				removeVideo: "Remove video";
+				removingVideo: "Removing video…";
+			};
+			saveToWatchLaterButton: {
+				failedToSaveVideo: "Failed to save video to Watch Later";
+				saveVideo: "Save to Watch Later";
+				savingVideo: "Saving to Watch Later…";
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";
@@ -278,7 +433,7 @@ interface EnUS {
 				};
 				holdModifierKey: {
 					enable: {
-						label: "Enable when holding modifier key";
+						label: "When holding modifier key";
 						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
 					};
 					optionLabel: "{{KEY}} key";
@@ -286,12 +441,13 @@ interface EnUS {
 				};
 				holdRightClick: {
 					enable: {
-						label: "Enable when holding right click";
+						label: "When holding right click";
 						title: "Hold right click to enable scroll wheel volume control";
 					};
 				};
 				title: "Scroll wheel volume control settings";
 			};
+			settingSearch: { placeholder: "Search for a setting" };
 			videoHistory: {
 				enable: {
 					label: "Track watched videos";
@@ -318,6 +474,11 @@ interface EnUS {
 				};
 				title: "Volume boost settings";
 			};
+			youtubeDataApiV3Key: {
+				getApiKeyLinkText: "You can get one from here";
+				input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
+				title: "YouTube API V3 Key";
+			};
 			youtubeDeepDark: {
 				author: "Author";
 				"co-authors": "Co-authors";
@@ -330,10 +491,7 @@ interface EnUS {
 					mainText: { label: "Main text color"; title: "Color for main text" };
 					secondBackground: { label: "Secondary background color"; title: "Color for secondary background" };
 				};
-				enable: {
-					label: "Enable selected theme";
-					title: "Activate the selected theme for the page";
-				};
+				enable: { label: "Deep Dark Theme"; title: "Activate the selected theme for the page" };
 				select: { label: "Select theme"; title: "Select a theme to be applied to the page" };
 				title: "YouTube Deep Dark Settings";
 			};

@@ -1,37 +1,8 @@
-export type FeatureName =
-	| "automaticTheaterMode"
-	| "featureMenu"
-	| "hideScrollBar"
-	| "hideShorts"
-	| "loopButton"
-	| "maximizePlayerButton"
-	| "openTranscriptButton"
-	| "openYouTubeSettingsOnHover"
-	| "playbackSpeedButtons"
-	| "playerQuality"
-	| "playerSpeed"
-	| "remainingTime"
-	| "rememberVolume"
-	| "removeRedirect"
-	| "screenshotButton"
-	| "scrollWheelSpeedControl"
-	| "scrollWheelVolumeControl"
-	| "shareShortener"
-	| "shortsAutoScroll"
-	| "videoHistory"
-	| "volumeBoostButton";
-type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
-
 export interface EventListenerInfo<K extends keyof HTMLElementEventMap> {
 	callback: EventCallback<K>;
 	eventName: K;
 	target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap];
 }
-
-export type TargetedListeners<K extends keyof HTMLElementEventMap> = Map<
-	HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
-	Map<K, EventListenerInfo<K>[]>
->;
 export type EventManager = {
 	addEventListener: <K extends keyof HTMLElementEventMap>(
 		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
@@ -53,6 +24,41 @@ export type EventManager = {
 
 	removeEventListeners: (featureName: FeatureName) => void;
 };
+
+export type FeatureName =
+	| "automaticTheaterMode"
+	| "copyTimestampUrlButton"
+	| "featureMenu"
+	| "forwardRewindButtons"
+	| "hideEndScreenCardsButton"
+	| "hideScrollBar"
+	| "hideShorts"
+	| "loopButton"
+	| "maximizePlayerButton"
+	| "openTranscriptButton"
+	| "openYouTubeSettingsOnHover"
+	| "playbackSpeedButtons"
+	| "playerQuality"
+	| "playerSpeed"
+	| "playlistLength"
+	| "playlistManagementButtons"
+	| "remainingTime"
+	| "rememberVolume"
+	| "removeRedirect"
+	| "saveToWatchLaterButton"
+	| "screenshotButton"
+	| "scrollWheelSpeedControl"
+	| "scrollWheelVolumeControl"
+	| "shareShortener"
+	| "shortsAutoScroll"
+	| "videoHistory"
+	| "volumeBoostButton";
+
+export type TargetedListeners<K extends keyof HTMLElementEventMap> = Map<
+	HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
+	Map<K, EventListenerInfo<K>[]>
+>;
+type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
 export const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
@@ -82,10 +88,8 @@ export const eventManager: EventManager = {
 			target.addEventListener(eventName, callback, options);
 		}
 	},
-
 	// event listener info objects
-	listeners: new Map(),
-
+	listeners: new Map<string, TargetedListeners<keyof HTMLElementEventMap>>(),
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {
 		// Iterate over all registered listeners

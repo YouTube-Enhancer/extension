@@ -1,16 +1,18 @@
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isNewYouTubeVideoLayout, isWatchPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
+export function disableOpenYouTubeSettingsOnHover() {
+	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
+}
 export async function enableOpenYouTubeSettingsOnHover() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { enable_open_youtube_settings_on_hover: enableOpenYouTubeSettingsOnHover }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the open YouTube settings on hover option is disabled, return
 	if (!enableOpenYouTubeSettingsOnHover) return;
 	const settingsButton = document.querySelector<HTMLButtonElement>(".ytp-button.ytp-settings-button");
@@ -22,7 +24,12 @@ export async function enableOpenYouTubeSettingsOnHover() {
 	const featureMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu#yte-feature-menu");
 	if (!featureMenu) return;
 	// Get the player element
-	const playerContainer = isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#player-container.ytd-watch-flexy") : null;
+	const playerContainer =
+		isWatchPage() ?
+			document.querySelector<HTMLDivElement>(
+				isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
+			)
+		:	null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	const showSettings = () => {
@@ -43,7 +50,4 @@ export async function enableOpenYouTubeSettingsOnHover() {
 	eventManager.addEventListener(settingsButton, "mouseleave", settingsButtonMouseLeaveListener, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(settingsMenu, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
 	eventManager.addEventListener(playerContainer, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
-}
-export function disableOpenYouTubeSettingsOnHover() {
-	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
 }

@@ -4,7 +4,7 @@ import { generateErrorMessage } from "zod-error";
 
 import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "../types";
 
-import { type AvailableLocales } from "../i18n";
+import { type AvailableLocales } from "../i18n/constants";
 import { i18nDir } from "./plugins/utils";
 import { formatError } from "./utilities";
 
@@ -52,24 +52,13 @@ const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProg
 	})
 });
 
-function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
-	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
-
-	if (match) {
-		const [, oldObjectPart] = match;
-		const newObjectPart = JSON.stringify(updatedObject, null, 2);
-		return code.replace(oldObjectPart, newObjectPart);
-	} else {
-		return null;
-	}
-}
 export default async function updateLocalePercentages() {
 	const localePercentages = await getLocalePercentagesFromCrowdin();
 	if (!localePercentages) return;
-	const localePercentagesFile = readFileSync(`${i18nDir}/index.ts`, "utf-8");
+	const localePercentagesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, Object.fromEntries(localePercentages));
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
-		writeFileSync(`${i18nDir}/index.ts`, updatedLocalePercentagesFile);
+		writeFileSync(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);
 	}
 }
 async function getLocalePercentagesFromCrowdin() {
@@ -98,9 +87,19 @@ async function getLocalePercentagesFromCrowdin() {
 			return localePercentages;
 		} else if (!crowdinLanguageProgressResponseParsed.success) {
 			const { error } = crowdinLanguageProgressResponseParsed;
-			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.errors)}`);
+			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`);
 		}
 	} catch (error) {
 		throw new Error(formatError(error));
+	}
+}
+function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
+	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
+	if (match) {
+		const [, oldObjectPart] = match;
+		const newObjectPart = JSON.stringify(updatedObject, null, 2);
+		return code.replace(oldObjectPart, newObjectPart);
+	} else {
+		return null;
 	}
 }

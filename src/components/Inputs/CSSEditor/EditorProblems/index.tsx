@@ -1,8 +1,9 @@
+import React, { forwardRef } from "react";
+
 import { useSettings } from "@/src/components/Settings/Settings";
 import { type Nullable } from "@/src/types";
-import { MarkerSeverity, type editor } from "@/src/utils/monaco";
+import { type editor, MarkerSeverity } from "@/src/utils/monaco";
 import { cn } from "@/src/utils/utilities";
-import React, { forwardRef } from "react";
 
 import "./index.css";
 type EditorProblemsProps = {
@@ -16,14 +17,14 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 	} = useSettings();
 	const getIcon = (severity: MarkerSeverity) => {
 		switch (severity) {
+			case MarkerSeverity.Error:
+				return "error";
 			case MarkerSeverity.Hint:
 				return "hint";
 			case MarkerSeverity.Info:
 				return "info";
 			case MarkerSeverity.Warning:
 				return "warning";
-			case MarkerSeverity.Error:
-				return "error";
 			default:
 				return "";
 		}

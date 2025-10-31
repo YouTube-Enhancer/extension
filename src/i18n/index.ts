@@ -1,75 +1,16 @@
-import { type Resource, createInstance } from "i18next";
+import { createInstance, type Resource } from "i18next";
+
+import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 
 import { waitForSpecificMessage } from "../utils/utilities";
-export const availableLocales = [
-  "ca-ES",
-  "cs-CZ",
-  "de-DE",
-  "en-GB",
-  "en-US",
-  "es-ES",
-  "fa-IR",
-  "fr-FR",
-  "he-IL",
-  "hi-IN",
-  "it-IT",
-  "ja-JP",
-  "pl-PL",
-  "pt-BR",
-  "ru-RU",
-  "sv-SE",
-  "tr-TR",
-  "zh-CN",
-  "zh-TW"
-] as const;
-export const localePercentages: Record<AvailableLocales, number> = {
-  "en-US": 100,
-  "ca-ES": 0,
-  "cs-CZ": 0,
-  "de-DE": 36,
-  "en-GB": 2,
-  "es-ES": 63,
-  "fa-IR": 0,
-  "fr-FR": 67,
-  "he-IL": 0,
-  "hi-IN": 0,
-  "it-IT": 100,
-  "ja-JP": 100,
-  "pl-PL": 0,
-  "pt-BR": 74,
-  "ru-RU": 100,
-  "sv-SE": 98,
-  "tr-TR": 75,
-  "zh-CN": 100,
-  "zh-TW": 95
-};
-export const localeDirection: Record<AvailableLocales, "ltr" | "rtl"> = {
-	"ca-ES": "ltr",
-	"cs-CZ": "ltr",
-	"de-DE": "ltr",
-	"en-GB": "ltr",
-	"en-US": "ltr",
-	"es-ES": "ltr",
-	"fa-IR": "rtl",
-	"fr-FR": "ltr",
-	"he-IL": "rtl",
-	"hi-IN": "ltr",
-	"it-IT": "ltr",
-	"ja-JP": "ltr",
-	"pl-PL": "ltr",
-	"pt-BR": "ltr",
-	"ru-RU": "ltr",
-	"sv-SE": "ltr",
-	"tr-TR": "ltr",
-	"zh-CN": "ltr",
-	"zh-TW": "ltr"
-};
-export type AvailableLocales = (typeof availableLocales)[number];
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
-export async function i18nService(locale: AvailableLocales) {
+export async function i18nService(locale: AvailableLocales = "en-US") {
 	let extensionURL;
-	const isYouTube = window.location.hostname === "www.youtube.com";
+	const {
+		location: { hostname }
+	} = window;
+	const isYouTube = hostname === "youtube.com" || hostname.endsWith(".youtube.com");
 	if (isYouTube) {
 		const extensionURLResponse = await waitForSpecificMessage("extensionURL", "request_data", "content");
 		if (!extensionURLResponse) throw new Error("Failed to get extension URL");

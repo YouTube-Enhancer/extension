@@ -1,16 +1,24 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
+import { deepDarkCssID } from "@/src/utils/constants";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { createDeepDarkCSSElement, deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "./utils";
-export const deepDarkCssID = "yte-deep-dark-css";
+export function disableDeepDarkCSS() {
+	// Get the deep dark theme style element
+	const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
+	// Check if the deep dark theme style element exists
+	if (!deepDarkThemeStyleElement) return;
+	// Remove the deep dark theme style element
+	deepDarkThemeStyleElement.remove();
+}
+
 export async function enableDeepDarkCSS() {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: { deep_dark_custom_theme_colors, deep_dark_preset, enable_deep_dark_theme }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// Check if deep dark theme is enabled
 	if (!enable_deep_dark_theme) return;
 	if (deepDarkCSSExists()) {
@@ -23,13 +31,4 @@ export async function enableDeepDarkCSS() {
 	);
 	// Insert the deep dark theme style element
 	document.head.appendChild(deepDarkThemeStyleElement);
-}
-
-export function disableDeepDarkCSS() {
-	// Get the deep dark theme style element
-	const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
-	// Check if the deep dark theme style element exists
-	if (!deepDarkThemeStyleElement) return;
-	// Remove the deep dark theme style element
-	deepDarkThemeStyleElement.remove();
 }

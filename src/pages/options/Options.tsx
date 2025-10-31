@@ -1,7 +1,9 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { type JSX } from "react";
+
 import Settings from "@/src/components/Settings/Settings";
 import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import { SettingsFilterProvider } from "@/src/hooks/useSettingsFilter/provider";
 
 export default function Options(): JSX.Element {
 	const client = new QueryClient({
@@ -15,9 +17,11 @@ export default function Options(): JSX.Element {
 	});
 	return (
 		<NotificationsProvider>
-			<QueryClientProvider client={client}>
-				<Settings />
-			</QueryClientProvider>
+			<SettingsFilterProvider>
+				<QueryClientProvider client={client}>
+					<Settings />
+				</QueryClientProvider>
+			</SettingsFilterProvider>
 		</NotificationsProvider>
 	);
 }

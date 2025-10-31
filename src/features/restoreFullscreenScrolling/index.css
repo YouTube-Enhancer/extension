@@ -1,0 +1,17 @@
+.yte-ytd-watch-flexy-restore-fullscreen-scrolling[fullscreen] #single-column-container.ytd-watch-flexy,
+.yte-ytd-watch-flexy-restore-fullscreen-scrolling[fullscreen] #columns.ytd-watch-flexy {
+	display: flex !important;
+}
+
+.yte-ytd-app-restore-fullscreen-scrolling[fullscreen] {
+	overflow: auto !important;
+}
+
+.yte-ytd-app-restore-fullscreen-scrolling[scrolling] {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	right: calc((var(--ytd-app-fullerscreen-scrollbar-width) + 1px) * -1) !important;
+	bottom: 0 !important;
+	overflow-x: auto !important;
+}

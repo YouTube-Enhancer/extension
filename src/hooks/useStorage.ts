@@ -10,52 +10,6 @@ export type StorageArea = "local" | "sync";
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
 /**
- * Returns a stateful value from storage, and a function to update it.
- */
-export function useStorage<T>(key: string, initialValue: T, area: StorageArea = "local"): [T, SetValue<T>] {
-	const [storedValue, setStoredValue] = useState<T>(initialValue);
-
-	useEffect(() => {
-		readStorage<T>(key, area)
-			.then((res) => {
-				if (res) return setStoredValue(res);
-				return;
-			})
-			.catch((err) => console.error(err));
-
-		chrome.storage.onChanged.addListener((changes, namespace) => {
-			if (namespace === area && Object.hasOwnProperty.call(changes, key)) {
-				if (changes[key].newValue) setStoredValue(changes[key].newValue as unknown as T);
-			}
-		});
-	}, [area, key]);
-
-	const setValueRef = useRef<SetValue<T>>();
-
-	setValueRef.current = (value) => {
-		// Allow value to be a function, so we have the same API as useState
-		const newValue = value instanceof Function ? value(storedValue) : value;
-		// Save to storage
-		setStoredValue((prevState) => {
-			setStorage<T>(key, newValue, area)
-				.then((success) => {
-					if (!success) setStoredValue(prevState);
-					return;
-				})
-				.catch((error) => console.error(error));
-
-			return newValue;
-		});
-	};
-
-	// Return a wrapped version of useState's setter function that ...
-	// ... persists the new value to storage.
-	const setValue: SetValue<T> = useCallback((value) => setValueRef.current?.(value), []);
-
-	return [storedValue, setValue];
-}
-
-/**
  * Retrieves value from chrome storage area
  *
  * @param key
@@ -86,4 +40,42 @@ export async function setStorage<T>(key: string, value: T, area: StorageArea = "
 		console.warn(`Error setting ${area} storage key "${key}":`, error);
 		return false;
 	}
+}
+
+/**
+ * Returns a stateful value from storage, and a function to update it.
+ */
+export function useStorage<T>(key: string, initialValue: T, area: StorageArea = "local"): [T, SetValue<T>] {
+	const [storedValue, setStoredValue] = useState<T>(initialValue);
+	useEffect(() => {
+		readStorage<T>(key, area)
+			.then((res) => {
+				if (res) return setStoredValue(res);
+				return;
+			})
+			.catch((err) => console.error(err));
+		chrome.storage.onChanged.addListener((changes, namespace) => {
+			if (namespace === area && Object.hasOwnProperty.call(changes, key)) {
+				if (changes[key].newValue) setStoredValue(changes[key].newValue as unknown as T);
+			}
+		});
+	}, [area, key]);
+	const setValueRef = useRef<SetValue<T>>((value) => {
+		// Allow value to be a function, so we have the same API as useState
+		const newValue = value instanceof Function ? value(storedValue) : value;
+		// Save to storage
+		setStoredValue((prevState) => {
+			setStorage<T>(key, newValue, area)
+				.then((success) => {
+					if (!success) setStoredValue(prevState);
+					return;
+				})
+				.catch((error) => console.error(error));
+			return newValue;
+		});
+	});
+	// Return a wrapped version of useState's setter function that ...
+	// ... persists the new value to storage.
+	const setValue: SetValue<T> = useCallback((value) => setValueRef.current?.(value), []);
+	return [storedValue, setValue];
 }

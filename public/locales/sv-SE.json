@@ -8,9 +8,34 @@
 	"pages": {
 		"content": {
 			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"copied": "Kopierad!",
+						"label": "Kopiera videons webbadress med tidsstämpel"
+					}
+				},
 				"featureMenu": {
 					"button": {
 						"label": "Funktionsmeny"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "Snabbspola med {{TIME}}"
+						},
+						"rewindButton": {
+							"label": "Återspola med {{TIME}}"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Dölj slutskärmskort",
+						"toggle": {
+							"off": "Visa slutskärmskort",
+							"on": "Dölj slutskärmskort"
+						}
 					}
 				},
 				"loopButton": {
@@ -39,12 +64,17 @@
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Minska hastigheten med {{SPEED}}"
+							"label": "Minska hastigheten till {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Öka hastigheten med {{SPEED}}"
+							"label": "Öka hastigheten till {{SPEED}}"
 						}
-					}
+					},
+					"decreaseLimit": "Det går inte att sänka mer ({{SPEED}})",
+					"increaseLimit": "Det går inte att höja mer ({{SPEED}})"
+				},
+				"playlistLength": {
+					"title": "Total längd kanske inte är korrekt om vissa videor är dolda eller om du inte har laddat tillräckligt med videor för att få hela längden."
 				},
 				"screenshotButton": {
 					"button": {
@@ -72,6 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
+					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Rullningshjulets modifieringstangent för hastighetsreglering kan inte vara densamma modifieringstangent som rullningshjulets volymreglering.",
@@ -93,11 +124,37 @@
 			"allDataDeleted": "All data har tagits bort.",
 			"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
 		},
+		"optionDisabled": {
+			"either": {
+				"label": "Aktivera {{OPTIONS}} för att konfigurera detta alternativ",
+				"separator": " eller "
+			},
+			"plural": {
+				"label": "Aktivera {{OPTIONS}} för att konfigurera detta alternativ",
+				"separator": " och "
+			},
+			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
+			"specificOption": {
+				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
+				"screenshotButtonFileFormat": "Ställ in skärmbildens spartyp till 'Fil' för att konfigurera detta alternativ"
+			}
+		},
+		"scrollForMoreSettings": "Rulla för fler inställningar",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
 					"label": "Automatisk kvalitetsjustering",
 					"title": "Justerar automatiskt videokvaliteten till den valda nivån."
+				},
+				"fallbackQualityStrategy": {
+					"select": {
+						"label": "Reservmetod för kvaliten",
+						"options": {
+							"higher": "Högre",
+							"lower": "Lägre"
+						},
+						"title": "Metod att använda när den valda kvaliteten inte är tillgänglig"
+					}
 				},
 				"select": {
 					"label": "Spelarkvalitet",
@@ -125,11 +182,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
+						"copyTimestampUrlButton": "Kopiera videons webbadress med tidsstämpelknappen",
 						"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
+						"forwardButton": "Snabbspolningsknapp",
+						"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 						"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 						"loopButton": "Slingknapp",
 						"maximizePlayerButton": "Maximeraknapp",
 						"openTranscriptButton": "Transkriptknapp",
+						"rewindButton": "Återspolningsknapp",
 						"screenshotButton": "Skärmbildsknapp",
 						"volumeBoostButton": "Volymökningsknapp"
 					},
@@ -153,7 +214,7 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Inställningar för knappplacering"
+				"title": "Inställningar för knapplacering"
 			},
 			"customCSS": {
 				"editor": {
@@ -179,6 +240,17 @@
 					},
 					"title": "Inställningar för funktionsmeny"
 				}
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "Aktivera spola framåt-/återspolningsknappar",
+					"title": "Lägger till spola framåt- och återspolningsknappar till videospelaren"
+				},
+				"time": {
+					"label": "Spola framåt-/återspolningstid",
+					"title": "Tiden som videon ska spolas framåt/återspolas med"
+				},
+				"title": "Inställningar för knapparna spola framåt/återspola"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -209,6 +281,74 @@
 						"label": "Automatiskt teaterläge",
 						"title": "Aktiverar automatiskt teaterläge när du startar en video"
 					},
+					"automaticallyDisableAmbientMode": {
+						"label": "Inaktivera biobelysning automatiskt",
+						"title": "Inaktiverar automatiskt biobelysning när du startar en video"
+					},
+					"automaticallyDisableClosedCaptions": {
+						"label": "Inaktivera textning automatiskt",
+						"title": "Inaktiverar textning automatiskt när du laddar en video"
+					},
+					"automaticallyEnableClosedCaptions": {
+						"label": "Aktivera undertexter automatiskt",
+						"title": "Aktiverar automatiskt undertexter när du startar en video"
+					},
+					"automaticallyMaximizePlayer": {
+						"label": "Maximera spelaren automatiskt",
+						"title": "Maximera spelaren automatiskt när du laddar en video"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
+					"copyTimestampUrlButton": {
+						"label": "Kopiera videons webbadress med tidsstämpelknappen",
+						"title": "Kopiera videons webbadress med tidsstämpel (?t=123)"
+					},
+					"defaultToOriginalAudioTrack": {
+						"label": "Standard till originalljudspår",
+						"title": "Använd alltid originalljudspåret som standard"
+					},
+					"enablePlaylistManagementButtons": {
+						"label": "Aktivera knappar för hantering av spellistor",
+						"title": "Lägger till knappar i spellistobjekt för att ta bort videor från spellistan eller markera dem som ej sedda"
+					},
+					"enableSaveToWatchLaterButton": {
+						"label": "Aktivera knappen spara för att titta på senare",
+						"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
+					},
+					"hideArtificialIntelligenceSummary": {
+						"label": "Dölj AI-sammanfattning",
+						"title": "Döljer sammanfattningen av artificiell intelligens under videorna"
+					},
+					"hideEndScreenCards": {
+						"label": "Dölj slutskärmskort",
+						"title": "Döljer korten i slutet av videon"
+					},
+					"hideEndScreenCardsButton": {
+						"label": "Dölj knappen för slutskärmskort",
+						"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
+					},
+					"hideLiveStreamChat": {
+						"label": "Dölj direktströmschatt",
+						"title": "Döljer direktströmschatten"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"label": "Dölj officiella artistvideor",
+						"title": "Dölj officiella artistvideor från startsidan"
+					},
+					"hidePaidPromotionBanner": {
+						"label": "Dölj betald marknadsföringsbanner",
+						"title": "Döljer bannern som visas när du tittar på en video som har betald marknadsföring"
+					},
+					"hidePlayables": {
+						"label": "Dölj spelbara",
+						"title": "Döljer alla spelbara"
+					},
 					"hideScrollbar": {
 						"label": "Dölj rullningslisten",
 						"title": "Döljer sidornas rullningsfält"
@@ -216,6 +356,10 @@
 					"hideShorts": {
 						"label": "Dölj shorts",
 						"title": "Döljer alla shorts"
+					},
+					"hideTranslateComment": {
+						"label": "Dölj översättning av kommentarer",
+						"title": "Döljer knappen 'Översätt till språk' under kommentarer"
 					},
 					"loopButton": {
 						"label": "Slingknapp",
@@ -237,6 +381,10 @@
 						"label": "Pausa spelare i bakgrunden",
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
+					"playlistRemover": {
+						"label": "Dölj spellistor från hemsidan",
+						"title": "Bli av med spellistor från hemsidan"
+					},
 					"remainingTime": {
 						"label": "Återstående tid",
 						"title": "Visar återstående tid för videon du tittar på"
@@ -249,6 +397,10 @@
 						"label": "Ta bort YouTube-omdirigeringswebbadresser",
 						"title": "Ersätter YouTube-omdirigering genom faktiska webbadresser, hoppar över omdirigeringsvarningsdialog"
 					},
+					"restoreFullscreenScrolling": {
+						"label": "Återställ fullskärmsrullning",
+						"title": "Återställer rullning i helskärmsläge"
+					},
 					"shareShortener": {
 						"label": "Förkorta YouTube-videons delningslänk",
 						"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
@@ -258,8 +410,8 @@
 						"title": "Rullar automatiskt till nästa shorts"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
+						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
 					}
 				},
 				"title": "Övriga inställningar"
@@ -306,7 +458,7 @@
 				"type": {
 					"label": "Typ",
 					"options": {
-						"circle": "Circle",
+						"circle": "Cirkel",
 						"line": "Rad",
 						"no_display": "Ingen visning",
 						"text": "Text"
@@ -332,6 +484,42 @@
 					"title": "Hastigheten att spela upp videon i"
 				},
 				"title": "Inställningar för uppspelningshastighet"
+			},
+			"playlistLength": {
+				"enable": {
+					"label": "Visa information om spellistans längd",
+					"title": "Visar spellistans totala längd och hur mycket som har tittats på och hur mycket som återstår."
+				},
+				"title": "Inställningar för spellistans längd",
+				"wayToGetLength": {
+					"select": {
+						"label": "Metod för att få spellistans längd",
+						"title": "Sättet att få information om spellista längd (API-metoden kommer att falla tillbaka till HTML om ett fel inträffar)"
+					}
+				},
+				"wayToGetWatchTime": {
+					"select": {
+						"label": "Metod för att hämta tittad tid",
+						"options": {
+							"duration": "Videolängd",
+							"youtube": "Tittad videolängd"
+						},
+						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
+					}
+				}
+			},
+			"playlistManagementButtons": {
+				"failedToMarkAsUnwatched": "Det gick inte att markera video som ej sedd",
+				"failedToRemoveVideo": "Det gick inte att ta bort video",
+				"markAsUnwatched": "Markera som ej sedd",
+				"markingAsUnwatched": "Markerar som ej sedd…",
+				"removeVideo": "Ta bort video",
+				"removingVideo": "Tar bort video…"
+			},
+			"saveToWatchLaterButton": {
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -396,6 +584,9 @@
 				},
 				"title": "Rullningshjulets volyminställningar"
 			},
+			"settingSearch": {
+				"placeholder": "Sök efter en inställning"
+			},
 			"videoHistory": {
 				"enable": {
 					"label": "Håll reda på visade videor",
@@ -433,6 +624,14 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
+			},
+			"youtubeDataApiV3Key": {
+				"getApiKeyLinkText": "Du kan hämta en härifrån",
+				"input": {
+					"label": "API-nyckel",
+					"title": "Ange din Youtube Data API V3-nyckel."
+				},
+				"title": "YouTube API V3-nyckel"
 			},
 			"youtubeDeepDark": {
 				"author": "Skapare",

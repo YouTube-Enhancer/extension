@@ -16,14 +16,6 @@ import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
 
 export const featuresInMenu = new Set<AllButtonNames>();
 
-function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
-	if (isToggle) {
-		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
-		listener(JSON.parse(menuItem.ariaChecked) as boolean);
-	} else {
-		listener();
-	}
-}
 /**
  * Adds a feature item to the feature menu.
  * @param buttonName The name of the button
@@ -31,25 +23,24 @@ function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTML
  * @param icon The icon for the feature
  * @param listener The listener for the feature
  * @param isToggle Whether the feature is a toggle
+ * @param initialChecked The initial checked state of the feature
  */
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
 	label: string,
 	icon: BasicIcon,
 	listener: ListenerType<Toggle>,
-	isToggle: boolean
+	isToggle: boolean,
+	initialChecked: boolean = false
 ) {
 	const featureName = findKeyByValue(buttonName as MultiButtonNames) ?? (buttonName as SingleButtonFeatureNames);
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
-
 	// Wait for the feature menu to exist
 	await waitForAllElements(["#yte-feature-menu"]);
-
 	// Get the feature menu
 	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
 	if (!featureMenu) return;
-
 	// Check if the feature item already exists in the menu
 	const featureExistsInMenu = featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(buttonName).featureMenuItemId}`);
 	if (featureExistsInMenu) {
@@ -59,26 +50,22 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 		return;
 	}
-
 	// Get the feature menu panel
 	const featureMenuPanel = document.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
-
 	// Get the IDs for the feature item
 	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(buttonName);
-
 	// Create a menu item element
 	const menuItem = document.createElement("div");
 	menuItem.classList.add("ytp-menuitem");
 	menuItem.id = featureMenuItemId;
-
+	menuItem.style.height = "40px";
 	// Create the menu item icon element
 	const menuItemIcon = document.createElement("div");
 	menuItemIcon.id = featureMenuItemIconId;
 	menuItemIcon.classList.add("ytp-menuitem-icon");
 	menuItemIcon.appendChild(icon);
 	menuItem.appendChild(menuItemIcon);
-
 	// Create the menu item label element
 	const menuItemLabel = document.createElement("div");
 	menuItemLabel.classList.add("ytp-menuitem-label");
@@ -86,7 +73,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	menuItemLabel.id = featureMenuItemLabelId;
 	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	menuItem.appendChild(menuItemLabel);
-
 	// If it's a toggle item, create the toggle elements
 	if (isToggle) {
 		const menuItemContent = document.createElement("div");
@@ -95,24 +81,53 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemToggle.classList.add("ytp-menuitem-toggle-checkbox");
 		menuItemContent.appendChild(menuItemToggle);
 		menuItem.appendChild(menuItemContent);
-		menuItem.ariaChecked = "false";
+		menuItem.ariaChecked = initialChecked ? "true" : "false";
 	} else {
 		const menuItemContent = document.createElement("div");
 		menuItemContent.classList.add("ytp-menuitem-content");
 		menuItem.appendChild(menuItemContent);
 	}
-
 	// Add the item to the feature menu panel
 	featureMenuPanel.appendChild(menuItem);
-
 	// Adjust the height and width of the feature menu
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 	featureMenu.style.width = "fit-content";
 	// Show the feature menu button since an item has been added
 	const featureMenuButton = document.querySelector<HTMLDivElement>("#yte-feature-menu-button");
 	if (featureMenuButton) {
-		featureMenuButton.style.display = "initial";
+		featureMenuButton.style.display = "flex";
 	}
+}
+/**
+ * Gets the IDs for a feature item.
+ * @param buttonName the name of the button
+ * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
+ */
+export function getFeatureIds(buttonName: AllButtonNames): {
+	featureMenuItemIconId: FeatureMenuItemIconId;
+	featureMenuItemId: FeatureMenuItemId;
+	featureMenuItemLabelId: FeatureMenuItemLabelId;
+} {
+	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
+	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
+	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
+	return {
+		featureMenuItemIconId,
+		featureMenuItemId,
+		featureMenuItemLabelId
+	};
+}
+export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
+	return document.querySelector(`#yte-panel-menu > ${selector}`);
+}
+export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
+	return document.querySelector(selector);
+}
+export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
+	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
+	return document.querySelector(selector);
 }
 /**
  * Removes a feature item from the feature menu.
@@ -121,7 +136,6 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	// Remove the feature name from the set of features in the menu
 	featuresInMenu.delete(buttonName);
-
 	// Get the unique ID for the feature item
 	const { featureMenuItemId } = getFeatureIds(buttonName);
 	// Find the feature menu
@@ -130,27 +144,21 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	// Find the feature menu panel
 	const featureMenuPanel = featureMenu.querySelector<HTMLDivElement>("#yte-panel-menu");
 	if (!featureMenuPanel) return;
-
 	// Find the specific feature menu item
 	const featureMenuItem = featureMenuPanel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
 	if (!featureMenuItem) return;
-
 	// Remove the feature menu item
 	featureMenuItem.remove();
-
 	// Check if there are any items left in the menu
 	if (featureMenuPanel.childElementCount === 0) {
 		// If no items are left, hide the menu
 		featureMenu.style.display = "none";
-
 		// Find the feature menu button
 		const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
 		if (!featureMenuButton) return;
-
 		// Hide the feature menu button since the menu is empty
 		featureMenuButton.style.display = "none";
 	}
-
 	// Adjust the height and width of the feature menu panel
 	featureMenu.style.height = `${40 * featureMenuPanel.childElementCount + 16}px`;
 }
@@ -175,34 +183,11 @@ export function updateFeatureMenuTitle(title: string) {
 	if (!featureMenuButton) return;
 	featureMenuButton.dataset.title = title;
 }
-/**
- * Gets the IDs for a feature item.
- * @param buttonName the name of the button
- * @returns { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId}
- */
-export function getFeatureIds(buttonName: AllButtonNames): {
-	featureMenuItemIconId: FeatureMenuItemIconId;
-	featureMenuItemId: FeatureMenuItemId;
-	featureMenuItemLabelId: FeatureMenuItemLabelId;
-} {
-	const featureMenuItemIconId: FeatureMenuItemIconId = `yte-${buttonName}-icon`;
-	const featureMenuItemId: FeatureMenuItemId = `yte-feature-${buttonName}-menuitem`;
-	const featureMenuItemLabelId: FeatureMenuItemLabelId = `yte-${buttonName}-label`;
-	return {
-		featureMenuItemIconId,
-		featureMenuItemId,
-		featureMenuItemLabelId
-	};
-}
-export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemIconId> = `#yte-${buttonName}-icon`;
-	return document.querySelector(selector);
-}
-export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemLabelId> = `#yte-${buttonName}-label`;
-	return document.querySelector(selector);
-}
-export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector: WithId<FeatureMenuItemId> = `#yte-feature-${buttonName}-menuitem`;
-	return document.querySelector(`#yte-panel-menu > ${selector}`);
+function featureMenuClickListener<Toggle extends boolean = false>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
+	if (isToggle) {
+		menuItem.ariaChecked = menuItem.ariaChecked ? (!JSON.parse(menuItem.ariaChecked)).toString() : "false";
+		listener(JSON.parse(menuItem.ariaChecked) as boolean);
+	} else {
+		listener();
+	}
 }

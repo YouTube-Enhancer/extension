@@ -13,7 +13,6 @@ import { loopButtonClickListener } from "./utils";
 
 export const addLoopButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -21,7 +20,7 @@ export const addLoopButton: AddButtonFunction = async () => {
 				enable_loop_button
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the loop button option is disabled, return
 	if (!enable_loop_button) return;
 	// Get the volume control element
@@ -30,19 +29,18 @@ export const addLoopButton: AddButtonFunction = async () => {
 	if (!volumeControl) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
-
 	await addFeatureButton(
 		"loopButton",
 		loopButtonPlacement,
 		loopButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.loopButton.button.label")
 		:	window.i18nextInstance.t("pages.content.features.loopButton.button.toggle.off"),
-		getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("loopButton", loopButtonPlacement),
 		loopButtonClickListener,
 		true
 	);
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
-		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu");
+		const loopSVG = getFeatureIcon("loopButton", loopButtonPlacement);
 		for (const mutation of mutationList) {
 			if (mutation.type === "attributes") {
 				const { attributeName, target } = mutation;
@@ -62,17 +60,17 @@ export const addLoopButton: AddButtonFunction = async () => {
 					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
 					if (!button) return;
 					switch (loopButtonPlacement) {
-						case "feature_menu": {
-							if (loopSVG instanceof SVGSVGElement) {
-								button.firstChild?.replaceWith(loopSVG);
-							}
-							break;
-						}
 						case "below_player":
 						case "player_controls_left":
 						case "player_controls_right": {
 							if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
 								button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
+							}
+							break;
+						}
+						case "feature_menu": {
+							if (loopSVG instanceof SVGSVGElement) {
+								button.firstChild?.replaceWith(loopSVG);
 							}
 							break;
 						}

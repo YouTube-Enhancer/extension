@@ -6,34 +6,39 @@ import { getFeatureIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, formatError, waitForSpecificMessage } from "@/src/utils/utilities";
 
+export function applyVolumeBoost(volume_boost_amount: number) {
+	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
+	if (!window.gainNode) setupVolumeBoost();
+	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
+}
+export function disableVolumeBoost() {
+	if (window.gainNode) {
+		browserColorLog(`Disabling volume boost`, "FgMagenta");
+		window.gainNode.gain.value = 1; // Set gain back to default
+	}
+}
+export async function enableVolumeBoost() {
+	setupVolumeBoost();
+	const {
+		data: {
+			options: { volume_boost_amount }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	applyVolumeBoost(volume_boost_amount);
+}
 export default async function volumeBoost() {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
 	const {
 		data: {
 			options: { enable_volume_boost, volume_boost_amount, volume_boost_mode }
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enable_volume_boost) return;
 	setupVolumeBoost();
-
 	if (volume_boost_mode === "per_video") {
 		await addVolumeBoostButton();
 	} else if (volume_boost_mode === "global") {
 		applyVolumeBoost(volume_boost_amount);
 	}
-}
-export async function enableVolumeBoost() {
-	setupVolumeBoost();
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
-	const {
-		data: {
-			options: { volume_boost_amount }
-		}
-	} = optionsData;
-
-	applyVolumeBoost(volume_boost_amount);
 }
 function setupVolumeBoost() {
 	if (!window.audioCtx || !window.gainNode) {
@@ -52,34 +57,21 @@ function setupVolumeBoost() {
 		}
 	}
 }
-export function disableVolumeBoost() {
-	if (window.gainNode) {
-		browserColorLog(`Disabling volume boost`, "FgMagenta");
-		window.gainNode.gain.value = 1; // Set gain back to default
-	}
-}
-export function applyVolumeBoost(volume_boost_amount: number) {
-	browserColorLog(`Setting volume boost to ${Math.pow(10, volume_boost_amount / 20)}`, "FgMagenta");
-	if (!window.gainNode) setupVolumeBoost();
-	window.gainNode.gain.value = Math.pow(10, volume_boost_amount / 20);
-}
 export const addVolumeBoostButton: AddButtonFunction = async () => {
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
-
 	const {
 		data: {
 			options: {
 				button_placements: { volumeBoostButton: volumeBoostButtonPlacement }
 			}
 		}
-	} = optionsData;
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	await addFeatureButton(
 		"volumeBoostButton",
 		volumeBoostButtonPlacement,
 		volumeBoostButtonPlacement === "feature_menu" ?
 			window.i18nextInstance.t("pages.content.features.volumeBoostButton.button.label")
 		:	window.i18nextInstance.t(`pages.content.features.volumeBoostButton.button.toggle.off`),
-		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement),
 		(checked) => {
 			void (async () => {
 				if (checked !== undefined) {

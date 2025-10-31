@@ -2,8 +2,8 @@
 	"env": {
 		"__DEV__": "true"
 	},
-	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"],
+	"exec": "npm run build",
 	"ext": "ts,tsx,css,html,json",
-	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts"],
-	"exec": "concurrently \"vite build\" \"ts-json-as-const public/locales/en-US.json\" \"prettier --write public/locales/en-US.json.d.ts\" \"eslint --fix public/locales/en-US.json.d.ts\""
+	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts"],
+	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"]
 }

@@ -65,6 +65,12 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
 
+- **Hide live stream chat**: Hide the chat section of live streams.
+
+- **Hide translate comment button**: Hides the `Translate to Language` button under comments.
+
+- **Hide end screen cards:**: Hide the end screen cards on videos.
+
 ### Video history settings
 
 - **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
@@ -201,7 +207,7 @@ Before you begin, ensure you have the following software installed on your syste
 Next, open your terminal (command prompt or shell) and navigate to the directory where you want to store the YouTube Enhancer extension project. Run the following command to clone the repository:
 
 ```bash
-git clone https://github.com/VampireChicken12/youtube-enhancer.git
+git clone https://github.com/YouTube-Enhancer/extension.git
 ```
 
 ### 3. Navigate to the Project Directory
@@ -298,6 +304,22 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/szaumoor"><img src="https://avatars.githubusercontent.com/u/78204388?v=4?s=100" width="100px;" alt="Marcos C.R."/><br /><sub><b>Marcos C.R.</b></sub></a><br /><a href="#ideas-szaumoor" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/charlymoon741"><img src="https://avatars.githubusercontent.com/u/62484941?v=4?s=100" width="100px;" alt="Carlos Ramos Luna"/><br /><sub><b>Carlos Ramos Luna</b></sub></a><br /><a href="#ideas-charlymoon741" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Angsimosaurus"><img src="https://avatars.githubusercontent.com/u/79510039?v=4?s=100" width="100px;" alt="앙시모사우루스"/><br /><sub><b>앙시모사우루스</b></sub></a><br /><a href="#translation-Angsimosaurus" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mabra51"><img src="https://avatars.githubusercontent.com/u/12016338?v=4?s=100" width="100px;" alt="Mabra51"/><br /><sub><b>Mabra51</b></sub></a><br /><a href="#ideas-Mabra51" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a> <a href="#code-eduardozgz" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://notyasho.netlify.app/blogs"><img src="https://avatars.githubusercontent.com/u/90166733?v=4?s=100" width="100px;" alt="pyrix"/><br /><sub><b>pyrix</b></sub></a><br /><a href="#ideas-at-pyrix" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-at-pyrix" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CaiCheng-Li"><img src="https://avatars.githubusercontent.com/u/150627108?v=4?s=100" width="100px;" alt="CaiCheng-Li"/><br /><sub><b>CaiCheng-Li</b></sub></a><br /><a href="#bug-CaiCheng-Li" title="Bug reports">🐛</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://sites.google.com/u/0/d/1OdIAWachs1svsjOS4lT9jqwlE632B6rP"><img src="https://avatars.githubusercontent.com/u/121247693?v=4?s=100" width="100px;" alt="Lexiosity"/><br /><sub><b>Lexiosity</b></sub></a><br /><a href="#bug-Lexiosity" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/HelloIamarandomperson"><img src="https://avatars.githubusercontent.com/u/136181387?v=4?s=100" width="100px;" alt="HelloIamarandomperson"/><br /><sub><b>HelloIamarandomperson</b></sub></a><br /><a href="#code-HelloIamarandomperson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TheMajor-GitHub"><img src="https://avatars.githubusercontent.com/u/94167392?v=4?s=100" width="100px;" alt="The Major"/><br /><sub><b>The Major</b></sub></a><br /><a href="#ideas-TheMajor-GitHub" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dnicolson"><img src="https://avatars.githubusercontent.com/u/2276355?v=4?s=100" width="100px;" alt="Dave Nicolson"/><br /><sub><b>Dave Nicolson</b></sub></a><br /><a href="#code-dnicolson" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dheatly23"><img src="https://avatars.githubusercontent.com/u/71598333?v=4?s=100" width="100px;" alt="Dheatly23"/><br /><sub><b>Dheatly23</b></sub></a><br /><a href="#code-Dheatly23" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

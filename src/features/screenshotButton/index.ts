@@ -12,26 +12,22 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		// Create a canvas element and get its context
 		const canvas = document.createElement("canvas");
 		const context = canvas.getContext("2d");
-
 		// Set the dimensions of the canvas to the video's dimensions
 		const { videoHeight, videoWidth } = videoElement;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
-
 		// Draw the video element onto the canvas
 		if (!context) return;
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
 		// Wait for the options message and get the format from it
-		const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		const {
 			data: {
 				options: { screenshot_format, screenshot_save_as }
 			}
-		} = optionsData;
-		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, "image/png"));
+		} = await waitForSpecificMessage("options", "request_data", "content");
+		const mimeType = screenshot_save_as === "file" ? `image/${screenshot_format}` : "image/png";
+		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
 		if (!blob) return;
-
 		switch (screenshot_save_as) {
 			case "clipboard": {
 				const screenshotButton = getFeatureButton("screenshotButton");
@@ -44,11 +40,16 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 					text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
 				});
 				listener();
-				const clipboardImage = new ClipboardItem({ "image/png": blob });
-				void navigator.clipboard.write([clipboardImage]);
-				setTimeout(() => {
+				try {
+					const clipboardImage = new ClipboardItem({ [mimeType]: blob });
+					await navigator.clipboard.write([clipboardImage]);
+					setTimeout(() => {
+						remove();
+					}, 1200);
+				} catch (err) {
 					remove();
-				}, 1200);
+					console.log(err);
+				}
 				break;
 			}
 			case "file": {
@@ -60,12 +61,11 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				break;
 			}
 		}
-	} catch (error) {}
+	} catch (_error) {}
 }
 
 export const addScreenshotButton: AddButtonFunction = async () => {
 	// Wait for the "options" message from the content script
-	const optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
 			options: {
@@ -73,8 +73,7 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 				enable_screenshot_button: enableScreenshotButton
 			}
 		}
-	} = optionsData;
-
+	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the screenshot button option is disabled, return
 	if (!enableScreenshotButton) return;
 	// Add a click event listener to the screenshot button
@@ -96,7 +95,7 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 		"screenshotButton",
 		screenshotButtonPlacement,
 		window.i18nextInstance.t("pages.content.features.screenshotButton.button.label"),
-		getFeatureIcon("screenshotButton", screenshotButtonPlacement !== "feature_menu" ? "shared_icon_position" : "feature_menu"),
+		getFeatureIcon("screenshotButton", screenshotButtonPlacement),
 		screenshotButtonClickListener,
 		false
 	);
