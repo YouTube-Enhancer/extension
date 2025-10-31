@@ -18,6 +18,7 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	});
 }
 
+const CONTAINER = "ytd-two-column-browse-results-renderer:is([page-subtype='home'], [page-subtype='subscriptions'])";
 const TRANSLATION_KEY_PREFIX = "settings.sections.saveToWatchLaterButton";
 
 let videosObserver: MutationObserver | null = null;
@@ -50,7 +51,7 @@ export async function enableSaveToWatchLaterButton() {
 	});
 
 	function addButtonToVideoItems() {
-		document.querySelectorAll("yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))").forEach((video) => {
+		document.querySelectorAll(`${CONTAINER} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`).forEach((video) => {
 			const { contentId: videoId } = (video as YTLockupViewModel).rawProps.data();
 
 			const saveButton = createActionButton({
@@ -80,7 +81,7 @@ export async function enableSaveToWatchLaterButton() {
 
 	function observePlaylist() {
 		addButtonToVideoItems();
-		const container = document.querySelector("ytd-two-column-browse-results-renderer");
+		const container = document.querySelector(CONTAINER);
 		if (container) {
 			videosObserver = new MutationObserver(addButtonToVideoItems);
 			videosObserver.observe(container, { childList: true, subtree: true });
