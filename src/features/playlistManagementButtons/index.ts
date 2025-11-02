@@ -8,6 +8,9 @@ import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
 import { getPlaylistId } from "../playlistLength/utils";
 
 interface YTDPlaylistVideoRenderer extends HTMLElement {
+	data: {
+		setVideoId: string;
+	};
 	playlistVideoId: string;
 }
 
@@ -58,10 +61,10 @@ export async function enablePlaylistManagementButtons() {
 				return;
 			}
 
-			const { playlistVideoId: setVideoId } = item as YTDPlaylistVideoRenderer;
-			if (!setVideoId) {
-				return;
-			}
+			const {
+				data: { setVideoId },
+				playlistVideoId: videoId
+			} = item as YTDPlaylistVideoRenderer;
 
 			const removeButton = createActionButton({
 				className: "yte-remove-button yte-action-button-large",
@@ -70,8 +73,8 @@ export async function enablePlaylistManagementButtons() {
 				iconColor: "red",
 				onClick: async () => {
 					const playlistId = getPlaylistId()!;
-					await youtube.playlist.removeVideos(playlistId, [setVideoId]);
-					item.remove();
+					await youtube.playlist.removeVideos(playlistId, [videoId]);
+					removeFromPlaylist(setVideoId);
 				},
 				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
 				translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
@@ -86,7 +89,7 @@ export async function enablePlaylistManagementButtons() {
 				iconColor: "gray",
 				onClick: async () => {
 					const history = await youtube.getHistory();
-					await history.removeVideo(setVideoId, 5);
+					await history.removeVideo(videoId, 5);
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
 					resetButton.remove();
 				},
@@ -120,4 +123,16 @@ export async function enablePlaylistManagementButtons() {
 	if (document.readyState === "complete" || document.readyState === "interactive") {
 		observePlaylist();
 	}
+}
+
+function removeFromPlaylist(setVideoId: string) {
+	document.querySelector("ytd-app")?.dispatchEvent(
+		new CustomEvent("yt-action", {
+			detail: {
+				actionName: "yt-playlist-remove-videos-action",
+				args: [{ playlistRemoveVideosAction: { setVideoIds: [setVideoId] } }],
+				returnValue: []
+			}
+		})
+	);
 }

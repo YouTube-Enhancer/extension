@@ -1,4 +1,3 @@
-import "./index.css";
 import type { Nullable } from "@/src/types";
 
 import {
@@ -8,13 +7,13 @@ import {
 } from "@/src/features/hideArtificialIntelligenceSummary/utils";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-let aiSummaryObserver: Nullable<MutationObserver> = null;
+let playablesObserver: Nullable<MutationObserver> = null;
 export async function disableHideArtificialIntelligenceSummary() {
 	await showArtificialIntelligenceSummary();
 	// Disconnect the observer
-	if (aiSummaryObserver) {
-		aiSummaryObserver.disconnect();
-		aiSummaryObserver = null;
+	if (playablesObserver) {
+		playablesObserver.disconnect();
+		playablesObserver = null;
 	}
 }
 export async function enableHideArtificialIntelligenceSummary() {
@@ -26,6 +25,6 @@ export async function enableHideArtificialIntelligenceSummary() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideArtificialIntelligenceSummary) return;
 	await hideArtificialIntelligenceSummary();
-	if (aiSummaryObserver) aiSummaryObserver.disconnect();
-	aiSummaryObserver = await observeArtificialIntelligenceSummary();
+	if (playablesObserver) playablesObserver.disconnect();
+	playablesObserver = await observeArtificialIntelligenceSummary();
 }

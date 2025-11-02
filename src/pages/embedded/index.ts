@@ -250,7 +250,6 @@ const enableFeatures = async () => {
 		}
 		await Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
-			enableHideArtificialIntelligenceSummary(),
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
 			enableOpenYouTubeSettingsOnHover(),
