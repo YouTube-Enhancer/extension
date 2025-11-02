@@ -68,7 +68,8 @@ const manifestV2: Manifest.WebExtensionManifest = {
 			data_collection_permissions: {
 				required: ["none"]
 			},
-			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}"
+			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}",
+			strict_min_version: "140.0"
 		}
 	},
 	content_scripts: [

@@ -2,12 +2,13 @@ import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
 import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { getFeatureIcon } from "@/src/icons";
+import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureMenuItem } from "@/src/features/featureMenu/utils";
+import { getFeatureIcon, type ToggleIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 export async function disableHideEndScreenCards() {
 	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-container"]);
@@ -79,20 +80,30 @@ export function isEndScreenCardsHidden(): boolean {
 	return endCards.length > 0;
 }
 function hideEndScreenCards() {
-	modifyElementsClassList(
-		"add",
-		Array.from(document.querySelectorAll(".ytp-ce-element")).map((element) => ({
-			className: "yte-hide-end-screen-cards",
-			element
-		}))
-	);
+	modifyElementsClassList("add", "yte-hide-end-screen-cards", [
+		document.querySelector(".ytp-ce-hide-button-container"),
+		...document.querySelectorAll(".ytp-ce-element")
+	]);
 }
 function showEndScreenCards() {
-	modifyElementsClassList(
-		"remove",
-		Array.from(document.querySelectorAll(".ytp-ce-element")).map((element) => ({
-			className: "yte-hide-end-screen-cards",
-			element
-		}))
-	);
+	modifyElementsClassList("remove", "yte-hide-end-screen-cards", [
+		document.querySelector(".ytp-ce-hide-button-container"),
+		...document.querySelectorAll(".ytp-ce-element")
+	]);
 }
+export const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icon: ToggleIcon, checked: boolean) => {
+	if (hideEndScreenCardsPlacement === "feature_menu") {
+		const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
+		if (!hideEndScreenCardsMenuItem) return;
+		hideEndScreenCardsMenuItem.ariaChecked = checked ? "false" : "true";
+	} else {
+		const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
+		if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
+		updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
+		updateFeatureButtonTitle(
+			"hideEndScreenCardsButton",
+			window.i18nextInstance.t(`pages.content.features.hideEndScreenCardsButton.button.toggle.${checked ? "on" : "off"}`)
+		);
+		hideEndScreenCardsButton.ariaChecked = checked ? "true" : "false";
+	}
+};

@@ -17,8 +17,7 @@ import {
 const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
-const IMMERSIVE_HEADER_SELECTOR =
-	"ytd-playlist-header-renderer .immersive-header-container .immersive-header-content .thumbnail-and-metadata-wrapper";
+const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
 export const getHeaderSelectors = () =>
 	({
 		playlist: (() => {
@@ -225,12 +224,23 @@ export async function initializePlaylistLength({
 	await appendPlaylistLengthUIElement(element);
 	let lastUpdate = 0;
 	const throttleDelay = 500;
+	let lastPlaylistLength: null | number = null;
 	async function safeUpdate() {
 		const now = Date.now();
 		if (now - lastUpdate < throttleDelay) return;
 		lastUpdate = now;
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
+		if (playlistLengthGetMethod === "api") {
+			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const { length: currentLength } = playlistItems;
+			if (lastPlaylistLength === null) {
+				lastPlaylistLength = currentLength;
+			} else if (currentLength !== lastPlaylistLength) {
+				window.cachedPlaylistDuration = null;
+				lastPlaylistLength = currentLength;
+			}
+		}
 		const data = await getDataForPlaylistLengthUIElement({
 			pageType,
 			playlistLengthGetMethod,
@@ -299,16 +309,18 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 
 		let totalSeconds = 0;
 		for (const video of playlist.videos) {
-			if ((video as PlaylistVideo).duration) {
-				totalSeconds += (video as PlaylistVideo).duration.seconds;
+			const playlistVideo = video as PlaylistVideo;
+			if (playlistVideo?.duration?.seconds) {
+				totalSeconds += playlistVideo.duration.seconds;
 			}
 		}
 
 		while (playlist.has_continuation) {
 			const continuation = await playlist.getContinuation();
 			for (const video of continuation.videos) {
-				if ((video as PlaylistVideo).duration) {
-					totalSeconds += (video as PlaylistVideo).duration.seconds;
+				const playlistVideo = video as PlaylistVideo;
+				if (playlistVideo?.duration?.seconds) {
+					totalSeconds += playlistVideo.duration.seconds;
 				}
 			}
 		}
