@@ -61,6 +61,7 @@ export async function enablePlaylistManagementButtons() {
 				return;
 			}
 
+			const playlistId = getPlaylistId()!;
 			const {
 				data: { setVideoId },
 				playlistVideoId: videoId
@@ -72,9 +73,7 @@ export async function enablePlaylistManagementButtons() {
 				icon: FaTrash,
 				iconColor: "red",
 				onClick: async () => {
-					const playlistId = getPlaylistId()!;
-					await youtube.playlist.removeVideos(playlistId, [videoId]);
-					removeFromPlaylist(setVideoId);
+					await removeFromPlaylist(youtube, playlistId, setVideoId);
 				},
 				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
 				translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
@@ -125,7 +124,18 @@ export async function enablePlaylistManagementButtons() {
 	}
 }
 
-function removeFromPlaylist(setVideoId: string) {
+async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
+	const response = await youtube.actions.execute("/browse/edit_playlist", {
+		actions: [
+			{
+				action: "ACTION_REMOVE_VIDEO",
+				setVideoId: setVideoId
+			}
+		],
+		params: "CAFAAQ%3D%3D",
+		playlistId: playlistId
+	});
+
 	document.querySelector("ytd-app")?.dispatchEvent(
 		new CustomEvent("yt-action", {
 			detail: {
@@ -135,4 +145,12 @@ function removeFromPlaylist(setVideoId: string) {
 			}
 		})
 	);
+
+	if (response?.data?.newHeader?.playlistHeaderRenderer) {
+		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
+			new CustomEvent("yt-new-playlist-header", {
+				detail: response.data.newHeader.playlistHeaderRenderer
+			})
+		);
+	}
 }
