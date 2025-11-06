@@ -247,6 +247,7 @@ export function createTooltip({
 } {
 	function makeTooltip() {
 		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
+		const isDelhiModern = isModernYouTubeVideoLayout();
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
@@ -260,7 +261,13 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${rect.top - (isBigMode ? 20 : 6)}px`
+					top: `${
+						rect.top -
+						(isDelhiModern ?
+							isBigMode ? 20
+							:	6
+						:	1)
+					}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -457,6 +464,9 @@ export function getFormattedTimestamp() {
 
 	return `${month}/${day}/${year} ${paddedHours}:${minutes}:${seconds}:${milliseconds} ${period}`;
 }
+export function getLayoutType(): "legacy" | "modern" {
+	return isModernYouTubeVideoLayout() ? "modern" : "legacy";
+}
 export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
 	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
 	let value: any = obj;
@@ -536,6 +546,9 @@ export function isHomePage() {
 export function isLivePage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "live";
+}
+export function isModernYouTubeVideoLayout(): boolean {
+	return document.querySelector(".ytp-delhi-modern") !== null;
 }
 export function isNewYouTubeVideoLayout(): boolean {
 	// Check for the class in the new layout

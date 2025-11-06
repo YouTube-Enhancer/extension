@@ -1,0 +1,4 @@
+body:not(:has(.ytp-delhi-modern)) #yte-feature-menu-button {
+	justify-content: center;
+	align-items: center;
+}
