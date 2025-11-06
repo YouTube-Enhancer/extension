@@ -295,7 +295,7 @@
 					},
 					"automaticallyMaximizePlayer": {
 						"label": "Automatically maximize player",
-						"title": "Bir video yüklediğinizde oynatıcıyı otomatik olarak büyütür"
+						"title": "Automatically maximizes the player when you load a video"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"label": "Automatically show more videos on end screen",
@@ -510,11 +510,11 @@
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Video kaldırılamadı",
+				"failedToRemoveVideo": "Failed to remove video",
 				"markAsUnwatched": "Mark as unwatched",
 				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Videoyu kaldır",
-				"removingVideo": "Video kaldırılıyor…"
+				"removeVideo": "Remove video",
+				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
 				"failedToSaveVideo": "Failed to save video to Watch Later",

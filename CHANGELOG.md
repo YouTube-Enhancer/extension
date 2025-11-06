@@ -1,3 +1,30 @@
+# [1.30.0](https://github.com/YouTube-Enhancer/extension/compare/v1.29.0...v1.30.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* add backwards compatibility for old layout in features that updated for new layout ([f67c8b1](https://github.com/YouTube-Enhancer/extension/commit/f67c8b1ffa7b7c61bbcd7267b4ec172c7a80ff5e))
+* Hide AI summary not enabling on page load ([210855d](https://github.com/YouTube-Enhancer/extension/commit/210855d5d09550c8a1ee22aabf198b584c2fc053))
+* **maximize player button:** Fix two progress bar when maximized [#1039](https://github.com/YouTube-Enhancer/extension/issues/1039) ([bc5677d](https://github.com/YouTube-Enhancer/extension/commit/bc5677df51c407a91c9a8916d18aecf755c38e39))
+
+
+### Features
+
+* Automatically show more videos on end screen [#1035](https://github.com/YouTube-Enhancer/extension/issues/1035) ([ca8511e](https://github.com/YouTube-Enhancer/extension/commit/ca8511ebda5c744f9c45b271ff2f8127912d2090))
+* Hide members only videos [#966](https://github.com/YouTube-Enhancer/extension/issues/966) ([6fcf639](https://github.com/YouTube-Enhancer/extension/commit/6fcf6399d7a74336d6821db3f9f5c47774043fdd))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.30.0-Chrome.zip | c7b1d2e1ba69b8d5cbd641317c5236d69588705023598c30911fcbbf1c5684e7 |
+| youtube-enhancer-v1.30.0-Chromium.zip | c7b1d2e1ba69b8d5cbd641317c5236d69588705023598c30911fcbbf1c5684e7 |
+| youtube-enhancer-v1.30.0-Edge.zip | c7b1d2e1ba69b8d5cbd641317c5236d69588705023598c30911fcbbf1c5684e7 |
+| youtube-enhancer-v1.30.0-Firefox.zip | 96c020471aaaed359d3d635a9ac8d8671207eb24849b0f4df9f227496fd14f1b |
+
 # [1.29.0](https://github.com/YouTube-Enhancer/extension/compare/v1.28.1...v1.29.0) (2025-10-23)
 
 
