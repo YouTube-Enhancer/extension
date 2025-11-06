@@ -779,6 +779,14 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
+						checked={settings.enable_hide_members_only_videos?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.hideMembersOnlyVideos.label")}
+						onChange={setCheckboxOption("enable_hide_members_only_videos")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.hideMembersOnlyVideos.title")}
+						type="checkbox"
+					/>
+					<Setting
 						checked={settings.enable_automatically_disable_ambient_mode?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.automaticallyDisableAmbientMode.label")}
 						onChange={setCheckboxOption("enable_automatically_disable_ambient_mode")}
@@ -816,6 +824,14 @@ export default function Settings() {
 						onChange={setCheckboxOption("enable_save_to_watch_later_button")}
 						parentSetting={null}
 						title={t("settings.sections.miscellaneous.features.enableSaveToWatchLaterButton.title")}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_automatically_show_more_videos_on_end_screen?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.label")}
+						onChange={setCheckboxOption("enable_automatically_show_more_videos_on_end_screen")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.title")}
 						type="checkbox"
 					/>
 				</SettingSection>

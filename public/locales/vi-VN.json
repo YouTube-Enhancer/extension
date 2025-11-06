@@ -1,6 +1,6 @@
 {
-	"langCode": "en-US",
-	"langName": "English (US)",
+	"langCode": "vi-VN",
+	"langName": "Tiếng Việt (Việt Nam)",
 	"messages": {
 		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
 		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
@@ -297,6 +297,10 @@
 						"label": "Automatically maximize player",
 						"title": "Automatically maximizes the player when you load a video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Copy video URL with timestamp button",
 						"title": "Copies video URL with timestamp (?t=123)"
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "Hide live stream chat",
 						"title": "Hides the live stream chat"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Hide Official Artist Videos",
@@ -509,8 +517,9 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

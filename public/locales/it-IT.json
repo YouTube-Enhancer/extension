@@ -297,6 +297,10 @@
 						"label": "Massimizza automaticamente il riproduttore",
 						"title": "Massimizza automaticamente il riproduttore quando carichi un video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Pulsante \"Copia URL video con temporizzazione\"",
 						"title": "Copia l'URL del video con la temporizzazione (?t=123)"
@@ -307,11 +311,11 @@
 					},
 					"enablePlaylistManagementButtons": {
 						"label": "Abilita i pulsanti di gestione della lista riproduzioni",
-						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+						"title": "Aggiunge pulsanti agli elementi della lista riproduzioni per rimuovere i video dalla lista riproduzioni o contrassegnarli come non visti"
 					},
 					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
+						"title": "Aggiunge un pulsante ai video Home e Abbonamenti per salvare il video nella lista riproduzioni 'Guarda più tardi'"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Nascondi riepilogo IA",
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "Nascondi chat live stream",
 						"title": "Nasconde la chat live stream"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Nascondi video ufficiali dell'artista",
@@ -501,16 +509,17 @@
 				}
 			},
 			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Failed to remove video",
-				"markAsUnwatched": "Mark as unwatched",
-				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
+				"failedToMarkAsUnwatched": "Impossibile contrassegnare il video come non visto",
+				"failedToRemoveVideo": "Impossibile rimuovere il video",
+				"markAsUnwatched": "Contrassegna come non visto",
+				"markingAsUnwatched": "Contrassegno come non visto…",
+				"removeVideo": "Rimuovi video",
+				"removingVideo": "Rimozione video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

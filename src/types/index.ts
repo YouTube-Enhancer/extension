@@ -241,6 +241,7 @@ export type configuration = {
 	enable_automatically_enable_closed_captions: boolean;
 	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
+	enable_automatically_show_more_videos_on_end_screen: boolean;
 	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
@@ -251,6 +252,7 @@ export type configuration = {
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
 	enable_hide_live_stream_chat: boolean;
+	enable_hide_members_only_videos: boolean;
 	enable_hide_official_artist_videos_from_home_page: boolean;
 	enable_hide_paid_promotion_banner: boolean;
 	enable_hide_playables: boolean;
@@ -380,6 +382,10 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ automaticallyEnableClosedCaptionsEnabled: boolean }
 	>;
 	automaticallyMaximizePlayerChange: DataResponseMessage<"automaticallyMaximizePlayerChange", { automaticallyMaximizePlayerEnabled: boolean }>;
+	automaticallyShowMoreVideosOnEndScreenChange: DataResponseMessage<
+		"automaticallyShowMoreVideosOnEndScreenChange",
+		{ automaticallyShowMoreVideosOnEndScreenEnabled: boolean }
+	>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
@@ -401,6 +407,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hideEndScreenCardsButtonPlacement: ButtonPlacement; hideEndScreenCardsEnabled: boolean }
 	>;
 	hideLiveStreamChatChange: DataResponseMessage<"hideLiveStreamChatChange", { hideLiveStreamChatEnabled: boolean }>;
+	hideMembersOnlyVideosChange: DataResponseMessage<"hideMembersOnlyVideosChange", { hideMembersOnlyVideosEnabled: boolean }>;
 	hideOfficialArtistVideosFromHomePageChange: DataResponseMessage<
 		"hideOfficialArtistVideosFromHomePageChange",
 		{ hideOfficialArtistVideosFromHomePageEnabled: boolean }

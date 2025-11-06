@@ -7,6 +7,10 @@ import {
 } from "@/src/features/automaticallyDisableClosedCaptions";
 import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
 import { disableAutomaticallyMaximizePlayer, enableAutomaticallyMaximizePlayer } from "@/src/features/automaticallyMaximizePlayer";
+import {
+	disableAutomaticallyShowMoreVideosOnEndScreen,
+	enableAutomaticallyShowMoreVideosOnEndScreen
+} from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
 import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -29,6 +33,7 @@ import {
 	updateHideEndScreenCardsButtonState
 } from "@/src/features/hideEndScreenCards";
 import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
+import { disableHideMembersOnlyVideos, enableHideMembersOnlyVideos } from "@/src/features/hideMembersOnlyVideos";
 import {
 	disableHideOfficialArtistVideosFromHomePage,
 	enableHideOfficialArtistVideosFromHomePage
@@ -188,6 +193,7 @@ const enableFeatures = async () => {
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		await Promise.all([
 			enableHidePaidPromotionBanner(),
+			enableHideMembersOnlyVideos(),
 			enableHideShorts(),
 			enableHidePlayables(),
 			enableRemoveRedirect(),
@@ -244,6 +250,7 @@ const enableFeatures = async () => {
 		}
 		await Promise.all([
 			promptUserToResumeVideo(() => void setupVideoHistory()),
+			enableHideArtificialIntelligenceSummary(),
 			setupPlaybackSpeedChangeListener(),
 			enableShortsAutoScroll(),
 			enableOpenYouTubeSettingsOnHover(),
@@ -264,7 +271,8 @@ const enableFeatures = async () => {
 			enableDefaultToOriginalAudioTrack(),
 			enableRestoreFullscreenScrolling(),
 			enablePlaylistManagementButtons(),
-			enableAutomaticallyMaximizePlayer()
+			enableAutomaticallyMaximizePlayer(),
+			enableAutomaticallyShowMoreVideosOnEndScreen()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -376,6 +384,17 @@ const initialize = function () {
 						else disableAutomaticallyMaximizePlayer();
 						break;
 					}
+					case "automaticallyShowMoreVideosOnEndScreenChange": {
+						const {
+							data: { automaticallyShowMoreVideosOnEndScreenEnabled }
+						} = message;
+						if (automaticallyShowMoreVideosOnEndScreenEnabled) {
+							await enableAutomaticallyShowMoreVideosOnEndScreen();
+						} else {
+							await disableAutomaticallyShowMoreVideosOnEndScreen();
+						}
+						break;
+					}
 					case "automaticTheaterModeChange": {
 						// Get the player element
 						const playerContainer =
@@ -394,6 +413,7 @@ const initialize = function () {
 						sizeButton.click();
 						break;
 					}
+
 					case "buttonPlacementChange": {
 						const { data } = message;
 						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
@@ -464,7 +484,6 @@ const initialize = function () {
 						}
 						break;
 					}
-
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -603,6 +622,17 @@ const initialize = function () {
 							await enableHideLiveStreamChat();
 						} else {
 							await disableHideLiveStreamChat();
+						}
+						break;
+					}
+					case "hideMembersOnlyVideosChange": {
+						const {
+							data: { hideMembersOnlyVideosEnabled }
+						} = message;
+						if (hideMembersOnlyVideosEnabled) {
+							await enableHideMembersOnlyVideos();
+						} else {
+							await disableHideMembersOnlyVideos();
 						}
 						break;
 					}

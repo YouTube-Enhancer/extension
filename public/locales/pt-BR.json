@@ -297,6 +297,10 @@
 						"label": "Automatically maximize player",
 						"title": "Automatically maximizes the player when you load a video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Copiar URL do vídeo com o botão de minutagem",
 						"title": "Copia o URL do vídeo com a minutagem (?t=123)"
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "Ocultar chat da transmissão",
 						"title": "Oculta o chat da transmissão"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Ocultar vídeos de artistas originais",
@@ -509,8 +517,9 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

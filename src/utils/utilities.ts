@@ -247,6 +247,7 @@ export function createTooltip({
 } {
 	function makeTooltip() {
 		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
+		const isDelhiModern = isModernYouTubeVideoLayout();
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
@@ -260,7 +261,13 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${rect.top - (isBigMode ? 20 : 6)}px`
+					top: `${
+						rect.top -
+						(isDelhiModern ?
+							isBigMode ? 20
+							:	6
+						:	1)
+					}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -457,6 +464,9 @@ export function getFormattedTimestamp() {
 
 	return `${month}/${day}/${year} ${paddedHours}:${minutes}:${seconds}:${milliseconds} ${period}`;
 }
+export function getLayoutType(): "legacy" | "modern" {
+	return isModernYouTubeVideoLayout() ? "modern" : "legacy";
+}
 export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
 	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
 	let value: any = obj;
@@ -514,6 +524,17 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 		}
 	}
 }
+export function isChannelHomePage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return (
+		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === undefined) ||
+		(firstSection !== undefined && firstSection.startsWith("@") && secondSection === "featured")
+	);
+}
+export function isChannelVideosPage() {
+	const [firstSection, secondSection] = extractSectionsFromYouTubeURL(window.location.href);
+	return firstSection !== undefined && firstSection.startsWith("@") && secondSection === "videos";
+}
 export function IsDarkMode() {
 	const darkMode = document.documentElement.hasAttribute("dark");
 	return darkMode;
@@ -525,6 +546,9 @@ export function isHomePage() {
 export function isLivePage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "live";
+}
+export function isModernYouTubeVideoLayout(): boolean {
+	return document.querySelector(".ytp-delhi-modern") !== null;
 }
 export function isNewYouTubeVideoLayout(): boolean {
 	// Check for the class in the new layout
@@ -557,8 +581,42 @@ export function modifyElementClassList(action: ModifyElementAction, elementPair:
 	const { className, element } = elementPair;
 	element?.classList[action](className);
 }
-export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]) {
-	elements.forEach((element) => modifyElementClassList(action, element));
+
+export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, selectors: string[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: Nullable<Element>[]): void;
+export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: NodeListOf<Element>): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	classNameOrPairs: ElementClassPair[] | string,
+	selectors?: NodeListOf<Element> | Nullable<Element>[] | string[]
+): void {
+	let elements: ElementClassPair[] = [];
+	if (Array.isArray(classNameOrPairs) && classNameOrPairs.every((x) => "element" in x)) {
+		// Case 1: Array of ElementClassPair
+		elements = classNameOrPairs;
+	} else if (typeof classNameOrPairs === "string") {
+		if (Array.isArray(selectors) && typeof selectors[0] === "string") {
+			// Case 2: Array of selector strings
+			elements = (selectors as string[]).map((selector) => ({
+				className: classNameOrPairs,
+				element: document.querySelector(selector)
+			}));
+		} else if (selectors instanceof NodeList) {
+			// Case 3: NodeList
+			elements = Array.from(selectors).map((element) => ({
+				className: classNameOrPairs,
+				element
+			}));
+		} else if (Array.isArray(selectors) && selectors[0] instanceof Element) {
+			// Case 4: Array of Elements
+			elements = (selectors as Element[]).map((element) => ({
+				className: classNameOrPairs,
+				element
+			}));
+		}
+	}
+	elements.forEach((pair) => modifyElementClassList(action, pair));
 }
 export function parseStoredValue(value: string) {
 	try {

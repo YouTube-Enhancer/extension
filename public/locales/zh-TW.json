@@ -297,6 +297,10 @@
 						"label": "Automatically maximize player",
 						"title": "Automatically maximizes the player when you load a video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "複製目前播放時間的影片網址按鈕",
 						"title": "複製目前播放時間的影片網址 (?t=123)"
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "隱藏直播聊天室",
 						"title": "隱藏直播的聊天室"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "隱藏官方藝人影片",
@@ -509,8 +517,9 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {
