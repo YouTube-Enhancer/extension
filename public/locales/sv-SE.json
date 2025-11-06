@@ -102,7 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Rullningshjulets modifieringstangent för hastighetsreglering kan inte vara densamma modifieringstangent som rullningshjulets volymreglering.",
@@ -136,7 +136,7 @@
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
 				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Ställ in skärmbildens spartyp till 'Fil' för att konfigurera detta alternativ"
 			}
 		},
 		"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -290,12 +290,16 @@
 						"title": "Inaktiverar textning automatiskt när du laddar en video"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Aktivera undertexter automatiskt",
+						"title": "Aktiverar automatiskt undertexter när du startar en video"
 					},
 					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
-						"title": "Automatically maximizes the player when you load a video"
+						"label": "Maximera spelaren automatiskt",
+						"title": "Maximera spelaren automatiskt när du laddar en video"
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
@@ -306,12 +310,12 @@
 						"title": "Använd alltid originalljudspåret som standard"
 					},
 					"enablePlaylistManagementButtons": {
-						"label": "Enable playlist management buttons",
-						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
+						"label": "Aktivera knappar för hantering av spellistor",
+						"title": "Lägger till knappar i spellistobjekt för att ta bort videor från spellistan eller markera dem som ej sedda"
 					},
 					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+						"label": "Aktivera knappen spara för att titta på senare",
+						"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Dölj AI-sammanfattning",
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "Dölj direktströmschatt",
 						"title": "Döljer direktströmschatten"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Dölj officiella artistvideor",
@@ -501,16 +509,17 @@
 				}
 			},
 			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Failed to remove video",
-				"markAsUnwatched": "Mark as unwatched",
-				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
+				"failedToMarkAsUnwatched": "Det gick inte att markera video som ej sedd",
+				"failedToRemoveVideo": "Det gick inte att ta bort video",
+				"markAsUnwatched": "Markera som ej sedd",
+				"markingAsUnwatched": "Markerar som ej sedd…",
+				"removeVideo": "Ta bort video",
+				"removingVideo": "Tar bort video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

@@ -1,15 +1,16 @@
-import React from "react";
-import { renderToString } from "react-dom/server";
-import { FaSpinner, FaUndoAlt } from "react-icons/fa";
+import { FaUndoAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { Innertube } from "youtubei.js/web";
 
-import "./index.css";
-import { createTooltip, isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
+import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
 
 interface YTDPlaylistVideoRenderer extends HTMLElement {
+	data: {
+		setVideoId: string;
+	};
 	playlistVideoId: string;
 }
 
@@ -54,77 +55,48 @@ export async function enablePlaylistManagementButtons() {
 	});
 
 	function addButtonToPlaylistItems() {
-		const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
+		const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
 		playlistItems.forEach((item) => {
 			if (item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
 				return;
 			}
 
-			const { playlistVideoId: setVideoId } = item as YTDPlaylistVideoRenderer;
-			if (!setVideoId) {
-				return;
-			}
+			const playlistId = getPlaylistId()!;
+			const {
+				data: { setVideoId },
+				playlistVideoId: videoId
+			} = item as YTDPlaylistVideoRenderer;
 
-			const removeButton = document.createElement("button");
-			removeButton.innerHTML = renderToString(React.createElement(FaTrash, { color: "red", size: 18 }));
-			removeButton.className = "yte-remove-button";
-			removeButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.removeVideo`);
-			removeButton.onclick = async () => {
-				const { innerHTML: originalHTML, title: originalTitle } = removeButton;
-				removeButton.disabled = true;
-				removeButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.removingVideo`);
-				removeButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
-				removeButton.classList.add("yte-spinning");
-				try {
-					const playlistId = getPlaylistId()!;
-					await youtube.playlist.removeVideos(playlistId, [setVideoId]);
-					item.remove();
-				} catch (err) {
-					const { listener } = createTooltip({
-						element: removeButton,
-						featureName: "playlistManagementButtons",
-						id: "yte-feature-playlistManagementButtons-tooltip",
-						text: `${window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`)}: ${err instanceof Error ? err.message : String(err)}`
-					});
-					listener();
-				} finally {
-					removeButton.disabled = false;
-					removeButton.innerHTML = originalHTML;
-					removeButton.title = originalTitle;
-					removeButton.classList.remove("yte-spinning");
-				}
-			};
+			const removeButton = createActionButton({
+				className: "yte-remove-button yte-action-button-large",
+				featureName: "playlistManagementButtons",
+				icon: FaTrash,
+				iconColor: "red",
+				onClick: async () => {
+					await removeFromPlaylist(youtube, playlistId, setVideoId);
+				},
+				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
+				translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
+				translationProcessing: `${TRANSLATION_KEY_PREFIX}.removingVideo`
+			});
+			removeButton.style.verticalAlign = "top";
 
-			const resetButton = document.createElement("button");
-			resetButton.innerHTML = renderToString(React.createElement(FaUndoAlt, { color: "red", size: 18 }));
-			resetButton.className = "yte-reset-button";
-			resetButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.markAsUnwatched`);
-			resetButton.onclick = async () => {
-				const { innerHTML: originalHTML, title: originalTitle } = resetButton;
-				resetButton.disabled = true;
-				resetButton.title = window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`);
-				resetButton.innerHTML = renderToString(React.createElement(FaSpinner, { color: "gray", size: 18 }));
-				resetButton.classList.add("yte-spinning");
-
-				try {
+			const resetButton = createActionButton({
+				className: "yte-reset-button yte-action-button-large",
+				featureName: "playlistManagementButtons",
+				icon: FaUndoAlt,
+				iconColor: "gray",
+				onClick: async () => {
 					const history = await youtube.getHistory();
-					await history.removeVideo(setVideoId, 5);
+					await history.removeVideo(videoId, 5);
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
-				} catch (err) {
-					const { listener } = createTooltip({
-						element: resetButton,
-						featureName: "playlistManagementButtons",
-						id: "yte-feature-playlistManagementButtons-tooltip",
-						text: `${window.i18nextInstance?.t(`${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`)}: ${err instanceof Error ? err.message : String(err)}`
-					});
-					listener();
-				} finally {
-					resetButton.disabled = false;
-					resetButton.innerHTML = originalHTML;
-					resetButton.title = originalTitle;
-					resetButton.classList.remove("yte-spinning");
-				}
-			};
+					resetButton.remove();
+				},
+				translationError: `${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`,
+				translationHover: `${TRANSLATION_KEY_PREFIX}.markAsUnwatched`,
+				translationProcessing: `${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`
+			});
+			resetButton.style.verticalAlign = "top";
 
 			const menu = item.querySelector("#menu");
 			if (menu) {
@@ -149,5 +121,48 @@ export async function enablePlaylistManagementButtons() {
 	window.addEventListener("DOMContentLoaded", observePlaylist);
 	if (document.readyState === "complete" || document.readyState === "interactive") {
 		observePlaylist();
+	}
+}
+
+async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
+	const response = await youtube.actions.execute("/browse/edit_playlist", {
+		actions: [
+			{
+				action: "ACTION_REMOVE_VIDEO",
+				setVideoId: setVideoId
+			}
+		],
+		params: "CAFAAQ%3D%3D",
+		playlistId: playlistId
+	});
+
+	document.querySelector("ytd-app")?.dispatchEvent(
+		new CustomEvent("yt-action", {
+			detail: {
+				actionName: "yt-playlist-remove-videos-action",
+				args: [{ playlistRemoveVideosAction: { setVideoIds: [setVideoId] } }],
+				returnValue: []
+			}
+		})
+	);
+
+	if (response?.data?.frameworkUpdates?.entityBatchUpdate) {
+		document.querySelector("ytd-app")?.dispatchEvent(
+			new CustomEvent("yt-action", {
+				detail: {
+					actionName: "yt-entity-update-command",
+					args: [{ entityUpdateCommand: { entityBatchUpdate: response.data.frameworkUpdates.entityBatchUpdate } }],
+					returnValue: []
+				}
+			})
+		);
+	}
+	
+	if (response?.data?.newHeader?.playlistHeaderRenderer) {
+		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
+			new CustomEvent("yt-new-playlist-header", {
+				detail: response.data.newHeader.playlistHeaderRenderer
+			})
+		);
 	}
 }

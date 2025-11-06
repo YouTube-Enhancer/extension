@@ -297,6 +297,10 @@
 						"label": "Automatically maximize player",
 						"title": "Automatically maximizes the player when you load a video"
 					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"label": "Automatically show more videos on end screen",
+						"title": "Automatically shows more videos on end screen when you load a video"
+					},
 					"copyTimestampUrlButton": {
 						"label": "Кнопка «Копировать URL видео с таймкодом»",
 						"title": "Копирует ссылку видео с меткой времени (?t=123)"
@@ -328,6 +332,10 @@
 					"hideLiveStreamChat": {
 						"label": "Спрятать чат прямого эфира",
 						"title": "Прячет чат прямого эфира (стрима)"
+					},
+					"hideMembersOnlyVideos": {
+						"label": "Hide members-only videos",
+						"title": "Hides videos that are only visible to members"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Скрывать официальные видео исполнителя",
@@ -509,8 +517,9 @@
 				"removingVideo": "Removing video…"
 			},
 			"saveToWatchLaterButton": {
-				"error": "Failed to add video to Watch Later",
-				"save": "Save to Watch Later"
+				"failedToSaveVideo": "Failed to save video to Watch Later",
+				"saveVideo": "Save to Watch Later",
+				"savingVideo": "Saving to Watch Later…"
 			},
 			"screenshotButton": {
 				"enable": {

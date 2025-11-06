@@ -203,6 +203,10 @@ interface EnUS {
 						label: "Automatically maximize player";
 						title: "Automatically maximizes the player when you load a video";
 					};
+					automaticallyShowMoreVideosOnEndScreen: {
+						label: "Automatically show more videos on end screen";
+						title: "Automatically shows more videos on end screen when you load a video";
+					};
 					automaticTheaterMode: {
 						label: "Automatic theater mode";
 						title: "Automatically enables theater mode when you load a video";
@@ -236,6 +240,10 @@ interface EnUS {
 						title: "Adds a button to show/hide the cards at the end of the video";
 					};
 					hideLiveStreamChat: { label: "Hide live stream chat"; title: "Hides the live stream chat" };
+					hideMembersOnlyVideos: {
+						label: "Hide members-only videos";
+						title: "Hides videos that are only visible to members";
+					};
 					hideOfficialArtistVideosFromHomePage: {
 						label: "Hide Official Artist Videos";
 						title: "Hide Official Artist Videos from Home Page";
@@ -389,7 +397,11 @@ interface EnUS {
 				removeVideo: "Remove video";
 				removingVideo: "Removing video…";
 			};
-			saveToWatchLaterButton: { error: "Failed to add video to Watch Later"; save: "Save to Watch Later" };
+			saveToWatchLaterButton: {
+				failedToSaveVideo: "Failed to save video to Watch Later";
+				saveVideo: "Save to Watch Later";
+				savingVideo: "Saving to Watch Later…";
+			};
 			screenshotButton: {
 				enable: {
 					label: "Screenshot button";
