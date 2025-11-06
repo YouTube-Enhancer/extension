@@ -1,4 +1,4 @@
-.yte-button-player-controls-left {
+.ytp-delhi-modern .yte-button-player-controls-left {
 	margin: var(--yt-delhi-pill-top-height, 12px) 0 var(--yt-delhi-pill-top-height, 12px) 12px;
 	height: var(--yt-delhi-pill-height, 48px) !important;
 	border-radius: 28px;
@@ -8,12 +8,19 @@
 	text-shadow: 0 0 2px #000;
 	padding: 0;
 	position: relative;
+	align-items: center !important;
+	display: flex !important;
+	width: -webkit-fill-available !important;
+	max-width: var(--yt-delhi-pill-height, 48px) !important;
 }
 
 .ytp-delhi-modern.ytp-big-mode .yte-button-player-controls-left {
 	margin-top: calc((var(--yt-delhi-big-mode-bottom-controls-height, 96px) - var(--yt-delhi-big-mode-pill-height, 56px)) / 2) !important;
 	height: var(--yt-delhi-big-mode-pill-height, 56px) !important;
-	width: 56px !important;
+	width: -webkit-fill-available !important;
+	align-items: center !important;
+	display: flex !important;
+	max-width: var(--yt-delhi-big-mode-pill-height, 56px) !important;
 }
 
 .yte-button-below-player {
@@ -23,4 +30,25 @@
 	z-index: 0;
 	height: 48px;
 	width: 48px;
+	align-items: center;
+	display: flex;
+}
+
+body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left,
+body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-right {
+	place-content: center !important;
+	display: inline-flex !important;
+	flex-wrap: wrap !important;
+	padding: 0px 4px !important;
+	z-index: 0 !important;
+}
+
+body:not(:has(.ytp-delhi-modern)) .ytp-right-controls:has(.yte-button-player-controls-right) {
+	align-items: center !important;
+	display: flex !important;
+}
+
+body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left {
+	width: -webkit-fill-available;
+	max-width: 48px;
 }

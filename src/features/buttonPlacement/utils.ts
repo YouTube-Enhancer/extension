@@ -58,11 +58,7 @@ export async function makeFeatureButton<Name extends AllButtonNames, Placement e
 			: "yte-button-player-controls-left"
 		],
 		elementId: `${getFeatureButtonId(buttonName)}`,
-		elementType: "button",
-		styles: {
-			alignItems: "center",
-			display: "flex"
-		}
+		elementType: "button"
 	});
 	button.dataset.title = label;
 	const { listener: tooltipListener, update } = createTooltip({

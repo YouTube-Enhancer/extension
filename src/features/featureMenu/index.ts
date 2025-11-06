@@ -1,3 +1,4 @@
+import "./index.css";
 import type { FeatureMenuOpenType } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
