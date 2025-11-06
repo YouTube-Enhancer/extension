@@ -94,10 +94,6 @@ function adjustPlayer(action: ModifyElementAction) {
 		{
 			className: "yte-maximized-width",
 			element: document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom")
-		},
-		{
-			className: "yte-maximized-width",
-			element: document.querySelector<HTMLDivElement>(".ytp-chapter-hover-container")
 		}
 	]);
 }
