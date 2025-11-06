@@ -320,6 +320,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/TheMajor-GitHub"><img src="https://avatars.githubusercontent.com/u/94167392?v=4?s=100" width="100px;" alt="The Major"/><br /><sub><b>The Major</b></sub></a><br /><a href="#ideas-TheMajor-GitHub" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dnicolson"><img src="https://avatars.githubusercontent.com/u/2276355?v=4?s=100" width="100px;" alt="Dave Nicolson"/><br /><sub><b>Dave Nicolson</b></sub></a><br /><a href="#code-dnicolson" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dheatly23"><img src="https://avatars.githubusercontent.com/u/71598333?v=4?s=100" width="100px;" alt="Dheatly23"/><br /><sub><b>Dheatly23</b></sub></a><br /><a href="#code-Dheatly23" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/minkses"><img src="https://avatars.githubusercontent.com/u/33008182?v=4?s=100" width="100px;" alt="Minks S"/><br /><sub><b>Minks S</b></sub></a><br /><a href="#bug-minkses" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

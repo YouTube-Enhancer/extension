@@ -309,7 +309,7 @@ export function createTooltip({
 			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
 			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
 			else {
-				if (playerContainer) playerContainer.appendChild(tooltip);
+				if (playerContainer?.offsetParent) playerContainer.appendChild(tooltip);
 				else document.body.appendChild(tooltip);
 			}
 		},
