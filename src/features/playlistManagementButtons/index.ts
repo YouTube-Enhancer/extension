@@ -146,6 +146,18 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 		})
 	);
 
+	if (response?.data?.frameworkUpdates?.entityBatchUpdate) {
+		document.querySelector("ytd-app")?.dispatchEvent(
+			new CustomEvent("yt-action", {
+				detail: {
+					actionName: "yt-entity-update-command",
+					args: [{ entityUpdateCommand: { entityBatchUpdate: response.data.frameworkUpdates.entityBatchUpdate } }],
+					returnValue: []
+				}
+			})
+		);
+	}
+	
 	if (response?.data?.newHeader?.playlistHeaderRenderer) {
 		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
 			new CustomEvent("yt-new-playlist-header", {
