@@ -49,6 +49,12 @@ export async function enablePlaylistManagementButtons() {
 		return;
 	}
 
+	document.addEventListener("yt-action", async (event) => {
+		if ((event as CustomEvent).detail.actionName === "yt-prepare-page-dispose") {
+			await disablePlaylistManagementButtons();
+		}
+	});
+
 	const youtube = await Innertube.create({
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)
