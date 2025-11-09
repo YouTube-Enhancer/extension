@@ -67,18 +67,16 @@ export async function enablePlaylistManagementButtons() {
 				return;
 			}
 
-			const playlistId = getPlaylistId()!;
-			const {
-				data: { setVideoId },
-				playlistVideoId: videoId
-			} = item as YTDPlaylistVideoRenderer;
-
 			const removeButton = createActionButton({
 				className: "yte-remove-button yte-action-button-large",
 				featureName: "playlistManagementButtons",
 				icon: FaTrash,
 				iconColor: "red",
 				onClick: async () => {
+					const playlistId = getPlaylistId()!;
+					const {
+						data: { setVideoId }
+					} = item as YTDPlaylistVideoRenderer;
 					await removeFromPlaylist(youtube, playlistId, setVideoId);
 				},
 				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
@@ -93,6 +91,7 @@ export async function enablePlaylistManagementButtons() {
 				icon: FaUndoAlt,
 				iconColor: "gray",
 				onClick: async () => {
+					const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 					const history = await youtube.getHistory();
 					await history.removeVideo(videoId, 5);
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
@@ -163,7 +162,7 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 			})
 		);
 	}
-	
+
 	if (response?.data?.newHeader?.playlistHeaderRenderer) {
 		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
 			new CustomEvent("yt-new-playlist-header", {
