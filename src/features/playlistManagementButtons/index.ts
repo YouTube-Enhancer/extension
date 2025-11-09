@@ -115,6 +115,10 @@ export async function enablePlaylistManagementButtons() {
 	}
 
 	function observePlaylist() {
+		if (playlistObserver) {
+			return;
+		}
+
 		addButtonToPlaylistItems();
 		const container = document.querySelector("ytd-playlist-video-list-renderer");
 		if (container) {
@@ -123,10 +127,7 @@ export async function enablePlaylistManagementButtons() {
 		}
 	}
 
-	window.addEventListener("DOMContentLoaded", observePlaylist);
-	if (document.readyState === "complete" || document.readyState === "interactive") {
-		observePlaylist();
-	}
+	observePlaylist();
 }
 
 async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
