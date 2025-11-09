@@ -3,7 +3,7 @@ import { FaTrash } from "react-icons/fa6";
 import { Innertube } from "youtubei.js/web";
 
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
-import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
 
@@ -45,7 +45,7 @@ export async function enablePlaylistManagementButtons() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_playlist_management_buttons || !isPlaylistPage() || getPlaylistId() === "LL") {
+	if (!enable_playlist_management_buttons || !document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")) {
 		return;
 	}
 
