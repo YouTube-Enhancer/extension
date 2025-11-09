@@ -463,7 +463,7 @@
 						"no_display": "No mostrar",
 						"text": "Texto"
 					},
-					"title": "Select the type of On-Screen Display"
+					"title": "Selecciona el estilo del visualizador en pantalla"
 				}
 			},
 			"playbackSpeed": {
@@ -501,7 +501,7 @@
 					"select": {
 						"label": "Method to get watched time",
 						"options": {
-							"duration": "Video Length",
+							"duration": "Duración del Video",
 							"youtube": "Video Watch Time"
 						},
 						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
@@ -513,8 +513,8 @@
 				"failedToRemoveVideo": "Failed to remove video",
 				"markAsUnwatched": "Mark as unwatched",
 				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
+				"removeVideo": "Eliminar vídeo",
+				"removingVideo": "Eliminando vídeo…"
 			},
 			"saveToWatchLaterButton": {
 				"failedToSaveVideo": "Failed to save video to Watch Later",
@@ -596,7 +596,7 @@
 					"select": {
 						"label": "Resume type",
 						"options": {
-							"automatic": "Automatic",
+							"automatic": "Automático",
 							"prompt": "Prompt"
 						},
 						"title": "Select how you want to resume videos"
@@ -628,22 +628,22 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "Clave API",
+					"title": "Introduce tu clave de Youtube Data API V3."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "Clave de YouTube API V3"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Autor",
+				"co-authors": "Coautores",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Color de sombra",
+						"title": "Color para las sombras"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Color secundario de texto",
+						"title": "Color para el texto secundario"
 					},
 					"hoverBackground": {
 						"label": "Hover background color",
