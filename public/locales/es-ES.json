@@ -10,75 +10,75 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "¡Copiado!",
+						"label": "Copiar URL de vídeo con marca de tiempo"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menú de funciones"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Avanzar rápidamente por {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Rebobinado por {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Ocultar tarjetas de pantalla final",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Mostrar tarjetas de pantalla final",
+							"on": "Ocultar tarjetas de pantalla final"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Bucle",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Desactivar repetición",
+							"on": "Activar repetición"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximizar",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Maximizar desactivado",
+							"on": "Maximizar activado"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Abrir transcripción"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Disminuye la velocidad a {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Aumenta la velocidad a {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
-					"increaseLimit": "Can't increase further ({{SPEED}})"
+					"decreaseLimit": "No se puede disminuir más ({{SPEED}})",
+					"increaseLimit": "No se puede aumentar más ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Puede que la longitud total no sea exacta si se ocultan algunos vídeos o si no ha cargado suficientes vídeos para obtener la longitud completa."
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Captura de pantalla"
 					},
 					"copiedToClipboard": "Captura de pantalla copiada al portapapeles"
 				},
@@ -90,10 +90,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Potenciador de volumen",
 						"toggle": {
-							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"off": "Desactivar potenciador de volumen",
+							"on": "Activar potenciador de volumen"
 						}
 					}
 				}
@@ -102,11 +102,11 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Esta opción no se puede activar mientras '{{OPTION}}' está habilitada.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
-							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
+							"speedControl": "La tecla del modificador de control de velocidad de rueda de desplazamiento no puede ser la misma que la tecla del modificador del control de volumen de la rueda.",
+							"volumeControl": "La tecla del modificador del control de volumen de la rueda de desplazamiento no puede ser la misma que la tecla del modificador del control de velocidad de la rueda."
 						}
 					}
 				},
@@ -126,20 +126,20 @@
 		},
 		"optionDisabled": {
 			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"label": "Activar {{OPTIONS}} para configurar esta opción",
+				"separator": " o "
 			},
 			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
+				"label": "Habilitar {{OPTIONS}} para configurar esta opción",
+				"separator": " y "
 			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
+			"singular": "Habilitar '{{OPTION}}' para configurar esta opción",
 			"specificOption": {
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"featureMenu": "Configure al menos un botón para colocarse en el menú de funciones para configurar esta opción.",
+				"screenshotButtonFileFormat": "Establecer el tipo de guardado de captura de pantalla a 'Archivo' para configurar esta opción"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "Desplazar para más ajustes",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -148,12 +148,12 @@
 				},
 				"fallbackQualityStrategy": {
 					"select": {
-						"label": "Quality fallback strategy",
+						"label": "Estrategia de calidad de contingencia",
 						"options": {
-							"higher": "Higher",
-							"lower": "Lower"
+							"higher": "Superior",
+							"lower": "Inferior"
 						},
-						"title": "The strategy to use when the selected quality is not available"
+						"title": "La estrategia a utilizar cuando la calidad seleccionada no está disponible"
 					}
 				},
 				"select": {
@@ -172,7 +172,7 @@
 					"value": "Confirmar"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Abrir extensión en una pestaña nueva"
 				},
 				"reset": {
 					"title": "Restablece todos los ajustes a sus valores predeterminados, haga clic en el botón de confirmar para guardar los cambios",
@@ -182,15 +182,15 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
+						"copyTimestampUrlButton": "Copiar URL de vídeo con el botón de marca de tiempo",
+						"decreasePlaybackSpeedButton": "Botón de disminuir velocidad",
+						"forwardButton": "Botón de avance rápido",
+						"hideEndScreenCardsButton": "Botón de ocultar tarjetas de pantalla final",
+						"increasePlaybackSpeedButton": "Botón de aumentar velocidad",
 						"loopButton": "Botón de repetición",
 						"maximizePlayerButton": "Maximizar botón",
 						"openTranscriptButton": "Abrir botón de transcripción",
-						"rewindButton": "Rewind button",
+						"rewindButton": "Botón de rebobinar",
 						"screenshotButton": "Botón de captura de pantalla",
 						"volumeBoostButton": "Botón Aumento de Volumen"
 					},
@@ -200,7 +200,7 @@
 							"value": "Debajo del reproductor"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
+							"placement": "en el menú de funciones",
 							"value": "Menú de funciones"
 						},
 						"player_controls_left": {
@@ -243,14 +243,14 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Botones de avance/retroceso",
+					"title": "Añade botones de avance y retroceso al reproductor de vídeo"
 				},
 				"time": {
 					"label": "Adelantar/rebobinar tiempo",
-					"title": "The amount of time to forward/rewind the video by"
+					"title": "La cantidad de tiempo para avanzar/retroceder el video"
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Ajustes del botón avanzar/retroceder"
 			},
 			"importExportSettings": {
 				"exportButton": {
@@ -282,11 +282,11 @@
 						"title": "Activar automáticamente el modo cine al cargar un vídeo"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "Desactivar automáticamente el modo ambiente",
+						"title": "Desactiva automáticamente el modo ambiente al cargar un vídeo"
 					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
+						"label": "Desactivar automáticamente los subtítulos",
 						"title": "Automatically disables closed captions when you load a video"
 					},
 					"automaticallyEnableClosedCaptions": {
@@ -354,8 +354,8 @@
 						"title": "Oculta la barra de desplazamiento de la página"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Ocultar shorts",
+						"title": "Oculta todos los shorts"
 					},
 					"hideTranslateComment": {
 						"label": "Hide translate comment button",
@@ -654,7 +654,7 @@
 						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "Accent color",
+						"label": "Color destacado",
 						"title": "Color for accent"
 					},
 					"mainText": {
