@@ -30,7 +30,8 @@ export async function disableSaveToWatchLaterButton() {
 	}
 
 	document.querySelectorAll(".yte-save-to-watch-later-button").forEach((saveButton) => {
-		removeSaveToWatchLaterButton(saveButton as HTMLElement);
+		saveButton.closest("yt-lockup-view-model")!.querySelector("h3")!.style.paddingRight = "0";
+		saveButton.remove();
 	});
 }
 
@@ -60,7 +61,8 @@ export async function enableSaveToWatchLaterButton() {
 				icon: AiOutlineVideoCameraAdd,
 				onClick: async () => {
 					await youtube.playlist.addVideos("WL", [videoId]);
-					removeSaveToWatchLaterButton(saveButton);
+					saveButton.closest("yt-lockup-view-model")!.querySelector("h3")!.style.paddingRight = "0";
+					saveButton.style.display = "none";
 				},
 				translationError: `${TRANSLATION_KEY_PREFIX}.failedToSaveVideo`,
 				translationHover: `${TRANSLATION_KEY_PREFIX}.saveVideo`,
@@ -79,7 +81,11 @@ export async function enableSaveToWatchLaterButton() {
 		});
 	}
 
-	function observePlaylist() {
+	function observeVideos() {
+		if (videosObserver) {
+			return;
+		}
+
 		addButtonToVideoItems();
 		const container = document.querySelector(CONTAINER);
 		if (container) {
@@ -88,14 +94,5 @@ export async function enableSaveToWatchLaterButton() {
 		}
 	}
 
-	window.addEventListener("DOMContentLoaded", observePlaylist);
-	if (document.readyState === "complete" || document.readyState === "interactive") {
-		observePlaylist();
-	}
-}
-
-function removeSaveToWatchLaterButton(button: HTMLElement) {
-	const heading = button.closest("yt-lockup-view-model")!.querySelector("h3") as HTMLElement;
-	heading.style.paddingRight = "0";
-	button.style.display = "none";
+	observeVideos();
 }
