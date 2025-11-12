@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import checkLocalesForMissingKeys from "./src/utils/checkLocalesForMissingKeys";
 import { ENABLE_SOURCE_MAP } from "./src/utils/constants";
 import buildContentScript from "./src/utils/plugins/build-content-script";
+import bundleWorker from "./src/utils/plugins/bundle-worker";
 import copyBuild from "./src/utils/plugins/copy-build";
 import copyPublic from "./src/utils/plugins/copy-public";
 import makeManifest from "./src/utils/plugins/make-manifest";
@@ -35,6 +36,12 @@ export default function build() {
 					popup: resolve(pagesDir, "popup", "index.html")
 				},
 				output: {
+					assetFileNames: (chunk) => {
+						return `assets/${chunk.name}`;
+					},
+					chunkFileNames: (chunk) => {
+						return `assets/${chunk.name}.js`;
+					},
 					entryFileNames: (chunk) => {
 						return `src/pages/${chunk.name}/index.js`;
 					}
@@ -42,7 +49,7 @@ export default function build() {
 			},
 			sourcemap: ENABLE_SOURCE_MAP
 		},
-		plugins: [replaceDevModeConst(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
+		plugins: [replaceDevModeConst(), bundleWorker(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		resolve: {
 			alias: {
 				"@/assets": assetsDir,
