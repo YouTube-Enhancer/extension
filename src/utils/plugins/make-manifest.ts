@@ -4,11 +4,9 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 import { manifestV2, manifestV3 } from "../../manifest";
-import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-import { browsers } from "./utils";
+import { browsers, outDir } from "./utils";
 
-const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 export default function makeManifest(): PluginOption {
 	return {
 		closeBundle() {

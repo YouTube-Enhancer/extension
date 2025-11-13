@@ -3,13 +3,9 @@ import type { PluginOption } from "vite";
 import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
-import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-import { browsers, copyDirectorySync } from "./utils";
+import { browsers, copyDirectorySync, outDir, publicDir } from "./utils";
 
-const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
-
-const publicDir = resolve(__dirname, "..", "..", "..", "public");
 export default function copyPublic(): PluginOption {
 	return {
 		closeBundle() {
