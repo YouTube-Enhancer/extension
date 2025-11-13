@@ -46,13 +46,20 @@ export default function build() {
 					entryFileNames: (chunk) => {
 						return `src/pages/${chunk.name}/index.js`;
 					}
+				},
+				treeshake: {
+					moduleSideEffects: false,
+					propertyReadSideEffects: false,
+					tryCatchDeoptimization: false
 				}
 			},
 			sourcemap: ENABLE_SOURCE_MAP
 		},
 		esbuild: {
 			keepNames: true,
-			minifyIdentifiers: false
+			minifyIdentifiers: false,
+			minifySyntax: false,
+			minifyWhitespace: true
 		},
 		plugins: [replaceDevModeConst(), bundleWorker(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		resolve: {
