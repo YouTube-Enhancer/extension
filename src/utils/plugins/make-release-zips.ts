@@ -5,11 +5,9 @@ import { createWriteStream, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
 import pkg from "../../../package.json";
-import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-import { browsers } from "./utils";
+import { browsers, outDir } from "./utils";
 
-const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
 const releaseDir = resolve(__dirname, "..", "..", "..", "releases");
 
 export default function makeReleaseZips(): PluginOption {

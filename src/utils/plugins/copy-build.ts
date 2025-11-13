@@ -3,11 +3,8 @@ import type { PluginOption } from "vite";
 import { rmSync } from "fs";
 import { resolve } from "path";
 
-import { outputFolderName } from "../constants";
 import terminalColorLog from "../log";
-import { browsers, copyDirectorySync } from "./utils";
-
-const outDir = resolve(__dirname, "..", "..", "..", outputFolderName);
+import { browsers, copyDirectorySync, outDir } from "./utils";
 export default function copyBuild(): PluginOption {
 	return {
 		closeBundle() {
