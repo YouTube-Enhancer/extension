@@ -27,6 +27,7 @@ export default function build() {
 	return defineConfig({
 		build: {
 			emptyOutDir: false,
+			minify: "esbuild",
 			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
@@ -48,6 +49,10 @@ export default function build() {
 				}
 			},
 			sourcemap: ENABLE_SOURCE_MAP
+		},
+		esbuild: {
+			keepNames: true,
+			minifyIdentifiers: false
 		},
 		plugins: [replaceDevModeConst(), bundleWorker(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		resolve: {
