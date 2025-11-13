@@ -48,9 +48,9 @@ export default function build() {
 					}
 				},
 				treeshake: {
-					moduleSideEffects: false,
-					propertyReadSideEffects: false,
-					tryCatchDeoptimization: false
+					moduleSideEffects: true,
+					propertyReadSideEffects: true,
+					tryCatchDeoptimization: true
 				}
 			},
 			sourcemap: ENABLE_SOURCE_MAP
