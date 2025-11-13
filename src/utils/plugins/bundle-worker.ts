@@ -5,6 +5,14 @@ import { basename } from "path";
 
 export default function vitePluginBundleWorker(): Plugin {
 	return {
+		apply: "build",
+		configResolved(config) {
+			// Remove the built-in Vite worker plugin in place (read-only array)
+			const plugins = config.plugins as Plugin[];
+			const index = plugins.findIndex((p) => p.name === "vite:worker");
+			if (index !== -1) plugins.splice(index, 1);
+		},
+		enforce: "pre",
 		name: "vite-plugin-bundle-worker",
 		transform(_code: string, id: string) {
 			// Only process files ending with '?worker'
