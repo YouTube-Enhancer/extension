@@ -14,9 +14,48 @@ const theaterModeButtonPathD: Record<"legacy" | "modern", string> = {
 let isProgrammaticClick = false;
 let listenersInitialized = false;
 
+let headerHoverTimeout: null | number = null;
+let headerVisible = false;
+const headerMouseMoveHandler = (e: MouseEvent) => {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
+	if (!header) return;
+	function showHeader() {
+		if (!headerVisible) {
+			header?.classList.add("yte-header-visible");
+			headerVisible = true;
+		}
+	}
+	function hideHeader() {
+		if (headerVisible) {
+			header?.classList.remove("yte-header-visible");
+			headerVisible = false;
+		}
+	}
+	if (!header) return;
+	const { height: headerHeight } = header.getBoundingClientRect();
+	if (e.clientY <= headerHeight) {
+		if (!headerHoverTimeout) {
+			headerHoverTimeout = window.setTimeout(() => {
+				showHeader();
+				headerHoverTimeout = null;
+			}, 300);
+		}
+	} else {
+		if (headerHoverTimeout) {
+			clearTimeout(headerHoverTimeout);
+			headerHoverTimeout = null;
+		}
+		hideHeader();
+	}
+};
+const handleResize = () => {
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+};
 export function maximizePlayer() {
 	const videoPlayer = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoPlayer) return;
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+	document.body.addEventListener("resize", handleResize);
 	const chromeBottom = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!chromeBottom) return;
 	const leftControls = chromeBottom.querySelector<HTMLDivElement>("div.ytp-left-controls");
@@ -29,9 +68,15 @@ export function maximizePlayer() {
 	const layoutType = getLayoutType();
 	const inTheaterMode =
 		document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
+	const header = document.querySelector("#masthead-container");
+	if (!header) return;
+	const { height: headerHeight } = header.getBoundingClientRect();
+	document.body.style.setProperty("--yte-header-height", `${headerHeight}px`);
 	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
 	if (!inTheaterMode && sizeElement) clickAndRestore(sizeElement);
 	adjustPlayer("add");
+	document.addEventListener("mousemove", headerMouseMoveHandler);
+	updateColumnsOffset();
 	if (!listenersInitialized) {
 		listenersInitialized = true;
 		[pipElement, sizeElement, miniPlayerElement].forEach((element) => {
@@ -68,12 +113,14 @@ export function minimizePlayer() {
 	if (lastState === "default" && sizeElement) clickAndRestore(sizeElement);
 	document.body.removeAttribute("yte-size-button-state");
 	adjustPlayer("remove");
+	document.body.removeEventListener("resize", handleResize);
+	document.body.style.setProperty("--yte-columns-offset", "0px");
 }
 
 function adjustPlayer(action: ModifyElementAction) {
 	switch (action) {
 		case "add":
-			document.body.style.overflow = "hidden";
+			document.body.style.overflow = "";
 			document.body.setAttribute("yte-maximized", "");
 			break;
 		case "remove":
@@ -120,4 +167,13 @@ function clickAndRestore(sizeElement: HTMLButtonElement) {
 		newButton.setAttribute("data-tooltip-title", original.tooltipTitle);
 		isProgrammaticClick = false;
 	}, 50);
+}
+function updateColumnsOffset() {
+	const videoContainer = document.querySelector<HTMLDivElement>(".yte-maximized-video-container");
+	const columns = document.querySelector<HTMLDivElement>("#columns");
+	if (!videoContainer || !columns) return;
+	const videoRect = videoContainer.getBoundingClientRect();
+	const columnsRect = columns.getBoundingClientRect();
+	const overlap = Math.max(videoRect.bottom - columnsRect.top, 0);
+	document.body.style.setProperty("--yte-columns-offset", `${overlap}px`);
 }
