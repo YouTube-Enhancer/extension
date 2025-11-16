@@ -32,6 +32,14 @@ const headerMouseMoveHandler = (e: MouseEvent) => {
 		}
 	}
 	if (!header) return;
+	const navigateStartHandler = () => {
+		showHeader();
+		if (headerHoverTimeout) clearTimeout(headerHoverTimeout);
+		document.removeEventListener("mousemove", headerMouseMoveHandler);
+		document.removeEventListener("yt-navigate-start", navigateStartHandler);
+		minimizePlayer();
+	};
+	document.addEventListener("yt-navigate-start", navigateStartHandler);
 	const { height: headerHeight } = header.getBoundingClientRect();
 	if (e.clientY <= headerHeight) {
 		if (!headerHoverTimeout) {
@@ -49,13 +57,17 @@ const headerMouseMoveHandler = (e: MouseEvent) => {
 	}
 };
 const handleResize = () => {
-	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+	const header = document.querySelector("#masthead-container");
+	if (!header) return;
+	const { height: headerHeight } = header.getBoundingClientRect();
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight + headerHeight}px`);
+	setTimeout(() => {
+		updateColumnsOffset();
+	}, 100);
 };
 export function maximizePlayer() {
 	const videoPlayer = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoPlayer) return;
-	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
-	document.body.addEventListener("resize", handleResize);
 	const chromeBottom = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	if (!chromeBottom) return;
 	const leftControls = chromeBottom.querySelector<HTMLDivElement>("div.ytp-left-controls");
@@ -70,13 +82,17 @@ export function maximizePlayer() {
 		document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
 	const header = document.querySelector("#masthead-container");
 	if (!header) return;
+	if (!inTheaterMode) clickAndRestore(sizeElement);
+	adjustPlayer("add");
 	const { height: headerHeight } = header.getBoundingClientRect();
 	document.body.style.setProperty("--yte-header-height", `${headerHeight}px`);
 	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
-	if (!inTheaterMode && sizeElement) clickAndRestore(sizeElement);
-	adjustPlayer("add");
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight + headerHeight}px`);
+	document.body.addEventListener("resize", handleResize, { passive: true });
 	document.addEventListener("mousemove", headerMouseMoveHandler);
-	updateColumnsOffset();
+	setTimeout(() => {
+		updateColumnsOffset();
+	}, 100);
 	if (!listenersInitialized) {
 		listenersInitialized = true;
 		[pipElement, sizeElement, miniPlayerElement].forEach((element) => {
@@ -87,19 +103,14 @@ export function maximizePlayer() {
 				async () => {
 					if (isProgrammaticClick) return;
 					minimizePlayer();
-					const maximizePlayerButton = getFeatureButton("maximizePlayerButton");
-					if (!maximizePlayerButton) return;
-					maximizePlayerButton.ariaChecked = "false";
 					const button = getFeatureButton("maximizePlayerButton");
+					if (!button || !(button instanceof HTMLButtonElement)) return;
+					button.ariaChecked = "false";
 					const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-					if (button && button instanceof HTMLButtonElement) {
-						if (typeof icon === "object" && "off" in icon && "on" in icon)
-							updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
-						updateFeatureButtonTitle(
-							"maximizePlayerButton",
-							window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off")
-						);
+					if (icon && typeof icon === "object" && "off" in icon) {
+						updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
 					}
+					updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
 				},
 				"maximizePlayerButton"
 			);
@@ -114,7 +125,9 @@ export function minimizePlayer() {
 	document.body.removeAttribute("yte-size-button-state");
 	adjustPlayer("remove");
 	document.body.removeEventListener("resize", handleResize);
-	document.body.style.setProperty("--yte-columns-offset", "0px");
+	document.body.style.removeProperty("--yte-columns-offset");
+	document.body.style.removeProperty("--yte-header-height");
+	document.body.style.removeProperty("--yte-video-height");
 }
 
 function adjustPlayer(action: ModifyElementAction) {
