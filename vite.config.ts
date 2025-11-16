@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react-swc";
 import { config } from "dotenv";
-import { resolve } from "path";
+import path, { resolve } from "path";
 import { defineConfig } from "vite";
 
 import checkLocalesForMissingKeys from "./src/utils/checkLocalesForMissingKeys";
@@ -45,10 +45,34 @@ export default function build() {
 					},
 					entryFileNames: (chunk) => {
 						return `src/pages/${chunk.name}/index.js`;
+					},
+					manualChunks: (id) => {
+						if (id.includes("node_modules/monaco-editor")) {
+							const parts = id.split(path.posix.sep || path.sep);
+							const vsIndex = parts.findIndex((part) => part === "vs");
+							if (vsIndex >= 0 && parts.length > vsIndex + 1) {
+								const { [vsIndex + 2]: folder } = parts;
+								switch (folder) {
+									case "browser":
+										return "monaco-editor-browser";
+									case "common":
+										return "monaco-editor-common";
+									case "contrib":
+										return "monaco-editor-contrib";
+									case "standalone":
+										return "monaco-editor-standalone";
+									default:
+										return "monaco-editor-other";
+								}
+							}
+							return "monaco-editor-other";
+						}
+						if (id.includes("node_modules")) return "vendor";
 					}
 				},
 				treeshake: {
 					moduleSideEffects: true,
+					preset: "smallest",
 					propertyReadSideEffects: true,
 					tryCatchDeoptimization: true
 				}
