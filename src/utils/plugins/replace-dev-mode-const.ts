@@ -6,7 +6,7 @@ export default function replaceDevModeConst(): PluginOption {
 		name: "replace-dev-mode-const",
 		transform(code, id) {
 			if (id.includes("constants.ts")) {
-				terminalColorLog(`Replacing DEV_MODE constant`);
+				terminalColorLog(`Replacing DEV_MODE constant`, "success");
 				const replacedConstantCode = code.replace(
 					/export const DEV_MODE = process.env.__DEV__ === "true";/g,
 					`export const DEV_MODE = ${process.env.__DEV__ === "true"};`

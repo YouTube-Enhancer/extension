@@ -21,6 +21,21 @@ export const hooksDir = resolve(srcDir, "hooks");
 export const i18nDir = resolve(srcDir, "i18n");
 
 export const browsers = GetInstalledBrowsers();
+if (browsers.length === 0) {
+	// If no browsers are installed, add Chrome and Firefox
+	browsers.push(
+		{
+			name: "Chrome",
+			path: "",
+			type: "chrome"
+		},
+		{
+			name: "Firefox",
+			path: "",
+			type: "firefox"
+		}
+	);
+}
 export function copyDirectorySync(sourceDir: string, targetDir: string) {
 	// Create the target directory if it doesn't exist
 	if (!existsSync(targetDir)) {

@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import checkLocalesForMissingKeys from "./src/utils/checkLocalesForMissingKeys";
 import { ENABLE_SOURCE_MAP } from "./src/utils/constants";
 import buildContentScript from "./src/utils/plugins/build-content-script";
+import bundleWorker from "./src/utils/plugins/bundle-worker";
 import copyBuild from "./src/utils/plugins/copy-build";
 import copyPublic from "./src/utils/plugins/copy-public";
 import makeManifest from "./src/utils/plugins/make-manifest";
@@ -26,6 +27,7 @@ export default function build() {
 	return defineConfig({
 		build: {
 			emptyOutDir: false,
+			minify: "esbuild",
 			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
@@ -35,14 +37,32 @@ export default function build() {
 					popup: resolve(pagesDir, "popup", "index.html")
 				},
 				output: {
-					entryFileNames: (chunk) => {
-						return `src/pages/${chunk.name}/index.js`;
+					assetFileNames: (chunk) => `src/${chunk.name}`,
+					chunkFileNames: (chunk) => `src/${chunk.name}.js`,
+					entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
+					manualChunks: (id) => {
+						if (id.includes("node_modules")) {
+							const [module] = id.split("node_modules/")[1].split("/");
+							return `vendor/${module.split("/")[0]}`;
+						}
 					}
+				},
+				treeshake: {
+					moduleSideEffects: true,
+					preset: "smallest",
+					propertyReadSideEffects: true,
+					tryCatchDeoptimization: true
 				}
 			},
 			sourcemap: ENABLE_SOURCE_MAP
 		},
-		plugins: [replaceDevModeConst(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
+		esbuild: {
+			keepNames: true,
+			minifyIdentifiers: true,
+			minifySyntax: true,
+			minifyWhitespace: true
+		},
+		plugins: [replaceDevModeConst(), bundleWorker(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
 		resolve: {
 			alias: {
 				"@/assets": assetsDir,

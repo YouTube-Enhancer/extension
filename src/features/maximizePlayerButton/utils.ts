@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/types";
 
 import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
@@ -14,6 +14,77 @@ const theaterModeButtonPathD: Record<"legacy" | "modern", string> = {
 let isProgrammaticClick = false;
 let listenersInitialized = false;
 
+let headerHoverTimeout: null | number = null;
+let headerVisible = false;
+async function changeMaximizeButtonToOff() {
+	const button = getFeatureButton("maximizePlayerButton");
+	if (!button || !(button instanceof HTMLButtonElement)) return;
+	button.ariaChecked = "false";
+	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
+	if (icon && typeof icon === "object" && "off" in icon) {
+		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
+	}
+	updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
+}
+function hideHeader() {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
+	if (!header) return;
+	if (headerVisible) {
+		header.classList.remove("yte-header-visible");
+		headerVisible = false;
+	}
+}
+function resetFeatureState() {
+	isProgrammaticClick = false;
+	listenersInitialized = false;
+	if (headerHoverTimeout) {
+		clearTimeout(headerHoverTimeout);
+		headerHoverTimeout = null;
+	}
+	headerVisible = false;
+}
+function showHeader() {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
+	if (!header) return;
+	if (!headerVisible) {
+		header.classList.add("yte-header-visible");
+		headerVisible = true;
+	}
+}
+const navigateStartHandler = (e: CustomEvent<YouTubeNavigateStart>) => {
+	if (e.detail.pageType !== "watch") {
+		showHeader();
+		if (headerHoverTimeout) clearTimeout(headerHoverTimeout);
+		document.removeEventListener("mousemove", headerMouseMoveHandler);
+		document.removeEventListener("yt-navigate-start", navigateStartHandler);
+		window.removeEventListener("resize", handleResize);
+		minimizePlayer();
+		resetFeatureState();
+		void changeMaximizeButtonToOff();
+	}
+};
+const headerMouseMoveHandler = (e: MouseEvent) => {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
+	if (!header) return;
+	const { height: headerHeight } = header.getBoundingClientRect();
+	if (e.clientY <= headerHeight) {
+		if (!headerHoverTimeout) {
+			headerHoverTimeout = window.setTimeout(() => {
+				showHeader();
+				headerHoverTimeout = null;
+			}, 300);
+		}
+	} else {
+		if (headerHoverTimeout) {
+			clearTimeout(headerHoverTimeout);
+			headerHoverTimeout = null;
+		}
+		hideHeader();
+	}
+};
+const handleResize = () => {
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+};
 export function maximizePlayer() {
 	const videoPlayer = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoPlayer) return;
@@ -29,9 +100,17 @@ export function maximizePlayer() {
 	const layoutType = getLayoutType();
 	const inTheaterMode =
 		document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
-	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
-	if (!inTheaterMode && sizeElement) clickAndRestore(sizeElement);
+	const header = document.querySelector("#masthead-container");
+	if (!header) return;
+	if (!inTheaterMode) clickAndRestore(sizeElement);
 	adjustPlayer("add");
+	const { height: headerHeight } = header.getBoundingClientRect();
+	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
+	document.body.style.setProperty("--yte-header-height", `${headerHeight}px`);
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+	window.addEventListener("resize", handleResize);
+	document.addEventListener("mousemove", headerMouseMoveHandler);
+	document.addEventListener("yt-navigate-start", navigateStartHandler);
 	if (!listenersInitialized) {
 		listenersInitialized = true;
 		[pipElement, sizeElement, miniPlayerElement].forEach((element) => {
@@ -42,19 +121,7 @@ export function maximizePlayer() {
 				async () => {
 					if (isProgrammaticClick) return;
 					minimizePlayer();
-					const maximizePlayerButton = getFeatureButton("maximizePlayerButton");
-					if (!maximizePlayerButton) return;
-					maximizePlayerButton.ariaChecked = "false";
-					const button = getFeatureButton("maximizePlayerButton");
-					const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-					if (button && button instanceof HTMLButtonElement) {
-						if (typeof icon === "object" && "off" in icon && "on" in icon)
-							updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
-						updateFeatureButtonTitle(
-							"maximizePlayerButton",
-							window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off")
-						);
-					}
+					await changeMaximizeButtonToOff();
 				},
 				"maximizePlayerButton"
 			);
@@ -66,14 +133,19 @@ export function minimizePlayer() {
 	const lastState = document.body.getAttribute("yte-size-button-state");
 	const sizeElement = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) clickAndRestore(sizeElement);
-	document.body.removeAttribute("yte-size-button-state");
 	adjustPlayer("remove");
+	document.body.removeAttribute("yte-size-button-state");
+	document.body.style.removeProperty("--yte-header-height");
+	document.body.style.removeProperty("--yte-video-height");
+	window.removeEventListener("resize", handleResize);
+	document.removeEventListener("mousemove", headerMouseMoveHandler);
+	document.removeEventListener("yt-navigate-start", navigateStartHandler);
 }
 
 function adjustPlayer(action: ModifyElementAction) {
 	switch (action) {
 		case "add":
-			document.body.style.overflow = "hidden";
+			document.body.style.overflow = "";
 			document.body.setAttribute("yte-maximized", "");
 			break;
 		case "remove":

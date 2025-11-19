@@ -4,7 +4,8 @@ import { resolve } from "path";
 import { build } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
-import { ENABLE_SOURCE_MAP, outputFolderName } from "../constants";
+import { ENABLE_SOURCE_MAP } from "../constants";
+import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "./utils";
 const packages: { [entryAlias: string]: string }[] = [
 	{
 		content: resolve(__dirname, "../../../", "src/pages/content/index.ts")
@@ -13,14 +14,6 @@ const packages: { [entryAlias: string]: string }[] = [
 		embedded: resolve(__dirname, "../../../", "src/pages/embedded/index.ts")
 	}
 ];
-const root = resolve("src");
-const pagesDir = resolve(root, "pages");
-const assetsDir = resolve(root, "assets");
-const componentsDir = resolve(root, "components");
-const utilsDir = resolve(root, "utils");
-const hooksDir = resolve(root, "hooks");
-
-const outDir = resolve(__dirname, "../../../", outputFolderName);
 export default function buildContentScript(): PluginOption {
 	return {
 		async buildEnd() {
@@ -48,7 +41,7 @@ export default function buildContentScript(): PluginOption {
 							"@/components": componentsDir,
 							"@/hooks": hooksDir,
 							"@/pages": pagesDir,
-							"@/src": root,
+							"@/src": srcDir,
 							"@/utils": utilsDir
 						}
 					}

@@ -3,7 +3,7 @@ import { FaTrash } from "react-icons/fa6";
 import { Innertube } from "youtubei.js/web";
 
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
-import { isPlaylistPage, waitForSpecificMessage } from "@/src/utils/utilities";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
 
@@ -45,9 +45,15 @@ export async function enablePlaylistManagementButtons() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_playlist_management_buttons || !isPlaylistPage() || getPlaylistId() === "LL") {
+	if (!enable_playlist_management_buttons || !document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")) {
 		return;
 	}
+
+	document.addEventListener("yt-action", async (event) => {
+		if ((event as CustomEvent).detail.actionName === "yt-prepare-page-dispose") {
+			await disablePlaylistManagementButtons();
+		}
+	});
 
 	const youtube = await Innertube.create({
 		cookie: document.cookie,
@@ -61,18 +67,16 @@ export async function enablePlaylistManagementButtons() {
 				return;
 			}
 
-			const playlistId = getPlaylistId()!;
-			const {
-				data: { setVideoId },
-				playlistVideoId: videoId
-			} = item as YTDPlaylistVideoRenderer;
-
 			const removeButton = createActionButton({
 				className: "yte-remove-button yte-action-button-large",
 				featureName: "playlistManagementButtons",
 				icon: FaTrash,
 				iconColor: "red",
 				onClick: async () => {
+					const playlistId = getPlaylistId()!;
+					const {
+						data: { setVideoId }
+					} = item as YTDPlaylistVideoRenderer;
 					await removeFromPlaylist(youtube, playlistId, setVideoId);
 				},
 				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
@@ -87,6 +91,7 @@ export async function enablePlaylistManagementButtons() {
 				icon: FaUndoAlt,
 				iconColor: "gray",
 				onClick: async () => {
+					const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 					const history = await youtube.getHistory();
 					await history.removeVideo(videoId, 5);
 					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
@@ -110,6 +115,10 @@ export async function enablePlaylistManagementButtons() {
 	}
 
 	function observePlaylist() {
+		if (playlistObserver) {
+			return;
+		}
+
 		addButtonToPlaylistItems();
 		const container = document.querySelector("ytd-playlist-video-list-renderer");
 		if (container) {
@@ -118,10 +127,7 @@ export async function enablePlaylistManagementButtons() {
 		}
 	}
 
-	window.addEventListener("DOMContentLoaded", observePlaylist);
-	if (document.readyState === "complete" || document.readyState === "interactive") {
-		observePlaylist();
-	}
+	observePlaylist();
 }
 
 async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
@@ -157,7 +163,7 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 			})
 		);
 	}
-	
+
 	if (response?.data?.newHeader?.playlistHeaderRenderer) {
 		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
 			new CustomEvent("yt-new-playlist-header", {
