@@ -1,3 +1,25 @@
+## [1.30.1](https://github.com/YouTube-Enhancer/extension/compare/v1.30.0...v1.30.1) (2025-11-19)
+
+
+### Bug Fixes
+
+* Disable vite build hashes ([590eca4](https://github.com/YouTube-Enhancer/extension/commit/590eca4e64519cd0a4ae057bb3b2a02d182d1287))
+* **maximize player:** elements under player were overlapped by the player ([7446ea7](https://github.com/YouTube-Enhancer/extension/commit/7446ea7bb20c88ff47bde7c9e8569dfad4f14b40))
+* **maximize player:** fix columns being under player ([466ebd1](https://github.com/YouTube-Enhancer/extension/commit/466ebd1b09668492da2bc84d3b28dea5a06d544e))
+* **maximize player:** Unable to scroll + allow user to access the top bar when maximized [#1070](https://github.com/YouTube-Enhancer/extension/issues/1070) ([a8d4d99](https://github.com/YouTube-Enhancer/extension/commit/a8d4d993ce0a6a60494273d711bd7b1aa3c9ac95))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.30.1-Chrome.zip | 0569eedb1c59ed5a963189aa6fd3ad10fd1ddf6cbfe910c956dffd9220c9c244 |
+| youtube-enhancer-v1.30.1-Chromium.zip | 0569eedb1c59ed5a963189aa6fd3ad10fd1ddf6cbfe910c956dffd9220c9c244 |
+| youtube-enhancer-v1.30.1-Edge.zip | 0569eedb1c59ed5a963189aa6fd3ad10fd1ddf6cbfe910c956dffd9220c9c244 |
+| youtube-enhancer-v1.30.1-Firefox.zip | 959a1ee3a96b776d36192a247cae68d9b1e48b1732cf93aaae9d0b4509ae0f26 |
+
 # [1.30.0](https://github.com/YouTube-Enhancer/extension/compare/v1.29.0...v1.30.0) (2025-11-06)
 
 
