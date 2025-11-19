@@ -1,10 +1,17 @@
 .yte-maximized-video {
 	width: 100vw !important;
-	height: var(--yte-video-height) !important;
+	height: auto !important;
+	max-height: 100vh !important;
 	left: 0 !important;
 	top: 0 !important;
 	object-fit: contain !important;
-	background: black !important;
+	transform: translateY(var(--yte-header-height)) !important;
+	position: relative !important;
+}
+
+body[yte-maximized] div.html5-video-container {
+	height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
+	display: flex !important;
 }
 
 .yte-maximized-video-container {
@@ -12,8 +19,9 @@
 	top: 0 !important;
 	left: 0 !important;
 	width: 100vw !important;
-	height: var(--yte-video-height) !important;
+	height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
 	z-index: 2020 !important;
+	background: black !important;
 	margin-top: calc(-1 * var(--yte-header-height)) !important;
 }
 
@@ -23,12 +31,12 @@
 
 body[yte-maximized] #full-bleed-container {
 	margin-top: calc(-1 * var(--yte-header-height)) !important;
-	height: var(--yte-video-height) !important;
+	height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
+	max-height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
 }
 
 body[yte-maximized] #columns {
-	margin-top: var(--yte-columns-offset) !important;
-	transition: margin-top 0.1s ease;
+	margin-top: calc(-1 * var(--yte-header-height)) !important;
 }
 
 body[yte-maximized] #masthead-container {
