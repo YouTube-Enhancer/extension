@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react-swc";
 import { config } from "dotenv";
-import path, { resolve } from "path";
+import { resolve } from "path";
 import { defineConfig } from "vite";
 
 import checkLocalesForMissingKeys from "./src/utils/checkLocalesForMissingKeys";
@@ -37,37 +37,14 @@ export default function build() {
 					popup: resolve(pagesDir, "popup", "index.html")
 				},
 				output: {
-					assetFileNames: (chunk) => {
-						return `assets/${chunk.name}`;
-					},
-					chunkFileNames: (chunk) => {
-						return `assets/${chunk.name}.js`;
-					},
-					entryFileNames: (chunk) => {
-						return `src/pages/${chunk.name}/index.js`;
-					},
+					assetFileNames: (chunk) => `src/${chunk.name}`,
+					chunkFileNames: (chunk) => `src/${chunk.name}.js`,
+					entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
 					manualChunks: (id) => {
-						if (id.includes("node_modules/monaco-editor")) {
-							const parts = id.split(path.posix.sep || path.sep);
-							const vsIndex = parts.findIndex((part) => part === "vs");
-							if (vsIndex >= 0 && parts.length > vsIndex + 1) {
-								const { [vsIndex + 2]: folder } = parts;
-								switch (folder) {
-									case "browser":
-										return "monaco-editor-browser";
-									case "common":
-										return "monaco-editor-common";
-									case "contrib":
-										return "monaco-editor-contrib";
-									case "standalone":
-										return "monaco-editor-standalone";
-									default:
-										return "monaco-editor-other";
-								}
-							}
-							return "monaco-editor-other";
+						if (id.includes("node_modules")) {
+							const [module] = id.split("node_modules/")[1].split("/");
+							return `vendor/${module.split("/")[0]}`;
 						}
-						if (id.includes("node_modules")) return "vendor";
 					}
 				},
 				treeshake: {
@@ -81,8 +58,8 @@ export default function build() {
 		},
 		esbuild: {
 			keepNames: true,
-			minifyIdentifiers: false,
-			minifySyntax: false,
+			minifyIdentifiers: true,
+			minifySyntax: true,
 			minifyWhitespace: true
 		},
 		plugins: [replaceDevModeConst(), bundleWorker(), react(), makeManifest(), buildContentScript(), copyPublic(), copyBuild(), makeReleaseZips()],
