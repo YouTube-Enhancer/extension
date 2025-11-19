@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/types";
 
 import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
@@ -16,30 +16,56 @@ let listenersInitialized = false;
 
 let headerHoverTimeout: null | number = null;
 let headerVisible = false;
-const headerMouseMoveHandler = (e: MouseEvent) => {
+async function changeMaximizeButtonToOff() {
+	const button = getFeatureButton("maximizePlayerButton");
+	if (!button || !(button instanceof HTMLButtonElement)) return;
+	button.ariaChecked = "false";
+	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
+	if (icon && typeof icon === "object" && "off" in icon) {
+		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
+	}
+	updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
+}
+function hideHeader() {
 	const header = document.querySelector<HTMLElement>("#masthead-container");
 	if (!header) return;
-	function showHeader() {
-		if (!headerVisible) {
-			header?.classList.add("yte-header-visible");
-			headerVisible = true;
-		}
+	if (headerVisible) {
+		header.classList.remove("yte-header-visible");
+		headerVisible = false;
 	}
-	function hideHeader() {
-		if (headerVisible) {
-			header?.classList.remove("yte-header-visible");
-			headerVisible = false;
-		}
+}
+function resetFeatureState() {
+	isProgrammaticClick = false;
+	listenersInitialized = false;
+	if (headerHoverTimeout) {
+		clearTimeout(headerHoverTimeout);
+		headerHoverTimeout = null;
 	}
+	headerVisible = false;
+}
+function showHeader() {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
 	if (!header) return;
-	const navigateStartHandler = () => {
+	if (!headerVisible) {
+		header.classList.add("yte-header-visible");
+		headerVisible = true;
+	}
+}
+const navigateStartHandler = (e: CustomEvent<YouTubeNavigateStart>) => {
+	if (e.detail.pageType !== "watch") {
 		showHeader();
 		if (headerHoverTimeout) clearTimeout(headerHoverTimeout);
 		document.removeEventListener("mousemove", headerMouseMoveHandler);
 		document.removeEventListener("yt-navigate-start", navigateStartHandler);
+		window.removeEventListener("resize", handleResize);
 		minimizePlayer();
-	};
-	document.addEventListener("yt-navigate-start", navigateStartHandler);
+		resetFeatureState();
+		void changeMaximizeButtonToOff();
+	}
+};
+const headerMouseMoveHandler = (e: MouseEvent) => {
+	const header = document.querySelector<HTMLElement>("#masthead-container");
+	if (!header) return;
 	const { height: headerHeight } = header.getBoundingClientRect();
 	if (e.clientY <= headerHeight) {
 		if (!headerHoverTimeout) {
@@ -57,13 +83,7 @@ const headerMouseMoveHandler = (e: MouseEvent) => {
 	}
 };
 const handleResize = () => {
-	const header = document.querySelector("#masthead-container");
-	if (!header) return;
-	const { height: headerHeight } = header.getBoundingClientRect();
-	document.body.style.setProperty("--yte-video-height", `${window.innerHeight + headerHeight}px`);
-	setTimeout(() => {
-		updateColumnsOffset();
-	}, 100);
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
 };
 export function maximizePlayer() {
 	const videoPlayer = document.querySelector<HTMLVideoElement>("video.html5-main-video");
@@ -85,14 +105,12 @@ export function maximizePlayer() {
 	if (!inTheaterMode) clickAndRestore(sizeElement);
 	adjustPlayer("add");
 	const { height: headerHeight } = header.getBoundingClientRect();
-	document.body.style.setProperty("--yte-header-height", `${headerHeight}px`);
 	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
-	document.body.style.setProperty("--yte-video-height", `${window.innerHeight + headerHeight}px`);
-	document.body.addEventListener("resize", handleResize, { passive: true });
+	document.body.style.setProperty("--yte-header-height", `${headerHeight}px`);
+	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
+	window.addEventListener("resize", handleResize);
 	document.addEventListener("mousemove", headerMouseMoveHandler);
-	setTimeout(() => {
-		updateColumnsOffset();
-	}, 100);
+	document.addEventListener("yt-navigate-start", navigateStartHandler);
 	if (!listenersInitialized) {
 		listenersInitialized = true;
 		[pipElement, sizeElement, miniPlayerElement].forEach((element) => {
@@ -103,14 +121,7 @@ export function maximizePlayer() {
 				async () => {
 					if (isProgrammaticClick) return;
 					minimizePlayer();
-					const button = getFeatureButton("maximizePlayerButton");
-					if (!button || !(button instanceof HTMLButtonElement)) return;
-					button.ariaChecked = "false";
-					const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-					if (icon && typeof icon === "object" && "off" in icon) {
-						updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
-					}
-					updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
+					await changeMaximizeButtonToOff();
 				},
 				"maximizePlayerButton"
 			);
@@ -122,12 +133,13 @@ export function minimizePlayer() {
 	const lastState = document.body.getAttribute("yte-size-button-state");
 	const sizeElement = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) clickAndRestore(sizeElement);
-	document.body.removeAttribute("yte-size-button-state");
 	adjustPlayer("remove");
-	document.body.removeEventListener("resize", handleResize);
-	document.body.style.removeProperty("--yte-columns-offset");
+	document.body.removeAttribute("yte-size-button-state");
 	document.body.style.removeProperty("--yte-header-height");
 	document.body.style.removeProperty("--yte-video-height");
+	window.removeEventListener("resize", handleResize);
+	document.removeEventListener("mousemove", headerMouseMoveHandler);
+	document.removeEventListener("yt-navigate-start", navigateStartHandler);
 }
 
 function adjustPlayer(action: ModifyElementAction) {
@@ -180,13 +192,4 @@ function clickAndRestore(sizeElement: HTMLButtonElement) {
 		newButton.setAttribute("data-tooltip-title", original.tooltipTitle);
 		isProgrammaticClick = false;
 	}, 50);
-}
-function updateColumnsOffset() {
-	const videoContainer = document.querySelector<HTMLDivElement>(".yte-maximized-video-container");
-	const columns = document.querySelector<HTMLDivElement>("#columns");
-	if (!videoContainer || !columns) return;
-	const videoRect = videoContainer.getBoundingClientRect();
-	const columnsRect = columns.getBoundingClientRect();
-	const overlap = Math.max(videoRect.bottom - columnsRect.top, 0);
-	document.body.style.setProperty("--yte-columns-offset", `${overlap}px`);
 }

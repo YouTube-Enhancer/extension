@@ -537,6 +537,10 @@ export type VideoHistoryEntry = {
 };
 export type VideoHistoryStatus = "watched" | "watching";
 export type VideoHistoryStorage = Record<string, VideoHistoryEntry>;
+export type YouTubeNavigateStart = {
+	pageType: string;
+	url: string;
+};
 export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
 export type YouTubePlaylistItem = {
 	contentDetails: {

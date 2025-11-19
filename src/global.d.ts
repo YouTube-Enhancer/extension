@@ -1,6 +1,7 @@
 import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
 
 import type { i18nInstanceType } from "./i18n";
+import type { YouTubeNavigateStart } from "./types";
 
 declare module "*.svg" {
 	import React from "react";
@@ -99,6 +100,9 @@ declare module "node_modules/@types/webextension-polyfill/namespaces/manifest.d.
 	}
 }
 declare global {
+	interface DocumentEventMap {
+		"yt-navigate-start": CustomEvent<YouTubeNavigateStart>;
+	}
 	interface ObjectConstructor {
 		entries<T>(o: { [K in keyof T]: T[K] }): [keyof T, T[keyof T]][];
 		keys<T>(o: T): (keyof T)[];
