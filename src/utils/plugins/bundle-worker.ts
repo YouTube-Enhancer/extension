@@ -34,7 +34,7 @@ export default function vitePluginBundleWorker(): Plugin {
 			} = result;
 
 			// Emit the bundled worker as an asset in the "assets/" folder
-			const fileName = `assets/${basename(workerPath)}`;
+			const fileName = `src/vendor/${basename(workerPath)}`;
 			const url = this.emitFile({
 				fileName,
 				source: bundledCode,
