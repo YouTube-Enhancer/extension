@@ -219,9 +219,13 @@ interface EnUS {
 						label: "Default to original audio track";
 						title: "Always default to the original audio track";
 					};
-					enablePlaylistManagementButtons: {
-						label: "Enable playlist management buttons";
-						title: "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched";
+					enableMarkAsUnwatchedButton: {
+						label: "Mark as unwatched button";
+						title: "Add a button to playlist items to mark videos as unwatched";
+					};
+					enableRemoveVideoButton: {
+						label: "Remove video button";
+						title: "Add a button to playlist items to remove videos from the playlist";
 					};
 					enableSaveToWatchLaterButton: {
 						label: "Enable save to Watch Later button";

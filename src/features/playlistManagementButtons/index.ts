@@ -22,6 +22,7 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 
 const PLAYLIST_ITEM_SELECTOR =
 	"ytd-playlist-video-list-renderer ytd-playlist-panel-video-renderer, ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
+const THUMBAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 const TRANSLATION_KEY_PREFIX = "settings.sections.playlistManagementButtons";
 
 let playlistObserver: MutationObserver | null = null;
@@ -41,11 +42,14 @@ export async function disablePlaylistManagementButtons() {
 export async function enablePlaylistManagementButtons() {
 	const {
 		data: {
-			options: { enable_playlist_management_buttons }
+			options: { enable_playlist_remove_button, enable_playlist_reset_button }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_playlist_management_buttons || !document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")) {
+	if (
+		(!enable_playlist_remove_button && !enable_playlist_reset_button) ||
+		!document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")
+	) {
 		return;
 	}
 
@@ -63,54 +67,56 @@ export async function enablePlaylistManagementButtons() {
 	function addButtonToPlaylistItems() {
 		const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
 		playlistItems.forEach((item) => {
-			if (item.querySelector(".yte-remove-button") || item.querySelector(".yte-reset-button")) {
+			const menu = item.querySelector("#menu");
+			if (!menu) {
 				return;
 			}
 
-			const removeButton = createActionButton({
-				className: "yte-remove-button yte-action-button-large",
-				featureName: "playlistManagementButtons",
-				icon: FaTrash,
-				iconColor: "red",
-				onClick: async () => {
-					const playlistId = getPlaylistId()!;
-					const {
-						data: { setVideoId }
-					} = item as YTDPlaylistVideoRenderer;
-					await removeFromPlaylist(youtube, playlistId, setVideoId);
-				},
-				translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
-				translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
-				translationProcessing: `${TRANSLATION_KEY_PREFIX}.removingVideo`
-			});
-			removeButton.style.verticalAlign = "top";
-
-			const resetButton = createActionButton({
-				className: "yte-reset-button yte-action-button-large",
-				featureName: "playlistManagementButtons",
-				icon: FaUndoAlt,
-				iconColor: "gray",
-				onClick: async () => {
-					const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
-					const history = await youtube.getHistory();
-					await history.removeVideo(videoId, 5);
-					item.querySelector("#overlays ytd-thumbnail-overlay-resume-playback-renderer")?.remove();
-					resetButton.remove();
-				},
-				translationError: `${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`,
-				translationHover: `${TRANSLATION_KEY_PREFIX}.markAsUnwatched`,
-				translationProcessing: `${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`
-			});
-			resetButton.style.verticalAlign = "top";
-
-			const menu = item.querySelector("#menu");
-			if (menu) {
-				menu.prepend(removeButton);
-				menu.prepend(resetButton);
-				Array.from(menu.children).forEach((child) => {
-					(child as HTMLElement).style.display = "inline-flex";
+			if (enable_playlist_remove_button && !item.querySelector(".yte-remove-button")) {
+				const removeButton = createActionButton({
+					className: "yte-remove-button yte-action-button-large",
+					featureName: "playlistManagementButtons",
+					icon: FaTrash,
+					iconColor: "red",
+					onClick: async () => {
+						const playlistId = getPlaylistId()!;
+						const {
+							data: { setVideoId }
+						} = item as YTDPlaylistVideoRenderer;
+						await removeFromPlaylist(youtube, playlistId, setVideoId);
+					},
+					translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
+					translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
+					translationProcessing: `${TRANSLATION_KEY_PREFIX}.removingVideo`
 				});
+				removeButton.style.verticalAlign = "top";
+				menu.prepend(removeButton);
 			}
+
+			if (enable_playlist_reset_button && !item.querySelector(".yte-reset-button") && item.querySelector(THUMBAIL_OVERLAY_SELECTOR)) {
+				const resetButton = createActionButton({
+					className: "yte-reset-button yte-action-button-large",
+					featureName: "playlistManagementButtons",
+					icon: FaUndoAlt,
+					iconColor: "gray",
+					onClick: async () => {
+						const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
+						const history = await youtube.getHistory();
+						await history.removeVideo(videoId, 5);
+						item.querySelector(THUMBAIL_OVERLAY_SELECTOR)?.remove();
+						resetButton.remove();
+					},
+					translationError: `${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`,
+					translationHover: `${TRANSLATION_KEY_PREFIX}.markAsUnwatched`,
+					translationProcessing: `${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`
+				});
+				resetButton.style.verticalAlign = "top";
+				menu.prepend(resetButton);
+			}
+
+			Array.from(menu.children).forEach((child) => {
+				(child as HTMLElement).style.display = "inline-flex";
+			});
 		});
 	}
 
@@ -122,7 +128,13 @@ export async function enablePlaylistManagementButtons() {
 		addButtonToPlaylistItems();
 		const container = document.querySelector("ytd-playlist-video-list-renderer");
 		if (container) {
-			playlistObserver = new MutationObserver(addButtonToPlaylistItems);
+			let timeoutId: number;
+			playlistObserver = new MutationObserver(() => {
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
+				timeoutId = window.setTimeout(addButtonToPlaylistItems, 100);
+			});
 			playlistObserver.observe(container, { childList: true, subtree: true });
 		}
 	}
