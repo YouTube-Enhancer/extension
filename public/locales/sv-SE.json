@@ -309,9 +309,13 @@
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
 					},
-					"enablePlaylistManagementButtons": {
-						"label": "Aktivera knappar för hantering av spellistor",
-						"title": "Lägger till knappar i spellistobjekt för att ta bort videor från spellistan eller markera dem som ej sedda"
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Aktivera knappen spara för att titta på senare",
