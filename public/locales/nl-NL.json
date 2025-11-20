@@ -214,7 +214,7 @@
 					},
 					"title": "Plaats de {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Knop Plaatsing Instellingen"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Aangepaste CSS inschakelen",
 					"title": "Maakt het mogelijk aangepaste CSS toe te passen op de pagina"
 				},
-				"title": "Gepersonaliseerde CSS Instellingen"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Selecteer de positie voor de schermweergave"
 				},
-				"title": "Schermweergave Instellingen",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Type",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API sleutel",
 					"title": "Voer uw Youtube Data API V3 sleutel in."
 				},
-				"title": "YouTube API V3 Sleutel"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Auteur",
@@ -674,7 +674,7 @@
 					"label": "Select theme",
 					"title": "Select a theme to be applied to the page"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
