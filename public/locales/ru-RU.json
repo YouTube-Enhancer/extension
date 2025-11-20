@@ -214,7 +214,7 @@
 					},
 					"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Настройки размещения кнопок"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Включить пользовательский CSS",
 					"title": "Включает пользовательские настройки CSS для применения к странице"
 				},
-				"title": "Пользовательские настройки CSS"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Выберите позицию отображения на экране (OSD)"
 				},
-				"title": "Настройки отображения на экране (OSD)",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Тип",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API ключ",
 					"title": "Введите ваш ключ Youtube Data API V3."
 				},
-				"title": "Ключ YouTube API V3"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Автор",
@@ -674,7 +674,7 @@
 					"label": "Выбрать тему",
 					"title": "Выберите тему для применения к странице"
 				},
-				"title": "Настройки YouTube Deep Dark"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
