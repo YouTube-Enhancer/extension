@@ -214,7 +214,7 @@
 					},
 					"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
 				},
-				"title": "ボタン置き方設定"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "カスタムCSSを可能にする",
 					"title": "ページに適用するカスタムCSSを可能にする"
 				},
-				"title": "カスタムCSS設定"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
 				},
-				"title": "オンスクリーンディスプレイの設定",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "OSD型",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "APIキー",
 					"title": "YouTube API V3キーを入力してください。"
 				},
-				"title": "YouTube API V3キー"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
@@ -674,7 +674,7 @@
 					"label": "テーマを選択",
 					"title": "ページのテーマを選択選べしてください"
 				},
-				"title": "YouTubeディープダーク設定"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
