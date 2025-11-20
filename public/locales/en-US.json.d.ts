@@ -133,7 +133,7 @@ interface EnUS {
 					};
 					title: "Place the {{BUTTON_NAME}} {{PLACEMENT}}";
 				};
-				title: "Button Placement Settings";
+				title: "Button placement settings";
 			};
 			customCSS: {
 				editor: {
@@ -142,7 +142,7 @@ interface EnUS {
 					noProblems: "No problems found.";
 				};
 				enable: { label: "Custom CSS"; title: "Enables custom CSS to be applied to the page" };
-				title: "Custom CSS Settings";
+				title: "Custom CSS settings";
 			};
 			featureMenu: {
 				openType: {
@@ -346,7 +346,7 @@ interface EnUS {
 					};
 					title: "Select the position of the On-Screen Display";
 				};
-				title: "On-Screen Display Settings";
+				title: "On-screen display settings";
 				type: {
 					label: "Type";
 					options: { circle: "Circle"; line: "Line"; no_display: "No display"; text: "Text" };
@@ -477,7 +477,7 @@ interface EnUS {
 			youtubeDataApiV3Key: {
 				getApiKeyLinkText: "You can get one from here";
 				input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
-				title: "YouTube API V3 Key";
+				title: "YouTube API V3 key";
 			};
 			youtubeDeepDark: {
 				author: "Author";
@@ -493,7 +493,7 @@ interface EnUS {
 				};
 				enable: { label: "Deep Dark Theme"; title: "Activate the selected theme for the page" };
 				select: { label: "Select theme"; title: "Select a theme to be applied to the page" };
-				title: "YouTube Deep Dark Settings";
+				title: "YouTube deep dark settings";
 			};
 		};
 	};

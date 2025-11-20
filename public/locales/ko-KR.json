@@ -631,7 +631,7 @@
 					"label": "API Key",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "개발자",
