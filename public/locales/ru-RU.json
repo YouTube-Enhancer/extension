@@ -309,10 +309,6 @@
 						"label": "Выставлять оригинальную звуковую дорожку по умолчанию",
 						"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
 					},
-					"enablePlaylistManagementButtons": {
-						"label": "Enable playlist management buttons",
-						"title": "Adds buttons to playlist items to remove videos from the playlist or mark them as unwatched"
-					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
 						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"

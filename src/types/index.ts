@@ -267,7 +267,8 @@ export type configuration = {
 	enable_pausing_background_players: boolean;
 	enable_playback_speed_buttons: boolean;
 	enable_playlist_length: boolean;
-	enable_playlist_management_buttons: boolean;
+	enable_playlist_remove_button: boolean;
+	enable_playlist_reset_button: boolean;
 	enable_redirect_remover: boolean;
 	enable_remaining_time: boolean;
 	enable_remember_last_volume: boolean;
@@ -439,7 +440,8 @@ export type ExtensionSendOnlyMessageMappings = {
 	playerSpeedChange: DataResponseMessage<"playerSpeedChange", { enableForcedPlaybackSpeed: boolean; playerSpeed?: number }>;
 	playlistLengthChange: DataResponseMessage<"playlistLengthChange", { playlistLengthEnabled: boolean }>;
 	playlistLengthGetMethodChange: DataResponseMessage<"playlistLengthGetMethodChange", undefined>;
-	playlistManagementButtonsChange: DataResponseMessage<"playlistManagementButtonsChange", { playlistManagementButtonsEnabled: boolean }>;
+	playlistRemoveButtonChange: DataResponseMessage<"playlistRemoveButtonChange", { playlistRemoveButtonEnabled: boolean }>;
+	playlistResetButtonChange: DataResponseMessage<"playlistResetButtonChange", { playlistResetButtonEnabled: boolean }>;
 	playlistWatchTimeGetMethodChange: DataResponseMessage<"playlistWatchTimeGetMethodChange", undefined>;
 	remainingTimeChange: DataResponseMessage<"remainingTimeChange", { remainingTimeEnabled: boolean }>;
 	rememberVolumeChange: DataResponseMessage<"rememberVolumeChange", { rememberVolumeEnabled: boolean }>;

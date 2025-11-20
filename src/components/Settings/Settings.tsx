@@ -803,14 +803,6 @@ export default function Settings() {
 						type="checkbox"
 					/>
 					<Setting
-						checked={settings.enable_playlist_management_buttons?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.label")}
-						onChange={setCheckboxOption("enable_playlist_management_buttons")}
-						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.enablePlaylistManagementButtons.title")}
-						type="checkbox"
-					/>
-					<Setting
 						checked={settings.enable_restore_fullscreen_scrolling?.toString() === "true"}
 						label={t("settings.sections.miscellaneous.features.restoreFullscreenScrolling.label")}
 						onChange={setCheckboxOption("enable_restore_fullscreen_scrolling")}
@@ -1146,6 +1138,25 @@ export default function Settings() {
 						title={t("settings.sections.volumeBoost.boostAmount.title")}
 						type="number"
 						value={settings.volume_boost_amount}
+					/>
+				</SettingSection>
+				<SettingSection title="Playlist management settings">
+					<SettingTitle />
+					<Setting
+						checked={settings.enable_playlist_remove_button?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enableRemoveVideoButton.label")}
+						onChange={setCheckboxOption("enable_playlist_remove_button")}
+						parentSetting={null}
+						title="Adds a button to remove videos from the playlist"
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_playlist_reset_button?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.enableMarkAsUnwatchedButton.label")}
+						onChange={setCheckboxOption("enable_playlist_reset_button")}
+						parentSetting={null}
+						title="Adds a button to mark videos as unwatched"
+						type="checkbox"
 					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.screenshotButton.title")}>

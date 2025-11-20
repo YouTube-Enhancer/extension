@@ -309,10 +309,6 @@
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
 					},
-					"enablePlaylistManagementButtons": {
-						"label": "Aktivera knappar för hantering av spellistor",
-						"title": "Lägger till knappar i spellistobjekt för att ta bort videor från spellistan eller markera dem som ej sedda"
-					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Aktivera knappen spara för att titta på senare",
 						"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
