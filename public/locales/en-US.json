@@ -489,6 +489,20 @@
 				},
 				"title": "Playback speed settings"
 			},
+			"playlistManagement": {
+				"features": {
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					},
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					}
+				},
+				"title": "Playlist management settings"
+			},
+
 			"playlistLength": {
 				"enable": {
 					"label": "Display playlist length information",
