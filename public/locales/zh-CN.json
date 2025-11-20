@@ -214,7 +214,7 @@
 					},
 					"title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}"
 				},
-				"title": "按钮位置设置"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "启用自定义 CSS",
 					"title": "启用自定义 CSS 以应用到页面"
 				},
-				"title": "自定义 CSS 设置"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "选择屏幕提示文本颜色"
 				},
-				"title": "屏幕提示信息设置",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "类型",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API 密钥",
 					"title": "输入您的 Youtube 数据 API V3 密钥。"
 				},
-				"title": "YouTube API V3 密钥"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",
@@ -674,7 +674,7 @@
 					"label": "选择主题",
 					"title": "选择要应用到页面的主题"
 				},
-				"title": "YouTube 暗黑模式设置"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
