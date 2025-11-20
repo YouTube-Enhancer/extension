@@ -214,7 +214,7 @@
 					},
 					"title": "Розмістити {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Параметри розміщення кнопки"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Увімкнути користувацький CSS",
 					"title": "Дозволяє використовувати користувацький CSS для сторінки"
 				},
-				"title": "Власні налаштування CSS"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Type",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API Key",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Author",
@@ -674,7 +674,7 @@
 					"label": "Select theme",
 					"title": "Select a theme to be applied to the page"
 				},
-				"title": "YouTube Deep Dark Settings"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
