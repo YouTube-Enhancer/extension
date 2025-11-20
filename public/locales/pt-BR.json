@@ -214,7 +214,7 @@
 					},
 					"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
 				},
-				"title": "Opções de colocação de botão"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "CSS personalizado",
 					"title": "Ativa o CSS personalizado para ser aplicado à página"
 				},
-				"title": "Opções do CSS personalizado"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Seleciona a posição da exibição na tela"
 				},
-				"title": "Opções de exibição na tela",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "Chave API",
 					"title": "Insira sua chave API YouTube Data V3."
 				},
-				"title": "Chave API YouTube Data V3"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Autor",
@@ -674,7 +674,7 @@
 					"label": "Selecionar tema",
 					"title": "Selecione um tema para a página"
 				},
-				"title": "Opções do fundo escuro do YouTube"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
