@@ -309,9 +309,13 @@
 						"label": "默认设置为原始音轨",
 						"title": "总是默认原始音轨"
 					},
-					"enablePlaylistManagementButtons": {
-						"label": "启用播放列表管理按钮",
-						"title": "添加播放列表项目按钮从播放列表中删除视频或将其标记为未观看视频"
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "启用保存到稍后观看按钮",
