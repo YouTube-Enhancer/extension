@@ -214,7 +214,7 @@
 					},
 					"title": "Posiziona {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Impostazioni posizione pulsante"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Abilita CSS personalizzato",
 					"title": "Abilita il CSS personalizzato da applicare alla pagina"
 				},
-				"title": "Impostazioni CSS personalizzate"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Seleziona la posizione dello schermo interattivo"
 				},
-				"title": "Impostazioni schermo interattivo",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "Chiave API",
 					"title": "Inserisci la tua chiave Youtube API V3."
 				},
-				"title": "Chiave Youtube API V3"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",
@@ -674,7 +674,7 @@
 					"label": "Seleziona tema",
 					"title": "Seleziona un tema da applicare alla pagina"
 				},
-				"title": "Impostazioni sfondo scuro di YouTube"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
