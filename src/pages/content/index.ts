@@ -421,9 +421,14 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				playlistLengthEnabled: newValue
 			});
 		},
-		enable_playlist_management_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistManagementButtonsChange", {
-				playlistManagementButtonsEnabled: newValue
+		enable_playlist_remove_button: (_oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistRemoveButtonChange", {
+				playlistRemoveButtonEnabled: newValue
+			});
+		},
+		enable_playlist_reset_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("playlistResetButtonChange", {
+				playlistResetButtonEnabled: newValue
 			});
 		},
 		enable_redirect_remover: (__oldValue, newValue) => {

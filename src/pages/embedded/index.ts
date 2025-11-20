@@ -932,15 +932,10 @@ const initialize = function () {
 						await enablePlaylistLength();
 						break;
 					}
-					case "playlistManagementButtonsChange": {
-						const {
-							data: { playlistManagementButtonsEnabled }
-						} = message;
-						if (playlistManagementButtonsEnabled) {
-							await enablePlaylistManagementButtons();
-						} else {
-							await disablePlaylistManagementButtons();
-						}
+					case "playlistRemoveButtonChange":
+					case "playlistResetButtonChange": {
+						await disablePlaylistManagementButtons();
+						await enablePlaylistManagementButtons();
 						break;
 					}
 					case "remainingTimeChange": {
