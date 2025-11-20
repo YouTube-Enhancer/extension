@@ -214,7 +214,7 @@
 					},
 					"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 				},
-				"title": "Düğme Yerleşim Ayarları"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Özel CSS'yi etkinleştir",
 					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
 				},
-				"title": "Özel CSS Ayarları"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Ekran görüntüleme konumunu seçin"
 				},
-				"title": "Ekran Üstü Görüntüleme Ayarları",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Tür",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API Anahtarı",
 					"title": "Youtube Veri API V3 anahtarınızı girin."
 				},
-				"title": "YouTube API V3 Anahtarı"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Yazar",
@@ -674,7 +674,7 @@
 					"label": "Tema seç",
 					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
-				"title": "YouTube Deep Dark Ayarları"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
