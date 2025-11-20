@@ -12,6 +12,10 @@
 }
 
 .yte-action-button:hover {
+	background: white;
+}
+
+html[dark] .yte-action-button:hover {
 	background: rgba(255, 255, 255, 0.2);
 }
 

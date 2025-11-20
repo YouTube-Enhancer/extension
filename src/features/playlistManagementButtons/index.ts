@@ -1,9 +1,8 @@
-import { FaUndoAlt } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa6";
+import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import { Innertube } from "youtubei.js/web";
 
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { IsDarkMode, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
 
@@ -76,8 +75,8 @@ export async function enablePlaylistManagementButtons() {
 				const removeButton = createActionButton({
 					className: "yte-remove-button yte-action-button-large",
 					featureName: "playlistManagementButtons",
-					icon: FaTrash,
-					iconColor: "red",
+					icon: FaTrashAlt,
+					iconColor: IsDarkMode() ? "white" : "black",
 					onClick: async () => {
 						const playlistId = getPlaylistId()!;
 						const {
@@ -98,7 +97,7 @@ export async function enablePlaylistManagementButtons() {
 					className: "yte-reset-button yte-action-button-large",
 					featureName: "playlistManagementButtons",
 					icon: FaUndoAlt,
-					iconColor: "gray",
+					iconColor: IsDarkMode() ? "white" : "black",
 					onClick: async () => {
 						const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 						const history = await youtube.getHistory();
