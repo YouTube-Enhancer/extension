@@ -309,9 +309,13 @@
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
 					},
-					"enablePlaylistManagementButtons": {
-						"label": "Abilita i pulsanti di gestione della lista riproduzioni",
-						"title": "Aggiunge pulsanti agli elementi della lista riproduzioni per rimuovere i video dalla lista riproduzioni o contrassegnarli come non visti"
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
