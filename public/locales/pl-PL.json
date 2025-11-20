@@ -214,7 +214,7 @@
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Własny CSS",
 					"title": "Enables custom CSS to be applied to the page"
 				},
-				"title": "Własne ustawienia CSS"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Type",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "Klucz API",
 					"title": "Wpisz swój klucz API V3."
 				},
-				"title": "Klucz YouTube API V3"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Autor",
@@ -674,7 +674,7 @@
 					"label": "Wybierz motyw",
 					"title": "Wybierz motyw, który ma zostać zastosowany na stronie"
 				},
-				"title": "Ustawienia motywu YouTube Deep Dark"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
