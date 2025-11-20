@@ -1140,22 +1140,22 @@ export default function Settings() {
 						value={settings.volume_boost_amount}
 					/>
 				</SettingSection>
-				<SettingSection title="Playlist management settings">
+				<SettingSection title={t("settings.sections.playlistManagement.title")}>
 					<SettingTitle />
 					<Setting
 						checked={settings.enable_playlist_remove_button?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.enableRemoveVideoButton.label")}
+						label={t("settings.sections.playlistManagement.features.removeVideoButton.label")}
 						onChange={setCheckboxOption("enable_playlist_remove_button")}
 						parentSetting={null}
-						title="Adds a button to remove videos from the playlist"
+						title={t("settings.sections.playlistManagement.features.removeVideoButton.title")}
 						type="checkbox"
 					/>
 					<Setting
 						checked={settings.enable_playlist_reset_button?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.enableMarkAsUnwatchedButton.label")}
+						label={t("settings.sections.playlistManagement.features.markAsUnwatchedButton.label")}
 						onChange={setCheckboxOption("enable_playlist_reset_button")}
 						parentSetting={null}
-						title="Adds a button to mark videos as unwatched"
+						title={t("settings.sections.playlistManagement.features.markAsUnwatchedButton.title")}
 						type="checkbox"
 					/>
 				</SettingSection>

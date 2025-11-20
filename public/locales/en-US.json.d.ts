@@ -393,6 +393,19 @@ interface EnUS {
 					};
 				};
 			};
+			playlistManagement: {
+				features: {
+					markAsUnwatchedButton: {
+						label: "Mark as unwatched button";
+						title: "Adds a button to mark videos as unwatched";
+					};
+					removeVideoButton: {
+						label: "Remove video button";
+						title: "Adds a button to remove videos from the playlist";
+					};
+				};
+				title: "Playlist management settings";
+			};
 			playlistManagementButtons: {
 				failedToMarkAsUnwatched: "Failed to mark video as unwatched";
 				failedToRemoveVideo: "Failed to remove video";
