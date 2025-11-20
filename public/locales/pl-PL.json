@@ -214,7 +214,7 @@
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button Placement Settings"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -450,7 +450,7 @@
 					},
 					"title": "Select the position of the On-Screen Display"
 				},
-				"title": "On-Screen Display Settings",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Type",
 					"options": {
