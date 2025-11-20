@@ -318,10 +318,8 @@ const initialize = function () {
 		window.i18nextInstance = i18nextInstance;
 		if (isFirstLoad) {
 			void enableFeatures();
-			handleSoftNavigate();
-		} else if (!isFirstLoad) {
-			handleSoftNavigate();
 		}
+		handleSoftNavigate();
 		isFirstLoad = false;
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
