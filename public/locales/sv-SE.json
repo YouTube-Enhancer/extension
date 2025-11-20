@@ -214,7 +214,7 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Inställningar för knapplacering"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Aktivera anpassad CSS",
 					"title": "Aktiverar anpassad CSS som ska tillämpas på sidan"
 				},
-				"title": "Anpassade CSS-inställningar"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "Välj placering av On-Screen Display"
 				},
-				"title": "On-Screen Display-inställningar",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Typ",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API-nyckel",
 					"title": "Ange din Youtube Data API V3-nyckel."
 				},
-				"title": "YouTube API V3-nyckel"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Skapare",
@@ -674,7 +674,7 @@
 					"label": "Välj tema",
 					"title": "Välj ett tema som ska tillämpas på sidan"
 				},
-				"title": "Deep Dark-inställningar för YouTube"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
