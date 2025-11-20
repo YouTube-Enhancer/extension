@@ -214,7 +214,7 @@
 					},
 					"title": "{{BUTTON_NAME}} 을 {{PLACEMENT}} 에 배치하세요"
 				},
-				"title": "버튼 배치 설정"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "CSS 커스텀 활성화",
 					"title": "커스텀 CSS를 적용할 수 있습니다."
 				},
-				"title": "커스텀 CSS 설정"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -454,7 +454,7 @@
 					},
 					"title": "온 스크린 디스플레이의 위치를 선택하세요"
 				},
-				"title": "온 스크린 디스플레이 설정",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "유형",
 					"options": {
@@ -631,7 +631,7 @@
 					"label": "API Key",
 					"title": "Enter your Youtube Data API V3 key."
 				},
-				"title": "YouTube API V3 Key"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "개발자",
@@ -674,7 +674,7 @@
 					"label": "테마 선택",
 					"title": "적용할 테마를 선택하세요"
 				},
-				"title": "유튜브 딥 다크 설정"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
