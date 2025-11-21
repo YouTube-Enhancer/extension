@@ -214,7 +214,7 @@
 					},
 					"title": "Posiziona {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button placement settings"
+				"title": "Impostazioni posizione pulsanti"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Abilita CSS personalizzato",
 					"title": "Abilita il CSS personalizzato da applicare alla pagina"
 				},
-				"title": "Custom CSS settings"
+				"title": "Impostazioni CSS personalizzate"
 			},
 			"featureMenu": {
 				"openType": {
@@ -310,12 +310,12 @@
 						"title": "Traccia audio originale sempre predefinita"
 					},
 					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per rimuovere i video da essa"
 					},
 					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
+						"label": "Marca come pulsante non visto",
+						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per contrassegnare i video come non visti"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
@@ -458,7 +458,7 @@
 					},
 					"title": "Seleziona la posizione dello schermo interattivo"
 				},
-				"title": "On-screen display settings",
+				"title": "Impostazioni schermo",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -492,8 +492,8 @@
 			"playlistManagement": {
 				"features": {
 					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiunge un pulsante per rimuovere i video dalla lista riproduzioni"
 					},
 					"markAsUnwatchedButton": {
 						"label": "Mark as unwatched button",
@@ -648,7 +648,7 @@
 					"label": "Chiave API",
 					"title": "Inserisci la tua chiave Youtube API V3."
 				},
-				"title": "YouTube API V3 key"
+				"title": "Chiave API V3 di YouTube"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",
@@ -691,7 +691,7 @@
 					"label": "Seleziona tema",
 					"title": "Seleziona un tema da applicare alla pagina"
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Impostazioni scure di YouTube"
 			}
 		}
 	}
