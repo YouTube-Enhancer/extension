@@ -496,11 +496,11 @@
 						"title": "Aggiunge un pulsante per rimuovere i video dalla lista riproduzioni"
 					},
 					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
+						"label": "Marca come pulsante non visto",
+						"title": "Aggiunge un pulsante per marcare i video come non visti"
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Impostazioni gestione scaletta"
 			},
 			"playlistLength": {
 				"enable": {
