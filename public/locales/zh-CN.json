@@ -214,7 +214,7 @@
 					},
 					"title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}"
 				},
-				"title": "Button placement settings"
+				"title": "按钮位置设置"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "启用自定义 CSS",
 					"title": "启用自定义 CSS 以应用到页面"
 				},
-				"title": "Custom CSS settings"
+				"title": "自定义 CSS 设置"
 			},
 			"featureMenu": {
 				"openType": {
@@ -310,12 +310,12 @@
 						"title": "总是默认原始音轨"
 					},
 					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
+						"label": "移除视频按钮",
+						"title": "在播放列表中添加一个移除视频按钮"
 					},
 					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
+						"label": "标记为未观看按钮",
+						"title": "在播放列表中添加一个标记视频为未观看按钮"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "启用保存到稍后观看按钮",
@@ -458,7 +458,7 @@
 					},
 					"title": "选择屏幕提示文本颜色"
 				},
-				"title": "On-screen display settings",
+				"title": "屏幕提示信息设置",
 				"type": {
 					"label": "类型",
 					"options": {
@@ -492,15 +492,15 @@
 			"playlistManagement": {
 				"features": {
 					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
+						"label": "移除视频按钮",
+						"title": "添加一个按钮从播放列表中移除视频"
 					},
 					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
+						"label": "标记为未观看按钮",
+						"title": "添加一个按钮将视频标记为未观看视频"
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "播放列表管理设置"
 			},
 			"playlistLength": {
 				"enable": {
@@ -648,7 +648,7 @@
 					"label": "API 密钥",
 					"title": "输入您的 Youtube 数据 API V3 密钥。"
 				},
-				"title": "YouTube API V3 key"
+				"title": "YouTube API V3 密钥"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",
@@ -691,7 +691,7 @@
 					"label": "选择主题",
 					"title": "选择要应用到页面的主题"
 				},
-				"title": "YouTube deep dark settings"
+				"title": "YouTube 暗黑模式设置"
 			}
 		}
 	}
