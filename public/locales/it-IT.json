@@ -362,8 +362,8 @@
 						"title": "Nasconde tutti i blocchi"
 					},
 					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
+						"label": "Nascondi i video raccomandati",
+						"title": "Nasconde la barra laterale che raccomanda i video"
 					},
 					"hideTranslateComment": {
 						"label": "Nascondi pulsante \"Traduci commento\"",
