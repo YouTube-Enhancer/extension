@@ -309,13 +309,13 @@
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
 					},
-					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
-					},
 					"enableMarkAsUnwatchedButton": {
 						"label": "Mark as unwatched button",
 						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -360,6 +360,10 @@
 					"hideShorts": {
 						"label": "Ocultar shorts",
 						"title": "Oculta todos los shorts"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "Hide translate comment button",
@@ -489,19 +493,6 @@
 				},
 				"title": "Ajustes de velocidad de reproducción"
 			},
-			"playlistManagement": {
-				"features": {
-					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
-					},
-					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
-					}
-				},
-				"title": "Playlist management settings"
-			},
 			"playlistLength": {
 				"enable": {
 					"label": "Display playlist length information",
@@ -524,6 +515,19 @@
 						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 					}
 				}
+			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
