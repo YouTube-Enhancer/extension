@@ -11,6 +11,7 @@ import {
 	round,
 	sendContentMessage,
 	waitForAllElements,
+	waitForElement,
 	waitForSpecificMessage
 } from "@/utils/utilities";
 export async function promptUserToResumeVideo(cb: () => void) {
@@ -29,7 +30,10 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	// If player container is not available, return
 	if (!playerContainer) return;
 	await waitForAllElements(["#owner #upload-info #channel-name"]);
-	const isOfficialArtistChannel = document.querySelector("#owner #upload-info #channel-name .badge-style-type-verified-artist") !== null;
+	const isOfficialArtistChannel =
+		(await waitForElement(
+			"#owner #upload-info #channel-name svg path[d='M9.03 2.242 8.272 3H7.2A4.2 4.2 0 003 7.2v1.072l-.758.758a4.2 4.2 0 000 5.94l.758.758V16.8A4.2 4.2 0 007.2 21h1.072l.758.758a4.2 4.2 0 005.94 0l.758-.758H16.8a4.2 4.2 0 004.2-4.2v-1.072l.758-.758a4.2 4.2 0 000-5.94L21 8.272V7.2A4.2 4.2 0 0016.8 3h-1.072l-.758-.758a4.2 4.2 0 00-5.94 0Zm7.73 6.638a.5.5 0 01.241.427v1.743a.256.256 0 01-.386.219L14.001 9.7v4.55a2.75 2.75 0 11-2-2.646V6.888a.5.5 0 01.759-.428l4 2.42Z']"
+		)) !== null;
 	if (isOfficialArtistChannel) return;
 	const { video_id: videoId } = await playerContainer.getVideoData();
 	if (!videoId) return;
