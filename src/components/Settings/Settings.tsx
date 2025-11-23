@@ -826,6 +826,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.automaticallyShowMoreVideosOnEndScreen.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_hide_sidebar_recommended_videos?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.hideSidebarRecommendedVideos.label")}
+						onChange={setCheckboxOption("enable_hide_sidebar_recommended_videos")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.hideSidebarRecommendedVideos.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />

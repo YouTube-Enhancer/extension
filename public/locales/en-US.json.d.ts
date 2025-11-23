@@ -259,6 +259,10 @@ interface EnUS {
 					hidePlayables: { label: "Hide playables"; title: "Hides all playables" };
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
+					hideSidebarRecommendedVideos: {
+						label: "Hide recommended videos";
+						title: "Hides the sidebar that recommends videos";
+					};
 					hideTranslateComment: {
 						label: "Hide translate comment button";
 						title: "Hides 'Translate to Language' button under comments";
