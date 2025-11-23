@@ -309,13 +309,13 @@
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
 					},
-					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
-					},
 					"enableMarkAsUnwatchedButton": {
 						"label": "Mark as unwatched button",
 						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Aktivera knappen spara för att titta på senare",
@@ -360,6 +360,10 @@
 					"hideShorts": {
 						"label": "Dölj shorts",
 						"title": "Döljer alla shorts"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "Dölj översättning av kommentarer",
@@ -489,19 +493,6 @@
 				},
 				"title": "Inställningar för uppspelningshastighet"
 			},
-			"playlistManagement": {
-				"features": {
-					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
-					},
-					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
-					}
-				},
-				"title": "Playlist management settings"
-			},
 			"playlistLength": {
 				"enable": {
 					"label": "Visa information om spellistans längd",
@@ -524,6 +515,19 @@
 						"title": "Sättet att få den tid som tittats på (videons längdtyp används endast på visningssidan)"
 					}
 				}
+			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Det gick inte att markera video som ej sedd",
