@@ -309,13 +309,13 @@
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
 					},
-					"enableRemoveVideoButton": {
-						"label": "Rimuovi pulsante video",
-						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per rimuovere i video da essa"
-					},
 					"enableMarkAsUnwatchedButton": {
 						"label": "Marca come pulsante non visto",
 						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per contrassegnare i video come non visti"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per rimuovere i video da essa"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
@@ -360,6 +360,10 @@
 					"hideShorts": {
 						"label": "Nascondi blocchi",
 						"title": "Nasconde tutti i blocchi"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "Nascondi pulsante \"Traduci commento\"",
@@ -489,19 +493,6 @@
 				},
 				"title": "Impostazioni velocità riproduzione"
 			},
-			"playlistManagement": {
-				"features": {
-					"removeVideoButton": {
-						"label": "Rimuovi pulsante video",
-						"title": "Aggiunge un pulsante per rimuovere i video dalla lista riproduzioni"
-					},
-					"markAsUnwatchedButton": {
-						"label": "Marca come pulsante non visto",
-						"title": "Aggiunge un pulsante per marcare i video come non visti"
-					}
-				},
-				"title": "Impostazioni gestione scaletta"
-			},
 			"playlistLength": {
 				"enable": {
 					"label": "Mostra informazioni lunghezza lista riproduzioni",
@@ -524,6 +515,19 @@
 						"title": "Il modo per ottenere la quantità di tempo guardato (tipo di lunghezza video usato solo nella pagina di riproduzione)"
 					}
 				}
+			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Marca come pulsante non visto",
+						"title": "Aggiunge un pulsante per marcare i video come non visti"
+					},
+					"removeVideoButton": {
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiunge un pulsante per rimuovere i video dalla lista riproduzioni"
+					}
+				},
+				"title": "Impostazioni gestione scaletta"
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Impossibile contrassegnare il video come non visto",
