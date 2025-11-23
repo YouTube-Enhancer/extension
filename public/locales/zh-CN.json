@@ -309,13 +309,13 @@
 						"label": "默认设置为原始音轨",
 						"title": "总是默认原始音轨"
 					},
-					"enableRemoveVideoButton": {
-						"label": "移除视频按钮",
-						"title": "在播放列表中添加一个移除视频按钮"
-					},
 					"enableMarkAsUnwatchedButton": {
 						"label": "标记为未观看按钮",
 						"title": "在播放列表中添加一个标记视频为未观看按钮"
+					},
+					"enableRemoveVideoButton": {
+						"label": "移除视频按钮",
+						"title": "在播放列表中添加一个移除视频按钮"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "启用保存到稍后观看按钮",
@@ -360,6 +360,10 @@
 					"hideShorts": {
 						"label": "隐藏短视频",
 						"title": "隐藏所有短视频"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "隐藏翻译评论按钮",
@@ -489,19 +493,6 @@
 				},
 				"title": "播放速度设置"
 			},
-			"playlistManagement": {
-				"features": {
-					"removeVideoButton": {
-						"label": "移除视频按钮",
-						"title": "添加一个按钮从播放列表中移除视频"
-					},
-					"markAsUnwatchedButton": {
-						"label": "标记为未观看按钮",
-						"title": "添加一个按钮将视频标记为未观看视频"
-					}
-				},
-				"title": "播放列表管理设置"
-			},
 			"playlistLength": {
 				"enable": {
 					"label": "显示播放列表长度信息",
@@ -524,6 +515,19 @@
 						"title": "获取已观看时间长度的方法 (“视频长度”方法仅会在观看页面使用)"
 					}
 				}
+			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "标记为未观看按钮",
+						"title": "添加一个按钮将视频标记为未观看视频"
+					},
+					"removeVideoButton": {
+						"label": "移除视频按钮",
+						"title": "添加一个按钮从播放列表中移除视频"
+					}
+				},
+				"title": "播放列表管理设置"
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "将视频标记为未观看失败",
