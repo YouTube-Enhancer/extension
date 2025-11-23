@@ -47,6 +47,7 @@ import {
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
+import { disableHideSidebarRecommendedVideos, enableHideSidebarRecommendedVideos } from "@/src/features/hideSidebarRecommendedVideos";
 import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
@@ -272,7 +273,8 @@ const enableFeatures = async () => {
 			enableRestoreFullscreenScrolling(),
 			enablePlaylistManagementButtons(),
 			enableAutomaticallyMaximizePlayer(),
-			enableAutomaticallyShowMoreVideosOnEndScreen()
+			enableAutomaticallyShowMoreVideosOnEndScreen(),
+			enableHideSidebarRecommendedVideos()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -411,7 +413,6 @@ const initialize = function () {
 						sizeButton.click();
 						break;
 					}
-
 					case "buttonPlacementChange": {
 						const { data } = message;
 						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
@@ -482,6 +483,7 @@ const initialize = function () {
 						}
 						break;
 					}
+
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -702,6 +704,17 @@ const initialize = function () {
 							await enableHideShorts();
 						} else {
 							await disableHideShorts();
+						}
+						break;
+					}
+					case "hideSidebarRecommendedVideosChange": {
+						const {
+							data: { hideSidebarRecommendedVideosEnabled }
+						} = message;
+						if (hideSidebarRecommendedVideosEnabled) {
+							await enableHideSidebarRecommendedVideos();
+						} else {
+							await disableHideSidebarRecommendedVideos();
 						}
 						break;
 					}

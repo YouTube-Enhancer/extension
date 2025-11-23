@@ -380,6 +380,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideShortsEnabled: newValue
 			});
 		},
+		enable_hide_sidebar_recommended_videos: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideSidebarRecommendedVideosChange", {
+				hideSidebarRecommendedVideosEnabled: newValue
+			});
+		},
 		enable_hide_translate_comment: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideTranslateCommentChange", {
 				hideTranslateCommentEnabled: newValue

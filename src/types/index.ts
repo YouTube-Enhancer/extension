@@ -259,6 +259,7 @@ export type configuration = {
 	enable_hide_playlist_recommendations_from_home_page: boolean;
 	enable_hide_scrollbar: boolean;
 	enable_hide_shorts: boolean;
+	enable_hide_sidebar_recommended_videos: boolean;
 	enable_hide_translate_comment: boolean;
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
@@ -421,6 +422,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
+	hideSidebarRecommendedVideosChange: DataResponseMessage<"hideSidebarRecommendedVideosChange", { hideSidebarRecommendedVideosEnabled: boolean }>;
 	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
