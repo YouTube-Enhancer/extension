@@ -226,7 +226,7 @@
 					"label": "Aktivera anpassad CSS",
 					"title": "Aktiverar anpassad CSS som ska tillämpas på sidan"
 				},
-				"title": "Custom CSS settings"
+				"title": "Anpassade CSS-inställningar"
 			},
 			"featureMenu": {
 				"openType": {
@@ -298,8 +298,8 @@
 						"title": "Maximera spelaren automatiskt när du laddar en video"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
+						"label": "Visa automatiskt fler videor på slutskärmen",
+						"title": "Visa automatiskt fler videor på slutskärmen när du laddar en video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
@@ -310,12 +310,12 @@
 						"title": "Använd alltid originalljudspåret som standard"
 					},
 					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
+						"label": "Markera som ej sedd",
+						"title": "Lägg till en knapp i spellistans objekt för att markera videor som ej sedda"
 					},
 					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
+						"label": "Ta bort videoknappen",
+						"title": "Lägg till en knapp i spellistobjekt för att ta bort videor från spellistan"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Aktivera knappen spara för att titta på senare",
@@ -338,8 +338,8 @@
 						"title": "Döljer direktströmschatten"
 					},
 					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
+						"label": "Dölj endast för medlemmar-videor",
+						"title": "Döljer videor som endast är synliga för medlemmar"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Dölj officiella artistvideor",
@@ -362,8 +362,8 @@
 						"title": "Döljer alla shorts"
 					},
 					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
+						"label": "Dölj rekommenderade videor",
+						"title": "Döljer sidofältet som rekommenderar videor"
 					},
 					"hideTranslateComment": {
 						"label": "Dölj översättning av kommentarer",
@@ -462,7 +462,7 @@
 					},
 					"title": "Välj placering av On-Screen Display"
 				},
-				"title": "On-screen display settings",
+				"title": "On-Screen skärminställningar",
 				"type": {
 					"label": "Typ",
 					"options": {
@@ -519,12 +519,12 @@
 			"playlistManagement": {
 				"features": {
 					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
+						"label": "Markera som ej seddknapp",
+						"title": "Lägger till en knapp för att markera videor som ej sedda"
 					},
 					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
+						"label": "Ta bort videoknappen",
+						"title": "Lägger till en knapp för att ta bort videor från spellistan"
 					}
 				},
 				"title": "Playlist management settings"
@@ -539,8 +539,8 @@
 			},
 			"saveToWatchLaterButton": {
 				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
+				"saveVideo": "Spara till titta senare",
+				"savingVideo": "Sparar till titta senare…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -652,7 +652,7 @@
 					"label": "API-nyckel",
 					"title": "Ange din Youtube Data API V3-nyckel."
 				},
-				"title": "YouTube API V3 key"
+				"title": "YouTube API V3-nyckel"
 			},
 			"youtubeDeepDark": {
 				"author": "Skapare",
@@ -695,7 +695,7 @@
 					"label": "Välj tema",
 					"title": "Välj ett tema som ska tillämpas på sidan"
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Deep Dark-inställningar för YouTube"
 			}
 		}
 	}
