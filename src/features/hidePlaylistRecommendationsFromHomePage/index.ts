@@ -1,6 +1,6 @@
 import type { Nullable } from "@/src/types";
 
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { isHomePage, waitForSpecificMessage } from "@/src/utils/utilities";
 
 let recommendationsObserver: Nullable<MutationObserver> = null;
 let observerDisabled = false;
@@ -22,7 +22,7 @@ export async function enableHidePlaylistRecommendationsFromHomePage() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
 	if (!enable_hide_playlist_recommendations_from_home_page) return;
-
+	if (!isHomePage()) return;
 	hideRecommendations();
 	observeHomePageRecommendations();
 }
