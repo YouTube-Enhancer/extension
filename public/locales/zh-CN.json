@@ -362,8 +362,8 @@
 						"title": "隐藏所有短视频"
 					},
 					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
+						"label": "隐藏推荐视频",
+						"title": "隐藏推荐视频的侧边栏"
 					},
 					"hideTranslateComment": {
 						"label": "隐藏翻译评论按钮",
