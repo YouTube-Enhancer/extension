@@ -11,7 +11,7 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"label": "Video URL mit Zeitstempel kopieren"
 					}
 				},
 				"featureMenu": {
@@ -70,7 +70,7 @@
 							"label": "Increase Speed to {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"decreaseLimit": "Geringer nicht möglich ({{SPEED}})",
 					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"playlistLength": {
@@ -182,34 +182,34 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"rewindButton": "Rewind button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"copyTimestampUrlButton": "Video-URL mit Timestamp kopieren",
+						"decreasePlaybackSpeedButton": "Geschwindigkeit verringern",
+						"forwardButton": "Vorspulen",
+						"hideEndScreenCardsButton": "End-Screen Karte verstecken",
+						"increasePlaybackSpeedButton": "Geschwindigkeit erhöhen",
+						"loopButton": "Loop",
+						"maximizePlayerButton": "Maximieren",
+						"openTranscriptButton": "Transkript",
+						"rewindButton": "Zurückspulen",
+						"screenshotButton": "Screenshot",
+						"volumeBoostButton": "Lautstärke-Boost"
 					},
 					"options": {
 						"below_player": {
 							"placement": "below the player controls",
-							"value": "Below Player"
+							"value": "Unter dem Player"
 						},
 						"feature_menu": {
 							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"value": "Feature-Menü"
 						},
 						"player_controls_left": {
 							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"value": "Links"
 						},
 						"player_controls_right": {
 							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"value": "Rechts"
 						}
 					},
 					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
@@ -218,25 +218,25 @@
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
+					"collapse": "Editor einklappen",
 					"expand": "Expand Editor",
 					"noProblems": "No problems found."
 				},
 				"enable": {
-					"label": "Custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Benutzerdefiniertes CSS",
+					"title": "Aktiviert benutzerdefiniertes CSS für die Seite"
 				},
 				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Menü Aktivierungstyp",
 						"options": {
-							"click": "Click",
+							"click": "Klick",
 							"hover": "Hover"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Wähle die Methode zum Aktivieren des Feature-Menüs"
 					},
 					"title": "Feature-Menüeinstellungen"
 				}
@@ -282,16 +282,16 @@
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "Ambient-Modus automatisch deaktivieren",
+						"title": "Deaktiviert automatisch den Ambient-Modus, wenn du ein Video lädst"
 					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Untertitel automatisch deaktivieren",
+						"title": "Deaktiviert automatisch Untertitel, wenn du ein Video lädst"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Untertitel automatisch aktivieren",
+						"title": "Aktiviert die Untertitel automatisch, wenn du ein Video lädst"
 					},
 					"automaticallyMaximizePlayer": {
 						"label": "Automatically maximize player",
@@ -302,8 +302,8 @@
 						"title": "Automatically shows more videos on end screen when you load a video"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Video-URL mit Zeitstempel kopieren",
+						"title": "Kopiert die Video-URL mit Zeitstempel (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
 						"label": "Default to original audio track",
@@ -426,18 +426,18 @@
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Farbe",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
+						"blue": "Blau",
+						"green": "Grün",
 						"orange": "Orange",
 						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"purple": "Lila",
+						"red": "Rot",
+						"white": "Weiß",
+						"yellow": "Gelb"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Farbe für den On-Screen Display wählen"
 				},
 				"hide": {
 					"label": "Hide Delay",
@@ -448,8 +448,8 @@
 					"title": "Adjust the transparency of the On-Screen Display"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "Innenabstand",
+					"title": "Passe den Abstand rund um die On-Screen-Anzeige in Pixeln an. Dies gilt speziell für die On-Screen-Anzeige in den Ecken."
 				},
 				"position": {
 					"label": "Position",
@@ -466,7 +466,7 @@
 				"type": {
 					"label": "Type",
 					"options": {
-						"circle": "Circle",
+						"circle": "Kreis",
 						"line": "Line",
 						"no_display": "No display",
 						"text": "Text"
@@ -649,8 +649,8 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API Schlüssel",
+					"title": "Gib deinen YouTube Data API V3 Schlüssel ein."
 				},
 				"title": "YouTube API V3 key"
 			},
@@ -676,7 +676,7 @@
 					},
 					"mainColor": {
 						"label": "Accent color",
-						"title": "Color for accent"
+						"title": "Farbe für die Akzente"
 					},
 					"mainText": {
 						"label": "Main text color",
