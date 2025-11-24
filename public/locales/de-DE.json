@@ -58,7 +58,7 @@
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Transkript öffnen"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -172,7 +172,7 @@
 					"value": "Bestätigen"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Erweiterungseinstellungen in einem neuen Tab öffnen"
 				},
 				"reset": {
 					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
@@ -238,7 +238,7 @@
 						},
 						"title": "Select the method to activate the feature menu"
 					},
-					"title": "Feature menu settings"
+					"title": "Feature-Menüeinstellungen"
 				}
 			},
 			"forwardRewindButtons": {
@@ -378,12 +378,12 @@
 						"title": "Adds a button to the feature menu to maximize the player"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Transkript-Button",
+						"title": "Fügt eine Schaltfläche zum Feature-Menü hinzu, um das Protokoll des Videos zu öffnen, das du siehst"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "YouTube-Einstellungen beim Hover öffnen",
+						"title": "Öffnet die YouTube Einstellungen, wenn du über den Einstellungs-Button fährst"
 					},
 					"pauseBackgroundPlayers": {
 						"label": "Pause background players",
