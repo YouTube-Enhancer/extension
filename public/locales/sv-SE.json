@@ -214,7 +214,7 @@
 					},
 					"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Button placement settings"
+				"title": "Inställningar för knapplacering"
 			},
 			"customCSS": {
 				"editor": {
@@ -527,7 +527,7 @@
 						"title": "Lägger till en knapp för att ta bort videor från spellistan"
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Inställningar för hantering av spellistor"
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Det gick inte att markera video som ej sedd",
@@ -538,9 +538,9 @@
 				"removingVideo": "Tar bort video…"
 			},
 			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Spara till titta senare",
-				"savingVideo": "Sparar till titta senare…"
+				"failedToSaveVideo": "Det gick inte att spara videon till titta på senare",
+				"saveVideo": "Spara till titta på senare",
+				"savingVideo": "Sparar till titta på senare…"
 			},
 			"screenshotButton": {
 				"enable": {
