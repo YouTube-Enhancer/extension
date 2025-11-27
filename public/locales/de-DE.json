@@ -675,7 +675,7 @@
 						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "Accent color",
+						"label": "Akzentfarbe",
 						"title": "Farbe für die Akzente"
 					},
 					"mainText": {
