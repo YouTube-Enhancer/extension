@@ -136,7 +136,7 @@
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
 				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-				"screenshotButtonFileFormat": "Ställ in skärmbildens spartyp till 'Fil' för att konfigurera detta alternativ"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Urklipp",
-					"file": "Fil"
+					"file": "Fil",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Skärmbildsformat",
