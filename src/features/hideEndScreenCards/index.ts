@@ -8,7 +8,7 @@ import { getFeatureIcon, type ToggleIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
 
 import "./index.css";
-import { isWatchPage, modifyElementsClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, modifyElementClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 export async function disableHideEndScreenCards() {
 	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-container"]);
@@ -76,20 +76,20 @@ export const removeHideEndScreenCardsButton: RemoveButtonFunction = async (place
 	eventManager.removeEventListeners("hideEndScreenCardsButton");
 };
 export function isEndScreenCardsHidden(): boolean {
-	const endCards = document.querySelectorAll(".ytp-ce-element.yte-hide-end-screen-cards");
-	return endCards.length > 0;
+	const elem = document.querySelector("div#movie_player.yte-hide-end-screen-cards");
+	return elem !== null;
 }
 function hideEndScreenCards() {
-	modifyElementsClassList("add", "yte-hide-end-screen-cards", [
-		document.querySelector(".ytp-ce-hide-button-container"),
-		...document.querySelectorAll(".ytp-ce-element")
-	]);
+	modifyElementClassList("add", {
+		className: "yte-hide-end-screen-cards",
+		element: document.querySelector("div#movie_player")
+	});
 }
 function showEndScreenCards() {
-	modifyElementsClassList("remove", "yte-hide-end-screen-cards", [
-		document.querySelector(".ytp-ce-hide-button-container"),
-		...document.querySelectorAll(".ytp-ce-element")
-	]);
+	modifyElementClassList("remove", {
+		className: "yte-hide-end-screen-cards",
+		element: document.querySelector("div#movie_player")
+	});
 }
 export const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icon: ToggleIcon, checked: boolean) => {
 	if (hideEndScreenCardsPlacement === "feature_menu") {
