@@ -136,7 +136,7 @@
 			"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 			"specificOption": {
 				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Role para mais opções",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Área de transferência",
-					"file": "Arquivo"
+					"file": "Arquivo",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Formato da captura de tela",
