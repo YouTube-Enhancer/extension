@@ -78,7 +78,7 @@ interface EnUS {
 			singular: "Enable '{{OPTION}}' to configure this option";
 			specificOption: {
 				featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
-				screenshotButtonFileFormat: "Set screenshot save type to 'File' to configure this option";
+				screenshotButtonFileFormat: "Set screenshot save type to 'File' or 'Both' to configure this option";
 			};
 		};
 		scrollForMoreSettings: "Scroll for more settings";
@@ -428,7 +428,7 @@ interface EnUS {
 					label: "Screenshot button";
 					title: "Adds a button to the player to take a screenshot of the video";
 				};
-				saveAs: { clipboard: "Clipboard"; file: "File" };
+				saveAs: { both: "Both (File and Clipboard)"; clipboard: "Clipboard"; file: "File" };
 				selectFormat: { label: "Screenshot format"; title: "The format to save the screenshot in" };
 				selectSaveAs: { label: "Screenshot save type"; title: "The screenshot save type" };
 				title: "Screenshot settings";
