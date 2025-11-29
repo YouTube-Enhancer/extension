@@ -136,7 +136,7 @@
 			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
 				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata come 'File' per configurare questa opzione"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Appunti",
-					"file": "File"
+					"file": "File",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Formato schermata",
