@@ -136,7 +136,7 @@
 			"singular": "Включите '{{OPTION}}' для настройки этого параметра",
 			"specificOption": {
 				"featureMenu": "Включите по крайней мере одну кнопку, которая будет размещена в меню функций для настройки этой опции.",
-				"screenshotButtonFileFormat": "Установите тип сохранения скриншота «Файл» для настройки этого параметра"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Прокрутите для других настроек",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Буфер обмена",
-					"file": "Файл"
+					"file": "Файл",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Формат скриншота",
