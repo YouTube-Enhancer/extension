@@ -136,7 +136,7 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Aby skonfigurować tę opcję, ustaw typ zapisu zrzutu ekranu na „Plik”"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Clipboard",
-					"file": "File"
+					"file": "File",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Screenshot format",
