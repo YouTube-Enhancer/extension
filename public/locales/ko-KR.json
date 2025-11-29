@@ -136,7 +136,7 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Scroll for more settings",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "클립보드로 복사",
-					"file": "파일로 저장"
+					"file": "파일로 저장",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "캡처 방법",
