@@ -136,7 +136,7 @@
 			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-				"screenshotButtonFileFormat": "Bu seçeneği yapılandırmak için ekran görüntüsü kaydetme türünü 'File' olarak ayarlayın"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Pano",
-					"file": "Dosya"
+					"file": "Dosya",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Ekran görüntüsü formatı",
