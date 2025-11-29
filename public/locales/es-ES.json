@@ -136,7 +136,7 @@
 			"singular": "Habilitar '{{OPTION}}' para configurar esta opción",
 			"specificOption": {
 				"featureMenu": "Configure al menos un botón para colocarse en el menú de funciones para configurar esta opción.",
-				"screenshotButtonFileFormat": "Establecer el tipo de guardado de captura de pantalla a 'Archivo' para configurar esta opción"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Desplazar para más ajustes",
@@ -549,7 +549,8 @@
 				},
 				"saveAs": {
 					"clipboard": "Portapapeles",
-					"file": "Archivo"
+					"file": "Archivo",
+					"both": "Both (File and Clipboard)"
 				},
 				"selectFormat": {
 					"label": "Formato de captura de pantalla",
