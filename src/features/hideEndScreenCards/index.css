@@ -1,3 +1,10 @@
-.yte-hide-end-screen-cards {
-	display: none !important;
+div#movie_player {
+  &.yte-hide-end-screen-cards {
+    .ytp-ce-element,
+    .ytp-ce-hide-button-container,
+    .ytp-fullscreen-grid,
+    .html5-endscreen {
+      display: none !important;
+    }
+  }
 }
