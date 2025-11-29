@@ -266,7 +266,8 @@ export default function Settings() {
 	];
 	const ScreenshotSaveAsOptions: SelectOption<"screenshot_save_as">[] = [
 		{ label: t("settings.sections.screenshotButton.saveAs.file"), value: "file" },
-		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" }
+		{ label: t("settings.sections.screenshotButton.saveAs.clipboard"), value: "clipboard" },
+		{ label: t("settings.sections.screenshotButton.saveAs.both"), value: "both" }
 	];
 	const VolumeBoostModeOptions: SelectOption<"volume_boost_mode">[] = [
 		{

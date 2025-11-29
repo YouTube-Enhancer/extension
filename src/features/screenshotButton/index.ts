@@ -25,41 +25,50 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				options: { screenshot_format, screenshot_save_as }
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
-		const mimeType = screenshot_save_as === "file" ? `image/${screenshot_format}` : "image/png";
-		const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
-		if (!blob) return;
-		switch (screenshot_save_as) {
-			case "clipboard": {
-				const screenshotButton = getFeatureButton("screenshotButton");
-				if (!screenshotButton) return;
-				const { listener, remove } = createTooltip({
-					direction: "up",
-					element: screenshotButton,
-					featureName: "screenshotButton",
-					id: "yte-feature-screenshotButton-tooltip",
-					text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
-				});
-				listener();
-				try {
+
+		const copyToClipboard = async () => {
+			const screenshotButton = getFeatureButton("screenshotButton");
+			if (!screenshotButton) return;
+			const { listener, remove } = createTooltip({
+				direction: "up",
+				element: screenshotButton,
+				featureName: "screenshotButton",
+				id: "yte-feature-screenshotButton-tooltip",
+				text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
+			});
+			listener();
+			try {
+				const mimeType = "image/png";
+				const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
+				if (blob) {
 					const clipboardImage = new ClipboardItem({ [mimeType]: blob });
 					await navigator.clipboard.write([clipboardImage]);
-					setTimeout(() => {
-						remove();
-					}, 1200);
-				} catch (err) {
-					remove();
-					console.log(err);
 				}
-				break;
+				setTimeout(() => {
+					remove();
+				}, 1200);
+			} catch (err) {
+				remove();
+				console.log(err);
 			}
-			case "file": {
-				const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-				const a = document.createElement("a");
-				a.href = URL.createObjectURL(blob);
-				a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${screenshot_format}`;
-				a.click();
-				break;
-			}
+		};
+
+		const saveToFile = async () => {
+			const mimeType = `image/${screenshot_format}`;
+			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
+			if (!blob) return;
+			const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+			const a = document.createElement("a");
+			a.href = URL.createObjectURL(blob);
+			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${screenshot_format}`;
+			a.click();
+		};
+
+		if (screenshot_save_as === "clipboard" || screenshot_save_as === "both") {
+			await copyToClipboard();
+		}
+		if (screenshot_save_as === "file" || screenshot_save_as === "both") {
+			await saveToFile();
 		}
 	} catch (_error) {}
 }
