@@ -677,7 +677,7 @@
 					},
 					"mainColor": {
 						"label": "Color destacado",
-						"title": "Color for accent"
+						"title": "Color para destacados"
 					},
 					"mainText": {
 						"label": "Main text color",
