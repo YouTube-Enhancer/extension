@@ -136,7 +136,7 @@
 			"singular": "启用 '{{OPTION}}' 以配置此选项",
 			"specificOption": {
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 			}
 		},
 		"scrollForMoreSettings": "滚动以查看更多设置",
@@ -550,7 +550,7 @@
 				"saveAs": {
 					"clipboard": "剪贴板",
 					"file": "文件",
-					"both": "Both (File and Clipboard)"
+					"both": "全部(文件和剪贴板)"
 				},
 				"selectFormat": {
 					"label": "截图格式",
