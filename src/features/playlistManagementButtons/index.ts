@@ -147,11 +147,11 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 		actions: [
 			{
 				action: "ACTION_REMOVE_VIDEO",
-				setVideoId: setVideoId
+				setVideoId
 			}
 		],
 		params: "CAFAAQ%3D%3D",
-		playlistId: playlistId
+		playlistId
 	});
 
 	document.querySelector("ytd-app")?.dispatchEvent(
@@ -164,6 +164,7 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 		})
 	);
 
+	// triggers a sidebar update for regular playlists
 	if (response?.data?.frameworkUpdates?.entityBatchUpdate) {
 		document.querySelector("ytd-app")?.dispatchEvent(
 			new CustomEvent("yt-action", {
@@ -176,6 +177,7 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 		);
 	}
 
+	// triggers a sidebar update for the WL playlist
 	if (response?.data?.newHeader?.playlistHeaderRenderer) {
 		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
 			new CustomEvent("yt-new-playlist-header", {
