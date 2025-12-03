@@ -71,7 +71,11 @@ export async function enablePlaylistManagementButtons() {
 				return;
 			}
 
-			if (enable_playlist_remove_button && !item.querySelector(".yte-remove-button")) {
+			const removeButton = item.querySelector(".yte-remove-button");
+			const resetButton = item.querySelector(".yte-reset-button");
+			const resumeOverlay = item.querySelector(THUMBAIL_OVERLAY_SELECTOR);
+
+			if (enable_playlist_remove_button && !removeButton) {
 				const removeButton = createActionButton({
 					className: "yte-remove-button yte-action-button-large",
 					featureName: "playlistManagementButtons",
@@ -92,7 +96,7 @@ export async function enablePlaylistManagementButtons() {
 				menu.prepend(removeButton);
 			}
 
-			if (enable_playlist_reset_button && !item.querySelector(".yte-reset-button") && item.querySelector(THUMBAIL_OVERLAY_SELECTOR)) {
+			if (enable_playlist_reset_button && !resetButton && resumeOverlay) {
 				const resetButton = createActionButton({
 					className: "yte-reset-button yte-action-button-large",
 					featureName: "playlistManagementButtons",
@@ -110,7 +114,11 @@ export async function enablePlaylistManagementButtons() {
 					translationProcessing: `${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`
 				});
 				resetButton.style.verticalAlign = "top";
-				menu.prepend(resetButton);
+				if (enable_playlist_remove_button && removeButton) {
+					removeButton.prepend(resetButton);
+				} else {
+					menu.prepend(resetButton);
+				}
 			}
 
 			Array.from(menu.children).forEach((child) => {
@@ -127,13 +135,7 @@ export async function enablePlaylistManagementButtons() {
 		addButtonToPlaylistItems();
 		const container = document.querySelector("ytd-playlist-video-list-renderer");
 		if (container) {
-			let timeoutId: number;
-			playlistObserver = new MutationObserver(() => {
-				if (timeoutId) {
-					clearTimeout(timeoutId);
-				}
-				timeoutId = window.setTimeout(addButtonToPlaylistItems, 100);
-			});
+			playlistObserver = new MutationObserver(addButtonToPlaylistItems);
 			playlistObserver.observe(container, { childList: true, subtree: true });
 		}
 	}
