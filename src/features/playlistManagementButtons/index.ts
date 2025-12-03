@@ -19,8 +19,7 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	});
 }
 
-const PLAYLIST_ITEM_SELECTOR =
-	"ytd-playlist-video-list-renderer ytd-playlist-panel-video-renderer, ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
+const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
 const THUMBAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 const TRANSLATION_KEY_PREFIX = "settings.sections.playlistManagementButtons";
 
