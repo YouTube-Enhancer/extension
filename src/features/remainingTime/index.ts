@@ -1,7 +1,7 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
-import { isShortsPage, isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { calculateRemainingTime } from "./utils";
 
@@ -18,16 +18,14 @@ export async function setupRemainingTime() {
 			options: { enable_remaining_time }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
+	if (!isWatchPage()) return;
 	// If remaining time option is disabled, return
 	if (!enable_remaining_time) return;
 	// Get the player element
-	const playerContainer =
-		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	// If player element is not available, return
 	if (!playerContainer) return;
-	const timeDisplay = playerContainer.querySelector(".ytp-time-display > span.ytp-time-wrapper > .ytp-time-contents");
+	const timeDisplay = playerContainer.querySelector(".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents");
 	if (!timeDisplay) return;
 	// Get the video element
 	const videoElement = playerContainer.querySelector("video");
@@ -52,10 +50,7 @@ export async function setupRemainingTime() {
 function playerTimeUpdateListener() {
 	void (async () => {
 		// Get the player element
-		const playerContainer =
-			isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-			: null;
+		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 		// If player element is not available, return
 		if (!playerContainer) return;
 		// Get the video element
