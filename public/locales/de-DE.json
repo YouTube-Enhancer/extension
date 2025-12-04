@@ -33,7 +33,7 @@
 					"button": {
 						"label": "Hide end screen cards",
 						"toggle": {
-							"off": "Show end screen cards",
+							"off": "Zeige Endcards",
 							"on": "Hide end screen cards"
 						}
 					}
@@ -51,8 +51,8 @@
 					"button": {
 						"label": "Maximize",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Maximieren aus",
+							"on": "Maximieren an"
 						}
 					}
 				},
@@ -375,7 +375,7 @@
 					},
 					"maximizePlayerButton": {
 						"label": "Player-Button maximieren",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"title": "Fügt dem Eigenschaftsmenü eine Schaltfläche hinzu, um den Video-Player zu maximieren"
 					},
 					"openTranscriptButton": {
 						"label": "Transkript-Button",
@@ -410,16 +410,16 @@
 						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "YouTube Video Link kürzen",
+						"title": "Verkürzt den YouTube Video Link (youtu.be) indem si/Feature-Parameter entfernt wird"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Shorts automatisch scrollen",
+						"title": "Scrollen Sie automatisch im nächsten Short"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Überspringe \"Video ist pausiert. Weiter ansehen?\"",
+						"title": "Überspringt den Leerlauf-Dialog, der die Videowiedergabe pausiert"
 					}
 				},
 				"title": "Weitere Einstellungen"
@@ -564,8 +564,8 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Geschwindigkeitsänderung durch Mausrad",
+					"title": "Geschwindigkeitsänderung durch Mausrad anpassen"
 				},
 				"enable": {
 					"label": "Scroll wheel speed control",
@@ -660,12 +660,12 @@
 				"co-authors": "Mitersteller",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Schattenfarbe",
+						"title": "Farbe für Schatten"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Sekundäre Textfarbe",
+						"title": "Farbe für sekundären Text"
 					},
 					"hoverBackground": {
 						"label": "Hintergrundfarbe beim Hovern",
@@ -680,12 +680,12 @@
 						"title": "Farbe für die Akzente"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Haupttextfarbe",
+						"title": "Farbe für Haupttext"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Sekundäre Hintergrundfarbe",
+						"title": "Farbe für sekundären Hintergrund"
 					}
 				},
 				"enable": {
@@ -693,8 +693,8 @@
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Theme auswählen",
+					"title": "Wählen Sie ein Theme aus, das auf die Seite angewendet werden soll"
 				},
 				"title": "YouTube deep dark settings"
 			}
