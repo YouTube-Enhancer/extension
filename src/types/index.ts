@@ -237,6 +237,7 @@ export type configuration = {
 	deep_dark_preset: DeepDarkPreset;
 	enable_automatic_theater_mode: boolean;
 	enable_automatically_disable_ambient_mode: boolean;
+	enable_automatically_disable_autoplay: boolean;
 	enable_automatically_disable_closed_captions: boolean;
 	enable_automatically_enable_closed_captions: boolean;
 	enable_automatically_maximize_player: boolean;
@@ -375,6 +376,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"automaticallyDisableAmbientModeChange",
 		{ automaticallyDisableAmbientModeEnabled: boolean }
 	>;
+	automaticallyDisableAutoPlayChange: DataResponseMessage<"automaticallyDisableAutoPlayChange", { automaticallyDisableAutoPlayEnabled: boolean }>;
 	automaticallyDisableClosedCaptionsChange: DataResponseMessage<
 		"automaticallyDisableClosedCaptionsChange",
 		{ automaticallyDisableClosedCaptionsEnabled: boolean }

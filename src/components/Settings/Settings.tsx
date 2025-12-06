@@ -835,6 +835,14 @@ export default function Settings() {
 						title={t("settings.sections.miscellaneous.features.hideSidebarRecommendedVideos.title")}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_automatically_disable_autoplay?.toString() === "true"}
+						label={t("settings.sections.miscellaneous.features.automaticallyDisableAutoPlay.label")}
+						onChange={setCheckboxOption("enable_automatically_disable_autoplay")}
+						parentSetting={null}
+						title={t("settings.sections.miscellaneous.features.automaticallyDisableAutoPlay.title")}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t("settings.sections.videoHistory.title")}>
 					<SettingTitle />

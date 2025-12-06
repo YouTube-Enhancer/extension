@@ -16,13 +16,7 @@ declare module "*.json" {
 }
 
 declare module "node_modules/@types/youtube-player/dist/types" {
-	interface audioTrack {
-		tq: {
-			id: string;
-			isDefault: boolean;
-			name: string;
-		};
-	}
+	type audioTrack = Record<string, unknown>;
 	interface ProgressState {
 		airingEnd: number;
 		airingStart: number;
