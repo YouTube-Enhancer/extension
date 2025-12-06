@@ -1,6 +1,7 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
 import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
+import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
 import {
 	disableAutomaticallyDisableClosedCaptions,
 	enableAutomaticallyDisableClosedCaptions
@@ -274,7 +275,8 @@ const enableFeatures = async () => {
 			enablePlaylistManagementButtons(),
 			enableAutomaticallyMaximizePlayer(),
 			enableAutomaticallyShowMoreVideosOnEndScreen(),
-			enableHideSidebarRecommendedVideos()
+			enableHideSidebarRecommendedVideos(),
+			enableAutomaticallyDisableAutoPlay()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -351,6 +353,17 @@ const initialize = function () {
 							await enableAutomaticallyDisableAmbientMode();
 						} else {
 							await disableAutomaticallyDisableAmbientMode();
+						}
+						break;
+					}
+					case "automaticallyDisableAutoPlayChange": {
+						const {
+							data: { automaticallyDisableAutoPlayEnabled }
+						} = message;
+						if (automaticallyDisableAutoPlayEnabled) {
+							await enableAutomaticallyDisableAutoPlay();
+						} else {
+							await disableAutomaticallyDisableAutoPlay();
 						}
 						break;
 					}
