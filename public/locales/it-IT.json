@@ -286,8 +286,8 @@
                         "title": "Disabilita automaticamente la modalità ambiente quando si carica un video"
                     },
                     "automaticallyDisableAutoPlay": {
-                        "label": "Automatically disable autoplay",
-                        "title": "Automatically disables autoplay when you load a video"
+                        "label": "Disabilita automaticamente la riproduzione automatica",
+                        "title": "Disabilita automaticamente la riproduzione automatica quando carichi un video"
                     },
                     "automaticallyDisableClosedCaptions": {
                         "label": "Disabilita automaticamente le didascalie chiuse",
