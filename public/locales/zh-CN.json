@@ -1,703 +1,707 @@
 {
-	"langCode": "zh-CN",
-	"langName": "中文 (简体)",
-	"messages": {
-		"resumingVideo": "恢复视频播放时刻于 {{VIDEO_TIME}}",
-		"settingVolume": "设置音量增强至 {{VOLUME_BOOST_AMOUNT}}"
-	},
-	"pages": {
-		"content": {
-			"features": {
-				"copyTimestampUrlButton": {
-					"button": {
-						"copied": "复制成功！",
-						"label": "复制带有时间戳的视频 URL"
-					}
-				},
-				"featureMenu": {
-					"button": {
-						"label": "功能菜单"
-					}
-				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "向前快进 {{TIME}}"
-						},
-						"rewindButton": {
-							"label": "向后快退 {{TIME}}"
-						}
-					}
-				},
-				"hideEndScreenCardsButton": {
-					"button": {
-						"label": "隐藏结束界面卡片",
-						"toggle": {
-							"off": "显示结束界面卡片",
-							"on": "隐藏结束界面卡片"
-						}
-					}
-				},
-				"loopButton": {
-					"button": {
-						"label": "循环播放",
-						"toggle": {
-							"off": "取消循环",
-							"on": "启用循环"
-						}
-					}
-				},
-				"maximizePlayerButton": {
-					"button": {
-						"label": "最大化",
-						"toggle": {
-							"off": "最大化关闭",
-							"on": "最大化开启"
-						}
-					}
-				},
-				"openTranscriptButton": {
-					"button": {
-						"label": "打开转写文稿"
-					}
-				},
-				"playbackSpeedButtons": {
-					"buttons": {
-						"decreasePlaybackSpeedButton": {
-							"label": "降低播放速度至 {{SPEED}}"
-						},
-						"increasePlaybackSpeedButton": {
-							"label": "增加播放速度至 {{SPEED}}"
-						}
-					},
-					"decreaseLimit": "不能继续降低({{SPEED}})",
-					"increaseLimit": "不能继续增加({{SPEED}})"
-				},
-				"playlistLength": {
-					"title": "如果某些视频被隐藏，或者您没有加载足够的视频来获取全部长度，总长度可能不准确。"
-				},
-				"screenshotButton": {
-					"button": {
-						"label": "屏幕截图"
-					},
-					"copiedToClipboard": "截图已复制到剪贴板"
-				},
-				"videoHistory": {
-					"resumeButton": "继续播放",
-					"resumePrompt": {
-						"close": "关"
-					}
-				},
-				"volumeBoostButton": {
-					"button": {
-						"label": "音量增强",
-						"toggle": {
-							"off": "关闭音量增强",
-							"on": "开启音量增强"
-						}
-					}
-				}
-			}
-		},
-		"options": {
-			"notifications": {
-				"error": {
-					"optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
-					"scrollWheelHoldModifierKey": {
-						"sameKey": {
-							"speedControl": "滚轮控制播放速度键位与控制音量冲突。",
-							"volumeControl": "滚轮控制音量键位与控制播放速度冲突。"
-						}
-					}
-				},
-				"info": {
-					"reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
-				},
-				"success": {
-					"saved": "选项已保存。"
-				}
-			}
-		}
-	},
-	"settings": {
-		"clearData": {
-			"allDataDeleted": "所有数据已删除。",
-			"confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
-		},
-		"optionDisabled": {
-			"either": {
-				"label": "启用 {{OPTIONS}} 以配置此选项",
-				"separator": " 或 "
-			},
-			"plural": {
-				"label": "启用 {{OPTIONS}} 以配置此选项",
-				"separator": " 和 "
-			},
-			"singular": "启用 '{{OPTION}}' 以配置此选项",
-			"specificOption": {
-				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
-			}
-		},
-		"scrollForMoreSettings": "滚动以查看更多设置",
-		"sections": {
-			"automaticQuality": {
-				"enable": {
-					"label": "自动质量调整",
-					"title": "自动调整视频质量到所选等级。"
-				},
-				"fallbackQualityStrategy": {
-					"select": {
-						"label": "质量回退策略",
-						"options": {
-							"higher": "升高",
-							"lower": "降低"
-						},
-						"title": "当所选质量不可用时使用的策略"
-					}
-				},
-				"select": {
-					"label": "播放质量",
-					"title": "将视频质量设为"
-				},
-				"title": "自动画质设置"
-			},
-			"bottomButtons": {
-				"clear": {
-					"title": "清除此扩展存储在您机器上的所有数据",
-					"value": "清除数据"
-				},
-				"confirm": {
-					"title": "确认重置设置",
-					"value": "确认"
-				},
-				"openTab": {
-					"title": "在新标签中打开扩展设置"
-				},
-				"reset": {
-					"title": "重置所有设置为默认设置，点击确认按钮以保存更改",
-					"value": "重新开始"
-				}
-			},
-			"buttonPlacement": {
-				"select": {
-					"buttonNames": {
-						"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
-						"decreasePlaybackSpeedButton": "降低速度按钮",
-						"forwardButton": "快进按钮",
-						"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
-						"increasePlaybackSpeedButton": "增加速度按钮",
-						"loopButton": "循环按钮",
-						"maximizePlayerButton": "最大化按钮",
-						"openTranscriptButton": "转写文稿按钮",
-						"rewindButton": "快退按钮",
-						"screenshotButton": "屏幕截图按钮",
-						"volumeBoostButton": "音量增强按钮"
-					},
-					"options": {
-						"below_player": {
-							"placement": "位于播放器控制按键下方",
-							"value": "位于播放器下方"
-						},
-						"feature_menu": {
-							"placement": "位于功能菜单内",
-							"value": "功能菜单"
-						},
-						"player_controls_left": {
-							"placement": "位于播放器控制按键左侧",
-							"value": "控件居左"
-						},
-						"player_controls_right": {
-							"placement": "位于播放器控制按键右侧",
-							"value": "控件居右"
-						}
-					},
-					"title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}"
-				},
-				"title": "按钮位置设置"
-			},
-			"customCSS": {
-				"editor": {
-					"collapse": "折叠编辑器",
-					"expand": "展开编辑器",
-					"noProblems": "未发现问题"
-				},
-				"enable": {
-					"label": "启用自定义 CSS",
-					"title": "启用自定义 CSS 以应用到页面"
-				},
-				"title": "自定义 CSS 设置"
-			},
-			"featureMenu": {
-				"openType": {
-					"select": {
-						"label": "菜单激活方式",
-						"options": {
-							"click": "点击",
-							"hover": "悬停"
-						},
-						"title": "设置打开功能菜单的方式"
-					},
-					"title": "功能菜单设置"
-				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "启用快进/快退按钮",
-					"title": "给视频播放器添加快进/快退按钮"
-				},
-				"time": {
-					"label": "快进/快退时间",
-					"title": "快进/快退视频的时间长度"
-				},
-				"title": "快进/快退按钮设置"
-			},
-			"importExportSettings": {
-				"exportButton": {
-					"success": "导出配置成功",
-					"title": "导出设置到 JSON 文件",
-					"value": "导出设置"
-				},
-				"importButton": {
-					"error": {
-						"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
-						"validation": "导入设置出错。请检查文件格式。\n{{ERROR_MESSAGE}}"
-					},
-					"success": "设置导入成功",
-					"title": "从 JSON 文件导入设置",
-					"value": "导入设置"
-				}
-			},
-			"language": {
-				"select": {
-					"label": "语言",
-					"title": "用于扩展的语言"
-				},
-				"title": "语言"
-			},
-			"miscellaneous": {
-				"features": {
-					"automaticTheaterMode": {
-						"label": "自动启用剧场模式",
-						"title": "当视频打开时，自动启用剧场模式"
-					},
-					"automaticallyDisableAmbientMode": {
-						"label": "自动禁用氛围模式",
-						"title": "载入视频时自动禁用氛围模式"
-					},
-					"automaticallyDisableClosedCaptions": {
-						"label": "自动禁用隐藏式字幕",
-						"title": "载入视频时自动禁用隐藏式字幕"
-					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "自动启用隐藏式字幕",
-						"title": "载入视频时自动启用隐藏式字幕"
-					},
-					"automaticallyMaximizePlayer": {
-						"label": "自动最大化播放器",
-						"title": "当视频打开时，自动最大化播放器"
-					},
-					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "在结束屏幕上自动显示更多视频",
-						"title": "加载视频时自动在结束屏幕上显示更多视频"
-					},
-					"copyTimestampUrlButton": {
-						"label": "复制带有时间戳的视频 URL 按钮",
-						"title": "复制带有时间戳的视频 URL (?t=123)"
-					},
-					"defaultToOriginalAudioTrack": {
-						"label": "默认设置为原始音轨",
-						"title": "总是默认原始音轨"
-					},
-					"enableMarkAsUnwatchedButton": {
-						"label": "标记为未观看按钮",
-						"title": "在播放列表中添加一个标记视频为未观看按钮"
-					},
-					"enableRemoveVideoButton": {
-						"label": "移除视频按钮",
-						"title": "在播放列表中添加一个移除视频按钮"
-					},
-					"enableSaveToWatchLaterButton": {
-						"label": "启用保存到稍后观看按钮",
-						"title": "在主页和订阅视频中添加一个按钮，将视频保存到“稍后观看”播放列表"
-					},
-					"hideArtificialIntelligenceSummary": {
-						"label": "隐藏 AI 摘要",
-						"title": "隐藏视频下方的人工智能摘要"
-					},
-					"hideEndScreenCards": {
-						"label": "隐藏结束界面卡片",
-						"title": "隐藏视频末尾的卡片"
-					},
-					"hideEndScreenCardsButton": {
-						"label": "隐藏结束界面卡片按钮",
-						"title": "添加按钮以显示/隐藏视频末尾的卡片"
-					},
-					"hideLiveStreamChat": {
-						"label": "隐藏直播聊天",
-						"title": "隐藏直播聊天"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "隐藏仅限会员的视频",
-						"title": "隐藏仅对会员可见的视频"
-					},
-					"hideOfficialArtistVideosFromHomePage": {
-						"label": "隐藏音乐人官方视频",
-						"title": "从主页上隐藏来自音乐人官方频道的视频"
-					},
-					"hidePaidPromotionBanner": {
-						"label": "隐藏付费推广横幅",
-						"title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
-					},
-					"hidePlayables": {
-						"label": "隐藏可播放内容",
-						"title": "隐藏所有可播放内容"
-					},
-					"hideScrollbar": {
-						"label": "启用隐藏滚动条",
-						"title": "隐藏页面滚动条"
-					},
-					"hideShorts": {
-						"label": "隐藏短视频",
-						"title": "隐藏所有短视频"
-					},
-					"hideSidebarRecommendedVideos": {
-						"label": "隐藏推荐视频",
-						"title": "隐藏推荐视频的侧边栏"
-					},
-					"hideTranslateComment": {
-						"label": "隐藏翻译评论按钮",
-						"title": "隐藏评论下方的“翻译至当前语言”按钮"
-					},
-					"loopButton": {
-						"label": "循环按钮",
-						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
-					},
-					"maximizePlayerButton": {
-						"label": "最大化播放器按钮",
-						"title": "在功能菜单中添加一个按钮来最大化播放器"
-					},
-					"openTranscriptButton": {
-						"label": "转写文稿按钮",
-						"title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
-					},
-					"openYouTubeSettingsOnHover": {
-						"label": "悬停时打开 YouTube 设置",
-						"title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
-					},
-					"pauseBackgroundPlayers": {
-						"label": "暂停后台播放",
-						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
-					},
-					"playlistRemover": {
-						"label": "从主页隐藏播放列表",
-						"title": "从主页去除播放列表"
-					},
-					"remainingTime": {
-						"label": "剩余时间",
-						"title": "显示您观看的视频的剩余时间"
-					},
-					"rememberLastVolume": {
-						"label": "记住最后一个音量",
-						"title": "记住最后一个视频的音量并在打开新视频时设置"
-					},
-					"removeRedirect": {
-						"label": "屏蔽YouTube重定向链接",
-						"title": "用真实链接替换YouTube重定向，并跳过重定向警告"
-					},
-					"restoreFullscreenScrolling": {
-						"label": "恢复全屏滚动",
-						"title": "在全屏模式下恢复滚动"
-					},
-					"shareShortener": {
-						"label": "缩短YouTube视频分享链接",
-						"title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
-					},
-					"shortsAutoScroll": {
-						"label": "短视频自动下滑",
-						"title": "短视频播完后，自动下滑播放下一个"
-					},
-					"skipContinueWatching": {
-						"label": "跳过\"视频已暂停。继续观看吗？\"",
-						"title": "跳过暂停视频播放的闲置对话框"
-					}
-				},
-				"title": "其他设置"
-			},
-			"onScreenDisplaySettings": {
-				"color": {
-					"label": "颜色",
-					"options": {
-						"blue": "蓝色",
-						"green": "绿色",
-						"orange": "橙色",
-						"pink": "粉色",
-						"purple": "紫色",
-						"red": "红色",
-						"white": "白色",
-						"yellow": "黄色"
-					},
-					"title": "选择屏幕提示文本颜色"
-				},
-				"hide": {
-					"label": "隐藏延时",
-					"title": "指定时间，以毫秒计，然后自动隐藏屏幕显示"
-				},
-				"opacity": {
-					"label": "透明度",
-					"title": "调整屏幕提示文本的透明度"
-				},
-				"padding": {
-					"label": "内边距",
-					"title": "调整屏幕提示周围以像素为单位的间距。主要适用于角落的屏幕提示。"
-				},
-				"position": {
-					"label": "位置",
-					"options": {
-						"bottom_left": "左下",
-						"bottom_right": "右下",
-						"center": "居中",
-						"top_left": "左上",
-						"top_right": "右上"
-					},
-					"title": "选择屏幕提示文本颜色"
-				},
-				"title": "屏幕提示信息设置",
-				"type": {
-					"label": "类型",
-					"options": {
-						"circle": "圆形图标",
-						"line": "直线",
-						"no_display": "无显示",
-						"text": "文本"
-					},
-					"title": "选择屏幕提示文本颜色"
-				}
-			},
-			"playbackSpeed": {
-				"enable": {
-					"label": "强制播放速度",
-					"title": "将视频速度设置为您在下面选择的内容"
-				},
-				"playbackSpeedButtons": {
-					"label": "播放速度按钮",
-					"select": {
-						"label": "播放按钮的速度",
-						"title": "每次点击要更改的速度量"
-					},
-					"title": "添加按钮以增加或降低您观看的视频的播放速度"
-				},
-				"select": {
-					"label": "播放速度",
-					"title": "将视频播放速度设为"
-				},
-				"title": "播放速度设置"
-			},
-			"playlistLength": {
-				"enable": {
-					"label": "显示播放列表长度信息",
-					"title": "显示播放列表的总长度，已观看多少，以及还剩多少。"
-				},
-				"title": "播放列表长度设置",
-				"wayToGetLength": {
-					"select": {
-						"label": "获取播放列表长度的方法",
-						"title": "获取播放列表长度信息的方式 (如果发生错误，API 方法将回退到 HTML)"
-					}
-				},
-				"wayToGetWatchTime": {
-					"select": {
-						"label": "获取已观看时间的方法",
-						"options": {
-							"duration": "视频长度",
-							"youtube": "视频观看时间"
-						},
-						"title": "获取已观看时间长度的方法 (“视频长度”方法仅会在观看页面使用)"
-					}
-				}
-			},
-			"playlistManagement": {
-				"features": {
-					"markAsUnwatchedButton": {
-						"label": "标记为未观看按钮",
-						"title": "添加一个按钮将视频标记为未观看视频"
-					},
-					"removeVideoButton": {
-						"label": "移除视频按钮",
-						"title": "添加一个按钮从播放列表中移除视频"
-					}
-				},
-				"title": "播放列表管理设置"
-			},
-			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "将视频标记为未观看失败",
-				"failedToRemoveVideo": "移除视频失败",
-				"markAsUnwatched": "标记为未观看",
-				"markingAsUnwatched": "正在标记为未观看…",
-				"removeVideo": "删除视频",
-				"removingVideo": "正在移除视频…"
-			},
-			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "将视频保存到稍后观看失败",
-				"saveVideo": "保存至稍后观看",
-				"savingVideo": "保存至稍后观看…"
-			},
-			"screenshotButton": {
-				"enable": {
-					"label": "屏幕截图按钮",
-					"title": "向播放器添加一个按钮以拍摄视频的截图"
-				},
-				"saveAs": {
-					"clipboard": "剪贴板",
-					"file": "文件",
-					"both": "全部(文件和剪贴板)"
-				},
-				"selectFormat": {
-					"label": "截图格式",
-					"title": "保存屏幕截图的格式"
-				},
-				"selectSaveAs": {
-					"label": "屏幕截图保存类型",
-					"title": "屏幕截图保存类型"
-				},
-				"title": "屏幕截图选项"
-			},
-			"scrollWheelSpeedControl": {
-				"adjustmentSteps": {
-					"label": "每轮滚动音量",
-					"title": "调整每轮滚动的音量变化"
-				},
-				"enable": {
-					"label": "滚轮控制播放速度设置",
-					"title": "按下控制键时启用滚轮音量调整"
-				},
-				"optionLabel": "{{KEY}} 键",
-				"select": {
-					"label": "控制键",
-					"title": "启用功能时按住的控制键"
-				},
-				"title": "滚轮控制播放速度设置"
-			},
-			"scrollWheelVolumeControl": {
-				"adjustmentSteps": {
-					"label": "每轮滚动音量",
-					"title": "调整每轮滚动的音量变化"
-				},
-				"enable": {
-					"label": "滚轮控制音量",
-					"title": "让您使用滚轮来控制您正在观看的视频音量"
-				},
-				"holdModifierKey": {
-					"enable": {
-						"label": "在按住控制键时启用功能",
-						"title": "按下控制键时启用滚轮音量调整"
-					},
-					"optionLabel": "{{KEY}} 键",
-					"select": {
-						"label": "控制键",
-						"title": "启用功能时按住的控制键"
-					}
-				},
-				"holdRightClick": {
-					"enable": {
-						"label": "按住右键时启用",
-						"title": "按住右键以启用滚轮音量控制"
-					}
-				},
-				"title": "滚轮控制音量设置"
-			},
-			"settingSearch": {
-				"placeholder": "搜索设置"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "记录已观看视频",
-					"title": "记录您关闭视频的进度并在下次播放时恢复"
-				},
-				"resumeType": {
-					"select": {
-						"label": "进度恢复方式",
-						"options": {
-							"automatic": "自动",
-							"prompt": "提示"
-						},
-						"title": "选择恢复视频播放进度的方式"
-					}
-				},
-				"title": "视频历史记录设置"
-			},
-			"volumeBoost": {
-				"boostAmount": {
-					"label": "音量提升量(分贝)",
-					"title": "音量提升量（分贝）"
-				},
-				"enable": {
-					"label": "音量增强",
-					"title": "启用音量增强"
-				},
-				"mode": {
-					"select": {
-						"label": "音量增强模式",
-						"options": {
-							"global": "全局统一",
-							"perVideo": "分别记忆"
-						},
-						"title": "选择音量增强生效的方式。“分别记忆”为每个视频记住各自的设置。“全局”使音量增强功能开启时，对所有视频采用同一设置。"
-					}
-				},
-				"title": "音量增强设置"
-			},
-			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "您可以从这里获取一个",
-				"input": {
-					"label": "API 密钥",
-					"title": "输入您的 Youtube 数据 API V3 密钥。"
-				},
-				"title": "YouTube API V3 密钥"
-			},
-			"youtubeDeepDark": {
-				"author": "作者",
-				"co-authors": "合作作者",
-				"colors": {
-					"colorShadow": {
-						"label": "阴影颜色",
-						"title": "阴影颜色"
-					},
-					"dimmerText": {
-						"label": "次要文本颜色",
-						"title": "为次要文本使用的颜色"
-					},
-					"hoverBackground": {
-						"label": "悬停背景颜色",
-						"title": "为悬停背景使用的颜色"
-					},
-					"mainBackground": {
-						"label": "主要背景颜色",
-						"title": "为主要背景使用的颜色"
-					},
-					"mainColor": {
-						"label": "强调颜色",
-						"title": "为强调使用的颜色"
-					},
-					"mainText": {
-						"label": "主要文本颜色",
-						"title": "为主要文本使用的颜色"
-					},
-					"secondBackground": {
-						"label": "次要背景颜色",
-						"title": "为次要背景使用的颜色"
-					}
-				},
-				"enable": {
-					"label": "启用所选主题",
-					"title": "在页面上应用所选主题"
-				},
-				"select": {
-					"label": "选择主题",
-					"title": "选择要应用到页面的主题"
-				},
-				"title": "YouTube 暗黑模式设置"
-			}
-		}
-	}
+    "langCode": "zh-CN",
+    "langName": "中文 (简体)",
+    "messages": {
+        "resumingVideo": "恢复视频播放时刻于 {{VIDEO_TIME}}",
+        "settingVolume": "设置音量增强至 {{VOLUME_BOOST_AMOUNT}}"
+    },
+    "pages": {
+        "content": {
+            "features": {
+                "copyTimestampUrlButton": {
+                    "button": {
+                        "copied": "复制成功！",
+                        "label": "复制带有时间戳的视频 URL"
+                    }
+                },
+                "featureMenu": {
+                    "button": {
+                        "label": "功能菜单"
+                    }
+                },
+                "forwardRewindButtons": {
+                    "buttons": {
+                        "forwardButton": {
+                            "label": "向前快进 {{TIME}}"
+                        },
+                        "rewindButton": {
+                            "label": "向后快退 {{TIME}}"
+                        }
+                    }
+                },
+                "hideEndScreenCardsButton": {
+                    "button": {
+                        "label": "隐藏结束界面卡片",
+                        "toggle": {
+                            "off": "显示结束界面卡片",
+                            "on": "隐藏结束界面卡片"
+                        }
+                    }
+                },
+                "loopButton": {
+                    "button": {
+                        "label": "循环播放",
+                        "toggle": {
+                            "off": "取消循环",
+                            "on": "启用循环"
+                        }
+                    }
+                },
+                "maximizePlayerButton": {
+                    "button": {
+                        "label": "最大化",
+                        "toggle": {
+                            "off": "最大化关闭",
+                            "on": "最大化开启"
+                        }
+                    }
+                },
+                "openTranscriptButton": {
+                    "button": {
+                        "label": "打开转写文稿"
+                    }
+                },
+                "playbackSpeedButtons": {
+                    "buttons": {
+                        "decreasePlaybackSpeedButton": {
+                            "label": "降低播放速度至 {{SPEED}}"
+                        },
+                        "increasePlaybackSpeedButton": {
+                            "label": "增加播放速度至 {{SPEED}}"
+                        }
+                    },
+                    "decreaseLimit": "不能继续降低({{SPEED}})",
+                    "increaseLimit": "不能继续增加({{SPEED}})"
+                },
+                "playlistLength": {
+                    "title": "如果某些视频被隐藏，或者您没有加载足够的视频来获取全部长度，总长度可能不准确。"
+                },
+                "screenshotButton": {
+                    "button": {
+                        "label": "屏幕截图"
+                    },
+                    "copiedToClipboard": "截图已复制到剪贴板"
+                },
+                "videoHistory": {
+                    "resumeButton": "继续播放",
+                    "resumePrompt": {
+                        "close": "关"
+                    }
+                },
+                "volumeBoostButton": {
+                    "button": {
+                        "label": "音量增强",
+                        "toggle": {
+                            "off": "关闭音量增强",
+                            "on": "开启音量增强"
+                        }
+                    }
+                }
+            }
+        },
+        "options": {
+            "notifications": {
+                "error": {
+                    "optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
+                    "scrollWheelHoldModifierKey": {
+                        "sameKey": {
+                            "speedControl": "滚轮控制播放速度键位与控制音量冲突。",
+                            "volumeControl": "滚轮控制音量键位与控制播放速度冲突。"
+                        }
+                    }
+                },
+                "info": {
+                    "reset": "所有选项已重置为默认值。\n现在您可以通过单击“确认”按钮保存更改，或通过关闭此页面或忽略此通知放弃更改。"
+                },
+                "success": {
+                    "saved": "选项已保存。"
+                }
+            }
+        }
+    },
+    "settings": {
+        "clearData": {
+            "allDataDeleted": "所有数据已删除。",
+            "confirmAlert": "这将删除所有与选项相关的扩展数据。是否继续？"
+        },
+        "optionDisabled": {
+            "either": {
+                "label": "启用 {{OPTIONS}} 以配置此选项",
+                "separator": " 或 "
+            },
+            "plural": {
+                "label": "启用 {{OPTIONS}} 以配置此选项",
+                "separator": " 和 "
+            },
+            "singular": "启用 '{{OPTION}}' 以配置此选项",
+            "specificOption": {
+                "featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
+                "screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
+            }
+        },
+        "scrollForMoreSettings": "滚动以查看更多设置",
+        "sections": {
+            "automaticQuality": {
+                "enable": {
+                    "label": "自动质量调整",
+                    "title": "自动调整视频质量到所选等级。"
+                },
+                "fallbackQualityStrategy": {
+                    "select": {
+                        "label": "质量回退策略",
+                        "options": {
+                            "higher": "升高",
+                            "lower": "降低"
+                        },
+                        "title": "当所选质量不可用时使用的策略"
+                    }
+                },
+                "select": {
+                    "label": "播放质量",
+                    "title": "将视频质量设为"
+                },
+                "title": "自动画质设置"
+            },
+            "bottomButtons": {
+                "clear": {
+                    "title": "清除此扩展存储在您机器上的所有数据",
+                    "value": "清除数据"
+                },
+                "confirm": {
+                    "title": "确认重置设置",
+                    "value": "确认"
+                },
+                "openTab": {
+                    "title": "在新标签中打开扩展设置"
+                },
+                "reset": {
+                    "title": "重置所有设置为默认设置，点击确认按钮以保存更改",
+                    "value": "重新开始"
+                }
+            },
+            "buttonPlacement": {
+                "select": {
+                    "buttonNames": {
+                        "copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
+                        "decreasePlaybackSpeedButton": "降低速度按钮",
+                        "forwardButton": "快进按钮",
+                        "hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
+                        "increasePlaybackSpeedButton": "增加速度按钮",
+                        "loopButton": "循环按钮",
+                        "maximizePlayerButton": "最大化按钮",
+                        "openTranscriptButton": "转写文稿按钮",
+                        "rewindButton": "快退按钮",
+                        "screenshotButton": "屏幕截图按钮",
+                        "volumeBoostButton": "音量增强按钮"
+                    },
+                    "options": {
+                        "below_player": {
+                            "placement": "位于播放器控制按键下方",
+                            "value": "位于播放器下方"
+                        },
+                        "feature_menu": {
+                            "placement": "位于功能菜单内",
+                            "value": "功能菜单"
+                        },
+                        "player_controls_left": {
+                            "placement": "位于播放器控制按键左侧",
+                            "value": "控件居左"
+                        },
+                        "player_controls_right": {
+                            "placement": "位于播放器控制按键右侧",
+                            "value": "控件居右"
+                        }
+                    },
+                    "title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}"
+                },
+                "title": "按钮位置设置"
+            },
+            "customCSS": {
+                "editor": {
+                    "collapse": "折叠编辑器",
+                    "expand": "展开编辑器",
+                    "noProblems": "未发现问题"
+                },
+                "enable": {
+                    "label": "启用自定义 CSS",
+                    "title": "启用自定义 CSS 以应用到页面"
+                },
+                "title": "自定义 CSS 设置"
+            },
+            "featureMenu": {
+                "openType": {
+                    "select": {
+                        "label": "菜单激活方式",
+                        "options": {
+                            "click": "点击",
+                            "hover": "悬停"
+                        },
+                        "title": "设置打开功能菜单的方式"
+                    },
+                    "title": "功能菜单设置"
+                }
+            },
+            "forwardRewindButtons": {
+                "enable": {
+                    "label": "启用快进/快退按钮",
+                    "title": "给视频播放器添加快进/快退按钮"
+                },
+                "time": {
+                    "label": "快进/快退时间",
+                    "title": "快进/快退视频的时间长度"
+                },
+                "title": "快进/快退按钮设置"
+            },
+            "importExportSettings": {
+                "exportButton": {
+                    "success": "导出配置成功",
+                    "title": "导出设置到 JSON 文件",
+                    "value": "导出设置"
+                },
+                "importButton": {
+                    "error": {
+                        "unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
+                        "validation": "导入设置出错。请检查文件格式。\n{{ERROR_MESSAGE}}"
+                    },
+                    "success": "设置导入成功",
+                    "title": "从 JSON 文件导入设置",
+                    "value": "导入设置"
+                }
+            },
+            "language": {
+                "select": {
+                    "label": "语言",
+                    "title": "用于扩展的语言"
+                },
+                "title": "语言"
+            },
+            "miscellaneous": {
+                "features": {
+                    "automaticTheaterMode": {
+                        "label": "自动启用剧场模式",
+                        "title": "当视频打开时，自动启用剧场模式"
+                    },
+                    "automaticallyDisableAmbientMode": {
+                        "label": "自动禁用氛围模式",
+                        "title": "载入视频时自动禁用氛围模式"
+                    },
+                    "automaticallyDisableAutoPlay": {
+                        "label": "Automatically disable autoplay",
+                        "title": "Automatically disables autoplay when you load a video"
+                    },
+                    "automaticallyDisableClosedCaptions": {
+                        "label": "自动禁用隐藏式字幕",
+                        "title": "载入视频时自动禁用隐藏式字幕"
+                    },
+                    "automaticallyEnableClosedCaptions": {
+                        "label": "自动启用隐藏式字幕",
+                        "title": "载入视频时自动启用隐藏式字幕"
+                    },
+                    "automaticallyMaximizePlayer": {
+                        "label": "自动最大化播放器",
+                        "title": "当视频打开时，自动最大化播放器"
+                    },
+                    "automaticallyShowMoreVideosOnEndScreen": {
+                        "label": "在结束屏幕上自动显示更多视频",
+                        "title": "加载视频时自动在结束屏幕上显示更多视频"
+                    },
+                    "copyTimestampUrlButton": {
+                        "label": "复制带有时间戳的视频 URL 按钮",
+                        "title": "复制带有时间戳的视频 URL (?t=123)"
+                    },
+                    "defaultToOriginalAudioTrack": {
+                        "label": "默认设置为原始音轨",
+                        "title": "总是默认原始音轨"
+                    },
+                    "enableMarkAsUnwatchedButton": {
+                        "label": "标记为未观看按钮",
+                        "title": "在播放列表中添加一个标记视频为未观看按钮"
+                    },
+                    "enableRemoveVideoButton": {
+                        "label": "移除视频按钮",
+                        "title": "在播放列表中添加一个移除视频按钮"
+                    },
+                    "enableSaveToWatchLaterButton": {
+                        "label": "启用保存到稍后观看按钮",
+                        "title": "在主页和订阅视频中添加一个按钮，将视频保存到“稍后观看”播放列表"
+                    },
+                    "hideArtificialIntelligenceSummary": {
+                        "label": "隐藏 AI 摘要",
+                        "title": "隐藏视频下方的人工智能摘要"
+                    },
+                    "hideEndScreenCards": {
+                        "label": "隐藏结束界面卡片",
+                        "title": "隐藏视频末尾的卡片"
+                    },
+                    "hideEndScreenCardsButton": {
+                        "label": "隐藏结束界面卡片按钮",
+                        "title": "添加按钮以显示/隐藏视频末尾的卡片"
+                    },
+                    "hideLiveStreamChat": {
+                        "label": "隐藏直播聊天",
+                        "title": "隐藏直播聊天"
+                    },
+                    "hideMembersOnlyVideos": {
+                        "label": "隐藏仅限会员的视频",
+                        "title": "隐藏仅对会员可见的视频"
+                    },
+                    "hideOfficialArtistVideosFromHomePage": {
+                        "label": "隐藏音乐人官方视频",
+                        "title": "从主页上隐藏来自音乐人官方频道的视频"
+                    },
+                    "hidePaidPromotionBanner": {
+                        "label": "隐藏付费推广横幅",
+                        "title": "隐藏当您观看带有付费促销的视频时出现的横幅广告"
+                    },
+                    "hidePlayables": {
+                        "label": "隐藏可播放内容",
+                        "title": "隐藏所有可播放内容"
+                    },
+                    "hideScrollbar": {
+                        "label": "启用隐藏滚动条",
+                        "title": "隐藏页面滚动条"
+                    },
+                    "hideShorts": {
+                        "label": "隐藏短视频",
+                        "title": "隐藏所有短视频"
+                    },
+                    "hideSidebarRecommendedVideos": {
+                        "label": "隐藏推荐视频",
+                        "title": "隐藏推荐视频的侧边栏"
+                    },
+                    "hideTranslateComment": {
+                        "label": "隐藏翻译评论按钮",
+                        "title": "隐藏评论下方的“翻译至当前语言”按钮"
+                    },
+                    "loopButton": {
+                        "label": "循环按钮",
+                        "title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
+                    },
+                    "maximizePlayerButton": {
+                        "label": "最大化播放器按钮",
+                        "title": "在功能菜单中添加一个按钮来最大化播放器"
+                    },
+                    "openTranscriptButton": {
+                        "label": "转写文稿按钮",
+                        "title": "在功能菜单中添加一个按钮来循环你正在观看的视频"
+                    },
+                    "openYouTubeSettingsOnHover": {
+                        "label": "悬停时打开 YouTube 设置",
+                        "title": "当您悬停在设置按钮上时打开 YouTube 设置菜单"
+                    },
+                    "pauseBackgroundPlayers": {
+                        "label": "暂停后台播放",
+                        "title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
+                    },
+                    "playlistRemover": {
+                        "label": "从主页隐藏播放列表",
+                        "title": "从主页去除播放列表"
+                    },
+                    "remainingTime": {
+                        "label": "剩余时间",
+                        "title": "显示您观看的视频的剩余时间"
+                    },
+                    "rememberLastVolume": {
+                        "label": "记住最后一个音量",
+                        "title": "记住最后一个视频的音量并在打开新视频时设置"
+                    },
+                    "removeRedirect": {
+                        "label": "屏蔽YouTube重定向链接",
+                        "title": "用真实链接替换YouTube重定向，并跳过重定向警告"
+                    },
+                    "restoreFullscreenScrolling": {
+                        "label": "恢复全屏滚动",
+                        "title": "在全屏模式下恢复滚动"
+                    },
+                    "shareShortener": {
+                        "label": "缩短YouTube视频分享链接",
+                        "title": "分享Youtube视频(youtu.be)时，删除si/feature 参数以缩短链接"
+                    },
+                    "shortsAutoScroll": {
+                        "label": "短视频自动下滑",
+                        "title": "短视频播完后，自动下滑播放下一个"
+                    },
+                    "skipContinueWatching": {
+                        "label": "跳过\"视频已暂停。继续观看吗？\"",
+                        "title": "跳过暂停视频播放的闲置对话框"
+                    }
+                },
+                "title": "其他设置"
+            },
+            "onScreenDisplaySettings": {
+                "color": {
+                    "label": "颜色",
+                    "options": {
+                        "blue": "蓝色",
+                        "green": "绿色",
+                        "orange": "橙色",
+                        "pink": "粉色",
+                        "purple": "紫色",
+                        "red": "红色",
+                        "white": "白色",
+                        "yellow": "黄色"
+                    },
+                    "title": "选择屏幕提示文本颜色"
+                },
+                "hide": {
+                    "label": "隐藏延时",
+                    "title": "指定时间，以毫秒计，然后自动隐藏屏幕显示"
+                },
+                "opacity": {
+                    "label": "透明度",
+                    "title": "调整屏幕提示文本的透明度"
+                },
+                "padding": {
+                    "label": "内边距",
+                    "title": "调整屏幕提示周围以像素为单位的间距。主要适用于角落的屏幕提示。"
+                },
+                "position": {
+                    "label": "位置",
+                    "options": {
+                        "bottom_left": "左下",
+                        "bottom_right": "右下",
+                        "center": "居中",
+                        "top_left": "左上",
+                        "top_right": "右上"
+                    },
+                    "title": "选择屏幕提示文本颜色"
+                },
+                "title": "屏幕提示信息设置",
+                "type": {
+                    "label": "类型",
+                    "options": {
+                        "circle": "圆形图标",
+                        "line": "直线",
+                        "no_display": "无显示",
+                        "text": "文本"
+                    },
+                    "title": "选择屏幕提示文本颜色"
+                }
+            },
+            "playbackSpeed": {
+                "enable": {
+                    "label": "强制播放速度",
+                    "title": "将视频速度设置为您在下面选择的内容"
+                },
+                "playbackSpeedButtons": {
+                    "label": "播放速度按钮",
+                    "select": {
+                        "label": "播放按钮的速度",
+                        "title": "每次点击要更改的速度量"
+                    },
+                    "title": "添加按钮以增加或降低您观看的视频的播放速度"
+                },
+                "select": {
+                    "label": "播放速度",
+                    "title": "将视频播放速度设为"
+                },
+                "title": "播放速度设置"
+            },
+            "playlistLength": {
+                "enable": {
+                    "label": "显示播放列表长度信息",
+                    "title": "显示播放列表的总长度，已观看多少，以及还剩多少。"
+                },
+                "title": "播放列表长度设置",
+                "wayToGetLength": {
+                    "select": {
+                        "label": "获取播放列表长度的方法",
+                        "title": "获取播放列表长度信息的方式 (如果发生错误，API 方法将回退到 HTML)"
+                    }
+                },
+                "wayToGetWatchTime": {
+                    "select": {
+                        "label": "获取已观看时间的方法",
+                        "options": {
+                            "duration": "视频长度",
+                            "youtube": "视频观看时间"
+                        },
+                        "title": "获取已观看时间长度的方法 (“视频长度”方法仅会在观看页面使用)"
+                    }
+                }
+            },
+            "playlistManagement": {
+                "features": {
+                    "markAsUnwatchedButton": {
+                        "label": "标记为未观看按钮",
+                        "title": "添加一个按钮将视频标记为未观看视频"
+                    },
+                    "removeVideoButton": {
+                        "label": "移除视频按钮",
+                        "title": "添加一个按钮从播放列表中移除视频"
+                    }
+                },
+                "title": "播放列表管理设置"
+            },
+            "playlistManagementButtons": {
+                "failedToMarkAsUnwatched": "将视频标记为未观看失败",
+                "failedToRemoveVideo": "移除视频失败",
+                "markAsUnwatched": "标记为未观看",
+                "markingAsUnwatched": "正在标记为未观看…",
+                "removeVideo": "删除视频",
+                "removingVideo": "正在移除视频…"
+            },
+            "saveToWatchLaterButton": {
+                "failedToSaveVideo": "将视频保存到稍后观看失败",
+                "saveVideo": "保存至稍后观看",
+                "savingVideo": "保存至稍后观看…"
+            },
+            "screenshotButton": {
+                "enable": {
+                    "label": "屏幕截图按钮",
+                    "title": "向播放器添加一个按钮以拍摄视频的截图"
+                },
+                "saveAs": {
+                    "both": "全部(文件和剪贴板)",
+                    "clipboard": "剪贴板",
+                    "file": "文件"
+                },
+                "selectFormat": {
+                    "label": "截图格式",
+                    "title": "保存屏幕截图的格式"
+                },
+                "selectSaveAs": {
+                    "label": "屏幕截图保存类型",
+                    "title": "屏幕截图保存类型"
+                },
+                "title": "屏幕截图选项"
+            },
+            "scrollWheelSpeedControl": {
+                "adjustmentSteps": {
+                    "label": "每轮滚动音量",
+                    "title": "调整每轮滚动的音量变化"
+                },
+                "enable": {
+                    "label": "滚轮控制播放速度设置",
+                    "title": "按下控制键时启用滚轮音量调整"
+                },
+                "optionLabel": "{{KEY}} 键",
+                "select": {
+                    "label": "控制键",
+                    "title": "启用功能时按住的控制键"
+                },
+                "title": "滚轮控制播放速度设置"
+            },
+            "scrollWheelVolumeControl": {
+                "adjustmentSteps": {
+                    "label": "每轮滚动音量",
+                    "title": "调整每轮滚动的音量变化"
+                },
+                "enable": {
+                    "label": "滚轮控制音量",
+                    "title": "让您使用滚轮来控制您正在观看的视频音量"
+                },
+                "holdModifierKey": {
+                    "enable": {
+                        "label": "在按住控制键时启用功能",
+                        "title": "按下控制键时启用滚轮音量调整"
+                    },
+                    "optionLabel": "{{KEY}} 键",
+                    "select": {
+                        "label": "控制键",
+                        "title": "启用功能时按住的控制键"
+                    }
+                },
+                "holdRightClick": {
+                    "enable": {
+                        "label": "按住右键时启用",
+                        "title": "按住右键以启用滚轮音量控制"
+                    }
+                },
+                "title": "滚轮控制音量设置"
+            },
+            "settingSearch": {
+                "placeholder": "搜索设置"
+            },
+            "videoHistory": {
+                "enable": {
+                    "label": "记录已观看视频",
+                    "title": "记录您关闭视频的进度并在下次播放时恢复"
+                },
+                "resumeType": {
+                    "select": {
+                        "label": "进度恢复方式",
+                        "options": {
+                            "automatic": "自动",
+                            "prompt": "提示"
+                        },
+                        "title": "选择恢复视频播放进度的方式"
+                    }
+                },
+                "title": "视频历史记录设置"
+            },
+            "volumeBoost": {
+                "boostAmount": {
+                    "label": "音量提升量(分贝)",
+                    "title": "音量提升量（分贝）"
+                },
+                "enable": {
+                    "label": "音量增强",
+                    "title": "启用音量增强"
+                },
+                "mode": {
+                    "select": {
+                        "label": "音量增强模式",
+                        "options": {
+                            "global": "全局统一",
+                            "perVideo": "分别记忆"
+                        },
+                        "title": "选择音量增强生效的方式。“分别记忆”为每个视频记住各自的设置。“全局”使音量增强功能开启时，对所有视频采用同一设置。"
+                    }
+                },
+                "title": "音量增强设置"
+            },
+            "youtubeDataApiV3Key": {
+                "getApiKeyLinkText": "您可以从这里获取一个",
+                "input": {
+                    "label": "API 密钥",
+                    "title": "输入您的 Youtube 数据 API V3 密钥。"
+                },
+                "title": "YouTube API V3 密钥"
+            },
+            "youtubeDeepDark": {
+                "author": "作者",
+                "co-authors": "合作作者",
+                "colors": {
+                    "colorShadow": {
+                        "label": "阴影颜色",
+                        "title": "阴影颜色"
+                    },
+                    "dimmerText": {
+                        "label": "次要文本颜色",
+                        "title": "为次要文本使用的颜色"
+                    },
+                    "hoverBackground": {
+                        "label": "悬停背景颜色",
+                        "title": "为悬停背景使用的颜色"
+                    },
+                    "mainBackground": {
+                        "label": "主要背景颜色",
+                        "title": "为主要背景使用的颜色"
+                    },
+                    "mainColor": {
+                        "label": "强调颜色",
+                        "title": "为强调使用的颜色"
+                    },
+                    "mainText": {
+                        "label": "主要文本颜色",
+                        "title": "为主要文本使用的颜色"
+                    },
+                    "secondBackground": {
+                        "label": "次要背景颜色",
+                        "title": "为次要背景使用的颜色"
+                    }
+                },
+                "enable": {
+                    "label": "启用所选主题",
+                    "title": "在页面上应用所选主题"
+                },
+                "select": {
+                    "label": "选择主题",
+                    "title": "选择要应用到页面的主题"
+                },
+                "title": "YouTube 暗黑模式设置"
+            }
+        }
+    }
 }
