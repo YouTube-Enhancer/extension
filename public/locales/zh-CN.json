@@ -286,8 +286,8 @@
                         "title": "载入视频时自动禁用氛围模式"
                     },
                     "automaticallyDisableAutoPlay": {
-                        "label": "Automatically disable autoplay",
-                        "title": "Automatically disables autoplay when you load a video"
+                        "label": "自动禁用自动播放",
+                        "title": "载入视频时自动禁用自动播放"
                     },
                     "automaticallyDisableClosedCaptions": {
                         "label": "自动禁用隐藏式字幕",
