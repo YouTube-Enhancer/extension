@@ -1,5 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import eventManager from "@/src/utils/EventManager";
 import { browserColorLog, isShortsPage, isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -83,7 +84,7 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 const speedValueRegex = /(?<!\d\.)([0-1](\.\d+)?|2)(?![\d.])/;
 export async function setupPlaybackSpeedChangeListener() {
 	const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-	const speedMenuItemClickListener = (event: Event) => {
+	const speedMenuItemClickListener = async (event: Event) => {
 		const { target: speedMenuItem } = event as Event & { target: HTMLDivElement };
 		if (!speedMenuItem) return;
 		const { textContent: speedValue } = speedMenuItem;
@@ -96,11 +97,12 @@ export async function setupPlaybackSpeedChangeListener() {
 				playerSpeed = Number(speedValueMatch[1]);
 			}
 		}
+		await updateSpeedButtons(playerSpeed);
 		window.localStorage.setItem("playerSpeed", String(playerSpeed));
 	};
 	// Create an observer instance
 	const playerSpeedMenuObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
-		mutationsList.forEach((mutation) => {
+		mutationsList.forEach(async (mutation) => {
 			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
 			// Check if the target element has the desired structure
 			const panelHeader = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-header");
@@ -118,6 +120,7 @@ export async function setupPlaybackSpeedChangeListener() {
 						const speedValueMatch = customSpeedLabelValue.match(speedValueRegex);
 						if (speedValueMatch) {
 							const playerSpeed = Number(speedValueMatch[1]);
+							await updateSpeedButtons(playerSpeed);
 							window.localStorage.setItem("playerSpeed", String(playerSpeed));
 						}
 					}
@@ -130,13 +133,14 @@ export async function setupPlaybackSpeedChangeListener() {
 		});
 	});
 	const customSpeedSliderObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
-		mutationsList.forEach((mutation) => {
+		mutationsList.forEach(async (mutation) => {
 			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
 			if (!targetElement.matches(".ytp-speedslider-text")) return;
 			const { textContent: speedValue } = targetElement;
 			// If the playback speed is not available, return
 			if (!speedValue) return;
 			const playerSpeed = parseFloat(speedValue);
+			await updateSpeedButtons(playerSpeed);
 			window.localStorage.setItem("playerSpeed", String(playerSpeed));
 		});
 	});
@@ -163,4 +167,13 @@ export async function setupPlaybackSpeedChangeListener() {
 		const playerSpeed = isNaN(Number(speedValue)) ? 1 : Number(speedValue);
 		window.localStorage.setItem("playerSpeed", String(playerSpeed));
 	}
+}
+async function updateSpeedButtons(playerSpeed: number) {
+	const {
+		data: {
+			options: { playback_buttons_speed: playbackSpeedPerClick }
+		}
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "increase"));
+	await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "decrease"));
 }
