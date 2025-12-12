@@ -404,7 +404,7 @@ const initialize = function () {
 						if (automaticallyShowMoreVideosOnEndScreenEnabled) {
 							await enableAutomaticallyShowMoreVideosOnEndScreen();
 						} else {
-							await disableAutomaticallyShowMoreVideosOnEndScreen();
+							disableAutomaticallyShowMoreVideosOnEndScreen();
 						}
 						break;
 					}
@@ -615,7 +615,7 @@ const initialize = function () {
 						const {
 							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
 						} = message;
-						const endScreenCardsHidden = await isEndScreenCardsHidden();
+						const endScreenCardsHidden = isEndScreenCardsHidden();
 						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
 						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
 						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
