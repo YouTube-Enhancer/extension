@@ -136,7 +136,7 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Scroll for more settings",
@@ -214,7 +214,7 @@
 					},
 					"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
 				},
-				"title": "ボタン置き方設定"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "カスタムCSSを可能にする",
 					"title": "ページに適用するカスタムCSSを可能にする"
 				},
-				"title": "カスタムCSS設定"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -285,6 +285,10 @@
 						"label": "シネマティック ライティングを自動的に無効にする",
 						"title": "動画の読み込み時にシネマティック ライティングを自動にディセーブルする"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "クローズドキャプションを自動にディセーブルする",
 						"title": "動画の読み込み時にクローズドキャプションを自動にディセーブルする"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "ショートを隠す",
 						"title": "全ショートを隠す"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "コメント翻訳ボタンを隠す",
@@ -450,7 +466,7 @@
 					},
 					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
 				},
-				"title": "オンスクリーンディスプレイの設定",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "OSD型",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 				"failedToRemoveVideo": "Failed to remove video",
@@ -523,6 +552,7 @@
 					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "クリップボード",
 					"file": "ファイル"
 				},
@@ -627,7 +657,7 @@
 					"label": "APIキー",
 					"title": "YouTube API V3キーを入力してください。"
 				},
-				"title": "YouTube API V3キー"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
@@ -670,7 +700,7 @@
 					"label": "テーマを選択",
 					"title": "ページのテーマを選択選べしてください"
 				},
-				"title": "YouTubeディープダーク設定"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}

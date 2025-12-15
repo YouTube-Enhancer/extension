@@ -136,7 +136,7 @@
 			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-				"screenshotButtonFileFormat": "Bu seçeneği yapılandırmak için ekran görüntüsü kaydetme türünü 'File' olarak ayarlayın"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -214,7 +214,7 @@
 					},
 					"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 				},
-				"title": "Düğme Yerleşim Ayarları"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "Özel CSS'yi etkinleştir",
 					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
 				},
-				"title": "Özel CSS Ayarları"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -285,6 +285,10 @@
 						"label": "Ortam modunu otomatik olarak devre dışı bırak",
 						"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
 						"title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Varsayılan olarak orijinal ses parçasına dön",
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "Kısa videoları gizle",
 						"title": "Tüm kısa videoları gizler"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "Yorumu Çevir'i Gizle Butonu",
@@ -450,7 +466,7 @@
 					},
 					"title": "Ekran görüntüleme konumunu seçin"
 				},
-				"title": "Ekran Üstü Görüntüleme Ayarları",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Tür",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 				"failedToRemoveVideo": "Video kaldırılamadı",
@@ -523,6 +552,7 @@
 					"title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "Pano",
 					"file": "Dosya"
 				},
@@ -627,7 +657,7 @@
 					"label": "API Anahtarı",
 					"title": "Youtube Veri API V3 anahtarınızı girin."
 				},
-				"title": "YouTube API V3 Anahtarı"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Yazar",
@@ -670,7 +700,7 @@
 					"label": "Tema seç",
 					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
-				"title": "YouTube Deep Dark Ayarları"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}
