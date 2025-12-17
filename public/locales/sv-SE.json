@@ -136,7 +136,7 @@
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
 				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-				"screenshotButtonFileFormat": "Ställ in skärmbildens spartyp till 'Fil' för att konfigurera detta alternativ"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -285,6 +285,10 @@
 						"label": "Inaktivera biobelysning automatiskt",
 						"title": "Inaktiverar automatiskt biobelysning när du startar en video"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Inaktivera textning automatiskt",
 						"title": "Inaktiverar textning automatiskt när du laddar en video"
@@ -298,8 +302,8 @@
 						"title": "Maximera spelaren automatiskt när du laddar en video"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
+						"label": "Visa automatiskt fler videor på slutskärmen",
+						"title": "Visa automatiskt fler videor på slutskärmen när du laddar en video"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Kopiera videons webbadress med tidsstämpelknappen",
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Standard till originalljudspår",
 						"title": "Använd alltid originalljudspåret som standard"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Markera som ej sedd",
+						"title": "Lägg till en knapp i spellistans objekt för att markera videor som ej sedda"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Ta bort videoknappen",
+						"title": "Lägg till en knapp i spellistobjekt för att ta bort videor från spellistan"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Aktivera knappen spara för att titta på senare",
@@ -330,8 +342,8 @@
 						"title": "Döljer direktströmschatten"
 					},
 					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
+						"label": "Dölj endast för medlemmar-videor",
+						"title": "Döljer videor som endast är synliga för medlemmar"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Dölj officiella artistvideor",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "Dölj shorts",
 						"title": "Döljer alla shorts"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Dölj rekommenderade videor",
+						"title": "Döljer sidofältet som rekommenderar videor"
 					},
 					"hideTranslateComment": {
 						"label": "Dölj översättning av kommentarer",
@@ -450,7 +466,7 @@
 					},
 					"title": "Välj placering av On-Screen Display"
 				},
-				"title": "On-Screen Display-inställningar",
+				"title": "On-Screen skärminställningar",
 				"type": {
 					"label": "Typ",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Markera som ej seddknapp",
+						"title": "Lägger till en knapp för att markera videor som ej sedda"
+					},
+					"removeVideoButton": {
+						"label": "Ta bort videoknappen",
+						"title": "Lägger till en knapp för att ta bort videor från spellistan"
+					}
+				},
+				"title": "Inställningar för hantering av spellistor"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Det gick inte att markera video som ej sedd",
 				"failedToRemoveVideo": "Det gick inte att ta bort video",
@@ -513,9 +542,9 @@
 				"removingVideo": "Tar bort video…"
 			},
 			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
+				"failedToSaveVideo": "Det gick inte att spara videon till titta på senare",
+				"saveVideo": "Spara till titta på senare",
+				"savingVideo": "Sparar till titta på senare…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -523,6 +552,7 @@
 					"title": "Lägger till en knapp till spelaren för att ta en skärmbild av videon"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "Urklipp",
 					"file": "Fil"
 				},

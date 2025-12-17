@@ -10,8 +10,8 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "Kopiert!",
+						"label": "Video URL mit Zeitstempel kopieren"
 					}
 				},
 				"featureMenu": {
@@ -33,7 +33,7 @@
 					"button": {
 						"label": "Hide end screen cards",
 						"toggle": {
-							"off": "Show end screen cards",
+							"off": "Zeige Endcards",
 							"on": "Hide end screen cards"
 						}
 					}
@@ -51,14 +51,14 @@
 					"button": {
 						"label": "Maximize",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Maximieren aus",
+							"on": "Maximieren an"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Transkript öffnen"
 					}
 				},
 				"playbackSpeedButtons": {
@@ -70,11 +70,11 @@
 							"label": "Increase Speed to {{SPEED}}"
 						}
 					},
-					"decreaseLimit": "Can't decrease further ({{SPEED}})",
+					"decreaseLimit": "Geringer nicht möglich ({{SPEED}})",
 					"increaseLimit": "Can't increase further ({{SPEED}})"
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "Die Gesamtlänge kann ungenau sein, wenn einige Videos ausgeblendet sind oder wenn Sie nicht genug Videos geladen haben, um die volle Länge zu erhalten."
 				},
 				"screenshotButton": {
 					"button": {
@@ -105,7 +105,7 @@
 					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"speedControl": "Die Bedientaste für die Geschwindigkeitsregelung für das Scrollen kann nicht identisch sein mit der Änderungstaste für die Lautstärkeregelung des Mausrades.",
 							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
 						}
 					}
@@ -136,10 +136,10 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "Weitere Einstellungen gibt es unten",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -172,7 +172,7 @@
 					"value": "Bestätigen"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Erweiterungseinstellungen in einem neuen Tab öffnen"
 				},
 				"reset": {
 					"title": "Setzt alle Einstellungen auf ihre Standardwerte zurück. Klicken Sie auf die Bestätigungs-Schaltfläche, um die Änderungen zu speichern",
@@ -182,63 +182,63 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
-						"decreasePlaybackSpeedButton": "Decrease Speed button",
-						"forwardButton": "Fast Forward button",
-						"hideEndScreenCardsButton": "Hide end screen cards button",
-						"increasePlaybackSpeedButton": "Increase Speed button",
-						"loopButton": "Loop button",
-						"maximizePlayerButton": "Maximize button",
-						"openTranscriptButton": "Open Transcript button",
-						"rewindButton": "Rewind button",
-						"screenshotButton": "Screenshot button",
-						"volumeBoostButton": "Volume Boost button"
+						"copyTimestampUrlButton": "Video-URL mit Timestamp kopieren",
+						"decreasePlaybackSpeedButton": "Geschwindigkeit verringern",
+						"forwardButton": "Vorspulen",
+						"hideEndScreenCardsButton": "End-Screen Karte verstecken",
+						"increasePlaybackSpeedButton": "Geschwindigkeit erhöhen",
+						"loopButton": "Loop",
+						"maximizePlayerButton": "Maximieren",
+						"openTranscriptButton": "Transkript",
+						"rewindButton": "Zurückspulen",
+						"screenshotButton": "Screenshot",
+						"volumeBoostButton": "Lautstärke-Boost"
 					},
 					"options": {
 						"below_player": {
-							"placement": "below the player controls",
-							"value": "Below Player"
+							"placement": "unterhalb der Video-Steuerung",
+							"value": "Unter dem Player"
 						},
 						"feature_menu": {
-							"placement": "in the feature menu",
-							"value": "Feature Menu"
+							"placement": "im Eigenschaftsmenü",
+							"value": "Feature-Menü"
 						},
 						"player_controls_left": {
-							"placement": "on the left side of player controls",
-							"value": "Left Controls"
+							"placement": "auf der linken Seite der Video-Steuerung",
+							"value": "Links"
 						},
 						"player_controls_right": {
-							"placement": "on the right side of player controls",
-							"value": "Right Controls"
+							"placement": "auf der rechten Seite der Video-Steuerung",
+							"value": "Rechts"
 						}
 					},
-					"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+					"title": "Platziere {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
 				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
-					"noProblems": "No problems found."
+					"collapse": "Editor einklappen",
+					"expand": "Editor vergrößern",
+					"noProblems": "Keine Probleme gefunden."
 				},
 				"enable": {
-					"label": "Custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "Benutzerdefiniertes CSS",
+					"title": "Aktiviert benutzerdefiniertes CSS für die Seite"
 				},
 				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
 					"select": {
-						"label": "Menu Activation Type",
+						"label": "Menü Aktivierungstyp",
 						"options": {
-							"click": "Click",
+							"click": "Klick",
 							"hover": "Hover"
 						},
-						"title": "Select the method to activate the feature menu"
+						"title": "Wähle die Methode zum Aktivieren des Feature-Menüs"
 					},
-					"title": "Feature menu settings"
+					"title": "Feature-Menüeinstellungen"
 				}
 			},
 			"forwardRewindButtons": {
@@ -282,16 +282,20 @@
 						"title": "Automatisch den Theatermodus aktivieren, wenn ein Video geladen wird"
 					},
 					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
+						"label": "Ambient-Modus automatisch deaktivieren",
+						"title": "Deaktiviert automatisch den Ambient-Modus, wenn du ein Video lädst"
+					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
 					},
 					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
+						"label": "Untertitel automatisch deaktivieren",
+						"title": "Deaktiviert automatisch Untertitel, wenn du ein Video lädst"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Untertitel automatisch aktivieren",
+						"title": "Aktiviert die Untertitel automatisch, wenn du ein Video lädst"
 					},
 					"automaticallyMaximizePlayer": {
 						"label": "Automatically maximize player",
@@ -302,12 +306,20 @@
 						"title": "Automatically shows more videos on end screen when you load a video"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Video-URL mit Zeitstempel kopieren",
+						"title": "Kopiert die Video-URL mit Zeitstempel (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -350,12 +362,16 @@
 						"title": "Versteckt die Scrollleiste"
 					},
 					"hideShorts": {
-						"label": "Hide shorts",
-						"title": "Hides all shorts"
+						"label": "Shorts ausblenden",
+						"title": "Alle Shorts ausblenden"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
-						"label": "Hide translate comment button",
-						"title": "Hides 'Translate to Language' button under comments"
+						"label": "Übersetzungs-Kommentar-Button ausblenden",
+						"title": "Versteckt die Schaltfläche \"In Sprache übersetzen\" unter Kommentaren"
 					},
 					"loopButton": {
 						"label": "Dauerschleife-Button",
@@ -363,15 +379,15 @@
 					},
 					"maximizePlayerButton": {
 						"label": "Player-Button maximieren",
-						"title": "Adds a button to the feature menu to maximize the player"
+						"title": "Fügt dem Eigenschaftsmenü eine Schaltfläche hinzu, um den Video-Player zu maximieren"
 					},
 					"openTranscriptButton": {
-						"label": "Open transcript button",
-						"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+						"label": "Transkript-Button",
+						"title": "Fügt eine Schaltfläche zum Feature-Menü hinzu, um das Protokoll des Videos zu öffnen, das du siehst"
 					},
 					"openYouTubeSettingsOnHover": {
-						"label": "Open YouTube settings on hover",
-						"title": "Opens the YouTube settings menu when you hover over the settings button"
+						"label": "YouTube-Einstellungen beim Hover öffnen",
+						"title": "Öffnet die YouTube Einstellungen, wenn du über den Einstellungs-Button fährst"
 					},
 					"pauseBackgroundPlayers": {
 						"label": "Pause background players",
@@ -398,46 +414,46 @@
 						"title": "Restores scrolling in fullscreen mode"
 					},
 					"shareShortener": {
-						"label": "Shorten YouTube video share link",
-						"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+						"label": "YouTube Video Link kürzen",
+						"title": "Verkürzt den YouTube Video Link (youtu.be) indem si/Feature-Parameter entfernt wird"
 					},
 					"shortsAutoScroll": {
-						"label": "Shorts auto scroll",
-						"title": "Automatically scrolls to the next short"
+						"label": "Shorts automatisch scrollen",
+						"title": "Scrollen Sie automatisch im nächsten Short"
 					},
 					"skipContinueWatching": {
-						"label": "Skip \"Video is paused. Continue watching?\"",
-						"title": "Skips the idle dialog that pauses video playback"
+						"label": "Überspringe \"Video ist pausiert. Weiter ansehen?\"",
+						"title": "Überspringt den Leerlauf-Dialog, der die Videowiedergabe pausiert"
 					}
 				},
 				"title": "Weitere Einstellungen"
 			},
 			"onScreenDisplaySettings": {
 				"color": {
-					"label": "Color",
+					"label": "Farbe",
 					"options": {
-						"blue": "Blue",
-						"green": "Green",
+						"blue": "Blau",
+						"green": "Grün",
 						"orange": "Orange",
 						"pink": "Pink",
-						"purple": "Purple",
-						"red": "Red",
-						"white": "White",
-						"yellow": "Yellow"
+						"purple": "Lila",
+						"red": "Rot",
+						"white": "Weiß",
+						"yellow": "Gelb"
 					},
-					"title": "Select the color for the On-Screen Display"
+					"title": "Farbe für den On-Screen Display wählen"
 				},
 				"hide": {
 					"label": "Hide Delay",
 					"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
 				},
 				"opacity": {
-					"label": "Opacity",
-					"title": "Adjust the transparency of the On-Screen Display"
+					"label": "Transparenz",
+					"title": "Die Transparenz der Bildschirmanzeige anpassen"
 				},
 				"padding": {
-					"label": "Padding",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"label": "Innenabstand",
+					"title": "Passe den Abstand rund um die Bildschirmanzeige in Pixeln an. Dies gilt speziell für die Bildschirmanzeige in den Ecken."
 				},
 				"position": {
 					"label": "Position",
@@ -454,8 +470,8 @@
 				"type": {
 					"label": "Type",
 					"options": {
-						"circle": "Circle",
-						"line": "Line",
+						"circle": "Kreis",
+						"line": "Balken",
 						"no_display": "No display",
 						"text": "Text"
 					},
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 				"failedToRemoveVideo": "Failed to remove video",
@@ -523,6 +552,7 @@
 					"title": "Fügt dem Player einen Button hinzu, um einen Screenshot des Videos zu machen"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "Zwischenablage",
 					"file": "Datei"
 				},
@@ -538,12 +568,12 @@
 			},
 			"scrollWheelSpeedControl": {
 				"adjustmentSteps": {
-					"label": "Speed Change Per Scroll",
-					"title": "Adjust the speed change per scroll"
+					"label": "Geschwindigkeitsänderung durch Mausrad",
+					"title": "Geschwindigkeitsänderung durch Mausrad anpassen"
 				},
 				"enable": {
 					"label": "Scroll wheel speed control",
-					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
+					"title": "Drücken Sie eine Änderntaste, um die Lautstärkeregelung mit dem Mausrad zu aktivieren."
 				},
 				"optionLabel": "{{KEY}} key",
 				"select": {
@@ -585,8 +615,8 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "Gesehene Videos protokollieren",
+					"title": "Hält den Überblick darüber, wo du aufgehört hast, wenn du Videos anschaust und aktiviert das Fortfahren der Wiedergabe"
 				},
 				"resumeType": {
 					"select": {
@@ -624,42 +654,42 @@
 			"youtubeDataApiV3Key": {
 				"getApiKeyLinkText": "You can get one from here",
 				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
+					"label": "API Schlüssel",
+					"title": "Gib deinen YouTube Data API V3 Schlüssel ein."
 				},
 				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
-				"author": "Author",
-				"co-authors": "Co-authors",
+				"author": "Ersteller",
+				"co-authors": "Mitersteller",
 				"colors": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Schattenfarbe",
+						"title": "Farbe für Schatten"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Sekundäre Textfarbe",
+						"title": "Farbe für sekundären Text"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Hintergrundfarbe beim Hovern",
+						"title": "Farbe für den Hintergrund beim Hovern"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Haupthintergrundfarbe",
+						"title": "Farbe für Haupthintergrund"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Akzentfarbe",
+						"title": "Farbe für die Akzente"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Haupttextfarbe",
+						"title": "Farbe für Haupttext"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Sekundäre Hintergrundfarbe",
+						"title": "Farbe für sekundären Hintergrund"
 					}
 				},
 				"enable": {
@@ -667,8 +697,8 @@
 					"title": "Activate the selected theme for the page"
 				},
 				"select": {
-					"label": "Select theme",
-					"title": "Select a theme to be applied to the page"
+					"label": "Theme auswählen",
+					"title": "Wählen Sie ein Theme aus, das auf die Seite angewendet werden soll"
 				},
 				"title": "YouTube deep dark settings"
 			}
