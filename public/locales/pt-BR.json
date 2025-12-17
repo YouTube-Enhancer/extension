@@ -136,7 +136,7 @@
 			"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 			"specificOption": {
 				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Role para mais opções",
@@ -214,7 +214,7 @@
 					},
 					"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
 				},
-				"title": "Opções de colocação de botão"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "CSS personalizado",
 					"title": "Ativa o CSS personalizado para ser aplicado à página"
 				},
-				"title": "Opções do CSS personalizado"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -285,6 +285,10 @@
 						"label": "Desativar automaticamente o modo ambiente",
 						"title": "Desativa o modo ambiente automaticamente ao carregar um vídeo"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Desativar legendas automaticamente",
 						"title": "Desativa as legendas ao carregar um vídeo"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Retornar à faixa de vídeo original",
 						"title": "Sempre retornar à faixa de vídeo original"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "Ocultar \"Shorts\"",
 						"title": "Oculta a função \"Shorts\""
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "Ocultar botão de traduzir comentário",
@@ -450,7 +466,7 @@
 					},
 					"title": "Seleciona a posição da exibição na tela"
 				},
-				"title": "Opções de exibição na tela",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 				"failedToRemoveVideo": "Failed to remove video",
@@ -523,6 +552,7 @@
 					"title": "Adiciona um botão ao reprodutor para tirar uma captura de tela do vídeo"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "Área de transferência",
 					"file": "Arquivo"
 				},
@@ -627,7 +657,7 @@
 					"label": "Chave API",
 					"title": "Insira sua chave API YouTube Data V3."
 				},
-				"title": "Chave API YouTube Data V3"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "Autor",
@@ -670,7 +700,7 @@
 					"label": "Selecionar tema",
 					"title": "Selecione um tema para a página"
 				},
-				"title": "Opções do fundo escuro do YouTube"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}

@@ -136,7 +136,7 @@
 			"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 			"specificOption": {
 				"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata come 'File' per configurare questa opzione"
+				"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione"
 			}
 		},
 		"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -214,7 +214,7 @@
 					},
 					"title": "Posiziona {{BUTTON_NAME}} {{PLACEMENT}}"
 				},
-				"title": "Impostazioni posizione pulsante"
+				"title": "Impostazioni posizione pulsanti"
 			},
 			"customCSS": {
 				"editor": {
@@ -285,6 +285,10 @@
 						"label": "Disabilita automaticamente la modalità ambiente",
 						"title": "Disabilita automaticamente la modalità ambiente quando si carica un video"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Disabilita automaticamente la riproduzione automatica",
+						"title": "Disabilita automaticamente la riproduzione automatica quando carichi un video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Disabilita automaticamente le didascalie chiuse",
 						"title": "Disabilita automaticamente le didascalie chiuse quando si carica un video"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Traccia audio originale predefinita",
 						"title": "Traccia audio originale sempre predefinita"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Marca come pulsante non visto",
+						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per contrassegnare i video come non visti"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiungi un pulsante alle voci della lista riproduzioni per rimuovere i video da essa"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Abilita il pulsante del salvataggio per guardare più tardi",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "Nascondi blocchi",
 						"title": "Nasconde tutti i blocchi"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Nascondi i video raccomandati",
+						"title": "Nasconde la barra laterale che raccomanda i video"
 					},
 					"hideTranslateComment": {
 						"label": "Nascondi pulsante \"Traduci commento\"",
@@ -450,7 +466,7 @@
 					},
 					"title": "Seleziona la posizione dello schermo interattivo"
 				},
-				"title": "Impostazioni schermo interattivo",
+				"title": "Impostazioni schermo",
 				"type": {
 					"label": "Tipo",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Marca come pulsante non visto",
+						"title": "Aggiunge un pulsante per marcare i video come non visti"
+					},
+					"removeVideoButton": {
+						"label": "Rimuovi pulsante video",
+						"title": "Aggiunge un pulsante per rimuovere i video dalla lista riproduzioni"
+					}
+				},
+				"title": "Impostazioni gestione scaletta"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Impossibile contrassegnare il video come non visto",
 				"failedToRemoveVideo": "Impossibile rimuovere il video",
@@ -523,6 +552,7 @@
 					"title": "Aggiunge un pulsante al riproduttore per catturare una schermata del video"
 				},
 				"saveAs": {
+					"both": "Entrambi (File e Appunti)",
 					"clipboard": "Appunti",
 					"file": "File"
 				},
@@ -627,7 +657,7 @@
 					"label": "Chiave API",
 					"title": "Inserisci la tua chiave Youtube API V3."
 				},
-				"title": "Chiave Youtube API V3"
+				"title": "Chiave API V3 di YouTube"
 			},
 			"youtubeDeepDark": {
 				"author": "Autore",
@@ -670,7 +700,7 @@
 					"label": "Seleziona tema",
 					"title": "Seleziona un tema da applicare alla pagina"
 				},
-				"title": "Impostazioni sfondo scuro di YouTube"
+				"title": "Impostazioni scure di YouTube"
 			}
 		}
 	}

@@ -136,7 +136,7 @@
 			"singular": "Enable '{{OPTION}}' to configure this option",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' to configure this option"
+				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
 		"scrollForMoreSettings": "Scroll for more settings",
@@ -214,7 +214,7 @@
 					},
 					"title": "將{{BUTTON_NAME}}放{{PLACEMENT}}"
 				},
-				"title": "按鈕位置設定"
+				"title": "Button placement settings"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "啟用自訂CSS",
 					"title": "啟用應用到頁面的自訂CSS"
 				},
-				"title": "自訂CSS設定"
+				"title": "Custom CSS settings"
 			},
 			"featureMenu": {
 				"openType": {
@@ -285,6 +285,10 @@
 						"label": "自動停用微光效果",
 						"title": "載入影片時自動停用微光效果"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "Automatically disable autoplay",
+						"title": "Automatically disables autoplay when you load a video"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "自動停用字幕",
 						"title": "載入影片時自動停用字幕"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "Default to original audio track",
 						"title": "Always default to the original audio track"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Add a button to playlist items to mark videos as unwatched"
+					},
+					"enableRemoveVideoButton": {
+						"label": "Remove video button",
+						"title": "Add a button to playlist items to remove videos from the playlist"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "Enable save to Watch Later button",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "隱藏 Shorts",
 						"title": "隱藏全部 Shorts"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "Hide recommended videos",
+						"title": "Hides the sidebar that recommends videos"
 					},
 					"hideTranslateComment": {
 						"label": "隱藏翻譯留言按鈕",
@@ -450,7 +466,7 @@
 					},
 					"title": "選擇屏幕顥示的位置"
 				},
-				"title": "屏幕顥示設定",
+				"title": "On-screen display settings",
 				"type": {
 					"label": "類型",
 					"options": {
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "Mark as unwatched button",
+						"title": "Adds a button to mark videos as unwatched"
+					},
+					"removeVideoButton": {
+						"label": "Remove video button",
+						"title": "Adds a button to remove videos from the playlist"
+					}
+				},
+				"title": "Playlist management settings"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 				"failedToRemoveVideo": "Failed to remove video",
@@ -523,6 +552,7 @@
 					"title": "在播放器加入擷取螢幕截圖按鈕"
 				},
 				"saveAs": {
+					"both": "Both (File and Clipboard)",
 					"clipboard": "剪貼簿",
 					"file": "檔案"
 				},
@@ -627,7 +657,7 @@
 					"label": "API 金鑰",
 					"title": "輸入你的 YouTube Data API V3 金鑰"
 				},
-				"title": "YouTube API V3 金鑰"
+				"title": "YouTube API V3 key"
 			},
 			"youtubeDeepDark": {
 				"author": "作者",
@@ -670,7 +700,7 @@
 					"label": "選擇主題",
 					"title": "選擇套用到頁面的主題"
 				},
-				"title": "YouTube Deep Dark 設定"
+				"title": "YouTube deep dark settings"
 			}
 		}
 	}

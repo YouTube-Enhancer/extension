@@ -136,7 +136,7 @@
 			"singular": "启用 '{{OPTION}}' 以配置此选项",
 			"specificOption": {
 				"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”以配置此选项"
+				"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 			}
 		},
 		"scrollForMoreSettings": "滚动以查看更多设置",
@@ -285,6 +285,10 @@
 						"label": "自动禁用氛围模式",
 						"title": "载入视频时自动禁用氛围模式"
 					},
+					"automaticallyDisableAutoPlay": {
+						"label": "自动禁用自动播放",
+						"title": "载入视频时自动禁用自动播放"
+					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "自动禁用隐藏式字幕",
 						"title": "载入视频时自动禁用隐藏式字幕"
@@ -308,6 +312,14 @@
 					"defaultToOriginalAudioTrack": {
 						"label": "默认设置为原始音轨",
 						"title": "总是默认原始音轨"
+					},
+					"enableMarkAsUnwatchedButton": {
+						"label": "标记为未观看按钮",
+						"title": "在播放列表中添加一个标记视频为未观看按钮"
+					},
+					"enableRemoveVideoButton": {
+						"label": "移除视频按钮",
+						"title": "在播放列表中添加一个移除视频按钮"
 					},
 					"enableSaveToWatchLaterButton": {
 						"label": "启用保存到稍后观看按钮",
@@ -352,6 +364,10 @@
 					"hideShorts": {
 						"label": "隐藏短视频",
 						"title": "隐藏所有短视频"
+					},
+					"hideSidebarRecommendedVideos": {
+						"label": "隐藏推荐视频",
+						"title": "隐藏推荐视频的侧边栏"
 					},
 					"hideTranslateComment": {
 						"label": "隐藏翻译评论按钮",
@@ -504,6 +520,19 @@
 					}
 				}
 			},
+			"playlistManagement": {
+				"features": {
+					"markAsUnwatchedButton": {
+						"label": "标记为未观看按钮",
+						"title": "添加一个按钮将视频标记为未观看视频"
+					},
+					"removeVideoButton": {
+						"label": "移除视频按钮",
+						"title": "添加一个按钮从播放列表中移除视频"
+					}
+				},
+				"title": "播放列表管理设置"
+			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "将视频标记为未观看失败",
 				"failedToRemoveVideo": "移除视频失败",
@@ -523,6 +552,7 @@
 					"title": "向播放器添加一个按钮以拍摄视频的截图"
 				},
 				"saveAs": {
+					"both": "全部(文件和剪贴板)",
 					"clipboard": "剪贴板",
 					"file": "文件"
 				},
