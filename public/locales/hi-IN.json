@@ -2,57 +2,57 @@
 	"langCode": "hi-IN",
 	"langName": "Hindi",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "{{VIDEO_TIME}} पर वीडियो पुनः आरंभ किया जा रहा है",
+		"settingVolume": "ध्वनि प्रवर्धन को {{VOLUME_BOOST_AMOUNT}} पर सेट किया जा रहा है"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"copied": "कॉपी किया गया!",
+						"label": "टाइमस्टैम्प सहित वीडियो URL कॉपी करें"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "सुविधा मेनू"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "{{TIME}} तक तेज़ी से आगे बढ़ाएँ"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} तक पीछे ले जाएँ"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "अंतिम स्क्रीन कार्ड छिपाएँ",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "अंतिम स्क्रीन कार्ड दिखाएँ",
+							"on": "अंतिम स्क्रीन कार्ड छिपाएँ"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "दोहराव",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "दोहराव बंद",
+							"on": "दोहराव चालू"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "अधिकतम करें",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "अधिकतम बंद",
+							"on": "अधिकतम चालू"
 						}
 					}
 				},
@@ -255,7 +255,7 @@
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Settings successfully exported",
-					"title": "Export settings to a JSON file",
+					"title": "सेटिंग्स को JSON फ़ाइल में निर्यात करें",
 					"value": "निर्यात सेटिंग्स"
 				},
 				"importButton": {
