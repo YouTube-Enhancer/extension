@@ -1,3 +1,40 @@
+# [1.31.0](https://github.com/YouTube-Enhancer/extension/compare/v1.30.1...v1.31.0) (2025-12-19)
+
+
+### Bug Fixes
+
+* add comments and remove redundant code ([4e3c2ea](https://github.com/YouTube-Enhancer/extension/commit/4e3c2ea06d6d9552b65cb80f599be01f6b044793))
+* **default to original audio track:** More robust way of handling the audio tracks implemented ([8284222](https://github.com/YouTube-Enhancer/extension/commit/8284222836159ebb2e4bde6fea7beb08fe02b350))
+* ensure button order without a timeout ([cc11c51](https://github.com/YouTube-Enhancer/extension/commit/cc11c512be450839f387d7c757bc6bd7780b34e8))
+* **hide playlists from homepage:** hiding playlists from playlist page ([79e9657](https://github.com/YouTube-Enhancer/extension/commit/79e9657fbf16441b4030454ec40d068c4138f838))
+* make settings capitalization consistent ([0f96e2b](https://github.com/YouTube-Enhancer/extension/commit/0f96e2b438113b9f1adf55dc1f4cb3d1e386fd5a))
+* playlist management translation strings ([c23f018](https://github.com/YouTube-Enhancer/extension/commit/c23f0187133171cd3d4204c7557a2773dc959458))
+* **remaining time:** Selector was broken ([a585fdf](https://github.com/YouTube-Enhancer/extension/commit/a585fdfbea09a580ede73bac64076f4c02eea111))
+* remove redundant code ([0a73b82](https://github.com/YouTube-Enhancer/extension/commit/0a73b8273fc59db0bd87a4ebb9213351e6a08bac))
+* remove unused selector ([fa68ad8](https://github.com/YouTube-Enhancer/extension/commit/fa68ad8a4d388b1c867074f882f1aff01dcc83e1))
+* unintended translation change ([83c5e91](https://github.com/YouTube-Enhancer/extension/commit/83c5e91a0370782bbaaf0dad754fef34cec1ca21))
+* Update playback buttons speed when player speed is changed in menu [#1106](https://github.com/YouTube-Enhancer/extension/issues/1106) ([ff1253f](https://github.com/YouTube-Enhancer/extension/commit/ff1253f972f19fd8a5bfab078800dab54f1bf4d3))
+* **video history:** Resuming on official artist channels when it shouldn't ([fd2bfe1](https://github.com/YouTube-Enhancer/extension/commit/fd2bfe14504ee947e32816602962fa9911fe53e1))
+* Watch Later buttons on page navigation ([b8a6431](https://github.com/YouTube-Enhancer/extension/commit/b8a643101ee7fea9e6c1b082923cba355ae34536))
+
+
+### Features
+
+* Automatically disable autoplay [#1103](https://github.com/YouTube-Enhancer/extension/issues/1103) ([581ba24](https://github.com/YouTube-Enhancer/extension/commit/581ba245a9bbe1b04ac67ca470ca350f540e96e8))
+* Hide recommended videos sidebar [#1079](https://github.com/YouTube-Enhancer/extension/issues/1079) ([3232240](https://github.com/YouTube-Enhancer/extension/commit/323224015e7bfb0e8b590ed377a193891b47c52e))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.31.0-Chrome.zip | 11b79a87ff3e0367de317c1a2e07025cbb0eb4e1007cef619fd3d6c9deb36ba9 |
+| youtube-enhancer-v1.31.0-Chromium.zip | 11b79a87ff3e0367de317c1a2e07025cbb0eb4e1007cef619fd3d6c9deb36ba9 |
+| youtube-enhancer-v1.31.0-Edge.zip | 11b79a87ff3e0367de317c1a2e07025cbb0eb4e1007cef619fd3d6c9deb36ba9 |
+| youtube-enhancer-v1.31.0-Firefox.zip | 3124b306c71e76f363b7fc57e415f5351ff26a3aa14343c35f8536cc402b349c |
+
 ## [1.30.1](https://github.com/YouTube-Enhancer/extension/compare/v1.30.0...v1.30.1) (2025-11-19)
 
 
