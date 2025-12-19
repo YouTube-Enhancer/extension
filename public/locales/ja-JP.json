@@ -127,11 +127,11 @@
 		"optionDisabled": {
 			"either": {
 				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
+				"separator": " や "
 			},
 			"plural": {
 				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
+				"separator": " と "
 			},
 			"singular": "'{{OPTION}}' 設定を有効にする",
 			"specificOption": {
@@ -214,7 +214,7 @@
 					},
 					"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
 				},
-				"title": "Button placement settings"
+				"title": "ボタン置き方設定"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "カスタムCSSを可能にする",
 					"title": "ページに適用するカスタムCSSを可能にする"
 				},
-				"title": "Custom CSS settings"
+				"title": "カスタムCSS設定"
 			},
 			"featureMenu": {
 				"openType": {
@@ -466,7 +466,7 @@
 					},
 					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
 				},
-				"title": "On-screen display settings",
+				"title": "オンスクリーンディスプレイの設定",
 				"type": {
 					"label": "OSD型",
 					"options": {
@@ -535,11 +535,11 @@
 			},
 			"playlistManagementButtons": {
 				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Failed to remove video",
-				"markAsUnwatched": "Mark as unwatched",
+				"failedToRemoveVideo": "動画を削除できませんでした",
+				"markAsUnwatched": "未視聴にする",
 				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
+				"removeVideo": "ビデオを削除",
+				"removingVideo": "ビデオの削除..."
 			},
 			"saveToWatchLaterButton": {
 				"failedToSaveVideo": "Failed to save video to Watch Later",
@@ -657,7 +657,7 @@
 					"label": "APIキー",
 					"title": "YouTube API V3キーを入力してください。"
 				},
-				"title": "YouTube API V3 key"
+				"title": "YouTube API V3キー"
 			},
 			"youtubeDeepDark": {
 				"author": "作家",
@@ -700,7 +700,7 @@
 					"label": "テーマを選択",
 					"title": "ページのテーマを選択選べしてください"
 				},
-				"title": "YouTube deep dark settings"
+				"title": "YouTubeディープダーク設定"
 			}
 		}
 	}
