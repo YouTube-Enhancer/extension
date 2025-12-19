@@ -256,7 +256,7 @@
 				"exportButton": {
 					"success": "Einstellungen erfolgreich exportiert",
 					"title": "Einstellungen zu JSON-Datei exportieren",
-					"value": "Eistellungen exportieren"
+					"value": "Einstellungen exportieren"
 				},
 				"importButton": {
 					"error": {

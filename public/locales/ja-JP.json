@@ -133,13 +133,13 @@
 				"label": "Enable {{OPTIONS}} to configure this option",
 				"separator": " and "
 			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
+			"singular": "'{{OPTION}}' 設定を有効にする",
 			"specificOption": {
 				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
 				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 			}
 		},
-		"scrollForMoreSettings": "Scroll for more settings",
+		"scrollForMoreSettings": "スクロールで設定の続きを表示",
 		"sections": {
 			"automaticQuality": {
 				"enable": {
@@ -261,7 +261,7 @@
 				"importButton": {
 					"error": {
 						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。",
-						"validation": "設定がインポートを失敗されました。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
+						"validation": "設定のインポート失敗、ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
 					},
 					"success": "設定がインポートをされました",
 					"title": "JSONファイルから設定がインポートする",
@@ -310,8 +310,8 @@
 						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
+						"label": "オリジナルのオーディオトラックをデフォルトにする",
+						"title": "常にオリジナルのオーディオトラックをデフォルトにする"
 					},
 					"enableMarkAsUnwatchedButton": {
 						"label": "Mark as unwatched button",
@@ -326,8 +326,8 @@
 						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 					},
 					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
+						"label": "AIサマリーを非表示",
+						"title": "動画の下のAIサマリーを非表示にする"
 					},
 					"hideEndScreenCards": {
 						"label": "終了画面のカードを非表示にする",
@@ -410,8 +410,8 @@
 						"title": "YouTubeリダイレクトを実物なURLを換えして、リダイレクト注意を抜かします"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "全画面表示のスクロールを復元",
+						"title": "全画面表示モードでスクロールを復元します"
 					},
 					"shareShortener": {
 						"label": "YouTube動画のURLを短縮する",
