@@ -222,13 +222,10 @@ export async function initializePlaylistLength({
 		pageType
 	);
 	await appendPlaylistLengthUIElement(element);
-	let lastUpdate = 0;
-	const throttleDelay = 500;
+	let updateTimeout: Nullable<number> = null;
 	let lastPlaylistLength: null | number = null;
+	const debounceDelay = 300;
 	async function safeUpdate() {
-		const now = Date.now();
-		if (now - lastUpdate < throttleDelay) return;
-		lastUpdate = now;
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
 		if (playlistLengthGetMethod === "api") {
@@ -251,8 +248,17 @@ export async function initializePlaylistLength({
 			watchedTimeSeconds: Math.floor(data.watchedTimeSeconds / playerSpeed)
 		});
 	}
+	function debouncedUpdate() {
+		if (updateTimeout !== null) {
+			clearTimeout(updateTimeout);
+		}
+		updateTimeout = window.setTimeout(() => {
+			updateTimeout = null;
+			void safeUpdate();
+		}, debounceDelay);
+	}
 	const documentObserver = new MutationObserver(() => {
-		void safeUpdate();
+		debouncedUpdate();
 	});
 	documentObserver.observe(document.documentElement, { childList: true, subtree: true });
 	if (videoElement) {
