@@ -251,6 +251,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "kindofabuzz",
+      "name": "kindofabuzz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1378108?v=4",
+      "profile": "https://github.com/kindofabuzz",
+      "contributions": [
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
