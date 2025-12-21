@@ -58,7 +58,7 @@ jobs:
         if: success()
         run: |
           git checkout main
-          git add ./src/i18n/index.ts
+          git add src/i18n
           if git diff --cached --quiet; then
             echo "No changes to commit on main."
           else
