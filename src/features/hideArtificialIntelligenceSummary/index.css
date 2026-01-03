@@ -1,3 +1,7 @@
-.yte-hide-ai-summary {
-	display: none !important;
+body.yte-hide-ai-summary {
+
+	& #expandable-metadata [has-video-summary],
+	div#video-summary [has-video-summary] {
+		display: none !important;
+	}
 }

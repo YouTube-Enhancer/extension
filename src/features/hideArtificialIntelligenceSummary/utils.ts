@@ -1,22 +1,13 @@
-import { modifyElementsClassList } from "@/src/utils/utilities";
-
-const artificialIntelligenceSummarySelector = "#expandable-metadata [has-video-summary]";
-
+import { modifyElementClassList } from "@/src/utils/utilities";
 export async function hideArtificialIntelligenceSummary() {
-	modifyElementsClassList("add", "yte-hide-ai-summary", document.querySelectorAll(artificialIntelligenceSummarySelector));
-}
-export async function observeArtificialIntelligenceSummary() {
-	const observer = new MutationObserver(async (mutations) => {
-		const containsArtificialIntelligenceSummary = mutations.some(
-			(mutation) => mutation.target instanceof Element && mutation.target.matches(artificialIntelligenceSummarySelector)
-		);
-		if (containsArtificialIntelligenceSummary) {
-			await hideArtificialIntelligenceSummary();
-		}
+	modifyElementClassList("add", {
+		className: "yte-hide-ai-summary",
+		element: document.body
 	});
-	observer.observe(document.body, { childList: true, subtree: true });
-	return observer;
 }
 export async function showArtificialIntelligenceSummary() {
-	modifyElementsClassList("remove", "yte-hide-ai-summary", document.querySelectorAll(artificialIntelligenceSummarySelector));
+	modifyElementClassList("remove", {
+		className: "yte-hide-ai-summary",
+		element: document.body
+	});
 }
