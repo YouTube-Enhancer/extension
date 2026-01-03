@@ -1,3 +1,5 @@
-.yte-hide-playables {
-	display: none !important;
+body.yte-hide-playables {
+	& ytd-rich-section-renderer:has(a[href="/playables"]) {
+		display: none !important;
+	}
 }
