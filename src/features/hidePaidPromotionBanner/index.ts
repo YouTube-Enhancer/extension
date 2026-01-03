@@ -5,7 +5,7 @@ import "./index.css";
 export function disableHidePaidPromotionBanner() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-paid-promotion-banner",
-		element: document.querySelector(".ytp-paid-content-overlay")
+		element: document.body
 	});
 }
 
@@ -18,6 +18,6 @@ export async function enableHidePaidPromotionBanner() {
 	if (!enable_hide_paid_promotion_banner) return;
 	modifyElementClassList("add", {
 		className: "yte-hide-paid-promotion-banner",
-		element: document.querySelector(".ytp-paid-content-overlay")
+		element: document.body
 	});
 }

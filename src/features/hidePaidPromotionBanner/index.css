@@ -1,3 +1,5 @@
-.yte-hide-paid-promotion-banner {
-	display: none !important;
+body.yte-hide-paid-promotion-banner {
+	& .ytp-paid-content-overlay {
+		display: none !important;
+	}
 }
