@@ -1,0 +1,5 @@
+body.yte-hide-playlist-recommendations-from-home-page {
+	& ytd-rich-item-renderer:has(yt-collection-thumbnail-view-model) {
+		display: none !important;
+	}
+}
