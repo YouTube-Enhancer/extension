@@ -1,3 +1,5 @@
-.yte-hide-translate-comment {
-	display: none !important;
+body.yte-hide-translate-comment {
+	& ytd-tri-state-button-view-model.translate-button {
+		display: none !important;
+	}
 }
