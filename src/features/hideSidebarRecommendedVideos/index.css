@@ -1,3 +1,5 @@
-.yte-hide-sidebar-recommended-videos {
-	display: none !important;
+body.yte-hide-sidebar-recommended-videos {
+	& #secondary #secondary-inner #related {
+		display: none !important;
+	}
 }

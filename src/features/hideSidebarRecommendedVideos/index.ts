@@ -1,11 +1,11 @@
-import "./index.css";
-import { modifyElementClassList, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { modifyElementClassList, waitForSpecificMessage } from "@/src/utils/utilities";
 
-const sidebarRecommendedVideosSelector = "#secondary #secondary-inner #related";
+import "./index.css";
+
 export async function disableHideSidebarRecommendedVideos() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-sidebar-recommended-videos",
-		element: document.querySelector(sidebarRecommendedVideosSelector)
+		element: document.body
 	});
 }
 
@@ -16,9 +16,8 @@ export async function enableHideSidebarRecommendedVideos() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideSidebarRecommendedVideos) return;
-	await waitForElement(sidebarRecommendedVideosSelector);
 	modifyElementClassList("add", {
 		className: "yte-hide-sidebar-recommended-videos",
-		element: document.querySelector(sidebarRecommendedVideosSelector)
+		element: document.body
 	});
 }
