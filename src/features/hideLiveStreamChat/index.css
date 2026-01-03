@@ -1,3 +1,14 @@
-.yte-hide-live-stream-chat {
-	display: none !important;
+body.yte-hide-live-stream-chat {
+
+	& div#chat-container,
+	div#chat-container-live-stream-chat,
+	#full-bleed-chat-container #panels-full-bleed-container,
+	#full-bleed-container #panels-full-bleed-container,
+	ytd-live-chat-frame {
+		display: none !important;
+	}
+
+	& ytd-watch-flexy[fixed-panels] #columns.ytd-watch-flexy {
+		padding-right: 0px !important;
+	}
 }
