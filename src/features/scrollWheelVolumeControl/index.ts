@@ -1,10 +1,13 @@
+import "./index.css";
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import {
 	isLivePage,
 	isShortsPage,
 	isWatchPage,
+	modifyElementClassList,
 	preventScroll,
 	waitForAllElements,
 	waitForElement,
@@ -13,6 +16,13 @@ import {
 
 import { adjustVolume, setupScrollListeners } from "./utils";
 
+export function disableScrollWheelVolumeControl() {
+	modifyElementClassList("remove", {
+		className: "yte-scroll-wheel-volume-control",
+		element: document.body
+	});
+	eventManager.removeEventListeners("scrollWheelVolumeControl");
+}
 /**
  * Adjusts the volume on scroll wheel events.
  * It listens for scroll wheel events on specified container selectors,
@@ -21,7 +31,7 @@ import { adjustVolume, setupScrollListeners } from "./utils";
  *
  * @returns {Promise<void>} A promise that resolves once the volume adjustment is completed.
  */
-export default async function adjustVolumeOnScrollWheel(): Promise<void> {
+export default async function enableScrollWheelVolumeControl(): Promise<void> {
 	// Wait for the "options" message from the content script
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
@@ -117,4 +127,8 @@ export default async function adjustVolumeOnScrollWheel(): Promise<void> {
 	for (const selector of containerSelectors) {
 		setupScrollListeners(selector, handleWheel);
 	}
+	modifyElementClassList("add", {
+		className: "yte-scroll-wheel-volume-control",
+		element: document.body
+	});
 }

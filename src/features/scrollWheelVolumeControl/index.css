@@ -1,0 +1,37 @@
+body.yte-scroll-wheel-volume-control {
+	.html5-video-player.ytp-fullscreen:is(.ytp-fullscreen-grid-peeking, .ytp-fullscreen-grid-active) {
+
+		.ytp-fullscreen-grid,
+		.ytp-gradient-bottom {
+			display: none !important;
+		}
+
+		.ytp-chrome-bottom {
+			bottom: 0px !important;
+		}
+
+		&:not(:is(.ytp-autohide, .ytp-autohide-active)) {
+			.ytp-chrome-bottom {
+				opacity: unset !important;
+			}
+
+			.ytp-overlays-container {
+				opacity: unset !important;
+			}
+		}
+
+		.ytp-overlays-container {
+			bottom: calc(var(--yt-delhi-bottom-controls-height, 72px) + 30px) !important;
+		}
+	}
+
+	div.html5-video-player {
+		--ytp-grid-scroll-percentage: 0 !important;
+	}
+
+	div.html5-video-player.ytp-delhi-modern.ytp-fullscreen-grid-active {
+		.ytp-chrome-bottom {
+			display: block !important;
+		}
+	}
+}
