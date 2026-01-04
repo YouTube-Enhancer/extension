@@ -76,7 +76,7 @@ import { disableRestoreFullscreenScrolling, enableRestoreFullscreenScrolling } f
 import { disableSaveToWatchLaterButton, enableSaveToWatchLaterButton } from "@/src/features/saveToWatchLaterButton";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
-import adjustVolumeOnScrollWheel from "@/src/features/scrollWheelVolumeControl";
+import enableScrollWheelVolumeControl, { disableScrollWheelVolumeControl } from "@/src/features/scrollWheelVolumeControl";
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
@@ -262,7 +262,7 @@ const enableFeatures = async () => {
 			enableRemainingTime(),
 			setPlayerQuality(),
 			setPlayerSpeed(),
-			adjustVolumeOnScrollWheel(),
+			enableScrollWheelVolumeControl(),
 			adjustSpeedOnScrollWheel(),
 			enableHideTranslateComment(),
 			enableHideEndScreenCards(),
@@ -1044,9 +1044,9 @@ const initialize = function () {
 							data: { scrollWheelVolumeControlEnabled }
 						} = message;
 						if (scrollWheelVolumeControlEnabled) {
-							await adjustVolumeOnScrollWheel();
+							await enableScrollWheelVolumeControl();
 						} else {
-							eventManager.removeEventListeners("scrollWheelVolumeControl");
+							disableScrollWheelVolumeControl();
 						}
 						break;
 					}
