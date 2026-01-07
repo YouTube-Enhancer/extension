@@ -1,12 +1,13 @@
 body.yte-hide-shorts {
-
 	& ytd-guide-entry-renderer:has(a[title="Shorts"]),
 	ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
 	ytd-rich-section-renderer:has([is-shorts]),
 	ytd-reel-shelf-renderer:has(#title-container),
 	yt-tab-shape[tab-title="Shorts"],
 	yt-chip-cloud-chip-renderer:has(yt-formatted-string[title="Shorts"]),
-	grid-shelf-view-model:has([d="m19.45,3.88c1.12,1.82.48,4.15-1.42,5.22l-1.32.74.94.41c1.36.58,2.27,1.85,2.35,3.27.08,1.43-.68,2.77-1.97,3.49l-8,4.47c-1.91,1.06-4.35.46-5.48-1.35-1.12-1.82-.48-4.15,1.42-5.22l1.33-.74-.94-.41c-1.36-.58-2.27-1.85-2.35-3.27-.08-1.43.68-2.77,1.97-3.49l8-4.47c1.91-1.06,4.35-.46,5.48,1.35Z"]),
+	grid-shelf-view-model:has(
+		[d="m19.45,3.88c1.12,1.82.48,4.15-1.42,5.22l-1.32.74.94.41c1.36.58,2.27,1.85,2.35,3.27.08,1.43-.68,2.77-1.97,3.49l-8,4.47c-1.91,1.06-4.35.46-5.48-1.35-1.12-1.82-.48-4.15,1.42-5.22l1.33-.74-.94-.41c-1.36-.58-2.27-1.85-2.35-3.27-.08-1.43.68-2.77,1.97-3.49l8-4.47c1.91-1.06,4.35-.46,5.48,1.35Z"]
+	),
 	ytd-video-renderer:has([overlay-style="SHORTS"]) {
 		display: none !important;
 	}
