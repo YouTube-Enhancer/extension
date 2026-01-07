@@ -1,6 +1,5 @@
 body.yte-scroll-wheel-volume-control {
 	.html5-video-player.ytp-fullscreen:is(.ytp-fullscreen-grid-peeking, .ytp-fullscreen-grid-active) {
-
 		.ytp-fullscreen-grid,
 		.ytp-gradient-bottom {
 			display: none !important;
