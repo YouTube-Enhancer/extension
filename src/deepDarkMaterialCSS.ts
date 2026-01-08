@@ -1415,7 +1415,7 @@ ytd-live-chat-frame #show-hide-button.ytd-live-chat-frame > ytd-button-renderer.
 
 .yt-spec-button-shape-next--call-to-action.yt-spec-button-shape-next--text:hover,
 .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--tonal:hover {
-	background-color: var(--yt-spec-10-percent-layer) !important;
+	background-color: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1)) !important;
 }
 
 /*join button*/
@@ -1431,7 +1431,7 @@ yt-button-shape:nth-child(1)>.yt-spec-button-shape-next--size-m.yt-spec-button-s
 }
 
 .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--outline:hover {
-	background-color: var(--yt-spec-10-percent-layer) !important;
+	background-color: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1)) !important;
 }
 
 /*comment button*/
@@ -2377,7 +2377,7 @@ ytd-structured-description-content-renderer[inline-structured-description]
 /*chapter metadata in search results*/
 ytd-expandable-metadata-renderer {
 	/*this is used on hover, might as well*/
-	background-color: var(--yt-spec-badge-chip-background) !important;
+	background-color: var(--yt-spec-badge-chip-background, rgba(255, 255, 255, 0.1)) !important;
 }
 
 /*expanded chapters in search results*/
@@ -2853,7 +2853,7 @@ ytd-button-renderer yt-formatted-string.ytd-button-renderer:hover {
 
 .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--text:hover {
 	/*background-color: var(--hover-background) !important;*/
-	background-color: var(--yt-spec-10-percent-layer) !important;
+	background-color: var(--yt-spec-10-percent-layer, rgba(0, 0, 0, 0.1)) !important;
 }
 
 /*Show more videos*/
