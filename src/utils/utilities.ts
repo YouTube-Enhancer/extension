@@ -772,38 +772,25 @@ export function timeStringToSeconds(timeString: string): number {
  * Wait for all elements to appear in the document.
  *
  * @param selectors - Array of CSS selectors for the elements to wait for.
- * @param timeout - Max time (ms) to wait before giving up. Default: 10s.
- * @param interval - Retry interval (ms). Default: 250ms.
+ * @param timeout - Max time (ms) to wait before giving up. Default: 15s.
  * @returns Promise that resolves with an array of the matching elements.
  */
-export function waitForAllElements(selectors: Selector[], timeout = 15000, interval = 250): Promise<Element[]> {
-	return new Promise((resolve, reject) => {
-		browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
-
-		const start = Date.now();
-
-		const check = () => {
-			requestAnimationFrame(() => {
-				const found = selectors.map((sel) => document.querySelector(sel));
-				const allPresent = found.every(Boolean);
-
-				if (allPresent) {
-					resolve(found as Element[]);
-					return;
-				}
-
-				if (Date.now() - start >= timeout) {
-					reject(new Error(`Timeout: Not all elements appeared (${selectors.join(", ")})`));
-					return;
-				}
-
-				setTimeout(check, interval);
-			});
-		};
-
-		check();
-	});
+export async function waitForAllElements(selectors: Selector[], timeout = 15000): Promise<Element[]> {
+	browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
+	const start = performance.now();
+	const results = await Promise.all(
+		selectors.map((selector) => {
+			const remaining = timeout - (performance.now() - start);
+			return remaining > 0 ? waitForElement<Element>(selector, remaining) : Promise.resolve(null);
+		})
+	);
+	const missing = selectors.filter((_, i) => !results[i]);
+	if (missing.length) {
+		throw new Error(`Timeout: Missing selectors: ${missing.join(", ")}`);
+	}
+	return results as Element[];
 }
+
 export function waitForElement<T extends Element>(selector: string, timeout = 2500): Promise<null | T> {
 	return new Promise((resolve) => {
 		const start = performance.now();
