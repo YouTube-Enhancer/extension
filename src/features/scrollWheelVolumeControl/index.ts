@@ -41,7 +41,7 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 	} = optionsData;
 	// If scroll wheel volume control is disabled, return
 	if (!enableScrollWheelVolumeControl) return;
-	const containerSelectors = ["div#player", "div#player-container"];
+	const containerSelectors = ["div#player", "#player-container:has(#movie_player)"];
 	// Wait for the specified container selectors to be available on the page
 	await waitForAllElements(containerSelectors);
 
