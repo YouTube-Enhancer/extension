@@ -1,3 +1,27 @@
+## [1.31.1](https://github.com/YouTube-Enhancer/extension/compare/v1.31.0...v1.31.1) (2026-01-11)
+
+
+### Bug Fixes
+
+* **hide artificial intelligence summary:** not hiding summary ([1931381](https://github.com/YouTube-Enhancer/extension/commit/19313810058bd8b7d90d8421d28240d0844e52cd))
+* **hide members only videos:** Home page and channel videos page not hiding [#1114](https://github.com/YouTube-Enhancer/extension/issues/1114) ([5de03de](https://github.com/YouTube-Enhancer/extension/commit/5de03de88ea3853cd3461cbf3076e44544b36298))
+* **hide members only videos:** recommended videos were hidden on accident when a members only video exists in them ([f9256a8](https://github.com/YouTube-Enhancer/extension/commit/f9256a872efc5bef6c13e79b9bfb54cffc1491ee))
+* High risk security vulnerability related to NPM version [#1118](https://github.com/YouTube-Enhancer/extension/issues/1118) ([c26d59f](https://github.com/YouTube-Enhancer/extension/commit/c26d59f9b7287d41c044e949ac65bfbd86cdf5c6))
+* **scroll wheel speed + volume control:** Selector was matching wrong element causing the feature to not work [#1132](https://github.com/YouTube-Enhancer/extension/issues/1132) ([175583f](https://github.com/YouTube-Enhancer/extension/commit/175583f7d81f0351f9423119521255507fcfb35b))
+* **scroll wheel volume control:** Page scrolling in fullscreen interfering with adjusting volume [#1087](https://github.com/YouTube-Enhancer/extension/issues/1087) ([4286976](https://github.com/YouTube-Enhancer/extension/commit/4286976a6880c5700882801b22cf4f4773c8796d))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.31.1-Chrome.zip | f93ae424af60503b5975bc001c636bd5fc9c9a5463f413b020584cf196a22f28 |
+| youtube-enhancer-v1.31.1-Chromium.zip | f93ae424af60503b5975bc001c636bd5fc9c9a5463f413b020584cf196a22f28 |
+| youtube-enhancer-v1.31.1-Edge.zip | f93ae424af60503b5975bc001c636bd5fc9c9a5463f413b020584cf196a22f28 |
+| youtube-enhancer-v1.31.1-Firefox.zip | 8538bd3f4ddba32811e85c79cb15632334fabf7a9b7c1f2ef518c19baa9069da |
+
 # [1.31.0](https://github.com/YouTube-Enhancer/extension/compare/v1.30.1...v1.31.0) (2025-12-19)
 
 
