@@ -1,11 +1,10 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
-import { setupScrollListeners } from "@/src/features/scrollWheelVolumeControl/utils";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 
-import { adjustSpeed } from "./utils";
+import { adjustSpeed, setupScrollListeners } from "./utils";
 
 export default async function adjustSpeedOnScrollWheel() {
 	// Wait for the "options" message from the content script
@@ -17,7 +16,7 @@ export default async function adjustSpeedOnScrollWheel() {
 	} = optionsData;
 	// If scroll wheel speed control is disabled, return
 	if (!enableScrollWheelSpeedControl) return;
-	const containerSelectors = ["div#player", "div#player-container"];
+	const containerSelectors = ["div#player", "div#player-container:has(#movie_player)"];
 	// Wait for the specified container selectors to be available on the page
 	await waitForAllElements(containerSelectors);
 	// Get the player element
