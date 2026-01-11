@@ -102,7 +102,7 @@
 		"options": {
 			"notifications": {
 				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "A tecla alternadora da velocidade de rolagem não pode ser a mesma que a tecla alternadora do volume.",
@@ -136,7 +136,7 @@
 			"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 			"specificOption": {
 				"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+				"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 			}
 		},
 		"scrollForMoreSettings": "Role para mais opções",
@@ -214,7 +214,7 @@
 					},
 					"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
 				},
-				"title": "Button placement settings"
+				"title": "Configurações de posicionamento dos botões"
 			},
 			"customCSS": {
 				"editor": {
@@ -226,7 +226,7 @@
 					"label": "CSS personalizado",
 					"title": "Ativa o CSS personalizado para ser aplicado à página"
 				},
-				"title": "Custom CSS settings"
+				"title": "Configurações de CSS personalizado"
 			},
 			"featureMenu": {
 				"openType": {
@@ -286,24 +286,24 @@
 						"title": "Desativa o modo ambiente automaticamente ao carregar um vídeo"
 					},
 					"automaticallyDisableAutoPlay": {
-						"label": "Automatically disable autoplay",
-						"title": "Automatically disables autoplay when you load a video"
+						"label": "Desativar reprodução automática",
+						"title": "Desativa automaticamente a reprodução automática ao carregar um vídeo"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Desativar legendas automaticamente",
 						"title": "Desativa as legendas ao carregar um vídeo"
 					},
 					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
+						"label": "Ativar legendas automaticamente",
+						"title": "Ativa automaticamente as legendas ao carregar um vídeo"
 					},
 					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
-						"title": "Automatically maximizes the player when you load a video"
+						"label": "Maximizar o vídeo automaticamente",
+						"title": "Maximiza automaticamente o reprodutor ao carregar um vídeo"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
+						"label": "Exibir automaticamente mais vídeos na tela final",
+						"title": "Mostra automaticamente mais vídeos na tela final do vídeo"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Copiar URL do vídeo com o botão de minutagem",
@@ -314,16 +314,16 @@
 						"title": "Sempre retornar à faixa de vídeo original"
 					},
 					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
+						"label": "Botão \"Marcar como não assistido\"",
+						"title": "Adicione um botão aos itens da lista de reprodução para marcar vídeos como não assistidos"
 					},
 					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
+						"label": "Botão \"Remover vídeo\"",
+						"title": "Adicione um botão aos itens da lista de reprodução para remover vídeos da lista"
 					},
 					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+						"label": "Ativar botão \"Assistir mais tarde\"",
+						"title": "Adiciona um botão aos vídeos da página inicial e das inscrições para salvar o vídeo na lista de reprodução \"Assistir mais tarde\""
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "Ocultar resumo IA",
@@ -342,8 +342,8 @@
 						"title": "Oculta o chat da transmissão"
 					},
 					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
+						"label": "Ocultar vídeos exclusivos para membros",
+						"title": "Oculta vídeos que só membros são permitidos a assistir"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Ocultar vídeos de artistas originais",
@@ -366,8 +366,8 @@
 						"title": "Oculta a função \"Shorts\""
 					},
 					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
+						"label": "Ocultar vídeos recomendados",
+						"title": "Oculta a barra lateral de recomendação de vídeos"
 					},
 					"hideTranslateComment": {
 						"label": "Ocultar botão de traduzir comentário",
@@ -394,8 +394,8 @@
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
 					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
+						"label": "Ocultar listas de reprodução da página inicial",
+						"title": "Remova as listas de reprodução da página inicial"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
@@ -410,8 +410,8 @@
 						"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
 					},
 					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
+						"label": "Restaurar rolagem em tela cheia",
+						"title": "Restaura a rolagem da página no modo de tela cheia"
 					},
 					"shareShortener": {
 						"label": "Encurtar link de compartilha de vídeo",
@@ -523,28 +523,28 @@
 			"playlistManagement": {
 				"features": {
 					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
+						"label": "Botão \"Marcar como não assistido\"",
+						"title": "Adiciona um botão para marcar vídeos como não assistidos"
 					},
 					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
+						"label": "Botão \"Remover vídeo\"",
+						"title": "Adicione um botão aos itens da lista de reprodução para remover vídeos da lista"
 					}
 				},
 				"title": "Playlist management settings"
 			},
 			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Failed to remove video",
-				"markAsUnwatched": "Mark as unwatched",
-				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
+				"failedToMarkAsUnwatched": "Falha ao marcar o vídeo como não assistido",
+				"failedToRemoveVideo": "Falha ao remover o vídeo",
+				"markAsUnwatched": "Marcar como não assistido",
+				"markingAsUnwatched": "Marcando como não assistido…",
+				"removeVideo": "Remover vídeo",
+				"removingVideo": "Removendo vídeo…"
 			},
 			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
+				"failedToSaveVideo": "Não foi possível salvar o vídeo em \"Assistir mais tarde\"",
+				"saveVideo": "Salvar em \"Assistir mais tarde\"",
+				"savingVideo": "Salvando em \"Assistir mais tarde\"…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -552,7 +552,7 @@
 					"title": "Adiciona um botão ao reprodutor para tirar uma captura de tela do vídeo"
 				},
 				"saveAs": {
-					"both": "Both (File and Clipboard)",
+					"both": "Ambos (Arquivo e Área de Transferência)",
 					"clipboard": "Área de transferência",
 					"file": "Arquivo"
 				},
@@ -657,7 +657,7 @@
 					"label": "Chave API",
 					"title": "Insira sua chave API YouTube Data V3."
 				},
-				"title": "YouTube API V3 key"
+				"title": "Chave da API YouTube Data v3"
 			},
 			"youtubeDeepDark": {
 				"author": "Autor",

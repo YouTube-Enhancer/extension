@@ -136,7 +136,7 @@
 			"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 			"specificOption": {
 				"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+				"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
 			}
 		},
 		"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -286,8 +286,8 @@
 						"title": "Inaktiverar automatiskt biobelysning när du startar en video"
 					},
 					"automaticallyDisableAutoPlay": {
-						"label": "Automatically disable autoplay",
-						"title": "Automatically disables autoplay when you load a video"
+						"label": "Inaktivera automatisk uppspelning",
+						"title": "Inaktiverar automatiskt uppspelning när du startar en video"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Inaktivera textning automatiskt",
@@ -552,7 +552,7 @@
 					"title": "Lägger till en knapp till spelaren för att ta en skärmbild av videon"
 				},
 				"saveAs": {
-					"both": "Both (File and Clipboard)",
+					"both": "Båda (fil och urklipp)",
 					"clipboard": "Urklipp",
 					"file": "Fil"
 				},
