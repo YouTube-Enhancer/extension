@@ -11,7 +11,7 @@
 				"copyTimestampUrlButton": {
 					"button": {
 						"copied": "Copied!",
-						"label": "Copy video URL with timestamp"
+						"label": "Copier l'URL de la vidéo avec le timestamp"
 					}
 				},
 				"featureMenu": {
@@ -172,7 +172,7 @@
 					"value": "Confirmer"
 				},
 				"openTab": {
-					"title": "Open extension settings in a new tab"
+					"title": "Ouvrir les paramètres de l'extension dans un nouvel onglet"
 				},
 				"reset": {
 					"title": "Réinitialise tous les paramètres par défaut, cliquez sur le bouton de confirmation pour enregistrer les modifications",
@@ -182,7 +182,7 @@
 			"buttonPlacement": {
 				"select": {
 					"buttonNames": {
-						"copyTimestampUrlButton": "Copy video URL with timestamp button",
+						"copyTimestampUrlButton": "Bouton copier l'URL avec timestamp",
 						"decreasePlaybackSpeedButton": "Decrease Speed button",
 						"forwardButton": "Fast Forward button",
 						"hideEndScreenCardsButton": "Hide end screen cards button",
@@ -306,8 +306,8 @@
 						"title": "Automatically shows more videos on end screen when you load a video"
 					},
 					"copyTimestampUrlButton": {
-						"label": "Copy video URL with timestamp button",
-						"title": "Copies video URL with timestamp (?t=123)"
+						"label": "Bouton de copie de l'URL avec timestamp",
+						"title": "Copie l'URL de la vidéo avec le timestamp (?t=123)"
 					},
 					"defaultToOriginalAudioTrack": {
 						"label": "Default to original audio track",

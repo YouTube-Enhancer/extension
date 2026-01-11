@@ -2,8 +2,8 @@
 	"langCode": "ca-ES",
 	"langName": "Català",
 	"messages": {
-		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
-		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "",
+		"settingVolume": "New song \n"
 	},
 	"pages": {
 		"content": {
