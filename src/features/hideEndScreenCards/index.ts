@@ -11,7 +11,7 @@ import "./index.css";
 import { isWatchPage, modifyElementClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 export async function disableHideEndScreenCards() {
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 	showEndScreenCards();
 }
 
@@ -23,7 +23,7 @@ export async function enableHideEndScreenCards() {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideEndScreenCards) return;
 	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-container"]);
+	await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 	hideEndScreenCards();
 }
 export const addHideEndScreenCardsButton: AddButtonFunction = async () => {

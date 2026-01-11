@@ -191,7 +191,7 @@ const enableFeatures = async () => {
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		// Wait for the specified container selectors to be available on the page
-		await waitForAllElements(["div#player", "div#player-container"]);
+		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 		eventManager.removeAllEventListeners(["featureMenu"]);
 		await Promise.all([
 			enableHidePaidPromotionBanner(),

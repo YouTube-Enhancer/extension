@@ -40,7 +40,7 @@ async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 		: null;
 	if (!pageType) return;
 	if (pageType === "watch") {
-		await waitForAllElements(["div#player", "div#player-container", "div.ytp-settings-menu:not(#yte-feature-menu)"]);
+		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)", "div.ytp-settings-menu:not(#yte-feature-menu)"]);
 		const settingsButton: Nullable<HTMLButtonElement> = document.querySelector("button.ytp-settings-button");
 		const settingsMenu: Nullable<HTMLDivElement> = document.querySelector("div.ytp-settings-menu:not(#yte-feature-menu)");
 		if (!settingsMenu) return;
