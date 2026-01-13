@@ -424,6 +424,10 @@
 					"skipContinueWatching": {
 						"label": "Überspringe \"Video ist pausiert. Weiter ansehen?\"",
 						"title": "Überspringt den Leerlauf-Dialog, der die Videowiedergabe pausiert"
+					},
+					"timestampPeek": {
+						"label": "Timestamp Peek",
+						"title": "Shows a preview of the video when you hover over a timestamp"
 					}
 				},
 				"title": "Weitere Einstellungen"
