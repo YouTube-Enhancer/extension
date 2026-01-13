@@ -424,6 +424,10 @@
 					"skipContinueWatching": {
 						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
+					},
+					"timestampPeek": {
+						"label": "Timestamp Peek",
+						"title": "Shows a preview of the video when you hover over a timestamp"
 					}
 				},
 				"title": "Övriga inställningar"
