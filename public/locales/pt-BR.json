@@ -424,6 +424,10 @@
 					"skipContinueWatching": {
 						"label": "Pular aviso de ausência",
 						"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
+					},
+					"timestampPeek": {
+						"label": "Timestamp Peek",
+						"title": "Shows a preview of the video when you hover over a timestamp"
 					}
 				},
 				"title": "Diversos"
