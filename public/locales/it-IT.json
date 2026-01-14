@@ -426,8 +426,8 @@
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
 					},
 					"timestampPeek": {
-						"label": "Timestamp Peek",
-						"title": "Shows a preview of the video when you hover over a timestamp"
+						"label": "Anteprima video",
+						"title": "Mostra un'anteprima del video quando punti un tempo di riproduzione"
 					}
 				},
 				"title": "Impostazioni varie"
