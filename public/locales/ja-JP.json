@@ -426,8 +426,8 @@
 						"title": "動画一時休止する休眠メッセージを抜かされます"
 					},
 					"timestampPeek": {
-						"label": "Timestamp Peek",
-						"title": "Shows a preview of the video when you hover over a timestamp"
+						"label": "Timestamp Preview",
+						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "他の設定"
