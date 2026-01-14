@@ -426,8 +426,8 @@
 						"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
 					},
 					"timestampPeek": {
-						"label": "Timestamp Peek",
-						"title": "Shows a preview of the video when you hover over a timestamp"
+						"label": "Zaman Damgası Önizlemesi",
+						"title": "Video önizlemesini izlemek için fareyi zaman damgasının üzerine getirin. Oynatmaya o andan itibaren başlamak için önizlemeye tıklayın."
 					}
 				},
 				"title": "Çeşitli ayarlar"
