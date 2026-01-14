@@ -426,8 +426,8 @@
 						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
 					},
 					"timestampPeek": {
-						"label": "Timestamp Peek",
-						"title": "Shows a preview of the video when you hover over a timestamp"
+						"label": "Timestamp Preview",
+						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "기타 설정"
