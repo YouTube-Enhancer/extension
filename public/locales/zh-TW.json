@@ -426,8 +426,8 @@
 						"title": "跳過暫停影片播放的閒置對話框"
 					},
 					"timestampPeek": {
-						"label": "Timestamp Peek",
-						"title": "Shows a preview of the video when you hover over a timestamp"
+						"label": "Timestamp Preview",
+						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "其他設定"
