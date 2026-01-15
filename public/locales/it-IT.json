@@ -427,7 +427,7 @@
 					},
 					"timestampPeek": {
 						"label": "Anteprima marcatura oraria",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						"title": "Visualizza in anteprima il video saltando a un marcatore temporale. Clicca l'anteprima per iniziare la riproduzione da quel momento."
 					}
 				},
 				"title": "Impostazioni varie"
