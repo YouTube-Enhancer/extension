@@ -426,7 +426,7 @@
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
 					},
 					"timestampPeek": {
-						"label": "Timestamp Preview",
+						"label": "Anteprima marcatura oraria",
 						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
