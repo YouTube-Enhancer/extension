@@ -393,7 +393,7 @@
 						"label": "Ставить на паузу видео в фоновых вкладках",
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Спрятать плейлисты на главной",
 						"title": "Прячет плейлисты на главной (домашней) странице"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Пропускать \"Воспроизведение приостановлено. Продолжить?\"",
 						"title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "Прочие параметры"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
