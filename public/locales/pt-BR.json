@@ -393,7 +393,7 @@
 						"label": "Pausar player em segundo plano",
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Ocultar listas de reprodução da página inicial",
 						"title": "Remova as listas de reprodução da página inicial"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Pular aviso de ausência",
 						"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "Diversos"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
