@@ -393,7 +393,7 @@
 						"label": "Metti in pausa riproduttori in secondo piano",
 						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Nascondi liste riproduzioni dalla pagina iniziale",
 						"title": "Elimina le liste riproduzioni dalla pagina iniziale"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 						"title": "Salta la finestra che mette in pausa la riproduzione video"
-					},
-					"timestampPeek": {
-						"label": "Anteprima marcatura oraria",
-						"title": "Visualizza in anteprima il video saltando a un marcatore temporale. Clicca l'anteprima per iniziare la riproduzione da quel momento."
 					}
 				},
 				"title": "Impostazioni varie"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
