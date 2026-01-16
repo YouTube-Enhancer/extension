@@ -261,6 +261,10 @@ interface EnUS {
 						title: "Hides the banner that appears when you watch a video that has a paid promotion";
 					};
 					hidePlayables: { label: "Hide playables"; title: "Hides all playables" };
+					hidePlaylistRecommendationsFromHomePage: {
+						label: "Hide playlists from homepage";
+						title: "Get rid of playlists from homepage";
+					};
 					hideScrollbar: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" };
 					hideShorts: { label: "Hide shorts"; title: "Hides all shorts" };
 					hideSidebarRecommendedVideos: {
@@ -290,10 +294,6 @@ interface EnUS {
 					pauseBackgroundPlayers: {
 						label: "Pause background players";
 						title: "Pauses video players in background tabs when you start a new player in foreground tab";
-					};
-					playlistRemover: {
-						label: "Hide playlists from homepage";
-						title: "Get rid of playlists from homepage";
 					};
 					remainingTime: {
 						label: "Remaining time";
@@ -527,3 +527,4 @@ interface EnUS {
 declare const EnUS: EnUS;
 
 export = EnUS;
+

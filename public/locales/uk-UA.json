@@ -393,7 +393,7 @@
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

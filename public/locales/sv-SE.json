@@ -393,7 +393,7 @@
 						"label": "Pausa spelare i bakgrunden",
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Dölj spellistor från hemsidan",
 						"title": "Bli av med spellistor från hemsidan"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

@@ -393,7 +393,7 @@
 						"label": "Pausar player em segundo plano",
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Ocultar listas de reprodução da página inicial",
 						"title": "Remova as listas de reprodução da página inicial"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

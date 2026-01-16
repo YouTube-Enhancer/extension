@@ -393,7 +393,7 @@
 						"label": "Arka plan oynatıcılarını duraklat",
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Ana sayfadaki oynatma listelerini gizle",
 						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

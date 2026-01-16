@@ -393,7 +393,7 @@
 						"label": "背後タブのビデオプレイヤーを一時停止",
 						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+
