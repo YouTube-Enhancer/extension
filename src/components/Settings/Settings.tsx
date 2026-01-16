@@ -773,10 +773,10 @@ export default function Settings() {
 					/>
 					<Setting
 						checked={settings.enable_hide_playlist_recommendations_from_home_page?.toString() === "true"}
-						label={t("settings.sections.miscellaneous.features.playlistRemover.label")}
+						label={t("settings.sections.miscellaneous.features.hidePlaylistRecommendationsFromHomePage.label")}
 						onChange={setCheckboxOption("enable_hide_playlist_recommendations_from_home_page")}
 						parentSetting={null}
-						title={t("settings.sections.miscellaneous.features.playlistRemover.title")}
+						title={t("settings.sections.miscellaneous.features.hidePlaylistRecommendationsFromHomePage.title")}
 						type="checkbox"
 					/>
 					<Setting

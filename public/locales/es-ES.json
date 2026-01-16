@@ -393,7 +393,7 @@
 						"label": "Pausar reproductores de fondo",
 						"title": "Pausa los reproductores de vídeo en pestañas de fondo cuando inicias un nuevo reproductor en la pestaña de inicio"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Ocultar listas de reproducción de la página de inicio",
 						"title": "Oculta las listas de reproducción que aparecen en la página de inicio"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

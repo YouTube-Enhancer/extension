@@ -393,7 +393,7 @@
 						"label": "Achtergrondafspelers pauzeren",
 						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+

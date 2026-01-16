@@ -393,7 +393,7 @@
 						"label": "백그라운드 플레이어 일시 중지",
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -705,3 +705,4 @@
 		}
 	}
 }
+
