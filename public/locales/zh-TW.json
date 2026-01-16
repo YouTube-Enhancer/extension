@@ -393,7 +393,7 @@
 						"label": "暫停背景播放程序",
 						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "跳過「影片已暫停，繼續觀看？」",
 						"title": "跳過暫停影片播放的閒置對話框"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "其他設定"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
