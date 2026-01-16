@@ -393,7 +393,7 @@
 						"label": "暂停后台播放",
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "从主页隐藏播放列表",
 						"title": "从主页去除播放列表"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "跳过\"视频已暂停。继续观看吗？\"",
 						"title": "跳过暂停视频播放的闲置对话框"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "其他设置"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
