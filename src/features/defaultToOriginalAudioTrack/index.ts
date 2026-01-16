@@ -4,7 +4,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
 let originalAudioTrack: Nullable<ParsedAudioTrack> = null;
-type ParsedAudioTrack = { isDefault: boolean; name: string; track: audioTrack };
+type ParsedAudioTrack = { isAutoDubbed: boolean; isDefault: boolean; name: string; track: audioTrack };
 /**
  * Reverts the audio track to the one that was selected by the user
  * when the feature was enabled.
@@ -48,7 +48,7 @@ export async function enableDefaultToOriginalAudioTrack() {
 function findDefaultTrack(tracks: Record<string, unknown>[]): Nullable<ParsedAudioTrack> {
 	for (const track of tracks) {
 		const audio = parseAudioTrack(track);
-		if (audio && audio.isDefault === true) {
+		if (audio && audio.isDefault === false && audio.isAutoDubbed === false) {
 			return audio;
 		}
 	}
@@ -58,8 +58,9 @@ function findDefaultTrack(tracks: Record<string, unknown>[]): Nullable<ParsedAud
 function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAudioTrack> {
 	for (const key of Object.keys(obj)) {
 		const { [key]: value } = obj;
-		if (value && typeof value === "object" && !Array.isArray(value) && "name" in value && "isDefault" in value) {
+		if (value && typeof value === "object" && !Array.isArray(value) && "name" in value && "isDefault" in value && "isAutoDubbed" in value) {
 			return {
+				isAutoDubbed: value.isAutoDubbed as boolean,
 				isDefault: value.isDefault as boolean,
 				name: value.name as string,
 				track: obj
