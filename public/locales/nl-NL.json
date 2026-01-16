@@ -393,7 +393,7 @@
 						"label": "Achtergrondafspelers pauzeren",
 						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Sla \"video is gepauzeerd. Hervatten?\" over",
 						"title": "Slaat het afwezig dialoog die het afspelen pauzeert over"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "Overige instellingen"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
