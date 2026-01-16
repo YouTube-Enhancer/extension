@@ -393,7 +393,7 @@
 						"label": "Pausa spelare i bakgrunden",
 						"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Dölj spellistor från hemsidan",
 						"title": "Bli av med spellistor från hemsidan"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Hoppa över \"Videon är pausad. Fortsätt titta?\"",
 						"title": "Hoppa över dialogrutan som pausar videouppspelningen"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "Övriga inställningar"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
