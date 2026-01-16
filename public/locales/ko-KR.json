@@ -393,7 +393,7 @@
 						"label": "백그라운드 플레이어 일시 중지",
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업 스킵",
 						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "기타 설정"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
