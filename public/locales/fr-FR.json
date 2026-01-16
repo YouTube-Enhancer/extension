@@ -393,7 +393,7 @@
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 					},
-					"playlistRemover": {
+					"hidePlaylistRecommendationsFromHomePage": {
 						"label": "Hide playlists from homepage",
 						"title": "Get rid of playlists from homepage"
 					},
@@ -424,10 +424,6 @@
 					"skipContinueWatching": {
 						"label": "Skip \"Video is paused. Continue watching?\"",
 						"title": "Skips the idle dialog that pauses video playback"
-					},
-					"timestampPeek": {
-						"label": "Timestamp Preview",
-						"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 					}
 				},
 				"title": "Autre paramètres"
@@ -709,3 +705,4 @@
 		}
 	}
 }
+
