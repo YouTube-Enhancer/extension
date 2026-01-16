@@ -77,6 +77,7 @@ export default [
 			"no-useless-escape": "off",
 			"prefer-const": ["error", { destructuring: "any", ignoreReadBeforeAssign: false }],
 			"prefer-destructuring": ["error", { array: true, object: true }, { enforceForRenamedProperties: true }],
+			"prettier/prettier": ["error", { endOfLine: "auto", useTabs: true }],
 			quotes: ["error", "double", { allowTemplateLiterals: true, avoidEscape: true }],
 			"react/react-in-jsx-scope": "off",
 			semi: ["error", "always"],
