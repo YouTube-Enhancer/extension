@@ -27,7 +27,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@tanstack/react-query": "^5.90.5",
     "dotenv": "^17.2.3",
-    "globals": "^16.4.0",
+    "globals": "^17.0.0",
     "i18next": "^25.6.0",
     "monaco-editor": "^0.55.1",
     "react": "^19.2.0",
