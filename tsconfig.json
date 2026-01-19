@@ -36,7 +36,7 @@
 		"playwright.config.ts",
 		"tailwind.config.ts",
 		"postcss.config.cjs",
-		"prettier.config.cjs",
+		"prettier.config.mjs",
 		"src/features/__tests__",
 		"eslint.config.mjs"
 	],

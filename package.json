@@ -50,7 +50,7 @@
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/archiver": "^7.0.0",
     "@types/chrome": "^0.1.24",
-    "@types/node": "^24.9.1",
+    "@types/node": "^25.0.9",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/webextension-polyfill": "^0.12.4",
