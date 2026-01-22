@@ -43,3 +43,6 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left {
 	width: -webkit-fill-available;
 	max-width: 48px;
 }
+.yte-button-player-controls-left svg {
+	padding: 8px !important;
+}
