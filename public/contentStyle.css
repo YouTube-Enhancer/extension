@@ -26,8 +26,3 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-tooltip {
 	background-color: var(--yt-spec-overlay-background-medium-light, rgba(0, 0, 0, 0.3)) !important;
 	text-shadow: 0 0 2px #000 !important;
 }
-
-.ytp-big-mode .yte-button-tooltip {
-	line-height: 22px !important;
-	font: 20px !important;
-}
