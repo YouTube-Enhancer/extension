@@ -14,15 +14,6 @@
 	max-width: var(--yt-delhi-pill-height, 48px) !important;
 }
 
-.ytp-delhi-modern.ytp-big-mode .yte-button-player-controls-left {
-	margin-top: calc((var(--yt-delhi-big-mode-bottom-controls-height, 96px) - var(--yt-delhi-big-mode-pill-height, 56px)) / 2) !important;
-	height: var(--yt-delhi-big-mode-pill-height, 56px) !important;
-	width: -webkit-fill-available !important;
-	align-items: center !important;
-	display: flex !important;
-	max-width: var(--yt-delhi-big-mode-pill-height, 56px) !important;
-}
-
 .yte-button-below-player {
 	place-content: center;
 	display: flex;

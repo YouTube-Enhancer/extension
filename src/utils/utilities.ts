@@ -246,7 +246,6 @@ export function createTooltip({
 	update: () => void;
 } {
 	function makeTooltip() {
-		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
 		const isDelhiModern = isModernYouTubeVideoLayout();
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
@@ -261,13 +260,7 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${
-						rect.top -
-						(isDelhiModern ?
-							isBigMode ? 20
-							:	6
-						:	1)
-					}px`
+					top: `${rect.top - (isDelhiModern ? 6 : 1)}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
