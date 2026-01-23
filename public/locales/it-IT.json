@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Apri trascrizione"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
 						"rewindButton": "Pulsante Riavvolgi",
 						"screenshotButton": "Pulsante Schermata",
@@ -275,6 +285,33 @@
 				},
 				"title": "Lingua"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Nascondi giocabili",
 						"title": "Nasconde tutti i giocabili"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Nascondi liste riproduzioni dalla pagina iniziale",
+						"title": "Elimina le liste riproduzioni dalla pagina iniziale"
+					},
 					"hideScrollbar": {
 						"label": "Nascondi barra scorrimento",
 						"title": "Nasconde la barra di scorrimento delle pagine"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Metti in pausa riproduttori in secondo piano",
 						"title": "Mette in pausa i riproduttori video nelle schede nascoste quando si avvia un nuovo riproduttore nella scheda aperta"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Nascondi liste riproduzioni dalla pagina iniziale",
-						"title": "Elimina le liste riproduzioni dalla pagina iniziale"
 					},
 					"remainingTime": {
 						"label": "Tempo rimanente",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
