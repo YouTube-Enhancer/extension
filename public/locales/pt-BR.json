@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Abrir transcrição"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 						"loopButton": "Botão Repetir",
 						"maximizePlayerButton": "Botão Maximizar",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Abrir botão de transcrição",
 						"rewindButton": "Botão Voltar",
 						"screenshotButton": "Botão de captura de tela",
@@ -275,6 +285,33 @@
 				},
 				"title": "Idioma"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Ocultar jogáveis",
 						"title": "Oculta a seção de jogáveis"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Ocultar listas de reprodução da página inicial",
+						"title": "Remova as listas de reprodução da página inicial"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de rolagem",
 						"title": "Oculta a barra de rolagem da página"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Pausar player em segundo plano",
 						"title": "Pausa o player nas abas em segundo plano ao iniciar um novo player noutra aba"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Ocultar listas de reprodução da página inicial",
-						"title": "Remova as listas de reprodução da página inicial"
 					},
 					"remainingTime": {
 						"label": "Tempo restante",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
