@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Abrir transcripción"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Botón para aumentar la velocidad",
 						"loopButton": "Botón de repetición",
 						"maximizePlayerButton": "Botón para maximizar",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Abrir botón de transcripción",
 						"rewindButton": "Botón para rebobinar",
 						"screenshotButton": "Botón de captura de pantalla",
@@ -275,6 +285,33 @@
 				},
 				"title": "Idioma"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Ocultar reproducibles",
 						"title": "Oculta todos los reproducibles"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Ocultar listas de reproducción de la página de inicio",
+						"title": "Oculta las listas de reproducción que aparecen en la página de inicio"
+					},
 					"hideScrollbar": {
 						"label": "Ocultar barra de desplazamiento",
 						"title": "Oculta la barra de desplazamiento de la página"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Pausar reproductores de fondo",
 						"title": "Pausa los reproductores de vídeo en pestañas de fondo cuando inicias un nuevo reproductor en la pestaña de inicio"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Ocultar listas de reproducción de la página de inicio",
-						"title": "Oculta las listas de reproducción que aparecen en la página de inicio"
 					},
 					"remainingTime": {
 						"label": "Tiempo restante",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
