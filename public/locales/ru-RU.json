@@ -286,10 +286,6 @@
 				"title": "Язык"
 			},
 			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
 				"enable": {
 					"label": "Open Mini Player when viewing comments",
 					"title": "Automatically opens the Mini Player when you scroll to comments."
@@ -311,6 +307,10 @@
 					"title": "Sets the initial size before you resize the Mini Player."
 				},
 				"title": "Mini Player settings"
+			},
+			"miniPlayerButton": {
+				"label": "Mini Player button",
+				"title": "Adds a button that opens the Mini Player"
 			},
 			"miscellaneous": {
 				"features": {
