@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Open ondertitels"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Verhoog snelheid knop",
 						"loopButton": "Loop knop",
 						"maximizePlayerButton": "Maximaliseer knop",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Open ondertitels knop",
 						"rewindButton": "Terugspoelknop",
 						"screenshotButton": "Schermafbeelding knop",
@@ -275,6 +285,33 @@
 				},
 				"title": "Taal"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Hide playables",
 						"title": "Hides all playables"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"hideScrollbar": {
 						"label": "Verberg scrollbar",
 						"title": "Verbergt de scrollbar op de pagina"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Achtergrondafspelers pauzeren",
 						"title": "Pauzeert videospelers in achtergrond tabbladen wanneer je een nieuwe videospeler start op een voorgrond tabblad"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Resterende tijd",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
