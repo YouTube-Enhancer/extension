@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "打開文字記錄"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "加快速度按妞",
 						"loopButton": "循環播放按鈕",
 						"maximizePlayerButton": "最大化按鈕",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "開啟文字記錄按鈕",
 						"rewindButton": "倒帶按鈕",
 						"screenshotButton": "螢幕截圖按鈕",
@@ -275,6 +285,33 @@
 				},
 				"title": "語言"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Hide playables",
 						"title": "Hides all playables"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"hideScrollbar": {
 						"label": "隱藏捲軸",
 						"title": "隱藏頁面捲軸"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "暫停背景播放程序",
 						"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "剩餘時間",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
