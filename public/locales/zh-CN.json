@@ -286,10 +286,6 @@
 				"title": "语言"
 			},
 			"miniPlayer": {
-				"button": {
-					"label": "迷你播放器按钮",
-					"title": "添加打开迷你播放器的按钮"
-				},
 				"enable": {
 					"label": "查看评论时打开迷你播放器",
 					"title": "当您滚动到评论时自动打开迷你播放器。"
@@ -311,6 +307,10 @@
 					"title": "设置缩放迷你播放器之前的起始大小。"
 				},
 				"title": "迷你播放器设置"
+			},
+			"miniPlayerButton": {
+				"label": "Mini Player button",
+				"title": "Adds a button that opens the Mini Player"
 			},
 			"miscellaneous": {
 				"features": {
