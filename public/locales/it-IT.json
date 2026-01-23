@@ -58,10 +58,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Mini riproduttore",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini riproduttore inattivo",
+							"on": "Mini riproduttore attivo"
 						}
 					}
 				},
@@ -198,7 +198,7 @@
 						"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 						"loopButton": "Pulsante Ripeti",
 						"maximizePlayerButton": "Pulsante Massimizza",
-						"miniPlayerButton": "Mini Player",
+						"miniPlayerButton": "Mini riproduttore",
 						"openTranscriptButton": "Pulsante Apri trascrizione",
 						"rewindButton": "Pulsante Riavvolgi",
 						"screenshotButton": "Pulsante Schermata",
@@ -287,30 +287,30 @@
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "Pulsante Mini riproduttore",
+					"title": "Aggiunge un pulsante che apre il mini riproduttore"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "Apri Mini riproduttore quando si visualizzano i commenti",
+					"title": "Apre automaticamente il Mini riproduttore quando scorri verso i commenti."
 				},
 				"position": {
-					"label": "Default Mini Player position",
+					"label": "Posizione del mini riproduttore predefinita",
 					"options": {
-						"bottomCenter": "Bottom center",
-						"bottomLeft": "Bottom left",
-						"bottomRight": "Bottom right",
-						"topCenter": "Top center",
-						"topLeft": "Top left",
-						"topRight": "Top right"
+						"bottomCenter": "In basso al centro",
+						"bottomLeft": "In basso a sinistra",
+						"bottomRight": "In basso a destra",
+						"topCenter": "In alto al centro",
+						"topLeft": "Alto - sinistra",
+						"topRight": "In alto a destra"
 					},
-					"title": "Sets the starting position before you move the Mini Player."
+					"title": "Imposta la posizione di partenza prima di spostare il Mini riproduttore."
 				},
 				"size": {
-					"label": "Default Mini Player size",
-					"title": "Sets the initial size before you resize the Mini Player."
+					"label": "Dimensione predefinita del mini riproduttore",
+					"title": "Imposta la dimensione iniziale prima di ridimensionare il mini riproduttore."
 				},
-				"title": "Mini Player settings"
+				"title": "Impostazioni mini riproduttore"
 			},
 			"miscellaneous": {
 				"features": {
