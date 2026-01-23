@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Открыть стенограмму"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 						"loopButton": "Кнопка «Зациклить»",
 						"maximizePlayerButton": "Кнопка «Развернуть»",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 						"rewindButton": "Кнопка перемотки назад",
 						"screenshotButton": "Кнопка «Скриншот»",
@@ -275,6 +285,33 @@
 				},
 				"title": "Язык"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Спрятать игры",
 						"title": "Прячет все игры (playables)"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Спрятать плейлисты на главной",
+						"title": "Прячет плейлисты на главной (домашней) странице"
+					},
 					"hideScrollbar": {
 						"label": "Включить скрытие полосы прокрутки страницы",
 						"title": "Скрывает полосу прокрутки страницы"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Ставить на паузу видео в фоновых вкладках",
 						"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Спрятать плейлисты на главной",
-						"title": "Прячет плейлисты на главной (домашней) странице"
 					},
 					"remainingTime": {
 						"label": "Включить отображение оставшегося времени",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
