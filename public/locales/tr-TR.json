@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Transkripti Aç"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Transkripti Aç butonu",
 						"rewindButton": "Geri sarma düğmesi",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
@@ -275,6 +285,33 @@
 				},
 				"title": "Dil"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Oynatılabilirleri gizle",
 						"title": "Tüm oynatılabilir öğeleri gizle"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Ana sayfadaki oynatma listelerini gizle",
+						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
+					},
 					"hideScrollbar": {
 						"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 						"title": "Sayfa kaydırma çubuğunu gizler"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Arka plan oynatıcılarını duraklat",
 						"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Ana sayfadaki oynatma listelerini gizle",
-						"title": "Ana sayfadaki oynatma listelerinden kurtulun"
 					},
 					"remainingTime": {
 						"label": "Kalan süre",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
