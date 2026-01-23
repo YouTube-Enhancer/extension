@@ -58,10 +58,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Mini Oynatıcı",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini Oynatıcı kapalı",
+							"on": "Mini Oynatıcı açık"
 						}
 					}
 				},
@@ -145,7 +145,7 @@
 			"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 			"specificOption": {
 				"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+				"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 			}
 		},
 		"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -198,7 +198,7 @@
 						"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 						"loopButton": "Döngü düğmesi",
 						"maximizePlayerButton": "Tam ekran düğmesi",
-						"miniPlayerButton": "Mini Player",
+						"miniPlayerButton": "Mini Oynatıcı",
 						"openTranscriptButton": "Transkripti Aç butonu",
 						"rewindButton": "Geri sarma düğmesi",
 						"screenshotButton": "Ekran görüntüsü düğmesi",
@@ -224,7 +224,7 @@
 					},
 					"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 				},
-				"title": "Button placement settings"
+				"title": "Düğme yerleşim ayarları"
 			},
 			"customCSS": {
 				"editor": {
@@ -236,7 +236,7 @@
 					"label": "Özel CSS'yi etkinleştir",
 					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
 				},
-				"title": "Custom CSS settings"
+				"title": "Özel CSS Ayarları"
 			},
 			"featureMenu": {
 				"openType": {
@@ -265,7 +265,7 @@
 			"importExportSettings": {
 				"exportButton": {
 					"success": "Ayarlar başarıyla dışa aktarıldı",
-					"title": "Ayarları JSON dosyasına aktar",
+					"title": "Ayarları JSON dosyasından içe aktar",
 					"value": "Ayarları Dışa Aktar"
 				},
 				"importButton": {
@@ -274,7 +274,7 @@
 						"validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
 					},
 					"success": "Ayarlar başarıyla içe aktarıldı",
-					"title": "Ayarları JSON dosyasına aktar",
+					"title": "Ayarları JSON dosyasından içe aktar",
 					"value": "Ayarları İçe Aktar"
 				}
 			},
@@ -286,31 +286,31 @@
 				"title": "Dil"
 			},
 			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "Yorumları görüntülemek için Mini Oynatıcıyı açın",
+					"title": "Yorumlara geldiğinizde Mini Oynatıcı otomatik olarak açılır."
 				},
 				"position": {
-					"label": "Default Mini Player position",
+					"label": "Varsayılan Mini Oynatıcı konumu",
 					"options": {
-						"bottomCenter": "Bottom center",
-						"bottomLeft": "Bottom left",
-						"bottomRight": "Bottom right",
-						"topCenter": "Top center",
-						"topLeft": "Top left",
-						"topRight": "Top right"
+						"bottomCenter": "Alt orta",
+						"bottomLeft": "Sol alt",
+						"bottomRight": "Sağ alt",
+						"topCenter": "Üst orta",
+						"topLeft": "Sol üst",
+						"topRight": "Sağ üst"
 					},
-					"title": "Sets the starting position before you move the Mini Player."
+					"title": "Mini Oynatıcı'yı hareket ettirmeden önce başlangıç konumunu ayarlar."
 				},
 				"size": {
-					"label": "Default Mini Player size",
-					"title": "Sets the initial size before you resize the Mini Player."
+					"label": "Varsayılan Mini Oynatıcı boyutu",
+					"title": "Mini Oynatıcı'nın boyutunu değiştirmeden önce başlangıç boyutunu ayarlar."
 				},
-				"title": "Mini Player settings"
+				"title": "Mini Oynatıcı Ayarları"
+			},
+			"miniPlayerButton": {
+				"label": "Mini Player button",
+				"title": "Adds a button that opens the Mini Player"
 			},
 			"miscellaneous": {
 				"features": {
@@ -323,8 +323,8 @@
 						"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
 					},
 					"automaticallyDisableAutoPlay": {
-						"label": "Automatically disable autoplay",
-						"title": "Automatically disables autoplay when you load a video"
+						"label": "Otomatik oynatmayı, otomatik olarak devre dışı bırak",
+						"title": "Video yüklediğinizde otomatik oynatmayı devre dışı bırakır"
 					},
 					"automaticallyDisableClosedCaptions": {
 						"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
@@ -335,12 +335,12 @@
 						"title": "Bir videoyu yüklediğinizde altyazıları otomatik olarak etkinleştirir"
 					},
 					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
+						"label": "Oynatıcıyı otomatik olarak azami boyuta getir",
 						"title": "Bir video yüklediğinizde oynatıcıyı otomatik olarak büyütür"
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
+						"label": "Bitiş ekranında otomatik olarak daha fazla video göster",
+						"title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
 					},
 					"copyTimestampUrlButton": {
 						"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
@@ -351,16 +351,16 @@
 						"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 					},
 					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
+						"label": "İzlenmemiş olarak işaretle düğmesi",
+						"title": "Oynatma listesi öğelerine, videoları izlenmedi olarak işaretlemek için bir düğmesi ekle"
 					},
 					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
+						"label": "Video düğmesini kaldır",
+						"title": "Oynatma listesi öğelerine, videoları oynatma listesinden kaldırmak için bir düğme ekle"
 					},
 					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+						"label": "Daha Sonra İzle'ye kaydetme düğmesini etkinleştir",
+						"title": "Ana Sayfa ve Abonelikler videolarına, oynatma listesine kaydetmek için videoyu ‘Daha Sonra İzle’ düğmesi ekler"
 					},
 					"hideArtificialIntelligenceSummary": {
 						"label": "AI özetini gizle",
@@ -379,8 +379,8 @@
 						"title": "Canlı yayın sohbetini gizler"
 					},
 					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
+						"label": "Üyelere özel videoları gizle",
+						"title": "Sadece üyelere görünen videoları gizle"
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"label": "Resmi Sanatçı Videolarını Gizle",
@@ -407,8 +407,8 @@
 						"title": "Tüm kısa videoları gizler"
 					},
 					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
+						"label": "Önerilen videoları gizle",
+						"title": "Video önerilerini gösteren kenar çubuğunu gizler"
 					},
 					"hideTranslateComment": {
 						"label": "Yorumu Çevir'i Gizle Butonu",
@@ -490,7 +490,7 @@
 				},
 				"padding": {
 					"label": "İç Boşluk",
-					"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+					"title": "Ekran Üzeri Gösterge etrafındaki boşluğu piksel cinsinden ayarlayın. Bu ayar özellikle köşe Ekran Üzeri Gösterge için geçerlidir."
 				},
 				"position": {
 					"label": "Konum",
@@ -503,7 +503,7 @@
 					},
 					"title": "Ekran görüntüleme konumunu seçin"
 				},
-				"title": "On-screen display settings",
+				"title": "Ekran üstü görüntü ayarları",
 				"type": {
 					"label": "Tür",
 					"options": {
@@ -560,28 +560,28 @@
 			"playlistManagement": {
 				"features": {
 					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
+						"label": "İzlenmeyen olarak işaretle düğmesi",
+						"title": "Videoları izlenmemiş olarak işaretlemek için bir düğme ekler"
 					},
 					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
+						"label": "Video düğmesini kaldır",
+						"title": "Oynatma listesinden videoları kaldırmak için bir düğme ekler"
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Oynatma listesini yönetme ayarları"
 			},
 			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+				"failedToMarkAsUnwatched": "Videoyu izlenmemiş olarak işaretleme başarısız oldu",
 				"failedToRemoveVideo": "Video kaldırılamadı",
-				"markAsUnwatched": "Mark as unwatched",
-				"markingAsUnwatched": "Marking as unwatched…",
+				"markAsUnwatched": "İzlenmemiş olarak işaretle",
+				"markingAsUnwatched": "İzlenmemiş olarak işaretleniyor…",
 				"removeVideo": "Videoyu kaldır",
 				"removingVideo": "Video kaldırılıyor…"
 			},
 			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
+				"failedToSaveVideo": "Videoyu daha sonra izlemek üzere kaydetme işlemi başarısız oldu",
+				"saveVideo": "Daha sonra izlemek için kaydet",
+				"savingVideo": "Daha sonra izlemek için kaydediliyor…"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -589,7 +589,7 @@
 					"title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler"
 				},
 				"saveAs": {
-					"both": "Both (File and Clipboard)",
+					"both": "Her İkisi",
 					"clipboard": "Pano",
 					"file": "Dosya"
 				},
@@ -694,7 +694,7 @@
 					"label": "API Anahtarı",
 					"title": "Youtube Veri API V3 anahtarınızı girin."
 				},
-				"title": "YouTube API V3 key"
+				"title": "YouTube API V3 anahtarı"
 			},
 			"youtubeDeepDark": {
 				"author": "Yazar",
@@ -737,7 +737,7 @@
 					"label": "Tema seç",
 					"title": "Sayfa için uygulanacak bir tema seçin"
 				},
-				"title": "YouTube deep dark settings"
+				"title": "YouTube deep dark ayarları"
 			}
 		}
 	}
