@@ -58,10 +58,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "迷你播放器",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "迷你播放器关闭",
+							"on": "迷你播放器开启"
 						}
 					}
 				},
@@ -198,7 +198,7 @@
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
-						"miniPlayerButton": "Mini Player",
+						"miniPlayerButton": "迷你播放器",
 						"openTranscriptButton": "转写文稿按钮",
 						"rewindButton": "快退按钮",
 						"screenshotButton": "屏幕截图按钮",
@@ -287,30 +287,30 @@
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "迷你播放器按钮",
+					"title": "添加打开迷你播放器的按钮"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "查看评论时打开迷你播放器",
+					"title": "当您滚动到评论时自动打开迷你播放器。"
 				},
 				"position": {
-					"label": "Default Mini Player position",
+					"label": "默认迷你播放器位置",
 					"options": {
-						"bottomCenter": "Bottom center",
-						"bottomLeft": "Bottom left",
-						"bottomRight": "Bottom right",
-						"topCenter": "Top center",
-						"topLeft": "Top left",
-						"topRight": "Top right"
+						"bottomCenter": "底部居中",
+						"bottomLeft": "左下角",
+						"bottomRight": "右下角",
+						"topCenter": "顶部居中",
+						"topLeft": "左上角",
+						"topRight": "右上角"
 					},
-					"title": "Sets the starting position before you move the Mini Player."
+					"title": "设置移动迷你播放器之前的起始位置。"
 				},
 				"size": {
-					"label": "Default Mini Player size",
-					"title": "Sets the initial size before you resize the Mini Player."
+					"label": "默认迷你播放器大小",
+					"title": "设置缩放迷你播放器之前的起始大小。"
 				},
-				"title": "Mini Player settings"
+				"title": "迷你播放器设置"
 			},
 			"miscellaneous": {
 				"features": {
