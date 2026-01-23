@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "스크립트 보기"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "속도 조절 버튼",
 						"loopButton": "연속 재생 버튼",
 						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "스크립트 보기 버튼",
 						"rewindButton": "되감기 버튼",
 						"screenshotButton": "스크린샷 버튼",
@@ -275,6 +285,33 @@
 				},
 				"title": "언어"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Hide playables",
 						"title": "Hides all playables"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"hideScrollbar": {
 						"label": "스크롤바 숨기기",
 						"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "백그라운드 플레이어 일시 중지",
 						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "남은 시간 표시",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
