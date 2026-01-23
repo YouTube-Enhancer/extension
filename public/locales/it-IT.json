@@ -286,10 +286,6 @@
 				"title": "Lingua"
 			},
 			"miniPlayer": {
-				"button": {
-					"label": "Pulsante Mini riproduttore",
-					"title": "Aggiunge un pulsante che apre il mini riproduttore"
-				},
 				"enable": {
 					"label": "Apri Mini riproduttore quando si visualizzano i commenti",
 					"title": "Apre automaticamente il Mini riproduttore quando scorri verso i commenti."
@@ -311,6 +307,10 @@
 					"title": "Imposta la dimensione iniziale prima di ridimensionare il mini riproduttore."
 				},
 				"title": "Impostazioni mini riproduttore"
+			},
+			"miniPlayerButton": {
+				"label": "Mini Player button",
+				"title": "Adds a button that opens the Mini Player"
 			},
 			"miscellaneous": {
 				"features": {
