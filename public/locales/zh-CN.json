@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "打开转写文稿"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "增加速度按钮",
 						"loopButton": "循环按钮",
 						"maximizePlayerButton": "最大化按钮",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "转写文稿按钮",
 						"rewindButton": "快退按钮",
 						"screenshotButton": "屏幕截图按钮",
@@ -275,6 +285,33 @@
 				},
 				"title": "语言"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "隐藏可播放内容",
 						"title": "隐藏所有可播放内容"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "从主页隐藏播放列表",
+						"title": "从主页去除播放列表"
+					},
 					"hideScrollbar": {
 						"label": "启用隐藏滚动条",
 						"title": "隐藏页面滚动条"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "暂停后台播放",
 						"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "从主页隐藏播放列表",
-						"title": "从主页去除播放列表"
 					},
 					"remainingTime": {
 						"label": "剩余时间",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
