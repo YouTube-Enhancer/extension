@@ -56,6 +56,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Open transcript"
@@ -189,6 +198,7 @@
 						"increasePlaybackSpeedButton": "Increase Speed button",
 						"loopButton": "Loop button",
 						"maximizePlayerButton": "Maximize button",
+						"miniPlayerButton": "Mini Player",
 						"openTranscriptButton": "Open Transcript button",
 						"rewindButton": "Rewind button",
 						"screenshotButton": "Screenshot button",
@@ -275,6 +285,33 @@
 				},
 				"title": "Langue"
 			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"position": {
+					"label": "Default Mini Player position",
+					"options": {
+						"bottomCenter": "Bottom center",
+						"bottomLeft": "Bottom left",
+						"bottomRight": "Bottom right",
+						"topCenter": "Top center",
+						"topLeft": "Top left",
+						"topRight": "Top right"
+					},
+					"title": "Sets the starting position before you move the Mini Player."
+				},
+				"size": {
+					"label": "Default Mini Player size",
+					"title": "Sets the initial size before you resize the Mini Player."
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"features": {
 					"automaticTheaterMode": {
@@ -357,6 +394,10 @@
 						"label": "Hide playables",
 						"title": "Hides all playables"
 					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"label": "Hide playlists from homepage",
+						"title": "Get rid of playlists from homepage"
+					},
 					"hideScrollbar": {
 						"label": "Cacher la barre de défilement",
 						"title": "Cache la barre de défilement des pages"
@@ -392,10 +433,6 @@
 					"pauseBackgroundPlayers": {
 						"label": "Pause background players",
 						"title": "Pauses video players in background tabs when you start a new player in foreground tab"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
 					},
 					"remainingTime": {
 						"label": "Temps restant",
@@ -705,4 +742,3 @@
 		}
 	}
 }
-
