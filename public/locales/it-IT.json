@@ -309,8 +309,8 @@
 				"title": "Impostazioni mini riproduttore"
 			},
 			"miniPlayerButton": {
-				"label": "Mini Player button",
-				"title": "Adds a button that opens the Mini Player"
+				"label": "Pulsante Mini riproduttore",
+				"title": "Aggiunge un pulsante che apre il mini riproduttore"
 			},
 			"miscellaneous": {
 				"features": {
