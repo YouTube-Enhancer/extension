@@ -1,744 +1,823 @@
 {
-	"langCode": "ko-KR",
-	"langName": "한국어",
-	"messages": {
-		"resumingVideo": "영상을 {{VIDEO_TIME}} 부터 다시 재생합니다.",
-		"settingVolume": "볼륨 부스트를 {{VOLUME_BOOST_AMOUNT}} 로 설정합니다."
-	},
-	"pages": {
-		"content": {
-			"features": {
-				"copyTimestampUrlButton": {
-					"button": {
-						"copied": "복사되었습니다.",
-						"label": "현재 시간 주소 복사"
-					}
-				},
-				"featureMenu": {
-					"button": {
-						"label": "추가 기능"
-					}
-				},
-				"forwardRewindButtons": {
-					"buttons": {
-						"forwardButton": {
-							"label": "{{TIME}} 초 빨리 감기"
-						},
-						"rewindButton": {
-							"label": "{{TIME}} 초 되감기"
-						}
-					}
-				},
-				"hideEndScreenCardsButton": {
-					"button": {
-						"label": "최종 화면 숨기기",
-						"toggle": {
-							"off": "최종 화면 보기",
-							"on": "최종 화면 숨기기"
-						}
-					}
-				},
-				"loopButton": {
-					"button": {
-						"label": "연속 재생",
-						"toggle": {
-							"off": "연속 재생 끄기",
-							"on": "연속 재생 켜기"
-						}
-					}
-				},
-				"maximizePlayerButton": {
-					"button": {
-						"label": "화면 크기에 맞추기",
-						"toggle": {
-							"off": "끄기",
-							"on": "켜기"
-						}
-					}
-				},
-				"miniPlayerButton": {
-					"button": {
-						"label": "Mini Player",
-						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
-						}
-					}
-				},
-				"openTranscriptButton": {
-					"button": {
-						"label": "스크립트 보기"
-					}
-				},
-				"playbackSpeedButtons": {
-					"buttons": {
-						"decreasePlaybackSpeedButton": {
-							"label": "재생 속도를 {{SPEED}} 로 변경"
-						},
-						"increasePlaybackSpeedButton": {
-							"label": "재생 속도를 {{SPEED}} 로 변경"
-						}
-					},
-					"decreaseLimit": "({{SPEED}}) 에서 더 줄일 수 없습니다.",
-					"increaseLimit": "({{SPEED}}) 에서 더 늘릴 수 없습니다."
-				},
-				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
-				},
-				"screenshotButton": {
-					"button": {
-						"label": "스크린샷"
-					},
-					"copiedToClipboard": "현재 화면 클립보드에 복사"
-				},
-				"videoHistory": {
-					"resumeButton": "이어서 시청하기",
-					"resumePrompt": {
-						"close": "닫기"
-					}
-				},
-				"volumeBoostButton": {
-					"button": {
-						"label": "볼륨 부스트",
-						"toggle": {
-							"off": "볼륨 부스트 끄기",
-							"on": "볼륨 부스트 켜기"
-						}
-					}
-				}
-			}
-		},
-		"options": {
-			"notifications": {
-				"error": {
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
-					"scrollWheelHoldModifierKey": {
-						"sameKey": {
-							"speedControl": "중복되는 키가 설정되어 있습니다.",
-							"volumeControl": "중복되는 키가 설정되어 있습니다."
-						}
-					}
-				},
-				"info": {
-					"reset": "모든 옵션이 기본값으로 재설정되었습니다.\n이제 \"확인\" 버튼를 눌러 변경사항을 저장하거나 이 페이지를 닫아 변경사항을 취소할 수 있습니다."
-				},
-				"success": {
-					"saved": "저장되었습니다."
-				}
-			}
-		}
-	},
-	"settings": {
-		"clearData": {
-			"allDataDeleted": "모든 데이터가 삭제되었습니다.",
-			"confirmAlert": "모든 데이터가 삭제됩니다. 진행할까요?"
-		},
-		"optionDisabled": {
-			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " or "
-			},
-			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " and "
-			},
-			"singular": "Enable '{{OPTION}}' to configure this option",
-			"specificOption": {
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
-			}
-		},
-		"scrollForMoreSettings": "Scroll for more settings",
-		"sections": {
-			"automaticQuality": {
-				"enable": {
-					"label": "화질 설정",
-					"title": "영상의 화질이 자동으로 변경됩니다."
-				},
-				"fallbackQualityStrategy": {
-					"select": {
-						"label": "화질 대체",
-						"options": {
-							"higher": "높음",
-							"lower": "낮음"
-						},
-						"title": "선택한 화질을 사용할 수 없을 때 다음 방법을 사용합니다."
-					}
-				},
-				"select": {
-					"label": "동영상 화질",
-					"title": "항상 선택한 화질로 동영상이 재생됩니다."
-				},
-				"title": "동영상 화질 자동 변경"
-			},
-			"bottomButtons": {
-				"clear": {
-					"title": "확장과 관련된 데이터를 PC에서 모두 삭제합니다.",
-					"value": "데이터 삭제"
-				},
-				"confirm": {
-					"title": "작업을 진행하려면 다시 누르세요",
-					"value": "확인"
-				},
-				"openTab": {
-					"title": "새 탭에서 설정 열기"
-				},
-				"reset": {
-					"title": "모든 설정을 기본값으로 변경합니다. 진행을 원하시면 확인을 누르세요",
-					"value": "초기화"
-				}
-			},
-			"buttonPlacement": {
-				"select": {
-					"buttonNames": {
-						"copyTimestampUrlButton": "현재 시간 주소 복사 버튼",
-						"decreasePlaybackSpeedButton": "속도 조절 버튼",
-						"forwardButton": "빨리 감기 버튼",
-						"hideEndScreenCardsButton": "최종 화면 숨기기",
-						"increasePlaybackSpeedButton": "속도 조절 버튼",
-						"loopButton": "연속 재생 버튼",
-						"maximizePlayerButton": "화면 크기에 맞추기 버튼",
-						"miniPlayerButton": "Mini Player",
-						"openTranscriptButton": "스크립트 보기 버튼",
-						"rewindButton": "되감기 버튼",
-						"screenshotButton": "스크린샷 버튼",
-						"volumeBoostButton": "볼륨 부스트 버튼"
-					},
-					"options": {
-						"below_player": {
-							"placement": "플레이어 컨트롤 아래",
-							"value": "아래"
-						},
-						"feature_menu": {
-							"placement": "추가 기능 버튼",
-							"value": "추가 기능"
-						},
-						"player_controls_left": {
-							"placement": "플레이어 컨트롤의 왼쪽",
-							"value": "왼쪽"
-						},
-						"player_controls_right": {
-							"placement": "플레이어 컨트롤의 오른쪽",
-							"value": "오른쪽"
-						}
-					},
-					"title": "{{BUTTON_NAME}} 을 {{PLACEMENT}} 에 배치하세요"
-				},
-				"title": "Button placement settings"
-			},
-			"customCSS": {
-				"editor": {
-					"collapse": "편집기 축소",
-					"expand": "편집기 확대",
-					"noProblems": "발견된 문제가 없습니다."
-				},
-				"enable": {
-					"label": "CSS 커스텀 활성화",
-					"title": "커스텀 CSS를 적용할 수 있습니다."
-				},
-				"title": "Custom CSS settings"
-			},
-			"featureMenu": {
-				"openType": {
-					"select": {
-						"label": "메뉴 활성화 방식",
-						"options": {
-							"click": "클릭 시",
-							"hover": "마우스 커서를 올릴 때"
-						},
-						"title": "추가 기능 메뉴를 어떤 방식으로 열지 선택하세요"
-					},
-					"title": "추가 기능 설정"
-				}
-			},
-			"forwardRewindButtons": {
-				"enable": {
-					"label": "되감기/빨리 감기 버튼 사용",
-					"title": "플레이어에 되감기와 빨리 감기 버튼을 추가합니다."
-				},
-				"time": {
-					"label": "되감기/빨리 감기 시간",
-					"title": "되감기/빨리 감기 시간"
-				},
-				"title": "되감기/빨리 감기 버튼 설정"
-			},
-			"importExportSettings": {
-				"exportButton": {
-					"success": "설정을 성공적으로 내보냈습니다.",
-					"title": "설정 JSON로 내보내기",
-					"value": "설정 내보내기"
-				},
-				"importButton": {
-					"error": {
-						"unknown": "설정 가져오기에 오류가 있습니다. 파일 형식을 확인하십시오.",
-						"validation": "설정 가져 오기에 오류가 있습니다. 파일 형식을 확인하십시오.\n{{ERROR_MESSAGE}}"
-					},
-					"success": "설정 파일을 성공적으로 가져왔습니다.",
-					"title": "JSON 파일에서 설정 가져오기",
-					"value": "설정 가져오기"
-				}
-			},
-			"language": {
-				"select": {
-					"label": "언어",
-					"title": "이곳에서 언어를 변경할 수 있습니다."
-				},
-				"title": "언어"
-			},
-			"miniPlayer": {
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"position": {
-					"label": "Default Mini Player position",
-					"options": {
-						"bottomCenter": "Bottom center",
-						"bottomLeft": "Bottom left",
-						"bottomRight": "Bottom right",
-						"topCenter": "Top center",
-						"topLeft": "Top left",
-						"topRight": "Top right"
-					},
-					"title": "Sets the starting position before you move the Mini Player."
-				},
-				"size": {
-					"label": "Default Mini Player size",
-					"title": "Sets the initial size before you resize the Mini Player."
-				},
-				"title": "Mini Player settings"
-			},
-			"miniPlayerButton": {
-				"label": "Mini Player button",
-				"title": "Adds a button that opens the Mini Player"
-			},
-			"miscellaneous": {
-				"features": {
-					"automaticTheaterMode": {
-						"label": "자동 극장 모드",
-						"title": "동영상 재생 시 자동으로 극장 모드가 활성화 됩니다."
-					},
-					"automaticallyDisableAmbientMode": {
-						"label": "Automatically disable ambient mode",
-						"title": "Automatically disables ambient mode when you load a video"
-					},
-					"automaticallyDisableAutoPlay": {
-						"label": "Automatically disable autoplay",
-						"title": "Automatically disables autoplay when you load a video"
-					},
-					"automaticallyDisableClosedCaptions": {
-						"label": "Automatically disable closed captions",
-						"title": "Automatically disables closed captions when you load a video"
-					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
-					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
-						"title": "Automatically maximizes the player when you load a video"
-					},
-					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
-					},
-					"copyTimestampUrlButton": {
-						"label": "현재 시간 주소 복사 버튼",
-						"title": "현재 시간 주소 복사 (?t=123)"
-					},
-					"defaultToOriginalAudioTrack": {
-						"label": "Default to original audio track",
-						"title": "Always default to the original audio track"
-					},
-					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
-					},
-					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
-					},
-					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
-					},
-					"hideArtificialIntelligenceSummary": {
-						"label": "Hide AI summary",
-						"title": "Hides the artificial intelligence summary below videos"
-					},
-					"hideEndScreenCards": {
-						"label": "최종 화면 숨기기",
-						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨깁니다."
-					},
-					"hideEndScreenCardsButton": {
-						"label": "최종 화면 숨기기 버튼",
-						"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨기거나 표시합니다."
-					},
-					"hideLiveStreamChat": {
-						"label": "실시간 채팅 숨기기",
-						"title": "실시간 채팅 레이아웃을 숨깁니다."
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
-					},
-					"hideOfficialArtistVideosFromHomePage": {
-						"label": "Hide Official Artist Videos",
-						"title": "Hide Official Artist Videos from Home Page"
-					},
-					"hidePaidPromotionBanner": {
-						"label": "유료 광고 배너 숨기기",
-						"title": "유료 광고가 있는 동영상을 볼 때 나타나는 배너를 숨깁니다."
-					},
-					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
-					},
-					"hidePlaylistRecommendationsFromHomePage": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
-					},
-					"hideScrollbar": {
-						"label": "스크롤바 숨기기",
-						"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
-					},
-					"hideShorts": {
-						"label": "쇼츠 숨기기",
-						"title": "쇼츠 동영상들을 숨깁니다."
-					},
-					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
-					},
-					"hideTranslateComment": {
-						"label": "댓글 번역 버튼 숨기기",
-						"title": "댓글 아래에 표시되는 번역 버튼을 숨깁니다."
-					},
-					"loopButton": {
-						"label": "연속 재생 버튼",
-						"title": "추가 기능 메뉴에 \"연속 재생\" 버튼을 추가합니다."
-					},
-					"maximizePlayerButton": {
-						"label": "화면 크기에 맞추기 버튼",
-						"title": "추가 기능 메뉴에 \"화면 크기에 맞추기\" 버튼을 추가합니다."
-					},
-					"openTranscriptButton": {
-						"label": "스크립트 보기 버튼",
-						"title": "추가 기능 메뉴에 \"스크립트 보기\" 버튼을 추가합니다."
-					},
-					"openYouTubeSettingsOnHover": {
-						"label": "마우스 커서를 올려 유튜브 설정 열기",
-						"title": "설정 버튼 위로 마우스 커서를 올리면 유튜브 설정 메뉴를 엽니다."
-					},
-					"pauseBackgroundPlayers": {
-						"label": "백그라운드 플레이어 일시 중지",
-						"title": "다른 탭에서 동영상을 재생할 때 이전 탭의 동영상 플레이어를 일시 중지합니다."
-					},
-					"remainingTime": {
-						"label": "남은 시간 표시",
-						"title": "현재 동영상의 남은 시간을 표시합니다."
-					},
-					"rememberLastVolume": {
-						"label": "마지막 볼륨 기억",
-						"title": "마지막으로 본 동영상의 볼륨이 다른 동영상에서도 유지됩니다."
-					},
-					"removeRedirect": {
-						"label": "유튜브 / 리디렉션 URL 제거",
-						"title": "리디렉션 경고 대화를 건너뛰고 실제 URL로 유튜브 리디렉션을 대체합니다."
-					},
-					"restoreFullscreenScrolling": {
-						"label": "Restore fullscreen scrolling",
-						"title": "Restores scrolling in fullscreen mode"
-					},
-					"shareShortener": {
-						"label": "유튜브 동영상 공유 링크 짧게하기",
-						"title": "si/feature 매개 변수를 제거하여 유튜브 동영상 공유 링크를 단축(youtu.be)"
-					},
-					"shortsAutoScroll": {
-						"label": "쇼츠 동영상 자동 스크롤",
-						"title": "재생이 완료되면 다음 쇼츠로 넘어갑니다."
-					},
-					"skipContinueWatching": {
-						"label": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업 스킵",
-						"title": "'동영상이 일시중지되었습니다. 이어서 시청하시겠어요?' 팝업을 자동으로 스킵하여 끊김 없는 재생을 유지합니다."
-					}
-				},
-				"title": "기타 설정"
-			},
-			"onScreenDisplaySettings": {
-				"color": {
-					"label": "색상",
-					"options": {
-						"blue": "블루",
-						"green": "그린",
-						"orange": "오렌지",
-						"pink": "핑크",
-						"purple": "퍼플",
-						"red": "레드",
-						"white": "화이트",
-						"yellow": "옐로우"
-					},
-					"title": "화면에 속도 조절 등의 알림을 표시하는 텍스트 색상을 변경합니다."
-				},
-				"hide": {
-					"label": "사라지는 시간",
-					"title": "온 스크린 디스플레이가 몇초 후에 사라지는지 설정합니다."
-				},
-				"opacity": {
-					"label": "투명도",
-					"title": "온 스크린 디스플레이의 투명도 조절"
-				},
-				"padding": {
-					"label": "여백",
-					"title": "온 스크린 디스플레이의 주변 여백을 픽셀 단위로 조절합니다."
-				},
-				"position": {
-					"label": "위치",
-					"options": {
-						"bottom_left": "왼쪽 아래",
-						"bottom_right": "오른쪽 아래",
-						"center": "가운데",
-						"top_left": "왼쪽 위",
-						"top_right": "오른쪽 위"
-					},
-					"title": "온 스크린 디스플레이의 위치를 선택하세요"
-				},
-				"title": "On-screen display settings",
-				"type": {
-					"label": "유형",
-					"options": {
-						"circle": "원형",
-						"line": "선",
-						"no_display": "표시 안 함",
-						"text": "텍스트"
-					},
-					"title": "온 스크린 디스플레이가 어떻게 표시될지 선택합니다."
-				}
-			},
-			"playbackSpeed": {
-				"enable": {
-					"label": "재생 속도 고정",
-					"title": "동영상 재생 속도를 아래에서 선택한 속도로 설정합니다."
-				},
-				"playbackSpeedButtons": {
-					"label": "재생 속도 버튼",
-					"select": {
-						"label": "재생 속도 버튼",
-						"title": "클릭당 변경되는 속도 단위"
-					},
-					"title": "보고있는 동영상의 재생 속도를 변경하기 위한 버튼 추가"
-				},
-				"select": {
-					"label": "플레이어 속도",
-					"title": "동영상의 속도를 변경합니다."
-				},
-				"title": "재생 속도 설정"
-			},
-			"playlistLength": {
-				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
-				},
-				"title": "Playlist length settings",
-				"wayToGetLength": {
-					"select": {
-						"label": "Method to get playlist length",
-						"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
-					}
-				},
-				"wayToGetWatchTime": {
-					"select": {
-						"label": "Method to get watched time",
-						"options": {
-							"duration": "Video Length",
-							"youtube": "Video Watch Time"
-						},
-						"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
-					}
-				}
-			},
-			"playlistManagement": {
-				"features": {
-					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
-					},
-					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
-					}
-				},
-				"title": "Playlist management settings"
-			},
-			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "Failed to remove video",
-				"markAsUnwatched": "Mark as unwatched",
-				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "Remove video",
-				"removingVideo": "Removing video…"
-			},
-			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
-			},
-			"screenshotButton": {
-				"enable": {
-					"label": "스크린샷 버튼",
-					"title": "현재 화면을 캡처하기 위한 스크린샷 버튼을 추가합니다."
-				},
-				"saveAs": {
-					"both": "Both (File and Clipboard)",
-					"clipboard": "클립보드로 복사",
-					"file": "파일로 저장"
-				},
-				"selectFormat": {
-					"label": "캡처 방법",
-					"title": "스크린샷을 저장하는 방식"
-				},
-				"selectSaveAs": {
-					"label": "스크린샷 저장 방식",
-					"title": "현재 화면을 클립보드에 복사, 파일로 저장 두 가지 옵션이 있습니다."
-				},
-				"title": "스크린샷 설정"
-			},
-			"scrollWheelSpeedControl": {
-				"adjustmentSteps": {
-					"label": "스크롤 당 속도 변경",
-					"title": "스크롤에 따라 속도가 조절됩니다."
-				},
-				"enable": {
-					"label": "스크롤 휠로 속도 제어",
-					"title": "스크롤 휠을 사용해 속도를 조절하려면 이 옵션을 사용하세요"
-				},
-				"optionLabel": "{{KEY}}",
-				"select": {
-					"label": "보조 키",
-					"title": "보조 키와 함께 사용해야 작동이 됩니다."
-				},
-				"title": "스크롤 휠 속도 제어 설정"
-			},
-			"scrollWheelVolumeControl": {
-				"adjustmentSteps": {
-					"label": "스크롤 당 볼륨 조절",
-					"title": "스크롤에 따라 볼륨이 조절됩니다."
-				},
-				"enable": {
-					"label": "스크롤로 볼륨 조절",
-					"title": "스크롤 휠을 사용하여 보고 있는 동영상의 볼륨을 조절할 수 있습니다."
-				},
-				"holdModifierKey": {
-					"enable": {
-						"label": "보조 키를 누를 때 활성화",
-						"title": "보조 키와 함께 사용해야 작동합니다."
-					},
-					"optionLabel": "{{KEY}}",
-					"select": {
-						"label": "보조 키",
-						"title": "보조 키와 함께 사용해야 작동합니다."
-					}
-				},
-				"holdRightClick": {
-					"enable": {
-						"label": "마우스 오른쪽 버튼을 누른 상태에서 활성화",
-						"title": "우클릭 상태로 스크롤 하세요"
-					}
-				},
-				"title": "스크롤 휠로 볼륨 조절 설정"
-			},
-			"settingSearch": {
-				"placeholder": "설정 검색"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "시청한 동영상 기억",
-					"title": "동영상의 중단된 위치를 기억하고 이어서 시청할 수 있습니다."
-				},
-				"resumeType": {
-					"select": {
-						"label": "이어서 시청하기",
-						"options": {
-							"automatic": "자동",
-							"prompt": "팝업 클릭"
-						},
-						"title": "이어서 시청하는 방법 선택"
-					}
-				},
-				"title": "동영상 시청 기록 설정"
-			},
-			"volumeBoost": {
-				"boostAmount": {
-					"label": "부피 부스트(dB)",
-					"title": "높을 수록 소리가 커집니다."
-				},
-				"enable": {
-					"label": "볼륨 부스트",
-					"title": "볼륨 부스트 켜기"
-				},
-				"mode": {
-					"select": {
-						"label": "볼륨 부스트 적용 방법",
-						"options": {
-							"global": "전체",
-							"perVideo": "개별 동영상"
-						},
-						"title": "볼륨 부스트 활성화 방법을 선택하십시오. '개별 동영상'을 사용하면 추가 기능 메뉴에서 각 비디오를 개별적으로 적용할 수 있습니다. 전체'를 선택하면 이 모든 동영상에 적용됩니다."
-					}
-				},
-				"title": "볼륨 부스트 설정"
-			},
-			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "You can get one from here",
-				"input": {
-					"label": "API Key",
-					"title": "Enter your Youtube Data API V3 key."
-				},
-				"title": "YouTube API V3 key"
-			},
-			"youtubeDeepDark": {
-				"author": "개발자",
-				"co-authors": "도와주신분들",
-				"colors": {
-					"colorShadow": {
-						"label": "그림자 색상",
-						"title": "그림자 색상"
-					},
-					"dimmerText": {
-						"label": "보조 텍스트 색상",
-						"title": "보조 텍스트의 색상"
-					},
-					"hoverBackground": {
-						"label": "마우스 커서를 올렸을 때 색상",
-						"title": "마우스 커서를 올렸을 때의 색상을 변경합니다."
-					},
-					"mainBackground": {
-						"label": "메인 배경 색상",
-						"title": "메인 백그라운드 색상을 변경합니다."
-					},
-					"mainColor": {
-						"label": "강조 색상",
-						"title": "강조할 색상을 선택하세요"
-					},
-					"mainText": {
-						"label": "메인 텍스트 색상",
-						"title": "메인 텍스트 색상을 변경합니다."
-					},
-					"secondBackground": {
-						"label": "보조 배경 색상",
-						"title": "보조 배경의 색상을 변경합니다."
-					}
-				},
-				"enable": {
-					"label": "선택한 테마 사용",
-					"title": "선택한 테마를 활성화합니다."
-				},
-				"select": {
-					"label": "테마 선택",
-					"title": "적용할 테마를 선택하세요"
-				},
-				"title": "YouTube deep dark settings"
-			}
-		}
-	}
+  "langCode": "ko-KR",
+  "langName": "한국어",
+  "messages": {
+    "resumingVideo": "영상을 {{VIDEO_TIME}} 부터 다시 재생합니다.",
+    "settingVolume": "볼륨 부스트를 {{VOLUME_BOOST_AMOUNT}} 로 설정합니다."
+  },
+  "pages": {
+    "content": {
+      "features": {
+        "copyTimestampUrlButton": {
+          "button": {
+            "label": "현재 시간 주소 복사"
+          },
+          "extras": {
+            "copied": "Copied!"
+          }
+        },
+        "featureMenu": {
+          "button": {
+            "label": "추가 기능"
+          }
+        },
+        "forwardRewindButtons": {
+          "buttons": {
+            "forwardButton": {
+              "label": "{{TIME}} 초 빨리 감기"
+            },
+            "rewindButton": {
+              "label": "{{TIME}} 초 되감기"
+            }
+          }
+        },
+        "hideEndScreenCardsButton": {
+          "button": {
+            "label": "최종 화면 숨기기",
+            "toggle": {
+              "off": "최종 화면 보기",
+              "on": "최종 화면 숨기기"
+            }
+          }
+        },
+        "loopButton": {
+          "button": {
+            "label": "연속 재생",
+            "toggle": {
+              "off": "연속 재생 끄기",
+              "on": "연속 재생 켜기"
+            }
+          }
+        },
+        "maximizePlayerButton": {
+          "button": {
+            "label": "화면 크기에 맞추기",
+            "toggle": {
+              "off": "끄기",
+              "on": "켜기"
+            }
+          }
+        },
+        "openTranscriptButton": {
+          "button": {
+            "label": "스크립트 보기"
+          }
+        },
+        "playbackSpeedButtons": {
+          "buttons": {
+            "decreasePlaybackSpeedButton": {
+              "label": "재생 속도를 {{SPEED}} 로 변경"
+            },
+            "increasePlaybackSpeedButton": {
+              "label": "재생 속도를 {{SPEED}} 로 변경"
+            }
+          },
+          "extras": {
+            "decreaseLimit": "Can't decrease further ({{SPEED}})",
+            "increaseLimit": "Can't increase further ({{SPEED}})"
+          }
+        },
+        "playlistLength": {
+          "title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+        },
+        "playlistManagementButtons": {
+          "extras": {
+            "failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+            "failedToRemoveVideo": "Failed to remove video",
+            "markAsUnwatched": "Mark as unwatched",
+            "markingAsUnwatched": "Marking as unwatched…",
+            "removeVideo": "Remove video",
+            "removingVideo": "Removing video…"
+          }
+        },
+        "saveToWatchLaterButton": {
+          "extras": {
+            "failedToSaveVideo": "Failed to save video to Watch Later",
+            "saveVideo": "Save to Watch Later",
+            "savingVideo": "Saving to Watch Later…"
+          }
+        },
+        "screenshotButton": {
+          "button": {
+            "label": "스크린샷"
+          },
+          "extras": {
+            "copiedToClipboard": "Screenshot copied to clipboard"
+          }
+        },
+        "videoHistory": {
+          "extras": {
+            "resumeButton": "Resume",
+            "resumePromptClose": "Close"
+          }
+        },
+        "volumeBoostButton": {
+          "button": {
+            "label": "볼륨 부스트",
+            "toggle": {
+              "off": "볼륨 부스트 끄기",
+              "on": "볼륨 부스트 켜기"
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "extras": {
+        "bottomButtons": {
+          "clear": {
+            "title": "Clears all data this extension has stored on your machine",
+            "value": "Clear Data"
+          },
+          "confirm": {
+            "title": "Confirm setting reset",
+            "value": "Confirm"
+          },
+          "openTab": {
+            "title": "Open extension settings in a new tab"
+          },
+          "reset": {
+            "title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+            "value": "Reset"
+          }
+        },
+        "buttonPlacement": {
+          "select": {
+            "buttonNames": {
+              "copyTimestampUrlButton": "Copy video URL with timestamp button",
+              "decreasePlaybackSpeedButton": "Decrease Speed button",
+              "forwardButton": "Fast Forward button",
+              "hideEndScreenCardsButton": "Hide end screen cards button",
+              "increasePlaybackSpeedButton": "Increase Speed button",
+              "loopButton": "Loop button",
+              "maximizePlayerButton": "Maximize button",
+              "openTranscriptButton": "Open Transcript button",
+              "rewindButton": "Rewind button",
+              "screenshotButton": "Screenshot button",
+              "volumeBoostButton": "Volume Boost button"
+            },
+            "options": {
+              "below_player": {
+                "placement": "below the player controls",
+                "value": "Below Player"
+              },
+              "feature_menu": {
+                "placement": "in the feature menu",
+                "value": "Feature Menu"
+              },
+              "player_controls_left": {
+                "placement": "on the left side of player controls",
+                "value": "Left Controls"
+              },
+              "player_controls_right": {
+                "placement": "on the right side of player controls",
+                "value": "Right Controls"
+              }
+            },
+            "title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+          },
+          "title": "Button placement settings"
+        },
+        "clearData": {
+          "allDataDeleted": "All data has been deleted.",
+          "confirmAlert": "This will delete all extension data related to options. Continue?"
+        },
+        "featureMenu": {
+          "openType": {
+            "select": {
+              "label": "Menu Activation Type",
+              "options": {
+                "click": "Click",
+                "hover": "Hover"
+              },
+              "title": "Select the method to activate the feature menu"
+            },
+            "title": "Feature menu settings"
+          }
+        },
+        "importExportSettings": {
+          "exportButton": {
+            "success": "Settings successfully exported",
+            "title": "Export settings to a JSON file",
+            "value": "Export Settings"
+          },
+          "importButton": {
+            "error": {
+              "unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+              "validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+            },
+            "success": "Settings imported successfully",
+            "title": "Import settings from a JSON file",
+            "value": "Import Settings"
+          }
+        },
+        "language": {
+          "select": {
+            "label": "Language",
+            "title": "The language to use for the extension"
+          },
+          "title": "Language"
+        },
+        "optionDisabled": {
+          "either": {
+            "label": "Enable {{OPTIONS}} to configure this option",
+            "separator": " or "
+          },
+          "plural": {
+            "label": "Enable {{OPTIONS}} to configure this option",
+            "separator": " and "
+          },
+          "singular": "Enable '{{OPTION}}' to configure this option",
+          "specificOption": {
+            "featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+            "screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+          }
+        },
+        "scrollForMoreSettings": "Scroll for more settings",
+        "settingSearch": {
+          "placeholder": "Search for a setting"
+        },
+        "youtubeDataApiV3Key": {
+          "getApiKeyLinkText": "You can get one from here",
+          "input": {
+            "label": "API Key",
+            "title": "Enter your Youtube Data API V3 key."
+          },
+          "title": "YouTube API V3 key"
+        }
+      },
+      "notifications": {
+        "error": {
+          "optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+          "scrollWheelHoldModifierKey": {
+            "sameKey": {
+              "speedControl": "중복되는 키가 설정되어 있습니다.",
+              "volumeControl": "중복되는 키가 설정되어 있습니다."
+            }
+          }
+        },
+        "info": {
+          "reset": "모든 옵션이 기본값으로 재설정되었습니다.\n이제 \"확인\" 버튼를 눌러 변경사항을 저장하거나 이 페이지를 닫아 변경사항을 취소할 수 있습니다."
+        },
+        "success": {
+          "saved": "저장되었습니다."
+        }
+      }
+    }
+  },
+  "settings": {
+    "sections": {
+      "customCSS": {
+        "enable": {
+          "label": "CSS 커스텀 활성화",
+          "title": "커스텀 CSS를 적용할 수 있습니다."
+        },
+        "extras": {
+          "collapse": "Collapse Editor",
+          "expand": "Expand Editor",
+          "noProblems": "No problems found."
+        },
+        "title": "Custom CSS settings"
+      },
+      "deepDarkCSS": {
+        "enable": {
+          "label": "Deep Dark Theme",
+          "title": "Activate the selected theme for the page"
+        },
+        "extras": {
+          "author": "Author",
+          "co-authors": "Co-authors"
+        },
+        "settings": {
+          "colorShadow": {
+            "label": "Shadow color",
+            "title": "Color for shadows"
+          },
+          "dimmerText": {
+            "label": "Secondary text color",
+            "title": "Color for secondary text"
+          },
+          "hoverBackground": {
+            "label": "Hover background color",
+            "title": "Color for hover background"
+          },
+          "mainBackground": {
+            "label": "Main background color",
+            "title": "Color for main background"
+          },
+          "mainColor": {
+            "label": "Accent color",
+            "title": "Color for accent"
+          },
+          "mainText": {
+            "label": "Main text color",
+            "title": "Color for main text"
+          },
+          "secondBackground": {
+            "label": "Secondary background color",
+            "title": "Color for secondary background"
+          },
+          "theme": {
+            "select": {
+              "label": "Select theme",
+              "title": "Select a theme to be applied to the page"
+            }
+          }
+        },
+        "title": "YouTube deep dark settings"
+      },
+      "forwardRewindButtons": {
+        "enable": {
+          "label": "되감기/빨리 감기 버튼 사용",
+          "title": "플레이어에 되감기와 빨리 감기 버튼을 추가합니다."
+        },
+        "settings": {
+          "time": {
+            "label": "Forward/rewind time",
+            "title": "The amount of time to forward/rewind the video by"
+          }
+        },
+        "title": "되감기/빨리 감기 버튼 설정"
+      },
+      "miscellaneous": {
+        "settings": {
+          "automaticallyDisableAmbientMode": {
+            "enable": {
+              "label": "Automatically disable ambient mode",
+              "title": "Automatically disables ambient mode when you load a video"
+            }
+          },
+          "automaticallyDisableAutoPlay": {
+            "enable": {
+              "label": "Automatically disable autoplay",
+              "title": "Automatically disables autoplay when you load a video"
+            }
+          },
+          "automaticallyDisableClosedCaptions": {
+            "enable": {
+              "label": "Automatically disable closed captions",
+              "title": "Automatically disables closed captions when you load a video"
+            }
+          },
+          "automaticallyEnableClosedCaptions": {
+            "enable": {
+              "label": "Automatically enable closed captions",
+              "title": "Automatically enables closed captions when you load a video"
+            }
+          },
+          "automaticallyMaximizePlayer": {
+            "enable": {
+              "label": "Automatically maximize player",
+              "title": "Automatically maximizes the player when you load a video"
+            }
+          },
+          "automaticallyShowMoreVideosOnEndScreen": {
+            "enable": {
+              "label": "Automatically show more videos on end screen",
+              "title": "Automatically shows more videos on end screen when you load a video"
+            }
+          },
+          "automaticTheaterMode": {
+            "enable": {
+              "label": "Automatic theater mode",
+              "title": "Automatically enables theater mode when you load a video"
+            }
+          },
+          "copyTimestampUrlButton": {
+            "enable": {
+              "label": "Copy video URL with timestamp button",
+              "title": "Copies video URL with timestamp (?t=123)"
+            }
+          },
+          "defaultToOriginalAudioTrack": {
+            "enable": {
+              "label": "Default to original audio track",
+              "title": "Always default to the original audio track"
+            }
+          },
+          "saveToWatchLaterButton": {
+            "enable": {
+              "label": "Enable save to Watch Later button",
+              "title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+            }
+          },
+          "hideArtificialIntelligenceSummary": {
+            "enable": {
+              "label": "Hide AI summary",
+              "title": "Hides the artificial intelligence summary below videos"
+            }
+          },
+          "hideEndScreenCards": {
+            "enable": {
+              "label": "Hide end screen cards",
+              "title": "Hides the cards at the end of the video"
+            }
+          },
+          "hideEndScreenCardsButton": {
+            "enable": {
+              "label": "Hide end screen cards button",
+              "title": "Adds a button to show/hide the cards at the end of the video"
+            }
+          },
+          "hideLiveStreamChat": {
+            "enable": {
+              "label": "Hide live stream chat",
+              "title": "Hides the live stream chat"
+            }
+          },
+          "hideMembersOnlyVideos": {
+            "enable": {
+              "label": "Hide members-only videos",
+              "title": "Hides videos that are only visible to members"
+            }
+          },
+          "hideOfficialArtistVideosFromHomePage": {
+            "enable": {
+              "label": "Hide Official Artist Videos",
+              "title": "Hide Official Artist Videos from Home Page"
+            }
+          },
+          "hidePaidPromotionBanner": {
+            "enable": {
+              "label": "Hide paid promotion banner",
+              "title": "Hides the banner that appears when you watch a video that has a paid promotion"
+            }
+          },
+          "hidePlayables": {
+            "enable": {
+              "label": "Hide playables",
+              "title": "Hides all playables"
+            }
+          },
+          "hidePlaylistRecommendationsFromHomePage": {
+            "enable": {
+              "label": "Hide playlists from homepage",
+              "title": "Get rid of playlists from homepage"
+            }
+          },
+          "hideScrollbar": {
+            "enable": {
+              "label": "Hide scrollbar",
+              "title": "Hides the pages scrollbar"
+            }
+          },
+          "hideShorts": {
+            "enable": {
+              "label": "Hide shorts",
+              "title": "Hides all shorts"
+            }
+          },
+          "hideSidebarRecommendedVideos": {
+            "enable": {
+              "label": "Hide recommended videos",
+              "title": "Hides the sidebar that recommends videos"
+            }
+          },
+          "hideTranslateComment": {
+            "enable": {
+              "label": "Hide translate comment button",
+              "title": "Hides 'Translate to Language' button under comments"
+            }
+          },
+          "loopButton": {
+            "enable": {
+              "label": "Loop button",
+              "title": "Adds a button to the feature menu to loop the video you're watching"
+            }
+          },
+          "maximizePlayerButton": {
+            "enable": {
+              "label": "Maximize player button",
+              "title": "Adds a button to the feature menu to maximize the player"
+            }
+          },
+          "openTranscriptButton": {
+            "enable": {
+              "label": "Open transcript button",
+              "title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+            }
+          },
+          "openYouTubeSettingsOnHover": {
+            "enable": {
+              "label": "Open YouTube settings on hover",
+              "title": "Opens the YouTube settings menu when you hover over the settings button"
+            }
+          },
+          "pauseBackgroundPlayers": {
+            "enable": {
+              "label": "Pause background players",
+              "title": "Pauses video players in background tabs when you start a new player in foreground tab"
+            }
+          },
+          "remainingTime": {
+            "enable": {
+              "label": "Remaining time",
+              "title": "Shows the remaining time of the video you're watching"
+            }
+          },
+          "rememberVolume": {
+            "enable": {
+              "label": "Remember last volume",
+              "title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+            }
+          },
+          "removeRedirect": {
+            "enable": {
+              "label": "Remove YouTube /redirect URLs",
+              "title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+            }
+          },
+          "restoreFullscreenScrolling": {
+            "enable": {
+              "label": "Restore fullscreen scrolling",
+              "title": "Restores scrolling in fullscreen mode"
+            }
+          },
+          "shareShortener": {
+            "enable": {
+              "label": "Shorten YouTube video share link",
+              "title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+            }
+          },
+          "shortsAutoScroll": {
+            "enable": {
+              "label": "Shorts auto scroll",
+              "title": "Automatically scrolls to the next short"
+            }
+          },
+          "skipContinueWatching": {
+            "enable": {
+              "label": "Skip \"Video is paused. Continue watching?\"",
+              "title": "Skips the idle dialog that pauses video playback"
+            }
+          }
+        },
+        "title": "기타 설정"
+      },
+      "onScreenDisplaySettings": {
+        "settings": {
+          "color": {
+            "label": "Color",
+            "select": {
+              "options": {
+                "blue": "Blue",
+                "green": "Green",
+                "orange": "Orange",
+                "pink": "Pink",
+                "purple": "Purple",
+                "red": "Red",
+                "white": "White",
+                "yellow": "Yellow"
+              }
+            },
+            "title": "Select the color for the On-Screen Display"
+          },
+          "hide": {
+            "label": "Hide Delay",
+            "title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+          },
+          "opacity": {
+            "label": "Opacity",
+            "title": "Adjust the transparency of the On-Screen Display"
+          },
+          "padding": {
+            "label": "Padding",
+            "title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+          },
+          "position": {
+            "label": "Position",
+            "select": {
+              "options": {
+                "bottom_left": "Bottom Left",
+                "bottom_right": "Bottom Right",
+                "center": "Center",
+                "top_left": "Top Left",
+                "top_right": "Top Right"
+              }
+            },
+            "title": "Select the position of the On-Screen Display"
+          },
+          "type": {
+            "label": "Type",
+            "select": {
+              "options": {
+                "circle": "Circle",
+                "line": "Line",
+                "no_display": "No display",
+                "text": "Text"
+              }
+            },
+            "title": "Select the type of On-Screen Display"
+          }
+        },
+        "title": "On-screen display settings"
+      },
+      "playerQuality": {
+        "enable": {
+          "label": "Automatic quality adjustment",
+          "title": "Automatically adjusts the video quality to the selected level."
+        },
+        "settings": {
+          "quality": {
+            "select": {
+              "label": "Player quality",
+              "title": "The quality to set the video to"
+            }
+          },
+          "qualityFallbackStrategy": {
+            "select": {
+              "label": "Quality fallback strategy",
+              "options": {
+                "higher": "Higher",
+                "lower": "Lower"
+              },
+              "title": "The strategy to use when the selected quality is not available"
+            }
+          }
+        },
+        "title": "Automatic quality settings"
+      },
+      "playerSpeed": {
+        "enable": {
+          "label": "Forced playback speed",
+          "title": "Sets the video speed to what you choose below"
+        },
+        "settings": {
+          "buttons": {
+            "label": "Playback speed buttons",
+            "select": {
+              "label": "Playback buttons speed",
+              "title": "Amount of speed to be changed per click"
+            },
+            "title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+          },
+          "speed": {
+            "select": {
+              "label": "Player speed",
+              "title": "The speed to set the video to"
+            }
+          }
+        },
+        "title": "Playback speed settings"
+      },
+      "playlistLength": {
+        "enable": {
+          "label": "Display playlist length information",
+          "title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+        },
+        "settings": {
+          "wayToGetLength": {
+            "select": {
+              "label": "Method to get playlist length",
+              "title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+            }
+          },
+          "wayToGetWatchTime": {
+            "select": {
+              "label": "Method to get watched time",
+              "options": {
+                "duration": "Video Length",
+                "youtube": "Video Watch Time"
+              },
+              "title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+            }
+          }
+        },
+        "title": "Playlist length settings"
+      },
+      "playlistManagementButtons": {
+        "settings": {
+          "markAsUnwatchedButton": {
+            "enable": {
+              "label": "Mark as unwatched button",
+              "title": "Adds a button to mark videos as unwatched"
+            }
+          },
+          "removeVideoButton": {
+            "enable": {
+              "label": "Remove video button",
+              "title": "Adds a button to remove videos from the playlist"
+            }
+          }
+        },
+        "title": "Playlist management settings"
+      },
+      "screenshotButton": {
+        "enable": {
+          "label": "스크린샷 버튼",
+          "title": "현재 화면을 캡처하기 위한 스크린샷 버튼을 추가합니다."
+        },
+        "settings": {
+          "format": {
+            "label": "Screenshot format",
+            "title": "The format to save the screenshot in"
+          },
+          "saveAs": {
+            "select": {
+              "options": {
+                "both": "Both (File and Clipboard)",
+                "clipboard": "Clipboard",
+                "file": "File"
+              },
+              "label": "Screenshot save type",
+              "title": "The screenshot save type"
+            }
+          }
+        },
+        "title": "스크린샷 설정"
+      },
+      "scrollWheelSpeedControl": {
+        "enable": {
+          "label": "스크롤 휠로 속도 제어",
+          "title": "스크롤 휠을 사용해 속도를 조절하려면 이 옵션을 사용하세요"
+        },
+        "extras": {
+          "optionLabel": "{{KEY}} key"
+        },
+        "settings": {
+          "adjustmentSteps": {
+            "label": "Speed Change Per Scroll",
+            "title": "Adjust the speed change per scroll"
+          },
+          "modifierKey": {
+            "select": {
+              "label": "Modifier key",
+              "title": "The modifier key to use"
+            }
+          }
+        },
+        "title": "스크롤 휠 속도 제어 설정"
+      },
+      "scrollWheelVolumeControl": {
+        "enable": {
+          "label": "스크롤로 볼륨 조절",
+          "title": "스크롤 휠을 사용하여 보고 있는 동영상의 볼륨을 조절할 수 있습니다."
+        },
+        "extras": {
+          "optionLabel": "{{KEY}} key"
+        },
+        "settings": {
+          "adjustmentSteps": {
+            "label": "Volume Change Per Scroll",
+            "title": "Adjust the volume change per scroll"
+          },
+          "holdModifierKey": {
+            "label": "When holding modifier key",
+            "select": {
+              "label": "Modifier key",
+              "title": "The modifier key to use"
+            },
+            "title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+          },
+          "holdRightClick": {
+            "label": "When holding right click",
+            "title": "Hold right click to enable scroll wheel volume control"
+          }
+        },
+        "title": "스크롤 휠로 볼륨 조절 설정"
+      },
+      "videoHistory": {
+        "enable": {
+          "label": "시청한 동영상 기억",
+          "title": "동영상의 중단된 위치를 기억하고 이어서 시청할 수 있습니다."
+        },
+        "settings": {
+          "resumeType": {
+            "select": {
+              "label": "Resume type",
+              "options": {
+                "automatic": "Automatic",
+                "prompt": "Prompt"
+              },
+              "title": "Select how you want to resume videos"
+            }
+          }
+        },
+        "title": "동영상 시청 기록 설정"
+      },
+      "volumeBoost": {
+        "enable": {
+          "label": "볼륨 부스트",
+          "title": "볼륨 부스트 켜기"
+        },
+        "settings": {
+          "amount": {
+            "label": "Volume boost amount (dB)",
+            "title": "The amount to boost the volume by"
+          },
+          "mode": {
+            "select": {
+              "label": "Volume boost mode",
+              "options": {
+                "global": "Global",
+                "perVideo": "Per video"
+              },
+              "title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+            }
+          }
+        },
+        "title": "볼륨 부스트 설정"
+      }
+    }
+  }
 }
