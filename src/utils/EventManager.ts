@@ -51,6 +51,7 @@ export type FeatureName =
 	| "scrollWheelVolumeControl"
 	| "shareShortener"
 	| "shortsAutoScroll"
+	| "timestampPeek"
 	| "videoHistory"
 	| "volumeBoostButton";
 

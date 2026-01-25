@@ -80,6 +80,7 @@ import enableScrollWheelVolumeControl, { disableScrollWheelVolumeControl } from 
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
+import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timestampPeek";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -207,7 +208,8 @@ const enableFeatures = async () => {
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage(),
 			enableHidePlaylistRecommendationsFromHomePage(),
-			enableSaveToWatchLaterButton()
+			enableSaveToWatchLaterButton(),
+			enableTimestampPeek()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -496,7 +498,6 @@ const initialize = function () {
 						}
 						break;
 					}
-
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -1078,6 +1079,17 @@ const initialize = function () {
 						} = message;
 						if (skipContinueWatchingEnabled) {
 							await enableSkipContinueWatching();
+						}
+						break;
+					}
+					case "timestampPeekChange": {
+						const {
+							data: { timestampPeekEnabled }
+						} = message;
+						if (timestampPeekEnabled) {
+							await enableTimestampPeek();
+						} else {
+							disableTimestampPeek();
 						}
 						break;
 					}

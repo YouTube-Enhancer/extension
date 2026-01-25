@@ -405,6 +405,12 @@ interface EnUS {
 							title: "Skips the idle dialog that pauses video playback";
 						};
 					};
+					timestampPeek: {
+						enable: {
+							label: "Timestamp Preview";
+							title: "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.";
+						};
+					};
 				};
 				title: "Miscellaneous settings";
 			};

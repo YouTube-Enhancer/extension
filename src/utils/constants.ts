@@ -23,6 +23,7 @@ import {
 	youtubePlayerQualityLevels,
 	youtubePlayerSpeedStep
 } from "../types";
+import { isNewYouTubeVideoLayout } from "../utils/utilities";
 
 export const deepDarkCssID = "yte-deep-dark-css";
 export const outputFolderName = "dist";
@@ -249,3 +250,10 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;
 export const YouTube_Enhancer_Public_Youtube_Data_API_V3_Key = "AIzaSyA_z2BR_HSfKsPvuttqjD_6AY60zgqbm5k";
+export const getCommentsPanelSelector = () =>
+	isNewYouTubeVideoLayout() ?
+		"ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section'] ytd-item-section-renderer[section-identifier='comment-item-section']"
+	:	"ytd-comments.ytd-watch-flexy ytd-item-section-renderer[section-identifier='comment-item-section']";
+export const commentsHeaderSelector = "ytd-comments div#header";
+export const engagementPanelVisibility = ["ENGAGEMENT_PANEL_VISIBILITY_HIDDEN", "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] as const;
+export type EngagementPanelVisibility = (typeof engagementPanelVisibility)[number];
