@@ -10,7 +10,7 @@ const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpand
 	const {
 		i18nInstance: { t }
 	} = useSettings();
-	const buttonValue = isExpanded ? t("settings.sections.customCSS.editor.collapse") : t("settings.sections.customCSS.editor.expand");
+	const buttonValue = isExpanded ? t("settings.sections.customCSS.extras.collapse") : t("settings.sections.customCSS.extras.expand");
 
 	return (
 		<input

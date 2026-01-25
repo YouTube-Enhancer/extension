@@ -57,15 +57,15 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 						parentSetting: { type, value }
 					} = settingProps;
 					if (type === "singular") {
-						return t("settings.optionDisabled.singular", {
+						return t("pages.options.extras.optionDisabled.singular", {
 							OPTION: t(value)
 						});
 					}
 					if (type === "specificOption") {
 						return t(value);
 					}
-					const options = value.map((option) => `'${t(option)}'`).join(t(`settings.optionDisabled.${type}.separator`));
-					return t(`settings.optionDisabled.${type}.label`, { OPTIONS: options });
+					const options = value.map((option) => `'${t(option)}'`).join(t(`pages.options.extras.optionDisabled.${type}.separator`));
+					return t(`pages.options.extras.optionDisabled.${type}.label`, { OPTIONS: options });
 				})()}
 			>
 				<SettingInput {...settingProps} />
