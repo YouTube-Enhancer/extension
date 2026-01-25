@@ -13,7 +13,7 @@
             "label": "टाइमस्टैम्प सहित वीडियो URL कॉपी करें"
           },
           "extras": {
-            "copied": "Copied!"
+            "copied": "कॉपी किया गया!"
           }
         },
         "featureMenu": {
@@ -198,8 +198,8 @@
         "importExportSettings": {
           "exportButton": {
             "success": "Settings successfully exported",
-            "title": "Export settings to a JSON file",
-            "value": "Export Settings"
+            "title": "सेटिंग्स को JSON फ़ाइल में निर्यात करें",
+            "value": "निर्यात सेटिंग्स"
           },
           "importButton": {
             "error": {
