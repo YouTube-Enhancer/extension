@@ -309,8 +309,8 @@
 				"title": "Mini Oynatıcı Ayarları"
 			},
 			"miniPlayerButton": {
-				"label": "Mini Player button",
-				"title": "Adds a button that opens the Mini Player"
+				"label": "Mini Oynatıcı düğmesi",
+				"title": "Mini Oynatıcıyı açan bir düğme ekler"
 			},
 			"miscellaneous": {
 				"features": {
