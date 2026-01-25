@@ -341,6 +341,12 @@
       },
       "miscellaneous": {
         "settings": {
+          "automaticTheaterMode": {
+            "enable": {
+              "label": "自動啟用劇院模式",
+              "title": "載入影片時自動啟用劇院模式"
+            }
+          },
           "automaticallyDisableAmbientMode": {
             "enable": {
               "label": "自動停用微光效果",
@@ -377,12 +383,6 @@
               "title": "Automatically shows more videos on end screen when you load a video"
             }
           },
-          "automaticTheaterMode": {
-            "enable": {
-              "label": "自動啟用劇院模式",
-              "title": "載入影片時自動啟用劇院模式"
-            }
-          },
           "copyTimestampUrlButton": {
             "enable": {
               "label": "複製目前播放時間的影片網址按鈕",
@@ -393,12 +393,6 @@
             "enable": {
               "label": "Default to original audio track",
               "title": "Always default to the original audio track"
-            }
-          },
-          "saveToWatchLaterButton": {
-            "enable": {
-              "label": "Enable save to Watch Later button",
-              "title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
             }
           },
           "hideArtificialIntelligenceSummary": {
@@ -531,6 +525,12 @@
             "enable": {
               "label": "Restore fullscreen scrolling",
               "title": "Restores scrolling in fullscreen mode"
+            }
+          },
+          "saveToWatchLaterButton": {
+            "enable": {
+              "label": "Enable save to Watch Later button",
+              "title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
             }
           },
           "shareShortener": {
@@ -714,12 +714,12 @@
           },
           "saveAs": {
             "select": {
+              "label": "螢幕截圖儲存方式",
               "options": {
                 "both": "Both (File and Clipboard)",
                 "clipboard": "剪貼簿",
                 "file": "檔案"
               },
-              "label": "螢幕截圖儲存方式",
               "title": "螢幕截圖的儲存方式"
             }
           }

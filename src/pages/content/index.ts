@@ -496,6 +496,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				skipContinueWatchingEnabled: newValue
 			});
 		},
+		enable_timestamp_peek: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("timestampPeekChange", {
+				timestampPeekEnabled: newValue
+			});
+		},
 		enable_video_history: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("videoHistoryChange", {
 				videoHistoryEnabled: newValue

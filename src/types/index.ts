@@ -463,6 +463,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		}
 	>;
 	skipContinueWatchingChange: DataResponseMessage<"skipContinueWatchingChange", { skipContinueWatchingEnabled: boolean }>;
+	timestampPeekChange: DataResponseMessage<"timestampPeekChange", { timestampPeekEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	volumeBoostAmountChange: DataResponseMessage<
 		"volumeBoostAmountChange",

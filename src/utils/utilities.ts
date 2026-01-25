@@ -33,6 +33,7 @@ import type { SVGElementAttributes } from "./SVGElementAttributes";
 import { deepDarkPresets } from "../deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "../features/deepDarkCSS/utils";
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { engagementPanelVisibility, type EngagementPanelVisibility, getCommentsPanelSelector } from "../utils/constants";
 import { eventManager, type FeatureName } from "./EventManager";
 
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
@@ -611,6 +612,24 @@ export function modifyElementsClassList(
 	}
 	elements.forEach((pair) => modifyElementClassList(action, pair));
 }
+export function observeCommentsPanelVisibilityChange(cb: { [K in EngagementPanelVisibility]: () => void }): MutationObserver {
+	const observer = new MutationObserver((mutationList) => {
+		mutationList.forEach((mutation) => {
+			if (mutation.attributeName === "visibility") {
+				const target = mutation.target as HTMLElement;
+				if (!target) return;
+				const visibility = target.getAttribute("visibility");
+				if (!visibility) return;
+				if (!engagementPanelVisibility.includes(visibility)) return;
+				const castVisibility = visibility as EngagementPanelVisibility;
+				cb[castVisibility]();
+			}
+		});
+	});
+	const commentsPanel = document.querySelector(getCommentsPanelSelector()) as Element;
+	observer.observe(commentsPanel, { attributeFilter: ["visibility"] });
+	return observer;
+}
 export function parseStoredValue(value: string) {
 	try {
 		// Attempt to parse the value as JSON
@@ -703,6 +722,7 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 		resolve();
 	});
 }
+
 /**
  * Sends a message from the extension
  * @param type - The type of the message to send.
@@ -783,7 +803,6 @@ export async function waitForAllElements(selectors: Selector[], timeout = 15000)
 	}
 	return results as Element[];
 }
-
 export function waitForElement<T extends Element>(selector: string, timeout = 2500): Promise<null | T> {
 	return new Promise((resolve) => {
 		const start = performance.now();
@@ -802,6 +821,7 @@ export function waitForElement<T extends Element>(selector: string, timeout = 25
 		check();
 	});
 }
+
 /**
  * Waits for a specific message of the given type, action, source, and data.
  *
@@ -852,7 +872,6 @@ function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: s
 		styling: [style, BrowserColors.Reset]
 	};
 }
-
 /**
  * Extracts all sections from a YouTube URL path.
  * @param {string} url - The YouTube URL.
@@ -865,6 +884,7 @@ function extractSectionsFromYouTubeURL(url: string): string[] {
 	// Split the path into an array of sections
 	return path.split("/").filter((section) => section !== "");
 }
+
 function getColor(type: ColorType) {
 	switch (type) {
 		case "error":
@@ -890,7 +910,6 @@ function getLuminance(rgb: { b: number; g: number; r: number }): number {
 
 	return 0.2126 * r2 + 0.7152 * g2 + 0.0722 * b2;
 }
-
 /**
  * Group multiple log messages into a single message with combined styling.
  *

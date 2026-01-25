@@ -1,0 +1,17 @@
+#yte-timestamp-peek-overlay {
+	position: fixed;
+	width: 400px;
+	height: 225px;
+	z-index: 9999;
+	display: none;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+#yte-timestamp-peek-overlay video {
+	width: 400px !important;
+	height: 225px !important;
+	object-fit: contain !important;
+	top: 0 !important;
+	left: 0 !important;
+}
