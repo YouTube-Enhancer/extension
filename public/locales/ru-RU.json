@@ -13,7 +13,7 @@
             "label": "Копировать URL видео с таймкодом"
           },
           "extras": {
-            "copied": "Copied!"
+            "copied": "Скопировано!"
           }
         },
         "featureMenu": {
@@ -73,8 +73,8 @@
             }
           },
           "extras": {
-            "decreaseLimit": "Can't decrease further ({{SPEED}})",
-            "increaseLimit": "Can't increase further ({{SPEED}})"
+            "decreaseLimit": "Невозможно уменьшить ({{SPEED}})",
+            "increaseLimit": "Невозможно увеличить ({{SPEED}})"
           }
         },
         "playlistLength": {
@@ -102,13 +102,13 @@
             "label": "Скриншот"
           },
           "extras": {
-            "copiedToClipboard": "Screenshot copied to clipboard"
+            "copiedToClipboard": "Скриншот скопирован в буфер обмена"
           }
         },
         "videoHistory": {
           "extras": {
-            "resumeButton": "Resume",
-            "resumePromptClose": "Close"
+            "resumeButton": "Возобновить",
+            "resumePromptClose": "Закрыть"
           }
         },
         "volumeBoostButton": {
@@ -126,122 +126,122 @@
       "extras": {
         "bottomButtons": {
           "clear": {
-            "title": "Clears all data this extension has stored on your machine",
-            "value": "Clear Data"
+            "title": "Очистить все данные, которые это расширение хранит на вашем компьютере",
+            "value": "Удалить данные"
           },
           "confirm": {
-            "title": "Confirm setting reset",
-            "value": "Confirm"
+            "title": "Подтвердить сброс настроек",
+            "value": "Подтвердить"
           },
           "openTab": {
-            "title": "Open extension settings in a new tab"
+            "title": "Открывать настройки расширения в новой вкладке"
           },
           "reset": {
-            "title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-            "value": "Reset"
+            "title": "Сбрасывает все параметры до значений по умолчанию. Нажмите \"Подтвердить\", чтобы сохранить изменения",
+            "value": "Сброс"
           }
         },
         "buttonPlacement": {
           "select": {
             "buttonNames": {
-              "copyTimestampUrlButton": "Copy video URL with timestamp button",
-              "decreasePlaybackSpeedButton": "Decrease Speed button",
-              "forwardButton": "Fast Forward button",
-              "hideEndScreenCardsButton": "Hide end screen cards button",
-              "increasePlaybackSpeedButton": "Increase Speed button",
-              "loopButton": "Loop button",
-              "maximizePlayerButton": "Maximize button",
-              "openTranscriptButton": "Open Transcript button",
-              "rewindButton": "Rewind button",
-              "screenshotButton": "Screenshot button",
-              "volumeBoostButton": "Volume Boost button"
+              "copyTimestampUrlButton": "Кнопка «Копировать URL видео с таймкодом»",
+              "decreasePlaybackSpeedButton": "Кнопка уменьшения скорости видео",
+              "forwardButton": "Кнопка перемотки вперёд",
+              "hideEndScreenCardsButton": "Кнопка «Скрыть заставки следующих видео»",
+              "increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
+              "loopButton": "Кнопка «Зациклить»",
+              "maximizePlayerButton": "Кнопка «Развернуть»",
+              "openTranscriptButton": "Кнопка «Открыть стенограмму»",
+              "rewindButton": "Кнопка перемотки назад",
+              "screenshotButton": "Кнопка «Скриншот»",
+              "volumeBoostButton": "Кнопка «Усиление громкости»"
             },
             "options": {
               "below_player": {
-                "placement": "below the player controls",
-                "value": "Below Player"
+                "placement": "под проигрывателем",
+                "value": "Под проигрывателем"
               },
               "feature_menu": {
-                "placement": "in the feature menu",
-                "value": "Feature Menu"
+                "placement": "в меню функций",
+                "value": "Меню функций"
               },
               "player_controls_left": {
-                "placement": "on the left side of player controls",
-                "value": "Left Controls"
+                "placement": "с левой стороны панели управления",
+                "value": "Слева"
               },
               "player_controls_right": {
-                "placement": "on the right side of player controls",
-                "value": "Right Controls"
+                "placement": "с правой стороны панели управления",
+                "value": "Справа"
               }
             },
-            "title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+            "title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}"
           },
           "title": "Button placement settings"
         },
         "clearData": {
-          "allDataDeleted": "All data has been deleted.",
-          "confirmAlert": "This will delete all extension data related to options. Continue?"
+          "allDataDeleted": "Все данные были удалены.",
+          "confirmAlert": "Это приведет к удалению всех данных расширения, связанных с настройками. Продолжить?"
         },
         "featureMenu": {
           "openType": {
             "select": {
-              "label": "Menu Activation Type",
+              "label": "Тип активации меню",
               "options": {
-                "click": "Click",
-                "hover": "Hover"
+                "click": "Посредством нажатия",
+                "hover": "При наведении курсора"
               },
-              "title": "Select the method to activate the feature menu"
+              "title": "Выберите способ активации меню функций"
             },
-            "title": "Feature menu settings"
+            "title": "Настройки меню функций"
           }
         },
         "importExportSettings": {
           "exportButton": {
-            "success": "Settings successfully exported",
-            "title": "Export settings to a JSON file",
-            "value": "Export Settings"
+            "success": "Настройки успешно экспортированы",
+            "title": "Экспорт настроек в JSON файл",
+            "value": "Экспорт настроек"
           },
           "importButton": {
             "error": {
-              "unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-              "validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+              "unknown": "Ошибка импорта настроек. Пожалуйста, проверьте формат файла.\nПроизошла неизвестная ошибка.",
+              "validation": "Ошибка импорта настроек. Пожалуйста, проверьте формат файла.\n{{ERROR_MESSAGE}}"
             },
-            "success": "Settings imported successfully",
-            "title": "Import settings from a JSON file",
-            "value": "Import Settings"
+            "success": "Настройки успешно импортированы",
+            "title": "Импорт настроек из JSON файла",
+            "value": "Импорт настроек"
           }
         },
         "language": {
           "select": {
-            "label": "Language",
-            "title": "The language to use for the extension"
+            "label": "Язык",
+            "title": "Язык расширения"
           },
-          "title": "Language"
+          "title": "Язык"
         },
         "optionDisabled": {
           "either": {
-            "label": "Enable {{OPTIONS}} to configure this option",
-            "separator": " or "
+            "label": "Включите {{OPTIONS}} для настройки этого параметра",
+            "separator": " или "
           },
           "plural": {
-            "label": "Enable {{OPTIONS}} to configure this option",
-            "separator": " and "
+            "label": "Включите {{OPTIONS}} для настройки этого параметра",
+            "separator": " и "
           },
-          "singular": "Enable '{{OPTION}}' to configure this option",
+          "singular": "Включите '{{OPTION}}' для настройки этого параметра",
           "specificOption": {
-            "featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+            "featureMenu": "Включите по крайней мере одну кнопку, которая будет размещена в меню функций для настройки этой опции.",
             "screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
           }
         },
-        "scrollForMoreSettings": "Scroll for more settings",
+        "scrollForMoreSettings": "Прокрутите для других настроек",
         "settingSearch": {
-          "placeholder": "Search for a setting"
+          "placeholder": "Поиск настроек"
         },
         "youtubeDataApiV3Key": {
-          "getApiKeyLinkText": "You can get one from here",
+          "getApiKeyLinkText": "Вы можете получить ключ здесь",
           "input": {
-            "label": "API Key",
-            "title": "Enter your Youtube Data API V3 key."
+            "label": "API ключ",
+            "title": "Введите ваш ключ Youtube Data API V3."
           },
           "title": "YouTube API V3 key"
         }
@@ -273,54 +273,54 @@
           "title": "Включает пользовательские настройки CSS для применения к странице"
         },
         "extras": {
-          "collapse": "Collapse Editor",
-          "expand": "Expand Editor",
-          "noProblems": "No problems found."
+          "collapse": "Свернуть редактор",
+          "expand": "Расширить редактор",
+          "noProblems": "Проблем не найдено."
         },
         "title": "Custom CSS settings"
       },
       "deepDarkCSS": {
         "enable": {
-          "label": "Deep Dark Theme",
-          "title": "Activate the selected theme for the page"
+          "label": "Включить выбранную тему",
+          "title": "Активировать выбранную тему для страницы"
         },
         "extras": {
-          "author": "Author",
-          "co-authors": "Co-authors"
+          "author": "Автор",
+          "co-authors": "Соавторы"
         },
         "settings": {
           "colorShadow": {
-            "label": "Shadow color",
-            "title": "Color for shadows"
+            "label": "Цвет тени",
+            "title": "Цвет теней"
           },
           "dimmerText": {
-            "label": "Secondary text color",
-            "title": "Color for secondary text"
+            "label": "Цвет вторичного текста",
+            "title": "Цвет для вторичного текста"
           },
           "hoverBackground": {
-            "label": "Hover background color",
-            "title": "Color for hover background"
+            "label": "Цвет фона при наведении",
+            "title": "Цвет, который будет задаваться фону при наведении"
           },
           "mainBackground": {
-            "label": "Main background color",
-            "title": "Color for main background"
+            "label": "Основной цвет фона",
+            "title": "Цвет для основного фона"
           },
           "mainColor": {
-            "label": "Accent color",
-            "title": "Color for accent"
+            "label": "Цвет акцента",
+            "title": "Цвет для акцента"
           },
           "mainText": {
-            "label": "Main text color",
-            "title": "Color for main text"
+            "label": "Цвет основного текста",
+            "title": "Цвет для основного текста"
           },
           "secondBackground": {
-            "label": "Secondary background color",
-            "title": "Color for secondary background"
+            "label": "Дополнительный цвет фона",
+            "title": "Цвет для вторичного фона"
           },
           "theme": {
             "select": {
-              "label": "Select theme",
-              "title": "Select a theme to be applied to the page"
+              "label": "Выбрать тему",
+              "title": "Выберите тему для применения к странице"
             }
           }
         },
@@ -333,8 +333,8 @@
         },
         "settings": {
           "time": {
-            "label": "Forward/rewind time",
-            "title": "The amount of time to forward/rewind the video by"
+            "label": "Время перемотки",
+            "title": "Кол-во времени, на которое будет перематываться видео"
           }
         },
         "title": "Настройки кнопок перемотки вперёд/назад"
@@ -343,8 +343,8 @@
         "settings": {
           "automaticallyDisableAmbientMode": {
             "enable": {
-              "label": "Automatically disable ambient mode",
-              "title": "Automatically disables ambient mode when you load a video"
+              "label": "Автоматическое отключение режима освещения",
+              "title": "Автоматически отключать режим освещения при загрузке видео"
             }
           },
           "automaticallyDisableAutoPlay": {
@@ -355,8 +355,8 @@
           },
           "automaticallyDisableClosedCaptions": {
             "enable": {
-              "label": "Automatically disable closed captions",
-              "title": "Automatically disables closed captions when you load a video"
+              "label": "Автоматически отключать субтитры",
+              "title": "Автоматически отключает субтитры при загрузке видео"
             }
           },
           "automaticallyEnableClosedCaptions": {
@@ -379,20 +379,20 @@
           },
           "automaticTheaterMode": {
             "enable": {
-              "label": "Automatic theater mode",
-              "title": "Automatically enables theater mode when you load a video"
+              "label": "Включить автоматический режим кинотеатра",
+              "title": "Автоматически включать режим кинотеатра при загрузке видео"
             }
           },
           "copyTimestampUrlButton": {
             "enable": {
-              "label": "Copy video URL with timestamp button",
-              "title": "Copies video URL with timestamp (?t=123)"
+              "label": "Кнопка «Копировать URL видео с таймкодом»",
+              "title": "Копирует ссылку видео с меткой времени (?t=123)"
             }
           },
           "defaultToOriginalAudioTrack": {
             "enable": {
-              "label": "Default to original audio track",
-              "title": "Always default to the original audio track"
+              "label": "Выставлять оригинальную звуковую дорожку по умолчанию",
+              "title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
             }
           },
           "saveToWatchLaterButton": {
@@ -403,26 +403,26 @@
           },
           "hideArtificialIntelligenceSummary": {
             "enable": {
-              "label": "Hide AI summary",
-              "title": "Hides the artificial intelligence summary below videos"
+              "label": "Прятать краткое содержание от ИИ",
+              "title": "Прячет краткое содержание видео от ИИ под описанием"
             }
           },
           "hideEndScreenCards": {
             "enable": {
-              "label": "Hide end screen cards",
-              "title": "Hides the cards at the end of the video"
+              "label": "Скрыть заставки следующих видео",
+              "title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
             }
           },
           "hideEndScreenCardsButton": {
             "enable": {
-              "label": "Hide end screen cards button",
-              "title": "Adds a button to show/hide the cards at the end of the video"
+              "label": "Кнопка «Скрыть заставки следующих видео»",
+              "title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
             }
           },
           "hideLiveStreamChat": {
             "enable": {
-              "label": "Hide live stream chat",
-              "title": "Hides the live stream chat"
+              "label": "Спрятать чат прямого эфира",
+              "title": "Прячет чат прямого эфира (стрима)"
             }
           },
           "hideMembersOnlyVideos": {
@@ -433,38 +433,38 @@
           },
           "hideOfficialArtistVideosFromHomePage": {
             "enable": {
-              "label": "Hide Official Artist Videos",
-              "title": "Hide Official Artist Videos from Home Page"
+              "label": "Скрывать официальные видео исполнителя",
+              "title": "Скрывает официальные видео исполнителя с домашней страницы"
             }
           },
           "hidePaidPromotionBanner": {
             "enable": {
-              "label": "Hide paid promotion banner",
-              "title": "Hides the banner that appears when you watch a video that has a paid promotion"
+              "label": "Скрыть \"Содержит прямую рекламу\"",
+              "title": "Скрывает баннер, отображающийся при просмотре видео, которое имеет платную рекламу"
             }
           },
           "hidePlayables": {
             "enable": {
-              "label": "Hide playables",
-              "title": "Hides all playables"
+              "label": "Спрятать игры",
+              "title": "Прячет все игры (playables)"
             }
           },
           "hidePlaylistRecommendationsFromHomePage": {
             "enable": {
-              "label": "Hide playlists from homepage",
-              "title": "Get rid of playlists from homepage"
+              "label": "Спрятать плейлисты на главной",
+              "title": "Прячет плейлисты на главной (домашней) странице"
             }
           },
           "hideScrollbar": {
             "enable": {
-              "label": "Hide scrollbar",
-              "title": "Hides the pages scrollbar"
+              "label": "Включить скрытие полосы прокрутки страницы",
+              "title": "Скрывает полосу прокрутки страницы"
             }
           },
           "hideShorts": {
             "enable": {
-              "label": "Hide shorts",
-              "title": "Hides all shorts"
+              "label": "Скрыть Shorts",
+              "title": "Скрывает все Shorts"
             }
           },
           "hideSidebarRecommendedVideos": {
@@ -475,80 +475,80 @@
           },
           "hideTranslateComment": {
             "enable": {
-              "label": "Hide translate comment button",
-              "title": "Hides 'Translate to Language' button under comments"
+              "label": "Спрятать кнопку 'Перевести на...'",
+              "title": "Прячет кнопку 'Перевести на русский' под комментарием"
             }
           },
           "loopButton": {
             "enable": {
-              "label": "Loop button",
-              "title": "Adds a button to the feature menu to loop the video you're watching"
+              "label": "Включить кнопку «Зациклить»",
+              "title": "Добавляет кнопку в меню функций для автоматического повтора просмотренного видео (зацикливание)"
             }
           },
           "maximizePlayerButton": {
             "enable": {
-              "label": "Maximize player button",
-              "title": "Adds a button to the feature menu to maximize the player"
+              "label": "Включить кнопку «Развернуть проигрыватель»",
+              "title": "Добавляет кнопку в меню функций, которая позволит максимизировать проигрыватель"
             }
           },
           "openTranscriptButton": {
             "enable": {
-              "label": "Open transcript button",
-              "title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+              "label": "Показать кнопку стенограммы видео",
+              "title": "Добавляет кнопку в меню функций, чтобы открыть стенограмму видео, которое вы просматриваете"
             }
           },
           "openYouTubeSettingsOnHover": {
             "enable": {
-              "label": "Open YouTube settings on hover",
-              "title": "Opens the YouTube settings menu when you hover over the settings button"
+              "label": "Открывать настройки YouTube при наведении курсора",
+              "title": "Открывает меню настроек YouTube при наведении на кнопку меню"
             }
           },
           "pauseBackgroundPlayers": {
             "enable": {
-              "label": "Pause background players",
-              "title": "Pauses video players in background tabs when you start a new player in foreground tab"
+              "label": "Ставить на паузу видео в фоновых вкладках",
+              "title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
             }
           },
           "remainingTime": {
             "enable": {
-              "label": "Remaining time",
-              "title": "Shows the remaining time of the video you're watching"
+              "label": "Включить отображение оставшегося времени",
+              "title": "Показывает оставшееся время просмотра видео"
             }
           },
           "rememberVolume": {
             "enable": {
-              "label": "Remember last volume",
-              "title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+              "label": "Запомнить уровень громкости",
+              "title": "Запоминает громкость последнего видео, которое вы смотрели и устанавливает это значение при открытии нового видео"
             }
           },
           "removeRedirect": {
             "enable": {
-              "label": "Remove YouTube /redirect URLs",
-              "title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+              "label": "Убрать YouTube /redirect ссылки",
+              "title": "Заменяет /redirect ссылки на актуальные, убирая предупреждение о переходе на другой ресурс"
             }
           },
           "restoreFullscreenScrolling": {
             "enable": {
-              "label": "Restore fullscreen scrolling",
-              "title": "Restores scrolling in fullscreen mode"
+              "label": "Включить прокрутку в полноэкранном режиме",
+              "title": "Восстанавливает возможность прокрутки в полноэкранном режиме"
             }
           },
           "shareShortener": {
             "enable": {
-              "label": "Shorten YouTube video share link",
-              "title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+              "label": "Укоротить ссылку с кнопки \"Поделиться\"",
+              "title": "Укорачивает ссылку с кнопки \"Поделиться\" (youtu.be), убирая параметры si/feature из нее"
             }
           },
           "shortsAutoScroll": {
             "enable": {
-              "label": "Shorts auto scroll",
-              "title": "Automatically scrolls to the next short"
+              "label": "Автоматическая прокрутка Shorts",
+              "title": "Автоматически скроллит до следующего Shorts"
             }
           },
           "skipContinueWatching": {
             "enable": {
-              "label": "Skip \"Video is paused. Continue watching?\"",
-              "title": "Skips the idle dialog that pauses video playback"
+              "label": "Пропускать \"Воспроизведение приостановлено. Продолжить?\"",
+              "title": "Автоматически пропускает диалог простоя, который приостанавливает воспроизведение"
             }
           }
         },
@@ -557,108 +557,108 @@
       "onScreenDisplaySettings": {
         "settings": {
           "color": {
-            "label": "Color",
+            "label": "Цвет",
             "select": {
               "options": {
-                "blue": "Blue",
-                "green": "Green",
-                "orange": "Orange",
-                "pink": "Pink",
-                "purple": "Purple",
-                "red": "Red",
-                "white": "White",
-                "yellow": "Yellow"
+                "blue": "Синий",
+                "green": "Зеленый",
+                "orange": "Оранжевый",
+                "pink": "Розовый",
+                "purple": "Фиолетовый",
+                "red": "Красный",
+                "white": "Белый",
+                "yellow": "Желтый"
               }
             },
-            "title": "Select the color for the On-Screen Display"
+            "title": "Выберите цвет для отображения на экране (OSD)"
           },
           "hide": {
-            "label": "Hide Delay",
-            "title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+            "label": "Задержка скрытия",
+            "title": "Укажите время, в миллисекундах, перед автоматическим скрытием OSD"
           },
           "opacity": {
-            "label": "Opacity",
-            "title": "Adjust the transparency of the On-Screen Display"
+            "label": "Прозрачность",
+            "title": "Настройка прозрачности отображения на экране (OSD)"
           },
           "padding": {
-            "label": "Padding",
-            "title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+            "label": "Отступы",
+            "title": "Регулировка интервала вокруг отображения на экране (OSD) в пикселях. Применяется в частности для углов OSD."
           },
           "position": {
-            "label": "Position",
+            "label": "Расположение",
             "select": {
               "options": {
-                "bottom_left": "Bottom Left",
-                "bottom_right": "Bottom Right",
-                "center": "Center",
-                "top_left": "Top Left",
-                "top_right": "Top Right"
+                "bottom_left": "Слева снизу",
+                "bottom_right": "Справа снизу",
+                "center": "По центру",
+                "top_left": "Слева сверху",
+                "top_right": "Справа сверху"
               }
             },
-            "title": "Select the position of the On-Screen Display"
+            "title": "Выберите позицию отображения на экране (OSD)"
           },
           "type": {
-            "label": "Type",
+            "label": "Тип",
             "select": {
               "options": {
-                "circle": "Circle",
-                "line": "Line",
-                "no_display": "No display",
-                "text": "Text"
+                "circle": "Круг",
+                "line": "Линия",
+                "no_display": "Не показывать",
+                "text": "Текст"
               }
             },
-            "title": "Select the type of On-Screen Display"
+            "title": "Выберите тип отображения на экране (OSD)"
           }
         },
         "title": "On-screen display settings"
       },
       "playerQuality": {
         "enable": {
-          "label": "Automatic quality adjustment",
-          "title": "Automatically adjusts the video quality to the selected level."
+          "label": "Включить автоматическую регулировку качества",
+          "title": "Автоматически настраивает качество видео на выбранный уровень."
         },
         "settings": {
           "quality": {
             "select": {
-              "label": "Player quality",
-              "title": "The quality to set the video to"
+              "label": "Качество проигрывателя",
+              "title": "Качество, которое будет задаваться для видео"
             }
           },
           "qualityFallbackStrategy": {
             "select": {
-              "label": "Quality fallback strategy",
+              "label": "Стратегия восстановления качества",
               "options": {
-                "higher": "Higher",
-                "lower": "Lower"
+                "higher": "Выше",
+                "lower": "Ниже"
               },
-              "title": "The strategy to use when the selected quality is not available"
+              "title": "Какую стратегию использовать, когда выбранное качество недоступно"
             }
           }
         },
-        "title": "Automatic quality settings"
+        "title": "Автоматические настройки качества"
       },
       "playerSpeed": {
         "enable": {
-          "label": "Forced playback speed",
-          "title": "Sets the video speed to what you choose below"
+          "label": "Включить принудительную скорость воспроизведения",
+          "title": "Устанавливает скорость проигрывания видео на ту, что вы выбрали ниже"
         },
         "settings": {
           "buttons": {
-            "label": "Playback speed buttons",
+            "label": "Кнопки регулирования скорости видео",
             "select": {
-              "label": "Playback buttons speed",
-              "title": "Amount of speed to be changed per click"
+              "label": "Дельта кнопок регулирования скорости",
+              "title": "Число, на которое будет изменена скорость за клик"
             },
-            "title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+            "title": "Добавляет кнопки для увеличения или уменьшения скорости воспроизведения просматриваемого видео"
           },
           "speed": {
             "select": {
-              "label": "Player speed",
-              "title": "The speed to set the video to"
+              "label": "Скорость проигрывателя",
+              "title": "Скорость, которая будет задаваться для видео"
             }
           }
         },
-        "title": "Playback speed settings"
+        "title": "Настройки скорости воспроизведения"
       },
       "playlistLength": {
         "enable": {
@@ -668,18 +668,18 @@
         "settings": {
           "wayToGetLength": {
             "select": {
-              "label": "Method to get playlist length",
-              "title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+              "label": "Способ получения длины плейлиста",
+              "title": "Способ получения информации о длине плейлиста (метод API будет переключаться обратно к HTML, если возникнет ошибка)"
             }
           },
           "wayToGetWatchTime": {
             "select": {
-              "label": "Method to get watched time",
+              "label": "Метод получения времени просмотра",
               "options": {
-                "duration": "Video Length",
-                "youtube": "Video Watch Time"
+                "duration": "Продолжительность видео",
+                "youtube": "Время просмотра видео"
               },
-              "title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+              "title": "Способ получения количества времени просмотра (тип длины видео используется только на странице просмотра)"
             }
           }
         },
@@ -709,18 +709,18 @@
         },
         "settings": {
           "format": {
-            "label": "Screenshot format",
-            "title": "The format to save the screenshot in"
+            "label": "Формат скриншота",
+            "title": "Формат, в котором будет сохраняться скриншот"
           },
           "saveAs": {
             "select": {
               "options": {
                 "both": "Both (File and Clipboard)",
-                "clipboard": "Clipboard",
-                "file": "File"
+                "clipboard": "Буфер обмена",
+                "file": "Файл"
               },
-              "label": "Screenshot save type",
-              "title": "The screenshot save type"
+              "label": "Тип сохранения скриншота",
+              "title": "Тип сохранения скриншота"
             }
           }
         },
@@ -732,17 +732,17 @@
           "title": "Нажмите клавишу-модификатор, чтобы включить управление скоростью воспроизведения с помощью колеса мыши."
         },
         "extras": {
-          "optionLabel": "{{KEY}} key"
+          "optionLabel": "Клавиша {{KEY}}"
         },
         "settings": {
           "adjustmentSteps": {
-            "label": "Speed Change Per Scroll",
-            "title": "Adjust the speed change per scroll"
+            "label": "Изменение скорости воспроизведения за прокрутку колеса",
+            "title": "Регулировка значения, на которое изменяется скорость воспроизведения за прокрутку"
           },
           "modifierKey": {
             "select": {
-              "label": "Modifier key",
-              "title": "The modifier key to use"
+              "label": "Клавиша-модификатор",
+              "title": "Используемая клавиша-модификатор"
             }
           }
         },
@@ -754,24 +754,24 @@
           "title": "Позволяет использовать колесо мыши для управления громкостью видео, которое вы просматриваете"
         },
         "extras": {
-          "optionLabel": "{{KEY}} key"
+          "optionLabel": "Клавиша {{KEY}}"
         },
         "settings": {
           "adjustmentSteps": {
-            "label": "Volume Change Per Scroll",
-            "title": "Adjust the volume change per scroll"
+            "label": "Изменение громкости за прокрутку колеса",
+            "title": "Регулировка значения, на которое изменяется громкость за прокрутку"
           },
           "holdModifierKey": {
-            "label": "When holding modifier key",
+            "label": "Включить при удержании клавиши-модификатора",
             "select": {
-              "label": "Modifier key",
-              "title": "The modifier key to use"
+              "label": "Клавиша-модификатор",
+              "title": "Используемая клавиша-модификатор"
             },
-            "title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+            "title": "Нажмите клавишу-модификатор, чтобы включить управление громкостью с помощью колеса мыши."
           },
           "holdRightClick": {
-            "label": "When holding right click",
-            "title": "Hold right click to enable scroll wheel volume control"
+            "label": "Включить при удержании правой кнопки мыши",
+            "title": "Удерживайте правую кнопку мыши, чтобы включить управление громкостью с помощью колеса мыши"
           }
         },
         "title": "Настройки управления громкостью с помощью колеса мыши"
@@ -784,12 +784,12 @@
         "settings": {
           "resumeType": {
             "select": {
-              "label": "Resume type",
+              "label": "Тип возобновления",
               "options": {
-                "automatic": "Automatic",
-                "prompt": "Prompt"
+                "automatic": "Автоматически",
+                "prompt": "Запрашивать"
               },
-              "title": "Select how you want to resume videos"
+              "title": "Выберите, как вы хотите возобновлять просмотр видео"
             }
           }
         },
@@ -802,17 +802,17 @@
         },
         "settings": {
           "amount": {
-            "label": "Volume boost amount (dB)",
-            "title": "The amount to boost the volume by"
+            "label": "Значение увеличения громкости (дБ)",
+            "title": "Значение, на которое будет увеличена громкость"
           },
           "mode": {
             "select": {
-              "label": "Volume boost mode",
+              "label": "Режим увеличения громкости",
               "options": {
-                "global": "Global",
-                "perVideo": "Per video"
+                "global": "Глобально",
+                "perVideo": "Для видео"
               },
-              "title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+              "title": "Выберите, каким образом должно применяться усиление громкости. 'Для видео' позволяет включать усиление для каждого видео отдельно в меню функций. 'Глобально' применяет усиление для всех просматриваемых видео когда усиление громкости включено."
             }
           }
         },
