@@ -13,7 +13,7 @@
             "label": "複製目前播放時間的影片網址"
           },
           "extras": {
-            "copied": "Copied!"
+            "copied": "已複製！"
           }
         },
         "featureMenu": {
@@ -73,8 +73,8 @@
             }
           },
           "extras": {
-            "decreaseLimit": "Can't decrease further ({{SPEED}})",
-            "increaseLimit": "Can't increase further ({{SPEED}})"
+            "decreaseLimit": "無法再減速 ({{SPEED}})",
+            "increaseLimit": "無法再加速 ({{SPEED}})"
           }
         },
         "playlistLength": {
@@ -102,13 +102,13 @@
             "label": "螢幕截圖"
           },
           "extras": {
-            "copiedToClipboard": "Screenshot copied to clipboard"
+            "copiedToClipboard": "螢幕截圖已複製剪貼簿"
           }
         },
         "videoHistory": {
           "extras": {
-            "resumeButton": "Resume",
-            "resumePromptClose": "Close"
+            "resumeButton": "繼續",
+            "resumePromptClose": "關閉"
           }
         },
         "volumeBoostButton": {
@@ -126,97 +126,97 @@
       "extras": {
         "bottomButtons": {
           "clear": {
-            "title": "Clears all data this extension has stored on your machine",
-            "value": "Clear Data"
+            "title": "清除這個擴充套件儲存在此機上的資料",
+            "value": "清除資料"
           },
           "confirm": {
-            "title": "Confirm setting reset",
-            "value": "Confirm"
+            "title": "確認重設設定",
+            "value": "確認"
           },
           "openTab": {
-            "title": "Open extension settings in a new tab"
+            "title": "於新頁面開啟擴充套件設定"
           },
           "reset": {
-            "title": "Resets all settings to their defaults, Click the confirm button to save the changes",
-            "value": "Reset"
+            "title": "將所以設定回復到初始值，按確認儲存變更",
+            "value": "重置"
           }
         },
         "buttonPlacement": {
           "select": {
             "buttonNames": {
-              "copyTimestampUrlButton": "Copy video URL with timestamp button",
-              "decreasePlaybackSpeedButton": "Decrease Speed button",
-              "forwardButton": "Fast Forward button",
-              "hideEndScreenCardsButton": "Hide end screen cards button",
-              "increasePlaybackSpeedButton": "Increase Speed button",
-              "loopButton": "Loop button",
-              "maximizePlayerButton": "Maximize button",
-              "openTranscriptButton": "Open Transcript button",
-              "rewindButton": "Rewind button",
-              "screenshotButton": "Screenshot button",
-              "volumeBoostButton": "Volume Boost button"
+              "copyTimestampUrlButton": "複製目前播放時間的影片網址按鈕",
+              "decreasePlaybackSpeedButton": "減慢速度按鈕",
+              "forwardButton": "快轉按鈕",
+              "hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
+              "increasePlaybackSpeedButton": "加快速度按妞",
+              "loopButton": "循環播放按鈕",
+              "maximizePlayerButton": "最大化按鈕",
+              "openTranscriptButton": "開啟文字記錄按鈕",
+              "rewindButton": "倒帶按鈕",
+              "screenshotButton": "螢幕截圖按鈕",
+              "volumeBoostButton": "音量增強按鈕"
             },
             "options": {
               "below_player": {
-                "placement": "below the player controls",
-                "value": "Below Player"
+                "placement": "於播放器底下",
+                "value": "播放器底下"
               },
               "feature_menu": {
-                "placement": "in the feature menu",
-                "value": "Feature Menu"
+                "placement": "於功能選單",
+                "value": "功能選單"
               },
               "player_controls_left": {
-                "placement": "on the left side of player controls",
-                "value": "Left Controls"
+                "placement": "於播放器左邊",
+                "value": "播放器左邊"
               },
               "player_controls_right": {
-                "placement": "on the right side of player controls",
-                "value": "Right Controls"
+                "placement": "於播放器右邊",
+                "value": "播放器右邊"
               }
             },
-            "title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+            "title": "將{{BUTTON_NAME}}放{{PLACEMENT}}"
           },
           "title": "Button placement settings"
         },
         "clearData": {
-          "allDataDeleted": "All data has been deleted.",
-          "confirmAlert": "This will delete all extension data related to options. Continue?"
+          "allDataDeleted": "所有資料已重置。",
+          "confirmAlert": "將會清除這個擴充套件的相關選項，繼續？"
         },
         "featureMenu": {
           "openType": {
             "select": {
-              "label": "Menu Activation Type",
+              "label": "選單開啟方式",
               "options": {
-                "click": "Click",
-                "hover": "Hover"
+                "click": "點擊",
+                "hover": "游標懸浮"
               },
-              "title": "Select the method to activate the feature menu"
+              "title": "選擇選單開啟方式"
             },
-            "title": "Feature menu settings"
+            "title": "功能選單設定"
           }
         },
         "importExportSettings": {
           "exportButton": {
-            "success": "Settings successfully exported",
-            "title": "Export settings to a JSON file",
-            "value": "Export Settings"
+            "success": "設定已成功匯出",
+            "title": "匯出設定至 JSON 檔案",
+            "value": "匯出設定"
           },
           "importButton": {
             "error": {
-              "unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-              "validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+              "unknown": "設定匯入失敗，請檢查檔案格式。\n發生不明錯誤。",
+              "validation": "設定匯入失敗，請檢查檔案格式。{{ERROR_MESSAGE}}"
             },
-            "success": "Settings imported successfully",
-            "title": "Import settings from a JSON file",
-            "value": "Import Settings"
+            "success": "設定已成功匯入",
+            "title": "由 JSON 檔案匯入設定",
+            "value": "匯入設定"
           }
         },
         "language": {
           "select": {
-            "label": "Language",
-            "title": "The language to use for the extension"
+            "label": "語言",
+            "title": "擴充套件使用的語言"
           },
-          "title": "Language"
+          "title": "語言"
         },
         "optionDisabled": {
           "either": {
@@ -235,13 +235,13 @@
         },
         "scrollForMoreSettings": "Scroll for more settings",
         "settingSearch": {
-          "placeholder": "Search for a setting"
+          "placeholder": "搜尋設定"
         },
         "youtubeDataApiV3Key": {
-          "getApiKeyLinkText": "You can get one from here",
+          "getApiKeyLinkText": "你可以從這裡取得",
           "input": {
-            "label": "API Key",
-            "title": "Enter your Youtube Data API V3 key."
+            "label": "API 金鑰",
+            "title": "輸入你的 YouTube Data API V3 金鑰"
           },
           "title": "YouTube API V3 key"
         }
@@ -273,54 +273,54 @@
           "title": "啟用應用到頁面的自訂CSS"
         },
         "extras": {
-          "collapse": "Collapse Editor",
-          "expand": "Expand Editor",
-          "noProblems": "No problems found."
+          "collapse": "收起編輯器",
+          "expand": "展開編輯器",
+          "noProblems": "沒有發現問題"
         },
         "title": "Custom CSS settings"
       },
       "deepDarkCSS": {
         "enable": {
-          "label": "Deep Dark Theme",
-          "title": "Activate the selected theme for the page"
+          "label": "啟用已選主題",
+          "title": "啟用頁面的已選主題"
         },
         "extras": {
-          "author": "Author",
-          "co-authors": "Co-authors"
+          "author": "作者",
+          "co-authors": "共同作者"
         },
         "settings": {
           "colorShadow": {
-            "label": "Shadow color",
-            "title": "Color for shadows"
+            "label": "陰影顏色",
+            "title": "陰影的顏色"
           },
           "dimmerText": {
-            "label": "Secondary text color",
-            "title": "Color for secondary text"
+            "label": "次要文字顏色",
+            "title": "次要文字的顏色"
           },
           "hoverBackground": {
-            "label": "Hover background color",
-            "title": "Color for hover background"
+            "label": "懸停背景色",
+            "title": "滑過背景顏色"
           },
           "mainBackground": {
-            "label": "Main background color",
-            "title": "Color for main background"
+            "label": "主要背景顏色",
+            "title": "主要背景的顏色"
           },
           "mainColor": {
-            "label": "Accent color",
-            "title": "Color for accent"
+            "label": "重點色調",
+            "title": "重點色調的顏色"
           },
           "mainText": {
-            "label": "Main text color",
-            "title": "Color for main text"
+            "label": "主要文字顏色",
+            "title": "主要文字的顏色"
           },
           "secondBackground": {
-            "label": "Secondary background color",
-            "title": "Color for secondary background"
+            "label": "次要背景顏色",
+            "title": "次要背景顏色"
           },
           "theme": {
             "select": {
-              "label": "Select theme",
-              "title": "Select a theme to be applied to the page"
+              "label": "選擇主題",
+              "title": "選擇套用到頁面的主題"
             }
           }
         },
@@ -333,8 +333,8 @@
         },
         "settings": {
           "time": {
-            "label": "Forward/rewind time",
-            "title": "The amount of time to forward/rewind the video by"
+            "label": "快轉/倒帶時間",
+            "title": "每次快轉/倒帶的時間"
           }
         },
         "title": "快轉/倒帶按鈕設定"
@@ -343,8 +343,8 @@
         "settings": {
           "automaticallyDisableAmbientMode": {
             "enable": {
-              "label": "Automatically disable ambient mode",
-              "title": "Automatically disables ambient mode when you load a video"
+              "label": "自動停用微光效果",
+              "title": "載入影片時自動停用微光效果"
             }
           },
           "automaticallyDisableAutoPlay": {
@@ -355,8 +355,8 @@
           },
           "automaticallyDisableClosedCaptions": {
             "enable": {
-              "label": "Automatically disable closed captions",
-              "title": "Automatically disables closed captions when you load a video"
+              "label": "自動停用字幕",
+              "title": "載入影片時自動停用字幕"
             }
           },
           "automaticallyEnableClosedCaptions": {
@@ -379,14 +379,14 @@
           },
           "automaticTheaterMode": {
             "enable": {
-              "label": "Automatic theater mode",
-              "title": "Automatically enables theater mode when you load a video"
+              "label": "自動啟用劇院模式",
+              "title": "載入影片時自動啟用劇院模式"
             }
           },
           "copyTimestampUrlButton": {
             "enable": {
-              "label": "Copy video URL with timestamp button",
-              "title": "Copies video URL with timestamp (?t=123)"
+              "label": "複製目前播放時間的影片網址按鈕",
+              "title": "複製目前播放時間的影片網址 (?t=123)"
             }
           },
           "defaultToOriginalAudioTrack": {
@@ -409,20 +409,20 @@
           },
           "hideEndScreenCards": {
             "enable": {
-              "label": "Hide end screen cards",
-              "title": "Hides the cards at the end of the video"
+              "label": "隱藏片尾資訊卡",
+              "title": "隱藏影片片尾的資訊卡"
             }
           },
           "hideEndScreenCardsButton": {
             "enable": {
-              "label": "Hide end screen cards button",
-              "title": "Adds a button to show/hide the cards at the end of the video"
+              "label": "隱藏片尾資訊卡按鈕",
+              "title": "在影片結束時新增顯示/隱藏卡片的按鈕"
             }
           },
           "hideLiveStreamChat": {
             "enable": {
-              "label": "Hide live stream chat",
-              "title": "Hides the live stream chat"
+              "label": "隱藏直播聊天室",
+              "title": "隱藏直播的聊天室"
             }
           },
           "hideMembersOnlyVideos": {
@@ -433,14 +433,14 @@
           },
           "hideOfficialArtistVideosFromHomePage": {
             "enable": {
-              "label": "Hide Official Artist Videos",
-              "title": "Hide Official Artist Videos from Home Page"
+              "label": "隱藏官方藝人影片",
+              "title": "從主頁隱藏官方藝人影片"
             }
           },
           "hidePaidPromotionBanner": {
             "enable": {
-              "label": "Hide paid promotion banner",
-              "title": "Hides the banner that appears when you watch a video that has a paid promotion"
+              "label": "隱藏付費推廣橫幅",
+              "title": "隱藏當影片帶有付費推廣時顯示的橫幅"
             }
           },
           "hidePlayables": {
@@ -457,14 +457,14 @@
           },
           "hideScrollbar": {
             "enable": {
-              "label": "Hide scrollbar",
-              "title": "Hides the pages scrollbar"
+              "label": "隱藏捲軸",
+              "title": "隱藏頁面捲軸"
             }
           },
           "hideShorts": {
             "enable": {
-              "label": "Hide shorts",
-              "title": "Hides all shorts"
+              "label": "隱藏 Shorts",
+              "title": "隱藏全部 Shorts"
             }
           },
           "hideSidebarRecommendedVideos": {
@@ -475,56 +475,56 @@
           },
           "hideTranslateComment": {
             "enable": {
-              "label": "Hide translate comment button",
-              "title": "Hides 'Translate to Language' button under comments"
+              "label": "隱藏翻譯留言按鈕",
+              "title": "隱藏留言下的翻譯按鈕"
             }
           },
           "loopButton": {
             "enable": {
-              "label": "Loop button",
-              "title": "Adds a button to the feature menu to loop the video you're watching"
+              "label": "循環按鈕",
+              "title": "加入按鈕循環播放當前影片"
             }
           },
           "maximizePlayerButton": {
             "enable": {
-              "label": "Maximize player button",
-              "title": "Adds a button to the feature menu to maximize the player"
+              "label": "最大化播放器按鈕",
+              "title": "加入最大化播放器按鈕"
             }
           },
           "openTranscriptButton": {
             "enable": {
-              "label": "Open transcript button",
-              "title": "Adds a button to the feature menu to open the transcript of the video you're watching"
+              "label": "開啟文字記錄按鈕",
+              "title": "加入按鈕開啟當前影片的文子記錄"
             }
           },
           "openYouTubeSettingsOnHover": {
             "enable": {
-              "label": "Open YouTube settings on hover",
-              "title": "Opens the YouTube settings menu when you hover over the settings button"
+              "label": "懸浮時開啟設定選單",
+              "title": "鼠標懸浮在設定按鈕時開啟選單"
             }
           },
           "pauseBackgroundPlayers": {
             "enable": {
-              "label": "Pause background players",
-              "title": "Pauses video players in background tabs when you start a new player in foreground tab"
+              "label": "暫停背景播放程序",
+              "title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
             }
           },
           "remainingTime": {
             "enable": {
-              "label": "Remaining time",
-              "title": "Shows the remaining time of the video you're watching"
+              "label": "剩餘時間",
+              "title": "顥示現時影片的剩餘時間"
             }
           },
           "rememberVolume": {
             "enable": {
-              "label": "Remember last volume",
-              "title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
+              "label": "記住上次播放音量",
+              "title": "記住上次的播放音量，設定到新播放的影片上"
             }
           },
           "removeRedirect": {
             "enable": {
-              "label": "Remove YouTube /redirect URLs",
-              "title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+              "label": "移除 YouTube 重新導向網址",
+              "title": "以真正網址取代 YouTube 重新導向網址，跳過重新導向警告對話框"
             }
           },
           "restoreFullscreenScrolling": {
@@ -535,20 +535,20 @@
           },
           "shareShortener": {
             "enable": {
-              "label": "Shorten YouTube video share link",
-              "title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+              "label": "縮短 YouTube 影片共享連結",
+              "title": "縮短 YouTube 影片共享連結 (youtu.be)，移除 si/feature 參數"
             }
           },
           "shortsAutoScroll": {
             "enable": {
-              "label": "Shorts auto scroll",
-              "title": "Automatically scrolls to the next short"
+              "label": "Shorts 自動滾動",
+              "title": "自動滾動到下一段 Short"
             }
           },
           "skipContinueWatching": {
             "enable": {
-              "label": "Skip \"Video is paused. Continue watching?\"",
-              "title": "Skips the idle dialog that pauses video playback"
+              "label": "跳過「影片已暫停，繼續觀看？」",
+              "title": "跳過暫停影片播放的閒置對話框"
             }
           }
         },
@@ -557,108 +557,108 @@
       "onScreenDisplaySettings": {
         "settings": {
           "color": {
-            "label": "Color",
+            "label": "顏色",
             "select": {
               "options": {
-                "blue": "Blue",
-                "green": "Green",
-                "orange": "Orange",
-                "pink": "Pink",
-                "purple": "Purple",
-                "red": "Red",
-                "white": "White",
-                "yellow": "Yellow"
+                "blue": "藍色",
+                "green": "綠色",
+                "orange": "橙色",
+                "pink": "粉紅色",
+                "purple": "紫色",
+                "red": "紅色",
+                "white": "白色",
+                "yellow": "黃色"
               }
             },
-            "title": "Select the color for the On-Screen Display"
+            "title": "選擇屏幕顥示的顏色"
           },
           "hide": {
-            "label": "Hide Delay",
-            "title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
+            "label": "隱藏延遲",
+            "title": "指定多少毫秒後自動隱藏屏幕顥示"
           },
           "opacity": {
-            "label": "Opacity",
-            "title": "Adjust the transparency of the On-Screen Display"
+            "label": "透明度",
+            "title": "調節屏幕顥示的透明度"
           },
           "padding": {
-            "label": "Padding",
-            "title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+            "label": "填充",
+            "title": "以像素為單位調整屏幕顥示周圍的空間，適用於置於角落的屏幕顥示。"
           },
           "position": {
-            "label": "Position",
+            "label": "位置",
             "select": {
               "options": {
-                "bottom_left": "Bottom Left",
-                "bottom_right": "Bottom Right",
-                "center": "Center",
-                "top_left": "Top Left",
-                "top_right": "Top Right"
+                "bottom_left": "左下",
+                "bottom_right": "右下",
+                "center": "置中",
+                "top_left": "左上",
+                "top_right": "右上"
               }
             },
-            "title": "Select the position of the On-Screen Display"
+            "title": "選擇屏幕顥示的位置"
           },
           "type": {
-            "label": "Type",
+            "label": "類型",
             "select": {
               "options": {
-                "circle": "Circle",
-                "line": "Line",
-                "no_display": "No display",
-                "text": "Text"
+                "circle": "圓形",
+                "line": "線條",
+                "no_display": "不顯示",
+                "text": "文字"
               }
             },
-            "title": "Select the type of On-Screen Display"
+            "title": "選擇屏幕顥示風格"
           }
         },
         "title": "On-screen display settings"
       },
       "playerQuality": {
         "enable": {
-          "label": "Automatic quality adjustment",
-          "title": "Automatically adjusts the video quality to the selected level."
+          "label": "自動畫質調整",
+          "title": "自動調整到指定畫質"
         },
         "settings": {
           "quality": {
             "select": {
-              "label": "Player quality",
-              "title": "The quality to set the video to"
+              "label": "播放畫質",
+              "title": "設定影片播放畫質"
             }
           },
           "qualityFallbackStrategy": {
             "select": {
-              "label": "Quality fallback strategy",
+              "label": "畫質後備策略",
               "options": {
-                "higher": "Higher",
-                "lower": "Lower"
+                "higher": "較高",
+                "lower": "較低"
               },
-              "title": "The strategy to use when the selected quality is not available"
+              "title": "所選畫質不適用時的策略"
             }
           }
         },
-        "title": "Automatic quality settings"
+        "title": "自動畫質設定"
       },
       "playerSpeed": {
         "enable": {
-          "label": "Forced playback speed",
-          "title": "Sets the video speed to what you choose below"
+          "label": "強制播放速度",
+          "title": "設定影片播放速度如下"
         },
         "settings": {
           "buttons": {
-            "label": "Playback speed buttons",
+            "label": "播放速度按鈕",
             "select": {
-              "label": "Playback buttons speed",
-              "title": "Amount of speed to be changed per click"
+              "label": "播放速率控制鈕",
+              "title": "每次按下時改變的速度"
             },
-            "title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+            "title": "加入加快或減慢播放速度按鈕"
           },
           "speed": {
             "select": {
-              "label": "Player speed",
-              "title": "The speed to set the video to"
+              "label": "播放速度",
+              "title": "設定影片播放速度為"
             }
           }
         },
-        "title": "Playback speed settings"
+        "title": "播放速度設定"
       },
       "playlistLength": {
         "enable": {
@@ -668,18 +668,18 @@
         "settings": {
           "wayToGetLength": {
             "select": {
-              "label": "Method to get playlist length",
-              "title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+              "label": "取得播放清單時間方法",
+              "title": "取得播放清單時間資訊的方法(如API方法失敗會使用HTML方式)"
             }
           },
           "wayToGetWatchTime": {
             "select": {
-              "label": "Method to get watched time",
+              "label": "影片長度取得方法",
               "options": {
-                "duration": "Video Length",
-                "youtube": "Video Watch Time"
+                "duration": "影片長度",
+                "youtube": "影片已觀看時間"
               },
-              "title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+              "title": "取得已觀看時間的方法(影片長度方式只用於觀看頁)"
             }
           }
         },
@@ -709,18 +709,18 @@
         },
         "settings": {
           "format": {
-            "label": "Screenshot format",
-            "title": "The format to save the screenshot in"
+            "label": "螢幕截圖儲存格式",
+            "title": "螢幕截圖的儲存格式"
           },
           "saveAs": {
             "select": {
               "options": {
                 "both": "Both (File and Clipboard)",
-                "clipboard": "Clipboard",
-                "file": "File"
+                "clipboard": "剪貼簿",
+                "file": "檔案"
               },
-              "label": "Screenshot save type",
-              "title": "The screenshot save type"
+              "label": "螢幕截圖儲存方式",
+              "title": "螢幕截圖的儲存方式"
             }
           }
         },
@@ -732,17 +732,17 @@
           "title": "按住輔助按鍵來啟用播放速度調節"
         },
         "extras": {
-          "optionLabel": "{{KEY}} key"
+          "optionLabel": "{{KEY}} 鍵"
         },
         "settings": {
           "adjustmentSteps": {
-            "label": "Speed Change Per Scroll",
-            "title": "Adjust the speed change per scroll"
+            "label": "每次滾動的速度增減",
+            "title": "調整每次滾動時的播放速度幅度"
           },
           "modifierKey": {
             "select": {
-              "label": "Modifier key",
-              "title": "The modifier key to use"
+              "label": "輔助按鍵",
+              "title": "使用的輔助按鍵"
             }
           }
         },
@@ -754,24 +754,24 @@
           "title": "使用滑鼠滾輪控制現在播放的影片音量"
         },
         "extras": {
-          "optionLabel": "{{KEY}} key"
+          "optionLabel": "{{KEY}} 鍵"
         },
         "settings": {
           "adjustmentSteps": {
-            "label": "Volume Change Per Scroll",
-            "title": "Adjust the volume change per scroll"
+            "label": "每次滾動的音量增減",
+            "title": "調整每次滾動時的音量增減幅度"
           },
           "holdModifierKey": {
-            "label": "When holding modifier key",
+            "label": "啟用輔助按鍵",
             "select": {
-              "label": "Modifier key",
-              "title": "The modifier key to use"
+              "label": "輔助按鍵",
+              "title": "使用的輔助按鍵"
             },
-            "title": "Press a modifier key to enable volume adjustment with the scroll wheel."
+            "title": "按住輔助按鍵來啟用滾輪音量調節"
           },
           "holdRightClick": {
-            "label": "When holding right click",
-            "title": "Hold right click to enable scroll wheel volume control"
+            "label": "按住滑鼠右鍵時啟用",
+            "title": "住滑鼠右鍵時啟用滾輪音量調節"
           }
         },
         "title": "滾輪音量控制設定"
@@ -784,12 +784,12 @@
         "settings": {
           "resumeType": {
             "select": {
-              "label": "Resume type",
+              "label": "繼續播放方式",
               "options": {
-                "automatic": "Automatic",
-                "prompt": "Prompt"
+                "automatic": "自動",
+                "prompt": "提示"
               },
-              "title": "Select how you want to resume videos"
+              "title": "選擇如何繼續播放"
             }
           }
         },
@@ -802,17 +802,17 @@
         },
         "settings": {
           "amount": {
-            "label": "Volume boost amount (dB)",
-            "title": "The amount to boost the volume by"
+            "label": "音量增強度 (分貝)",
+            "title": "將音量增幅至"
           },
           "mode": {
             "select": {
-              "label": "Volume boost mode",
+              "label": "音量增強模式",
               "options": {
-                "global": "Global",
-                "perVideo": "Per video"
+                "global": "全局",
+                "perVideo": "單獨"
               },
-              "title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
+              "title": "選擇音量增強如何應用到影片。「單獨」能使用選單為該影片開啟音量增強。「全局」在啟用音量增強時會應用到所影片。"
             }
           }
         },
