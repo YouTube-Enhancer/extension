@@ -167,7 +167,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			verticalAlign: "middle"
 		}
 	});
-	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.resumeButton");
+	resumeButton.textContent = window.i18nextInstance.t("pages.content.features.videoHistory.extras.resumeButton");
 	function startCountdown() {
 		if (prompt) prompt.style.display = "block";
 		if (animationFrameId) {
@@ -208,7 +208,7 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		element: closeButton,
 		featureName: "videoHistory",
 		id: "yte-feature-videoHistory-tooltip",
-		text: window.i18nextInstance.t("pages.content.features.videoHistory.resumePrompt.close")
+		text: window.i18nextInstance.t("pages.content.features.videoHistory.extras.resumePromptClose")
 	});
 	eventManager.removeEventListener(closeButton, "mouseover", "videoHistory");
 	eventManager.addEventListener(closeButton, "mouseover", resumePromptCloseButtonMouseOverListener, "videoHistory");

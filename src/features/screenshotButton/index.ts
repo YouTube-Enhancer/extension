@@ -34,7 +34,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				element: screenshotButton,
 				featureName: "screenshotButton",
 				id: "yte-feature-screenshotButton-tooltip",
-				text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
+				text: window.i18nextInstance.t("pages.content.features.screenshotButton.extras.copiedToClipboard")
 			});
 			listener();
 			try {

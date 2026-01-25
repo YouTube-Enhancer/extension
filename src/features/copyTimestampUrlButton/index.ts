@@ -30,7 +30,7 @@ export const addCopyTimestampUrlButton: AddButtonFunction = async () => {
 			featureName: "copyTimestampUrlButton",
 			id: "yte-feature-copyTimestampUrlButton-tooltip"
 		});
-		button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.copied");
+		button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.extras.copied");
 		update();
 		setTimeout(() => {
 			remove();

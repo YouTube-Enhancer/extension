@@ -51,9 +51,11 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		id: `yte-feature-${buttonName}-tooltip`
 	});
 	button.dataset.title = window.i18nextInstance.t(
-		currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.increaseLimit`
-		: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton" ? `pages.content.features.playbackSpeedButtons.decreaseLimit`
-		: `pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
+		currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton" ?
+			`pages.content.features.playbackSpeedButtons.extras.increaseLimit`
+		: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton" ?
+			`pages.content.features.playbackSpeedButtons.extras.decreaseLimit`
+		:	`pages.content.features.playbackSpeedButtons.buttons.${buttonName as "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton"}.label`,
 		{
 			SPEED: speed
 		}
@@ -148,7 +150,7 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		increasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
 			currentPlaybackSpeed == maxSpeed ?
-				`pages.content.features.playbackSpeedButtons.increaseLimit`
+				`pages.content.features.playbackSpeedButtons.extras.increaseLimit`
 			:	"pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
@@ -189,7 +191,7 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 		decreasePlaybackSpeedButtonPlacement,
 		window.i18nextInstance.t(
 			currentPlaybackSpeed == minSpeed ?
-				`pages.content.features.playbackSpeedButtons.decreaseLimit`
+				`pages.content.features.playbackSpeedButtons.extras.decreaseLimit`
 			:	"pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label",
 			{
 				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
