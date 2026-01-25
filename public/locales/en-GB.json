@@ -379,8 +379,8 @@
           },
           "automaticTheaterMode": {
             "enable": {
-              "label": "Automatic theater mode",
-              "title": "Automatically enables theater mode when you load a video"
+              "label": "Automatic theatre mode",
+              "title": "Automatically enables theatre mode when you load a video"
             }
           },
           "copyTimestampUrlButton": {
@@ -557,7 +557,7 @@
       "onScreenDisplaySettings": {
         "settings": {
           "color": {
-            "label": "Color",
+            "label": "Colour",
             "select": {
               "options": {
                 "blue": "Blue",
@@ -570,7 +570,7 @@
                 "yellow": "Yellow"
               }
             },
-            "title": "Select the color for the On-Screen Display"
+            "title": "Select the colour for the On-Screen Display"
           },
           "hide": {
             "label": "Hide Delay",
@@ -590,7 +590,7 @@
               "options": {
                 "bottom_left": "Bottom Left",
                 "bottom_right": "Bottom Right",
-                "center": "Center",
+                "center": "Centre",
                 "top_left": "Top Left",
                 "top_right": "Top Right"
               }
