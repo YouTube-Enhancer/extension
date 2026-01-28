@@ -46,3 +46,6 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left {
 .yte-button-player-controls-left svg {
 	padding: 8px !important;
 }
+#movie_player.ytp-autohide .yte-button-player-controls-left {
+	display: none !important;
+}
