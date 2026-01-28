@@ -54,7 +54,7 @@
             "label": "Maximização",
             "toggle": {
               "off": "Minimizar",
-              "on": "Maximizar"
+              "on": "Minimizar"
             }
           }
         },
@@ -324,7 +324,7 @@
             }
           }
         },
-        "title": "YouTube deep dark settings"
+        "title": "Configurações YouTube Deep Dark"
       },
       "forwardRewindButtons": {
         "enable": {
@@ -610,7 +610,7 @@
             "title": "Seleciona o tipo de exibição na tela"
           }
         },
-        "title": "On-screen display settings"
+        "title": "Configurações de exibição na tela"
       },
       "playerQuality": {
         "enable": {
@@ -700,7 +700,7 @@
             }
           }
         },
-        "title": "Playlist management settings"
+        "title": "Configurações de gerenciamento de listas de reprodução"
       },
       "screenshotButton": {
         "enable": {
