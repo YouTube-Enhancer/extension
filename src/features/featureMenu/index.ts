@@ -1,77 +1,66 @@
-import "./index.css";
 import type { FeatureMenuOpenType } from "@/src/types";
+
+import "./index.css";
 
 import eventManager from "@/src/utils/EventManager";
 import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
 
-// Function to enable the feature menu
+const MENU_ID = "#yte-feature-menu";
+const BUTTON_ID = "#yte-feature-menu-button";
+
 export async function enableFeatureMenu() {
-	const featureMenuButtonExists = document.querySelector("#yte-feature-menu-button") !== null;
-	if (featureMenuButtonExists) return;
+	if (document.querySelector(BUTTON_ID)) return;
 	await createFeatureMenuButton();
 }
 
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
-	if (!settingsButton) return;
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
-	if (!playerContainer) return;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
-	if (!bottomControls) return;
-	const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-	if (!featureMenu) return;
-	const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");
-	if (!featureMenuButton) return;
+	const featureMenu = document.querySelector<HTMLDivElement>(MENU_ID);
+	const featureMenuButton = document.querySelector<HTMLButtonElement>(BUTTON_ID);
+	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton) return;
 	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
 		id: "yte-feature-featureMenu-tooltip"
 	});
+
+	let menuVisible = false;
+
 	const hideYouTubeSettings = () => {
 		const settingsMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-		if (!settingsMenu) return;
-		if (settingsMenu.style.display === "none") return;
-		settingsButton.click();
+		if (settingsMenu && settingsMenu.style.display !== "none") settingsButton.click();
 	};
 	const showFeatureMenu = () => {
-		if (featureMenu.style.display !== "none") return;
+		if (menuVisible) return;
+		menuVisible = true;
 		adjustAdsContainerStyles(true);
 		bottomControls.style.opacity = "1";
 		featureMenu.style.display = "block";
 	};
 	const hideFeatureMenu = () => {
-		if (featureMenu.style.display === "none") return;
+		if (!menuVisible) return;
+		menuVisible = false;
 		adjustAdsContainerStyles(false);
 		featureMenu.style.display = "none";
 		bottomControls.style.opacity = "";
 	};
 	const clickOutsideListener = (event: Event) => {
-		if (!featureMenuButton) return;
-		if (event.target === featureMenuButton) return;
-		if (event.target === featureMenu) return;
-		if (featureMenu.contains(event.target as Node)) return;
+		const target = event.target as Node;
+		if (featureMenuButton.contains(target) || featureMenu.contains(target)) return;
 		hideFeatureMenu();
 	};
 
 	switch (featureMenuOpenType) {
-		case "click": {
+		case "click":
 			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
-			eventManager.addEventListener(
-				featureMenuButton,
-				"click",
-				() => {
-					const featureMenuVisible = featureMenu.style.display === "block";
-					if (featureMenuVisible) return hideFeatureMenu();
-					showFeatureMenu();
-				},
-				"featureMenu"
-			);
+			eventManager.addEventListener(featureMenuButton, "click", () => (menuVisible ? hideFeatureMenu() : showFeatureMenu()), "featureMenu");
 			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
 			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
 			break;
-		}
-		case "hover": {
+		case "hover":
 			eventManager.addEventListener(
 				featureMenuButton,
 				"mouseover",
@@ -85,8 +74,10 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			eventManager.addEventListener(
 				featureMenuButton,
 				"mouseleave",
-				(event) => {
-					if ([featureMenu, featureMenuButton].includes(event.target as HTMLButtonElement)) return;
+				(e) => {
+					if (!(e instanceof MouseEvent)) return;
+					const rt = e.relatedTarget as Node | null;
+					if (rt && (rt === featureMenu || rt === featureMenuButton || featureMenu.contains(rt))) return;
 					removeFeatureMenuTooltip();
 					hideFeatureMenu();
 				},
@@ -112,31 +103,25 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			);
 			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
 			break;
+	}
+
+	const observer = new MutationObserver((mutations) => {
+		for (const mutation of mutations) {
+			if (mutation.type !== "childList") continue;
+			for (const node of Array.from(mutation.addedNodes)) {
+				if (!(node instanceof HTMLElement)) continue;
+				if (node.classList.contains("video-ads") && node.classList.contains("ytp-ad-module")) {
+					adjustAdsContainerStyles(menuVisible);
+				}
+			}
 		}
-	}
-	function handleMutation(mutations: MutationRecord[]) {
-		mutations.forEach((mutation) => {
-			if (mutation.type !== "childList") return;
-			const addedNodes = Array.from(mutation.addedNodes);
-			const isAdsElementAdded = addedNodes.some(
-				(node) => (node as HTMLDivElement).classList?.contains("video-ads") && (node as HTMLDivElement).classList?.contains("ytp-ad-module")
-			);
-			if (!isAdsElementAdded) return;
-			const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-			if (!featureMenu) return;
-			adjustAdsContainerStyles(featureMenu.style.display === "block");
-		});
-	}
-	const observer = new MutationObserver(handleMutation);
-	observer.observe(playerContainer, {
-		childList: true,
-		subtree: true
 	});
+
+	observer.observe(playerContainer, { childList: true, subtree: true });
 }
+
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsContainer = document.querySelector<HTMLDivElement>("div.video-ads.ytp-ad-module");
-	if (!adsContainer) return;
-	const adsSpan = adsContainer.querySelector<HTMLSpanElement>("span.ytp-ad-preview-container");
+	const adsSpan = document.querySelector<HTMLSpanElement>("div.video-ads.ytp-ad-module span.ytp-ad-preview-container");
 	if (!adsSpan) return;
 	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
 	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
@@ -148,19 +133,14 @@ function createFeatureMenu() {
 		classlist: ["ytp-popup", "ytp-settings-menu"],
 		elementId: "yte-feature-menu",
 		elementType: "div",
-		styles: {
-			display: "none",
-			zIndex: "2050"
-		}
+		styles: { display: "none", zIndex: "2050" }
 	});
 	// Create the feature menu panel
 	const featureMenuPanel = createStyledElement({
 		classlist: ["ytp-panel"],
 		elementId: "yte-feature-menu-panel",
 		elementType: "div",
-		styles: {
-			display: "contents"
-		}
+		styles: { display: "contents" }
 	});
 	// Append the panel to the menu
 	featureMenu.appendChild(featureMenuPanel);
@@ -174,10 +154,9 @@ function createFeatureMenu() {
 	return featureMenu;
 }
 async function createFeatureMenuButton() {
-	// Check if the feature menu already exists
-	const featureMenuExists = document.querySelector<HTMLDivElement>("#yte-feature-menu") !== null;
-	const featureMenu = featureMenuExists ? (document.querySelector("#yte-feature-menu") as HTMLDivElement) : createFeatureMenu();
-	// Create the feature menu button
+	const existingMenu = document.querySelector<HTMLDivElement>(MENU_ID);
+	const featureMenu = existingMenu ?? createFeatureMenu();
+
 	const featureMenuButton = createStyledElement({
 		classlist: ["ytp-button"],
 		elementId: "yte-feature-menu-button",
@@ -185,39 +164,28 @@ async function createFeatureMenuButton() {
 		styles: { display: "none" }
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
-	// Create the SVG icon for the button
-	const featureButtonSVG = makeFeatureMenuIcon();
-	featureMenuButton.appendChild(featureButtonSVG);
-	// Get references to various elements and check their existence
+	featureMenuButton.appendChild(makeFeatureMenuIcon());
+
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
-	if (!settingsButton) return;
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
-	if (!playerContainer) return;
-	// Insert the feature menu button and feature menu itself
+	if (!settingsButton || !playerContainer) return;
 	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-	// Wait for the "options" message from the content script
 	const {
 		data: {
 			options: { feature_menu_open_type: featureMenuOpenType }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	await waitForAllElements(["#yte-feature-menu", "#yte-feature-menu-button"]);
+	await waitForAllElements([MENU_ID, BUTTON_ID]);
 	setupFeatureMenuEventListeners(featureMenuOpenType);
 }
 function makeFeatureMenuIcon() {
-	const featureButtonSVG = createSVGElement(
+	return createSVGElement(
 		"svg",
-		{
-			fill: "white",
-			height: "24px",
-			viewBox: "0 0 24 24",
-			width: "24px"
-		},
+		{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
 		createSVGElement("path", {
 			d: "M 3.1273593,7.5636797 H 7.5636797 V 3.1273593 H 3.1273593 Z M 9.7818397,20.872641 H 14.21816 V 16.43632 H 9.7818397 Z m -6.6544804,0 H 7.5636797 V 16.43632 H 3.1273593 Z m 0,-6.654481 H 7.5636797 V 9.7818397 H 3.1273593 Z m 6.6544804,0 H 14.21816 V 9.7818397 H 9.7818397 Z M 16.43632,3.1273593 v 4.4363204 h 4.436321 V 3.1273593 Z M 9.7818397,7.5636797 H 14.21816 V 3.1273593 H 9.7818397 Z M 16.43632,14.21816 h 4.436321 V 9.7818397 H 16.43632 Z m 0,6.654481 h 4.436321 V 16.43632 H 16.43632 Z",
 			fill: "white"
 		})
 	);
-	return featureButtonSVG;
 }
