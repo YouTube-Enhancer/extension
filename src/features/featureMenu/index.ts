@@ -163,7 +163,7 @@ async function createFeatureMenuButton() {
 		elementType: "button",
 		styles: { display: "none" }
 	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t("pages.content.features.featureMenu.button.label");
+	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
 
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");

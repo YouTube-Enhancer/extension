@@ -10,8 +10,9 @@ const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpand
 	const {
 		i18nInstance: { t }
 	} = useSettings();
-	const buttonValue = isExpanded ? t("settings.sections.customCSS.extras.collapse") : t("settings.sections.customCSS.extras.expand");
-
+	const buttonValue = t((translations) =>
+		isExpanded ? translations.settings.sections.customCSS.extras.collapse : translations.settings.sections.customCSS.extras.expand
+	);
 	return (
 		<input
 			className={cn("my-2 flex self-start rounded-md bg-[rgba(43,43,43,1)] p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(43,43,43,0.5)]", {

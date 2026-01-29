@@ -748,72 +748,58 @@ const initialize = function () {
 						const {
 							data: { options }
 						} = await waitForSpecificMessage("options", "request_data", "content");
-						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
-							for (const feature of featuresInMenu) {
-								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
-								if (featureToMultiButtonsMap.has(featureName)) {
-									const multiFeatureName = featureName as MultiButtonFeatureNames;
-									const multiButtonName = feature as MultiButtonNames;
-									switch (multiFeatureName) {
-										case "playbackSpeedButtons": {
-											updateFeatureMenuItemLabel(
-												feature,
-												window.i18nextInstance.t(
-													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-													{
-														SPEED: options.playback_buttons_speed
-													}
-												)
-											);
-											break;
-										}
-									}
-								} else {
-									updateFeatureMenuItemLabel(
-										feature,
-										window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+						const {
+							i18nextInstance: { t }
+						} = window;
+						const getFeatureName = (feature: AllButtonNames) => findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
+						const getSingleLabel = (featureName: SingleButtonNames) => t((tr) => tr.pages.content.features[featureName].button.label);
+						const getMultiLabel = (multiFeatureName: MultiButtonFeatureNames, multiButtonName: MultiButtonNames) => {
+							switch (multiFeatureName) {
+								case "forwardRewindButtons":
+									return t(
+										(tr) =>
+											tr.pages.content.features[multiFeatureName].buttons[
+												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
+											].label,
+										{ TIME: options.forward_rewind_buttons_time }
 									);
-								}
+								case "playbackSpeedButtons":
+									return t(
+										(tr) =>
+											tr.pages.content.features[multiFeatureName].buttons[
+												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
+											].label,
+										{ SPEED: options.playback_buttons_speed }
+									);
 							}
+						};
+						const updateMenuFeatureLabel = (feature: AllButtonNames) => {
+							const featureName = getFeatureName(feature);
+							if (featureToMultiButtonsMap.has(featureName)) {
+								const label = getMultiLabel(featureName as MultiButtonFeatureNames, feature as MultiButtonNames);
+								if (label) updateFeatureMenuItemLabel(feature, label);
+							} else {
+								updateFeatureMenuItemLabel(feature, getSingleLabel(featureName as SingleButtonNames));
+							}
+						};
+						if (featuresInMenu.size > 0) {
+							updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
+							for (const feature of featuresInMenu) updateMenuFeatureLabel(feature);
 						}
 						if (featuresInControls.size > 0) {
 							for (const feature of featuresInControls) {
-								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (toggleFeatures.includes(feature)) {
 									const toggleFeature = feature as ToggleFeatures;
 									const featureButton = getFeatureButton(toggleFeature);
-									if (!featureButton) return;
+									if (!featureButton) continue;
 									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
 									updateFeatureButtonTitle(
 										toggleFeature,
-										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
+										t((tr) => tr.pages.content.features[toggleFeature].button.toggle[buttonChecked ? "on" : "off"])
 									);
-								} else {
-									if (featureToMultiButtonsMap.has(featureName)) {
-										const multiFeatureName = featureName as MultiButtonFeatureNames;
-										const multiButtonName = feature as MultiButtonNames;
-										switch (multiFeatureName) {
-											case "playbackSpeedButtons": {
-												updateFeatureMenuItemLabel(
-													feature,
-													window.i18nextInstance.t(
-														`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-														{
-															SPEED: options.playback_buttons_speed
-														}
-													)
-												);
-												break;
-											}
-										}
-									} else {
-										updateFeatureButtonTitle(
-											feature,
-											window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
-										);
-									}
+									continue;
 								}
+								updateMenuFeatureLabel(feature);
 							}
 						}
 						break;
