@@ -39,7 +39,7 @@ export const addForwardButton: AddButtonFunction = async () => {
 	await addFeatureButton(
 		"forwardButton",
 		forwardButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.forwardRewindButtons.buttons.forwardButton.label", {
+		window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
 			TIME: Measure.of(forward_rewind_buttons_time, seconds).toString()
 		}),
 		getFeatureIcon("forwardButton", forwardButtonPlacement),
@@ -69,7 +69,7 @@ export const addRewindButton: AddButtonFunction = async () => {
 	await addFeatureButton(
 		"rewindButton",
 		rewindButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.forwardRewindButtons.buttons.rewindButton.label", {
+		window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
 			TIME: Measure.of(forward_rewind_buttons_time, seconds).toString()
 		}),
 		getFeatureIcon("rewindButton", rewindButtonPlacement),

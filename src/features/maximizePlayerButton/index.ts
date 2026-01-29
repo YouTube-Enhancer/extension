@@ -1,5 +1,6 @@
-import "./index.css";
 import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
+
+import "./index.css";
 
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
@@ -25,8 +26,10 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 		"maximizePlayerButton",
 		maximizePlayerButtonPlacement,
 		maximizePlayerButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.label")
-		:	window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.button.toggle.${isPlayerMaximized ? "on" : "off"}`),
+			window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+		:	window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
+			),
 		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement),
 		(checked) => {
 			if (checked === undefined) return;
@@ -41,7 +44,7 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 			});
 			updateFeatureButtonTitle(
 				"maximizePlayerButton",
-				window.i18nextInstance.t(`pages.content.features.maximizePlayerButton.button.toggle.${checked ? "on" : "off"}`)
+				window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[checked ? "on" : "off"])
 			);
 			if (checked) {
 				remove();

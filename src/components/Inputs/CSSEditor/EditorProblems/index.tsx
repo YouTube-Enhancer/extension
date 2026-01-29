@@ -31,7 +31,7 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 	};
 	return (
 		<div className={cn("bg-[#1e1e1e]", className)} ref={ref}>
-			{problems.length === 0 && <div className="center p-1">{t("settings.sections.customCSS.extras.noProblems")}</div>}
+			{problems.length === 0 && <div className="center p-1">{t((translations) => translations.settings.sections.customCSS.extras.noProblems)}</div>}
 			{problems.map((problem, index) => (
 				<div
 					className="center flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc] hover:bg-[#2e2e2e]"

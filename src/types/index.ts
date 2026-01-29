@@ -1,4 +1,4 @@
-import type { ParseKeys, TOptions } from "i18next";
+import type { ParseKeys, TFunction, TOptions } from "i18next";
 import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
@@ -169,6 +169,7 @@ export type SingleButtonFeatureNames = Exclude<
 >;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
 export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+export type TSelectorFunc = Parameters<TFunction<"en-US">>[0];
 const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 	forwardRewindButtons: {
 		forwardButton: "",
@@ -505,9 +506,10 @@ export type MessageMappings = Prettify<{
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 export type MessageSource = "content" | "extension";
+
 export type Notification = {
 	action: NotificationAction;
-	message: TOptionsKeys;
+	message: TSelectorFunc;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;
