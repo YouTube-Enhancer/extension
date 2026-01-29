@@ -28,50 +28,52 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
 	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
+	const onChangeRef = useRef(onChange);
+	const debouncedOnChangeRef = useRef(
+		debounce((val: string) => {
+			onChangeRef.current(val);
+		}, 500)
+	);
 	const [editorValue, setEditorValue] = useState(value);
 	const [isEditorExpanded, setEditorExpanded] = useState(false);
-	const [initialBodyOverflowValue, setInitialBodyOverflowValue] = useState<string>("");
+	const [initialBodyOverflowValue, setInitialBodyOverflowValue] = useState("");
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
-	const [windowResized, setWindowResized] = useState(0);
-
-	const expandedEditorHeight = useMemo<number>(() => {
-		const {
-			documentElement: { clientHeight: documentHeight }
-		} = document;
+	const [viewportHeight, setViewportHeight] = useState(() => document.documentElement.clientHeight);
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
+	const expandedEditorHeight = useMemo(() => {
 		const expandButtonHeight = expandButtonRef.current?.clientHeight ?? 0;
 		const editorProblemsHeight = editorProblemsRef.current?.clientHeight ?? 0;
-		const editorHeight = documentHeight - (expandButtonHeight + editorProblemsHeight + 12);
-		return editorHeight;
-	}, [problems, windowResized, editorProblemsRef.current?.clientHeight, expandButtonRef.current?.clientHeight]);
-
-	const handleEditorDidMount = useCallback((editor: editor.IStandaloneCodeEditor, monaco: Monaco) => {
-		editorRef.current = editor;
-		monacoRef.current = monaco;
+		return viewportHeight - (expandButtonHeight + editorProblemsHeight + 12);
+	}, [viewportHeight, problems]);
+	const flushSave = useCallback(() => {
+		const currentValue = editorRef.current?.getValue() ?? "";
+		onChangeRef.current(currentValue);
 	}, []);
-
-	const debouncedOnChange = useCallback(debounce(onChange, 300), []);
-
-	const setEditorValueCallback = useCallback(
-		(value: string = "") => {
-			setEditorValue(value);
-			debouncedOnChange(value);
+	const handleEditorDidMount = useCallback(
+		(editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+			editorRef.current = editorInstance;
+			monacoRef.current = monaco;
+			editorInstance.onDidBlurEditorText(() => {
+				flushSave();
+			});
 		},
-		[debouncedOnChange]
+		[flushSave]
 	);
-
+	const handleEditorChange = useCallback((val: string = "") => {
+		setEditorValue(val);
+		debouncedOnChangeRef.current(val);
+	}, []);
 	useEffect(() => {
 		setEditorValue(value);
 	}, [value]);
-
 	const expandEditor = () => {
-		const currentScrollPosition = { x: window.scrollX, y: window.scrollY };
-		setPageScrollPosition(currentScrollPosition);
+		setPageScrollPosition({ x: window.scrollX, y: window.scrollY });
 		setEditorExpanded(true);
-
 		setInitialBodyOverflowValue(document.body.style.overflow);
 		document.body.style.overflow = "hidden";
-
 		editorRef.current?.focus();
 	};
 	const collapseEditor = () => {
@@ -79,24 +81,14 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 		setEditorExpanded(false);
 		editorRef.current?.focus();
 	};
-
 	useLayoutEffect(() => {
-		if (!isEditorExpanded) {
-			window.scrollTo(pageScrollPosition.x, pageScrollPosition.y);
-		}
+		if (!isEditorExpanded) window.scrollTo(pageScrollPosition.x, pageScrollPosition.y);
 	}, [isEditorExpanded, pageScrollPosition]);
-
 	useEffect(() => {
-		// Trigger any effect that depends on window size
-		const onResize = () => setWindowResized(Math.random());
-
+		const onResize = () => setViewportHeight(document.documentElement.clientHeight);
 		window.addEventListener("resize", onResize);
-		// Clean up the event listener when the component unmounts
-		return () => {
-			window.removeEventListener("resize", onResize);
-		};
+		return () => window.removeEventListener("resize", onResize);
 	}, []);
-
 	return (
 		<div
 			className={cn(className, {
@@ -104,25 +96,18 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 				"w-full flex flex-col": !isEditorExpanded
 			})}
 		>
-			<ExpandButton
-				isExpanded={isEditorExpanded}
-				onToggle={() => {
-					if (!isEditorExpanded) return expandEditor();
-					collapseEditor();
-				}}
-				ref={expandButtonRef}
-			/>
+			<ExpandButton isExpanded={isEditorExpanded} onToggle={() => (isEditorExpanded ? collapseEditor() : expandEditor())} ref={expandButtonRef} />
 			<Editor
-				className={cn("size-full grow", { "cursor-not-allowed": disabled, "pointer-events-none": disabled })}
+				className={cn("size-full grow", { "cursor-not-allowed pointer-events-none": disabled })}
 				height={isEditorExpanded ? expandedEditorHeight : 400}
 				language="css"
-				onChange={disabled ? () => void 0 : setEditorValueCallback}
+				onChange={disabled ? () => {} : handleEditorChange}
 				onMount={handleEditorDidMount}
 				onValidate={setProblems}
 				options={editorOptions}
 				theme="vs-dark"
 				value={editorValue}
-				width={isEditorExpanded ? window.document.documentElement.clientWidth : 500}
+				width={isEditorExpanded ? document.documentElement.clientWidth : 500}
 				wrapperProps={{ className: cn({ "cursor-not-allowed": disabled }) }}
 			/>
 			<EditorProblems
