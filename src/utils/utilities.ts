@@ -59,52 +59,22 @@ export function chooseClosestQuality(
 	availableQualities: YoutubePlayerQualityLevel[],
 	fallbackStrategy: PlayerQualityFallbackStrategy
 ): Nullable<YoutubePlayerQualityLevel> {
-	// If there are no available qualities, return null
-	if (availableQualities.length === 0) {
-		return null;
-	}
-
-	// If the selected quality is available, return it
-	if (availableQualities.includes(selectedQuality)) {
-		return selectedQuality;
-	}
-
-	// Find the index of the selected quality in the array
+	if (availableQualities.length === 0) return null;
+	availableQualities = availableQualities.filter((q) => q !== "auto");
+	if (availableQualities.includes(selectedQuality)) return selectedQuality;
 	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
-
-	// Find the available quality levels that are closest to the selected quality level
-	const closestQualities = availableQualities.reduce(
-		(acc, quality) => {
-			const qualityIndex = youtubePlayerQualityLevels.indexOf(quality);
-			if (qualityIndex !== -1) {
-				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality, qualityIndex });
-			}
-			return acc;
-		},
-		[] as { difference: number; quality: YoutubePlayerQualityLevel; qualityIndex: number }[]
-	);
-
-	// Sort the closest qualities by difference in ascending order
-	closestQualities.sort((a, b) => a.difference - b.difference);
-
-	// If fallback strategy is "higher", prefer higher quality levels
+	const mapped = availableQualities.map((quality) => ({
+		index: youtubePlayerQualityLevels.indexOf(quality),
+		quality
+	}));
+	if (mapped.length === 0) return null;
+	const higher = mapped.filter((q) => q.index > selectedIndex).sort((a, b) => a.index - b.index);
+	const lower = mapped.filter((q) => q.index < selectedIndex).sort((a, b) => b.index - a.index);
 	if (fallbackStrategy === "higher") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex > selectedIndex) {
-				return quality;
-			}
-		}
+		return higher[0]?.quality ?? lower[0]?.quality ?? null;
+	} else {
+		return lower[0]?.quality ?? higher[0]?.quality ?? null;
 	}
-
-	// If fallback strategy is "lower", prefer lower quality levels
-	if (fallbackStrategy === "lower") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex < selectedIndex) {
-				return quality;
-			}
-		}
-	}
-	return null;
 }
 const BrowserColors = {
 	BgBlack: "background-color: black; color: white;",
