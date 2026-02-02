@@ -7,7 +7,7 @@ import { browserColorLog, isShortsPage, isWatchPage, waitForElement, waitForSpec
 // Restore the player speed to the last saved player speed
 export async function restorePlayerSpeed() {
 	// Get the saved player speed from the local storage
-	const playerSpeed = window.localStorage.getItem("playerSpeed");
+	const playerSpeed = Number(window.localStorage.getItem("playerSpeed") ?? "1");
 	// If the player speed is not available, return
 	if (!playerSpeed) return;
 	// Get the player element
@@ -24,9 +24,9 @@ export async function restorePlayerSpeed() {
 	// Log the message indicating the player speed being set
 	browserColorLog(`Restoring player speed to ${playerSpeed}`, "FgMagenta");
 	// Set the playback speed
-	void playerContainer.setPlaybackRate(Number(playerSpeed));
+	void playerContainer.setPlaybackRate(playerSpeed);
 	// Set the video playback speed
-	video.playbackRate = Number(playerSpeed);
+	video.playbackRate = playerSpeed;
 }
 /**
  * Sets the player speed based on the given speed.
@@ -57,11 +57,7 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	} else if (typeof input === "number") {
 		playerSpeed = input;
 	}
-	// If the player speed is not specified, return
-	if (!playerSpeed) return;
-	// If forced playback speed option is disabled, return
-	if (!enablePlayerSpeed) return;
-	// Get the player element
+	if (!playerSpeed || !enablePlayerSpeed) return;
 	const playerContainer =
 		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
@@ -81,91 +77,98 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	// Set the video playback speed
 	if (video) video.playbackRate = playerSpeed;
 }
-const speedValueRegex = /(?<!\d\.)([0-1](\.\d+)?|2)(?![\d.])/;
+const speedValueRegex = /(\d+(?:\.\d+)?)/;
+const speedMenuItemSelector =
+	".ytp-menuitem:has(.ytp-menuitem-icon svg path[d='M12 1c1.44 0 2.87.28 4.21.83a11 11 0 0 1 3.45 2.27l-1.81 1.05A9 9 0 0 0 3 12a9 9 0 0 0 18-.00l-.01-.44a8.99 8.99 0 0 0-.14-1.20l1.81-1.05A11.00 11.00 0 0 1 10.51 22.9 11 11 0 0 1 12 1Zm7.08 6.25-7.96 3.25a1.74 1.74 0 1 0 1.73 2.99l6.8-5.26a.57.57 0 0 0-.56-.98Z'])";
 export async function setupPlaybackSpeedChangeListener() {
 	const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-	const speedMenuItemClickListener = async (event: Event) => {
-		const { target: speedMenuItem } = event as Event & { target: HTMLDivElement };
+	let regularMenuProcessed = false; // Only process the main menu once per open
+	const readSpeedFromMainMenuItem = async () => {
+		await new Promise(requestAnimationFrame);
+		const speedMenuItem = document.querySelector<HTMLDivElement>(speedMenuItemSelector);
 		if (!speedMenuItem) return;
-		const { textContent: speedValue } = speedMenuItem;
-		// If the playback speed is not available, return
-		if (!speedValue) return;
-		let playerSpeed: number = 1;
-		if (speedValueRegex.test(speedValue)) {
-			const speedValueMatch = speedValue.match(speedValueRegex);
-			if (speedValueMatch) {
-				playerSpeed = Number(speedValueMatch[1]);
-			}
-		}
+		const content = speedMenuItem.querySelector<HTMLDivElement>(".ytp-menuitem-content")?.textContent ?? null;
+		const match = content?.match(speedValueRegex);
+		const playerSpeed = match ? Number(match[1]) : 1; // Default to 1 for Normal
 		await updateSpeedButtons(playerSpeed);
 		window.localStorage.setItem("playerSpeed", String(playerSpeed));
 	};
-	// Create an observer instance
-	const playerSpeedMenuObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
-		mutationsList.forEach(async (mutation) => {
-			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
-			// Check if the target element has the desired structure
-			const panelHeader = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-header");
+	const extractSpeed = (text: null | string, isChecked = false): null | number => {
+		if (!text) return null;
+		const match = text.match(speedValueRegex);
+		if (match) return Number(match[1]);
+		if (isChecked) return 1; // Normal
+		return null;
+	};
+	const isPlaybackSpeedMenu = (panelMenu: HTMLDivElement) =>
+		!!panelMenu.closest(".ytp-settings-menu")?.querySelector(".ytp-speed-slider-menu-footer");
+	const speedMenuItemClickListener = async (event: Event) => {
+		const menuItem = (event.target as HTMLElement).closest<HTMLDivElement>("div.ytp-menuitem");
+		if (!menuItem) return;
+		const label = menuItem.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
+		const isChecked = menuItem.getAttribute("aria-checked") === "true";
+		const playerSpeed = extractSpeed(label, isChecked);
+		if (!playerSpeed) return;
+		await updateSpeedButtons(playerSpeed);
+		window.localStorage.setItem("playerSpeed", String(playerSpeed));
+	};
+	const playerSpeedMenuObserver = new MutationObserver(async (mutationsList) => {
+		for (const mutation of mutationsList) {
+			const targetElement = mutation.target as HTMLDivElement;
 			const panelMenu = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-menu");
-			const menuItems = panelMenu?.querySelectorAll<HTMLDivElement>("div.ytp-menuitem");
-			if (panelHeader && panelMenu && menuItems && menuItems.length === 9) {
-				const [customSpeedMenuItem] = menuItems;
-				const customSpeedActive = customSpeedMenuItem.getAttribute("aria-checked") === "true";
-				if (customSpeedActive) {
-					const customSpeedLabel = customSpeedMenuItem.querySelector<HTMLDivElement>("div.ytp-menuitem-label");
-					if (!customSpeedLabel) return;
-					const { textContent: customSpeedLabelValue } = customSpeedLabel;
-					if (!customSpeedLabelValue) return;
-					if (speedValueRegex.test(customSpeedLabelValue)) {
-						const speedValueMatch = customSpeedLabelValue.match(speedValueRegex);
-						if (speedValueMatch) {
-							const playerSpeed = Number(speedValueMatch[1]);
-							await updateSpeedButtons(playerSpeed);
-							window.localStorage.setItem("playerSpeed", String(playerSpeed));
-						}
-					}
-				} else {
-					menuItems.forEach((menuItem) => {
-						eventManager.addEventListener(menuItem, "click", speedMenuItemClickListener, "playerSpeed");
-					});
-				}
+			if (!panelMenu) continue;
+			// Handle regular menu (main menu) once per open
+			if (!regularMenuProcessed && panelMenu.querySelector(speedMenuItemSelector)) {
+				regularMenuProcessed = true;
+				await readSpeedFromMainMenuItem();
 			}
-		});
+			if (!isPlaybackSpeedMenu(panelMenu)) continue;
+			const menuItems = panelMenu.querySelectorAll<HTMLDivElement>("div.ytp-menuitem");
+			const checkedItem = panelMenu.querySelector<HTMLDivElement>('div.ytp-menuitem[aria-checked="true"]');
+			const checkedLabel = checkedItem?.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
+			const checkedSpeed = extractSpeed(checkedLabel, checkedItem?.getAttribute("aria-checked") === "true");
+			if (checkedSpeed) {
+				await updateSpeedButtons(checkedSpeed);
+				window.localStorage.setItem("playerSpeed", String(checkedSpeed));
+			}
+			menuItems.forEach((menuItem) => {
+				eventManager.removeEventListener(menuItem, "click", "playerSpeed");
+				eventManager.addEventListener(menuItem, "click", speedMenuItemClickListener, "playerSpeed");
+			});
+		}
 	});
-	const customSpeedSliderObserver = new MutationObserver((mutationsList: MutationRecord[]) => {
-		mutationsList.forEach(async (mutation) => {
-			const { target: targetElement } = mutation as MutationRecord & { target: HTMLDivElement };
-			if (!targetElement.matches(".ytp-speedslider-text")) return;
-			const { textContent: speedValue } = targetElement;
-			// If the playback speed is not available, return
-			if (!speedValue) return;
-			const playerSpeed = parseFloat(speedValue);
+	const customSpeedSliderObserver = new MutationObserver(async (mutationsList) => {
+		for (const mutation of mutationsList) {
+			const targetElement = mutation.target as HTMLDivElement;
+			if (!targetElement.matches(".ytp-speedslider-text")) continue;
+			const playerSpeed = parseFloat(targetElement.textContent ?? "");
+			if (!playerSpeed) return;
 			await updateSpeedButtons(playerSpeed);
 			window.localStorage.setItem("playerSpeed", String(playerSpeed));
-		});
+		}
 	});
-	const config: MutationObserverInit = { childList: true, subtree: true };
 	if (settingsPanelMenu) {
-		playerSpeedMenuObserver.observe(settingsPanelMenu, config);
+		playerSpeedMenuObserver.observe(settingsPanelMenu, {
+			attributeFilter: ["style"],
+			attributes: true,
+			childList: true,
+			subtree: true
+		});
 		customSpeedSliderObserver.observe(settingsPanelMenu, {
 			attributeFilter: ["aria-valuenow"],
 			attributes: true,
 			childList: true,
 			subtree: true
 		});
-		const speedMenuItem = await waitForElement(
-			".ytp-menuitem:has(.ytp-menuitem-icon svg path[d='M10,8v8l6-4L10,8L10,8z M6.3,5L5.7,4.2C7.2,3,9,2.2,11,2l0.1,1C9.3,3.2,7.7,3.9,6.3,5z            M5,6.3L4.2,5.7C3,7.2,2.2,9,2,11 l1,.1C3.2,9.3,3.9,7.7,5,6.3z            M5,17.7c-1.1-1.4-1.8-3.1-2-4.8L2,13c0.2,2,1,3.8,2.2,5.4L5,17.7z            M11.1,21c-1.8-0.2-3.4-0.9-4.8-2 l-0.6,.8C7.2,21,9,21.8,11,22L11.1,21z            M22,12c0-5.2-3.9-9.4-9-10l-0.1,1c4.6,.5,8.1,4.3,8.1,9s-3.5,8.5-8.1,9l0.1,1 C18.2,21.5,22,17.2,22,12z'])"
-		);
-		if (!speedMenuItem) return;
-		const {
-			children: [, , speedMenuItemContent]
-		} = speedMenuItem;
-		if (!speedMenuItemContent) return;
-		const { textContent: speedValue } = speedMenuItem;
-		// If the playback speed is not available, return
-		if (!speedValue) return;
-		const playerSpeed = isNaN(Number(speedValue)) ? 1 : Number(speedValue);
-		window.localStorage.setItem("playerSpeed", String(playerSpeed));
+		new MutationObserver((mutationsList) => {
+			for (const mutation of mutationsList) {
+				const targetElement = mutation.target as HTMLDivElement;
+				if (targetElement === settingsPanelMenu && targetElement.style.display === "none") {
+					// Reset the flag when the menu is closed
+					regularMenuProcessed = false;
+				}
+			}
+		}).observe(settingsPanelMenu, { attributeFilter: ["style"], attributes: true });
 	}
 }
 async function updateSpeedButtons(playerSpeed: number) {
