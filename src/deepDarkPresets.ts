@@ -117,7 +117,7 @@ export const deepDarkPresets = {
 		--shadow: 0 1px 0.5px rgba(0, 0, 0, .3);
 	}`,
 	Discord: `
-		:root {
+	:root {
 		--main-color: #7289da;
 		--main-background: #1e2124;
 		--second-background: #2f3136;
