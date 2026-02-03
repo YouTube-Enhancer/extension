@@ -219,8 +219,8 @@
 					"title": "Språk"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Öppna inställningssidan vid uppdatering",
+					"title": "Öppnar inställningssidan när YouTube Enhancer har uppdaterats"
 				},
 				"optionDisabled": {
 					"either": {
@@ -273,7 +273,7 @@
 		"sections": {
 			"customCSS": {
 				"enable": {
-					"label": "Aktivera anpassad CSS",
+					"label": "Anpassad CSS",
 					"title": "Aktiverar anpassad CSS som ska tillämpas på sidan"
 				},
 				"extras": {
@@ -425,7 +425,7 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Dölj endast för medlemmar-videor",
+							"label": "Dölj videor som endast är för medlemmar",
 							"title": "Döljer videor som endast är synliga för medlemmar"
 						}
 					},
