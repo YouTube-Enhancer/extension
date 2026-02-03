@@ -6,8 +6,8 @@ import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } f
 import { getFeatureMenuItem } from "@/src/features/featureMenu/utils";
 import { getFeatureIcon, type ToggleIcon } from "@/src/icons";
 import eventManager from "@/src/utils/EventManager";
-
 import { isWatchPage, modifyElementClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+
 import "./index.css";
 export async function disableHideEndScreenCards() {
 	if (!isWatchPage()) return;
