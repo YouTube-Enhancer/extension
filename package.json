@@ -16,7 +16,10 @@
     "dev": "nodemon",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+		"update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
+		"update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
+		"update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
   },
   "type": "module",
   "optionalDependencies": {
