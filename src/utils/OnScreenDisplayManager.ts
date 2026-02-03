@@ -254,22 +254,30 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
 		// Find elements for positioning the canvas.
 		const bottomElement: Nullable<HTMLDivElement> =
-			document.querySelector(
-				"ytd-reel-video-renderer[is-active] > div.overlay.ytd-reel-video-renderer > ytd-reel-player-overlay-renderer > div > ytd-reel-player-header-renderer"
-			) ?? document.querySelector(".ytp-chrome-bottom");
-		const { top: topRectTop = 0 } = document.querySelector(".player-controls > ytd-shorts-player-controls")?.getBoundingClientRect() || {};
-		const { bottom: bottomRectBottom = 0, top: bottomRectTop = 0 } = bottomElement?.getBoundingClientRect() || {};
-		const heightExcludingMarginPadding =
-			bottomElement ?
+			document.querySelector<HTMLDivElement>(
+				"ytd-reel-video-renderer[is-active] ytd-reel-player-overlay-renderer div.ytd-reel-player-overlay-renderer div#overlay"
+			) ?? document.querySelector<HTMLDivElement>(".ytp-chrome-bottom");
+		const shortsTopControls = document.querySelector<HTMLDivElement>(".player-controls > ytd-shorts-player-controls");
+		let paddingTop = 0;
+		if (isShortsPage() && shortsTopControls) {
+			const shortsTopStyle = getComputedStyle(shortsTopControls);
+			paddingTop = shortsTopControls.offsetHeight + parseInt(shortsTopStyle.marginTop, 10) + parseInt(shortsTopStyle.marginBottom, 10);
+		}
+		let paddingBottom = 0;
+		if (bottomElement) {
+			const bottomStyle = getComputedStyle(bottomElement);
+			const bottomVisualHeight =
 				bottomElement.offsetHeight -
-				(parseInt(getComputedStyle(bottomElement).marginTop, 10) +
-					parseInt(getComputedStyle(bottomElement).marginBottom, 10) +
-					parseInt(getComputedStyle(bottomElement).paddingTop, 10) +
-					parseInt(getComputedStyle(bottomElement).paddingBottom, 10)) +
-				10
-			:	0;
-		const paddingTop = isShortsPage() ? topRectTop / 2 : 0;
-		const paddingBottom = isShortsPage() ? heightExcludingMarginPadding : Math.round(bottomRectBottom - bottomRectTop);
+				(parseInt(bottomStyle.marginTop, 10) +
+					parseInt(bottomStyle.marginBottom, 10) +
+					parseInt(bottomStyle.paddingTop, 10) +
+					parseInt(bottomStyle.paddingBottom, 10)) +
+				10;
+			const bottomRect = bottomElement.getBoundingClientRect();
+			const playerRect = this.options.playerContainer.getBoundingClientRect();
+			const horizontallyOverlaps = bottomRect.right > playerRect.left && bottomRect.left < playerRect.right;
+			paddingBottom = isShortsPage() && horizontallyOverlaps ? bottomVisualHeight : Math.round(bottomRect.bottom - bottomRect.top);
+		}
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
 			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)
