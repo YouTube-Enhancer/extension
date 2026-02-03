@@ -1,823 +1,827 @@
 {
-  "langCode": "tr-TR",
-  "langName": "Türkçe",
-  "messages": {
-    "resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir",
-    "settingVolume": "Ses güçlendirmesini {{VOLUME_BOOST_AMOUNT}} olarak ayarla"
-  },
-  "pages": {
-    "content": {
-      "features": {
-        "copyTimestampUrlButton": {
-          "button": {
-            "label": "Geçerli zamana ait video URL'sini kopyala"
-          },
-          "extras": {
-            "copied": "Kopyalandı!"
-          }
-        },
-        "featureMenu": {
-          "button": {
-            "label": "Özellik menüsü"
-          }
-        },
-        "forwardRewindButtons": {
-          "buttons": {
-            "forwardButton": {
-              "label": "{{TIME}} hızlı ileri sar"
-            },
-            "rewindButton": {
-              "label": "{{TIME}} kadar geri sar"
-            }
-          }
-        },
-        "hideEndScreenCardsButton": {
-          "button": {
-            "label": "Bitiş ekranı kartlarını gizle",
-            "toggle": {
-              "off": "Bitiş ekranı kartlarını göster",
-              "on": "Bitiş ekranı kartlarını gizle"
-            }
-          }
-        },
-        "loopButton": {
-          "button": {
-            "label": "Tekrarla",
-            "toggle": {
-              "off": "Tekrarlama kapalı",
-              "on": "Tekrarlama açık"
-            }
-          }
-        },
-        "maximizePlayerButton": {
-          "button": {
-            "label": "Ekranı kapla",
-            "toggle": {
-              "off": "Tam ekran kapalı",
-              "on": "Tam ekran açıl"
-            }
-          }
-        },
-        "openTranscriptButton": {
-          "button": {
-            "label": "Transkripti Aç"
-          }
-        },
-        "playbackSpeedButtons": {
-          "buttons": {
-            "decreasePlaybackSpeedButton": {
-              "label": "Hızı {{SPEED}} değerine düşür"
-            },
-            "increasePlaybackSpeedButton": {
-              "label": "Hızı {{SPEED}} değerine çıkar"
-            }
-          },
-          "extras": {
-            "decreaseLimit": "Daha fazla düşüremezsin ({{SPEED}})",
-            "increaseLimit": "Daha fazla artıramazsın ({{SPEED}})"
-          }
-        },
-        "playlistLength": {
-          "title": "Bazı videolar gizliyse veya tam uzunluğa ulaşmak için yeterli sayıda video yüklemediyseniz, toplam uzunluk doğru olmayabilir."
-        },
-        "playlistManagementButtons": {
-          "extras": {
-            "failedToMarkAsUnwatched": "Videoyu izlenmemiş olarak işaretleme başarısız oldu",
-            "failedToRemoveVideo": "Video kaldırılamadı",
-            "markAsUnwatched": "İzlenmemiş olarak işaretle",
-            "markingAsUnwatched": "İzlenmemiş olarak işaretleniyor…",
-            "removeVideo": "Videoyu kaldır",
-            "removingVideo": "Video kaldırılıyor…"
-          }
-        },
-        "saveToWatchLaterButton": {
-          "extras": {
-            "failedToSaveVideo": "Videoyu daha sonra izlemek üzere kaydetme işlemi başarısız oldu",
-            "saveVideo": "Daha sonra izlemek için kaydet",
-            "savingVideo": "Daha sonra izlemek için kaydediliyor…"
-          }
-        },
-        "screenshotButton": {
-          "button": {
-            "label": "Ekran görüntüsü"
-          },
-          "extras": {
-            "copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
-          }
-        },
-        "videoHistory": {
-          "extras": {
-            "resumeButton": "Devam Et",
-            "resumePromptClose": "Kapat"
-          }
-        },
-        "volumeBoostButton": {
-          "button": {
-            "label": "Ses Yükseltici",
-            "toggle": {
-              "off": "Ses Yükseltici Devredışı",
-              "on": "Ses Yükseltici Aktif"
-            }
-          }
-        }
-      }
-    },
-    "options": {
-      "extras": {
-        "bottomButtons": {
-          "clear": {
-            "title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
-            "value": "Veriyi Temizle"
-          },
-          "confirm": {
-            "title": "Ayarı sıfırlamayı onayla",
-            "value": "Onayla"
-          },
-          "openTab": {
-            "title": "Uzantı ayarlarını yeni bir sekmede açın"
-          },
-          "reset": {
-            "title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
-            "value": "Sıfırla"
-          }
-        },
-        "buttonPlacement": {
-          "select": {
-            "buttonNames": {
-              "copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
-              "decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
-              "forwardButton": "Hızlı İleri düğmesi",
-              "hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
-              "increasePlaybackSpeedButton": "Hızı Artırma Butonu",
-              "loopButton": "Döngü düğmesi",
-              "maximizePlayerButton": "Tam ekran düğmesi",
-              "openTranscriptButton": "Transkripti Aç butonu",
-              "rewindButton": "Geri sarma düğmesi",
-              "screenshotButton": "Ekran görüntüsü düğmesi",
-              "volumeBoostButton": "Ses güçlendirme düğmesi"
-            },
-            "options": {
-              "below_player": {
-                "placement": "oynatıcı kontrollerinin altında",
-                "value": "Oynatıcının altında"
-              },
-              "feature_menu": {
-                "placement": "özellik menüsünde",
-                "value": "Özellik Menüsü"
-              },
-              "player_controls_left": {
-                "placement": "oynatıcı kontrollerinin sol tarafında",
-                "value": "Sol Kontroller"
-              },
-              "player_controls_right": {
-                "placement": "oynatıcı kontrollerinin sağ tarafında",
-                "value": "Sağ Kontroller"
-              }
-            },
-            "title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
-          },
-          "title": "Düğme yerleşim ayarları"
-        },
-        "clearData": {
-          "allDataDeleted": "Tüm veriler silindi.",
-          "confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
-        },
-        "featureMenu": {
-          "openType": {
-            "select": {
-              "label": "Menü Aktivasyon Türü",
-              "options": {
-                "click": "Tıkla",
-                "hover": "İmleci Üzerine Getir"
-              },
-              "title": "Özellik menüsünü etkinleştirme yöntemini seçin"
-            },
-            "title": "Özellik menüsü ayarları"
-          }
-        },
-        "importExportSettings": {
-          "exportButton": {
-            "success": "Ayarlar başarıyla dışa aktarıldı",
-            "title": "Ayarları JSON dosyasından içe aktar",
-            "value": "Ayarları Dışa Aktar"
-          },
-          "importButton": {
-            "error": {
-              "unknown": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\nBilinmeyen bir hata oluştu.",
-              "validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
-            },
-            "success": "Ayarlar başarıyla içe aktarıldı",
-            "title": "Ayarları JSON dosyasından içe aktar",
-            "value": "Ayarları İçe Aktar"
-          }
-        },
-        "language": {
-          "select": {
-            "label": "Dil",
-            "title": "Uzuntı için kullanılacak dil"
-          },
-          "title": "Dil"
-        },
-        "optionDisabled": {
-          "either": {
-            "label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
-            "separator": " veya "
-          },
-          "plural": {
-            "label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
-            "separator": " ve "
-          },
-          "singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
-          "specificOption": {
-            "featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-            "screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
-          }
-        },
-        "scrollForMoreSettings": "Daha fazla ayar için kaydırın",
-        "settingSearch": {
-          "placeholder": "Bir ayar arayın"
-        },
-        "youtubeDataApiV3Key": {
-          "getApiKeyLinkText": "Buradan bir tane alabilirsiniz",
-          "input": {
-            "label": "API Anahtarı",
-            "title": "Youtube Veri API V3 anahtarınızı girin."
-          },
-          "title": "YouTube API V3 anahtarı"
-        }
-      },
-      "notifications": {
-        "error": {
-          "optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
-          "scrollWheelHoldModifierKey": {
-            "sameKey": {
-              "speedControl": "Kaydırma tekerleği hız kontrolü için kullanılan değiştirici tuş, kaydırma tekerleği ses kontrolü için kullanılan değiştirici tuşla aynı olamaz.",
-              "volumeControl": "Kaydırma tekerleği ile ses düzeyi kontrolü için kullanılan değiştirici tuş, kaydırma hızı kontrolü için kullanılan değiştirici tuşla aynı olamaz."
-            }
-          }
-        },
-        "info": {
-          "reset": "Tüm seçenekler varsayılan değerlerine sıfırlandı.\nArtık \"Onayla\" düğmesine tıklayarak değişiklikleri kaydedebilir veya bu sayfayı kapatarak iptal edebilir veya bu bildirimi göz ardı edebilirsiniz."
-        },
-        "success": {
-          "saved": "Seçenekler kaydedildi."
-        }
-      }
-    }
-  },
-  "settings": {
-    "sections": {
-      "customCSS": {
-        "enable": {
-          "label": "Özel CSS'yi etkinleştir",
-          "title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
-        },
-        "extras": {
-          "collapse": "Düzenleyiciyi Daralt",
-          "expand": "Düzenleyiciyi Genişlet",
-          "noProblems": "Hiç bir sorun bulunamadı."
-        },
-        "title": "Özel CSS Ayarları"
-      },
-      "deepDarkCSS": {
-        "enable": {
-          "label": "Seçilen temayı etkinleştir",
-          "title": "Sayfa için seçilen temayı etkinleştirin"
-        },
-        "extras": {
-          "author": "Yazar",
-          "co-authors": "Ortak yazarlar"
-        },
-        "settings": {
-          "colorShadow": {
-            "label": "Gölge rengi",
-            "title": "Gölge rengi"
-          },
-          "dimmerText": {
-            "label": "İkincil metin rengi",
-            "title": "İkincil metin rengi"
-          },
-          "hoverBackground": {
-            "label": "Üzerine gelindiğindeki arka plan rengi",
-            "title": "Üzerine gelindiğindeki arka plan rengi"
-          },
-          "mainBackground": {
-            "label": "Ana arka plan rengi",
-            "title": "Ana arka plan rengi"
-          },
-          "mainColor": {
-            "label": "Vurgulama rengi",
-            "title": "Vurgulama rengi"
-          },
-          "mainText": {
-            "label": "Ana metin rengi",
-            "title": "Ana metin için renk"
-          },
-          "secondBackground": {
-            "label": "İkincil arka plan rengi",
-            "title": "İkincil arka plan rengi"
-          },
-          "theme": {
-            "select": {
-              "label": "Tema seç",
-              "title": "Sayfa için uygulanacak bir tema seçin"
-            }
-          }
-        },
-        "title": "YouTube deep dark ayarları"
-      },
-      "forwardRewindButtons": {
-        "enable": {
-          "label": "İleri/geri sarma düğmeleri",
-          "title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
-        },
-        "settings": {
-          "time": {
-            "label": "İleri/geri sarma süresi",
-            "title": "Videoyu ileri/geri sarmak için atlanacak süre"
-          }
-        },
-        "title": "İleri/geri sarma düğmesi ayarları"
-      },
-      "miscellaneous": {
-        "settings": {
-          "automaticallyDisableAmbientMode": {
-            "enable": {
-              "label": "Ortam modunu otomatik olarak devre dışı bırak",
-              "title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
-            }
-          },
-          "automaticallyDisableAutoPlay": {
-            "enable": {
-              "label": "Otomatik oynatmayı, otomatik olarak devre dışı bırak",
-              "title": "Video yüklediğinizde otomatik oynatmayı devre dışı bırakır"
-            }
-          },
-          "automaticallyDisableClosedCaptions": {
-            "enable": {
-              "label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
-              "title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
-            }
-          },
-          "automaticallyEnableClosedCaptions": {
-            "enable": {
-              "label": "Kapalı altyazıları otomatik olarak etkinleştir",
-              "title": "Bir videoyu yüklediğinizde altyazıları otomatik olarak etkinleştirir"
-            }
-          },
-          "automaticallyMaximizePlayer": {
-            "enable": {
-              "label": "Oynatıcıyı otomatik olarak azami boyuta getir",
-              "title": "Bir video yüklediğinizde oynatıcıyı otomatik olarak büyütür"
-            }
-          },
-          "automaticallyShowMoreVideosOnEndScreen": {
-            "enable": {
-              "label": "Bitiş ekranında otomatik olarak daha fazla video göster",
-              "title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
-            }
-          },
-          "automaticTheaterMode": {
-            "enable": {
-              "label": "Otomatik tiyatro modu",
-              "title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
-            }
-          },
-          "copyTimestampUrlButton": {
-            "enable": {
-              "label": "Video URL'sini zaman damgası düğmesiyle kopyala",
-              "title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
-            }
-          },
-          "defaultToOriginalAudioTrack": {
-            "enable": {
-              "label": "Varsayılan olarak orijinal ses parçasına dön",
-              "title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
-            }
-          },
-          "saveToWatchLaterButton": {
-            "enable": {
-              "label": "Daha Sonra İzle'ye kaydetme düğmesini etkinleştir",
-              "title": "Ana Sayfa ve Abonelikler videolarına, oynatma listesine kaydetmek için videoyu ‘Daha Sonra İzle’ düğmesi ekler"
-            }
-          },
-          "hideArtificialIntelligenceSummary": {
-            "enable": {
-              "label": "AI özetini gizle",
-              "title": "Videoların altındaki yapay zeka özetini gizler"
-            }
-          },
-          "hideEndScreenCards": {
-            "enable": {
-              "label": "Bitiş ekranı kartlarını gizle",
-              "title": "Video'nun sonundaki kartları gizler"
-            }
-          },
-          "hideEndScreenCardsButton": {
-            "enable": {
-              "label": "Bitiş ekranı kartlarını gizleme düğmesi",
-              "title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
-            }
-          },
-          "hideLiveStreamChat": {
-            "enable": {
-              "label": "Canlı yayın sohbetini gizle",
-              "title": "Canlı yayın sohbetini gizler"
-            }
-          },
-          "hideMembersOnlyVideos": {
-            "enable": {
-              "label": "Üyelere özel videoları gizle",
-              "title": "Sadece üyelere görünen videoları gizle"
-            }
-          },
-          "hideOfficialArtistVideosFromHomePage": {
-            "enable": {
-              "label": "Resmi Sanatçı Videolarını Gizle",
-              "title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
-            }
-          },
-          "hidePaidPromotionBanner": {
-            "enable": {
-              "label": "Ücretli tanıtım afişini gizle",
-              "title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
-            }
-          },
-          "hidePlayables": {
-            "enable": {
-              "label": "Oynatılabilirleri gizle",
-              "title": "Tüm oynatılabilir öğeleri gizle"
-            }
-          },
-          "hidePlaylistRecommendationsFromHomePage": {
-            "enable": {
-              "label": "Ana sayfadaki oynatma listelerini gizle",
-              "title": "Ana sayfadaki oynatma listelerinden kurtulun"
-            }
-          },
-          "hideScrollbar": {
-            "enable": {
-              "label": "Kaydırma çubuğu gizlemeyi etkinleştir",
-              "title": "Sayfa kaydırma çubuğunu gizler"
-            }
-          },
-          "hideShorts": {
-            "enable": {
-              "label": "Kısa videoları gizle",
-              "title": "Tüm kısa videoları gizler"
-            }
-          },
-          "hideSidebarRecommendedVideos": {
-            "enable": {
-              "label": "Önerilen videoları gizle",
-              "title": "Video önerilerini gösteren kenar çubuğunu gizler"
-            }
-          },
-          "hideTranslateComment": {
-            "enable": {
-              "label": "Yorumu Çevir'i Gizle Butonu",
-              "title": "Yorumlar altındaki 'Dile Çevir' düğmesini gizler"
-            }
-          },
-          "loopButton": {
-            "enable": {
-              "label": "Tekrarlama düğmesi",
-              "title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
-            }
-          },
-          "maximizePlayerButton": {
-            "enable": {
-              "label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir",
-              "title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler"
-            }
-          },
-          "openTranscriptButton": {
-            "enable": {
-              "label": "Not dökümü düğmesini gizle",
-              "title": "İzlediğiniz videonun metnini açmak için özellik menüsüne bir düğme ekler"
-            }
-          },
-          "openYouTubeSettingsOnHover": {
-            "enable": {
-              "label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
-              "title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
-            }
-          },
-          "pauseBackgroundPlayers": {
-            "enable": {
-              "label": "Arka plan oynatıcılarını duraklat",
-              "title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
-            }
-          },
-          "remainingTime": {
-            "enable": {
-              "label": "Kalan süre",
-              "title": "İzlediğiniz videonun kalan süresini gösterir"
-            }
-          },
-          "rememberVolume": {
-            "enable": {
-              "label": "Son ses hacmini hatırla",
-              "title": "İzlediğiniz son videonun ses seviyesini hatırlar ve yeni bir video açtığınızda bu ses seviyesine ayarlar"
-            }
-          },
-          "removeRedirect": {
-            "enable": {
-              "label": "YouTube yönlendirme bağlantılarını kaldır",
-              "title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
-            }
-          },
-          "restoreFullscreenScrolling": {
-            "enable": {
-              "label": "Tam ekran kaydırmayı geri yükle",
-              "title": "Tam ekran modunda kaydırmayı geri yükler"
-            }
-          },
-          "shareShortener": {
-            "enable": {
-              "label": "YouTube video paylaşım bağlantısını kısalt",
-              "title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
-            }
-          },
-          "shortsAutoScroll": {
-            "enable": {
-              "label": "Kısa videoya otomatik kaydır",
-              "title": "Bir sonraki kısa videoya otomatik kaydır"
-            }
-          },
-          "skipContinueWatching": {
-            "enable": {
-              "label": "\"Video durdu. Hala orda mısın?\"ı Atla",
-              "title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
-            }
-          }
-        },
-        "title": "Çeşitli ayarlar"
-      },
-      "onScreenDisplaySettings": {
-        "settings": {
-          "color": {
-            "label": "Renk",
-            "select": {
-              "options": {
-                "blue": "Mavi",
-                "green": "Yeşil",
-                "orange": "Turuncu",
-                "pink": "Pembe",
-                "purple": "Mor",
-                "red": "Kırmızı",
-                "white": "Beyaz",
-                "yellow": "Sarı"
-              }
-            },
-            "title": "Ekran göstergesinin rengini seçin"
-          },
-          "hide": {
-            "label": "Gecikmeyi Gizle",
-            "title": "Ekran görüntüsünü otomatik olarak gizlemeden önce geçen süreyi milisaniye cinsinden belirtin"
-          },
-          "opacity": {
-            "label": "Saydamlık",
-            "title": "Ekrandaki gösterimin saydamlığını ayarlayın"
-          },
-          "padding": {
-            "label": "İç Boşluk",
-            "title": "Ekran Üzeri Gösterge etrafındaki boşluğu piksel cinsinden ayarlayın. Bu ayar özellikle köşe Ekran Üzeri Gösterge için geçerlidir."
-          },
-          "position": {
-            "label": "Konum",
-            "select": {
-              "options": {
-                "bottom_left": "Sol Alt",
-                "bottom_right": "Sağ Alt",
-                "center": "Orta",
-                "top_left": "Sol Üst",
-                "top_right": "Sağ Üst"
-              }
-            },
-            "title": "Ekran görüntüleme konumunu seçin"
-          },
-          "type": {
-            "label": "Tür",
-            "select": {
-              "options": {
-                "circle": "Daire",
-                "line": "Satır",
-                "no_display": "Ekran yok",
-                "text": "Metin"
-              }
-            },
-            "title": "Ekran görüntüleme türünü seçin"
-          }
-        },
-        "title": "Ekran üstü görüntü ayarları"
-      },
-      "playerQuality": {
-        "enable": {
-          "label": "Otomatik kalite ayarlamayı etkinleştir",
-          "title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
-        },
-        "settings": {
-          "quality": {
-            "select": {
-              "label": "Oynatma kalitesi",
-              "title": "Videonun ayarlanacağı kalite"
-            }
-          },
-          "qualityFallbackStrategy": {
-            "select": {
-              "label": "Kalite geri dönüş stratejisi",
-              "options": {
-                "higher": "Daha yüksek",
-                "lower": "Daha düşük"
-              },
-              "title": "Seçilen kalite mevcut değilse kullanılacak strateji"
-            }
-          }
-        },
-        "title": "Otomatik kalite ayarları"
-      },
-      "playerSpeed": {
-        "enable": {
-          "label": "Zorunlu oynatma hızını etkinleştir",
-          "title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
-        },
-        "settings": {
-          "buttons": {
-            "label": "Oynatma hızı ayarları",
-            "select": {
-              "label": "Oynatma düğmelerinin hızı",
-              "title": "Tıklama başına değiştirilecek hız miktarı"
-            },
-            "title": "İzlediğiniz videonun oynatma hızını artırmak veya azaltmak için düğmeler ekler"
-          },
-          "speed": {
-            "select": {
-              "label": "Oynatma hızı",
-              "title": "Video oynatma hızını ayarlar"
-            }
-          }
-        },
-        "title": "Oynatma hızı ayarları"
-      },
-      "playlistLength": {
-        "enable": {
-          "label": "Çalma listesinin uzunluk bilgilerini göster",
-          "title": "Oynatma listesinin toplam, izlenen ve ne kalan uzunluğunu gösterir."
-        },
-        "settings": {
-          "wayToGetLength": {
-            "select": {
-              "label": "Oynatma listesi uzunluğunu alma yöntemi",
-              "title": "Oynatma listesi uzunluk bilgisi alma yolu (Bir hata oluşursa API yöntemi HTML'e geri dönecek)"
-            }
-          },
-          "wayToGetWatchTime": {
-            "select": {
-              "label": "İzlenme süresini alma yöntemi",
-              "options": {
-                "duration": "Video Uzunluğu",
-                "youtube": "Video İzlenme Süresi"
-              },
-              "title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
-            }
-          }
-        },
-        "title": "Oynatma listesi uzunluk ayarları"
-      },
-      "playlistManagementButtons": {
-        "settings": {
-          "markAsUnwatchedButton": {
-            "enable": {
-              "label": "İzlenmeyen olarak işaretle düğmesi",
-              "title": "Videoları izlenmemiş olarak işaretlemek için bir düğme ekler"
-            }
-          },
-          "removeVideoButton": {
-            "enable": {
-              "label": "Video düğmesini kaldır",
-              "title": "Oynatma listesinden videoları kaldırmak için bir düğme ekler"
-            }
-          }
-        },
-        "title": "Oynatma listesini yönetme ayarları"
-      },
-      "screenshotButton": {
-        "enable": {
-          "label": "Ekran görüntüsü tuşunu etkinleştir",
-          "title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler"
-        },
-        "settings": {
-          "format": {
-            "label": "Ekran görüntüsü formatı",
-            "title": "Ekran görüntüsünün kaydedileceği format"
-          },
-          "saveAs": {
-            "select": {
-              "options": {
-                "both": "Her İkisi",
-                "clipboard": "Pano",
-                "file": "Dosya"
-              },
-              "label": "Ekran görüntüsü kaydetme türü",
-              "title": "Ekran görüntüsü kaydetme türü"
-            }
-          }
-        },
-        "title": "Ekran görüntüsü ayarları"
-      },
-      "scrollWheelSpeedControl": {
-        "enable": {
-          "label": "Kaydırma tekerleği hız kontrolü",
-          "title": "Kaydırma tekerleği ile hız ayarını etkinleştirmek için değiştirici tuşlarından birine basın."
-        },
-        "extras": {
-          "optionLabel": "{{KEY}} anahtarı"
-        },
-        "settings": {
-          "adjustmentSteps": {
-            "label": "Kaydırma başına hız değişimi",
-            "title": "Kaydırma başına hız değiştirmeyi ayarlar"
-          },
-          "modifierKey": {
-            "select": {
-              "label": "Düzenleyici anahtar",
-              "title": "Kullanılacak kısayol düğmesi"
-            }
-          }
-        },
-        "title": "Kaydırma tekerleği için hız kontrolü ayarları"
-      },
-      "scrollWheelVolumeControl": {
-        "enable": {
-          "label": "Kaydırma tekerleği ile ses kontrolü",
-          "title": "İzlediğiniz videonun ses düzeyini kontrol etmek için kaydırma tekerleğini kullanmanızı sağlar"
-        },
-        "extras": {
-          "optionLabel": "{{KEY}} anahtarı"
-        },
-        "settings": {
-          "adjustmentSteps": {
-            "label": "Her kaydırmada değiştirilecek ses düzeyi",
-            "title": "Her kaydırmada değiştirilecek ses düzeyini ayarlayın"
-          },
-          "holdModifierKey": {
-            "label": "Değiştirici tuşa basılı tutulduğunda",
-            "select": {
-              "label": "Düzenleyici anahtar",
-              "title": "Kullanılacak kısayol düğmesi"
-            },
-            "title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
-          },
-          "holdRightClick": {
-            "label": "Etkinleştirmek için sağ tuşa basılı tutun",
-            "title": "Kaydırma tekerleği ile ses kontrolünü etkinleştirmek için farenin sağ düğmesine basılı tutun"
-          }
-        },
-        "title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
-      },
-      "videoHistory": {
-        "enable": {
-          "label": "İzlenen videoları takip edin",
-          "title": "İzlediğiniz videolarda en son nerede kaldığınızı takip eder ve oynatmaya oradan devam etmenizi sağlar"
-        },
-        "settings": {
-          "resumeType": {
-            "select": {
-              "label": "Devam etme türü",
-              "options": {
-                "automatic": "Otomatik",
-                "prompt": "İpucu"
-              },
-              "title": "Videoları nasıl devam ettirmek istediğinizi seçin"
-            }
-          }
-        },
-        "title": "Video geçmişi ayarları"
-      },
-      "volumeBoost": {
-        "enable": {
-          "label": "Ses güçlendirmeyi etkinleştir",
-          "title": "Ses güçlendirmeyi etkinleştir"
-        },
-        "settings": {
-          "amount": {
-            "label": "Ses güçlendirme miktarı (dB)",
-            "title": "Ses güçlendirme miktarı"
-          },
-          "mode": {
-            "select": {
-              "label": "Ses güçlendirme modu",
-              "options": {
-                "global": "Genel",
-                "perVideo": "Video başına"
-              },
-              "title": "Ses artırmanın nasıl uygulanacağını seçin. 'Video başına', özellik menüsünde her video için ayrı ayrı güçlendirmenin etkinleştirilmesine olanak tanır. 'Genel', ses artırma etkinleştirildiğinde tüm videolara güçlendirme uygular."
-            }
-          }
-        },
-        "title": "Ses güçlendirme ayarları"
-      }
-    }
-  }
+	"langCode": "tr-TR",
+	"langName": "Türkçe",
+	"messages": {
+		"resumingVideo": "{{VIDEO_TIME}} tarihinde videoyu devam ettir",
+		"settingVolume": "Ses güçlendirmesini {{VOLUME_BOOST_AMOUNT}} olarak ayarla"
+	},
+	"pages": {
+		"content": {
+			"features": {
+				"copyTimestampUrlButton": {
+					"button": {
+						"label": "Geçerli zamana ait video URL'sini kopyala"
+					},
+					"extras": {
+						"copied": "Kopyalandı!"
+					}
+				},
+				"featureMenu": {
+					"button": {
+						"label": "Özellik menüsü"
+					}
+				},
+				"forwardRewindButtons": {
+					"buttons": {
+						"forwardButton": {
+							"label": "{{TIME}} hızlı ileri sar"
+						},
+						"rewindButton": {
+							"label": "{{TIME}} kadar geri sar"
+						}
+					}
+				},
+				"hideEndScreenCardsButton": {
+					"button": {
+						"label": "Bitiş ekranı kartlarını gizle",
+						"toggle": {
+							"off": "Bitiş ekranı kartlarını göster",
+							"on": "Bitiş ekranı kartlarını gizle"
+						}
+					}
+				},
+				"loopButton": {
+					"button": {
+						"label": "Tekrarla",
+						"toggle": {
+							"off": "Tekrarlama kapalı",
+							"on": "Tekrarlama açık"
+						}
+					}
+				},
+				"maximizePlayerButton": {
+					"button": {
+						"label": "Ekranı kapla",
+						"toggle": {
+							"off": "Tam ekran kapalı",
+							"on": "Tam ekran açıl"
+						}
+					}
+				},
+				"openTranscriptButton": {
+					"button": {
+						"label": "Transkripti Aç"
+					}
+				},
+				"playbackSpeedButtons": {
+					"buttons": {
+						"decreasePlaybackSpeedButton": {
+							"label": "Hızı {{SPEED}} değerine düşür"
+						},
+						"increasePlaybackSpeedButton": {
+							"label": "Hızı {{SPEED}} değerine çıkar"
+						}
+					},
+					"extras": {
+						"decreaseLimit": "Daha fazla düşüremezsin ({{SPEED}})",
+						"increaseLimit": "Daha fazla artıramazsın ({{SPEED}})"
+					}
+				},
+				"playlistLength": {
+					"title": "Bazı videolar gizliyse veya tam uzunluğa ulaşmak için yeterli sayıda video yüklemediyseniz, toplam uzunluk doğru olmayabilir."
+				},
+				"playlistManagementButtons": {
+					"extras": {
+						"failedToMarkAsUnwatched": "Videoyu izlenmemiş olarak işaretleme başarısız oldu",
+						"failedToRemoveVideo": "Video kaldırılamadı",
+						"markAsUnwatched": "İzlenmemiş olarak işaretle",
+						"markingAsUnwatched": "İzlenmemiş olarak işaretleniyor…",
+						"removeVideo": "Videoyu kaldır",
+						"removingVideo": "Video kaldırılıyor…"
+					}
+				},
+				"saveToWatchLaterButton": {
+					"extras": {
+						"failedToSaveVideo": "Videoyu daha sonra izlemek üzere kaydetme işlemi başarısız oldu",
+						"saveVideo": "Daha sonra izlemek için kaydet",
+						"savingVideo": "Daha sonra izlemek için kaydediliyor…"
+					}
+				},
+				"screenshotButton": {
+					"button": {
+						"label": "Ekran görüntüsü"
+					},
+					"extras": {
+						"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
+					}
+				},
+				"videoHistory": {
+					"extras": {
+						"resumeButton": "Devam Et",
+						"resumePromptClose": "Kapat"
+					}
+				},
+				"volumeBoostButton": {
+					"button": {
+						"label": "Ses Yükseltici",
+						"toggle": {
+							"off": "Ses Yükseltici Devredışı",
+							"on": "Ses Yükseltici Aktif"
+						}
+					}
+				}
+			}
+		},
+		"options": {
+			"extras": {
+				"bottomButtons": {
+					"clear": {
+						"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
+						"value": "Veriyi Temizle"
+					},
+					"confirm": {
+						"title": "Ayarı sıfırlamayı onayla",
+						"value": "Onayla"
+					},
+					"openTab": {
+						"title": "Uzantı ayarlarını yeni bir sekmede açın"
+					},
+					"reset": {
+						"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
+						"value": "Sıfırla"
+					}
+				},
+				"buttonPlacement": {
+					"select": {
+						"buttonNames": {
+							"copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
+							"decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
+							"forwardButton": "Hızlı İleri düğmesi",
+							"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
+							"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
+							"loopButton": "Döngü düğmesi",
+							"maximizePlayerButton": "Tam ekran düğmesi",
+							"openTranscriptButton": "Transkripti Aç butonu",
+							"rewindButton": "Geri sarma düğmesi",
+							"screenshotButton": "Ekran görüntüsü düğmesi",
+							"volumeBoostButton": "Ses güçlendirme düğmesi"
+						},
+						"options": {
+							"below_player": {
+								"placement": "oynatıcı kontrollerinin altında",
+								"value": "Oynatıcının altında"
+							},
+							"feature_menu": {
+								"placement": "özellik menüsünde",
+								"value": "Özellik Menüsü"
+							},
+							"player_controls_left": {
+								"placement": "oynatıcı kontrollerinin sol tarafında",
+								"value": "Sol Kontroller"
+							},
+							"player_controls_right": {
+								"placement": "oynatıcı kontrollerinin sağ tarafında",
+								"value": "Sağ Kontroller"
+							}
+						},
+						"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
+					},
+					"title": "Düğme yerleşim ayarları"
+				},
+				"clearData": {
+					"allDataDeleted": "Tüm veriler silindi.",
+					"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
+				},
+				"featureMenu": {
+					"openType": {
+						"select": {
+							"label": "Menü Aktivasyon Türü",
+							"options": {
+								"click": "Tıkla",
+								"hover": "İmleci Üzerine Getir"
+							},
+							"title": "Özellik menüsünü etkinleştirme yöntemini seçin"
+						},
+						"title": "Özellik menüsü ayarları"
+					}
+				},
+				"importExportSettings": {
+					"exportButton": {
+						"success": "Ayarlar başarıyla dışa aktarıldı",
+						"title": "Ayarları JSON dosyasından içe aktar",
+						"value": "Ayarları Dışa Aktar"
+					},
+					"importButton": {
+						"error": {
+							"unknown": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\nBilinmeyen bir hata oluştu.",
+							"validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
+						},
+						"success": "Ayarlar başarıyla içe aktarıldı",
+						"title": "Ayarları JSON dosyasından içe aktar",
+						"value": "Ayarları İçe Aktar"
+					}
+				},
+				"language": {
+					"select": {
+						"label": "Dil",
+						"title": "Uzuntı için kullanılacak dil"
+					},
+					"title": "Dil"
+				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
+				"optionDisabled": {
+					"either": {
+						"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+						"separator": " veya "
+					},
+					"plural": {
+						"label": "Bu seçeneği yapılandırmak için {{OPTIONS}} öğesini etkinleştirin",
+						"separator": " ve "
+					},
+					"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
+					"specificOption": {
+						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
+						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
+					}
+				},
+				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
+				"settingSearch": {
+					"placeholder": "Bir ayar arayın"
+				},
+				"youtubeDataApiV3Key": {
+					"getApiKeyLinkText": "Buradan bir tane alabilirsiniz",
+					"input": {
+						"label": "API Anahtarı",
+						"title": "Youtube Veri API V3 anahtarınızı girin."
+					},
+					"title": "YouTube API V3 anahtarı"
+				}
+			},
+			"notifications": {
+				"error": {
+					"optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
+					"scrollWheelHoldModifierKey": {
+						"sameKey": {
+							"speedControl": "Kaydırma tekerleği hız kontrolü için kullanılan değiştirici tuş, kaydırma tekerleği ses kontrolü için kullanılan değiştirici tuşla aynı olamaz.",
+							"volumeControl": "Kaydırma tekerleği ile ses düzeyi kontrolü için kullanılan değiştirici tuş, kaydırma hızı kontrolü için kullanılan değiştirici tuşla aynı olamaz."
+						}
+					}
+				},
+				"info": {
+					"reset": "Tüm seçenekler varsayılan değerlerine sıfırlandı.\nArtık \"Onayla\" düğmesine tıklayarak değişiklikleri kaydedebilir veya bu sayfayı kapatarak iptal edebilir veya bu bildirimi göz ardı edebilirsiniz."
+				},
+				"success": {
+					"saved": "Seçenekler kaydedildi."
+				}
+			}
+		}
+	},
+	"settings": {
+		"sections": {
+			"customCSS": {
+				"enable": {
+					"label": "Özel CSS'yi etkinleştir",
+					"title": "Özel CSS'nin sayfaya uygulanmasını sağlar"
+				},
+				"extras": {
+					"collapse": "Düzenleyiciyi Daralt",
+					"expand": "Düzenleyiciyi Genişlet",
+					"noProblems": "Hiç bir sorun bulunamadı."
+				},
+				"title": "Özel CSS Ayarları"
+			},
+			"deepDarkCSS": {
+				"enable": {
+					"label": "Seçilen temayı etkinleştir",
+					"title": "Sayfa için seçilen temayı etkinleştirin"
+				},
+				"extras": {
+					"author": "Yazar",
+					"co-authors": "Ortak yazarlar"
+				},
+				"settings": {
+					"colorShadow": {
+						"label": "Gölge rengi",
+						"title": "Gölge rengi"
+					},
+					"dimmerText": {
+						"label": "İkincil metin rengi",
+						"title": "İkincil metin rengi"
+					},
+					"hoverBackground": {
+						"label": "Üzerine gelindiğindeki arka plan rengi",
+						"title": "Üzerine gelindiğindeki arka plan rengi"
+					},
+					"mainBackground": {
+						"label": "Ana arka plan rengi",
+						"title": "Ana arka plan rengi"
+					},
+					"mainColor": {
+						"label": "Vurgulama rengi",
+						"title": "Vurgulama rengi"
+					},
+					"mainText": {
+						"label": "Ana metin rengi",
+						"title": "Ana metin için renk"
+					},
+					"secondBackground": {
+						"label": "İkincil arka plan rengi",
+						"title": "İkincil arka plan rengi"
+					},
+					"theme": {
+						"select": {
+							"label": "Tema seç",
+							"title": "Sayfa için uygulanacak bir tema seçin"
+						}
+					}
+				},
+				"title": "YouTube deep dark ayarları"
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "İleri/geri sarma düğmeleri",
+					"title": "Video oynatıcısına ileri ve geri sarma düğmeleri ekler"
+				},
+				"settings": {
+					"time": {
+						"label": "İleri/geri sarma süresi",
+						"title": "Videoyu ileri/geri sarmak için atlanacak süre"
+					}
+				},
+				"title": "İleri/geri sarma düğmesi ayarları"
+			},
+			"miscellaneous": {
+				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Otomatik tiyatro modu",
+							"title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+						}
+					},
+					"automaticallyDisableAmbientMode": {
+						"enable": {
+							"label": "Ortam modunu otomatik olarak devre dışı bırak",
+							"title": "Bir video yüklediğinizde ortam modunu otomatik olarak devre dışı bırakır"
+						}
+					},
+					"automaticallyDisableAutoPlay": {
+						"enable": {
+							"label": "Otomatik oynatmayı, otomatik olarak devre dışı bırak",
+							"title": "Video yüklediğinizde otomatik oynatmayı devre dışı bırakır"
+						}
+					},
+					"automaticallyDisableClosedCaptions": {
+						"enable": {
+							"label": "Kapalı altyazıları otomatik olarak devre dışı bırak",
+							"title": "Bir video yüklendiğinde kapalı altyazıları otomatik olarak devre dışı bırakır"
+						}
+					},
+					"automaticallyEnableClosedCaptions": {
+						"enable": {
+							"label": "Kapalı altyazıları otomatik olarak etkinleştir",
+							"title": "Bir videoyu yüklediğinizde altyazıları otomatik olarak etkinleştirir"
+						}
+					},
+					"automaticallyMaximizePlayer": {
+						"enable": {
+							"label": "Oynatıcıyı otomatik olarak azami boyuta getir",
+							"title": "Bir video yüklediğinizde oynatıcıyı otomatik olarak büyütür"
+						}
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"enable": {
+							"label": "Bitiş ekranında otomatik olarak daha fazla video göster",
+							"title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
+						}
+					},
+					"copyTimestampUrlButton": {
+						"enable": {
+							"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
+							"title": "Video URL'sini zaman damgasıyla kopyalar (?t=123)"
+						}
+					},
+					"defaultToOriginalAudioTrack": {
+						"enable": {
+							"label": "Varsayılan olarak orijinal ses parçasına dön",
+							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
+						}
+					},
+					"hideArtificialIntelligenceSummary": {
+						"enable": {
+							"label": "AI özetini gizle",
+							"title": "Videoların altındaki yapay zeka özetini gizler"
+						}
+					},
+					"hideEndScreenCards": {
+						"enable": {
+							"label": "Bitiş ekranı kartlarını gizle",
+							"title": "Video'nun sonundaki kartları gizler"
+						}
+					},
+					"hideEndScreenCardsButton": {
+						"enable": {
+							"label": "Bitiş ekranı kartlarını gizleme düğmesi",
+							"title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
+						}
+					},
+					"hideLiveStreamChat": {
+						"enable": {
+							"label": "Canlı yayın sohbetini gizle",
+							"title": "Canlı yayın sohbetini gizler"
+						}
+					},
+					"hideMembersOnlyVideos": {
+						"enable": {
+							"label": "Üyelere özel videoları gizle",
+							"title": "Sadece üyelere görünen videoları gizle"
+						}
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"enable": {
+							"label": "Resmi Sanatçı Videolarını Gizle",
+							"title": "Ana Sayfada Resmi Sanatçı Videolarını Gizle"
+						}
+					},
+					"hidePaidPromotionBanner": {
+						"enable": {
+							"label": "Ücretli tanıtım afişini gizle",
+							"title": "Ücretli tanıtım içeren bir videoyu izlediğinizde görünen başlığı gizler"
+						}
+					},
+					"hidePlayables": {
+						"enable": {
+							"label": "Oynatılabilirleri gizle",
+							"title": "Tüm oynatılabilir öğeleri gizle"
+						}
+					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"enable": {
+							"label": "Ana sayfadaki oynatma listelerini gizle",
+							"title": "Ana sayfadaki oynatma listelerinden kurtulun"
+						}
+					},
+					"hideScrollbar": {
+						"enable": {
+							"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
+							"title": "Sayfa kaydırma çubuğunu gizler"
+						}
+					},
+					"hideShorts": {
+						"enable": {
+							"label": "Kısa videoları gizle",
+							"title": "Tüm kısa videoları gizler"
+						}
+					},
+					"hideSidebarRecommendedVideos": {
+						"enable": {
+							"label": "Önerilen videoları gizle",
+							"title": "Video önerilerini gösteren kenar çubuğunu gizler"
+						}
+					},
+					"hideTranslateComment": {
+						"enable": {
+							"label": "Yorumu Çevir'i Gizle Butonu",
+							"title": "Yorumlar altındaki 'Dile Çevir' düğmesini gizler"
+						}
+					},
+					"loopButton": {
+						"enable": {
+							"label": "Tekrarlama düğmesi",
+							"title": "İzlediğiniz videoyu döngüye almak için özellik menüsüne bir düğme ekler"
+						}
+					},
+					"maximizePlayerButton": {
+						"enable": {
+							"label": "Oynatıcıyı tam ekran yapma düğmesini etkinleştir",
+							"title": "Oynatıcıyı büyütmek için özellik menüsüne bir düğme ekler"
+						}
+					},
+					"openTranscriptButton": {
+						"enable": {
+							"label": "Not dökümü düğmesini gizle",
+							"title": "İzlediğiniz videonun metnini açmak için özellik menüsüne bir düğme ekler"
+						}
+					},
+					"openYouTubeSettingsOnHover": {
+						"enable": {
+							"label": "Fare ile üzerine gelerek Youtube ayarlarını açın",
+							"title": "Ayarlar düğmesinin üzerine gelindiğinde YouTube ayarlar menüsünü açar"
+						}
+					},
+					"pauseBackgroundPlayers": {
+						"enable": {
+							"label": "Arka plan oynatıcılarını duraklat",
+							"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
+						}
+					},
+					"remainingTime": {
+						"enable": {
+							"label": "Kalan süre",
+							"title": "İzlediğiniz videonun kalan süresini gösterir"
+						}
+					},
+					"rememberVolume": {
+						"enable": {
+							"label": "Son ses hacmini hatırla",
+							"title": "İzlediğiniz son videonun ses seviyesini hatırlar ve yeni bir video açtığınızda bu ses seviyesine ayarlar"
+						}
+					},
+					"removeRedirect": {
+						"enable": {
+							"label": "YouTube yönlendirme bağlantılarını kaldır",
+							"title": "Yönlendirme uyarı diyaloğunu atlayarak YouTube yönlendirmesini gerçek URL'lerle değiştirir"
+						}
+					},
+					"restoreFullscreenScrolling": {
+						"enable": {
+							"label": "Tam ekran kaydırmayı geri yükle",
+							"title": "Tam ekran modunda kaydırmayı geri yükler"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Daha Sonra İzle'ye kaydetme düğmesini etkinleştir",
+							"title": "Ana Sayfa ve Abonelikler videolarına, oynatma listesine kaydetmek için videoyu ‘Daha Sonra İzle’ düğmesi ekler"
+						}
+					},
+					"shareShortener": {
+						"enable": {
+							"label": "YouTube video paylaşım bağlantısını kısalt",
+							"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
+						}
+					},
+					"shortsAutoScroll": {
+						"enable": {
+							"label": "Kısa videoya otomatik kaydır",
+							"title": "Bir sonraki kısa videoya otomatik kaydır"
+						}
+					},
+					"skipContinueWatching": {
+						"enable": {
+							"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
+							"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
+						}
+					}
+				},
+				"title": "Çeşitli ayarlar"
+			},
+			"onScreenDisplaySettings": {
+				"settings": {
+					"color": {
+						"label": "Renk",
+						"select": {
+							"options": {
+								"blue": "Mavi",
+								"green": "Yeşil",
+								"orange": "Turuncu",
+								"pink": "Pembe",
+								"purple": "Mor",
+								"red": "Kırmızı",
+								"white": "Beyaz",
+								"yellow": "Sarı"
+							}
+						},
+						"title": "Ekran göstergesinin rengini seçin"
+					},
+					"hide": {
+						"label": "Gecikmeyi Gizle",
+						"title": "Ekran görüntüsünü otomatik olarak gizlemeden önce geçen süreyi milisaniye cinsinden belirtin"
+					},
+					"opacity": {
+						"label": "Saydamlık",
+						"title": "Ekrandaki gösterimin saydamlığını ayarlayın"
+					},
+					"padding": {
+						"label": "İç Boşluk",
+						"title": "Ekran Üzeri Gösterge etrafındaki boşluğu piksel cinsinden ayarlayın. Bu ayar özellikle köşe Ekran Üzeri Gösterge için geçerlidir."
+					},
+					"position": {
+						"label": "Konum",
+						"select": {
+							"options": {
+								"bottom_left": "Sol Alt",
+								"bottom_right": "Sağ Alt",
+								"center": "Orta",
+								"top_left": "Sol Üst",
+								"top_right": "Sağ Üst"
+							}
+						},
+						"title": "Ekran görüntüleme konumunu seçin"
+					},
+					"type": {
+						"label": "Tür",
+						"select": {
+							"options": {
+								"circle": "Daire",
+								"line": "Satır",
+								"no_display": "Ekran yok",
+								"text": "Metin"
+							}
+						},
+						"title": "Ekran görüntüleme türünü seçin"
+					}
+				},
+				"title": "Ekran üstü görüntü ayarları"
+			},
+			"playerQuality": {
+				"enable": {
+					"label": "Otomatik kalite ayarlamayı etkinleştir",
+					"title": "Video kalitesini seçilen seviyeye otomatik olarak ayarlar."
+				},
+				"settings": {
+					"quality": {
+						"select": {
+							"label": "Oynatma kalitesi",
+							"title": "Videonun ayarlanacağı kalite"
+						}
+					},
+					"qualityFallbackStrategy": {
+						"select": {
+							"label": "Kalite geri dönüş stratejisi",
+							"options": {
+								"higher": "Daha yüksek",
+								"lower": "Daha düşük"
+							},
+							"title": "Seçilen kalite mevcut değilse kullanılacak strateji"
+						}
+					}
+				},
+				"title": "Otomatik kalite ayarları"
+			},
+			"playerSpeed": {
+				"enable": {
+					"label": "Zorunlu oynatma hızını etkinleştir",
+					"title": "Video hızını aşağıda seçtiğiniz hıza ayarlar"
+				},
+				"settings": {
+					"buttons": {
+						"label": "Oynatma hızı ayarları",
+						"select": {
+							"label": "Oynatma düğmelerinin hızı",
+							"title": "Tıklama başına değiştirilecek hız miktarı"
+						},
+						"title": "İzlediğiniz videonun oynatma hızını artırmak veya azaltmak için düğmeler ekler"
+					},
+					"speed": {
+						"select": {
+							"label": "Oynatma hızı",
+							"title": "Video oynatma hızını ayarlar"
+						}
+					}
+				},
+				"title": "Oynatma hızı ayarları"
+			},
+			"playlistLength": {
+				"enable": {
+					"label": "Çalma listesinin uzunluk bilgilerini göster",
+					"title": "Oynatma listesinin toplam, izlenen ve ne kalan uzunluğunu gösterir."
+				},
+				"settings": {
+					"wayToGetLength": {
+						"select": {
+							"label": "Oynatma listesi uzunluğunu alma yöntemi",
+							"title": "Oynatma listesi uzunluk bilgisi alma yolu (Bir hata oluşursa API yöntemi HTML'e geri dönecek)"
+						}
+					},
+					"wayToGetWatchTime": {
+						"select": {
+							"label": "İzlenme süresini alma yöntemi",
+							"options": {
+								"duration": "Video Uzunluğu",
+								"youtube": "Video İzlenme Süresi"
+							},
+							"title": "İzlenen süreyi alma yolu (Video Uzunluğu türü yalnızca izleme sayfasında kullanılır)"
+						}
+					}
+				},
+				"title": "Oynatma listesi uzunluk ayarları"
+			},
+			"playlistManagementButtons": {
+				"settings": {
+					"markAsUnwatchedButton": {
+						"enable": {
+							"label": "İzlenmeyen olarak işaretle düğmesi",
+							"title": "Videoları izlenmemiş olarak işaretlemek için bir düğme ekler"
+						}
+					},
+					"removeVideoButton": {
+						"enable": {
+							"label": "Video düğmesini kaldır",
+							"title": "Oynatma listesinden videoları kaldırmak için bir düğme ekler"
+						}
+					}
+				},
+				"title": "Oynatma listesini yönetme ayarları"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "Ekran görüntüsü tuşunu etkinleştir",
+					"title": "Videonun ekran görüntüsünü almak için oynatıcıya bir düğme ekler"
+				},
+				"settings": {
+					"format": {
+						"label": "Ekran görüntüsü formatı",
+						"title": "Ekran görüntüsünün kaydedileceği format"
+					},
+					"saveAs": {
+						"select": {
+							"label": "Ekran görüntüsü kaydetme türü",
+							"options": {
+								"both": "Her İkisi",
+								"clipboard": "Pano",
+								"file": "Dosya"
+							},
+							"title": "Ekran görüntüsü kaydetme türü"
+						}
+					}
+				},
+				"title": "Ekran görüntüsü ayarları"
+			},
+			"scrollWheelSpeedControl": {
+				"enable": {
+					"label": "Kaydırma tekerleği hız kontrolü",
+					"title": "Kaydırma tekerleği ile hız ayarını etkinleştirmek için değiştirici tuşlarından birine basın."
+				},
+				"extras": {
+					"optionLabel": "{{KEY}} anahtarı"
+				},
+				"settings": {
+					"adjustmentSteps": {
+						"label": "Kaydırma başına hız değişimi",
+						"title": "Kaydırma başına hız değiştirmeyi ayarlar"
+					},
+					"modifierKey": {
+						"select": {
+							"label": "Düzenleyici anahtar",
+							"title": "Kullanılacak kısayol düğmesi"
+						}
+					}
+				},
+				"title": "Kaydırma tekerleği için hız kontrolü ayarları"
+			},
+			"scrollWheelVolumeControl": {
+				"enable": {
+					"label": "Kaydırma tekerleği ile ses kontrolü",
+					"title": "İzlediğiniz videonun ses düzeyini kontrol etmek için kaydırma tekerleğini kullanmanızı sağlar"
+				},
+				"extras": {
+					"optionLabel": "{{KEY}} anahtarı"
+				},
+				"settings": {
+					"adjustmentSteps": {
+						"label": "Her kaydırmada değiştirilecek ses düzeyi",
+						"title": "Her kaydırmada değiştirilecek ses düzeyini ayarlayın"
+					},
+					"holdModifierKey": {
+						"label": "Değiştirici tuşa basılı tutulduğunda",
+						"select": {
+							"label": "Düzenleyici anahtar",
+							"title": "Kullanılacak kısayol düğmesi"
+						},
+						"title": "Kaydırma tekerleği ile ses düzeyi ayarını etkinleştirmek için değiştirici tuşlardan birine basın"
+					},
+					"holdRightClick": {
+						"label": "Etkinleştirmek için sağ tuşa basılı tutun",
+						"title": "Kaydırma tekerleği ile ses kontrolünü etkinleştirmek için farenin sağ düğmesine basılı tutun"
+					}
+				},
+				"title": "Kaydırma tekerleği ile ses seviyesi kontrolü ayarları"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "İzlenen videoları takip edin",
+					"title": "İzlediğiniz videolarda en son nerede kaldığınızı takip eder ve oynatmaya oradan devam etmenizi sağlar"
+				},
+				"settings": {
+					"resumeType": {
+						"select": {
+							"label": "Devam etme türü",
+							"options": {
+								"automatic": "Otomatik",
+								"prompt": "İpucu"
+							},
+							"title": "Videoları nasıl devam ettirmek istediğinizi seçin"
+						}
+					}
+				},
+				"title": "Video geçmişi ayarları"
+			},
+			"volumeBoost": {
+				"enable": {
+					"label": "Ses güçlendirmeyi etkinleştir",
+					"title": "Ses güçlendirmeyi etkinleştir"
+				},
+				"settings": {
+					"amount": {
+						"label": "Ses güçlendirme miktarı (dB)",
+						"title": "Ses güçlendirme miktarı"
+					},
+					"mode": {
+						"select": {
+							"label": "Ses güçlendirme modu",
+							"options": {
+								"global": "Genel",
+								"perVideo": "Video başına"
+							},
+							"title": "Ses artırmanın nasıl uygulanacağını seçin. 'Video başına', özellik menüsünde her video için ayrı ayrı güçlendirmenin etkinleştirilmesine olanak tanır. 'Genel', ses artırma etkinleştirildiğinde tüm videolara güçlendirme uygular."
+						}
+					}
+				},
+				"title": "Ses güçlendirme ayarları"
+			}
+		}
+	}
 }
