@@ -136,7 +136,7 @@ export function createPlaylistLengthUIElement(
 		videoTimeDisplay.textContent = `${formatDuration(watchedTimeSeconds)} / ${formatDuration(totalTimeSeconds)} (- ${formatDuration(totalTimeSeconds - watchedTimeSeconds)})`;
 		percentageWatched.textContent = `${watchedPercentage}%`;
 	};
-	wrapper.title = window.i18nextInstance.t("pages.content.features.playlistLength.title");
+	wrapper.title = window.i18nextInstance.t((translations) => translations.pages.content.features.playlistLength.title);
 	updateElement(initialState);
 	return {
 		element: wrapper,

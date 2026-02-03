@@ -24,7 +24,10 @@ async function changeMaximizeButtonToOff() {
 	if (icon && typeof icon === "object" && "off" in icon) {
 		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
 	}
-	updateFeatureButtonTitle("maximizePlayerButton", window.i18nextInstance.t("pages.content.features.maximizePlayerButton.button.toggle.off"));
+	updateFeatureButtonTitle(
+		"maximizePlayerButton",
+		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle.off)
+	);
 }
 function hideHeader() {
 	const header = document.querySelector<HTMLElement>("#masthead-container");

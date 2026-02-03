@@ -34,7 +34,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				element: screenshotButton,
 				featureName: "screenshotButton",
 				id: "yte-feature-screenshotButton-tooltip",
-				text: window.i18nextInstance.t("pages.content.features.screenshotButton.copiedToClipboard")
+				text: window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.extras.copiedToClipboard)
 			});
 			listener();
 			try {
@@ -103,7 +103,7 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 	await addFeatureButton(
 		"screenshotButton",
 		screenshotButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.screenshotButton.button.label"),
+		window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
 		getFeatureIcon("screenshotButton", screenshotButtonPlacement),
 		screenshotButtonClickListener,
 		false

@@ -1,4 +1,4 @@
-import type { configurationId, Nullable, TOptionsKeys } from "@/src/types";
+import type { configurationId, Nullable, TSelectorFunc } from "@/src/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
@@ -15,15 +15,15 @@ import { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInpu
 export type parentSetting =
 	| {
 			type: "either" | "plural";
-			value: TOptionsKeys[];
+			value: TSelectorFunc[];
 	  }
 	| {
 			type: "singular";
-			value: TOptionsKeys;
+			value: TSelectorFunc;
 	  }
 	| {
 			type: "specificOption";
-			value: TOptionsKeys;
+			value: TSelectorFunc;
 	  };
 type SettingInputProps<ID extends configurationId> = {
 	alwaysVisible?: boolean;
@@ -57,15 +57,17 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 						parentSetting: { type, value }
 					} = settingProps;
 					if (type === "singular") {
-						return t("settings.optionDisabled.singular", {
+						return t((translations) => translations.pages.options.extras.optionDisabled.singular, {
 							OPTION: t(value)
 						});
 					}
 					if (type === "specificOption") {
 						return t(value);
 					}
-					const options = value.map((option) => `'${t(option)}'`).join(t(`settings.optionDisabled.${type}.separator`));
-					return t(`settings.optionDisabled.${type}.label`, { OPTIONS: options });
+					const options = value
+						.map((option) => `'${t(option)}'`)
+						.join(t((translations) => translations.pages.options.extras.optionDisabled[type].separator));
+					return t((translations) => translations.pages.options.extras.optionDisabled[type].label, { OPTIONS: options });
 				})()}
 			>
 				<SettingInput {...settingProps} />
