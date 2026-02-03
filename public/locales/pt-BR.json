@@ -54,7 +54,7 @@
 						"label": "Maximização",
 						"toggle": {
 							"off": "Minimizar",
-							"on": "Maximizar"
+							"on": "Minimizar"
 						}
 					}
 				},
@@ -218,6 +218,10 @@
 					},
 					"title": "Idioma"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Ative o {{OPTIONS}} para configurar esta opção",
@@ -324,7 +328,7 @@
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Configurações YouTube Deep Dark"
 			},
 			"forwardRewindButtons": {
 				"enable": {
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Modo teatro automático",
+							"title": "Ativa automaticamente o modo teatro ao carregar um vídeo"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Desativar automaticamente o modo ambiente",
@@ -377,12 +387,6 @@
 							"title": "Mostra automaticamente mais vídeos na tela final do vídeo"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Modo teatro automático",
-							"title": "Ativa automaticamente o modo teatro ao carregar um vídeo"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Copiar URL do vídeo com o botão de minutagem",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Retornar à faixa de vídeo original",
 							"title": "Sempre retornar à faixa de vídeo original"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Ativar botão \"Assistir mais tarde\"",
-							"title": "Adiciona um botão aos vídeos da página inicial e das inscrições para salvar o vídeo na lista de reprodução \"Assistir mais tarde\""
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -533,6 +531,12 @@
 							"title": "Restaura a rolagem da página no modo de tela cheia"
 						}
 					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Ativar botão \"Assistir mais tarde\"",
+							"title": "Adiciona um botão aos vídeos da página inicial e das inscrições para salvar o vídeo na lista de reprodução \"Assistir mais tarde\""
+						}
+					},
 					"shareShortener": {
 						"enable": {
 							"label": "Encurtar link de compartilha de vídeo",
@@ -610,7 +614,7 @@
 						"title": "Seleciona o tipo de exibição na tela"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "Configurações de exibição na tela"
 			},
 			"playerQuality": {
 				"enable": {
@@ -700,7 +704,7 @@
 						}
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Configurações de gerenciamento de listas de reprodução"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Tipo de armazenamento da captura de tela",
 							"options": {
 								"both": "Ambos (Arquivo e Área de Transferência)",
 								"clipboard": "Área de transferência",
 								"file": "Arquivo"
 							},
-							"label": "Tipo de armazenamento da captura de tela",
 							"title": "O tipo de armazenamento da captura de tela"
 						}
 					}

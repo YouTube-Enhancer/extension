@@ -141,6 +141,10 @@ interface EnUS {
 					select: { label: "Language"; title: "The language to use for the extension" };
 					title: "Language";
 				};
+				openSettingsOnMajorOrMinorVersionChange: {
+					label: "Open settings page on update";
+					title: "Opens the settings page when a major or minor version of YouTube Enhancer is installed";
+				};
 				optionDisabled: {
 					either: { label: "Enable {{OPTIONS}} to configure this option"; separator: " or " };
 					plural: { label: "Enable {{OPTIONS}} to configure this option"; separator: " and " };

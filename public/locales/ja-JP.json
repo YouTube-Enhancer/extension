@@ -218,6 +218,10 @@
 					},
 					"title": "言語"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Enable {{OPTIONS}} to configure this option",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "自動シアターモード",
+							"title": "動画の読み込み時に自動的にシアターモードを有効にする"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "シネマティック ライティングを自動的に無効にする",
@@ -377,12 +387,6 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "自動シアターモード",
-							"title": "動画の読み込み時に自動的にシアターモードを有効にする"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "タイムスタンプ付きの動画URLをコピーのボタン",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "オリジナルのオーディオトラックをデフォルトにする",
 							"title": "常にオリジナルのオーディオトラックをデフォルトにする"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "全画面表示のスクロールを復元",
 							"title": "全画面表示モードでスクロールを復元します"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "スクリーンショットセーブ型",
 							"options": {
 								"both": "Both (File and Clipboard)",
 								"clipboard": "クリップボード",
 								"file": "ファイル"
 							},
-							"label": "スクリーンショットセーブ型",
 							"title": "スクリーンショットのセーブ型"
 						}
 					}

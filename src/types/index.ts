@@ -291,6 +291,7 @@ export type configuration = {
 	feature_menu_open_type: FeatureMenuOpenType;
 	forward_rewind_buttons_time: number;
 	language: AvailableLocales;
+	open_settings_on_major_or_minor_version_change: boolean;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;
 	osd_display_opacity: number;

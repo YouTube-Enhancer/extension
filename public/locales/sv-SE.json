@@ -1,5 +1,5 @@
 {
-	"langCode": "en-US",
+	"langCode": "sv-SE",
 	"langName": "Svenska (SV)",
 	"messages": {
 		"resumingVideo": "Återupptar video vid {{VIDEO_TIME}}",
@@ -218,6 +218,10 @@
 					},
 					"title": "Språk"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Aktivera {{OPTIONS}} för att konfigurera detta alternativ",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Automatiskt teaterläge",
+							"title": "Aktiverar automatiskt teaterläge när du startar en video"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Inaktivera biobelysning automatiskt",
@@ -377,12 +387,6 @@
 							"title": "Visa automatiskt fler videor på slutskärmen när du laddar en video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Automatiskt teaterläge",
-							"title": "Aktiverar automatiskt teaterläge när du startar en video"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Kopiera videons webbadress med tidsstämpelknappen",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Standard till originalljudspår",
 							"title": "Använd alltid originalljudspåret som standard"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Aktivera knappen spara för att titta på senare",
-							"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "Återställ fullskärmsrullning",
 							"title": "Återställer rullning i helskärmsläge"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Aktivera knappen spara för att titta på senare",
+							"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Skärmbildstyp att spara i",
 							"options": {
 								"both": "Båda (fil och urklipp)",
 								"clipboard": "Urklipp",
 								"file": "Fil"
 							},
-							"label": "Skärmbildstyp att spara i",
 							"title": "Skärmbildens spartyp"
 						}
 					}

@@ -218,6 +218,10 @@
 					},
 					"title": "Lingua"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Abilita {{OPTIONS}} per configurare questa opzione",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Modalità teatro automatica",
+							"title": "Attiva automaticamente la modalità teatro quando carichi un video"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Disabilita automaticamente la modalità ambiente",
@@ -377,12 +387,6 @@
 							"title": "Mostra automaticamente più video sulla schermata finale quando si carica un video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Modalità teatro automatica",
-							"title": "Attiva automaticamente la modalità teatro quando carichi un video"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Traccia audio originale predefinita",
 							"title": "Traccia audio originale sempre predefinita"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Abilita il pulsante del salvataggio per guardare più tardi",
-							"title": "Aggiunge un pulsante ai video Home e Abbonamenti per salvare il video nella lista riproduzioni 'Guarda più tardi'"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "Ripristina scorrimento a schermo intero",
 							"title": "Ripristina lo scorrimento nella modalità schermo intero"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Abilita il pulsante del salvataggio per guardare più tardi",
+							"title": "Aggiunge un pulsante ai video Home e Abbonamenti per salvare il video nella lista riproduzioni 'Guarda più tardi'"
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Tipo salvataggio schermata",
 							"options": {
 								"both": "Entrambi (File e Appunti)",
 								"clipboard": "Appunti",
 								"file": "File"
 							},
-							"label": "Tipo salvataggio schermata",
 							"title": "Il tipo di salvataggio della schermata"
 						}
 					}
