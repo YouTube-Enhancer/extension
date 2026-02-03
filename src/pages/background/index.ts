@@ -3,9 +3,12 @@ import type { ContentToBackgroundSendOnlyMessageMappings } from "@/src/types";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 
 import { version } from "../../../package.json";
-
-chrome.runtime.onInstalled.addListener((details) => {
+import { setDefaultValues } from "../../defaults";
+chrome.runtime.onInstalled.addListener(async (details) => {
+	const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } = (await setDefaultValues().catch(() => void 0)) ?? {};
 	const { previousVersion, reason } = details;
+	console.log(`Previous version: ${previousVersion}, Reason: ${reason}`, openSettingsOnMajorOrMinorUpdate);
+	if (!openSettingsOnMajorOrMinorUpdate) return;
 	switch (reason) {
 		case chrome.runtime.OnInstalledReason.INSTALL: {
 			// Open the options page after install

@@ -82,19 +82,19 @@
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+						"failedToMarkAsUnwatched": "Videoyu izlenmemiş olarak işaretleme başarısız oldu",
 						"failedToRemoveVideo": "Video kaldırılamadı",
-						"markAsUnwatched": "Mark as unwatched",
-						"markingAsUnwatched": "Marking as unwatched…",
+						"markAsUnwatched": "İzlenmemiş olarak işaretle",
+						"markingAsUnwatched": "İzlenmemiş olarak işaretleniyor…",
 						"removeVideo": "Videoyu kaldır",
 						"removingVideo": "Video kaldırılıyor…"
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Failed to save video to Watch Later",
-						"saveVideo": "Save to Watch Later",
-						"savingVideo": "Saving to Watch Later…"
+						"failedToSaveVideo": "Videoyu daha sonra izlemek üzere kaydetme işlemi başarısız oldu",
+						"saveVideo": "Daha sonra izlemek için kaydet",
+						"savingVideo": "Daha sonra izlemek için kaydediliyor…"
 					}
 				},
 				"screenshotButton": {
@@ -176,7 +176,7 @@
 						},
 						"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
 					},
-					"title": "Button placement settings"
+					"title": "Düğme yerleşim ayarları"
 				},
 				"clearData": {
 					"allDataDeleted": "Tüm veriler silindi.",
@@ -198,7 +198,7 @@
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Ayarlar başarıyla dışa aktarıldı",
-						"title": "Ayarları JSON dosyasına aktar",
+						"title": "Ayarları JSON dosyasından içe aktar",
 						"value": "Ayarları Dışa Aktar"
 					},
 					"importButton": {
@@ -207,7 +207,7 @@
 							"validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
 						},
 						"success": "Ayarlar başarıyla içe aktarıldı",
-						"title": "Ayarları JSON dosyasına aktar",
+						"title": "Ayarları JSON dosyasından içe aktar",
 						"value": "Ayarları İçe Aktar"
 					}
 				},
@@ -217,6 +217,10 @@
 						"title": "Uzuntı için kullanılacak dil"
 					},
 					"title": "Dil"
+				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
 				},
 				"optionDisabled": {
 					"either": {
@@ -230,7 +234,7 @@
 					"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 					"specificOption": {
 						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 					}
 				},
 				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -243,7 +247,7 @@
 						"label": "API Anahtarı",
 						"title": "Youtube Veri API V3 anahtarınızı girin."
 					},
-					"title": "YouTube API V3 key"
+					"title": "YouTube API V3 anahtarı"
 				}
 			},
 			"notifications": {
@@ -277,7 +281,7 @@
 					"expand": "Düzenleyiciyi Genişlet",
 					"noProblems": "Hiç bir sorun bulunamadı."
 				},
-				"title": "Custom CSS settings"
+				"title": "Özel CSS Ayarları"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -324,7 +328,7 @@
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "YouTube deep dark ayarları"
 			},
 			"forwardRewindButtons": {
 				"enable": {
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Otomatik tiyatro modu",
+							"title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Ortam modunu otomatik olarak devre dışı bırak",
@@ -349,8 +359,8 @@
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "Automatically disable autoplay",
-							"title": "Automatically disables autoplay when you load a video"
+							"label": "Otomatik oynatmayı, otomatik olarak devre dışı bırak",
+							"title": "Video yüklediğinizde otomatik oynatmayı devre dışı bırakır"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
@@ -367,20 +377,14 @@
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "Automatically maximize player",
+							"label": "Oynatıcıyı otomatik olarak azami boyuta getir",
 							"title": "Bir video yüklediğinizde oynatıcıyı otomatik olarak büyütür"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
-							"label": "Automatically show more videos on end screen",
-							"title": "Automatically shows more videos on end screen when you load a video"
-						}
-					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Otomatik tiyatro modu",
-							"title": "Bir video yüklediğinizde tiyatro modunu otomatik olarak etkinleştirir"
+							"label": "Bitiş ekranında otomatik olarak daha fazla video göster",
+							"title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Varsayılan olarak orijinal ses parçasına dön",
 							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -427,8 +425,8 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Üyelere özel videoları gizle",
+							"title": "Sadece üyelere görünen videoları gizle"
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -469,8 +467,8 @@
 					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
-							"label": "Hide recommended videos",
-							"title": "Hides the sidebar that recommends videos"
+							"label": "Önerilen videoları gizle",
+							"title": "Video önerilerini gösteren kenar çubuğunu gizler"
 						}
 					},
 					"hideTranslateComment": {
@@ -533,6 +531,12 @@
 							"title": "Tam ekran modunda kaydırmayı geri yükler"
 						}
 					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Daha Sonra İzle'ye kaydetme düğmesini etkinleştir",
+							"title": "Ana Sayfa ve Abonelikler videolarına, oynatma listesine kaydetmek için videoyu ‘Daha Sonra İzle’ düğmesi ekler"
+						}
+					},
 					"shareShortener": {
 						"enable": {
 							"label": "YouTube video paylaşım bağlantısını kısalt",
@@ -582,7 +586,7 @@
 					},
 					"padding": {
 						"label": "İç Boşluk",
-						"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
+						"title": "Ekran Üzeri Gösterge etrafındaki boşluğu piksel cinsinden ayarlayın. Bu ayar özellikle köşe Ekran Üzeri Gösterge için geçerlidir."
 					},
 					"position": {
 						"label": "Konum",
@@ -610,7 +614,7 @@
 						"title": "Ekran görüntüleme türünü seçin"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "Ekran üstü görüntü ayarları"
 			},
 			"playerQuality": {
 				"enable": {
@@ -689,18 +693,18 @@
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "Mark as unwatched button",
-							"title": "Adds a button to mark videos as unwatched"
+							"label": "İzlenmeyen olarak işaretle düğmesi",
+							"title": "Videoları izlenmemiş olarak işaretlemek için bir düğme ekler"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "Remove video button",
-							"title": "Adds a button to remove videos from the playlist"
+							"label": "Video düğmesini kaldır",
+							"title": "Oynatma listesinden videoları kaldırmak için bir düğme ekler"
 						}
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Oynatma listesini yönetme ayarları"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Ekran görüntüsü kaydetme türü",
 							"options": {
-								"both": "Both (File and Clipboard)",
+								"both": "Her İkisi",
 								"clipboard": "Pano",
 								"file": "Dosya"
 							},
-							"label": "Ekran görüntüsü kaydetme türü",
 							"title": "Ekran görüntüsü kaydetme türü"
 						}
 					}

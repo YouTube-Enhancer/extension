@@ -218,6 +218,10 @@
 					},
 					"title": "Язык"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Включите {{OPTIONS}} для настройки этого параметра",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Включить автоматический режим кинотеатра",
+							"title": "Автоматически включать режим кинотеатра при загрузке видео"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Автоматическое отключение режима освещения",
@@ -377,12 +387,6 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Включить автоматический режим кинотеатра",
-							"title": "Автоматически включать режим кинотеатра при загрузке видео"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Кнопка «Копировать URL видео с таймкодом»",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Выставлять оригинальную звуковую дорожку по умолчанию",
 							"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "Включить прокрутку в полноэкранном режиме",
 							"title": "Восстанавливает возможность прокрутки в полноэкранном режиме"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Тип сохранения скриншота",
 							"options": {
 								"both": "Both (File and Clipboard)",
 								"clipboard": "Буфер обмена",
 								"file": "Файл"
 							},
-							"label": "Тип сохранения скриншота",
 							"title": "Тип сохранения скриншота"
 						}
 					}

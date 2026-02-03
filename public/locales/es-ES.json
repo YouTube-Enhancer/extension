@@ -218,6 +218,10 @@
 					},
 					"title": "Idioma"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Activar {{OPTIONS}} para configurar esta opción",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Modo cine automático",
+							"title": "Activar automáticamente el modo cine al cargar un vídeo"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Desactivar automáticamente el modo ambiente",
@@ -377,12 +387,6 @@
 							"title": "Automáticamente mostrar más videos en la pantalla final, al terminar un video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Modo cine automático",
-							"title": "Activar automáticamente el modo cine al cargar un vídeo"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Botón para copiar la URL con marca de tiempo",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Usar pista de audio original por defecto",
 							"title": "Siempre usar pista de audio original"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Habiliar el boton para ver mas tarde",
-							"title": "Agregar botón a los vídeos de Inicio y Suscripciones para guardar el vídeo en la lista de reproducción 'Ver más tarde'"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "Restore fullscreen scrolling",
 							"title": "Restores scrolling in fullscreen mode"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Habiliar el boton para ver mas tarde",
+							"title": "Agregar botón a los vídeos de Inicio y Suscripciones para guardar el vídeo en la lista de reproducción 'Ver más tarde'"
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Método de guardado de captura de pantalla",
 							"options": {
 								"both": "Both (File and Clipboard)",
 								"clipboard": "Portapapeles",
 								"file": "Archivo"
 							},
-							"label": "Método de guardado de captura de pantalla",
 							"title": "Método de guardado sobre el que se guardará la captura de pantalla"
 						}
 					}

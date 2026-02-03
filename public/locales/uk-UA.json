@@ -218,6 +218,10 @@
 					},
 					"title": "Мова"
 				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
 				"optionDisabled": {
 					"either": {
 						"label": "Enable {{OPTIONS}} to configure this option",
@@ -341,6 +345,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "Automatic theater mode",
+							"title": "Automatically enables theater mode when you load a video"
+						}
+					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Automatically disable ambient mode",
@@ -377,12 +387,6 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
-					"automaticTheaterMode": {
-						"enable": {
-							"label": "Automatic theater mode",
-							"title": "Automatically enables theater mode when you load a video"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Copy video URL with timestamp button",
@@ -393,12 +397,6 @@
 						"enable": {
 							"label": "Default to original audio track",
 							"title": "Always default to the original audio track"
-						}
-					},
-					"saveToWatchLaterButton": {
-						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -531,6 +529,12 @@
 						"enable": {
 							"label": "Restore fullscreen scrolling",
 							"title": "Restores scrolling in fullscreen mode"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -714,12 +718,12 @@
 					},
 					"saveAs": {
 						"select": {
+							"label": "Screenshot save type",
 							"options": {
 								"both": "Both (File and Clipboard)",
 								"clipboard": "Clipboard",
 								"file": "File"
 							},
-							"label": "Screenshot save type",
 							"title": "The screenshot save type"
 						}
 					}

@@ -489,6 +489,14 @@ export default function Settings() {
 					</h1>
 					<SettingSearch i18nInstance={i18nInstance} />
 				</div>
+				<Setting
+					checked={settings.open_settings_on_major_or_minor_version_change?.toString() === "true"}
+					label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
+					onChange={setCheckboxOption("open_settings_on_major_or_minor_version_change")}
+					parentSetting={null}
+					title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
+					type="checkbox"
+				></Setting>
 				<Suspense fallback={<Loader />}>
 					<LanguageOptions selectedLanguage={settings["language"]} setValueOption={setValueOption} t={i18nInstance.t} />
 				</Suspense>
@@ -558,6 +566,24 @@ export default function Settings() {
 							/>
 						);
 					})}
+				</SettingSection>
+				<SettingSection title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.title)}>
+					<SettingTitle />
+					<Setting
+						disabled={false}
+						input_type="password"
+						label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
+						onChange={setValueOption("youtube_data_api_v3_key")}
+						parentSetting={null}
+						title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title)}
+						type="text-input"
+						value={settings.youtube_data_api_v3_key}
+					/>
+					<fieldset className={cn("flex flex-row gap-1")}>
+						<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">
+							{t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.getApiKeyLinkText)}
+						</Link>
+					</fieldset>
 				</SettingSection>
 				<SettingSection title={t((translations) => translations.settings.sections.miscellaneous.title)}>
 					<SettingTitle />
@@ -1288,24 +1314,6 @@ export default function Settings() {
 						title={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetWatchTime.select.title)}
 						type="select"
 					/>
-				</SettingSection>
-				<SettingSection title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.title)}>
-					<SettingTitle />
-					<Setting
-						disabled={false}
-						input_type="password"
-						label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
-						onChange={setValueOption("youtube_data_api_v3_key")}
-						parentSetting={null}
-						title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title)}
-						type="text-input"
-						value={settings.youtube_data_api_v3_key}
-					/>
-					<fieldset className={cn("flex flex-row gap-1")}>
-						<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">
-							{t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.getApiKeyLinkText)}
-						</Link>
-					</fieldset>
 				</SettingSection>
 				<SettingSection title={t((translations) => translations.settings.sections.deepDarkCSS.title)}>
 					<SettingTitle />
