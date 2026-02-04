@@ -234,7 +234,9 @@
 					"singular": "'{{OPTION}}' 設定を有効にする",
 					"specificOption": {
 						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "スクロールで設定の続きを表示",
@@ -821,6 +823,19 @@
 					}
 				},
 				"title": "音量ブーストの設定"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}
