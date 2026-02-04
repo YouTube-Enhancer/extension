@@ -229,8 +229,8 @@
 					"title": "Dil"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Güncelleme sırasında ayarlar sayfasını açın",
+					"title": "YouTube Enhancer'ın ana veya alt sürümü yüklendiğinde ayarlar sayfasını açar"
 				},
 				"optionDisabled": {
 					"either": {
@@ -874,11 +874,11 @@
 			"globalVolume": {
 				"enable": {
 					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
+						"label": "Video başlangıç sesi",
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},
