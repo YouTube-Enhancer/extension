@@ -58,6 +58,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Open ondertitels"
@@ -151,6 +160,7 @@
 							"increasePlaybackSpeedButton": "Verhoog snelheid knop",
 							"loopButton": "Loop knop",
 							"maximizePlayerButton": "Maximaliseer knop",
+							"miniPlayerButton": "Mini Player button",
 							"openTranscriptButton": "Open ondertitels knop",
 							"rewindButton": "Terugspoelknop",
 							"screenshotButton": "Schermafbeelding knop",
@@ -273,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Aangepaste CSS inschakelen",
@@ -555,6 +596,12 @@
 						"enable": {
 							"label": "Sla \"video is gepauzeerd. Hervatten?\" over",
 							"title": "Slaat het afwezig dialoog die het afspelen pauzeert over"
+						}
+					},
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					}
 				},
