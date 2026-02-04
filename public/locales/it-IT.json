@@ -234,7 +234,9 @@
 					"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 					"specificOption": {
 						"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione"
+						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -345,6 +347,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						}
+					},
 					"automaticTheaterMode": {
 						"enable": {
 							"label": "Modalità teatro automatica",
@@ -821,6 +829,19 @@
 					}
 				},
 				"title": "Impostazioni aumento volume"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}
