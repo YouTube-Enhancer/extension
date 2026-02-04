@@ -58,6 +58,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "打开转写文稿"
@@ -151,6 +160,7 @@
 							"increasePlaybackSpeedButton": "增加速度按钮",
 							"loopButton": "循环按钮",
 							"maximizePlayerButton": "最大化按钮",
+							"miniPlayerButton": "Mini Player button",
 							"openTranscriptButton": "转写文稿按钮",
 							"rewindButton": "快退按钮",
 							"screenshotButton": "屏幕截图按钮",
@@ -273,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "启用自定义 CSS",
@@ -555,6 +596,12 @@
 						"enable": {
 							"label": "跳过\"视频已暂停。继续观看吗？\"",
 							"title": "跳过暂停视频播放的闲置对话框"
+						}
+					},
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					}
 				},
