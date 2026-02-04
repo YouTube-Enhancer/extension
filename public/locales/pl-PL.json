@@ -234,7 +234,9 @@
 					"singular": "Enable '{{OPTION}}' to configure this option",
 					"specificOption": {
 						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
@@ -345,6 +347,12 @@
 			},
 			"miscellaneous": {
 				"settings": {
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						}
+					},
 					"automaticTheaterMode": {
 						"enable": {
 							"label": "Automatic theater mode",
@@ -821,6 +829,19 @@
 					}
 				},
 				"title": "Ustawienia zwiększenia głośności"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}
