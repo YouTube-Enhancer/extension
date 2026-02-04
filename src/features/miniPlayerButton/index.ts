@@ -23,6 +23,9 @@ function syncMiniPlayerButtonUI(active: boolean) {
 				updateFeatureButtonIcon(btn, active ? icon.on : icon.off);
 			}
 		}
+	} else {
+		const btn = getFeatureButton("miniPlayerButton");
+		if (btn) btn.ariaChecked = active.toString();
 	}
 }
 export const addMiniPlayerButton: AddButtonFunction = async () => {
