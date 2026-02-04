@@ -331,6 +331,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				forwardRewindButtonsEnabled: newValue
 			});
 		},
+		enable_global_volume: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("globalVolumeChange", {
+				globalVolumeEnabled: newValue
+			});
+		},
 		enable_hide_artificial_intelligence_summary: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideArtificialIntelligenceSummaryChange", {
 				hideArtificialIntelligenceSummaryEnabled: newValue

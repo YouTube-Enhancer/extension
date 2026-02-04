@@ -250,6 +250,7 @@ export type configuration = {
 	enable_default_to_original_audio_track: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
+	enable_global_volume: boolean;
 	enable_hide_artificial_intelligence_summary: boolean;
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
@@ -290,6 +291,7 @@ export type configuration = {
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;
 	forward_rewind_buttons_time: number;
+	global_volume: number;
 	language: AvailableLocales;
 	open_settings_on_major_or_minor_version_change: boolean;
 	osd_display_color: OnScreenDisplayColor;
@@ -403,6 +405,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	defaultToOriginalAudioTrackChange: DataResponseMessage<"defaultToOriginalAudioTrackChange", { defaultToOriginalAudioTrackEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	forwardRewindButtonsChange: DataResponseMessage<"forwardRewindButtonsChange", { forwardRewindButtonsEnabled: boolean }>;
+	globalVolumeChange: DataResponseMessage<"globalVolumeChange", { globalVolumeEnabled: boolean }>;
 	hideArtificialIntelligenceSummaryChange: DataResponseMessage<
 		"hideArtificialIntelligenceSummaryChange",
 		{ hideArtificialIntelligenceSummaryEnabled: boolean }
