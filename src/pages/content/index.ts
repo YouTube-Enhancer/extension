@@ -2,16 +2,16 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
-	type AllButtonNames,
-	buttonNames,
-	type ButtonPlacement,
-	type configuration,
-	type configurationKeys,
-	type ContentSendOnlyMessageMappings,
-	type ContentToBackgroundSendOnlyMessageMappings,
-	type Messages,
-	type RememberedVolumes,
-	type StorageChanges
+    type AllButtonNames,
+    buttonNames,
+    type ButtonPlacement,
+    type configuration,
+    type configurationKeys,
+    type ContentSendOnlyMessageMappings,
+    type ContentToBackgroundSendOnlyMessageMappings,
+    type Messages,
+    type RememberedVolumes,
+    type StorageChanges
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
@@ -300,6 +300,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideEndScreenCardsButtonEnabled: newValue
 			});
 		},
+		enable_comments_mini_player: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("commentsMiniPlayerChange", {
+				miniPlayerEnabled: newValue
+			});
+		},
+		enable_comments_mini_player_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("miniPlayerButtonChange", {
+				miniPlayerButtonEnabled: newValue
+			});
+		},
 		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
 				copyTimestampUrlButtonEnabled: newValue
@@ -530,6 +540,18 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		language: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("languageChange", {
 				language: newValue
+			});
+		},
+		mini_player_default_position: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
+				defaultPosition: newValue,
+				defaultSize: options.mini_player_default_size
+			});
+		},
+		mini_player_default_size: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
+				defaultPosition: options.mini_player_default_position,
+				defaultSize: newValue
 			});
 		},
 		playback_buttons_speed: (__oldValue, newValue) => {

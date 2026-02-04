@@ -54,6 +54,8 @@ import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/f
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
+import { disableCommentsMiniPlayer, enableCommentsMiniPlayer, setCommentsMiniPlayerDefaults } from "@/src/features/miniPlayer";
+import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -280,13 +282,15 @@ const enableFeatures = async () => {
 			enableAutomaticallyShowMoreVideosOnEndScreen(),
 			enableHideSidebarRecommendedVideos(),
 			enableAutomaticallyDisableAutoPlay(),
-			enableGlobalVolume()
+			enableGlobalVolume(),
+			enableCommentsMiniPlayer()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
+		await addMiniPlayerButton();
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
@@ -497,6 +501,17 @@ const initialize = function () {
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
 							await featureFuncs.remove();
 							await featureFuncs.add();
+						}
+						break;
+					}
+					case "commentsMiniPlayerChange": {
+						const {
+							data: { miniPlayerEnabled }
+						} = message;
+						if (miniPlayerEnabled) {
+							await enableCommentsMiniPlayer();
+						} else {
+							await disableCommentsMiniPlayer();
 						}
 						break;
 					}
@@ -839,6 +854,24 @@ const initialize = function () {
 							await removeMaximizePlayerButton();
 							minimizePlayer();
 						}
+						break;
+					}
+					case "miniPlayerButtonChange": {
+						const {
+							data: { miniPlayerButtonEnabled }
+						} = message;
+						if (miniPlayerButtonEnabled) {
+							await addMiniPlayerButton();
+						} else {
+							await removeMiniPlayerButton();
+						}
+						break;
+					}
+					case "miniPlayerDefaultsChange": {
+						const {
+							data: { defaultPosition: mini_player_default_position, defaultSize: mini_player_default_size }
+						} = message;
+						setCommentsMiniPlayerDefaults({ mini_player_default_position, mini_player_default_size });
 						break;
 					}
 					case "openTranscriptButtonChange": {

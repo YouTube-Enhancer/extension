@@ -35,6 +35,8 @@ export type FeatureName =
 	| "hideShorts"
 	| "loopButton"
 	| "maximizePlayerButton"
+	| "miniPlayer"
+	| "miniPlayerButton"
 	| "openTranscriptButton"
 	| "openYouTubeSettingsOnHover"
 	| "playbackSpeedButtons"

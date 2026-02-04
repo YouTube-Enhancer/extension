@@ -24,6 +24,9 @@ interface EnUS {
 				};
 				loopButton: { button: { label: "Loop"; toggle: { off: "Loop off"; on: "Loop on" } } };
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
+				miniPlayerButton: {
+					button: { label: "Mini Player"; toggle: { off: "Mini Player off"; on: "Mini Player on" } };
+				};
 				openTranscriptButton: { button: { label: "Open transcript" } };
 				playbackSpeedButtons: {
 					buttons: {
@@ -92,6 +95,7 @@ interface EnUS {
 							increasePlaybackSpeedButton: "Increase Speed button";
 							loopButton: "Loop button";
 							maximizePlayerButton: "Maximize button";
+							miniPlayerButton: "Mini Player button";
 							openTranscriptButton: "Open Transcript button";
 							rewindButton: "Rewind button";
 							screenshotButton: "Screenshot button";
@@ -234,6 +238,34 @@ interface EnUS {
 					};
 				};
 				title: "Global Volume Override";
+			};
+			miniPlayer: {
+				button: { label: "Mini Player button"; title: "Adds a button that opens the Mini Player" };
+				enable: {
+					label: "Open Mini Player when viewing comments";
+					title: "Automatically opens the Mini Player when you scroll to comments.";
+				};
+				settings: {
+					position: {
+						select: {
+							label: "Default Mini Player position";
+							options: {
+								bottomCenter: "Bottom center";
+								bottomLeft: "Bottom left";
+								bottomRight: "Bottom right";
+								topCenter: "Top center";
+								topLeft: "Top left";
+								topRight: "Top right";
+							};
+							title: "Sets the starting position before you move the Mini Player.";
+						};
+					};
+					size: {
+						label: "Default Mini Player size";
+						title: "Sets the initial size before you resize the Mini Player.";
+					};
+				};
+				title: "Mini Player settings";
 			};
 			miscellaneous: {
 				settings: {

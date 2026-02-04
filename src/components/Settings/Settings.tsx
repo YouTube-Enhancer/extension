@@ -287,6 +287,7 @@ export default function Settings() {
 		| "button_placements.increasePlaybackSpeedButton"
 		| "button_placements.loopButton"
 		| "button_placements.maximizePlayerButton"
+		| "button_placements.miniPlayerButton"
 		| "button_placements.openTranscriptButton"
 		| "button_placements.rewindButton"
 		| "button_placements.screenshotButton"
@@ -302,6 +303,21 @@ export default function Settings() {
 			label: t((translations) => translations.pages.options.extras.buttonPlacement.select.options.player_controls_right.value),
 			value: "player_controls_right"
 		}
+	];
+	const miniPlayerDefaultSizeOptions: SelectOption<"mini_player_default_size">[] = [
+		{ label: "320x180", value: "320x180" },
+		{ label: "400x225", value: "400x225" },
+		{ label: "480x270", value: "480x270" },
+		{ label: "560x315", value: "560x315" }
+	];
+
+	const miniPlayerDefaultPositionOptions: SelectOption<"mini_player_default_position">[] = [
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topLeft), value: "top_left" },
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topCenter), value: "top_center" },
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topRight), value: "top_right" },
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.bottomLeft), value: "bottom_left" },
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.bottomCenter), value: "bottom_center" },
+		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.bottomRight), value: "bottom_right" }
 	];
 	const videoHistoryResumeTypeOptions: SelectOption<"video_history_resume_type">[] = [
 		{
@@ -1316,6 +1332,63 @@ export default function Settings() {
 						title={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetWatchTime.select.title)}
 						type="select"
 					/>
+				</SettingSection>
+				<SettingSection title={t((translations) => translations.settings.sections.miniPlayer.title)}>
+					<SettingTitle />
+					<Setting
+						checked={settings.enable_comments_mini_player?.toString() === "true"}
+						label={t((translations) => translations.settings.sections.miniPlayer.enable.label)}
+						onChange={setCheckboxOption("enable_comments_mini_player")}
+						parentSetting={null}
+						title={t((translations) => translations.settings.sections.miniPlayer.enable.title)}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_comments_mini_player_button?.toString() === "true"}
+						label={t((translations) => translations.settings.sections.miniPlayer.button.label)}
+						onChange={setCheckboxOption("enable_comments_mini_player_button")}
+						parentSetting={null}
+						title={t((translations) => translations.settings.sections.miniPlayer.button.title)}
+						type="checkbox"
+					/>
+					<Setting
+						id="mini_player_default_size"
+						label={t((translations) => translations.settings.sections.miniPlayer.settings.size.label)}
+						onChange={setValueOption("mini_player_default_size")}
+						options={miniPlayerDefaultSizeOptions}
+						parentSetting={null}
+						selectedOption={getSelectedOption("mini_player_default_size")}
+						title={t((translations) => translations.settings.sections.miniPlayer.settings.size.title)}
+						type="select"
+					/>
+					<Setting
+						id="mini_player_default_position"
+						label={t((translations) => translations.settings.sections.miniPlayer.settings.position.select.label)}
+						onChange={setValueOption("mini_player_default_position")}
+						options={miniPlayerDefaultPositionOptions}
+						parentSetting={null}
+						selectedOption={getSelectedOption("mini_player_default_position")}
+						title={t((translations) => translations.settings.sections.miniPlayer.settings.position.select.title)}
+						type="select"
+					/>
+				</SettingSection>
+				<SettingSection title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.title)}>
+					<SettingTitle />
+					<Setting
+						disabled={false}
+						input_type="password"
+						label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
+						onChange={setValueOption("youtube_data_api_v3_key")}
+						parentSetting={null}
+						title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title)}
+						type="text-input"
+						value={settings.youtube_data_api_v3_key}
+					/>
+					<fieldset className={cn("flex flex-row gap-1")}>
+						<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">
+							{t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.getApiKeyLinkText)}
+						</Link>
+					</fieldset>
 				</SettingSection>
 				<SettingSection title={t((translations) => translations.settings.sections.deepDarkCSS.title)}>
 					<SettingTitle />
