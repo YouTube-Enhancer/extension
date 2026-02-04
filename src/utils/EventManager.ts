@@ -35,6 +35,8 @@ export type FeatureName =
 	| "hideShorts"
 	| "loopButton"
 	| "maximizePlayerButton"
+	| "miniPlayer"
+	| "miniPlayerButton"
 	| "openTranscriptButton"
 	| "openYouTubeSettingsOnHover"
 	| "playbackSpeedButtons"
@@ -51,6 +53,7 @@ export type FeatureName =
 	| "scrollWheelVolumeControl"
 	| "shareShortener"
 	| "shortsAutoScroll"
+	| "timestampPeek"
 	| "videoHistory"
 	| "volumeBoostButton";
 

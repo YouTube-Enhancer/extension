@@ -33,8 +33,8 @@ import type { SVGElementAttributes } from "./SVGElementAttributes";
 import { deepDarkPresets } from "../deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "../features/deepDarkCSS/utils";
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
+import { engagementPanelVisibility, type EngagementPanelVisibility, getCommentsPanelSelector } from "../utils/constants";
 import { eventManager, type FeatureName } from "./EventManager";
-
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
 
@@ -58,52 +58,22 @@ export function chooseClosestQuality(
 	availableQualities: YoutubePlayerQualityLevel[],
 	fallbackStrategy: PlayerQualityFallbackStrategy
 ): Nullable<YoutubePlayerQualityLevel> {
-	// If there are no available qualities, return null
-	if (availableQualities.length === 0) {
-		return null;
-	}
-
-	// If the selected quality is available, return it
-	if (availableQualities.includes(selectedQuality)) {
-		return selectedQuality;
-	}
-
-	// Find the index of the selected quality in the array
+	if (availableQualities.length === 0) return null;
+	availableQualities = availableQualities.filter((q) => q !== "auto");
+	if (availableQualities.includes(selectedQuality)) return selectedQuality;
 	const selectedIndex = youtubePlayerQualityLevels.indexOf(selectedQuality);
-
-	// Find the available quality levels that are closest to the selected quality level
-	const closestQualities = availableQualities.reduce(
-		(acc, quality) => {
-			const qualityIndex = youtubePlayerQualityLevels.indexOf(quality);
-			if (qualityIndex !== -1) {
-				acc.push({ difference: Math.abs(selectedIndex - qualityIndex), quality, qualityIndex });
-			}
-			return acc;
-		},
-		[] as { difference: number; quality: YoutubePlayerQualityLevel; qualityIndex: number }[]
-	);
-
-	// Sort the closest qualities by difference in ascending order
-	closestQualities.sort((a, b) => a.difference - b.difference);
-
-	// If fallback strategy is "higher", prefer higher quality levels
+	const mapped = availableQualities.map((quality) => ({
+		index: youtubePlayerQualityLevels.indexOf(quality),
+		quality
+	}));
+	if (mapped.length === 0) return null;
+	const higher = mapped.filter((q) => q.index > selectedIndex).sort((a, b) => a.index - b.index);
+	const lower = mapped.filter((q) => q.index < selectedIndex).sort((a, b) => b.index - a.index);
 	if (fallbackStrategy === "higher") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex > selectedIndex) {
-				return quality;
-			}
-		}
+		return higher[0]?.quality ?? lower[0]?.quality ?? null;
+	} else {
+		return lower[0]?.quality ?? higher[0]?.quality ?? null;
 	}
-
-	// If fallback strategy is "lower", prefer lower quality levels
-	if (fallbackStrategy === "lower") {
-		for (const { quality, qualityIndex } of closestQualities) {
-			if (qualityIndex < selectedIndex) {
-				return quality;
-			}
-		}
-	}
-	return null;
 }
 const BrowserColors = {
 	BgBlack: "background-color: black; color: white;",
@@ -227,7 +197,7 @@ export function createSVGElement<K extends keyof SVGElementTagNameMap>(
 
 	return element;
 }
-
+const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
 export function createTooltip({
 	direction = "up",
 	element,
@@ -246,8 +216,8 @@ export function createTooltip({
 	update: () => void;
 } {
 	function makeTooltip() {
-		const isBigMode = document.querySelector(".ytp-big-mode") !== null;
 		const isDelhiModern = isModernYouTubeVideoLayout();
+		const isYTEMiniPlayerActive = isMiniPlayerActive();
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
@@ -261,13 +231,7 @@ export function createTooltip({
 				}),
 				...conditionalStyles({
 					condition: direction === "up",
-					top: `${
-						rect.top -
-						(isDelhiModern ?
-							isBigMode ? 20
-							:	6
-						:	1)
-					}px`
+					top: `${rect.top - (isDelhiModern ? 6 : 1)}px`
 				}),
 				...conditionalStyles({
 					condition: direction === "down",
@@ -283,7 +247,7 @@ export function createTooltip({
 					left: `${rect.right + rect.width}px`,
 					top: `${rect.bottom}px`
 				}),
-				zIndex: "99999"
+				zIndex: isYTEMiniPlayerActive ? "2147483647" : "99999"
 			}
 		});
 		const {
@@ -305,10 +269,12 @@ export function createTooltip({
 				tooltip.remove();
 			}
 			const tooltip = makeTooltip();
+			const isYTEMiniPlayerActive = isMiniPlayerActive();
 			const isButtonBelowPlayer = element?.parentElement?.id === "yte-button-container";
 			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
-			else {
+			if (isYTEMiniPlayerActive || isButtonBelowPlayer) {
+				document.body.appendChild(tooltip);
+			} else {
 				if (playerContainer?.offsetParent) playerContainer.appendChild(tooltip);
 				else document.body.appendChild(tooltip);
 			}
@@ -618,6 +584,24 @@ export function modifyElementsClassList(
 	}
 	elements.forEach((pair) => modifyElementClassList(action, pair));
 }
+export function observeCommentsPanelVisibilityChange(cb: { [K in EngagementPanelVisibility]: () => void }): MutationObserver {
+	const observer = new MutationObserver((mutationList) => {
+		mutationList.forEach((mutation) => {
+			if (mutation.attributeName === "visibility") {
+				const target = mutation.target as HTMLElement;
+				if (!target) return;
+				const visibility = target.getAttribute("visibility");
+				if (!visibility) return;
+				if (!engagementPanelVisibility.includes(visibility)) return;
+				const castVisibility = visibility as EngagementPanelVisibility;
+				cb[castVisibility]();
+			}
+		});
+	});
+	const commentsPanel = document.querySelector(getCommentsPanelSelector()) as Element;
+	observer.observe(commentsPanel, { attributeFilter: ["visibility"] });
+	return observer;
+}
 export function parseStoredValue(value: string) {
 	try {
 		// Attempt to parse the value as JSON
@@ -710,6 +694,7 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 		resolve();
 	});
 }
+
 /**
  * Sends a message from the extension
  * @param type - The type of the message to send.
@@ -790,7 +775,6 @@ export async function waitForAllElements(selectors: Selector[], timeout = 15000)
 	}
 	return results as Element[];
 }
-
 export function waitForElement<T extends Element>(selector: string, timeout = 2500): Promise<null | T> {
 	return new Promise((resolve) => {
 		const start = performance.now();
@@ -809,6 +793,7 @@ export function waitForElement<T extends Element>(selector: string, timeout = 25
 		check();
 	});
 }
+
 /**
  * Waits for a specific message of the given type, action, source, and data.
  *
@@ -859,7 +844,6 @@ function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: s
 		styling: [style, BrowserColors.Reset]
 	};
 }
-
 /**
  * Extracts all sections from a YouTube URL path.
  * @param {string} url - The YouTube URL.
@@ -872,6 +856,7 @@ function extractSectionsFromYouTubeURL(url: string): string[] {
 	// Split the path into an array of sections
 	return path.split("/").filter((section) => section !== "");
 }
+
 function getColor(type: ColorType) {
 	switch (type) {
 		case "error":
@@ -897,7 +882,6 @@ function getLuminance(rgb: { b: number; g: number; r: number }): number {
 
 	return 0.2126 * r2 + 0.7152 * g2 + 0.0722 * b2;
 }
-
 /**
  * Group multiple log messages into a single message with combined styling.
  *

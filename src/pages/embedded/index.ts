@@ -24,6 +24,7 @@ import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack }
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
+import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
 import {
 	addHideEndScreenCardsButton,
@@ -53,6 +54,8 @@ import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/f
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
 import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
 import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
+import { disableCommentsMiniPlayer, enableCommentsMiniPlayer, setCommentsMiniPlayerDefaults } from "@/src/features/miniPlayer";
+import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -80,6 +83,7 @@ import enableScrollWheelVolumeControl, { disableScrollWheelVolumeControl } from 
 import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
 import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
 import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
+import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timestampPeek";
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
@@ -207,7 +211,8 @@ const enableFeatures = async () => {
 			enableDeepDarkCSS(),
 			enableHideOfficialArtistVideosFromHomePage(),
 			enableHidePlaylistRecommendationsFromHomePage(),
-			enableSaveToWatchLaterButton()
+			enableSaveToWatchLaterButton(),
+			enableTimestampPeek()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -276,13 +281,16 @@ const enableFeatures = async () => {
 			enableAutomaticallyMaximizePlayer(),
 			enableAutomaticallyShowMoreVideosOnEndScreen(),
 			enableHideSidebarRecommendedVideos(),
-			enableAutomaticallyDisableAutoPlay()
+			enableAutomaticallyDisableAutoPlay(),
+			enableGlobalVolume(),
+			enableCommentsMiniPlayer()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
 		await addMaximizePlayerButton();
+		await addMiniPlayerButton();
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
@@ -496,7 +504,17 @@ const initialize = function () {
 						}
 						break;
 					}
-
+					case "commentsMiniPlayerChange": {
+						const {
+							data: { miniPlayerEnabled }
+						} = message;
+						if (miniPlayerEnabled) {
+							await enableCommentsMiniPlayer();
+						} else {
+							await disableCommentsMiniPlayer();
+						}
+						break;
+					}
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -508,6 +526,7 @@ const initialize = function () {
 						}
 						break;
 					}
+
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
@@ -589,6 +608,17 @@ const initialize = function () {
 						} else {
 							await removeRewindButton();
 							await removeForwardButton();
+						}
+						break;
+					}
+					case "globalVolumeChange": {
+						const {
+							data: { globalVolumeEnabled }
+						} = message;
+						if (globalVolumeEnabled) {
+							await enableGlobalVolume();
+						} else {
+							await disableGlobalVolume();
 						}
 						break;
 					}
@@ -747,72 +777,58 @@ const initialize = function () {
 						const {
 							data: { options }
 						} = await waitForSpecificMessage("options", "request_data", "content");
-						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(window.i18nextInstance.t("pages.content.features.featureMenu.button.label"));
-							for (const feature of featuresInMenu) {
-								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
-								if (featureToMultiButtonsMap.has(featureName)) {
-									const multiFeatureName = featureName as MultiButtonFeatureNames;
-									const multiButtonName = feature as MultiButtonNames;
-									switch (multiFeatureName) {
-										case "playbackSpeedButtons": {
-											updateFeatureMenuItemLabel(
-												feature,
-												window.i18nextInstance.t(
-													`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-													{
-														SPEED: options.playback_buttons_speed
-													}
-												)
-											);
-											break;
-										}
-									}
-								} else {
-									updateFeatureMenuItemLabel(
-										feature,
-										window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
+						const {
+							i18nextInstance: { t }
+						} = window;
+						const getFeatureName = (feature: AllButtonNames) => findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
+						const getSingleLabel = (featureName: SingleButtonNames) => t((tr) => tr.pages.content.features[featureName].button.label);
+						const getMultiLabel = (multiFeatureName: MultiButtonFeatureNames, multiButtonName: MultiButtonNames) => {
+							switch (multiFeatureName) {
+								case "forwardRewindButtons":
+									return t(
+										(tr) =>
+											tr.pages.content.features[multiFeatureName].buttons[
+												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
+											].label,
+										{ TIME: options.forward_rewind_buttons_time }
 									);
-								}
+								case "playbackSpeedButtons":
+									return t(
+										(tr) =>
+											tr.pages.content.features[multiFeatureName].buttons[
+												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
+											].label,
+										{ SPEED: options.playback_buttons_speed }
+									);
 							}
+						};
+						const updateMenuFeatureLabel = (feature: AllButtonNames) => {
+							const featureName = getFeatureName(feature);
+							if (featureToMultiButtonsMap.has(featureName)) {
+								const label = getMultiLabel(featureName as MultiButtonFeatureNames, feature as MultiButtonNames);
+								if (label) updateFeatureMenuItemLabel(feature, label);
+							} else {
+								updateFeatureMenuItemLabel(feature, getSingleLabel(featureName as SingleButtonNames));
+							}
+						};
+						if (featuresInMenu.size > 0) {
+							updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
+							for (const feature of featuresInMenu) updateMenuFeatureLabel(feature);
 						}
 						if (featuresInControls.size > 0) {
 							for (const feature of featuresInControls) {
-								const featureName = findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
 								if (toggleFeatures.includes(feature)) {
 									const toggleFeature = feature as ToggleFeatures;
 									const featureButton = getFeatureButton(toggleFeature);
-									if (!featureButton) return;
+									if (!featureButton) continue;
 									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
 									updateFeatureButtonTitle(
 										toggleFeature,
-										window.i18nextInstance.t(`pages.content.features.${toggleFeature}.button.toggle.${buttonChecked ? "on" : "off"}`)
+										t((tr) => tr.pages.content.features[toggleFeature].button.toggle[buttonChecked ? "on" : "off"])
 									);
-								} else {
-									if (featureToMultiButtonsMap.has(featureName)) {
-										const multiFeatureName = featureName as MultiButtonFeatureNames;
-										const multiButtonName = feature as MultiButtonNames;
-										switch (multiFeatureName) {
-											case "playbackSpeedButtons": {
-												updateFeatureMenuItemLabel(
-													feature,
-													window.i18nextInstance.t(
-														`pages.content.features.${multiFeatureName}.buttons.${multiButtonName}.label` as `pages.content.features.${typeof multiFeatureName}.buttons.${KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>}.label`,
-														{
-															SPEED: options.playback_buttons_speed
-														}
-													)
-												);
-												break;
-											}
-										}
-									} else {
-										updateFeatureButtonTitle(
-											feature,
-											window.i18nextInstance.t(`pages.content.features.${featureName as SingleButtonNames}.button.label`)
-										);
-									}
+									continue;
 								}
+								updateMenuFeatureLabel(feature);
 							}
 						}
 						break;
@@ -838,6 +854,24 @@ const initialize = function () {
 							await removeMaximizePlayerButton();
 							minimizePlayer();
 						}
+						break;
+					}
+					case "miniPlayerButtonChange": {
+						const {
+							data: { miniPlayerButtonEnabled }
+						} = message;
+						if (miniPlayerButtonEnabled) {
+							await addMiniPlayerButton();
+						} else {
+							await removeMiniPlayerButton();
+						}
+						break;
+					}
+					case "miniPlayerDefaultsChange": {
+						const {
+							data: { defaultPosition: mini_player_default_position, defaultSize: mini_player_default_size }
+						} = message;
+						setCommentsMiniPlayerDefaults({ mini_player_default_position, mini_player_default_size });
 						break;
 					}
 					case "openTranscriptButtonChange": {
@@ -1078,6 +1112,17 @@ const initialize = function () {
 						} = message;
 						if (skipContinueWatchingEnabled) {
 							await enableSkipContinueWatching();
+						}
+						break;
+					}
+					case "timestampPeekChange": {
+						const {
+							data: { timestampPeekEnabled }
+						} = message;
+						if (timestampPeekEnabled) {
+							await enableTimestampPeek();
+						} else {
+							disableTimestampPeek();
 						}
 						break;
 					}

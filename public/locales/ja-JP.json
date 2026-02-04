@@ -10,8 +10,10 @@
 			"features": {
 				"copyTimestampUrlButton": {
 					"button": {
-						"copied": "コピー完了！",
 						"label": "タイムスタンプ付きの動画URLをコピーする"
+					},
+					"extras": {
+						"copied": "コピー完了！"
 					}
 				},
 				"featureMenu": {
@@ -70,22 +72,43 @@
 							"label": "再生速度を{{SPEED}}で上げする"
 						}
 					},
-					"decreaseLimit": "再生速度を下げるはできまっせん ({{SPEED}})",
-					"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
+					"extras": {
+						"decreaseLimit": "再生速度を下げるはできまっせん ({{SPEED}})",
+						"increaseLimit": "再生速度を上げるはできまっせん ({{SPEED}})"
+					}
 				},
 				"playlistLength": {
 					"title": "一部の動画が非表示になっている場合、または完全な長さを得るために十分な動画を読み込んでいない場合、合計長さが正確でない可能性があります。"
+				},
+				"playlistManagementButtons": {
+					"extras": {
+						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+						"failedToRemoveVideo": "動画を削除できませんでした",
+						"markAsUnwatched": "未視聴にする",
+						"markingAsUnwatched": "Marking as unwatched…",
+						"removeVideo": "ビデオを削除",
+						"removingVideo": "ビデオの削除..."
+					}
+				},
+				"saveToWatchLaterButton": {
+					"extras": {
+						"failedToSaveVideo": "Failed to save video to Watch Later",
+						"saveVideo": "Save to Watch Later",
+						"savingVideo": "Saving to Watch Later…"
+					}
 				},
 				"screenshotButton": {
 					"button": {
 						"label": "スクリーンショット"
 					},
-					"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました"
+					"extras": {
+						"copiedToClipboard": "スクリーンショットをクリップボードにコピーしました"
+					}
 				},
 				"videoHistory": {
-					"resumeButton": "レジューム",
-					"resumePrompt": {
-						"close": "終了"
+					"extras": {
+						"resumeButton": "レジューム",
+						"resumePromptClose": "終了"
 					}
 				},
 				"volumeBoostButton": {
@@ -100,6 +123,135 @@
 			}
 		},
 		"options": {
+			"extras": {
+				"bottomButtons": {
+					"clear": {
+						"title": "マシンに保存されているすべてのエクステンションデータを消去します",
+						"value": "データの消去"
+					},
+					"confirm": {
+						"title": "設定リセットを確認する",
+						"value": "確認"
+					},
+					"openTab": {
+						"title": "新しいブラウザタブに拡張機能設定を開けるする"
+					},
+					"reset": {
+						"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
+						"value": "リセット"
+					}
+				},
+				"buttonPlacement": {
+					"select": {
+						"buttonNames": {
+							"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
+							"decreasePlaybackSpeedButton": "速度を下げるボタン",
+							"forwardButton": "早送ボタン",
+							"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
+							"increasePlaybackSpeedButton": "速度を上げるボタン",
+							"loopButton": "ループボタン",
+							"maximizePlayerButton": "最大表示ボタン",
+							"openTranscriptButton": "文字起こしを見せるボタン",
+							"rewindButton": "リワインドボタン",
+							"screenshotButton": "スクリーンショットボタン",
+							"volumeBoostButton": "音量ブーストボタン"
+						},
+						"options": {
+							"below_player": {
+								"placement": "プレイヤーコントローラーの下",
+								"value": "プレイヤーの下"
+							},
+							"feature_menu": {
+								"placement": "フィーチャー・メニューの中",
+								"value": "フィーチャー・メニュー"
+							},
+							"player_controls_left": {
+								"placement": "プレイヤーコントローラーの左側",
+								"value": "左のコントロール"
+							},
+							"player_controls_right": {
+								"placement": "プレイヤーコントローラーの右側",
+								"value": "右のコントロール"
+							}
+						},
+						"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
+					},
+					"title": "ボタン置き方設定"
+				},
+				"clearData": {
+					"allDataDeleted": "すべてのデータが削除されました。",
+					"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
+				},
+				"featureMenu": {
+					"openType": {
+						"select": {
+							"label": "メニューの有効化型",
+							"options": {
+								"click": "ボタンクリック",
+								"hover": "マウスホバー"
+							},
+							"title": "フィーチャー・メニューを有効化にする方法を選択します"
+						},
+						"title": "フィーチャー・メニュー設定"
+					}
+				},
+				"importExportSettings": {
+					"exportButton": {
+						"success": "設定がエクスポートをされました",
+						"title": "JSONファイルで設定がエクスポートする",
+						"value": "エクスポート設定"
+					},
+					"importButton": {
+						"error": {
+							"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。",
+							"validation": "設定のインポート失敗、ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
+						},
+						"success": "設定がインポートをされました",
+						"title": "JSONファイルから設定がインポートする",
+						"value": "インポート設定"
+					}
+				},
+				"language": {
+					"select": {
+						"label": "言語",
+						"title": "エクステンションに使用する言語"
+					},
+					"title": "言語"
+				},
+				"openSettingsOnMajorOrMinorVersionChange": {
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+				},
+				"optionDisabled": {
+					"either": {
+						"label": "Enable {{OPTIONS}} to configure this option",
+						"separator": " や "
+					},
+					"plural": {
+						"label": "Enable {{OPTIONS}} to configure this option",
+						"separator": " と "
+					},
+					"singular": "'{{OPTION}}' 設定を有効にする",
+					"specificOption": {
+						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option"
+					}
+				},
+				"scrollForMoreSettings": "スクロールで設定の続きを表示",
+				"settingSearch": {
+					"placeholder": "設定を探す"
+				},
+				"youtubeDataApiV3Key": {
+					"getApiKeyLinkText": "APIキーがここで取得をします。",
+					"input": {
+						"label": "APIキー",
+						"title": "YouTube API V3キーを入力してください。"
+					},
+					"title": "YouTube API V3キー"
+				}
+			},
 			"notifications": {
 				"error": {
 					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
@@ -120,549 +272,29 @@
 		}
 	},
 	"settings": {
-		"clearData": {
-			"allDataDeleted": "すべてのデータが削除されました。",
-			"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
-		},
-		"optionDisabled": {
-			"either": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " や "
-			},
-			"plural": {
-				"label": "Enable {{OPTIONS}} to configure this option",
-				"separator": " と "
-			},
-			"singular": "'{{OPTION}}' 設定を有効にする",
-			"specificOption": {
-				"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-				"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
-			}
-		},
-		"scrollForMoreSettings": "スクロールで設定の続きを表示",
 		"sections": {
-			"automaticQuality": {
-				"enable": {
-					"label": "自動画質調整",
-					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。"
-				},
-				"fallbackQualityStrategy": {
-					"select": {
-						"label": "画質フォールバック対策",
-						"options": {
-							"higher": "上位",
-							"lower": "下位"
-						},
-						"title": "使用不能選択中画質ときに対策使ってする"
-					}
-				},
-				"select": {
-					"label": "プレイヤーの動画質",
-					"title": "動画の画質に設定する"
-				},
-				"title": "自動画質設定"
-			},
-			"bottomButtons": {
-				"clear": {
-					"title": "マシンに保存されているすべてのエクステンションデータを消去します",
-					"value": "データの消去"
-				},
-				"confirm": {
-					"title": "設定リセットを確認する",
-					"value": "確認"
-				},
-				"openTab": {
-					"title": "新しいブラウザタブに拡張機能設定を開けるする"
-				},
-				"reset": {
-					"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
-					"value": "リセット"
-				}
-			},
-			"buttonPlacement": {
-				"select": {
-					"buttonNames": {
-						"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
-						"decreasePlaybackSpeedButton": "速度を下げるボタン",
-						"forwardButton": "早送ボタン",
-						"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
-						"increasePlaybackSpeedButton": "速度を上げるボタン",
-						"loopButton": "ループボタン",
-						"maximizePlayerButton": "最大表示ボタン",
-						"openTranscriptButton": "文字起こしを見せるボタン",
-						"rewindButton": "リワインドボタン",
-						"screenshotButton": "スクリーンショットボタン",
-						"volumeBoostButton": "音量ブーストボタン"
-					},
-					"options": {
-						"below_player": {
-							"placement": "プレイヤーコントローラーの下",
-							"value": "プレイヤーの下"
-						},
-						"feature_menu": {
-							"placement": "フィーチャー・メニューの中",
-							"value": "フィーチャー・メニュー"
-						},
-						"player_controls_left": {
-							"placement": "プレイヤーコントローラーの左側",
-							"value": "左のコントロール"
-						},
-						"player_controls_right": {
-							"placement": "プレイヤーコントローラーの右側",
-							"value": "右のコントロール"
-						}
-					},
-					"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する"
-				},
-				"title": "ボタン置き方設定"
-			},
 			"customCSS": {
-				"editor": {
-					"collapse": "エディターを最小化する",
-					"expand": "エディターを広げる",
-					"noProblems": "構文に問題はありませんでした。"
-				},
 				"enable": {
 					"label": "カスタムCSSを可能にする",
 					"title": "ページに適用するカスタムCSSを可能にする"
 				},
+				"extras": {
+					"collapse": "エディターを最小化する",
+					"expand": "エディターを広げる",
+					"noProblems": "構文に問題はありませんでした。"
+				},
 				"title": "カスタムCSS設定"
 			},
-			"featureMenu": {
-				"openType": {
-					"select": {
-						"label": "メニューの有効化型",
-						"options": {
-							"click": "ボタンクリック",
-							"hover": "マウスホバー"
-						},
-						"title": "フィーチャー・メニューを有効化にする方法を選択します"
-					},
-					"title": "フィーチャー・メニュー設定"
-				}
-			},
-			"forwardRewindButtons": {
+			"deepDarkCSS": {
 				"enable": {
-					"label": "早送/リワインドボタンを可能にする",
-					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
+					"label": "選択中テーマを可能にする",
+					"title": "選択中ページにテーマを可能にする"
 				},
-				"time": {
-					"label": "早送/リワインド時間",
-					"title": "動画に早送/リワインドを量時間"
+				"extras": {
+					"author": "作家",
+					"co-authors": "共同作家"
 				},
-				"title": "早送/リワインドボタン設定"
-			},
-			"importExportSettings": {
-				"exportButton": {
-					"success": "設定がエクスポートをされました",
-					"title": "JSONファイルで設定がエクスポートする",
-					"value": "エクスポート設定"
-				},
-				"importButton": {
-					"error": {
-						"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。",
-						"validation": "設定のインポート失敗、ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
-					},
-					"success": "設定がインポートをされました",
-					"title": "JSONファイルから設定がインポートする",
-					"value": "インポート設定"
-				}
-			},
-			"language": {
-				"select": {
-					"label": "言語",
-					"title": "エクステンションに使用する言語"
-				},
-				"title": "言語"
-			},
-			"miscellaneous": {
-				"features": {
-					"automaticTheaterMode": {
-						"label": "自動シアターモード",
-						"title": "動画の読み込み時に自動的にシアターモードを有効にする"
-					},
-					"automaticallyDisableAmbientMode": {
-						"label": "シネマティック ライティングを自動的に無効にする",
-						"title": "動画の読み込み時にシネマティック ライティングを自動にディセーブルする"
-					},
-					"automaticallyDisableAutoPlay": {
-						"label": "Automatically disable autoplay",
-						"title": "Automatically disables autoplay when you load a video"
-					},
-					"automaticallyDisableClosedCaptions": {
-						"label": "クローズドキャプションを自動にディセーブルする",
-						"title": "動画の読み込み時にクローズドキャプションを自動にディセーブルする"
-					},
-					"automaticallyEnableClosedCaptions": {
-						"label": "Automatically enable closed captions",
-						"title": "Automatically enables closed captions when you load a video"
-					},
-					"automaticallyMaximizePlayer": {
-						"label": "Automatically maximize player",
-						"title": "Automatically maximizes the player when you load a video"
-					},
-					"automaticallyShowMoreVideosOnEndScreen": {
-						"label": "Automatically show more videos on end screen",
-						"title": "Automatically shows more videos on end screen when you load a video"
-					},
-					"copyTimestampUrlButton": {
-						"label": "タイムスタンプ付きの動画URLをコピーのボタン",
-						"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
-					},
-					"defaultToOriginalAudioTrack": {
-						"label": "オリジナルのオーディオトラックをデフォルトにする",
-						"title": "常にオリジナルのオーディオトラックをデフォルトにする"
-					},
-					"enableMarkAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Add a button to playlist items to mark videos as unwatched"
-					},
-					"enableRemoveVideoButton": {
-						"label": "Remove video button",
-						"title": "Add a button to playlist items to remove videos from the playlist"
-					},
-					"enableSaveToWatchLaterButton": {
-						"label": "Enable save to Watch Later button",
-						"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
-					},
-					"hideArtificialIntelligenceSummary": {
-						"label": "AIサマリーを非表示",
-						"title": "動画の下のAIサマリーを非表示にする"
-					},
-					"hideEndScreenCards": {
-						"label": "終了画面のカードを非表示にする",
-						"title": "動画の終了で画面カードを非表示にする"
-					},
-					"hideEndScreenCardsButton": {
-						"label": "終了画面のカードボタンを非表示にする",
-						"title": "終了画面でボタンなカードを見せるか隠すに追加する"
-					},
-					"hideLiveStreamChat": {
-						"label": "配信チャットを隠す",
-						"title": "配信チャットを隠する"
-					},
-					"hideMembersOnlyVideos": {
-						"label": "Hide members-only videos",
-						"title": "Hides videos that are only visible to members"
-					},
-					"hideOfficialArtistVideosFromHomePage": {
-						"label": "公式アーティストの動画を隠する",
-						"title": "ホームページから公式アーティストの動画を隠する"
-					},
-					"hidePaidPromotionBanner": {
-						"label": "有料プロモーションバナーを隠す",
-						"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
-					},
-					"hidePlayables": {
-						"label": "Hide playables",
-						"title": "Hides all playables"
-					},
-					"hideScrollbar": {
-						"label": "スクロールバー隠す機能",
-						"title": "ページのスクロールバーを隠す"
-					},
-					"hideShorts": {
-						"label": "ショートを隠す",
-						"title": "全ショートを隠す"
-					},
-					"hideSidebarRecommendedVideos": {
-						"label": "Hide recommended videos",
-						"title": "Hides the sidebar that recommends videos"
-					},
-					"hideTranslateComment": {
-						"label": "コメント翻訳ボタンを隠す",
-						"title": "コメントの下で「言語に翻訳する」ボタンを隠する"
-					},
-					"loopButton": {
-						"label": "動画ループボタン",
-						"title": "動画をループするボタンをフィーチャー・メニューに追加する"
-					},
-					"maximizePlayerButton": {
-						"label": "最大化ボタン",
-						"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する"
-					},
-					"openTranscriptButton": {
-						"label": "文字起こしを見せるボタン",
-						"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する"
-					},
-					"openYouTubeSettingsOnHover": {
-						"label": "マウスを合わせでYouTubeの設定を開ける",
-						"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
-					},
-					"pauseBackgroundPlayers": {
-						"label": "背後タブのビデオプレイヤーを一時停止",
-						"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
-					},
-					"playlistRemover": {
-						"label": "Hide playlists from homepage",
-						"title": "Get rid of playlists from homepage"
-					},
-					"remainingTime": {
-						"label": "残り時間",
-						"title": "動画の残り時間を表示します"
-					},
-					"rememberLastVolume": {
-						"label": "前音量を覚える",
-						"title": "新ビデオの音量を前動画の音量に変化する。"
-					},
-					"removeRedirect": {
-						"label": "YouTubeのリダイレクトURLを削除する",
-						"title": "YouTubeリダイレクトを実物なURLを換えして、リダイレクト注意を抜かします"
-					},
-					"restoreFullscreenScrolling": {
-						"label": "全画面表示のスクロールを復元",
-						"title": "全画面表示モードでスクロールを復元します"
-					},
-					"shareShortener": {
-						"label": "YouTube動画のURLを短縮する",
-						"title": "YouTube動画のURLに機能パラメータを削除して短縮する(youtu.be)"
-					},
-					"shortsAutoScroll": {
-						"label": "ショートの自動スクロール",
-						"title": "次のショートを自動にスクロールする"
-					},
-					"skipContinueWatching": {
-						"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
-						"title": "動画一時休止する休眠メッセージを抜かされます"
-					}
-				},
-				"title": "他の設定"
-			},
-			"onScreenDisplaySettings": {
-				"color": {
-					"label": "OSDの色",
-					"options": {
-						"blue": "青色",
-						"green": "緑色",
-						"orange": "橙色",
-						"pink": "桃色",
-						"purple": "紫色",
-						"red": "赤色",
-						"white": "白色",
-						"yellow": "黄色"
-					},
-					"title": "オンスクリーンディスプレイ(OSD)の色を選択選ぶ"
-				},
-				"hide": {
-					"label": "非表示の遅延",
-					"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します"
-				},
-				"opacity": {
-					"label": "OSDの不透明度",
-					"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する"
-				},
-				"padding": {
-					"label": "スペーシング",
-					"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。"
-				},
-				"position": {
-					"label": "ポジション",
-					"options": {
-						"bottom_left": "左下隅",
-						"bottom_right": "右下隅",
-						"center": "中心",
-						"top_left": "左上隅",
-						"top_right": "右上隅"
-					},
-					"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
-				},
-				"title": "オンスクリーンディスプレイの設定",
-				"type": {
-					"label": "OSD型",
-					"options": {
-						"circle": "円形",
-						"line": "ライン",
-						"no_display": "見せない",
-						"text": "テキスト"
-					},
-					"title": "オンスクリーンディスプレイ(OSD)型を選択選ぶ"
-				}
-			},
-			"playbackSpeed": {
-				"enable": {
-					"label": "強制再生速度",
-					"title": "強制再生速度を可能にする"
-				},
-				"playbackSpeedButtons": {
-					"label": "再生速度ボタン",
-					"select": {
-						"label": "再生ボタン速度",
-						"title": "マウスクリックに速度を変化する量"
-					},
-					"title": "動画の再生速度を上げか下げボタンに追加する"
-				},
-				"select": {
-					"label": "動画の再生速度",
-					"title": "動画の速度に設定する"
-				},
-				"title": "再生速度設定"
-			},
-			"playlistLength": {
-				"enable": {
-					"label": "プレイリストの長さ情報を表示",
-					"title": "プレイリストの長さ全額、視聴時間量、と残り時間を見せてしまいます。"
-				},
-				"title": "プレイリストの長さ設定",
-				"wayToGetLength": {
-					"select": {
-						"label": "プレイリストの長さを取得する方法",
-						"title": "プレイリストの長さ情報を取得する方法 (エラーが発生した場合、APIメソッドはHTMLにフォールバックします)"
-					}
-				},
-				"wayToGetWatchTime": {
-					"select": {
-						"label": "動画の視聴時間の取り出す方法",
-						"options": {
-							"duration": "動画の長さ",
-							"youtube": "動画の視聴時間"
-						},
-						"title": "視聴時間の長さを取得する方法 (動画の長さタイプはウォッチページでのみ使用)"
-					}
-				}
-			},
-			"playlistManagement": {
-				"features": {
-					"markAsUnwatchedButton": {
-						"label": "Mark as unwatched button",
-						"title": "Adds a button to mark videos as unwatched"
-					},
-					"removeVideoButton": {
-						"label": "Remove video button",
-						"title": "Adds a button to remove videos from the playlist"
-					}
-				},
-				"title": "Playlist management settings"
-			},
-			"playlistManagementButtons": {
-				"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-				"failedToRemoveVideo": "動画を削除できませんでした",
-				"markAsUnwatched": "未視聴にする",
-				"markingAsUnwatched": "Marking as unwatched…",
-				"removeVideo": "ビデオを削除",
-				"removingVideo": "ビデオの削除..."
-			},
-			"saveToWatchLaterButton": {
-				"failedToSaveVideo": "Failed to save video to Watch Later",
-				"saveVideo": "Save to Watch Later",
-				"savingVideo": "Saving to Watch Later…"
-			},
-			"screenshotButton": {
-				"enable": {
-					"label": "スクリーンショットボタン",
-					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する"
-				},
-				"saveAs": {
-					"both": "Both (File and Clipboard)",
-					"clipboard": "クリップボード",
-					"file": "ファイル"
-				},
-				"selectFormat": {
-					"label": "スクリーンショットフォーマット",
-					"title": "スクリーンショットを保存するフォーマット"
-				},
-				"selectSaveAs": {
-					"label": "スクリーンショットセーブ型",
-					"title": "スクリーンショットのセーブ型"
-				},
-				"title": "スクリーンショット設定"
-			},
-			"scrollWheelSpeedControl": {
-				"adjustmentSteps": {
-					"label": "スクロールごとの速度変化",
-					"title": "スクロールごとの速度変化の分量をする"
-				},
-				"enable": {
-					"label": "スクロールホイール再生速度制御",
-					"title": "キーバインドを押さえるでスクロールホイール再生速度制御可能にさせる。"
-				},
-				"optionLabel": "{{KEY}} キー",
-				"select": {
-					"label": "キーバインド",
-					"title": "キーバインド選択選ぶ"
-				},
-				"title": "スクロールホイール再生速度制御設定"
-			},
-			"scrollWheelVolumeControl": {
-				"adjustmentSteps": {
-					"label": "スクロールごとの音量変化",
-					"title": "スクロールごとの音量変化の分量をする"
-				},
-				"enable": {
-					"label": "スクロールホイール音量制御",
-					"title": "スクロールホイールを使用して、ビデオの音量を制御する。"
-				},
-				"holdModifierKey": {
-					"enable": {
-						"label": "キーバインドに押さえる",
-						"title": "キーバインドを押さえるでスクロールホイール音量制御可能にさせる"
-					},
-					"optionLabel": "{{KEY}} キー",
-					"select": {
-						"label": "キーバインド",
-						"title": "キーバインド選択選べる"
-					}
-				},
-				"holdRightClick": {
-					"enable": {
-						"label": "右クリックに押さえるで可能にする",
-						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする"
-					}
-				},
-				"title": "スクロールホイール音量制御設定"
-			},
-			"settingSearch": {
-				"placeholder": "設定を探す"
-			},
-			"videoHistory": {
-				"enable": {
-					"label": "視聴した動画に追跡をつける",
-					"title": "再生を再開できるように、視聴中の動画で中断した場所を追跡します"
-				},
-				"resumeType": {
-					"select": {
-						"label": "レジューム型",
-						"options": {
-							"automatic": "自動",
-							"prompt": "入力要求"
-						},
-						"title": "動画をレジュームするの方法を選択します"
-					}
-				},
-				"title": "動画履歴設定"
-			},
-			"volumeBoost": {
-				"boostAmount": {
-					"label": "音量ブーストの量(dB)",
-					"title": "音量を上げる量"
-				},
-				"enable": {
-					"label": "音量ブースト",
-					"title": "音量ブーストを可能にする"
-				},
-				"mode": {
-					"select": {
-						"label": "音量ブースト型",
-						"options": {
-							"global": "全て",
-							"perVideo": "動画ごと"
-						},
-						"title": "音量ブーストの適用方法を選択します。「動画ごと」は別々の動画ごとを音量ブーストに可能する。「全て」は全ての動画を音量ブーストに付ける。"
-					}
-				},
-				"title": "音量ブーストの設定"
-			},
-			"youtubeDataApiV3Key": {
-				"getApiKeyLinkText": "APIキーがここで取得をします。",
-				"input": {
-					"label": "APIキー",
-					"title": "YouTube API V3キーを入力してください。"
-				},
-				"title": "YouTube API V3キー"
-			},
-			"youtubeDeepDark": {
-				"author": "作家",
-				"co-authors": "共同作家",
-				"colors": {
+				"settings": {
 					"colorShadow": {
 						"label": "陰の色",
 						"title": "陰の色"
@@ -690,17 +322,526 @@
 					"secondBackground": {
 						"label": "二次背景色",
 						"title": "二次背景の色"
+					},
+					"theme": {
+						"select": {
+							"label": "テーマを選択",
+							"title": "ページのテーマを選択選べしてください"
+						}
 					}
 				},
-				"enable": {
-					"label": "選択中テーマを可能にする",
-					"title": "選択中ページにテーマを可能にする"
-				},
-				"select": {
-					"label": "テーマを選択",
-					"title": "ページのテーマを選択選べしてください"
-				},
 				"title": "YouTubeディープダーク設定"
+			},
+			"forwardRewindButtons": {
+				"enable": {
+					"label": "早送/リワインドボタンを可能にする",
+					"title": "早送ボタンとリワインドボタンをビデオ・プレーヤーに追加する"
+				},
+				"settings": {
+					"time": {
+						"label": "早送/リワインド時間",
+						"title": "動画に早送/リワインドを量時間"
+					}
+				},
+				"title": "早送/リワインドボタン設定"
+			},
+			"miscellaneous": {
+				"settings": {
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						}
+					},
+					"automaticTheaterMode": {
+						"enable": {
+							"label": "自動シアターモード",
+							"title": "動画の読み込み時に自動的にシアターモードを有効にする"
+						}
+					},
+					"automaticallyDisableAmbientMode": {
+						"enable": {
+							"label": "シネマティック ライティングを自動的に無効にする",
+							"title": "動画の読み込み時にシネマティック ライティングを自動にディセーブルする"
+						}
+					},
+					"automaticallyDisableAutoPlay": {
+						"enable": {
+							"label": "Automatically disable autoplay",
+							"title": "Automatically disables autoplay when you load a video"
+						}
+					},
+					"automaticallyDisableClosedCaptions": {
+						"enable": {
+							"label": "クローズドキャプションを自動にディセーブルする",
+							"title": "動画の読み込み時にクローズドキャプションを自動にディセーブルする"
+						}
+					},
+					"automaticallyEnableClosedCaptions": {
+						"enable": {
+							"label": "Automatically enable closed captions",
+							"title": "Automatically enables closed captions when you load a video"
+						}
+					},
+					"automaticallyMaximizePlayer": {
+						"enable": {
+							"label": "Automatically maximize player",
+							"title": "Automatically maximizes the player when you load a video"
+						}
+					},
+					"automaticallyShowMoreVideosOnEndScreen": {
+						"enable": {
+							"label": "Automatically show more videos on end screen",
+							"title": "Automatically shows more videos on end screen when you load a video"
+						}
+					},
+					"copyTimestampUrlButton": {
+						"enable": {
+							"label": "タイムスタンプ付きの動画URLをコピーのボタン",
+							"title": "タイムスタンプ付きの動画URLをコピーする (?t=123)"
+						}
+					},
+					"defaultToOriginalAudioTrack": {
+						"enable": {
+							"label": "オリジナルのオーディオトラックをデフォルトにする",
+							"title": "常にオリジナルのオーディオトラックをデフォルトにする"
+						}
+					},
+					"hideArtificialIntelligenceSummary": {
+						"enable": {
+							"label": "AIサマリーを非表示",
+							"title": "動画の下のAIサマリーを非表示にする"
+						}
+					},
+					"hideEndScreenCards": {
+						"enable": {
+							"label": "終了画面のカードを非表示にする",
+							"title": "動画の終了で画面カードを非表示にする"
+						}
+					},
+					"hideEndScreenCardsButton": {
+						"enable": {
+							"label": "終了画面のカードボタンを非表示にする",
+							"title": "終了画面でボタンなカードを見せるか隠すに追加する"
+						}
+					},
+					"hideLiveStreamChat": {
+						"enable": {
+							"label": "配信チャットを隠す",
+							"title": "配信チャットを隠する"
+						}
+					},
+					"hideMembersOnlyVideos": {
+						"enable": {
+							"label": "Hide members-only videos",
+							"title": "Hides videos that are only visible to members"
+						}
+					},
+					"hideOfficialArtistVideosFromHomePage": {
+						"enable": {
+							"label": "公式アーティストの動画を隠する",
+							"title": "ホームページから公式アーティストの動画を隠する"
+						}
+					},
+					"hidePaidPromotionBanner": {
+						"enable": {
+							"label": "有料プロモーションバナーを隠す",
+							"title": "有料プロモーションのある動画を視聴したときに表示されるバナーを隠すします"
+						}
+					},
+					"hidePlayables": {
+						"enable": {
+							"label": "Hide playables",
+							"title": "Hides all playables"
+						}
+					},
+					"hidePlaylistRecommendationsFromHomePage": {
+						"enable": {
+							"label": "Hide playlists from homepage",
+							"title": "Get rid of playlists from homepage"
+						}
+					},
+					"hideScrollbar": {
+						"enable": {
+							"label": "スクロールバー隠す機能",
+							"title": "ページのスクロールバーを隠す"
+						}
+					},
+					"hideShorts": {
+						"enable": {
+							"label": "ショートを隠す",
+							"title": "全ショートを隠す"
+						}
+					},
+					"hideSidebarRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos",
+							"title": "Hides the sidebar that recommends videos"
+						}
+					},
+					"hideTranslateComment": {
+						"enable": {
+							"label": "コメント翻訳ボタンを隠す",
+							"title": "コメントの下で「言語に翻訳する」ボタンを隠する"
+						}
+					},
+					"loopButton": {
+						"enable": {
+							"label": "動画ループボタン",
+							"title": "動画をループするボタンをフィーチャー・メニューに追加する"
+						}
+					},
+					"maximizePlayerButton": {
+						"enable": {
+							"label": "最大化ボタン",
+							"title": "プレイヤーを最大化するボタンをフィーチャー・メニューに追加する"
+						}
+					},
+					"openTranscriptButton": {
+						"enable": {
+							"label": "文字起こしを見せるボタン",
+							"title": "動画の文字起こしを見せるするボタンをフィーチャー・メニューに追加する"
+						}
+					},
+					"openYouTubeSettingsOnHover": {
+						"enable": {
+							"label": "マウスを合わせでYouTubeの設定を開ける",
+							"title": "設定ボタンにマウスを合わせたときにYouTubeの設定メニューを開けてする"
+						}
+					},
+					"pauseBackgroundPlayers": {
+						"enable": {
+							"label": "背後タブのビデオプレイヤーを一時停止",
+							"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
+						}
+					},
+					"remainingTime": {
+						"enable": {
+							"label": "残り時間",
+							"title": "動画の残り時間を表示します"
+						}
+					},
+					"rememberVolume": {
+						"enable": {
+							"label": "前音量を覚える",
+							"title": "新ビデオの音量を前動画の音量に変化する。"
+						}
+					},
+					"removeRedirect": {
+						"enable": {
+							"label": "YouTubeのリダイレクトURLを削除する",
+							"title": "YouTubeリダイレクトを実物なURLを換えして、リダイレクト注意を抜かします"
+						}
+					},
+					"restoreFullscreenScrolling": {
+						"enable": {
+							"label": "全画面表示のスクロールを復元",
+							"title": "全画面表示モードでスクロールを復元します"
+						}
+					},
+					"saveToWatchLaterButton": {
+						"enable": {
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+						}
+					},
+					"shareShortener": {
+						"enable": {
+							"label": "YouTube動画のURLを短縮する",
+							"title": "YouTube動画のURLに機能パラメータを削除して短縮する(youtu.be)"
+						}
+					},
+					"shortsAutoScroll": {
+						"enable": {
+							"label": "ショートの自動スクロール",
+							"title": "次のショートを自動にスクロールする"
+						}
+					},
+					"skipContinueWatching": {
+						"enable": {
+							"label": "「動画が一時停止されました。続きを視聴しますか？」を抜かする",
+							"title": "動画一時休止する休眠メッセージを抜かされます"
+						}
+					}
+				},
+				"title": "他の設定"
+			},
+			"onScreenDisplaySettings": {
+				"settings": {
+					"color": {
+						"label": "OSDの色",
+						"select": {
+							"options": {
+								"blue": "青色",
+								"green": "緑色",
+								"orange": "橙色",
+								"pink": "桃色",
+								"purple": "紫色",
+								"red": "赤色",
+								"white": "白色",
+								"yellow": "黄色"
+							}
+						},
+						"title": "オンスクリーンディスプレイ(OSD)の色を選択選ぶ"
+					},
+					"hide": {
+						"label": "非表示の遅延",
+						"title": "OSDを自動的に非表示にするまでの時間(ミリ秒)単位で指定します"
+					},
+					"opacity": {
+						"label": "OSDの不透明度",
+						"title": "オンスクリーンディスプレイ(OSD)の不透明度を調整する"
+					},
+					"padding": {
+						"label": "スペーシング",
+						"title": "オンスクリーンディスプレイ(OSD)周辺の画素でスペーシングが変化する。特に隅なOSDのみ適用されます。"
+					},
+					"position": {
+						"label": "ポジション",
+						"select": {
+							"options": {
+								"bottom_left": "左下隅",
+								"bottom_right": "右下隅",
+								"center": "中心",
+								"top_left": "左上隅",
+								"top_right": "右上隅"
+							}
+						},
+						"title": "オンスクリーンディスプレイ(OSD)のポジションを選択選ぶ"
+					},
+					"type": {
+						"label": "OSD型",
+						"select": {
+							"options": {
+								"circle": "円形",
+								"line": "ライン",
+								"no_display": "見せない",
+								"text": "テキスト"
+							}
+						},
+						"title": "オンスクリーンディスプレイ(OSD)型を選択選ぶ"
+					}
+				},
+				"title": "オンスクリーンディスプレイの設定"
+			},
+			"playerQuality": {
+				"enable": {
+					"label": "自動画質調整",
+					"title": "選択したレベルに合わせて動画の画質を自動的に調整します。"
+				},
+				"settings": {
+					"quality": {
+						"select": {
+							"label": "プレイヤーの動画質",
+							"title": "動画の画質に設定する"
+						}
+					},
+					"qualityFallbackStrategy": {
+						"select": {
+							"label": "画質フォールバック対策",
+							"options": {
+								"higher": "上位",
+								"lower": "下位"
+							},
+							"title": "使用不能選択中画質ときに対策使ってする"
+						}
+					}
+				},
+				"title": "自動画質設定"
+			},
+			"playerSpeed": {
+				"enable": {
+					"label": "強制再生速度",
+					"title": "強制再生速度を可能にする"
+				},
+				"settings": {
+					"buttons": {
+						"label": "再生速度ボタン",
+						"select": {
+							"label": "再生ボタン速度",
+							"title": "マウスクリックに速度を変化する量"
+						},
+						"title": "動画の再生速度を上げか下げボタンに追加する"
+					},
+					"speed": {
+						"select": {
+							"label": "動画の再生速度",
+							"title": "動画の速度に設定する"
+						}
+					}
+				},
+				"title": "再生速度設定"
+			},
+			"playlistLength": {
+				"enable": {
+					"label": "プレイリストの長さ情報を表示",
+					"title": "プレイリストの長さ全額、視聴時間量、と残り時間を見せてしまいます。"
+				},
+				"settings": {
+					"wayToGetLength": {
+						"select": {
+							"label": "プレイリストの長さを取得する方法",
+							"title": "プレイリストの長さ情報を取得する方法 (エラーが発生した場合、APIメソッドはHTMLにフォールバックします)"
+						}
+					},
+					"wayToGetWatchTime": {
+						"select": {
+							"label": "動画の視聴時間の取り出す方法",
+							"options": {
+								"duration": "動画の長さ",
+								"youtube": "動画の視聴時間"
+							},
+							"title": "視聴時間の長さを取得する方法 (動画の長さタイプはウォッチページでのみ使用)"
+						}
+					}
+				},
+				"title": "プレイリストの長さ設定"
+			},
+			"playlistManagementButtons": {
+				"settings": {
+					"markAsUnwatchedButton": {
+						"enable": {
+							"label": "Mark as unwatched button",
+							"title": "Adds a button to mark videos as unwatched"
+						}
+					},
+					"removeVideoButton": {
+						"enable": {
+							"label": "Remove video button",
+							"title": "Adds a button to remove videos from the playlist"
+						}
+					}
+				},
+				"title": "Playlist management settings"
+			},
+			"screenshotButton": {
+				"enable": {
+					"label": "スクリーンショットボタン",
+					"title": "動画をスクリーンショット撮るするボタンをビデオ・プレーヤーに追加する"
+				},
+				"settings": {
+					"format": {
+						"label": "スクリーンショットフォーマット",
+						"title": "スクリーンショットを保存するフォーマット"
+					},
+					"saveAs": {
+						"select": {
+							"label": "スクリーンショットセーブ型",
+							"options": {
+								"both": "Both (File and Clipboard)",
+								"clipboard": "クリップボード",
+								"file": "ファイル"
+							},
+							"title": "スクリーンショットのセーブ型"
+						}
+					}
+				},
+				"title": "スクリーンショット設定"
+			},
+			"scrollWheelSpeedControl": {
+				"enable": {
+					"label": "スクロールホイール再生速度制御",
+					"title": "キーバインドを押さえるでスクロールホイール再生速度制御可能にさせる。"
+				},
+				"extras": {
+					"optionLabel": "{{KEY}} キー"
+				},
+				"settings": {
+					"adjustmentSteps": {
+						"label": "スクロールごとの速度変化",
+						"title": "スクロールごとの速度変化の分量をする"
+					},
+					"modifierKey": {
+						"select": {
+							"label": "キーバインド",
+							"title": "キーバインド選択選ぶ"
+						}
+					}
+				},
+				"title": "スクロールホイール再生速度制御設定"
+			},
+			"scrollWheelVolumeControl": {
+				"enable": {
+					"label": "スクロールホイール音量制御",
+					"title": "スクロールホイールを使用して、ビデオの音量を制御する。"
+				},
+				"extras": {
+					"optionLabel": "{{KEY}} キー"
+				},
+				"settings": {
+					"adjustmentSteps": {
+						"label": "スクロールごとの音量変化",
+						"title": "スクロールごとの音量変化の分量をする"
+					},
+					"holdModifierKey": {
+						"label": "キーバインドに押さえる",
+						"select": {
+							"label": "キーバインド",
+							"title": "キーバインド選択選べる"
+						},
+						"title": "キーバインドを押さえるでスクロールホイール音量制御可能にさせる"
+					},
+					"holdRightClick": {
+						"label": "右クリックに押さえるで可能にする",
+						"title": "右クリックに押さえるでスクロールホイール音量制御可能にする"
+					}
+				},
+				"title": "スクロールホイール音量制御設定"
+			},
+			"videoHistory": {
+				"enable": {
+					"label": "視聴した動画に追跡をつける",
+					"title": "再生を再開できるように、視聴中の動画で中断した場所を追跡します"
+				},
+				"settings": {
+					"resumeType": {
+						"select": {
+							"label": "レジューム型",
+							"options": {
+								"automatic": "自動",
+								"prompt": "入力要求"
+							},
+							"title": "動画をレジュームするの方法を選択します"
+						}
+					}
+				},
+				"title": "動画履歴設定"
+			},
+			"volumeBoost": {
+				"enable": {
+					"label": "音量ブースト",
+					"title": "音量ブーストを可能にする"
+				},
+				"settings": {
+					"amount": {
+						"label": "音量ブーストの量(dB)",
+						"title": "音量を上げる量"
+					},
+					"mode": {
+						"select": {
+							"label": "音量ブースト型",
+							"options": {
+								"global": "全て",
+								"perVideo": "動画ごと"
+							},
+							"title": "音量ブーストの適用方法を選択します。「動画ごと」は別々の動画ごとを音量ブーストに可能する。「全て」は全ての動画を音量ブーストに付ける。"
+						}
+					}
+				},
+				"title": "音量ブーストの設定"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}

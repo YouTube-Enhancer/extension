@@ -1,5 +1,6 @@
-import "./index.css";
 import type { YouTubePlayerDiv } from "@/src/types";
+
+import "./index.css";
 
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
@@ -41,7 +42,7 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 	} = optionsData;
 	// If scroll wheel volume control is disabled, return
 	if (!enableScrollWheelVolumeControl) return;
-	const containerSelectors = ["div#player", "#player-container:has(#movie_player)"];
+	const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
 	// Wait for the specified container selectors to be available on the page
 	await waitForAllElements(containerSelectors);
 
