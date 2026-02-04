@@ -260,6 +260,15 @@
       "contributions": [
         "security"
       ]
+    },
+    {
+      "login": "SoSeDiK",
+      "name": "Illia Bondar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19875118?v=4",
+      "profile": "https://github.com/SoSeDiK",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
