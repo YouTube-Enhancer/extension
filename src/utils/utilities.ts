@@ -35,7 +35,6 @@ import { getDeepDarkCustomThemeStyle } from "../features/deepDarkCSS/utils";
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { engagementPanelVisibility, type EngagementPanelVisibility, getCommentsPanelSelector } from "../utils/constants";
 import { eventManager, type FeatureName } from "./EventManager";
-
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
 
@@ -198,7 +197,7 @@ export function createSVGElement<K extends keyof SVGElementTagNameMap>(
 
 	return element;
 }
-
+const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
 export function createTooltip({
 	direction = "up",
 	element,
@@ -218,6 +217,7 @@ export function createTooltip({
 } {
 	function makeTooltip() {
 		const isDelhiModern = isModernYouTubeVideoLayout();
+		const isYTEMiniPlayerActive = isMiniPlayerActive();
 		const rect = element.getBoundingClientRect();
 		// Create tooltip element
 		const tooltip = createStyledElement({
@@ -247,7 +247,7 @@ export function createTooltip({
 					left: `${rect.right + rect.width}px`,
 					top: `${rect.bottom}px`
 				}),
-				zIndex: "99999"
+				zIndex: isYTEMiniPlayerActive ? "2147483647" : "99999"
 			}
 		});
 		const {
@@ -269,10 +269,12 @@ export function createTooltip({
 				tooltip.remove();
 			}
 			const tooltip = makeTooltip();
+			const isYTEMiniPlayerActive = isMiniPlayerActive();
 			const isButtonBelowPlayer = element?.parentElement?.id === "yte-button-container";
 			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-			if (isButtonBelowPlayer) document.body.appendChild(tooltip);
-			else {
+			if (isYTEMiniPlayerActive || isButtonBelowPlayer) {
+				document.body.appendChild(tooltip);
+			} else {
 				if (playerContainer?.offsetParent) playerContainer.appendChild(tooltip);
 				else document.body.appendChild(tooltip);
 			}

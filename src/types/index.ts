@@ -123,6 +123,10 @@ export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
 export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const miniPlayerPositions = ["bottom_center", "bottom_left", "bottom_right", "top_center", "top_left", "top_right"] as const;
+export type MiniPlayerPosition = (typeof miniPlayerPositions)[number];
+export const miniPlayerSizes = ["320x180", "400x225", "480x270", "560x315"] as const;
+export type MiniPlayerSize = (typeof miniPlayerSizes)[number];
 export const playlistWatchTimeGetMethod = ["duration", "youtube"] as const;
 export type PlaylistWatchTimeGetMethod = (typeof playlistWatchTimeGetMethod)[number];
 export const playlistLengthGetMethod = ["api", "html"] as const;
@@ -198,6 +202,7 @@ export const buttonNames = Object.keys({
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
+	miniPlayerButton: "",
 	openTranscriptButton: "",
 	rewindButton: "",
 	screenshotButton: "",
@@ -211,6 +216,7 @@ export const buttonNameToSettingName = {
 	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
 	loopButton: "enable_loop_button",
 	maximizePlayerButton: "enable_maximize_player_button",
+	miniPlayerButton: "enable_comments_mini_player_button",
 	openTranscriptButton: "enable_open_transcript_button",
 	rewindButton: "enable_forward_rewind_buttons",
 	screenshotButton: "enable_screenshot_button",
@@ -244,6 +250,8 @@ export type configuration = {
 	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_automatically_show_more_videos_on_end_screen: boolean;
+	enable_comments_mini_player: boolean;
+	enable_comments_mini_player_button: boolean;
 	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
@@ -293,6 +301,8 @@ export type configuration = {
 	forward_rewind_buttons_time: number;
 	global_volume: number;
 	language: AvailableLocales;
+	mini_player_default_position: MiniPlayerPosition;
+	mini_player_default_size: MiniPlayerSize;
 	open_settings_on_major_or_minor_version_change: boolean;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;
@@ -396,6 +406,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
+	commentsMiniPlayerChange: DataResponseMessage<"commentsMiniPlayerChange", { miniPlayerEnabled: boolean }>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	deepDarkThemeChange: DataResponseMessage<
@@ -434,6 +445,8 @@ export type ExtensionSendOnlyMessageMappings = {
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	miniPlayerButtonChange: DataResponseMessage<"miniPlayerButtonChange", { miniPlayerButtonEnabled: boolean }>;
+	miniPlayerDefaultsChange: DataResponseMessage<"miniPlayerDefaultsChange", { defaultPosition: MiniPlayerPosition; defaultSize: MiniPlayerSize }>;
 	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
 	openYTSettingsOnHoverChange: DataResponseMessage<
 		"openYTSettingsOnHoverChange",
