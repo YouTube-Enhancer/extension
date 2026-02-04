@@ -30,18 +30,18 @@ export const addCopyTimestampUrlButton: AddButtonFunction = async () => {
 			featureName: "copyTimestampUrlButton",
 			id: "yte-feature-copyTimestampUrlButton-tooltip"
 		});
-		button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.copied");
+		button.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.extras.copied);
 		update();
 		setTimeout(() => {
 			remove();
-			button.dataset.title = window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.label");
+			button.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.button.label);
 			update();
 		}, 1000);
 	}
 	await addFeatureButton(
 		"copyTimestampUrlButton",
 		copyTimestampUrlButtonPlacement,
-		window.i18nextInstance.t("pages.content.features.copyTimestampUrlButton.button.label"),
+		window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.button.label),
 		getFeatureIcon("copyTimestampUrlButton", copyTimestampUrlButtonPlacement),
 		copyTimestampUrlButtonClickListener,
 		false

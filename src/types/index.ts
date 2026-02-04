@@ -1,4 +1,4 @@
-import type { ParseKeys, TOptions } from "i18next";
+import type { ParseKeys, TFunction, TOptions } from "i18next";
 import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
@@ -123,6 +123,10 @@ export const videoHistoryResumeTypes = ["automatic", "prompt"] as const;
 export type VideoHistoryResumeType = (typeof videoHistoryResumeTypes)[number];
 export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
+export const miniPlayerPositions = ["bottom_center", "bottom_left", "bottom_right", "top_center", "top_left", "top_right"] as const;
+export type MiniPlayerPosition = (typeof miniPlayerPositions)[number];
+export const miniPlayerSizes = ["320x180", "400x225", "480x270", "560x315"] as const;
+export type MiniPlayerSize = (typeof miniPlayerSizes)[number];
 export const playlistWatchTimeGetMethod = ["duration", "youtube"] as const;
 export type PlaylistWatchTimeGetMethod = (typeof playlistWatchTimeGetMethod)[number];
 export const playlistLengthGetMethod = ["api", "html"] as const;
@@ -169,6 +173,7 @@ export type SingleButtonFeatureNames = Exclude<
 >;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
 export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
+export type TSelectorFunc = Parameters<TFunction<"en-US">>[0];
 const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 	forwardRewindButtons: {
 		forwardButton: "",
@@ -197,6 +202,7 @@ export const buttonNames = Object.keys({
 	increasePlaybackSpeedButton: "",
 	loopButton: "",
 	maximizePlayerButton: "",
+	miniPlayerButton: "",
 	openTranscriptButton: "",
 	rewindButton: "",
 	screenshotButton: "",
@@ -210,6 +216,7 @@ export const buttonNameToSettingName = {
 	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
 	loopButton: "enable_loop_button",
 	maximizePlayerButton: "enable_maximize_player_button",
+	miniPlayerButton: "enable_comments_mini_player_button",
 	openTranscriptButton: "enable_open_transcript_button",
 	rewindButton: "enable_forward_rewind_buttons",
 	screenshotButton: "enable_screenshot_button",
@@ -243,12 +250,15 @@ export type configuration = {
 	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_automatically_show_more_videos_on_end_screen: boolean;
+	enable_comments_mini_player: boolean;
+	enable_comments_mini_player_button: boolean;
 	enable_copy_timestamp_url_button: boolean;
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_default_to_original_audio_track: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
+	enable_global_volume: boolean;
 	enable_hide_artificial_intelligence_summary: boolean;
 	enable_hide_end_screen_cards: boolean;
 	enable_hide_end_screen_cards_button: boolean;
@@ -289,7 +299,11 @@ export type configuration = {
 	enable_volume_boost: boolean;
 	feature_menu_open_type: FeatureMenuOpenType;
 	forward_rewind_buttons_time: number;
+	global_volume: number;
 	language: AvailableLocales;
+	mini_player_default_position: MiniPlayerPosition;
+	mini_player_default_size: MiniPlayerSize;
+	open_settings_on_major_or_minor_version_change: boolean;
 	osd_display_color: OnScreenDisplayColor;
 	osd_display_hide_time: number;
 	osd_display_opacity: number;
@@ -392,6 +406,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
+	commentsMiniPlayerChange: DataResponseMessage<"commentsMiniPlayerChange", { miniPlayerEnabled: boolean }>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
 	customCSSChange: DataResponseMessage<"customCSSChange", { customCSSCode: string; customCSSEnabled: boolean }>;
 	deepDarkThemeChange: DataResponseMessage<
@@ -401,6 +416,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	defaultToOriginalAudioTrackChange: DataResponseMessage<"defaultToOriginalAudioTrackChange", { defaultToOriginalAudioTrackEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	forwardRewindButtonsChange: DataResponseMessage<"forwardRewindButtonsChange", { forwardRewindButtonsEnabled: boolean }>;
+	globalVolumeChange: DataResponseMessage<"globalVolumeChange", { globalVolumeEnabled: boolean }>;
 	hideArtificialIntelligenceSummaryChange: DataResponseMessage<
 		"hideArtificialIntelligenceSummaryChange",
 		{ hideArtificialIntelligenceSummaryEnabled: boolean }
@@ -429,6 +445,8 @@ export type ExtensionSendOnlyMessageMappings = {
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	loopButtonChange: DataResponseMessage<"loopButtonChange", { loopButtonEnabled: boolean }>;
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
+	miniPlayerButtonChange: DataResponseMessage<"miniPlayerButtonChange", { miniPlayerButtonEnabled: boolean }>;
+	miniPlayerDefaultsChange: DataResponseMessage<"miniPlayerDefaultsChange", { defaultPosition: MiniPlayerPosition; defaultSize: MiniPlayerSize }>;
 	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
 	openYTSettingsOnHoverChange: DataResponseMessage<
 		"openYTSettingsOnHoverChange",
@@ -463,6 +481,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		}
 	>;
 	skipContinueWatchingChange: DataResponseMessage<"skipContinueWatchingChange", { skipContinueWatchingEnabled: boolean }>;
+	timestampPeekChange: DataResponseMessage<"timestampPeekChange", { timestampPeekEnabled: boolean }>;
 	videoHistoryChange: DataResponseMessage<"videoHistoryChange", { videoHistoryEnabled: boolean }>;
 	volumeBoostAmountChange: DataResponseMessage<
 		"volumeBoostAmountChange",
@@ -504,9 +523,10 @@ export type MessageMappings = Prettify<{
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
 export type MessageSource = "content" | "extension";
+
 export type Notification = {
 	action: NotificationAction;
-	message: TOptionsKeys;
+	message: TSelectorFunc;
 	progress?: number;
 	removeAfterMs?: number;
 	timestamp?: number;

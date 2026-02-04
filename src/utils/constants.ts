@@ -8,6 +8,8 @@ import {
 	buttonNames,
 	buttonPlacements,
 	featureMenuOpenTypes,
+	miniPlayerPositions,
+	miniPlayerSizes,
 	modifierKeys,
 	onScreenDisplayColors,
 	onScreenDisplayPositions,
@@ -23,6 +25,7 @@ import {
 	youtubePlayerQualityLevels,
 	youtubePlayerSpeedStep
 } from "../types";
+import { isNewYouTubeVideoLayout } from "../utils/utilities";
 
 export const deepDarkCssID = "yte-deep-dark-css";
 export const outputFolderName = "dist";
@@ -35,6 +38,7 @@ export const defaultConfiguration = {
 		increasePlaybackSpeedButton: "player_controls_left",
 		loopButton: "feature_menu",
 		maximizePlayerButton: "feature_menu",
+		miniPlayerButton: "feature_menu",
 		openTranscriptButton: "feature_menu",
 		rewindButton: "player_controls_right",
 		screenshotButton: "feature_menu",
@@ -59,12 +63,15 @@ export const defaultConfiguration = {
 	enable_automatically_maximize_player: false,
 	enable_automatically_set_quality: false,
 	enable_automatically_show_more_videos_on_end_screen: false,
+	enable_comments_mini_player: false,
+	enable_comments_mini_player_button: false,
 	enable_copy_timestamp_url_button: false,
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_default_to_original_audio_track: false,
 	enable_forced_playback_speed: false,
 	enable_forward_rewind_buttons: false,
+	enable_global_volume: false,
 	enable_hide_artificial_intelligence_summary: false,
 	enable_hide_end_screen_cards: false,
 	enable_hide_end_screen_cards_button: false,
@@ -105,7 +112,11 @@ export const defaultConfiguration = {
 	enable_volume_boost: false,
 	feature_menu_open_type: "hover",
 	forward_rewind_buttons_time: 5,
+	global_volume: 25,
 	language: "en-US",
+	mini_player_default_position: "bottom_right",
+	mini_player_default_size: "400x225",
+	open_settings_on_major_or_minor_version_change: true,
 	osd_display_color: "white",
 	osd_display_hide_time: 750,
 	osd_display_opacity: 75,
@@ -170,12 +181,15 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_automatically_maximize_player: z.boolean().optional(),
 	enable_automatically_set_quality: z.boolean().optional(),
 	enable_automatically_show_more_videos_on_end_screen: z.boolean().optional(),
+	enable_comments_mini_player: z.boolean().optional(),
+	enable_comments_mini_player_button: z.boolean().optional(),
 	enable_copy_timestamp_url_button: z.boolean().optional(),
 	enable_custom_css: z.boolean().optional(),
 	enable_deep_dark_theme: z.boolean().optional(),
 	enable_default_to_original_audio_track: z.boolean().optional(),
 	enable_forced_playback_speed: z.boolean().optional(),
 	enable_forward_rewind_buttons: z.boolean().optional(),
+	enable_global_volume: z.boolean().optional(),
 	enable_hide_artificial_intelligence_summary: z.boolean().optional(),
 	enable_hide_end_screen_cards: z.boolean().optional(),
 	enable_hide_end_screen_cards_button: z.boolean().optional(),
@@ -216,7 +230,11 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_volume_boost: z.boolean().optional(),
 	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),
 	forward_rewind_buttons_time: z.number().optional(),
+	global_volume: z.number().min(0).max(100).optional(),
 	language: z.enum(availableLocales).optional(),
+	mini_player_default_position: z.enum(miniPlayerPositions).optional(),
+	mini_player_default_size: z.enum(miniPlayerSizes).optional(),
+	open_settings_on_major_or_minor_version_change: z.boolean().optional(),
 	osd_display_color: z.enum(onScreenDisplayColors).optional(),
 	osd_display_hide_time: z.number().optional(),
 	osd_display_opacity: z.number().min(1).max(100).optional(),
@@ -249,3 +267,10 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;
 export const YouTube_Enhancer_Public_Youtube_Data_API_V3_Key = "AIzaSyA_z2BR_HSfKsPvuttqjD_6AY60zgqbm5k";
+export const getCommentsPanelSelector = () =>
+	isNewYouTubeVideoLayout() ?
+		"ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section'] ytd-item-section-renderer[section-identifier='comment-item-section']"
+	:	"ytd-comments.ytd-watch-flexy ytd-item-section-renderer[section-identifier='comment-item-section']";
+export const commentsHeaderSelector = "ytd-comments div#header";
+export const engagementPanelVisibility = ["ENGAGEMENT_PANEL_VISIBILITY_HIDDEN", "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"] as const;
+export type EngagementPanelVisibility = (typeof engagementPanelVisibility)[number];
