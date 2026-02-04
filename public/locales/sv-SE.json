@@ -234,7 +234,9 @@
 					"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 					"specificOption": {
 						"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
+						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -821,6 +823,19 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}
