@@ -1,13 +1,13 @@
 /* eslint-disable no-secrets/no-secrets */
 /**
- * Version 4.7.3
+ * Version 4.7.4
  * Author: https://github.com/RaitaroH
  * Co-authors: https://github.com/MechaLynx https://github.com/MaximeRF
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
  */
 export const deepDarkMaterial = `
 /* Author     : Theme made by RaitaroH */
-/* Co-authors : https://github.com/MechaLynx https://github.com/MaximeRF */
+/* Co-authors : https://github.com/MechaLynx https://github.com/MaxRFDev */
 /* Home       : https://github.com/RaitaroH/YouTube-DeepDark */
 /* Licence    : GNU General Public License v3.0 */
 
@@ -315,7 +315,7 @@ ytd-post-renderer[uses-compact-lockup] ytd-button-renderer.style-suggestive[is-p
 ytd-rich-item-renderer.ytd-rich-item-renderer-highlight {
 	/*border-radius: 8px;*/
 	background-color: var(--hover-background) !important; /*var(--yt-spec-outline);*/
-	box-shadow: 0 0 0 10px  var(--hover-background) !important; /*var(--yt-spec-outline);*/
+	box-shadow: 0 0 0 10px var(--hover-background) !important; /*var(--yt-spec-outline);*/
 }
 
 /*Feed filter*/
@@ -692,7 +692,7 @@ yt-button-renderer.yt-copy-link-renderer .yt-spec-button-shape-next--call-to-act
 
 /*Video cards*/
 /*2025-11-15*/
-/*ttile*/
+/*title*/
 ytd-grid-video-renderer.use-ellipsis #details.ytd-grid-video-renderer a.ytd-grid-video-renderer,
 ytd-compact-video-renderer.use-ellipsis #video-title.ytd-compact-video-renderer,
 #video-title.ytd-video-renderer,
@@ -1751,6 +1751,11 @@ grid-shelf-view-model.ytGridShelfViewModelHost > yt-section-header-view-model > 
 	fill: var(--main-color) !important;
 }
 
+/*shorts background*/
+#cinematic-container {
+	background: transparent !important;
+}
+
 /*Playlist page*/
 /*sidebar*/
 ytd-playlist-sidebar-renderer {
@@ -1909,13 +1914,15 @@ ytd-transcript-search-box-renderer {
 	background-color: var(--second-background) !important;
 }
 /*2024-10-27*/
-.YtChipShapeActive /*chip or tab*/
+.YtChipShapeActive, /*chip or tab*/
 .ytChipShapeActive /*nice*/ {
 	background: var(--second-background) !important;
 	color: var(--main-text) !important;
 }
-.YtChipShapeInactive, .ytChipShapeInactive
-.YtwTimelineChapterViewModelHost, .ytwTimelineChapterViewModelHost {
+.YtChipShapeInactive,
+.ytChipShapeInactive,
+.YtwTimelineChapterViewModelHost,
+.ytwTimelineChapterViewModelHost {
 	background: var(--hover-background) !important;
 	color: var(--main-text) !important;
 }
@@ -2097,7 +2104,7 @@ ytd-voice-search-dialog-renderer[dialog] {
 }
 #header-text.ytd-voice-search-dialog-renderer,
 #microphone-label.ytd-voice-search-dialog-renderer,
-#microphone.ytd-voice-search-dialog-renderer[state="try-again"] #microphone-circle.ytd-voice-search-dialog-renderer yt-icon.ytd-voice-search-dialog-renderer
+#microphone.ytd-voice-search-dialog-renderer[state="try-again"] #microphone-circle.ytd-voice-search-dialog-renderer yt-icon.ytd-voice-search-dialog-renderer,
 .yt-spec-button-shape-next--mono.yt-spec-button-shape-next--text {
 	color: var(--main-text) !important;
 }
@@ -2435,8 +2442,10 @@ ytd-item-section-renderer[static-comments-header] #header.ytd-item-section-rende
 
 /*Chat*/
 /*open panel*/
-.YtCarouselTitleViewModelTitle, .ytCarouselTitleViewModelTitle
-.YtTextCarouselItemViewModelHost, .ytTextCarouselItemViewModelHost {
+.YtCarouselTitleViewModelTitle,
+.ytCarouselTitleViewModelTitle,
+.YtTextCarouselItemViewModelHost,
+.ytTextCarouselItemViewModelHost {
 	color: var(--main-text) !important;
 }
 /*header*/
@@ -2814,8 +2823,8 @@ ytd-notification-renderer.unread #new.ytd-notification-renderer,
 	border-color: var(--main-color) !important;
 }
 .text.ytd-notification-renderer,
-.message.ytd-notification-renderer
-#yt-masthead-notifications-title, .yt-lockup-notification .yt-lockup-title a /*account settings*/
+.message.ytd-notification-renderer,
+#yt-masthead-notifications-title, .yt-lockup-notification .yt-lockup-title a, /*account settings*/
 h2.yt-multi-page-menu-section-renderer /*comments and notifications headers*/ {
 	color: var(--main-text) !important;
 }
