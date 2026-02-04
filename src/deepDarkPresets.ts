@@ -3,7 +3,7 @@
  * Author: https://github.com/RaitaroH
  * Co-authors: https://github.com/MechaLynx
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
- * Version: 4.7.3
+ * Version: 4.7.4
  */
 export const deepDarkPreset = [
 	"9anime",
