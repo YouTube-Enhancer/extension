@@ -323,6 +323,9 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/minkses"><img src="https://avatars.githubusercontent.com/u/33008182?v=4?s=100" width="100px;" alt="Minks S"/><br /><sub><b>Minks S</b></sub></a><br /><a href="#bug-minkses" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kindofabuzz"><img src="https://avatars.githubusercontent.com/u/1378108?v=4?s=100" width="100px;" alt="kindofabuzz"/><br /><sub><b>kindofabuzz</b></sub></a><br /><a href="#security-kindofabuzz" title="Security">🛡️</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SoSeDiK"><img src="https://avatars.githubusercontent.com/u/19875118?v=4?s=100" width="100px;" alt="Illia Bondar"/><br /><sub><b>Illia Bondar</b></sub></a><br /><a href="#ideas-SoSeDiK" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
