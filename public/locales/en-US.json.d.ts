@@ -151,6 +151,8 @@ interface EnUS {
 					singular: "Enable '{{OPTION}}' to configure this option";
 					specificOption: {
 						featureMenu: "Configure at least one button to be placed in the feature menu to configure this option.";
+						globalVolume: "Disable 'Remember last volume' to configure this option";
+						rememberVolume: "Disable 'Global volume' to configure this option";
 						screenshotButtonFileFormat: "Set screenshot save type to 'File' or 'Both' to configure this option";
 					};
 				};
@@ -219,6 +221,19 @@ interface EnUS {
 					};
 				};
 				title: "Forward/rewind button settings";
+			};
+			globalVolume: {
+				enable: {
+					label: "Always start videos with this volume";
+					title: "Makes all videos begin at your selected volume automatically";
+				};
+				settings: {
+					amount: {
+						label: "Video start volume";
+						title: "The volume applied to every video when it begins playing";
+					};
+				};
+				title: "Global Volume Override";
 			};
 			miscellaneous: {
 				settings: {

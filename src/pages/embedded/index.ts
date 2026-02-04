@@ -24,6 +24,7 @@ import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack }
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
+import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
 import {
 	addHideEndScreenCardsButton,
@@ -278,7 +279,8 @@ const enableFeatures = async () => {
 			enableAutomaticallyMaximizePlayer(),
 			enableAutomaticallyShowMoreVideosOnEndScreen(),
 			enableHideSidebarRecommendedVideos(),
-			enableAutomaticallyDisableAutoPlay()
+			enableAutomaticallyDisableAutoPlay(),
+			enableGlobalVolume()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -509,6 +511,7 @@ const initialize = function () {
 						}
 						break;
 					}
+
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
@@ -590,6 +593,17 @@ const initialize = function () {
 						} else {
 							await removeRewindButton();
 							await removeForwardButton();
+						}
+						break;
+					}
+					case "globalVolumeChange": {
+						const {
+							data: { globalVolumeEnabled }
+						} = message;
+						if (globalVolumeEnabled) {
+							await enableGlobalVolume();
+						} else {
+							await disableGlobalVolume();
 						}
 						break;
 					}
