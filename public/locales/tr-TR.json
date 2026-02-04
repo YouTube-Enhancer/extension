@@ -245,8 +245,8 @@
 					"specificOption": {
 						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
 						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Bu seçeneği yapılandırmak için 'Son ses seviyesini hatırla' seçeneğini devre dışı bırakın",
+						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın"
 					}
 				},
 				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -873,7 +873,7 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
+					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
 					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
 				},
 				"settings": {
