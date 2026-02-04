@@ -1,4 +1,5 @@
 {
+  "baseBranch": "dev",
   "commitConvention": "angular",
   "commitType": "docs",
   "contributors": [
@@ -235,37 +236,46 @@
       "profile": "https://github.com/dnicolson"
     },
     {
-      "login": "Dheatly23",
-      "name": "Dheatly23",
       "avatar_url": "https://avatars.githubusercontent.com/u/71598333?v=4",
-      "profile": "https://github.com/Dheatly23",
       "contributions": [
         "code"
-      ]
+      ],
+      "login": "Dheatly23",
+      "name": "Dheatly23",
+      "profile": "https://github.com/Dheatly23"
     },
     {
-      "login": "minkses",
-      "name": "Minks S",
       "avatar_url": "https://avatars.githubusercontent.com/u/33008182?v=4",
-      "profile": "https://github.com/minkses",
       "contributions": [
         "bug"
-      ]
+      ],
+      "login": "minkses",
+      "name": "Minks S",
+      "profile": "https://github.com/minkses"
     },
     {
-      "login": "kindofabuzz",
-      "name": "kindofabuzz",
       "avatar_url": "https://avatars.githubusercontent.com/u/1378108?v=4",
-      "profile": "https://github.com/kindofabuzz",
       "contributions": [
         "security"
-      ]
+      ],
+      "login": "kindofabuzz",
+      "name": "kindofabuzz",
+      "profile": "https://github.com/kindofabuzz"
     },
     {
+      "avatar_url": "https://avatars.githubusercontent.com/u/90115330?v=4",
+      "contributions": [
+        "ideas"
+      ],
       "login": "jtoya85",
       "name": "jtoya85",
-      "avatar_url": "https://avatars.githubusercontent.com/u/90115330?v=4",
-      "profile": "https://github.com/jtoya85",
+      "profile": "https://github.com/jtoya85"
+    },
+    {
+      "login": "SoSeDiK",
+      "name": "Illia Bondar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19875118?v=4",
+      "profile": "https://github.com/SoSeDiK",
       "contributions": [
         "ideas"
       ]
@@ -276,5 +286,6 @@
     "README.md"
   ],
   "projectName": "extension",
-  "projectOwner": "YouTube-Enhancer"
+  "projectOwner": "YouTube-Enhancer",
+  "repoType": "github"
 }
