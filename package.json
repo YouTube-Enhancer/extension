@@ -17,9 +17,9 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-		"update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
-		"update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
-		"update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
+    "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
+    "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
+    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
   },
   "type": "module",
   "optionalDependencies": {
@@ -52,7 +52,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/archiver": "^7.0.0",
-    "@types/chrome": "^0.1.24",
+    "@types/chrome": "^0.1.36",
     "@types/node": "^25.0.9",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
