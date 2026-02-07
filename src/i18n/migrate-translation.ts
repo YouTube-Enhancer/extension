@@ -1,10 +1,22 @@
+import type { ZodArray, ZodError, ZodIssue, ZodObject, ZodOptional, ZodType } from "zod";
+
 import fs from "node:fs";
 import path from "node:path";
 import z from "zod";
 
 import type { NewTranslationStruct, OldTranslationStruct } from "@/src/i18n/types";
-import type { TypeToZodSchema } from "@/src/types";
-
+type TypeToZod<T> = {
+	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
+		undefined extends T[K] ?
+			ZodOptional<ZodType<Exclude<T[K], undefined>>>
+		:	ZodType<T[K]>
+	:	ZodObject<TypeToZod<T[K]>>;
+};
+type TypeToZodSchema<T> = ZodObject<{
+	[K in keyof T]: T[K] extends any[] ? ZodArray<ZodType<T[K][number]>>
+	: T[K] extends object ? ZodObject<TypeToZod<T[K]>>
+	: ZodType<T[K]>;
+}>;
 export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = z.object({
 	langCode: z.string(),
 	langName: z.string(),
@@ -1046,8 +1058,8 @@ Options:
 `);
 }
 
-function printZodErrors(error: z.ZodError<any>) {
-	const formatError = (issues: z.ZodIssue[], pathPrefix: string = "") => {
+function printZodErrors(error: ZodError<any>) {
+	const formatError = (issues: ZodIssue[], pathPrefix: string = "") => {
 		for (const issue of issues) {
 			const path = [...(pathPrefix ? [pathPrefix] : []), ...issue.path].join(".");
 			console.log(`❌ ${path || "(root)"} → ${issue.message}`);
