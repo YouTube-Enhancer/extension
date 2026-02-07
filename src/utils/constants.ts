@@ -1,4 +1,4 @@
-import { z, ZodEnum, ZodObject } from "zod";
+import { z, ZodMiniEnum, ZodMiniObject } from "zod/v4-mini";
 
 import type { AllButtonNames, ButtonPlacement, configuration, TypeToPartialZodSchema } from "../types";
 
@@ -144,25 +144,93 @@ export const defaultConfiguration = {
 	volume_boost_mode: "global",
 	youtube_data_api_v3_key: ""
 } satisfies configuration;
+type ConfigurationNumericConstraints = Partial<NumbersOnly<configuration>>;
+type ConstraintTree = {
+	[key: string]: ConstraintTree | NumberConstraint;
+};
+type IsEmptyObject<T> = keyof T extends never ? true : false;
+type NumberConstraint = { max?: number; min?: number; step?: number };
+/**
+ * Recursively keeps ONLY numeric fields.
+ * - number  -> NumberConstraint
+ * - object  -> same object but filtered to numeric sub-keys
+ * - anything else -> never (removed)
+ */
+type NumbersOnly<T> =
+	T extends number ? NumberConstraint
+	: T extends object ?
+		RemoveEmpty<{
+			[K in keyof T]: NumbersOnly<T[K]>;
+		}>
+	:	never;
+type RemoveEmpty<T> = {
+	[K in keyof T as T[K] extends never ? never
+	: T[K] extends object ?
+		IsEmptyObject<T[K]> extends true ?
+			never
+		:	K
+	:	K]: T[K];
+};
+export function validateNumbers(obj: configuration, constraints: ConstraintTree, path: (number | string)[] = []): void {
+	for (const key of Object.keys(constraints) as (keyof typeof constraints)[]) {
+		const { [key]: rule } = constraints;
+		const value = (obj as any)?.[key];
+		const currentPath = [...path, key];
+
+		// Nested object → recurse
+		if (isConstraintTree(rule)) {
+			if (value && typeof value === "object") {
+				validateNumbers(value, rule, currentPath);
+			}
+			continue;
+		}
+		// Leaf constraint → validate number
+		if (typeof value !== "number") continue;
+		const { max, min, step } = rule;
+		const label = currentPath.map(String).join(".");
+		if (min !== undefined && value < min) {
+			throw new Error(`${label} must be >= ${min}`);
+		}
+		if (max !== undefined && value > max) {
+			throw new Error(`${label} must be <= ${max}`);
+		}
+		if (step !== undefined && (value - (min ?? 0)) % step !== 0) {
+			throw new Error(`${label} must be in steps of ${step}`);
+		}
+	}
+}
+
+function isConstraintTree(value: any): value is ConstraintTree {
+	return typeof value === "object" && value !== null && !("min" in value || "max" in value || "step" in value);
+}
+export const numberConstraints: ConfigurationNumericConstraints = {
+	global_volume: { max: 100, min: 0 },
+	osd_display_opacity: { max: 100, min: 1 },
+	playback_buttons_speed: { max: 1.0, min: youtubePlayerSpeedStep, step: youtubePlayerSpeedStep },
+	player_speed: { max: 16.0, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
+	remembered_volumes: { shortsPageVolume: { max: 100, min: 0 }, watchPageVolume: { max: 100, min: 0 } },
+	speed_adjustment_steps: { max: 1.0, min: 0.05, step: 0.05 },
+	volume_adjustment_steps: { max: 100, min: 1 }
+};
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
 	"button_placements",
 	{
-		button_placements: ZodObject<{
-			[K in AllButtonNames]: ZodEnum<{ [K in ButtonPlacement]: K }>;
+		button_placements: ZodMiniObject<{
+			[K in AllButtonNames]: ZodMiniEnum<{ [K in ButtonPlacement]: K }>;
 		}>;
 	},
 	true
 > = z.object({
 	button_placements: z.object({
 		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements).optional() }),
-			{} as Record<AllButtonNames, ZodEnum<{ [K in ButtonPlacement]: K }>>
+			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements) }),
+			{} as Record<AllButtonNames, ZodMiniEnum<{ [K in ButtonPlacement]: K }>>
 		)
 	}),
-	custom_css_code: z.string().optional(),
-	deep_dark_custom_theme_colors: z
-		.object({
+	custom_css_code: z.optional(z.string()),
+	deep_dark_custom_theme_colors: z.optional(
+		z.object({
 			colorShadow: z.string(),
 			dimmerText: z.string(),
 			hoverBackground: z.string(),
@@ -171,98 +239,98 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 			mainText: z.string(),
 			secondBackground: z.string()
 		})
-		.optional(),
-	deep_dark_preset: z.enum(deepDarkPreset).optional(),
-	enable_automatic_theater_mode: z.boolean().optional(),
-	enable_automatically_disable_ambient_mode: z.boolean().optional(),
-	enable_automatically_disable_autoplay: z.boolean().optional(),
-	enable_automatically_disable_closed_captions: z.boolean().optional(),
-	enable_automatically_enable_closed_captions: z.boolean().optional(),
-	enable_automatically_maximize_player: z.boolean().optional(),
-	enable_automatically_set_quality: z.boolean().optional(),
-	enable_automatically_show_more_videos_on_end_screen: z.boolean().optional(),
-	enable_comments_mini_player: z.boolean().optional(),
-	enable_comments_mini_player_button: z.boolean().optional(),
-	enable_copy_timestamp_url_button: z.boolean().optional(),
-	enable_custom_css: z.boolean().optional(),
-	enable_deep_dark_theme: z.boolean().optional(),
-	enable_default_to_original_audio_track: z.boolean().optional(),
-	enable_forced_playback_speed: z.boolean().optional(),
-	enable_forward_rewind_buttons: z.boolean().optional(),
-	enable_global_volume: z.boolean().optional(),
-	enable_hide_artificial_intelligence_summary: z.boolean().optional(),
-	enable_hide_end_screen_cards: z.boolean().optional(),
-	enable_hide_end_screen_cards_button: z.boolean().optional(),
-	enable_hide_live_stream_chat: z.boolean().optional(),
-	enable_hide_members_only_videos: z.boolean().optional(),
-	enable_hide_official_artist_videos_from_home_page: z.boolean().optional(),
-	enable_hide_paid_promotion_banner: z.boolean().optional(),
-	enable_hide_playables: z.boolean().optional(),
-	enable_hide_playlist_recommendations_from_home_page: z.boolean().optional(),
-	enable_hide_scrollbar: z.boolean().optional(),
-	enable_hide_shorts: z.boolean().optional(),
-	enable_hide_sidebar_recommended_videos: z.boolean().optional(),
-	enable_hide_translate_comment: z.boolean().optional(),
-	enable_loop_button: z.boolean().optional(),
-	enable_maximize_player_button: z.boolean().optional(),
-	enable_open_transcript_button: z.boolean().optional(),
-	enable_open_youtube_settings_on_hover: z.boolean().optional(),
-	enable_pausing_background_players: z.boolean().optional(),
-	enable_playback_speed_buttons: z.boolean().optional(),
-	enable_playlist_length: z.boolean().optional(),
-	enable_playlist_remove_button: z.boolean().optional(),
-	enable_playlist_reset_button: z.boolean().optional(),
-	enable_redirect_remover: z.boolean().optional(),
-	enable_remaining_time: z.boolean().optional(),
-	enable_remember_last_volume: z.boolean().optional(),
-	enable_restore_fullscreen_scrolling: z.boolean().optional(),
-	enable_save_to_watch_later_button: z.boolean().optional(),
-	enable_screenshot_button: z.boolean().optional(),
-	enable_scroll_wheel_speed_control: z.boolean().optional(),
-	enable_scroll_wheel_volume_control: z.boolean().optional(),
-	enable_scroll_wheel_volume_control_hold_modifier_key: z.boolean().optional(),
-	enable_scroll_wheel_volume_control_hold_right_click: z.boolean().optional(),
-	enable_share_shortener: z.boolean().optional(),
-	enable_shorts_auto_scroll: z.boolean().optional(),
-	enable_skip_continue_watching: z.boolean().optional(),
-	enable_timestamp_peek: z.boolean().optional(),
-	enable_video_history: z.boolean().optional(),
-	enable_volume_boost: z.boolean().optional(),
-	feature_menu_open_type: z.enum(featureMenuOpenTypes).optional(),
-	forward_rewind_buttons_time: z.number().optional(),
-	global_volume: z.number().min(0).max(100).optional(),
-	language: z.enum(availableLocales).optional(),
-	mini_player_default_position: z.enum(miniPlayerPositions).optional(),
-	mini_player_default_size: z.enum(miniPlayerSizes).optional(),
-	open_settings_on_major_or_minor_version_change: z.boolean().optional(),
-	osd_display_color: z.enum(onScreenDisplayColors).optional(),
-	osd_display_hide_time: z.number().optional(),
-	osd_display_opacity: z.number().min(1).max(100).optional(),
-	osd_display_padding: z.number().optional(),
-	osd_display_position: z.enum(onScreenDisplayPositions).optional(),
-	osd_display_type: z.enum(onScreenDisplayTypes).optional(),
-	playback_buttons_speed: z.number().min(youtubePlayerSpeedStep).max(1.0).step(youtubePlayerSpeedStep).optional(),
-	player_quality: z.enum(youtubePlayerQualityLevels).optional(),
-	player_quality_fallback_strategy: z.enum(PlayerQualityFallbackStrategy).optional(),
-	player_speed: z.number().min(youtubePlayerMinSpeed).max(16.0).step(youtubePlayerSpeedStep).optional(),
-	playlist_length_get_method: z.enum(playlistLengthGetMethod).optional(),
-	playlist_watch_time_get_method: z.enum(playlistWatchTimeGetMethod).optional(),
-	remembered_volumes: z
-		.object({
-			shortsPageVolume: z.number().min(0).max(100).optional(),
-			watchPageVolume: z.number().min(0).max(100).optional()
+	),
+	deep_dark_preset: z.optional(z.enum(deepDarkPreset)),
+	enable_automatic_theater_mode: z.optional(z.boolean()),
+	enable_automatically_disable_ambient_mode: z.optional(z.boolean()),
+	enable_automatically_disable_autoplay: z.optional(z.boolean()),
+	enable_automatically_disable_closed_captions: z.optional(z.boolean()),
+	enable_automatically_enable_closed_captions: z.optional(z.boolean()),
+	enable_automatically_maximize_player: z.optional(z.boolean()),
+	enable_automatically_set_quality: z.optional(z.boolean()),
+	enable_automatically_show_more_videos_on_end_screen: z.optional(z.boolean()),
+	enable_comments_mini_player: z.optional(z.boolean()),
+	enable_comments_mini_player_button: z.optional(z.boolean()),
+	enable_copy_timestamp_url_button: z.optional(z.boolean()),
+	enable_custom_css: z.optional(z.boolean()),
+	enable_deep_dark_theme: z.optional(z.boolean()),
+	enable_default_to_original_audio_track: z.optional(z.boolean()),
+	enable_forced_playback_speed: z.optional(z.boolean()),
+	enable_forward_rewind_buttons: z.optional(z.boolean()),
+	enable_global_volume: z.optional(z.boolean()),
+	enable_hide_artificial_intelligence_summary: z.optional(z.boolean()),
+	enable_hide_end_screen_cards: z.optional(z.boolean()),
+	enable_hide_end_screen_cards_button: z.optional(z.boolean()),
+	enable_hide_live_stream_chat: z.optional(z.boolean()),
+	enable_hide_members_only_videos: z.optional(z.boolean()),
+	enable_hide_official_artist_videos_from_home_page: z.optional(z.boolean()),
+	enable_hide_paid_promotion_banner: z.optional(z.boolean()),
+	enable_hide_playables: z.optional(z.boolean()),
+	enable_hide_playlist_recommendations_from_home_page: z.optional(z.boolean()),
+	enable_hide_scrollbar: z.optional(z.boolean()),
+	enable_hide_shorts: z.optional(z.boolean()),
+	enable_hide_sidebar_recommended_videos: z.optional(z.boolean()),
+	enable_hide_translate_comment: z.optional(z.boolean()),
+	enable_loop_button: z.optional(z.boolean()),
+	enable_maximize_player_button: z.optional(z.boolean()),
+	enable_open_transcript_button: z.optional(z.boolean()),
+	enable_open_youtube_settings_on_hover: z.optional(z.boolean()),
+	enable_pausing_background_players: z.optional(z.boolean()),
+	enable_playback_speed_buttons: z.optional(z.boolean()),
+	enable_playlist_length: z.optional(z.boolean()),
+	enable_playlist_remove_button: z.optional(z.boolean()),
+	enable_playlist_reset_button: z.optional(z.boolean()),
+	enable_redirect_remover: z.optional(z.boolean()),
+	enable_remaining_time: z.optional(z.boolean()),
+	enable_remember_last_volume: z.optional(z.boolean()),
+	enable_restore_fullscreen_scrolling: z.optional(z.boolean()),
+	enable_save_to_watch_later_button: z.optional(z.boolean()),
+	enable_screenshot_button: z.optional(z.boolean()),
+	enable_scroll_wheel_speed_control: z.optional(z.boolean()),
+	enable_scroll_wheel_volume_control: z.optional(z.boolean()),
+	enable_scroll_wheel_volume_control_hold_modifier_key: z.optional(z.boolean()),
+	enable_scroll_wheel_volume_control_hold_right_click: z.optional(z.boolean()),
+	enable_share_shortener: z.optional(z.boolean()),
+	enable_shorts_auto_scroll: z.optional(z.boolean()),
+	enable_skip_continue_watching: z.optional(z.boolean()),
+	enable_timestamp_peek: z.optional(z.boolean()),
+	enable_video_history: z.optional(z.boolean()),
+	enable_volume_boost: z.optional(z.boolean()),
+	feature_menu_open_type: z.optional(z.enum(featureMenuOpenTypes)),
+	forward_rewind_buttons_time: z.optional(z.number()),
+	global_volume: z.optional(z.number()),
+	language: z.optional(z.enum(availableLocales)),
+	mini_player_default_position: z.optional(z.enum(miniPlayerPositions)),
+	mini_player_default_size: z.optional(z.enum(miniPlayerSizes)),
+	open_settings_on_major_or_minor_version_change: z.optional(z.boolean()),
+	osd_display_color: z.optional(z.enum(onScreenDisplayColors)),
+	osd_display_hide_time: z.optional(z.number()),
+	osd_display_opacity: z.optional(z.number()),
+	osd_display_padding: z.optional(z.number()),
+	osd_display_position: z.optional(z.enum(onScreenDisplayPositions)),
+	osd_display_type: z.optional(z.enum(onScreenDisplayTypes)),
+	playback_buttons_speed: z.optional(z.number()),
+	player_quality: z.optional(z.enum(youtubePlayerQualityLevels)),
+	player_quality_fallback_strategy: z.optional(z.enum(PlayerQualityFallbackStrategy)),
+	player_speed: z.optional(z.number()),
+	playlist_length_get_method: z.optional(z.enum(playlistLengthGetMethod)),
+	playlist_watch_time_get_method: z.optional(z.enum(playlistWatchTimeGetMethod)),
+	remembered_volumes: z.optional(
+		z.object({
+			shortsPageVolume: z.optional(z.number()),
+			watchPageVolume: z.optional(z.number())
 		})
-		.optional(),
-	screenshot_format: z.enum(screenshotFormats).optional(),
-	screenshot_save_as: z.enum(screenshotTypes).optional(),
-	scroll_wheel_speed_control_modifier_key: z.enum(modifierKeys).optional(),
-	scroll_wheel_volume_control_modifier_key: z.enum(modifierKeys).optional(),
-	speed_adjustment_steps: z.number().min(0.05).max(1.0).step(0.05).optional(),
-	video_history_resume_type: z.enum(videoHistoryResumeTypes).optional(),
-	volume_adjustment_steps: z.number().min(1).max(100).optional(),
-	volume_boost_amount: z.number().optional(),
-	volume_boost_mode: z.enum(volumeBoostModes).optional(),
-	youtube_data_api_v3_key: z.string().optional()
+	),
+	screenshot_format: z.optional(z.enum(screenshotFormats)),
+	screenshot_save_as: z.optional(z.enum(screenshotTypes)),
+	scroll_wheel_speed_control_modifier_key: z.optional(z.enum(modifierKeys)),
+	scroll_wheel_volume_control_modifier_key: z.optional(z.enum(modifierKeys)),
+	speed_adjustment_steps: z.optional(z.number()),
+	video_history_resume_type: z.optional(z.enum(videoHistoryResumeTypes)),
+	volume_adjustment_steps: z.optional(z.number()),
+	volume_boost_amount: z.optional(z.number()),
+	volume_boost_mode: z.optional(z.enum(volumeBoostModes)),
+	youtube_data_api_v3_key: z.optional(z.string())
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

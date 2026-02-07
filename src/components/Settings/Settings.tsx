@@ -4,10 +4,10 @@ import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
-import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineExpandMore, MdOutlineOpenInNew } from "react-icons/md";
 import { generateErrorMessage } from "zod-error";
 
@@ -20,7 +20,7 @@ import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { availableLocales, localeDirection, localePercentages } from "@/src/i18n/constants";
 import { buttonNames, youtubePlayerMaxSpeed, youtubePlayerSpeedStep } from "@/src/types";
-import { configurationImportSchema, defaultConfiguration as defaultSettings } from "@/src/utils/constants";
+import { configurationImportSchema, defaultConfiguration as defaultSettings, numberConstraints, validateNumbers } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { cn, deepMerge, formatDateForFileName, getPathValue, isButtonSelectDisabled, parseStoredValue } from "@/src/utils/utilities";
 
@@ -48,6 +48,7 @@ export default function Settings() {
 			await queryClient.invalidateQueries({
 				queryKey: ["settings"]
 			});
+			await queryClient.refetchQueries({ queryKey: ["settings"] });
 			addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
 		}
 	});
@@ -361,42 +362,46 @@ export default function Settings() {
 			if (!target) return;
 			const { files } = target as HTMLInputElement;
 			const file = files?.[0];
-			if (file) {
-				try {
-					const fileContents = await file.text();
-					const importedSettings = JSON.parse(fileContents);
-					// Validate the imported settings.
-					const result = configurationImportSchema.safeParse(importedSettings);
-					if (!result.success) {
-						const { error } = result;
-						const errorMessage = generateErrorMessage(error.issues);
-						window.alert(
-							t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.validation, {
-								ERROR_MESSAGE: errorMessage
-							})
-						);
-					} else {
-						const castSettings = deepMerge(defaultSettings, importedSettings as configuration) as configuration;
-						for (const key of Object.keys(castSettings)) {
-							if (typeof castSettings[key] !== "string") {
-								localStorage.setItem(key, JSON.stringify(castSettings[key]));
-								void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
-							} else {
-								localStorage.setItem(key, castSettings[key]);
-								void chrome.storage.local.set({ [key]: castSettings[key] });
-							}
-						}
-						await updateStoredSettings();
-						const storedSettings = await getSettings();
-						// Set the imported settings in your state.
-						settingsMutate.mutate(storedSettings);
-						// Show a success notification.
-						addNotification("success", (translations) => translations.pages.options.extras.importExportSettings.importButton.success);
-					}
-				} catch (_) {
-					// Handle any import errors.
-					window.alert(t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.unknown));
+			if (!file) return;
+			try {
+				const fileContents = await file.text();
+				const importedSettings = JSON.parse(fileContents);
+				// Validate the imported settings.
+				const result = configurationImportSchema.safeParse(importedSettings);
+				if (!result.success) {
+					const errorMessage = generateErrorMessage(result.error.issues);
+					window.alert(
+						t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.validation, { ERROR_MESSAGE: errorMessage })
+					);
+					return;
 				}
+				const castSettings = deepMerge(defaultSettings, importedSettings as configuration) as configuration;
+				// Validate number constraints
+				try {
+					validateNumbers(castSettings, numberConstraints);
+				} catch (numError) {
+					window.alert((numError as Error).message);
+					return;
+				}
+				// Store validated settings
+				for (const key of Object.keys(castSettings)) {
+					if (typeof castSettings[key] !== "string") {
+						localStorage.setItem(key, JSON.stringify(castSettings[key]));
+						void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
+					} else {
+						localStorage.setItem(key, castSettings[key]);
+						void chrome.storage.local.set({ [key]: castSettings[key] });
+					}
+				}
+				await updateStoredSettings();
+				const storedSettings = await getSettings();
+				// Set the imported settings in your state.
+				settingsMutate.mutate(storedSettings);
+				// Show a success notification.
+				addNotification("success", (translations) => translations.pages.options.extras.importExportSettings.importButton.success);
+			} catch (_) {
+				// Handle any import errors.
+				window.alert(t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.unknown));
 			}
 			if (settingsImportRef.current) settingsImportRef.current.value = "";
 		})();
