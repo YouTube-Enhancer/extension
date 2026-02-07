@@ -5,7 +5,7 @@ import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 import { version } from "../../../package.json";
 import { setDefaultValues } from "../../defaults";
 chrome.runtime.onInstalled.addListener(async (details) => {
-	const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } = (await setDefaultValues().catch(() => void 0)) ?? {};
+	const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } = (await setDefaultValues().catch(console.error)) ?? {};
 	const { previousVersion, reason } = details;
 	console.log(`Previous version: ${previousVersion}, Reason: ${reason}`, openSettingsOnMajorOrMinorUpdate);
 	if (!openSettingsOnMajorOrMinorUpdate) return;
