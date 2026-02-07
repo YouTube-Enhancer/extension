@@ -12,7 +12,7 @@ import {
 	disableAutomaticallyShowMoreVideosOnEndScreen,
 	enableAutomaticallyShowMoreVideosOnEndScreen
 } from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
-import { enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { disableAutomaticTheaterMode, enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
@@ -115,7 +115,6 @@ import {
 	formatError,
 	groupButtonChanges,
 	isLivePage,
-	isNewYouTubeVideoLayout,
 	isPlaylistPage,
 	isShortsPage,
 	isWatchPage,
@@ -417,21 +416,14 @@ const initialize = function () {
 						break;
 					}
 					case "automaticTheaterModeChange": {
-						// Get the player element
-						const playerContainer =
-							isWatchPage() ?
-								document.querySelector<HTMLDivElement>(
-									isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
-								)
-							: isShortsPage() ? document.querySelector("div#shorts-player")
-							: null;
-						// If player element is not available, return
-						if (!playerContainer) return;
-						// Get the size button
-						const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
-						// If the size button is not available return
-						if (!sizeButton) return;
-						sizeButton.click();
+						const {
+							data: { automaticTheaterModeEnabled }
+						} = message;
+						if (automaticTheaterModeEnabled) {
+							await enableAutomaticTheaterMode();
+						} else {
+							disableAutomaticTheaterMode();
+						}
 						break;
 					}
 					case "buttonPlacementChange": {

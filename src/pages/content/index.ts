@@ -2,16 +2,16 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
 import {
-    type AllButtonNames,
-    buttonNames,
-    type ButtonPlacement,
-    type configuration,
-    type configurationKeys,
-    type ContentSendOnlyMessageMappings,
-    type ContentToBackgroundSendOnlyMessageMappings,
-    type Messages,
-    type RememberedVolumes,
-    type StorageChanges
+	type AllButtonNames,
+	buttonNames,
+	type ButtonPlacement,
+	type configuration,
+	type configurationKeys,
+	type ContentSendOnlyMessageMappings,
+	type ContentToBackgroundSendOnlyMessageMappings,
+	type Messages,
+	type RememberedVolumes,
+	type StorageChanges
 } from "@/src/types";
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
