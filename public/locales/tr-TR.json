@@ -58,6 +58,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini Player",
+						"toggle": {
+							"off": "Mini Player off",
+							"on": "Mini Player on"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Transkripti Aç"
@@ -151,6 +160,7 @@
 							"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 							"loopButton": "Döngü düğmesi",
 							"maximizePlayerButton": "Tam ekran düğmesi",
+							"miniPlayerButton": "Mini Player button",
 							"openTranscriptButton": "Transkripti Aç butonu",
 							"rewindButton": "Geri sarma düğmesi",
 							"screenshotButton": "Ekran görüntüsü düğmesi",
@@ -219,8 +229,8 @@
 					"title": "Dil"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Güncelleme sırasında ayarlar sayfasını açın",
+					"title": "YouTube Enhancer'ın ana veya alt sürümü yüklendiğinde ayarlar sayfasını açar"
 				},
 				"optionDisabled": {
 					"either": {
@@ -235,8 +245,8 @@
 					"specificOption": {
 						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
 						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Bu seçeneği yapılandırmak için 'Son ses seviyesini hatırla' seçeneğini devre dışı bırakın",
+						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın"
 					}
 				},
 				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -273,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Özel CSS'yi etkinleştir",
@@ -347,12 +388,6 @@
 			},
 			"miscellaneous": {
 				"settings": {
-					"timestampPeek": {
-						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
-						}
-					},
 					"automaticTheaterMode": {
 						"enable": {
 							"label": "Otomatik tiyatro modu",
@@ -561,6 +596,12 @@
 						"enable": {
 							"label": "\"Video durdu. Hala orda mısın?\"ı Atla",
 							"title": "Video oynatmayı durduran boşta kalma iletişim kutusunu atlar"
+						}
+					},
+					"timestampPeek": {
+						"enable": {
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					}
 				},
@@ -832,12 +873,12 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
+					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
+						"label": "Video başlangıç sesi",
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},

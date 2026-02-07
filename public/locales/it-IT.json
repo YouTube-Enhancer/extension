@@ -58,6 +58,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "Mini riproduttore",
+						"toggle": {
+							"off": "Mini riproduttore inattivo",
+							"on": "Mini riproduttore attivo"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "Apri trascrizione"
@@ -151,6 +160,7 @@
 							"increasePlaybackSpeedButton": "Pulsante Aumenta velocità",
 							"loopButton": "Pulsante Ripeti",
 							"maximizePlayerButton": "Pulsante Massimizza",
+							"miniPlayerButton": "Pulsante Mini riproduttore",
 							"openTranscriptButton": "Pulsante Apri trascrizione",
 							"rewindButton": "Pulsante Riavvolgi",
 							"screenshotButton": "Pulsante Schermata",
@@ -219,8 +229,8 @@
 					"title": "Lingua"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Apri la pagina delle impostazioni dopo l'aggiornamento",
+					"title": "Apre la pagina delle impostazioni quando è installata una versione più recente o antecedente di YouTube Enhancer"
 				},
 				"optionDisabled": {
 					"either": {
@@ -235,8 +245,8 @@
 					"specificOption": {
 						"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
 						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Disabilita 'Ricorda ultimo volume' per configurare questa opzione",
+						"rememberVolume": "Disabilita 'Volume globale' per configurare questa opzione"
 					}
 				},
 				"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -273,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "Pulsante Mini riproduttore",
+					"title": "Aggiunge un pulsante che apre il mini riproduttore"
+				},
+				"enable": {
+					"label": "Apri Mini riproduttore quando si visualizzano i commenti",
+					"title": "Apre automaticamente il Mini riproduttore quando scorri verso i commenti."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Posizione del mini riproduttore predefinita",
+							"options": {
+								"bottomCenter": "In basso al centro",
+								"bottomLeft": "In basso a sinistra",
+								"bottomRight": "In basso a destra",
+								"topCenter": "In alto al centro",
+								"topLeft": "Alto - sinistra",
+								"topRight": "In alto a destra"
+							},
+							"title": "Imposta la posizione di partenza prima di spostare il Mini riproduttore."
+						}
+					},
+					"size": {
+						"label": "Dimensione predefinita del mini riproduttore",
+						"title": "Imposta la dimensione iniziale prima di ridimensionare il mini riproduttore."
+					}
+				},
+				"title": "Impostazioni mini riproduttore"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Abilita CSS personalizzato",
@@ -347,12 +388,6 @@
 			},
 			"miscellaneous": {
 				"settings": {
-					"timestampPeek": {
-						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
-						}
-					},
 					"automaticTheaterMode": {
 						"enable": {
 							"label": "Modalità teatro automatica",
@@ -561,6 +596,12 @@
 						"enable": {
 							"label": "Salta \"Video in pausa. Continuare a guardare?\"",
 							"title": "Salta la finestra che mette in pausa la riproduzione video"
+						}
+					},
+					"timestampPeek": {
+						"enable": {
+							"label": "Anteprima marcatura oraria",
+							"title": "Mostra in anteprima il video puntando un marcatore temporale. Clicca l'anteprima per iniziare la riproduzione da quel momento."
 						}
 					}
 				},
@@ -832,16 +873,16 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Avvia sempre video usando questo volume",
+					"title": "Inizia automaticamente tutti i video usando il volume selezionato"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "Volume iniziale video",
+						"title": "Il volume assegnato a ogni video quando inizia la riproduzione"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Sovrascrittura volume globale"
 			}
 		}
 	}
