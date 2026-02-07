@@ -29,7 +29,7 @@ export async function setDefaultValues(): Promise<configuration> {
 	for (const option of Object.keys(defaultConfiguration) as (keyof configuration)[]) {
 		const { [option]: defaultValue } = defaultConfiguration;
 		const localValueString = HAS_LOCAL_STORAGE ? localStorage.getItem(option as string) : null;
-		const { [option as string]: chromeValue } = chromeStored;
+		const chromeValue = chromeStored?.[option as string];
 		let storedValue: unknown = null;
 		// Get existing value
 		if (localValueString !== null) {
@@ -83,4 +83,4 @@ function setSetting<K extends keyof configuration>(obj: configuration, key: K, v
 
 (async () => {
 	await setDefaultValues();
-})().catch(() => void 0);
+})().catch(console.error);
