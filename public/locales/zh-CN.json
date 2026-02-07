@@ -58,6 +58,15 @@
 						}
 					}
 				},
+				"miniPlayerButton": {
+					"button": {
+						"label": "迷你播放器",
+						"toggle": {
+							"off": "迷你播放器关闭",
+							"on": "迷你播放器开启"
+						}
+					}
+				},
 				"openTranscriptButton": {
 					"button": {
 						"label": "打开转写文稿"
@@ -151,6 +160,7 @@
 							"increasePlaybackSpeedButton": "增加速度按钮",
 							"loopButton": "循环按钮",
 							"maximizePlayerButton": "最大化按钮",
+							"miniPlayerButton": "迷你播放器按钮",
 							"openTranscriptButton": "转写文稿按钮",
 							"rewindButton": "快退按钮",
 							"screenshotButton": "屏幕截图按钮",
@@ -219,8 +229,8 @@
 					"title": "语言"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "在更新时打开设置页面",
+					"title": "当安装YouTube Enhancer的主要或次要版本时打开设置页面"
 				},
 				"optionDisabled": {
 					"either": {
@@ -235,8 +245,8 @@
 					"specificOption": {
 						"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
 						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "禁用“记住最后一个音量”来配置此选项",
+						"rememberVolume": "禁用“全局音量”来配置此选项"
 					}
 				},
 				"scrollForMoreSettings": "滚动以查看更多设置",
@@ -273,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "迷你播放器按钮",
+					"title": "添加打开迷你播放器的按钮"
+				},
+				"enable": {
+					"label": "查看评论时打开迷你播放器",
+					"title": "当您滚动到评论时自动打开迷你播放器。"
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "默认迷你播放器位置",
+							"options": {
+								"bottomCenter": "底部居中",
+								"bottomLeft": "左下角",
+								"bottomRight": "右下角",
+								"topCenter": "顶部居中",
+								"topLeft": "左上角",
+								"topRight": "右上角"
+							},
+							"title": "设置移动迷你播放器之前的起始位置。"
+						}
+					},
+					"size": {
+						"label": "默认迷你播放器大小",
+						"title": "设置缩放迷你播放器之前的起始大小。"
+					}
+				},
+				"title": "迷你播放器设置"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "启用自定义 CSS",
@@ -347,12 +388,6 @@
 			},
 			"miscellaneous": {
 				"settings": {
-					"timestampPeek": {
-						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
-						}
-					},
 					"automaticTheaterMode": {
 						"enable": {
 							"label": "自动启用剧场模式",
@@ -561,6 +596,12 @@
 						"enable": {
 							"label": "跳过\"视频已暂停。继续观看吗？\"",
 							"title": "跳过暂停视频播放的闲置对话框"
+						}
+					},
+					"timestampPeek": {
+						"enable": {
+							"label": "时间戳预览",
+							"title": "通过悬停在时间戳预览视频。点击预览开始播放。"
 						}
 					}
 				},
@@ -832,16 +873,16 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "总是以此音量开始视频",
+					"title": "自动让所有视频以您选定的音量开始播放"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "视频起始音量",
+						"title": "每个视频开始播放时都使用该音量"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "全局音量覆盖"
 			}
 		}
 	}
