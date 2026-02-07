@@ -1,3 +1,44 @@
+# [1.32.0](https://github.com/YouTube-Enhancer/extension/compare/v1.31.1...v1.32.0) (2026-02-07)
+
+
+### Bug Fixes
+
+* **automatic theater mode:** Not enabling on live streams [#1167](https://github.com/YouTube-Enhancer/extension/issues/1167) ([d7abef3](https://github.com/YouTube-Enhancer/extension/commit/d7abef396179e7aff825d6b7c31468843e6549ac))
+* **button placement:** left placed buttons not hiding, YouTube changed something ([23cf842](https://github.com/YouTube-Enhancer/extension/commit/23cf8423dabc01627b95dede2050f34e69ef8bd2))
+* **default to original audio track:** YouTube changed something breaking the feature again.. ([339ff81](https://github.com/YouTube-Enhancer/extension/commit/339ff81f365be7fd8e7101d0f461997367fc4182))
+* Firefox defaults not being set because of error ([2292b4b](https://github.com/YouTube-Enhancer/extension/commit/2292b4b37e92c16871f439d58b539d9d1f053507))
+* **hide artificial intelligence summary:** not hiding summary ([ab8fe63](https://github.com/YouTube-Enhancer/extension/commit/ab8fe638acf1a3ba2cc8edc1f56e0a075085bcb1))
+* **hide members only videos:** Home page and channel videos page not hiding [#1114](https://github.com/YouTube-Enhancer/extension/issues/1114) ([5946bdc](https://github.com/YouTube-Enhancer/extension/commit/5946bdcd047c7d44708f3e869a4ebce5e3ef581a))
+* **hide members only videos:** recommended videos were hidden on accident when a members only video exists in them ([bca3175](https://github.com/YouTube-Enhancer/extension/commit/bca31759d4ab5774d3f06f66f3d4c30a44aea9b5))
+* High risk security vulnerability related to NPM version [#1118](https://github.com/YouTube-Enhancer/extension/issues/1118) ([eab8ee3](https://github.com/YouTube-Enhancer/extension/commit/eab8ee392e1c50f564cb54e23a6f41983076ee13))
+* make icons bigger on left side of controls ([96592cf](https://github.com/YouTube-Enhancer/extension/commit/96592cf35789b49ea25938f39312d474cc263392))
+* **on screen display:** Overlapping shorts top and bottom ([15a9a75](https://github.com/YouTube-Enhancer/extension/commit/15a9a75782970f3395d15c3fa71c89c038b203d4))
+* **player quality:** Not selecting highest available quality when selected isn't available [#1160](https://github.com/YouTube-Enhancer/extension/issues/1160) ([f1fdef0](https://github.com/YouTube-Enhancer/extension/commit/f1fdef06ece1ad6af6633c974787e2bf35ffcb71))
+* **restore player speed:** The speed the user set was not being properly persisted to local storage ([758eea2](https://github.com/YouTube-Enhancer/extension/commit/758eea2a0c4f726120d5c2f24ca6d06d1f885dfb))
+* **scroll wheel controls:** Not working on shorts page [#1161](https://github.com/YouTube-Enhancer/extension/issues/1161) ([fe64a83](https://github.com/YouTube-Enhancer/extension/commit/fe64a83472718533f8df21a16506e3bd143f8fe7))
+* **scroll wheel speed + volume control:** Selector was matching wrong element causing the feature to not work [#1132](https://github.com/YouTube-Enhancer/extension/issues/1132) ([4fbe17d](https://github.com/YouTube-Enhancer/extension/commit/4fbe17d32aae73f07547d9c359821643b6d4a93a))
+* **scroll wheel volume control:** Page scrolling in fullscreen interfering with adjusting volume [#1087](https://github.com/YouTube-Enhancer/extension/issues/1087) ([f92b89f](https://github.com/YouTube-Enhancer/extension/commit/f92b89faf2ed0fabd98b64579c81d3c0fd2e1c41))
+
+
+### Features
+
+* **Global Volume:** Always set volume to the same volume based on user settings [#1044](https://github.com/YouTube-Enhancer/extension/issues/1044) ([04a87b8](https://github.com/YouTube-Enhancer/extension/commit/04a87b8200f10ffd898328db548ce118a0d758f3))
+* Mini player when scrolling down to comments [#248](https://github.com/YouTube-Enhancer/extension/issues/248) ([db03d54](https://github.com/YouTube-Enhancer/extension/commit/db03d54699a5fe53f562bf2ec6279db5c65e3234))
+* Option to disable automatic opening of settings page on update [#1159](https://github.com/YouTube-Enhancer/extension/issues/1159) ([1eb531c](https://github.com/YouTube-Enhancer/extension/commit/1eb531cc7313df8b2e1a2c94bb19aa2e459a0241))
+* Timestamp preview [#675](https://github.com/YouTube-Enhancer/extension/issues/675) ([d488c72](https://github.com/YouTube-Enhancer/extension/commit/d488c72f75788a75a1864f515fb3d35064de99f1))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.32.0-Chrome.zip | 2dd5385a5af91076601e65b260a9cfa9cf3a4ee0d07e174a6aa865ec70f2115e |
+| youtube-enhancer-v1.32.0-Chromium.zip | 2dd5385a5af91076601e65b260a9cfa9cf3a4ee0d07e174a6aa865ec70f2115e |
+| youtube-enhancer-v1.32.0-Edge.zip | 2dd5385a5af91076601e65b260a9cfa9cf3a4ee0d07e174a6aa865ec70f2115e |
+| youtube-enhancer-v1.32.0-Firefox.zip | ce6bb4e16030cab71044c34d6e2891f403daf44e817620101b475b5a31c5de00 |
+
 ## [1.31.1](https://github.com/YouTube-Enhancer/extension/compare/v1.31.0...v1.31.1) (2026-01-11)
 
 
