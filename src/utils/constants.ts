@@ -21,6 +21,7 @@ import {
 	screenshotTypes,
 	videoHistoryResumeTypes,
 	volumeBoostModes,
+	youtubePlayerMaxSpeed,
 	youtubePlayerMinSpeed,
 	youtubePlayerQualityLevels,
 	youtubePlayerSpeedStep
@@ -172,6 +173,7 @@ type RemoveEmpty<T> = {
 	:	K]: T[K];
 };
 export function validateNumbers(obj: configuration, constraints: ConstraintTree, path: (number | string)[] = []): void {
+	const EPSILON = 1e-8;
 	for (const key of Object.keys(constraints) as (keyof typeof constraints)[]) {
 		const { [key]: rule } = constraints;
 		const value = (obj as any)?.[key];
@@ -188,14 +190,18 @@ export function validateNumbers(obj: configuration, constraints: ConstraintTree,
 		if (typeof value !== "number") continue;
 		const { max, min, step } = rule;
 		const label = currentPath.map(String).join(".");
-		if (min !== undefined && value < min) {
+		if (min !== undefined && value < min - EPSILON) {
 			throw new Error(`${label} must be >= ${min}`);
 		}
-		if (max !== undefined && value > max) {
+		if (max !== undefined && value > max + EPSILON) {
 			throw new Error(`${label} must be <= ${max}`);
 		}
-		if (step !== undefined && (value - (min ?? 0)) % step !== 0) {
-			throw new Error(`${label} must be in steps of ${step}`);
+		if (step !== undefined) {
+			const base = min ?? 0;
+			const remainder = (value - base) % step;
+			if (!(Math.abs(remainder) < EPSILON || Math.abs(remainder - step) < EPSILON)) {
+				throw new Error(`${label} must be in steps of ${step}`);
+			}
 		}
 	}
 }
@@ -207,7 +213,7 @@ export const numberConstraints: ConfigurationNumericConstraints = {
 	global_volume: { max: 100, min: 0 },
 	osd_display_opacity: { max: 100, min: 1 },
 	playback_buttons_speed: { max: 1.0, min: youtubePlayerSpeedStep, step: youtubePlayerSpeedStep },
-	player_speed: { max: 16.0, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
+	player_speed: { max: youtubePlayerMaxSpeed, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
 	remembered_volumes: { shortsPageVolume: { max: 100, min: 0 }, watchPageVolume: { max: 100, min: 0 } },
 	speed_adjustment_steps: { max: 1.0, min: 0.05, step: 0.05 },
 	volume_adjustment_steps: { max: 100, min: 1 }
