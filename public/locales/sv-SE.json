@@ -290,29 +290,29 @@
 				},
 				"enable": {
 					"label": "Öppna Minispelare när du tittar på kommentarer",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"title": "Öppnar automatiskt Minispelaren när du bläddrar i kommentarerna."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "Default Mini Player position",
+							"label": "Standardplats för Minispelaren",
 							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
+								"bottomCenter": "Nederst i mitten",
+								"bottomLeft": "Nederst till vänster",
+								"bottomRight": "Nederst till höger",
+								"topCenter": "Överst i mitten",
+								"topLeft": "Överst till vänster",
+								"topRight": "Överst till höger"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Ställer in startplatsen innan du flyttar Minispelaren."
 						}
 					},
 					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"label": "Standardstorlek för Minispelaren",
+						"title": "Ställer in den ursprungliga storleken innan du ändrar storlek på Minispelaren."
 					}
 				},
-				"title": "Mini Player settings"
+				"title": "Inställningar för Minispelare"
 			},
 			"customCSS": {
 				"enable": {
@@ -600,8 +600,8 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Förhandsgranskning för tidsstämpel",
+							"title": "Förhandsgranska videon genom att hålla muspekaren över en tidsstämpel. Klicka på förhandsgranskningen för att starta uppspelningen från det ögonblicket."
 						}
 					}
 				},
@@ -873,16 +873,16 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Starta alltid videor med den här volymen",
+					"title": "Får alla videor att börja med din valda volym"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "Videons startvolym",
+						"title": "Volymen används på varje video när den börjar spelas upp"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Global volymöverskridning"
 			}
 		}
 	}
