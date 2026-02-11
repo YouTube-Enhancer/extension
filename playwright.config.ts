@@ -1,23 +1,24 @@
 import type { PlayerSize, YouTubePlayer } from "youtube-player/dist/types";
 
-import { buttonContainerId } from "@/src/features/buttonPlacement/utils";
-import { checkTests } from "@/src/utils/checkTests";
-import { defaultConfiguration } from "@/src/utils/constants";
 // TODO: update tests to test all button placements
-import { type BrowserContext, type Page, test as base, chromium, defineConfig, devices } from "@playwright/test";
+import { test as base, type BrowserContext, chromium, defineConfig, devices, type Page } from "@playwright/test";
 import { join } from "path";
 import { cwd } from "process";
 
+import { buttonContainerId } from "@/src/features/buttonPlacement/utils";
+import { checkTests } from "@/src/utils/checkTests";
+import { defaultConfiguration } from "@/src/utils/constants";
+
 import type {
 	ButtonPlacement,
+	configuration,
+	configurationId,
 	FeatureButtonId,
 	FeatureMenuItemId,
 	ModifierKey,
 	Path,
 	PathValue,
-	YoutubePlayerQualityLevel,
-	configuration,
-	configurationId
+	YoutubePlayerQualityLevel
 } from "./src/types/index";
 
 import { chooseClosestQuality, clamp } from "./src/utils/utilities";
@@ -25,8 +26,11 @@ checkTests();
 
 type FilterKeysByPrefix<O extends object, K extends keyof O, Prefix extends string> = K extends `${Prefix}${string}` ? K : never;
 
-type YouTubePlayerSetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "set">;
-type YouTubePlayerGetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "get">;
+type FilterKeysByValueType<O extends object, ValueType> = {
+	[K in keyof O]: O[K] extends ValueType ? K
+	: O[K] extends Record<string, ValueType> ? K
+	: never;
+}[keyof O];
 type FilterMethodsWithParameters<O extends object, K extends keyof O> = {
 	[Key in K]: O[Key] extends (...args: any[]) => any ?
 		Parameters<O[Key]> extends [] ?
@@ -34,11 +38,16 @@ type FilterMethodsWithParameters<O extends object, K extends keyof O> = {
 		:	Key
 	:	never;
 }[K];
+type SelectKeys = {
+	[K in Path<configuration>]: PathValue<configuration, K> extends number | string ? K : never;
+}[Path<configuration>];
+
+type YouTubePlayerGetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "get">;
 
 type YouTubePlayerGetKeysWithoutParams = Exclude<YouTubePlayerGetKeys, FilterMethodsWithParameters<YouTubePlayer, YouTubePlayerGetKeys>>;
-
 type YouTubePlayerGetReturnType<K extends YouTubePlayerGetKeysWithoutParams> =
 	K extends keyof YouTubePlayerGetReturnTypeMappings ? YouTubePlayerGetReturnTypeMappings[K] : "Return type not implemented";
+
 type YouTubePlayerGetReturnTypeMappings = {
 	getAvailableQualityLevels: Exclude<YoutubePlayerQualityLevel, "auto">[];
 	getPlaybackQuality: YoutubePlayerQualityLevel;
@@ -46,268 +55,8 @@ type YouTubePlayerGetReturnTypeMappings = {
 	getSize: PlayerSize;
 	getVolume: number;
 };
-type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K
-	: O[K] extends Record<string, ValueType> ? K
-	: never;
-}[keyof O];
 
-export async function navigateToOptionsPage(page: Page, extensionId: string) {
-	await navigateToPage(page, `chrome-extension://${extensionId}/src/pages/options/index.html`);
-	await page.waitForTimeout(250);
-	await selectOption(page, "feature_menu_open_type", "click");
-}
-export async function navigateToPage(page: Page, url: string) {
-	await page.goto(url);
-	await page.waitForLoadState();
-	expect(page.url()).toBe(url);
-}
-export function waitForSelector(page: Page, selector: configurationId) {
-	const element = page.locator(`id=${selector}`);
-	return element;
-}
-export async function getValueFromYouTubePlayer<P extends Page, K extends YouTubePlayerGetKeysWithoutParams>(page: P, key: K) {
-	const value = await page.evaluate(
-		async ([selector, key]) => {
-			// Get the element with the selector.
-			const container = document.querySelector(selector) as unknown as YouTubePlayer | null;
-			if (!container) return null;
-			// Call the method on the element.
-			return await container[key]();
-		},
-		["div#movie_player", key] as const
-	);
-	return value as YouTubePlayerGetReturnType<K> | null;
-}
-export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubePlayerSetKeys, V extends Parameters<YouTubePlayer[K]>>(
-	page: P,
-	key: K,
-	...value: V
-) {
-	await page.evaluate(
-		async ({ key, selector, value }) => {
-			// Find the YouTube player on the page.
-			const container = document.querySelector(selector) as unknown as YouTubePlayer | null;
-			if (!container) return null;
-			try {
-				// Call the specified function on the player.
-				await (container[key] as (...args: V[]) => Promise<void>)(...value);
-			} catch (error) {
-				console.error(error);
-			}
-		},
-		// Pass the following arguments to the function:
-		{ key, selector: "div#movie_player", value } as const
-	);
-}
-type SelectKeys = {
-	[K in Path<configuration>]: PathValue<configuration, K> extends number | string ? K : never;
-}[Path<configuration>];
-export async function selectOption<P extends Page, K extends SelectKeys, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
-	// Wait for the select to appear on the page
-	const select = waitForSelector(page, id);
-	expect(select).toBeTruthy();
-	// Click the select to open the dropdown
-	await select.locator("div > button").click();
-	// Select the option
-	const selectOption = select.locator(`div > div > div[aria-valuetext="${value}"]`);
-	expect(selectOption).toBeTruthy();
-	await selectOption.click();
-}
-export async function getSelected<P extends Page, K extends Exclude<FilterKeysByValueType<configuration, number | string>, undefined>>(
-	page: P,
-	id: K
-) {
-	// Wait for the select to appear
-	const select = waitForSelector(page, id);
-	// Make sure the select has appeared
-	expect(select).toBeTruthy();
-	// Get the selected value
-	const selected = await select.getAttribute("aria-valuetext");
-	// Make sure the selected value is not empty
-	expect(selected).toBeTruthy();
-	// Return the selected value
-	return selected;
-}
-export async function setValue<
-	P extends Page,
-	K extends Exclude<FilterKeysByValueType<configuration, number>, undefined>,
-	V extends configuration[K]
->(page: P, key: K, value: V) {
-	// Find the input element using the key (which is a data-test-id)
-	const input = waitForSelector(page, key);
-	// Type the value into the input element
-	expect(input).toBeTruthy();
-	await input.fill(String(value));
-}
-export async function navigateToYoutubePage(page: Page) {
-	// Navigate to a YouTube video
-	await navigateToPage(page, "https://www.youtube.com/watch?v=epUk3T2Kfno");
-	// Confirm that the message from YouTube is on the page
-	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
-	// Confirm that the message from the extension is on the page
-	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
-	// Wait for the page to be fully loaded
-	await page.waitForLoadState("networkidle");
-	await handleYoutubeAds(page);
-	await handleYoutubePromos(page);
-}
-
-export async function handleYoutubeAds(page: Page) {
-	const adsContainer = await page.evaluate(() => {
-		const adsContainer = document.querySelector("div.video-ads.ytp-ad-module");
-		if (!adsContainer) return null;
-		return {
-			hasRemainingTime: adsContainer.querySelector<HTMLSpanElement>(".ytp-ad-duration-remaining > .ytp-ad-text") !== null,
-			hasSkipButton: adsContainer.querySelector<HTMLButtonElement>(".ytp-ad-skip-ad-slot button") !== null,
-			remainingTime: adsContainer.querySelector<HTMLSpanElement>(".ytp-ad-duration-remaining > .ytp-ad-text")?.textContent
-		};
-	});
-	if (!adsContainer) return;
-	// If there is a skip button, click it
-	if (adsContainer.hasSkipButton) {
-		await page.evaluate(() => {
-			const skipButton = document.querySelector<HTMLButtonElement>(".ytp-ad-skip-ad-slot button");
-			if (!skipButton) return;
-			skipButton.click();
-		});
-		return;
-	}
-	// If there is a remaining time, wait for the ad to be over
-	if (adsContainer.hasRemainingTime && adsContainer.remainingTime) {
-		// Parse the remaining time from mm:ss format into milliseconds
-		const [hours = 0, minutes = 0, seconds = 0] = adsContainer.remainingTime.split(":").map((value) => parseInt(value));
-		const remainingTime = hours * 60 * 60 + minutes * 60 + seconds;
-		// Wait for the ad to be over
-		await page.waitForTimeout(remainingTime * 1000);
-	}
-}
-
-export async function handleYoutubePromos(page: Page) {
-	const promoContainer = await page.evaluate(() => {
-		const promoContainer = document.querySelector("tp-yt-paper-dialog");
-		if (!promoContainer) return null;
-		return {
-			isVisible: promoContainer !== null
-		};
-	});
-	if (!promoContainer) return;
-	if (promoContainer.isVisible) {
-		await page.evaluate(() => {
-			const dismissButton = document.querySelector<HTMLButtonElement>("#dismiss-button");
-			if (!dismissButton) return;
-			dismissButton.click();
-		});
-	}
-}
-
-export async function expectFeatureMenuItemToBeTruthy(page: Page, featureId: FeatureMenuItemId) {
-	// Get the menu item for the feature
-	const menuItem = page.locator(`#${featureId}`);
-	// Check that the menu item is attached to the DOM
-	await expect(menuItem).toBeAttached();
-}
-export async function expectFeatureMenuItemToBeFalsy(page: Page, featureId: FeatureMenuItemId) {
-	// Get the menu item for the feature
-	const menuItem = page.locator(`#${featureId}`);
-	// Check that the menu item is not attached to the DOM
-	await expect(menuItem).not.toBeAttached();
-}
-export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId) {
-	// Get the menu item for the feature
-	const menuItem = page.locator(`#${featureId}`);
-	// Check that the menu item is attached to the DOM
-	await expect(menuItem).toBeAttached();
-}
-export async function expectFeatureButtonToBeFalsy(page: Page, featureId: FeatureButtonId) {
-	// Get the menu item for the feature
-	const menuItem = page.locator(`#${featureId}`);
-	// Check that the menu item is not attached to the DOM
-	await expect(menuItem).not.toBeAttached();
-}
-export async function expectFeatureButtonToBeIn(page: Page, featureId: FeatureButtonId, placement: Exclude<ButtonPlacement, "feature_menu">) {
-	const placementSelectors = {
-		below_player: `#${buttonContainerId}`,
-		player_controls_left: ".ytp-left-controls",
-		player_controls_right: ".ytp-right-controls"
-	};
-	const { [placement]: selector } = placementSelectors;
-	const container = page.locator(selector);
-	await expect(container).toBeAttached();
-	const button = container.locator(`#${featureId}`);
-	await expect(button).toBeAttached();
-}
-export async function clickFeatureMenuItem(page: Page, featureId: FeatureMenuItemId) {
-	// Open the features menu
-	await page.locator(`#yte-feature-menu-button`).click();
-	// Click the feature menu item
-	await page.locator(`#${featureId}`).click();
-}
-export async function clickFeatureButton(page: Page, featureId: FeatureButtonId) {
-	// Click the feature button
-	await page.locator(`#${featureId}`).click();
-}
-export async function expectCurrentQualityLevelToBeTruthy(page: Page, expectedQuality: YoutubePlayerQualityLevel) {
-	// Get the current quality level from the YouTube player
-	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality");
-	// Check that the quality level is the same as the one we set
-	expect(currentQualityLevel).toBeTruthy();
-	expect(currentQualityLevel).toBe(expectedQuality);
-}
-export async function expectCurrentQualityLevelToBeFalsy(page: Page, expectedQuality: YoutubePlayerQualityLevel) {
-	// Get the current quality level from the YouTube player
-	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality");
-	// Make sure the current quality level exists
-	expect(currentQualityLevel).toBeTruthy();
-	// Make sure the current quality level is not the expected quality level
-	expect(currentQualityLevel).not.toBe(expectedQuality);
-}
-export async function getClosestQuality(page: Page, quality: YoutubePlayerQualityLevel) {
-	// Get the available quality levels from the YouTube player.
-	const availableQualityLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels");
-	// Ensure we have some quality levels available.
-	expect(availableQualityLevels).toBeTruthy();
-	if (!availableQualityLevels) return;
-	// Choose the best quality level.
-	const closestQuality = chooseClosestQuality(quality, availableQualityLevels);
-	return closestQuality;
-}
-export async function getCurrentVolume(page: Page) {
-	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume");
-	return currentVolume;
-}
-export async function enableFeature(page: Page, feature: FilterKeysByPrefix<configuration, keyof configuration, "enable">) {
-	// Wait for the checkbox to appear
-	const checkbox = waitForSelector(page, feature);
-	// Set the checkbox to true
-	await checkbox.setChecked(true);
-	// Check that the checkbox is true
-	const isChecked = await checkbox.isChecked();
-	expect(isChecked).toBe(true);
-}
-export async function disableFeature(page: Page, feature: FilterKeysByPrefix<configuration, keyof configuration, "enable">) {
-	// Wait for the checkbox to appear.
-	const checkbox = waitForSelector(page, feature);
-	// Uncheck the checkbox.
-	await checkbox.setChecked(false);
-	// Ensure the checkbox is unchecked.
-	const isChecked = await checkbox.isChecked();
-	expect(isChecked).toBe(false);
-}
-export async function setVolume(page: Page, volume: number) {
-	// Set the volume of the YouTube player to the value specified by the user.
-	await page.evaluate(
-		async ([selector, volume]) => {
-			// Get a reference to the YouTube player element.
-			const container = document.querySelector(selector) as unknown as YouTubePlayer | null;
-			// If the element does not exist, return null.
-			if (!container) return null;
-			// Set the volume of the player and return the result.
-			await container.setVolume(volume);
-		},
-		["div#movie_player", volume] as const
-	);
-}
+type YouTubePlayerSetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "set">;
 export async function adjustWithScrollWheel({
 	controlType,
 	direction,
@@ -395,6 +144,259 @@ export async function adjustWithScrollWheel({
 	const expectedValue = value + (direction === "up" ? 1 : -1) * defaultConfiguration[`${controlType}_adjustment_steps`];
 	expect(valueAfterScroll).toBeTruthy();
 	expect(valueAfterScroll).toBe(controlType === "speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
+}
+export async function clickFeatureButton(page: Page, featureId: FeatureButtonId) {
+	// Click the feature button
+	await page.locator(`#${featureId}`).click();
+}
+export async function clickFeatureMenuItem(page: Page, featureId: FeatureMenuItemId) {
+	// Open the features menu
+	await page.locator(`#yte-feature-menu-button`).click();
+	// Click the feature menu item
+	await page.locator(`#${featureId}`).click();
+}
+export async function disableFeature(page: Page, feature: FilterKeysByPrefix<configuration, keyof configuration, "enable">) {
+	// Wait for the checkbox to appear.
+	const checkbox = waitForSelector(page, feature);
+	// Uncheck the checkbox.
+	await checkbox.setChecked(false);
+	// Ensure the checkbox is unchecked.
+	const isChecked = await checkbox.isChecked();
+	expect(isChecked).toBe(false);
+}
+export async function enableFeature(page: Page, feature: FilterKeysByPrefix<configuration, keyof configuration, "enable">) {
+	// Wait for the checkbox to appear
+	const checkbox = waitForSelector(page, feature);
+	// Set the checkbox to true
+	await checkbox.setChecked(true);
+	// Check that the checkbox is true
+	const isChecked = await checkbox.isChecked();
+	expect(isChecked).toBe(true);
+}
+export async function expectCurrentQualityLevelToBeFalsy(page: Page, expectedQuality: YoutubePlayerQualityLevel) {
+	// Get the current quality level from the YouTube player
+	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality");
+	// Make sure the current quality level exists
+	expect(currentQualityLevel).toBeTruthy();
+	// Make sure the current quality level is not the expected quality level
+	expect(currentQualityLevel).not.toBe(expectedQuality);
+}
+export async function expectCurrentQualityLevelToBeTruthy(page: Page, expectedQuality: YoutubePlayerQualityLevel) {
+	// Get the current quality level from the YouTube player
+	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality");
+	// Check that the quality level is the same as the one we set
+	expect(currentQualityLevel).toBeTruthy();
+	expect(currentQualityLevel).toBe(expectedQuality);
+}
+export async function expectFeatureButtonToBeFalsy(page: Page, featureId: FeatureButtonId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is not attached to the DOM
+	await expect(menuItem).not.toBeAttached();
+}
+export async function expectFeatureButtonToBeIn(page: Page, featureId: FeatureButtonId, placement: Exclude<ButtonPlacement, "feature_menu">) {
+	const placementSelectors = {
+		below_player: `#${buttonContainerId}`,
+		player_controls_left: ".ytp-left-controls",
+		player_controls_right: ".ytp-right-controls"
+	};
+	const { [placement]: selector } = placementSelectors;
+	const container = page.locator(selector);
+	await expect(container).toBeAttached();
+	const button = container.locator(`#${featureId}`);
+	await expect(button).toBeAttached();
+}
+
+export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is attached to the DOM
+	await expect(menuItem).toBeAttached();
+}
+
+export async function expectFeatureMenuItemToBeFalsy(page: Page, featureId: FeatureMenuItemId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is not attached to the DOM
+	await expect(menuItem).not.toBeAttached();
+}
+
+export async function expectFeatureMenuItemToBeTruthy(page: Page, featureId: FeatureMenuItemId) {
+	// Get the menu item for the feature
+	const menuItem = page.locator(`#${featureId}`);
+	// Check that the menu item is attached to the DOM
+	await expect(menuItem).toBeAttached();
+}
+export async function getClosestQuality(page: Page, quality: YoutubePlayerQualityLevel) {
+	// Get the available quality levels from the YouTube player.
+	const availableQualityLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels");
+	// Ensure we have some quality levels available.
+	expect(availableQualityLevels).toBeTruthy();
+	if (!availableQualityLevels) return;
+	// Choose the best quality level.
+	const closestQuality = chooseClosestQuality(quality, availableQualityLevels);
+	return closestQuality;
+}
+export async function getCurrentVolume(page: Page) {
+	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume");
+	return currentVolume;
+}
+export async function getSelected<P extends Page, K extends Exclude<FilterKeysByValueType<configuration, number | string>, undefined>>(
+	page: P,
+	id: K
+) {
+	// Wait for the select to appear
+	const select = waitForSelector(page, id);
+	// Make sure the select has appeared
+	expect(select).toBeTruthy();
+	// Get the selected value
+	const selected = await select.getAttribute("aria-valuetext");
+	// Make sure the selected value is not empty
+	expect(selected).toBeTruthy();
+	// Return the selected value
+	return selected;
+}
+export async function getValueFromYouTubePlayer<P extends Page, K extends YouTubePlayerGetKeysWithoutParams>(page: P, key: K) {
+	const value = await page.evaluate(
+		async ([selector, key]) => {
+			// Get the element with the selector.
+			const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
+			if (!container) return null;
+			// Call the method on the element.
+			return await container[key]();
+		},
+		["div#movie_player", key] as const
+	);
+	return value as null | YouTubePlayerGetReturnType<K>;
+}
+export async function handleYoutubeAds(page: Page) {
+	const adsContainer = await page.evaluate(() => {
+		const adsContainer = document.querySelector("div.video-ads.ytp-ad-module");
+		if (!adsContainer) return null;
+		return {
+			hasRemainingTime: adsContainer.querySelector<HTMLSpanElement>(".ytp-ad-duration-remaining > .ytp-ad-text") !== null,
+			hasSkipButton: adsContainer.querySelector<HTMLButtonElement>(".ytp-ad-skip-ad-slot button") !== null,
+			remainingTime: adsContainer.querySelector<HTMLSpanElement>(".ytp-ad-duration-remaining > .ytp-ad-text")?.textContent
+		};
+	});
+	if (!adsContainer) return;
+	// If there is a skip button, click it
+	if (adsContainer.hasSkipButton) {
+		await page.evaluate(() => {
+			const skipButton = document.querySelector<HTMLButtonElement>(".ytp-ad-skip-ad-slot button");
+			if (!skipButton) return;
+			skipButton.click();
+		});
+		return;
+	}
+	// If there is a remaining time, wait for the ad to be over
+	if (adsContainer.hasRemainingTime && adsContainer.remainingTime) {
+		// Parse the remaining time from mm:ss format into milliseconds
+		const [hours = 0, minutes = 0, seconds = 0] = adsContainer.remainingTime.split(":").map((value) => parseInt(value));
+		const remainingTime = hours * 60 * 60 + minutes * 60 + seconds;
+		// Wait for the ad to be over
+		await page.waitForTimeout(remainingTime * 1000);
+	}
+}
+export async function handleYoutubePromos(page: Page) {
+	const promoContainer = await page.evaluate(() => {
+		const promoContainer = document.querySelector("tp-yt-paper-dialog");
+		if (!promoContainer) return null;
+		return {
+			isVisible: promoContainer !== null
+		};
+	});
+	if (!promoContainer) return;
+	if (promoContainer.isVisible) {
+		await page.evaluate(() => {
+			const dismissButton = document.querySelector<HTMLButtonElement>("#dismiss-button");
+			if (!dismissButton) return;
+			dismissButton.click();
+		});
+	}
+}
+export async function navigateToOptionsPage(page: Page, extensionId: string) {
+	await navigateToPage(page, `chrome-extension://${extensionId}/src/pages/options/index.html`);
+	await page.waitForTimeout(250);
+	await selectOption(page, "feature_menu_open_type", "click");
+}
+export async function navigateToPage(page: Page, url: string) {
+	await page.goto(url);
+	await page.waitForLoadState();
+	expect(page.url()).toBe(url);
+}
+export async function navigateToYoutubePage(page: Page) {
+	// Navigate to a YouTube video
+	await navigateToPage(page, "https://www.youtube.com/watch?v=epUk3T2Kfno");
+	// Confirm that the message from YouTube is on the page
+	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
+	// Confirm that the message from the extension is on the page
+	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	// Wait for the page to be fully loaded
+	await page.waitForLoadState("networkidle");
+	await handleYoutubeAds(page);
+	await handleYoutubePromos(page);
+}
+export async function selectOption<P extends Page, K extends SelectKeys, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
+	// Wait for the select to appear on the page
+	const select = waitForSelector(page, id);
+	expect(select).toBeTruthy();
+	// Click the select to open the dropdown
+	await select.locator("div > button").click();
+	// Select the option
+	const selectOption = select.locator(`div > div > div[aria-valuetext="${value}"]`);
+	expect(selectOption).toBeTruthy();
+	await selectOption.click();
+}
+export async function setValue<
+	P extends Page,
+	K extends Exclude<FilterKeysByValueType<configuration, number>, undefined>,
+	V extends configuration[K]
+>(page: P, key: K, value: V) {
+	// Find the input element using the key (which is a data-test-id)
+	const input = waitForSelector(page, key);
+	// Type the value into the input element
+	expect(input).toBeTruthy();
+	await input.fill(String(value));
+}
+export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubePlayerSetKeys, V extends Parameters<YouTubePlayer[K]>>(
+	page: P,
+	key: K,
+	...value: V
+) {
+	await page.evaluate(
+		async ({ key, selector, value }) => {
+			// Find the YouTube player on the page.
+			const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
+			if (!container) return null;
+			try {
+				// Call the specified function on the player.
+				await (container[key] as (...args: V[]) => Promise<void>)(...value);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		// Pass the following arguments to the function:
+		{ key, selector: "div#movie_player", value } as const
+	);
+}
+export async function setVolume(page: Page, volume: number) {
+	// Set the volume of the YouTube player to the value specified by the user.
+	await page.evaluate(
+		async ([selector, volume]) => {
+			// Get a reference to the YouTube player element.
+			const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
+			// If the element does not exist, return null.
+			if (!container) return null;
+			// Set the volume of the player and return the result.
+			await container.setVolume(volume);
+		},
+		["div#movie_player", volume] as const
+	);
+}
+export function waitForSelector(page: Page, selector: configurationId) {
+	const element = page.locator(`id=${selector}`);
+	return element;
 }
 async function getCurrentValue(page: Page, controlType: "speed" | "volume") {
 	const { [controlType]: key } = {
