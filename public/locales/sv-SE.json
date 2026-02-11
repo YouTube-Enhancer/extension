@@ -60,10 +60,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Minispelare",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Minispelare av",
+							"on": "Minispelare på"
 						}
 					}
 				},
@@ -160,7 +160,7 @@
 							"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 							"loopButton": "Slingknapp",
 							"maximizePlayerButton": "Maximeraknapp",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Minispelarknapp",
 							"openTranscriptButton": "Transkriptknapp",
 							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
@@ -245,8 +245,8 @@
 					"specificOption": {
 						"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
 						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Inaktivera 'Kom ihåg senaste volym' för att konfigurera detta alternativ",
+						"rememberVolume": "Inaktivera 'Global volym' för att konfigurera detta alternativ"
 					}
 				},
 				"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -285,11 +285,11 @@
 		"sections": {
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "Minispelarknapp",
+					"title": "Lägger till en knapp som öppnar Minispelaren"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
+					"label": "Öppna Minispelare när du tittar på kommentarer",
 					"title": "Automatically opens the Mini Player when you scroll to comments."
 				},
 				"settings": {
