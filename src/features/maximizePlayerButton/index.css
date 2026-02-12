@@ -26,7 +26,7 @@ body[yte-maximized] div.html5-video-container {
 }
 
 .yte-maximized-width {
-	width: calc(99vw - 13px) !important;
+	width: calc(100vw - 24px) !important;
 }
 
 body[yte-maximized] #full-bleed-container {
