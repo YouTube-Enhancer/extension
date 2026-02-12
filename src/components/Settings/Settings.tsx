@@ -48,7 +48,6 @@ export default function Settings() {
 			await queryClient.invalidateQueries({
 				queryKey: ["settings"]
 			});
-			await queryClient.refetchQueries({ queryKey: ["settings"] });
 			addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
 		}
 	});
@@ -82,11 +81,17 @@ export default function Settings() {
 	const setCheckboxOption =
 		(key: Path<configuration>) =>
 		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
+			const currentValue = getPathValue(settings, key);
+			// Don't mutate if the value hasn't changed
+			if (currentValue === checked) return;
 			settingsMutate.mutate({ ...settings, [key]: checked });
 		};
 	const setValueOption =
 		(key: Path<configuration>) =>
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			const currentValue = getPathValue(settings, key);
+			// Don't mutate if the value hasn't changed
+			if (currentValue === value) return;
 			settingsMutate.mutate(
 				((state) => {
 					const updatedState = { ...state };
@@ -1732,17 +1737,16 @@ function LanguageOptions({
 		</SettingSection>
 	);
 }
-async function setSettings(settings: configuration) {
-	for (const key of Object.keys(settings)) {
-		if (typeof settings[key] !== "string") {
-			localStorage.setItem(key, JSON.stringify(settings[key]));
-			await chrome.storage.local.set({ [key]: JSON.stringify(settings[key]) });
-		} else {
-			localStorage.setItem(key, settings[key]);
-			await chrome.storage.local.set({ [key]: settings[key] });
-		}
+async function setSettings(newSettings: configuration) {
+	const current = await getSettings();
+	if (JSON.stringify(current) === JSON.stringify(newSettings)) return;
+	for (const key of Object.keys(newSettings)) {
+		const value = typeof newSettings[key] === "string" ? newSettings[key] : JSON.stringify(newSettings[key]);
+		localStorage.setItem(key, value);
+		await chrome.storage.local.set({ [key]: value });
 	}
 }
+
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
 export const useSettings = () => {
 	const context = useContext(SettingsContext);

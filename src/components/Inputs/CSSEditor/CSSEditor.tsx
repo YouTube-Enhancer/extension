@@ -1,9 +1,10 @@
 import { Editor, type Monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
+import useDebounceFn from "@/src/hooks/useDebounce";
 import { type Nullable } from "@/src/types";
 import { type editor } from "@/src/utils/monaco";
-import { cn, debounce } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/utilities";
 
 import { editorOptions } from "./editorOptions";
 import EditorProblems from "./EditorProblems";
@@ -28,21 +29,18 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
 	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
-	const onChangeRef = useRef(onChange);
-	const debouncedOnChangeRef = useRef(
-		debounce((val: string) => {
-			onChangeRef.current(val);
-		}, 500)
-	);
 	const [editorValue, setEditorValue] = useState(value);
 	const [isEditorExpanded, setEditorExpanded] = useState(false);
 	const [initialBodyOverflowValue, setInitialBodyOverflowValue] = useState("");
 	const [pageScrollPosition, setPageScrollPosition] = useState<ScrollPosition>({ x: 0, y: 0 });
 	const [problems, setProblems] = useState<editor.IMarker[]>([]);
 	const [viewportHeight, setViewportHeight] = useState(() => document.documentElement.clientHeight);
+	const debouncedOnChange = useDebounceFn((val: string) => {
+		onChange(val);
+	}, 500);
 	useEffect(() => {
-		onChangeRef.current = onChange;
-	}, [onChange]);
+		setEditorValue(value);
+	}, [value]);
 	const expandedEditorHeight = useMemo(() => {
 		const expandButtonHeight = expandButtonRef.current?.clientHeight ?? 0;
 		const editorProblemsHeight = editorProblemsRef.current?.clientHeight ?? 0;
@@ -50,8 +48,8 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 	}, [viewportHeight, problems]);
 	const flushSave = useCallback(() => {
 		const currentValue = editorRef.current?.getValue() ?? "";
-		onChangeRef.current(currentValue);
-	}, []);
+		onChange(currentValue);
+	}, [onChange]);
 	const handleEditorDidMount = useCallback(
 		(editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
 			editorRef.current = editorInstance;
@@ -62,13 +60,13 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 		},
 		[flushSave]
 	);
-	const handleEditorChange = useCallback((val: string = "") => {
-		setEditorValue(val);
-		debouncedOnChangeRef.current(val);
-	}, []);
-	useEffect(() => {
-		setEditorValue(value);
-	}, [value]);
+	const handleEditorChange = useCallback(
+		(val: string = "") => {
+			setEditorValue(val);
+			debouncedOnChange(val);
+		},
+		[debouncedOnChange]
+	);
 	const expandEditor = () => {
 		setPageScrollPosition({ x: window.scrollX, y: window.scrollY });
 		setEditorExpanded(true);
