@@ -28,9 +28,10 @@ body[yte-maximized] div.html5-video-container {
 .yte-maximized-width {
 	width: calc(100vw - 24px) !important;
 }
-
-body[yte-maximized] #full-bleed-container {
+body[yte-maximized]:not(:has(ytd-watch-flexy[fullscreen])) #full-bleed-container {
 	margin-top: calc(-1 * var(--yte-header-height)) !important;
+}
+body[yte-maximized] #full-bleed-container {
 	height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
 	max-height: calc(var(--yte-video-height) + var(--yte-header-height)) !important;
 }
