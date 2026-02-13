@@ -8,6 +8,16 @@
 	"pages": {
 		"content": {
 			"features": {
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Flip video horizontally"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Flip video vertically"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copier l'URL de la vidéo avec le timestamp"
@@ -164,7 +174,9 @@
 							"openTranscriptButton": "Open Transcript button",
 							"rewindButton": "Rewind button",
 							"screenshotButton": "Screenshot button",
-							"volumeBoostButton": "Volume Boost button"
+							"volumeBoostButton": "Volume Boost button",
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button"
 						},
 						"options": {
 							"below_player": {
@@ -621,6 +633,18 @@
 						"enable": {
 							"label": "Timestamp Preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
 						}
 					}
 				},
