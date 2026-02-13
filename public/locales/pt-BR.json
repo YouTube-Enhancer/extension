@@ -244,9 +244,9 @@
 					"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 					"specificOption": {
 						"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção",
 						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
 				},
 				"scrollForMoreSettings": "Role para mais opções",
@@ -283,37 +283,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "CSS personalizado",
@@ -386,6 +355,50 @@
 				},
 				"title": "Opções de avançar/voltar"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +441,12 @@
 						"enable": {
 							"label": "Exibir automaticamente mais vídeos na tela final",
 							"title": "Mostra automaticamente mais vídeos na tela final do vídeo"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -870,19 +889,6 @@
 					}
 				},
 				"title": "Opções de aumento de volume"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}
