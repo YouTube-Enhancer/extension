@@ -244,9 +244,9 @@
 					"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 					"specificOption": {
 						"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ",
 						"globalVolume": "Inaktivera 'Kom ihåg senaste volym' för att konfigurera detta alternativ",
-						"rememberVolume": "Inaktivera 'Global volym' för att konfigurera detta alternativ"
+						"rememberVolume": "Inaktivera 'Global volym' för att konfigurera detta alternativ",
+						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
 					}
 				},
 				"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -283,37 +283,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Minispelarknapp",
-					"title": "Lägger till en knapp som öppnar Minispelaren"
-				},
-				"enable": {
-					"label": "Öppna Minispelare när du tittar på kommentarer",
-					"title": "Öppnar automatiskt Minispelaren när du bläddrar i kommentarerna."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Standardplats för Minispelaren",
-							"options": {
-								"bottomCenter": "Nederst i mitten",
-								"bottomLeft": "Nederst till vänster",
-								"bottomRight": "Nederst till höger",
-								"topCenter": "Överst i mitten",
-								"topLeft": "Överst till vänster",
-								"topRight": "Överst till höger"
-							},
-							"title": "Ställer in startplatsen innan du flyttar Minispelaren."
-						}
-					},
-					"size": {
-						"label": "Standardstorlek för Minispelaren",
-						"title": "Ställer in den ursprungliga storleken innan du ändrar storlek på Minispelaren."
-					}
-				},
-				"title": "Inställningar för Minispelare"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Anpassad CSS",
@@ -386,6 +355,50 @@
 				},
 				"title": "Inställningar för knapparna spola framåt/återspola"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Starta alltid videor med den här volymen",
+					"title": "Får alla videor att börja med din valda volym"
+				},
+				"settings": {
+					"amount": {
+						"label": "Videons startvolym",
+						"title": "Volymen används på varje video när den börjar spelas upp"
+					}
+				},
+				"title": "Global volymöverskridning"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Minispelarknapp",
+					"title": "Lägger till en knapp som öppnar Minispelaren"
+				},
+				"enable": {
+					"label": "Öppna Minispelare när du tittar på kommentarer",
+					"title": "Öppnar automatiskt Minispelaren när du bläddrar i kommentarerna."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Standardplats för Minispelaren",
+							"options": {
+								"bottomCenter": "Nederst i mitten",
+								"bottomLeft": "Nederst till vänster",
+								"bottomRight": "Nederst till höger",
+								"topCenter": "Överst i mitten",
+								"topLeft": "Överst till vänster",
+								"topRight": "Överst till höger"
+							},
+							"title": "Ställer in startplatsen innan du flyttar Minispelaren."
+						}
+					},
+					"size": {
+						"label": "Standardstorlek för Minispelaren",
+						"title": "Ställer in den ursprungliga storleken innan du ändrar storlek på Minispelaren."
+					}
+				},
+				"title": "Inställningar för Minispelare"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +441,12 @@
 						"enable": {
 							"label": "Visa automatiskt fler videor på slutskärmen",
 							"title": "Visa automatiskt fler videor på slutskärmen när du laddar en video"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -870,19 +889,6 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Starta alltid videor med den här volymen",
-					"title": "Får alla videor att börja med din valda volym"
-				},
-				"settings": {
-					"amount": {
-						"label": "Videons startvolym",
-						"title": "Volymen används på varje video när den börjar spelas upp"
-					}
-				},
-				"title": "Global volymöverskridning"
 			}
 		}
 	}
