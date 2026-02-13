@@ -244,9 +244,9 @@
 					"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 					"specificOption": {
 						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın",
 						"globalVolume": "Bu seçeneği yapılandırmak için 'Son ses seviyesini hatırla' seçeneğini devre dışı bırakın",
-						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın"
+						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın",
+						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 					}
 				},
 				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
@@ -283,37 +283,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Özel CSS'yi etkinleştir",
@@ -386,6 +355,50 @@
 				},
 				"title": "İleri/geri sarma düğmesi ayarları"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
+					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video başlangıç sesi",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +441,12 @@
 						"enable": {
 							"label": "Bitiş ekranında otomatik olarak daha fazla video göster",
 							"title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -870,19 +889,6 @@
 					}
 				},
 				"title": "Ses güçlendirme ayarları"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
-					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video başlangıç sesi",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}
