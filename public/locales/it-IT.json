@@ -8,6 +8,16 @@
 	"pages": {
 		"content": {
 			"features": {
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Flip video horizontally"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Flip video vertically"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copia URL video con temporizzazione"
@@ -164,7 +174,9 @@
 							"openTranscriptButton": "Pulsante Apri trascrizione",
 							"rewindButton": "Pulsante Riavvolgi",
 							"screenshotButton": "Pulsante Schermata",
-							"volumeBoostButton": "Pulsante Aumento volume"
+							"volumeBoostButton": "Pulsante Aumento volume",
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button"
 						},
 						"options": {
 							"below_player": {
@@ -621,6 +633,18 @@
 						"enable": {
 							"label": "Anteprima marcatura oraria",
 							"title": "Mostra in anteprima il video puntando un marcatore temporale. Clicca l'anteprima per iniziare la riproduzione da quel momento."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
 						}
 					}
 				},
