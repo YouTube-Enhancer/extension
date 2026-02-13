@@ -10,12 +10,12 @@
 			"features": {
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Ribalta video orizzontalmente"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Ribalta video verticalmente"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -175,8 +175,8 @@
 							"rewindButton": "Pulsante Riavvolgi",
 							"screenshotButton": "Pulsante Schermata",
 							"volumeBoostButton": "Pulsante Aumento volume",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoVerticalButton": "Pulsante 'Ribalta video verticalmente'",
+							"flipVideoHorizontalButton": "Pulsante 'Ribalta video orizzontalmente'"
 						},
 						"options": {
 							"below_player": {
@@ -458,7 +458,7 @@
 					"blockNumberKeySeeking": {
 						"enable": {
 							"label": "Blocca ricerca chiave numero",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"title": "Impedisce alla pressione 0-9 di attuare salti a una percentuale del video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -637,14 +637,14 @@
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Pulsante capovolgimento video orizzontale",
+							"title": "Aggiunge un pulsante per capovolgere il video orizzontalmente"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"label": "Pulsante capovolgimento video verticale",
+							"title": "Aggiunge un pulsante per capovolgere il video verticalmente"
 						}
 					}
 				},
