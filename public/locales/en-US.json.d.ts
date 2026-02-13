@@ -10,6 +10,8 @@ interface EnUS {
 			features: {
 				copyTimestampUrlButton: { button: { label: "Copy video URL with timestamp" }; extras: { copied: "Copied!" } };
 				featureMenu: { button: { label: "Feature menu" } };
+				flipVideoHorizontalButton: { button: { label: "Flip video horizontally" } };
+				flipVideoVerticalButton: { button: { label: "Flip video vertically" } };
 				forwardRewindButtons: {
 					buttons: {
 						forwardButton: { label: "Fast forward by {{TIME}}" };
@@ -90,6 +92,8 @@ interface EnUS {
 						buttonNames: {
 							copyTimestampUrlButton: "Copy video URL with timestamp button";
 							decreasePlaybackSpeedButton: "Decrease Speed button";
+							flipVideoHorizontalButton: "Flip video horizontally button";
+							flipVideoVerticalButton: "Flip video vertically button";
 							forwardButton: "Fast Forward button";
 							hideEndScreenCardsButton: "Hide end screen cards button";
 							increasePlaybackSpeedButton: "Increase Speed button";
@@ -327,6 +331,18 @@ interface EnUS {
 						enable: {
 							label: "Default to original audio track";
 							title: "Always default to the original audio track";
+						};
+					};
+					flipVideoHorizontalButton: {
+						enable: {
+							label: "Horizontal video flip button";
+							title: "Adds a button to flip the video horizontally";
+						};
+					};
+					flipVideoVerticalButton: {
+						enable: {
+							label: "Vertical video flip button";
+							title: "Adds a button to flip the video vertically";
 						};
 					};
 					hideArtificialIntelligenceSummary: {

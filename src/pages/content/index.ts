@@ -335,6 +335,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				defaultToOriginalAudioTrackEnabled: newValue
 			});
 		},
+		enable_flip_video_horizontal_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoHorizontalButtonChange", {
+				flipVideoHorizontalButtonEnabled: newValue
+			});
+		},
+		enable_flip_video_vertical_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoVerticalButtonChange", {
+				flipVideoVerticalButtonEnabled: newValue
+			});
+		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("playerSpeedChange", {
 				enableForcedPlaybackSpeed: newValue,

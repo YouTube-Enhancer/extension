@@ -919,6 +919,22 @@ export default function Settings() {
 						title={t((translations) => translations.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.title)}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_flip_video_vertical_button}
+						label={t((translations) => translations.settings.sections.miscellaneous.settings.flipVideoVerticalButton.enable.label)}
+						onChange={setCheckboxOption("enable_flip_video_vertical_button")}
+						parentSetting={null}
+						title={t((translations) => translations.settings.sections.miscellaneous.settings.flipVideoVerticalButton.enable.title)}
+						type="checkbox"
+					/>
+					<Setting
+						checked={settings.enable_flip_video_horizontal_button}
+						label={t((translations) => translations.settings.sections.miscellaneous.settings.flipVideoHorizontalButton.enable.label)}
+						onChange={setCheckboxOption("enable_flip_video_horizontal_button")}
+						parentSetting={null}
+						title={t((translations) => translations.settings.sections.miscellaneous.settings.flipVideoHorizontalButton.enable.title)}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t((translations) => translations.settings.sections.videoHistory.title)}>
 					<SettingTitle />

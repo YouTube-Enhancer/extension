@@ -13,7 +13,6 @@ import {
 	enableAutomaticallyShowMoreVideosOnEndScreen
 } from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
 import { disableAutomaticTheaterMode, enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
-import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/blockNumberKeySeeking";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
@@ -22,8 +21,15 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
+import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/disableNumberKeySkip";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import {
+	addFlipVideoHorizontalButton,
+	addFlipVideoVerticalButton,
+	removeFlipVideoHorizontalButton,
+	removeFlipVideoVerticalButton
+} from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
@@ -295,6 +301,8 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await addFlipVideoVerticalButton();
+		await addFlipVideoHorizontalButton();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -582,6 +590,28 @@ const initialize = function () {
 							data: { featureMenuOpenType }
 						} = message;
 						setupFeatureMenuEventListeners(featureMenuOpenType);
+						break;
+					}
+					case "flipVideoHorizontalButtonChange": {
+						const {
+							data: { flipVideoHorizontalButtonEnabled }
+						} = message;
+						if (flipVideoHorizontalButtonEnabled) {
+							await addFlipVideoHorizontalButton();
+						} else {
+							await removeFlipVideoHorizontalButton();
+						}
+						break;
+					}
+					case "flipVideoVerticalButtonChange": {
+						const {
+							data: { flipVideoVerticalButtonEnabled }
+						} = message;
+						if (flipVideoVerticalButtonEnabled) {
+							await addFlipVideoVerticalButton();
+						} else {
+							await removeFlipVideoVerticalButton();
+						}
 						break;
 					}
 					case "forwardRewindButtonsChange": {

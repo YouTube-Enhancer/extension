@@ -29,6 +29,8 @@ export type FeatureName =
 	| "automaticTheaterMode"
 	| "copyTimestampUrlButton"
 	| "featureMenu"
+	| "flipVideoHorizontalButton"
+	| "flipVideoVerticalButton"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"
 	| "hideScrollBar"

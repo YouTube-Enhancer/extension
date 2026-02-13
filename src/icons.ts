@@ -326,6 +326,62 @@ export const miniPlayerOffSVG = createSVGElement(
 		"stroke-width": "1.25"
 	})
 );
+const flipHorizontalButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "none",
+		height: "24px",
+		stroke: "white",
+		"stroke-width": "2",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	// Center vertical line
+	createSVGElement("path", {
+		d: "M12 2v20",
+		"stroke-linecap": "round"
+	}),
+	// Left arrow
+	createSVGElement("path", {
+		d: "M8 12H2m0 0 4-4m-4 4 4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	}),
+	// Right arrow
+	createSVGElement("path", {
+		d: "M16 12h6m0 0-4-4m4 4-4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	})
+);
+const flipVerticalButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "none",
+		height: "24px",
+		stroke: "white",
+		"stroke-width": "2",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	// Center horizontal line
+	createSVGElement("path", {
+		d: "M2 12h20",
+		"stroke-linecap": "round"
+	}),
+	// Up arrow
+	createSVGElement("path", {
+		d: "M12 8V2m0 0-4 4m4-4 4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	}),
+	// Down arrow
+	createSVGElement("path", {
+		d: "M12 16v6m0 0-4-4m4 4 4-4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	})
+);
 
 export const featureIcons = {
 	copyTimestampUrlButton: {
@@ -335,6 +391,14 @@ export const featureIcons = {
 	decreasePlaybackSpeedButton: {
 		feature_menu: decreasePlaybackSpeedButtonSVG,
 		shared_icon_position: decreasePlaybackSpeedButtonSVG
+	},
+	flipVideoHorizontalButton: {
+		feature_menu: flipHorizontalButtonSVG,
+		shared_icon_position: flipHorizontalButtonSVG
+	},
+	flipVideoVerticalButton: {
+		feature_menu: flipVerticalButtonSVG,
+		shared_icon_position: flipVerticalButtonSVG
 	},
 	forwardButton: {
 		feature_menu: forwardButtonSVG,
