@@ -457,7 +457,7 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
+							"label": "Blocca ricerca chiave numero",
 							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
