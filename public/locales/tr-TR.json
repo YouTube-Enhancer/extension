@@ -457,8 +457,8 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Numara tuşlarıyla atlamayı engelle",
+							"title": "0-9 tuşlarına basıldığında videonun belirli bir yüzdesine atlamayı engeller."
 						}
 					},
 					"copyTimestampUrlButton": {
