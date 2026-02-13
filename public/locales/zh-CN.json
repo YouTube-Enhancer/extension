@@ -244,9 +244,9 @@
 					"singular": "启用 '{{OPTION}}' 以配置此选项",
 					"specificOption": {
 						"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项",
 						"globalVolume": "禁用“记住最后一个音量”来配置此选项",
-						"rememberVolume": "禁用“全局音量”来配置此选项"
+						"rememberVolume": "禁用“全局音量”来配置此选项",
+						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 					}
 				},
 				"scrollForMoreSettings": "滚动以查看更多设置",
@@ -283,37 +283,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "迷你播放器按钮",
-					"title": "添加打开迷你播放器的按钮"
-				},
-				"enable": {
-					"label": "查看评论时打开迷你播放器",
-					"title": "当您滚动到评论时自动打开迷你播放器。"
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "默认迷你播放器位置",
-							"options": {
-								"bottomCenter": "底部居中",
-								"bottomLeft": "左下角",
-								"bottomRight": "右下角",
-								"topCenter": "顶部居中",
-								"topLeft": "左上角",
-								"topRight": "右上角"
-							},
-							"title": "设置移动迷你播放器之前的起始位置。"
-						}
-					},
-					"size": {
-						"label": "默认迷你播放器大小",
-						"title": "设置缩放迷你播放器之前的起始大小。"
-					}
-				},
-				"title": "迷你播放器设置"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "启用自定义 CSS",
@@ -386,6 +355,50 @@
 				},
 				"title": "快进/快退按钮设置"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "总是以此音量开始视频",
+					"title": "自动让所有视频以您选定的音量开始播放"
+				},
+				"settings": {
+					"amount": {
+						"label": "视频起始音量",
+						"title": "每个视频开始播放时都使用该音量"
+					}
+				},
+				"title": "全局音量覆盖"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "迷你播放器按钮",
+					"title": "添加打开迷你播放器的按钮"
+				},
+				"enable": {
+					"label": "查看评论时打开迷你播放器",
+					"title": "当您滚动到评论时自动打开迷你播放器。"
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "默认迷你播放器位置",
+							"options": {
+								"bottomCenter": "底部居中",
+								"bottomLeft": "左下角",
+								"bottomRight": "右下角",
+								"topCenter": "顶部居中",
+								"topLeft": "左上角",
+								"topRight": "右上角"
+							},
+							"title": "设置移动迷你播放器之前的起始位置。"
+						}
+					},
+					"size": {
+						"label": "默认迷你播放器大小",
+						"title": "设置缩放迷你播放器之前的起始大小。"
+					}
+				},
+				"title": "迷你播放器设置"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +441,12 @@
 						"enable": {
 							"label": "在结束屏幕上自动显示更多视频",
 							"title": "加载视频时自动在结束屏幕上显示更多视频"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -870,19 +889,6 @@
 					}
 				},
 				"title": "音量增强设置"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "总是以此音量开始视频",
-					"title": "自动让所有视频以您选定的音量开始播放"
-				},
-				"settings": {
-					"amount": {
-						"label": "视频起始音量",
-						"title": "每个视频开始播放时都使用该音量"
-					}
-				},
-				"title": "全局音量覆盖"
 			}
 		}
 	}
