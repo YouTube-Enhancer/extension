@@ -21,6 +21,7 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
+import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/disableNumberKeySkip";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
@@ -282,7 +283,8 @@ const enableFeatures = async () => {
 			enableHideSidebarRecommendedVideos(),
 			enableAutomaticallyDisableAutoPlay(),
 			enableGlobalVolume(),
-			enableCommentsMiniPlayer()
+			enableCommentsMiniPlayer(),
+			enableBlockNumberKeySkip()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -426,6 +428,18 @@ const initialize = function () {
 						}
 						break;
 					}
+					case "blockNumberKeySeekingChange": {
+						const {
+							data: { blockNumberKeySeekingEnabled }
+						} = message;
+						console.log(`blockNumberKeySeekingEnabled: ${blockNumberKeySeekingEnabled}`);
+						if (blockNumberKeySeekingEnabled) {
+							await enableBlockNumberKeySkip();
+						} else {
+							await disableBlockNumberKeySkip();
+						}
+						break;
+					}
 					case "buttonPlacementChange": {
 						const { data } = message;
 						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
@@ -507,6 +521,7 @@ const initialize = function () {
 						}
 						break;
 					}
+
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -518,7 +533,6 @@ const initialize = function () {
 						}
 						break;
 					}
-
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }

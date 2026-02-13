@@ -1,9 +1,10 @@
 import type { IconType } from "react-icons";
-import type { TSelectorFunc } from "@/src/types";
 
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { FaSpinner } from "react-icons/fa";
+
+import type { TSelectorFunc } from "@/src/types";
 
 import "./index.css";
 

@@ -911,6 +911,14 @@ export default function Settings() {
 						title={t((translations) => translations.settings.sections.miscellaneous.settings.timestampPeek.enable.title)}
 						type="checkbox"
 					/>
+					<Setting
+						checked={settings.enable_block_number_key_seeking}
+						label={t((translations) => translations.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.label)}
+						onChange={setCheckboxOption("enable_block_number_key_seeking")}
+						parentSetting={null}
+						title={t((translations) => translations.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.title)}
+						type="checkbox"
+					/>
 				</SettingSection>
 				<SettingSection title={t((translations) => translations.settings.sections.videoHistory.title)}>
 					<SettingTitle />
