@@ -24,6 +24,12 @@ import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack }
 import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/disableNumberKeySkip";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import {
+	addFlipVideoHorizontalButton,
+	addFlipVideoVerticalButton,
+	removeFlipVideoHorizontalButton,
+	removeFlipVideoVerticalButton
+} from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
@@ -295,6 +301,8 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await addFlipVideoVerticalButton();
+		await addFlipVideoHorizontalButton();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -582,6 +590,28 @@ const initialize = function () {
 							data: { featureMenuOpenType }
 						} = message;
 						setupFeatureMenuEventListeners(featureMenuOpenType);
+						break;
+					}
+					case "flipVideoHorizontalButtonChange": {
+						const {
+							data: { flipVideoHorizontalButtonEnabled }
+						} = message;
+						if (flipVideoHorizontalButtonEnabled) {
+							await addFlipVideoHorizontalButton();
+						} else {
+							await removeFlipVideoHorizontalButton();
+						}
+						break;
+					}
+					case "flipVideoVerticalButtonChange": {
+						const {
+							data: { flipVideoVerticalButtonEnabled }
+						} = message;
+						if (flipVideoVerticalButtonEnabled) {
+							await addFlipVideoVerticalButton();
+						} else {
+							await removeFlipVideoVerticalButton();
+						}
 						break;
 					}
 					case "forwardRewindButtonsChange": {
