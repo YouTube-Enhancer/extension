@@ -311,6 +311,12 @@ interface EnUS {
 							title: "Automatically enables theater mode when you load a video";
 						};
 					};
+					blockNumberKeySeeking: {
+						enable: {
+							label: "Block number key seeking";
+							title: "Prevents pressing 0-9 from jumping to a percentage of the video";
+						};
+					};
 					copyTimestampUrlButton: {
 						enable: {
 							label: "Copy video URL with timestamp button";

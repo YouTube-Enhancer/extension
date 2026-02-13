@@ -300,6 +300,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideEndScreenCardsButtonEnabled: newValue
 			});
 		},
+		enable_block_number_key_seeking: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("blockNumberKeySeekingChange", {
+				blockNumberKeySeekingEnabled: newValue
+			});
+		},
 		enable_comments_mini_player: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("commentsMiniPlayerChange", {
 				miniPlayerEnabled: newValue

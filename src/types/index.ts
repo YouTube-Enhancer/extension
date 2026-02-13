@@ -249,6 +249,7 @@ export type configuration = {
 	enable_automatically_maximize_player: boolean;
 	enable_automatically_set_quality: boolean;
 	enable_automatically_show_more_videos_on_end_screen: boolean;
+	enable_block_number_key_seeking: boolean;
 	enable_comments_mini_player: boolean;
 	enable_comments_mini_player_button: boolean;
 	enable_copy_timestamp_url_button: boolean;
@@ -404,6 +405,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ automaticallyShowMoreVideosOnEndScreenEnabled: boolean }
 	>;
 	automaticTheaterModeChange: DataResponseMessage<"automaticTheaterModeChange", { automaticTheaterModeEnabled: boolean }>;
+	blockNumberKeySeekingChange: DataResponseMessage<"blockNumberKeySeekingChange", { blockNumberKeySeekingEnabled: boolean }>;
 	buttonPlacementChange: DataResponseMessage<"buttonPlacementChange", ButtonPlacementChange>;
 	commentsMiniPlayerChange: DataResponseMessage<"commentsMiniPlayerChange", { miniPlayerEnabled: boolean }>;
 	copyTimestampUrlButtonChange: DataResponseMessage<"copyTimestampUrlButtonChange", { copyTimestampUrlButtonEnabled: boolean }>;
