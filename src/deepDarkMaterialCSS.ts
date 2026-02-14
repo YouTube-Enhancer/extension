@@ -1751,11 +1751,6 @@ grid-shelf-view-model.ytGridShelfViewModelHost > yt-section-header-view-model > 
 	fill: var(--main-color) !important;
 }
 
-/*shorts background*/
-#cinematic-container {
-	background: transparent !important;
-}
-
 /*Playlist page*/
 /*sidebar*/
 ytd-playlist-sidebar-renderer {
