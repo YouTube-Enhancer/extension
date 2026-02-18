@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 import type { Nullable } from "@/src/types";
@@ -23,9 +23,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, input_type, 
 	const inputRef = useRef<Nullable<HTMLInputElement>>(null);
 	const id = useId();
 	const [localValue, setLocalValue] = useState(value);
-	useEffect(() => {
-		setLocalValue(value);
-	}, [value]);
+	if (value !== localValue) setLocalValue(value);
 	const debouncedOnChange = useDebounceFn((event: ChangeEvent<HTMLInputElement>) => {
 		onChange(event);
 	}, 300);
@@ -50,11 +48,19 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, input_type, 
 	const disabledInputClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
 	const resolvedType = input_type === "password" && showPassword ? "text" : input_type;
 	return (
-		<div aria-valuetext={localValue} className={cn("relative flex flex-row items-center justify-between gap-4", className)} title={title}>
+		<div aria-valuetext={value} className={cn("relative flex flex-row items-center justify-between gap-4", className)} title={title}>
 			<label htmlFor={id}>{label}</label>
 			<div
 				className="flex w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black dark:multi-['border-gray-700;bg-[#23272a];text-white']"
 				onClick={() => inputRef.current?.focus()}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						inputRef.current?.focus();
+					}
+				}}
+				role="button"
+				tabIndex={0}
 			>
 				{input_type === "password" && (
 					<button
@@ -78,7 +84,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, input_type, 
 					onChange={handleInputChange}
 					ref={inputRef}
 					type={resolvedType}
-					value={localValue}
+					value={value}
 				/>
 			</div>
 		</div>

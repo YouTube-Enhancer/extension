@@ -4,7 +4,7 @@ import type EnUS from "public/locales/en-US.json";
 import type { ChangeEvent, ChangeEventHandler } from "react";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, Suspense, useContext, useEffect, useRef, useState } from "react";
+import { createContext, Suspense, useContext, useEffect, useReducer, useRef, useState } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
@@ -31,10 +31,15 @@ import Setting, { type parentSetting } from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 import SettingSection from "./components/SettingSection";
 import SettingTitle from "./components/SettingTitle";
+type Action = { payload: boolean; type: "SET_LOADING" } | { payload: SelectOption<"language">[]; type: "SET_LANGUAGES" };
 type SettingsContextProps = {
 	direction: "ltr" | "rtl";
 	i18nInstance: i18nInstanceType;
 	settings: configuration;
+};
+type State = {
+	languageOptions: SelectOption<"language">[];
+	languagesLoading: boolean;
 };
 export default function Settings() {
 	const queryClient = useQueryClient();
@@ -57,7 +62,7 @@ export default function Settings() {
 			const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
 			setCanScroll(window.scrollY < scrollableHeight);
 		};
-		window.addEventListener("scroll", handleScroll);
+		window.addEventListener("scroll", handleScroll, { passive: true });
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
 		};
@@ -509,7 +514,7 @@ export default function Settings() {
 			<div className="h-fit w-fit bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']" dir={localeDirection[settings.language]}>
 				<div className="sticky left-0 top-0 z-10 flex flex-col justify-between gap-1 bg-[#f5f5f5] dark:bg-[#181a1b]">
 					<h1 className="flex content-center items-center gap-3 text-xl font-bold sm:text-2xl md:text-3xl" dir={"ltr"}>
-						<img className="h-16 w-16" src="/icons/icon_128.png" />
+						<img alt="YouTube Enhancer Icon" className="h-16 w-16" src="/icons/icon_128.png" />
 						YouTube Enhancer
 						<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 					</h1>
@@ -1730,16 +1735,14 @@ function LanguageOptions({
 	setValueOption: (key: configurationKeys) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	t: i18nInstanceType["t"];
 }) {
-	const [languageOptions, setLanguageOptions] = useState<SelectOption<"language">[]>([]);
-	const [languagesLoading, setLanguagesLoading] = useState(true);
+	const [state, dispatch] = useReducer(reducer, { languageOptions: [], languagesLoading: true });
 	useEffect(() => {
 		void (async () => {
 			try {
 				const languages = await getLanguageOptions();
-				setLanguageOptions(languages);
-				setLanguagesLoading(false);
+				dispatch({ payload: languages, type: "SET_LANGUAGES" });
 			} catch (_) {
-				setLanguagesLoading(false);
+				dispatch({ payload: false, type: "SET_LOADING" });
 			}
 		})();
 	}, []);
@@ -1750,9 +1753,9 @@ function LanguageOptions({
 				disabled={false}
 				id="language"
 				label={t((translations) => translations.pages.options.extras.language.select.label)}
-				loading={languagesLoading}
+				loading={state.languagesLoading}
 				onChange={setValueOption("language")}
-				options={languageOptions}
+				options={state.languageOptions}
 				parentSetting={null}
 				selectedOption={selectedLanguage}
 				title={t((translations) => translations.pages.options.extras.language.select.title)}
@@ -1760,6 +1763,16 @@ function LanguageOptions({
 			/>
 		</SettingSection>
 	);
+}
+function reducer(state: State, action: Action): State {
+	switch (action.type) {
+		case "SET_LANGUAGES":
+			return { ...state, languageOptions: action.payload, languagesLoading: false };
+		case "SET_LOADING":
+			return { ...state, languagesLoading: action.payload };
+		default:
+			return state;
+	}
 }
 async function setSettings(newSettings: configuration) {
 	const current = await getSettings();

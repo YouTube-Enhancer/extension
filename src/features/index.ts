@@ -9,10 +9,10 @@ import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/featu
 import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
 import { addOpenTranscriptButton, removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import {
-    addDecreasePlaybackSpeedButton,
-    addIncreasePlaybackSpeedButton,
-    removeDecreasePlaybackSpeedButton,
-    removeIncreasePlaybackSpeedButton
+	addDecreasePlaybackSpeedButton,
+	addIncreasePlaybackSpeedButton,
+	removeDecreasePlaybackSpeedButton,
+	removeIncreasePlaybackSpeedButton
 } from "@/src/features/playbackSpeedButtons";
 import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
 import { addVolumeBoostButton, removeVolumeBoostButton } from "@/src/features/volumeBoost";
