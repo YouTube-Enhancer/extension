@@ -1,14 +1,12 @@
 import { type ChangeEvent, useRef } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 
-import type { i18nInstanceType } from "@/src/i18n";
-
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 
-export default function SettingSearch({ i18nInstance }: { i18nInstance: i18nInstanceType }) {
+export default function SettingSearch() {
 	const { filter, setFilter } = useSettingsFilter();
-	const { direction } = useSettings();
+	const { direction, i18nInstance } = useSettings();
 	const { t } = i18nInstance;
 	const inputRef = useRef<HTMLInputElement>(null);
 	return (
