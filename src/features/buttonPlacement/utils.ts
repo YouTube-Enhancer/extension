@@ -128,7 +128,11 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 }
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
 	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
-	if (button) button.dataset.title = title;
+	if (button) {
+		button.dataset.title = title;
+		const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
+		if (tooltip) tooltip.textContent = title;
+	}
 }
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
