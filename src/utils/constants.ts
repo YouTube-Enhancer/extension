@@ -235,7 +235,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 > = z.object({
 	button_placements: z.object({
 		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements) }),
+			(acc, featureName) => ({ ...acc, [featureName]: z.optional(z.enum(buttonPlacements)) }),
 			{} as Record<AllButtonNames, ZodMiniEnum<{ [K in ButtonPlacement]: K }>>
 		)
 	}),
