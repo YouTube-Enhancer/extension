@@ -8,6 +8,16 @@
 	"pages": {
 		"content": {
 			"features": {
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Flip video horizontally"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Flip video vertically"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Скопіювати URL відео з міткою часу"
@@ -164,7 +174,9 @@
 							"openTranscriptButton": "Кнопка відкрити транскрипт",
 							"rewindButton": "Кнопка відмотки",
 							"screenshotButton": "Кнопка для скріншота",
-							"volumeBoostButton": "Кнопка збільшення гучності"
+							"volumeBoostButton": "Кнопка збільшення гучності",
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button"
 						},
 						"options": {
 							"below_player": {
@@ -244,9 +256,9 @@
 					"singular": "Enable '{{OPTION}}' to configure this option",
 					"specificOption": {
 						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
 						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "Scroll for more settings",
@@ -283,37 +295,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Увімкнути користувацький CSS",
@@ -386,6 +367,50 @@
 				},
 				"title": "Налаштування кнопки вперед/назад"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +453,12 @@
 						"enable": {
 							"label": "Automatically show more videos on end screen",
 							"title": "Automatically shows more videos on end screen when you load a video"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -602,6 +633,18 @@
 						"enable": {
 							"label": "Timestamp Preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
 						}
 					}
 				},
@@ -870,19 +913,6 @@
 					}
 				},
 				"title": "Volume boost settings"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}

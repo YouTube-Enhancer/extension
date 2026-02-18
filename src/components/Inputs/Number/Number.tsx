@@ -26,7 +26,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
 	const id = useId();
 	const { direction } = useSettings();
-	const [localValue, setLocalValue] = useState<string>(value.toString());
+	const [localValue, setLocalValue] = useState<string>(() => value.toString());
 	useEffect(() => {
 		setLocalValue(value.toString());
 	}, [value]);
@@ -44,8 +44,6 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 		setLocalValue(value);
 		debouncedChange(value);
 	};
-	const NumberPlus = () => updateNumber("up");
-	const NumberMinus = () => updateNumber("down");
 	const handleChange = (value: string) => {
 		if (min && parseFloat(value) < min) value = min + "";
 		if (max && parseFloat(value) > max) value = max + "";
@@ -98,7 +96,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						aria-label="Add one"
 						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
-						onClick={NumberPlus}
+						onClick={() => updateNumber("up")}
 						style={{
 							borderTopRightRadius: "0.375rem",
 							transition: "all linear 0.1s"
@@ -111,7 +109,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						aria-label="Subtract one"
 						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
-						onClick={NumberMinus}
+						onClick={() => updateNumber("down")}
 						style={{
 							borderBottomRightRadius: "0.375rem",
 							transition: "all linear 0.1s"

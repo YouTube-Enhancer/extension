@@ -1,5 +1,5 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
+import { featureButtonFunctions } from "@/src/features";
 import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
 import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
 import {
@@ -313,11 +313,13 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	if (!featureFunctions) {
 		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
 	}
-	// Cast featureFunctions to FeatureFuncRecord
-	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+	// Ensure featureFunctions are valid
+	if (typeof featureFunctions.add !== "function" || typeof featureFunctions.remove !== "function") {
+		throw new Error(`Feature '${featureName}' functions are not valid`);
+	}
 	return {
-		add: () => castFeatureFunctions.add(),
-		remove: () => castFeatureFunctions.remove(oldPlacement)
+		add: () => featureFunctions.add(),
+		remove: () => featureFunctions.remove(oldPlacement)
 	};
 };
 function handleSoftNavigate() {
@@ -512,7 +514,9 @@ const initialize = function () {
 						}
 						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
 							if (oldPlacement === newPlacement) continue;
+							console.log(`featureName: ${featureName}, newPlacement: ${newPlacement}, oldPlacement: ${oldPlacement}`);
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
+							console.log(`featureFuncs: `, featureFuncs);
 							await featureFuncs.remove();
 							await featureFuncs.add();
 						}

@@ -34,7 +34,7 @@ import { deepDarkPresets } from "../deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "../features/deepDarkCSS/utils";
 import { buttonNameToSettingName, featureToMultiButtonsMap, youtubePlayerQualityLevels } from "../types";
 import { engagementPanelVisibility, type EngagementPanelVisibility, getCommentsPanelSelector } from "../utils/constants";
-import { eventManager, type FeatureName } from "./EventManager";
+import eventManager, { type FeatureName } from "./EventManager";
 export const isStrictEqual = (value1: unknown) => (value2: unknown) => value1 === value2;
 export const isNotStrictEqual = (value1: unknown) => (value2: unknown) => value1 !== value2;
 
