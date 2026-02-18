@@ -60,7 +60,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 		"dark:!text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	const buttonClasses =
-		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
+		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white transition-colors duration-100 ease-linear" satisfies ClassValue;
 	return (
 		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
 			<label className="mb-1" htmlFor={id}>
@@ -98,8 +98,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						disabled={disabled}
 						onClick={() => updateNumber("up")}
 						style={{
-							borderTopRightRadius: "0.375rem",
-							transition: "all linear 0.1s"
+							borderTopRightRadius: "0.375rem"
 						}}
 						type="button"
 					>
@@ -111,8 +110,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						disabled={disabled}
 						onClick={() => updateNumber("down")}
 						style={{
-							borderBottomRightRadius: "0.375rem",
-							transition: "all linear 0.1s"
+							borderBottomRightRadius: "0.375rem"
 						}}
 						type="button"
 					>
