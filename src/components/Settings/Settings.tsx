@@ -1,7 +1,7 @@
 import type { ChangeEvent } from "react";
 
 import { useMutation, type UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, Suspense, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
@@ -9,7 +9,6 @@ import "@/components/Settings/Settings.css";
 import type { configuration, configurationKeys, Nullable, Path } from "@/src/types";
 
 import { useNotifications } from "@/hooks";
-import LanguageOptions from "@/src/components/Settings/components/LanguageOptions";
 import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
 import SettingsHeader from "@/src/components/Settings/components/SettingsHeader";
 import {
@@ -19,6 +18,7 @@ import {
 	FeatureMenuOpenTypeSection,
 	ForwardRewindButtonsSection,
 	GlobalVolumeSection,
+	LanguageSettingsSection,
 	MiniPlayerSection,
 	MiscellaneousSection,
 	OnScreenDisplaySection,
@@ -160,9 +160,7 @@ export default function Settings() {
 					title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
 					type="checkbox"
 				></Setting>
-				<Suspense fallback={<Loader />}>
-					<LanguageOptions selectedLanguage={settings["language"]} />
-				</Suspense>
+				<LanguageSettingsSection />
 				<FeatureMenuOpenTypeSection />
 				<ButtonPlacementSection />
 				<YouTubeDataApiKeySection />

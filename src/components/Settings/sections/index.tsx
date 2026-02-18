@@ -7,6 +7,7 @@ import DeepDarkCSSSection from "@/src/components/Settings/sections/DeepDarkCSS";
 import FeatureMenuOpenTypeSection from "@/src/components/Settings/sections/FeatureMenuOpenType";
 import ForwardRewindButtonsSection from "@/src/components/Settings/sections/ForwardRewindButtons";
 import GlobalVolumeSection from "@/src/components/Settings/sections/GlobalVolume";
+import LanguageSettingsSection from "@/src/components/Settings/sections/LanguageSettings";
 import MiniPlayerSection from "@/src/components/Settings/sections/MiniPlayer";
 import MiscellaneousSection from "@/src/components/Settings/sections/Miscellaneous";
 import OnScreenDisplaySection from "@/src/components/Settings/sections/OnScreenDisplay";
@@ -20,6 +21,7 @@ import ScrollWheelVolumeControlSection from "@/src/components/Settings/sections/
 import VideoHistorySection from "@/src/components/Settings/sections/VideoHistory";
 import VolumeBoostSection from "@/src/components/Settings/sections/VolumeBoost";
 import YouTubeDataApiKeySection from "@/src/components/Settings/sections/YouTubeDataApiKey";
+
 export function getScrollWheelControlModifierKeyOptions({ t }: i18nInstanceType) {
 	return [
 		{
@@ -49,6 +51,7 @@ export {
 	FeatureMenuOpenTypeSection,
 	ForwardRewindButtonsSection,
 	GlobalVolumeSection,
+	LanguageSettingsSection,
 	MiniPlayerSection,
 	MiscellaneousSection,
 	OnScreenDisplaySection,
