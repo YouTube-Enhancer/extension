@@ -132,10 +132,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Potenciador de volumen",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "Desactivar potenciador de volumen",
-							"on": "Activar potenciador de volumen"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -899,7 +899,11 @@
 				"settings": {
 					"amount": {
 						"label": "Incremento de volumen (dB)",
-						"title": "Cuantos decibelios quieres aumentar el volumen"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {
