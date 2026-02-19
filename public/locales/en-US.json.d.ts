@@ -67,8 +67,8 @@ interface EnUS {
 				videoHistory: { extras: { resumeButton: "Resume"; resumePromptClose: "Close" } };
 				volumeBoostButton: {
 					button: {
-						label: "Volume Boost";
-						toggle: { off: "Volume boost off"; on: "Volume boost on" };
+						label: "Volume Boost ({{value}} dB)";
+						toggle: { off: "Volume boost off"; on: "Volume boost ({{value}} dB)" };
 					};
 				};
 			};
@@ -682,7 +682,11 @@ interface EnUS {
 			volumeBoost: {
 				enable: { label: "Volume boost"; title: "Enable volume boost" };
 				settings: {
-					amount: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
+					amount: {
+						label: "Volume boost amount (dB)";
+						title: "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it.";
+					};
+					amount_global_only: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by." };
 					mode: {
 						select: {
 							label: "Volume boost mode";

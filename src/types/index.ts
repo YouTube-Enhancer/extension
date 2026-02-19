@@ -340,6 +340,7 @@ export type ContentSendOnlyMessageMappings = {
 	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
+	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
 };
 export type ContentToBackgroundSendOnlyMessageMappings = {
 	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;

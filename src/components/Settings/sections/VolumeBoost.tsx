@@ -56,7 +56,11 @@ export default function VolumeBoostSection() {
 				min={1}
 				onChange={setValueOption("volume_boost_amount")}
 				parentSetting={volumeBoostParentSetting}
-				title={t((translations) => translations.settings.sections.volumeBoost.settings.amount.title)}
+				title={
+					settings.volume_boost_mode === "per_video" ?
+						t((translations) => translations.settings.sections.volumeBoost.settings.amount.title)
+					:	t((translations) => translations.settings.sections.volumeBoost.settings.amount_global_only.title)
+				}
 				type="number"
 				value={settings.volume_boost_amount}
 			/>
