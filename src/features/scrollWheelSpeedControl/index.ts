@@ -1,5 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -31,6 +32,8 @@ export default async function adjustSpeedOnScrollWheel() {
 	if (playerVideoData.isLive) return;
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		const volumeBoostButton = getFeatureButton("volumeBoostButton");
+		if (volumeBoostButton && event.target === volumeBoostButton) return;
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};

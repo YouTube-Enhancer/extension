@@ -94,7 +94,7 @@ import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timest
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
-	applyVolumeBoost,
+	applyVolumeBoostDb,
 	disableVolumeBoost,
 	enableVolumeBoost,
 	removeVolumeBoostButton
@@ -1184,14 +1184,14 @@ const initialize = function () {
 						switch (volumeBoostMode) {
 							case "global": {
 								if (!volumeBoostEnabled) return;
-								applyVolumeBoost(volumeBoostAmount);
+								applyVolumeBoostDb(volumeBoostAmount);
 								break;
 							}
 							case "per_video": {
 								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
 								if (!volumeBoostButton) return;
 								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+								if (volumeBoostForVideoEnabled) applyVolumeBoostDb(volumeBoostAmount);
 							}
 						}
 						break;

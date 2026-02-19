@@ -150,6 +150,10 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
+					case "setVolumeBoostAmount": {
+						void chrome.storage.local.set({ volume_boost_amount: message.data });
+						break;
+					}
 					case "videoHistoryOne": {
 						const { data } = message;
 						if (!data) return;
