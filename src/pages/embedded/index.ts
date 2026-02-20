@@ -1178,10 +1178,12 @@ const initialize = function () {
 	})();
 };
 
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initialize);
-} else {
-	initialize();
+if (window.self === window.top) {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initialize);
+	} else {
+		initialize();
+	}
 }
 
 window.onbeforeunload = function () {
