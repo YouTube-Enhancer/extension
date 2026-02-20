@@ -10,12 +10,12 @@
 			"features": {
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Inverter vídeo horizontalmente"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Inverter o vídeo verticalmente"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -72,8 +72,8 @@
 					"button": {
 						"label": "Mini Player",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini Player desligado",
+							"on": "Mini Player ligado"
 						}
 					}
 				},
@@ -132,10 +132,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost ({{value}} dB)",
+						"label": "Ganho de Volume ({{value}} dB)",
 						"toggle": {
 							"off": "Aumento de volume desativado",
-							"on": "Volume boost ({{value}} dB)"
+							"on": "Ganho de volume ({{value}} dB)"
 						}
 					}
 				}
@@ -170,13 +170,13 @@
 							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 							"loopButton": "Botão Repetir",
 							"maximizePlayerButton": "Botão Maximizar",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Botão do Mini Player",
 							"openTranscriptButton": "Abrir botão de transcrição",
 							"rewindButton": "Botão Voltar",
 							"screenshotButton": "Botão de captura de tela",
 							"volumeBoostButton": "Botão de ganho de volume",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
+							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente"
 						},
 						"options": {
 							"below_player": {
@@ -241,8 +241,8 @@
 					"title": "Idioma"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Abrir a página de configurações na atualização",
+					"title": "Abre a página de configurações quando uma versão maior ou menor do YouTube Enhancer é instalada"
 				},
 				"optionDisabled": {
 					"either": {
@@ -256,8 +256,8 @@
 					"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 					"specificOption": {
 						"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"globalVolume": "Desative 'Lembrar último volume' para configurar esta opção",
+						"rememberVolume": "Desative 'Lembrar último volume' para configurar esta opção",
 						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
 				},
@@ -369,8 +369,8 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Sempre iniciar vídeos com este volume",
+					"title": "Faz com que todos os vídeos comecem no seu volume selecionado automaticamente"
 				},
 				"settings": {
 					"amount": {
