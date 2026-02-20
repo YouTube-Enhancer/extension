@@ -1184,10 +1184,10 @@ if (document.readyState === "loading") {
 	initialize();
 }
 
-window.onbeforeunload = function () {
+window.addEventListener("pagehide", () => {
 	eventManager.removeAllEventListeners();
 	element.remove();
-};
+});
 
 // Error handling
 window.addEventListener("error", (event) => {
