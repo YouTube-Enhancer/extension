@@ -374,42 +374,42 @@
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "Volume inicial de vídeo",
+						"title": "O volume aplicado a cada vídeo quando ele começa a reproduzir"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Substituição de Volume Global"
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "Botão do Mini Player",
+					"title": "Adiciona um botão que abre o Mini Player"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "Abrir Mini Player ao ver comentários",
+					"title": "Abrir automaticamente o Mini Player ao rolar para os comentários."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "Default Mini Player position",
+							"label": "Posição padrão Mini Player",
 							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
+								"bottomCenter": "Centro inferior",
+								"bottomLeft": "Canto inferior esquerdo",
+								"bottomRight": "Canto inferior direito",
+								"topCenter": "Superior no centro",
+								"topLeft": "Superior Esquerdo",
+								"topRight": "Superior direita"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Define a posição inicial antes de mover o Mini Player."
 						}
 					},
 					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"label": "Tamanho padrão do Mini Player",
+						"title": "Define o tamanho inicial antes de redimensionar o Mini Player."
 					}
 				},
-				"title": "Mini Player settings"
+				"title": "Configurações do Mini Player"
 			},
 			"miscellaneous": {
 				"settings": {
@@ -457,8 +457,8 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Bloquear tecla de número em busca",
+							"title": "Impede que se pule 0-9 para uma porcentagem do vídeo"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -631,20 +631,20 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Pré-visualização de Timestamp",
+							"title": "Pré-visualize o vídeo passando o mouse sobre um timestamp. Clique na pré-visualização para começar a reprodução a partir daquele momento."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Botão de girar vídeo horizontal",
+							"title": "Adiciona um botão para virar o vídeo horizontalmente"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"label": "Botão de girar vídeo verticalmente",
+							"title": "Adiciona um botão para virar o vídeo verticalmente"
 						}
 					}
 				},
@@ -899,11 +899,11 @@
 				"settings": {
 					"amount": {
 						"label": "Aumento de volume (dB)",
-						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+						"title": "O valor para ganho do volume. Você também pode rolar sobre o botão de impulso de volume (Shift/Ctrl para ganhos maiores) para ajustá-lo."
 					},
 					"amount_global_only": {
-						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"label": "Quantidade de ganho de volume (dB)",
+						"title": "Valor de ganho de volume por."
 					},
 					"mode": {
 						"select": {
