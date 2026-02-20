@@ -139,9 +139,9 @@ document.addEventListener("yte-message-from-youtube", () => {
 				switch (message.type) {
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
-						window.onunload = () => {
+						window.addEventListener("pagehide", () => {
 							chrome.storage.onChanged.removeListener(storageListeners);
-						};
+						});
 						break;
 					}
 					case "setRememberedVolume": {
