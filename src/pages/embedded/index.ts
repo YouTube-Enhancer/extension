@@ -176,9 +176,13 @@ function shouldEnableFeaturesFuncReturn() {
 }
 let isEnablingFeatures = false;
 let enableFeaturesTimeout: null | ReturnType<typeof setTimeout> = null;
+let lastEnabledURL: string | null = null;
 function scheduleEnableFeatures() {
 	if (enableFeaturesTimeout) clearTimeout(enableFeaturesTimeout);
 	enableFeaturesTimeout = setTimeout(() => {
+		const currentURL = window.location.href;
+		if (lastEnabledURL === currentURL) return;
+		lastEnabledURL = currentURL;
 		void enableFeatures();
 	}, 200);
 }
