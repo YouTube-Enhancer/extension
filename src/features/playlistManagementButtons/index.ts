@@ -21,7 +21,6 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 
 const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
 const THUMBAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
-const TRANSLATION_KEY_PREFIX = "settings.sections.playlistManagementButtons";
 
 let playlistObserver: MutationObserver | null = null;
 
@@ -87,9 +86,9 @@ export async function enablePlaylistManagementButtons() {
 						} = item as YTDPlaylistVideoRenderer;
 						await removeFromPlaylist(youtube, playlistId, setVideoId);
 					},
-					translationError: `${TRANSLATION_KEY_PREFIX}.failedToRemoveVideo`,
-					translationHover: `${TRANSLATION_KEY_PREFIX}.removeVideo`,
-					translationProcessing: `${TRANSLATION_KEY_PREFIX}.removingVideo`
+					translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToRemoveVideo,
+					translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo,
+					translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removingVideo
 				});
 				removeButton.style.verticalAlign = "top";
 				menu.prepend(removeButton);
@@ -108,9 +107,9 @@ export async function enablePlaylistManagementButtons() {
 						item.querySelector(THUMBAIL_OVERLAY_SELECTOR)?.remove();
 						resetButton.remove();
 					},
-					translationError: `${TRANSLATION_KEY_PREFIX}.failedToMarkAsUnwatched`,
-					translationHover: `${TRANSLATION_KEY_PREFIX}.markAsUnwatched`,
-					translationProcessing: `${TRANSLATION_KEY_PREFIX}.markingAsUnwatched`
+					translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToMarkAsUnwatched,
+					translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched,
+					translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markingAsUnwatched
 				});
 				resetButton.style.verticalAlign = "top";
 				if (enable_playlist_remove_button && removeButton) {

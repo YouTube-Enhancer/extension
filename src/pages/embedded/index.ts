@@ -1,5 +1,5 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
+import { featureButtonFunctions } from "@/src/features";
 import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
 import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
 import {
@@ -21,8 +21,15 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
+import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/disableNumberKeySkip";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import {
+	addFlipVideoHorizontalButton,
+	addFlipVideoVerticalButton,
+	removeFlipVideoHorizontalButton,
+	removeFlipVideoVerticalButton
+} from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
@@ -87,7 +94,7 @@ import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timest
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
-	applyVolumeBoost,
+	applyVolumeBoostDb,
 	disableVolumeBoost,
 	enableVolumeBoost,
 	removeVolumeBoostButton
@@ -282,7 +289,8 @@ const enableFeatures = async () => {
 			enableHideSidebarRecommendedVideos(),
 			enableAutomaticallyDisableAutoPlay(),
 			enableGlobalVolume(),
-			enableCommentsMiniPlayer()
+			enableCommentsMiniPlayer(),
+			enableBlockNumberKeySkip()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
 		await addHideEndScreenCardsButton();
@@ -293,6 +301,8 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await addFlipVideoVerticalButton();
+		await addFlipVideoHorizontalButton();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -303,11 +313,13 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	if (!featureFunctions) {
 		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
 	}
-	// Cast featureFunctions to FeatureFuncRecord
-	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+	// Ensure featureFunctions are valid
+	if (typeof featureFunctions.add !== "function" || typeof featureFunctions.remove !== "function") {
+		throw new Error(`Feature '${featureName}' functions are not valid`);
+	}
 	return {
-		add: () => castFeatureFunctions.add(),
-		remove: () => castFeatureFunctions.remove(oldPlacement)
+		add: () => featureFunctions.add(),
+		remove: () => featureFunctions.remove(oldPlacement)
 	};
 };
 function handleSoftNavigate() {
@@ -426,6 +438,18 @@ const initialize = function () {
 						}
 						break;
 					}
+					case "blockNumberKeySeekingChange": {
+						const {
+							data: { blockNumberKeySeekingEnabled }
+						} = message;
+						console.log(`blockNumberKeySeekingEnabled: ${blockNumberKeySeekingEnabled}`);
+						if (blockNumberKeySeekingEnabled) {
+							await enableBlockNumberKeySkip();
+						} else {
+							await disableBlockNumberKeySkip();
+						}
+						break;
+					}
 					case "buttonPlacementChange": {
 						const { data } = message;
 						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
@@ -490,7 +514,9 @@ const initialize = function () {
 						}
 						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
 							if (oldPlacement === newPlacement) continue;
+							console.log(`featureName: ${featureName}, newPlacement: ${newPlacement}, oldPlacement: ${oldPlacement}`);
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
+							console.log(`featureFuncs: `, featureFuncs);
 							await featureFuncs.remove();
 							await featureFuncs.add();
 						}
@@ -507,6 +533,7 @@ const initialize = function () {
 						}
 						break;
 					}
+
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -518,7 +545,6 @@ const initialize = function () {
 						}
 						break;
 					}
-
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
@@ -568,6 +594,28 @@ const initialize = function () {
 							data: { featureMenuOpenType }
 						} = message;
 						setupFeatureMenuEventListeners(featureMenuOpenType);
+						break;
+					}
+					case "flipVideoHorizontalButtonChange": {
+						const {
+							data: { flipVideoHorizontalButtonEnabled }
+						} = message;
+						if (flipVideoHorizontalButtonEnabled) {
+							await addFlipVideoHorizontalButton();
+						} else {
+							await removeFlipVideoHorizontalButton();
+						}
+						break;
+					}
+					case "flipVideoVerticalButtonChange": {
+						const {
+							data: { flipVideoVerticalButtonEnabled }
+						} = message;
+						if (flipVideoVerticalButtonEnabled) {
+							await addFlipVideoVerticalButton();
+						} else {
+							await removeFlipVideoVerticalButton();
+						}
 						break;
 					}
 					case "forwardRewindButtonsChange": {
@@ -1136,14 +1184,14 @@ const initialize = function () {
 						switch (volumeBoostMode) {
 							case "global": {
 								if (!volumeBoostEnabled) return;
-								applyVolumeBoost(volumeBoostAmount);
+								applyVolumeBoostDb(volumeBoostAmount);
 								break;
 							}
 							case "per_video": {
 								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
 								if (!volumeBoostButton) return;
 								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+								if (volumeBoostForVideoEnabled) applyVolumeBoostDb(volumeBoostAmount);
 							}
 						}
 						break;

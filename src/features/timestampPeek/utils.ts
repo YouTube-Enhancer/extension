@@ -11,7 +11,7 @@ let hideTimer: null | number = null;
 let placeholderDiv: HTMLDivElement | null = null;
 let overlayParent: HTMLElement | null = null;
 let originalVideoStyles: null | { height: string; objectFit: string; width: string } = null;
-
+const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
 export function getTimestampFromString(href: string) {
 	const tParam = new URLSearchParams(href).get("t") ?? "0";
 	return parseInt(tParam, 10);
@@ -224,6 +224,7 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
 	const overlay = getOrCreateOverlay();
+	const miniPlayerActive = isMiniPlayerActive();
 	if (show) {
 		const { style } = video;
 		originalVideoStyles = { height: style.height, objectFit: style.objectFit, width: style.width };
@@ -256,6 +257,10 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 		overlay.style.transform = `translate(${posX}px, ${posY}px)`;
 		video.pause();
 		await seekVideo(video, timestamp);
+		if (miniPlayerActive) {
+			const miniPlayer = document.querySelector<HTMLDivElement>("#yte-mini-player-overlay");
+			miniPlayer!.style.display = "none";
+		}
 		try {
 			await video.play();
 		} catch (err) {
@@ -278,6 +283,10 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 			}
 		}
 		overlay.style.display = "none";
+		if (miniPlayerActive) {
+			const miniPlayer = document.querySelector<HTMLDivElement>("#yte-mini-player-overlay");
+			miniPlayer!.style.display = "block";
+		}
 	}
 }
 
