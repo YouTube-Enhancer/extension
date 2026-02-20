@@ -70,8 +70,8 @@ export function createPlaylistLengthUIElement(
 		elementId: "yte-playlist-length-ui",
 		elementType: "div",
 		styles: {
-			backgroundColor: "var(--yt-spec-badge-chip-background)",
-			border: "1px solid var(--yt-spec-10-percent-layer)",
+			backgroundColor: "var(--yt-spec-additive-background)",
+			border: "1px solid var(--yt-spec-outline)",
 			borderRadius: "10px",
 			height: "48px",
 			marginBottom: "10px",
@@ -102,7 +102,7 @@ export function createPlaylistLengthUIElement(
 		elementType: "div",
 		styles: {
 			bottom: "15px",
-			color: "var(--yt-spec-text-primary)",
+			color: pageType === "watch" ? "var(--yt-spec-text-primary)" : "var(--yt-spec-overlay-text-primary)",
 			fontSize: "15px",
 			marginLeft: "19px",
 			position: "absolute"
@@ -113,11 +113,11 @@ export function createPlaylistLengthUIElement(
 		elementId: "yte-playlist-length-ui-percentageWatched",
 		elementType: "div",
 		styles: {
-			backgroundColor: "var(--yt-spec-brand-background-primary)",
-			border: "1px solid var(--yt-spec-10-percent-layer)",
+			backgroundColor: "var(--yt-spec-button-chip-background-hover)",
+			border: "1px solid var(--yt-spec-outline)",
 			borderRadius: "6px",
 			bottom: "0px",
-			color: "var(--yt-spec-text-primary)",
+			color: pageType === "watch" ? "var(--yt-spec-text-primary)" : "var(--yt-spec-overlay-text-primary)",
 			fontSize: "15px",
 			padding: "4px 8px",
 			position: "absolute",

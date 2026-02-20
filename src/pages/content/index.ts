@@ -150,6 +150,10 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
 						break;
 					}
+					case "setVolumeBoostAmount": {
+						void chrome.storage.local.set({ volume_boost_amount: message.data });
+						break;
+					}
 					case "videoHistoryOne": {
 						const { data } = message;
 						if (!data) return;
@@ -300,6 +304,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideEndScreenCardsButtonEnabled: newValue
 			});
 		},
+		enable_block_number_key_seeking: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("blockNumberKeySeekingChange", {
+				blockNumberKeySeekingEnabled: newValue
+			});
+		},
 		enable_comments_mini_player: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("commentsMiniPlayerChange", {
 				miniPlayerEnabled: newValue
@@ -328,6 +337,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_default_to_original_audio_track(__oldValue, newValue) {
 			sendExtensionOnlyMessage("defaultToOriginalAudioTrackChange", {
 				defaultToOriginalAudioTrackEnabled: newValue
+			});
+		},
+		enable_flip_video_horizontal_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoHorizontalButtonChange", {
+				flipVideoHorizontalButtonEnabled: newValue
+			});
+		},
+		enable_flip_video_vertical_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoVerticalButtonChange", {
+				flipVideoVerticalButtonEnabled: newValue
 			});
 		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {

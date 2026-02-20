@@ -21,6 +21,7 @@ import {
 	screenshotTypes,
 	videoHistoryResumeTypes,
 	volumeBoostModes,
+	youtubePlayerMaxSpeed,
 	youtubePlayerMinSpeed,
 	youtubePlayerQualityLevels,
 	youtubePlayerSpeedStep
@@ -33,6 +34,8 @@ export const defaultConfiguration = {
 	button_placements: {
 		copyTimestampUrlButton: "player_controls_right",
 		decreasePlaybackSpeedButton: "player_controls_left",
+		flipVideoHorizontalButton: "player_controls_left",
+		flipVideoVerticalButton: "player_controls_left",
 		forwardButton: "player_controls_right",
 		hideEndScreenCardsButton: "player_controls_right",
 		increasePlaybackSpeedButton: "player_controls_left",
@@ -63,12 +66,15 @@ export const defaultConfiguration = {
 	enable_automatically_maximize_player: false,
 	enable_automatically_set_quality: false,
 	enable_automatically_show_more_videos_on_end_screen: false,
+	enable_block_number_key_seeking: false,
 	enable_comments_mini_player: false,
 	enable_comments_mini_player_button: false,
 	enable_copy_timestamp_url_button: false,
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_default_to_original_audio_track: false,
+	enable_flip_video_horizontal_button: false,
+	enable_flip_video_vertical_button: false,
 	enable_forced_playback_speed: false,
 	enable_forward_rewind_buttons: false,
 	enable_global_volume: false,
@@ -172,6 +178,7 @@ type RemoveEmpty<T> = {
 	:	K]: T[K];
 };
 export function validateNumbers(obj: configuration, constraints: ConstraintTree, path: (number | string)[] = []): void {
+	const EPSILON = 1e-8;
 	for (const key of Object.keys(constraints) as (keyof typeof constraints)[]) {
 		const { [key]: rule } = constraints;
 		const value = (obj as any)?.[key];
@@ -188,14 +195,18 @@ export function validateNumbers(obj: configuration, constraints: ConstraintTree,
 		if (typeof value !== "number") continue;
 		const { max, min, step } = rule;
 		const label = currentPath.map(String).join(".");
-		if (min !== undefined && value < min) {
+		if (min !== undefined && value < min - EPSILON) {
 			throw new Error(`${label} must be >= ${min}`);
 		}
-		if (max !== undefined && value > max) {
+		if (max !== undefined && value > max + EPSILON) {
 			throw new Error(`${label} must be <= ${max}`);
 		}
-		if (step !== undefined && (value - (min ?? 0)) % step !== 0) {
-			throw new Error(`${label} must be in steps of ${step}`);
+		if (step !== undefined) {
+			const base = min ?? 0;
+			const remainder = (value - base) % step;
+			if (!(Math.abs(remainder) < EPSILON || Math.abs(remainder - step) < EPSILON)) {
+				throw new Error(`${label} must be in steps of ${step}`);
+			}
 		}
 	}
 }
@@ -207,7 +218,7 @@ export const numberConstraints: ConfigurationNumericConstraints = {
 	global_volume: { max: 100, min: 0 },
 	osd_display_opacity: { max: 100, min: 1 },
 	playback_buttons_speed: { max: 1.0, min: youtubePlayerSpeedStep, step: youtubePlayerSpeedStep },
-	player_speed: { max: 16.0, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
+	player_speed: { max: youtubePlayerMaxSpeed, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
 	remembered_volumes: { shortsPageVolume: { max: 100, min: 0 }, watchPageVolume: { max: 100, min: 0 } },
 	speed_adjustment_steps: { max: 1.0, min: 0.05, step: 0.05 },
 	volume_adjustment_steps: { max: 100, min: 1 }
@@ -224,7 +235,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 > = z.object({
 	button_placements: z.object({
 		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements) }),
+			(acc, featureName) => ({ ...acc, [featureName]: z.optional(z.enum(buttonPlacements)) }),
 			{} as Record<AllButtonNames, ZodMiniEnum<{ [K in ButtonPlacement]: K }>>
 		)
 	}),
@@ -249,12 +260,15 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_automatically_maximize_player: z.optional(z.boolean()),
 	enable_automatically_set_quality: z.optional(z.boolean()),
 	enable_automatically_show_more_videos_on_end_screen: z.optional(z.boolean()),
+	enable_block_number_key_seeking: z.optional(z.boolean()),
 	enable_comments_mini_player: z.optional(z.boolean()),
 	enable_comments_mini_player_button: z.optional(z.boolean()),
 	enable_copy_timestamp_url_button: z.optional(z.boolean()),
 	enable_custom_css: z.optional(z.boolean()),
 	enable_deep_dark_theme: z.optional(z.boolean()),
 	enable_default_to_original_audio_track: z.optional(z.boolean()),
+	enable_flip_video_horizontal_button: z.optional(z.boolean()),
+	enable_flip_video_vertical_button: z.optional(z.boolean()),
 	enable_forced_playback_speed: z.optional(z.boolean()),
 	enable_forward_rewind_buttons: z.optional(z.boolean()),
 	enable_global_volume: z.optional(z.boolean()),

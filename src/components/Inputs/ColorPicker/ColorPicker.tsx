@@ -1,6 +1,6 @@
 import type { ClassValue } from "clsx";
 
-import React, { type ChangeEvent, useCallback, useRef } from "react";
+import React, { type ChangeEvent, useRef } from "react";
 import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
 
 import { useComponentVisible } from "@/src/hooks";
@@ -8,6 +8,7 @@ import { useComponentVisible } from "@/src/hooks";
 import "./index.css";
 
 import useClickOutside from "@/src/hooks/useClickOutside";
+import useDebounceFn from "@/src/hooks/useDebounce";
 import { cn } from "@/src/utils/utilities";
 export type ColorPickerProps = {
 	className?: string;
@@ -17,19 +18,6 @@ export type ColorPickerProps = {
 	title: string;
 	value: string;
 };
-
-function useDebounceFn<T extends (...args: any[]) => void>(fn: T, delay: number): T {
-	const timeout = useRef<NodeJS.Timeout | null>(null);
-	return useCallback(
-		(...args: Parameters<T>) => {
-			if (timeout.current) clearTimeout(timeout.current);
-			timeout.current = setTimeout(() => {
-				fn(...args);
-			}, delay);
-		},
-		[fn, delay]
-	) as T;
-}
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, label, onChange, value }) => {
 	const handleChange = useDebounceFn((value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>), 200);

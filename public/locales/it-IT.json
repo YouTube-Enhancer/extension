@@ -8,6 +8,16 @@
 	"pages": {
 		"content": {
 			"features": {
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Ribalta video orizzontalmente"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Ribalta video verticalmente"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copia URL video con temporizzazione"
@@ -164,7 +174,9 @@
 							"openTranscriptButton": "Pulsante Apri trascrizione",
 							"rewindButton": "Pulsante Riavvolgi",
 							"screenshotButton": "Pulsante Schermata",
-							"volumeBoostButton": "Pulsante Aumento volume"
+							"volumeBoostButton": "Pulsante Aumento volume",
+							"flipVideoVerticalButton": "Pulsante 'Ribalta video verticalmente'",
+							"flipVideoHorizontalButton": "Pulsante 'Ribalta video orizzontalmente'"
 						},
 						"options": {
 							"below_player": {
@@ -244,9 +256,9 @@
 					"singular": "Abilita '{{OPTION}}' per configurare questa opzione",
 					"specificOption": {
 						"featureMenu": "Configura almeno un pulsante da posizionare nel menu' delle funzioni per configurare questa opzione.",
-						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione",
 						"globalVolume": "Disabilita 'Ricorda ultimo volume' per configurare questa opzione",
-						"rememberVolume": "Disabilita 'Volume globale' per configurare questa opzione"
+						"rememberVolume": "Disabilita 'Volume globale' per configurare questa opzione",
+						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione"
 					}
 				},
 				"scrollForMoreSettings": "Scorri per altre impostazioni",
@@ -283,37 +295,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Pulsante Mini riproduttore",
-					"title": "Aggiunge un pulsante che apre il mini riproduttore"
-				},
-				"enable": {
-					"label": "Apri Mini riproduttore quando si visualizzano i commenti",
-					"title": "Apre automaticamente il Mini riproduttore quando scorri verso i commenti."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Posizione del mini riproduttore predefinita",
-							"options": {
-								"bottomCenter": "In basso al centro",
-								"bottomLeft": "In basso a sinistra",
-								"bottomRight": "In basso a destra",
-								"topCenter": "In alto al centro",
-								"topLeft": "Alto - sinistra",
-								"topRight": "In alto a destra"
-							},
-							"title": "Imposta la posizione di partenza prima di spostare il Mini riproduttore."
-						}
-					},
-					"size": {
-						"label": "Dimensione predefinita del mini riproduttore",
-						"title": "Imposta la dimensione iniziale prima di ridimensionare il mini riproduttore."
-					}
-				},
-				"title": "Impostazioni mini riproduttore"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Abilita CSS personalizzato",
@@ -386,6 +367,50 @@
 				},
 				"title": "Impostazioni pulsante Avanti / Riavvolgi"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Avvia sempre video usando questo volume",
+					"title": "Inizia automaticamente tutti i video usando il volume selezionato"
+				},
+				"settings": {
+					"amount": {
+						"label": "Volume iniziale video",
+						"title": "Il volume assegnato a ogni video quando inizia la riproduzione"
+					}
+				},
+				"title": "Sovrascrittura volume globale"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Pulsante Mini riproduttore",
+					"title": "Aggiunge un pulsante che apre il mini riproduttore"
+				},
+				"enable": {
+					"label": "Apri Mini riproduttore quando si visualizzano i commenti",
+					"title": "Apre automaticamente il Mini riproduttore quando scorri verso i commenti."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Posizione del mini riproduttore predefinita",
+							"options": {
+								"bottomCenter": "In basso al centro",
+								"bottomLeft": "In basso a sinistra",
+								"bottomRight": "In basso a destra",
+								"topCenter": "In alto al centro",
+								"topLeft": "Alto - sinistra",
+								"topRight": "In alto a destra"
+							},
+							"title": "Imposta la posizione di partenza prima di spostare il Mini riproduttore."
+						}
+					},
+					"size": {
+						"label": "Dimensione predefinita del mini riproduttore",
+						"title": "Imposta la dimensione iniziale prima di ridimensionare il mini riproduttore."
+					}
+				},
+				"title": "Impostazioni mini riproduttore"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -428,6 +453,12 @@
 						"enable": {
 							"label": "Mostra automaticamente altri video sulla schermata finale",
 							"title": "Mostra automaticamente più video sulla schermata finale quando si carica un video"
+						}
+					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Blocca ricerca chiave numero",
+							"title": "Impedisce alla pressione 0-9 di attuare salti a una percentuale del video"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -602,6 +633,18 @@
 						"enable": {
 							"label": "Anteprima marcatura oraria",
 							"title": "Mostra in anteprima il video puntando un marcatore temporale. Clicca l'anteprima per iniziare la riproduzione da quel momento."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Pulsante capovolgimento video orizzontale",
+							"title": "Aggiunge un pulsante per capovolgere il video orizzontalmente"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Pulsante capovolgimento video verticale",
+							"title": "Aggiunge un pulsante per capovolgere il video verticalmente"
 						}
 					}
 				},
@@ -870,19 +913,6 @@
 					}
 				},
 				"title": "Impostazioni aumento volume"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Avvia sempre video usando questo volume",
-					"title": "Inizia automaticamente tutti i video usando il volume selezionato"
-				},
-				"settings": {
-					"amount": {
-						"label": "Volume iniziale video",
-						"title": "Il volume assegnato a ogni video quando inizia la riproduzione"
-					}
-				},
-				"title": "Sovrascrittura volume globale"
 			}
 		}
 	}
