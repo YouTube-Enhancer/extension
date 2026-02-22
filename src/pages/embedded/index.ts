@@ -13,6 +13,7 @@ import {
 	enableAutomaticallyShowMoreVideosOnEndScreen
 } from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
 import { disableAutomaticTheaterMode, enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/blockNumberKeySeeking";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
@@ -21,7 +22,6 @@ import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils
 import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
 import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
-import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/disableNumberKeySkip";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
