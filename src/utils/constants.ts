@@ -34,6 +34,8 @@ export const defaultConfiguration = {
 	button_placements: {
 		copyTimestampUrlButton: "player_controls_right",
 		decreasePlaybackSpeedButton: "player_controls_left",
+		flipVideoHorizontalButton: "player_controls_left",
+		flipVideoVerticalButton: "player_controls_left",
 		forwardButton: "player_controls_right",
 		hideEndScreenCardsButton: "player_controls_right",
 		increasePlaybackSpeedButton: "player_controls_left",
@@ -71,6 +73,8 @@ export const defaultConfiguration = {
 	enable_custom_css: false,
 	enable_deep_dark_theme: false,
 	enable_default_to_original_audio_track: false,
+	enable_flip_video_horizontal_button: false,
+	enable_flip_video_vertical_button: false,
 	enable_forced_playback_speed: false,
 	enable_forward_rewind_buttons: false,
 	enable_global_volume: false,
@@ -231,7 +235,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 > = z.object({
 	button_placements: z.object({
 		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.enum(buttonPlacements) }),
+			(acc, featureName) => ({ ...acc, [featureName]: z.optional(z.enum(buttonPlacements)) }),
 			{} as Record<AllButtonNames, ZodMiniEnum<{ [K in ButtonPlacement]: K }>>
 		)
 	}),
@@ -263,6 +267,8 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	enable_custom_css: z.optional(z.boolean()),
 	enable_deep_dark_theme: z.optional(z.boolean()),
 	enable_default_to_original_audio_track: z.optional(z.boolean()),
+	enable_flip_video_horizontal_button: z.optional(z.boolean()),
+	enable_flip_video_vertical_button: z.optional(z.boolean()),
 	enable_forced_playback_speed: z.optional(z.boolean()),
 	enable_forward_rewind_buttons: z.optional(z.boolean()),
 	enable_global_volume: z.optional(z.boolean()),

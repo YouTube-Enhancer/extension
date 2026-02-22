@@ -1,5 +1,5 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
+import { featureButtonFunctions } from "@/src/features";
 import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
 import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
 import {
@@ -24,6 +24,12 @@ import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } fro
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import {
+	addFlipVideoHorizontalButton,
+	addFlipVideoVerticalButton,
+	removeFlipVideoHorizontalButton,
+	removeFlipVideoVerticalButton
+} from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
@@ -88,7 +94,7 @@ import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timest
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
-	applyVolumeBoost,
+	applyVolumeBoostDb,
 	disableVolumeBoost,
 	enableVolumeBoost,
 	removeVolumeBoostButton
@@ -177,9 +183,15 @@ function shouldEnableFeaturesFuncReturn() {
 }
 let isEnablingFeatures = false;
 let enableFeaturesTimeout: null | ReturnType<typeof setTimeout> = null;
+let lastEnabledURL: null | string = null;
 function scheduleEnableFeatures() {
 	if (enableFeaturesTimeout) clearTimeout(enableFeaturesTimeout);
 	enableFeaturesTimeout = setTimeout(() => {
+		const {
+			location: { href: currentURL }
+		} = window;
+		if (lastEnabledURL === currentURL) return;
+		lastEnabledURL = currentURL;
 		void enableFeatures();
 	}, 200);
 }
@@ -295,6 +307,8 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await addFlipVideoVerticalButton();
+		await addFlipVideoHorizontalButton();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -305,11 +319,13 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	if (!featureFunctions) {
 		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
 	}
-	// Cast featureFunctions to FeatureFuncRecord
-	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+	// Ensure featureFunctions are valid
+	if (typeof featureFunctions.add !== "function" || typeof featureFunctions.remove !== "function") {
+		throw new Error(`Feature '${featureName}' functions are not valid`);
+	}
 	return {
-		add: () => castFeatureFunctions.add(),
-		remove: () => castFeatureFunctions.remove(oldPlacement)
+		add: () => featureFunctions.add(),
+		remove: () => featureFunctions.remove(oldPlacement)
 	};
 };
 function handleSoftNavigate() {
@@ -504,7 +520,9 @@ const initialize = function () {
 						}
 						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
 							if (oldPlacement === newPlacement) continue;
+							console.log(`featureName: ${featureName}, newPlacement: ${newPlacement}, oldPlacement: ${oldPlacement}`);
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
+							console.log(`featureFuncs: `, featureFuncs);
 							await featureFuncs.remove();
 							await featureFuncs.add();
 						}
@@ -582,6 +600,28 @@ const initialize = function () {
 							data: { featureMenuOpenType }
 						} = message;
 						setupFeatureMenuEventListeners(featureMenuOpenType);
+						break;
+					}
+					case "flipVideoHorizontalButtonChange": {
+						const {
+							data: { flipVideoHorizontalButtonEnabled }
+						} = message;
+						if (flipVideoHorizontalButtonEnabled) {
+							await addFlipVideoHorizontalButton();
+						} else {
+							await removeFlipVideoHorizontalButton();
+						}
+						break;
+					}
+					case "flipVideoVerticalButtonChange": {
+						const {
+							data: { flipVideoVerticalButtonEnabled }
+						} = message;
+						if (flipVideoVerticalButtonEnabled) {
+							await addFlipVideoVerticalButton();
+						} else {
+							await removeFlipVideoVerticalButton();
+						}
 						break;
 					}
 					case "forwardRewindButtonsChange": {
@@ -1150,14 +1190,14 @@ const initialize = function () {
 						switch (volumeBoostMode) {
 							case "global": {
 								if (!volumeBoostEnabled) return;
-								applyVolumeBoost(volumeBoostAmount);
+								applyVolumeBoostDb(volumeBoostAmount);
 								break;
 							}
 							case "per_video": {
 								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
 								if (!volumeBoostButton) return;
 								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+								if (volumeBoostForVideoEnabled) applyVolumeBoostDb(volumeBoostAmount);
 							}
 						}
 						break;
@@ -1192,16 +1232,18 @@ const initialize = function () {
 	})();
 };
 
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initialize);
-} else {
-	initialize();
+if (window.self === window.top) {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initialize);
+	} else {
+		initialize();
+	}
 }
 
-window.onbeforeunload = function () {
+window.addEventListener("pagehide", () => {
 	eventManager.removeAllEventListeners();
 	element.remove();
-};
+});
 
 // Error handling
 window.addEventListener("error", (event) => {

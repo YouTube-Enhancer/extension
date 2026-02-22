@@ -2,6 +2,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import "./index.css";
 
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import {
@@ -48,6 +49,8 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 
 	// Define the event handler for the scroll wheel events
 	const handleWheel = async (event: Event) => {
+		const volumeBoostButton = getFeatureButton("volumeBoostButton");
+		if (volumeBoostButton && event.target === volumeBoostButton) return;
 		const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
 		// If the settings panel menu is targeted return
 		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;

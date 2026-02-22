@@ -196,6 +196,8 @@ export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export const buttonNames = Object.keys({
 	copyTimestampUrlButton: "",
 	decreasePlaybackSpeedButton: "",
+	flipVideoHorizontalButton: "",
+	flipVideoVerticalButton: "",
 	forwardButton: "",
 	hideEndScreenCardsButton: "",
 	increasePlaybackSpeedButton: "",
@@ -210,6 +212,8 @@ export const buttonNames = Object.keys({
 export const buttonNameToSettingName = {
 	copyTimestampUrlButton: "enable_copy_timestamp_url_button",
 	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
+	flipVideoHorizontalButton: "enable_flip_video_horizontal_button",
+	flipVideoVerticalButton: "enable_flip_video_vertical_button",
 	forwardButton: "enable_forward_rewind_buttons",
 	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
 	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
@@ -256,6 +260,8 @@ export type configuration = {
 	enable_custom_css: boolean;
 	enable_deep_dark_theme: boolean;
 	enable_default_to_original_audio_track: boolean;
+	enable_flip_video_horizontal_button: boolean;
+	enable_flip_video_vertical_button: boolean;
 	enable_forced_playback_speed: boolean;
 	enable_forward_rewind_buttons: boolean;
 	enable_global_volume: boolean;
@@ -334,6 +340,7 @@ export type ContentSendOnlyMessageMappings = {
 	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setRememberedVolume: SendDataMessage<"send_data", "content", "setRememberedVolume", RememberedVolumes>;
+	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
 };
 export type ContentToBackgroundSendOnlyMessageMappings = {
 	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
@@ -416,6 +423,8 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	defaultToOriginalAudioTrackChange: DataResponseMessage<"defaultToOriginalAudioTrackChange", { defaultToOriginalAudioTrackEnabled: boolean }>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
+	flipVideoHorizontalButtonChange: DataResponseMessage<"flipVideoHorizontalButtonChange", { flipVideoHorizontalButtonEnabled: boolean }>;
+	flipVideoVerticalButtonChange: DataResponseMessage<"flipVideoVerticalButtonChange", { flipVideoVerticalButtonEnabled: boolean }>;
 	forwardRewindButtonsChange: DataResponseMessage<"forwardRewindButtonsChange", { forwardRewindButtonsEnabled: boolean }>;
 	globalVolumeChange: DataResponseMessage<"globalVolumeChange", { globalVolumeEnabled: boolean }>;
 	hideArtificialIntelligenceSummaryChange: DataResponseMessage<

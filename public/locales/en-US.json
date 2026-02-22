@@ -8,6 +8,16 @@
 	"pages": {
 		"content": {
 			"features": {
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Flip video horizontally"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Flip video vertically"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copy video URL with timestamp"
@@ -122,10 +132,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "Volume boost off",
-							"on": "Volume boost on"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -164,7 +174,9 @@
 							"openTranscriptButton": "Open Transcript button",
 							"rewindButton": "Rewind button",
 							"screenshotButton": "Screenshot button",
-							"volumeBoostButton": "Volume Boost button"
+							"volumeBoostButton": "Volume Boost button",
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button"
 						},
 						"options": {
 							"below_player": {
@@ -622,6 +634,18 @@
 							"label": "Timestamp Preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
+						}
 					}
 				},
 				"title": "Miscellaneous settings"
@@ -875,7 +899,11 @@
 				"settings": {
 					"amount": {
 						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {

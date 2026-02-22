@@ -10,6 +10,8 @@ interface EnUS {
 			features: {
 				copyTimestampUrlButton: { button: { label: "Copy video URL with timestamp" }; extras: { copied: "Copied!" } };
 				featureMenu: { button: { label: "Feature menu" } };
+				flipVideoHorizontalButton: { button: { label: "Flip video horizontally" } };
+				flipVideoVerticalButton: { button: { label: "Flip video vertically" } };
 				forwardRewindButtons: {
 					buttons: {
 						forwardButton: { label: "Fast forward by {{TIME}}" };
@@ -65,8 +67,8 @@ interface EnUS {
 				videoHistory: { extras: { resumeButton: "Resume"; resumePromptClose: "Close" } };
 				volumeBoostButton: {
 					button: {
-						label: "Volume Boost";
-						toggle: { off: "Volume boost off"; on: "Volume boost on" };
+						label: "Volume Boost ({{value}} dB)";
+						toggle: { off: "Volume boost off"; on: "Volume boost ({{value}} dB)" };
 					};
 				};
 			};
@@ -90,6 +92,8 @@ interface EnUS {
 						buttonNames: {
 							copyTimestampUrlButton: "Copy video URL with timestamp button";
 							decreasePlaybackSpeedButton: "Decrease Speed button";
+							flipVideoHorizontalButton: "Flip video horizontally button";
+							flipVideoVerticalButton: "Flip video vertically button";
 							forwardButton: "Fast Forward button";
 							hideEndScreenCardsButton: "Hide end screen cards button";
 							increasePlaybackSpeedButton: "Increase Speed button";
@@ -327,6 +331,18 @@ interface EnUS {
 						enable: {
 							label: "Default to original audio track";
 							title: "Always default to the original audio track";
+						};
+					};
+					flipVideoHorizontalButton: {
+						enable: {
+							label: "Horizontal video flip button";
+							title: "Adds a button to flip the video horizontally";
+						};
+					};
+					flipVideoVerticalButton: {
+						enable: {
+							label: "Vertical video flip button";
+							title: "Adds a button to flip the video vertically";
 						};
 					};
 					hideArtificialIntelligenceSummary: {
@@ -666,7 +682,11 @@ interface EnUS {
 			volumeBoost: {
 				enable: { label: "Volume boost"; title: "Enable volume boost" };
 				settings: {
-					amount: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
+					amount: {
+						label: "Volume boost amount (dB)";
+						title: "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it.";
+					};
+					amount_global_only: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by." };
 					mode: {
 						select: {
 							label: "Volume boost mode";

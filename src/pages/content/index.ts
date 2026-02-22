@@ -139,15 +139,19 @@ document.addEventListener("yte-message-from-youtube", () => {
 				switch (message.type) {
 					case "pageLoaded": {
 						chrome.storage.onChanged.addListener(storageListeners);
-						window.onunload = () => {
+						window.addEventListener("pagehide", () => {
 							chrome.storage.onChanged.removeListener(storageListeners);
-						};
+						});
 						break;
 					}
 					case "setRememberedVolume": {
 						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
 						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
 						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
+						break;
+					}
+					case "setVolumeBoostAmount": {
+						void chrome.storage.local.set({ volume_boost_amount: message.data });
 						break;
 					}
 					case "videoHistoryOne": {
@@ -333,6 +337,16 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 		enable_default_to_original_audio_track(__oldValue, newValue) {
 			sendExtensionOnlyMessage("defaultToOriginalAudioTrackChange", {
 				defaultToOriginalAudioTrackEnabled: newValue
+			});
+		},
+		enable_flip_video_horizontal_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoHorizontalButtonChange", {
+				flipVideoHorizontalButtonEnabled: newValue
+			});
+		},
+		enable_flip_video_vertical_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("flipVideoVerticalButtonChange", {
+				flipVideoVerticalButtonEnabled: newValue
 			});
 		},
 		enable_forced_playback_speed: (__oldValue, newValue) => {
