@@ -198,7 +198,7 @@
 						},
 						"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}"
 					},
-					"title": "Button placement settings"
+					"title": "Ajustes de ubicación de botones"
 				},
 				"clearData": {
 					"allDataDeleted": "Todos los datos han sido eliminados.",
@@ -209,7 +209,7 @@
 						"select": {
 							"label": "Tipo de activación del menú",
 							"options": {
-								"click": "Click",
+								"click": "Hacer clic",
 								"hover": "Pasar el cursor por encima"
 							},
 							"title": "Selecciona el método para abrir el menú"
@@ -352,7 +352,7 @@
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Ajustes de tono muy oscuro de YouTube"
 			},
 			"forwardRewindButtons": {
 				"enable": {
