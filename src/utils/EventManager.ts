@@ -39,6 +39,7 @@ export type FeatureName =
 	| "maximizePlayerButton"
 	| "miniPlayer"
 	| "miniPlayerButton"
+	| "monoToStereoButton"
 	| "openTranscriptButton"
 	| "openYouTubeSettingsOnHover"
 	| "playbackSpeedButtons"

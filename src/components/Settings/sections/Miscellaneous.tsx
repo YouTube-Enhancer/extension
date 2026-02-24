@@ -334,6 +334,14 @@ export default function MiscellaneousSection() {
 				title={t((translations) => translations.settings.sections.miscellaneous.settings.flipVideoHorizontalButton.enable.title)}
 				type="checkbox"
 			/>
+			<Setting
+				checked={settings.enable_mono_to_stereo_button.toString() === "true"}
+				label={t((translations) => translations.settings.sections.miscellaneous.settings.monoToStereoButton.enable.label)}
+				onChange={setCheckboxOption("enable_mono_to_stereo_button")}
+				parentSetting={null}
+				title={t((translations) => translations.settings.sections.miscellaneous.settings.monoToStereoButton.enable.title)}
+				type="checkbox"
+			/>
 		</SettingSection>
 	);
 }

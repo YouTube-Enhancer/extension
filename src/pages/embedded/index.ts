@@ -63,6 +63,7 @@ import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/featu
 import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { disableCommentsMiniPlayer, enableCommentsMiniPlayer, setCommentsMiniPlayerDefaults } from "@/src/features/miniPlayer";
 import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
+import { addMonoToStereoButton, removeMonoToStereoButton } from "@/src/features/monoToStereo";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -260,6 +261,7 @@ const enableFeatures = async () => {
 			enableBlockNumberKeySkip()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addMonoToStereoButton();
 		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
@@ -879,6 +881,17 @@ const initialize = function () {
 							data: { defaultPosition: mini_player_default_position, defaultSize: mini_player_default_size }
 						} = message;
 						setCommentsMiniPlayerDefaults({ mini_player_default_position, mini_player_default_size });
+						break;
+					}
+					case "monoToStereoButtonChange": {
+						const {
+							data: { monoToStereoButtonEnabled }
+						} = message;
+						if (monoToStereoButtonEnabled) {
+							await addMonoToStereoButton();
+						} else {
+							await removeMonoToStereoButton();
+						}
 						break;
 					}
 					case "openTranscriptButtonChange": {

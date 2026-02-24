@@ -219,6 +219,7 @@ export const buttonNames = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
 	miniPlayerButton: "",
+	monoToStereoButton: "",
 	openTranscriptButton: "",
 	rewindButton: "",
 	screenshotButton: "",
@@ -235,6 +236,7 @@ export const buttonNameToSettingName = {
 	loopButton: "enable_loop_button",
 	maximizePlayerButton: "enable_maximize_player_button",
 	miniPlayerButton: "enable_comments_mini_player_button",
+	monoToStereoButton: "enable_mono_to_stereo_button",
 	openTranscriptButton: "enable_open_transcript_button",
 	rewindButton: "enable_forward_rewind_buttons",
 	screenshotButton: "enable_screenshot_button",
@@ -295,6 +297,7 @@ export type configuration = {
 	enable_hide_translate_comment: boolean;
 	enable_loop_button: boolean;
 	enable_maximize_player_button: boolean;
+	enable_mono_to_stereo_button: boolean;
 	enable_open_transcript_button: boolean;
 	enable_open_youtube_settings_on_hover: boolean;
 	enable_pausing_background_players: boolean;
@@ -472,6 +475,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	maximizeButtonChange: DataResponseMessage<"maximizeButtonChange", { maximizePlayerButtonEnabled: boolean }>;
 	miniPlayerButtonChange: DataResponseMessage<"miniPlayerButtonChange", { miniPlayerButtonEnabled: boolean }>;
 	miniPlayerDefaultsChange: DataResponseMessage<"miniPlayerDefaultsChange", { defaultPosition: MiniPlayerPosition; defaultSize: MiniPlayerSize }>;
+	monoToStereoButtonChange: DataResponseMessage<"monoToStereoButtonChange", { monoToStereoButtonEnabled: boolean }>;
 	openTranscriptButtonChange: DataResponseMessage<"openTranscriptButtonChange", { openTranscriptButtonEnabled: boolean }>;
 	openYTSettingsOnHoverChange: DataResponseMessage<
 		"openYTSettingsOnHoverChange",

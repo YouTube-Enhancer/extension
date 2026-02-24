@@ -8,6 +8,7 @@ export const toggleFeatures = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
 	miniPlayerButton: "",
+	monoToStereoButton: "",
 	volumeBoostButton: ""
 } satisfies Partial<Record<AllButtonNames, "">>);
 export type FeatureIconMap = {
@@ -364,25 +365,60 @@ const flipVerticalButtonSVG = createSVGElement(
 		viewBox: "0 0 24 24",
 		width: "24px"
 	},
-	// Center horizontal line
 	createSVGElement("path", {
 		d: "M2 12h20",
 		"stroke-linecap": "round"
 	}),
-	// Up arrow
 	createSVGElement("path", {
 		d: "M12 8V2m0 0-4 4m4-4 4 4",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round"
 	}),
-	// Down arrow
 	createSVGElement("path", {
 		d: "M12 16v6m0 0-4-4m4 4 4-4",
 		"stroke-linecap": "round",
 		"stroke-linejoin": "round"
 	})
 );
+export const monoToStereoOnSVG = createSVGElement(
+	"svg",
+	{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
+	createSVGElement("path", {
+		d: "M3 9v6h4l5 5V4L7 9H3z", // speaker body
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M15 6c1.5 1.5 1.5 12 0 12", // left wave, pushed left
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M18 4c2 2 2 16 0 16", // right wave, pushed right
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	})
+);
 
+export const monoToStereoOffSVG = createSVGElement(
+	"svg",
+	{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
+	createSVGElement("path", {
+		d: "M3 9v6h4l5 5V4L7 9H3z", // speaker body
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M15 12c1 0 1 0 0 0", // mono wave stays centered
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	})
+);
 export const featureIcons = {
 	copyTimestampUrlButton: {
 		feature_menu: copyURLWithTimestampSVG,
@@ -434,6 +470,13 @@ export const featureIcons = {
 		shared_icon_position: {
 			off: miniPlayerOffSVG,
 			on: miniPlayerOnSVG
+		}
+	},
+	monoToStereoButton: {
+		feature_menu: monoToStereoOffSVG,
+		shared_icon_position: {
+			off: monoToStereoOffSVG,
+			on: monoToStereoOnSVG
 		}
 	},
 	openTranscriptButton: {

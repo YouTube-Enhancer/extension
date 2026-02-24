@@ -29,6 +29,12 @@ interface EnUS {
 				miniPlayerButton: {
 					button: { label: "Mini Player"; toggle: { off: "Mini Player off"; on: "Mini Player on" } };
 				};
+				monoToStereoButton: {
+					button: {
+						label: "Mono Audio Handling";
+						toggle: { off: "Original Audio"; on: "Mono → Stereo Output" };
+					};
+				};
 				openTranscriptButton: { button: { label: "Open transcript" } };
 				playbackSpeedButtons: {
 					buttons: {
@@ -100,6 +106,7 @@ interface EnUS {
 							loopButton: "Loop button";
 							maximizePlayerButton: "Maximize button";
 							miniPlayerButton: "Mini Player button";
+							monoToStereoButton: "Mono to Stereo button";
 							openTranscriptButton: "Open Transcript button";
 							rewindButton: "Rewind button";
 							screenshotButton: "Screenshot button";
@@ -413,6 +420,12 @@ interface EnUS {
 						enable: {
 							label: "Maximize player button";
 							title: "Adds a button to the feature menu to maximize the player";
+						};
+					};
+					monoToStereoButton: {
+						enable: {
+							label: "Mono to Stereo button";
+							title: "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.";
 						};
 					};
 					openTranscriptButton: {
