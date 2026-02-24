@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Audio Handling",
+						"toggle": {
+							"on": "Mono → Stereo Output",
+							"off": "Original Audio"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "水平翻转视频"
@@ -176,7 +185,8 @@
 							"screenshotButton": "屏幕截图按钮",
 							"volumeBoostButton": "音量增强按钮",
 							"flipVideoVerticalButton": "垂直翻转视频按钮",
-							"flipVideoHorizontalButton": "水平翻转视频按钮"
+							"flipVideoHorizontalButton": "水平翻转视频按钮",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -501,6 +511,12 @@
 						"enable": {
 							"label": "隐藏仅限会员的视频",
 							"title": "隐藏仅对会员可见的视频"
+						}
+					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
