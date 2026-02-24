@@ -1,4 +1,4 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import eventManager from "@/src/utils/EventManager";
@@ -78,98 +78,55 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 	if (video) video.playbackRate = playerSpeed;
 }
 const speedValueRegex = /(\d+(?:\.\d+)?)/;
-const speedMenuItemSelector =
-	".ytp-menuitem:has(.ytp-menuitem-icon svg path[d='M12 1c1.44 0 2.87.28 4.21.83a11 11 0 0 1 3.45 2.27l-1.81 1.05A9 9 0 0 0 3 12a9 9 0 0 0 18-.00l-.01-.44a8.99 8.99 0 0 0-.14-1.20l1.81-1.05A11.00 11.00 0 0 1 10.51 22.9 11 11 0 0 1 12 1Zm7.08 6.25-7.96 3.25a1.74 1.74 0 1 0 1.73 2.99l6.8-5.26a.57.57 0 0 0-.56-.98Z'])";
 export async function setupPlaybackSpeedChangeListener() {
 	const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-	let regularMenuProcessed = false; // Only process the main menu once per open
-	const readSpeedFromMainMenuItem = async () => {
-		await new Promise(requestAnimationFrame);
-		const speedMenuItem = document.querySelector<HTMLDivElement>(speedMenuItemSelector);
-		if (!speedMenuItem) return;
-		const content = speedMenuItem.querySelector<HTMLDivElement>(".ytp-menuitem-content")?.textContent ?? null;
-		const match = content?.match(speedValueRegex);
-		const playerSpeed = match ? Number(match[1]) : 1; // Default to 1 for Normal
-		await updateSpeedButtons(playerSpeed);
-		window.localStorage.setItem("playerSpeed", String(playerSpeed));
+	if (!settingsPanelMenu) return;
+	let lastSpeed: Nullable<number> = null;
+	const updateStoredSpeed = (speed: number) => {
+		if (speed === lastSpeed) return;
+		lastSpeed = speed;
+		void updateSpeedButtons(speed);
+		window.localStorage.setItem("playerSpeed", String(speed));
 	};
-	const extractSpeed = (text: null | string, isChecked = false): null | number => {
+	const parseSpeed = (text: Nullable<string>): Nullable<number> => {
 		if (!text) return null;
 		const match = text.match(speedValueRegex);
-		if (match) return Number(match[1]);
-		if (isChecked) return 1; // Normal
-		return null;
+		return match ? Number(match[1]) : null;
 	};
-	const isPlaybackSpeedMenu = (panelMenu: HTMLDivElement) =>
-		!!panelMenu.closest(".ytp-settings-menu")?.querySelector(".ytp-speed-slider-menu-footer");
-	const speedMenuItemClickListener = (event: Event) => {
-		const menuItem = (event.target as HTMLElement).closest<HTMLDivElement>("div.ytp-menuitem");
-		if (!menuItem) return;
-		const label = menuItem.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
-		const isChecked = menuItem.getAttribute("aria-checked") === "true";
-		const playerSpeed = extractSpeed(label, isChecked);
-		if (!playerSpeed) return;
-		void updateSpeedButtons(playerSpeed);
-		window.localStorage.setItem("playerSpeed", String(playerSpeed));
+	const handleSliderChange = (slider: HTMLInputElement) => {
+		const speed = parseSpeed(slider.value);
+		if (speed !== null) updateStoredSpeed(speed);
 	};
-	const playerSpeedMenuObserver = new MutationObserver((mutationsList) => {
-		for (const mutation of mutationsList) {
-			const targetElement = mutation.target as HTMLDivElement;
-			const panelMenu = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-menu");
-			if (!panelMenu) continue;
-			// Handle regular menu (main menu) once per open
-			if (!regularMenuProcessed && panelMenu.querySelector(speedMenuItemSelector)) {
-				regularMenuProcessed = true;
-				void readSpeedFromMainMenuItem();
-			}
-			if (!isPlaybackSpeedMenu(panelMenu)) continue;
-			const menuItems = panelMenu.querySelectorAll<HTMLDivElement>("div.ytp-menuitem");
-			const checkedItem = panelMenu.querySelector<HTMLDivElement>('div.ytp-menuitem[aria-checked="true"]');
-			const checkedLabel = checkedItem?.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
-			const checkedSpeed = extractSpeed(checkedLabel, checkedItem?.getAttribute("aria-checked") === "true");
-			if (checkedSpeed) {
-				void updateSpeedButtons(checkedSpeed);
-				window.localStorage.setItem("playerSpeed", String(checkedSpeed));
-			}
-			menuItems.forEach((menuItem) => {
-				eventManager.removeEventListener(menuItem, "click", "playerSpeed");
-				eventManager.addEventListener(menuItem, "click", speedMenuItemClickListener, "playerSpeed");
-			});
+	const handlePresetClick = (button: HTMLButtonElement) => {
+		const span = button.querySelector("span");
+		const speed = parseSpeed(span?.textContent ?? null);
+		if (speed !== null) updateStoredSpeed(speed);
+	};
+	const panelObserver = new MutationObserver(() => {
+		const speedPanel = settingsPanelMenu.querySelector<HTMLDivElement>(".ytp-variable-speed-panel-content");
+		if (!speedPanel) return;
+		// Slider
+		const slider = speedPanel.querySelector<HTMLInputElement>(".ytp-input-slider.ytp-speedslider");
+		if (slider) {
+			eventManager.removeEventListener(slider, "input", "playerSpeed");
+			eventManager.addEventListener(slider, "input", () => handleSliderChange(slider), "playerSpeed");
 		}
-	});
-	const customSpeedSliderObserver = new MutationObserver((mutationsList) => {
-		for (const mutation of mutationsList) {
-			const targetElement = mutation.target as HTMLDivElement;
-			if (!targetElement.matches(".ytp-speedslider-text")) continue;
-			const playerSpeed = parseFloat(targetElement.textContent ?? "");
-			if (!playerSpeed) return;
-			void updateSpeedButtons(playerSpeed);
-			window.localStorage.setItem("playerSpeed", String(playerSpeed));
-		}
-	});
-	if (settingsPanelMenu) {
-		playerSpeedMenuObserver.observe(settingsPanelMenu, {
-			attributeFilter: ["style"],
-			attributes: true,
-			childList: true,
-			subtree: true
+		// Preset buttons
+		const presets = speedPanel.querySelectorAll<HTMLButtonElement>(".ytp-variable-speed-panel-preset-button");
+		presets.forEach((preset) => {
+			eventManager.removeEventListener(preset, "click", "playerSpeed");
+			eventManager.addEventListener(preset, "click", () => handlePresetClick(preset), "playerSpeed");
 		});
-		customSpeedSliderObserver.observe(settingsPanelMenu, {
-			attributeFilter: ["aria-valuenow"],
-			attributes: true,
-			childList: true,
-			subtree: true
-		});
-		new MutationObserver((mutationsList) => {
-			for (const mutation of mutationsList) {
-				const targetElement = mutation.target as HTMLDivElement;
-				if (targetElement === settingsPanelMenu && targetElement.style.display === "none") {
-					// Reset the flag when the menu is closed
-					regularMenuProcessed = false;
-				}
-			}
-		}).observe(settingsPanelMenu, { attributeFilter: ["style"], attributes: true });
-	}
+		// Display span (catch programmatic updates)
+		const displaySpan = speedPanel.querySelector<HTMLSpanElement>(".ytp-variable-speed-panel-display span, .ytp-speedslider-text");
+		const speed = parseSpeed(displaySpan?.textContent ?? null);
+		if (speed !== null) updateStoredSpeed(speed);
+	});
+	panelObserver.observe(settingsPanelMenu, { characterData: true, childList: true, subtree: true });
+	// Reset lastSpeed when menu closes
+	new MutationObserver(() => {
+		if (settingsPanelMenu.style.display === "none") lastSpeed = null;
+	}).observe(settingsPanelMenu, { attributeFilter: ["style"], attributes: true });
 }
 async function updateSpeedButtons(playerSpeed: number) {
 	const {
