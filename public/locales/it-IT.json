@@ -10,10 +10,10 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Gestione audio mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"on": "Audio mono/stereo",
+							"off": "Audio originale"
 						}
 					}
 				},
@@ -186,7 +186,7 @@
 							"volumeBoostButton": "Pulsante Aumento volume",
 							"flipVideoVerticalButton": "Pulsante 'Ribalta video verticalmente'",
 							"flipVideoHorizontalButton": "Pulsante 'Ribalta video orizzontalmente'",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "Pulsante da mono a stereo"
 						},
 						"options": {
 							"below_player": {
@@ -515,8 +515,8 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"label": "Pulsante da mono a stereo",
+							"title": "Aggiunge un pulsante per convertire l'audio mono in stereo. Le tracce stereo rimangono invariate."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
