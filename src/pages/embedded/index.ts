@@ -483,9 +483,7 @@ const initialize = function () {
 						}
 						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
 							if (oldPlacement === newPlacement) continue;
-							console.log(`featureName: ${featureName}, newPlacement: ${newPlacement}, oldPlacement: ${oldPlacement}`);
 							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
-							console.log(`featureFuncs: `, featureFuncs);
 							await featureFuncs.remove();
 							await featureFuncs.add();
 						}
