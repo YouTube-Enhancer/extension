@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Ses İşlemesi",
+						"toggle": {
+							"on": "Mono'dan Stereo'ya Çıkış",
+							"off": "Orjinal Ses"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Flip video horizontally"
@@ -176,7 +185,8 @@
 							"screenshotButton": "Ekran görüntüsü düğmesi",
 							"volumeBoostButton": "Ses güçlendirme düğmesi",
 							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono'dan Stereo'ya düğmesi"
 						},
 						"options": {
 							"below_player": {
@@ -501,6 +511,12 @@
 						"enable": {
 							"label": "Üyelere özel videoları gizle",
 							"title": "Sadece üyelere görünen videoları gizle"
+						}
+					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono'dan Stereo'ya düğmesi",
+							"title": "Mono ses dosyalarını stereo'ya dönüştürmek için bir düğme ekler. Stereo parçalarda herhangi bir değişiklik yapılmaz."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
