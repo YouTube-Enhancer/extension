@@ -1,30 +1,41 @@
 import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import { Innertube } from "youtubei.js/web";
 
+import type { YtActionEvent } from "@/src/types";
+
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { IsDarkMode, waitForSpecificMessage } from "@/src/utils/utilities";
 
 import { getPlaylistId } from "../playlistLength/utils";
-
-interface YTDPlaylistVideoRenderer extends HTMLElement {
-	data: {
-		setVideoId: string;
-	};
-	playlistVideoId: string;
-}
 
 if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	window.trustedTypes.createPolicy("default", {
 		createHTML: (input: string) => input
 	});
 }
-
+interface YTDPlaylistVideoRenderer extends HTMLElement {
+	data: {
+		setVideoId: string;
+	};
+	playlistVideoId: string;
+}
 const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
-const THUMBAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
+const THUMBNAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 
 let playlistObserver: MutationObserver | null = null;
 
-export async function disablePlaylistManagementButtons() {
+type EditPlaylistResponse = {
+	data: {
+		frameworkUpdates: {
+			entityBatchUpdate: unknown;
+		};
+		newHeader: {
+			playlistHeaderRenderer: unknown;
+		};
+	};
+};
+
+export function disablePlaylistManagementButtons() {
 	if (playlistObserver) {
 		playlistObserver.disconnect();
 		playlistObserver = null;
@@ -35,7 +46,6 @@ export async function disablePlaylistManagementButtons() {
 		item.querySelectorAll(".yte-remove-button, .yte-reset-button").forEach((btn) => btn.remove());
 	});
 }
-
 export async function enablePlaylistManagementButtons() {
 	const {
 		data: {
@@ -50,9 +60,9 @@ export async function enablePlaylistManagementButtons() {
 		return;
 	}
 
-	document.addEventListener("yt-action", async (event) => {
-		if ((event as CustomEvent).detail.actionName === "yt-prepare-page-dispose") {
-			await disablePlaylistManagementButtons();
+	document.addEventListener("yt-action", (event) => {
+		if ((event as YtActionEvent).detail.actionName === "yt-prepare-page-dispose") {
+			disablePlaylistManagementButtons();
 		}
 	});
 
@@ -71,7 +81,7 @@ export async function enablePlaylistManagementButtons() {
 
 			const removeButton = item.querySelector(".yte-remove-button");
 			const resetButton = item.querySelector(".yte-reset-button");
-			const resumeOverlay = item.querySelector(THUMBAIL_OVERLAY_SELECTOR);
+			const resumeOverlay = item.querySelector(THUMBNAIL_OVERLAY_SELECTOR);
 
 			if (enable_playlist_remove_button && !removeButton) {
 				const removeButton = createActionButton({
@@ -104,7 +114,7 @@ export async function enablePlaylistManagementButtons() {
 						const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 						const history = await youtube.getHistory();
 						await history.removeVideo(videoId, 5);
-						item.querySelector(THUMBAIL_OVERLAY_SELECTOR)?.remove();
+						item.querySelector(THUMBNAIL_OVERLAY_SELECTOR)?.remove();
 						resetButton.remove();
 					},
 					translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToMarkAsUnwatched,
@@ -140,7 +150,6 @@ export async function enablePlaylistManagementButtons() {
 
 	observePlaylist();
 }
-
 async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
 	const response = await youtube.actions.execute("/browse/edit_playlist", {
 		actions: [
@@ -152,7 +161,8 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 		params: "CAFAAQ%3D%3D",
 		playlistId
 	});
-
+	// Not the best typing but it'll do for now
+	const castResponse = response as unknown as EditPlaylistResponse;
 	document.querySelector("ytd-app")?.dispatchEvent(
 		new CustomEvent("yt-action", {
 			detail: {
@@ -164,12 +174,12 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 	);
 
 	// triggers a sidebar update for regular playlists
-	if (response?.data?.frameworkUpdates?.entityBatchUpdate) {
+	if (castResponse?.data?.frameworkUpdates?.entityBatchUpdate) {
 		document.querySelector("ytd-app")?.dispatchEvent(
 			new CustomEvent("yt-action", {
 				detail: {
 					actionName: "yt-entity-update-command",
-					args: [{ entityUpdateCommand: { entityBatchUpdate: response.data.frameworkUpdates.entityBatchUpdate } }],
+					args: [{ entityUpdateCommand: { entityBatchUpdate: castResponse.data.frameworkUpdates.entityBatchUpdate } }],
 					returnValue: []
 				}
 			})
@@ -177,10 +187,10 @@ async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVid
 	}
 
 	// triggers a sidebar update for the WL playlist
-	if (response?.data?.newHeader?.playlistHeaderRenderer) {
+	if (castResponse?.data?.newHeader?.playlistHeaderRenderer) {
 		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
 			new CustomEvent("yt-new-playlist-header", {
-				detail: response.data.newHeader.playlistHeaderRenderer
+				detail: castResponse.data.newHeader.playlistHeaderRenderer
 			})
 		);
 	}

@@ -112,8 +112,7 @@ import {
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
 	type SingleButtonFeatureNames,
-	type SingleButtonNames,
-	type YouTubePlayerDiv
+	type SingleButtonNames
 } from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
@@ -140,44 +139,6 @@ element.style.display = "none";
 element.id = "yte-message-from-youtube";
 document.documentElement.appendChild(element);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const alwaysShowProgressBar = async function () {
-	const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-	if (!player) return;
-	const playBar = player.querySelector<HTMLDivElement>(".ytp-play-progress");
-	if (!playBar) return;
-	const loadBar = player.querySelector<HTMLDivElement>(".ytp-load-progress");
-	if (!loadBar) return;
-	const currentTime = await player.getCurrentTime();
-	const duration = await player.getDuration();
-	const bytesLoaded = await player.getVideoBytesLoaded();
-	const played = (currentTime * 100) / duration;
-	const loaded = bytesLoaded * 100;
-	let width = 0;
-	let progressPlay = 0;
-	let progressLoad = 0;
-
-	width += playBar.offsetWidth;
-
-	const widthPercent = width / 100;
-	const progressWidth = playBar.offsetWidth / widthPercent;
-	let playBarProgress = 0;
-	let loadBarProgress = 0;
-	if (played - progressPlay >= progressWidth) {
-		playBarProgress = 100;
-	} else if (played > progressPlay && played < progressWidth + progressPlay) {
-		loadBarProgress = (100 * ((played - progressPlay) * widthPercent)) / playBar.offsetWidth;
-	}
-	playBar.style.transform = `scaleX(${playBarProgress / 100})`;
-	if (loaded - progressLoad >= progressWidth) {
-		loadBarProgress = 100;
-	} else if (loaded > progressLoad && loaded < progressWidth + progressLoad) {
-		loadBarProgress = (100 * ((loaded - progressLoad) * widthPercent)) / playBar.offsetWidth;
-	}
-	loadBar.style.transform = `scaleX(${loadBarProgress / 100})`;
-	progressPlay += progressWidth;
-	progressLoad += progressWidth;
-};
 function shouldEnableFeaturesFuncReturn() {
 	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
 }
@@ -452,7 +413,7 @@ const initialize = function () {
 						if (blockNumberKeySeekingEnabled) {
 							await enableBlockNumberKeySkip();
 						} else {
-							await disableBlockNumberKeySkip();
+							disableBlockNumberKeySkip();
 						}
 						break;
 					}
@@ -535,7 +496,7 @@ const initialize = function () {
 						if (miniPlayerEnabled) {
 							await enableCommentsMiniPlayer();
 						} else {
-							await disableCommentsMiniPlayer();
+							disableCommentsMiniPlayer();
 						}
 						break;
 					}
@@ -675,7 +636,7 @@ const initialize = function () {
 						if (hideArtificialIntelligenceSummaryEnabled) {
 							await enableHideArtificialIntelligenceSummary();
 						} else {
-							await disableHideArtificialIntelligenceSummary();
+							disableHideArtificialIntelligenceSummary();
 						}
 						break;
 					}
@@ -721,7 +682,7 @@ const initialize = function () {
 						if (hideMembersOnlyVideosEnabled) {
 							await enableHideMembersOnlyVideos();
 						} else {
-							await disableHideMembersOnlyVideos();
+							disableHideMembersOnlyVideos();
 						}
 						break;
 					}
@@ -754,7 +715,7 @@ const initialize = function () {
 						if (hidePlayablesEnabled) {
 							await enableHidePlayables();
 						} else {
-							await disableHidePlayables();
+							disableHidePlayables();
 						}
 						break;
 					}
@@ -792,7 +753,7 @@ const initialize = function () {
 						if (hideShortsEnabled) {
 							await enableHideShorts();
 						} else {
-							await disableHideShorts();
+							disableHideShorts();
 						}
 						break;
 					}
@@ -803,7 +764,7 @@ const initialize = function () {
 						if (hideSidebarRecommendedVideosEnabled) {
 							await enableHideSidebarRecommendedVideos();
 						} else {
-							await disableHideSidebarRecommendedVideos();
+							disableHideSidebarRecommendedVideos();
 						}
 						break;
 					}
@@ -812,7 +773,7 @@ const initialize = function () {
 							data: { hideTranslateCommentEnabled }
 						} = message;
 						if (hideTranslateCommentEnabled) await enableHideTranslateComment();
-						else await disableHideTranslateComment();
+						else disableHideTranslateComment();
 						break;
 					}
 					case "languageChange": {
@@ -1040,7 +1001,7 @@ const initialize = function () {
 					}
 					case "playlistRemoveButtonChange":
 					case "playlistResetButtonChange": {
-						await disablePlaylistManagementButtons();
+						disablePlaylistManagementButtons();
 						await enablePlaylistManagementButtons();
 						break;
 					}
@@ -1093,7 +1054,7 @@ const initialize = function () {
 						if (saveToWatchLaterButtonEnabled) {
 							await enableSaveToWatchLaterButton();
 						} else {
-							await disableSaveToWatchLaterButton();
+							disableSaveToWatchLaterButton();
 						}
 						break;
 					}
@@ -1246,11 +1207,12 @@ window.addEventListener("pagehide", () => {
 });
 
 // Error handling
-window.addEventListener("error", (event) => {
+window.addEventListener("error", (event: ErrorEvent) => {
 	event.preventDefault();
-	const errorLine = event.error?.stack || `${event.filename}:${event.lineno}:${event.colno}`;
-	const errorMessage = event.error ? formatError(event.error) : event.message || "Unknown error";
-	browserColorLog(errorMessage + "\nAt: " + errorLine, "FgRed");
+	const errorLine =
+		event.error instanceof Error && typeof event.error.stack === "string" ? event.error.stack : `${event.filename}:${event.lineno}:${event.colno}`;
+	const errorMessage = event.error instanceof Error ? formatError(event.error) : event.message || "Unknown error";
+	browserColorLog(`${errorMessage}\nAt: ${errorLine}`, "FgRed");
 });
 
 window.addEventListener("unhandledrejection", (event) => {

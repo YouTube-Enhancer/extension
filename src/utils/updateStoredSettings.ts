@@ -34,15 +34,18 @@ async function getStoredSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
 		void chrome.storage.local.get<configuration>((settings) => {
 			try {
-				const storedSettings: Partial<configuration> = (
-					Object.keys(settings)
-						.filter((key) => typeof key === "string")
-						.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const storedSettings: Partial<configuration> = Object.keys(settings)
+					.filter((key) => typeof key === "string")
+					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
 				resolve(castedSettings);
 			} catch (error) {
-				reject(error);
+				if (error instanceof Error) {
+					reject(error);
+				} else {
+					reject(new Error("unknown error"));
+				}
 			}
 		});
 	});

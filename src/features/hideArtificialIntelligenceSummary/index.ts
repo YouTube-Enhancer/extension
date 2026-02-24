@@ -3,8 +3,8 @@ import "./index.css";
 import { hideArtificialIntelligenceSummary, showArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary/utils";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-export async function disableHideArtificialIntelligenceSummary() {
-	await showArtificialIntelligenceSummary();
+export function disableHideArtificialIntelligenceSummary() {
+	showArtificialIntelligenceSummary();
 }
 export async function enableHideArtificialIntelligenceSummary() {
 	// Wait for the "options" message from the content script
@@ -14,5 +14,5 @@ export async function enableHideArtificialIntelligenceSummary() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHideArtificialIntelligenceSummary) return;
-	await hideArtificialIntelligenceSummary();
+	hideArtificialIntelligenceSummary();
 }

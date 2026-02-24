@@ -82,7 +82,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.appendChild(menuItemToggle);
 		setMenuItemChecked(menuItem, initialChecked);
 	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem!, listener, isToggle), featureName);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
 	updateMenuSize(featureMenu, panel);
 	const featureMenuButton = document.querySelector<HTMLDivElement>(MENU_BUTTON_ID);
@@ -158,7 +158,7 @@ function featureMenuClickListener<Toggle extends boolean>(menuItem: HTMLDivEleme
 
 	const newState = !getMenuItemChecked(menuItem);
 	setMenuItemChecked(menuItem, newState);
-	listener(newState as any);
+	listener(newState);
 }
 
 function getMenu(): HTMLDivElement | null {

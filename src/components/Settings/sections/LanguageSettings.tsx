@@ -64,7 +64,8 @@ async function getLanguageOptions() {
 			};
 			return Promise.resolve(languageOption);
 		} catch (err) {
-			return Promise.reject(err);
+			if (err instanceof Error) return Promise.reject(err);
+			else return Promise.reject(new Error("unknown error"));
 		}
 	});
 

@@ -35,7 +35,7 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 			{problems.map((problem) => (
 				<div
 					className="center hover:bg-[#2e2e2e'] flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc]"
-					key={`${problem.startLineNumber}-${problem.startColumn}-${problem.code}`}
+					key={`${problem.startLineNumber}-${problem.startColumn}-${problem.code && typeof problem.code === "object" && "value" in problem.code ? problem.code.value : problem.code}`}
 					onClick={() => {
 						if (!editor) return;
 						editor.focus();

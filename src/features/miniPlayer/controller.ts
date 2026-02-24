@@ -432,6 +432,24 @@ function writeSavedState(s: MiniPlayerRect) {
 	localStorage.setItem(LS_MINI_PLAYER_RECT_KEY, JSON.stringify(s));
 }
 let miniPlayerBarState: Nullable<MiniPlayerBarState> = null;
+type miniPlayerWindow = {
+	ytInitialPlayerResponse?: {
+		storyboards?: {
+			playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
+		};
+	};
+	ytplayer?: {
+		config?: {
+			args?: {
+				raw_player_response?: {
+					storyboards?: {
+						playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
+					};
+				};
+			};
+		};
+	};
+};
 export function disableMiniPlayerCustomProgress() {
 	if (!miniPlayerBarState) return;
 	const { barRoot, cleanupFns } = miniPlayerBarState;
@@ -641,21 +659,15 @@ function getSeekWindow(video: HTMLVideoElement) {
 	return null;
 }
 function getStoryboardRenderer(): Nullable<PlayerStoryboardSpecRenderer> {
-	const w = window as unknown as {
-		ytInitialPlayerResponse?: any;
-		ytplayer?: any;
-	};
+	const w = window as unknown as miniPlayerWindow;
 	return (
-		(w.ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer as PlayerStoryboardSpecRenderer | undefined) ??
-		(w.ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer as PlayerStoryboardSpecRenderer | undefined) ??
+		w.ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer ??
+		w.ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer ??
 		null
 	);
 }
 function getStoryboardSpec(): Nullable<string> {
-	const w = window as unknown as {
-		ytInitialPlayerResponse?: any;
-		ytplayer?: any;
-	};
+	const w = window as unknown as miniPlayerWindow;
 	return (
 		w.ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer?.spec ??
 		w.ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer?.spec ??

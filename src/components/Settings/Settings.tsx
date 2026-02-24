@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 
-import type { configuration, configurationKeys, Nullable, Path } from "@/src/types";
+import type { configuration, Nullable, ParentType, Path, PathSegments, PathValue } from "@/src/types";
 
 import { useNotifications } from "@/hooks";
 import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
@@ -41,28 +41,39 @@ import { getPathValue, parseStoredValue } from "@/src/utils/utilities";
 import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
+type BooleanPath<T> = {
+	[P in Path<T>]: PathValue<T, P> extends boolean ? P : never;
+}[Path<T>];
 type SettingsContextProps = {
 	direction: "ltr" | "rtl";
-	getSelectedOption: <K extends Path<configuration>>(key: K) => ReturnType<typeof getPathValue<configuration, K>>;
+	getSelectedOption: <K extends Path<configuration>>(
+		key: K & (PathValue<configuration, K> extends string ? K : never)
+	) => PathValue<configuration, K>;
 	i18nInstance: i18nInstanceType;
-	setCheckboxOption: (key: Path<configuration>) => ({ currentTarget }: ChangeEvent<HTMLInputElement>) => void;
+	setCheckboxOption: <K extends BooleanPath<configuration>>(key: K) => ({ currentTarget }: ChangeEvent<HTMLInputElement>) => void;
 	settings: configuration;
 	settingsMutate: UseMutationResult<void, Error, configuration, unknown>;
-	setValueOption: (key: Path<configuration>) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+	setValueOption: <K extends Path<configuration>>(key: K) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
+type StringPath<T> = {
+	[P in Path<T>]: PathValue<T, P> extends string ? P : never;
+}[Path<T>];
 export function getSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
 		void chrome.storage.local.get<configuration>((settings) => {
 			try {
-				const storedSettings: Partial<configuration> = (
-					Object.keys(settings)
-						.filter((key) => typeof key === "string")
-						.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-				).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				const storedSettings: Partial<configuration> = Object.keys(settings)
+					.filter((key) => typeof key === "string")
+					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
 				resolve(castedSettings);
 			} catch (error) {
-				reject(error);
+				if (error instanceof Error) {
+					reject(error);
+				} else {
+					reject(new Error("unknown error"));
+				}
 			}
 		});
 	});
@@ -96,47 +107,33 @@ export default function Settings() {
 		return <Loader />;
 	}
 	const { t } = i18nInstance;
-	const setCheckboxOption =
-		(key: Path<configuration>) =>
-		({ currentTarget: { checked } }: ChangeEvent<HTMLInputElement>) => {
+	function createOptionSetter<P extends Path<configuration>, E extends { currentTarget: unknown }>(
+		key: P,
+		extractValue: (e: E) => PathValue<configuration, P>
+	): (event: E) => void;
+	function createOptionSetter<P extends BooleanPath<configuration>>(
+		key: P,
+		extractValue: (e: ChangeEvent<HTMLInputElement>) => boolean
+	): (event: ChangeEvent<HTMLInputElement>) => void;
+	function createOptionSetter<P extends Path<configuration>, E>(key: P, extractValue: (e: E) => PathValue<configuration, P>) {
+		return (event: E) => {
+			const nextValue = extractValue(event);
 			const currentValue = getPathValue(settings, key);
-			// Don't mutate if the value hasn't changed
-			if (currentValue === checked) return;
-			settingsMutate.mutate({ ...settings, [key]: checked });
+			if (currentValue === nextValue) return;
+			settingsMutate.mutate(updateConfigAtPath(settings!, key, nextValue));
 		};
-	const setValueOption =
-		(key: Path<configuration>) =>
-		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-			const currentValue = getPathValue(settings, key);
-			// Don't mutate if the value hasn't changed
-			if (currentValue === value) return;
-			settingsMutate.mutate(
-				((state) => {
-					const updatedState = { ...state };
-					const keys = key.split(".") as Array<keyof configuration>;
-					let parentValue: any = updatedState;
-
-					for (const currentKey of keys.slice(0, -1)) {
-						({ [currentKey]: parentValue } = parentValue);
-					}
-
-					const propertyName = keys.at(keys.length - 1);
-					if (!propertyName) return updatedState;
-					if (typeof parentValue === "object" && parentValue !== null) {
-						// If the path represents a nested property, update the nested property
-
-						parentValue[propertyName] = value;
-					} else {
-						// If the path represents a top-level property, update it directly
-						// @ts-expect-error not sure how to type this
-						updatedState[propertyName] = value;
-					}
-
-					return updatedState;
-				})(settings)
-			);
-		};
-	const getSelectedOption = <K extends Path<configuration>>(key: K) => getPathValue(settings, key);
+	}
+	const setCheckboxOption = <P extends BooleanPath<configuration>>(key: P) =>
+		createOptionSetter(key, (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.checked);
+	const setValueOption = <P extends Path<configuration>>(key: P) =>
+		createOptionSetter(key, (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => e.currentTarget.value as PathValue<configuration, P>);
+	function getSelectedOption<K extends Path<configuration>>(
+		key: K & (PathValue<configuration, K> extends string ? K : never)
+	): PathValue<configuration, K>;
+	function getSelectedOption<K extends StringPath<configuration>>(key: K): string;
+	function getSelectedOption(key: StringPath<configuration>): string {
+		return getPathValue(settings, key);
+	}
 	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
 	return (
 		<SettingsContext.Provider
@@ -193,7 +190,9 @@ async function fetchSettings() {
 		return settings;
 	} catch (error) {
 		console.error("Failed to get settings:", error);
-		throw new Error("Failed to fetch settings");
+		throw new Error("Failed to fetch settings", {
+			cause: error
+		});
 	}
 }
 async function setSettings(newSettings: configuration) {
@@ -214,3 +213,22 @@ export const useSettings = () => {
 	}
 	return context;
 };
+function updateConfigAtPath<P extends Path<configuration>>(state: configuration, key: P, nextValue: PathValue<configuration, P>): configuration {
+	type Segments = PathSegments<P>;
+	type Parent = ParentType<configuration, Segments>;
+	const keys = key.split(".") as unknown as Segments;
+	const updatedState: configuration = { ...state };
+	let parent: Parent | undefined = updatedState as Parent;
+	for (const k of keys.slice(0, -1)) {
+		if (typeof parent !== "object" || parent === null || !(k in parent)) {
+			return state;
+		}
+		parent = parent[k as keyof Parent] as Parent;
+	}
+	const lastKey = keys.at(-1);
+	if (!lastKey || typeof parent !== "object" || parent === null) {
+		return state;
+	}
+	parent[lastKey as keyof Parent] = nextValue as Parent[keyof Parent];
+	return updatedState;
+}

@@ -3,8 +3,8 @@ import "./index.css";
 import { hidePlayables, showPlayables } from "@/src/features/hidePlayables/utils";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-export async function disableHidePlayables() {
-	await showPlayables();
+export function disableHidePlayables() {
+	showPlayables();
 }
 export async function enableHidePlayables() {
 	// Wait for the "options" message from the content script
@@ -14,5 +14,5 @@ export async function enableHidePlayables() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!enableHidePlayables) return;
-	await hidePlayables();
+	hidePlayables();
 }

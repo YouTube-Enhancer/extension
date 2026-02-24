@@ -31,19 +31,33 @@ export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends
 	: Omit<Input, Omitted>[K] extends object ? ZodOptionalType<ZodMiniObject<TypeToZod<Omit<Input, Omitted>[K]>>>
 	: ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>;
 };
-export type Path<T> = keyof T | PathImpl<T, keyof T>;
+export type ParentType<T, Segments extends readonly PropertyKey[]> =
+	Segments extends readonly [...infer Rest extends readonly PropertyKey[], infer _Last] ? Traverse<T, Rest> : never;
+export type Path<T> = PathInternal<T>;
+export type PathSegments<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, ...PathSegments<Tail>] : [P];
 export type PathValue<T, P extends Path<T>> =
-	P extends `${infer Key}.${infer Rest}` ?
-		Key extends keyof T ?
-			Rest extends Path<T[Key]> ?
-				PathValue<T[Key], Rest>
+	P extends `${infer Head}.${infer Tail}` ?
+		Head extends keyof T ? PathValue<T[Head], Extract<Tail, Path<T[Head]>>>
+		: Head extends `${number}` ?
+			T extends readonly (infer U)[] ?
+				PathValue<U, Extract<Tail, Path<U>>>
 			:	never
 		:	never
 	: P extends keyof T ? T[P]
-	: never;
+	: P extends `${number}` ?
+		T extends readonly (infer U)[] ?
+			U
+		:	never
+	:	never;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
+export type Traverse<T, Segments extends readonly PropertyKey[]> =
+	Segments extends readonly [infer K, ...infer Rest extends readonly PropertyKey[]] ?
+		K extends keyof T ?
+			Traverse<T[K], Rest>
+		:	never
+	:	T;
 export type TypeToPartialZodSchema<
 	Input,
 	Omitted extends keyof Input = never,
@@ -65,14 +79,15 @@ export type TypeToZodSchema<T> = ZodMiniObject<{
 export type WithId<S extends string> = `#${S}`;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type ZodOptionalType<T extends ZodMiniType> = ZodMiniOptional<T>;
-type PathImpl<T, Key extends keyof T> =
-	Key extends string ?
-		T[Key] extends Record<string, any> ?
-			T[Key] extends ArrayLike<any> ?
-				`${Key}.${PathImpl<T[Key], Exclude<keyof T[Key], keyof any[]>>}` | Key
-			:	`${Key}.${PathImpl<T[Key], keyof T[Key]>}` | Key
-		:	Key
-	:	never;
+type PathInternal<T> =
+	T extends Primitive ? never
+	: T extends readonly (infer U)[] ? `${number}.${PathInternal<U>}` | `${number}`
+	: {
+			[K in Extract<keyof T, string>]: T[K] extends Primitive ? K
+			: T[K] extends readonly (infer U)[] ? `${K}.${number}.${PathInternal<U>}` | `${K}.${number}` | K
+			: `${K}.${PathInternal<T[K]>}` | K;
+		}[Extract<keyof T, string>];
+type Primitive = bigint | boolean | null | number | string | symbol | undefined;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
 	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
@@ -597,3 +612,6 @@ export type YouTubeVideoItem = {
 export type YouTubeVideoResponse = {
 	items: YouTubeVideoItem[];
 };
+export type YtActionEvent = CustomEvent<{
+	actionName: string;
+}>;

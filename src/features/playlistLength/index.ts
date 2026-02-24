@@ -36,12 +36,14 @@ export async function enablePlaylistLength() {
 		playlistWatchTimeGetMethod
 	});
 	resizeObserver?.disconnect();
-	resizeObserver = new ResizeObserver(async () => {
-		documentObserver = await initPlaylistLength({
-			pageType,
-			playlistLengthGetMethod,
-			playlistWatchTimeGetMethod
-		});
+	resizeObserver = new ResizeObserver(() => {
+		void (async () => {
+			documentObserver = await initPlaylistLength({
+				pageType,
+				playlistLengthGetMethod,
+				playlistWatchTimeGetMethod
+			});
+		})();
 	});
 	resizeObserver.observe(document.documentElement);
 }

@@ -128,7 +128,7 @@ export const enableCommentsMiniPlayer = async () => {
 	await attachCommentsAutoMiniPlayer(miniPlayer);
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const disableCommentsMiniPlayer = async () => {
+export const disableCommentsMiniPlayer = () => {
 	cleanupAutoObservers();
 	const sentinel = document.getElementById(SENTINEL_ID);
 	sentinel?.remove();

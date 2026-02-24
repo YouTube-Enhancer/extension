@@ -58,7 +58,7 @@ export function handleTimestampHover(el: HTMLElement, timestamp: number) {
 			return;
 		}
 		video.currentTime = restoreTime ?? 0;
-		if (!wasPlaying) await video.pause();
+		if (!wasPlaying) video.pause();
 		hideShield();
 	};
 	const mouseEnterHandler = () => {

@@ -2,7 +2,7 @@ import { modifyElementClassList, waitForSpecificMessage } from "@/src/utils/util
 
 import "./index.css";
 
-export async function disableHideSidebarRecommendedVideos() {
+export function disableHideSidebarRecommendedVideos() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-sidebar-recommended-videos",
 		element: document.body

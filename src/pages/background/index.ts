@@ -4,30 +4,33 @@ import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
 
 import { version } from "../../../package.json";
 import { setDefaultValues } from "../../defaults";
-chrome.runtime.onInstalled.addListener(async (details) => {
-	const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } = (await setDefaultValues().catch(console.error)) ?? {};
-	const { previousVersion, reason } = details;
-	console.log(`Previous version: ${previousVersion}, Reason: ${reason}`, openSettingsOnMajorOrMinorUpdate);
-	if (!openSettingsOnMajorOrMinorUpdate) return;
-	switch (reason) {
-		case chrome.runtime.OnInstalledReason.INSTALL: {
-			// Open the options page after install
-			void chrome.tabs.create({ url: "/src/pages/options/index.html" });
-			break;
-		}
-		case chrome.runtime.OnInstalledReason.UPDATE: {
-			if (!previousVersion) return;
-			if (
-				isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
-				isNewMinorVersion(previousVersion as VersionString, version as VersionString)
-			) {
-				// Open options page if a new major or minor version is released
+chrome.runtime.onInstalled.addListener((details) => {
+	void (async () => {
+		const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } =
+			(await setDefaultValues().catch(console.error)) ?? {};
+		const { previousVersion, reason } = details;
+		console.log(`Previous version: ${previousVersion}, Reason: ${reason}`, openSettingsOnMajorOrMinorUpdate);
+		if (!openSettingsOnMajorOrMinorUpdate) return;
+		switch (reason) {
+			case "install": {
+				// Open the options page after install
 				void chrome.tabs.create({ url: "/src/pages/options/index.html" });
+				break;
 			}
-			void updateStoredSettings();
-			break;
+			case "update": {
+				if (!previousVersion) return;
+				if (
+					isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
+					isNewMinorVersion(previousVersion as VersionString, version as VersionString)
+				) {
+					// Open options page if a new major or minor version is released
+					void chrome.tabs.create({ url: "/src/pages/options/index.html" });
+				}
+				void updateStoredSettings();
+				break;
+			}
 		}
-	}
+	})();
 });
 type VersionString = `${string}.${string}.${string}`;
 

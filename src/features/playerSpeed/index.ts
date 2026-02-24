@@ -102,17 +102,17 @@ export async function setupPlaybackSpeedChangeListener() {
 	};
 	const isPlaybackSpeedMenu = (panelMenu: HTMLDivElement) =>
 		!!panelMenu.closest(".ytp-settings-menu")?.querySelector(".ytp-speed-slider-menu-footer");
-	const speedMenuItemClickListener = async (event: Event) => {
+	const speedMenuItemClickListener = (event: Event) => {
 		const menuItem = (event.target as HTMLElement).closest<HTMLDivElement>("div.ytp-menuitem");
 		if (!menuItem) return;
 		const label = menuItem.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
 		const isChecked = menuItem.getAttribute("aria-checked") === "true";
 		const playerSpeed = extractSpeed(label, isChecked);
 		if (!playerSpeed) return;
-		await updateSpeedButtons(playerSpeed);
+		void updateSpeedButtons(playerSpeed);
 		window.localStorage.setItem("playerSpeed", String(playerSpeed));
 	};
-	const playerSpeedMenuObserver = new MutationObserver(async (mutationsList) => {
+	const playerSpeedMenuObserver = new MutationObserver((mutationsList) => {
 		for (const mutation of mutationsList) {
 			const targetElement = mutation.target as HTMLDivElement;
 			const panelMenu = targetElement.querySelector<HTMLDivElement>("div.ytp-panel > div.ytp-panel-menu");
@@ -120,7 +120,7 @@ export async function setupPlaybackSpeedChangeListener() {
 			// Handle regular menu (main menu) once per open
 			if (!regularMenuProcessed && panelMenu.querySelector(speedMenuItemSelector)) {
 				regularMenuProcessed = true;
-				await readSpeedFromMainMenuItem();
+				void readSpeedFromMainMenuItem();
 			}
 			if (!isPlaybackSpeedMenu(panelMenu)) continue;
 			const menuItems = panelMenu.querySelectorAll<HTMLDivElement>("div.ytp-menuitem");
@@ -128,7 +128,7 @@ export async function setupPlaybackSpeedChangeListener() {
 			const checkedLabel = checkedItem?.querySelector<HTMLDivElement>(".ytp-menuitem-label")?.textContent ?? null;
 			const checkedSpeed = extractSpeed(checkedLabel, checkedItem?.getAttribute("aria-checked") === "true");
 			if (checkedSpeed) {
-				await updateSpeedButtons(checkedSpeed);
+				void updateSpeedButtons(checkedSpeed);
 				window.localStorage.setItem("playerSpeed", String(checkedSpeed));
 			}
 			menuItems.forEach((menuItem) => {
@@ -137,13 +137,13 @@ export async function setupPlaybackSpeedChangeListener() {
 			});
 		}
 	});
-	const customSpeedSliderObserver = new MutationObserver(async (mutationsList) => {
+	const customSpeedSliderObserver = new MutationObserver((mutationsList) => {
 		for (const mutation of mutationsList) {
 			const targetElement = mutation.target as HTMLDivElement;
 			if (!targetElement.matches(".ytp-speedslider-text")) continue;
 			const playerSpeed = parseFloat(targetElement.textContent ?? "");
 			if (!playerSpeed) return;
-			await updateSpeedButtons(playerSpeed);
+			void updateSpeedButtons(playerSpeed);
 			window.localStorage.setItem("playerSpeed", String(playerSpeed));
 		}
 	});
