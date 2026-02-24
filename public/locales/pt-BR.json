@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Audio Handling",
+						"toggle": {
+							"on": "Mono → Stereo Output",
+							"off": "Original Audio"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Inverter vídeo horizontalmente"
@@ -176,7 +185,8 @@
 							"screenshotButton": "Botão de captura de tela",
 							"volumeBoostButton": "Botão de ganho de volume",
 							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
-							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente"
+							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -501,6 +511,12 @@
 						"enable": {
 							"label": "Ocultar vídeos exclusivos para membros",
 							"title": "Oculta vídeos que só membros são permitidos a assistir"
+						}
+					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
