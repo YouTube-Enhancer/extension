@@ -2,7 +2,7 @@ import type { ZodArray, ZodError, ZodIssue, ZodObject, ZodOptional, ZodType } fr
 
 import fs from "node:fs";
 import path from "node:path";
-import z from "zod";
+import { object, string } from "zod";
 
 import type { NewTranslationStruct, OldTranslationStruct } from "@/src/i18n/types";
 type TypeToZod<T> = {
@@ -17,709 +17,709 @@ type TypeToZodSchema<T> = ZodObject<{
 	: T[K] extends object ? ZodObject<TypeToZod<T[K]>>
 	: ZodType<T[K]>;
 }>;
-export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = z.object({
-	langCode: z.string(),
-	langName: z.string(),
-	messages: z.object({
-		resumingVideo: z.string(),
-		settingVolume: z.string()
+export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = object({
+	langCode: string(),
+	langName: string(),
+	messages: object({
+		resumingVideo: string(),
+		settingVolume: string()
 	}),
-	pages: z.object({
-		content: z.object({
-			features: z.object({
-				copyTimestampUrlButton: z.object({
-					button: z.object({
-						copied: z.string(),
-						label: z.string()
+	pages: object({
+		content: object({
+			features: object({
+				copyTimestampUrlButton: object({
+					button: object({
+						copied: string(),
+						label: string()
 					})
 				}),
-				featureMenu: z.object({
-					button: z.object({
-						label: z.string()
+				featureMenu: object({
+					button: object({
+						label: string()
 					})
 				}),
-				forwardRewindButtons: z.object({
-					buttons: z.object({
-						forwardButton: z.object({
-							label: z.string()
+				forwardRewindButtons: object({
+					buttons: object({
+						forwardButton: object({
+							label: string()
 						}),
-						rewindButton: z.object({
-							label: z.string()
+						rewindButton: object({
+							label: string()
 						})
 					})
 				}),
-				hideEndScreenCardsButton: z.object({
-					button: z.object({
-						label: z.string(),
-						toggle: z.object({
-							off: z.string(),
-							on: z.string()
+				hideEndScreenCardsButton: object({
+					button: object({
+						label: string(),
+						toggle: object({
+							off: string(),
+							on: string()
 						})
 					})
 				}),
-				loopButton: z.object({
-					button: z.object({
-						label: z.string(),
-						toggle: z.object({
-							off: z.string(),
-							on: z.string()
+				loopButton: object({
+					button: object({
+						label: string(),
+						toggle: object({
+							off: string(),
+							on: string()
 						})
 					})
 				}),
-				maximizePlayerButton: z.object({
-					button: z.object({
-						label: z.string(),
-						toggle: z.object({
-							off: z.string(),
-							on: z.string()
+				maximizePlayerButton: object({
+					button: object({
+						label: string(),
+						toggle: object({
+							off: string(),
+							on: string()
 						})
 					})
 				}),
-				openTranscriptButton: z.object({
-					button: z.object({
-						label: z.string()
+				openTranscriptButton: object({
+					button: object({
+						label: string()
 					})
 				}),
-				playbackSpeedButtons: z.object({
-					buttons: z.object({
-						decreasePlaybackSpeedButton: z.object({
-							label: z.string()
+				playbackSpeedButtons: object({
+					buttons: object({
+						decreasePlaybackSpeedButton: object({
+							label: string()
 						}),
-						increasePlaybackSpeedButton: z.object({
-							label: z.string()
+						increasePlaybackSpeedButton: object({
+							label: string()
 						})
 					}),
-					decreaseLimit: z.string(),
-					increaseLimit: z.string()
+					decreaseLimit: string(),
+					increaseLimit: string()
 				}),
-				playlistLength: z.object({
-					title: z.string()
+				playlistLength: object({
+					title: string()
 				}),
-				screenshotButton: z.object({
-					button: z.object({
-						label: z.string()
+				screenshotButton: object({
+					button: object({
+						label: string()
 					}),
-					copiedToClipboard: z.string()
+					copiedToClipboard: string()
 				}),
-				videoHistory: z.object({
-					resumeButton: z.string(),
-					resumePrompt: z.object({
-						close: z.string()
+				videoHistory: object({
+					resumeButton: string(),
+					resumePrompt: object({
+						close: string()
 					})
 				}),
-				volumeBoostButton: z.object({
-					button: z.object({
-						label: z.string(),
-						toggle: z.object({
-							off: z.string(),
-							on: z.string()
+				volumeBoostButton: object({
+					button: object({
+						label: string(),
+						toggle: object({
+							off: string(),
+							on: string()
 						})
 					})
 				})
 			})
 		}),
-		options: z.object({
-			notifications: z.object({
-				error: z.object({
-					optionConflict: z.string(),
-					scrollWheelHoldModifierKey: z.object({
-						sameKey: z.object({
-							speedControl: z.string(),
-							volumeControl: z.string()
+		options: object({
+			notifications: object({
+				error: object({
+					optionConflict: string(),
+					scrollWheelHoldModifierKey: object({
+						sameKey: object({
+							speedControl: string(),
+							volumeControl: string()
 						})
 					})
 				}),
-				info: z.object({
-					reset: z.string()
+				info: object({
+					reset: string()
 				}),
-				success: z.object({
-					saved: z.string()
+				success: object({
+					saved: string()
 				})
 			})
 		})
 	}),
-	settings: z.object({
-		clearData: z.object({
-			allDataDeleted: z.string(),
-			confirmAlert: z.string()
+	settings: object({
+		clearData: object({
+			allDataDeleted: string(),
+			confirmAlert: string()
 		}),
-		optionDisabled: z.object({
-			either: z.object({
-				label: z.string(),
-				separator: z.string()
+		optionDisabled: object({
+			either: object({
+				label: string(),
+				separator: string()
 			}),
-			plural: z.object({
-				label: z.string(),
-				separator: z.string()
+			plural: object({
+				label: string(),
+				separator: string()
 			}),
-			singular: z.string(),
-			specificOption: z.object({
-				featureMenu: z.string(),
-				screenshotButtonFileFormat: z.string()
+			singular: string(),
+			specificOption: object({
+				featureMenu: string(),
+				screenshotButtonFileFormat: string()
 			})
 		}),
-		scrollForMoreSettings: z.string(),
-		sections: z.object({
-			automaticQuality: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+		scrollForMoreSettings: string(),
+		sections: object({
+			automaticQuality: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				fallbackQualityStrategy: z.object({
-					select: z.object({
-						label: z.string(),
-						options: z.object({
-							higher: z.string(),
-							lower: z.string()
+				fallbackQualityStrategy: object({
+					select: object({
+						label: string(),
+						options: object({
+							higher: string(),
+							lower: string()
 						}),
-						title: z.string()
+						title: string()
 					})
 				}),
-				select: z.object({
-					label: z.string(),
-					title: z.string()
+				select: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			bottomButtons: z.object({
-				clear: z.object({
-					title: z.string(),
-					value: z.string()
+			bottomButtons: object({
+				clear: object({
+					title: string(),
+					value: string()
 				}),
-				confirm: z.object({
-					title: z.string(),
-					value: z.string()
+				confirm: object({
+					title: string(),
+					value: string()
 				}),
-				openTab: z.object({
-					title: z.string()
+				openTab: object({
+					title: string()
 				}),
-				reset: z.object({
-					title: z.string(),
-					value: z.string()
+				reset: object({
+					title: string(),
+					value: string()
 				})
 			}),
-			buttonPlacement: z.object({
-				select: z.object({
-					buttonNames: z.object({
-						copyTimestampUrlButton: z.string(),
-						decreasePlaybackSpeedButton: z.string(),
-						forwardButton: z.string(),
-						hideEndScreenCardsButton: z.string(),
-						increasePlaybackSpeedButton: z.string(),
-						loopButton: z.string(),
-						maximizePlayerButton: z.string(),
-						openTranscriptButton: z.string(),
-						rewindButton: z.string(),
-						screenshotButton: z.string(),
-						volumeBoostButton: z.string()
+			buttonPlacement: object({
+				select: object({
+					buttonNames: object({
+						copyTimestampUrlButton: string(),
+						decreasePlaybackSpeedButton: string(),
+						forwardButton: string(),
+						hideEndScreenCardsButton: string(),
+						increasePlaybackSpeedButton: string(),
+						loopButton: string(),
+						maximizePlayerButton: string(),
+						openTranscriptButton: string(),
+						rewindButton: string(),
+						screenshotButton: string(),
+						volumeBoostButton: string()
 					}),
-					options: z.object({
-						below_player: z.object({
-							placement: z.string(),
-							value: z.string()
+					options: object({
+						below_player: object({
+							placement: string(),
+							value: string()
 						}),
-						feature_menu: z.object({
-							placement: z.string(),
-							value: z.string()
+						feature_menu: object({
+							placement: string(),
+							value: string()
 						}),
-						player_controls_left: z.object({
-							placement: z.string(),
-							value: z.string()
+						player_controls_left: object({
+							placement: string(),
+							value: string()
 						}),
-						player_controls_right: z.object({
-							placement: z.string(),
-							value: z.string()
+						player_controls_right: object({
+							placement: string(),
+							value: string()
 						})
 					}),
-					title: z.string()
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			customCSS: z.object({
-				editor: z.object({
-					collapse: z.string(),
-					expand: z.string(),
-					noProblems: z.string()
+			customCSS: object({
+				editor: object({
+					collapse: string(),
+					expand: string(),
+					noProblems: string()
 				}),
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			featureMenu: z.object({
-				openType: z.object({
-					select: z.object({
-						label: z.string(),
-						options: z.object({
-							click: z.string(),
-							hover: z.string()
+			featureMenu: object({
+				openType: object({
+					select: object({
+						label: string(),
+						options: object({
+							click: string(),
+							hover: string()
 						}),
-						title: z.string()
+						title: string()
 					}),
-					title: z.string()
+					title: string()
 				})
 			}),
-			forwardRewindButtons: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+			forwardRewindButtons: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				time: z.object({
-					label: z.string(),
-					title: z.string()
+				time: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			importExportSettings: z.object({
-				exportButton: z.object({
-					success: z.string(),
-					title: z.string(),
-					value: z.string()
+			importExportSettings: object({
+				exportButton: object({
+					success: string(),
+					title: string(),
+					value: string()
 				}),
-				importButton: z.object({
-					error: z.object({
-						unknown: z.string(),
-						validation: z.string()
+				importButton: object({
+					error: object({
+						unknown: string(),
+						validation: string()
 					}),
-					success: z.string(),
-					title: z.string(),
-					value: z.string()
+					success: string(),
+					title: string(),
+					value: string()
 				})
 			}),
-			language: z.object({
-				select: z.object({
-					label: z.string(),
-					title: z.string()
+			language: object({
+				select: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			miscellaneous: z.object({
-				features: z.object({
-					automaticallyDisableAmbientMode: z.object({
-						label: z.string(),
-						title: z.string()
+			miscellaneous: object({
+				features: object({
+					automaticallyDisableAmbientMode: object({
+						label: string(),
+						title: string()
 					}),
-					automaticallyDisableAutoPlay: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticallyDisableAutoPlay: object({
+						label: string(),
+						title: string()
 					}),
-					automaticallyDisableClosedCaptions: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticallyDisableClosedCaptions: object({
+						label: string(),
+						title: string()
 					}),
-					automaticallyEnableClosedCaptions: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticallyEnableClosedCaptions: object({
+						label: string(),
+						title: string()
 					}),
-					automaticallyMaximizePlayer: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticallyMaximizePlayer: object({
+						label: string(),
+						title: string()
 					}),
-					automaticallyShowMoreVideosOnEndScreen: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticallyShowMoreVideosOnEndScreen: object({
+						label: string(),
+						title: string()
 					}),
-					automaticTheaterMode: z.object({
-						label: z.string(),
-						title: z.string()
+					automaticTheaterMode: object({
+						label: string(),
+						title: string()
 					}),
-					copyTimestampUrlButton: z.object({
-						label: z.string(),
-						title: z.string()
+					copyTimestampUrlButton: object({
+						label: string(),
+						title: string()
 					}),
-					defaultToOriginalAudioTrack: z.object({
-						label: z.string(),
-						title: z.string()
+					defaultToOriginalAudioTrack: object({
+						label: string(),
+						title: string()
 					}),
-					enableMarkAsUnwatchedButton: z.object({
-						label: z.string(),
-						title: z.string()
+					enableMarkAsUnwatchedButton: object({
+						label: string(),
+						title: string()
 					}),
-					enableRemoveVideoButton: z.object({
-						label: z.string(),
-						title: z.string()
+					enableRemoveVideoButton: object({
+						label: string(),
+						title: string()
 					}),
-					enableSaveToWatchLaterButton: z.object({
-						label: z.string(),
-						title: z.string()
+					enableSaveToWatchLaterButton: object({
+						label: string(),
+						title: string()
 					}),
-					hideArtificialIntelligenceSummary: z.object({
-						label: z.string(),
-						title: z.string()
+					hideArtificialIntelligenceSummary: object({
+						label: string(),
+						title: string()
 					}),
-					hideEndScreenCards: z.object({
-						label: z.string(),
-						title: z.string()
+					hideEndScreenCards: object({
+						label: string(),
+						title: string()
 					}),
-					hideEndScreenCardsButton: z.object({
-						label: z.string(),
-						title: z.string()
+					hideEndScreenCardsButton: object({
+						label: string(),
+						title: string()
 					}),
-					hideLiveStreamChat: z.object({
-						label: z.string(),
-						title: z.string()
+					hideLiveStreamChat: object({
+						label: string(),
+						title: string()
 					}),
-					hideMembersOnlyVideos: z.object({
-						label: z.string(),
-						title: z.string()
+					hideMembersOnlyVideos: object({
+						label: string(),
+						title: string()
 					}),
-					hideOfficialArtistVideosFromHomePage: z.object({
-						label: z.string(),
-						title: z.string()
+					hideOfficialArtistVideosFromHomePage: object({
+						label: string(),
+						title: string()
 					}),
-					hidePaidPromotionBanner: z.object({
-						label: z.string(),
-						title: z.string()
+					hidePaidPromotionBanner: object({
+						label: string(),
+						title: string()
 					}),
-					hidePlayables: z.object({
-						label: z.string(),
-						title: z.string()
+					hidePlayables: object({
+						label: string(),
+						title: string()
 					}),
-					hidePlaylistRecommendationsFromHomePage: z.object({
-						label: z.string(),
-						title: z.string()
+					hidePlaylistRecommendationsFromHomePage: object({
+						label: string(),
+						title: string()
 					}),
-					hideScrollbar: z.object({
-						label: z.string(),
-						title: z.string()
+					hideScrollbar: object({
+						label: string(),
+						title: string()
 					}),
-					hideShorts: z.object({
-						label: z.string(),
-						title: z.string()
+					hideShorts: object({
+						label: string(),
+						title: string()
 					}),
-					hideSidebarRecommendedVideos: z.object({
-						label: z.string(),
-						title: z.string()
+					hideSidebarRecommendedVideos: object({
+						label: string(),
+						title: string()
 					}),
-					hideTranslateComment: z.object({
-						label: z.string(),
-						title: z.string()
+					hideTranslateComment: object({
+						label: string(),
+						title: string()
 					}),
-					loopButton: z.object({
-						label: z.string(),
-						title: z.string()
+					loopButton: object({
+						label: string(),
+						title: string()
 					}),
-					maximizePlayerButton: z.object({
-						label: z.string(),
-						title: z.string()
+					maximizePlayerButton: object({
+						label: string(),
+						title: string()
 					}),
-					openTranscriptButton: z.object({
-						label: z.string(),
-						title: z.string()
+					openTranscriptButton: object({
+						label: string(),
+						title: string()
 					}),
-					openYouTubeSettingsOnHover: z.object({
-						label: z.string(),
-						title: z.string()
+					openYouTubeSettingsOnHover: object({
+						label: string(),
+						title: string()
 					}),
-					pauseBackgroundPlayers: z.object({
-						label: z.string(),
-						title: z.string()
+					pauseBackgroundPlayers: object({
+						label: string(),
+						title: string()
 					}),
-					remainingTime: z.object({
-						label: z.string(),
-						title: z.string()
+					remainingTime: object({
+						label: string(),
+						title: string()
 					}),
-					rememberLastVolume: z.object({
-						label: z.string(),
-						title: z.string()
+					rememberLastVolume: object({
+						label: string(),
+						title: string()
 					}),
-					removeRedirect: z.object({
-						label: z.string(),
-						title: z.string()
+					removeRedirect: object({
+						label: string(),
+						title: string()
 					}),
-					restoreFullscreenScrolling: z.object({
-						label: z.string(),
-						title: z.string()
+					restoreFullscreenScrolling: object({
+						label: string(),
+						title: string()
 					}),
-					shareShortener: z.object({
-						label: z.string(),
-						title: z.string()
+					shareShortener: object({
+						label: string(),
+						title: string()
 					}),
-					shortsAutoScroll: z.object({
-						label: z.string(),
-						title: z.string()
+					shortsAutoScroll: object({
+						label: string(),
+						title: string()
 					}),
-					skipContinueWatching: z.object({
-						label: z.string(),
-						title: z.string()
+					skipContinueWatching: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				title: z.string()
+				title: string()
 			}),
-			onScreenDisplaySettings: z.object({
-				color: z.object({
-					label: z.string(),
-					options: z.object({
-						blue: z.string(),
-						green: z.string(),
-						orange: z.string(),
-						pink: z.string(),
-						purple: z.string(),
-						red: z.string(),
-						white: z.string(),
-						yellow: z.string()
+			onScreenDisplaySettings: object({
+				color: object({
+					label: string(),
+					options: object({
+						blue: string(),
+						green: string(),
+						orange: string(),
+						pink: string(),
+						purple: string(),
+						red: string(),
+						white: string(),
+						yellow: string()
 					}),
-					title: z.string()
+					title: string()
 				}),
-				hide: z.object({
-					label: z.string(),
-					title: z.string()
+				hide: object({
+					label: string(),
+					title: string()
 				}),
-				opacity: z.object({
-					label: z.string(),
-					title: z.string()
+				opacity: object({
+					label: string(),
+					title: string()
 				}),
-				padding: z.object({
-					label: z.string(),
-					title: z.string()
+				padding: object({
+					label: string(),
+					title: string()
 				}),
-				position: z.object({
-					label: z.string(),
-					options: z.object({
-						bottom_left: z.string(),
-						bottom_right: z.string(),
-						center: z.string(),
-						top_left: z.string(),
-						top_right: z.string()
+				position: object({
+					label: string(),
+					options: object({
+						bottom_left: string(),
+						bottom_right: string(),
+						center: string(),
+						top_left: string(),
+						top_right: string()
 					}),
-					title: z.string()
+					title: string()
 				}),
-				title: z.string(),
-				type: z.object({
-					label: z.string(),
-					options: z.object({
-						circle: z.string(),
-						line: z.string(),
-						no_display: z.string(),
-						text: z.string()
+				title: string(),
+				type: object({
+					label: string(),
+					options: object({
+						circle: string(),
+						line: string(),
+						no_display: string(),
+						text: string()
 					}),
-					title: z.string()
+					title: string()
 				})
 			}),
-			playbackSpeed: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+			playbackSpeed: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				playbackSpeedButtons: z.object({
-					label: z.string(),
-					select: z.object({
-						label: z.string(),
-						title: z.string()
+				playbackSpeedButtons: object({
+					label: string(),
+					select: object({
+						label: string(),
+						title: string()
 					}),
-					title: z.string()
+					title: string()
 				}),
-				select: z.object({
-					label: z.string(),
-					title: z.string()
+				select: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			playlistLength: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+			playlistLength: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string(),
-				wayToGetLength: z.object({
-					select: z.object({
-						label: z.string(),
-						title: z.string()
+				title: string(),
+				wayToGetLength: object({
+					select: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				wayToGetWatchTime: z.object({
-					select: z.object({
-						label: z.string(),
-						options: z.object({
-							duration: z.string(),
-							youtube: z.string()
+				wayToGetWatchTime: object({
+					select: object({
+						label: string(),
+						options: object({
+							duration: string(),
+							youtube: string()
 						}),
-						title: z.string()
+						title: string()
 					})
 				})
 			}),
-			playlistManagement: z.object({
-				features: z.object({
-					markAsUnwatchedButton: z.object({
-						label: z.string(),
-						title: z.string()
+			playlistManagement: object({
+				features: object({
+					markAsUnwatchedButton: object({
+						label: string(),
+						title: string()
 					}),
-					removeVideoButton: z.object({
-						label: z.string(),
-						title: z.string()
+					removeVideoButton: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				title: z.string()
+				title: string()
 			}),
-			playlistManagementButtons: z.object({
-				failedToMarkAsUnwatched: z.string(),
-				failedToRemoveVideo: z.string(),
-				markAsUnwatched: z.string(),
-				markingAsUnwatched: z.string(),
-				removeVideo: z.string(),
-				removingVideo: z.string()
+			playlistManagementButtons: object({
+				failedToMarkAsUnwatched: string(),
+				failedToRemoveVideo: string(),
+				markAsUnwatched: string(),
+				markingAsUnwatched: string(),
+				removeVideo: string(),
+				removingVideo: string()
 			}),
-			saveToWatchLaterButton: z.object({
-				failedToSaveVideo: z.string(),
-				saveVideo: z.string(),
-				savingVideo: z.string()
+			saveToWatchLaterButton: object({
+				failedToSaveVideo: string(),
+				saveVideo: string(),
+				savingVideo: string()
 			}),
-			screenshotButton: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+			screenshotButton: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				saveAs: z.object({
-					both: z.string(),
-					clipboard: z.string(),
-					file: z.string()
+				saveAs: object({
+					both: string(),
+					clipboard: string(),
+					file: string()
 				}),
-				selectFormat: z.object({
-					label: z.string(),
-					title: z.string()
+				selectFormat: object({
+					label: string(),
+					title: string()
 				}),
-				selectSaveAs: z.object({
-					label: z.string(),
-					title: z.string()
+				selectSaveAs: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			scrollWheelSpeedControl: z.object({
-				adjustmentSteps: z.object({
-					label: z.string(),
-					title: z.string()
+			scrollWheelSpeedControl: object({
+				adjustmentSteps: object({
+					label: string(),
+					title: string()
 				}),
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				optionLabel: z.string(),
-				select: z.object({
-					label: z.string(),
-					title: z.string()
+				optionLabel: string(),
+				select: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			scrollWheelVolumeControl: z.object({
-				adjustmentSteps: z.object({
-					label: z.string(),
-					title: z.string()
+			scrollWheelVolumeControl: object({
+				adjustmentSteps: object({
+					label: string(),
+					title: string()
 				}),
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				holdModifierKey: z.object({
-					enable: z.object({
-						label: z.string(),
-						title: z.string()
+				holdModifierKey: object({
+					enable: object({
+						label: string(),
+						title: string()
 					}),
-					optionLabel: z.string(),
-					select: z.object({
-						label: z.string(),
-						title: z.string()
+					optionLabel: string(),
+					select: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				holdRightClick: z.object({
-					enable: z.object({
-						label: z.string(),
-						title: z.string()
+				holdRightClick: object({
+					enable: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				title: z.string()
+				title: string()
 			}),
-			settingSearch: z.object({
-				placeholder: z.string()
+			settingSearch: object({
+				placeholder: string()
 			}),
-			videoHistory: z.object({
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+			videoHistory: object({
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				resumeType: z.object({
-					select: z.object({
-						label: z.string(),
-						options: z.object({
-							automatic: z.string(),
-							prompt: z.string()
+				resumeType: object({
+					select: object({
+						label: string(),
+						options: object({
+							automatic: string(),
+							prompt: string()
 						}),
-						title: z.string()
+						title: string()
 					})
 				}),
-				title: z.string()
+				title: string()
 			}),
-			volumeBoost: z.object({
-				boostAmount: z.object({
-					label: z.string(),
-					title: z.string()
+			volumeBoost: object({
+				boostAmount: object({
+					label: string(),
+					title: string()
 				}),
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				mode: z.object({
-					select: z.object({
-						label: z.string(),
-						options: z.object({
-							global: z.string(),
-							perVideo: z.string()
+				mode: object({
+					select: object({
+						label: string(),
+						options: object({
+							global: string(),
+							perVideo: string()
 						}),
-						title: z.string()
+						title: string()
 					})
 				}),
-				title: z.string()
+				title: string()
 			}),
-			youtubeDataApiV3Key: z.object({
-				getApiKeyLinkText: z.string(),
-				input: z.object({
-					label: z.string(),
-					title: z.string()
+			youtubeDataApiV3Key: object({
+				getApiKeyLinkText: string(),
+				input: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			}),
-			youtubeDeepDark: z.object({
-				author: z.string(),
-				"co-authors": z.string(),
-				colors: z.object({
-					colorShadow: z.object({
-						label: z.string(),
-						title: z.string()
+			youtubeDeepDark: object({
+				author: string(),
+				"co-authors": string(),
+				colors: object({
+					colorShadow: object({
+						label: string(),
+						title: string()
 					}),
-					dimmerText: z.object({
-						label: z.string(),
-						title: z.string()
+					dimmerText: object({
+						label: string(),
+						title: string()
 					}),
-					hoverBackground: z.object({
-						label: z.string(),
-						title: z.string()
+					hoverBackground: object({
+						label: string(),
+						title: string()
 					}),
-					mainBackground: z.object({
-						label: z.string(),
-						title: z.string()
+					mainBackground: object({
+						label: string(),
+						title: string()
 					}),
-					mainColor: z.object({
-						label: z.string(),
-						title: z.string()
+					mainColor: object({
+						label: string(),
+						title: string()
 					}),
-					mainText: z.object({
-						label: z.string(),
-						title: z.string()
+					mainText: object({
+						label: string(),
+						title: string()
 					}),
-					secondBackground: z.object({
-						label: z.string(),
-						title: z.string()
+					secondBackground: object({
+						label: string(),
+						title: string()
 					})
 				}),
-				enable: z.object({
-					label: z.string(),
-					title: z.string()
+				enable: object({
+					label: string(),
+					title: string()
 				}),
-				select: z.object({
-					label: z.string(),
-					title: z.string()
+				select: object({
+					label: string(),
+					title: string()
 				}),
-				title: z.string()
+				title: string()
 			})
 		})
 	})
@@ -839,6 +839,7 @@ function migrate(old: OldTranslationStruct): NewTranslationStruct {
 					title: old.settings.sections.forwardRewindButtons.title
 				},
 				miscellaneous: {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					settings: Object.fromEntries(
 						Object.entries(old.settings.sections.miscellaneous.features)
 							.map(([key, value]) => {
@@ -873,7 +874,7 @@ function migrate(old: OldTranslationStruct): NewTranslationStruct {
 								}
 							})
 							.filter(Boolean)
-					) as any,
+					),
 					title: old.settings.sections.miscellaneous.title
 				},
 				onScreenDisplaySettings: {

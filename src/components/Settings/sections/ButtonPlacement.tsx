@@ -4,7 +4,7 @@ import Setting from "@/src/components/Settings/components/Setting";
 import SettingSection from "@/src/components/Settings/components/SettingSection";
 import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
-import { type AllButtonNames, buttonNames } from "@/src/types";
+import { buttonNames } from "@/src/types";
 import { isButtonSelectDisabled } from "@/src/utils/utilities";
 
 export default function ButtonPlacementSection() {
@@ -47,7 +47,7 @@ export default function ButtonPlacementSection() {
 				return (
 					<Setting
 						disabled={isButtonSelectDisabled(feature, settings)}
-						id={`button_placements.${feature}` as `button_placements.${AllButtonNames}`}
+						id={`button_placements.${feature}` as const}
 						key={feature}
 						label={label}
 						onChange={(change) => {
@@ -74,12 +74,13 @@ export default function ButtonPlacementSection() {
 							type: "singular",
 							value: (translations) => translations.pages.options.extras.buttonPlacement.select.buttonNames[feature]
 						}}
-						selectedOption={getSelectedOption(`button_placements.${feature}`)}
+						selectedOption={getSelectedOption(`button_placements.${feature}` as const)}
 						title={t((translations) => translations.pages.options.extras.buttonPlacement.select.title, {
 							BUTTON_NAME: label.toLowerCase(),
 							PLACEMENT: t(
 								(translations) =>
-									translations.pages.options.extras.buttonPlacement.select.options[getSelectedOption(`button_placements.${feature}`)].placement
+									translations.pages.options.extras.buttonPlacement.select.options[getSelectedOption(`button_placements.${feature}` as const)]
+										.placement
 							)
 						})}
 						type="select"

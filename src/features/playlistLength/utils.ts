@@ -333,7 +333,9 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 
 		return totalSeconds;
 	} catch (error) {
-		throw new Error(`Error fetching playlist duration: ${error}`);
+		throw new Error(`Error fetching playlist duration:`, {
+			cause: error
+		});
 	}
 }
 function getVideoDetails(videoElement: Element): VideoDetails {

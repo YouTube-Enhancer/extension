@@ -177,17 +177,17 @@ type RemoveEmpty<T> = {
 		:	K
 	:	K]: T[K];
 };
-export function validateNumbers(obj: configuration, constraints: ConstraintTree, path: (number | string)[] = []): void {
+export function validateNumbers<T extends Record<string, unknown>>(obj: T, constraints: ConstraintTree, path: (number | string)[] = []): void {
 	const EPSILON = 1e-8;
-	for (const key of Object.keys(constraints) as (keyof typeof constraints)[]) {
+	for (const key in constraints) {
+		if (!Object.prototype.hasOwnProperty.call(constraints, key)) continue;
 		const { [key]: rule } = constraints;
-		const value = (obj as any)?.[key];
+		const { [key]: value } = obj as Record<string, unknown>;
 		const currentPath = [...path, key];
-
 		// Nested object → recurse
 		if (isConstraintTree(rule)) {
-			if (value && typeof value === "object") {
-				validateNumbers(value, rule, currentPath);
+			if (value && typeof value === "object" && !Array.isArray(value)) {
+				validateNumbers(value as Record<string, unknown>, rule, currentPath);
 			}
 			continue;
 		}

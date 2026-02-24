@@ -48,16 +48,16 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 	await waitForAllElements(containerSelectors);
 
 	// Define the event handler for the scroll wheel events
-	const handleWheel = async (event: Event) => {
-		const volumeBoostButton = getFeatureButton("volumeBoostButton");
-		if (volumeBoostButton && event.target === volumeBoostButton) return;
-		const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-		// If the settings panel menu is targeted return
-		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
-		const setOptionsData = async () => {
-			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
-		};
+	const handleWheel = (event: Event) => {
 		void (async () => {
+			const volumeBoostButton = getFeatureButton("volumeBoostButton");
+			if (volumeBoostButton && event.target === volumeBoostButton) return;
+			const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+			// If the settings panel menu is targeted return
+			if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
+			const setOptionsData = async () => {
+				return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
+			};
 			if (!optionsData) {
 				return void (await setOptionsData());
 			}

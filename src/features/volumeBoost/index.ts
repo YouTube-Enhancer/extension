@@ -54,28 +54,30 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 			window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: volume_boost_amount })
 		:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
 		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement),
-		async (checked) => {
-			isVolumeBoostEnabled = !!checked;
-			if (checked) {
-				await enableVolumeBoost();
-				const {
-					data: {
-						options: { volume_boost_amount }
-					}
-				} = await waitForSpecificMessage("options", "request_data", "content");
-				updateFeatureButtonTitle(
-					"volumeBoostButton",
-					window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
-						value: volume_boost_amount
-					})
-				);
-			} else {
-				disableVolumeBoost();
-				updateFeatureButtonTitle(
-					"volumeBoostButton",
-					window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
-				);
-			}
+		(checked) => {
+			void (async () => {
+				isVolumeBoostEnabled = !!checked;
+				if (checked) {
+					await enableVolumeBoost();
+					const {
+						data: {
+							options: { volume_boost_amount }
+						}
+					} = await waitForSpecificMessage("options", "request_data", "content");
+					updateFeatureButtonTitle(
+						"volumeBoostButton",
+						window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
+							value: volume_boost_amount
+						})
+					);
+				} else {
+					disableVolumeBoost();
+					updateFeatureButtonTitle(
+						"volumeBoostButton",
+						window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
+					);
+				}
+			})();
 		},
 		true
 	);

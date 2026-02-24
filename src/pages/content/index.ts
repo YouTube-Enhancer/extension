@@ -6,7 +6,6 @@ import {
 	buttonNames,
 	type ButtonPlacement,
 	type configuration,
-	type configurationKeys,
 	type ContentSendOnlyMessageMappings,
 	type ContentToBackgroundSendOnlyMessageMappings,
 	type Messages,
@@ -39,11 +38,10 @@ void (async () => {
 	 */
 	const options: configuration = await new Promise((resolve) => {
 		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = (
-				Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+			const storedSettings: Partial<configuration> = Object.keys(settings)
+				.filter((key) => typeof key === "string")
+				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 			resolve(storedSettings as configuration);
 		});
 	});
@@ -104,11 +102,10 @@ document.addEventListener("yte-message-from-youtube", () => {
 						 */
 						const options: configuration = await new Promise((resolve) => {
 							void chrome.storage.local.get<configuration>((settings) => {
-								const storedSettings: Partial<configuration> = (
-									Object.keys(settings)
-										.filter((key) => typeof key === "string")
-										.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-								).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+								const storedSettings: Partial<configuration> = Object.keys(settings)
+									.filter((key) => typeof key === "string")
+									.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+									.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 								resolve(storedSettings as configuration);
 							});
 						});
@@ -189,11 +186,10 @@ const castStorageChanges = (changes: StorageChanges) => {
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = (
-				Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+			const storedSettings: Partial<configuration> = Object.keys(settings)
+				.filter((key) => typeof key === "string")
+				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 			resolve(storedSettings as configuration);
 		});
 	});

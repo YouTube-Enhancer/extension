@@ -1,12 +1,12 @@
 import { modifyElementClassList } from "@/src/utils/utilities";
 
-export async function hidePlayables() {
+export function hidePlayables() {
 	modifyElementClassList("add", {
 		className: "yte-hide-playables",
 		element: document.body
 	});
 }
-export async function showPlayables() {
+export function showPlayables() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-playables",
 		element: document.body

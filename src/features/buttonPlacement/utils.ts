@@ -166,7 +166,7 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	setChecked(button, newState);
 	if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, newState ? icon.on : icon.off);
 	else if (icon instanceof SVGSVGElement) updateFeatureButtonIcon(button, icon);
-	listener(newState as any);
+	listener(newState);
 }
 
 function getChecked(button: HTMLButtonElement) {

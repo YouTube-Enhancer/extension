@@ -18,7 +18,7 @@ type SetValue<T> = Dispatch<SetStateAction<T>>;
 export async function readStorage<T>(key: string, area: StorageArea = "local"): Promise<T | undefined> {
 	try {
 		const result = await chrome.storage[area].get(key);
-		return result?.[key] as unknown as T;
+		return result?.[key] as T;
 	} catch (error) {
 		console.warn(`Error reading ${area} storage key "${key}":`, error);
 		return undefined;

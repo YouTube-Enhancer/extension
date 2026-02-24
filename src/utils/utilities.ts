@@ -434,17 +434,16 @@ export function getLayoutType(): "legacy" | "modern" {
 	return isModernYouTubeVideoLayout() ? "modern" : "legacy";
 }
 export function getPathValue<T, P extends Path<T>>(obj: T, path: P): PathValue<T, P> {
-	const keys = (typeof path === "string" ? path.split(".") : [path]) as Array<keyof T>;
-	let value: any = obj;
-
+	const keys = typeof path === "string" ? path.split(".") : [path];
+	let value: unknown = obj;
 	for (const key of keys) {
 		if (value && typeof value === "object" && key in value) {
-			({ [key]: value } = value);
+			({ [key]: value } = value as Record<string, unknown>);
 		} else {
 			console.error(`Invalid path: ${String(path)}`);
+			return undefined as unknown as PathValue<T, P>; // unreachable fallback
 		}
 	}
-
 	return value as PathValue<T, P>;
 }
 export function groupButtonChanges(changes: ButtonPlacementChange): {
@@ -472,7 +471,7 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 				multiButtonChanges[multiButtonFeatureNames] = {};
 			}
 			// eslint-disable-next-line prefer-destructuring
-			multiButtonChanges[multiButtonFeatureNames]![buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
+			multiButtonChanges[multiButtonFeatureNames][buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]] =
 				changes.buttonPlacement[buttonName as keyof FeatureToMultiButtonMap[typeof multiButtonFeatureNames]];
 		}
 	});
@@ -896,7 +895,7 @@ function groupMessages(messages: { message: string; styling: string[] }[]): Arra
 function hexToRgb(hex: string) {
 	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 	const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-	hex = hex.replace(shorthandRegex, (_m, r, g, b) => {
+	hex = hex.replace(shorthandRegex, (_match: string, r: string, g: string, b: string): string => {
 		return r + r + g + g + b + b;
 	});
 

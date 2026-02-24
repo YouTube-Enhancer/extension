@@ -1,6 +1,8 @@
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { Innertube } from "youtubei.js/web";
 
+import type { YtActionEvent } from "@/src/types";
+
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { isHomePage, isSubscriptionsPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -22,7 +24,7 @@ const CONTAINER = "ytd-two-column-browse-results-renderer:is([page-subtype='home
 
 let videosObserver: MutationObserver | null = null;
 
-export async function disableSaveToWatchLaterButton() {
+export function disableSaveToWatchLaterButton() {
 	if (videosObserver) {
 		videosObserver.disconnect();
 		videosObserver = null;
@@ -45,9 +47,9 @@ export async function enableSaveToWatchLaterButton() {
 		return;
 	}
 
-	document.addEventListener("yt-action", async (event) => {
-		if ((event as CustomEvent).detail.actionName === "yt-prepare-page-dispose") {
-			await disableSaveToWatchLaterButton();
+	document.addEventListener("yt-action", (event) => {
+		if ((event as YtActionEvent).detail.actionName === "yt-prepare-page-dispose") {
+			disableSaveToWatchLaterButton();
 		}
 	});
 

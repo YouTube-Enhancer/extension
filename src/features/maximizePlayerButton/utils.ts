@@ -121,10 +121,10 @@ export function maximizePlayer() {
 			eventManager.addEventListener(
 				element,
 				"click",
-				async () => {
+				() => {
 					if (isProgrammaticClick) return;
 					minimizePlayer();
-					await changeMaximizeButtonToOff();
+					void changeMaximizeButtonToOff();
 				},
 				"maximizePlayerButton"
 			);

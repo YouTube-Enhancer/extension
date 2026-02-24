@@ -2,7 +2,7 @@ import { modifyElementClassList, waitForSpecificMessage } from "@/src/utils/util
 
 import "./index.css";
 
-export async function disableHideTranslateComment() {
+export function disableHideTranslateComment() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-translate-comment",
 		element: document.body

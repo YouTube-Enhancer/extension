@@ -11,7 +11,7 @@ const keydownHandler = (event: KeyboardEvent): void => {
 	}
 };
 
-export async function disableBlockNumberKeySkip() {
+export function disableBlockNumberKeySkip() {
 	document.removeEventListener("keydown", keydownHandler, { capture: true });
 }
 
