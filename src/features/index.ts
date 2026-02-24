@@ -63,6 +63,10 @@ export const featureButtonFunctions = {
 		add: addMiniPlayerButton,
 		remove: removeMiniPlayerButton
 	},
+	monoToStereoButton: {
+		add: addVolumeBoostButton,
+		remove: removeVolumeBoostButton
+	},
 	openTranscriptButton: {
 		add: addOpenTranscriptButton,
 		remove: removeOpenTranscriptButton

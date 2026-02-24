@@ -435,6 +435,11 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				maximizePlayerButtonEnabled: newValue
 			});
 		},
+		enable_mono_to_stereo_button: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("monoToStereoButtonChange", {
+				monoToStereoButtonEnabled: newValue
+			});
+		},
 		enable_open_transcript_button: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("openTranscriptButtonChange", {
 				openTranscriptButtonEnabled: newValue
