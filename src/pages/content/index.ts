@@ -144,7 +144,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 					case "setRememberedVolume": {
 						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
 						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
+						void chrome.storage.local.set({ remembered_volumes: { ...existingRememberedVolumes, ...message.data } });
 						break;
 					}
 					case "setVolumeBoostAmount": {
@@ -167,29 +167,16 @@ document.addEventListener("yte-message-from-youtube", () => {
 });
 const storageListeners = (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
-	const changeKeys = Object.keys(
-		changes as {
-			[K in keyof configuration]?: {
-				newValue: configuration[K] | undefined;
-				oldValue: configuration[K] | undefined;
-			};
-		}
-	);
+	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
-};
-const castStorageChanges = (changes: StorageChanges) => {
-	return Object.fromEntries(Object.entries(changes).map(([key, change]) => [key, change as { newValue?: unknown; oldValue?: unknown }])) as {
-		[K in keyof configuration]: { newValue?: string; oldValue?: string };
-	};
 };
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		void chrome.storage.local.get<configuration>((settings) => {
 			const storedSettings: Partial<configuration> = Object.keys(settings)
-				.filter((key) => typeof key === "string")
 				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {});
 			resolve(storedSettings as configuration);
 		});
 	});
@@ -210,13 +197,20 @@ const deepEqual = (a: unknown, b: unknown): boolean => {
 	return true;
 };
 const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
-	if (change?.newValue === undefined || change?.oldValue === undefined) {
-		return false;
-	}
-	const parsedOldValue = parseStoredValue(change.oldValue as string);
-	const parsedNewValue = parseStoredValue(change.newValue as string);
-	return !deepEqual(parsedOldValue, parsedNewValue);
+	if (change?.newValue === undefined || change?.oldValue === undefined) return false;
+	return !deepEqual(change.oldValue, change.newValue);
 };
+const castStorageChanges = (changes: StorageChanges) => {
+	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
+	for (const [key, change] of Object.entries(changes)) {
+		if (key in defaultConfiguration) {
+			const typedKey = key as keyof configuration;
+			result[typedKey] = change as { newValue?: unknown; oldValue?: unknown };
+		}
+	}
+	return result;
+};
+
 const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
 
@@ -607,15 +601,13 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 			});
 		}
 	};
-	Object.entries(castedChanges).forEach(([key, change]) => {
-		if (isValidChange(change)) {
-			if (!change.newValue) return;
-			if (!change.oldValue) return;
-			const oldValue = parseStoredValue(change.oldValue) as configuration[typeof key];
-			const newValue = parseStoredValue(change.newValue) as configuration[typeof key];
-			const { [key]: handler } = keyActions;
-			if (!handler) return;
-			(handler as (oldValue: configuration[typeof key], newValue: configuration[typeof key]) => void)(oldValue, newValue);
-		}
-	});
+
+	for (const key of Object.keys(castedChanges)) {
+		const { [key]: change } = castedChanges;
+		if (!isValidChange(change)) continue;
+		if (!change || change.newValue === undefined || change.oldValue === undefined) continue;
+		const { newValue, oldValue } = change as { newValue: configuration[typeof key]; oldValue: configuration[typeof key] };
+		const handler = keyActions[key] as ((oldValue: configuration[typeof key], newValue: configuration[typeof key]) => void) | undefined;
+		if (handler) handler(oldValue, newValue);
+	}
 };

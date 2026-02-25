@@ -47,15 +47,8 @@ export default function SettingsFooter() {
 					return;
 				}
 				// Store validated settings
-				for (const key of Object.keys(castSettings)) {
-					if (typeof castSettings[key] !== "string") {
-						localStorage.setItem(key, JSON.stringify(castSettings[key]));
-						void chrome.storage.local.set({ [key]: JSON.stringify(castSettings[key]) });
-					} else {
-						localStorage.setItem(key, castSettings[key]);
-						void chrome.storage.local.set({ [key]: castSettings[key] });
-					}
-				}
+				const validKeys = new Set(Object.keys(defaultConfiguration));
+				void chrome.storage.local.set(Object.fromEntries(Object.entries(castSettings).filter(([key]) => validKeys.has(key))));
 				await updateStoredSettings();
 				const storedSettings = await getSettings();
 				// Set the imported settings in your state.
@@ -75,15 +68,7 @@ export default function SettingsFooter() {
 	function clearData() {
 		const userHasConfirmed = window.confirm(t((translations) => translations.pages.options.extras.clearData.confirmAlert));
 		if (userHasConfirmed) {
-			for (const key of Object.keys(defaultConfiguration)) {
-				if (typeof defaultConfiguration[key] !== "string") {
-					localStorage.setItem(key, JSON.stringify(defaultConfiguration[key]));
-					void chrome.storage.local.set({ [key]: JSON.stringify(defaultConfiguration[key]) });
-				} else {
-					localStorage.setItem(key, defaultConfiguration[key]);
-					void chrome.storage.local.set({ [key]: defaultConfiguration[key] });
-				}
-			}
+			void chrome.storage.local.set(Object.fromEntries(Object.entries(defaultConfiguration).map(([key, value]) => [key, value])));
 			addNotification("success", (translations) => translations.pages.options.extras.clearData.allDataDeleted);
 		}
 	}
@@ -181,15 +166,8 @@ export default function SettingsFooter() {
 						if (notificationToRemove) {
 							removeNotification(notificationToRemove);
 						}
-						localStorage.setItem("remembered_volumes", JSON.stringify(settings.remembered_volumes));
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify(settings.remembered_volumes) });
-						for (const key of Object.keys(defaultConfiguration)) {
-							if (typeof defaultConfiguration[key] !== "string") {
-								localStorage.setItem(key, JSON.stringify(defaultConfiguration[key]));
-								void chrome.storage.local.set({ [key]: JSON.stringify(defaultConfiguration[key]) });
-							}
-						}
-
+						void chrome.storage.local.set({ remembered_volumes: settings.remembered_volumes });
+						void chrome.storage.local.set(Object.fromEntries(Object.keys(defaultConfiguration).map((key) => [key, defaultConfiguration[key]])));
 						addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
 					}}
 					title={t((translations) => translations.pages.options.extras.bottomButtons.confirm.title)}
