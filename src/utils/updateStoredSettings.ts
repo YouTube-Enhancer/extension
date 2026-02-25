@@ -1,30 +1,25 @@
-import type { configuration, configurationKeys } from "@/src/types";
+import type { configuration } from "@/src/types";
 
 import { defaultConfiguration } from "@/src/utils/constants";
 import { parseStoredValue } from "@/src/utils/utilities";
 
-const changedKeys = Object.keys({
-	osd_display_type: ""
-} satisfies Partial<Record<configurationKeys, "">>);
-
 export async function updateStoredSettings() {
 	try {
+		const rawStorage = await chrome.storage.local.get(null);
+		const rawKeys = Object.keys(rawStorage);
 		const settings = await getStoredSettings();
-		const removedKeys = Object.keys(settings).filter((key) => !Object.keys(defaultConfiguration).includes(key));
-		for (const changedKey of changedKeys) {
-			switch (changedKey) {
-				case "osd_display_type": {
-					if ((settings.osd_display_type as unknown as string) === "round") {
-						settings.osd_display_type = "circle";
-					}
-					break;
-				}
+		const removedKeys = rawKeys.filter((key) => !(key in defaultConfiguration));
+		if (removedKeys.length > 0) {
+			await chrome.storage.local.remove(removedKeys);
+		}
+		const filteredSettings: Partial<configuration> = {};
+		for (const key of Object.keys(defaultConfiguration) as Array<keyof configuration>) {
+			const { [key]: value } = settings;
+			if (value !== undefined) {
+				Object.assign(filteredSettings, { [key]: value });
 			}
 		}
-		for (const key of removedKeys) {
-			delete settings[key];
-		}
-		await setModifiedSettings(settings);
+		await setModifiedSettings(filteredSettings);
 	} catch (error) {
 		console.error("Failed to update stored settings:", error);
 	}
@@ -34,27 +29,22 @@ async function getStoredSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
 		void chrome.storage.local.get<configuration>((settings) => {
 			try {
-				const storedSettings: Partial<configuration> = Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-				const castedSettings = storedSettings as configuration;
-				resolve(castedSettings);
+				const storedSettings: Partial<configuration> = Object.keys(settings).reduce(
+					(acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }),
+					{}
+				);
+				resolve(storedSettings as configuration);
 			} catch (error) {
-				if (error instanceof Error) {
-					reject(error);
-				} else {
-					reject(new Error("unknown error"));
-				}
+				reject(error instanceof Error ? error : new Error("unknown error"));
 			}
 		});
 	});
 }
 
 async function setModifiedSettings(settings: Partial<configuration>) {
-	const updates: Record<string, string> = {};
+	const updates: Record<string, unknown> = {};
 	for (const [key, value] of Object.entries(settings)) {
-		updates[key] = typeof value !== "string" ? JSON.stringify(value) : value;
+		updates[key] = value;
 	}
 	await chrome.storage.local.set(updates);
 }

@@ -198,11 +198,7 @@ async function fetchSettings() {
 async function setSettings(newSettings: configuration) {
 	const current = await getSettings();
 	if (JSON.stringify(current) === JSON.stringify(newSettings)) return;
-	for (const key of Object.keys(newSettings)) {
-		const value = typeof newSettings[key] === "string" ? newSettings[key] : JSON.stringify(newSettings[key]);
-		localStorage.setItem(key, value);
-		await chrome.storage.local.set({ [key]: value });
-	}
+	await chrome.storage.local.set(Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value])));
 }
 
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
