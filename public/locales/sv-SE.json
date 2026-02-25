@@ -13,18 +13,18 @@
 						"label": "Mono Audio Handling",
 						"toggle": {
 							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"off": "Originalljud"
 						}
 					}
 				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Vänd videon horisontellt"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Vänd videon vertikalt"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -184,9 +184,9 @@
 							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
 							"volumeBoostButton": "Volymökningsknapp",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
+							"flipVideoHorizontalButton": "Knapp för vänd videon horisontellt",
+							"monoToStereoButton": "Knapp för mono till stereo"
 						},
 						"options": {
 							"below_player": {
@@ -515,7 +515,7 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
+							"label": "Knapp för mono till stereo",
 							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
@@ -660,7 +660,7 @@
 					"flipVideoVerticalButton": {
 						"enable": {
 							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"title": "Lägger till en knapp för att vända videon vertikalt"
 						}
 					}
 				},
@@ -915,11 +915,11 @@
 				"settings": {
 					"amount": {
 						"label": "Volymökningsmängd (dB)",
-						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+						"title": "Hur mycket volymen ska höjas med. Du kan också rulla över volymökningsknappen (Skift/Ctrl för större steg) för att justera den."
 					},
 					"amount_global_only": {
-						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"label": "Volymökningsmängd (dB)",
+						"title": "Hur mycket ska ljudet ökas med."
 					},
 					"mode": {
 						"select": {
