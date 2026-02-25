@@ -10,10 +10,10 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "单声道处理",
 						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"on": "单声道 → 立体声输出",
+							"off": "原始音频"
 						}
 					}
 				},
@@ -186,7 +186,7 @@
 							"volumeBoostButton": "音量增强按钮",
 							"flipVideoVerticalButton": "垂直翻转视频按钮",
 							"flipVideoHorizontalButton": "水平翻转视频按钮",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "单声道转立体声按钮"
 						},
 						"options": {
 							"below_player": {
@@ -515,8 +515,8 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"label": "单声道转立体声按钮",
+							"title": "添加一个按钮来将单声道转换为立体声。立体声保持不变。"
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
