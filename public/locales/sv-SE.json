@@ -10,9 +10,9 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Monoljudshantering",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Mono → Stereo-utgång",
 							"off": "Originalljud"
 						}
 					}
@@ -141,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost ({{value}} dB)",
+						"label": "Volymökning ({{value}} dB)",
 						"toggle": {
 							"off": "Volymökning av",
-							"on": "Volume boost ({{value}} dB)"
+							"on": "Volymökning ({{value}} dB)"
 						}
 					}
 				}
@@ -467,8 +467,8 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Blockera nummernyckelsökning",
+							"title": "Förhindrar att 0-9 hoppar till en procentandel av videon"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -516,7 +516,7 @@
 					"monoToStereoButton": {
 						"enable": {
 							"label": "Knapp för mono till stereo",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrad."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -653,13 +653,13 @@
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Knapp för horisontell videovändning",
+							"title": "Lägger till en knapp för att vända videon horisontellt"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
+							"label": "Knapp för vertikal videovändning",
 							"title": "Lägger till en knapp för att vända videon vertikalt"
 						}
 					}
