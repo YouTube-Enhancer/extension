@@ -404,9 +404,49 @@ const storageChangeHandler = async (changes: StorageChanges, areaName: string) =
 				hideScrollBarEnabled: newValue
 			});
 		},
-		enable_hide_shorts: (__oldValue, newValue) => {
+		enable_hide_shorts_channel: (__oldValue, newValue) => {
 			sendExtensionOnlyMessage("hideShortsChange", {
-				hideShortsEnabled: newValue
+				enableHideShortsChannel: newValue,
+				enableHideShortsHome: options.enable_hide_shorts_home,
+				enableHideShortsSearch: options.enable_hide_shorts_search,
+				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
+				enableHideShortsVideos: options.enable_hide_shorts_videos
+			});
+		},
+		enable_hide_shorts_home: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				enableHideShortsChannel: options.enable_hide_shorts_channel,
+				enableHideShortsHome: newValue,
+				enableHideShortsSearch: options.enable_hide_shorts_search,
+				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
+				enableHideShortsVideos: options.enable_hide_shorts_videos
+			});
+		},
+		enable_hide_shorts_search: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				enableHideShortsChannel: options.enable_hide_shorts_channel,
+				enableHideShortsHome: options.enable_hide_shorts_home,
+				enableHideShortsSearch: newValue,
+				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
+				enableHideShortsVideos: options.enable_hide_shorts_videos
+			});
+		},
+		enable_hide_shorts_sidebar: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				enableHideShortsChannel: options.enable_hide_shorts_channel,
+				enableHideShortsHome: options.enable_hide_shorts_home,
+				enableHideShortsSearch: options.enable_hide_shorts_search,
+				enableHideShortsSidebar: newValue,
+				enableHideShortsVideos: options.enable_hide_shorts_videos
+			});
+		},
+		enable_hide_shorts_videos: (__oldValue, newValue) => {
+			sendExtensionOnlyMessage("hideShortsChange", {
+				enableHideShortsChannel: options.enable_hide_shorts_channel,
+				enableHideShortsHome: options.enable_hide_shorts_home,
+				enableHideShortsSearch: options.enable_hide_shorts_search,
+				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
+				enableHideShortsVideos: newValue
 			});
 		},
 		enable_hide_sidebar_recommended_videos: (__oldValue, newValue) => {

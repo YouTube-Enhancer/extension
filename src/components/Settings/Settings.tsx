@@ -18,6 +18,7 @@ import {
 	FeatureMenuOpenTypeSection,
 	ForwardRewindButtonsSection,
 	GlobalVolumeSection,
+	HideShortsSection,
 	LanguageSettingsSection,
 	MiniPlayerSection,
 	MiscellaneousSection,
@@ -161,6 +162,7 @@ export default function Settings() {
 				<FeatureMenuOpenTypeSection />
 				<ButtonPlacementSection />
 				<YouTubeDataApiKeySection />
+				<HideShortsSection />
 				<MiscellaneousSection />
 				<VideoHistorySection />
 				<OnScreenDisplaySection />

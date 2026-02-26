@@ -250,6 +250,28 @@ interface EnUS {
 				};
 				title: "Global Volume Override";
 			};
+			hideShorts: {
+				settings: {
+					channel: {
+						label: "Hide on Channel pages";
+						title: "Removes the Shorts shelf and tab on channel pages";
+					};
+					home: {
+						label: "Hide on Home feed";
+						title: "Removes the Shorts section from the Home feed";
+					};
+					search: {
+						label: "Hide in Search results";
+						title: "Removes Shorts videos from search results";
+					};
+					sidebar: { label: "Hide in sidebar"; title: "Removes the Shorts button from the sidebar" };
+					videos: {
+						label: "Hide on watch pages";
+						title: "Removes Shorts videos from recommendations on watch pages";
+					};
+				};
+				title: "Hide Shorts";
+			};
 			miniPlayer: {
 				button: { label: "Mini Player button"; title: "Adds a button that opens the Mini Player" };
 				enable: {
@@ -397,7 +419,6 @@ interface EnUS {
 						};
 					};
 					hideScrollbar: { enable: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" } };
-					hideShorts: { enable: { label: "Hide shorts"; title: "Hides all shorts" } };
 					hideSidebarRecommendedVideos: {
 						enable: {
 							label: "Hide recommended videos";
