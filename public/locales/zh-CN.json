@@ -661,27 +661,27 @@
 				"title": "其他设置"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "隐藏短视频",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "在侧边栏中隐藏",
+						"title": "从侧边栏移除短视频按钮"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "在主页中隐藏",
+						"title": "从主页时间线中移除短视频"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "在频道页面中隐藏",
+						"title": "从频道页面中移除短视频分类和标签"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "在搜索结果中隐藏",
+						"title": "从搜索结果中移除短视频"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "在观看页面中隐藏",
+						"title": "从观看页面的推荐列表移除短视频"
 					}
 				}
 			},
