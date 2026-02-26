@@ -549,12 +549,6 @@
 							"title": "Sayfa kaydırma çubuğunu gizler"
 						}
 					},
-					"hideShorts": {
-						"enable": {
-							"label": "Kısa videoları gizle",
-							"title": "Tüm kısa videoları gizler"
-						}
-					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
 							"label": "Önerilen videoları gizle",
@@ -665,6 +659,31 @@
 					}
 				},
 				"title": "Çeşitli ayarlar"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
