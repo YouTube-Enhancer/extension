@@ -549,12 +549,6 @@
 							"title": "Скрывает полосу прокрутки страницы"
 						}
 					},
-					"hideShorts": {
-						"enable": {
-							"label": "Скрыть Shorts",
-							"title": "Скрывает все Shorts"
-						}
-					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
 							"label": "Hide recommended videos",
@@ -665,6 +659,31 @@
 					}
 				},
 				"title": "Прочие параметры"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
