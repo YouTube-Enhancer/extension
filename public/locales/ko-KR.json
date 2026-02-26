@@ -549,12 +549,6 @@
 							"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
 						}
 					},
-					"hideShorts": {
-						"enable": {
-							"label": "쇼츠 숨기기",
-							"title": "쇼츠 동영상들을 숨깁니다."
-						}
-					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
 							"label": "Hide recommended videos",
@@ -665,6 +659,31 @@
 					}
 				},
 				"title": "기타 설정"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
