@@ -292,7 +292,11 @@ export type configuration = {
 	enable_hide_playables: boolean;
 	enable_hide_playlist_recommendations_from_home_page: boolean;
 	enable_hide_scrollbar: boolean;
-	enable_hide_shorts: boolean;
+	enable_hide_shorts_channel: boolean;
+	enable_hide_shorts_home: boolean;
+	enable_hide_shorts_search: boolean;
+	enable_hide_shorts_sidebar: boolean;
+	enable_hide_shorts_videos: boolean;
 	enable_hide_sidebar_recommended_videos: boolean;
 	enable_hide_translate_comment: boolean;
 	enable_loop_button: boolean;
@@ -467,7 +471,16 @@ export type ExtensionSendOnlyMessageMappings = {
 		{ hidePlaylistRecommendationsFromHomePageEnabled: boolean }
 	>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
-	hideShortsChange: DataResponseMessage<"hideShortsChange", { hideShortsEnabled: boolean }>;
+	hideShortsChange: DataResponseMessage<
+		"hideShortsChange",
+		{
+			enableHideShortsChannel: boolean;
+			enableHideShortsHome: boolean;
+			enableHideShortsSearch: boolean;
+			enableHideShortsSidebar: boolean;
+			enableHideShortsVideos: boolean;
+		}
+	>;
 	hideSidebarRecommendedVideosChange: DataResponseMessage<"hideSidebarRecommendedVideosChange", { hideSidebarRecommendedVideosEnabled: boolean }>;
 	hideTranslateCommentChange: DataResponseMessage<"hideTranslateCommentChange", { hideTranslateCommentEnabled: boolean }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;

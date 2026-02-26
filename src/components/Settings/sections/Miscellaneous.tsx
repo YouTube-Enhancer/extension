@@ -135,14 +135,6 @@ export default function MiscellaneousSection() {
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_hide_shorts?.toString() === "true"}
-				label={t((translations) => translations.settings.sections.miscellaneous.settings.hideShorts.enable.label)}
-				onChange={setCheckboxOption("enable_hide_shorts")}
-				parentSetting={null}
-				title={t((translations) => translations.settings.sections.miscellaneous.settings.hideShorts.enable.title)}
-				type="checkbox"
-			/>
-			<Setting
 				checked={settings.enable_hide_playables?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.miscellaneous.settings.hidePlayables.enable.label)}
 				onChange={setCheckboxOption("enable_hide_playables")}

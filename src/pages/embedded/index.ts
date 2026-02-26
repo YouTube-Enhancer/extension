@@ -55,7 +55,8 @@ import {
 } from "@/src/features/hidePlaylistRecommendationsFromHomePage";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
-import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
+import { enableHideShorts } from "@/src/features/hideShorts";
+import { applyShortsVisibility } from "@/src/features/hideShorts/utils";
 import { disableHideSidebarRecommendedVideos, enableHideSidebarRecommendedVideos } from "@/src/features/hideSidebarRecommendedVideos";
 import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
@@ -748,13 +749,16 @@ const initialize = function () {
 					}
 					case "hideShortsChange": {
 						const {
-							data: { hideShortsEnabled }
+							data: {
+								enableHideShortsChannel: channel,
+								enableHideShortsHome: home,
+								enableHideShortsSearch: search,
+								enableHideShortsSidebar: sidebar,
+								enableHideShortsVideos: videos
+							}
 						} = message;
-						if (hideShortsEnabled) {
-							await enableHideShorts();
-						} else {
-							disableHideShorts();
-						}
+
+						applyShortsVisibility({ channel, home, search, sidebar, videos });
 						break;
 					}
 					case "hideSidebarRecommendedVideosChange": {

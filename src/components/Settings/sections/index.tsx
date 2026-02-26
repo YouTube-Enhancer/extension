@@ -22,6 +22,8 @@ import VideoHistorySection from "@/src/components/Settings/sections/VideoHistory
 import VolumeBoostSection from "@/src/components/Settings/sections/VolumeBoost";
 import YouTubeDataApiKeySection from "@/src/components/Settings/sections/YouTubeDataApiKey";
 
+import HideShortsSection from "./HideShortsSection";
+
 export function getScrollWheelControlModifierKeyOptions({ t }: i18nInstanceType) {
 	return [
 		{
@@ -51,6 +53,7 @@ export {
 	FeatureMenuOpenTypeSection,
 	ForwardRewindButtonsSection,
 	GlobalVolumeSection,
+	HideShortsSection,
 	LanguageSettingsSection,
 	MiniPlayerSection,
 	MiscellaneousSection,
