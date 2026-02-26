@@ -661,27 +661,27 @@
 				"title": "Impostazioni varie"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Nascondi corti",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "Nascondi nella barra laterale",
+						"title": "Rimuove il pulsante dei corti dalla barra laterale"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "Nascondi su feed Inizio",
+						"title": "Rimuove la sezione dei corti dal feed Inizio"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "Nascondi nelle pagine dei canali",
+						"title": "Rimuove lo scaffale e la scheda dei corti nelle pagine dei canali"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "Nascondi nei risultati della ricerca",
+						"title": "Rimuove i video dei corti dai risultati della ricerca"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "Nascondi nelle pagine dell'orologio",
+						"title": "Rimuove i video dei corti dai consigli nelle pagine dell'orologio"
 					}
 				}
 			},
