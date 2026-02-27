@@ -10,9 +10,11 @@ export async function enableHidePlayables() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_hide_playables: enableHidePlayables }
+			options: {
+				hidePlayables: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHidePlayables) return;
+	if (!enabled) return;
 	hidePlayables();
 }

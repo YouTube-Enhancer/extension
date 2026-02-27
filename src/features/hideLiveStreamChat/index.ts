@@ -17,10 +17,12 @@ export async function disableHideLiveStreamChat() {
 export async function enableHideLiveStreamChat() {
 	const {
 		data: {
-			options: { enable_hide_live_stream_chat: enableHideLiveStreamChat }
+			options: {
+				hideLiveStreamChat: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideLiveStreamChat) return;
+	if (!enabled) return;
 	const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!player) return;
 	const playerData = await player.getVideoData();

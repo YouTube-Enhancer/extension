@@ -12,10 +12,12 @@ export function disableHideSidebarRecommendedVideos() {
 export async function enableHideSidebarRecommendedVideos() {
 	const {
 		data: {
-			options: { enable_hide_sidebar_recommended_videos: enableHideSidebarRecommendedVideos }
+			options: {
+				hideSidebarRecommendedVideos: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideSidebarRecommendedVideos) return;
+	if (!enabled) return;
 	modifyElementClassList("add", {
 		className: "yte-hide-sidebar-recommended-videos",
 		element: document.body

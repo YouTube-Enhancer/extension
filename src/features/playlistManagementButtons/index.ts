@@ -49,7 +49,12 @@ export function disablePlaylistManagementButtons() {
 export async function enablePlaylistManagementButtons() {
 	const {
 		data: {
-			options: { enable_playlist_remove_button, enable_playlist_reset_button }
+			options: {
+				playlistManagementButtons: {
+					removeButton: { enabled: enable_playlist_remove_button },
+					resetButton: { enabled: enable_playlist_reset_button }
+				}
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 

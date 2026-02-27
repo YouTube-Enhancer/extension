@@ -51,7 +51,9 @@ export async function setPlayerSpeed(input?: number): Promise<void> {
 		// Wait for the "options" message from the content script
 		({
 			data: {
-				options: { enable_forced_playback_speed: enablePlayerSpeed, player_speed: playerSpeed }
+				options: {
+					playerSpeed: { enabled: enablePlayerSpeed, speed: playerSpeed }
+				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content"));
 	} else if (typeof input === "number") {
@@ -131,9 +133,11 @@ export async function setupPlaybackSpeedChangeListener() {
 async function updateSpeedButtons(playerSpeed: number) {
 	const {
 		data: {
-			options: { playback_buttons_speed: playbackSpeedPerClick }
+			options: {
+				playbackSpeedButtons: { speed }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "increase"));
-	await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "decrease"));
+	await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, speed, "increase"));
+	await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(playerSpeed, speed, "decrease"));
 }

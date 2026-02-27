@@ -16,14 +16,14 @@ export default function DeepDarkCSSSection() {
 		settings,
 		setValueOption
 	} = useSettings();
-	const deepDarkCSSThemeOptions: SelectOption<"deep_dark_preset">[] = deepDarkPreset.map((value) => {
+	const deepDarkCSSThemeOptions: SelectOption<"deepDarkCSS.preset">[] = deepDarkPreset.map((value) => {
 		return {
 			label: value,
 			value
 		};
 	});
-	const isDeepDarkThemeDisabled = settings.enable_deep_dark_theme?.toString() !== "true";
-	const isDeepDarkThemeCustom = settings.deep_dark_preset === "Custom";
+	const isDeepDarkThemeDisabled = settings.deepDarkCSS.enabled?.toString() !== "true";
+	const isDeepDarkThemeCustom = settings.deepDarkCSS.preset === "Custom";
 	const deepDarkThemeColorPickerParentSetting = {
 		type: "singular",
 		value: (translations) => translations.settings.sections.deepDarkCSS.enable.label
@@ -46,24 +46,24 @@ export default function DeepDarkCSSSection() {
 				</fieldset>
 			</fieldset>
 			<Setting
-				checked={settings.enable_deep_dark_theme?.toString() === "true"}
+				checked={settings.deepDarkCSS.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.deepDarkCSS.enable.label)}
-				onChange={setCheckboxOption("enable_deep_dark_theme")}
+				onChange={setCheckboxOption("deepDarkCSS.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.deepDarkCSS.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_deep_dark_theme?.toString() === "false"}
-				id="deep_dark_preset"
+				disabled={settings.deepDarkCSS.enabled?.toString() === "false"}
+				id="deepDarkCSS.preset"
 				label={t((translations) => translations.settings.sections.deepDarkCSS.settings.theme.select.label)}
-				onChange={setValueOption("deep_dark_preset")}
+				onChange={setValueOption("deepDarkCSS.preset")}
 				options={deepDarkCSSThemeOptions}
 				parentSetting={{
 					type: "singular",
 					value: (translations) => translations.settings.sections.deepDarkCSS.enable.label
 				}}
-				selectedOption={getSelectedOption("deep_dark_preset")}
+				selectedOption={getSelectedOption("deepDarkCSS.preset")}
 				title={t((translations) => translations.settings.sections.deepDarkCSS.settings.theme.select.title)}
 				type="select"
 			/>
@@ -72,65 +72,65 @@ export default function DeepDarkCSSSection() {
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainColor.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainColor")}
+						onChange={setValueOption("deepDarkCSS.colors.mainColor")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainColor.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainColor}
+						value={settings.deepDarkCSS.colors.mainColor}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainBackground.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainBackground")}
+						onChange={setValueOption("deepDarkCSS.colors.mainBackground")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainBackground.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainBackground}
+						value={settings.deepDarkCSS.colors.mainBackground}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.secondBackground.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.secondBackground")}
+						onChange={setValueOption("deepDarkCSS.colors.secondBackground")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.secondBackground.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.secondBackground}
+						value={settings.deepDarkCSS.colors.secondBackground}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.hoverBackground.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.hoverBackground")}
+						onChange={setValueOption("deepDarkCSS.colors.hoverBackground")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.hoverBackground.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.hoverBackground}
+						value={settings.deepDarkCSS.colors.hoverBackground}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainText.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.mainText")}
+						onChange={setValueOption("deepDarkCSS.colors.mainText")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.mainText.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.mainText}
+						value={settings.deepDarkCSS.colors.mainText}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.dimmerText.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.dimmerText")}
+						onChange={setValueOption("deepDarkCSS.colors.dimmerText")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.dimmerText.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.dimmerText}
+						value={settings.deepDarkCSS.colors.dimmerText}
 					/>
 					<Setting
 						disabled={isDeepDarkThemeDisabled}
 						label={t((translations) => translations.settings.sections.deepDarkCSS.settings.colorShadow.label)}
-						onChange={setValueOption("deep_dark_custom_theme_colors.colorShadow")}
+						onChange={setValueOption("deepDarkCSS.colors.colorShadow")}
 						parentSetting={deepDarkThemeColorPickerParentSetting}
 						title={t((translations) => translations.settings.sections.deepDarkCSS.settings.colorShadow.title)}
 						type="color-picker"
-						value={settings.deep_dark_custom_theme_colors.colorShadow}
+						value={settings.deepDarkCSS.colors.colorShadow}
 					/>
 				</>
 			)}

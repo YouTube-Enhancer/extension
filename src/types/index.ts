@@ -33,7 +33,14 @@ export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends
 };
 export type ParentType<T, Segments extends readonly PropertyKey[]> =
 	Segments extends readonly [...infer Rest extends readonly PropertyKey[], infer _Last] ? Traverse<T, Rest> : never;
-export type Path<T> = PathInternal<T>;
+export type Path<T> =
+	T extends Primitive ? never
+	: T extends readonly (infer U)[] ? `${number}.${Path<U>}` | `${number}`
+	: {
+			[K in Extract<keyof T, string>]: T[K] extends Primitive ? K
+			: T[K] extends readonly (infer U)[] ? `${K}.${number}.${Path<U>}` | `${K}.${number}` | K
+			: `${K}.${Path<T[K]>}` | K;
+		}[Extract<keyof T, string>];
 export type PathSegments<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, ...PathSegments<Tail>] : [P];
 export type PathValue<T, P extends Path<T>> =
 	P extends `${infer Head}.${infer Tail}` ?
@@ -79,14 +86,6 @@ export type TypeToZodSchema<T> = ZodMiniObject<{
 export type WithId<S extends string> = `#${S}`;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 export type ZodOptionalType<T extends ZodMiniType> = ZodMiniOptional<T>;
-type PathInternal<T> =
-	T extends Primitive ? never
-	: T extends readonly (infer U)[] ? `${number}.${PathInternal<U>}` | `${number}`
-	: {
-			[K in Extract<keyof T, string>]: T[K] extends Primitive ? K
-			: T[K] extends readonly (infer U)[] ? `${K}.${number}.${PathInternal<U>}` | `${K}.${number}` | K
-			: `${K}.${PathInternal<T[K]>}` | K;
-		}[Extract<keyof T, string>];
 type Primitive = bigint | boolean | null | number | string | symbol | undefined;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
@@ -226,22 +225,22 @@ export const buttonNames = Object.keys({
 	volumeBoostButton: ""
 } satisfies Record<AllButtonNames, "">);
 export const buttonNameToSettingName = {
-	copyTimestampUrlButton: "enable_copy_timestamp_url_button",
-	decreasePlaybackSpeedButton: "enable_playback_speed_buttons",
-	flipVideoHorizontalButton: "enable_flip_video_horizontal_button",
-	flipVideoVerticalButton: "enable_flip_video_vertical_button",
-	forwardButton: "enable_forward_rewind_buttons",
-	hideEndScreenCardsButton: "enable_hide_end_screen_cards_button",
-	increasePlaybackSpeedButton: "enable_playback_speed_buttons",
-	loopButton: "enable_loop_button",
-	maximizePlayerButton: "enable_maximize_player_button",
-	miniPlayerButton: "enable_comments_mini_player_button",
-	monoToStereoButton: "enable_mono_to_stereo_button",
-	openTranscriptButton: "enable_open_transcript_button",
-	rewindButton: "enable_forward_rewind_buttons",
-	screenshotButton: "enable_screenshot_button",
-	volumeBoostButton: "enable_volume_boost"
-} satisfies Record<AllButtonNames, `enable_${string}` & configurationKeys>;
+	copyTimestampUrlButton: "copyTimestampUrlButton",
+	decreasePlaybackSpeedButton: "playbackSpeedButtons",
+	flipVideoHorizontalButton: "flipVideoButtons",
+	flipVideoVerticalButton: "flipVideoButtons",
+	forwardButton: "forwardRewindButtons",
+	hideEndScreenCardsButton: "hideEndScreenCardsButton",
+	increasePlaybackSpeedButton: "playbackSpeedButtons",
+	loopButton: "loopButton",
+	maximizePlayerButton: "maximizePlayerButton",
+	miniPlayerButton: "miniPlayerButton",
+	monoToStereoButton: "monoToStereoButton",
+	openTranscriptButton: "openTranscriptButton",
+	rewindButton: "forwardRewindButtons",
+	screenshotButton: "screenshotButton",
+	volumeBoostButton: "volumeBoost"
+} satisfies Record<AllButtonNames, configurationKeys>;
 export type ActionMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"request_action", "content"> & {
 		data: D;
@@ -258,103 +257,92 @@ export type ButtonPlacementConfigurationMap = {
 // #endregion Extension Messaging Types
 // #region Configuration types
 export type configuration = {
-	button_placements: ButtonPlacementConfigurationMap;
-	custom_css_code: string;
-	deep_dark_custom_theme_colors: DeepDarkCustomThemeColors;
-	deep_dark_preset: DeepDarkPreset;
-	enable_automatic_theater_mode: boolean;
-	enable_automatically_disable_ambient_mode: boolean;
-	enable_automatically_disable_autoplay: boolean;
-	enable_automatically_disable_closed_captions: boolean;
-	enable_automatically_enable_closed_captions: boolean;
-	enable_automatically_maximize_player: boolean;
-	enable_automatically_set_quality: boolean;
-	enable_automatically_show_more_videos_on_end_screen: boolean;
-	enable_block_number_key_seeking: boolean;
-	enable_comments_mini_player: boolean;
-	enable_comments_mini_player_button: boolean;
-	enable_copy_timestamp_url_button: boolean;
-	enable_custom_css: boolean;
-	enable_deep_dark_theme: boolean;
-	enable_default_to_original_audio_track: boolean;
-	enable_flip_video_horizontal_button: boolean;
-	enable_flip_video_vertical_button: boolean;
-	enable_forced_playback_speed: boolean;
-	enable_forward_rewind_buttons: boolean;
-	enable_global_volume: boolean;
-	enable_hide_artificial_intelligence_summary: boolean;
-	enable_hide_end_screen_cards: boolean;
-	enable_hide_end_screen_cards_button: boolean;
-	enable_hide_live_stream_chat: boolean;
-	enable_hide_members_only_videos: boolean;
-	enable_hide_official_artist_videos_from_home_page: boolean;
-	enable_hide_paid_promotion_banner: boolean;
-	enable_hide_playables: boolean;
-	enable_hide_playlist_recommendations_from_home_page: boolean;
-	enable_hide_scrollbar: boolean;
-	enable_hide_shorts_channel: boolean;
-	enable_hide_shorts_home: boolean;
-	enable_hide_shorts_search: boolean;
-	enable_hide_shorts_sidebar: boolean;
-	enable_hide_shorts_videos: boolean;
-	enable_hide_sidebar_recommended_videos: boolean;
-	enable_hide_translate_comment: boolean;
-	enable_loop_button: boolean;
-	enable_maximize_player_button: boolean;
-	enable_mono_to_stereo_button: boolean;
-	enable_open_transcript_button: boolean;
-	enable_open_youtube_settings_on_hover: boolean;
-	enable_pausing_background_players: boolean;
-	enable_playback_speed_buttons: boolean;
-	enable_playlist_length: boolean;
-	enable_playlist_remove_button: boolean;
-	enable_playlist_reset_button: boolean;
-	enable_redirect_remover: boolean;
-	enable_remaining_time: boolean;
-	enable_remember_last_volume: boolean;
-	enable_restore_fullscreen_scrolling: boolean;
-	enable_save_to_watch_later_button: boolean;
-	enable_screenshot_button: boolean;
-	enable_scroll_wheel_speed_control: boolean;
-	enable_scroll_wheel_volume_control: boolean;
-	enable_scroll_wheel_volume_control_hold_modifier_key: boolean;
-	enable_scroll_wheel_volume_control_hold_right_click: boolean;
-	enable_share_shortener: boolean;
-	enable_shorts_auto_scroll: boolean;
-	enable_skip_continue_watching: boolean;
-	enable_timestamp_peek: boolean;
-	enable_video_history: boolean;
-	enable_volume_boost: boolean;
-	feature_menu_open_type: FeatureMenuOpenType;
-	forward_rewind_buttons_time: number;
-	global_volume: number;
+	automaticallyDisableAmbientMode: { enabled: boolean };
+	automaticallyDisableAutoPlay: { enabled: boolean };
+	automaticallyDisableClosedCaptions: { enabled: boolean };
+	automaticallyEnableClosedCaptions: { enabled: boolean };
+	automaticallyMaximizePlayer: { enabled: boolean };
+	automaticallyShowMoreVideosOnEndScreen: { enabled: boolean };
+	automaticTheaterMode: { enabled: boolean };
+	blockNumberKeySeeking: { enabled: boolean };
+	buttonPlacement: ButtonPlacementConfigurationMap;
+	copyTimestampUrlButton: { enabled: boolean };
+	customCSS: { code: string; enabled: boolean };
+	deepDarkCSS: { colors: DeepDarkCustomThemeColors; enabled: boolean; preset: DeepDarkPreset };
+	defaultToOriginalAudioTrack: { enabled: boolean };
+	featureMenu: { openType: FeatureMenuOpenType };
+	flipVideoButtons: { flipHorizontal: { enabled: boolean }; flipVertical: { enabled: boolean } };
+	forwardRewindButtons: { enabled: boolean; time: number };
+	globalVolume: {
+		enabled: boolean;
+		volume: number;
+	};
+	hideArtificialIntelligenceSummary: { enabled: boolean };
+	hideEndScreenCards: { enabled: boolean };
+	hideEndScreenCardsButton: { enabled: boolean };
+	hideLiveStreamChat: { enabled: boolean };
+	hideMembersOnlyVideos: { enabled: boolean };
+	hideOfficialArtistVideosFromHomePage: { enabled: boolean };
+	hidePaidPromotionBanner: { enabled: boolean };
+	hidePlayables: { enabled: boolean };
+	hidePlaylistRecommendationsFromHomePage: { enabled: boolean };
+	hideScrollBar: { enabled: boolean };
+	hideShorts: {
+		channel: { enabled: boolean };
+		home: { enabled: boolean };
+		search: { enabled: boolean };
+		sidebar: { enabled: boolean };
+		videos: { enabled: boolean };
+	};
+	hideSidebarRecommendedVideos: { enabled: boolean };
+	hideTranslateComment: { enabled: boolean };
 	language: AvailableLocales;
-	mini_player_default_position: MiniPlayerPosition;
-	mini_player_default_size: MiniPlayerSize;
-	open_settings_on_major_or_minor_version_change: boolean;
-	osd_display_color: OnScreenDisplayColor;
-	osd_display_hide_time: number;
-	osd_display_opacity: number;
-	osd_display_padding: number;
-	osd_display_position: OnScreenDisplayPosition;
-	osd_display_type: OnScreenDisplayType;
-	playback_buttons_speed: number;
-	player_quality: YoutubePlayerQualityLevel;
-	player_quality_fallback_strategy: PlayerQualityFallbackStrategy;
-	player_speed: number;
-	playlist_length_get_method: PlaylistLengthGetMethod;
-	playlist_watch_time_get_method: PlaylistWatchTimeGetMethod;
-	remembered_volumes: RememberedVolumes;
-	screenshot_format: ScreenshotFormat;
-	screenshot_save_as: ScreenshotType;
-	scroll_wheel_speed_control_modifier_key: ModifierKey;
-	scroll_wheel_volume_control_modifier_key: ModifierKey;
-	speed_adjustment_steps: number;
-	video_history_resume_type: VideoHistoryResumeType;
-	volume_adjustment_steps: number;
-	volume_boost_amount: number;
-	volume_boost_mode: VolumeBoostMode;
-	youtube_data_api_v3_key: string;
+	loopButton: { enabled: boolean };
+	maximizePlayerButton: { enabled: boolean };
+	miniPlayer: {
+		defaultPosition: MiniPlayerPosition;
+		defaultSize: MiniPlayerSize;
+		enabled: boolean;
+	};
+	miniPlayerButton: { enabled: boolean };
+	monoToStereoButton: {
+		enabled: boolean;
+	};
+	onScreenDisplay: {
+		color: OnScreenDisplayColor;
+		hideTime: number;
+		opacity: number;
+		padding: number;
+		position: OnScreenDisplayPosition;
+		type: OnScreenDisplayType;
+	};
+	openSettingsOnMajorOrMinorVersionChange: boolean;
+	openTranscriptButton: { enabled: boolean };
+	openYouTubeSettingsOnHover: { enabled: boolean };
+	pauseBackgroundPlayers: { enabled: boolean };
+	playbackSpeedButtons: { enabled: boolean; speed: number };
+	playerQuality: { enabled: boolean; fallbackStrategy: PlayerQualityFallbackStrategy; quality: YoutubePlayerQualityLevel };
+	playerSpeed: {
+		enabled: boolean;
+		speed: number;
+	};
+	playlistLength: { enabled: boolean; lengthGetMethod: PlaylistLengthGetMethod; watchTimeGetMethod: PlaylistWatchTimeGetMethod };
+	playlistManagementButtons: { removeButton: { enabled: boolean }; resetButton: { enabled: boolean } };
+	remainingTime: { enabled: boolean };
+	rememberVolume: RememberedVolumes & { enabled: boolean };
+	removeRedirect: { enabled: boolean };
+	restoreFullscreenScrolling: { enabled: boolean };
+	saveToWatchLaterButton: { enabled: boolean };
+	screenshotButton: { enabled: boolean; format: ScreenshotFormat; saveAs: ScreenshotType };
+	scrollWheelSpeedControl: { enabled: boolean; modifierKey: ModifierKey; steps: number };
+	scrollWheelVolumeControl: { enabled: boolean; holdModifierKey: boolean; holdRightClick: boolean; modifierKey: ModifierKey; steps: number };
+	shareShortener: { enabled: boolean };
+	shortsAutoScroll: { enabled: boolean };
+	skipContinueWatching: { enabled: boolean };
+	timestampPeek: { enabled: boolean };
+	videoHistory: { enabled: boolean; resumeType: VideoHistoryResumeType };
+	volumeBoost: { amount: number; enabled: boolean; mode: VolumeBoostMode };
+	youtubeDataApiV3Key: string;
 };
 export type configurationId = Path<configuration>;
 export type configurationKeys = keyof configuration;
@@ -576,7 +564,6 @@ export type Notification = {
 };
 export type NotificationAction = "reset_settings" | undefined;
 export type NotificationType = "error" | "info" | "success" | "warning";
-
 export type RememberedVolumes = { shortsPageVolume?: number; watchPageVolume?: number };
 export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
 	BaseMessage<"request_data", "content"> & {
@@ -610,6 +597,8 @@ export type YouTubeNavigateStart = {
 	url: string;
 };
 export type YouTubePlayerDiv = HTMLDivElement & YouTubePlayer;
+// #endregion Configuration types
+
 export type YouTubePlaylistItem = {
 	contentDetails: {
 		videoId: string;
@@ -624,8 +613,6 @@ export type YouTubeVideoItem = {
 		duration: string; // ISO 8601 duration format
 	};
 };
-// #endregion Configuration types
-
 export type YouTubeVideoResponse = {
 	items: YouTubeVideoItem[];
 };

@@ -39,11 +39,13 @@ export function disableSaveToWatchLaterButton() {
 export async function enableSaveToWatchLaterButton() {
 	const {
 		data: {
-			options: { enable_save_to_watch_later_button }
+			options: {
+				saveToWatchLaterButton: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_save_to_watch_later_button || (!isHomePage() && !isSubscriptionsPage())) {
+	if (!enabled || (!isHomePage() && !isSubscriptionsPage())) {
 		return;
 	}
 

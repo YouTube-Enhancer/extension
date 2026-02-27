@@ -9,7 +9,7 @@ import { getSettings, useSettings } from "@/src/components/Settings/Settings";
 import { useNotifications } from "@/src/hooks";
 import { configurationImportSchema, defaultConfiguration, numberConstraints, validateNumbers } from "@/src/utils/constants";
 import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
-import { deepMerge, formatDateForFileName, parseStoredValue } from "@/src/utils/utilities";
+import { deepMerge, formatDateForFileName, isLegacyConfiguration, migrateConfiguration, parseStoredValue } from "@/src/utils/utilities";
 export default function SettingsFooter() {
 	const {
 		i18nInstance: { t },
@@ -28,7 +28,14 @@ export default function SettingsFooter() {
 			if (!file) return;
 			try {
 				const fileContents = await file.text();
-				const importedSettings = JSON.parse(fileContents);
+				const importedRaw = JSON.parse(fileContents);
+				let importedSettings: configuration;
+				// Legacy configuration migration
+				if (isLegacyConfiguration(importedRaw)) {
+					importedSettings = migrateConfiguration(importedRaw as Record<string, unknown>, defaultConfiguration);
+				} else {
+					importedSettings = importedRaw as configuration;
+				}
 				// Validate the imported settings.
 				const result = configurationImportSchema.safeParse(importedSettings);
 				if (!result.success) {
@@ -38,7 +45,7 @@ export default function SettingsFooter() {
 					);
 					return;
 				}
-				const castSettings = deepMerge(defaultConfiguration, importedSettings as configuration) as configuration;
+				const castSettings = deepMerge(defaultConfiguration, importedSettings) as configuration;
 				// Validate number constraints
 				try {
 					validateNumbers(castSettings, numberConstraints);
@@ -166,7 +173,7 @@ export default function SettingsFooter() {
 						if (notificationToRemove) {
 							removeNotification(notificationToRemove);
 						}
-						void chrome.storage.local.set({ remembered_volumes: settings.remembered_volumes });
+						void chrome.storage.local.set({ rememberVolume: settings.rememberVolume });
 						void chrome.storage.local.set(Object.fromEntries(Object.keys(defaultConfiguration).map((key) => [key, defaultConfiguration[key]])));
 						addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
 					}}

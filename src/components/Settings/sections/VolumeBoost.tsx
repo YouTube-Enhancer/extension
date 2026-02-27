@@ -13,7 +13,7 @@ export default function VolumeBoostSection() {
 		settings,
 		setValueOption
 	} = useSettings();
-	const VolumeBoostModeOptions: SelectOption<"volume_boost_mode">[] = [
+	const VolumeBoostModeOptions: SelectOption<"volumeBoost.mode">[] = [
 		{
 			label: t((translations) => translations.settings.sections.volumeBoost.settings.mode.select.options.global),
 			value: "global"
@@ -31,38 +31,38 @@ export default function VolumeBoostSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.volumeBoost.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_volume_boost?.toString() === "true"}
+				checked={settings.volumeBoost.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.volumeBoost.enable.label)}
-				onChange={setCheckboxOption("enable_volume_boost")}
+				onChange={setCheckboxOption("volumeBoost.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.volumeBoost.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_volume_boost?.toString() !== "true"}
-				id="volume_boost_mode"
+				disabled={settings.volumeBoost.enabled?.toString() !== "true"}
+				id="volumeBoost.mode"
 				label={t((translations) => translations.settings.sections.volumeBoost.settings.mode.select.label)}
-				onChange={setValueOption("volume_boost_mode")}
+				onChange={setValueOption("volumeBoost.mode")}
 				options={VolumeBoostModeOptions}
 				parentSetting={volumeBoostParentSetting}
-				selectedOption={getSelectedOption("volume_boost_mode")}
+				selectedOption={getSelectedOption("volumeBoost.mode")}
 				title={t((translations) => translations.settings.sections.volumeBoost.settings.mode.select.title)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_volume_boost?.toString() !== "true"}
+				disabled={settings.volumeBoost.enabled?.toString() !== "true"}
 				label={t((translations) => translations.settings.sections.volumeBoost.settings.amount.label)}
 				max={100}
 				min={1}
-				onChange={setValueOption("volume_boost_amount")}
+				onChange={setValueOption("volumeBoost.amount")}
 				parentSetting={volumeBoostParentSetting}
 				title={
-					settings.volume_boost_mode === "per_video" ?
+					settings.volumeBoost.mode === "per_video" ?
 						t((translations) => translations.settings.sections.volumeBoost.settings.amount.title)
 					:	t((translations) => translations.settings.sections.volumeBoost.settings.amount_global_only.title)
 				}
 				type="number"
-				value={settings.volume_boost_amount}
+				value={settings.volumeBoost.amount}
 			/>
 		</SettingSection>
 	);

@@ -4,10 +4,12 @@ import { browserColorLog, waitForSpecificMessage } from "@/src/utils/utilities";
 export default async function enableRemoveRedirect() {
 	const {
 		data: {
-			options: { enable_redirect_remover: removeRedirectEnabled }
+			options: {
+				removeRedirect: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!removeRedirectEnabled) return;
+	if (!enabled) return;
 	browserColorLog(`Enabling removeRedirect`, "FgMagenta");
 	const regex = /https\:\/\/www\.youtube\.com\/redirect\?.+/gm;
 	const links: NodeListOf<HTMLElement> = document.querySelectorAll(

@@ -16,19 +16,19 @@ export default function CustomCSSSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.customCSS.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_custom_css?.toString() === "true"}
+				checked={settings.customCSS.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.customCSS.enable.label)}
-				onChange={setCheckboxOption("enable_custom_css")}
+				onChange={setCheckboxOption("customCSS.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.customCSS.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
 				alwaysVisible
-				disabled={settings.enable_custom_css?.toString() !== "true"}
+				disabled={settings.customCSS.enabled?.toString() !== "true"}
 				onChange={(value) => {
 					if (value !== undefined) {
-						setValueOption("custom_css_code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
+						setValueOption("customCSS.code")({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 					}
 				}}
 				parentSetting={{
@@ -36,7 +36,7 @@ export default function CustomCSSSection() {
 					value: (translations) => translations.settings.sections.customCSS.enable.label
 				}}
 				type="css-editor"
-				value={settings.custom_css_code}
+				value={settings.customCSS.code}
 			/>
 		</SettingSection>
 	);

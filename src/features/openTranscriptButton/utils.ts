@@ -10,7 +10,7 @@ export const addOpenTranscriptButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { openTranscriptButton: openTranscriptButtonPlacement }
+				buttonPlacement: { openTranscriptButton: openTranscriptButtonPlacement }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");

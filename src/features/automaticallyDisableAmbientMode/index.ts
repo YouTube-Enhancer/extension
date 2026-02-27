@@ -25,10 +25,12 @@ export async function disableAutomaticallyDisableAmbientMode(): Promise<void> {
 export async function enableAutomaticallyDisableAmbientMode(): Promise<void> {
 	const {
 		data: {
-			options: { enable_automatically_disable_ambient_mode }
+			options: {
+				automaticallyDisableAmbientMode: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_automatically_disable_ambient_mode) return;
+	if (!enabled) return;
 	await toggleAmbientMode(false);
 }
 

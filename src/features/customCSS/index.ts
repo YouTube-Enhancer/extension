@@ -14,20 +14,22 @@ export async function enableCustomCSS() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { custom_css_code, enable_custom_css }
+			options: {
+				customCSS: { code, enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// Check if custom CSS is enabled
-	if (!enable_custom_css) return;
+	if (!enabled) return;
 	if (customCSSExists()) {
 		updateCustomCSS({
-			custom_css_code
+			code
 		});
 		return;
 	}
 	// Create the custom CSS style element
 	const customCSSStyleElement = createCustomCSSElement({
-		custom_css_code
+		code
 	});
 	// Insert the custom CSS style element
 	document.head.appendChild(customCSSStyleElement);

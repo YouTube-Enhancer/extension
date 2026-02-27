@@ -13,13 +13,13 @@ export default function MiniPlayerSection() {
 		settings,
 		setValueOption
 	} = useSettings();
-	const miniPlayerDefaultSizeOptions: SelectOption<"mini_player_default_size">[] = [
+	const miniPlayerDefaultSizeOptions: SelectOption<"miniPlayer.defaultSize">[] = [
 		{ label: "320x180", value: "320x180" },
 		{ label: "400x225", value: "400x225" },
 		{ label: "480x270", value: "480x270" },
 		{ label: "560x315", value: "560x315" }
 	];
-	const miniPlayerDefaultPositionOptions: SelectOption<"mini_player_default_position">[] = [
+	const miniPlayerDefaultPositionOptions: SelectOption<"miniPlayer.defaultPosition">[] = [
 		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topLeft), value: "top_left" },
 		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topCenter), value: "top_center" },
 		{ label: t((translations) => translations.settings.sections.miniPlayer.settings.position.select.options.topRight), value: "top_right" },
@@ -31,38 +31,38 @@ export default function MiniPlayerSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.miniPlayer.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_comments_mini_player?.toString() === "true"}
+				checked={settings.miniPlayer.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.miniPlayer.enable.label)}
-				onChange={setCheckboxOption("enable_comments_mini_player")}
+				onChange={setCheckboxOption("miniPlayer.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.miniPlayer.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_comments_mini_player_button?.toString() === "true"}
+				checked={settings.miniPlayerButton.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.miniPlayer.button.label)}
-				onChange={setCheckboxOption("enable_comments_mini_player_button")}
+				onChange={setCheckboxOption("miniPlayerButton.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.miniPlayer.button.title)}
 				type="checkbox"
 			/>
 			<Setting
-				id="mini_player_default_size"
+				id="miniPlayer.defaultSize"
 				label={t((translations) => translations.settings.sections.miniPlayer.settings.size.label)}
-				onChange={setValueOption("mini_player_default_size")}
+				onChange={setValueOption("miniPlayer.defaultSize")}
 				options={miniPlayerDefaultSizeOptions}
 				parentSetting={null}
-				selectedOption={getSelectedOption("mini_player_default_size")}
+				selectedOption={getSelectedOption("miniPlayer.defaultSize")}
 				title={t((translations) => translations.settings.sections.miniPlayer.settings.size.title)}
 				type="select"
 			/>
 			<Setting
-				id="mini_player_default_position"
+				id="miniPlayer.defaultPosition"
 				label={t((translations) => translations.settings.sections.miniPlayer.settings.position.select.label)}
-				onChange={setValueOption("mini_player_default_position")}
+				onChange={setValueOption("miniPlayer.defaultPosition")}
 				options={miniPlayerDefaultPositionOptions}
 				parentSetting={null}
-				selectedOption={getSelectedOption("mini_player_default_position")}
+				selectedOption={getSelectedOption("miniPlayer.defaultPosition")}
 				title={t((translations) => translations.settings.sections.miniPlayer.settings.position.select.title)}
 				type="select"
 			/>

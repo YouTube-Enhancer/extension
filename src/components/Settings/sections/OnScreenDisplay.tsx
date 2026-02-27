@@ -16,7 +16,7 @@ export default function OnScreenDisplaySection() {
 		setValueOption
 	} = useSettings();
 	const colorDotClassName: ClassValue = "m-2 w-3 h-3 rounded-[50%] border-DEFAULT border-solid border-black";
-	const colorOptions: SelectOption<"osd_display_color">[] = [
+	const colorOptions: SelectOption<"onScreenDisplay.color">[] = [
 		{
 			element: <div className={cn(colorDotClassName, "bg-[red]")}></div>,
 			label: t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.color.select.options.red),
@@ -58,7 +58,7 @@ export default function OnScreenDisplaySection() {
 			value: "white"
 		}
 	];
-	const OSD_DisplayTypeOptions: SelectOption<"osd_display_type">[] = [
+	const OSD_DisplayTypeOptions: SelectOption<"onScreenDisplay.type">[] = [
 		{
 			label: t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.type.select.options.no_display),
 			value: "no_display"
@@ -76,7 +76,7 @@ export default function OnScreenDisplaySection() {
 			value: "circle"
 		}
 	];
-	const OSD_PositionOptions: SelectOption<"osd_display_position">[] = [
+	const OSD_PositionOptions: SelectOption<"onScreenDisplay.position">[] = [
 		{
 			label: t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.position.select.options.top_left),
 			value: "top_left"
@@ -98,8 +98,9 @@ export default function OnScreenDisplaySection() {
 			value: "center"
 		}
 	];
+	// FIXME: Update to be configurable when volume boost button is enabled or just allow configuration always
 	const isOSDDisabled =
-		settings.enable_scroll_wheel_volume_control?.toString() !== "true" && settings.enable_scroll_wheel_speed_control?.toString() !== "true";
+		settings.scrollWheelVolumeControl.enabled?.toString() !== "true" && settings.scrollWheelSpeedControl.enabled?.toString() !== "true";
 	const osdParentSetting = {
 		type: "either",
 		value: [
@@ -112,34 +113,34 @@ export default function OnScreenDisplaySection() {
 			<SettingTitle />
 			<Setting
 				disabled={isOSDDisabled}
-				id="osd_display_color"
+				id="onScreenDisplay.color"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.color.label)}
-				onChange={setValueOption("osd_display_color")}
+				onChange={setValueOption("onScreenDisplay.color")}
 				options={colorOptions}
 				parentSetting={osdParentSetting}
-				selectedOption={getSelectedOption("osd_display_color")}
+				selectedOption={getSelectedOption("onScreenDisplay.color")}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.color.title)}
 				type="select"
 			/>
 			<Setting
 				disabled={isOSDDisabled}
-				id="osd_display_type"
+				id="onScreenDisplay.type"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.type.label)}
-				onChange={setValueOption("osd_display_type")}
+				onChange={setValueOption("onScreenDisplay.type")}
 				options={OSD_DisplayTypeOptions}
 				parentSetting={osdParentSetting}
-				selectedOption={getSelectedOption("osd_display_type")}
+				selectedOption={getSelectedOption("onScreenDisplay.type")}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.type.title)}
 				type="select"
 			/>
 			<Setting
 				disabled={isOSDDisabled}
-				id="osd_display_position"
+				id="onScreenDisplay.position"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.position.label)}
-				onChange={setValueOption("osd_display_position")}
+				onChange={setValueOption("onScreenDisplay.position")}
 				options={OSD_PositionOptions}
 				parentSetting={osdParentSetting}
-				selectedOption={getSelectedOption("osd_display_position")}
+				selectedOption={getSelectedOption("onScreenDisplay.position")}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.position.title)}
 				type="select"
 			/>
@@ -148,31 +149,31 @@ export default function OnScreenDisplaySection() {
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.opacity.label)}
 				max={100}
 				min={1}
-				onChange={setValueOption("osd_display_opacity")}
+				onChange={setValueOption("onScreenDisplay.opacity")}
 				parentSetting={osdParentSetting}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.opacity.title)}
 				type="number"
-				value={settings.osd_display_opacity}
+				value={settings.onScreenDisplay.opacity}
 			/>
 			<Setting
 				disabled={isOSDDisabled}
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.hide.label)}
 				min={1}
-				onChange={setValueOption("osd_display_hide_time")}
+				onChange={setValueOption("onScreenDisplay.hideTime")}
 				parentSetting={osdParentSetting}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.hide.title)}
 				type="number"
-				value={settings.osd_display_hide_time}
+				value={settings.onScreenDisplay.hideTime}
 			/>
 			<Setting
 				disabled={isOSDDisabled}
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.padding.label)}
 				min={0}
-				onChange={setValueOption("osd_display_padding")}
+				onChange={setValueOption("onScreenDisplay.padding")}
 				parentSetting={osdParentSetting}
 				title={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.padding.title)}
 				type="number"
-				value={settings.osd_display_padding}
+				value={settings.onScreenDisplay.padding}
 			/>
 		</SettingSection>
 	);

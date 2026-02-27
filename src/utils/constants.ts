@@ -31,7 +31,15 @@ import { isNewYouTubeVideoLayout } from "../utils/utilities";
 export const deepDarkCssID = "yte-deep-dark-css";
 export const outputFolderName = "dist";
 export const defaultConfiguration = {
-	button_placements: {
+	automaticallyDisableAmbientMode: { enabled: false },
+	automaticallyDisableAutoPlay: { enabled: false },
+	automaticallyDisableClosedCaptions: { enabled: false },
+	automaticallyEnableClosedCaptions: { enabled: false },
+	automaticallyMaximizePlayer: { enabled: false },
+	automaticallyShowMoreVideosOnEndScreen: { enabled: false },
+	automaticTheaterMode: { enabled: false },
+	blockNumberKeySeeking: { enabled: false },
+	buttonPlacement: {
 		copyTimestampUrlButton: "player_controls_right",
 		decreasePlaybackSpeedButton: "player_controls_left",
 		flipVideoHorizontalButton: "player_controls_left",
@@ -48,113 +56,79 @@ export const defaultConfiguration = {
 		screenshotButton: "feature_menu",
 		volumeBoostButton: "feature_menu"
 	},
-	custom_css_code: "",
-	deep_dark_custom_theme_colors: {
-		colorShadow: "#383c4a4d",
-		dimmerText: "#cccccc",
-		hoverBackground: "#4e5467",
-		mainBackground: "#22242d",
-		mainColor: "#367bf0",
-		mainText: "#eeeeee",
-		secondBackground: "#242730"
+	copyTimestampUrlButton: { enabled: false },
+	customCSS: { code: "", enabled: false },
+	deepDarkCSS: {
+		colors: {
+			colorShadow: "#383c4a4d",
+			dimmerText: "#cccccc",
+			hoverBackground: "#4e5467",
+			mainBackground: "#22242d",
+			mainColor: "#367bf0",
+			mainText: "#eeeeee",
+			secondBackground: "#242730"
+		},
+		enabled: false,
+		preset: "Deep-Dark"
 	},
-	deep_dark_preset: "Deep-Dark",
-	enable_automatic_theater_mode: false,
-	enable_automatically_disable_ambient_mode: false,
-	enable_automatically_disable_autoplay: false,
-	enable_automatically_disable_closed_captions: false,
-	enable_automatically_enable_closed_captions: false,
-	enable_automatically_maximize_player: false,
-	enable_automatically_set_quality: false,
-	enable_automatically_show_more_videos_on_end_screen: false,
-	enable_block_number_key_seeking: false,
-	enable_comments_mini_player: false,
-	enable_comments_mini_player_button: false,
-	enable_copy_timestamp_url_button: false,
-	enable_custom_css: false,
-	enable_deep_dark_theme: false,
-	enable_default_to_original_audio_track: false,
-	enable_flip_video_horizontal_button: false,
-	enable_flip_video_vertical_button: false,
-	enable_forced_playback_speed: false,
-	enable_forward_rewind_buttons: false,
-	enable_global_volume: false,
-	enable_hide_artificial_intelligence_summary: false,
-	enable_hide_end_screen_cards: false,
-	enable_hide_end_screen_cards_button: false,
-	enable_hide_live_stream_chat: false,
-	enable_hide_members_only_videos: false,
-	enable_hide_official_artist_videos_from_home_page: false,
-	enable_hide_paid_promotion_banner: false,
-	enable_hide_playables: false,
-	enable_hide_playlist_recommendations_from_home_page: false,
-	enable_hide_scrollbar: false,
-	enable_hide_shorts_channel: false,
-	enable_hide_shorts_home: false,
-	enable_hide_shorts_search: false,
-	enable_hide_shorts_sidebar: false,
-	enable_hide_shorts_videos: false,
-	enable_hide_sidebar_recommended_videos: false,
-	enable_hide_translate_comment: false,
-	enable_loop_button: false,
-	enable_maximize_player_button: false,
-	enable_mono_to_stereo_button: false,
-	enable_open_transcript_button: false,
-	enable_open_youtube_settings_on_hover: false,
-	enable_pausing_background_players: false,
-	enable_playback_speed_buttons: false,
-	enable_playlist_length: false,
-	enable_playlist_remove_button: false,
-	enable_playlist_reset_button: false,
-	enable_redirect_remover: false,
-	enable_remaining_time: false,
-	enable_remember_last_volume: false,
-	enable_restore_fullscreen_scrolling: false,
-	enable_save_to_watch_later_button: false,
-	enable_screenshot_button: false,
-	enable_scroll_wheel_speed_control: false,
-	enable_scroll_wheel_volume_control: false,
-	enable_scroll_wheel_volume_control_hold_modifier_key: false,
-	enable_scroll_wheel_volume_control_hold_right_click: false,
-	enable_share_shortener: false,
-	enable_shorts_auto_scroll: false,
-	enable_skip_continue_watching: false,
-	enable_timestamp_peek: false,
-	enable_video_history: false,
-	enable_volume_boost: false,
-	feature_menu_open_type: "hover",
-	forward_rewind_buttons_time: 5,
-	global_volume: 25,
+	defaultToOriginalAudioTrack: { enabled: false },
+	featureMenu: { openType: "click" },
+	flipVideoButtons: { flipHorizontal: { enabled: false }, flipVertical: { enabled: false } },
+	forwardRewindButtons: { enabled: false, time: 5 },
+	globalVolume: {
+		enabled: false,
+		volume: 25
+	},
+	hideArtificialIntelligenceSummary: { enabled: false },
+	hideEndScreenCards: { enabled: false },
+	hideEndScreenCardsButton: { enabled: false },
+	hideLiveStreamChat: { enabled: false },
+	hideMembersOnlyVideos: { enabled: false },
+	hideOfficialArtistVideosFromHomePage: { enabled: false },
+	hidePaidPromotionBanner: { enabled: false },
+	hidePlayables: { enabled: false },
+	hidePlaylistRecommendationsFromHomePage: { enabled: false },
+	hideScrollBar: { enabled: false },
+	hideShorts: {
+		channel: { enabled: false },
+		home: { enabled: false },
+		search: { enabled: false },
+		sidebar: { enabled: false },
+		videos: { enabled: false }
+	},
+	hideSidebarRecommendedVideos: { enabled: false },
+	hideTranslateComment: { enabled: false },
 	language: "en-US",
-	mini_player_default_position: "bottom_right",
-	mini_player_default_size: "400x225",
-	open_settings_on_major_or_minor_version_change: true,
-	osd_display_color: "white",
-	osd_display_hide_time: 750,
-	osd_display_opacity: 75,
-	osd_display_padding: 5,
-	osd_display_position: "center",
-	osd_display_type: "text",
-	playback_buttons_speed: 0.25,
-	player_quality: "auto",
-	player_quality_fallback_strategy: "lower",
-	player_speed: 1,
-	playlist_length_get_method: "api",
-	playlist_watch_time_get_method: "youtube",
-	remembered_volumes: {
-		shortsPageVolume: 100,
-		watchPageVolume: 100
-	},
-	screenshot_format: "png",
-	screenshot_save_as: "file",
-	scroll_wheel_speed_control_modifier_key: "altKey",
-	scroll_wheel_volume_control_modifier_key: "ctrlKey",
-	speed_adjustment_steps: 0.25,
-	video_history_resume_type: "prompt",
-	volume_adjustment_steps: 5,
-	volume_boost_amount: 5,
-	volume_boost_mode: "global",
-	youtube_data_api_v3_key: ""
+	loopButton: { enabled: false },
+	maximizePlayerButton: { enabled: false },
+	miniPlayer: { defaultPosition: "bottom_right", defaultSize: "400x225", enabled: false },
+	miniPlayerButton: { enabled: false },
+	monoToStereoButton: { enabled: false },
+	onScreenDisplay: { color: "white", hideTime: 750, opacity: 75, padding: 5, position: "center", type: "text" },
+	openSettingsOnMajorOrMinorVersionChange: true,
+	openTranscriptButton: { enabled: false },
+	openYouTubeSettingsOnHover: { enabled: false },
+	pauseBackgroundPlayers: { enabled: false },
+	playbackSpeedButtons: { enabled: false, speed: 0.25 },
+	playerQuality: { enabled: false, fallbackStrategy: "lower", quality: "auto" },
+	playerSpeed: { enabled: false, speed: 1 },
+	playlistLength: { enabled: false, lengthGetMethod: "api", watchTimeGetMethod: "youtube" },
+	playlistManagementButtons: { removeButton: { enabled: false }, resetButton: { enabled: false } },
+	remainingTime: { enabled: false },
+	rememberVolume: { enabled: false, shortsPageVolume: 100, watchPageVolume: 100 },
+	removeRedirect: { enabled: false },
+	restoreFullscreenScrolling: { enabled: false },
+	saveToWatchLaterButton: { enabled: false },
+	screenshotButton: { enabled: false, format: "png", saveAs: "file" },
+	scrollWheelSpeedControl: { enabled: false, modifierKey: "altKey", steps: 0.25 },
+	scrollWheelVolumeControl: { enabled: false, holdModifierKey: false, holdRightClick: false, modifierKey: "ctrlKey", steps: 5 },
+	shareShortener: { enabled: false },
+	shortsAutoScroll: { enabled: false },
+	skipContinueWatching: { enabled: false },
+	timestampPeek: { enabled: false },
+	videoHistory: { enabled: false, resumeType: "prompt" },
+	volumeBoost: { amount: 5, enabled: false, mode: "global" },
+	youtubeDataApiV3Key: ""
 } satisfies configuration;
 type ConfigurationNumericConstraints = Partial<NumbersOnly<configuration>>;
 type ConstraintTree = {
@@ -171,9 +145,11 @@ type NumberConstraint = { max?: number; min?: number; step?: number };
 type NumbersOnly<T> =
 	T extends number ? NumberConstraint
 	: T extends object ?
-		RemoveEmpty<{
-			[K in keyof T]: NumbersOnly<T[K]>;
-		}>
+		Partial<
+			RemoveEmpty<{
+				[K in keyof T]: NumbersOnly<T[K]>;
+			}>
+		>
 	:	never;
 type RemoveEmpty<T> = {
 	[K in keyof T as T[K] extends never ? never
@@ -221,141 +197,154 @@ function isConstraintTree(value: any): value is ConstraintTree {
 	return typeof value === "object" && value !== null && !("min" in value || "max" in value || "step" in value);
 }
 export const numberConstraints: ConfigurationNumericConstraints = {
-	global_volume: { max: 100, min: 0 },
-	osd_display_opacity: { max: 100, min: 1 },
-	playback_buttons_speed: { max: 1.0, min: youtubePlayerSpeedStep, step: youtubePlayerSpeedStep },
-	player_speed: { max: youtubePlayerMaxSpeed, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep },
-	remembered_volumes: { shortsPageVolume: { max: 100, min: 0 }, watchPageVolume: { max: 100, min: 0 } },
-	speed_adjustment_steps: { max: 1.0, min: 0.05, step: 0.05 },
-	volume_adjustment_steps: { max: 100, min: 1 }
+	globalVolume: { volume: { max: 100, min: 0 } },
+	onScreenDisplay: { opacity: { max: 100, min: 1 } },
+	playbackSpeedButtons: { speed: { max: 1.0, min: youtubePlayerSpeedStep, step: youtubePlayerSpeedStep } },
+	playerSpeed: { speed: { max: youtubePlayerMaxSpeed, min: youtubePlayerMinSpeed, step: youtubePlayerSpeedStep } },
+	rememberVolume: { shortsPageVolume: { max: 100, min: 0 }, watchPageVolume: { max: 100, min: 0 } },
+	scrollWheelSpeedControl: { steps: { max: 1.0, min: 0.05, step: 0.05 } },
+	scrollWheelVolumeControl: { steps: { max: 100, min: 1 } }
 };
 export const configurationImportSchema: TypeToPartialZodSchema<
 	configuration,
-	"button_placements",
+	"buttonPlacement",
 	{
-		button_placements: ZodMiniObject<{
+		buttonPlacement: ZodMiniObject<{
 			[K in AllButtonNames]: ZodMiniEnum<{ [K in ButtonPlacement]: K }>;
 		}>;
 	},
 	true
 > = z.object({
-	button_placements: z.object({
-		...buttonNames.reduce(
-			(acc, featureName) => ({ ...acc, [featureName]: z.optional(z.enum(buttonPlacements)) }),
+	automaticallyDisableAmbientMode: z.optional(z.object({ enabled: z.boolean() })),
+	automaticallyDisableAutoPlay: z.optional(z.object({ enabled: z.boolean() })),
+	automaticallyDisableClosedCaptions: z.optional(z.object({ enabled: z.boolean() })),
+	automaticallyEnableClosedCaptions: z.optional(z.object({ enabled: z.boolean() })),
+	automaticallyMaximizePlayer: z.optional(z.object({ enabled: z.boolean() })),
+	automaticallyShowMoreVideosOnEndScreen: z.optional(z.object({ enabled: z.boolean() })),
+	automaticTheaterMode: z.optional(z.object({ enabled: z.boolean() })),
+	blockNumberKeySeeking: z.optional(z.object({ enabled: z.boolean() })),
+	buttonPlacement: z.object(
+		buttonNames.reduce(
+			(acc, featureName) => ({
+				...acc,
+				[featureName]: z.optional(z.enum(buttonPlacements))
+			}),
 			{} as Record<AllButtonNames, ZodMiniEnum<{ [K in ButtonPlacement]: K }>>
 		)
-	}),
-	custom_css_code: z.optional(z.string()),
-	deep_dark_custom_theme_colors: z.optional(
+	),
+	copyTimestampUrlButton: z.optional(z.object({ enabled: z.boolean() })),
+	customCSS: z.optional(z.object({ code: z.string(), enabled: z.boolean() })),
+	deepDarkCSS: z.optional(
 		z.object({
-			colorShadow: z.string(),
-			dimmerText: z.string(),
-			hoverBackground: z.string(),
-			mainBackground: z.string(),
-			mainColor: z.string(),
-			mainText: z.string(),
-			secondBackground: z.string()
+			colors: z.object({
+				colorShadow: z.string(),
+				dimmerText: z.string(),
+				hoverBackground: z.string(),
+				mainBackground: z.string(),
+				mainColor: z.string(),
+				mainText: z.string(),
+				secondBackground: z.string()
+			}),
+			enabled: z.boolean(),
+			preset: z.enum(deepDarkPreset)
 		})
 	),
-	deep_dark_preset: z.optional(z.enum(deepDarkPreset)),
-	enable_automatic_theater_mode: z.optional(z.boolean()),
-	enable_automatically_disable_ambient_mode: z.optional(z.boolean()),
-	enable_automatically_disable_autoplay: z.optional(z.boolean()),
-	enable_automatically_disable_closed_captions: z.optional(z.boolean()),
-	enable_automatically_enable_closed_captions: z.optional(z.boolean()),
-	enable_automatically_maximize_player: z.optional(z.boolean()),
-	enable_automatically_set_quality: z.optional(z.boolean()),
-	enable_automatically_show_more_videos_on_end_screen: z.optional(z.boolean()),
-	enable_block_number_key_seeking: z.optional(z.boolean()),
-	enable_comments_mini_player: z.optional(z.boolean()),
-	enable_comments_mini_player_button: z.optional(z.boolean()),
-	enable_copy_timestamp_url_button: z.optional(z.boolean()),
-	enable_custom_css: z.optional(z.boolean()),
-	enable_deep_dark_theme: z.optional(z.boolean()),
-	enable_default_to_original_audio_track: z.optional(z.boolean()),
-	enable_flip_video_horizontal_button: z.optional(z.boolean()),
-	enable_flip_video_vertical_button: z.optional(z.boolean()),
-	enable_forced_playback_speed: z.optional(z.boolean()),
-	enable_forward_rewind_buttons: z.optional(z.boolean()),
-	enable_global_volume: z.optional(z.boolean()),
-	enable_hide_artificial_intelligence_summary: z.optional(z.boolean()),
-	enable_hide_end_screen_cards: z.optional(z.boolean()),
-	enable_hide_end_screen_cards_button: z.optional(z.boolean()),
-	enable_hide_live_stream_chat: z.optional(z.boolean()),
-	enable_hide_members_only_videos: z.optional(z.boolean()),
-	enable_hide_official_artist_videos_from_home_page: z.optional(z.boolean()),
-	enable_hide_paid_promotion_banner: z.optional(z.boolean()),
-	enable_hide_playables: z.optional(z.boolean()),
-	enable_hide_playlist_recommendations_from_home_page: z.optional(z.boolean()),
-	enable_hide_scrollbar: z.optional(z.boolean()),
-	enable_hide_shorts_channel: z.optional(z.boolean()),
-	enable_hide_shorts_home: z.optional(z.boolean()),
-	enable_hide_shorts_search: z.optional(z.boolean()),
-	enable_hide_shorts_sidebar: z.optional(z.boolean()),
-	enable_hide_shorts_videos: z.optional(z.boolean()),
-	enable_hide_sidebar_recommended_videos: z.optional(z.boolean()),
-	enable_hide_translate_comment: z.optional(z.boolean()),
-	enable_loop_button: z.optional(z.boolean()),
-	enable_maximize_player_button: z.optional(z.boolean()),
-	enable_mono_to_stereo_button: z.optional(z.boolean()),
-	enable_open_transcript_button: z.optional(z.boolean()),
-	enable_open_youtube_settings_on_hover: z.optional(z.boolean()),
-	enable_pausing_background_players: z.optional(z.boolean()),
-	enable_playback_speed_buttons: z.optional(z.boolean()),
-	enable_playlist_length: z.optional(z.boolean()),
-	enable_playlist_remove_button: z.optional(z.boolean()),
-	enable_playlist_reset_button: z.optional(z.boolean()),
-	enable_redirect_remover: z.optional(z.boolean()),
-	enable_remaining_time: z.optional(z.boolean()),
-	enable_remember_last_volume: z.optional(z.boolean()),
-	enable_restore_fullscreen_scrolling: z.optional(z.boolean()),
-	enable_save_to_watch_later_button: z.optional(z.boolean()),
-	enable_screenshot_button: z.optional(z.boolean()),
-	enable_scroll_wheel_speed_control: z.optional(z.boolean()),
-	enable_scroll_wheel_volume_control: z.optional(z.boolean()),
-	enable_scroll_wheel_volume_control_hold_modifier_key: z.optional(z.boolean()),
-	enable_scroll_wheel_volume_control_hold_right_click: z.optional(z.boolean()),
-	enable_share_shortener: z.optional(z.boolean()),
-	enable_shorts_auto_scroll: z.optional(z.boolean()),
-	enable_skip_continue_watching: z.optional(z.boolean()),
-	enable_timestamp_peek: z.optional(z.boolean()),
-	enable_video_history: z.optional(z.boolean()),
-	enable_volume_boost: z.optional(z.boolean()),
-	feature_menu_open_type: z.optional(z.enum(featureMenuOpenTypes)),
-	forward_rewind_buttons_time: z.optional(z.number()),
-	global_volume: z.optional(z.number()),
+	defaultToOriginalAudioTrack: z.optional(z.object({ enabled: z.boolean() })),
+	featureMenu: z.optional(z.object({ openType: z.enum(featureMenuOpenTypes) })),
+	flipVideoButtons: z.optional(
+		z.object({
+			flipHorizontal: z.object({ enabled: z.boolean() }),
+			flipVertical: z.object({ enabled: z.boolean() })
+		})
+	),
+	forwardRewindButtons: z.optional(z.object({ enabled: z.boolean(), time: z.number() })),
+	globalVolume: z.optional(z.object({ enabled: z.boolean(), volume: z.number() })),
+	hideArtificialIntelligenceSummary: z.optional(z.object({ enabled: z.boolean() })),
+	hideEndScreenCards: z.optional(z.object({ enabled: z.boolean() })),
+	hideEndScreenCardsButton: z.optional(z.object({ enabled: z.boolean() })),
+	hideLiveStreamChat: z.optional(z.object({ enabled: z.boolean() })),
+	hideMembersOnlyVideos: z.optional(z.object({ enabled: z.boolean() })),
+	hideOfficialArtistVideosFromHomePage: z.optional(z.object({ enabled: z.boolean() })),
+	hidePaidPromotionBanner: z.optional(z.object({ enabled: z.boolean() })),
+	hidePlayables: z.optional(z.object({ enabled: z.boolean() })),
+	hidePlaylistRecommendationsFromHomePage: z.optional(z.object({ enabled: z.boolean() })),
+	hideScrollBar: z.optional(z.object({ enabled: z.boolean() })),
+	hideShorts: z.optional(
+		z.object({
+			channel: z.object({ enabled: z.boolean() }),
+			home: z.object({ enabled: z.boolean() }),
+			search: z.object({ enabled: z.boolean() }),
+			sidebar: z.object({ enabled: z.boolean() }),
+			videos: z.object({ enabled: z.boolean() })
+		})
+	),
+	hideSidebarRecommendedVideos: z.optional(z.object({ enabled: z.boolean() })),
+	hideTranslateComment: z.optional(z.object({ enabled: z.boolean() })),
 	language: z.optional(z.enum(availableLocales)),
-	mini_player_default_position: z.optional(z.enum(miniPlayerPositions)),
-	mini_player_default_size: z.optional(z.enum(miniPlayerSizes)),
-	open_settings_on_major_or_minor_version_change: z.optional(z.boolean()),
-	osd_display_color: z.optional(z.enum(onScreenDisplayColors)),
-	osd_display_hide_time: z.optional(z.number()),
-	osd_display_opacity: z.optional(z.number()),
-	osd_display_padding: z.optional(z.number()),
-	osd_display_position: z.optional(z.enum(onScreenDisplayPositions)),
-	osd_display_type: z.optional(z.enum(onScreenDisplayTypes)),
-	playback_buttons_speed: z.optional(z.number()),
-	player_quality: z.optional(z.enum(youtubePlayerQualityLevels)),
-	player_quality_fallback_strategy: z.optional(z.enum(PlayerQualityFallbackStrategy)),
-	player_speed: z.optional(z.number()),
-	playlist_length_get_method: z.optional(z.enum(playlistLengthGetMethod)),
-	playlist_watch_time_get_method: z.optional(z.enum(playlistWatchTimeGetMethod)),
-	remembered_volumes: z.optional(
+	loopButton: z.optional(z.object({ enabled: z.boolean() })),
+	maximizePlayerButton: z.optional(z.object({ enabled: z.boolean() })),
+	miniPlayer: z.optional(
 		z.object({
-			shortsPageVolume: z.optional(z.number()),
-			watchPageVolume: z.optional(z.number())
+			defaultPosition: z.enum(miniPlayerPositions),
+			defaultSize: z.enum(miniPlayerSizes),
+			enabled: z.boolean()
 		})
 	),
-	screenshot_format: z.optional(z.enum(screenshotFormats)),
-	screenshot_save_as: z.optional(z.enum(screenshotTypes)),
-	scroll_wheel_speed_control_modifier_key: z.optional(z.enum(modifierKeys)),
-	scroll_wheel_volume_control_modifier_key: z.optional(z.enum(modifierKeys)),
-	speed_adjustment_steps: z.optional(z.number()),
-	video_history_resume_type: z.optional(z.enum(videoHistoryResumeTypes)),
-	volume_adjustment_steps: z.optional(z.number()),
-	volume_boost_amount: z.optional(z.number()),
-	volume_boost_mode: z.optional(z.enum(volumeBoostModes)),
-	youtube_data_api_v3_key: z.optional(z.string())
+	miniPlayerButton: z.optional(z.object({ enabled: z.boolean() })),
+	monoToStereoButton: z.optional(z.object({ enabled: z.boolean() })),
+	onScreenDisplay: z.optional(
+		z.object({
+			color: z.enum(onScreenDisplayColors),
+			hideTime: z.number(),
+			opacity: z.number(),
+			padding: z.number(),
+			position: z.enum(onScreenDisplayPositions),
+			type: z.enum(onScreenDisplayTypes)
+		})
+	),
+	openSettingsOnMajorOrMinorVersionChange: z.optional(z.boolean()),
+	openTranscriptButton: z.optional(z.object({ enabled: z.boolean() })),
+	openYouTubeSettingsOnHover: z.optional(z.object({ enabled: z.boolean() })),
+	pauseBackgroundPlayers: z.optional(z.object({ enabled: z.boolean() })),
+	playbackSpeedAdjustment: z.optional(z.object({ steps: z.number() })),
+	playbackSpeedButtons: z.optional(z.object({ enabled: z.boolean(), speed: z.number() })),
+	playerQuality: z.optional(
+		z.object({ enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), quality: z.enum(youtubePlayerQualityLevels) })
+	),
+	playerSpeed: z.optional(z.object({ enabled: z.boolean(), speed: z.number() })),
+	playlistLength: z.optional(
+		z.object({ enabled: z.boolean(), lengthGetMethod: z.enum(playlistLengthGetMethod), watchTimeGetMethod: z.enum(playlistWatchTimeGetMethod) })
+	),
+	playlistManagementButtons: z.optional(
+		z.object({
+			removeButton: z.object({ enabled: z.boolean() }),
+			resetButton: z.object({ enabled: z.boolean() })
+		})
+	),
+	remainingTime: z.optional(z.object({ enabled: z.boolean() })),
+	rememberVolume: z.optional(z.object({ enabled: z.boolean(), shortsPageVolume: z.optional(z.number()), watchPageVolume: z.optional(z.number()) })),
+	removeRedirect: z.optional(z.object({ enabled: z.boolean() })),
+	restoreFullscreenScrolling: z.optional(z.object({ enabled: z.boolean() })),
+	saveToWatchLaterButton: z.optional(z.object({ enabled: z.boolean() })),
+	screenshotButton: z.optional(z.object({ enabled: z.boolean(), format: z.enum(screenshotFormats), saveAs: z.enum(screenshotTypes) })),
+	scrollWheelSpeedControl: z.optional(z.object({ enabled: z.boolean(), modifierKey: z.enum(modifierKeys), steps: z.number() })),
+	scrollWheelVolumeControl: z.optional(
+		z.object({
+			enabled: z.boolean(),
+			holdModifierKey: z.boolean(),
+			holdRightClick: z.boolean(),
+			modifierKey: z.enum(modifierKeys),
+			steps: z.number()
+		})
+	),
+	shareShortener: z.optional(z.object({ enabled: z.boolean() })),
+	shortsAutoScroll: z.optional(z.object({ enabled: z.boolean() })),
+	skipContinueWatching: z.optional(z.object({ enabled: z.boolean() })),
+	timestampPeek: z.optional(z.object({ enabled: z.boolean() })),
+	videoHistory: z.optional(z.object({ enabled: z.boolean(), resumeType: z.enum(videoHistoryResumeTypes) })),
+	volumeAdjustment: z.optional(z.object({ steps: z.number() })),
+	volumeBoost: z.optional(z.object({ amount: z.number(), enabled: z.boolean(), mode: z.enum(volumeBoostModes) })),
+	youtubeDataApiV3Key: z.optional(z.string())
 });
 export const DEV_MODE = process.env.__DEV__ === "true";
 export const ENABLE_SOURCE_MAP = DEV_MODE === true ? "inline" : false;

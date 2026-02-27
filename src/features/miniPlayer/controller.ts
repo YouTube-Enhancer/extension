@@ -108,7 +108,7 @@ export class MiniPlayerController {
 			this.setRect(savedRect);
 			return;
 		}
-		const { height, width } = parseSizePreset(this.options.mini_player_default_size);
+		const { height, width } = parseSizePreset(this.options.defaultSize);
 		const margin = 16;
 		const { innerHeight: vh, innerWidth: vw } = window;
 		const xLeft = margin;
@@ -118,7 +118,7 @@ export class MiniPlayerController {
 		const yBottom = vh - height - margin;
 		let x = xRight;
 		let y = yBottom;
-		switch (this.options.mini_player_default_position) {
+		switch (this.options.defaultPosition) {
 			case "bottom_center":
 				x = xCenter;
 				y = yBottom;

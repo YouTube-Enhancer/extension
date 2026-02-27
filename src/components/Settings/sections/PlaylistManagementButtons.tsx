@@ -13,17 +13,17 @@ export default function PlaylistManagementButtonsSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.playlistManagementButtons.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_playlist_remove_button?.toString() === "true"}
+				checked={settings.playlistManagementButtons.removeButton.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable.label)}
-				onChange={setCheckboxOption("enable_playlist_remove_button")}
+				onChange={setCheckboxOption("playlistManagementButtons.removeButton.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_playlist_reset_button?.toString() === "true"}
+				checked={settings.playlistManagementButtons.resetButton.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.label)}
-				onChange={setCheckboxOption("enable_playlist_reset_button")}
+				onChange={setCheckboxOption("playlistManagementButtons.resetButton.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.title)}
 				type="checkbox"

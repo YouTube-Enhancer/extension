@@ -18,9 +18,11 @@ export function disableBlockNumberKeySkip() {
 export async function enableBlockNumberKeySkip() {
 	const {
 		data: {
-			options: { enable_block_number_key_seeking: disableNumberKeySkip }
+			options: {
+				blockNumberKeySeeking: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!disableNumberKeySkip) return;
+	if (!enabled) return;
 	document.addEventListener("keydown", keydownHandler, { capture: true });
 }

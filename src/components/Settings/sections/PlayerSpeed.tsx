@@ -14,27 +14,27 @@ export default function PlayerSpeedSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.playerSpeed.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_forced_playback_speed?.toString() === "true"}
+				checked={settings.playerSpeed.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playerSpeed.enable.label)}
-				onChange={setCheckboxOption("enable_forced_playback_speed")}
+				onChange={setCheckboxOption("playerSpeed.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playerSpeed.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_playback_speed_buttons?.toString() === "true"}
+				checked={settings.playbackSpeedButtons.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playerSpeed.settings.buttons.label)}
-				onChange={setCheckboxOption("enable_playback_speed_buttons")}
+				onChange={setCheckboxOption("playbackSpeedButtons.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playerSpeed.settings.buttons.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_forced_playback_speed?.toString() !== "true"}
+				disabled={settings.playerSpeed.enabled?.toString() !== "true"}
 				label={t((translations) => translations.settings.sections.playerSpeed.settings.speed.select.label)}
 				max={youtubePlayerMaxSpeed}
 				min={youtubePlayerSpeedStep}
-				onChange={setValueOption("player_speed")}
+				onChange={setValueOption("playerSpeed.speed")}
 				parentSetting={{
 					type: "singular",
 					value: (translations) => translations.settings.sections.playerSpeed.enable.label
@@ -42,14 +42,14 @@ export default function PlayerSpeedSection() {
 				step={youtubePlayerSpeedStep}
 				title={t((translations) => translations.settings.sections.playerSpeed.settings.speed.select.title)}
 				type="number"
-				value={settings.player_speed}
+				value={settings.playerSpeed.speed}
 			/>
 			<Setting
-				disabled={settings.enable_playback_speed_buttons?.toString() !== "true"}
+				disabled={settings.playbackSpeedButtons.enabled?.toString() !== "true"}
 				label={t((translations) => translations.settings.sections.playerSpeed.settings.buttons.select.label)}
 				max={1}
 				min={youtubePlayerSpeedStep}
-				onChange={setValueOption("playback_buttons_speed")}
+				onChange={setValueOption("playbackSpeedButtons.speed")}
 				parentSetting={{
 					type: "singular",
 					value: (translations) => translations.settings.sections.playerSpeed.settings.buttons.label
@@ -57,7 +57,7 @@ export default function PlayerSpeedSection() {
 				step={youtubePlayerSpeedStep}
 				title={t((translations) => translations.settings.sections.playerSpeed.settings.buttons.select.title)}
 				type="number"
-				value={settings.playback_buttons_speed}
+				value={settings.playbackSpeedButtons.speed}
 			/>
 		</SettingSection>
 	);

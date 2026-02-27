@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import type { AvailableLocales } from "@/src/i18n/constants";
+
 import type {
 	ActionMessage,
 	AllButtonNames,
@@ -11,13 +13,18 @@ import type {
 	ContentToBackgroundSendOnlyMessageMappings,
 	DeepPartial,
 	ExtensionSendOnlyMessageMappings,
+	FeatureMenuOpenType,
 	FeatureToMultiButtonMap,
 	MessageMappings,
 	Messages,
 	MessageSource,
+	MiniPlayerPosition,
+	MiniPlayerSize,
 	MultiButtonChange,
 	Nullable,
+	OnScreenDisplayColor,
 	OnScreenDisplayPosition,
+	OnScreenDisplayType,
 	Path,
 	PathValue,
 	PlayerQualityFallbackStrategy,
@@ -26,6 +33,7 @@ import type {
 	SingleButtonChange,
 	SingleButtonFeatureNames,
 	SingleButtonNames,
+	VolumeBoostMode,
 	YoutubePlayerQualityLevel
 } from "../types";
 import type { SVGElementAttributes } from "./SVGElementAttributes";
@@ -383,18 +391,20 @@ export function formatError(error: unknown) {
 export async function getButtonColor() {
 	const {
 		data: {
-			options: { deep_dark_custom_theme_colors, deep_dark_preset, enable_deep_dark_theme }
+			options: {
+				deepDarkCSS: { colors: deepDarkThemeColors, enabled, preset }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	const isDarkMode = IsDarkMode();
-	const colors = deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset];
+	const colors = preset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkThemeColors) : deepDarkPresets[preset];
 	const mainBackgroundColor = parseMainBackgroundColor(colors);
 	const contrastWithWhite = getContrast(mainBackgroundColor, "#FFFFFF");
 	const contrastWithBlack = getContrast(mainBackgroundColor, "#000000");
 	const buttonColor = contrastWithWhite > contrastWithBlack ? "#FFFFFF" : "#000000";
 
 	return (
-		enable_deep_dark_theme ? buttonColor
+		enabled ? buttonColor
 		: isDarkMode ? "#FFFFFF"
 		: "#000000"
 	);
@@ -480,12 +490,18 @@ export function groupButtonChanges(changes: ButtonPlacementChange): {
 }
 export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: configuration) {
 	switch (buttonName) {
+		case "flipVideoHorizontalButton": {
+			return settings.flipVideoButtons.flipHorizontal.enabled === false;
+		}
+		case "flipVideoVerticalButton": {
+			return settings.flipVideoButtons.flipVertical.enabled === false;
+		}
 		case "volumeBoostButton": {
-			return settings.volume_boost_mode === "global" || settings[buttonNameToSettingName[buttonName]] === false;
+			return settings.volumeBoost.mode === "global" || settings[buttonNameToSettingName[buttonName]].enabled === false;
 		}
 		default: {
 			const { [buttonName]: settingName } = buttonNameToSettingName;
-			return settings[settingName] === false;
+			return settings[settingName].enabled === false;
 		}
 	}
 }
@@ -507,6 +523,31 @@ export function IsDarkMode() {
 export function isHomePage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === undefined;
+}
+/**
+ * Checks if the given configuration is a legacy configuration (i.e. it contains
+ * enable_* keys or known legacy-only keys)
+ * @param {unknown} config - The configuration to check
+ * @returns {boolean} - True if the configuration is a legacy configuration, false otherwise
+ */
+export function isLegacyConfiguration(config: unknown): boolean {
+	if (!config || typeof config !== "object") return false;
+	const obj = config as Record<string, unknown>;
+	// Any enable_* key means old format
+	for (const key in obj) {
+		if (key.startsWith("enable_")) return true;
+	}
+	// Known legacy-only keys
+	if (
+		"osd_display_color" in obj ||
+		"player_speed" in obj ||
+		"volume_boost_amount" in obj ||
+		"speed_adjustment_steps" in obj ||
+		"volume_adjustment_steps" in obj
+	) {
+		return true;
+	}
+	return false;
 }
 export function isLivePage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
@@ -541,7 +582,159 @@ export function isWatchPage() {
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "watch";
 }
-
+/**
+ * Migrates an old configuration to the new format.
+ *
+ * @param {unknown} oldConfig - The old configuration to migrate
+ * @param {configuration} defaultConfiguration - The new configuration to start from
+ * @returns {configuration} - The new configuration
+ */
+export function migrateConfiguration(oldConfig: Record<string, unknown>, defaultConfiguration: configuration): configuration {
+	// Start from defaults to guarantee completeness
+	const newConfig: configuration = structuredClone(defaultConfiguration);
+	const enableKeyMap: Record<string, keyof configuration> = {
+		enable_automatic_theater_mode: "automaticTheaterMode",
+		enable_automatically_disable_ambient_mode: "automaticallyDisableAmbientMode",
+		enable_automatically_disable_autoplay: "automaticallyDisableAutoPlay",
+		enable_automatically_disable_closed_captions: "automaticallyDisableClosedCaptions",
+		enable_automatically_enable_closed_captions: "automaticallyEnableClosedCaptions",
+		enable_automatically_maximize_player: "automaticallyMaximizePlayer",
+		enable_automatically_set_quality: "playerQuality",
+		enable_automatically_show_more_videos_on_end_screen: "automaticallyShowMoreVideosOnEndScreen",
+		enable_block_number_key_seeking: "blockNumberKeySeeking",
+		enable_copy_timestamp_url_button: "copyTimestampUrlButton",
+		enable_custom_css: "customCSS",
+		enable_deep_dark_theme: "deepDarkCSS",
+		enable_default_to_original_audio_track: "defaultToOriginalAudioTrack",
+		enable_forced_playback_speed: "playerSpeed",
+		enable_forward_rewind_buttons: "forwardRewindButtons",
+		enable_global_volume: "globalVolume",
+		enable_hide_artificial_intelligence_summary: "hideArtificialIntelligenceSummary",
+		enable_hide_end_screen_cards: "hideEndScreenCards",
+		enable_hide_end_screen_cards_button: "hideEndScreenCardsButton",
+		enable_hide_live_stream_chat: "hideLiveStreamChat",
+		enable_hide_members_only_videos: "hideMembersOnlyVideos",
+		enable_hide_official_artist_videos_from_home_page: "hideOfficialArtistVideosFromHomePage",
+		enable_hide_paid_promotion_banner: "hidePaidPromotionBanner",
+		enable_hide_playables: "hidePlayables",
+		enable_hide_playlist_recommendations_from_home_page: "hidePlaylistRecommendationsFromHomePage",
+		enable_hide_scrollbar: "hideScrollBar",
+		enable_hide_shorts: "hideShorts",
+		enable_hide_sidebar_recommended_videos: "hideSidebarRecommendedVideos",
+		enable_hide_translate_comment: "hideTranslateComment",
+		enable_loop_button: "loopButton",
+		enable_maximize_player_button: "maximizePlayerButton",
+		enable_open_transcript_button: "openTranscriptButton",
+		enable_open_youtube_settings_on_hover: "openYouTubeSettingsOnHover",
+		enable_pausing_background_players: "pauseBackgroundPlayers",
+		enable_playback_speed_buttons: "playbackSpeedButtons",
+		enable_playlist_length: "playlistLength",
+		enable_redirect_remover: "removeRedirect",
+		enable_remaining_time: "remainingTime",
+		enable_remember_last_volume: "rememberVolume",
+		enable_restore_fullscreen_scrolling: "restoreFullscreenScrolling",
+		enable_save_to_watch_later_button: "saveToWatchLaterButton",
+		enable_screenshot_button: "screenshotButton",
+		enable_scroll_wheel_speed_control: "scrollWheelSpeedControl",
+		enable_scroll_wheel_volume_control: "scrollWheelVolumeControl",
+		enable_share_shortener: "shareShortener",
+		enable_shorts_auto_scroll: "shortsAutoScroll",
+		enable_skip_continue_watching: "skipContinueWatching",
+		enable_timestamp_peek: "timestampPeek",
+		enable_video_history: "videoHistory",
+		enable_volume_boost: "volumeBoost"
+	};
+	for (const [key, value] of Object.entries(oldConfig)) {
+		if (key in enableKeyMap && typeof value === "boolean") {
+			const { [key]: target } = enableKeyMap;
+			switch (target) {
+				case "flipVideoButtons":
+					if (typeof key === "string") {
+						if (key.includes("horizontal")) newConfig.flipVideoButtons.flipHorizontal.enabled = value;
+						if (key.includes("vertical")) newConfig.flipVideoButtons.flipVertical.enabled = value;
+					}
+					break;
+				case "playlistManagementButtons":
+					if (typeof key === "string") {
+						if (key.includes("remove")) newConfig.playlistManagementButtons.removeButton.enabled = value;
+						if (key.includes("reset")) newConfig.playlistManagementButtons.resetButton.enabled = value;
+					}
+					break;
+				default: {
+					const { [target]: targetValue } = newConfig;
+					// Check that it's an object and has an "enabled" boolean property
+					if (targetValue && typeof targetValue === "object" && "enabled" in targetValue && typeof targetValue.enabled === "boolean") {
+						(targetValue as { enabled: boolean }).enabled = value;
+					}
+				}
+			}
+			continue;
+		}
+		switch (key) {
+			case "custom_css_code":
+				newConfig.customCSS.code = String(value);
+				break;
+			case "deep_dark_custom_theme_colors":
+				newConfig.deepDarkCSS.colors = value as typeof newConfig.deepDarkCSS.colors;
+				break;
+			case "feature_menu_open_type":
+				newConfig.featureMenu.openType = value as FeatureMenuOpenType;
+				break;
+			case "forward_rewind_buttons_time":
+				newConfig.forwardRewindButtons.time = Number(value);
+				break;
+			case "global_volume":
+				newConfig.globalVolume.volume = Number(value);
+				break;
+			case "language":
+				newConfig.language = value as AvailableLocales;
+				break;
+			case "mini_player_default_position":
+				newConfig.miniPlayer.defaultPosition = value as MiniPlayerPosition;
+				break;
+			case "mini_player_default_size":
+				newConfig.miniPlayer.defaultSize = value as MiniPlayerSize;
+				break;
+			case "osd_display_color":
+				newConfig.onScreenDisplay.color = value as OnScreenDisplayColor;
+				break;
+			case "osd_display_hide_time":
+				newConfig.onScreenDisplay.hideTime = Number(value);
+				break;
+			case "osd_display_opacity":
+				newConfig.onScreenDisplay.opacity = Number(value);
+				break;
+			case "osd_display_padding":
+				newConfig.onScreenDisplay.padding = Number(value);
+				break;
+			case "osd_display_position":
+				newConfig.onScreenDisplay.position = value as OnScreenDisplayPosition;
+				break;
+			case "osd_display_type":
+				newConfig.onScreenDisplay.type = value as OnScreenDisplayType;
+				break;
+			case "player_speed":
+				newConfig.playerSpeed.speed = Number(value);
+				break;
+			case "speed_adjustment_steps":
+				newConfig.scrollWheelSpeedControl.steps = Number(value);
+				break;
+			case "volume_adjustment_steps":
+				newConfig.scrollWheelVolumeControl.steps = Number(value);
+				break;
+			case "volume_boost_amount":
+				newConfig.volumeBoost.amount = Number(value);
+				break;
+			case "volume_boost_mode":
+				newConfig.volumeBoost.mode = value as VolumeBoostMode;
+				break;
+			case "youtube_data_api_v3_key":
+				newConfig.youtubeDataApiV3Key = String(value);
+				break;
+		}
+	}
+	return newConfig;
+}
 export function modifyElementClassList(action: ModifyElementAction, elementPair: ElementClassPair) {
 	const { className, element } = elementPair;
 	element?.classList[action](className);
@@ -668,6 +861,7 @@ export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMap
 	element.textContent = JSON.stringify(message);
 	document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
 }
+
 /**
  * Sends a content message to the background.
  *

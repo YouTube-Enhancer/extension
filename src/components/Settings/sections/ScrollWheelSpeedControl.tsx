@@ -14,56 +14,56 @@ export default function ScrollWheelSpeedControlSection() {
 		type: "singular",
 		value: (translations) => translations.settings.sections.scrollWheelSpeedControl.enable.label
 	} satisfies parentSetting;
-	const scrollWheelControlModifierKeyOptions: SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[] =
+	const scrollWheelControlModifierKeyOptions: SelectOption<"scrollWheelSpeedControl.modifierKey" | "scrollWheelVolumeControl.modifierKey">[] =
 		getScrollWheelControlModifierKeyOptions(i18nInstance);
 	return (
 		<SettingSection title={t((translations) => translations.settings.sections.scrollWheelSpeedControl.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_scroll_wheel_speed_control?.toString() === "true"}
+				checked={settings.scrollWheelSpeedControl.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelSpeedControl.enable.label)}
-				onChange={setCheckboxOption("enable_scroll_wheel_speed_control")}
+				onChange={setCheckboxOption("scrollWheelSpeedControl.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.scrollWheelSpeedControl.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
-				id="scroll_wheel_speed_control_modifier_key"
+				disabled={settings.scrollWheelSpeedControl.enabled?.toString() !== "true"}
+				id="scrollWheelSpeedControl.modifierKey"
 				label={t((translations) => translations.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.label)}
 				onChange={(value) => {
 					const {
 						currentTarget: { value: scrollWheelModifierKey }
 					} = value;
 					if (
-						settings.enable_scroll_wheel_speed_control &&
-						settings.enable_scroll_wheel_volume_control_hold_modifier_key &&
-						settings.scroll_wheel_volume_control_modifier_key === scrollWheelModifierKey
+						settings.scrollWheelSpeedControl.enabled &&
+						settings.scrollWheelVolumeControl.holdModifierKey &&
+						settings.scrollWheelVolumeControl.modifierKey === scrollWheelModifierKey
 					) {
 						return addNotification(
 							"error",
 							(translations) => translations.pages.options.notifications.error.scrollWheelHoldModifierKey.sameKey.speedControl
 						);
 					}
-					setValueOption("scroll_wheel_speed_control_modifier_key")(value);
+					setValueOption("scrollWheelSpeedControl.modifierKey")(value);
 				}}
 				options={scrollWheelControlModifierKeyOptions}
 				parentSetting={scrollWheelSpeedControlParentSetting}
-				selectedOption={getSelectedOption("scroll_wheel_speed_control_modifier_key")}
+				selectedOption={getSelectedOption("scrollWheelSpeedControl.modifierKey")}
 				title={t((translations) => translations.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.title)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_scroll_wheel_speed_control?.toString() !== "true"}
+				disabled={settings.scrollWheelSpeedControl.enabled?.toString() !== "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.label)}
 				max={1}
 				min={0.05}
-				onChange={setValueOption("speed_adjustment_steps")}
+				onChange={setValueOption("scrollWheelSpeedControl.steps")}
 				parentSetting={scrollWheelSpeedControlParentSetting}
 				step={0.05}
 				title={t((translations) => translations.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.title)}
 				type="number"
-				value={settings.speed_adjustment_steps}
+				value={settings.scrollWheelSpeedControl.steps}
 			/>
 		</SettingSection>
 	);

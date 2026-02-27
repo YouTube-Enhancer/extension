@@ -20,10 +20,12 @@ export function disableShareShortener() {
 export async function enableShareShortener() {
 	const {
 		data: {
-			options: { enable_share_shortener }
+			options: {
+				shareShortener: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_share_shortener) return;
+	if (!enabled) return;
 	cleanSearchPage(window.location.href);
 	observeShareURLInput();
 }

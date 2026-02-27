@@ -15,18 +15,18 @@ export default function ButtonPlacementSection() {
 		setValueOption
 	} = useSettings();
 	const buttonPlacementOptions: SelectOption<
-		| "button_placements.copyTimestampUrlButton"
-		| "button_placements.decreasePlaybackSpeedButton"
-		| "button_placements.forwardButton"
-		| "button_placements.hideEndScreenCardsButton"
-		| "button_placements.increasePlaybackSpeedButton"
-		| "button_placements.loopButton"
-		| "button_placements.maximizePlayerButton"
-		| "button_placements.miniPlayerButton"
-		| "button_placements.openTranscriptButton"
-		| "button_placements.rewindButton"
-		| "button_placements.screenshotButton"
-		| "button_placements.volumeBoostButton"
+		| "buttonPlacement.copyTimestampUrlButton"
+		| "buttonPlacement.decreasePlaybackSpeedButton"
+		| "buttonPlacement.forwardButton"
+		| "buttonPlacement.hideEndScreenCardsButton"
+		| "buttonPlacement.increasePlaybackSpeedButton"
+		| "buttonPlacement.loopButton"
+		| "buttonPlacement.maximizePlayerButton"
+		| "buttonPlacement.miniPlayerButton"
+		| "buttonPlacement.openTranscriptButton"
+		| "buttonPlacement.rewindButton"
+		| "buttonPlacement.screenshotButton"
+		| "buttonPlacement.volumeBoostButton"
 	>[] = [
 		{ label: t((translations) => translations.pages.options.extras.buttonPlacement.select.options.below_player.value), value: "below_player" },
 		{ label: t((translations) => translations.pages.options.extras.buttonPlacement.select.options.feature_menu.value), value: "feature_menu" },
@@ -47,26 +47,26 @@ export default function ButtonPlacementSection() {
 				return (
 					<Setting
 						disabled={isButtonSelectDisabled(feature, settings)}
-						id={`button_placements.${feature}` as const}
+						id={`buttonPlacement.${feature}`}
 						key={feature}
 						label={label}
 						onChange={(change) => {
 							switch (feature) {
 								case "decreasePlaybackSpeedButton":
 								case "increasePlaybackSpeedButton": {
-									setValueOption(`button_placements.decreasePlaybackSpeedButton`)(change);
+									setValueOption(`buttonPlacement.decreasePlaybackSpeedButton`)(change);
 									// Timeout required otherwise the button won't work
-									setTimeout(() => setValueOption(`button_placements.increasePlaybackSpeedButton`)(change), 25);
+									setTimeout(() => setValueOption(`buttonPlacement.increasePlaybackSpeedButton`)(change), 25);
 									break;
 								}
 								case "forwardButton":
 								case "rewindButton": {
-									setValueOption(`button_placements.rewindButton`)(change);
-									setTimeout(() => setValueOption(`button_placements.forwardButton`)(change), 50);
+									setValueOption(`buttonPlacement.rewindButton`)(change);
+									setTimeout(() => setValueOption(`buttonPlacement.forwardButton`)(change), 50);
 									break;
 								}
 								default:
-									setValueOption(`button_placements.${feature}`)(change);
+									setValueOption(`buttonPlacement.${feature}`)(change);
 							}
 						}}
 						options={buttonPlacementOptions}
@@ -74,13 +74,12 @@ export default function ButtonPlacementSection() {
 							type: "singular",
 							value: (translations) => translations.pages.options.extras.buttonPlacement.select.buttonNames[feature]
 						}}
-						selectedOption={getSelectedOption(`button_placements.${feature}` as const)}
+						selectedOption={getSelectedOption(`buttonPlacement.${feature}` as const)}
 						title={t((translations) => translations.pages.options.extras.buttonPlacement.select.title, {
 							BUTTON_NAME: label.toLowerCase(),
 							PLACEMENT: t(
 								(translations) =>
-									translations.pages.options.extras.buttonPlacement.select.options[getSelectedOption(`button_placements.${feature}` as const)]
-										.placement
+									translations.pages.options.extras.buttonPlacement.select.options[getSelectedOption(`buttonPlacement.${feature}` as const)].placement
 							)
 						})}
 						type="select"

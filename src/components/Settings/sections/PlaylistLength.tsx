@@ -13,7 +13,7 @@ export default function PlaylistLengthSection() {
 		settings,
 		setValueOption
 	} = useSettings();
-	const playlistLengthGetMethodOptions: SelectOption<"playlist_length_get_method">[] = [
+	const playlistLengthGetMethodOptions: SelectOption<"playlistLength.lengthGetMethod">[] = [
 		{
 			label: "API",
 			value: "api"
@@ -23,7 +23,7 @@ export default function PlaylistLengthSection() {
 			value: "html"
 		}
 	];
-	const playlistWatchTimeGetMethodOptions: SelectOption<"playlist_watch_time_get_method">[] = [
+	const playlistWatchTimeGetMethodOptions: SelectOption<"playlistLength.watchTimeGetMethod">[] = [
 		{
 			label: t((translations) => translations.settings.sections.playlistLength.settings.wayToGetWatchTime.select.options.duration),
 			value: "duration"
@@ -41,32 +41,32 @@ export default function PlaylistLengthSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.playlistLength.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_playlist_length?.toString() === "true"}
+				checked={settings.playlistLength.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playlistLength.enable.label)}
-				onChange={setCheckboxOption("enable_playlist_length")}
+				onChange={setCheckboxOption("playlistLength.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playlistLength.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_playlist_length?.toString() !== "true"}
-				id="playlist_length_get_method"
+				disabled={settings.playlistLength.enabled?.toString() !== "true"}
+				id="playlistLength.lengthGetMethod"
 				label={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetLength.select.label)}
-				onChange={setValueOption("playlist_length_get_method")}
+				onChange={setValueOption("playlistLength.lengthGetMethod")}
 				options={playlistLengthGetMethodOptions}
 				parentSetting={playlistLengthParentSetting}
-				selectedOption={getSelectedOption("playlist_length_get_method")}
+				selectedOption={getSelectedOption("playlistLength.lengthGetMethod")}
 				title={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetLength.select.title)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_playlist_length?.toString() !== "true"}
-				id="playlist_watch_time_get_method"
+				disabled={settings.playlistLength.enabled?.toString() !== "true"}
+				id="playlistLength.watchTimeGetMethod"
 				label={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetWatchTime.select.label)}
-				onChange={setValueOption("playlist_watch_time_get_method")}
+				onChange={setValueOption("playlistLength.watchTimeGetMethod")}
 				options={playlistWatchTimeGetMethodOptions}
 				parentSetting={playlistLengthParentSetting}
-				selectedOption={getSelectedOption("playlist_watch_time_get_method")}
+				selectedOption={getSelectedOption("playlistLength.watchTimeGetMethod")}
 				title={t((translations) => translations.settings.sections.playlistLength.settings.wayToGetWatchTime.select.title)}
 				type="select"
 			/>

@@ -14,41 +14,41 @@ export default function HideShortsSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.hideShorts.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_hide_shorts_sidebar?.toString() === "true"}
+				checked={settings.hideShorts.sidebar.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.hideShorts.settings.sidebar.label)}
-				onChange={setCheckboxOption("enable_hide_shorts_sidebar")}
+				onChange={setCheckboxOption("hideShorts.sidebar.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.hideShorts.settings.sidebar.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_hide_shorts_home?.toString() === "true"}
+				checked={settings.hideShorts.home.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.hideShorts.settings.home.label)}
-				onChange={setCheckboxOption("enable_hide_shorts_home")}
+				onChange={setCheckboxOption("hideShorts.home.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.hideShorts.settings.home.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_hide_shorts_channel?.toString() === "true"}
+				checked={settings.hideShorts.channel.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.hideShorts.settings.channel.label)}
-				onChange={setCheckboxOption("enable_hide_shorts_channel")}
+				onChange={setCheckboxOption("hideShorts.channel.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.hideShorts.settings.channel.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_hide_shorts_search?.toString() === "true"}
+				checked={settings.hideShorts.search.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.hideShorts.settings.search.label)}
-				onChange={setCheckboxOption("enable_hide_shorts_search")}
+				onChange={setCheckboxOption("hideShorts.search.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.hideShorts.settings.search.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_hide_shorts_videos?.toString() === "true"}
+				checked={settings.hideShorts.videos.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.hideShorts.settings.videos.label)}
-				onChange={setCheckboxOption("enable_hide_shorts_videos")}
+				onChange={setCheckboxOption("hideShorts.videos.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.hideShorts.settings.videos.title)}
 				type="checkbox"

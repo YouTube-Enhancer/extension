@@ -9,9 +9,11 @@ export function disableHideMembersOnlyVideos() {
 export async function enableHideMembersOnlyVideos() {
 	const {
 		data: {
-			options: { enable_hide_members_only_videos }
+			options: {
+				hideMembersOnlyVideos: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_hide_members_only_videos) return;
+	if (!enabled) return;
 	hideMembersOnlyVideos();
 }
