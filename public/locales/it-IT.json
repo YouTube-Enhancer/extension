@@ -471,6 +471,12 @@
 							"title": "Impedisce alla pressione 0-9 di attuare salti a una percentuale del video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Pulsante \"Copia URL video con temporizzazione\"",
