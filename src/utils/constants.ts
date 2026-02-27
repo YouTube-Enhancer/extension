@@ -88,6 +88,7 @@ export const defaultConfiguration = {
 	hidePaidPromotionBanner: { enabled: false },
 	hidePlayables: { enabled: false },
 	hidePlaylistRecommendationsFromHomePage: { enabled: false },
+	hidePosts: { enabled: false },
 	hideScrollBar: { enabled: false },
 	hideShorts: {
 		channel: { enabled: false },
@@ -268,6 +269,7 @@ export const configurationImportSchema: TypeToPartialZodSchema<
 	hidePaidPromotionBanner: z.optional(z.object({ enabled: z.boolean() })),
 	hidePlayables: z.optional(z.object({ enabled: z.boolean() })),
 	hidePlaylistRecommendationsFromHomePage: z.optional(z.object({ enabled: z.boolean() })),
+	hidePosts: z.optional(z.object({ enabled: z.boolean() })),
 	hideScrollBar: z.optional(z.object({ enabled: z.boolean() })),
 	hideShorts: z.optional(
 		z.object({
