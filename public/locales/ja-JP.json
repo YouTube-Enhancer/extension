@@ -471,6 +471,12 @@
 							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "タイムスタンプ付きの動画URLをコピーのボタン",
