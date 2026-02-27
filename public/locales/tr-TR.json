@@ -471,6 +471,12 @@
 							"title": "0-9 tuşlarına basıldığında videonun belirli bir yüzdesine atlamayı engeller."
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
