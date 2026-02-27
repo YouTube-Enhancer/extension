@@ -286,6 +286,7 @@ export type configuration = {
 	hidePaidPromotionBanner: { enabled: boolean };
 	hidePlayables: { enabled: boolean };
 	hidePlaylistRecommendationsFromHomePage: { enabled: boolean };
+	hidePosts: { enabled: boolean };
 	hideScrollBar: { enabled: boolean };
 	hideShorts: {
 		channel: { enabled: boolean };
@@ -458,6 +459,7 @@ export type ExtensionSendOnlyMessageMappings = {
 		"hidePlaylistRecommendationsFromHomePageChange",
 		{ hidePlaylistRecommendationsFromHomePageEnabled: boolean }
 	>;
+	hidePostsChange: DataResponseMessage<"hidePostsChange", { hidePostsEnabled: boolean }>;
 	hideScrollBarChange: DataResponseMessage<"hideScrollBarChange", { hideScrollBarEnabled: boolean }>;
 	hideShortsChange: DataResponseMessage<
 		"hideShortsChange",

@@ -53,6 +53,7 @@ import {
 	disableHidePlaylistRecommendationsFromHomePage,
 	enableHidePlaylistRecommendationsFromHomePage
 } from "@/src/features/hidePlaylistRecommendationsFromHomePage";
+import { disableHidePosts, enableHidePosts } from "@/src/features/hidePosts";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
 import { enableHideShorts } from "@/src/features/hideShorts";
@@ -187,7 +188,8 @@ const enableFeatures = async () => {
 			enableHideOfficialArtistVideosFromHomePage(),
 			enableHidePlaylistRecommendationsFromHomePage(),
 			enableSaveToWatchLaterButton(),
-			enableTimestampPeek()
+			enableTimestampPeek(),
+			enableHidePosts()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -728,6 +730,17 @@ const initialize = function () {
 							await enableHidePlaylistRecommendationsFromHomePage();
 						} else {
 							disableHidePlaylistRecommendationsFromHomePage();
+						}
+						break;
+					}
+					case "hidePostsChange": {
+						const {
+							data: { hidePostsEnabled }
+						} = message;
+						if (hidePostsEnabled) {
+							await enableHidePosts();
+						} else {
+							disableHidePosts();
 						}
 						break;
 					}

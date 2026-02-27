@@ -334,6 +334,14 @@ export default function MiscellaneousSection() {
 				title={t((translations) => translations.settings.sections.miscellaneous.settings.monoToStereoButton.enable.title)}
 				type="checkbox"
 			/>
+			<Setting
+				checked={settings.hidePosts.enabled?.toString() === "true"}
+				label={t((translations) => translations.settings.sections.miscellaneous.settings.hidePosts.enable.label)}
+				onChange={setCheckboxOption("hidePosts.enabled")}
+				parentSetting={null}
+				title={t((translations) => translations.settings.sections.miscellaneous.settings.hidePosts.enable.title)}
+				type="checkbox"
+			/>
 		</SettingSection>
 	);
 }

@@ -1,0 +1,5 @@
+body.yte-hide-posts {
+	ytd-rich-section-renderer:has([is-post]) {
+		display: none !important;
+	}
+}

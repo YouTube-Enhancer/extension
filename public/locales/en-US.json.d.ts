@@ -418,6 +418,7 @@ interface EnUS {
 							title: "Get rid of playlists from homepage";
 						};
 					};
+					hidePosts: { enable: { label: "Hide posts"; title: "Hides posts from the home page" } };
 					hideScrollbar: { enable: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" } };
 					hideSidebarRecommendedVideos: {
 						enable: {

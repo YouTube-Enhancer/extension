@@ -425,6 +425,12 @@ const pathHandlers: {
 		}),
 		event: "hidePlaylistRecommendationsFromHomePageChange"
 	},
+	"hidePosts.enabled": {
+		build: ({ newValue }) => ({
+			hidePostsEnabled: newValue
+		}),
+		event: "hidePostsChange"
+	},
 	"hideScrollBar.enabled": {
 		build: ({ newValue }) => ({
 			hideScrollBarEnabled: newValue
