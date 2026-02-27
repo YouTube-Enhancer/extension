@@ -471,6 +471,12 @@
 							"title": "Impede que se pule 0-9 para uma porcentagem do vídeo"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Copiar URL do vídeo com o botão de minutagem",
