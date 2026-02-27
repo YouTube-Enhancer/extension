@@ -471,6 +471,12 @@
 							"title": "防止按0-9键跳转到视频的百分比"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "复制带有时间戳的视频 URL 按钮",
