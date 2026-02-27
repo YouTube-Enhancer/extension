@@ -473,8 +473,8 @@
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "Nascondi post",
+							"title": "Nasconde i post dalla pagina iniziale"
 						}
 					},
 					"copyTimestampUrlButton": {
