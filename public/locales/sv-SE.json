@@ -471,6 +471,12 @@
 							"title": "Förhindrar att 0-9 hoppar till en procentandel av videon"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Kopiera videons webbadress med tidsstämpelknappen",
