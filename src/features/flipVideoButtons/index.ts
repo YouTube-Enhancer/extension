@@ -11,12 +11,14 @@ export const addFlipVideoVerticalButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { flipVideoVerticalButton },
-				enable_flip_video_vertical_button
+				buttonPlacement: { flipVideoVerticalButton },
+				flipVideoButtons: {
+					flipVertical: { enabled }
+				}
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_flip_video_vertical_button) return;
+	if (!enabled) return;
 	await addFeatureButton(
 		"flipVideoVerticalButton",
 		flipVideoVerticalButton,
@@ -34,12 +36,14 @@ export const addFlipVideoHorizontalButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { flipVideoHorizontalButton },
-				enable_flip_video_horizontal_button
+				buttonPlacement: { flipVideoHorizontalButton },
+				flipVideoButtons: {
+					flipHorizontal: { enabled }
+				}
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_flip_video_horizontal_button) return;
+	if (!enabled) return;
 	await addFeatureButton(
 		"flipVideoHorizontalButton",
 		flipVideoHorizontalButton,

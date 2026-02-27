@@ -25,7 +25,7 @@ export default function PlayerQualitySection() {
 		{ label: "4320p", value: "highres" },
 		{ label: "auto", value: "auto" }
 		// This cast is here because otherwise it would require marking all the options 'as const'
-	].reverse() as SelectOption<"player_quality">[];
+	].reverse() as SelectOption<"playerQuality.quality">[];
 	const PlayerQualityFallbackStrategyOptions = [
 		{
 			label: t((translations) => translations.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.options.higher),
@@ -35,7 +35,7 @@ export default function PlayerQualitySection() {
 			label: t((translations) => translations.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.options.lower),
 			value: "lower"
 		}
-	] as SelectOption<"player_quality_fallback_strategy">[];
+	] as SelectOption<"playerQuality.fallbackStrategy">[];
 	const automaticQualityParentSetting = {
 		type: "singular",
 		value: (translations) => translations.settings.sections.playerQuality.enable.label
@@ -44,32 +44,32 @@ export default function PlayerQualitySection() {
 		<SettingSection title={t((translations) => translations.settings.sections.playerQuality.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_automatically_set_quality?.toString() === "true"}
+				checked={settings.playerQuality.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.playerQuality.enable.label)}
-				onChange={setCheckboxOption("enable_automatically_set_quality")}
+				onChange={setCheckboxOption("playerQuality.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.playerQuality.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
-				id="player_quality"
+				disabled={settings.playerQuality.enabled?.toString() !== "true"}
+				id="playerQuality.quality"
 				label={t((translations) => translations.settings.sections.playerQuality.settings.quality.select.label)}
-				onChange={setValueOption("player_quality")}
+				onChange={setValueOption("playerQuality.quality")}
 				options={YouTubePlayerQualityOptions}
 				parentSetting={automaticQualityParentSetting}
-				selectedOption={getSelectedOption("player_quality")}
+				selectedOption={getSelectedOption("playerQuality.quality")}
 				title={t((translations) => translations.settings.sections.playerQuality.settings.quality.select.title)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_automatically_set_quality?.toString() !== "true"}
-				id="player_quality_fallback_strategy"
+				disabled={settings.playerQuality.enabled?.toString() !== "true"}
+				id="playerQuality.fallbackStrategy"
 				label={t((translations) => translations.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.label)}
-				onChange={setValueOption("player_quality_fallback_strategy")}
+				onChange={setValueOption("playerQuality.fallbackStrategy")}
 				options={PlayerQualityFallbackStrategyOptions}
 				parentSetting={automaticQualityParentSetting}
-				selectedOption={getSelectedOption("player_quality_fallback_strategy")}
+				selectedOption={getSelectedOption("playerQuality.fallbackStrategy")}
 				title={t((translations) => translations.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.title)}
 				type="select"
 			/>

@@ -12,12 +12,12 @@ export const addMonoToStereoButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { monoToStereoButton },
-				enable_mono_to_stereo_button
+				buttonPlacement: { monoToStereoButton },
+				monoToStereoButton: { enabled }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_mono_to_stereo_button) return;
+	if (!enabled) return;
 	await addFeatureButton(
 		"monoToStereoButton",
 		monoToStereoButton,

@@ -2,11 +2,11 @@ import type { configuration } from "@/src/types";
 
 import { customCssID } from "@/src/features/customCSS";
 
-export function createCustomCSSElement({ custom_css_code }: Pick<configuration, "custom_css_code">) {
+export function createCustomCSSElement({ code }: Pick<configuration["customCSS"], "code">) {
 	// Create the custom CSS style element
 	const customCSSStyleElement = document.createElement("style");
 	customCSSStyleElement.id = customCssID;
-	customCSSStyleElement.textContent = custom_css_code;
+	customCSSStyleElement.textContent = code;
 	return customCSSStyleElement;
 }
 export function customCSSExists() {
@@ -16,10 +16,10 @@ export function customCSSExists() {
 	if (!customCSSStyleElement) return false;
 	return true;
 }
-export function updateCustomCSS({ custom_css_code }: Pick<configuration, "custom_css_code">) {
+export function updateCustomCSS({ code }: Pick<configuration["customCSS"], "code">) {
 	// Get the custom CSS style element
 	const customCSSStyleElement = document.querySelector<HTMLStyleElement>(`#${customCssID}`);
 	// Check if the custom CSS style element exists
 	if (!customCSSStyleElement) return;
-	customCSSStyleElement.replaceWith(createCustomCSSElement({ custom_css_code }));
+	customCSSStyleElement.replaceWith(createCustomCSSElement({ code }));
 }

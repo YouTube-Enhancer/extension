@@ -173,11 +173,13 @@ async function createFeatureMenuButton() {
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
 	const {
 		data: {
-			options: { feature_menu_open_type: featureMenuOpenType }
+			options: {
+				featureMenu: { openType }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	await waitForAllElements([MENU_ID, BUTTON_ID]);
-	setupFeatureMenuEventListeners(featureMenuOpenType);
+	setupFeatureMenuEventListeners(openType);
 }
 function makeFeatureMenuIcon() {
 	return createSVGElement(

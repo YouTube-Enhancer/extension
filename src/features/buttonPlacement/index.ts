@@ -1,6 +1,7 @@
-import "./index.css";
 import type { GetIconType } from "@/src/icons";
 import type { AllButtonNames, ButtonPlacement, MultiButtonNames, SingleButtonFeatureNames } from "@/src/types";
+
+import "./index.css";
 
 import { addFeatureItemToMenu, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
 import { findKeyByValue, removeTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -40,7 +41,7 @@ export async function removeFeatureButton<Name extends AllButtonNames>(buttonNam
 		({
 			data: {
 				options: {
-					button_placements: { [buttonName]: placement }
+					buttonPlacement: { [buttonName]: placement }
 				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content"));

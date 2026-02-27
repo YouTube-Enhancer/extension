@@ -18,11 +18,11 @@ export default function YouTubeDataApiKeySection() {
 				disabled={false}
 				input_type="password"
 				label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
-				onChange={setValueOption("youtube_data_api_v3_key")}
+				onChange={setValueOption("youtubeDataApiV3Key")}
 				parentSetting={null}
 				title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title)}
 				type="text-input"
-				value={settings.youtube_data_api_v3_key}
+				value={settings.youtubeDataApiV3Key}
 			/>
 			<fieldset className={cn("flex flex-row gap-1")}>
 				<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">

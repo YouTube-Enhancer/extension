@@ -22,7 +22,9 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		// Wait for the options message and get the format from it
 		const {
 			data: {
-				options: { screenshot_format, screenshot_save_as }
+				options: {
+					screenshotButton: { format, saveAs }
+				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 
@@ -54,20 +56,20 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		};
 
 		const saveToFile = async () => {
-			const mimeType = `image/${screenshot_format}`;
+			const mimeType = `image/${format}`;
 			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
 			if (!blob) return;
 			const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
-			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${screenshot_format}`;
+			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${format}`;
 			a.click();
 		};
 
-		if (screenshot_save_as === "clipboard" || screenshot_save_as === "both") {
+		if (saveAs === "clipboard" || saveAs === "both") {
 			await copyToClipboard();
 		}
-		if (screenshot_save_as === "file" || screenshot_save_as === "both") {
+		if (saveAs === "file" || saveAs === "both") {
 			await saveToFile();
 		}
 	} catch (_error) {}
@@ -78,13 +80,13 @@ export const addScreenshotButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { screenshotButton: screenshotButtonPlacement },
-				enable_screenshot_button: enableScreenshotButton
+				buttonPlacement: { screenshotButton: screenshotButtonPlacement },
+				screenshotButton: { enabled }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the screenshot button option is disabled, return
-	if (!enableScreenshotButton) return;
+	if (!enabled) return;
 	// Add a click event listener to the screenshot button
 	function screenshotButtonClickListener() {
 		void (async () => {

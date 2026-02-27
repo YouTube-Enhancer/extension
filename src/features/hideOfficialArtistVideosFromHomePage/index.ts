@@ -13,9 +13,11 @@ export async function enableHideOfficialArtistVideosFromHomePage() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_hide_official_artist_videos_from_home_page: enableHideOfficialArtistVideosFromHomePage }
+			options: {
+				hideOfficialArtistVideosFromHomePage: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideOfficialArtistVideosFromHomePage) return;
+	if (!enabled) return;
 	hideOfficialArtistVideosFromHomePage();
 }

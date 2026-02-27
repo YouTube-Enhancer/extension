@@ -1,25 +1,25 @@
 import type { configuration } from "@/src/types";
 
 import { defaultConfiguration } from "@/src/utils/constants";
-import { parseStoredValue } from "@/src/utils/utilities";
+import { isLegacyConfiguration, migrateConfiguration, parseStoredValue } from "@/src/utils/utilities";
 
 export async function updateStoredSettings() {
 	try {
 		const rawStorage = await chrome.storage.local.get(null);
-		const rawKeys = Object.keys(rawStorage);
-		const settings = await getStoredSettings();
-		const removedKeys = rawKeys.filter((key) => !(key in defaultConfiguration));
+		const rawKeys = Object.keys(rawStorage) as string[];
+		let settings = await getStoredSettings();
+		// Migrate legacy configuration
+		if (isLegacyConfiguration(settings)) {
+			settings = migrateConfiguration(settings, defaultConfiguration);
+		}
+		// Remove keys that are not in the default configuration
+		const validKeys = new Set(Object.keys(defaultConfiguration));
+		const removedKeys = rawKeys.filter((key) => !validKeys.has(key));
+
 		if (removedKeys.length > 0) {
 			await chrome.storage.local.remove(removedKeys);
 		}
-		const filteredSettings: Partial<configuration> = {};
-		for (const key of Object.keys(defaultConfiguration) as Array<keyof configuration>) {
-			const { [key]: value } = settings;
-			if (value !== undefined) {
-				Object.assign(filteredSettings, { [key]: value });
-			}
-		}
-		await setModifiedSettings(filteredSettings);
+		await setModifiedSettings(settings);
 	} catch (error) {
 		console.error("Failed to update stored settings:", error);
 	}

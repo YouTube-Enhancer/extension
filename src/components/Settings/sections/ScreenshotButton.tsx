@@ -13,12 +13,12 @@ export default function ScreenshotButtonSection() {
 		settings,
 		setValueOption
 	} = useSettings();
-	const ScreenshotFormatOptions: SelectOption<"screenshot_format">[] = [
+	const ScreenshotFormatOptions: SelectOption<"screenshotButton.format">[] = [
 		{ label: "PNG", value: "png" },
 		{ label: "JPEG", value: "jpeg" },
 		{ label: "WebP", value: "webp" }
 	];
-	const ScreenshotSaveAsOptions: SelectOption<"screenshot_save_as">[] = [
+	const ScreenshotSaveAsOptions: SelectOption<"screenshotButton.saveAs">[] = [
 		{ label: t((translations) => translations.settings.sections.screenshotButton.settings.saveAs.select.options.file), value: "file" },
 		{ label: t((translations) => translations.settings.sections.screenshotButton.settings.saveAs.select.options.clipboard), value: "clipboard" },
 		{ label: t((translations) => translations.settings.sections.screenshotButton.settings.saveAs.select.options.both), value: "both" }
@@ -35,36 +35,36 @@ export default function ScreenshotButtonSection() {
 		<SettingSection title={t((translations) => translations.settings.sections.screenshotButton.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_screenshot_button?.toString() === "true"}
+				checked={settings.screenshotButton.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.screenshotButton.enable.label)}
-				onChange={setCheckboxOption("enable_screenshot_button")}
+				onChange={setCheckboxOption("screenshotButton.enabled")}
 				parentSetting={null}
 				title={t((translations) => translations.settings.sections.screenshotButton.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_screenshot_button?.toString() !== "true"}
-				id="screenshot_save_as"
+				disabled={settings.screenshotButton.enabled?.toString() !== "true"}
+				id="screenshotButton.saveAs"
 				label={t((translations) => translations.settings.sections.screenshotButton.settings.saveAs.select.label)}
-				onChange={setValueOption("screenshot_save_as")}
+				onChange={setValueOption("screenshotButton.saveAs")}
 				options={ScreenshotSaveAsOptions}
 				parentSetting={screenshotButtonParentSetting}
-				selectedOption={getSelectedOption("screenshot_save_as")}
+				selectedOption={getSelectedOption("screenshotButton.saveAs")}
 				title={t((translations) => translations.settings.sections.screenshotButton.settings.saveAs.select.label)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_screenshot_button?.toString() !== "true" || settings.screenshot_save_as?.toString() === "clipboard"}
-				id="screenshot_format"
+				disabled={settings.screenshotButton.enabled?.toString() !== "true" || settings.screenshotButton.saveAs?.toString() === "clipboard"}
+				id="screenshotButton.format"
 				label={t((translations) => translations.settings.sections.screenshotButton.settings.format.label)}
-				onChange={setValueOption("screenshot_format")}
+				onChange={setValueOption("screenshotButton.format")}
 				options={ScreenshotFormatOptions}
 				parentSetting={
-					settings.enable_screenshot_button?.toString() === "true" && settings.screenshot_save_as?.toString() === "clipboard" ?
+					settings.screenshotButton.enabled?.toString() === "true" && settings.screenshotButton.saveAs?.toString() === "clipboard" ?
 						screenshotButtonSaveAsClipboardParentSetting
 					:	screenshotButtonParentSetting
 				}
-				selectedOption={getSelectedOption("screenshot_format")}
+				selectedOption={getSelectedOption("screenshotButton.format")}
 				title={t((translations) => translations.settings.sections.screenshotButton.settings.format.title)}
 				type="select"
 			/>

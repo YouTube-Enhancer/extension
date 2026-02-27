@@ -10,11 +10,13 @@ export async function enableOpenYouTubeSettingsOnHover() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_open_youtube_settings_on_hover: enableOpenYouTubeSettingsOnHover }
+			options: {
+				openYouTubeSettingsOnHover: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the open YouTube settings on hover option is disabled, return
-	if (!enableOpenYouTubeSettingsOnHover) return;
+	if (!enabled) return;
 	const settingsButton = document.querySelector<HTMLButtonElement>(".ytp-button.ytp-settings-button");
 	if (!settingsButton) return;
 	const featureMenuButton = document.querySelector<HTMLButtonElement>("#yte-feature-menu-button");

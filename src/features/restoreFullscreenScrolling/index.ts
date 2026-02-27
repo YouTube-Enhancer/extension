@@ -8,10 +8,12 @@ export async function disableRestoreFullscreenScrolling() {
 export async function enableRestoreFullscreenScrolling() {
 	const {
 		data: {
-			options: { enable_restore_fullscreen_scrolling }
+			options: {
+				restoreFullscreenScrolling: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_restore_fullscreen_scrolling) return;
+	if (!enabled) return;
 	await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
 	modifyElementsClassList("add", getFullscreenScrollPairs());
 }

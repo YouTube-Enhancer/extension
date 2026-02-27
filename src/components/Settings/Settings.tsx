@@ -151,9 +151,9 @@ export default function Settings() {
 			<div className="size-fit bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']" dir={localeDirection[settings.language]}>
 				<SettingsHeader />
 				<Setting
-					checked={settings.open_settings_on_major_or_minor_version_change?.toString() === "true"}
+					checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
 					label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
-					onChange={setCheckboxOption("open_settings_on_major_or_minor_version_change")}
+					onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
 					parentSetting={null}
 					title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
 					type="checkbox"

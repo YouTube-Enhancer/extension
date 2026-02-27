@@ -25,10 +25,12 @@ export function disableTimestampPeek() {
 export async function enableTimestampPeek() {
 	const {
 		data: {
-			options: { enable_timestamp_peek }
+			options: {
+				timestampPeek: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_timestamp_peek || !isWatchPage()) return;
+	if (!enabled || !isWatchPage()) return;
 	await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
 	const videoHref = getVideoHref();
 	if (!videoHref) return;

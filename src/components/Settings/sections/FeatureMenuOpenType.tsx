@@ -13,10 +13,10 @@ export default function FeatureMenuOpenTypeSection() {
 		<SettingSection title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}>
 			<SettingTitle />
 			<Setting
-				disabled={Object.values(settings.button_placements).every((v) => v !== "feature_menu")}
-				id="feature_menu_open_type"
+				disabled={Object.values(settings.buttonPlacement).every((v) => v !== "feature_menu")}
+				id="featureMenu.openType"
 				label={t((translations) => translations.pages.options.extras.featureMenu.openType.select.label)}
-				onChange={setValueOption("feature_menu_open_type")}
+				onChange={setValueOption("featureMenu.openType")}
 				options={[
 					{ label: t((translations) => translations.pages.options.extras.featureMenu.openType.select.options.hover), value: "hover" },
 					{ label: t((translations) => translations.pages.options.extras.featureMenu.openType.select.options.click), value: "click" }
@@ -25,7 +25,7 @@ export default function FeatureMenuOpenTypeSection() {
 					type: "specificOption",
 					value: (translations) => translations.pages.options.extras.optionDisabled.specificOption.featureMenu
 				}}
-				selectedOption={getSelectedOption("feature_menu_open_type")}
+				selectedOption={getSelectedOption("featureMenu.openType")}
 				title={t((translations) => translations.pages.options.extras.featureMenu.openType.select.title)}
 				type="select"
 			/>

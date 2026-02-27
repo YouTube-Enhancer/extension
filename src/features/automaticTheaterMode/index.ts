@@ -19,11 +19,13 @@ export async function enableAutomaticTheaterMode() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_automatic_theater_mode }
+			options: {
+				automaticTheaterMode: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If automatic theater mode isn't enabled return
-	if (!enable_automatic_theater_mode) return;
+	if (!enabled) return;
 	// Get the size button
 	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	// If the size button is not available return

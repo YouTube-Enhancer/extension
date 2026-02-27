@@ -15,12 +15,14 @@ export async function setupRemainingTime() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_remaining_time }
+			options: {
+				remainingTime: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	if (!isWatchPage()) return;
 	// If remaining time option is disabled, return
-	if (!enable_remaining_time) return;
+	if (!enabled) return;
 	// Get the player element
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	// If player element is not available, return

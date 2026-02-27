@@ -14,70 +14,70 @@ export default function ScrollWheelVolumeControlSection() {
 		type: "singular",
 		value: (translations) => translations.settings.sections.scrollWheelVolumeControl.enable.label
 	} satisfies parentSetting;
-	const scrollWheelControlModifierKeyOptions: SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[] =
+	const scrollWheelControlModifierKeyOptions: SelectOption<"scrollWheelSpeedControl.modifierKey" | "scrollWheelVolumeControl.modifierKey">[] =
 		getScrollWheelControlModifierKeyOptions(i18nInstance);
 	return (
 		<SettingSection title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.title)}>
 			<SettingTitle />
 			<Setting
-				checked={settings.enable_scroll_wheel_volume_control?.toString() === "true"}
+				checked={settings.scrollWheelVolumeControl.enabled?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelVolumeControl.enable.label)}
-				onChange={setCheckboxOption("enable_scroll_wheel_volume_control")}
+				onChange={setCheckboxOption("scrollWheelVolumeControl.enabled")}
 				parentSetting={scrollWheelVolumeControlParentSetting}
 				title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.enable.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_scroll_wheel_volume_control_hold_modifier_key?.toString() === "true"}
+				checked={settings.scrollWheelVolumeControl.holdModifierKey?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.label)}
-				onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_modifier_key")}
+				onChange={setCheckboxOption("scrollWheelVolumeControl.holdModifierKey")}
 				parentSetting={scrollWheelVolumeControlParentSetting}
 				title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.title)}
 				type="checkbox"
 			/>
 			<Setting
-				checked={settings.enable_scroll_wheel_volume_control_hold_right_click?.toString() === "true"}
+				checked={settings.scrollWheelVolumeControl.holdRightClick?.toString() === "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.label)}
-				onChange={setCheckboxOption("enable_scroll_wheel_volume_control_hold_right_click")}
+				onChange={setCheckboxOption("scrollWheelVolumeControl.holdRightClick")}
 				parentSetting={scrollWheelVolumeControlParentSetting}
 				title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.title)}
 				type="checkbox"
 			/>
 			<Setting
-				disabled={settings.enable_scroll_wheel_volume_control_hold_modifier_key?.toString() !== "true"}
-				id="scroll_wheel_volume_control_modifier_key"
+				disabled={settings.scrollWheelVolumeControl.holdModifierKey?.toString() !== "true"}
+				id="scrollWheelVolumeControl.modifierKey"
 				label={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.label)}
 				onChange={(value) => {
 					const {
 						currentTarget: { value: scrollWheelModifierKey }
 					} = value;
 					if (
-						settings.enable_scroll_wheel_speed_control &&
-						settings.enable_scroll_wheel_volume_control_hold_modifier_key &&
-						settings.scroll_wheel_speed_control_modifier_key === scrollWheelModifierKey
+						settings.scrollWheelSpeedControl.enabled &&
+						settings.scrollWheelVolumeControl.holdModifierKey &&
+						settings.scrollWheelSpeedControl.modifierKey === scrollWheelModifierKey
 					) {
 						return addNotification(
 							"error",
 							(translations) => translations.pages.options.notifications.error.scrollWheelHoldModifierKey.sameKey.volumeControl
 						);
 					}
-					setValueOption("scroll_wheel_volume_control_modifier_key")(value);
+					setValueOption("scrollWheelVolumeControl.modifierKey")(value);
 				}}
 				options={scrollWheelControlModifierKeyOptions}
 				parentSetting={scrollWheelVolumeControlParentSetting}
-				selectedOption={getSelectedOption("scroll_wheel_volume_control_modifier_key")}
+				selectedOption={getSelectedOption("scrollWheelVolumeControl.modifierKey")}
 				title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.title)}
 				type="select"
 			/>
 			<Setting
-				disabled={settings.enable_scroll_wheel_volume_control?.toString() !== "true"}
+				disabled={settings.scrollWheelVolumeControl.enabled?.toString() !== "true"}
 				label={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.label)}
 				min={1}
-				onChange={setValueOption("volume_adjustment_steps")}
+				onChange={setValueOption("scrollWheelVolumeControl.steps")}
 				parentSetting={scrollWheelVolumeControlParentSetting}
 				title={t((translations) => translations.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.title)}
 				type="number"
-				value={settings.volume_adjustment_steps}
+				value={settings.scrollWheelVolumeControl.steps}
 			/>
 		</SettingSection>
 	);

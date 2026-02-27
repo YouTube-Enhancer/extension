@@ -20,13 +20,15 @@ export default async function setPlayerQuality(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_automatically_set_quality, player_quality, player_quality_fallback_strategy }
+			options: {
+				playerQuality: { enabled, fallbackStrategy, quality }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If automatically set quality option is disabled, return
-	if (!enable_automatically_set_quality) return;
+	if (!enabled) return;
 	// If player quality is not specified, return
-	if (!player_quality) return;
+	if (!quality) return;
 	// Get the player element
 	const playerContainer =
 		isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
@@ -39,8 +41,8 @@ export default async function setPlayerQuality(): Promise<void> {
 	// Get the available quality levels
 	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 	// Check if the specified player quality is available
-	if (player_quality && player_quality !== "auto") {
-		const closestQuality = chooseClosestQuality(player_quality, availableQualityLevels, player_quality_fallback_strategy);
+	if (quality && quality !== "auto") {
+		const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
 		if (!closestQuality) return;
 		// Log the message indicating the player quality being set
 		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");

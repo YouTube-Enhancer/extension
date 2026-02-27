@@ -32,12 +32,12 @@ export const addMiniPlayerButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { miniPlayerButton },
-				enable_comments_mini_player_button
+				buttonPlacement: { miniPlayerButton },
+				miniPlayerButton: { enabled }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_comments_mini_player_button) return;
+	if (!enabled) return;
 	currentPlacement = miniPlayerButton;
 	await addFeatureButton(
 		"miniPlayerButton",

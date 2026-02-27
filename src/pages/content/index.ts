@@ -8,7 +8,10 @@ import {
 	type configuration,
 	type ContentSendOnlyMessageMappings,
 	type ContentToBackgroundSendOnlyMessageMappings,
+	type ExtensionSendOnlyMessageMappings,
 	type Messages,
+	type Path,
+	type PathValue,
 	type RememberedVolumes,
 	type StorageChanges
 } from "@/src/types";
@@ -29,23 +32,20 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
-
-void (async () => {
-	/**
-	 * Retrieves the options from the local storage and sends them back to the youtube page.
-	 *
-	 * @type {configuration}
-	 */
+const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		void chrome.storage.local.get<configuration>((settings) => {
 			const storedSettings: Partial<configuration> = Object.keys(settings)
-				.filter((key) => typeof key === "string")
 				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {});
 			resolve(storedSettings as configuration);
 		});
 	});
-	void void sendExtensionMessage("options", "data_response", { options });
+	return options;
+};
+void (async () => {
+	const options = await getStoredSettings();
+	void sendExtensionMessage("options", "data_response", { options });
 })();
 
 /**
@@ -171,17 +171,6 @@ const storageListeners = (changes: StorageChanges, areaName: string) => {
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
 };
-const getStoredSettings = async (): Promise<configuration> => {
-	const options: configuration = await new Promise((resolve) => {
-		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = Object.keys(settings)
-				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {});
-			resolve(storedSettings as configuration);
-		});
-	});
-	return options;
-};
 const deepEqual = (a: unknown, b: unknown): boolean => {
 	if (a === b) return true;
 	if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
@@ -211,443 +200,580 @@ const castStorageChanges = (changes: StorageChanges) => {
 	return result;
 };
 
+type PathEvent<P extends Path<configuration>, E extends keyof ExtensionSendOnlyMessageMappings> = {
+	build: (args: {
+		newValue: PathValue<configuration, P>;
+		oldValue: PathValue<configuration, P>;
+		options: configuration;
+		path: P;
+	}) => ExtensionSendOnlyMessageMappings[E]["data"];
+	event: E;
+};
+function getProp(obj: unknown, key: string): unknown {
+	return isRecord(obj) ? obj[key] : undefined;
+}
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
+}
+const pathHandlers: {
+	[P in Path<configuration>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
+} = {
+	"automaticallyDisableAmbientMode.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyDisableAmbientModeEnabled: newValue
+		}),
+		event: "automaticallyDisableAmbientModeChange"
+	},
+	"automaticallyDisableAutoPlay.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyDisableAutoPlayEnabled: newValue
+		}),
+		event: "automaticallyDisableAutoPlayChange"
+	},
+	"automaticallyDisableClosedCaptions.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyDisableClosedCaptionsEnabled: newValue
+		}),
+		event: "automaticallyDisableClosedCaptionsChange"
+	},
+	"automaticallyEnableClosedCaptions.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyEnableClosedCaptionsEnabled: newValue
+		}),
+		event: "automaticallyEnableClosedCaptionsChange"
+	},
+	"automaticallyMaximizePlayer.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyMaximizePlayerEnabled: newValue
+		}),
+		event: "automaticallyMaximizePlayerChange"
+	},
+	"automaticallyShowMoreVideosOnEndScreen.enabled": {
+		build: ({ newValue }) => ({
+			automaticallyShowMoreVideosOnEndScreenEnabled: newValue
+		}),
+		event: "automaticallyShowMoreVideosOnEndScreenChange"
+	},
+	"automaticTheaterMode.enabled": {
+		build: ({ newValue }) => ({
+			automaticTheaterModeEnabled: newValue
+		}),
+		event: "automaticTheaterModeChange"
+	},
+	"blockNumberKeySeeking.enabled": {
+		build: ({ newValue }) => ({
+			blockNumberKeySeekingEnabled: newValue
+		}),
+		event: "blockNumberKeySeekingChange"
+	},
+	buttonPlacement: {
+		build: ({ newValue, oldValue }) => ({
+			buttonPlacement: buttonNames.reduce(
+				(acc, feature) => {
+					const { [feature]: oldPlacement } = oldValue;
+					const { [feature]: newPlacement } = newValue;
+					return Object.assign(acc, {
+						[feature]: {
+							new: newPlacement,
+							old: oldPlacement
+						}
+					});
+				},
+				{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
+			)
+		}),
+		event: "buttonPlacementChange"
+	},
+	"copyTimestampUrlButton.enabled": {
+		build: ({ newValue }) => ({
+			copyTimestampUrlButtonEnabled: newValue
+		}),
+		event: "copyTimestampUrlButtonChange"
+	},
+	"customCSS.code": {
+		build: ({ newValue, options }) => ({
+			customCSSCode: newValue,
+			customCSSEnabled: options.customCSS.enabled
+		}),
+		event: "customCSSChange"
+	},
+	"customCSS.enabled": {
+		build: ({ newValue, options }) => ({
+			customCSSCode: options.customCSS.code,
+			customCSSEnabled: newValue
+		}),
+		event: "customCSSChange"
+	},
+	"deepDarkCSS.colors": {
+		build: ({ newValue, options }) => ({
+			deepDarkCustomThemeColors: newValue,
+			deepDarkPreset: options.deepDarkCSS.preset,
+			deepDarkThemeEnabled: options.deepDarkCSS.enabled
+		}),
+		event: "deepDarkThemeChange"
+	},
+	"deepDarkCSS.enabled": {
+		build: ({ newValue, options }) => ({
+			deepDarkCustomThemeColors: options.deepDarkCSS.colors,
+			deepDarkPreset: options.deepDarkCSS.preset,
+			deepDarkThemeEnabled: newValue
+		}),
+		event: "deepDarkThemeChange"
+	},
+	"deepDarkCSS.preset": {
+		build: ({ newValue, options }) => ({
+			deepDarkCustomThemeColors: options.deepDarkCSS.colors,
+			deepDarkPreset: newValue,
+			deepDarkThemeEnabled: options.deepDarkCSS.enabled
+		}),
+		event: "deepDarkThemeChange"
+	},
+	"defaultToOriginalAudioTrack.enabled": {
+		build: ({ newValue }) => ({
+			defaultToOriginalAudioTrackEnabled: newValue
+		}),
+		event: "defaultToOriginalAudioTrackChange"
+	},
+	"featureMenu.openType": {
+		build: ({ newValue }) => ({
+			featureMenuOpenType: newValue
+		}),
+		event: "featureMenuOpenTypeChange"
+	},
+	"flipVideoButtons.flipHorizontal.enabled": {
+		build: ({ newValue }) => ({
+			flipVideoHorizontalButtonEnabled: newValue
+		}),
+		event: "flipVideoHorizontalButtonChange"
+	},
+	"flipVideoButtons.flipVertical.enabled": {
+		build: ({ newValue }) => ({
+			flipVideoVerticalButtonEnabled: newValue
+		}),
+		event: "flipVideoVerticalButtonChange"
+	},
+	"forwardRewindButtons.enabled": {
+		build: ({ newValue }) => ({
+			forwardRewindButtonsEnabled: newValue
+		}),
+		event: "forwardRewindButtonsChange"
+	},
+	"forwardRewindButtons.time": {
+		build: () => ({
+			forwardRewindButtonsEnabled: true
+		}),
+		event: "forwardRewindButtonsChange"
+	},
+	"globalVolume.enabled": {
+		build: ({ newValue }) => ({
+			globalVolumeEnabled: newValue
+		}),
+		event: "globalVolumeChange"
+	},
+	"hideArtificialIntelligenceSummary.enabled": {
+		build: ({ newValue }) => ({
+			hideArtificialIntelligenceSummaryEnabled: newValue
+		}),
+		event: "hideArtificialIntelligenceSummaryChange"
+	},
+	"hideEndScreenCards.enabled": {
+		build: ({ newValue, options }) => ({
+			hideEndScreenCardsButtonPlacement: options.buttonPlacement["hideEndScreenCardsButton"],
+			hideEndScreenCardsEnabled: newValue
+		}),
+		event: "hideEndScreenCardsChange"
+	},
+	"hideEndScreenCardsButton.enabled": {
+		build: ({ newValue }) => ({
+			hideEndScreenCardsButtonEnabled: newValue
+		}),
+		event: "hideEndScreenCardsButtonChange"
+	},
+	"hideLiveStreamChat.enabled": {
+		build: ({ newValue }) => ({
+			hideLiveStreamChatEnabled: newValue
+		}),
+		event: "hideLiveStreamChatChange"
+	},
+	"hideMembersOnlyVideos.enabled": {
+		build: ({ newValue }) => ({
+			hideMembersOnlyVideosEnabled: newValue
+		}),
+		event: "hideMembersOnlyVideosChange"
+	},
+	"hideOfficialArtistVideosFromHomePage.enabled": {
+		build: ({ newValue }) => ({
+			hideOfficialArtistVideosFromHomePageEnabled: newValue
+		}),
+		event: "hideOfficialArtistVideosFromHomePageChange"
+	},
+	"hidePaidPromotionBanner.enabled": {
+		build: ({ newValue }) => ({
+			hidePaidPromotionBannerEnabled: newValue
+		}),
+		event: "hidePaidPromotionBannerChange"
+	},
+	"hidePlayables.enabled": {
+		build: ({ newValue }) => ({
+			hidePlayablesEnabled: newValue
+		}),
+		event: "hidePlayablesChange"
+	},
+	"hidePlaylistRecommendationsFromHomePage.enabled": {
+		build: ({ newValue }) => ({
+			hidePlaylistRecommendationsFromHomePageEnabled: newValue
+		}),
+		event: "hidePlaylistRecommendationsFromHomePageChange"
+	},
+	"hideScrollBar.enabled": {
+		build: ({ newValue }) => ({
+			hideScrollBarEnabled: newValue
+		}),
+		event: "hideScrollBarChange"
+	},
+	"hideShorts.channel.enabled": {
+		build: ({ newValue, options }) => ({
+			enableHideShortsChannel: newValue,
+			enableHideShortsHome: options.hideShorts.home.enabled,
+			enableHideShortsSearch: options.hideShorts.search.enabled,
+			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
+			enableHideShortsVideos: options.hideShorts.videos.enabled
+		}),
+		event: "hideShortsChange"
+	},
+	"hideShorts.home.enabled": {
+		build: ({ newValue, options }) => ({
+			enableHideShortsChannel: options.hideShorts.channel.enabled,
+			enableHideShortsHome: newValue,
+			enableHideShortsSearch: options.hideShorts.search.enabled,
+			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
+			enableHideShortsVideos: options.hideShorts.videos.enabled
+		}),
+		event: "hideShortsChange"
+	},
+	"hideShorts.search.enabled": {
+		build: ({ newValue, options }) => ({
+			enableHideShortsChannel: options.hideShorts.channel.enabled,
+			enableHideShortsHome: options.hideShorts.home.enabled,
+			enableHideShortsSearch: newValue,
+			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
+			enableHideShortsVideos: options.hideShorts.videos.enabled
+		}),
+		event: "hideShortsChange"
+	},
+	"hideShorts.sidebar.enabled": {
+		build: ({ newValue, options }) => ({
+			enableHideShortsChannel: options.hideShorts.channel.enabled,
+			enableHideShortsHome: options.hideShorts.home.enabled,
+			enableHideShortsSearch: options.hideShorts.search.enabled,
+			enableHideShortsSidebar: newValue,
+			enableHideShortsVideos: options.hideShorts.videos.enabled
+		}),
+		event: "hideShortsChange"
+	},
+	"hideShorts.videos.enabled": {
+		build: ({ newValue, options }) => ({
+			enableHideShortsChannel: options.hideShorts.channel.enabled,
+			enableHideShortsHome: options.hideShorts.home.enabled,
+			enableHideShortsSearch: options.hideShorts.search.enabled,
+			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
+			enableHideShortsVideos: newValue
+		}),
+		event: "hideShortsChange"
+	},
+	"hideSidebarRecommendedVideos.enabled": {
+		build: ({ newValue }) => ({
+			hideSidebarRecommendedVideosEnabled: newValue
+		}),
+		event: "hideSidebarRecommendedVideosChange"
+	},
+	"hideTranslateComment.enabled": {
+		build: ({ newValue }) => ({
+			hideTranslateCommentEnabled: newValue
+		}),
+		event: "hideTranslateCommentChange"
+	},
+	language: {
+		build: ({ newValue }) => ({
+			language: newValue
+		}),
+		event: "languageChange"
+	},
+	"loopButton.enabled": {
+		build: ({ newValue }) => ({
+			loopButtonEnabled: newValue
+		}),
+		event: "loopButtonChange"
+	},
+	"maximizePlayerButton.enabled": {
+		build: ({ newValue }) => ({
+			maximizePlayerButtonEnabled: newValue
+		}),
+		event: "maximizeButtonChange"
+	},
+	"miniPlayer.defaultPosition": {
+		build: ({ newValue, options }) => ({
+			defaultPosition: newValue,
+			defaultSize: options.miniPlayer.defaultSize
+		}),
+		event: "miniPlayerDefaultsChange"
+	},
+	"miniPlayer.defaultSize": {
+		build: ({ newValue, options }) => ({
+			defaultPosition: options.miniPlayer.defaultPosition,
+			defaultSize: newValue
+		}),
+		event: "miniPlayerDefaultsChange"
+	},
+	"miniPlayer.enabled": {
+		build: ({ newValue }) => ({
+			miniPlayerEnabled: newValue
+		}),
+		event: "commentsMiniPlayerChange"
+	},
+	"miniPlayerButton.enabled": {
+		build: ({ newValue }) => ({
+			miniPlayerButtonEnabled: newValue
+		}),
+		event: "miniPlayerButtonChange"
+	},
+	"monoToStereoButton.enabled": {
+		build: ({ newValue }) => ({
+			monoToStereoButtonEnabled: newValue
+		}),
+		event: "monoToStereoButtonChange"
+	},
+	"openTranscriptButton.enabled": {
+		build: ({ newValue }) => ({
+			openTranscriptButtonEnabled: newValue
+		}),
+		event: "openTranscriptButtonChange"
+	},
+	"openYouTubeSettingsOnHover.enabled": {
+		build: ({ newValue }) => ({
+			openYouTubeSettingsOnHoverEnabled: newValue
+		}),
+		event: "openYTSettingsOnHoverChange"
+	},
+	"pauseBackgroundPlayers.enabled": {
+		build: ({ newValue }) => ({
+			pauseBackgroundPlayersEnabled: newValue
+		}),
+		event: "pauseBackgroundPlayersChange"
+	},
+	"playbackSpeedButtons.enabled": {
+		build: ({ newValue, options }) => ({
+			playbackButtonsSpeed: options.playbackSpeedButtons.speed,
+			playbackSpeedButtonsEnabled: newValue
+		}),
+		event: "playbackSpeedButtonsChange"
+	},
+	"playbackSpeedButtons.speed": {
+		build: ({ newValue, options }) => ({
+			playbackButtonsSpeed: newValue,
+			playbackSpeedButtonsEnabled: options.playbackSpeedButtons.enabled
+		}),
+		event: "playbackSpeedButtonsChange"
+	},
+	"playerSpeed.enabled": {
+		build: ({ newValue, options }) => ({
+			enableForcedPlaybackSpeed: newValue,
+			playerSpeed: options.playerSpeed.speed
+		}),
+		event: "playerSpeedChange"
+	},
+	"playerSpeed.speed": {
+		build: ({ newValue, options }) => ({
+			enableForcedPlaybackSpeed: options.playerSpeed.enabled,
+			playerSpeed: newValue
+		}),
+		event: "playerSpeedChange"
+	},
+	"playlistLength.enabled": {
+		build: ({ newValue }) => ({
+			playlistLengthEnabled: newValue
+		}),
+		event: "playlistLengthChange"
+	},
+	"playlistLength.lengthGetMethod": {
+		build: () => undefined,
+		event: "playlistLengthGetMethodChange"
+	},
+	"playlistLength.watchTimeGetMethod": {
+		build: () => undefined,
+		event: "playlistWatchTimeGetMethodChange"
+	},
+	"playlistManagementButtons.removeButton.enabled": {
+		build: ({ newValue }) => ({
+			playlistRemoveButtonEnabled: newValue
+		}),
+		event: "playlistRemoveButtonChange"
+	},
+	"playlistManagementButtons.resetButton.enabled": {
+		build: ({ newValue }) => ({
+			playlistResetButtonEnabled: newValue
+		}),
+		event: "playlistResetButtonChange"
+	},
+	"remainingTime.enabled": {
+		build: ({ newValue }) => ({
+			remainingTimeEnabled: newValue
+		}),
+		event: "remainingTimeChange"
+	},
+	"rememberVolume.enabled": {
+		build: ({ newValue }) => ({
+			rememberVolumeEnabled: newValue
+		}),
+		event: "rememberVolumeChange"
+	},
+	"removeRedirect.enabled": {
+		build: ({ newValue }) => ({
+			removeRedirectEnabled: newValue
+		}),
+		event: "removeRedirectChange"
+	},
+	"restoreFullscreenScrolling.enabled": {
+		build: ({ newValue }) => ({
+			restoreFullscreenScrollingEnabled: newValue
+		}),
+		event: "restoreFullscreenScrollingChange"
+	},
+	"saveToWatchLaterButton.enabled": {
+		build: ({ newValue }) => ({
+			saveToWatchLaterButtonEnabled: newValue
+		}),
+		event: "saveToWatchLaterButtonChange"
+	},
+	"screenshotButton.enabled": {
+		build: ({ newValue }) => ({
+			screenshotButtonEnabled: newValue
+		}),
+		event: "screenshotButtonChange"
+	},
+	"scrollWheelSpeedControl.enabled": {
+		build: ({ newValue }) => ({
+			scrollWheelSpeedControlEnabled: newValue
+		}),
+		event: "scrollWheelSpeedControlChange"
+	},
+	"scrollWheelVolumeControl.enabled": {
+		build: ({ newValue }) => ({
+			scrollWheelVolumeControlEnabled: newValue
+		}),
+		event: "scrollWheelVolumeControlChange"
+	},
+	"shareShortener.enabled": {
+		build: ({ newValue }) => ({
+			shareShortenerEnabled: newValue
+		}),
+		event: "shareShortenerChange"
+	},
+	"shortsAutoScroll.enabled": {
+		build: ({ newValue }) => ({
+			shortsAutoScrollEnabled: newValue
+		}),
+		event: "shortsAutoScrollChange"
+	},
+	"skipContinueWatching.enabled": {
+		build: ({ newValue }) => ({
+			skipContinueWatchingEnabled: newValue
+		}),
+		event: "skipContinueWatchingChange"
+	},
+	"timestampPeek.enabled": {
+		build: ({ newValue }) => ({
+			timestampPeekEnabled: newValue
+		}),
+		event: "timestampPeekChange"
+	},
+	"videoHistory.enabled": {
+		build: ({ newValue }) => ({
+			videoHistoryEnabled: newValue
+		}),
+		event: "videoHistoryChange"
+	},
+	"volumeBoost.amount": {
+		build: ({ options }) => ({
+			volumeBoostEnabled: options.volumeBoost.enabled,
+			volumeBoostMode: options.volumeBoost.mode
+		}),
+		event: "volumeBoostChange"
+	},
+	"volumeBoost.enabled": {
+		build: ({ newValue, options }) => ({
+			volumeBoostEnabled: newValue,
+			volumeBoostMode: options.volumeBoost.mode
+		}),
+		event: "volumeBoostChange"
+	},
+	"volumeBoost.mode": {
+		build: ({ newValue, options }) => ({
+			volumeBoostEnabled: options.volumeBoost.enabled,
+			volumeBoostMode: newValue
+		}),
+		event: "volumeBoostChange"
+	}
+};
+
+function emitPathEvent<P extends keyof typeof pathHandlers>({
+	newValue,
+	oldValue,
+	options,
+	path
+}: {
+	newValue: PathValue<configuration, P>;
+	oldValue: PathValue<configuration, P>;
+	options: configuration;
+	path: P;
+}): void {
+	const { [path]: def } = pathHandlers;
+	if (!def) return;
+
+	sendExtensionOnlyMessage(def.event, def.build({ newValue, oldValue, options, path }));
+}
 const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
 	if (areaName !== "local") return;
 
-	// Convert changes to a typed object
 	const castedChanges = castStorageChanges(changes);
-
-	// Get the current configuration options from local storage
 	const options = await getStoredSettings();
-	const keyActions: {
-		[K in keyof configuration]?: (oldValue: configuration[K], newValue: configuration[K]) => void;
-	} = {
-		button_placements: (oldValue, newValue) => {
-			sendExtensionOnlyMessage("buttonPlacementChange", {
-				buttonPlacement: buttonNames.reduce(
-					(acc, feature) => {
-						const { [feature]: oldPlacement } = oldValue;
-						const { [feature]: newPlacement } = newValue;
-						return Object.assign(acc, {
-							[feature]: {
-								new: newPlacement,
-								old: oldPlacement
-							}
-						});
-					},
-					{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
-				)
-			});
-		},
-		custom_css_code: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("customCSSChange", {
-				customCSSCode: newValue,
-				customCSSEnabled: options.enable_custom_css
-			});
-		},
-		deep_dark_custom_theme_colors: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: newValue,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
-		deep_dark_preset: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: newValue,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
-		enable_automatic_theater_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticTheaterModeChange", {
-				automaticTheaterModeEnabled: newValue
-			});
-		},
-		enable_automatically_disable_ambient_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableAmbientModeChange", {
-				automaticallyDisableAmbientModeEnabled: newValue
-			});
-		},
-		enable_automatically_disable_autoplay: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableAutoPlayChange", {
-				automaticallyDisableAutoPlayEnabled: newValue
-			});
-		},
-		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
-				automaticallyDisableClosedCaptionsEnabled: newValue
-			});
-		},
-		enable_automatically_enable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyEnableClosedCaptionsChange", {
-				automaticallyEnableClosedCaptionsEnabled: newValue
-			});
-		},
-		enable_automatically_maximize_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyMaximizePlayerChange", {
-				automaticallyMaximizePlayerEnabled: newValue
-			});
-		},
-		enable_automatically_show_more_videos_on_end_screen: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
-				hideEndScreenCardsButtonEnabled: newValue
-			});
-		},
-		enable_block_number_key_seeking: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("blockNumberKeySeekingChange", {
-				blockNumberKeySeekingEnabled: newValue
-			});
-		},
-		enable_comments_mini_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("commentsMiniPlayerChange", {
-				miniPlayerEnabled: newValue
-			});
-		},
-		enable_comments_mini_player_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerButtonChange", {
-				miniPlayerButtonEnabled: newValue
-			});
-		},
-		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
-				copyTimestampUrlButtonEnabled: newValue
-			});
-		},
-		enable_custom_css: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
-		},
-		enable_deep_dark_theme: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: newValue
-			});
-		},
-		enable_default_to_original_audio_track(__oldValue, newValue) {
-			sendExtensionOnlyMessage("defaultToOriginalAudioTrackChange", {
-				defaultToOriginalAudioTrackEnabled: newValue
-			});
-		},
-		enable_flip_video_horizontal_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("flipVideoHorizontalButtonChange", {
-				flipVideoHorizontalButtonEnabled: newValue
-			});
-		},
-		enable_flip_video_vertical_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("flipVideoVerticalButtonChange", {
-				flipVideoVerticalButtonEnabled: newValue
-			});
-		},
-		enable_forced_playback_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playerSpeedChange", {
-				enableForcedPlaybackSpeed: newValue,
-				playerSpeed: options.player_speed
-			});
-		},
-		enable_forward_rewind_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
-				forwardRewindButtonsEnabled: newValue
-			});
-		},
-		enable_global_volume: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("globalVolumeChange", {
-				globalVolumeEnabled: newValue
-			});
-		},
-		enable_hide_artificial_intelligence_summary: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideArtificialIntelligenceSummaryChange", {
-				hideArtificialIntelligenceSummaryEnabled: newValue
-			});
-		},
-		enable_hide_end_screen_cards: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
-				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],
-				hideEndScreenCardsEnabled: newValue
-			});
-		},
-		enable_hide_end_screen_cards_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
-				hideEndScreenCardsButtonEnabled: newValue
-			});
-		},
-		enable_hide_live_stream_chat: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
-				hideLiveStreamChatEnabled: newValue
-			});
-		},
-		enable_hide_members_only_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideMembersOnlyVideosChange", {
-				hideMembersOnlyVideosEnabled: newValue
-			});
-		},
-		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
-		},
-		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
-				hidePaidPromotionBannerEnabled: newValue
-			});
-		},
-		enable_hide_playables: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePlayablesChange", {
-				hidePlayablesEnabled: newValue
-			});
-		},
-		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
-				hidePlaylistRecommendationsFromHomePageEnabled: newValue
-			});
-		},
-		enable_hide_scrollbar: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideScrollBarChange", {
-				hideScrollBarEnabled: newValue
-			});
-		},
-		enable_hide_shorts_channel: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				enableHideShortsChannel: newValue,
-				enableHideShortsHome: options.enable_hide_shorts_home,
-				enableHideShortsSearch: options.enable_hide_shorts_search,
-				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
-				enableHideShortsVideos: options.enable_hide_shorts_videos
-			});
-		},
-		enable_hide_shorts_home: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				enableHideShortsChannel: options.enable_hide_shorts_channel,
-				enableHideShortsHome: newValue,
-				enableHideShortsSearch: options.enable_hide_shorts_search,
-				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
-				enableHideShortsVideos: options.enable_hide_shorts_videos
-			});
-		},
-		enable_hide_shorts_search: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				enableHideShortsChannel: options.enable_hide_shorts_channel,
-				enableHideShortsHome: options.enable_hide_shorts_home,
-				enableHideShortsSearch: newValue,
-				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
-				enableHideShortsVideos: options.enable_hide_shorts_videos
-			});
-		},
-		enable_hide_shorts_sidebar: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				enableHideShortsChannel: options.enable_hide_shorts_channel,
-				enableHideShortsHome: options.enable_hide_shorts_home,
-				enableHideShortsSearch: options.enable_hide_shorts_search,
-				enableHideShortsSidebar: newValue,
-				enableHideShortsVideos: options.enable_hide_shorts_videos
-			});
-		},
-		enable_hide_shorts_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				enableHideShortsChannel: options.enable_hide_shorts_channel,
-				enableHideShortsHome: options.enable_hide_shorts_home,
-				enableHideShortsSearch: options.enable_hide_shorts_search,
-				enableHideShortsSidebar: options.enable_hide_shorts_sidebar,
-				enableHideShortsVideos: newValue
-			});
-		},
-		enable_hide_sidebar_recommended_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideSidebarRecommendedVideosChange", {
-				hideSidebarRecommendedVideosEnabled: newValue
-			});
-		},
-		enable_hide_translate_comment: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideTranslateCommentChange", {
-				hideTranslateCommentEnabled: newValue
-			});
-		},
-		enable_loop_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("loopButtonChange", {
-				loopButtonEnabled: newValue
-			});
-		},
-		enable_maximize_player_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("maximizeButtonChange", {
-				maximizePlayerButtonEnabled: newValue
-			});
-		},
-		enable_mono_to_stereo_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("monoToStereoButtonChange", {
-				monoToStereoButtonEnabled: newValue
-			});
-		},
-		enable_open_transcript_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("openTranscriptButtonChange", {
-				openTranscriptButtonEnabled: newValue
-			});
-		},
-		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
-				openYouTubeSettingsOnHoverEnabled: newValue
-			});
-		},
-		enable_pausing_background_players: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("pauseBackgroundPlayersChange", {
-				pauseBackgroundPlayersEnabled: newValue
-			});
-		},
-		enable_playback_speed_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: options.playback_buttons_speed,
-				playbackSpeedButtonsEnabled: newValue
-			});
-		},
-		enable_playlist_length: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistLengthChange", {
-				playlistLengthEnabled: newValue
-			});
-		},
-		enable_playlist_remove_button: (_oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistRemoveButtonChange", {
-				playlistRemoveButtonEnabled: newValue
-			});
-		},
-		enable_playlist_reset_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistResetButtonChange", {
-				playlistResetButtonEnabled: newValue
-			});
-		},
-		enable_redirect_remover: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("removeRedirectChange", {
-				removeRedirectEnabled: newValue
-			});
-		},
-		enable_remaining_time: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("remainingTimeChange", {
-				remainingTimeEnabled: newValue
-			});
-		},
-		enable_remember_last_volume: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("rememberVolumeChange", {
-				rememberVolumeEnabled: newValue
-			});
-		},
-		enable_restore_fullscreen_scrolling: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("restoreFullscreenScrollingChange", {
-				restoreFullscreenScrollingEnabled: newValue
-			});
-		},
-		enable_save_to_watch_later_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("saveToWatchLaterButtonChange", {
-				saveToWatchLaterButtonEnabled: newValue
-			});
-		},
-		enable_screenshot_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("screenshotButtonChange", {
-				screenshotButtonEnabled: newValue
-			});
-		},
-		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
-				scrollWheelSpeedControlEnabled: newValue
-			});
-		},
-		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
-				scrollWheelVolumeControlEnabled: newValue
-			});
-		},
-		enable_share_shortener: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("shareShortenerChange", {
-				shareShortenerEnabled: newValue
-			});
-		},
-		enable_shorts_auto_scroll: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("shortsAutoScrollChange", {
-				shortsAutoScrollEnabled: newValue
-			});
-		},
-		enable_skip_continue_watching: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("skipContinueWatchingChange", {
-				skipContinueWatchingEnabled: newValue
-			});
-		},
-		enable_timestamp_peek: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("timestampPeekChange", {
-				timestampPeekEnabled: newValue
-			});
-		},
-		enable_video_history: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("videoHistoryChange", {
-				videoHistoryEnabled: newValue
-			});
-		},
-		enable_volume_boost: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostEnabled: newValue,
-				volumeBoostMode: options.volume_boost_mode
-			});
-		},
-		feature_menu_open_type: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
-				featureMenuOpenType: newValue
-			});
-		},
-		forward_rewind_buttons_time: () => {
-			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
-				forwardRewindButtonsEnabled: options.enable_forward_rewind_buttons
-			});
-		},
-		language: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("languageChange", {
-				language: newValue
-			});
-		},
-		mini_player_default_position: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
-				defaultPosition: newValue,
-				defaultSize: options.mini_player_default_size
-			});
-		},
-		mini_player_default_size: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
-				defaultPosition: options.mini_player_default_position,
-				defaultSize: newValue
-			});
-		},
-		playback_buttons_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: newValue,
-				playbackSpeedButtonsEnabled: options.enable_playback_speed_buttons
-			});
-		},
-		player_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playerSpeedChange", {
-				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
-				playerSpeed: newValue
-			});
-		},
-		playlist_length_get_method: () => {
-			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
-		},
-		playlist_watch_time_get_method: () => {
-			sendExtensionOnlyMessage("playlistWatchTimeGetMethodChange", undefined);
-		},
-		volume_boost_amount: (newValue) => {
-			sendExtensionOnlyMessage("volumeBoostAmountChange", {
-				volumeBoostAmount: newValue,
-				volumeBoostEnabled: options.enable_volume_boost,
-				volumeBoostMode: options.volume_boost_mode
-			});
-		},
-
-		volume_boost_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostEnabled: options.enable_volume_boost,
-				volumeBoostMode: newValue
-			});
-		}
-	};
-
-	for (const key of Object.keys(castedChanges)) {
-		const { [key]: change } = castedChanges;
-		if (!isValidChange(change)) continue;
-		if (!change || change.newValue === undefined || change.oldValue === undefined) continue;
-		const { newValue, oldValue } = change as { newValue: configuration[typeof key]; oldValue: configuration[typeof key] };
-		const handler = keyActions[key] as ((oldValue: configuration[typeof key], newValue: configuration[typeof key]) => void) | undefined;
-		if (handler) handler(oldValue, newValue);
-	}
+	handleConfigChanges(castedChanges, ({ newValue, oldValue, path }) => {
+		emitPathEvent({ newValue, oldValue, options, path });
+	});
 };
+type ConfigPathChange<P extends keyof typeof pathHandlers> = {
+	newValue: PathValue<configuration, P>;
+	oldValue: PathValue<configuration, P>;
+	path: P;
+};
+
+function handleConfigChanges(
+	changes: Partial<Record<keyof configuration, chrome.storage.StorageChange>>,
+	handler: <P extends keyof typeof pathHandlers>(change: ConfigPathChange<P>) => void
+): void {
+	for (const rootKey of Object.keys(changes)) {
+		const { [rootKey]: change } = changes;
+		if (!change) continue;
+
+		// skip changes that are structurally equal
+		if (!isValidChange({ newValue: change.newValue, oldValue: change.oldValue })) continue;
+
+		const walk = (oldObj: unknown, newObj: unknown, path: string): void => {
+			if (deepEqual(oldObj, newObj)) return;
+
+			handler({
+				newValue: newObj as PathValue<configuration, keyof typeof pathHandlers>,
+				oldValue: oldObj as PathValue<configuration, keyof typeof pathHandlers>,
+				path: path as keyof typeof pathHandlers
+			});
+
+			if (typeof newObj !== "object" || newObj === null) return;
+
+			for (const key of Object.keys(newObj)) {
+				walk(getProp(oldObj, key), newObj[key], `${path}.${key}`);
+			}
+		};
+
+		walk(change.oldValue, change.newValue, rootKey);
+	}
+}

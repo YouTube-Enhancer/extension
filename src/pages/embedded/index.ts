@@ -166,7 +166,7 @@ const enableFeatures = async () => {
 	try {
 		const {
 			data: {
-				options: { button_placements }
+				options: { buttonPlacement }
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		// Wait for the specified container selectors to be available on the page
@@ -198,7 +198,7 @@ const enableFeatures = async () => {
 			if (!buttonName) continue;
 			switch (multiButtonFeatureName) {
 				case "forwardRewindButtons": {
-					switch (button_placements[buttonName]) {
+					switch (buttonPlacement[buttonName]) {
 						case "below_player":
 						case "feature_menu":
 						case "player_controls_left": {
@@ -214,7 +214,7 @@ const enableFeatures = async () => {
 					break;
 				}
 				case "playbackSpeedButtons": {
-					switch (button_placements[buttonName]) {
+					switch (buttonPlacement[buttonName]) {
 						case "below_player":
 						case "feature_menu":
 						case "player_controls_left": {
@@ -519,7 +519,7 @@ const initialize = function () {
 						} = message;
 						if (customCSSEnabled) {
 							if (customCSSExists()) {
-								updateCustomCSS({ custom_css_code: customCSSCode });
+								updateCustomCSS({ code: customCSSCode });
 							} else {
 								await enableCustomCSS();
 							}
@@ -593,7 +593,7 @@ const initialize = function () {
 						const {
 							data: {
 								options: {
-									button_placements: { forwardButton: forwardButtonPlacement }
+									buttonPlacement: { forwardButton: forwardButtonPlacement }
 								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
@@ -801,7 +801,7 @@ const initialize = function () {
 											tr.pages.content.features[multiFeatureName].buttons[
 												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
 											].label,
-										{ TIME: options.forward_rewind_buttons_time }
+										{ TIME: options.forwardRewindButtons.time }
 									);
 								case "playbackSpeedButtons":
 									return t(
@@ -809,7 +809,7 @@ const initialize = function () {
 											tr.pages.content.features[multiFeatureName].buttons[
 												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
 											].label,
-										{ SPEED: options.playback_buttons_speed }
+										{ SPEED: options.playbackSpeedButtons.speed }
 									);
 							}
 						};
@@ -880,9 +880,9 @@ const initialize = function () {
 					}
 					case "miniPlayerDefaultsChange": {
 						const {
-							data: { defaultPosition: mini_player_default_position, defaultSize: mini_player_default_size }
+							data: { defaultPosition, defaultSize }
 						} = message;
-						setCommentsMiniPlayerDefaults({ mini_player_default_position, mini_player_default_size });
+						setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
 						break;
 					}
 					case "monoToStereoButtonChange": {
@@ -936,7 +936,7 @@ const initialize = function () {
 						const {
 							data: {
 								options: {
-									button_placements: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
+									buttonPlacement: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
 								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
@@ -968,7 +968,9 @@ const initialize = function () {
 						} = message;
 						const {
 							data: {
-								options: { playback_buttons_speed: playbackSpeedPerClick }
+								options: {
+									playbackSpeedButtons: { speed: playbackSpeedPerClick }
+								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (enableForcedPlaybackSpeed && playerSpeed) {

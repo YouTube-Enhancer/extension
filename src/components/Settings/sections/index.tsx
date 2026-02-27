@@ -44,7 +44,7 @@ export function getScrollWheelControlModifierKeyOptions({ t }: i18nInstanceType)
 			}),
 			value: "shiftKey"
 		}
-	] satisfies SelectOption<"scroll_wheel_speed_control_modifier_key" | "scroll_wheel_volume_control_modifier_key">[];
+	] satisfies SelectOption<"scrollWheelSpeedControl.modifierKey" | "scrollWheelVolumeControl.modifierKey">[];
 }
 export {
 	ButtonPlacementSection,

@@ -21,7 +21,7 @@ export async function setRememberedVolume({
 	isShortsPage: boolean;
 	isWatchPage: boolean;
 	playerContainer: YouTubePlayerDiv;
-	rememberedVolumes: configuration["remembered_volumes"];
+	rememberedVolumes: Omit<configuration["rememberVolume"], "enabled">;
 }) {
 	// If the remembered volume option is enabled, set the volume and draw the volume display
 	if (rememberedVolumes && enableRememberVolume) {
@@ -41,11 +41,13 @@ export async function setupVolumeChangeListener() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_remember_last_volume: enableRememberVolume }
+			options: {
+				rememberVolume: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the volume is not being remembered, return
-	if (!enableRememberVolume) return;
+	if (!enabled) return;
 	const IsWatchPage = isWatchPage();
 	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();

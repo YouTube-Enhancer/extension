@@ -19,13 +19,11 @@ export async function enablePlaylistLength() {
 	const {
 		data: {
 			options: {
-				enable_playlist_length,
-				playlist_length_get_method: playlistLengthGetMethod,
-				playlist_watch_time_get_method: playlistWatchTimeGetMethod
+				playlistLength: { enabled, lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_playlist_length) return;
+	if (!enabled) return;
 	if (!document.querySelector(playlistItemsSelector())) return;
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPageFlag ? watch : playlist, playlistItemsSelector()]);

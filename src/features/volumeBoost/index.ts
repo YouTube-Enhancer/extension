@@ -17,24 +17,28 @@ export async function enableVolumeBoost() {
 	setupVolumeBoost();
 	const {
 		data: {
-			options: { volume_boost_amount }
+			options: {
+				volumeBoost: { amount }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	applyVolumeBoostDb(volume_boost_amount);
+	applyVolumeBoostDb(amount);
 }
 
 export default async function volumeBoost() {
 	const {
 		data: {
-			options: { enable_volume_boost, volume_boost_amount, volume_boost_mode }
+			options: {
+				volumeBoost: { amount, enabled, mode }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_volume_boost) return;
+	if (!enabled) return;
 	setupVolumeBoost();
-	if (volume_boost_mode === "per_video") {
+	if (mode === "per_video") {
 		await addVolumeBoostButton();
 	} else {
-		applyVolumeBoostDb(volume_boost_amount);
+		applyVolumeBoostDb(amount);
 	}
 }
 
@@ -42,8 +46,8 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				button_placements: { volumeBoostButton: volumeBoostButtonPlacement },
-				volume_boost_amount
+				buttonPlacement: { volumeBoostButton: volumeBoostButtonPlacement },
+				volumeBoost: { amount }
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
@@ -51,7 +55,7 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 		"volumeBoostButton",
 		volumeBoostButtonPlacement,
 		volumeBoostButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: volume_boost_amount })
+			window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: amount })
 		:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
 		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement),
 		(checked) => {
@@ -61,13 +65,15 @@ export const addVolumeBoostButton: AddButtonFunction = async () => {
 					await enableVolumeBoost();
 					const {
 						data: {
-							options: { volume_boost_amount }
+							options: {
+								volumeBoost: { amount }
+							}
 						}
 					} = await waitForSpecificMessage("options", "request_data", "content");
 					updateFeatureButtonTitle(
 						"volumeBoostButton",
 						window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
-							value: volume_boost_amount
+							value: amount
 						})
 					);
 				} else {
@@ -103,20 +109,23 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	if (event.ctrlKey) delta *= 5;
 	const {
 		data: {
-			options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position, volume_boost_amount }
+			options: {
+				onScreenDisplay: { color, hideTime, opacity, padding, position },
+				volumeBoost: { amount }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	const newValue = clampDb(volume_boost_amount + delta);
+	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (playerContainer) {
 		new OnScreenDisplayManager(
 			{
-				displayColor: osd_display_color,
-				displayHideTime: osd_display_hide_time,
-				displayOpacity: osd_display_opacity,
-				displayPadding: osd_display_padding,
-				displayPosition: osd_display_position,
+				displayColor: color,
+				displayHideTime: hideTime,
+				displayOpacity: opacity,
+				displayPadding: padding,
+				displayPosition: position,
 				displayType: "text",
 				playerContainer
 			},

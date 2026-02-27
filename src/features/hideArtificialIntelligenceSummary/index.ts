@@ -10,9 +10,11 @@ export async function enableHideArtificialIntelligenceSummary() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_hide_artificial_intelligence_summary: enableHideArtificialIntelligenceSummary }
+			options: {
+				hideArtificialIntelligenceSummary: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideArtificialIntelligenceSummary) return;
+	if (!enabled) return;
 	hideArtificialIntelligenceSummary();
 }

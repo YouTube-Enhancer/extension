@@ -17,10 +17,12 @@ export async function promptUserToResumeVideo(cb: () => void) {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_video_history: enableVideoHistory, video_history_resume_type }
+			options: {
+				videoHistory: { enabled, resumeType }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableVideoHistory) return;
+	if (!enabled) return;
 	// Get the player container element
 	const playerContainer =
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
@@ -45,7 +47,7 @@ export async function promptUserToResumeVideo(cb: () => void) {
 		data: { video_history_entry }
 	} = videoHistoryOneData;
 	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
-		if (video_history_resume_type === "automatic") {
+		if (resumeType === "automatic") {
 			void playerContainer.seekTo(video_history_entry.timestamp, true);
 			return cb();
 		}
@@ -58,10 +60,12 @@ export async function setupVideoHistory() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_video_history: enableVideoHistory }
+			options: {
+				videoHistory: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableVideoHistory) return;
+	if (!enabled) return;
 	if (!isWatchPage()) return;
 	// Get the player container element
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
