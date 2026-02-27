@@ -473,8 +473,8 @@
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "隐藏帖子",
+							"title": "从主页隐藏帖子"
 						}
 					},
 					"copyTimestampUrlButton": {
