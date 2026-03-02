@@ -61,13 +61,6 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 	interface YouTubePlayer {
 		getAudioTrack(): Promise<audioTrack>;
 		getAvailableAudioTracks(): Promise<audioTrack[]>;
-		getPlayerResponse(): {
-			storyboards?: {
-				playerStoryboardSpecRenderer?: {
-					spec?: string;
-				};
-			};
-		};
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
@@ -110,7 +103,6 @@ declare global {
 	}
 	interface Window {
 		audioCtx: AudioContext;
-		browser?: { storage: typeof chrome.storage };
 		cachedPlaylistDuration: null | { playlistId: string; totalTimeSeconds: number };
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;

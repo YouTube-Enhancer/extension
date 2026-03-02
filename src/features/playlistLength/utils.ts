@@ -18,26 +18,22 @@ const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-vie
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
 const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
-const selectFirstVisible = (...selectors: string[]) =>
-	selectors.map((s) => document.querySelector<HTMLElement>(s)).find((el) => el?.clientWidth ?? 0 > 0) || null;
-export const getHeaderSelectors = () => {
-	const playlistSelectors = [
-		IMMERSIVE_HEADER_SELECTOR,
-		NO_PADDING_HEADER_SELECTOR,
-		`${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`
-	];
-	const playlist =
-		playlistSelectors.find((selector) => {
-			const el = document.querySelector<HTMLElement>(selector);
-			return el?.clientWidth ?? 0 > 0;
-		}) ?? NO_PADDING_HEADER_SELECTOR;
-	const watch =
-		isNewYouTubeVideoLayout() ?
-			"#page-manager > ytd-watch-grid #playlist #header-contents"
-		:	"#page-manager > ytd-watch-flexy #playlist #header-contents";
-
-	return { playlist, watch } as const satisfies { playlist: string; watch: string };
-};
+export const getHeaderSelectors = () =>
+	({
+		playlist: (() => {
+			const noPaddingHeader = document.querySelector(NO_PADDING_HEADER_SELECTOR);
+			const cinematicHeader = document.querySelector(CINEMATIC_HEADER_SELECTOR);
+			const immersiveHeader = document.querySelector(IMMERSIVE_HEADER_SELECTOR);
+			if (immersiveHeader && immersiveHeader.clientWidth > 0) return IMMERSIVE_HEADER_SELECTOR;
+			if (noPaddingHeader && noPaddingHeader.clientWidth > 0) return NO_PADDING_HEADER_SELECTOR;
+			if (cinematicHeader && cinematicHeader.clientWidth > 0) return `${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`;
+			return NO_PADDING_HEADER_SELECTOR;
+		})(),
+		watch:
+			isNewYouTubeVideoLayout() ?
+				"#page-manager > ytd-watch-grid #playlist #header-contents"
+			:	"#page-manager > ytd-watch-flexy #playlist #header-contents"
+	}) as const satisfies { playlist: string; watch: string };
 export const playlistItemsSelector = () =>
 	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
 export type PlaylistLengthParameters = {
@@ -55,9 +51,12 @@ type WatchTimeParameters = {
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement) {
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist]);
-	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstVisible(playlist);
+	const headerContents =
+		isWatchPage() ? document.querySelector(watch) : Array.from(document.querySelectorAll(playlist))?.find((el) => el.clientWidth > 0);
 	if (!headerContents) return null;
-	document.querySelector("#yte-playlist-length-ui")?.remove();
+	if (document.querySelector("#yte-playlist-length-ui") !== null) {
+		document.querySelector("#yte-playlist-length-ui")?.remove();
+	}
 	headerContents.append(playlistLengthUIElement);
 }
 export function createPlaylistLengthUIElement(
@@ -78,14 +77,16 @@ export function createPlaylistLengthUIElement(
 			marginBottom: "10px",
 			overflow: "hidden",
 			position: "relative",
+			transform: "translate(-50%, 0%)",
 			...conditionalStyles({
 				condition: pageType === "watch",
+				left: "48.8%",
 				top: "50%",
-				transform: "translateX(-6px)",
 				width: "100%"
 			}),
 			...conditionalStyles({
 				condition: pageType === "playlist",
+				left: "50%",
 				marginTop: "10px",
 				width: "99%"
 			})
@@ -127,7 +128,10 @@ export function createPlaylistLengthUIElement(
 	percentageWatched.textContent = `0%`;
 	wrapper.append(watchedProgressBar, percentageWatched, videoTimeDisplay);
 	const updateElement = ({ totalTimeSeconds, watchedTimeSeconds }: VideoTimeState) => {
-		const watchedPercentage = Number.isFinite(totalTimeSeconds) ? Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100) : 0;
+		const watchedPercentage =
+			Number.isNaN(Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100)) ? 0
+			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100) === Infinity ? 0
+			: Math.floor((watchedTimeSeconds / totalTimeSeconds) * 100);
 		watchedProgressBar.style.width = `${watchedPercentage}%`;
 		videoTimeDisplay.textContent = `${formatDuration(watchedTimeSeconds)} / ${formatDuration(totalTimeSeconds)} (- ${formatDuration(totalTimeSeconds - watchedTimeSeconds)})`;
 		percentageWatched.textContent = `${watchedPercentage}%`;
@@ -146,22 +150,27 @@ export async function getDataForPlaylistLengthUIElement({
 }: PlaylistLengthParameters): Promise<VideoTimeState> {
 	const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
 	const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
-	let totalTimeSeconds = 0;
+	let totalTimeSeconds: number;
 	if (playlistLengthGetMethod === "api") {
 		const playlistId = getPlaylistId();
 		if (!playlistId) return { totalTimeSeconds: 0, watchedTimeSeconds: 0 };
-		// Return cached duration if available
-		if (window.cachedPlaylistDuration?.playlistId === playlistId) {
-			({
+		// Check cache
+		if (playlistLengthGetMethod === "api" && window.cachedPlaylistDuration && window.cachedPlaylistDuration.playlistId === playlistId) {
+			const {
 				cachedPlaylistDuration: { totalTimeSeconds }
-			} = window);
-		} else {
-			totalTimeSeconds = await getDurationFromAPI(playlistId);
-			// Cache the duration
-			window.cachedPlaylistDuration = { playlistId, totalTimeSeconds };
+			} = window;
+			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
+			const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
+			return { totalTimeSeconds, watchedTimeSeconds };
 		}
+		totalTimeSeconds = await getDurationFromAPI(playlistId);
+		// Cache the duration
+		window.cachedPlaylistDuration = { playlistId, totalTimeSeconds };
 	} else if (playlistLengthGetMethod === "html") {
 		({ totalTimeSeconds } = getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }));
+	} else {
+		return { totalTimeSeconds: 0, watchedTimeSeconds: 0 };
 	}
 	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
 	return { totalTimeSeconds, watchedTimeSeconds };
@@ -170,15 +179,20 @@ export function getPlaylistId(): null | string {
 	const playlistId = new URLSearchParams(window.location.search).get("list");
 	return playlistId;
 }
-function getPlaylistItems(selector: string): HTMLElement[] {
-	const el = document.querySelector(selector);
-	return el ? (Array.from(el.children) as HTMLElement[]) : [];
+export function getPlaylistItemsFromPlaylistPage() {
+	const playlistItems = document.querySelector("ytd-playlist-video-list-renderer div#contents");
+	if (!playlistItems) return [];
+	const { children: videos } = playlistItems;
+	return Array.from(videos) as HTMLElement[];
 }
-export const getPlaylistItemsFromWatchPage = () =>
-	getPlaylistItems(
+export function getPlaylistItemsFromWatchPage() {
+	const playlistItems = document.querySelector(
 		isNewYouTubeVideoLayout() ? "#page-manager > ytd-watch-grid #playlist #items" : "#page-manager > ytd-watch-flexy #playlist #items"
 	);
-export const getPlaylistItemsFromPlaylistPage = () => getPlaylistItems("ytd-playlist-video-list-renderer div#contents");
+	if (!playlistItems) return [];
+	const { children: videos } = playlistItems;
+	return Array.from(videos) as HTMLElement[];
+}
 export function getPlaylistItemsWatchedProgress(playlistItems: HTMLElement[]): VideoDetails[] {
 	return playlistItems.map(getVideoDetails);
 }
@@ -188,9 +202,10 @@ export async function initializePlaylistLength({
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
 	const { playlist, watch } = getHeaderSelectors();
-	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstVisible(playlist);
+	const headerContents =
+		isWatchPage() ? document.querySelector(watch) : Array.from(document.querySelectorAll(playlist))?.find((el) => el.clientWidth > 0);
 	if (!headerContents) return null;
-	const videoElement = getVideoElement();
+	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	const playlistItemsElement = document.querySelector(playlistItemsSelector());
 	if (!playlistItemsElement) return null;
 	const { playbackRate: playerSpeed = 1 } = videoElement || {};
@@ -211,7 +226,7 @@ export async function initializePlaylistLength({
 	let lastPlaylistLength: null | number = null;
 	const debounceDelay = 300;
 	async function safeUpdate() {
-		const videoElement = getVideoElement();
+		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		const { playbackRate: playerSpeed = 1 } = videoElement || {};
 		if (playlistLengthGetMethod === "api") {
 			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
@@ -252,26 +267,36 @@ export async function initializePlaylistLength({
 	return documentObserver;
 }
 
+export function sliceArrayById(array: VideoDetails[], id: string): VideoDetails[] {
+	const index = findIndexById(array, id);
+	if (index === -1) {
+		// If the videoId is not found, return an empty array or handle it as needed
+		return [];
+	}
+	// Slice the array from the start to the found index (inclusive)
+	return array.slice(0, index);
+}
 function calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }: WatchTimeParameters): number {
 	if (pageType === "watch") {
-		const playlistItemsWithoutCurrentVideo = playlistItemsVideoDetails.filter((video) => video.videoId !== getCurrentVideoId());
+		const slicedItems = sliceArrayById(playlistItemsVideoDetails, getCurrentVideoId()!);
 		return (
-			playlistItemsWithoutCurrentVideo.reduce(
-				(total, video) => total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration),
-				0
-			) + getCurrentVideoTime()
+			slicedItems.reduce((total, video) => total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration), 0) +
+			getCurrentVideoTime()
 		);
 	} else {
 		return playlistItemsVideoDetails.reduce((total, video) => total + video.progress, 0);
 	}
 }
-const getVideoElement = () => document.querySelector<HTMLVideoElement>("video");
+function findIndexById(array: VideoDetails[], id: string): number {
+	return array.findIndex((video) => video.videoId === id);
+}
 function getCurrentVideoId() {
 	const videoId = new URLSearchParams(window.location.search).get("v");
 	return videoId;
 }
 function getCurrentVideoTime() {
-	return getVideoElement()?.currentTime ?? 0;
+	const videoElement = document.querySelector("video") as HTMLVideoElement;
+	return videoElement.currentTime;
 }
 
 function getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }: WatchTimeParameters): VideoTimeState {
@@ -284,24 +309,28 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)
 	});
+
 	try {
-		let feed = await youtube.getPlaylist(playlistId);
+		const playlist = await youtube.getPlaylist(playlistId);
+
 		let totalSeconds = 0;
-		for (const video of feed.videos) {
+		for (const video of playlist.videos) {
 			const playlistVideo = video as PlaylistVideo;
 			if (playlistVideo?.duration?.seconds) {
 				totalSeconds += playlistVideo.duration.seconds;
 			}
 		}
-		while (feed.has_continuation) {
-			for (const video of feed.videos) {
+
+		while (playlist.has_continuation) {
+			const continuation = await playlist.getContinuation();
+			for (const video of continuation.videos) {
 				const playlistVideo = video as PlaylistVideo;
 				if (playlistVideo?.duration?.seconds) {
 					totalSeconds += playlistVideo.duration.seconds;
 				}
 			}
-			feed = await feed.getContinuation();
 		}
+
 		return totalSeconds;
 	} catch (error) {
 		throw new Error(`Error fetching playlist duration:`, {
@@ -310,10 +339,13 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 	}
 }
 function getVideoDetails(videoElement: Element): VideoDetails {
+	const videoId = getVideoId(videoElement);
+	const duration = getVideoDurationInSeconds(videoElement);
+	const progress = Math.floor((getWatchedPercentage(videoElement) / 100) * duration);
 	return {
-		duration: getVideoDurationInSeconds(videoElement),
-		progress: getVideoProgress(videoElement),
-		videoId: getVideoId(videoElement)
+		duration: duration,
+		progress: progress,
+		videoId: videoId
 	};
 }
 function getVideoDurationInSeconds(videoElement: Element): number {
@@ -326,11 +358,6 @@ function getVideoId(videoElement: Element): null | string {
 	if (!videoIdElement) return null;
 	const url = new URL(`https://youtube.com${videoIdElement.href}`);
 	return url.searchParams.get("v");
-}
-function getVideoProgress(videoElement: Element): number {
-	const duration = getVideoDurationInSeconds(videoElement);
-	const percent = getWatchedPercentage(videoElement);
-	return Math.floor((percent / 100) * duration);
 }
 function getWatchedPercentage(videoElement: Element): number {
 	const progressBar = videoElement.querySelector<HTMLElement>(".ytd-thumbnail-overlay-resume-playback-renderer,#progress");
