@@ -10,10 +10,10 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Manipulação de Áudio Mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"on": "Mono → Saída Estéreo",
+							"off": "Áudio Original"
 						}
 					}
 				},
@@ -186,7 +186,7 @@
 							"volumeBoostButton": "Botão de ganho de volume",
 							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
 							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "Botão Mono para Estéreo"
 						},
 						"options": {
 							"below_player": {
@@ -473,8 +473,8 @@
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "Esconder postagem",
+							"title": "Oculta postagens da página inicial"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -521,8 +521,8 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"label": "Botão Mono para Estéreo",
+							"title": "Adiciona um botão para converter áudio mono para estéreo. Faixas estéreo permanecem inalteradas."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -667,27 +667,27 @@
 				"title": "Diversos"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Ocultar Shorts",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "Ocultar na barra lateral",
+						"title": "Remove o botão Shorts da barra lateral"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "Ocultar no feed da Home",
+						"title": "Remove o botão Shorts da feed da Home"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "Esconder na página de Inscrições",
+						"title": "Remove o Shorts na página de inscrições"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "Ocultar nos resultados de pesquisa",
+						"title": "Remove os vídeos do Shorts dos resultados de pesquisa"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "Esconder na página de reprodução",
+						"title": "Remove o Shorts das recomendações na página de reprodução"
 					}
 				}
 			},
