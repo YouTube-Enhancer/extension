@@ -309,28 +309,24 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)
 	});
-
 	try {
-		const playlist = await youtube.getPlaylist(playlistId);
-
+		let feed = await youtube.getPlaylist(playlistId);
 		let totalSeconds = 0;
-		for (const video of playlist.videos) {
+		for (const video of feed.videos) {
 			const playlistVideo = video as PlaylistVideo;
 			if (playlistVideo?.duration?.seconds) {
 				totalSeconds += playlistVideo.duration.seconds;
 			}
 		}
-
-		while (playlist.has_continuation) {
-			const continuation = await playlist.getContinuation();
-			for (const video of continuation.videos) {
+		while (feed.has_continuation) {
+			for (const video of feed.videos) {
 				const playlistVideo = video as PlaylistVideo;
 				if (playlistVideo?.duration?.seconds) {
 					totalSeconds += playlistVideo.duration.seconds;
 				}
 			}
+			feed = await feed.getContinuation();
 		}
-
 		return totalSeconds;
 	} catch (error) {
 		throw new Error(`Error fetching playlist duration:`, {
