@@ -472,10 +472,10 @@
 						}
 					},
 					"hidePosts": {
-						"enable":  {
-								"label":  "Hide posts",
-								"title":  "Hides posts from the home page"
-							}
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
 					},
 					"copyTimestampUrlButton": {
 						"enable": {
