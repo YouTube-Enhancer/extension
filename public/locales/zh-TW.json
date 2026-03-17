@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Audio Handling",
+						"toggle": {
+							"on": "Mono → Stereo Output",
+							"off": "Original Audio"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Flip video horizontally"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "音量增強",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "關閉音量增強",
-							"on": "啟用音量增強"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "螢幕截圖按鈕",
 							"volumeBoostButton": "音量增強按鈕",
 							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -461,6 +471,12 @@
 							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "複製目前播放時間的影片網址按鈕",
@@ -503,6 +519,12 @@
 							"title": "Hides videos that are only visible to members"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "隱藏官方藝人影片",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "隱藏捲軸",
 							"title": "隱藏頁面捲軸"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "隱藏 Shorts",
-							"title": "隱藏全部 Shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "其他設定"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "音量增強度 (分貝)",
-						"title": "將音量增幅至"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {

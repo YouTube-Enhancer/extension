@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "单声道处理",
+						"toggle": {
+							"on": "单声道 → 立体声输出",
+							"off": "原始音频"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "水平翻转视频"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "音量增强",
+						"label": "音量提升 ({{value}} 分贝)",
 						"toggle": {
 							"off": "关闭音量增强",
-							"on": "开启音量增强"
+							"on": "音量提升 ({{value}} 分贝)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "屏幕截图按钮",
 							"volumeBoostButton": "音量增强按钮",
 							"flipVideoVerticalButton": "垂直翻转视频按钮",
-							"flipVideoHorizontalButton": "水平翻转视频按钮"
+							"flipVideoHorizontalButton": "水平翻转视频按钮",
+							"monoToStereoButton": "单声道转立体声按钮"
 						},
 						"options": {
 							"below_player": {
@@ -461,6 +471,12 @@
 							"title": "防止按0-9键跳转到视频的百分比"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "隐藏帖子",
+							"title": "从主页隐藏帖子"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "复制带有时间戳的视频 URL 按钮",
@@ -503,6 +519,12 @@
 							"title": "隐藏仅对会员可见的视频"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "单声道转立体声按钮",
+							"title": "添加一个按钮来将单声道转换为立体声。立体声保持不变。"
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "隐藏音乐人官方视频",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "启用隐藏滚动条",
 							"title": "隐藏页面滚动条"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "隐藏短视频",
-							"title": "隐藏所有短视频"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "其他设置"
+			},
+			"hideShorts": {
+				"title": "隐藏短视频",
+				"settings": {
+					"sidebar": {
+						"label": "在侧边栏中隐藏",
+						"title": "从侧边栏移除短视频按钮"
+					},
+					"home": {
+						"label": "在主页中隐藏",
+						"title": "从主页时间线中移除短视频"
+					},
+					"channel": {
+						"label": "在频道页面中隐藏",
+						"title": "从频道页面中移除短视频分类和标签"
+					},
+					"search": {
+						"label": "在搜索结果中隐藏",
+						"title": "从搜索结果中移除短视频"
+					},
+					"videos": {
+						"label": "在观看页面中隐藏",
+						"title": "从观看页面的推荐列表移除短视频"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "音量提升量(分贝)",
-						"title": "音量提升量（分贝）"
+						"title": "每步音量提升的多少。您也可以滚动音量提升按钮(Shift/Ctrl更大步) 来调整音量。"
+					},
+					"amount_global_only": {
+						"label": "音量提升量(分贝)",
+						"title": "音量提升的多少。"
 					},
 					"mode": {
 						"select": {
