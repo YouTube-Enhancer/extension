@@ -271,7 +271,6 @@
 						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 					}
 				},
-				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
 				"settingSearch": {
 					"placeholder": "Bir ayar arayın"
 				},
