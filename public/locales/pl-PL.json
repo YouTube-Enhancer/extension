@@ -271,7 +271,6 @@
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
-				"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
 				"settingSearch": {
 					"placeholder": "Szukaj ustawienia"
 				},
