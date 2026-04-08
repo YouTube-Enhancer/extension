@@ -271,7 +271,6 @@
 						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 					}
 				},
-				"scrollForMoreSettings": "滚动以查看更多设置",
 				"settingSearch": {
 					"placeholder": "搜索设置"
 				},
