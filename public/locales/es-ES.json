@@ -271,7 +271,6 @@
 						"screenshotButtonFileFormat": "Establecer el tipo de guardado de captura de pantalla a 'Archivo' o 'Ambos' para configurar esta opción"
 					}
 				},
-				"scrollForMoreSettings": "Desplazar para más ajustes",
 				"settingSearch": {
 					"placeholder": "Search for a setting"
 				},
