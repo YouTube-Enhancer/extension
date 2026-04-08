@@ -1,36 +1,19 @@
-import { applyShortsVisibility } from "@/src/features/hideShorts/utils";
+import { hideShorts, showShorts } from "@/src/features/hideShorts/utils";
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
-
-export function disableHideShorts(): void {
-	applyShortsVisibility({
-		channel: false,
-		home: false,
-		search: false,
-		sidebar: false,
-		videos: false
-	});
+export async function disableHideShorts() {
+	await showShorts();
 }
-export async function enableHideShorts(): Promise<void> {
+
+export async function enableHideShorts() {
+	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: {
-				hideShorts: {
-					channel: { enabled: channel },
-					home: { enabled: home },
-					search: { enabled: search },
-					sidebar: { enabled: sidebar },
-					videos: { enabled: videos }
-				}
-			}
+			options: { enable_hide_shorts }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	applyShortsVisibility({
-		channel,
-		home,
-		search,
-		sidebar,
-		videos
-	});
+	// If the hide shorts option is disabled, return
+	if (!enable_hide_shorts) return;
+	await hideShorts();
 }

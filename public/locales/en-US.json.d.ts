@@ -10,8 +10,6 @@ interface EnUS {
 			features: {
 				copyTimestampUrlButton: { button: { label: "Copy video URL with timestamp" }; extras: { copied: "Copied!" } };
 				featureMenu: { button: { label: "Feature menu" } };
-				flipVideoHorizontalButton: { button: { label: "Flip video horizontally" } };
-				flipVideoVerticalButton: { button: { label: "Flip video vertically" } };
 				forwardRewindButtons: {
 					buttons: {
 						forwardButton: { label: "Fast forward by {{TIME}}" };
@@ -28,12 +26,6 @@ interface EnUS {
 				maximizePlayerButton: { button: { label: "Maximize"; toggle: { off: "Maximize off"; on: "Maximize on" } } };
 				miniPlayerButton: {
 					button: { label: "Mini Player"; toggle: { off: "Mini Player off"; on: "Mini Player on" } };
-				};
-				monoToStereoButton: {
-					button: {
-						label: "Mono Audio Handling";
-						toggle: { off: "Original Audio"; on: "Mono → Stereo Output" };
-					};
 				};
 				openTranscriptButton: { button: { label: "Open transcript" } };
 				playbackSpeedButtons: {
@@ -73,8 +65,8 @@ interface EnUS {
 				videoHistory: { extras: { resumeButton: "Resume"; resumePromptClose: "Close" } };
 				volumeBoostButton: {
 					button: {
-						label: "Volume Boost ({{value}} dB)";
-						toggle: { off: "Volume boost off"; on: "Volume boost ({{value}} dB)" };
+						label: "Volume Boost";
+						toggle: { off: "Volume boost off"; on: "Volume boost on" };
 					};
 				};
 			};
@@ -98,15 +90,12 @@ interface EnUS {
 						buttonNames: {
 							copyTimestampUrlButton: "Copy video URL with timestamp button";
 							decreasePlaybackSpeedButton: "Decrease Speed button";
-							flipVideoHorizontalButton: "Flip video horizontally button";
-							flipVideoVerticalButton: "Flip video vertically button";
 							forwardButton: "Fast Forward button";
 							hideEndScreenCardsButton: "Hide end screen cards button";
 							increasePlaybackSpeedButton: "Increase Speed button";
 							loopButton: "Loop button";
 							maximizePlayerButton: "Maximize button";
 							miniPlayerButton: "Mini Player button";
-							monoToStereoButton: "Mono to Stereo button";
 							openTranscriptButton: "Open Transcript button";
 							rewindButton: "Rewind button";
 							screenshotButton: "Screenshot button";
@@ -250,28 +239,6 @@ interface EnUS {
 				};
 				title: "Global Volume Override";
 			};
-			hideShorts: {
-				settings: {
-					channel: {
-						label: "Hide on Channel pages";
-						title: "Removes the Shorts shelf and tab on channel pages";
-					};
-					home: {
-						label: "Hide on Home feed";
-						title: "Removes the Shorts section from the Home feed";
-					};
-					search: {
-						label: "Hide in Search results";
-						title: "Removes Shorts videos from search results";
-					};
-					sidebar: { label: "Hide in sidebar"; title: "Removes the Shorts button from the sidebar" };
-					videos: {
-						label: "Hide on watch pages";
-						title: "Removes Shorts videos from recommendations on watch pages";
-					};
-				};
-				title: "Hide Shorts";
-			};
 			miniPlayer: {
 				button: { label: "Mini Player button"; title: "Adds a button that opens the Mini Player" };
 				enable: {
@@ -344,12 +311,6 @@ interface EnUS {
 							title: "Automatically enables theater mode when you load a video";
 						};
 					};
-					blockNumberKeySeeking: {
-						enable: {
-							label: "Block number key seeking";
-							title: "Prevents pressing 0-9 from jumping to a percentage of the video";
-						};
-					};
 					copyTimestampUrlButton: {
 						enable: {
 							label: "Copy video URL with timestamp button";
@@ -360,18 +321,6 @@ interface EnUS {
 						enable: {
 							label: "Default to original audio track";
 							title: "Always default to the original audio track";
-						};
-					};
-					flipVideoHorizontalButton: {
-						enable: {
-							label: "Horizontal video flip button";
-							title: "Adds a button to flip the video horizontally";
-						};
-					};
-					flipVideoVerticalButton: {
-						enable: {
-							label: "Vertical video flip button";
-							title: "Adds a button to flip the video vertically";
 						};
 					};
 					hideArtificialIntelligenceSummary: {
@@ -418,8 +367,8 @@ interface EnUS {
 							title: "Get rid of playlists from homepage";
 						};
 					};
-					hidePosts: { enable: { label: "Hide posts"; title: "Hides posts from the home page" } };
 					hideScrollbar: { enable: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" } };
+					hideShorts: { enable: { label: "Hide shorts"; title: "Hides all shorts" } };
 					hideSidebarRecommendedVideos: {
 						enable: {
 							label: "Hide recommended videos";
@@ -442,12 +391,6 @@ interface EnUS {
 						enable: {
 							label: "Maximize player button";
 							title: "Adds a button to the feature menu to maximize the player";
-						};
-					};
-					monoToStereoButton: {
-						enable: {
-							label: "Mono to Stereo button";
-							title: "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.";
 						};
 					};
 					openTranscriptButton: {
@@ -717,11 +660,7 @@ interface EnUS {
 			volumeBoost: {
 				enable: { label: "Volume boost"; title: "Enable volume boost" };
 				settings: {
-					amount: {
-						label: "Volume boost amount (dB)";
-						title: "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it.";
-					};
-					amount_global_only: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by." };
+					amount: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
 					mode: {
 						select: {
 							label: "Volume boost mode";

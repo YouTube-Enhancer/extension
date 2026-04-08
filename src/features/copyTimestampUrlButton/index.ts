@@ -10,12 +10,12 @@ export const addCopyTimestampUrlButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { copyTimestampUrlButton: copyTimestampUrlButtonPlacement },
-				copyTimestampUrlButton: { enabled }
+				button_placements: { copyTimestampUrlButton: copyTimestampUrlButtonPlacement },
+				enable_copy_timestamp_url_button: enableCopyTimestampUrlButton
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enableCopyTimestampUrlButton) return;
 	function copyTimestampUrlButtonClickListener() {
 		const videoElement = document.querySelector<HTMLVideoElement>("video");
 		if (!videoElement) return;

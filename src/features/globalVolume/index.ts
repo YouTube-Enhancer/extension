@@ -15,13 +15,11 @@ export async function enableGlobalVolume(): Promise<void> {
 	if (!playerContainer) return;
 	const {
 		data: {
-			options: {
-				globalVolume: { enabled, volume }
-			}
+			options: { enable_global_volume, global_volume }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	await setPlayerVolume(playerContainer, volume);
+	if (!enable_global_volume) return;
+	await setPlayerVolume(playerContainer, global_volume);
 }
 
 async function getPlayerContainer(): Promise<Nullable<YouTubePlayerDiv>> {

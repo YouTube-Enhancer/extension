@@ -7,12 +7,9 @@ import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/u
 import "./index.css";
 
 let timestampElementObserver: Nullable<MutationObserver> = null;
-const navigateStartHandler = () => {
-	disableTimestampPeek();
-};
+
 export function disableTimestampPeek() {
 	eventManager.removeEventListeners("timestampPeek");
-	document.removeEventListener("yt-navigate-start", navigateStartHandler);
 	cleanupTimestampObserver();
 	const overlay = document.getElementById("yte-timestamp-peek-overlay");
 	if (overlay) overlay.remove();
@@ -25,17 +22,14 @@ export function disableTimestampPeek() {
 export async function enableTimestampPeek() {
 	const {
 		data: {
-			options: {
-				timestampPeek: { enabled }
-			}
+			options: { enable_timestamp_peek }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled || !isWatchPage()) return;
+	if (!enable_timestamp_peek || !isWatchPage()) return;
 	await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
 	const videoHref = getVideoHref();
 	if (!videoHref) return;
 	eventManager.removeEventListeners("timestampPeek");
-	document.addEventListener("yt-navigate-start", navigateStartHandler);
 	cleanupTimestampObserver();
 	handleTimestampElementsHover();
 	const obs = observeTimestampElements();

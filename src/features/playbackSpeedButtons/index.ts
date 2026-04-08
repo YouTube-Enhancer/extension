@@ -28,17 +28,17 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 	const {
 		data: {
 			options: {
-				buttonPlacement: {
+				button_placements: {
 					decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement,
 					increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement
 				},
-				playbackSpeedButtons: { speed: speedPerClick }
+				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
-	const minSpeed = getMinSpeed(speedPerClick);
+	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
 	const featureName = "playbackSpeedButtons";
 	const button = getFeatureButton(buttonName);
@@ -92,18 +92,16 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 				if (!playerContainer) return;
 				const {
 					data: {
-						options: {
-							onScreenDisplay: { color, hideTime, opacity, padding, position }
-						}
+						options: { osd_display_color, osd_display_hide_time, osd_display_opacity, osd_display_padding, osd_display_position }
 					}
 				} = await waitForSpecificMessage("options", "request_data", "content");
 				new OnScreenDisplayManager(
 					{
-						displayColor: color,
-						displayHideTime: hideTime,
-						displayOpacity: opacity,
-						displayPadding: padding,
-						displayPosition: position,
+						displayColor: osd_display_color,
+						displayHideTime: osd_display_hide_time,
+						displayOpacity: osd_display_opacity,
+						displayPadding: osd_display_padding,
+						displayPosition: osd_display_position,
 						displayType: "text", // TODO: support for line/round? currently buggy
 						playerContainer: playerContainer
 					},
@@ -130,12 +128,13 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement },
-				playbackSpeedButtons: { enabled, speed }
+				button_placements: { increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement },
+				enable_playback_speed_buttons,
+				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_playback_speed_buttons) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
@@ -156,11 +155,11 @@ export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
 					translations.pages.content.features.playbackSpeedButtons.extras.increaseLimit
 				:	translations.pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label,
 			{
-				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, "increase")
+				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
 			}
 		),
 		getFeatureIcon("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement),
-		playbackSpeedButtonClickListener(speed, "increase"),
+		playbackSpeedButtonClickListener(playbackSpeedPerClick, "increase"),
 		false
 	);
 };
@@ -170,15 +169,16 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement },
-				playbackSpeedButtons: { enabled, speed }
+				button_placements: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement },
+				enable_playback_speed_buttons,
+				playback_buttons_speed: playbackSpeedPerClick
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_playback_speed_buttons) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
-	const minSpeed = getMinSpeed(speed);
+	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
@@ -197,11 +197,11 @@ export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
 					translations.pages.content.features.playbackSpeedButtons.extras.decreaseLimit
 				:	translations.pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label,
 			{
-				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, "decrease")
+				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
 			}
 		),
 		getFeatureIcon("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement),
-		playbackSpeedButtonClickListener(speed, "decrease"),
+		playbackSpeedButtonClickListener(playbackSpeedPerClick, "decrease"),
 		false
 	);
 };

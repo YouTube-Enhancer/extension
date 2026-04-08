@@ -50,9 +50,7 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 				returnObjects: true
 			},
 			(err) => {
-				if (err && err instanceof Error) reject(err);
-				else if (err && typeof err === "string") reject(new Error(err));
-				else if (err) reject(new Error("unknown error"));
+				if (err) reject(err);
 				else resolve(instance);
 			}
 		);

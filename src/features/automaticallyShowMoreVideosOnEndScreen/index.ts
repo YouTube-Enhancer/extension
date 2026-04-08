@@ -1,7 +1,7 @@
 import { hideMoreVideosOnEndScreen, showMoreVideosOnEndScreen } from "@/src/features/automaticallyShowMoreVideosOnEndScreen/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 export function disableAutomaticallyShowMoreVideosOnEndScreen() {
 	hideMoreVideosOnEndScreen();
@@ -9,11 +9,9 @@ export function disableAutomaticallyShowMoreVideosOnEndScreen() {
 export async function enableAutomaticallyShowMoreVideosOnEndScreen() {
 	const {
 		data: {
-			options: {
-				automaticallyShowMoreVideosOnEndScreen: { enabled }
-			}
+			options: { enable_automatically_show_more_videos_on_end_screen }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_automatically_show_more_videos_on_end_screen) return;
 	showMoreVideosOnEndScreen();
 }

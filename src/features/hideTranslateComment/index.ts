@@ -2,7 +2,7 @@ import { modifyElementClassList, waitForSpecificMessage } from "@/src/utils/util
 
 import "./index.css";
 
-export function disableHideTranslateComment() {
+export async function disableHideTranslateComment() {
 	modifyElementClassList("remove", {
 		className: "yte-hide-translate-comment",
 		element: document.body
@@ -11,12 +11,10 @@ export function disableHideTranslateComment() {
 export async function enableHideTranslateComment() {
 	const {
 		data: {
-			options: {
-				hideTranslateComment: { enabled }
-			}
+			options: { enable_hide_translate_comment }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_hide_translate_comment) return;
 	modifyElementClassList("add", {
 		className: "yte-hide-translate-comment",
 		element: document.body

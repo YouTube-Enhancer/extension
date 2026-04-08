@@ -2,7 +2,7 @@ import { fixupPluginRules } from "@eslint/compat";
 import eslintJavascript from "@eslint/js";
 import eslintPluginImport from "eslint-plugin-import";
 import eslintPluginNoSecrets from "eslint-plugin-no-secrets";
-import { configs as eslintPluginPerfectionist } from "eslint-plugin-perfectionist";
+import eslintPluginPerfectionist from "eslint-plugin-perfectionist";
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import eslintPluginPromise from "eslint-plugin-promise";
 import eslintPluginReact from "eslint-plugin-react";
@@ -20,17 +20,13 @@ export default [
 		ignores: ["**/watch.js", "dist/**/*", "releases/**/*"]
 	},
 	eslintJavascript.configs.recommended,
-	...typescriptEslint.configs.recommendedTypeChecked.map((config) => ({
-		...config,
-		files: ["**/*.ts", "**/*.tsx"]
-	})),
+	...typescriptEslint.configs.recommended,
 	...eslintPluginTailwindCSS.configs["flat/recommended"],
 	eslintPluginImport.flatConfigs.recommended,
 	eslintPluginImport.flatConfigs.typescript,
-	eslintPluginImport.flatConfigs.react,
 	eslintPluginPromise.configs["flat/recommended"],
 	eslintPluginPrettier,
-	eslintPluginPerfectionist["recommended-natural"],
+	eslintPluginPerfectionist.configs["recommended-natural"],
 	{
 		files: ["**/*.ts", "**/*.tsx"],
 		languageOptions: {
@@ -45,13 +41,12 @@ export default [
 				ecmaFeatures: {
 					jsx: true
 				},
-				projectService: true,
+				project: "./tsconfig.json",
 				tsconfigRootDir: __dirname
 			},
 			sourceType: "module"
 		},
 		plugins: {
-			"@typescript-eslint": typescriptEslint.plugin,
 			"no-secrets": eslintPluginNoSecrets,
 			react: eslintPluginReact,
 			"react-hooks": fixupPluginRules(eslintPluginReactHooks)
@@ -79,7 +74,6 @@ export default [
 			"no-empty": ["error", { allowEmptyCatch: true }],
 			"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
 			"no-secrets/no-secrets": ["error", { tolerance: 5.0 }],
-			"no-unused-vars": "off",
 			"no-useless-escape": "off",
 			"prefer-const": ["error", { destructuring: "any", ignoreReadBeforeAssign: false }],
 			"prefer-destructuring": ["error", { array: true, object: true }, { enforceForRenamedProperties: true }],

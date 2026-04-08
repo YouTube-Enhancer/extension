@@ -17,12 +17,10 @@ export async function disableAutomaticallyDisableAutoPlay() {
 export async function enableAutomaticallyDisableAutoPlay() {
 	const {
 		data: {
-			options: {
-				automaticallyDisableAutoPlay: { enabled }
-			}
+			options: { enable_automatically_disable_autoplay }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_automatically_disable_autoplay) return;
 	if (!isWatchPage()) return;
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 8000);
 	if (!playerContainer) return;

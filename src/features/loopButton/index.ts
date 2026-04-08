@@ -16,13 +16,13 @@ export const addLoopButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { loopButton: loopButtonPlacement },
-				loopButton: { enabled }
+				button_placements: { loopButton: loopButtonPlacement },
+				enable_loop_button
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the loop button option is disabled, return
-	if (!enabled) return;
+	if (!enable_loop_button) return;
 	// Get the volume control element
 	const volumeControl = document.querySelector<HTMLSpanElement>("div.ytp-chrome-controls > div.ytp-left-controls > span.ytp-volume-area");
 	// If volume control element is not available, return

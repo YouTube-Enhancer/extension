@@ -2,18 +2,16 @@ import { hideMembersOnlyVideos, showMembersOnlyVideos } from "@/src/features/hid
 import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
-export function disableHideMembersOnlyVideos() {
-	showMembersOnlyVideos();
+export async function disableHideMembersOnlyVideos() {
+	await showMembersOnlyVideos();
 }
 
 export async function enableHideMembersOnlyVideos() {
 	const {
 		data: {
-			options: {
-				hideMembersOnlyVideos: { enabled }
-			}
+			options: { enable_hide_members_only_videos }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	hideMembersOnlyVideos();
+	if (!enable_hide_members_only_videos) return;
+	await hideMembersOnlyVideos();
 }

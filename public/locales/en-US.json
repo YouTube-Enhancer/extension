@@ -8,25 +8,6 @@
 	"pages": {
 		"content": {
 			"features": {
-				"monoToStereoButton": {
-					"button": {
-						"label": "Mono Audio Handling",
-						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
-						}
-					}
-				},
-				"flipVideoHorizontalButton": {
-					"button": {
-						"label": "Flip video horizontally"
-					}
-				},
-				"flipVideoVerticalButton": {
-					"button": {
-						"label": "Flip video vertically"
-					}
-				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copy video URL with timestamp"
@@ -141,10 +122,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost ({{value}} dB)",
+						"label": "Volume Boost",
 						"toggle": {
 							"off": "Volume boost off",
-							"on": "Volume boost ({{value}} dB)"
+							"on": "Volume boost on"
 						}
 					}
 				}
@@ -183,10 +164,7 @@
 							"openTranscriptButton": "Open Transcript button",
 							"rewindButton": "Rewind button",
 							"screenshotButton": "Screenshot button",
-							"volumeBoostButton": "Volume Boost button",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"volumeBoostButton": "Volume Boost button"
 						},
 						"options": {
 							"below_player": {
@@ -266,9 +244,9 @@
 					"singular": "Enable '{{OPTION}}' to configure this option",
 					"specificOption": {
 						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
 						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+						"rememberVolume": "Disable 'Global volume' to configure this option"
 					}
 				},
 				"scrollForMoreSettings": "Scroll for more settings",
@@ -305,6 +283,37 @@
 	},
 	"settings": {
 		"sections": {
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"customCSS": {
 				"enable": {
 					"label": "Custom CSS",
@@ -377,50 +386,6 @@
 				},
 				"title": "Forward/rewind button settings"
 			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
-			},
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -465,18 +430,6 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
-					"blockNumberKeySeeking": {
-						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
-						}
-					},
-					"hidePosts": {
-						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
-						}
-					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Copy video URL with timestamp button",
@@ -519,12 +472,6 @@
 							"title": "Hides videos that are only visible to members"
 						}
 					},
-					"monoToStereoButton": {
-						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
-						}
-					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Hide Official Artist Videos",
@@ -553,6 +500,12 @@
 						"enable": {
 							"label": "Hide scrollbar",
 							"title": "Hides the pages scrollbar"
+						}
+					},
+					"hideShorts": {
+						"enable": {
+							"label": "Hide shorts",
+							"title": "Hides all shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -650,46 +603,9 @@
 							"label": "Timestamp Preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
-					},
-					"flipVideoHorizontalButton": {
-						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
-						}
-					},
-					"flipVideoVerticalButton": {
-						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
-						}
 					}
 				},
 				"title": "Miscellaneous settings"
-			},
-			"hideShorts": {
-				"title": "Hide Shorts",
-				"settings": {
-					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
-					},
-					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
-					},
-					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
-					},
-					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
-					},
-					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
-					}
-				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -940,11 +856,7 @@
 				"settings": {
 					"amount": {
 						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
-					},
-					"amount_global_only": {
-						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"title": "The amount to boost the volume by"
 					},
 					"mode": {
 						"select": {
@@ -958,6 +870,19 @@
 					}
 				},
 				"title": "Volume boost settings"
+			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
 			}
 		}
 	}

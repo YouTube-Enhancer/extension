@@ -1,6 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-import type { i18nInstanceType } from "@/src/i18n";
 import type { Notification } from "@/src/types";
 
 import { useNotifications } from "@/src/hooks";
@@ -10,15 +9,11 @@ import { useSettings } from "../Settings";
 export default function SettingsNotifications() {
 	const { notifications } = useNotifications();
 	const [parentRef] = useAutoAnimate({ duration: 300 });
-	const { i18nInstance } = useSettings();
 	return (
 		<div id="notifications" ref={parentRef}>
-			{notifications.map((notification) => {
-				const { t } = i18nInstance;
-				const message: string = t(notification.message);
-				const key = [notification.type, notification.action, message].filter(Boolean).join("_");
-				return <ToastNotification i18nInstance={i18nInstance} key={key} notification={notification} />;
-			})}
+			{notifications.map((notification, index) => (
+				<ToastNotification key={index} notification={notification} />
+			))}
 		</div>
 	);
 }
@@ -30,9 +25,11 @@ function NotificationCloseButton({ notification }: { notification: Notification 
 		</button>
 	);
 }
-function ToastNotification({ i18nInstance: { t }, notification }: { i18nInstance: i18nInstanceType; notification: Notification }) {
+function ToastNotification({ key, notification }: { key: number; notification: Notification }) {
+	const {
+		i18nInstance: { t }
+	} = useSettings();
 	const message: string = t(notification.message);
-	const key = [notification.type, notification.action, message].filter(Boolean).join("_");
 	return (
 		<div
 			className={cn("notification inverse relative bg-teal-600", {
@@ -46,8 +43,8 @@ function ToastNotification({ i18nInstance: { t }, notification }: { i18nInstance
 			{notification.action ?
 				notification.action === "reset_settings" ?
 					<>
-						{message.split("\n").map((line) => (
-							<p key={line.replace(/ /g, "_")}>{line}</p>
+						{message.split("\n").map((line, index) => (
+							<p key={index}>{line}</p>
 						))}
 						<NotificationCloseButton notification={notification} />
 					</>

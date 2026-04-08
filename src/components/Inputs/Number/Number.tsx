@@ -1,9 +1,8 @@
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useId, useRef } from "react";
 
-import useDebounceFn from "@/src/hooks/useDebounce";
 import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/utilities";
 
@@ -26,33 +25,29 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
 	const id = useId();
 	const { direction } = useSettings();
-	const [localValue, setLocalValue] = useState<string>(() => value.toString());
-	useEffect(() => {
-		setLocalValue(value.toString());
-	}, [value]);
-	const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setLocalValue(e.currentTarget.value);
-		debouncedChange(e.currentTarget.value);
+	const NumberPlus = () => {
+		if (inputElement.current) {
+			inputElement.current.stepUp();
+			handleChange(inputElement.current.value);
+		}
 	};
-	const updateNumber = (action: "down" | "up") => {
-		if (!inputElement.current) return;
-		if (action === "up") inputElement.current.stepUp();
-		if (action === "down") inputElement.current.stepDown();
-		const {
-			current: { value }
-		} = inputElement;
-		setLocalValue(value);
-		debouncedChange(value);
+
+	const NumberMinus = () => {
+		if (inputElement.current) {
+			inputElement.current.stepDown();
+			handleChange(inputElement.current.value);
+		}
 	};
+
 	const handleChange = (value: string) => {
 		if (min && parseFloat(value) < min) value = min + "";
 		if (max && parseFloat(value) > max) value = max + "";
+
 		if (!isNaN(parseFloat(value))) {
-			setLocalValue(value);
 			onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>);
 		}
 	};
-	const debouncedChange = useDebounceFn(handleChange, 300);
+
 	const disabledButtonClasses = {
 		"!text-[#4b5563]": disabled,
 		"cursor-not-allowed": disabled,
@@ -60,7 +55,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 		"dark:!text-[#4b5563]": disabled
 	} satisfies ClassValue;
 	const buttonClasses =
-		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white transition-colors duration-100 ease-linear" satisfies ClassValue;
+		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white" satisfies ClassValue;
 	return (
 		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
 			<label className="mb-1" htmlFor={id}>
@@ -68,6 +63,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 			</label>
 			<div className="relative flex flex-row">
 				<input
+					aria-hidden={true}
 					className={cn(
 						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-2 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
 						disabledButtonClasses
@@ -76,7 +72,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 					id={id}
 					max={max}
 					min={min}
-					onChange={onInputChange}
+					onChange={(e) => handleChange(e.currentTarget.value)}
 					ref={inputElement}
 					step={step}
 					style={{
@@ -84,7 +80,7 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 						borderTopLeftRadius: "0.375rem"
 					}}
 					type="number"
-					value={localValue}
+					value={value}
 				></input>
 				<div
 					className={cn("absolute bottom-px flex h-[38px] flex-col", {
@@ -93,24 +89,28 @@ const NumberInput: React.FC<NumberInputProps> = ({ className, disabled, label, m
 					})}
 				>
 					<button
+						aria-hidden={true}
 						aria-label="Add one"
 						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
-						onClick={() => updateNumber("up")}
+						onClick={NumberPlus}
 						style={{
-							borderTopRightRadius: "0.375rem"
+							borderTopRightRadius: "0.375rem",
+							transition: "all linear 0.1s"
 						}}
 						type="button"
 					>
 						<Arrow rotation="up" />
 					</button>
 					<button
+						aria-hidden={true}
 						aria-label="Subtract one"
 						className={cn(buttonClasses, disabledButtonClasses)}
 						disabled={disabled}
-						onClick={() => updateNumber("down")}
+						onClick={NumberMinus}
 						style={{
-							borderBottomRightRadius: "0.375rem"
+							borderBottomRightRadius: "0.375rem",
+							transition: "all linear 0.1s"
 						}}
 						type="button"
 					>

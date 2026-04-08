@@ -18,12 +18,10 @@ export async function disableHideEndScreenCards() {
 export async function enableHideEndScreenCards() {
 	const {
 		data: {
-			options: {
-				hideEndScreenCards: { enabled }
-			}
+			options: { enable_hide_end_screen_cards: enableHideEndScreenCards }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enableHideEndScreenCards) return;
 	if (!isWatchPage()) return;
 	await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 	hideEndScreenCards();
@@ -32,12 +30,12 @@ export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { hideEndScreenCardsButton: hideEndScreenCardsButtonPlacement },
-				hideEndScreenCardsButton: { enabled }
+				button_placements: { hideEndScreenCardsButton: hideEndScreenCardsButtonPlacement },
+				enable_hide_end_screen_cards_button: enableHideEndScreenCardsButton
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enableHideEndScreenCardsButton) return;
 	if (!isWatchPage()) return;
 	// Get the player container element
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");

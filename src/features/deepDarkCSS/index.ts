@@ -16,19 +16,19 @@ export async function enableDeepDarkCSS() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: {
-				deepDarkCSS: { colors, enabled, preset }
-			}
+			options: { deep_dark_custom_theme_colors, deep_dark_preset, enable_deep_dark_theme }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// Check if deep dark theme is enabled
-	if (!enabled) return;
+	if (!enable_deep_dark_theme) return;
 	if (deepDarkCSSExists()) {
-		updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+		updateDeepDarkCSS(deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset]);
 		return;
 	}
 	// Create the deep dark theme style element
-	const deepDarkThemeStyleElement = createDeepDarkCSSElement(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+	const deepDarkThemeStyleElement = createDeepDarkCSSElement(
+		deep_dark_preset === "Custom" ? getDeepDarkCustomThemeStyle(deep_dark_custom_theme_colors) : deepDarkPresets[deep_dark_preset]
+	);
 	// Insert the deep dark theme style element
 	document.head.appendChild(deepDarkThemeStyleElement);
 }

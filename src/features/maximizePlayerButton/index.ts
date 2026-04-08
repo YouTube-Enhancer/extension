@@ -14,13 +14,13 @@ export const addMaximizePlayerButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { maximizePlayerButton: maximizePlayerButtonPlacement },
-				maximizePlayerButton: { enabled }
+				button_placements: { maximizePlayerButton: maximizePlayerButtonPlacement },
+				enable_maximize_player_button: enableMaximizePlayerButton
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the maximize player button option is disabled, return
-	if (!enabled) return;
+	if (!enableMaximizePlayerButton) return;
 	const isPlayerMaximized = document.body.getAttribute("yte-maximized") === "";
 	await addFeatureButton(
 		"maximizePlayerButton",

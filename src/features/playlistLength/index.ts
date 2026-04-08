@@ -19,11 +19,13 @@ export async function enablePlaylistLength() {
 	const {
 		data: {
 			options: {
-				playlistLength: { enabled, lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }
+				enable_playlist_length,
+				playlist_length_get_method: playlistLengthGetMethod,
+				playlist_watch_time_get_method: playlistWatchTimeGetMethod
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_playlist_length) return;
 	if (!document.querySelector(playlistItemsSelector())) return;
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPageFlag ? watch : playlist, playlistItemsSelector()]);
@@ -34,14 +36,12 @@ export async function enablePlaylistLength() {
 		playlistWatchTimeGetMethod
 	});
 	resizeObserver?.disconnect();
-	resizeObserver = new ResizeObserver(() => {
-		void (async () => {
-			documentObserver = await initPlaylistLength({
-				pageType,
-				playlistLengthGetMethod,
-				playlistWatchTimeGetMethod
-			});
-		})();
+	resizeObserver = new ResizeObserver(async () => {
+		documentObserver = await initPlaylistLength({
+			pageType,
+			playlistLengthGetMethod,
+			playlistWatchTimeGetMethod
+		});
 	});
 	resizeObserver.observe(document.documentElement);
 }

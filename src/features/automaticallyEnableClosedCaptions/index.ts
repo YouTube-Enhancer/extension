@@ -17,12 +17,10 @@ export async function enableAutomaticallyEnableClosedCaptions() {
 	if (!(isWatchPage() || isLivePage())) return;
 	const {
 		data: {
-			options: {
-				automaticallyEnableClosedCaptions: { enabled }
-			}
+			options: { enable_automatically_enable_closed_captions }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_automatically_enable_closed_captions) return;
 	// Get the player element
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	const subtitlesButton = document.querySelector<HTMLButtonElement>("button.ytp-subtitles-button");

@@ -12,12 +12,10 @@ export function disableHidePaidPromotionBanner() {
 export async function enableHidePaidPromotionBanner() {
 	const {
 		data: {
-			options: {
-				hidePaidPromotionBanner: { enabled }
-			}
+			options: { enable_hide_paid_promotion_banner }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_hide_paid_promotion_banner) return;
 	modifyElementClassList("add", {
 		className: "yte-hide-paid-promotion-banner",
 		element: document.body

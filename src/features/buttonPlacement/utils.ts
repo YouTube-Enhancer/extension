@@ -128,11 +128,7 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 }
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
 	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
-	if (button) {
-		button.dataset.title = title;
-		const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
-		if (tooltip) tooltip.textContent = title;
-	}
+	if (button) button.dataset.title = title;
 }
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
@@ -166,7 +162,7 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	setChecked(button, newState);
 	if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, newState ? icon.on : icon.off);
 	else if (icon instanceof SVGSVGElement) updateFeatureButtonIcon(button, icon);
-	listener(newState);
+	listener(newState as any);
 }
 
 function getChecked(button: HTMLButtonElement) {

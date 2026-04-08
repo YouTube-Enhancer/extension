@@ -2,7 +2,6 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import "./index.css";
 
-import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import eventManager from "@/src/utils/EventManager";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import {
@@ -38,42 +37,42 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
-			options: {
-				scrollWheelVolumeControl: { enabled }
-			}
+			options: { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl }
 		}
 	} = optionsData;
 	// If scroll wheel volume control is disabled, return
-	if (!enabled) return;
+	if (!enableScrollWheelVolumeControl) return;
 	const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
 	// Wait for the specified container selectors to be available on the page
 	await waitForAllElements(containerSelectors);
 
 	// Define the event handler for the scroll wheel events
-	const handleWheel = (event: Event) => {
+	const handleWheel = async (event: Event) => {
+		const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+		// If the settings panel menu is targeted return
+		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
+		const setOptionsData = async () => {
+			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
+		};
 		void (async () => {
-			const volumeBoostButton = getFeatureButton("volumeBoostButton");
-			if (volumeBoostButton && event.target === volumeBoostButton) return;
-			const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-			// If the settings panel menu is targeted return
-			if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
-			const setOptionsData = async () => {
-				return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
-			};
 			if (!optionsData) {
 				return void (await setOptionsData());
 			}
 			const {
 				data: {
 					options: {
-						onScreenDisplay: { color, hideTime, opacity, padding, position, type },
-						scrollWheelSpeedControl: { enabled: enable_scroll_wheel_speed_control, modifierKey: scroll_wheel_speed_control_modifier_key },
-						scrollWheelVolumeControl: {
-							holdModifierKey: enable_scroll_wheel_volume_control_hold_modifier_key,
-							holdRightClick: enable_scroll_wheel_volume_control_hold_right_click,
-							modifierKey: scroll_wheel_volume_control_modifier_key,
-							steps: volume_adjustment_steps
-						}
+						enable_scroll_wheel_speed_control,
+						enable_scroll_wheel_volume_control_hold_modifier_key,
+						enable_scroll_wheel_volume_control_hold_right_click,
+						osd_display_color,
+						osd_display_hide_time,
+						osd_display_opacity,
+						osd_display_padding,
+						osd_display_position,
+						osd_display_type,
+						scroll_wheel_speed_control_modifier_key,
+						scroll_wheel_volume_control_modifier_key,
+						volume_adjustment_steps
 					}
 				}
 			} = optionsData;
@@ -108,12 +107,12 @@ export default async function enableScrollWheelVolumeControl(): Promise<void> {
 			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, volume_adjustment_steps);
 			new OnScreenDisplayManager(
 				{
-					displayColor: color,
-					displayHideTime: hideTime,
-					displayOpacity: opacity,
-					displayPadding: padding,
-					displayPosition: position,
-					displayType: type,
+					displayColor: osd_display_color,
+					displayHideTime: osd_display_hide_time,
+					displayOpacity: osd_display_opacity,
+					displayPadding: osd_display_padding,
+					displayPosition: osd_display_position,
+					displayType: osd_display_type,
 					playerContainer: playerContainer
 				},
 				"yte-osd",

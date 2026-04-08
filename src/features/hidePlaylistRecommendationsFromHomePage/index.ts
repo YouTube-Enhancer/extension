@@ -8,13 +8,11 @@ export function disableHidePlaylistRecommendationsFromHomePage() {
 export async function enableHidePlaylistRecommendationsFromHomePage() {
 	const {
 		data: {
-			options: {
-				hidePlaylistRecommendationsFromHomePage: { enabled }
-			}
+			options: { enable_hide_playlist_recommendations_from_home_page }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enabled) return;
+	if (!enable_hide_playlist_recommendations_from_home_page) return;
 	if (!isHomePage()) return;
 	hideRecommendations();
 }

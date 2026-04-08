@@ -4,8 +4,6 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { FaSpinner } from "react-icons/fa";
 
-import type { TSelectorFunc } from "@/src/types";
-
 import "./index.css";
 
 import { type FeatureName } from "@/src/utils/EventManager";
@@ -18,9 +16,9 @@ interface ActionButtonConfig {
 	iconColor?: string;
 	iconSize?: number;
 	onClick: () => Promise<void>;
-	translationError: TSelectorFunc;
-	translationHover: TSelectorFunc;
-	translationProcessing: TSelectorFunc;
+	translationError: string;
+	translationHover: string;
+	translationProcessing: string;
 }
 
 export function createActionButton({
@@ -37,11 +35,13 @@ export function createActionButton({
 	const button = document.createElement("button");
 	button.innerHTML = renderToString(React.createElement(icon, { color: iconColor, size: iconSize }));
 	button.className = className + " yte-action-button";
+	// @ts-expect-error: dynamic key not assignable to i18next union type
 	button.title = window.i18nextInstance.t(translationHover);
 
 	button.onclick = async () => {
 		const { innerHTML: originalHTML, title: originalTitle } = button;
 		button.disabled = true;
+		// @ts-expect-error: dynamic key not assignable to i18next union type
 		button.title = window.i18nextInstance.t(translationProcessing);
 		button.innerHTML = renderToString(React.createElement(FaSpinner, { size: iconSize }));
 		button.classList.add("yte-spinning");
@@ -53,6 +53,7 @@ export function createActionButton({
 				element: button,
 				featureName,
 				id: `yte-feature-${featureName}-tooltip`,
+				// @ts-expect-error: dynamic key not assignable to i18next union type
 				text: `${window.i18nextInstance.t(translationError)}: ${error instanceof Error ? error.message : String(error)}`
 			});
 			listener();

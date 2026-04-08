@@ -1,5 +1,5 @@
 import type { MiniPlayerOptions } from "@/src/features/miniPlayer";
-import type { MiniPlayerSize, Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { MiniPlayerSize, Nullable } from "@/src/types";
 
 import eventManager from "@/src/utils/EventManager";
 import { clamp, createStyledElement } from "@/src/utils/utilities";
@@ -108,7 +108,7 @@ export class MiniPlayerController {
 			this.setRect(savedRect);
 			return;
 		}
-		const { height, width } = parseSizePreset(this.options.defaultSize);
+		const { height, width } = parseSizePreset(this.options.mini_player_default_size);
 		const margin = 16;
 		const { innerHeight: vh, innerWidth: vw } = window;
 		const xLeft = margin;
@@ -118,7 +118,7 @@ export class MiniPlayerController {
 		const yBottom = vh - height - margin;
 		let x = xRight;
 		let y = yBottom;
-		switch (this.options.defaultPosition) {
+		switch (this.options.mini_player_default_position) {
 			case "bottom_center":
 				x = xCenter;
 				y = yBottom;
@@ -432,24 +432,6 @@ function writeSavedState(s: MiniPlayerRect) {
 	localStorage.setItem(LS_MINI_PLAYER_RECT_KEY, JSON.stringify(s));
 }
 let miniPlayerBarState: Nullable<MiniPlayerBarState> = null;
-type miniPlayerWindow = {
-	ytInitialPlayerResponse?: {
-		storyboards?: {
-			playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
-		};
-	};
-	ytplayer?: {
-		config?: {
-			args?: {
-				raw_player_response?: {
-					storyboards?: {
-						playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
-					};
-				};
-			};
-		};
-	};
-};
 export function disableMiniPlayerCustomProgress() {
 	if (!miniPlayerBarState) return;
 	const { barRoot, cleanupFns } = miniPlayerBarState;
@@ -465,6 +447,9 @@ export function enableMiniPlayerCustomProgress(playerElement: HTMLElement, overl
 	const { barRoot, progressBar } = buildMiniBar();
 	overlayElement.appendChild(barRoot);
 	const restoreNative = hideNativeProgress(playerElement);
+	const storyboardRenderer = getStoryboardRenderer();
+	const specString = storyboardRenderer?.spec ?? getStoryboardSpec();
+	const storyboardSheet = specString ? parseStoryboard(specString, storyboardRenderer) : null;
 	const barState: MiniPlayerBarState = {
 		barRoot,
 		cleanupFns: [restoreNative],
@@ -473,60 +458,12 @@ export function enableMiniPlayerCustomProgress(playerElement: HTMLElement, overl
 		playedRatio: 0,
 		playerElement,
 		progressBar,
-		storyboardSheet: null,
+		storyboardSheet,
 		videoElement
 	};
-	function waitForPlayerResponse(timeout = 500) {
-		const start = performance.now();
-		return new Promise<Nullable<PlayerStoryboardSpecRenderer>>((resolve) => {
-			const check = () => {
-				const player = qs<YouTubePlayerDiv>(document.body, "#movie_player");
-				const resp = player?.getPlayerResponse?.()?.storyboards?.playerStoryboardSpecRenderer;
-				if (resp) resolve(resp);
-				else if (performance.now() - start > timeout) resolve(null);
-				else requestAnimationFrame(check);
-			};
-			check();
-		});
-	}
-	function refreshMiniPlayerStoryboard() {
-		void (async () => {
-			if (!miniPlayerBarState) return;
-			const { videoElement } = miniPlayerBarState;
-			const storyboardRenderer = await waitForPlayerResponse();
-			const specString = storyboardRenderer?.spec ?? getStoryboardSpec();
-			const storyboardSheet = specString ? parseStoryboard(specString, storyboardRenderer) : null;
-			miniPlayerBarState.storyboardSheet = storyboardSheet;
-			const { currentTime } = videoElement;
-			const seekWindow = getSeekWindow(videoElement);
-			if (seekWindow) updateStoryboardThumb(miniPlayerBarState, currentTime, seekWindow);
-		})();
-	}
-	const rebindVideo = () => {
-		const newVideo = qs<HTMLVideoElement>(playerElement, "video.html5-main-video");
-		if (!newVideo) return;
-		if (newVideo !== miniPlayerBarState!.videoElement) {
-			miniPlayerBarState!.videoElement.removeEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-			miniPlayerBarState!.videoElement = newVideo;
-			newVideo.addEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-		}
-	};
-	const onPlayerUpdated = () => {
-		rebindVideo();
-		queueMicrotask(refreshMiniPlayerStoryboard);
-	};
-	document.addEventListener("yt-navigate-finish", onPlayerUpdated);
-	document.addEventListener("yt-player-updated", onPlayerUpdated);
-	videoElement.addEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-	barState.cleanupFns.push(() => {
-		document.removeEventListener("yt-navigate-finish", onPlayerUpdated);
-		document.removeEventListener("yt-player-updated", onPlayerUpdated);
-		miniPlayerBarState?.videoElement.removeEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-	});
+	attachMiniBarEvents(barState);
 	miniPlayerBarState = barState;
-	attachMiniBarEvents(miniPlayerBarState);
 	updateMiniBar();
-	setTimeout(refreshMiniPlayerStoryboard, 50);
 }
 function attachMiniBarEvents(barState: MiniPlayerBarState) {
 	const { barRoot, videoElement } = barState;
@@ -703,12 +640,25 @@ function getSeekWindow(video: HTMLVideoElement) {
 	} catch {}
 	return null;
 }
-function getStoryboardSpec(): Nullable<string> {
-	const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+function getStoryboardRenderer(): Nullable<PlayerStoryboardSpecRenderer> {
+	const w = window as unknown as {
+		ytInitialPlayerResponse?: any;
+		ytplayer?: any;
+	};
 	return (
-		player?.getPlayerResponse?.()?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		(window as miniPlayerWindow).ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		(window as miniPlayerWindow).ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer?.spec ??
+		(w.ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer as PlayerStoryboardSpecRenderer | undefined) ??
+		(w.ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer as PlayerStoryboardSpecRenderer | undefined) ??
+		null
+	);
+}
+function getStoryboardSpec(): Nullable<string> {
+	const w = window as unknown as {
+		ytInitialPlayerResponse?: any;
+		ytplayer?: any;
+	};
+	return (
+		w.ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer?.spec ??
+		w.ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer?.spec ??
 		null
 	);
 }
@@ -794,7 +744,7 @@ function updateMiniBar() {
 	bufferedBar.style.transform = `scaleX(${loadedPct})`;
 }
 function updateStoryboardThumb(
-	{ progressBar: { previewThumbnail }, storyboardSheet, videoElement }: MiniPlayerBarState,
+	{ progressBar: { previewThumbnail }, storyboardSheet }: MiniPlayerBarState,
 	timeSeconds: number,
 	seekWindow: { end: number; start: number }
 ) {
@@ -813,21 +763,8 @@ function updateStoryboardThumb(
 	const row = Math.floor(within / storyboardSheet.cols);
 	const col = within % storyboardSheet.cols;
 	const url = buildStoryboardUrl(storyboardSheet, imageIndex);
-	const videoWidth = videoElement.videoWidth || 16;
-	const videoHeight = videoElement.videoHeight || 9;
-	const aspect = videoWidth / videoHeight;
-	// maximum preview size
-	const maxW = 160;
-	const maxH = 90;
-	let outW = maxW;
-	let outH = maxH;
-	if (aspect > 1) {
-		// wide video
-		outH = Math.min(maxH, maxW / aspect);
-	} else {
-		// tall video
-		outW = Math.min(maxW, maxH * aspect);
-	}
+	const outW = 160;
+	const outH = 90;
 	const sx = outW / storyboardSheet.width;
 	const sy = outH / storyboardSheet.height;
 	const s = Math.min(sx, sy);

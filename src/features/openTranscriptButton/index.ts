@@ -8,13 +8,11 @@ export async function openTranscriptButton() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: {
-				openTranscriptButton: { enabled }
-			}
+			options: { enable_open_transcript_button: enableOpenTranscriptButton }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the open transcript button option is disabled, return
-	if (!enabled) return;
+	if (!enableOpenTranscriptButton) return;
 	const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button");
 	const transcriptButtonMenuItem = getFeatureButton("openTranscriptButton");
 	// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item

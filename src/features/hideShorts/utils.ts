@@ -1,22 +1,14 @@
 import { modifyElementClassList } from "@/src/utils/utilities";
+export async function hideShorts() {
+	modifyElementClassList("add", {
+		className: "yte-hide-shorts",
+		element: document.body
+	});
+}
 
-export type ShortsSection = "channel" | "home" | "search" | "sidebar" | "videos";
-
-export type ShortsVisibilitySettings = Record<ShortsSection, boolean>;
-
-const shortsClassMap: Record<ShortsSection, string> = {
-	channel: "yte-hide-shorts-channel",
-	home: "yte-hide-shorts-home",
-	search: "yte-hide-shorts-search",
-	sidebar: "yte-hide-shorts-sidebar",
-	videos: "yte-hide-shorts-videos"
-};
-
-export const applyShortsVisibility = (settings: ShortsVisibilitySettings): void => {
-	for (const key of Object.keys(shortsClassMap)) {
-		modifyElementClassList(settings[key] ? "add" : "remove", {
-			className: shortsClassMap[key],
-			element: document.body
-		});
-	}
-};
+export async function showShorts() {
+	modifyElementClassList("remove", {
+		className: "yte-hide-shorts",
+		element: document.body
+	});
+}

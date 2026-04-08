@@ -32,10 +32,10 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 	return (
 		<div className={cn("bg-[#1e1e1e]", className)} ref={ref}>
 			{problems.length === 0 && <div className="center p-1">{t((translations) => translations.settings.sections.customCSS.extras.noProblems)}</div>}
-			{problems.map((problem) => (
+			{problems.map((problem, index) => (
 				<div
-					className="center hover:bg-[#2e2e2e'] flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc]"
-					key={`${problem.startLineNumber}-${problem.startColumn}-${problem.code && typeof problem.code === "object" && "value" in problem.code ? problem.code.value : problem.code}`}
+					className="center flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc] hover:bg-[#2e2e2e]"
+					key={index}
 					onClick={() => {
 						if (!editor) return;
 						editor.focus();
@@ -45,20 +45,6 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 							lineNumber: problem.startLineNumber
 						});
 					}}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							e.preventDefault();
-							if (!editor) return;
-							editor.focus();
-							editor.revealLine(problem.startLineNumber);
-							editor.setPosition({
-								column: problem.startColumn,
-								lineNumber: problem.startLineNumber
-							});
-						}
-					}}
-					role="button"
-					tabIndex={0}
 				>
 					<div className={`marker-icon ${getIcon(problem.severity)}`}>
 						<div className={`codicon codicon-${getIcon(problem.severity)}`} />

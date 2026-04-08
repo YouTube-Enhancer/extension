@@ -29,8 +29,6 @@ export type FeatureName =
 	| "automaticTheaterMode"
 	| "copyTimestampUrlButton"
 	| "featureMenu"
-	| "flipVideoHorizontalButton"
-	| "flipVideoVerticalButton"
 	| "forwardRewindButtons"
 	| "hideEndScreenCardsButton"
 	| "hideScrollBar"
@@ -39,7 +37,6 @@ export type FeatureName =
 	| "maximizePlayerButton"
 	| "miniPlayer"
 	| "miniPlayerButton"
-	| "monoToStereoButton"
 	| "openTranscriptButton"
 	| "openYouTubeSettingsOnHover"
 	| "playbackSpeedButtons"
@@ -66,7 +63,7 @@ export type TargetedListeners<K extends keyof HTMLElementEventMap> = Map<
 >;
 type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
 
-const eventManager: EventManager = {
+export const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
 	// Adds an event listener for the given target, eventName, and featureName
 	addEventListener: function (target, eventName, callback, featureName, options) {

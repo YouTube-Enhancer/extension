@@ -5,8 +5,8 @@ import { createStyledElement, waitForElement, waitForSpecificMessage } from "@/s
 import { MiniPlayerController, setManualOverride } from "./controller";
 
 export type MiniPlayerOptions = {
-	defaultPosition: MiniPlayerPosition;
-	defaultSize: MiniPlayerSize;
+	mini_player_default_position: MiniPlayerPosition;
+	mini_player_default_size: MiniPlayerSize;
 };
 
 const MINI_PLAYER_STATE_EVENT = "yte-mini-player-state";
@@ -116,21 +116,19 @@ async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 export const enableCommentsMiniPlayer = async () => {
 	const {
 		data: {
-			options: {
-				miniPlayer: { defaultPosition, defaultSize, enabled }
-			}
+			options: { enable_comments_mini_player, mini_player_default_position, mini_player_default_size }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_comments_mini_player) return;
 	setManualOverride(false);
 	const miniPlayer = ensureController({
-		defaultPosition,
-		defaultSize
+		mini_player_default_position,
+		mini_player_default_size
 	});
 	await attachCommentsAutoMiniPlayer(miniPlayer);
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const disableCommentsMiniPlayer = () => {
+export const disableCommentsMiniPlayer = async () => {
 	cleanupAutoObservers();
 	const sentinel = document.getElementById(SENTINEL_ID);
 	sentinel?.remove();
@@ -143,14 +141,12 @@ export const disableCommentsMiniPlayer = () => {
 async function getEnabledController(): Promise<Nullable<MiniPlayerController>> {
 	const {
 		data: {
-			options: {
-				miniPlayer: { defaultPosition, defaultSize }
-			}
+			options: { mini_player_default_position, mini_player_default_size }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	return ensureController({
-		defaultPosition,
-		defaultSize
+		mini_player_default_position,
+		mini_player_default_size
 	});
 }
 export const toggleMiniPlayerManual = async () => {

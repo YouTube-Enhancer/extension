@@ -25,12 +25,10 @@ export async function disableAutomaticallyDisableAmbientMode(): Promise<void> {
 export async function enableAutomaticallyDisableAmbientMode(): Promise<void> {
 	const {
 		data: {
-			options: {
-				automaticallyDisableAmbientMode: { enabled }
-			}
+			options: { enable_automatically_disable_ambient_mode }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_automatically_disable_ambient_mode) return;
 	await toggleAmbientMode(false);
 }
 
@@ -68,7 +66,7 @@ async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 		if (!desiredState) ambientModeWasEnabled = ambientModeEnabled;
 		settingsMenu.classList.remove("hidden");
 	} else {
-		await waitForElement("#shorts-player");
+		await waitForAllElements(["#shorts-player"]);
 		const menuButton = await waitForElement<HTMLButtonElement>("div#menu-button ytd-menu-renderer yt-button-shape button");
 		if (!menuButton) return console.log("Menu button not found");
 		const popupContainer = await waitForElement<HTMLDivElement>("ytd-popup-container");

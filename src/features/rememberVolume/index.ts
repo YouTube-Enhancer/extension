@@ -14,13 +14,11 @@ export default async function enableRememberVolume(): Promise<void> {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: {
-				rememberVolume: { enabled, ...rememberedVolumes }
-			}
+			options: { enable_remember_last_volume: enableRememberVolume, remembered_volumes: rememberedVolumes }
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the volume is not being remembered, return
-	if (!enabled) return;
+	if (!enableRememberVolume) return;
 	const IsWatchPage = isWatchPage();
 	const IsLivePage = isLivePage();
 	const IsShortsPage = isShortsPage();
@@ -34,7 +32,7 @@ export default async function enableRememberVolume(): Promise<void> {
 	// If setVolume method is not available in the player container, return
 	if (!playerContainer.setVolume) return;
 	void setRememberedVolume({
-		enableRememberVolume: enabled,
+		enableRememberVolume,
 		isShortsPage: IsShortsPage,
 		isWatchPage: IsWatchPage || IsLivePage,
 		playerContainer,

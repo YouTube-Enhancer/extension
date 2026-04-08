@@ -21,12 +21,13 @@ export const addForwardButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { forwardButton: forwardButtonPlacement },
-				forwardRewindButtons: { enabled, time }
+				button_placements: { forwardButton: forwardButtonPlacement },
+				enable_forward_rewind_buttons,
+				forward_rewind_buttons_time
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_forward_rewind_buttons) return;
 	if (!isWatchPage()) return;
 	// Get the player element
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
@@ -39,10 +40,10 @@ export const addForwardButton: AddButtonFunction = async () => {
 		"forwardButton",
 		forwardButtonPlacement,
 		window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
-			TIME: Measure.of(time, seconds).toString()
+			TIME: Measure.of(forward_rewind_buttons_time, seconds).toString()
 		}),
 		getFeatureIcon("forwardButton", forwardButtonPlacement),
-		() => void speedButtonListener("forward", time),
+		() => void speedButtonListener("forward", forward_rewind_buttons_time),
 		false
 	);
 };
@@ -50,12 +51,13 @@ export const addRewindButton: AddButtonFunction = async () => {
 	const {
 		data: {
 			options: {
-				buttonPlacement: { rewindButton: rewindButtonPlacement },
-				forwardRewindButtons: { enabled, time }
+				button_placements: { rewindButton: rewindButtonPlacement },
+				enable_forward_rewind_buttons,
+				forward_rewind_buttons_time
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
+	if (!enable_forward_rewind_buttons) return;
 	if (!isWatchPage()) return;
 	// Get the player element
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
@@ -68,10 +70,10 @@ export const addRewindButton: AddButtonFunction = async () => {
 		"rewindButton",
 		rewindButtonPlacement,
 		window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
-			TIME: Measure.of(time, seconds).toString()
+			TIME: Measure.of(forward_rewind_buttons_time, seconds).toString()
 		}),
 		getFeatureIcon("rewindButton", rewindButtonPlacement),
-		() => void speedButtonListener("backward", time),
+		() => void speedButtonListener("backward", forward_rewind_buttons_time),
 		false
 	);
 };

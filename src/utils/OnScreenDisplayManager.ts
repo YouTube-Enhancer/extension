@@ -14,8 +14,7 @@ export type DisplayOptions = {
 
 export const valueType = {
 	Speed: "speed",
-	Volume: "volume",
-	VolumeBoostDB: "volume_boost_db"
+	Volume: "volume"
 } as const;
 type Value<V extends ValueType> = {
 	max: number;
@@ -185,9 +184,6 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 					case "volume": {
 						text = `${value}%`;
 						break;
-					}
-					case "volume_boost_db": {
-						text = `${value}dB`;
 					}
 				}
 				this.setFont();

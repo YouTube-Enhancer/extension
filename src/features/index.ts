@@ -1,7 +1,6 @@
 import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
-import { addFlipVideoVerticalButton, removeFlipVideoVerticalButton } from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { addHideEndScreenCardsButton, removeHideEndScreenCardsButton } from "@/src/features/hideEndScreenCards";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
@@ -31,14 +30,6 @@ export const featureButtonFunctions = {
 		add: addDecreasePlaybackSpeedButton,
 		remove: removeDecreasePlaybackSpeedButton
 	},
-	flipVideoHorizontalButton: {
-		add: addFlipVideoVerticalButton,
-		remove: removeFlipVideoVerticalButton
-	},
-	flipVideoVerticalButton: {
-		add: addFlipVideoVerticalButton,
-		remove: removeFlipVideoVerticalButton
-	},
 	forwardButton: {
 		add: addForwardButton,
 		remove: removeForwardButton
@@ -62,10 +53,6 @@ export const featureButtonFunctions = {
 	miniPlayerButton: {
 		add: addMiniPlayerButton,
 		remove: removeMiniPlayerButton
-	},
-	monoToStereoButton: {
-		add: addVolumeBoostButton,
-		remove: removeVolumeBoostButton
 	},
 	openTranscriptButton: {
 		add: addOpenTranscriptButton,

@@ -90,9 +90,7 @@ async function getLocalePercentagesFromCrowdin() {
 			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`);
 		}
 	} catch (error) {
-		throw new Error(formatError(error), {
-			cause: error
-		});
+		throw new Error(formatError(error));
 	}
 }
 function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
