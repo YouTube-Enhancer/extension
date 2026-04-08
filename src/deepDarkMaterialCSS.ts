@@ -1,6 +1,6 @@
 /* eslint-disable no-secrets/no-secrets */
 /**
- * Version 4.7.4
+ * Version 4.7.5
  * Author: https://github.com/RaitaroH
  * Co-authors: https://github.com/MechaLynx https://github.com/MaximeRF
  * Repository: https://github.com/RaitaroH/YouTube-DeepDark
@@ -2790,7 +2790,8 @@ span.prefix.style-scope.paper-input-container > div.ytd-donation-amount-picker-r
 
 /*Notification*/
 /*bell icon notification count*/
-.yt-spec-icon-badge-shape--type-notification .yt-spec-icon-badge-shape__badge {
+.yt-spec-icon-badge-shape--type-notification .yt-spec-icon-badge-shape__badge,
+.ytSpecIconBadgeShapeTypeNotification .ytSpecIconBadgeShapeBadge {
 	background-color: var(--main-color) !important;
 	border: none !important;
 }
