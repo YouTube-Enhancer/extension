@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Audio Handling",
+						"toggle": {
+							"on": "Mono → Stereo Output",
+							"off": "Original Audio"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Flip video horizontally"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "볼륨 부스트",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "볼륨 부스트 끄기",
-							"on": "볼륨 부스트 켜기"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "스크린샷 버튼",
 							"volumeBoostButton": "볼륨 부스트 버튼",
 							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -461,6 +471,12 @@
 							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "현재 시간 주소 복사 버튼",
@@ -503,6 +519,12 @@
 							"title": "Hides videos that are only visible to members"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Hide Official Artist Videos",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "스크롤바 숨기기",
 							"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "쇼츠 숨기기",
-							"title": "쇼츠 동영상들을 숨깁니다."
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "기타 설정"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "부피 부스트(dB)",
-						"title": "높을 수록 소리가 커집니다."
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {

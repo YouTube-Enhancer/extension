@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Gestione audio mono",
+						"toggle": {
+							"on": "Audio mono/stereo",
+							"off": "Audio originale"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Ribalta video orizzontalmente"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Aumento volume",
+						"label": "Potenziamento volume ({{value}} dB)",
 						"toggle": {
 							"off": "Aumento volume NO",
-							"on": "Aumento volume SÌ"
+							"on": "Potenziamento volume ({{value}} dB)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "Pulsante Schermata",
 							"volumeBoostButton": "Pulsante Aumento volume",
 							"flipVideoVerticalButton": "Pulsante 'Ribalta video verticalmente'",
-							"flipVideoHorizontalButton": "Pulsante 'Ribalta video orizzontalmente'"
+							"flipVideoHorizontalButton": "Pulsante 'Ribalta video orizzontalmente'",
+							"monoToStereoButton": "Pulsante da mono a stereo"
 						},
 						"options": {
 							"below_player": {
@@ -461,6 +471,12 @@
 							"title": "Impedisce alla pressione 0-9 di attuare salti a una percentuale del video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Nascondi post",
+							"title": "Nasconde i post dalla pagina iniziale"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Pulsante \"Copia URL video con temporizzazione\"",
@@ -503,6 +519,12 @@
 							"title": "Nasconde i video che sono visibili solo ai membri"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Pulsante da mono a stereo",
+							"title": "Aggiunge un pulsante per convertire l'audio mono in stereo. Le tracce stereo rimangono invariate."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Nascondi video ufficiali dell'artista",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "Nascondi barra scorrimento",
 							"title": "Nasconde la barra di scorrimento delle pagine"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Nascondi blocchi",
-							"title": "Nasconde tutti i blocchi"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "Impostazioni varie"
+			},
+			"hideShorts": {
+				"title": "Nascondi corti",
+				"settings": {
+					"sidebar": {
+						"label": "Nascondi nella barra laterale",
+						"title": "Rimuove il pulsante dei corti dalla barra laterale"
+					},
+					"home": {
+						"label": "Nascondi su feed Inizio",
+						"title": "Rimuove la sezione dei corti dal feed Inizio"
+					},
+					"channel": {
+						"label": "Nascondi nelle pagine dei canali",
+						"title": "Rimuove lo scaffale e la scheda dei corti nelle pagine dei canali"
+					},
+					"search": {
+						"label": "Nascondi nei risultati della ricerca",
+						"title": "Rimuove i video dei corti dai risultati della ricerca"
+					},
+					"videos": {
+						"label": "Nascondi nelle pagine dell'orologio",
+						"title": "Rimuove i video dei corti dai consigli nelle pagine dell'orologio"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "Aumento volume (dB)",
-						"title": "La quantità da aggiungere al volume"
+						"title": "La quantità di aumento per il volume. È anche possibile scorrere sopra il pulsante del volume (Maiusc/Ctrl per incrementi maggiori) per regolarlo."
+					},
+					"amount_global_only": {
+						"label": "Incremento volume (dB)",
+						"title": "La quantità da aggiungere al volume."
 					},
 					"mode": {
 						"select": {
