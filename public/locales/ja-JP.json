@@ -271,7 +271,6 @@
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
-				"scrollForMoreSettings": "スクロールで設定の続きを表示",
 				"settingSearch": {
 					"placeholder": "設定を探す"
 				},
