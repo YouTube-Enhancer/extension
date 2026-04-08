@@ -17,10 +17,12 @@ export function disablePauseBackgroundPlayers() {
 export async function enablePauseBackgroundPlayers() {
 	const {
 		data: {
-			options: { enable_pausing_background_players: pauseBackgroundPlayersEnabled }
+			options: {
+				pauseBackgroundPlayers: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!pauseBackgroundPlayersEnabled) return;
+	if (!enabled) return;
 	// ignore home page and channel pages
 	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;
 	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");

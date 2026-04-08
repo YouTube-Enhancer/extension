@@ -1,5 +1,6 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { calculatePlaybackButtonSpeed, updatePlaybackSpeedButtonTooltip } from "@/src/features/playbackSpeedButtons";
 import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
 import { isShortsPage, isWatchPage, preventScroll, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
@@ -11,7 +12,9 @@ export default async function adjustSpeedOnScrollWheel() {
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const {
 		data: {
-			options: { enable_scroll_wheel_speed_control: enableScrollWheelSpeedControl }
+			options: {
+				scrollWheelSpeedControl: { enabled: enableScrollWheelSpeedControl }
+			}
 		}
 	} = optionsData;
 	// If scroll wheel speed control is disabled, return
@@ -31,6 +34,8 @@ export default async function adjustSpeedOnScrollWheel() {
 	if (playerVideoData.isLive) return;
 	// Define the event handler for the scroll wheel events
 	const handleWheel = (event: Event) => {
+		const volumeBoostButton = getFeatureButton("volumeBoostButton");
+		if (volumeBoostButton && event.target === volumeBoostButton) return;
 		const setOptionsData = async () => {
 			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
 		};
@@ -41,22 +46,15 @@ export default async function adjustSpeedOnScrollWheel() {
 			const {
 				data: {
 					options: {
-						enable_scroll_wheel_speed_control,
-						osd_display_color,
-						osd_display_hide_time,
-						osd_display_opacity,
-						osd_display_padding,
-						osd_display_position,
-						osd_display_type,
-						playback_buttons_speed,
-						scroll_wheel_speed_control_modifier_key,
-						speed_adjustment_steps
+						onScreenDisplay: { color, hideTime, opacity, padding, position, type },
+						playbackSpeedButtons: { speed },
+						scrollWheelSpeedControl: { enabled, modifierKey, steps }
 					}
 				}
 			} = optionsData;
 			const wheelEvent = event as WheelEvent;
 			// If the modifier key is required and not pressed, return
-			if (enable_scroll_wheel_speed_control && !wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
+			if (enabled && !wheelEvent[modifierKey]) return void (await setOptionsData());
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
 			preventScroll(wheelEvent);
@@ -72,23 +70,17 @@ export default async function adjustSpeedOnScrollWheel() {
 			// Adjust the speed based on the scroll direction
 			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
 			// Adjust the speed based on the scroll direction and options
-			const { newSpeed } = await adjustSpeed(scrollDelta, speed_adjustment_steps);
-			await updatePlaybackSpeedButtonTooltip(
-				"increasePlaybackSpeedButton",
-				calculatePlaybackButtonSpeed(newSpeed, playback_buttons_speed, "increase")
-			);
-			await updatePlaybackSpeedButtonTooltip(
-				"decreasePlaybackSpeedButton",
-				calculatePlaybackButtonSpeed(newSpeed, playback_buttons_speed, "decrease")
-			);
+			const { newSpeed } = await adjustSpeed(scrollDelta, steps);
+			await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(newSpeed, speed, "increase"));
+			await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(newSpeed, speed, "decrease"));
 			new OnScreenDisplayManager(
 				{
-					displayColor: osd_display_color,
-					displayHideTime: osd_display_hide_time,
-					displayOpacity: osd_display_opacity,
-					displayPadding: osd_display_padding,
-					displayPosition: osd_display_position,
-					displayType: osd_display_type,
+					displayColor: color,
+					displayHideTime: hideTime,
+					displayOpacity: opacity,
+					displayPadding: padding,
+					displayPosition: position,
+					displayType: type,
 					playerContainer: playerContainer
 				},
 				"yte-osd",

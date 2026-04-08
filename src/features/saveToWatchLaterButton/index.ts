@@ -1,6 +1,8 @@
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { Innertube } from "youtubei.js/web";
 
+import type { YtActionEvent } from "@/src/types";
+
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { isHomePage, isSubscriptionsPage, waitForSpecificMessage } from "@/src/utils/utilities";
 
@@ -19,11 +21,10 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 }
 
 const CONTAINER = "ytd-two-column-browse-results-renderer:is([page-subtype='home'], [page-subtype='subscriptions'])";
-const TRANSLATION_KEY_PREFIX = "settings.sections.saveToWatchLaterButton";
 
 let videosObserver: MutationObserver | null = null;
 
-export async function disableSaveToWatchLaterButton() {
+export function disableSaveToWatchLaterButton() {
 	if (videosObserver) {
 		videosObserver.disconnect();
 		videosObserver = null;
@@ -38,17 +39,19 @@ export async function disableSaveToWatchLaterButton() {
 export async function enableSaveToWatchLaterButton() {
 	const {
 		data: {
-			options: { enable_save_to_watch_later_button }
+			options: {
+				saveToWatchLaterButton: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 
-	if (!enable_save_to_watch_later_button || (!isHomePage() && !isSubscriptionsPage())) {
+	if (!enabled || (!isHomePage() && !isSubscriptionsPage())) {
 		return;
 	}
 
-	document.addEventListener("yt-action", async (event) => {
-		if ((event as CustomEvent).detail.actionName === "yt-prepare-page-dispose") {
-			await disableSaveToWatchLaterButton();
+	document.addEventListener("yt-action", (event) => {
+		if ((event as YtActionEvent).detail.actionName === "yt-prepare-page-dispose") {
+			disableSaveToWatchLaterButton();
 		}
 	});
 
@@ -70,9 +73,9 @@ export async function enableSaveToWatchLaterButton() {
 					saveButton.closest("yt-lockup-view-model")!.querySelector("h3")!.style.paddingRight = "0";
 					saveButton.style.display = "none";
 				},
-				translationError: `${TRANSLATION_KEY_PREFIX}.failedToSaveVideo`,
-				translationHover: `${TRANSLATION_KEY_PREFIX}.saveVideo`,
-				translationProcessing: `${TRANSLATION_KEY_PREFIX}.savingVideo`
+				translationError: (translations) => translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo,
+				translationHover: (translations) => translations.pages.content.features.saveToWatchLaterButton.extras.saveVideo,
+				translationProcessing: (translations) => translations.pages.content.features.saveToWatchLaterButton.extras.savingVideo
 			});
 
 			const heading = video.querySelector("h3") as HTMLElement;

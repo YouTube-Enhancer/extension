@@ -26,10 +26,12 @@ export async function disableDefaultToOriginalAudioTrack() {
 export async function enableDefaultToOriginalAudioTrack() {
 	const {
 		data: {
-			options: { enable_default_to_original_audio_track: defaultToOriginalAudioTrack }
+			options: {
+				defaultToOriginalAudioTrack: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!defaultToOriginalAudioTrack) return;
+	if (!enabled) return;
 	if (!isWatchPage()) return;
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;

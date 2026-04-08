@@ -1,5 +1,5 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { featureButtonFunctions, type FeatureFuncRecord } from "@/src/features";
+import { featureButtonFunctions } from "@/src/features";
 import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
 import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
 import {
@@ -13,6 +13,7 @@ import {
 	enableAutomaticallyShowMoreVideosOnEndScreen
 } from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
 import { disableAutomaticTheaterMode, enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
+import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/blockNumberKeySeeking";
 import { featuresInControls } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
@@ -23,6 +24,12 @@ import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } fro
 import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
 import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import {
+	addFlipVideoHorizontalButton,
+	addFlipVideoVerticalButton,
+	removeFlipVideoHorizontalButton,
+	removeFlipVideoVerticalButton
+} from "@/src/features/flipVideoButtons";
 import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
 import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
 import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
@@ -46,9 +53,11 @@ import {
 	disableHidePlaylistRecommendationsFromHomePage,
 	enableHidePlaylistRecommendationsFromHomePage
 } from "@/src/features/hidePlaylistRecommendationsFromHomePage";
+import { disableHidePosts, enableHidePosts } from "@/src/features/hidePosts";
 import { enableHideScrollBar } from "@/src/features/hideScrollBar";
 import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
-import { disableHideShorts, enableHideShorts } from "@/src/features/hideShorts";
+import { enableHideShorts } from "@/src/features/hideShorts";
+import { applyShortsVisibility } from "@/src/features/hideShorts/utils";
 import { disableHideSidebarRecommendedVideos, enableHideSidebarRecommendedVideos } from "@/src/features/hideSidebarRecommendedVideos";
 import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
 import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
@@ -56,6 +65,7 @@ import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/featu
 import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
 import { disableCommentsMiniPlayer, enableCommentsMiniPlayer, setCommentsMiniPlayerDefaults } from "@/src/features/miniPlayer";
 import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
+import { addMonoToStereoButton, removeMonoToStereoButton } from "@/src/features/monoToStereo";
 import { openTranscriptButton } from "@/src/features/openTranscriptButton";
 import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
 import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
@@ -87,7 +97,7 @@ import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timest
 import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
 import volumeBoost, {
 	addVolumeBoostButton,
-	applyVolumeBoost,
+	applyVolumeBoostDb,
 	disableVolumeBoost,
 	enableVolumeBoost,
 	removeVolumeBoostButton
@@ -105,8 +115,7 @@ import {
 	type MultiButtonFeatureNames,
 	type MultiButtonNames,
 	type SingleButtonFeatureNames,
-	type SingleButtonNames,
-	type YouTubePlayerDiv
+	type SingleButtonNames
 } from "@/src/types";
 import eventManager from "@/utils/EventManager";
 import {
@@ -133,52 +142,20 @@ element.style.display = "none";
 element.id = "yte-message-from-youtube";
 document.documentElement.appendChild(element);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const alwaysShowProgressBar = async function () {
-	const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-	if (!player) return;
-	const playBar = player.querySelector<HTMLDivElement>(".ytp-play-progress");
-	if (!playBar) return;
-	const loadBar = player.querySelector<HTMLDivElement>(".ytp-load-progress");
-	if (!loadBar) return;
-	const currentTime = await player.getCurrentTime();
-	const duration = await player.getDuration();
-	const bytesLoaded = await player.getVideoBytesLoaded();
-	const played = (currentTime * 100) / duration;
-	const loaded = bytesLoaded * 100;
-	let width = 0;
-	let progressPlay = 0;
-	let progressLoad = 0;
-
-	width += playBar.offsetWidth;
-
-	const widthPercent = width / 100;
-	const progressWidth = playBar.offsetWidth / widthPercent;
-	let playBarProgress = 0;
-	let loadBarProgress = 0;
-	if (played - progressPlay >= progressWidth) {
-		playBarProgress = 100;
-	} else if (played > progressPlay && played < progressWidth + progressPlay) {
-		loadBarProgress = (100 * ((played - progressPlay) * widthPercent)) / playBar.offsetWidth;
-	}
-	playBar.style.transform = `scaleX(${playBarProgress / 100})`;
-	if (loaded - progressLoad >= progressWidth) {
-		loadBarProgress = 100;
-	} else if (loaded > progressLoad && loaded < progressWidth + progressLoad) {
-		loadBarProgress = (100 * ((loaded - progressLoad) * widthPercent)) / playBar.offsetWidth;
-	}
-	loadBar.style.transform = `scaleX(${loadBarProgress / 100})`;
-	progressPlay += progressWidth;
-	progressLoad += progressWidth;
-};
 function shouldEnableFeaturesFuncReturn() {
 	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
 }
 let isEnablingFeatures = false;
 let enableFeaturesTimeout: null | ReturnType<typeof setTimeout> = null;
+let lastEnabledURL: null | string = null;
 function scheduleEnableFeatures() {
 	if (enableFeaturesTimeout) clearTimeout(enableFeaturesTimeout);
 	enableFeaturesTimeout = setTimeout(() => {
+		const {
+			location: { href: currentURL }
+		} = window;
+		if (lastEnabledURL === currentURL) return;
+		lastEnabledURL = currentURL;
 		void enableFeatures();
 	}, 200);
 }
@@ -190,7 +167,7 @@ const enableFeatures = async () => {
 	try {
 		const {
 			data: {
-				options: { button_placements }
+				options: { buttonPlacement }
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		// Wait for the specified container selectors to be available on the page
@@ -211,7 +188,8 @@ const enableFeatures = async () => {
 			enableHideOfficialArtistVideosFromHomePage(),
 			enableHidePlaylistRecommendationsFromHomePage(),
 			enableSaveToWatchLaterButton(),
-			enableTimestampPeek()
+			enableTimestampPeek(),
+			enableHidePosts()
 		]);
 		// Use a guard clause to reduce amount of times nesting code happens
 		if (shouldEnableFeaturesFuncReturn()) return;
@@ -222,7 +200,7 @@ const enableFeatures = async () => {
 			if (!buttonName) continue;
 			switch (multiButtonFeatureName) {
 				case "forwardRewindButtons": {
-					switch (button_placements[buttonName]) {
+					switch (buttonPlacement[buttonName]) {
 						case "below_player":
 						case "feature_menu":
 						case "player_controls_left": {
@@ -238,7 +216,7 @@ const enableFeatures = async () => {
 					break;
 				}
 				case "playbackSpeedButtons": {
-					switch (button_placements[buttonName]) {
+					switch (buttonPlacement[buttonName]) {
 						case "below_player":
 						case "feature_menu":
 						case "player_controls_left": {
@@ -282,9 +260,11 @@ const enableFeatures = async () => {
 			enableHideSidebarRecommendedVideos(),
 			enableAutomaticallyDisableAutoPlay(),
 			enableGlobalVolume(),
-			enableCommentsMiniPlayer()
+			enableCommentsMiniPlayer(),
+			enableBlockNumberKeySkip()
 		]);
 		// Features that add buttons should be put below and be ordered in the order those buttons should appear
+		await addMonoToStereoButton();
 		await addHideEndScreenCardsButton();
 		await addScreenshotButton();
 		await openTranscriptButton();
@@ -293,6 +273,8 @@ const enableFeatures = async () => {
 		await addLoopButton();
 		await addCopyTimestampUrlButton();
 		await volumeBoost();
+		await addFlipVideoVerticalButton();
+		await addFlipVideoHorizontalButton();
 	} finally {
 		isEnablingFeatures = false;
 	}
@@ -303,11 +285,13 @@ const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPl
 	if (!featureFunctions) {
 		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
 	}
-	// Cast featureFunctions to FeatureFuncRecord
-	const castFeatureFunctions = featureFunctions as unknown as FeatureFuncRecord;
+	// Ensure featureFunctions are valid
+	if (typeof featureFunctions.add !== "function" || typeof featureFunctions.remove !== "function") {
+		throw new Error(`Feature '${featureName}' functions are not valid`);
+	}
 	return {
-		add: () => castFeatureFunctions.add(),
-		remove: () => castFeatureFunctions.remove(oldPlacement)
+		add: () => featureFunctions.add(),
+		remove: () => featureFunctions.remove(oldPlacement)
 	};
 };
 function handleSoftNavigate() {
@@ -426,6 +410,18 @@ const initialize = function () {
 						}
 						break;
 					}
+					case "blockNumberKeySeekingChange": {
+						const {
+							data: { blockNumberKeySeekingEnabled }
+						} = message;
+						console.log(`blockNumberKeySeekingEnabled: ${blockNumberKeySeekingEnabled}`);
+						if (blockNumberKeySeekingEnabled) {
+							await enableBlockNumberKeySkip();
+						} else {
+							disableBlockNumberKeySkip();
+						}
+						break;
+					}
 					case "buttonPlacementChange": {
 						const { data } = message;
 						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
@@ -503,10 +499,11 @@ const initialize = function () {
 						if (miniPlayerEnabled) {
 							await enableCommentsMiniPlayer();
 						} else {
-							await disableCommentsMiniPlayer();
+							disableCommentsMiniPlayer();
 						}
 						break;
 					}
+
 					case "copyTimestampUrlButtonChange": {
 						const {
 							data: { copyTimestampUrlButtonEnabled }
@@ -518,14 +515,13 @@ const initialize = function () {
 						}
 						break;
 					}
-
 					case "customCSSChange": {
 						const {
 							data: { customCSSCode, customCSSEnabled }
 						} = message;
 						if (customCSSEnabled) {
 							if (customCSSExists()) {
-								updateCustomCSS({ custom_css_code: customCSSCode });
+								updateCustomCSS({ code: customCSSCode });
 							} else {
 								await enableCustomCSS();
 							}
@@ -570,6 +566,28 @@ const initialize = function () {
 						setupFeatureMenuEventListeners(featureMenuOpenType);
 						break;
 					}
+					case "flipVideoHorizontalButtonChange": {
+						const {
+							data: { flipVideoHorizontalButtonEnabled }
+						} = message;
+						if (flipVideoHorizontalButtonEnabled) {
+							await addFlipVideoHorizontalButton();
+						} else {
+							await removeFlipVideoHorizontalButton();
+						}
+						break;
+					}
+					case "flipVideoVerticalButtonChange": {
+						const {
+							data: { flipVideoVerticalButtonEnabled }
+						} = message;
+						if (flipVideoVerticalButtonEnabled) {
+							await addFlipVideoVerticalButton();
+						} else {
+							await removeFlipVideoVerticalButton();
+						}
+						break;
+					}
 					case "forwardRewindButtonsChange": {
 						const {
 							data: { forwardRewindButtonsEnabled }
@@ -577,7 +595,7 @@ const initialize = function () {
 						const {
 							data: {
 								options: {
-									button_placements: { forwardButton: forwardButtonPlacement }
+									buttonPlacement: { forwardButton: forwardButtonPlacement }
 								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
@@ -621,7 +639,7 @@ const initialize = function () {
 						if (hideArtificialIntelligenceSummaryEnabled) {
 							await enableHideArtificialIntelligenceSummary();
 						} else {
-							await disableHideArtificialIntelligenceSummary();
+							disableHideArtificialIntelligenceSummary();
 						}
 						break;
 					}
@@ -667,7 +685,7 @@ const initialize = function () {
 						if (hideMembersOnlyVideosEnabled) {
 							await enableHideMembersOnlyVideos();
 						} else {
-							await disableHideMembersOnlyVideos();
+							disableHideMembersOnlyVideos();
 						}
 						break;
 					}
@@ -700,7 +718,7 @@ const initialize = function () {
 						if (hidePlayablesEnabled) {
 							await enableHidePlayables();
 						} else {
-							await disableHidePlayables();
+							disableHidePlayables();
 						}
 						break;
 					}
@@ -712,6 +730,17 @@ const initialize = function () {
 							await enableHidePlaylistRecommendationsFromHomePage();
 						} else {
 							disableHidePlaylistRecommendationsFromHomePage();
+						}
+						break;
+					}
+					case "hidePostsChange": {
+						const {
+							data: { hidePostsEnabled }
+						} = message;
+						if (hidePostsEnabled) {
+							await enableHidePosts();
+						} else {
+							disableHidePosts();
 						}
 						break;
 					}
@@ -733,13 +762,16 @@ const initialize = function () {
 					}
 					case "hideShortsChange": {
 						const {
-							data: { hideShortsEnabled }
+							data: {
+								enableHideShortsChannel: channel,
+								enableHideShortsHome: home,
+								enableHideShortsSearch: search,
+								enableHideShortsSidebar: sidebar,
+								enableHideShortsVideos: videos
+							}
 						} = message;
-						if (hideShortsEnabled) {
-							await enableHideShorts();
-						} else {
-							await disableHideShorts();
-						}
+
+						applyShortsVisibility({ channel, home, search, sidebar, videos });
 						break;
 					}
 					case "hideSidebarRecommendedVideosChange": {
@@ -749,7 +781,7 @@ const initialize = function () {
 						if (hideSidebarRecommendedVideosEnabled) {
 							await enableHideSidebarRecommendedVideos();
 						} else {
-							await disableHideSidebarRecommendedVideos();
+							disableHideSidebarRecommendedVideos();
 						}
 						break;
 					}
@@ -758,7 +790,7 @@ const initialize = function () {
 							data: { hideTranslateCommentEnabled }
 						} = message;
 						if (hideTranslateCommentEnabled) await enableHideTranslateComment();
-						else await disableHideTranslateComment();
+						else disableHideTranslateComment();
 						break;
 					}
 					case "languageChange": {
@@ -782,7 +814,7 @@ const initialize = function () {
 											tr.pages.content.features[multiFeatureName].buttons[
 												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
 											].label,
-										{ TIME: options.forward_rewind_buttons_time }
+										{ TIME: options.forwardRewindButtons.time }
 									);
 								case "playbackSpeedButtons":
 									return t(
@@ -790,7 +822,7 @@ const initialize = function () {
 											tr.pages.content.features[multiFeatureName].buttons[
 												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
 											].label,
-										{ SPEED: options.playback_buttons_speed }
+										{ SPEED: options.playbackSpeedButtons.speed }
 									);
 							}
 						};
@@ -861,9 +893,20 @@ const initialize = function () {
 					}
 					case "miniPlayerDefaultsChange": {
 						const {
-							data: { defaultPosition: mini_player_default_position, defaultSize: mini_player_default_size }
+							data: { defaultPosition, defaultSize }
 						} = message;
-						setCommentsMiniPlayerDefaults({ mini_player_default_position, mini_player_default_size });
+						setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
+						break;
+					}
+					case "monoToStereoButtonChange": {
+						const {
+							data: { monoToStereoButtonEnabled }
+						} = message;
+						if (monoToStereoButtonEnabled) {
+							await addMonoToStereoButton();
+						} else {
+							await removeMonoToStereoButton();
+						}
 						break;
 					}
 					case "openTranscriptButtonChange": {
@@ -906,7 +949,7 @@ const initialize = function () {
 						const {
 							data: {
 								options: {
-									button_placements: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
+									buttonPlacement: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
 								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
@@ -938,7 +981,9 @@ const initialize = function () {
 						} = message;
 						const {
 							data: {
-								options: { playback_buttons_speed: playbackSpeedPerClick }
+								options: {
+									playbackSpeedButtons: { speed: playbackSpeedPerClick }
+								}
 							}
 						} = await waitForSpecificMessage("options", "request_data", "content");
 						if (enableForcedPlaybackSpeed && playerSpeed) {
@@ -986,7 +1031,7 @@ const initialize = function () {
 					}
 					case "playlistRemoveButtonChange":
 					case "playlistResetButtonChange": {
-						await disablePlaylistManagementButtons();
+						disablePlaylistManagementButtons();
 						await enablePlaylistManagementButtons();
 						break;
 					}
@@ -1039,7 +1084,7 @@ const initialize = function () {
 						if (saveToWatchLaterButtonEnabled) {
 							await enableSaveToWatchLaterButton();
 						} else {
-							await disableSaveToWatchLaterButton();
+							disableSaveToWatchLaterButton();
 						}
 						break;
 					}
@@ -1136,14 +1181,14 @@ const initialize = function () {
 						switch (volumeBoostMode) {
 							case "global": {
 								if (!volumeBoostEnabled) return;
-								applyVolumeBoost(volumeBoostAmount);
+								applyVolumeBoostDb(volumeBoostAmount);
 								break;
 							}
 							case "per_video": {
 								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
 								if (!volumeBoostButton) return;
 								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								if (volumeBoostForVideoEnabled) applyVolumeBoost(volumeBoostAmount);
+								if (volumeBoostForVideoEnabled) applyVolumeBoostDb(volumeBoostAmount);
 							}
 						}
 						break;
@@ -1178,23 +1223,26 @@ const initialize = function () {
 	})();
 };
 
-if (document.readyState === "loading") {
-	document.addEventListener("DOMContentLoaded", initialize);
-} else {
-	initialize();
+if (window.self === window.top) {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initialize);
+	} else {
+		initialize();
+	}
 }
 
-window.onbeforeunload = function () {
+window.addEventListener("pagehide", () => {
 	eventManager.removeAllEventListeners();
 	element.remove();
-};
+});
 
 // Error handling
-window.addEventListener("error", (event) => {
+window.addEventListener("error", (event: ErrorEvent) => {
 	event.preventDefault();
-	const errorLine = event.error?.stack || `${event.filename}:${event.lineno}:${event.colno}`;
-	const errorMessage = event.error ? formatError(event.error) : event.message || "Unknown error";
-	browserColorLog(errorMessage + "\nAt: " + errorLine, "FgRed");
+	const errorLine =
+		event.error instanceof Error && typeof event.error.stack === "string" ? event.error.stack : `${event.filename}:${event.lineno}:${event.colno}`;
+	const errorMessage = event.error instanceof Error ? formatError(event.error) : event.message || "Unknown error";
+	browserColorLog(`${errorMessage}\nAt: ${errorLine}`, "FgRed");
 });
 
 window.addEventListener("unhandledrejection", (event) => {

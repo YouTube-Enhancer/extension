@@ -12,11 +12,13 @@ export async function enableShortsAutoScroll() {
 	// Wait for the "options" message from the content script
 	const {
 		data: {
-			options: { enable_shorts_auto_scroll }
+			options: {
+				shortsAutoScroll: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// If the shorts auto scroll option is disabled, return
-	if (!enable_shorts_auto_scroll) return;
+	if (!enabled) return;
 	// Get the shorts container
 	const shortsContainer = await waitForElement<YouTubePlayerDiv>("#shorts-player");
 	// If shorts container is not available, return

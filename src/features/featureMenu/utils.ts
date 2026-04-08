@@ -12,7 +12,7 @@ import {
 	type WithId
 } from "@/src/types";
 import eventManager from "@/src/utils/EventManager";
-import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
+import { findKeyByValue, waitForElement } from "@/src/utils/utilities";
 
 export const featuresInMenu = new Set<AllButtonNames>();
 const MENU_ID = "#yte-feature-menu";
@@ -42,7 +42,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
 	// Wait for the feature menu to exist
-	await waitForAllElements([MENU_ID]);
+	await waitForElement(MENU_ID);
 	// Get the feature menu
 	const featureMenu = getMenu();
 	if (!featureMenu) return;
@@ -82,7 +82,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.appendChild(menuItemToggle);
 		setMenuItemChecked(menuItem, initialChecked);
 	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem!, listener, isToggle), featureName);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
 	updateMenuSize(featureMenu, panel);
 	const featureMenuButton = document.querySelector<HTMLDivElement>(MENU_BUTTON_ID);
@@ -158,7 +158,7 @@ function featureMenuClickListener<Toggle extends boolean>(menuItem: HTMLDivEleme
 
 	const newState = !getMenuItemChecked(menuItem);
 	setMenuItemChecked(menuItem, newState);
-	listener(newState as any);
+	listener(newState);
 }
 
 function getMenu(): HTMLDivElement | null {

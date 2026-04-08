@@ -7,9 +7,11 @@ export function disableAutomaticallyMaximizePlayer() {
 export async function enableAutomaticallyMaximizePlayer() {
 	const {
 		data: {
-			options: { enable_automatically_maximize_player }
+			options: {
+				automaticallyMaximizePlayer: { enabled }
+			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_automatically_maximize_player) return;
+	if (!enabled) return;
 	maximizePlayer();
 }
