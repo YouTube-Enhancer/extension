@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Ses İşlemesi",
+						"toggle": {
+							"on": "Mono'dan Stereo'ya Çıkış",
+							"off": "Orjinal Ses"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Flip video horizontally"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Ses Yükseltici",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "Ses Yükseltici Devredışı",
-							"on": "Ses Yükseltici Aktif"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "Ekran görüntüsü düğmesi",
 							"volumeBoostButton": "Ses güçlendirme düğmesi",
 							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono'dan Stereo'ya düğmesi"
 						},
 						"options": {
 							"below_player": {
@@ -461,6 +471,12 @@
 							"title": "0-9 tuşlarına basıldığında videonun belirli bir yüzdesine atlamayı engeller."
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
@@ -503,6 +519,12 @@
 							"title": "Sadece üyelere görünen videoları gizle"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono'dan Stereo'ya düğmesi",
+							"title": "Mono ses dosyalarını stereo'ya dönüştürmek için bir düğme ekler. Stereo parçalarda herhangi bir değişiklik yapılmaz."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Resmi Sanatçı Videolarını Gizle",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 							"title": "Sayfa kaydırma çubuğunu gizler"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Kısa videoları gizle",
-							"title": "Tüm kısa videoları gizler"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "Çeşitli ayarlar"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "Ses güçlendirme miktarı (dB)",
-						"title": "Ses güçlendirme miktarı"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {

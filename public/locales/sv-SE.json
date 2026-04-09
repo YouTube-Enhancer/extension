@@ -8,14 +8,23 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Monoljudshantering",
+						"toggle": {
+							"on": "Mono → Stereo-utgång",
+							"off": "Originalljud"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Vänd videon horisontellt"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Vänd videon vertikalt"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volymökning",
+						"label": "Volymökning ({{value}} dB)",
 						"toggle": {
 							"off": "Volymökning av",
-							"on": "Volymökning på"
+							"on": "Volymökning ({{value}} dB)"
 						}
 					}
 				}
@@ -175,8 +184,9 @@
 							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
 							"volumeBoostButton": "Volymökningsknapp",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
+							"flipVideoHorizontalButton": "Knapp för vänd videon horisontellt",
+							"monoToStereoButton": "Knapp för mono till stereo"
 						},
 						"options": {
 							"below_player": {
@@ -457,8 +467,14 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Blockera nummernyckelsökning",
+							"title": "Förhindrar att 0-9 hoppar till en procentandel av videon"
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -503,6 +519,12 @@
 							"title": "Döljer videor som endast är synliga för medlemmar"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Knapp för mono till stereo",
+							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrad."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Dölj officiella artistvideor",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "Dölj rullningslisten",
 							"title": "Döljer sidornas rullningsfält"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Dölj shorts",
-							"title": "Döljer alla shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -637,18 +653,43 @@
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Knapp för horisontell videovändning",
+							"title": "Lägger till en knapp för att vända videon horisontellt"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"label": "Knapp för vertikal videovändning",
+							"title": "Lägger till en knapp för att vända videon vertikalt"
 						}
 					}
 				},
 				"title": "Övriga inställningar"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "Volymökningsmängd (dB)",
-						"title": "Hur mycket ljudet ska öka med"
+						"title": "Hur mycket volymen ska höjas med. Du kan också rulla över volymökningsknappen (Skift/Ctrl för större steg) för att justera den."
+					},
+					"amount_global_only": {
+						"label": "Volymökningsmängd (dB)",
+						"title": "Hur mycket ska ljudet ökas med."
 					},
 					"mode": {
 						"select": {

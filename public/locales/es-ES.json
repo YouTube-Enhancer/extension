@@ -8,6 +8,15 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Audio Handling",
+						"toggle": {
+							"on": "Mono → Stereo Output",
+							"off": "Original Audio"
+						}
+					}
+				},
 				"flipVideoHorizontalButton": {
 					"button": {
 						"label": "Flip video horizontally"
@@ -132,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Potenciador de volumen",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "Desactivar potenciador de volumen",
-							"on": "Activar potenciador de volumen"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -176,7 +185,8 @@
 							"screenshotButton": "Botón de captura de pantalla",
 							"volumeBoostButton": "Botón para aumentar el volumen",
 							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button"
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -198,7 +208,7 @@
 						},
 						"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}"
 					},
-					"title": "Button placement settings"
+					"title": "Ajustes de ubicación de botones"
 				},
 				"clearData": {
 					"allDataDeleted": "Todos los datos han sido eliminados.",
@@ -209,7 +219,7 @@
 						"select": {
 							"label": "Tipo de activación del menú",
 							"options": {
-								"click": "Click",
+								"click": "Hacer clic",
 								"hover": "Pasar el cursor por encima"
 							},
 							"title": "Selecciona el método para abrir el menú"
@@ -352,7 +362,7 @@
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Ajustes de tono muy oscuro de YouTube"
 			},
 			"forwardRewindButtons": {
 				"enable": {
@@ -461,6 +471,12 @@
 							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Botón para copiar la URL con marca de tiempo",
@@ -503,6 +519,12 @@
 							"title": "Oculta los vídeos que solo son visibles para los miembros"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Ocultar Videos Oficiales del Artista",
@@ -531,12 +553,6 @@
 						"enable": {
 							"label": "Ocultar barra de desplazamiento",
 							"title": "Oculta la barra de desplazamiento de la página"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Ocultar shorts",
-							"title": "Oculta todos los shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -649,6 +665,31 @@
 					}
 				},
 				"title": "Ajustes varios"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -899,7 +940,11 @@
 				"settings": {
 					"amount": {
 						"label": "Incremento de volumen (dB)",
-						"title": "Cuantos decibelios quieres aumentar el volumen"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {
