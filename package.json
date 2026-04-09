@@ -39,7 +39,7 @@
     "react-icons": "^5.5.0",
     "safe-units": "^2.0.1",
     "tailwindcss-multi": "^0.4.6",
-    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-css-injected-by-js": "^4.0.1",
     "webextension-polyfill": "^0.12.0",
     "youtubei.js": "^17.0.1"
   },
@@ -58,7 +58,7 @@
     "@types/react-dom": "^19.2.2",
     "@types/webextension-polyfill": "^0.12.4",
     "@types/youtube-player": "^5.5.11",
-    "@vitejs/plugin-react-swc": "^4.1.0",
+    "@vitejs/plugin-react-swc": "^4.3.0",
     "archiver": "^7.0.1",
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
