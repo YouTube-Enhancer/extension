@@ -41,7 +41,6 @@ updates:
       - dependency-name: typescript-eslint
         update-types:
           - "version-update:semver-major"
-      - dependency-name: typescript-eslint
+      - dependency-name: vite
         update-types:
           - "version-update:semver-major"
-      - dependency-name: vite
