@@ -271,6 +271,7 @@
 						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione"
 					}
 				},
+				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
 					"placeholder": "Cerca un'impostazione"
 				},
