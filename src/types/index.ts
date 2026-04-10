@@ -1,7 +1,8 @@
 import type { ParseKeys, TFunction, TOptions } from "i18next";
-import type EnUS from "public/locales/en-US.json";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 import type { ZodMiniArray, ZodMiniObject, ZodMiniOptional, ZodMiniType } from "zod/v4-mini";
+
+import type EnUS from "@/public/locales/en-US.json.d";
 
 import type { DeepDarkPreset } from "../deepDarkPresets";
 import type { AvailableLocales } from "../i18n/constants";
@@ -187,7 +188,7 @@ export type SingleButtonFeatureNames = Exclude<
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
 export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type TSelectorFunc = Parameters<TFunction<"en-US">>[0];
-const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
+const featureToMultiButtonMapEntries = {
 	forwardRewindButtons: {
 		forwardButton: "",
 		rewindButton: ""
@@ -196,7 +197,7 @@ const featureToMultiButtonMapEntries: FeatureToMultiButtonMap = {
 		decreasePlaybackSpeedButton: "",
 		increasePlaybackSpeedButton: ""
 	}
-};
+} satisfies FeatureToMultiButtonMap;
 export const featureToMultiButtonsMap = new Map(
 	Object.keys(featureToMultiButtonMapEntries).map((key) => [
 		key,

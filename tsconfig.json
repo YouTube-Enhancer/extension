@@ -12,12 +12,13 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
-		"module": "esnext",
-		"moduleResolution": "node16",
+		"module": "preserve",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"paths": {
+			"@/public/locales/*": ["./public/locales/*"],
 			"@/src/*": ["./src/*"],
 			"@/assets/*": ["./src/assets/*"],
 			"@/pages/*": ["./src/pages/*"],
@@ -25,7 +26,9 @@
 			"@/utils": ["./src/utils/index"],
 			"@/utils/*": ["./src/utils/*"],
 			"@/hooks": ["./src/hooks/index"],
-			"@/hooks/*": ["./src/hooks/*"]
+			"@/hooks/*": ["./src/hooks/*"],
+			"monaco-editor/esm/*": ["./node_modules/monaco-editor/esm/*"],
+			"youtubei.js/dist/*": ["./node_modules/youtubei.js/dist/*"]
 		}
 	},
 	"include": [
