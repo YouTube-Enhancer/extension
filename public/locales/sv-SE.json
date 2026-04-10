@@ -271,6 +271,7 @@
 						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
 					}
 				},
+				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
 					"placeholder": "Sök efter en inställning"
 				},
