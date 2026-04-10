@@ -271,6 +271,7 @@
 						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
 				},
+				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
 					"placeholder": "Buscar por ajustes"
 				},
