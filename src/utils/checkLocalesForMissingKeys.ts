@@ -1,4 +1,4 @@
-import type EnUS from "public/locales/en-US.json";
+import type EnUS from "@/public/locales/en-US.json.d";
 
 import { availableLocales } from "../i18n/constants";
 import { flattenLocaleValues, getLocaleFile, type LocaleFile } from "./plugins/utils";

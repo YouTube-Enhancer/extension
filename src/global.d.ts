@@ -15,7 +15,7 @@ declare module "*.json" {
 	export default content;
 }
 
-declare module "node_modules/@types/youtube-player/dist/types" {
+declare module "youtube-player/dist/types" {
 	type audioTrack = Record<string, unknown>;
 	interface ProgressState {
 		airingEnd: number;

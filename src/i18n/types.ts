@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-modules */
-import type EnUS from "public/locales/en-US.json";
+import type EnUS from "@/public/locales/en-US.json.d";
 
 // -------------------------
 // Core primitives

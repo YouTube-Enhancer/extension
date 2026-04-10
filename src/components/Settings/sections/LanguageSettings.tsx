@@ -1,7 +1,6 @@
-import type EnUS from "public/locales/en-US.json";
-
 import { Suspense, useEffect, useReducer } from "react";
 
+import type EnUS from "@/public/locales/en-US.json.d";
 import type { SelectOption } from "@/src/components/Inputs";
 
 import Loader from "@/src/components/Loader";
