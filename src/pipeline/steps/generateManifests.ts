@@ -5,7 +5,7 @@ import { manifestV2, manifestV3 } from "../../manifest";
 import terminalColorLog from "../../utils/log";
 import { browsers, outDir } from "../../utils/plugins/utils";
 
-export function generateManifests(): void {
+export default function generateManifests(): void {
 	for (const browser of browsers) {
 		const browserDir = resolve(outDir, browser.name);
 		if (!existsSync(browserDir)) {

@@ -4,7 +4,7 @@ import { resolve } from "path";
 import terminalColorLog from "../../utils/log";
 import { browsers, copyDirectorySync, outDir, publicDir } from "../../utils/plugins/utils";
 
-export function copyOutputs(): void {
+export default function copyOutputs(): void {
 	for (const browser of browsers) {
 		const target = resolve(outDir, browser.name);
 

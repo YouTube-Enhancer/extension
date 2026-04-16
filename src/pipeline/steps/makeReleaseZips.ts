@@ -7,7 +7,9 @@ import { browsers, outDir } from "../../utils/plugins/utils";
 
 const releaseDir = resolve(process.cwd(), "releases");
 
-export async function makeReleaseZips(): Promise<void> {
+export default async function makeReleaseZips(): Promise<void> {
+	console.log(`[Build Pipeline]: Starting to create release zips`);
+
 	await Promise.all(
 		browsers.map(async (browser) => {
 			const browserReleaseDir = resolve(releaseDir, browser.name);
@@ -28,6 +30,7 @@ export async function makeReleaseZips(): Promise<void> {
 			releaseZip.directory(resolve(outDir, browser.name), false);
 
 			await releaseZip.finalize();
+			console.log(`[Build Pipeline]: Finished creating release zip for ${browser.name}`);
 		})
 	);
 }

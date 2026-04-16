@@ -4,10 +4,10 @@ import checkLocalesForMissingKeys from "../utils/checkLocalesForMissingKeys";
 import { emptyOutputFolder } from "../utils/plugins/utils";
 import updateAvailableLocales from "../utils/updateAvailableLocales";
 import updateLocalePercentages from "../utils/updateLocalePercentages";
-import { buildContentScripts } from "./steps/buildContentScripts";
-import { copyOutputs } from "./steps/copyOutputs";
-import { generateManifests } from "./steps/generateManifests";
-import { makeReleaseZips } from "./steps/makeReleaseZips";
+import buildContentScripts from "./steps/buildContentScripts";
+import copyOutputs from "./steps/copyOutputs";
+import generateManifests from "./steps/generateManifests";
+import makeReleaseZips from "./steps/makeReleaseZips";
 
 config();
 

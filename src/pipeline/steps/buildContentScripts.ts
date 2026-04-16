@@ -13,7 +13,7 @@ const contentScripts = [
 		embedded: resolve(process.cwd(), "src/pages/embedded/index.ts")
 	}
 ] as const;
-export async function buildContentScripts(): Promise<void> {
+export default async function buildContentScripts(): Promise<void> {
 	for (const contentScript of contentScripts) {
 		await build({
 			build: {
