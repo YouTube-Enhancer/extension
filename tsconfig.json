@@ -28,7 +28,8 @@
 			"@/hooks": ["./src/hooks/index"],
 			"@/hooks/*": ["./src/hooks/*"],
 			"monaco-editor/esm/*": ["./node_modules/monaco-editor/esm/*"],
-			"youtubei.js/dist/*": ["./node_modules/youtubei.js/dist/*"]
+			"rollup/*": ["./node_modules/rollup/dist/*"],
+			"vite/*": ["./node_modules/vite/*"]
 		}
 	},
 	"include": [
@@ -40,7 +41,6 @@
 		"postcss.config.cjs",
 		"prettier.config.mjs",
 		"src/features/__tests__",
-		"eslint.config.mjs"
-	],
+		"eslint.config.mjs"],
 	"exclude": ["node_modules", "dist", "releases"]
 }
