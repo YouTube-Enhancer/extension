@@ -8,7 +8,6 @@ import { buildContentScripts } from "./steps/buildContentScripts";
 import { copyOutputs } from "./steps/copyOutputs";
 import { generateManifests } from "./steps/generateManifests";
 import { makeReleaseZips } from "./steps/makeReleaseZips";
-import generateReadmeFeatures from "./steps/updateReadmeFeatures";
 
 config();
 
@@ -22,8 +21,6 @@ export async function runPostBuildPipeline(): Promise<void> {
 	console.log("[Build Pipeline] Manifests generated");
 	copyOutputs();
 	console.log("[Build Pipeline] Outputs copied");
-	await generateReadmeFeatures();
-	console.log("[Build Pipeline] README features generated");
 	await makeReleaseZips();
 	console.log("[Build Pipeline] Release ZIPs created");
 	console.log("[Build Pipeline] Post-build complete!");
