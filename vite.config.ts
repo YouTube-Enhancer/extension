@@ -1,7 +1,6 @@
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "./src/utils/constants";
 import bundleWorker from "./src/utils/plugins/bundle-worker";
@@ -49,7 +48,7 @@ export default defineConfig({
 		minifyWhitespace: true
 	},
 	mode: DEV_MODE ? "development" : "production",
-	plugins: [react(), bundleWorker(), cssInjectedByJsPlugin()],
+	plugins: [react(), bundleWorker()],
 	resolve: {
 		alias: {
 			"@/assets": assetsDir,
