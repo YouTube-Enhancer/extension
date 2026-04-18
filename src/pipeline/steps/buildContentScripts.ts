@@ -2,10 +2,8 @@ import { resolve } from "path";
 import { build } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
-import { ENABLE_SOURCE_MAP } from "@/src/utils/constants";
-
-import { DEV_MODE } from "../../utils/constants";
-import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "../../utils/plugins/utils";
+import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/constants";
+import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "@/utils/plugins/utils";
 const contentScripts = [
 	{
 		content: resolve(process.cwd(), "src/pages/content/index.ts")
