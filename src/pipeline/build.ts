@@ -15,29 +15,36 @@ const command = process.argv[2] || "all";
 
 export async function runPostBuildPipeline(): Promise<void> {
 	console.log("[Build Pipeline] Running post-build steps...");
-	await buildContentScripts();
-	console.log("[Build Pipeline] Content scripts built");
-	generateManifests();
-	console.log("[Build Pipeline] Manifests generated");
-	copyOutputs();
-	console.log("[Build Pipeline] Outputs copied");
-	await makeReleaseZips();
-	console.log("[Build Pipeline] Release ZIPs created");
-	console.log("[Build Pipeline] Post-build complete!");
+	const start = Date.now();
+	await timedStep("Building content scripts", () => buildContentScripts());
+	await timedStep("Generating manifests", () => generateManifests());
+	await timedStep("Copying outputs", () => copyOutputs());
+	await timedStep("Creating release ZIPs", () => makeReleaseZips());
+	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+	console.log(`[Build Pipeline] Post-build complete! (${elapsed}s total)`);
 }
 
 export async function runPreBuildPipeline(): Promise<void> {
 	console.log("[Build Pipeline] Running pre-build steps...");
-	emptyOutputFolder();
-	console.log("[Build Pipeline] Output folder cleared");
-	updateAvailableLocales();
-	console.log("[Build Pipeline] Locales updated");
+	const start = Date.now();
+	await timedStep("Clearing output folder", () => emptyOutputFolder());
+	await timedStep("Updating available locales", () => updateAvailableLocales());
 	if (process.env.NODE_ENV !== "development" && process.env.BYPASS_LOCALE_CHECK !== "true") {
 		checkLocalesForMissingKeys();
-		await updateLocalePercentages();
+		await timedStep("Updating locale percentages", () => updateLocalePercentages());
 		console.log("[Build Pipeline] Locale validation complete");
 	}
-	console.log("[Build Pipeline] Pre-build complete!");
+	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+	console.log(`[Build Pipeline] Pre-build complete! (${elapsed}s total)`);
+}
+
+async function timedStep<T>(name: string, fn: () => Promise<T> | T): Promise<T> {
+	const start = Date.now();
+	console.log(`[Build Pipeline] [Step] ${name}...`);
+	const result = await fn();
+	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+	console.log(`[Build Pipeline] [Step] ${name} (${elapsed}s)`);
+	return result;
 }
 
 void (async () => {

@@ -15,7 +15,7 @@ const pageInputs = {
 export default defineConfig({
 	build: {
 		emptyOutDir: false,
-		minify: "esbuild",
+		minify: !DEV_MODE ? "esbuild" : false,
 		modulePreload: false,
 		outDir: resolve(outDir, "temp"),
 		rollupOptions: {
@@ -43,9 +43,9 @@ export default defineConfig({
 	},
 	esbuild: {
 		keepNames: true,
-		minifyIdentifiers: true,
-		minifySyntax: true,
-		minifyWhitespace: true
+		minifyIdentifiers: !DEV_MODE,
+		minifySyntax: !DEV_MODE,
+		minifyWhitespace: !DEV_MODE
 	},
 	mode: DEV_MODE ? "development" : "production",
 	plugins: [react(), bundleWorker()],
