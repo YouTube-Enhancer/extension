@@ -4,6 +4,7 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { ENABLE_SOURCE_MAP } from "@/src/utils/constants";
 
+import { DEV_MODE } from "../../utils/constants";
 import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "../../utils/plugins/utils";
 const contentScripts = [
 	{
@@ -18,6 +19,7 @@ export default async function buildContentScripts(): Promise<void> {
 		await build({
 			build: {
 				emptyOutDir: false,
+				minify: !DEV_MODE ? "esbuild" : false,
 				outDir: resolve(outDir, "temp"),
 				rollupOptions: {
 					input: contentScript,
@@ -25,11 +27,24 @@ export default async function buildContentScripts(): Promise<void> {
 						entryFileNames: (chunk) => {
 							return `src/pages/${chunk.name}/index.js`;
 						}
+					},
+					treeshake: {
+						moduleSideEffects: true,
+						preset: "smallest",
+						propertyReadSideEffects: true,
+						tryCatchDeoptimization: true
 					}
 				},
 				sourcemap: ENABLE_SOURCE_MAP
 			},
 			configFile: false,
+			esbuild: {
+				keepNames: true,
+				minifyIdentifiers: !DEV_MODE,
+				minifySyntax: !DEV_MODE,
+				minifyWhitespace: !DEV_MODE
+			},
+			mode: DEV_MODE ? "development" : "production",
 			plugins: [cssInjectedByJsPlugin()],
 			publicDir: false,
 			resolve: {
