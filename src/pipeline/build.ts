@@ -4,7 +4,6 @@ import checkLocalesForMissingKeys from "../utils/checkLocalesForMissingKeys";
 import { emptyOutputFolder } from "../utils/plugins/utils";
 import updateAvailableLocales from "../utils/updateAvailableLocales";
 import updateLocalePercentages from "../utils/updateLocalePercentages";
-import buildContentScripts from "./steps/buildContentScripts";
 import copyOutputs from "./steps/copyOutputs";
 import generateManifests from "./steps/generateManifests";
 import makeReleaseZips from "./steps/makeReleaseZips";
@@ -16,7 +15,6 @@ const command = process.argv[2] || "all";
 export async function runPostBuildPipeline(): Promise<void> {
 	console.log("[Build Pipeline] Running post-build steps...");
 	const start = Date.now();
-	await timedStep("Building content scripts", () => buildContentScripts());
 	await timedStep("Generating manifests", () => generateManifests());
 	await timedStep("Copying outputs", () => copyOutputs());
 	await timedStep("Creating release ZIPs", () => makeReleaseZips());
@@ -29,10 +27,15 @@ export async function runPreBuildPipeline(): Promise<void> {
 	const start = Date.now();
 	await timedStep("Clearing output folder", () => emptyOutputFolder());
 	await timedStep("Updating available locales", () => updateAvailableLocales());
-	if (process.env.NODE_ENV !== "development" && process.env.BYPASS_LOCALE_CHECK !== "true") {
+	const isDevelopment = process.env.NODE_ENV === "development";
+	const shouldBypass = process.env.BYPASS_LOCALE_CHECK === "true";
+
+	if (!isDevelopment && !shouldBypass) {
 		checkLocalesForMissingKeys();
 		await timedStep("Updating locale percentages", () => updateLocalePercentages());
 		console.log("[Build Pipeline] Locale validation complete");
+	} else {
+		console.log(`[Build Pipeline] Skipping locale check`);
 	}
 	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
 	console.log(`[Build Pipeline] Pre-build complete! (${elapsed}s total)`);
