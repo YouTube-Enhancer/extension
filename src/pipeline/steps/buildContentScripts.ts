@@ -12,7 +12,7 @@ const contentScripts = [
 		embedded: resolve(process.cwd(), "src/pages/embedded/index.ts")
 	}
 ] as const;
-export default async function buildContentScripts(): Promise<void> {
+(async () => {
 	for (const contentScript of contentScripts) {
 		await build({
 			build: {
@@ -57,4 +57,7 @@ export default async function buildContentScripts(): Promise<void> {
 			}
 		});
 	}
-}
+})().catch((error: unknown) => {
+	console.error("[Build] Content script build failed:", error);
+	process.exit(1);
+});
