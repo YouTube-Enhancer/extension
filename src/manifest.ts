@@ -2,9 +2,10 @@ import type { Manifest } from "webextension-polyfill";
 
 import pkg from "../package.json";
 import { availableLocales } from "./i18n/constants";
+import { DEV_MODE } from "./utils/config/env";
 const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
 const hostPermissions: Manifest.MatchPattern[] = ["https://*.youtube.com/*"];
-const resources = [
+const baseResources = [
 	"contentStyle.css",
 	"/icons/icon_128.png",
 	"/icons/icon_48.png",
@@ -13,6 +14,9 @@ const resources = [
 	"src/pages/embedded/index.js",
 	...availableLocales.map((locale) => `/locales/${locale}.json`)
 ];
+const devtoolsResources =
+	DEV_MODE ? ["src/pages/devtools/index.js", "src/pages/devtools/index.css", "src/pages/devtools/panel.js", "src/pages/devtools/panel.html"] : [];
+const resources = [...baseResources, ...devtoolsResources];
 const icons = {
 	"16": "/icons/icon_16.png",
 	"19": "/icons/icon_19.png",
@@ -24,6 +28,7 @@ const action = {
 	default_icon: "/icons/icon_48.png",
 	default_popup: "src/pages/popup/index.html"
 };
+const devtoolsPage = DEV_MODE ? { devtools_page: "src/pages/devtools/index.html" } : {};
 const manifestV3: Manifest.WebExtensionManifest = {
 	action,
 	author: pkg.author.name,
@@ -55,7 +60,8 @@ const manifestV3: Manifest.WebExtensionManifest = {
 			matches: ["https://*.youtube.com/*"],
 			resources
 		}
-	]
+	],
+	...devtoolsPage
 };
 const manifestV2: Manifest.WebExtensionManifest = {
 	author: pkg.author.name,
@@ -89,7 +95,8 @@ const manifestV2: Manifest.WebExtensionManifest = {
 	},
 	permissions: permissions.concat(hostPermissions),
 	version: pkg.version,
-	web_accessible_resources: resources
+	web_accessible_resources: resources,
+	...devtoolsPage
 };
 
 export { manifestV2, manifestV3 };
