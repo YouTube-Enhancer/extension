@@ -1,138 +1,19 @@
-import { deepDarkPresets } from "@/src/deepDarkPresets";
-import { featureButtonFunctions } from "@/src/features";
-import { disableAutomaticallyDisableAmbientMode, enableAutomaticallyDisableAmbientMode } from "@/src/features/automaticallyDisableAmbientMode";
-import { disableAutomaticallyDisableAutoPlay, enableAutomaticallyDisableAutoPlay } from "@/src/features/automaticallyDisableAutoPlay";
-import {
-	disableAutomaticallyDisableClosedCaptions,
-	enableAutomaticallyDisableClosedCaptions
-} from "@/src/features/automaticallyDisableClosedCaptions";
-import { disableAutomaticallyEnableClosedCaptions, enableAutomaticallyEnableClosedCaptions } from "@/src/features/automaticallyEnableClosedCaptions";
-import { disableAutomaticallyMaximizePlayer, enableAutomaticallyMaximizePlayer } from "@/src/features/automaticallyMaximizePlayer";
-import {
-	disableAutomaticallyShowMoreVideosOnEndScreen,
-	enableAutomaticallyShowMoreVideosOnEndScreen
-} from "@/src/features/automaticallyShowMoreVideosOnEndScreen";
-import { disableAutomaticTheaterMode, enableAutomaticTheaterMode } from "@/src/features/automaticTheaterMode";
-import { disableBlockNumberKeySkip, enableBlockNumberKeySkip } from "@/src/features/blockNumberKeySeeking";
-import { featuresInControls } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateButtonsIconColor, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { addCopyTimestampUrlButton, removeCopyTimestampUrlButton } from "@/src/features/copyTimestampUrlButton";
-import { disableCustomCSS, enableCustomCSS } from "@/src/features/customCSS";
-import { customCSSExists, updateCustomCSS } from "@/src/features/customCSS/utils";
-import { disableDeepDarkCSS, enableDeepDarkCSS } from "@/src/features/deepDarkCSS";
-import { deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "@/src/features/deepDarkCSS/utils";
-import { disableDefaultToOriginalAudioTrack, enableDefaultToOriginalAudioTrack } from "@/src/features/defaultToOriginalAudioTrack";
-import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { featuresInMenu, getFeatureMenuItem, updateFeatureMenuItemLabel, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
-import {
-	addFlipVideoHorizontalButton,
-	addFlipVideoVerticalButton,
-	removeFlipVideoHorizontalButton,
-	removeFlipVideoVerticalButton
-} from "@/src/features/flipVideoButtons";
-import { addForwardButton, addRewindButton, removeForwardButton, removeRewindButton } from "@/src/features/forwardRewindButtons";
-import { disableGlobalVolume, enableGlobalVolume } from "@/src/features/globalVolume";
-import { disableHideArtificialIntelligenceSummary, enableHideArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary";
-import {
-	addHideEndScreenCardsButton,
-	disableHideEndScreenCards,
-	enableHideEndScreenCards,
-	isEndScreenCardsHidden,
-	removeHideEndScreenCardsButton,
-	updateHideEndScreenCardsButtonState
-} from "@/src/features/hideEndScreenCards";
-import { disableHideLiveStreamChat, enableHideLiveStreamChat } from "@/src/features/hideLiveStreamChat";
-import { disableHideMembersOnlyVideos, enableHideMembersOnlyVideos } from "@/src/features/hideMembersOnlyVideos";
-import {
-	disableHideOfficialArtistVideosFromHomePage,
-	enableHideOfficialArtistVideosFromHomePage
-} from "@/src/features/hideOfficialArtistVideosFromHomePage";
-import { disableHidePaidPromotionBanner, enableHidePaidPromotionBanner } from "@/src/features/hidePaidPromotionBanner";
-import { disableHidePlayables, enableHidePlayables } from "@/src/features/hidePlayables";
-import {
-	disableHidePlaylistRecommendationsFromHomePage,
-	enableHidePlaylistRecommendationsFromHomePage
-} from "@/src/features/hidePlaylistRecommendationsFromHomePage";
-import { disableHidePosts, enableHidePosts } from "@/src/features/hidePosts";
-import { enableHideScrollBar } from "@/src/features/hideScrollBar";
-import { hideScrollBar, showScrollBar } from "@/src/features/hideScrollBar/utils";
-import { enableHideShorts } from "@/src/features/hideShorts";
-import { applyShortsVisibility } from "@/src/features/hideShorts/utils";
-import { disableHideSidebarRecommendedVideos, enableHideSidebarRecommendedVideos } from "@/src/features/hideSidebarRecommendedVideos";
-import { disableHideTranslateComment, enableHideTranslateComment } from "@/src/features/hideTranslateComment";
-import { addLoopButton, removeLoopButton } from "@/src/features/loopButton";
-import { addMaximizePlayerButton, removeMaximizePlayerButton } from "@/src/features/maximizePlayerButton";
-import { minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
-import { disableCommentsMiniPlayer, enableCommentsMiniPlayer, setCommentsMiniPlayerDefaults } from "@/src/features/miniPlayer";
-import { addMiniPlayerButton, removeMiniPlayerButton } from "@/src/features/miniPlayerButton";
-import { addMonoToStereoButton, removeMonoToStereoButton } from "@/src/features/monoToStereo";
-import { openTranscriptButton } from "@/src/features/openTranscriptButton";
-import { removeOpenTranscriptButton } from "@/src/features/openTranscriptButton/utils";
-import { disableOpenYouTubeSettingsOnHover, enableOpenYouTubeSettingsOnHover } from "@/src/features/openYouTubeSettingsOnHover";
-import { disablePauseBackgroundPlayers, enablePauseBackgroundPlayers } from "@/src/features/pauseBackgroundPlayers";
-import {
-	addDecreasePlaybackSpeedButton,
-	addIncreasePlaybackSpeedButton,
-	calculatePlaybackButtonSpeed,
-	removeDecreasePlaybackSpeedButton,
-	removeIncreasePlaybackSpeedButton,
-	updatePlaybackSpeedButtonTooltip
-} from "@/src/features/playbackSpeedButtons";
-import setPlayerQuality from "@/src/features/playerQuality";
-import { restorePlayerSpeed, setPlayerSpeed, setupPlaybackSpeedChangeListener } from "@/src/features/playerSpeed";
-import { disablePlaylistLength, enablePlaylistLength } from "@/src/features/playlistLength";
-import { disablePlaylistManagementButtons, enablePlaylistManagementButtons } from "@/src/features/playlistManagementButtons";
-import { setupRemainingTime as enableRemainingTime, removeRemainingTimeDisplay } from "@/src/features/remainingTime";
-import enableRememberVolume from "@/src/features/rememberVolume";
-import enableRemoveRedirect from "@/src/features/removeRedirect";
-import { disableRestoreFullscreenScrolling, enableRestoreFullscreenScrolling } from "@/src/features/restoreFullscreenScrolling";
-import { disableSaveToWatchLaterButton, enableSaveToWatchLaterButton } from "@/src/features/saveToWatchLaterButton";
-import { addScreenshotButton, removeScreenshotButton } from "@/src/features/screenshotButton";
-import adjustSpeedOnScrollWheel from "@/src/features/scrollWheelSpeedControl";
-import enableScrollWheelVolumeControl, { disableScrollWheelVolumeControl } from "@/src/features/scrollWheelVolumeControl";
-import { disableShareShortener, enableShareShortener } from "@/src/features/shareShortener";
-import { disableShortsAutoScroll, enableShortsAutoScroll } from "@/src/features/shortsAutoScroll";
-import { enableSkipContinueWatching } from "@/src/features/skipContinueWatching";
-import { disableTimestampPeek, enableTimestampPeek } from "@/src/features/timestampPeek";
-import { promptUserToResumeVideo, setupVideoHistory } from "@/src/features/videoHistory";
-import volumeBoost, {
-	addVolumeBoostButton,
-	applyVolumeBoostDb,
-	disableVolumeBoost,
-	enableVolumeBoost,
-	removeVolumeBoostButton
-} from "@/src/features/volumeBoost";
+import eventManager from "@/src/events/EventManager";
+import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
+import { registry } from "@/src/features/_registry/featureRegistry";
+import { setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
+import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { i18nService } from "@/src/i18n";
-import { getFeatureIcon, type ToggleFeatures, toggleFeatures } from "@/src/icons";
-import {
-	type AllButtonNames,
-	type ButtonPlacement,
-	type ExtensionSendOnlyMessageMappings,
-	type FeatureToMultiButtonMap,
-	featureToMultiButtonsMap,
-	type KeysOfUnion,
-	type Messages,
-	type MultiButtonFeatureNames,
-	type MultiButtonNames,
-	type SingleButtonFeatureNames,
-	type SingleButtonNames
-} from "@/src/types";
-import eventManager from "@/utils/EventManager";
-import {
-	browserColorLog,
-	findKeyByValue,
-	formatError,
-	groupButtonChanges,
-	isLivePage,
-	isPlaylistPage,
-	isShortsPage,
-	isWatchPage,
-	sendContentOnlyMessage,
-	waitForAllElements,
-	waitForSpecificMessage
-} from "@/utils/utilities";
+import { type ExtensionSendOnlyMessages, type Messages } from "@/src/types";
+import { DEV_MODE } from "@/src/utils/config/env";
+import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
+import { browserColorLog } from "@/src/utils/logging";
+import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
+import { setupDevToolsListener } from "@/src/utils/messaging/devtools.embedded";
+import { formatError } from "@/utils/format/error";
 // TODO: Add always show progressbar feature
 let isFirstLoad = true;
+let isInitializing = false;
 /**
  * Creates a hidden div element with a specific ID that can be used to receive messages from YouTube.
  * The element is appended to the document's root element.
@@ -142,23 +23,9 @@ element.style.display = "none";
 element.id = "yte-message-from-youtube";
 document.documentElement.appendChild(element);
 
-function shouldEnableFeaturesFuncReturn() {
-	return !(isWatchPage() || isShortsPage() || isPlaylistPage() || isLivePage());
-}
 let isEnablingFeatures = false;
-let enableFeaturesTimeout: null | ReturnType<typeof setTimeout> = null;
-let lastEnabledURL: null | string = null;
-function scheduleEnableFeatures() {
-	if (enableFeaturesTimeout) clearTimeout(enableFeaturesTimeout);
-	enableFeaturesTimeout = setTimeout(() => {
-		const {
-			location: { href: currentURL }
-		} = window;
-		if (lastEnabledURL === currentURL) return;
-		lastEnabledURL = currentURL;
-		void enableFeatures();
-	}, 200);
-}
+let cleanupFeatureMenuListeners: (() => void) | null = null;
+
 const enableFeatures = async () => {
 	// Don't enable features if already enabling
 	if (isEnablingFeatures) return;
@@ -166,156 +33,43 @@ const enableFeatures = async () => {
 	browserColorLog(`Enabling features...`, "FgMagenta");
 	try {
 		const {
-			data: {
-				options: { buttonPlacement }
-			}
+			data: { options }
 		} = await waitForSpecificMessage("options", "request_data", "content");
-		// Wait for the specified container selectors to be available on the page
-		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
-		eventManager.removeAllEventListeners(["featureMenu"]);
-		await Promise.all([
-			enableHidePaidPromotionBanner(),
-			enableHideMembersOnlyVideos(),
-			enableHideShorts(),
-			enableHidePlayables(),
-			enableRemoveRedirect(),
-			enableShareShortener(),
-			enableSkipContinueWatching(),
-			enablePauseBackgroundPlayers(),
-			enableHideScrollBar(),
-			enableCustomCSS(),
-			enableDeepDarkCSS(),
-			enableHideOfficialArtistVideosFromHomePage(),
-			enableHidePlaylistRecommendationsFromHomePage(),
-			enableSaveToWatchLaterButton(),
-			enableTimestampPeek(),
-			enableHidePosts()
-		]);
-		// Use a guard clause to reduce amount of times nesting code happens
-		if (shouldEnableFeaturesFuncReturn()) return;
-		// Enable feature menu before calling button functions
-		await enableFeatureMenu();
-		for (const multiButtonFeatureName of featureToMultiButtonsMap.keys()) {
-			const buttonName = featureToMultiButtonsMap.get(multiButtonFeatureName)?.at(-1);
-			if (!buttonName) continue;
-			switch (multiButtonFeatureName) {
-				case "forwardRewindButtons": {
-					switch (buttonPlacement[buttonName]) {
-						case "below_player":
-						case "feature_menu":
-						case "player_controls_left": {
-							await addRewindButton().then(addForwardButton);
-							break;
-						}
-						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-						case "player_controls_right": {
-							await addForwardButton().then(addRewindButton);
-							break;
-						}
-					}
-					break;
-				}
-				case "playbackSpeedButtons": {
-					switch (buttonPlacement[buttonName]) {
-						case "below_player":
-						case "feature_menu":
-						case "player_controls_left": {
-							await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
-							break;
-						}
-						// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-						case "player_controls_right": {
-							await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
-							break;
-						}
-					}
-				}
-			}
-		}
-		await Promise.all([
-			promptUserToResumeVideo(() => void setupVideoHistory()),
-			enableHideArtificialIntelligenceSummary(),
-			setupPlaybackSpeedChangeListener(),
-			enableShortsAutoScroll(),
-			enableOpenYouTubeSettingsOnHover(),
-			enableHideLiveStreamChat(),
-			enableRememberVolume(),
-			enableAutomaticTheaterMode(),
-			enableRemainingTime(),
-			setPlayerQuality(),
-			setPlayerSpeed(),
-			enableScrollWheelVolumeControl(),
-			adjustSpeedOnScrollWheel(),
-			enableHideTranslateComment(),
-			enableHideEndScreenCards(),
-			enablePlaylistLength(),
-			enableAutomaticallyDisableClosedCaptions(),
-			enableAutomaticallyEnableClosedCaptions(),
-			enableAutomaticallyDisableAmbientMode(),
-			enableDefaultToOriginalAudioTrack(),
-			enableRestoreFullscreenScrolling(),
-			enablePlaylistManagementButtons(),
-			enableAutomaticallyMaximizePlayer(),
-			enableAutomaticallyShowMoreVideosOnEndScreen(),
-			enableHideSidebarRecommendedVideos(),
-			enableAutomaticallyDisableAutoPlay(),
-			enableGlobalVolume(),
-			enableCommentsMiniPlayer(),
-			enableBlockNumberKeySkip()
-		]);
-		// Features that add buttons should be put below and be ordered in the order those buttons should appear
-		await addMonoToStereoButton();
-		await addHideEndScreenCardsButton();
-		await addScreenshotButton();
-		await openTranscriptButton();
-		await addMaximizePlayerButton();
-		await addMiniPlayerButton();
-		await addLoopButton();
-		await addCopyTimestampUrlButton();
-		await volumeBoost();
-		await addFlipVideoVerticalButton();
-		await addFlipVideoHorizontalButton();
+		await registry.enableAll(options);
 	} finally {
 		isEnablingFeatures = false;
 	}
 };
-const getFeatureFunctions = (featureName: AllButtonNames, oldPlacement: ButtonPlacement) => {
-	const { [featureName]: featureFunctions } = featureButtonFunctions;
-	// Ensure featureFunctions exist before proceeding
-	if (!featureFunctions) {
-		throw new Error(`Feature '${featureName}' not found in featureButtonFunctions`);
-	}
-	// Ensure featureFunctions are valid
-	if (typeof featureFunctions.add !== "function" || typeof featureFunctions.remove !== "function") {
-		throw new Error(`Feature '${featureName}' functions are not valid`);
-	}
-	return {
-		add: () => featureFunctions.add(),
-		remove: () => featureFunctions.remove(oldPlacement)
-	};
-};
-function handleSoftNavigate() {
-	// Remove existing listeners
-	document.removeEventListener("yt-navigate-finish", scheduleEnableFeatures);
-	document.removeEventListener("yt-player-updated", scheduleEnableFeatures);
-	// Add listeners
-	document.addEventListener("yt-navigate-finish", scheduleEnableFeatures);
-	document.addEventListener("yt-player-updated", scheduleEnableFeatures);
-}
+
 const initialize = function () {
 	void (async () => {
-		const response = await waitForSpecificMessage("language", "request_data", "content");
-		if (!response) return;
-		const {
-			data: { language }
-		} = response;
-		const i18nextInstance = await i18nService(language);
-		window.i18nextInstance = i18nextInstance;
-		if (isFirstLoad) {
-			void enableFeatures();
+		if (isInitializing) return;
+		isInitializing = true;
+		try {
+			const {
+				data: {
+					options: { language }
+				}
+			} = await waitForSpecificMessage("options", "request_data", "content");
+			const i18nextInstance = await i18nService(language);
+			window.i18nextInstance = i18nextInstance;
+			if (isFirstLoad) {
+				await registerAllFeatures();
+				await getButtonColor();
+				await registry.initialize(enableFeatures);
+				new MutationObserver(() => {
+					buttonColorCache.clear();
+				}).observe(document.documentElement, { attributeFilter: ["dark"], attributes: true });
+				await enableFeatures();
+			}
+			isFirstLoad = false;
+		} finally {
+			isInitializing = false;
 		}
-		handleSoftNavigate();
-		isFirstLoad = false;
+
+		if (DEV_MODE) {
+			setupDevToolsListener();
+		}
 		/**
 		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
 		 *
@@ -329,468 +83,32 @@ const initialize = function () {
 				if (!stringifiedMessage) return;
 				let message;
 				try {
-					message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings] | Messages["response"];
+					message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessages | Messages["response"];
 				} catch (error) {
-					console.error(error);
+					console.error("[Embedded] Failed to parse incoming message:", error);
 					return;
 				}
 				if (!message) return;
 				switch (message.type) {
-					case "automaticallyDisableAmbientModeChange": {
-						const {
-							data: { automaticallyDisableAmbientModeEnabled }
-						} = message;
-						if (automaticallyDisableAmbientModeEnabled) {
-							await enableAutomaticallyDisableAmbientMode();
-						} else {
-							await disableAutomaticallyDisableAmbientMode();
-						}
+					case "featureConfigChange": {
+						await registry.notifyConfigChange(message.data.id, message.data.config);
 						break;
 					}
-					case "automaticallyDisableAutoPlayChange": {
-						const {
-							data: { automaticallyDisableAutoPlayEnabled }
-						} = message;
-						if (automaticallyDisableAutoPlayEnabled) {
-							await enableAutomaticallyDisableAutoPlay();
-						} else {
-							await disableAutomaticallyDisableAutoPlay();
-						}
-						break;
-					}
-					case "automaticallyDisableClosedCaptionsChange": {
-						const {
-							data: { automaticallyDisableClosedCaptionsEnabled }
-						} = message;
-						if (automaticallyDisableClosedCaptionsEnabled) {
-							await enableAutomaticallyDisableClosedCaptions();
-						} else {
-							await disableAutomaticallyDisableClosedCaptions();
-						}
-						break;
-					}
-					case "automaticallyEnableClosedCaptionsChange": {
-						const {
-							data: { automaticallyEnableClosedCaptionsEnabled }
-						} = message;
-						if (automaticallyEnableClosedCaptionsEnabled) {
-							await enableAutomaticallyEnableClosedCaptions();
-						} else {
-							await disableAutomaticallyEnableClosedCaptions();
-						}
-						break;
-					}
-					case "automaticallyMaximizePlayerChange": {
-						const {
-							data: { automaticallyMaximizePlayerEnabled }
-						} = message;
-						if (automaticallyMaximizePlayerEnabled) await enableAutomaticallyMaximizePlayer();
-						else disableAutomaticallyMaximizePlayer();
-						break;
-					}
-					case "automaticallyShowMoreVideosOnEndScreenChange": {
-						const {
-							data: { automaticallyShowMoreVideosOnEndScreenEnabled }
-						} = message;
-						if (automaticallyShowMoreVideosOnEndScreenEnabled) {
-							await enableAutomaticallyShowMoreVideosOnEndScreen();
-						} else {
-							disableAutomaticallyShowMoreVideosOnEndScreen();
-						}
-						break;
-					}
-					case "automaticTheaterModeChange": {
-						const {
-							data: { automaticTheaterModeEnabled }
-						} = message;
-						if (automaticTheaterModeEnabled) {
-							await enableAutomaticTheaterMode();
-						} else {
-							disableAutomaticTheaterMode();
-						}
-						break;
-					}
-					case "blockNumberKeySeekingChange": {
-						const {
-							data: { blockNumberKeySeekingEnabled }
-						} = message;
-						console.log(`blockNumberKeySeekingEnabled: ${blockNumberKeySeekingEnabled}`);
-						if (blockNumberKeySeekingEnabled) {
-							await enableBlockNumberKeySkip();
-						} else {
-							disableBlockNumberKeySkip();
-						}
-						break;
-					}
-					case "buttonPlacementChange": {
-						const { data } = message;
-						const { multiButtonChanges, singleButtonChanges } = groupButtonChanges(data);
-						for (const [featureName, changes] of Object.entries(multiButtonChanges)) {
-							switch (featureName) {
-								case "forwardRewindButtons": {
-									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
-										if (oldPlacement === newPlacement) continue;
-										const rewindButtonFuncs = getFeatureFunctions("rewindButton", oldPlacement);
-										const forwardButtonFuncs = getFeatureFunctions("forwardButton", oldPlacement);
-										switch (buttonName) {
-											case "forwardButton":
-											case "rewindButton": {
-												await forwardButtonFuncs.remove();
-												await rewindButtonFuncs.remove();
-												switch (newPlacement) {
-													case "below_player":
-													case "feature_menu":
-													case "player_controls_left": {
-														await rewindButtonFuncs.add().then(forwardButtonFuncs.add);
-														break;
-													}
-													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-													case "player_controls_right": {
-														await forwardButtonFuncs.add().then(rewindButtonFuncs.add);
-														break;
-													}
-												}
-											}
-										}
-									}
-									break;
-								}
-								case "playbackSpeedButtons": {
-									for (const [buttonName, { new: newPlacement, old: oldPlacement }] of Object.entries(changes)) {
-										if (oldPlacement === newPlacement) continue;
-										const increasePlaybackSpeedButtonFuncs = getFeatureFunctions("increasePlaybackSpeedButton", oldPlacement);
-										const decreasePlaybackSpeedButtonFuncs = getFeatureFunctions("decreasePlaybackSpeedButton", oldPlacement);
-										await decreasePlaybackSpeedButtonFuncs.remove();
-										await increasePlaybackSpeedButtonFuncs.remove();
-										switch (buttonName) {
-											case "decreasePlaybackSpeedButton":
-											case "increasePlaybackSpeedButton": {
-												switch (newPlacement) {
-													case "below_player":
-													case "feature_menu":
-													case "player_controls_left": {
-														await decreasePlaybackSpeedButtonFuncs.add().then(increasePlaybackSpeedButtonFuncs.add);
-														break;
-													}
-													// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-													case "player_controls_right": {
-														await increasePlaybackSpeedButtonFuncs.add().then(decreasePlaybackSpeedButtonFuncs.add);
-														break;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						for (const [featureName, { new: newPlacement, old: oldPlacement }] of Object.entries(singleButtonChanges)) {
-							if (oldPlacement === newPlacement) continue;
-							const featureFuncs = getFeatureFunctions(featureName, oldPlacement);
-							await featureFuncs.remove();
-							await featureFuncs.add();
-						}
-						break;
-					}
-					case "commentsMiniPlayerChange": {
-						const {
-							data: { miniPlayerEnabled }
-						} = message;
-						if (miniPlayerEnabled) {
-							await enableCommentsMiniPlayer();
-						} else {
-							disableCommentsMiniPlayer();
-						}
-						break;
-					}
-
-					case "copyTimestampUrlButtonChange": {
-						const {
-							data: { copyTimestampUrlButtonEnabled }
-						} = message;
-						if (copyTimestampUrlButtonEnabled) {
-							await addCopyTimestampUrlButton();
-						} else {
-							await removeCopyTimestampUrlButton();
-						}
-						break;
-					}
-					case "customCSSChange": {
-						const {
-							data: { customCSSCode, customCSSEnabled }
-						} = message;
-						if (customCSSEnabled) {
-							if (customCSSExists()) {
-								updateCustomCSS({ code: customCSSCode });
-							} else {
-								await enableCustomCSS();
-							}
-						} else {
-							disableCustomCSS();
-						}
-						break;
-					}
-					case "deepDarkThemeChange": {
-						const {
-							data: { deepDarkCustomThemeColors, deepDarkPreset, deepDarkThemeEnabled }
-						} = message;
-						if (deepDarkThemeEnabled) {
-							if (deepDarkCSSExists()) {
-								updateDeepDarkCSS(
-									deepDarkPreset === "Custom" ? getDeepDarkCustomThemeStyle(deepDarkCustomThemeColors) : deepDarkPresets[deepDarkPreset]
-								);
-							} else {
-								await enableDeepDarkCSS();
-							}
-						} else {
-							disableDeepDarkCSS();
-						}
-						updateButtonsIconColor();
-						break;
-					}
-					case "defaultToOriginalAudioTrackChange": {
-						const {
-							data: { defaultToOriginalAudioTrackEnabled }
-						} = message;
-						if (defaultToOriginalAudioTrackEnabled) {
-							await enableDefaultToOriginalAudioTrack();
-						} else {
-							await disableDefaultToOriginalAudioTrack();
-						}
+					case "featureEnabledStateChange": {
+						await registry.updateFeatureEnabledState(message.data.id, message.data.enabled, message.data.config);
 						break;
 					}
 					case "featureMenuOpenTypeChange": {
 						const {
 							data: { featureMenuOpenType }
 						} = message;
-						setupFeatureMenuEventListeners(featureMenuOpenType);
-						break;
-					}
-					case "flipVideoHorizontalButtonChange": {
-						const {
-							data: { flipVideoHorizontalButtonEnabled }
-						} = message;
-						if (flipVideoHorizontalButtonEnabled) {
-							await addFlipVideoHorizontalButton();
-						} else {
-							await removeFlipVideoHorizontalButton();
+						// Cleanup previous listeners if they exist
+						if (cleanupFeatureMenuListeners) {
+							cleanupFeatureMenuListeners();
+							cleanupFeatureMenuListeners = null;
 						}
-						break;
-					}
-					case "flipVideoVerticalButtonChange": {
-						const {
-							data: { flipVideoVerticalButtonEnabled }
-						} = message;
-						if (flipVideoVerticalButtonEnabled) {
-							await addFlipVideoVerticalButton();
-						} else {
-							await removeFlipVideoVerticalButton();
-						}
-						break;
-					}
-					case "forwardRewindButtonsChange": {
-						const {
-							data: { forwardRewindButtonsEnabled }
-						} = message;
-						const {
-							data: {
-								options: {
-									buttonPlacement: { forwardButton: forwardButtonPlacement }
-								}
-							}
-						} = await waitForSpecificMessage("options", "request_data", "content");
-						await removeForwardButton();
-						await removeRewindButton();
-						if (forwardRewindButtonsEnabled) {
-							switch (forwardButtonPlacement) {
-								case "below_player":
-								case "feature_menu":
-								case "player_controls_left": {
-									await addRewindButton().then(addForwardButton);
-									break;
-								}
-								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-								case "player_controls_right": {
-									await addForwardButton().then(addRewindButton);
-									break;
-								}
-							}
-						} else {
-							await removeRewindButton();
-							await removeForwardButton();
-						}
-						break;
-					}
-					case "globalVolumeChange": {
-						const {
-							data: { globalVolumeEnabled }
-						} = message;
-						if (globalVolumeEnabled) {
-							await enableGlobalVolume();
-						} else {
-							await disableGlobalVolume();
-						}
-						break;
-					}
-					case "hideArtificialIntelligenceSummaryChange": {
-						const {
-							data: { hideArtificialIntelligenceSummaryEnabled }
-						} = message;
-						if (hideArtificialIntelligenceSummaryEnabled) {
-							await enableHideArtificialIntelligenceSummary();
-						} else {
-							disableHideArtificialIntelligenceSummary();
-						}
-						break;
-					}
-					case "hideEndScreenCardsButtonChange": {
-						const {
-							data: { hideEndScreenCardsButtonEnabled }
-						} = message;
-						if (hideEndScreenCardsButtonEnabled) await addHideEndScreenCardsButton();
-						else await removeHideEndScreenCardsButton();
-						break;
-					}
-					case "hideEndScreenCardsChange": {
-						const {
-							data: { hideEndScreenCardsButtonPlacement: hideEndScreenCardsPlacement, hideEndScreenCardsEnabled }
-						} = message;
-						const endScreenCardsHidden = isEndScreenCardsHidden();
-						const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
-						if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
-						if (hideEndScreenCardsEnabled && !endScreenCardsHidden) {
-							await enableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, false);
-						} else if (!hideEndScreenCardsEnabled && endScreenCardsHidden) {
-							await disableHideEndScreenCards();
-							updateHideEndScreenCardsButtonState(hideEndScreenCardsPlacement, hideEndScreenCardsIcon, true);
-						}
-						break;
-					}
-					case "hideLiveStreamChatChange": {
-						const {
-							data: { hideLiveStreamChatEnabled }
-						} = message;
-						if (hideLiveStreamChatEnabled) {
-							await enableHideLiveStreamChat();
-						} else {
-							await disableHideLiveStreamChat();
-						}
-						break;
-					}
-					case "hideMembersOnlyVideosChange": {
-						const {
-							data: { hideMembersOnlyVideosEnabled }
-						} = message;
-						if (hideMembersOnlyVideosEnabled) {
-							await enableHideMembersOnlyVideos();
-						} else {
-							disableHideMembersOnlyVideos();
-						}
-						break;
-					}
-					case "hideOfficialArtistVideosFromHomePageChange": {
-						const {
-							data: { hideOfficialArtistVideosFromHomePageEnabled }
-						} = message;
-						if (hideOfficialArtistVideosFromHomePageEnabled) {
-							await enableHideOfficialArtistVideosFromHomePage();
-						} else {
-							disableHideOfficialArtistVideosFromHomePage();
-						}
-						break;
-					}
-					case "hidePaidPromotionBannerChange": {
-						const {
-							data: { hidePaidPromotionBannerEnabled }
-						} = message;
-						if (hidePaidPromotionBannerEnabled) {
-							await enableHidePaidPromotionBanner();
-						} else {
-							disableHidePaidPromotionBanner();
-						}
-						break;
-					}
-					case "hidePlayablesChange": {
-						const {
-							data: { hidePlayablesEnabled }
-						} = message;
-						if (hidePlayablesEnabled) {
-							await enableHidePlayables();
-						} else {
-							disableHidePlayables();
-						}
-						break;
-					}
-					case "hidePlaylistRecommendationsFromHomePageChange": {
-						const {
-							data: { hidePlaylistRecommendationsFromHomePageEnabled }
-						} = message;
-						if (hidePlaylistRecommendationsFromHomePageEnabled) {
-							await enableHidePlaylistRecommendationsFromHomePage();
-						} else {
-							disableHidePlaylistRecommendationsFromHomePage();
-						}
-						break;
-					}
-					case "hidePostsChange": {
-						const {
-							data: { hidePostsEnabled }
-						} = message;
-						if (hidePostsEnabled) {
-							await enableHidePosts();
-						} else {
-							disableHidePosts();
-						}
-						break;
-					}
-					case "hideScrollBarChange": {
-						const scrollBarHidden = document.getElementById("yte-hide-scroll-bar") !== null;
-						const {
-							data: { hideScrollBarEnabled }
-						} = message;
-						if (hideScrollBarEnabled) {
-							if (!scrollBarHidden) {
-								hideScrollBar();
-							}
-						} else {
-							if (scrollBarHidden) {
-								showScrollBar();
-							}
-						}
-						break;
-					}
-					case "hideShortsChange": {
-						const {
-							data: {
-								enableHideShortsChannel: channel,
-								enableHideShortsHome: home,
-								enableHideShortsSearch: search,
-								enableHideShortsSidebar: sidebar,
-								enableHideShortsVideos: videos
-							}
-						} = message;
-
-						applyShortsVisibility({ channel, home, search, sidebar, videos });
-						break;
-					}
-					case "hideSidebarRecommendedVideosChange": {
-						const {
-							data: { hideSidebarRecommendedVideosEnabled }
-						} = message;
-						if (hideSidebarRecommendedVideosEnabled) {
-							await enableHideSidebarRecommendedVideos();
-						} else {
-							disableHideSidebarRecommendedVideos();
-						}
-						break;
-					}
-					case "hideTranslateCommentChange": {
-						const {
-							data: { hideTranslateCommentEnabled }
-						} = message;
-						if (hideTranslateCommentEnabled) await enableHideTranslateComment();
-						else disableHideTranslateComment();
+						// Setup new listeners and store cleanup function
+						cleanupFeatureMenuListeners = setupFeatureMenuEventListeners(featureMenuOpenType);
 						break;
 					}
 					case "languageChange": {
@@ -804,412 +122,10 @@ const initialize = function () {
 						const {
 							i18nextInstance: { t }
 						} = window;
-						const getFeatureName = (feature: AllButtonNames) => findKeyByValue(feature as MultiButtonNames) ?? (feature as SingleButtonFeatureNames);
-						const getSingleLabel = (featureName: SingleButtonNames) => t((tr) => tr.pages.content.features[featureName].button.label);
-						const getMultiLabel = (multiFeatureName: MultiButtonFeatureNames, multiButtonName: MultiButtonNames) => {
-							switch (multiFeatureName) {
-								case "forwardRewindButtons":
-									return t(
-										(tr) =>
-											tr.pages.content.features[multiFeatureName].buttons[
-												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
-											].label,
-										{ TIME: options.forwardRewindButtons.time }
-									);
-								case "playbackSpeedButtons":
-									return t(
-										(tr) =>
-											tr.pages.content.features[multiFeatureName].buttons[
-												multiButtonName as KeysOfUnion<FeatureToMultiButtonMap[typeof multiFeatureName]>
-											].label,
-										{ SPEED: options.playbackSpeedButtons.speed }
-									);
-							}
-						};
-						const updateMenuFeatureLabel = (feature: AllButtonNames) => {
-							const featureName = getFeatureName(feature);
-							if (featureToMultiButtonsMap.has(featureName)) {
-								const label = getMultiLabel(featureName as MultiButtonFeatureNames, feature as MultiButtonNames);
-								if (label) updateFeatureMenuItemLabel(feature, label);
-							} else {
-								updateFeatureMenuItemLabel(feature, getSingleLabel(featureName as SingleButtonNames));
-							}
-						};
+						await registry.disableAll();
+						await registry.enableAll(options);
 						if (featuresInMenu.size > 0) {
 							updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
-							for (const feature of featuresInMenu) updateMenuFeatureLabel(feature);
-						}
-						if (featuresInControls.size > 0) {
-							for (const feature of featuresInControls) {
-								if (toggleFeatures.includes(feature)) {
-									const toggleFeature = feature as ToggleFeatures;
-									const featureButton = getFeatureButton(toggleFeature);
-									if (!featureButton) continue;
-									const buttonChecked = JSON.parse(featureButton.ariaChecked ?? "false") as boolean;
-									updateFeatureButtonTitle(
-										toggleFeature,
-										t((tr) => tr.pages.content.features[toggleFeature].button.toggle[buttonChecked ? "on" : "off"])
-									);
-									continue;
-								}
-								updateMenuFeatureLabel(feature);
-							}
-						}
-						break;
-					}
-					case "loopButtonChange": {
-						const {
-							data: { loopButtonEnabled }
-						} = message;
-						if (loopButtonEnabled) {
-							await addLoopButton();
-						} else {
-							await removeLoopButton();
-						}
-						break;
-					}
-					case "maximizeButtonChange": {
-						const {
-							data: { maximizePlayerButtonEnabled }
-						} = message;
-						if (maximizePlayerButtonEnabled) {
-							await addMaximizePlayerButton();
-						} else {
-							await removeMaximizePlayerButton();
-							minimizePlayer();
-						}
-						break;
-					}
-					case "miniPlayerButtonChange": {
-						const {
-							data: { miniPlayerButtonEnabled }
-						} = message;
-						if (miniPlayerButtonEnabled) {
-							await addMiniPlayerButton();
-						} else {
-							await removeMiniPlayerButton();
-						}
-						break;
-					}
-					case "miniPlayerDefaultsChange": {
-						const {
-							data: { defaultPosition, defaultSize }
-						} = message;
-						setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
-						break;
-					}
-					case "monoToStereoButtonChange": {
-						const {
-							data: { monoToStereoButtonEnabled }
-						} = message;
-						if (monoToStereoButtonEnabled) {
-							await addMonoToStereoButton();
-						} else {
-							await removeMonoToStereoButton();
-						}
-						break;
-					}
-					case "openTranscriptButtonChange": {
-						const {
-							data: { openTranscriptButtonEnabled }
-						} = message;
-						if (openTranscriptButtonEnabled) {
-							await openTranscriptButton();
-						} else {
-							await removeOpenTranscriptButton();
-						}
-						break;
-					}
-					case "openYTSettingsOnHoverChange": {
-						const {
-							data: { openYouTubeSettingsOnHoverEnabled }
-						} = message;
-						if (openYouTubeSettingsOnHoverEnabled) {
-							await enableOpenYouTubeSettingsOnHover();
-						} else {
-							disableOpenYouTubeSettingsOnHover();
-						}
-						break;
-					}
-					case "pauseBackgroundPlayersChange": {
-						const {
-							data: { pauseBackgroundPlayersEnabled }
-						} = message;
-						if (pauseBackgroundPlayersEnabled) {
-							await enablePauseBackgroundPlayers();
-						} else {
-							disablePauseBackgroundPlayers();
-						}
-						break;
-					}
-					case "playbackSpeedButtonsChange": {
-						const {
-							data: { playbackSpeedButtonsEnabled }
-						} = message;
-						const {
-							data: {
-								options: {
-									buttonPlacement: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement }
-								}
-							}
-						} = await waitForSpecificMessage("options", "request_data", "content");
-						if (playbackSpeedButtonsEnabled) {
-							await removeDecreasePlaybackSpeedButton();
-							await removeIncreasePlaybackSpeedButton();
-							switch (decreasePlaybackSpeedButtonPlacement) {
-								case "below_player":
-								case "feature_menu":
-								case "player_controls_left": {
-									await addDecreasePlaybackSpeedButton().then(addIncreasePlaybackSpeedButton);
-									break;
-								}
-								// Because of how the right controls are placed in the DOM, we need to add the buttons in reverse order
-								case "player_controls_right": {
-									await addIncreasePlaybackSpeedButton().then(addDecreasePlaybackSpeedButton);
-									break;
-								}
-							}
-						} else {
-							await removeDecreasePlaybackSpeedButton();
-							await removeIncreasePlaybackSpeedButton();
-						}
-						break;
-					}
-					case "playerSpeedChange": {
-						const {
-							data: { enableForcedPlaybackSpeed, playerSpeed }
-						} = message;
-						const {
-							data: {
-								options: {
-									playbackSpeedButtons: { speed: playbackSpeedPerClick }
-								}
-							}
-						} = await waitForSpecificMessage("options", "request_data", "content");
-						if (enableForcedPlaybackSpeed && playerSpeed) {
-							await updatePlaybackSpeedButtonTooltip(
-								"increasePlaybackSpeedButton",
-								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "increase")
-							);
-							await updatePlaybackSpeedButtonTooltip(
-								"decreasePlaybackSpeedButton",
-								calculatePlaybackButtonSpeed(playerSpeed, playbackSpeedPerClick, "decrease")
-							);
-							await setPlayerSpeed(Number(playerSpeed));
-						} else if (!enableForcedPlaybackSpeed) {
-							await restorePlayerSpeed();
-							const videoElement = document.querySelector<HTMLVideoElement>("video");
-							if (!videoElement) return;
-							const { playbackRate: currentSpeed } = videoElement;
-							await updatePlaybackSpeedButtonTooltip(
-								"increasePlaybackSpeedButton",
-								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "increase")
-							);
-							await updatePlaybackSpeedButtonTooltip(
-								"decreasePlaybackSpeedButton",
-								calculatePlaybackButtonSpeed(currentSpeed, playbackSpeedPerClick, "decrease")
-							);
-						}
-						break;
-					}
-					case "playlistLengthChange": {
-						const {
-							data: { playlistLengthEnabled }
-						} = message;
-						if (playlistLengthEnabled) {
-							await enablePlaylistLength();
-						} else {
-							disablePlaylistLength();
-						}
-						break;
-					}
-					case "playlistLengthGetMethodChange":
-					case "playlistWatchTimeGetMethodChange": {
-						disablePlaylistLength();
-						await enablePlaylistLength();
-						break;
-					}
-					case "playlistRemoveButtonChange":
-					case "playlistResetButtonChange": {
-						disablePlaylistManagementButtons();
-						await enablePlaylistManagementButtons();
-						break;
-					}
-					case "remainingTimeChange": {
-						const {
-							data: { remainingTimeEnabled }
-						} = message;
-						if (remainingTimeEnabled) {
-							await enableRemainingTime();
-						} else {
-							await removeRemainingTimeDisplay();
-						}
-						break;
-					}
-					case "rememberVolumeChange": {
-						const {
-							data: { rememberVolumeEnabled }
-						} = message;
-						if (rememberVolumeEnabled) {
-							await enableRememberVolume();
-						} else {
-							eventManager.removeEventListeners("rememberVolume");
-						}
-						break;
-					}
-					case "removeRedirectChange": {
-						const {
-							data: { removeRedirectEnabled }
-						} = message;
-						if (removeRedirectEnabled) {
-							await enableRemoveRedirect();
-						}
-						break;
-					}
-					case "restoreFullscreenScrollingChange": {
-						const {
-							data: { restoreFullscreenScrollingEnabled }
-						} = message;
-						if (restoreFullscreenScrollingEnabled) {
-							await enableRestoreFullscreenScrolling();
-						} else {
-							await disableRestoreFullscreenScrolling();
-						}
-						break;
-					}
-					case "saveToWatchLaterButtonChange": {
-						const {
-							data: { saveToWatchLaterButtonEnabled }
-						} = message;
-						if (saveToWatchLaterButtonEnabled) {
-							await enableSaveToWatchLaterButton();
-						} else {
-							disableSaveToWatchLaterButton();
-						}
-						break;
-					}
-					case "screenshotButtonChange": {
-						const {
-							data: { screenshotButtonEnabled }
-						} = message;
-						if (screenshotButtonEnabled) {
-							await addScreenshotButton();
-						} else {
-							await removeScreenshotButton();
-						}
-						break;
-					}
-					case "scrollWheelSpeedControlChange": {
-						const {
-							data: { scrollWheelSpeedControlEnabled }
-						} = message;
-						if (scrollWheelSpeedControlEnabled) {
-							await adjustSpeedOnScrollWheel();
-						} else {
-							eventManager.removeEventListeners("scrollWheelSpeedControl");
-						}
-						break;
-					}
-					case "scrollWheelVolumeControlChange": {
-						const {
-							data: { scrollWheelVolumeControlEnabled }
-						} = message;
-						if (scrollWheelVolumeControlEnabled) {
-							await enableScrollWheelVolumeControl();
-						} else {
-							disableScrollWheelVolumeControl();
-						}
-						break;
-					}
-					case "shareShortenerChange": {
-						const {
-							data: { shareShortenerEnabled }
-						} = message;
-						if (shareShortenerEnabled) {
-							await enableShareShortener();
-						} else {
-							disableShareShortener();
-						}
-						break;
-					}
-					case "shortsAutoScrollChange": {
-						const {
-							data: { shortsAutoScrollEnabled }
-						} = message;
-						if (shortsAutoScrollEnabled) {
-							await enableShortsAutoScroll();
-						} else {
-							disableShortsAutoScroll();
-						}
-						break;
-					}
-					case "skipContinueWatchingChange": {
-						const {
-							data: { skipContinueWatchingEnabled }
-						} = message;
-						if (skipContinueWatchingEnabled) {
-							await enableSkipContinueWatching();
-						}
-						break;
-					}
-					case "timestampPeekChange": {
-						const {
-							data: { timestampPeekEnabled }
-						} = message;
-						if (timestampPeekEnabled) {
-							await enableTimestampPeek();
-						} else {
-							disableTimestampPeek();
-						}
-						break;
-					}
-					case "videoHistoryChange": {
-						const {
-							data: { videoHistoryEnabled }
-						} = message;
-						if (videoHistoryEnabled) {
-							await setupVideoHistory();
-						} else {
-							eventManager.removeEventListeners("videoHistory");
-						}
-						break;
-					}
-					case "volumeBoostAmountChange": {
-						const {
-							data: { volumeBoostAmount, volumeBoostEnabled, volumeBoostMode }
-						} = message;
-						switch (volumeBoostMode) {
-							case "global": {
-								if (!volumeBoostEnabled) return;
-								applyVolumeBoostDb(volumeBoostAmount);
-								break;
-							}
-							case "per_video": {
-								const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
-								if (!volumeBoostButton) return;
-								const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-								if (volumeBoostForVideoEnabled) applyVolumeBoostDb(volumeBoostAmount);
-							}
-						}
-						break;
-					}
-					case "volumeBoostChange": {
-						const {
-							data: { volumeBoostEnabled, volumeBoostMode }
-						} = message;
-						if (volumeBoostEnabled) {
-							if (volumeBoostMode === "global") {
-								await removeVolumeBoostButton();
-								await enableVolumeBoost();
-							} else {
-								disableVolumeBoost();
-								await addVolumeBoostButton();
-							}
-						} else {
-							disableVolumeBoost();
-							if (volumeBoostMode === "per_video") {
-								await removeVolumeBoostButton();
-							}
 						}
 						break;
 					}
@@ -1232,9 +148,12 @@ if (window.self === window.top) {
 }
 
 window.addEventListener("pagehide", () => {
+	registry.destroyNavigationListener();
 	eventManager.removeAllEventListeners();
+	window.cleanupFeatureMenuListeners?.();
 	element.remove();
 });
+window.addEventListener("pageshow", initialize);
 
 // Error handling
 window.addEventListener("error", (event: ErrorEvent) => {
