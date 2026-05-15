@@ -1,19 +1,21 @@
-import { hideMembersOnlyVideos, showMembersOnlyVideos } from "@/src/features/hideMembersOnlyVideos/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
 
 import "./index.css";
-export function disableHideMembersOnlyVideos() {
-	showMembersOnlyVideos();
-}
+import { metadata } from "./index.metadata";
 
-export async function enableHideMembersOnlyVideos() {
-	const {
-		data: {
-			options: {
-				hideMembersOnlyVideos: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	hideMembersOnlyVideos();
-}
+export default createFeature({
+	...metadata,
+	onDisable: () => {
+		modifyElementClassList("remove", {
+			className: "yte-hide-members-only-videos",
+			element: document.body
+		});
+	},
+	onEnable: () => {
+		modifyElementClassList("add", {
+			className: "yte-hide-members-only-videos",
+			element: document.body
+		});
+	}
+});

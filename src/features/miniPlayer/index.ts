@@ -1,13 +1,13 @@
-import type { MiniPlayerPosition, MiniPlayerSize, Nullable } from "@/src/types";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { type Nullable } from "@/src/types";
+import { createStyledElement } from "@/src/utils/dom/elements";
+import { waitForElement } from "@/src/utils/dom/wait";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
 
-import { createStyledElement, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import type { MiniPlayerOptions } from "./types";
 
 import { MiniPlayerController, setManualOverride } from "./controller";
-
-export type MiniPlayerOptions = {
-	defaultPosition: MiniPlayerPosition;
-	defaultSize: MiniPlayerSize;
-};
+import { metadata } from "./index.metadata";
 
 const MINI_PLAYER_STATE_EVENT = "yte-mini-player-state";
 const SENTINEL_ID = "yte-mini-player-sentinel";
@@ -113,33 +113,6 @@ async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 	});
 	commentsMutationObserver.observe(document.documentElement, { childList: true, subtree: true });
 }
-export const enableCommentsMiniPlayer = async () => {
-	const {
-		data: {
-			options: {
-				miniPlayer: { defaultPosition, defaultSize, enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	setManualOverride(false);
-	const miniPlayer = ensureController({
-		defaultPosition,
-		defaultSize
-	});
-	await attachCommentsAutoMiniPlayer(miniPlayer);
-	emitMiniPlayerState(miniPlayer.isActive());
-};
-export const disableCommentsMiniPlayer = () => {
-	cleanupAutoObservers();
-	const sentinel = document.getElementById(SENTINEL_ID);
-	sentinel?.remove();
-	if (miniPlayerController) {
-		miniPlayerController.destroy();
-		miniPlayerController = null;
-	}
-	emitMiniPlayerState(false);
-};
 async function getEnabledController(): Promise<Nullable<MiniPlayerController>> {
 	const {
 		data: {
@@ -169,4 +142,35 @@ export const setMiniPlayerManual = async (checked: boolean) => {
 	}
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const isMiniPlayerActive = () => miniPlayerController?.isActive() ?? false;
+export const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "live"] },
+	onConfigChange: ({ defaultPosition, defaultSize }) => {
+		setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
+	},
+	onDisable: () => {
+		cleanupAutoObservers();
+		const sentinel = document.getElementById(SENTINEL_ID);
+		sentinel?.remove();
+		if (miniPlayerController) {
+			miniPlayerController.destroy();
+			miniPlayerController = null;
+		}
+		emitMiniPlayerState(false);
+	},
+	onEnable: async ({ defaultPosition, defaultSize }) => {
+		setManualOverride(false);
+		const miniPlayer = ensureController({
+			defaultPosition,
+			defaultSize
+		});
+		await attachCommentsAutoMiniPlayer(miniPlayer);
+		emitMiniPlayerState(miniPlayer.isActive());
+	},
+	persistState: true,
+	state: {
+		manualOverride: false,
+		rect: null
+	}
+});

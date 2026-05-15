@@ -1,16 +1,20 @@
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { checkIfFeatureButtonExists, getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
-import { type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { createTooltip, isLivePage, isWatchPage, round, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
+import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
+import { createTooltip } from "@/src/utils/dom/tooltip";
+import { waitForElement } from "@/src/utils/dom/wait";
+import { round } from "@/src/utils/math";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
 
-import type { AddButtonFunction, RemoveButtonFunction } from "../index";
+import { metadata } from "./index.metadata";
+
 let currentPlaybackSpeed = 1;
 const maxSpeed = 16;
-
 export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	const calculatedSpeed =
@@ -21,36 +25,90 @@ export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClic
 	return round(calculatedSpeed, 2);
 }
 
-export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton">(
-	buttonName: ButtonName,
-	speed: number
-) {
+export function getMinSpeed(playbackSpeedPerClick: number) {
+	return (
+		playbackSpeedPerClick == 0.25 ? 0.25
+		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
+		: playbackSpeedPerClick == 0.1 ? 0.01
+		: playbackSpeedPerClick == 1 ? 1
+		: youtubePlayerMinSpeed
+	);
+}
+export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: number, playbackSpeedPerClick: number) {
 	const {
 		data: {
 			options: {
-				buttonPlacement: {
-					decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement,
-					increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement
-				},
-				playbackSpeedButtons: { speed: speedPerClick }
+				playbackSpeedButtons: {
+					button: { placement }
+				}
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
-	const minSpeed = getMinSpeed(speedPerClick);
+	const minSpeed = getMinSpeed(playbackSpeedPerClick);
+	const buttons = [
+		{
+			buttonName: "increasePlaybackSpeedButton" as const,
+			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
+		},
+		{
+			buttonName: "decreasePlaybackSpeedButton" as const,
+			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
+		}
+	];
+	for (const { buttonName, speed } of buttons) {
+		const button = getFeatureButton(buttonName);
+		if (!button) continue;
+		const { update } = createTooltip({
+			direction: placement === "below_player" ? "down" : "up",
+			element: button,
+			featureName: "playbackSpeedButtons",
+			id: `yte-feature-${buttonName}-tooltip`
+		});
+		button.dataset.title = getPlaybackButtonTitle(buttonName, currentPlaybackSpeed, minSpeed, speed);
+		update();
+	}
+}
+
+async function addPlaybackSpeedButton(
+	buttonName: "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton",
+	placement: ButtonPlacement,
+	speed: number,
+	direction: "decrease" | "increase",
+	fullscreenPlacement: FullscreenPlacement
+) {
+	const videoElement = document.querySelector<HTMLVideoElement>("video");
+	if (!videoElement) return;
+	const minSpeed = getMinSpeed(speed);
 	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const featureName = "playbackSpeedButtons";
-	const button = getFeatureButton(buttonName);
-	if (!button) return;
-	const placement = buttonName == "increasePlaybackSpeedButton" ? increasePlaybackSpeedButtonPlacement : decreasePlaybackSpeedButtonPlacement;
-	const { update } = createTooltip({
-		direction: placement === "below_player" ? "down" : "up",
-		element: button,
-		featureName,
-		id: `yte-feature-${buttonName}-tooltip`
-	});
-	button.dataset.title = window.i18nextInstance.t(
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	if (!playerContainer) return;
+	const playerVideoData = await playerContainer.getVideoData();
+	if (playerVideoData.isLive && (await checkIfFeatureButtonExists(buttonName, placement))) {
+		await removeFeatureButton(buttonName, placement);
+		eventManager.removeEventListeners("playbackSpeedButtons");
+	}
+	if (playerVideoData.isLive) return;
+	await addFeatureButton(
+		buttonName,
+		placement,
+		getPlaybackButtonTitle(buttonName, currentPlaybackSpeed, minSpeed, calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, direction)),
+		getFeatureIcon(buttonName, placement),
+		playbackSpeedButtonClickListener(speed, direction),
+		false,
+		false,
+		fullscreenPlacement
+	);
+}
+
+function getPlaybackButtonTitle(
+	buttonName: "decreasePlaybackSpeedButton" | "increasePlaybackSpeedButton",
+	currentPlaybackSpeed: number,
+	minSpeed: number,
+	speed: number
+) {
+	return window.i18nextInstance.t(
 		(translations) =>
 			currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton" ?
 				translations.pages.content.features.playbackSpeedButtons.extras.increaseLimit
@@ -60,16 +118,6 @@ export async function updatePlaybackSpeedButtonTooltip<ButtonName extends "decre
 		{
 			SPEED: speed
 		}
-	);
-	update();
-}
-function getMinSpeed(playbackSpeedPerClick: number) {
-	return (
-		playbackSpeedPerClick == 0.25 ? 0.25
-		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
-		: playbackSpeedPerClick == 0.1 ? 0.01
-		: playbackSpeedPerClick == 1 ? 1
-		: youtubePlayerMinSpeed
 	);
 }
 
@@ -116,101 +164,45 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 				);
 				const speed = round(currentPlaybackSpeed + adjustmentAmount, 2);
 				await setPlayerSpeed(speed);
-				await updatePlaybackSpeedButtonTooltip("increasePlaybackSpeedButton", calculatePlaybackButtonSpeed(speed, playbackSpeedPerClick, "increase"));
-				await updatePlaybackSpeedButtonTooltip("decreasePlaybackSpeedButton", calculatePlaybackButtonSpeed(speed, playbackSpeedPerClick, "decrease"));
+				await updatePlaybackSpeedButtonTooltips(speed, playbackSpeedPerClick);
 			} catch (error) {
-				console.error(error);
+				console.error("[playbackSpeedButtons] Failed to set player speed:", error);
 			}
 		})();
 	};
 }
 
-export const addIncreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	if (!(isWatchPage() || isLivePage())) return;
-	const {
-		data: {
-			options: {
-				buttonPlacement: { increasePlaybackSpeedButton: increasePlaybackSpeedButtonPlacement },
-				playbackSpeedButtons: { enabled, speed }
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement }, speed }) => {
+				await addPlaybackSpeedButton("decreasePlaybackSpeedButton", placement, speed, "decrease", fullscreenPlacement);
+			},
+			name: "decreasePlaybackSpeedButton",
+			remove: async (placement) => {
+				await removeFeatureButton("decreasePlaybackSpeedButton", placement);
+				eventManager.removeEventListeners("playbackSpeedButtons");
+			}
+		},
+		{
+			add: async ({ button: { fullscreenPlacement, placement }, speed }) => {
+				await addPlaybackSpeedButton("increasePlaybackSpeedButton", placement, speed, "increase", fullscreenPlacement);
+			},
+			name: "increasePlaybackSpeedButton",
+			remove: async (placement) => {
+				await removeFeatureButton("increasePlaybackSpeedButton", placement);
+				eventManager.removeEventListeners("playbackSpeedButtons");
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	const videoElement = document.querySelector<HTMLVideoElement>("video");
-	if (!videoElement) return;
-	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-	if (!playerContainer) return;
-	const playerVideoData = await playerContainer.getVideoData();
-	if (playerVideoData.isLive && checkIfFeatureButtonExists("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement)) {
-		await removeFeatureButton("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement);
-		eventManager.removeEventListeners("playbackSpeedButtons");
+	],
+	dependencies: { includePages: ["watch"] },
+	onConfigChange: async ({ speed: playbackSpeedPerClick }) => {
+		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+		if (!playerContainer) return;
+		const video = playerContainer.querySelector<HTMLVideoElement>("video.html5-main-video");
+		if (!video) return;
+		const { playbackRate: speed } = video;
+		await updatePlaybackSpeedButtonTooltips(speed, playbackSpeedPerClick);
 	}
-	if (playerVideoData.isLive) return;
-	await addFeatureButton(
-		"increasePlaybackSpeedButton",
-		increasePlaybackSpeedButtonPlacement,
-		window.i18nextInstance.t(
-			(translations) =>
-				currentPlaybackSpeed == maxSpeed ?
-					translations.pages.content.features.playbackSpeedButtons.extras.increaseLimit
-				:	translations.pages.content.features.playbackSpeedButtons.buttons.increasePlaybackSpeedButton.label,
-			{
-				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, "increase")
-			}
-		),
-		getFeatureIcon("increasePlaybackSpeedButton", increasePlaybackSpeedButtonPlacement),
-		playbackSpeedButtonClickListener(speed, "increase"),
-		false
-	);
-};
-
-export const addDecreasePlaybackSpeedButton: AddButtonFunction = async () => {
-	if (!(isWatchPage() || isLivePage())) return;
-	const {
-		data: {
-			options: {
-				buttonPlacement: { decreasePlaybackSpeedButton: decreasePlaybackSpeedButtonPlacement },
-				playbackSpeedButtons: { enabled, speed }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	const videoElement = document.querySelector<HTMLVideoElement>("video");
-	if (!videoElement) return;
-	const minSpeed = getMinSpeed(speed);
-	({ playbackRate: currentPlaybackSpeed } = videoElement);
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-	if (!playerContainer) return;
-	const playerVideoData = await playerContainer.getVideoData();
-	if (playerVideoData.isLive && checkIfFeatureButtonExists("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement)) {
-		await removeFeatureButton("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement);
-		eventManager.removeEventListeners("playbackSpeedButtons");
-	}
-	if (playerVideoData.isLive) return;
-	await addFeatureButton(
-		"decreasePlaybackSpeedButton",
-		decreasePlaybackSpeedButtonPlacement,
-		window.i18nextInstance.t(
-			(translations) =>
-				currentPlaybackSpeed == minSpeed ?
-					translations.pages.content.features.playbackSpeedButtons.extras.decreaseLimit
-				:	translations.pages.content.features.playbackSpeedButtons.buttons.decreasePlaybackSpeedButton.label,
-			{
-				SPEED: calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, "decrease")
-			}
-		),
-		getFeatureIcon("decreasePlaybackSpeedButton", decreasePlaybackSpeedButtonPlacement),
-		playbackSpeedButtonClickListener(speed, "decrease"),
-		false
-	);
-};
-
-export const removeDecreasePlaybackSpeedButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("decreasePlaybackSpeedButton", placement);
-	eventManager.removeEventListeners("playbackSpeedButtons");
-};
-export const removeIncreasePlaybackSpeedButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("increasePlaybackSpeedButton", placement);
-	eventManager.removeEventListeners("playbackSpeedButtons");
-};
+});

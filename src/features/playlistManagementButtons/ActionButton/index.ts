@@ -8,8 +8,8 @@ import type { TSelectorFunc } from "@/src/types";
 
 import "./index.css";
 
-import { type FeatureName } from "@/src/utils/EventManager";
-import { createTooltip } from "@/src/utils/utilities";
+import { type FeatureName } from "@/src/events/EventManager";
+import { createTooltip } from "@/src/utils/dom/tooltip";
 
 interface ActionButtonConfig {
 	className: string;

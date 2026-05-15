@@ -1,20 +1,23 @@
 import "./index.css";
 
-import { hidePlayables, showPlayables } from "@/src/features/hidePlayables/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
 
-export function disableHidePlayables() {
-	showPlayables();
-}
-export async function enableHidePlayables() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				hidePlayables: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	hidePlayables();
-}
+import { metadata } from "./index.metadata";
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["home"] },
+	onDisable: () => {
+		modifyElementClassList("remove", {
+			className: "yte-hide-playables",
+			element: document.body
+		});
+	},
+	onEnable: () => {
+		modifyElementClassList("add", {
+			className: "yte-hide-playables",
+			element: document.body
+		});
+	}
+});

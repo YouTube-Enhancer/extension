@@ -1,104 +1,19 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { YouTubePlayerDiv } from "@/src/types";
-
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { getFeatureIds } from "@/src/features/featureMenu/utils";
+import { getFeatureIds, getFeatureMenuItem } from "@/src/features/featureMenu/utils";
 import { getFeatureIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
-import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import { sendContentOnlyMessage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { type YouTubePlayerDiv } from "@/src/types";
+import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
+import { getAudioEngine } from "@/src/utils/audioEngine";
+import { waitForElement } from "@/src/utils/dom/wait";
+import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
 
-import { applyVolumeBoostDb, clampDb, disableVolumeBoost, setupVolumeBoost, STEP_DB } from "./utils";
+import { metadata } from "./index.metadata";
+import { applyVolumeBoostDb, clampDb, setupVolumeBoost, STEP_DB } from "./utils";
 
 let isVolumeBoostEnabled = false;
-
-export async function enableVolumeBoost() {
-	setupVolumeBoost();
-	const {
-		data: {
-			options: {
-				volumeBoost: { amount }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	applyVolumeBoostDb(amount);
-}
-
-export default async function volumeBoost() {
-	const {
-		data: {
-			options: {
-				volumeBoost: { amount, enabled, mode }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	setupVolumeBoost();
-	if (mode === "per_video") {
-		await addVolumeBoostButton();
-	} else {
-		applyVolumeBoostDb(amount);
-	}
-}
-
-export const addVolumeBoostButton: AddButtonFunction = async () => {
-	const {
-		data: {
-			options: {
-				buttonPlacement: { volumeBoostButton: volumeBoostButtonPlacement },
-				volumeBoost: { amount }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	await addFeatureButton(
-		"volumeBoostButton",
-		volumeBoostButtonPlacement,
-		volumeBoostButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: amount })
-		:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
-		getFeatureIcon("volumeBoostButton", volumeBoostButtonPlacement),
-		(checked) => {
-			void (async () => {
-				isVolumeBoostEnabled = !!checked;
-				if (checked) {
-					await enableVolumeBoost();
-					const {
-						data: {
-							options: {
-								volumeBoost: { amount }
-							}
-						}
-					} = await waitForSpecificMessage("options", "request_data", "content");
-					updateFeatureButtonTitle(
-						"volumeBoostButton",
-						window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
-							value: amount
-						})
-					);
-				} else {
-					disableVolumeBoost();
-					updateFeatureButtonTitle(
-						"volumeBoostButton",
-						window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
-					);
-				}
-			})();
-		},
-		true
-	);
-	const volumeBoostButton = getFeatureButton("volumeBoostButton");
-	if (!volumeBoostButton) return;
-	eventManager.addEventListener(
-		volumeBoostButton,
-		"wheel",
-		(event) => {
-			void handleVolumeBoostScroll(event as WheelEvent);
-		},
-		"volumeBoostButton",
-		{ passive: false }
-	);
-};
 async function handleVolumeBoostScroll(event: WheelEvent) {
 	event.preventDefault();
 	let delta: number;
@@ -118,25 +33,24 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-	if (playerContainer) {
-		new OnScreenDisplayManager(
-			{
-				displayColor: color,
-				displayHideTime: hideTime,
-				displayOpacity: opacity,
-				displayPadding: padding,
-				displayPosition: position,
-				displayType: "text",
-				playerContainer
-			},
-			"yte-osd",
-			{
-				max: Infinity,
-				type: "volume_boost_db",
-				value: newValue
-			}
-		);
-	}
+	if (!playerContainer) return;
+	new OnScreenDisplayManager(
+		{
+			displayColor: color,
+			displayHideTime: hideTime,
+			displayOpacity: opacity,
+			displayPadding: padding,
+			displayPosition: position,
+			displayType: "text",
+			playerContainer
+		},
+		"yte-osd",
+		{
+			max: Infinity,
+			type: "volume_boost_db",
+			value: newValue
+		}
+	);
 	updateVolumeBoostFeatureMenuLabel(newValue);
 	updateFeatureButtonTitle(
 		"volumeBoostButton",
@@ -147,15 +61,95 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	if (!isVolumeBoostEnabled) return;
 	applyVolumeBoostDb(newValue);
 }
-
-export const removeVolumeBoostButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("volumeBoostButton", placement);
-	eventManager.removeEventListeners("volumeBoostButton");
-};
 function updateVolumeBoostFeatureMenuLabel(value: number) {
 	const { featureMenuItemLabelId } = getFeatureIds("volumeBoostButton");
 	const labelEl = document.getElementById(featureMenuItemLabelId);
 	if (!labelEl) return;
 	labelEl.textContent = window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value });
 }
-export { applyVolumeBoostDb, disableVolumeBoost };
+
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ amount, button: { fullscreenPlacement, placement } }) => {
+				await addFeatureButton(
+					"volumeBoostButton",
+					placement,
+					placement === "feature_menu" ?
+						window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: amount })
+					:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
+					getFeatureIcon("volumeBoostButton", placement),
+					(checked) => {
+						void (async () => {
+							const {
+								data: {
+									options: { volumeBoost }
+								}
+							} = await waitForSpecificMessage("options", "request_data", "content");
+							isVolumeBoostEnabled = !!checked;
+							if (checked) {
+								const { amount } = volumeBoost;
+								applyVolumeBoostDb(amount);
+								updateFeatureButtonTitle(
+									"volumeBoostButton",
+									window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
+										value: amount
+									})
+								);
+							} else {
+								const engine = getAudioEngine();
+								if (!engine) return;
+								engine.volumeGain.gain.value = 1;
+								updateFeatureButtonTitle(
+									"volumeBoostButton",
+									window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
+								);
+							}
+						})();
+					},
+					true,
+					false,
+					fullscreenPlacement
+				);
+				const volumeBoostButton = getFeatureButton("volumeBoostButton");
+				if (!volumeBoostButton) return;
+				eventManager.addEventListener(
+					volumeBoostButton,
+					"wheel",
+					(event) => {
+						void handleVolumeBoostScroll(event as WheelEvent);
+					},
+					"volumeBoostButton",
+					{ passive: false }
+				);
+			},
+			name: "volumeBoostButton",
+			remove: async (placement) => {
+				await removeFeatureButton("volumeBoostButton", placement);
+				eventManager.removeEventListeners("volumeBoostButton");
+			},
+			shouldRender: ({ mode }) => mode === "per_video"
+		}
+	],
+	dependencies: { includePages: ["watch", "live", "shorts"] },
+	onConfigChange: ({ amount, enabled, mode }) => {
+		if (!enabled) return;
+		if (mode === "global") applyVolumeBoostDb(amount);
+		else {
+			const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
+			if (!volumeBoostButton) return;
+			const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
+			if (volumeBoostForVideoEnabled) applyVolumeBoostDb(amount);
+		}
+	},
+	onDisable: () => {
+		const engine = getAudioEngine();
+		if (!engine) return;
+		engine.volumeGain.gain.value = 1;
+	},
+	onEnable: ({ amount, mode }) => {
+		setupVolumeBoost();
+		if (mode === "global") applyVolumeBoostDb(amount);
+	}
+});

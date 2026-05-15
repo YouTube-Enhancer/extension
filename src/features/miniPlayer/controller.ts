@@ -1,19 +1,19 @@
-import type { MiniPlayerOptions } from "@/src/features/miniPlayer";
-import type { MiniPlayerSize, Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { MiniPlayerOptions, MiniPlayerSize } from "@/src/features/miniPlayer/types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
-import eventManager from "@/src/utils/EventManager";
-import { clamp, createStyledElement } from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { registry } from "@/src/features/_registry/featureRegistry";
+import { createStyledElement } from "@/src/utils/dom/elements";
+import { clamp } from "@/src/utils/math";
 
 import "./index.css";
-
-type MiniPlayerRect = {
+const stateAPI = registry.stateManager.getStateAPI("miniPlayer");
+export type MiniPlayerRect = {
 	height: number;
 	width: number;
 	x: number;
 	y: number;
 };
-const LS_MINI_PLAYER_RECT_KEY = "yte_mini_player_state";
-const LS_MINI_PLAYER_MANUAL_KEY = "yte_mini_player_manual_override";
 type MiniPlayerBarState = {
 	barRoot: HTMLDivElement;
 	cleanupFns: Array<() => void>;
@@ -407,20 +407,19 @@ export class MiniPlayerController {
 	}
 }
 export function setManualOverride(enabled: boolean) {
-	localStorage.setItem(LS_MINI_PLAYER_MANUAL_KEY, enabled ? "1" : "0");
+	stateAPI.setState((prev) => ({ ...prev, manualOverride: enabled }));
 }
 function parseSizePreset(preset: MiniPlayerSize): { height: number; width: number } {
 	const [w, h] = preset.split("x").map((n) => parseInt(n, 10));
 	return { height: h, width: w };
 }
 function readManualOverride(): boolean {
-	return localStorage.getItem(LS_MINI_PLAYER_MANUAL_KEY) === "1";
+	return stateAPI.getState().manualOverride;
 }
 function readSavedState(): Nullable<MiniPlayerRect> {
 	try {
-		const raw = localStorage.getItem(LS_MINI_PLAYER_RECT_KEY);
-		if (!raw) return null;
-		const savedRect = JSON.parse(raw) as MiniPlayerRect;
+		const { rect: savedRect } = stateAPI.getState();
+		if (!savedRect) return null;
 		if (!Number.isFinite(savedRect.x) || !Number.isFinite(savedRect.y) || !Number.isFinite(savedRect.width) || !Number.isFinite(savedRect.height))
 			return null;
 		return savedRect;
@@ -429,7 +428,7 @@ function readSavedState(): Nullable<MiniPlayerRect> {
 	}
 }
 function writeSavedState(s: MiniPlayerRect) {
-	localStorage.setItem(LS_MINI_PLAYER_RECT_KEY, JSON.stringify(s));
+	stateAPI.setState((prev) => ({ ...prev, rect: s }));
 }
 let miniPlayerBarState: Nullable<MiniPlayerBarState> = null;
 type miniPlayerWindow = {

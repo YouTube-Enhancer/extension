@@ -1,20 +1,23 @@
 import "./index.css";
 
-import { hideArtificialIntelligenceSummary, showArtificialIntelligenceSummary } from "@/src/features/hideArtificialIntelligenceSummary/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
 
-export function disableHideArtificialIntelligenceSummary() {
-	showArtificialIntelligenceSummary();
-}
-export async function enableHideArtificialIntelligenceSummary() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				hideArtificialIntelligenceSummary: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	hideArtificialIntelligenceSummary();
-}
+import { metadata } from "./index.metadata";
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: () => {
+		modifyElementClassList("remove", {
+			className: "yte-hide-ai-summary",
+			element: document.body
+		});
+	},
+	onEnable: () => {
+		modifyElementClassList("add", {
+			className: "yte-hide-ai-summary",
+			element: document.body
+		});
+	}
+});

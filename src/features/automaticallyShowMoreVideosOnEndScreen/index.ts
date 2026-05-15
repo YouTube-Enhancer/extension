@@ -1,19 +1,12 @@
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { hideMoreVideosOnEndScreen, showMoreVideosOnEndScreen } from "@/src/features/automaticallyShowMoreVideosOnEndScreen/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+import { metadata } from "./index.metadata";
 
-export function disableAutomaticallyShowMoreVideosOnEndScreen() {
-	hideMoreVideosOnEndScreen();
-}
-export async function enableAutomaticallyShowMoreVideosOnEndScreen() {
-	const {
-		data: {
-			options: {
-				automaticallyShowMoreVideosOnEndScreen: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	showMoreVideosOnEndScreen();
-}
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: hideMoreVideosOnEndScreen,
+	onEnable: showMoreVideosOnEndScreen
+});

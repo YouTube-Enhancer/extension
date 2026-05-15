@@ -1,21 +1,29 @@
-import { browserColorLog, isNewYouTubeVideoLayout, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { browserColorLog } from "@/src/utils/logging";
+import { isNewYouTubeVideoLayout } from "@/src/utils/url";
+
+import { metadata } from "./index.metadata";
 
 interface YtdWatchElement extends Element {
 	youthereDataChanged_: () => void;
 }
-
-export async function enableSkipContinueWatching() {
-	const {
-		data: {
-			options: {
-				skipContinueWatching: { enabled }
-			}
+let youthereDataChanged_: () => void;
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: () => {
+		browserColorLog("Disabling skipContinueWatching", "FgMagenta");
+		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+		if (ytdWatchElement) {
+			ytdWatchElement.youthereDataChanged_ = youthereDataChanged_;
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	browserColorLog("Enabling skipContinueWatching", "FgMagenta");
-	const ytdWatchElement = document.querySelector(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
-	if (ytdWatchElement) {
-		(ytdWatchElement as YtdWatchElement).youthereDataChanged_ = function () {};
+	},
+	onEnable: () => {
+		browserColorLog("Enabling skipContinueWatching", "FgMagenta");
+		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+		if (ytdWatchElement) {
+			({ youthereDataChanged_ } = ytdWatchElement);
+			ytdWatchElement.youthereDataChanged_ = function () {};
+		}
 	}
-}
+});

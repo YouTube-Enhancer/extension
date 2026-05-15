@@ -43,7 +43,7 @@ export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, pla
 }
 
 export function getEffectivePlacement(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement): ButtonPlacement {
-	return isFullscreen() ? fullscreenPlacement : placement;
+	return isFullscreen() && fullscreenPlacement !== "same" ? fullscreenPlacement : placement;
 }
 
 export function getFeatureButton(buttonName: AllButtonNames) {
@@ -333,7 +333,7 @@ async function getPlacementRoot(placement: ButtonPlacement) {
 async function handleFullscreenChange() {
 	const inFullscreen = isFullscreen();
 	for (const [buttonName, info] of trackedButtons) {
-		const effectivePlacement = inFullscreen ? info.fullscreenPlacement : info.placement;
+		const effectivePlacement = inFullscreen && info.fullscreenPlacement !== "same" ? info.fullscreenPlacement : info.placement;
 		if (effectivePlacement === info.currentEffectivePlacement) continue;
 
 		if (info.currentEffectivePlacement !== "feature_menu") {

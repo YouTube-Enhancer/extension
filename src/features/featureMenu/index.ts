@@ -1,26 +1,32 @@
-import type { FeatureMenuOpenType } from "@/src/types";
-
 import "./index.css";
 
-import eventManager from "@/src/utils/EventManager";
-import { createStyledElement, createSVGElement, createTooltip, isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
+import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { createTooltip } from "@/src/utils/dom/tooltip";
+import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
+import { isWatchPage } from "@/src/utils/url";
+
+import type { FeatureMenuOpenType } from "./types";
 
 const MENU_ID = "#yte-feature-menu";
 const BUTTON_ID = "#yte-feature-menu-button";
 
 export async function enableFeatureMenu() {
 	if (document.querySelector(BUTTON_ID)) return;
-	await createFeatureMenuButton();
+	if (window.cleanupFeatureMenuListeners) window.cleanupFeatureMenuListeners();
+	window.cleanupFeatureMenuListeners = await createFeatureMenuButton();
 }
 
-export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType) {
+export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType): () => void {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	const featureMenu = document.querySelector<HTMLDivElement>(MENU_ID);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(BUTTON_ID);
-	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton) return;
+	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton) return () => {};
 	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
@@ -28,9 +34,10 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	});
 
 	let menuVisible = false;
+	let observer: MutationObserver | null = null;
 
 	const hideYouTubeSettings = () => {
-		const settingsMenu = document.querySelector<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
 		if (settingsMenu && settingsMenu.style.display !== "none") settingsButton.click();
 	};
 	const showFeatureMenu = () => {
@@ -105,7 +112,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			break;
 	}
 
-	const observer = new MutationObserver((mutations) => {
+	observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
 			if (mutation.type !== "childList") continue;
 			for (const node of Array.from(mutation.addedNodes)) {
@@ -118,6 +125,15 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	});
 
 	observer.observe(playerContainer, { childList: true, subtree: true });
+
+	// Return cleanup function
+	return () => {
+		eventManager.removeEventListeners("featureMenu");
+		if (observer) {
+			observer.disconnect();
+			observer = null;
+		}
+	};
 }
 
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
@@ -165,11 +181,24 @@ async function createFeatureMenuButton() {
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
+	const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls");
+	if (!rightControls) return () => {};
+	const containerId = "yte-right-controls-container";
+	let container = rightControls.querySelector<HTMLDivElement>(`#${containerId}`);
+	if (!container) {
+		container = createStyledElement({
+			elementId: containerId,
+			elementType: "div",
+			styles: { alignItems: "center", display: "flex" }
+		});
+		const leftSide = rightControls.querySelector<HTMLDivElement>(".ytp-right-controls-left");
+		if (leftSide) leftSide.insertAdjacentElement("beforebegin", container);
+		else rightControls.prepend(container);
+	}
+	container.insertAdjacentElement("afterend", featureMenuButton);
 
-	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
-	if (!settingsButton || !playerContainer) return;
-	settingsButton.insertAdjacentElement("beforebegin", featureMenuButton);
+	if (!playerContainer) return () => {};
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
 	const {
 		data: {
@@ -179,7 +208,7 @@ async function createFeatureMenuButton() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	await waitForAllElements([MENU_ID, BUTTON_ID]);
-	setupFeatureMenuEventListeners(openType);
+	return setupFeatureMenuEventListeners(openType);
 }
 function makeFeatureMenuIcon() {
 	return createSVGElement(

@@ -1,58 +1,58 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { flipVideoVertical } from "@/src/features/flipVideoButtons/utils";
 import { getFeatureIcon } from "@/src/icons";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
 
+import { metadata } from "./index.metadata";
 import { flipVideoHorizontal } from "./utils";
 
-export const addFlipVideoVerticalButton: AddButtonFunction = async () => {
-	const {
-		data: {
-			options: {
-				buttonPlacement: { flipVideoVerticalButton },
-				flipVideoButtons: {
-					flipVertical: { enabled }
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({
+				buttons: {
+					flipVideoHorizontalButton: { fullscreenPlacement, placement }
 				}
+			}) => {
+				await addFeatureButton(
+					"flipVideoHorizontalButton",
+					placement,
+					window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoHorizontalButton.button.label),
+					getFeatureIcon("flipVideoHorizontalButton", placement),
+					() => flipVideoHorizontal(),
+					false,
+					false,
+					fullscreenPlacement
+				);
+			},
+			name: "flipVideoHorizontalButton",
+			remove: async (placement) => {
+				await removeFeatureButton("flipVideoHorizontalButton", placement);
+			}
+		},
+		{
+			add: async ({
+				buttons: {
+					flipVideoVerticalButton: { fullscreenPlacement, placement }
+				}
+			}) => {
+				await addFeatureButton(
+					"flipVideoVerticalButton",
+					placement,
+					window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoVerticalButton.button.label),
+					getFeatureIcon("flipVideoVerticalButton", placement),
+					() => flipVideoVertical(),
+					false,
+					false,
+					fullscreenPlacement
+				);
+			},
+			name: "flipVideoVerticalButton",
+			remove: async (placement) => {
+				await removeFeatureButton("flipVideoVerticalButton", placement);
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	await addFeatureButton(
-		"flipVideoVerticalButton",
-		flipVideoVerticalButton,
-		window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoVerticalButton.button.label),
-		getFeatureIcon("flipVideoVerticalButton", flipVideoVerticalButton),
-		() => flipVideoVertical(),
-		false
-	);
-};
-export const removeFlipVideoVerticalButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("flipVideoVerticalButton", placement);
-};
-
-export const addFlipVideoHorizontalButton: AddButtonFunction = async () => {
-	const {
-		data: {
-			options: {
-				buttonPlacement: { flipVideoHorizontalButton },
-				flipVideoButtons: {
-					flipHorizontal: { enabled }
-				}
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	await addFeatureButton(
-		"flipVideoHorizontalButton",
-		flipVideoHorizontalButton,
-		window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoHorizontalButton.button.label),
-		getFeatureIcon("flipVideoHorizontalButton", flipVideoHorizontalButton),
-		() => flipVideoHorizontal(),
-		false
-	);
-};
-export const removeFlipVideoHorizontalButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("flipVideoHorizontalButton", placement);
-};
+	],
+	dependencies: { includePages: ["watch", "live"] }
+});

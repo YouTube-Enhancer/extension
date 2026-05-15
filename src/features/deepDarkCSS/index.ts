@@ -1,34 +1,40 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { updateButtonsIconColor } from "@/src/features/buttonPlacement/utils";
 import { deepDarkCssID } from "@/src/utils/constants";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { buttonColorCache } from "@/src/utils/deep-dark-theme";
+import { clearDeepDarkData, setDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
+import { metadata } from "./index.metadata";
 import { createDeepDarkCSSElement, deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "./utils";
-export function disableDeepDarkCSS() {
-	// Get the deep dark theme style element
-	const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
-	// Check if the deep dark theme style element exists
-	if (!deepDarkThemeStyleElement) return;
-	// Remove the deep dark theme style element
-	deepDarkThemeStyleElement.remove();
-}
 
-export async function enableDeepDarkCSS() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				deepDarkCSS: { colors, enabled, preset }
-			}
+export default createFeature({
+	...metadata,
+	onConfigChange: ({ colors, preset }) => {
+		if (deepDarkCSSExists()) {
+			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// Check if deep dark theme is enabled
-	if (!enabled) return;
-	if (deepDarkCSSExists()) {
-		updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
-		return;
+		setDeepDarkData(preset, colors);
+		buttonColorCache.clear();
+		updateButtonsIconColor();
+	},
+	onDisable: () => {
+		const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
+		if (!deepDarkThemeStyleElement) return;
+		deepDarkThemeStyleElement.remove();
+		clearDeepDarkData();
+		buttonColorCache.clear();
+		updateButtonsIconColor();
+	},
+	onEnable: ({ colors, preset }) => {
+		if (deepDarkCSSExists()) {
+			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+		} else {
+			const deepDarkThemeStyleElement = createDeepDarkCSSElement(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+			document.head.appendChild(deepDarkThemeStyleElement);
+		}
+		setDeepDarkData(preset, colors);
+		buttonColorCache.clear();
+		updateButtonsIconColor();
 	}
-	// Create the deep dark theme style element
-	const deepDarkThemeStyleElement = createDeepDarkCSSElement(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
-	// Insert the deep dark theme style element
-	document.head.appendChild(deepDarkThemeStyleElement);
-}
+});

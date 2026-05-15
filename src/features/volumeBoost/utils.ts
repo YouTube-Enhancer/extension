@@ -1,5 +1,6 @@
 import { getAudioEngine } from "@/src/utils/audioEngine";
-import { browserColorLog, formatError } from "@/src/utils/utilities";
+import { formatError } from "@/src/utils/format/error";
+import { browserColorLog } from "@/src/utils/logging";
 
 export const MIN_DB = 0;
 export const MAX_DB = Infinity;
@@ -18,12 +19,6 @@ export function clampDb(db: number) {
 export function dbToLinear(db: number) {
 	return Math.pow(10, db / 20);
 }
-export function disableVolumeBoost() {
-	const engine = getAudioEngine();
-	if (!engine) return;
-	engine.volumeGain.gain.value = 1;
-}
-
 export function setupVolumeBoost(): void {
 	try {
 		getAudioEngine();
