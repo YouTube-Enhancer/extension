@@ -18,7 +18,7 @@
     "build:locales": "node node_modules/ts-json-as-const/index.js public/locales/en-US.json",
     "lint:locales": "eslint --fix public/locales/en-US.json.d.ts",
     "lint:i18n": "eslint --fix src/i18n/constants.ts",
-    "build:post": "concurrently -k -s first \"npm:build:locales\" \"npm:lint:locales\" \"npm:lint:i18n\"",
+    "build:post": "npm run build:locales && concurrently \"npm:lint:locales\" \"npm:lint:i18n\"",
     "build:pre": "tsx src/pipeline/build.ts pre",
     "build:post-pipeline": "tsx src/pipeline/build.ts post",
     "build": "tsx src/pipeline/runBuilds.ts",
