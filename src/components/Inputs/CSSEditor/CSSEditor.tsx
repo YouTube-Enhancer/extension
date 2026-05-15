@@ -1,10 +1,12 @@
 import { type Monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
 
+import type { TFunction } from "@/src/pipeline/utils";
+
 import useDebounceFn from "@/src/hooks/useDebounce";
 import { type Nullable } from "@/src/types";
 import { type editor } from "@/src/utils/monaco";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import { editorOptions } from "./editorOptions";
 import EditorProblems from "./EditorProblems";
@@ -14,7 +16,9 @@ import ExpandButton from "./ExpandButton";
 export type CSSEditorProps = {
 	className?: string;
 	disabled: boolean;
+	disabledReason?: string;
 	onChange: (value: string) => void;
+	t?: TFunction;
 	value: string;
 };
 type ScrollPosition = {
@@ -24,7 +28,7 @@ type ScrollPosition = {
 
 // TODO: add share custom css button with integration with yt-enhancer.dev
 const Editor = React.lazy(() => import("@monaco-editor/react").then((module) => ({ default: module.Editor })));
-const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, value }) => {
+const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReason, onChange, t, value }) => {
 	const editorRef = useRef<Nullable<editor.IStandaloneCodeEditor>>(null);
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
@@ -95,7 +99,15 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 				"w-full flex flex-col": !state.isExpanded
 			})}
 		>
-			<ExpandButton isExpanded={state.isExpanded} onToggle={() => (state.isExpanded ? collapseEditor() : expandEditor())} ref={expandButtonRef} />
+			{disabled && disabledReason && (
+				<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">{disabledReason}</span>
+			)}
+			<ExpandButton
+				isExpanded={state.isExpanded}
+				onToggle={() => (state.isExpanded ? collapseEditor() : expandEditor())}
+				ref={expandButtonRef}
+				t={t}
+			/>
 			<Editor
 				className={cn("size-full grow", { "cursor-not-allowed pointer-events-none": disabled })}
 				height={state.isExpanded ? expandedEditorHeight : 400}
@@ -117,6 +129,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, onChange, va
 				editor={editorRef.current}
 				problems={state.problems}
 				ref={editorProblemsRef}
+				t={t}
 			/>
 		</div>
 	);

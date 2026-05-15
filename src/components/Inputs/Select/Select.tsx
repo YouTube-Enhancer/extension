@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 import type { configuration, configurationId, PathValue } from "@/src/types";
 
 import { useComponentVisible } from "@/hooks";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import Loader from "../../Loader";
 import Arrow from "../Number/Arrow";
@@ -19,6 +19,7 @@ export type SelectOption<Key extends configurationId> = {
 export type SelectProps<Key extends configurationId> = {
 	className?: string;
 	disabled?: boolean;
+	disabledReason?: string;
 	id: Key;
 	label: string;
 	loading?: boolean;
@@ -38,6 +39,7 @@ interface SelectOptionProps {
 const Select = <Key extends configurationId>({
 	className,
 	disabled = false,
+	disabledReason,
 	label,
 	loading = false,
 	onChange,
@@ -67,7 +69,7 @@ const Select = <Key extends configurationId>({
 			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={label}>
 				{label}
 			</label>
-			<div ref={selectRef}>
+			<div className="flex flex-col" ref={selectRef}>
 				<button
 					aria-expanded={isSelectVisible}
 					aria-haspopup="listbox"
@@ -135,6 +137,11 @@ const Select = <Key extends configurationId>({
 							</div>
 						))}
 					</div>
+				)}
+				{disabled && disabledReason && (
+					<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
+						{disabledReason}
+					</span>
 				)}
 			</div>
 		</div>

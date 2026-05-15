@@ -9,18 +9,19 @@ import "./index.css";
 
 import useClickOutside from "@/src/hooks/useClickOutside";
 import useDebounceFn from "@/src/hooks/useDebounce";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 export type ColorPickerProps = {
 	className?: string;
 	disabled: boolean;
+	disabledReason?: string;
 	label: string;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	title: string;
 	value: string;
 };
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, label, onChange, value }) => {
-	const handleChange = useDebounceFn((value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>), 200);
+const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, disabledReason, label, onChange, value }) => {
+	const handleColorChange = useDebounceFn((value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>), 200);
 	const colorPickerRef = useRef(null);
 	const { isComponentVisible: isColorPickerVisible, setIsComponentVisible: setIsColorPickerVisible } = useComponentVisible<HTMLDivElement>(
 		colorPickerRef,
@@ -41,7 +42,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, label, o
 			>
 				{label}
 			</label>
-			<div ref={colorPickerRef}>
+			<div className="flex flex-col" ref={colorPickerRef}>
 				<button
 					className={cn(
 						"flex h-10 w-40 items-center justify-between rounded-md border border-gray-300 bg-white p-1 text-black focus:outline-none dark:multi-['border-gray-700;bg-[#23272a];text-white']",
@@ -52,8 +53,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, label, o
 					type="button"
 				>
 					<div
-						// eslint-disable-next-line tailwindcss/enforces-shorthand
-						className="h-full w-full rounded-md border border-neutral-500"
+						className="size-full rounded-md border border-neutral-500"
 						style={{
 							backgroundColor: value
 						}}
@@ -61,16 +61,21 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, label, o
 				</button>
 				{isColorPickerVisible && (
 					<div className="z-10 mt-1 w-40 rounded-md border border-gray-300 bg-white shadow-lg dark:multi-['border-gray-700;bg-[#23272a]']">
-						<HexAlphaColorPicker color={value} onChange={handleChange} />
+						<HexAlphaColorPicker color={value} onChange={handleColorChange} />
 						<HexColorInput
 							alpha
 							className="!bg-white !text-black dark:multi-['!bg-[#23272a];!text-white']"
 							color={value}
 							id="color-picker-input"
-							onChange={handleChange}
+							onChange={handleColorChange}
 							prefixed
 						/>
 					</div>
+				)}
+				{disabled && disabledReason && (
+					<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
+						{disabledReason}
+					</span>
 				)}
 			</div>
 		</div>
