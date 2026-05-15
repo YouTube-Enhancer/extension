@@ -14,18 +14,20 @@ import {
 	timeStringToSeconds,
 	waitForAllElements
 } from "@/src/utils/utilities";
-const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.yt-page-header-view-model.yt-page-header-view-model--no-padding";
+const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelNoPadding";
 const CINEMATIC_HEADER_SELECTOR =
-	"yt-page-header-renderer yt-page-header-view-model.yt-page-header-view-model--cinematic-container-overflow-boundary";
-const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
-const selectFirstVisible = (...selectors: string[]) =>
-	selectors.map((s) => document.querySelector<HTMLElement>(s)).find((el) => el?.clientWidth ?? 0 > 0) || null;
+	"yt-page-header-renderer yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelCinematicContainerOverflowBoundary.ytPageHeaderViewModelDisplayAsSidebar .ytPageHeaderViewModelContent";
+const selectFirstWithWidth = (...selectors: string[]): HTMLElement | null => {
+	for (const selector of selectors) {
+		const elements = document.querySelectorAll<HTMLElement>(selector);
+		for (const el of elements) {
+			if ((el.clientWidth ?? 0) > 0) return el;
+		}
+	}
+	return null;
+};
 export const getHeaderSelectors = () => {
-	const playlistSelectors = [
-		IMMERSIVE_HEADER_SELECTOR,
-		NO_PADDING_HEADER_SELECTOR,
-		`${CINEMATIC_HEADER_SELECTOR} .yt-page-header-view-model__page-header-content`
-	];
+	const playlistSelectors = [NO_PADDING_HEADER_SELECTOR, CINEMATIC_HEADER_SELECTOR];
 	const playlist =
 		playlistSelectors.find((selector) => {
 			const el = document.querySelector<HTMLElement>(selector);
@@ -55,7 +57,7 @@ type WatchTimeParameters = {
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement) {
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist]);
-	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstVisible(playlist);
+	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstWithWidth(playlist);
 	if (!headerContents) return null;
 	document.querySelector("#yte-playlist-length-ui")?.remove();
 	headerContents.append(playlistLengthUIElement);
@@ -168,7 +170,7 @@ export async function getDataForPlaylistLengthUIElement({
 	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
 	return { totalTimeSeconds, watchedTimeSeconds };
 }
-export function getPlaylistId(): null | string {
+export function getPlaylistId(): Nullable<string> {
 	const playlistId = new URLSearchParams(window.location.search).get("list");
 	return playlistId;
 }
@@ -190,10 +192,14 @@ export async function initializePlaylistLength({
 	playlistWatchTimeGetMethod
 }: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
 	const { playlist, watch } = getHeaderSelectors();
-	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstVisible(playlist);
+	let headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstWithWidth(playlist);
+	if (!headerContents) {
+		headerContents = await waitForElement(isWatchPage() ? watch : playlist);
+	}
 	if (!headerContents) return null;
 	const videoElement = getVideoElement();
-	const playlistItemsElement = document.querySelector(playlistItemsSelector());
+	let playlistItemsElement = document.querySelector(playlistItemsSelector());
+	if (!playlistItemsElement) playlistItemsElement = await waitForElement(playlistItemsSelector());
 	if (!playlistItemsElement) return null;
 	const { playbackRate: playerSpeed = 1 } = videoElement || {};
 	const { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
@@ -210,7 +216,8 @@ export async function initializePlaylistLength({
 	);
 	await appendPlaylistLengthUIElement(element);
 	let updateTimeout: Nullable<number> = null;
-	let lastPlaylistLength: null | number = null;
+	let lastPlaylistLength: Nullable<number> = null;
+	let lastUpdate: Nullable<{ total: number; watched: number }> = null;
 	const debounceDelay = 300;
 	async function safeUpdate() {
 		const videoElement = getVideoElement();
@@ -230,9 +237,15 @@ export async function initializePlaylistLength({
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
+		const newTotal = Math.floor(data.totalTimeSeconds / playerSpeed);
+		const newWatched = Math.floor(data.watchedTimeSeconds / playerSpeed);
+		if (lastUpdate && lastUpdate.total === newTotal && lastUpdate.watched === newWatched) {
+			return;
+		}
+		lastUpdate = { total: newTotal, watched: newWatched };
 		update({
-			totalTimeSeconds: Math.floor(data.totalTimeSeconds / playerSpeed),
-			watchedTimeSeconds: Math.floor(data.watchedTimeSeconds / playerSpeed)
+			totalTimeSeconds: newTotal,
+			watchedTimeSeconds: newWatched
 		});
 	}
 	function debouncedUpdate() {
@@ -323,7 +336,7 @@ function getVideoDurationInSeconds(videoElement: Element): number {
 	if (!durationElement || !durationElement.textContent?.trim()) return 0;
 	return timeStringToSeconds(durationElement.textContent.trim());
 }
-function getVideoId(videoElement: Element): null | string {
+function getVideoId(videoElement: Element): Nullable<string> {
 	const videoIdElement = videoElement.querySelector<HTMLAnchorElement>("a#thumbnail");
 	if (!videoIdElement) return null;
 	const url = new URL(`https://youtube.com${videoIdElement.href}`);
