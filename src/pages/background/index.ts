@@ -49,7 +49,7 @@ function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString)
 	const [, newMinorVersion] = newVersion.split(".");
 	return oldMinorVersion !== newMinorVersion;
 }
-chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessages | DevToolsMessages["request"], _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessages | DevToolsMessages["request"], sender, sendResponse) => {
 	const { source, type } = message;
 
 	if (source === "devtools" && typeof type === "string" && type.startsWith("devtools_")) {
@@ -91,47 +91,46 @@ chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessag
 	const typedMessage = message as ContentToBackgroundSendOnlyMessages;
 	switch (typedMessage.type) {
 		case "pauseBackgroundPlayers": {
-			// Get the active tab's ID
-			chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
-				const [activeTab] = activeTabs;
-				const { id: activeTabId } = activeTab;
-				// Query all tabs except the active one
-				chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
-					for (const tab of tabs) {
-						// Skip the active tab
-						if (tab.id === activeTabId) continue;
-						if (tab.id !== undefined) {
-							chrome.scripting.executeScript(
-								{
-									func: () => {
-										const videos = document.querySelectorAll("video");
-										videos.forEach((video) => {
-											if (!video.paused) {
-												video.pause();
-											}
-										});
-										const audios = document.querySelectorAll("audio");
-										audios.forEach((audio) => {
-											if (!audio.paused) {
-												audio.pause();
-											}
-										});
-									},
-									target: { tabId: tab.id }
-								},
-								(results) => {
-									if (chrome.runtime.lastError) {
-										console.error(chrome.runtime.lastError.message);
-									} else {
-										if (results[0].result) {
-											console.log("[Background] Paused audios in tab:", { results: results[0].result, tabId: tab.id });
+			const senderTabId = sender.tab?.id;
+			chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
+				for (const tab of tabs) {
+					if (tab.id === senderTabId) continue;
+					if (tab.id !== undefined) {
+						chrome.scripting.executeScript(
+							{
+								func: () => {
+									const hasVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
+									const hasDocumentPiP =
+										"documentPictureInPicture" in window &&
+										!!(window as Window & { documentPictureInPicture?: { window: null | Window } }).documentPictureInPicture?.window;
+									if (hasVideoPiP || hasDocumentPiP) return;
+									const videos = document.querySelectorAll("video");
+									videos.forEach((video) => {
+										if (!video.paused) {
+											video.pause();
 										}
+									});
+									const audios = document.querySelectorAll("audio");
+									audios.forEach((audio) => {
+										if (!audio.paused) {
+											audio.pause();
+										}
+									});
+								},
+								target: { tabId: tab.id }
+							},
+							(results) => {
+								if (chrome.runtime.lastError) {
+									console.error(chrome.runtime.lastError.message);
+								} else {
+									if (results[0].result) {
+										console.log("[Background] Paused audios in tab:", { results: results[0].result, tabId: tab.id });
 									}
 								}
-							);
-						}
+							}
+						);
 					}
-				});
+				}
 			});
 			break;
 		}
