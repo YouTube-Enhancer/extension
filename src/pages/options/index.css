@@ -7,9 +7,9 @@ html > body {
 }
 body {
 	width: 90%;
-	min-width: 400px;
+	min-width: 540px;
 	max-width: 640px;
-	margin: 32px auto !important;
+	margin: 0px auto !important;
 }
 html > body > div#__root > div {
 	margin: auto;
