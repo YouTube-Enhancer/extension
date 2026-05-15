@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Dölj slutskärmskort",
 						"toggle": {
-							"off": "Visa slutskärmskort",
-							"on": "Dölj slutskärmskort"
+							"off": "Hide end screen cards",
+							"on": "Show end screen cards"
 						}
 					}
 				},
@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "på höger sida av spelarkontrollerna",
 								"value": "Höger kontroller"
+							},
+							"same": {
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}"
+						"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Inställningar för knapplacering"
 				},
@@ -286,6 +293,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
