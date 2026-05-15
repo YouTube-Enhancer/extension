@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Ocultar tarjetas de pantalla final",
 						"toggle": {
-							"off": "Mostrar tarjetas de pantalla final",
-							"on": "Ocultar tarjetas de pantalla final"
+							"off": "Ocultar tarjetas de pantalla final",
+							"on": "Mostrar tarjetas de pantalla final"
 						}
 					}
 				},
@@ -286,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "Esta opción no se puede activar mientras '{{OPTION}}' está habilitada.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {

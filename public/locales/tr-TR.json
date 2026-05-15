@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Bitiş ekranı kartlarını gizle",
 						"toggle": {
-							"off": "Bitiş ekranı kartlarını göster",
-							"on": "Bitiş ekranı kartlarını gizle"
+							"off": "Bitiş ekranı kartlarını gizle",
+							"on": "Bitiş ekranı kartlarını göster"
 						}
 					}
 				},
@@ -286,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {

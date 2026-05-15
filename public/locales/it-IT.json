@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Nascondi le schede finali",
 						"toggle": {
-							"off": "Mostra le schede finali",
-							"on": "Nascondi le schede finali"
+							"off": "Nascondi le schede finali",
+							"on": "Mostra le schede finali"
 						}
 					}
 				},
@@ -286,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "Questa opzione non può essere abilitata mentre '{{OPTION}}' è abilitato.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {

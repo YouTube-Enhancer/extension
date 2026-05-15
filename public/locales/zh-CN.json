@@ -54,8 +54,8 @@
 					"button": {
 						"label": "隐藏结束界面卡片",
 						"toggle": {
-							"off": "显示结束界面卡片",
-							"on": "隐藏结束界面卡片"
+							"off": "隐藏结束界面卡片",
+							"on": "显示结束界面卡片"
 						}
 					}
 				},
@@ -286,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
