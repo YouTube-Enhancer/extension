@@ -1,9 +1,11 @@
+import { storage } from "webextension-polyfill";
+
 import type { configuration } from "@/src/types";
 
-import { deepMerge } from "@/src/utils/utilities";
+import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+import { deepMerge } from "@/src/utils/config/utils";
 
-import { defaultConfiguration } from "./utils/constants";
-
+const defaultConfiguration = getDefaultConfiguration();
 /**
  * Sets default values for all settings in chrome storage and local storage.
  * If a setting doesn't exist in either chrome storage or local storage, it will be set to its default value.
@@ -14,10 +16,10 @@ import { defaultConfiguration } from "./utils/constants";
  * @returns A Promise that resolves with an object containing all the settings with their default values set.
  */
 export async function setDefaultValues(): Promise<configuration> {
-	const chromeStored = await chrome.storage.local.get();
+	const chromeStored = await storage.local.get();
 	const finalSettings = {} as configuration;
 	const chromeUpdates: Partial<configuration> = {};
-	for (const option of Object.keys(defaultConfiguration) as (keyof configuration)[]) {
+	for (const option of Object.keys(defaultConfiguration)) {
 		const { [option]: defaultValue } = defaultConfiguration;
 		const chromeValue = chromeStored?.[option as string];
 		let storedValue: unknown = null;
@@ -39,7 +41,7 @@ export async function setDefaultValues(): Promise<configuration> {
 	}
 	// Single storage writes instead of N writes
 	if (Object.keys(chromeUpdates).length) {
-		await chrome.storage.local.set(chromeUpdates);
+		await storage.local.set(chromeUpdates);
 	}
 	return finalSettings;
 }
@@ -53,4 +55,4 @@ function setSetting<K extends keyof configuration>(obj: configuration, key: K, v
 
 (async () => {
 	await setDefaultValues();
-})().catch(console.error);
+})().catch((err) => console.error("[defaults] Failed to set default values:", err));
