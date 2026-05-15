@@ -5,7 +5,7 @@ body.yte-hide-shorts-sidebar {
 	}
 }
 body.yte-hide-shorts-home {
-	ytd-rich-section-renderer:has([is-shorts]) {
+	ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has([is-shorts]) {
 		display: none !important;
 	}
 }
