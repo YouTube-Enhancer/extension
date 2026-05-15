@@ -1,3 +1,5 @@
+import type { configuration } from "@/src/types";
+
 import Setting from "@/src/components/Settings/components/Setting";
 import SettingSection from "@/src/components/Settings/components/SettingSection";
 import SettingTitle from "@/src/components/Settings/components/SettingTitle";
@@ -9,11 +11,12 @@ export default function FeatureMenuOpenTypeSection() {
 		settings,
 		setValueOption
 	} = useSettings();
+	const featureMenuAvailable = hasAnyFeatureMenuButton(settings);
 	return (
 		<SettingSection title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}>
 			<SettingTitle />
 			<Setting
-				disabled={Object.values(settings.buttonPlacement).every((v) => v !== "feature_menu")}
+				disabled={!featureMenuAvailable}
 				id="featureMenu.openType"
 				label={t((translations) => translations.pages.options.extras.featureMenu.openType.select.label)}
 				onChange={setValueOption("featureMenu.openType")}
@@ -31,4 +34,20 @@ export default function FeatureMenuOpenTypeSection() {
 			/>
 		</SettingSection>
 	);
+}
+function hasAnyFeatureMenuButton(settings: configuration): boolean {
+	for (const value of Object.values(settings)) {
+		if (typeof value !== "object" || value === null) continue;
+		// Single-button features
+		if ("button" in value) {
+			if (value.button?.placement === "feature_menu") return true;
+		}
+		// Multi-button features
+		if ("buttons" in value) {
+			for (const btn of Object.values(value.buttons ?? {})) {
+				if (btn.placement === "feature_menu") return true;
+			}
+		}
+	}
+	return false;
 }

@@ -1,43 +1,29 @@
 import type { ChangeEvent } from "react";
 
 import { useMutation, type UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import browser from "webextension-polyfill";
+
+import type { configuration, Nullable, Path, PathValue } from "@/src/types";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
-
-import type { configuration, Nullable, ParentType, Path, PathSegments, PathValue } from "@/src/types";
-
 import { useNotifications } from "@/hooks";
 import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
 import SettingsHeader from "@/src/components/Settings/components/SettingsHeader";
 import {
 	ButtonPlacementSection,
-	CustomCSSSection,
-	DeepDarkCSSSection,
 	FeatureMenuOpenTypeSection,
-	ForwardRewindButtonsSection,
-	GlobalVolumeSection,
-	HideShortsSection,
 	LanguageSettingsSection,
-	MiniPlayerSection,
-	MiscellaneousSection,
 	OnScreenDisplaySection,
-	PlayerQualitySection,
-	PlayerSpeedSection,
-	PlaylistLengthSection,
-	PlaylistManagementButtonsSection,
-	ScreenshotButtonSection,
-	ScrollWheelSpeedControlSection,
-	ScrollWheelVolumeControlSection,
-	VideoHistorySection,
-	VolumeBoostSection,
 	YouTubeDataApiKeySection
 } from "@/src/components/Settings/sections";
+import SettingsGenerator from "@/src/components/Settings/SettingsGenerator";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { localeDirection } from "@/src/i18n/constants";
-import { defaultConfiguration } from "@/src/utils/constants";
-import { getPathValue, parseStoredValue } from "@/src/utils/utilities";
+import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+import { parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
+import { getPathValue } from "@/src/utils/misc";
 
 import Loader from "../Loader";
 import Setting from "./components/Setting";
@@ -61,19 +47,19 @@ type StringPath<T> = {
 }[Path<T>];
 export function getSettings(): Promise<configuration> {
 	return new Promise((resolve, reject) => {
-		void chrome.storage.local.get<configuration>((settings) => {
+		const defaultConfiguration = getDefaultConfiguration();
+		void browser.storage.local.get(null).then((settings) => {
 			try {
 				const storedSettings: Partial<configuration> = Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key as unknown as string))
 					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
-				resolve(castedSettings);
+				return resolve(castedSettings);
 			} catch (error) {
 				if (error instanceof Error) {
-					reject(error);
+					return reject(error);
 				} else {
-					reject(new Error("unknown error"));
+					return reject(new Error("unknown error"));
 				}
 			}
 		});
@@ -87,15 +73,27 @@ export default function Settings() {
 	});
 	const settingsMutate = useMutation({
 		mutationFn: setSettings,
+		onError: (error) => {
+			console.error("Failed to save settings:", error);
+		},
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({
 				queryKey: ["settings"]
 			});
-			addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
+			const now = Date.now();
+			if (now - lastToastTime > 2000) {
+				addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
+				setLastToastTime(now);
+			}
 		}
 	});
+	const [lastToastTime, setLastToastTime] = useState(0);
 	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
 	const { addNotification } = useNotifications();
+	const settingsRef = useRef(settings);
+	useEffect(() => {
+		settingsRef.current = settings;
+	}, [settings]);
 	useEffect(() => {
 		if (settings && settings["language"]) {
 			void (async () => {
@@ -118,10 +116,11 @@ export default function Settings() {
 	): (event: ChangeEvent<HTMLInputElement>) => void;
 	function createOptionSetter<P extends Path<configuration>, E>(key: P, extractValue: (e: E) => PathValue<configuration, P>) {
 		return (event: E) => {
+			if (!settingsRef.current) return;
 			const nextValue = extractValue(event);
-			const currentValue = getPathValue(settings, key);
+			const currentValue = getPathValue(settingsRef.current, key);
 			if (currentValue === nextValue) return;
-			settingsMutate.mutate(updateConfigAtPath(settings!, key, nextValue));
+			settingsMutate.mutate(updateConfigAtPath(settingsRef.current, key, nextValue));
 		};
 	}
 	const setCheckboxOption = <P extends BooleanPath<configuration>>(key: P) =>
@@ -148,38 +147,28 @@ export default function Settings() {
 				setValueOption
 			}}
 		>
-			<div className="size-fit bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']" dir={localeDirection[settings.language]}>
+			<div
+				className="flex min-h-screen w-fit flex-col bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']"
+				dir={localeDirection[settings.language]}
+			>
 				<SettingsHeader />
-				<Setting
-					checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
-					label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
-					onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
-					parentSetting={null}
-					title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
-					type="checkbox"
-				></Setting>
-				<LanguageSettingsSection />
-				<FeatureMenuOpenTypeSection />
-				<ButtonPlacementSection />
-				<YouTubeDataApiKeySection />
-				<HideShortsSection />
-				<MiscellaneousSection />
-				<VideoHistorySection />
-				<OnScreenDisplaySection />
-				<ScrollWheelSpeedControlSection />
-				<ScrollWheelVolumeControlSection />
-				<PlayerQualitySection />
-				<PlayerSpeedSection />
-				<VolumeBoostSection />
-				<PlaylistManagementButtonsSection />
-				<ScreenshotButtonSection />
-				<ForwardRewindButtonsSection />
-				<PlaylistLengthSection />
-				<MiniPlayerSection />
-				<YouTubeDataApiKeySection />
-				<DeepDarkCSSSection />
-				<GlobalVolumeSection />
-				<CustomCSSSection />
+				<div className="flex-1 overflow-auto">
+					<Setting
+						checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
+						featureId="global"
+						label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
+						onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
+						parentSetting={null}
+						title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
+						type="checkbox"
+					/>
+					<LanguageSettingsSection />
+					<FeatureMenuOpenTypeSection />
+					<ButtonPlacementSection />
+					<YouTubeDataApiKeySection />
+					<OnScreenDisplaySection />
+					<SettingsGenerator />
+				</div>
 				<SettingsFooter />
 				<SettingsNotifications />
 			</div>
@@ -200,7 +189,7 @@ async function fetchSettings() {
 async function setSettings(newSettings: configuration) {
 	const current = await getSettings();
 	if (JSON.stringify(current) === JSON.stringify(newSettings)) return;
-	await chrome.storage.local.set(Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value])));
+	await browser.storage.local.set(Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value])));
 }
 
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);
@@ -211,22 +200,3 @@ export const useSettings = () => {
 	}
 	return context;
 };
-function updateConfigAtPath<P extends Path<configuration>>(state: configuration, key: P, nextValue: PathValue<configuration, P>): configuration {
-	type Segments = PathSegments<P>;
-	type Parent = ParentType<configuration, Segments>;
-	const keys = key.split(".") as unknown as Segments;
-	const updatedState: configuration = { ...state };
-	let parent: Parent | undefined = updatedState as Parent;
-	for (const k of keys.slice(0, -1)) {
-		if (typeof parent !== "object" || parent === null || !(k in parent)) {
-			return state;
-		}
-		parent = parent[k as keyof Parent] as Parent;
-	}
-	const lastKey = keys.at(-1);
-	if (!lastKey || typeof parent !== "object" || parent === null) {
-		return state;
-	}
-	parent[lastKey as keyof Parent] = nextValue as Parent[keyof Parent];
-	return updatedState;
-}
