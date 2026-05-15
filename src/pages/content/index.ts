@@ -52,20 +52,32 @@ if (DEV_MODE) {
 }
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
-		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = Object.keys(settings)
+		void browser.storage.local.get(null).then((settings) => {
+			const storedSettings = Object.keys(settings)
 				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {});
-			resolve(storedSettings as configuration);
+				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {}) as configuration;
+			return resolve(storedSettings);
 		});
 	});
 	return options;
 };
+const getStoredState = async (): Promise<{
+	[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
+}> => {
+	const stateKeys = metadataRegistry
+		.getAll()
+		.filter((feature) => feature.stateSchemaInput !== undefined)
+		.map((feature) => `state:${feature.id}` as const);
+	const result = await browser.storage.local.get(stateKeys);
+	const state = stateKeys.reduce((acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }), {}) as {
+		[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
+	};
+	return state;
+};
 void (async () => {
-	const options = await getStoredSettings();
-	void sendExtensionMessage("options", "data_response", { options });
+	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
+	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", { state })]);
 })();
-
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
  *
@@ -94,18 +106,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 				switch (message.type) {
 					case "extensionURL": {
 						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: chrome.runtime.getURL("")
-						});
-						break;
-					}
-					case "language": {
-						const language = await new Promise<AvailableLocales>((resolve) => {
-							chrome.storage.local.get("language", (o) => {
-								resolve(o.language as AvailableLocales);
-							});
-						});
-						void sendExtensionMessage("language", "data_response", {
-							language
+							extensionURL: browser.runtime.getURL("")
 						});
 						break;
 					}
@@ -115,33 +116,13 @@ document.addEventListener("yte-message-from-youtube", () => {
 						 *
 						 * @type {configuration}
 						 */
-						const options: configuration = await new Promise((resolve) => {
-							void chrome.storage.local.get<configuration>((settings) => {
-								const storedSettings: Partial<configuration> = Object.keys(settings)
-									.filter((key) => typeof key === "string")
-									.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
-									.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-								resolve(storedSettings as configuration);
-							});
-						});
+						const options: configuration = await getStoredSettings();
 						void sendExtensionMessage("options", "data_response", { options });
 						break;
 					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { id } = data;
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryOne", "data_response", {
-							video_history_entry: videoHistory[id]
-						});
+					case "state": {
+						const state = await getStoredState();
+						void sendExtensionMessage("state", "data_response", state);
 						break;
 					}
 				}
@@ -149,30 +130,25 @@ document.addEventListener("yte-message-from-youtube", () => {
 			}
 			case "send_data": {
 				switch (message.type) {
-					case "pageLoaded": {
-						chrome.storage.onChanged.addListener(storageListeners);
-						window.addEventListener("pagehide", () => {
-							chrome.storage.onChanged.removeListener(storageListeners);
+					case "featureStateUpdate": {
+						const {
+							data: { id, state }
+						} = message;
+						await browser.storage.local.set({
+							[`state:${id}`]: state
 						});
 						break;
 					}
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: { ...existingRememberedVolumes, ...message.data } });
+					case "pageLoaded": {
+						browser.storage.onChanged.addListener(storageListeners);
+						window.addEventListener("pagehide", () => {
+							browser.storage.onChanged.removeListener(storageListeners);
+						});
 						break;
 					}
 					case "setVolumeBoostAmount": {
-						void chrome.storage.local.set({ volume_boost_amount: message.data });
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { video_history_entry } = data;
-						if (!video_history_entry) return;
-						const { id, status, timestamp } = video_history_entry;
-						setVideoHistory(id, timestamp, status);
+						const { volumeBoost: existingVolumeBoost } = (await browser.storage.local.get("volumeBoost")) as configuration;
+						void browser.storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
 						break;
 					}
 				}
@@ -180,7 +156,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 		}
 	})();
 });
-const storageListeners = (changes: StorageChanges, areaName: string) => {
+const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
 	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
 	if (!changeKeys.length) return;
@@ -204,7 +180,7 @@ const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
 	if (change?.newValue === undefined || change?.oldValue === undefined) return false;
 	return !deepEqual(change.oldValue, change.newValue);
 };
-const castStorageChanges = (changes: StorageChanges) => {
+const castStorageChanges = (changes: StorageChanges<configuration>) => {
 	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
 	for (const [key, change] of Object.entries(changes)) {
 		if (key in defaultConfiguration) {
@@ -230,514 +206,23 @@ function getProp(obj: unknown, key: string): unknown {
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
 }
-const pathHandlers: {
-	[P in Path<configuration>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
+const changeHandlers: {
+	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
 } = {
-	"automaticallyDisableAmbientMode.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyDisableAmbientModeEnabled: newValue
-		}),
-		event: "automaticallyDisableAmbientModeChange"
-	},
-	"automaticallyDisableAutoPlay.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyDisableAutoPlayEnabled: newValue
-		}),
-		event: "automaticallyDisableAutoPlayChange"
-	},
-	"automaticallyDisableClosedCaptions.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyDisableClosedCaptionsEnabled: newValue
-		}),
-		event: "automaticallyDisableClosedCaptionsChange"
-	},
-	"automaticallyEnableClosedCaptions.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyEnableClosedCaptionsEnabled: newValue
-		}),
-		event: "automaticallyEnableClosedCaptionsChange"
-	},
-	"automaticallyMaximizePlayer.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyMaximizePlayerEnabled: newValue
-		}),
-		event: "automaticallyMaximizePlayerChange"
-	},
-	"automaticallyShowMoreVideosOnEndScreen.enabled": {
-		build: ({ newValue }) => ({
-			automaticallyShowMoreVideosOnEndScreenEnabled: newValue
-		}),
-		event: "automaticallyShowMoreVideosOnEndScreenChange"
-	},
-	"automaticTheaterMode.enabled": {
-		build: ({ newValue }) => ({
-			automaticTheaterModeEnabled: newValue
-		}),
-		event: "automaticTheaterModeChange"
-	},
-	"blockNumberKeySeeking.enabled": {
-		build: ({ newValue }) => ({
-			blockNumberKeySeekingEnabled: newValue
-		}),
-		event: "blockNumberKeySeekingChange"
-	},
-	buttonPlacement: {
-		build: ({ newValue, oldValue }) => ({
-			buttonPlacement: buttonNames.reduce(
-				(acc, feature) => {
-					const { [feature]: oldPlacement } = oldValue;
-					const { [feature]: newPlacement } = newValue;
-					return Object.assign(acc, {
-						[feature]: {
-							new: newPlacement,
-							old: oldPlacement
-						}
-					});
-				},
-				{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
-			)
-		}),
-		event: "buttonPlacementChange"
-	},
-	"copyTimestampUrlButton.enabled": {
-		build: ({ newValue }) => ({
-			copyTimestampUrlButtonEnabled: newValue
-		}),
-		event: "copyTimestampUrlButtonChange"
-	},
-	"customCSS.code": {
-		build: ({ newValue, options }) => ({
-			customCSSCode: newValue,
-			customCSSEnabled: options.customCSS.enabled
-		}),
-		event: "customCSSChange"
-	},
-	"customCSS.enabled": {
-		build: ({ newValue, options }) => ({
-			customCSSCode: options.customCSS.code,
-			customCSSEnabled: newValue
-		}),
-		event: "customCSSChange"
-	},
-	"deepDarkCSS.colors": {
-		build: ({ newValue, options }) => ({
-			deepDarkCustomThemeColors: newValue,
-			deepDarkPreset: options.deepDarkCSS.preset,
-			deepDarkThemeEnabled: options.deepDarkCSS.enabled
-		}),
-		event: "deepDarkThemeChange"
-	},
-	"deepDarkCSS.enabled": {
-		build: ({ newValue, options }) => ({
-			deepDarkCustomThemeColors: options.deepDarkCSS.colors,
-			deepDarkPreset: options.deepDarkCSS.preset,
-			deepDarkThemeEnabled: newValue
-		}),
-		event: "deepDarkThemeChange"
-	},
-	"deepDarkCSS.preset": {
-		build: ({ newValue, options }) => ({
-			deepDarkCustomThemeColors: options.deepDarkCSS.colors,
-			deepDarkPreset: newValue,
-			deepDarkThemeEnabled: options.deepDarkCSS.enabled
-		}),
-		event: "deepDarkThemeChange"
-	},
-	"defaultToOriginalAudioTrack.enabled": {
-		build: ({ newValue }) => ({
-			defaultToOriginalAudioTrackEnabled: newValue
-		}),
-		event: "defaultToOriginalAudioTrackChange"
-	},
 	"featureMenu.openType": {
 		build: ({ newValue }) => ({
 			featureMenuOpenType: newValue
 		}),
 		event: "featureMenuOpenTypeChange"
 	},
-	"flipVideoButtons.flipHorizontal.enabled": {
-		build: ({ newValue }) => ({
-			flipVideoHorizontalButtonEnabled: newValue
-		}),
-		event: "flipVideoHorizontalButtonChange"
-	},
-	"flipVideoButtons.flipVertical.enabled": {
-		build: ({ newValue }) => ({
-			flipVideoVerticalButtonEnabled: newValue
-		}),
-		event: "flipVideoVerticalButtonChange"
-	},
-	"forwardRewindButtons.enabled": {
-		build: ({ newValue }) => ({
-			forwardRewindButtonsEnabled: newValue
-		}),
-		event: "forwardRewindButtonsChange"
-	},
-	"forwardRewindButtons.time": {
-		build: () => ({
-			forwardRewindButtonsEnabled: true
-		}),
-		event: "forwardRewindButtonsChange"
-	},
-	"globalVolume.enabled": {
-		build: ({ newValue }) => ({
-			globalVolumeEnabled: newValue
-		}),
-		event: "globalVolumeChange"
-	},
-	"hideArtificialIntelligenceSummary.enabled": {
-		build: ({ newValue }) => ({
-			hideArtificialIntelligenceSummaryEnabled: newValue
-		}),
-		event: "hideArtificialIntelligenceSummaryChange"
-	},
-	"hideEndScreenCards.enabled": {
-		build: ({ newValue, options }) => ({
-			hideEndScreenCardsButtonPlacement: options.buttonPlacement["hideEndScreenCardsButton"],
-			hideEndScreenCardsEnabled: newValue
-		}),
-		event: "hideEndScreenCardsChange"
-	},
-	"hideEndScreenCardsButton.enabled": {
-		build: ({ newValue }) => ({
-			hideEndScreenCardsButtonEnabled: newValue
-		}),
-		event: "hideEndScreenCardsButtonChange"
-	},
-	"hideLiveStreamChat.enabled": {
-		build: ({ newValue }) => ({
-			hideLiveStreamChatEnabled: newValue
-		}),
-		event: "hideLiveStreamChatChange"
-	},
-	"hideMembersOnlyVideos.enabled": {
-		build: ({ newValue }) => ({
-			hideMembersOnlyVideosEnabled: newValue
-		}),
-		event: "hideMembersOnlyVideosChange"
-	},
-	"hideOfficialArtistVideosFromHomePage.enabled": {
-		build: ({ newValue }) => ({
-			hideOfficialArtistVideosFromHomePageEnabled: newValue
-		}),
-		event: "hideOfficialArtistVideosFromHomePageChange"
-	},
-	"hidePaidPromotionBanner.enabled": {
-		build: ({ newValue }) => ({
-			hidePaidPromotionBannerEnabled: newValue
-		}),
-		event: "hidePaidPromotionBannerChange"
-	},
-	"hidePlayables.enabled": {
-		build: ({ newValue }) => ({
-			hidePlayablesEnabled: newValue
-		}),
-		event: "hidePlayablesChange"
-	},
-	"hidePlaylistRecommendationsFromHomePage.enabled": {
-		build: ({ newValue }) => ({
-			hidePlaylistRecommendationsFromHomePageEnabled: newValue
-		}),
-		event: "hidePlaylistRecommendationsFromHomePageChange"
-	},
-	"hidePosts.enabled": {
-		build: ({ newValue }) => ({
-			hidePostsEnabled: newValue
-		}),
-		event: "hidePostsChange"
-	},
-	"hideScrollBar.enabled": {
-		build: ({ newValue }) => ({
-			hideScrollBarEnabled: newValue
-		}),
-		event: "hideScrollBarChange"
-	},
-	"hideShorts.channel.enabled": {
-		build: ({ newValue, options }) => ({
-			enableHideShortsChannel: newValue,
-			enableHideShortsHome: options.hideShorts.home.enabled,
-			enableHideShortsSearch: options.hideShorts.search.enabled,
-			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
-			enableHideShortsVideos: options.hideShorts.videos.enabled
-		}),
-		event: "hideShortsChange"
-	},
-	"hideShorts.home.enabled": {
-		build: ({ newValue, options }) => ({
-			enableHideShortsChannel: options.hideShorts.channel.enabled,
-			enableHideShortsHome: newValue,
-			enableHideShortsSearch: options.hideShorts.search.enabled,
-			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
-			enableHideShortsVideos: options.hideShorts.videos.enabled
-		}),
-		event: "hideShortsChange"
-	},
-	"hideShorts.search.enabled": {
-		build: ({ newValue, options }) => ({
-			enableHideShortsChannel: options.hideShorts.channel.enabled,
-			enableHideShortsHome: options.hideShorts.home.enabled,
-			enableHideShortsSearch: newValue,
-			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
-			enableHideShortsVideos: options.hideShorts.videos.enabled
-		}),
-		event: "hideShortsChange"
-	},
-	"hideShorts.sidebar.enabled": {
-		build: ({ newValue, options }) => ({
-			enableHideShortsChannel: options.hideShorts.channel.enabled,
-			enableHideShortsHome: options.hideShorts.home.enabled,
-			enableHideShortsSearch: options.hideShorts.search.enabled,
-			enableHideShortsSidebar: newValue,
-			enableHideShortsVideos: options.hideShorts.videos.enabled
-		}),
-		event: "hideShortsChange"
-	},
-	"hideShorts.videos.enabled": {
-		build: ({ newValue, options }) => ({
-			enableHideShortsChannel: options.hideShorts.channel.enabled,
-			enableHideShortsHome: options.hideShorts.home.enabled,
-			enableHideShortsSearch: options.hideShorts.search.enabled,
-			enableHideShortsSidebar: options.hideShorts.sidebar.enabled,
-			enableHideShortsVideos: newValue
-		}),
-		event: "hideShortsChange"
-	},
-	"hideSidebarRecommendedVideos.enabled": {
-		build: ({ newValue }) => ({
-			hideSidebarRecommendedVideosEnabled: newValue
-		}),
-		event: "hideSidebarRecommendedVideosChange"
-	},
-	"hideTranslateComment.enabled": {
-		build: ({ newValue }) => ({
-			hideTranslateCommentEnabled: newValue
-		}),
-		event: "hideTranslateCommentChange"
-	},
 	language: {
 		build: ({ newValue }) => ({
 			language: newValue
 		}),
 		event: "languageChange"
-	},
-	"loopButton.enabled": {
-		build: ({ newValue }) => ({
-			loopButtonEnabled: newValue
-		}),
-		event: "loopButtonChange"
-	},
-	"maximizePlayerButton.enabled": {
-		build: ({ newValue }) => ({
-			maximizePlayerButtonEnabled: newValue
-		}),
-		event: "maximizeButtonChange"
-	},
-	"miniPlayer.defaultPosition": {
-		build: ({ newValue, options }) => ({
-			defaultPosition: newValue,
-			defaultSize: options.miniPlayer.defaultSize
-		}),
-		event: "miniPlayerDefaultsChange"
-	},
-	"miniPlayer.defaultSize": {
-		build: ({ newValue, options }) => ({
-			defaultPosition: options.miniPlayer.defaultPosition,
-			defaultSize: newValue
-		}),
-		event: "miniPlayerDefaultsChange"
-	},
-	"miniPlayer.enabled": {
-		build: ({ newValue }) => ({
-			miniPlayerEnabled: newValue
-		}),
-		event: "commentsMiniPlayerChange"
-	},
-	"miniPlayerButton.enabled": {
-		build: ({ newValue }) => ({
-			miniPlayerButtonEnabled: newValue
-		}),
-		event: "miniPlayerButtonChange"
-	},
-	"monoToStereoButton.enabled": {
-		build: ({ newValue }) => ({
-			monoToStereoButtonEnabled: newValue
-		}),
-		event: "monoToStereoButtonChange"
-	},
-	"openTranscriptButton.enabled": {
-		build: ({ newValue }) => ({
-			openTranscriptButtonEnabled: newValue
-		}),
-		event: "openTranscriptButtonChange"
-	},
-	"openYouTubeSettingsOnHover.enabled": {
-		build: ({ newValue }) => ({
-			openYouTubeSettingsOnHoverEnabled: newValue
-		}),
-		event: "openYTSettingsOnHoverChange"
-	},
-	"pauseBackgroundPlayers.enabled": {
-		build: ({ newValue }) => ({
-			pauseBackgroundPlayersEnabled: newValue
-		}),
-		event: "pauseBackgroundPlayersChange"
-	},
-	"playbackSpeedButtons.enabled": {
-		build: ({ newValue, options }) => ({
-			playbackButtonsSpeed: options.playbackSpeedButtons.speed,
-			playbackSpeedButtonsEnabled: newValue
-		}),
-		event: "playbackSpeedButtonsChange"
-	},
-	"playbackSpeedButtons.speed": {
-		build: ({ newValue, options }) => ({
-			playbackButtonsSpeed: newValue,
-			playbackSpeedButtonsEnabled: options.playbackSpeedButtons.enabled
-		}),
-		event: "playbackSpeedButtonsChange"
-	},
-	"playerSpeed.enabled": {
-		build: ({ newValue, options }) => ({
-			enableForcedPlaybackSpeed: newValue,
-			playerSpeed: options.playerSpeed.speed
-		}),
-		event: "playerSpeedChange"
-	},
-	"playerSpeed.speed": {
-		build: ({ newValue, options }) => ({
-			enableForcedPlaybackSpeed: options.playerSpeed.enabled,
-			playerSpeed: newValue
-		}),
-		event: "playerSpeedChange"
-	},
-	"playlistLength.enabled": {
-		build: ({ newValue }) => ({
-			playlistLengthEnabled: newValue
-		}),
-		event: "playlistLengthChange"
-	},
-	"playlistLength.lengthGetMethod": {
-		build: () => undefined,
-		event: "playlistLengthGetMethodChange"
-	},
-	"playlistLength.watchTimeGetMethod": {
-		build: () => undefined,
-		event: "playlistWatchTimeGetMethodChange"
-	},
-	"playlistManagementButtons.removeButton.enabled": {
-		build: ({ newValue }) => ({
-			playlistRemoveButtonEnabled: newValue
-		}),
-		event: "playlistRemoveButtonChange"
-	},
-	"playlistManagementButtons.resetButton.enabled": {
-		build: ({ newValue }) => ({
-			playlistResetButtonEnabled: newValue
-		}),
-		event: "playlistResetButtonChange"
-	},
-	"remainingTime.enabled": {
-		build: ({ newValue }) => ({
-			remainingTimeEnabled: newValue
-		}),
-		event: "remainingTimeChange"
-	},
-	"rememberVolume.enabled": {
-		build: ({ newValue }) => ({
-			rememberVolumeEnabled: newValue
-		}),
-		event: "rememberVolumeChange"
-	},
-	"removeRedirect.enabled": {
-		build: ({ newValue }) => ({
-			removeRedirectEnabled: newValue
-		}),
-		event: "removeRedirectChange"
-	},
-	"restoreFullscreenScrolling.enabled": {
-		build: ({ newValue }) => ({
-			restoreFullscreenScrollingEnabled: newValue
-		}),
-		event: "restoreFullscreenScrollingChange"
-	},
-	"saveToWatchLaterButton.enabled": {
-		build: ({ newValue }) => ({
-			saveToWatchLaterButtonEnabled: newValue
-		}),
-		event: "saveToWatchLaterButtonChange"
-	},
-	"screenshotButton.enabled": {
-		build: ({ newValue }) => ({
-			screenshotButtonEnabled: newValue
-		}),
-		event: "screenshotButtonChange"
-	},
-	"scrollWheelSpeedControl.enabled": {
-		build: ({ newValue }) => ({
-			scrollWheelSpeedControlEnabled: newValue
-		}),
-		event: "scrollWheelSpeedControlChange"
-	},
-	"scrollWheelVolumeControl.enabled": {
-		build: ({ newValue }) => ({
-			scrollWheelVolumeControlEnabled: newValue
-		}),
-		event: "scrollWheelVolumeControlChange"
-	},
-	"shareShortener.enabled": {
-		build: ({ newValue }) => ({
-			shareShortenerEnabled: newValue
-		}),
-		event: "shareShortenerChange"
-	},
-	"shortsAutoScroll.enabled": {
-		build: ({ newValue }) => ({
-			shortsAutoScrollEnabled: newValue
-		}),
-		event: "shortsAutoScrollChange"
-	},
-	"skipContinueWatching.enabled": {
-		build: ({ newValue }) => ({
-			skipContinueWatchingEnabled: newValue
-		}),
-		event: "skipContinueWatchingChange"
-	},
-	"timestampPeek.enabled": {
-		build: ({ newValue }) => ({
-			timestampPeekEnabled: newValue
-		}),
-		event: "timestampPeekChange"
-	},
-	"videoHistory.enabled": {
-		build: ({ newValue }) => ({
-			videoHistoryEnabled: newValue
-		}),
-		event: "videoHistoryChange"
-	},
-	"volumeBoost.amount": {
-		build: ({ options }) => ({
-			volumeBoostEnabled: options.volumeBoost.enabled,
-			volumeBoostMode: options.volumeBoost.mode
-		}),
-		event: "volumeBoostChange"
-	},
-	"volumeBoost.enabled": {
-		build: ({ newValue, options }) => ({
-			volumeBoostEnabled: newValue,
-			volumeBoostMode: options.volumeBoost.mode
-		}),
-		event: "volumeBoostChange"
-	},
-	"volumeBoost.mode": {
-		build: ({ newValue, options }) => ({
-			volumeBoostEnabled: options.volumeBoost.enabled,
-			volumeBoostMode: newValue
-		}),
-		event: "volumeBoostChange"
 	}
 };
-
-function emitPathEvent<P extends keyof typeof pathHandlers>({
+function emitPathEvent<P extends keyof typeof changeHandlers>({
 	newValue,
 	oldValue,
 	options,
@@ -748,29 +233,64 @@ function emitPathEvent<P extends keyof typeof pathHandlers>({
 	options: configuration;
 	path: P;
 }): void {
-	const { [path]: def } = pathHandlers;
+	const { [path]: def } = changeHandlers;
 	if (!def) return;
 
 	sendExtensionOnlyMessage(def.event, def.build({ newValue, oldValue, options, path }));
 }
-const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
+const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
 	if (areaName !== "local") return;
-
 	const castedChanges = castStorageChanges(changes);
 	const options = await getStoredSettings();
+	const featureUpdates = new Map<FeatureKeys, { configChanged: boolean; stateChanged: boolean }>();
 	handleConfigChanges(castedChanges, ({ newValue, oldValue, path }) => {
-		emitPathEvent({ newValue, oldValue, options, path });
+		const rootKey = getRootKey(path);
+		if (isFeatureKey(rootKey)) {
+			let entry = featureUpdates.get(rootKey);
+			if (!entry) {
+				entry = { configChanged: false, stateChanged: false };
+				featureUpdates.set(rootKey, entry);
+			}
+			entry.configChanged = true;
+			if ((path.endsWith(".enabled") && typeof newValue === "boolean") || path.endsWith(".placement")) {
+				entry.stateChanged = true;
+			}
+		}
+		emitPathEvent({
+			newValue,
+			oldValue,
+			options,
+			path
+		});
 	});
+	for (const [feature, update] of featureUpdates) {
+		const { [feature]: config } = options;
+		if (update.configChanged) {
+			sendExtensionOnlyMessage("featureConfigChange", {
+				config,
+				id: feature
+			});
+		}
+		if (update.stateChanged) {
+			sendExtensionOnlyMessage("featureEnabledStateChange", {
+				config,
+				enabled: resolveEnabled(config),
+				id: feature
+			});
+		}
+	}
 };
-type ConfigPathChange<P extends keyof typeof pathHandlers> = {
+type ConfigPathChange<P extends keyof typeof changeHandlers> = {
 	newValue: PathValue<configuration, P>;
 	oldValue: PathValue<configuration, P>;
 	path: P;
 };
-
+function getRootKey(path: string): keyof configuration {
+	return path.split(".")[0] as keyof configuration;
+}
 function handleConfigChanges(
 	changes: Partial<Record<keyof configuration, chrome.storage.StorageChange>>,
-	handler: <P extends keyof typeof pathHandlers>(change: ConfigPathChange<P>) => void
+	handler: <P extends keyof typeof changeHandlers>(change: ConfigPathChange<P>) => void
 ): void {
 	for (const rootKey of Object.keys(changes)) {
 		const { [rootKey]: change } = changes;
@@ -782,16 +302,24 @@ function handleConfigChanges(
 		const walk = (oldObj: unknown, newObj: unknown, path: string): void => {
 			if (deepEqual(oldObj, newObj)) return;
 
-			handler({
-				newValue: newObj as PathValue<configuration, keyof typeof pathHandlers>,
-				oldValue: oldObj as PathValue<configuration, keyof typeof pathHandlers>,
-				path: path as keyof typeof pathHandlers
-			});
+			const isObject = typeof newObj === "object" && newObj !== null;
+			const isOldObject = typeof oldObj === "object" && oldObj !== null;
 
-			if (typeof newObj !== "object" || newObj === null) return;
+			// leaf-only: call handler only if at least one side is non-object
+			if (!isObject || !isOldObject) {
+				handler({
+					newValue: newObj as PathValue<configuration, keyof typeof changeHandlers>,
+					oldValue: oldObj as PathValue<configuration, keyof typeof changeHandlers>,
+					path: path as keyof typeof changeHandlers
+				});
+				return;
+			}
 
-			for (const key of Object.keys(newObj)) {
-				walk(getProp(oldObj, key), newObj[key], `${path}.${key}`);
+			// combine keys to handle added/removed properties
+			const keys = new Set([...Object.keys(newObj as Record<string, unknown>), ...Object.keys(oldObj as Record<string, unknown>)]);
+
+			for (const key of keys) {
+				walk(getProp(oldObj, key), getProp(newObj, key), `${path}.${key}`);
 			}
 		};
 
