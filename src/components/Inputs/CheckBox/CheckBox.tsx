@@ -1,6 +1,6 @@
 import React, { type ChangeEvent, useId } from "react";
 
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import { useSettings } from "../../Settings/Settings";
 

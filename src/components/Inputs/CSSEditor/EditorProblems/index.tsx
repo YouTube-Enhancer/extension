@@ -1,20 +1,21 @@
 import { forwardRef } from "react";
 
+import type { TFunction } from "@/src/pipeline/utils";
+
 import { useSettings } from "@/src/components/Settings/Settings";
 import { type Nullable } from "@/src/types";
 import { type editor, MarkerSeverity } from "@/src/utils/monaco";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import "./index.css";
 type EditorProblemsProps = {
 	className: string;
 	editor: Nullable<editor.IStandaloneCodeEditor>;
 	problems: editor.IMarker[];
+	t?: TFunction;
 };
-const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ className, editor, problems }, ref) => {
-	const {
-		i18nInstance: { t }
-	} = useSettings();
+const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ className, editor, problems, t: tProp }, ref) => {
+	const t = tProp ?? useSettings().i18nInstance.t;
 	const getIcon = (severity: MarkerSeverity) => {
 		switch (severity) {
 			case MarkerSeverity.Error:

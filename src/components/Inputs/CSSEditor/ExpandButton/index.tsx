@@ -1,15 +1,17 @@
 import { forwardRef } from "react";
 
+import type { TFunction } from "@/src/pipeline/utils";
+
 import { useSettings } from "@/src/components/Settings/Settings";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
+
 type ExpandButtonProps = {
 	isExpanded: boolean;
 	onToggle: () => void;
+	t?: TFunction;
 };
-const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpanded, onToggle }, ref) => {
-	const {
-		i18nInstance: { t }
-	} = useSettings();
+const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpanded, onToggle, t: tProp }, ref) => {
+	const t = tProp ?? useSettings().i18nInstance.t;
 	const buttonValue = t((translations) =>
 		isExpanded ? translations.settings.sections.customCSS.extras.collapse : translations.settings.sections.customCSS.extras.expand
 	);
