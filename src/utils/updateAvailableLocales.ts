@@ -16,7 +16,7 @@ function updateAvailableLocalesArray(code: string, updatedArray: string[]) {
 	const match = code.match(/export\s+const\s+availableLocales\s*=\s*\[([^\]]*)\]\s*as\s*const\s*;/);
 	if (match) {
 		const [, oldArrayPart] = match;
-		const newArrayPart = JSON.stringify(updatedArray, null, 2).replace(/^\[|\]$/g, "");
+		const newArrayPart = JSON.stringify(updatedArray, null, "\t").replace(/^\[|\]$/g, "");
 		return code.replace(oldArrayPart, newArrayPart);
 	} else {
 		return null;
