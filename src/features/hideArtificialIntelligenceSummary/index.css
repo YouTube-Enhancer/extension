@@ -1,6 +1,9 @@
 body.yte-hide-ai-summary {
 	& #expandable-metadata [has-video-summary],
-	div#video-summary [has-video-summary] {
+	div#video-summary [has-video-summary],
+	yt-button-view-model .you-chat-entrypoint-button,
+	yt-player-quick-action-buttons .you-chat-entrypoint-button,
+	ytd-engagement-panel-section-list-renderer[target-id='PAyouchat'] {
 		display: none !important;
 	}
 }
