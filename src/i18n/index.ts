@@ -1,11 +1,17 @@
 import { createInstance, type Resource } from "i18next";
 
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
-
-import { waitForSpecificMessage } from "../utils/utilities";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
+// Store the initialized i18n instance
+let i18nInstance: i18nInstanceType | null = null;
 export async function i18nService(locale: AvailableLocales = "en-US") {
+	// Return the existing instance if already initialized
+	if (i18nInstance) {
+		return i18nInstance;
+	}
+
 	let extensionURL;
 	const {
 		location: { hostname }
@@ -29,7 +35,7 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 		}
 	});
 	const translations = (await response.json()) as typeof import("../../public/locales/en-US.json");
-	const i18nextInstance = await new Promise<i18nInstanceType>((resolve, reject) => {
+	const instance = await new Promise<i18nInstanceType>((resolve, reject) => {
 		const resources: {
 			[k in AvailableLocales]?: {
 				translation: typeof import("../../public/locales/en-US.json");
@@ -37,8 +43,8 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 		} = {
 			[locale]: { translation: translations }
 		};
-		const instance = createInstance();
-		void instance.init(
+		const i18nextInstance = createInstance();
+		void i18nextInstance.init(
 			{
 				debug: true,
 				fallbackLng: "en-US",
@@ -53,9 +59,11 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 				if (err && err instanceof Error) reject(err);
 				else if (err && typeof err === "string") reject(new Error(err));
 				else if (err) reject(new Error("unknown error"));
-				else resolve(instance);
+				else resolve(i18nextInstance);
 			}
 		);
 	});
-	return i18nextInstance;
+
+	i18nInstance = instance;
+	return i18nInstance;
 }

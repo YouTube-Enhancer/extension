@@ -5,8 +5,9 @@ import path from "node:path";
 import { object, string } from "zod";
 
 import type { NewTranslationStruct, OldTranslationStruct } from "@/src/i18n/types";
+import type { Nullable } from "@/src/types";
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | null | number | string | undefined ?
+	[K in keyof T]: T[K] extends boolean | Nullable<number> | string | undefined ?
 		undefined extends T[K] ?
 			ZodOptional<ZodType<Exclude<T[K], undefined>>>
 		:	ZodType<T[K]>
