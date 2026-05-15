@@ -7,6 +7,13 @@ import { sendContentToBackgroundMessage } from "@/src/utils/messaging";
 import { metadata } from "./index.metadata";
 
 const PauseBackgroundPlayers = () => {
+	if (document.hidden) {
+		const isInVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
+		const isInDocumentPiP =
+			"documentPictureInPicture" in window &&
+			!!(window as Window & { documentPictureInPicture?: { window: null | Window } }).documentPictureInPicture?.window;
+		if (!isInVideoPiP && !isInDocumentPiP) return;
+	}
 	sendContentToBackgroundMessage("pauseBackgroundPlayers").catch((error) => {
 		throw new Error(`Failed to pause background players: ${error}`);
 	});
@@ -29,8 +36,10 @@ export default createFeature({
 		if (!videoPlayerContainer) {
 			videoPlayerContainer = document.querySelector(".html5-main-video");
 		}
+		let listenersAttached = false;
 		function detectPlaying() {
-			if (videoPlayerContainer) {
+			if (videoPlayerContainer && !listenersAttached) {
+				listenersAttached = true;
 				videoPlayerContainer.addEventListener("playing", PauseBackgroundPlayers);
 			}
 		}
