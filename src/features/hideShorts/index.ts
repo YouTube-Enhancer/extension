@@ -1,36 +1,49 @@
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { applyShortsVisibility } from "@/src/features/hideShorts/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
 
 import "./index.css";
+import { metadata } from "./index.metadata";
 
-export function disableHideShorts(): void {
-	applyShortsVisibility({
-		channel: false,
-		home: false,
-		search: false,
-		sidebar: false,
-		videos: false
-	});
-}
-export async function enableHideShorts(): Promise<void> {
-	const {
-		data: {
-			options: {
-				hideShorts: {
-					channel: { enabled: channel },
-					home: { enabled: home },
-					search: { enabled: search },
-					sidebar: { enabled: sidebar },
-					videos: { enabled: videos }
-				}
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	applyShortsVisibility({
-		channel,
-		home,
-		search,
-		sidebar,
-		videos
-	});
-}
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "home", "search", "channel_home"] },
+	onConfigChange: ({
+		channel: { enabled: channel },
+		home: { enabled: home },
+		search: { enabled: search },
+		sidebar: { enabled: sidebar },
+		videos: { enabled: videos }
+	}) => {
+		applyShortsVisibility({
+			channel,
+			home,
+			search,
+			sidebar,
+			videos
+		});
+	},
+	onDisable: () => {
+		applyShortsVisibility({
+			channel: false,
+			home: false,
+			search: false,
+			sidebar: false,
+			videos: false
+		});
+	},
+	onEnable: ({
+		channel: { enabled: channel },
+		home: { enabled: home },
+		search: { enabled: search },
+		sidebar: { enabled: sidebar },
+		videos: { enabled: videos }
+	}) => {
+		applyShortsVisibility({
+			channel,
+			home,
+			search,
+			sidebar,
+			videos
+		});
+	}
+});

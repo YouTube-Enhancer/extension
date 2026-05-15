@@ -1,8 +1,16 @@
-import type { VideoHistoryStatus, VideoHistoryStorage } from "@/src/types";
-export function getVideoHistory() {
-	return JSON.parse(window.localStorage.getItem("videoHistory") ?? "{}") as VideoHistoryStorage;
+import type { FeatureStateAPI } from "@/src/features/_registry/types";
+
+import type { VideoHistoryStatus, VideoHistoryStorage } from "./types";
+
+export function getVideoHistory(stateAPI: FeatureStateAPI<"videoHistory">): VideoHistoryStorage {
+	return stateAPI.getState()?.storage ?? {};
 }
-export function setVideoHistory(id: string, timestamp: number, status: VideoHistoryStatus) {
-	const history = getVideoHistory();
-	window.localStorage.setItem("videoHistory", JSON.stringify(Object.assign(history, { [id]: { id, status, timestamp } })));
+
+export function setVideoHistory(id: string, timestamp: number, status: VideoHistoryStatus, stateAPI: FeatureStateAPI<"videoHistory">) {
+	stateAPI.setState((prev) => ({
+		storage: {
+			...prev?.storage,
+			[id]: { id, status, timestamp }
+		}
+	}));
 }

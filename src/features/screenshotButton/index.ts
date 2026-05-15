@@ -1,11 +1,13 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { type Nullable } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip } from "@/src/utils/dom/tooltip";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
+
+import { metadata } from "./index.metadata";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -51,7 +53,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				}, 1200);
 			} catch (err) {
 				remove();
-				console.log(err);
+				console.error("[screenshotButton] Failed to copy screenshot to clipboard:", err);
 			}
 		};
 
@@ -75,43 +77,43 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 	} catch (_error) {}
 }
 
-export const addScreenshotButton: AddButtonFunction = async () => {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				buttonPlacement: { screenshotButton: screenshotButtonPlacement },
-				screenshotButton: { enabled }
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement } }) => {
+				// Add a click event listener to the screenshot button
+				function screenshotButtonClickListener() {
+					void (async () => {
+						// Get the video element
+						const videoElement = document.querySelector<HTMLVideoElement>("video");
+						// If video element is not available, return
+						if (!videoElement) return;
+						try {
+							// Take a screenshot
+							await takeScreenshot(videoElement);
+						} catch (error) {
+							console.error("[screenshotButton] Failed to take screenshot:", error);
+						}
+					})();
+				}
+				await addFeatureButton(
+					"screenshotButton",
+					placement,
+					window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
+					getFeatureIcon("screenshotButton", placement),
+					screenshotButtonClickListener,
+					false,
+					false,
+					fullscreenPlacement
+				);
+			},
+			name: "screenshotButton",
+			remove: async (placement) => {
+				await removeFeatureButton("screenshotButton", placement);
+				eventManager.removeEventListeners("screenshotButton");
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the screenshot button option is disabled, return
-	if (!enabled) return;
-	// Add a click event listener to the screenshot button
-	function screenshotButtonClickListener() {
-		void (async () => {
-			// Get the video element
-			const videoElement = document.querySelector<HTMLVideoElement>("video");
-			// If video element is not available, return
-			if (!videoElement) return;
-			try {
-				// Take a screenshot
-				await takeScreenshot(videoElement);
-			} catch (error) {
-				console.error(error);
-			}
-		})();
-	}
-	await addFeatureButton(
-		"screenshotButton",
-		screenshotButtonPlacement,
-		window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
-		getFeatureIcon("screenshotButton", screenshotButtonPlacement),
-		screenshotButtonClickListener,
-		false
-	);
-};
-export const removeScreenshotButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("screenshotButton", placement);
-	eventManager.removeEventListeners("screenshotButton");
-};
+	],
+	dependencies: { includePages: ["watch", "live"] }
+});

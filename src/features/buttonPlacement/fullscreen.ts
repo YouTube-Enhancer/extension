@@ -18,7 +18,7 @@ export function startFullscreenObserver(callback: () => void) {
 		});
 		fullscreenObserver.observe(target, { attributeFilter: ["fullscreen"], attributes: true });
 	}
-	document.addEventListener("fullscreenchange", onFullscreenChange);
+	document.addEventListener("fullscreenchange", onFullscreenChange, { passive: true });
 }
 
 export function stopFullscreenObserver() {

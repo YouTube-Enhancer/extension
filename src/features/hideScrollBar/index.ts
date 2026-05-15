@@ -1,18 +1,26 @@
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
 
-import { hideScrollBar } from "./utils";
+import { metadata } from "./index.metadata";
 
-export async function enableHideScrollBar() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				hideScrollBar: { enabled }
-			}
+export default createFeature({
+	...metadata,
+	onDisable: () => {
+		const style = document.getElementById("yte-hide-scroll-bar");
+		if (style) style.remove();
+	},
+	onEnable: () => {
+		if (document.getElementById("yte-hide-scroll-bar")) return;
+		const style = document.createElement("style");
+		style.textContent = `
+		::-webkit-scrollbar {
+			width: 0px;
+			height: 0px;
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the hide scroll bar option is disabled, return
-	if (!enabled) return;
-	if (document.getElementById("yte-hide-scroll-bar")) return;
-	hideScrollBar();
-}
+		html {
+			scrollbar-width: none;
+		}
+	`;
+		style.id = "yte-hide-scroll-bar";
+		document.head.appendChild(style);
+	}
+});

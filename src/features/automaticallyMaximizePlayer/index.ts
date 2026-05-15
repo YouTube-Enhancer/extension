@@ -1,17 +1,11 @@
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { maximizePlayer, minimizePlayer } from "@/src/features/maximizePlayerButton/utils";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
 
-export function disableAutomaticallyMaximizePlayer() {
-	minimizePlayer();
-}
-export async function enableAutomaticallyMaximizePlayer() {
-	const {
-		data: {
-			options: {
-				automaticallyMaximizePlayer: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	maximizePlayer();
-}
+import { metadata } from "./index.metadata";
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "live"] },
+	onDisable: minimizePlayer,
+	onEnable: maximizePlayer
+});

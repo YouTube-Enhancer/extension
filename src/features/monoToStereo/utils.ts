@@ -14,8 +14,8 @@ export function disableMonoToStereo(): void {
 	engine.source.disconnect();
 
 	engine.source.connect(engine.volumeGain);
-
-	engine.input = engine.source;
+	const { source } = engine;
+	engine.input = source;
 	engine.monoEnabled = false;
 	enabled = false;
 

@@ -1,24 +1,23 @@
-import { modifyElementClassList, waitForSpecificMessage } from "@/src/utils/utilities";
-
 import "./index.css";
 
-export function disableHideTranslateComment() {
-	modifyElementClassList("remove", {
-		className: "yte-hide-translate-comment",
-		element: document.body
-	});
-}
-export async function enableHideTranslateComment() {
-	const {
-		data: {
-			options: {
-				hideTranslateComment: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	modifyElementClassList("add", {
-		className: "yte-hide-translate-comment",
-		element: document.body
-	});
-}
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
+
+import { metadata } from "./index.metadata";
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: () => {
+		modifyElementClassList("remove", {
+			className: "yte-hide-translate-comment",
+			element: document.body
+		});
+	},
+	onEnable: () => {
+		modifyElementClassList("add", {
+			className: "yte-hide-translate-comment",
+			element: document.body
+		});
+	}
+});

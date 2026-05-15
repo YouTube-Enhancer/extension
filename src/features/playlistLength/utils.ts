@@ -2,18 +2,16 @@ import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVide
 
 import { Innertube } from "youtubei.js/web";
 
-import type { Nullable, PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod, VideoDetails } from "@/src/types";
+import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
+import type { Nullable, VideoDetails } from "@/src/types";
 
-import eventManager from "@/src/utils/EventManager";
-import {
-	conditionalStyles,
-	createStyledElement,
-	formatDuration,
-	isNewYouTubeVideoLayout,
-	isWatchPage,
-	timeStringToSeconds,
-	waitForAllElements
-} from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { createStyledElement } from "@/src/utils/dom/elements";
+import { playlistItemsSelector } from "@/src/utils/dom/selectors";
+import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
+import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
+import { conditionalStyles } from "@/src/utils/style";
+import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelNoPadding";
 const CINEMATIC_HEADER_SELECTOR =
 	"yt-page-header-renderer yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelCinematicContainerOverflowBoundary.ytPageHeaderViewModelDisplayAsSidebar .ytPageHeaderViewModelContent";
@@ -40,8 +38,6 @@ export const getHeaderSelectors = () => {
 
 	return { playlist, watch } as const satisfies { playlist: string; watch: string };
 };
-export const playlistItemsSelector = () =>
-	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
 export type PlaylistLengthParameters = {
 	pageType: PageType;
 	playlistLengthGetMethod: PlaylistLengthGetMethod;

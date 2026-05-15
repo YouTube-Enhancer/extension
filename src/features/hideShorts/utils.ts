@@ -1,4 +1,4 @@
-import { modifyElementClassList } from "@/src/utils/utilities";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
 
 export type ShortsSection = "channel" | "home" | "search" | "sidebar" | "videos";
 

@@ -1,6 +1,7 @@
 import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
 
+import eventManager from "@/src/events/EventManager";
 import {
 	type AllButtonNames,
 	type FeatureMenuItemIconId,
@@ -11,9 +12,8 @@ import {
 	type SingleButtonFeatureNames,
 	type WithId
 } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { findKeyByValue, waitForElement } from "@/src/utils/utilities";
-
+import { waitForElement } from "@/src/utils/dom/wait";
+import { findKeyByValue } from "@/src/utils/feature";
 export const featuresInMenu = new Set<AllButtonNames>();
 const MENU_ID = "#yte-feature-menu";
 const PANEL_ID = "#yte-panel-menu";
@@ -138,10 +138,6 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 		const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
 		if (featureMenuButton) featureMenuButton.style.display = "none";
 	}
-}
-export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: string) {
-	const featureMenuItemLabel = getFeatureMenuItemLabel(buttonName);
-	if (featureMenuItemLabel) featureMenuItemLabel.textContent = label;
 }
 /**
  *	Updates the title for the feature menu button.

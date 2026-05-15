@@ -1,4 +1,6 @@
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+
+import { metadata } from "./index.metadata";
 
 const keydownHandler = (event: KeyboardEvent): void => {
 	const target = event.target as HTMLElement | null;
@@ -10,19 +12,9 @@ const keydownHandler = (event: KeyboardEvent): void => {
 		event.preventDefault();
 	}
 };
-
-export function disableBlockNumberKeySkip() {
-	document.removeEventListener("keydown", keydownHandler, { capture: true });
-}
-
-export async function enableBlockNumberKeySkip() {
-	const {
-		data: {
-			options: {
-				blockNumberKeySeeking: { enabled }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enabled) return;
-	document.addEventListener("keydown", keydownHandler, { capture: true });
-}
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "live"] },
+	onDisable: () => document.removeEventListener("keydown", keydownHandler, { capture: true }),
+	onEnable: () => document.addEventListener("keydown", keydownHandler, { capture: true })
+});
