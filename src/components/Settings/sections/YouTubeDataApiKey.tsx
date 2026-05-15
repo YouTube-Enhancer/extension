@@ -3,7 +3,7 @@ import Setting from "@/src/components/Settings/components/Setting";
 import SettingSection from "@/src/components/Settings/components/SettingSection";
 import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 export default function YouTubeDataApiKeySection() {
 	const {

@@ -6,7 +6,7 @@ import Setting, { type parentSetting } from "@/src/components/Settings/component
 import SettingSection from "@/src/components/Settings/components/SettingSection";
 import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 export default function OnScreenDisplaySection() {
 	const {
@@ -98,14 +98,16 @@ export default function OnScreenDisplaySection() {
 			value: "center"
 		}
 	];
-	// FIXME: Update to be configurable when volume boost button is enabled or just allow configuration always
 	const isOSDDisabled =
-		settings.scrollWheelVolumeControl.enabled?.toString() !== "true" && settings.scrollWheelSpeedControl.enabled?.toString() !== "true";
+		settings.scrollWheelVolumeControl.enabled?.toString() !== "true" &&
+		settings.scrollWheelSpeedControl.enabled?.toString() !== "true" &&
+		(settings.volumeBoost.enabled?.toString() !== "true" || settings.volumeBoost.mode !== "per_video");
 	const osdParentSetting = {
 		type: "either",
 		value: [
 			(translations) => translations.settings.sections.scrollWheelVolumeControl.enable.label,
-			(translations) => translations.settings.sections.scrollWheelSpeedControl.enable.label
+			(translations) => translations.settings.sections.scrollWheelSpeedControl.enable.label,
+			(translations) => translations.settings.sections.volumeBoost.enable.label
 		]
 	} satisfies parentSetting;
 	return (
