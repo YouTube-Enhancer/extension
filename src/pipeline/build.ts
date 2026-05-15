@@ -1,25 +1,40 @@
 import { config } from "dotenv";
 
-import checkLocalesForMissingKeys from "../utils/checkLocalesForMissingKeys";
-import { emptyOutputFolder } from "../utils/plugins/utils";
-import updateAvailableLocales from "../utils/updateAvailableLocales";
-import updateLocalePercentages from "../utils/updateLocalePercentages";
-import copyOutputs from "./steps/copyOutputs";
-import generateManifests from "./steps/generateManifests";
-import makeReleaseZips from "./steps/makeReleaseZips";
+import checkLocalesForMissingKeys from "@/src/i18n/checkLocalesForMissingKeys";
+import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
+import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
+import { emptyOutputFolder } from "@/src/utils/plugins/utils";
+
+import { copyOutputs, generateManifests, makeReleaseZips, updateReadmeFeatures } from "./steps";
 
 config();
 
 const command = process.argv[2] || "all";
 
-export async function runPostBuildPipeline(): Promise<void> {
+export async function runPostBuildPipeline(retries = 3): Promise<void> {
 	console.log("[Build Pipeline] Running post-build steps...");
 	const start = Date.now();
-	await timedStep("Generating manifests", () => generateManifests());
-	await timedStep("Copying outputs", () => copyOutputs());
-	await timedStep("Creating release ZIPs", () => makeReleaseZips());
-	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
-	console.log(`[Build Pipeline] Post-build complete! (${elapsed}s total)`);
+
+	let lastError: Error | null = null;
+	for (let attempt = 1; attempt <= retries; attempt++) {
+		try {
+			await timedStep("Generating manifests", () => generateManifests());
+			await timedStep("Copying outputs", () => copyOutputs());
+			await timedStep("Updating README features", () => updateReadmeFeatures());
+			await timedStep("Creating release ZIPs", () => makeReleaseZips());
+			const elapsed = ((Date.now() - start) / 1000).toFixed(2);
+			console.log(`[Build Pipeline] Post-build complete! (${elapsed}s total)`);
+			return;
+		} catch (err) {
+			lastError = err as Error;
+			console.error(`[Build Pipeline] Attempt ${attempt}/${retries} failed:`, lastError.message);
+			if (attempt < retries) {
+				console.log("[Build Pipeline] Retrying in 2 seconds...");
+				await new Promise((resolve) => setTimeout(resolve, 2000));
+			}
+		}
+	}
+	throw new Error(lastError?.message ?? "Unknown error");
 }
 
 export async function runPreBuildPipeline(): Promise<void> {
