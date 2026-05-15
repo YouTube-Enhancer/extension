@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 import { manifestV2, manifestV3 } from "../../manifest";
-import terminalColorLog from "../../utils/log";
+import terminalColorLog from "../../utils/logging";
 import { browsers, outDir } from "../../utils/plugins/utils";
 
 export default function generateManifests(): void {

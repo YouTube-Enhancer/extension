@@ -1,7 +1,7 @@
 import { existsSync, rmSync } from "fs";
 import { resolve } from "path";
 
-import terminalColorLog from "../../utils/log";
+import terminalColorLog from "../../utils/logging";
 import { browsers, copyDirectorySync, outDir, publicDir } from "../../utils/plugins/utils";
 
 export default function copyOutputs(): void {
