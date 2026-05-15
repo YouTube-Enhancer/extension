@@ -9,6 +9,7 @@ import {
 	conditionalStyles,
 	createStyledElement,
 	formatDuration,
+	IsDarkMode,
 	isNewYouTubeVideoLayout,
 	isWatchPage,
 	timeStringToSeconds,
@@ -71,8 +72,8 @@ export function createPlaylistLengthUIElement(
 		elementId: "yte-playlist-length-ui",
 		elementType: "div",
 		styles: {
-			backgroundColor: "var(--yt-spec-additive-background)",
-			border: "1px solid var(--yt-spec-outline)",
+			backgroundColor: "var(--yt-spec-additive-background, rgba(255, 255, 255, 0.1))",
+			border: `1px solid var(--yt-spec-outline, ${IsDarkMode() || pageType !== "watch" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"})`,
 			borderRadius: "10px",
 			height: "48px",
 			marginBottom: "10px",
@@ -94,14 +95,18 @@ export function createPlaylistLengthUIElement(
 	const watchedProgressBar = createStyledElement({
 		elementId: "yte-playlist-length-ui-watchedProgressBar",
 		elementType: "div",
-		styles: { backgroundColor: "#9E2A2A", borderRadius: "8px", height: "100%" }
+		styles: {
+			backgroundColor: pageType === "watch" ? "var(--yt-active-playlist-panel-background-color)" : "#9E2A2A",
+			borderRadius: "8px",
+			height: "100%"
+		}
 	});
 	const videoTimeDisplay = createStyledElement({
 		elementId: "yte-playlist-length-ui-times",
 		elementType: "div",
 		styles: {
 			bottom: "15px",
-			color: pageType === "watch" ? "var(--yt-spec-text-primary)" : "var(--yt-spec-overlay-text-primary)",
+			color: pageType === "watch" && IsDarkMode() ? "white" : "",
 			fontSize: "15px",
 			marginLeft: "19px",
 			position: "absolute"
@@ -116,7 +121,7 @@ export function createPlaylistLengthUIElement(
 			border: "1px solid var(--yt-spec-outline)",
 			borderRadius: "6px",
 			bottom: "0px",
-			color: pageType === "watch" ? "var(--yt-spec-text-primary)" : "var(--yt-spec-overlay-text-primary)",
+			color: pageType === "watch" && IsDarkMode() ? "white" : "",
 			fontSize: "15px",
 			padding: "4px 8px",
 			position: "absolute",
