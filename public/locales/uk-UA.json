@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Приховати картки наприкінці відео",
 						"toggle": {
-							"off": "Показати картки наприкінці відео",
-							"on": "Приховати картки наприкінці відео"
+							"off": "Приховати картки наприкінці відео",
+							"on": "Показати картки наприкінці відео"
 						}
 					}
 				},
@@ -286,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
