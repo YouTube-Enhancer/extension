@@ -1,6 +1,6 @@
-import type { AllButtonNames, ButtonPlacement } from "./types";
+import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 
-import { createSVGElement } from "./utils/utilities";
+import { createSVGElement } from "@/src/utils/dom/elements";
 export type BasicIcon = SVGSVGElement;
 export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export const toggleFeatures = Object.keys({

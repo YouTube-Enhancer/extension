@@ -3,7 +3,7 @@ import { type ReactElement, useEffect, useState } from "react";
 import type { Notification, Nullable } from "@/src/types";
 
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
-import { isNotStrictEqual } from "@/src/utils/utilities";
+import { isNotStrictEqual } from "@/src/utils/predicate";
 
 import {
 	type AddNotification,
@@ -49,7 +49,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		setNotifications((notifications) => notifications.filter(isNotStrictEqual(notification)));
 	};
 	useEffect(() => {
-		let animationFrameId: null | number = null;
+		let animationFrameId: Nullable<number> = null;
 		const updateNotifications = () => {
 			const now = Date.now();
 			setNotifications((prevNotifications) => {

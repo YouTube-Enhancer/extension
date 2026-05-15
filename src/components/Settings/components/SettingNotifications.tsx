@@ -4,7 +4,7 @@ import type { i18nInstanceType } from "@/src/i18n";
 import type { Notification } from "@/src/types";
 
 import { useNotifications } from "@/src/hooks";
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import { useSettings } from "../Settings";
 export default function SettingsNotifications() {
