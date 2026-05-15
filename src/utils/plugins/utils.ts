@@ -3,7 +3,7 @@ import { GetInstalledBrowsers } from "get-installed-browsers";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 
-import type { AvailableLocales } from "@/src/i18n/constants";
+import type { AvailableLocales } from "../../i18n/constants";
 
 import { outputFolderName } from "../../../src/utils/constants";
 export type LocaleFile = {
