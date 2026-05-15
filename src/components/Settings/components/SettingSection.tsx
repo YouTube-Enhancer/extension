@@ -1,20 +1,23 @@
 import { SectionTitleProvider } from "@/src/hooks/useSectionTitle/provider";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
+import { textMatcher } from "@/src/utils/string";
 
 interface SettingSectionProps {
 	children: React.ReactNode[];
 	className?: string;
+	featureIds?: string[];
 	title: string;
 }
-export default function SettingSection({ children, className = "", title: sectionTitle }: SettingSectionProps) {
+
+export default function SettingSection({ children, className = "", featureIds = [], title: sectionTitle }: SettingSectionProps) {
 	const { filter } = useSettingsFilter();
+	const matchesText = textMatcher(filter);
 	const shouldSectionBeVisible =
 		filter === "" ||
-		(sectionTitle && sectionTitle.toLowerCase().includes(filter.toLowerCase())) ||
-		(children as React.ReactElement<{ label?: string; title?: string }>[]).some((child) => {
-			const { label, title } = child.props ?? {};
-			if (!label || !title) return false;
-			return label.toLowerCase().includes(filter.toLowerCase()) || title.toLowerCase().includes(filter.toLowerCase());
+		featureIds.some((id) => matchesText(id)) ||
+		(children as React.ReactElement<{ featureId?: string; label?: string; title?: string }>[]).some((child) => {
+			const { featureId, label, title } = child.props ?? {};
+			return matchesText(featureId ?? "") || matchesText(label ?? "") || matchesText(title ?? "");
 		});
 	return shouldSectionBeVisible ?
 			<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
