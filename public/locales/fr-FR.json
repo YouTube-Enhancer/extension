@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Hide end screen cards",
 						"toggle": {
-							"off": "Show end screen cards",
-							"on": "Hide end screen cards"
+							"off": "Hide end screen cards",
+							"on": "Show end screen cards"
 						}
 					}
 				},
@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "on the right side of player controls",
 								"value": "Right Controls"
+							},
+							"same": {
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Button placement settings"
 				},
@@ -286,6 +293,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
