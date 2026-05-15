@@ -1,29 +1,11 @@
-import type { Nullable, OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType, YouTubePlayerDiv } from "../types";
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { DisplayOptions, Value, ValueType } from "@/src/ui/OnScreenDisplayManager/types";
 
-import { browserColorLog, calculateCanvasPosition, clamp, createStyledElement, isShortsPage, round } from "./utilities";
-
-export type DisplayOptions = {
-	displayColor: OnScreenDisplayColor;
-	displayHideTime: number;
-	displayOpacity: number;
-	displayPadding: number;
-	displayPosition: OnScreenDisplayPosition;
-	displayType: OnScreenDisplayType;
-	playerContainer: Nullable<YouTubePlayerDiv>;
-};
-
-export const valueType = {
-	Speed: "speed",
-	Volume: "volume",
-	VolumeBoostDB: "volume_boost_db"
-} as const;
-type Value<V extends ValueType> = {
-	max: number;
-	type: V;
-	value: number;
-};
-
-type ValueType = (typeof valueType)[keyof typeof valueType];
+import { createStyledElement } from "@/src/utils/dom/elements";
+import { browserColorLog } from "@/src/utils/logging";
+import { clamp, round } from "@/src/utils/math";
+import { calculateCanvasPosition } from "@/src/utils/style";
+import { isShortsPage } from "@/src/utils/url";
 
 export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePlayerDiv>): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {
