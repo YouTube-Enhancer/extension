@@ -1,22 +1,25 @@
-import type { AvailableLocales } from "@/src/i18n/constants";
+import browser from "webextension-polyfill";
 
-import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import type { CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, FeatureState, NonFeatureKeys } from "@/src/features/_registry/types";
+
+import { invalidateDevToolsCache } from "@/src/components/devtools/hooks/useDevToolsQuery";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistry";
 import {
-	type AllButtonNames,
-	buttonNames,
-	type ButtonPlacement,
 	type configuration,
-	type ContentSendOnlyMessageMappings,
-	type ContentToBackgroundSendOnlyMessageMappings,
+	type ContentSendOnlyMessages,
+	type ContentToBackgroundSendOnlyMessages,
 	type ExtensionSendOnlyMessageMappings,
 	type Messages,
 	type Path,
 	type PathValue,
-	type RememberedVolumes,
 	type StorageChanges
 } from "@/src/types";
-import { defaultConfiguration } from "@/src/utils/constants";
-import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
+import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+import { DEV_MODE } from "@/src/utils/config/env";
+import { sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
+import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
+const defaultConfiguration = getDefaultConfiguration();
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
@@ -32,6 +35,21 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
+if (DEV_MODE) {
+	setupContentScriptBridge();
+	const seenKeys = new Set<string>();
+	browser.storage.onChanged.addListener((changes, areaName) => {
+		if (areaName !== "local") return;
+		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
+		if (!keys.length) return;
+		for (const key of keys) {
+			if (seenKeys.has(key)) continue;
+			seenKeys.add(key);
+			setTimeout(() => seenKeys.delete(key), 2000);
+		}
+		void invalidateDevToolsCache(keys);
+	});
+}
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		void chrome.storage.local.get<configuration>((settings) => {
@@ -61,18 +79,15 @@ document.addEventListener("yte-message-from-youtube", () => {
 		if (!stringifiedMessage) return;
 		let message;
 		try {
-			message = JSON.parse(stringifiedMessage) as
-				| ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings]
-				| ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]
-				| Messages["request"];
+			message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"];
 		} catch (error) {
-			console.error(error);
+			console.error("[ContentScript] Failed to parse incoming message:", error);
 			return;
 		}
 		if (!message) return;
 		switch (message.action) {
 			case "request_action": {
-				await chrome.runtime.sendMessage(message);
+				await browser.runtime.sendMessage(message);
 				break;
 			}
 			case "request_data": {
