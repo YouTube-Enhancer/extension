@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import browser from "webextension-polyfill";
 
 export type StorageArea = "local" | "sync";
 
@@ -17,7 +18,7 @@ type SetValue<T> = Dispatch<SetStateAction<T>>;
  */
 export async function readStorage<T>(key: string, area: StorageArea = "local"): Promise<T | undefined> {
 	try {
-		const result = await chrome.storage[area].get(key);
+		const result = await browser.storage[area].get(key);
 		return result?.[key] as T;
 	} catch (error) {
 		console.warn(`Error reading ${area} storage key "${key}":`, error);
@@ -34,7 +35,7 @@ export async function readStorage<T>(key: string, area: StorageArea = "local"): 
  */
 export async function setStorage<T>(key: string, value: T, area: StorageArea = "local"): Promise<boolean> {
 	try {
-		await chrome.storage[area].set({ [key]: value });
+		await browser.storage[area].set({ [key]: value });
 		return true;
 	} catch (error) {
 		console.warn(`Error setting ${area} storage key "${key}":`, error);
@@ -53,8 +54,8 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 				if (res) return setStoredValue(res);
 				return;
 			})
-			.catch((err) => console.error(err));
-		chrome.storage.onChanged.addListener((changes, namespace) => {
+			.catch((err) => console.error("[useStorage] Failed to read storage key:", { area, error: err, key }));
+		browser.storage.onChanged.addListener((changes, namespace) => {
 			if (namespace === area && Object.hasOwnProperty.call(changes, key)) {
 				if (changes[key].newValue) setStoredValue(changes[key].newValue as unknown as T);
 			}
@@ -70,7 +71,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 					if (!success) setStoredValue(prevState);
 					return;
 				})
-				.catch((error) => console.error(error));
+				.catch((error) => console.error("[useStorage] Failed to persist storage value:", { area, error, key }));
 			return newValue;
 		});
 	});
