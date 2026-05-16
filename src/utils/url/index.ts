@@ -22,7 +22,9 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 			return null;
 		}
 		const [first, second] = extractSectionsFromYouTubeURL(window.location.href);
-		if (first === undefined) return "home";
+		if (first === undefined) {
+			return window.location.pathname === "/" ? "home" : null;
+		}
 		if (first === "results") return "search";
 		if (first === "playlist") return "playlist";
 		if (first === "shorts") return "shorts";
@@ -40,7 +42,7 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 			}
 			return "watch";
 		}
-		return "home";
+		return null;
 	} catch {
 		return null;
 	}
