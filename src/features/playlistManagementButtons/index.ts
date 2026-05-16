@@ -41,7 +41,7 @@ export default createFeature({
 		});
 	},
 	onEnable: async ({ removeButton: { enabled: enable_playlist_remove_button }, resetButton: { enabled: enable_playlist_reset_button } }) => {
-		if (!document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")) {
+		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)"))) {
 			return;
 		}
 
