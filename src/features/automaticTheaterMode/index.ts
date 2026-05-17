@@ -1,6 +1,7 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { theaterModeButtonPathD } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { isNewYouTubeVideoLayout } from "@/src/utils/url";
+import { getLayoutType } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 export default createFeature({
@@ -11,8 +12,9 @@ export default createFeature({
 		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 		// If the size button is not available return
 		if (!sizeButton) return;
+		const layoutType = getLayoutType();
 		const inTheaterMode =
-			document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
+			document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
 		if (inTheaterMode) {
 			sizeButton.click();
 		}
@@ -22,8 +24,9 @@ export default createFeature({
 		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 		// If the size button is not available return
 		if (!sizeButton) return;
+		const layoutType = getLayoutType();
 		const inTheaterMode =
-			document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
+			document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
 		if (!inTheaterMode) {
 			sizeButton.click();
 		}

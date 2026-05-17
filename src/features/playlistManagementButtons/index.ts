@@ -50,7 +50,7 @@ export default createFeature({
 	},
 	onDisable: cleanupPlaylistManagementButtons,
 	onEnable: async ({ removeButton: { enabled: enable_playlist_remove_button }, resetButton: { enabled: enable_playlist_reset_button } }) => {
-		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)"))) {
+		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)", 2500, "optional"))) {
 			return;
 		}
 
