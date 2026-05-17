@@ -87,7 +87,7 @@ export function createPlaylistLengthUIElement(
 			...conditionalStyles({
 				condition: pageType === "playlist",
 				left: "50%",
-				marginTop: "10px",
+				marginTop: "24px",
 				width: "99%"
 			})
 		}
