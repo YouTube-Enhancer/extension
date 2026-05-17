@@ -4,7 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
+import { isLivePage, isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -23,7 +23,7 @@ export default createFeature({
 		if (!featureMenu) return;
 		// Get the player element
 		const playerContainer =
-			isWatchPage() ?
+			isWatchPage() || isLivePage() ?
 				await waitForElement<HTMLDivElement>(
 					isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
 				)
