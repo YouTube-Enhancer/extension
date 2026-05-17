@@ -1,50 +1,15 @@
-import type { Nullable } from "@/src/types";
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
+import { type Nullable } from "@/src/types";
+import { playlistItemsSelector } from "@/src/utils/dom/selectors";
+import { isWatchPage } from "@/src/utils/url";
 
-import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
-
-import { getHeaderSelectors, initializePlaylistLength, playlistItemsSelector, type PlaylistLengthParameters } from "./utils";
+import { metadata } from "./index.metadata";
+import { initializePlaylistLength, type PlaylistLengthParameters } from "./utils";
 let documentObserver: Nullable<MutationObserver> = null;
 let resizeObserver: Nullable<ResizeObserver> = null;
-export function disablePlaylistLength() {
-	eventManager.removeEventListeners("playlistLength");
-	documentObserver?.disconnect();
-	documentObserver = null;
-	resizeObserver?.disconnect();
-	resizeObserver = null;
-	document.querySelector("#yte-playlist-length-ui")?.remove();
-}
-export async function enablePlaylistLength() {
-	const isWatchPageFlag = isWatchPage();
-	const {
-		data: {
-			options: {
-				enable_playlist_length,
-				playlist_length_get_method: playlistLengthGetMethod,
-				playlist_watch_time_get_method: playlistWatchTimeGetMethod
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_playlist_length) return;
-	if (!document.querySelector(playlistItemsSelector())) return;
-	const { playlist, watch } = getHeaderSelectors();
-	await waitForAllElements([isWatchPageFlag ? watch : playlist, playlistItemsSelector()]);
-	const pageType = isWatchPageFlag ? "watch" : "playlist";
-	documentObserver = await initPlaylistLength({
-		pageType,
-		playlistLengthGetMethod,
-		playlistWatchTimeGetMethod
-	});
-	resizeObserver?.disconnect();
-	resizeObserver = new ResizeObserver(async () => {
-		documentObserver = await initPlaylistLength({
-			pageType,
-			playlistLengthGetMethod,
-			playlistWatchTimeGetMethod
-		});
-	});
-	resizeObserver.observe(document.documentElement);
-}
+
 async function initPlaylistLength({
 	pageType,
 	playlistLengthGetMethod,
@@ -57,13 +22,64 @@ async function initPlaylistLength({
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		});
-	} catch {
-		return playlistLengthGetMethod === "html" ? null : (
-				initPlaylistLength({
-					pageType,
-					playlistLengthGetMethod: "html",
-					playlistWatchTimeGetMethod
-				})
-			);
+	} catch (e) {
+		console.warn("[playlistLength] Failed to initialize with primary method, falling back to HTML method:", e);
+		if (playlistLengthGetMethod === "html") return null;
+
+		return initPlaylistLength({
+			pageType,
+			playlistLengthGetMethod: "html",
+			playlistWatchTimeGetMethod
+		});
 	}
 }
+
+function observePlaylistItems(params: PlaylistLengthParameters) {
+	const selector = playlistItemsSelector();
+	documentObserver?.disconnect();
+	documentObserver = new MutationObserver(() => {
+		if (!document.querySelector(selector)) return;
+		documentObserver?.disconnect();
+		void runInit(params);
+	});
+	documentObserver.observe(document.documentElement, {
+		childList: true,
+		subtree: true
+	});
+}
+
+async function runInit(params: PlaylistLengthParameters) {
+	documentObserver = await initPlaylistLength(params);
+}
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "playlist"] },
+	onConfigChange: async (config) => {
+		if (!config.enabled) return;
+		await registry.updateFeatureEnabledState("playlistLength", false, config);
+		await registry.updateFeatureEnabledState("playlistLength", true, config);
+	},
+	onDisable: () => {
+		eventManager.removeEventListeners("playlistLength");
+		documentObserver?.disconnect();
+		documentObserver = null;
+		resizeObserver?.disconnect();
+		resizeObserver = null;
+		document.querySelector("#yte-playlist-length-ui")?.remove();
+	},
+	onEnable: ({ lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }) => {
+		const pageType = isWatchPage() ? "watch" : "playlist";
+		const params: PlaylistLengthParameters = {
+			pageType,
+			playlistLengthGetMethod,
+			playlistWatchTimeGetMethod
+		};
+		observePlaylistItems(params);
+		resizeObserver?.disconnect();
+		resizeObserver = new ResizeObserver(() => {
+			void runInit(params);
+		});
+		resizeObserver.observe(document.documentElement);
+	}
+});

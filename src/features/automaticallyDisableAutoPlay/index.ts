@@ -1,34 +1,33 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { waitForElement } from "@/src/utils/dom/wait";
 
-export async function disableAutomaticallyDisableAutoPlay() {
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 8000);
-	if (!playerContainer) return;
-	const autoPlayButtonElem = await waitForElement<HTMLButtonElement>("#movie_player .ytp-autonav-toggle", 8000);
-	if (!autoPlayButtonElem) return;
-	const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
-	if (!autoPlayButtonElemChecked) return;
-	const isAutoPlayOn = autoPlayButtonElemChecked.getAttribute("aria-checked") === "false";
-	if (!isAutoPlayOn) return;
-	autoPlayButtonElem.click();
-}
+import { metadata } from "./index.metadata";
 
-export async function enableAutomaticallyDisableAutoPlay() {
-	const {
-		data: {
-			options: { enable_automatically_disable_autoplay }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_automatically_disable_autoplay) return;
-	if (!isWatchPage()) return;
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 8000);
-	if (!playerContainer) return;
-	const autoPlayButtonElem = await waitForElement<HTMLButtonElement>("#movie_player .ytp-autonav-toggle", 8000);
-	if (!autoPlayButtonElem) return;
-	const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
-	if (!autoPlayButtonElemChecked) return;
-	const isAutoPlayOn = autoPlayButtonElemChecked.getAttribute("aria-checked") === "true";
-	if (!isAutoPlayOn) return;
-	autoPlayButtonElem.click();
-}
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: async () => {
+		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 1000);
+		if (!playerContainer) return;
+		const autoPlayButtonElem = await waitForElement<HTMLButtonElement>(".ytp-autonav-toggle", playerContainer, 1000);
+		if (!autoPlayButtonElem) return;
+		const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
+		if (!autoPlayButtonElemChecked) return;
+		const isAutoPlayOn = autoPlayButtonElemChecked.getAttribute("aria-checked") === "false";
+		if (!isAutoPlayOn) return;
+		autoPlayButtonElem.click();
+	},
+	onEnable: async () => {
+		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 1000);
+		if (!playerContainer) return;
+		const autoPlayButtonElem = await waitForElement<HTMLButtonElement>(".ytp-autonav-toggle", playerContainer, 1000);
+		if (!autoPlayButtonElem) return;
+		const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
+		if (!autoPlayButtonElemChecked) return;
+		const isAutoPlayOn = autoPlayButtonElemChecked.getAttribute("aria-checked") === "true";
+		if (!isAutoPlayOn) return;
+		autoPlayButtonElem.click();
+	}
+});

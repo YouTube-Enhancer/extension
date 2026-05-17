@@ -1,33 +1,41 @@
-import type { ContentToBackgroundSendOnlyMessageMappings } from "@/src/types";
+import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages } from "@/src/types";
 
-import { updateStoredSettings } from "@/src/utils/updateStoredSettings";
+import { updateStoredSettings } from "@/src/utils/config/storage";
 
 import { version } from "../../../package.json";
 import { setDefaultValues } from "../../defaults";
-chrome.runtime.onInstalled.addListener(async (details) => {
-	const { open_settings_on_major_or_minor_version_change: openSettingsOnMajorOrMinorUpdate } = (await setDefaultValues().catch(console.error)) ?? {};
-	const { previousVersion, reason } = details;
-	console.log(`Previous version: ${previousVersion}, Reason: ${reason}`, openSettingsOnMajorOrMinorUpdate);
-	if (!openSettingsOnMajorOrMinorUpdate) return;
-	switch (reason) {
-		case chrome.runtime.OnInstalledReason.INSTALL: {
-			// Open the options page after install
-			void chrome.tabs.create({ url: "/src/pages/options/index.html" });
-			break;
-		}
-		case chrome.runtime.OnInstalledReason.UPDATE: {
-			if (!previousVersion) return;
-			if (
-				isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
-				isNewMinorVersion(previousVersion as VersionString, version as VersionString)
-			) {
-				// Open options page if a new major or minor version is released
+
+const sentRequestIds = new Set<string>();
+
+chrome.runtime.onInstalled.addListener((details) => {
+	void (async () => {
+		const { openSettingsOnMajorOrMinorVersionChange: openSettingsOnMajorOrMinorVersionChange } =
+			(await setDefaultValues().catch((err) => {
+				console.error("[Background] Failed to set default values:", err);
+				return undefined;
+			})) ?? {};
+		const { previousVersion, reason } = details;
+		if (!openSettingsOnMajorOrMinorVersionChange) return;
+		switch (reason) {
+			case "install": {
+				// Open the options page after install
 				void chrome.tabs.create({ url: "/src/pages/options/index.html" });
+				break;
 			}
-			void updateStoredSettings();
-			break;
+			case "update": {
+				if (!previousVersion) return;
+				if (
+					isNewMajorVersion(previousVersion as VersionString, version as VersionString) ||
+					isNewMinorVersion(previousVersion as VersionString, version as VersionString)
+				) {
+					// Open options page if a new major or minor version is released
+					void chrome.tabs.create({ url: "/src/pages/options/index.html" });
+				}
+				void updateStoredSettings();
+				break;
+			}
 		}
-	}
+	})();
 });
 type VersionString = `${string}.${string}.${string}`;
 
@@ -41,50 +49,88 @@ function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString)
 	const [, newMinorVersion] = newVersion.split(".");
 	return oldMinorVersion !== newMinorVersion;
 }
-chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]) => {
-	switch (message.type) {
+chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessages | DevToolsMessages["request"], sender, sendResponse) => {
+	const { source, type } = message;
+
+	if (source === "devtools" && typeof type === "string" && type.startsWith("devtools_")) {
+		const { requestId, tabId } = message;
+		if (type === "devtools_invalidate_cache") {
+			const data = message;
+			chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
+				for (const tab of tabs) {
+					if (tab.id === undefined) continue;
+					void chrome.tabs.sendMessage(tab.id, {
+						action: "invalidate_cache",
+						data: { keys: data.data?.keys },
+						source: "background"
+					});
+				}
+
+				sendResponse({ action: "data_response", data: { ok: true }, requestId, source: "background", tabId: 0, type });
+			});
+			return true;
+		}
+
+		// Deduplicate: skip if we already sent this requestId
+		if (requestId && sentRequestIds.has(requestId)) return true;
+		if (requestId) sentRequestIds.add(requestId);
+
+		chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
+			const targetTab = tabId !== undefined ? tabs.find((t) => t.id === tabId) : tabs[0];
+			if (!targetTab?.id) {
+				return sendResponse({ action: "data_response", data: null, requestId: requestId ?? "", source: "background", tabId: 0, type });
+			}
+			return chrome.tabs.sendMessage(targetTab.id, message, (response: unknown) => {
+				sendResponse(response);
+			});
+		});
+		return true;
+	}
+
+	// Handle regular background messages
+	const typedMessage = message as ContentToBackgroundSendOnlyMessages;
+	switch (typedMessage.type) {
 		case "pauseBackgroundPlayers": {
-			// Get the active tab's ID
-			chrome.tabs.query({ active: true, currentWindow: true }, (activeTabs) => {
-				const [activeTab] = activeTabs;
-				const { id: activeTabId } = activeTab;
-				// Query all tabs except the active one
-				chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
-					for (const tab of tabs) {
-						// Skip the active tab
-						if (tab.id === activeTabId) continue;
-						if (tab.id !== undefined) {
-							chrome.scripting.executeScript(
-								{
-									func: () => {
-										const videos = document.querySelectorAll("video");
-										videos.forEach((video) => {
-											if (!video.paused) {
-												video.pause();
-											}
-										});
-										const audios = document.querySelectorAll("audio");
-										audios.forEach((audio) => {
-											if (!audio.paused) {
-												audio.pause();
-											}
-										});
-									},
-									target: { tabId: tab.id }
-								},
-								(results) => {
-									if (chrome.runtime.lastError) {
-										console.error(chrome.runtime.lastError.message);
-									} else {
-										if (results[0].result) {
-											console.log(results);
+			const senderTabId = sender.tab?.id;
+			chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
+				for (const tab of tabs) {
+					if (tab.id === senderTabId) continue;
+					if (tab.id !== undefined) {
+						chrome.scripting.executeScript(
+							{
+								func: () => {
+									const hasVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
+									const hasDocumentPiP =
+										"documentPictureInPicture" in window &&
+										!!(window as Window & { documentPictureInPicture?: { window: null | Window } }).documentPictureInPicture?.window;
+									if (hasVideoPiP || hasDocumentPiP) return;
+									const videos = document.querySelectorAll("video");
+									videos.forEach((video) => {
+										if (!video.paused) {
+											video.pause();
 										}
+									});
+									const audios = document.querySelectorAll("audio");
+									audios.forEach((audio) => {
+										if (!audio.paused) {
+											audio.pause();
+										}
+									});
+								},
+								target: { tabId: tab.id }
+							},
+							(results) => {
+								if (chrome.runtime.lastError) {
+									console.error(chrome.runtime.lastError.message);
+								} else {
+									if (results[0].result) {
+										console.log("[Background] Paused audios in tab:", { results: results[0].result, tabId: tab.id });
 									}
 								}
-							);
-						}
+							}
+						);
 					}
-				});
+				}
 			});
 			break;
 		}

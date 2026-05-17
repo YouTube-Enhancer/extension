@@ -1,7 +1,7 @@
 import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
 
 import type { i18nInstanceType } from "./i18n";
-import type { YouTubeNavigateStart } from "./types";
+import type { Nullable, YouTubeNavigateStart } from "./types";
 
 declare module "*.svg" {
 	import React from "react";
@@ -15,13 +15,26 @@ declare module "*.json" {
 	export default content;
 }
 
-declare module "node_modules/@types/youtube-player/dist/types" {
+declare module "youtube-player/dist/types" {
 	type audioTrack = Record<string, unknown>;
+	interface PlayerState {
+		isBuffering: boolean;
+		isCued: boolean;
+		isDomPaused: boolean;
+		isEnded: boolean;
+		isError: boolean;
+		isOrWillBePlaying: boolean;
+		isPaused: boolean;
+		isPlaying: boolean;
+		isSeeking: boolean;
+		isUiSeeking: boolean;
+		isUnstarted: boolean;
+	}
 	interface ProgressState {
 		airingEnd: number;
 		airingStart: number;
 		allowSeeking: boolean;
-		clipEnd: null | number;
+		clipEnd: Nullable<number>;
 		clipStart: number;
 		current: number;
 		displayedStart: number;
@@ -61,6 +74,14 @@ declare module "node_modules/@types/youtube-player/dist/types" {
 	interface YouTubePlayer {
 		getAudioTrack(): Promise<audioTrack>;
 		getAvailableAudioTracks(): Promise<audioTrack[]>;
+		getPlayerResponse(): {
+			storyboards?: {
+				playerStoryboardSpecRenderer?: {
+					spec?: string;
+				};
+			};
+		};
+		getPlayerStateObject(): PlayerState;
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
@@ -103,7 +124,8 @@ declare global {
 	}
 	interface Window {
 		audioCtx: AudioContext;
-		cachedPlaylistDuration: null | { playlistId: string; totalTimeSeconds: number };
+		cachedPlaylistDuration: Nullable<{ playlistId: string; totalTimeSeconds: number }>;
+		cleanupFeatureMenuListeners: (() => void) | null;
 		gainNode: GainNode;
 		i18nextInstance: i18nInstanceType;
 		trustedTypes?: {

@@ -8,6 +8,25 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Monoljudshantering",
+						"toggle": {
+							"on": "Mono → Stereo-utgång",
+							"off": "Originalljud"
+						}
+					}
+				},
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Vänd videon horisontellt"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Vänd videon vertikalt"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Kopiera videons webbadress med tidsstämpel"
@@ -35,8 +54,8 @@
 					"button": {
 						"label": "Dölj slutskärmskort",
 						"toggle": {
-							"off": "Visa slutskärmskort",
-							"on": "Dölj slutskärmskort"
+							"off": "Dölj slutskärmskort",
+							"on": "Visa slutskärmskort"
 						}
 					}
 				},
@@ -60,10 +79,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Minispelare",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Minispelare av",
+							"on": "Minispelare på"
 						}
 					}
 				},
@@ -122,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volymökning",
+						"label": "Volymökning ({{value}} dB)",
 						"toggle": {
 							"off": "Volymökning av",
-							"on": "Volymökning på"
+							"on": "Volymökning ({{value}} dB)"
 						}
 					}
 				}
@@ -160,11 +179,14 @@
 							"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 							"loopButton": "Slingknapp",
 							"maximizePlayerButton": "Maximeraknapp",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Minispelarknapp",
 							"openTranscriptButton": "Transkriptknapp",
 							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
-							"volumeBoostButton": "Volymökningsknapp"
+							"volumeBoostButton": "Volymökningsknapp",
+							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
+							"flipVideoHorizontalButton": "Knapp för vänd videon horisontellt",
+							"monoToStereoButton": "Knapp för mono till stereo"
 						},
 						"options": {
 							"below_player": {
@@ -244,9 +266,9 @@
 					"singular": "Aktivera {{OPTION}} för att konfigurera detta alternativ",
 					"specificOption": {
 						"featureMenu": "Konfigurera minst en knapp som ska placeras i funktionsmenyn för att konfigurera det här alternativet.",
-						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Inaktivera 'Kom ihåg senaste volym' för att konfigurera detta alternativ",
+						"rememberVolume": "Inaktivera 'Global volym' för att konfigurera detta alternativ",
+						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
 					}
 				},
 				"scrollForMoreSettings": "Rulla för fler inställningar",
@@ -264,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
@@ -283,37 +320,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Anpassad CSS",
@@ -386,6 +392,50 @@
 				},
 				"title": "Inställningar för knapparna spola framåt/återspola"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Starta alltid videor med den här volymen",
+					"title": "Får alla videor att börja med din valda volym"
+				},
+				"settings": {
+					"amount": {
+						"label": "Videons startvolym",
+						"title": "Volymen används på varje video när den börjar spelas upp"
+					}
+				},
+				"title": "Global volymöverskridning"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Minispelarknapp",
+					"title": "Lägger till en knapp som öppnar Minispelaren"
+				},
+				"enable": {
+					"label": "Öppna Minispelare när du tittar på kommentarer",
+					"title": "Öppnar automatiskt Minispelaren när du bläddrar i kommentarerna."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Standardplats för Minispelaren",
+							"options": {
+								"bottomCenter": "Nederst i mitten",
+								"bottomLeft": "Nederst till vänster",
+								"bottomRight": "Nederst till höger",
+								"topCenter": "Överst i mitten",
+								"topLeft": "Överst till vänster",
+								"topRight": "Överst till höger"
+							},
+							"title": "Ställer in startplatsen innan du flyttar Minispelaren."
+						}
+					},
+					"size": {
+						"label": "Standardstorlek för Minispelaren",
+						"title": "Ställer in den ursprungliga storleken innan du ändrar storlek på Minispelaren."
+					}
+				},
+				"title": "Inställningar för Minispelare"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -430,6 +480,18 @@
 							"title": "Visa automatiskt fler videor på slutskärmen när du laddar en video"
 						}
 					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Blockera nummernyckelsökning",
+							"title": "Förhindrar att 0-9 hoppar till en procentandel av videon"
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Kopiera videons webbadress med tidsstämpelknappen",
@@ -472,6 +534,12 @@
 							"title": "Döljer videor som endast är synliga för medlemmar"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Knapp för mono till stereo",
+							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrad."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Dölj officiella artistvideor",
@@ -500,12 +568,6 @@
 						"enable": {
 							"label": "Dölj rullningslisten",
 							"title": "Döljer sidornas rullningsfält"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Dölj shorts",
-							"title": "Döljer alla shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -600,12 +662,49 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Förhandsgranskning för tidsstämpel",
+							"title": "Förhandsgranska videon genom att hålla muspekaren över en tidsstämpel. Klicka på förhandsgranskningen för att starta uppspelningen från det ögonblicket."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Knapp för horisontell videovändning",
+							"title": "Lägger till en knapp för att vända videon horisontellt"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Knapp för vertikal videovändning",
+							"title": "Lägger till en knapp för att vända videon vertikalt"
 						}
 					}
 				},
 				"title": "Övriga inställningar"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -856,7 +955,11 @@
 				"settings": {
 					"amount": {
 						"label": "Volymökningsmängd (dB)",
-						"title": "Hur mycket ljudet ska öka med"
+						"title": "Hur mycket volymen ska höjas med. Du kan också rulla över volymökningsknappen (Skift/Ctrl för större steg) för att justera den."
+					},
+					"amount_global_only": {
+						"label": "Volymökningsmängd (dB)",
+						"title": "Hur mycket ska ljudet ökas med."
 					},
 					"mode": {
 						"select": {
@@ -870,19 +973,6 @@
 					}
 				},
 				"title": "Inställningar för volymökning"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}

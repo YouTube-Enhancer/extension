@@ -8,6 +8,25 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "单声道处理",
+						"toggle": {
+							"on": "单声道 → 立体声输出",
+							"off": "原始音频"
+						}
+					}
+				},
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "水平翻转视频"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "垂直翻转视频"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "复制带有时间戳的视频 URL"
@@ -35,8 +54,8 @@
 					"button": {
 						"label": "隐藏结束界面卡片",
 						"toggle": {
-							"off": "显示结束界面卡片",
-							"on": "隐藏结束界面卡片"
+							"off": "隐藏结束界面卡片",
+							"on": "显示结束界面卡片"
 						}
 					}
 				},
@@ -122,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "音量增强",
+						"label": "音量提升 ({{value}} 分贝)",
 						"toggle": {
 							"off": "关闭音量增强",
-							"on": "开启音量增强"
+							"on": "音量提升 ({{value}} 分贝)"
 						}
 					}
 				}
@@ -164,7 +183,10 @@
 							"openTranscriptButton": "转写文稿按钮",
 							"rewindButton": "快退按钮",
 							"screenshotButton": "屏幕截图按钮",
-							"volumeBoostButton": "音量增强按钮"
+							"volumeBoostButton": "音量增强按钮",
+							"flipVideoVerticalButton": "垂直翻转视频按钮",
+							"flipVideoHorizontalButton": "水平翻转视频按钮",
+							"monoToStereoButton": "单声道转立体声按钮"
 						},
 						"options": {
 							"below_player": {
@@ -244,9 +266,9 @@
 					"singular": "启用 '{{OPTION}}' 以配置此选项",
 					"specificOption": {
 						"featureMenu": "配置至少一个按钮放置在功能菜单中以配置此选项。",
-						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项",
 						"globalVolume": "禁用“记住最后一个音量”来配置此选项",
-						"rememberVolume": "禁用“全局音量”来配置此选项"
+						"rememberVolume": "禁用“全局音量”来配置此选项",
+						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 					}
 				},
 				"scrollForMoreSettings": "滚动以查看更多设置",
@@ -264,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
@@ -283,37 +320,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "迷你播放器按钮",
-					"title": "添加打开迷你播放器的按钮"
-				},
-				"enable": {
-					"label": "查看评论时打开迷你播放器",
-					"title": "当您滚动到评论时自动打开迷你播放器。"
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "默认迷你播放器位置",
-							"options": {
-								"bottomCenter": "底部居中",
-								"bottomLeft": "左下角",
-								"bottomRight": "右下角",
-								"topCenter": "顶部居中",
-								"topLeft": "左上角",
-								"topRight": "右上角"
-							},
-							"title": "设置移动迷你播放器之前的起始位置。"
-						}
-					},
-					"size": {
-						"label": "默认迷你播放器大小",
-						"title": "设置缩放迷你播放器之前的起始大小。"
-					}
-				},
-				"title": "迷你播放器设置"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "启用自定义 CSS",
@@ -386,6 +392,50 @@
 				},
 				"title": "快进/快退按钮设置"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "总是以此音量开始视频",
+					"title": "自动让所有视频以您选定的音量开始播放"
+				},
+				"settings": {
+					"amount": {
+						"label": "视频起始音量",
+						"title": "每个视频开始播放时都使用该音量"
+					}
+				},
+				"title": "全局音量覆盖"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "迷你播放器按钮",
+					"title": "添加打开迷你播放器的按钮"
+				},
+				"enable": {
+					"label": "查看评论时打开迷你播放器",
+					"title": "当您滚动到评论时自动打开迷你播放器。"
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "默认迷你播放器位置",
+							"options": {
+								"bottomCenter": "底部居中",
+								"bottomLeft": "左下角",
+								"bottomRight": "右下角",
+								"topCenter": "顶部居中",
+								"topLeft": "左上角",
+								"topRight": "右上角"
+							},
+							"title": "设置移动迷你播放器之前的起始位置。"
+						}
+					},
+					"size": {
+						"label": "默认迷你播放器大小",
+						"title": "设置缩放迷你播放器之前的起始大小。"
+					}
+				},
+				"title": "迷你播放器设置"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -430,6 +480,18 @@
 							"title": "加载视频时自动在结束屏幕上显示更多视频"
 						}
 					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "禁止数字键快速跳转",
+							"title": "防止按0-9键跳转到视频的百分比"
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "隐藏帖子",
+							"title": "从主页隐藏帖子"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "复制带有时间戳的视频 URL 按钮",
@@ -472,6 +534,12 @@
 							"title": "隐藏仅对会员可见的视频"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "单声道转立体声按钮",
+							"title": "添加一个按钮来将单声道转换为立体声。立体声保持不变。"
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "隐藏音乐人官方视频",
@@ -500,12 +568,6 @@
 						"enable": {
 							"label": "启用隐藏滚动条",
 							"title": "隐藏页面滚动条"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "隐藏短视频",
-							"title": "隐藏所有短视频"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -603,9 +665,46 @@
 							"label": "时间戳预览",
 							"title": "通过悬停在时间戳预览视频。点击预览开始播放。"
 						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "水平视频翻转按钮",
+							"title": "添加一个按钮以水平翻转视频"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "垂直视频翻转按钮",
+							"title": "添加一个按钮以垂直翻转视频"
+						}
 					}
 				},
 				"title": "其他设置"
+			},
+			"hideShorts": {
+				"title": "隐藏短视频",
+				"settings": {
+					"sidebar": {
+						"label": "在侧边栏中隐藏",
+						"title": "从侧边栏移除短视频按钮"
+					},
+					"home": {
+						"label": "在主页中隐藏",
+						"title": "从主页时间线中移除短视频"
+					},
+					"channel": {
+						"label": "在频道页面中隐藏",
+						"title": "从频道页面中移除短视频分类和标签"
+					},
+					"search": {
+						"label": "在搜索结果中隐藏",
+						"title": "从搜索结果中移除短视频"
+					},
+					"videos": {
+						"label": "在观看页面中隐藏",
+						"title": "从观看页面的推荐列表移除短视频"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -856,7 +955,11 @@
 				"settings": {
 					"amount": {
 						"label": "音量提升量(分贝)",
-						"title": "音量提升量（分贝）"
+						"title": "每步音量提升的多少。您也可以滚动音量提升按钮(Shift/Ctrl更大步) 来调整音量。"
+					},
+					"amount_global_only": {
+						"label": "音量提升量(分贝)",
+						"title": "音量提升的多少。"
 					},
 					"mode": {
 						"select": {
@@ -870,19 +973,6 @@
 					}
 				},
 				"title": "音量增强设置"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "总是以此音量开始视频",
-					"title": "自动让所有视频以您选定的音量开始播放"
-				},
-				"settings": {
-					"amount": {
-						"label": "视频起始音量",
-						"title": "每个视频开始播放时都使用该音量"
-					}
-				},
-				"title": "全局音量覆盖"
 			}
 		}
 	}

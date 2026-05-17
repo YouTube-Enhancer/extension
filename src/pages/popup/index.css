@@ -1,6 +1,6 @@
 body {
 	width: fit-content;
-	margin: 12px;
+	margin: 12px !important;
 	font-family:
 		-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 	-webkit-font-smoothing: antialiased;
