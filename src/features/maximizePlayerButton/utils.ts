@@ -5,8 +5,7 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { type ModifyElementAction, modifyElementsClassList } from "@/src/utils/dom/classList";
-import { theaterModeButtonPathD } from "@/src/utils/dom/selectors";
-import { getLayoutType } from "@/src/utils/url";
+import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 const maximizePlayerButtonStateAPI = registry.stateManager.getStateAPI("maximizePlayerButton");
 export type PlayerControllerState = {
 	header: HeaderState;
@@ -176,9 +175,8 @@ export function maximizePlayer() {
 	if (!videoPlayer) return;
 	const sizeElement = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
 	if (!sizeElement) return;
-	const layoutType = getLayoutType();
 	const inTheaterMode =
-		document.querySelector<HTMLButtonElement>(`button.ytp-size-button svg path[d='${theaterModeButtonPathD[layoutType]}']`) !== null;
+		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
 	const header = document.querySelector("#masthead-container");
 	if (!header) return;
 	if (!inTheaterMode) clickAndRestore(sizeElement);
