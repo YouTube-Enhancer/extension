@@ -10,11 +10,10 @@ import {
 } from "@/src/types";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { theaterModeButtonPathD } from "@/src/utils/dom/selectors";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { findKeyByValue } from "@/src/utils/feature";
-import { getLayoutType, isNewYouTubeVideoLayout } from "@/src/utils/url";
+import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
 import { isFullscreen, startFullscreenObserver, stopFullscreenObserver } from "./fullscreen";
 export type ListenerType<Toggle extends boolean> = Toggle extends true ? (checked?: boolean) => void : () => void;
@@ -55,11 +54,9 @@ export function getFeatureButtonId(buttonName: AllButtonNames) {
 }
 
 export function isInTheaterMode(): boolean {
-	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
-	if (!sizeButton) return false;
-	const layoutType = getLayoutType();
-	const { [layoutType]: path } = theaterModeButtonPathD;
-	return sizeButton.querySelector(`path[d='${path}']`) !== null;
+	const inTheaterMode =
+		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
+	return inTheaterMode;
 }
 
 export async function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
