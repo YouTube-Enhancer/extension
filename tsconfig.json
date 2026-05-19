@@ -33,6 +33,7 @@
 			"vite/*": ["./node_modules/vite/*"],
 			"playwright.config": ["./playwright.config.ts"],
 			"playwright-core/types/*": ["./node_modules/playwright-core/types/*"],
+			"youtube-player/*": ["./node_modules/youtube-player/*"]
 		}
 	},
 	"include": [
