@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import { expect } from "playwright.config";
-import PlayerStates from "youtube-player/dist/constants/PlayerStates";
+import PlayerStates from "youtube-player/dist/constants/PlayerStates.js";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
