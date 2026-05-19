@@ -1,4 +1,7 @@
-import { disableFeature, enableFeature, expect, navigateToPageType, setOption, test } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 test.describe("videoHistory", () => {
 	test("video history resume prompt should appear when navigating back", async ({ page }) => {
@@ -68,8 +71,8 @@ test.describe("videoHistory", () => {
 		expect(resumedTime).toBeLessThan(watchedTime + 10);
 	});
 	test("video history resume prompt should not appear when disabled", async ({ page }) => {
-		await navigateToPageType(page, "watch", true);
 		await disableFeature(page, "videoHistory.enabled");
+		await navigateToPageType(page, "watch", true);
 		// Wait some time
 		await page.waitForTimeout(2000);
 		// Navigate away

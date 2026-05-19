@@ -1,4 +1,9 @@
-import { disableFeature, enableFeature, expect, getCurrentVolume, navigateToPageType, setVolume, test, volume } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { volume } from "@/src/utils/_tests/constants";
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
 
 const testPages = ["watch", "live", "shorts"] as const;
 

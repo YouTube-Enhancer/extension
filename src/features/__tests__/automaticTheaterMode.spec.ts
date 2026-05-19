@@ -1,6 +1,9 @@
 import type { Page } from "@playwright/test";
 
-import { disableFeature, enableFeature, expect, navigateToPageType, test } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const testPages = ["watch", "live"] as const;
 

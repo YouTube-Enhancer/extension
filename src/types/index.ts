@@ -34,9 +34,6 @@ export type ExtractButtonNames<T> =
 	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
 	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
 	: never;
-export type FilterKeysByValueType<T, ValueType> = {
-	[P in Path<T>]: PathValue<T, P> extends ValueType ? P : never;
-}[Path<T>];
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
 export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };

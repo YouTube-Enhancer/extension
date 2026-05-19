@@ -1,4 +1,7 @@
-import { disableFeature, enableFeature, expect, navigateToPageType, test } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 test.describe("hideScrollBar", () => {
 	test("scrollbar should be hidden", async ({ page }) => {

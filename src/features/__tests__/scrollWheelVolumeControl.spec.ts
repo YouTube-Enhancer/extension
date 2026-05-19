@@ -1,4 +1,7 @@
-import { adjustWithScrollWheel, test, volume } from "playwright.config";
+import { test } from "playwright.config";
+
+import { volume } from "@/src/utils/_tests/constants";
+import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
 
 const testPages = ["watch", "live", "shorts"] as const;
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
