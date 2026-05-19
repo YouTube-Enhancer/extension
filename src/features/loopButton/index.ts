@@ -75,6 +75,9 @@ export default createFeature({
 			remove: async (placement) => {
 				await removeFeatureButton("loopButton", placement);
 				eventManager.removeEventListeners("loopButton");
+				const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+				if (!videoElement) return;
+				videoElement.removeAttribute("loop");
 			}
 		}
 	],

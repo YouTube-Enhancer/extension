@@ -30,7 +30,9 @@
 			"monaco-editor/esm/*": ["./node_modules/monaco-editor/esm/*"],
 			"youtubei.js/dist/*": ["./node_modules/youtubei.js/dist/*"],
 			"rollup/*": ["./node_modules/rollup/dist/*"],
-			"vite/*": ["./node_modules/vite/*"]
+			"vite/*": ["./node_modules/vite/*"],
+			"playwright.config": ["./playwright.config.ts"],
+			"playwright-core/types/*": ["./node_modules/playwright-core/types/*"],
 		}
 	},
 	"include": [

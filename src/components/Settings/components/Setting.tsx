@@ -83,13 +83,14 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 	const { type } = settingProps;
 	switch (type) {
 		case "checkbox": {
-			const { checked, className, disabled, disabledReason, label, onChange, title } = settingProps;
+			const { checked, className, disabled, disabledReason, id, label, onChange, title } = settingProps;
 			return (
 				<Checkbox
 					checked={checked}
 					className={className}
 					disabled={disabled}
 					disabledReason={disabledReason}
+					id={id}
 					label={label}
 					onChange={onChange}
 					title={title}
@@ -115,12 +116,13 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			return <CSSEditor className={className} disabled={disabled} disabledReason={disabledReason} onChange={onChange} value={value} />;
 		}
 		case "number": {
-			const { className, disabled, disabledReason, label, max, min, onChange, step, value } = settingProps;
+			const { className, disabled, disabledReason, id, label, max, min, onChange, step, value } = settingProps;
 			return (
 				<NumberInput
 					className={className}
 					disabled={disabled}
 					disabledReason={disabledReason}
+					id={id}
 					label={label}
 					max={max}
 					min={min}
@@ -154,12 +156,13 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			);
 		}
 		case "text-input": {
-			const { className, disabled, disabledReason, input_type, label, onChange, title, value } = settingProps;
+			const { className, disabled, disabledReason, id, input_type, label, onChange, title, value } = settingProps;
 			return (
 				<TextInput
 					className={className}
 					disabled={disabled}
 					disabledReason={disabledReason}
+					id={id}
 					input_type={input_type}
 					label={label}
 					onChange={onChange}

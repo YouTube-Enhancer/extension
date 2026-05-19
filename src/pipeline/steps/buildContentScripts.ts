@@ -44,7 +44,7 @@ for (const contentScript of contentScripts) {
 			minifyWhitespace: !DEV_MODE
 		},
 		mode: DEV_MODE ? "development" : "production",
-		plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
+		plugins: [cssInjectedByJsPlugin()],
 		publicDir: false,
 		resolve: {
 			alias: {

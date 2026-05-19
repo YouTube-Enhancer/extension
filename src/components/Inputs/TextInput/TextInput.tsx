@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-import React, { useId, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 import type { Nullable } from "@/src/types";
@@ -12,6 +12,7 @@ export type TextInputProps = {
 	className?: string;
 	disabled: boolean;
 	disabledReason?: string;
+	id: string;
 	input_type: "password" | "text";
 	label: string;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -19,10 +20,9 @@ export type TextInputProps = {
 	value: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReason, input_type, label, onChange, title, value }) => {
+const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReason, id, input_type, label, onChange, title, value }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const inputRef = useRef<Nullable<HTMLInputElement>>(null);
-	const id = useId();
 	const [localValue, setLocalValue] = useState(value);
 	if (value !== localValue) setLocalValue(value);
 	const debouncedOnChange = useDebounceFn((event: ChangeEvent<HTMLInputElement>) => {

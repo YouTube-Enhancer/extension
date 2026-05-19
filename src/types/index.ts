@@ -34,11 +34,9 @@ export type ExtractButtonNames<T> =
 	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
 	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
 	: never;
-export type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K
-	: O[K] extends Record<string, ValueType> ? K
-	: never;
-}[keyof O];
+export type FilterKeysByValueType<T, ValueType> = {
+	[P in Path<T>]: PathValue<T, P> extends ValueType ? P : never;
+}[Path<T>];
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
 export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
@@ -174,6 +172,7 @@ export const featureToMultiButtonsMap = new Map(
 		Object.keys(featureToMultiButtonMapEntries[key]) as KeysOfUnion<FeatureToMultiButtonMap[typeof key]>[]
 	])
 );
+export type FeatureButtonId = `yte-feature-${AllButtonNames}-button`;
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
@@ -349,6 +348,20 @@ export type ContentSendOnlyMessageMappings = {
 	featureStateUpdate: SendDataMessage<"send_data", "content", "featureStateUpdate", { id: FeatureKeys; state: unknown }>;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
+	/**
+	 * ⚠ Test-only entrypoint.
+	 * Directly writes to browser.storage.local via content script pipeline.
+	 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+	 */
+	test_setConfigValue: SendDataMessage<
+		"send_data",
+		"content",
+		"test_setConfigValue",
+		{
+			key: Path<configuration>;
+			value: PathValue<configuration, Path<configuration>>;
+		}
+	>;
 };
 export type ContentSendOnlyMessages = ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
 export type ContentToBackgroundSendOnlyMessageMappings = {
