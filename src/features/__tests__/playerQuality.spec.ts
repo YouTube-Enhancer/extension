@@ -5,37 +5,51 @@ import {
 	expectCurrentQualityLevelToBeFalsy,
 	expectCurrentQualityLevelToBeTruthy,
 	getClosestQuality,
-	navigateToOptionsPage,
-	navigateToYoutubePage,
+	navigateToPageType,
 	qualityLevel,
-	selectOption,
+	setOption,
 	test
 } from "playwright.config";
 
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
+const testPages = ["watch", "shorts", "live"] as const;
 
-test("should enable automatically set quality", async ({ page }) => {
-	await enableFeature(page, "enable_automatically_set_quality");
-});
-test("should disable automatically set quality", async ({ page }) => {
-	await disableFeature(page, "enable_automatically_set_quality");
-});
-test("should set quality to closest", async ({ page }) => {
-	await enableFeature(page, "enable_automatically_set_quality");
-	await selectOption(page, "player_quality", qualityLevel);
-	await navigateToYoutubePage(page);
-	const closestQuality = await getClosestQuality(page, qualityLevel);
-	expect(closestQuality).toBeTruthy();
-	if (!closestQuality) return;
-	await expectCurrentQualityLevelToBeTruthy(page, closestQuality);
-});
-test("quality should not be set to closest", async ({ page }) => {
-	await disableFeature(page, "enable_automatically_set_quality");
-	await navigateToYoutubePage(page);
-	const closestQuality = await getClosestQuality(page, qualityLevel);
-	expect(closestQuality).toBeTruthy();
-	if (!closestQuality) return;
-	await expectCurrentQualityLevelToBeFalsy(page, closestQuality);
+test.describe("playerQuality", () => {
+	for (const pageType of testPages) {
+		test(`should set quality to closest on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			expect(closestQuality).toBeTruthy();
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+		});
+		test(`quality should not be set to closest when disabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			expect(closestQuality).toBeTruthy();
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeFalsy(page, pageType, closestQuality);
+		});
+		test(`should set quality with lower fallback strategy on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "playerQuality.enabled");
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await setOption(page, "playerQuality.fallbackStrategy", "lower");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel, "lower");
+			expect(closestQuality).toBeTruthy();
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+		});
+		test(`should set quality to hd720 on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "playerQuality.enabled");
+			await setOption(page, "playerQuality.quality", "hd720");
+			const closestQuality = await getClosestQuality(page, pageType, "hd720");
+			expect(closestQuality).toBeTruthy();
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+		});
+	}
 });

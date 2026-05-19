@@ -1,20 +1,25 @@
-import type { AvailableLocales } from "@/src/i18n/constants";
+import browser from "webextension-polyfill";
 
-import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
+import type { CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, FeatureState, NonFeatureKeys } from "@/src/features/_registry/types";
+
+import { invalidateDevToolsCache } from "@/src/components/devtools/hooks/useDevToolsQuery";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistry";
 import {
-	type AllButtonNames,
-	buttonNames,
-	type ButtonPlacement,
 	type configuration,
-	type configurationKeys,
-	type ContentSendOnlyMessageMappings,
-	type ContentToBackgroundSendOnlyMessageMappings,
+	type ContentSendOnlyMessages,
+	type ContentToBackgroundSendOnlyMessages,
+	type ExtensionSendOnlyMessageMappings,
 	type Messages,
-	type RememberedVolumes,
+	type Path,
+	type PathValue,
 	type StorageChanges
 } from "@/src/types";
-import { defaultConfiguration } from "@/src/utils/constants";
-import { parseStoredValue, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/utilities";
+import { getDefaultConfiguration } from "@/src/utils/config/defaults";
+import { DEV_MODE } from "@/src/utils/config/env";
+import { sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
+import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
+const defaultConfiguration = getDefaultConfiguration();
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
@@ -30,26 +35,49 @@ function initializeCommunicationElement() {
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
-
-void (async () => {
-	/**
-	 * Retrieves the options from the local storage and sends them back to the youtube page.
-	 *
-	 * @type {configuration}
-	 */
+if (DEV_MODE) {
+	setupContentScriptBridge();
+	const seenKeys = new Set<string>();
+	browser.storage.onChanged.addListener((changes, areaName) => {
+		if (areaName !== "local") return;
+		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
+		if (!keys.length) return;
+		for (const key of keys) {
+			if (seenKeys.has(key)) continue;
+			seenKeys.add(key);
+			setTimeout(() => seenKeys.delete(key), 2000);
+		}
+		void invalidateDevToolsCache(keys);
+	});
+}
+const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
-		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = (
-				Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-			resolve(storedSettings as configuration);
+		void browser.storage.local.get(null).then((settings) => {
+			const storedSettings = Object.keys(settings)
+				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {}) as configuration;
+			return resolve(storedSettings);
 		});
 	});
-	void void sendExtensionMessage("options", "data_response", { options });
+	return options;
+};
+const getStoredState = async (): Promise<{
+	[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
+}> => {
+	const stateKeys = metadataRegistry
+		.getAll()
+		.filter((feature) => feature.stateSchemaInput !== undefined)
+		.map((feature) => `state:${feature.id}` as const);
+	const result = await browser.storage.local.get(stateKeys);
+	const state = stateKeys.reduce((acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }), {}) as {
+		[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
+	};
+	return state;
+};
+void (async () => {
+	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
+	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", { state })]);
 })();
-
 /**
  * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
  *
@@ -63,36 +91,22 @@ document.addEventListener("yte-message-from-youtube", () => {
 		if (!stringifiedMessage) return;
 		let message;
 		try {
-			message = JSON.parse(stringifiedMessage) as
-				| ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings]
-				| ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings]
-				| Messages["request"];
+			message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"];
 		} catch (error) {
-			console.error(error);
+			console.error("[ContentScript] Failed to parse incoming message:", error);
 			return;
 		}
 		if (!message) return;
 		switch (message.action) {
 			case "request_action": {
-				await chrome.runtime.sendMessage(message);
+				await browser.runtime.sendMessage(message);
 				break;
 			}
 			case "request_data": {
 				switch (message.type) {
 					case "extensionURL": {
 						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: chrome.runtime.getURL("")
-						});
-						break;
-					}
-					case "language": {
-						const language = await new Promise<AvailableLocales>((resolve) => {
-							chrome.storage.local.get("language", (o) => {
-								resolve(o.language as AvailableLocales);
-							});
-						});
-						void sendExtensionMessage("language", "data_response", {
-							language
+							extensionURL: browser.runtime.getURL("")
 						});
 						break;
 					}
@@ -102,34 +116,13 @@ document.addEventListener("yte-message-from-youtube", () => {
 						 *
 						 * @type {configuration}
 						 */
-						const options: configuration = await new Promise((resolve) => {
-							void chrome.storage.local.get<configuration>((settings) => {
-								const storedSettings: Partial<configuration> = (
-									Object.keys(settings)
-										.filter((key) => typeof key === "string")
-										.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-								).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-								resolve(storedSettings as configuration);
-							});
-						});
+						const options: configuration = await getStoredSettings();
 						void sendExtensionMessage("options", "data_response", { options });
 						break;
 					}
-					case "videoHistoryAll": {
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryAll", "data_response", {
-							video_history_entries: videoHistory
-						});
-						break;
-					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { id } = data;
-						const videoHistory = getVideoHistory();
-						void sendExtensionMessage("videoHistoryOne", "data_response", {
-							video_history_entry: videoHistory[id]
-						});
+					case "state": {
+						const state = await getStoredState();
+						void sendExtensionMessage("state", "data_response", state);
 						break;
 					}
 				}
@@ -137,26 +130,44 @@ document.addEventListener("yte-message-from-youtube", () => {
 			}
 			case "send_data": {
 				switch (message.type) {
+					case "featureStateUpdate": {
+						const {
+							data: { id, state }
+						} = message;
+						await browser.storage.local.set({
+							[`state:${id}`]: state
+						});
+						break;
+					}
 					case "pageLoaded": {
-						chrome.storage.onChanged.addListener(storageListeners);
-						window.onunload = () => {
-							chrome.storage.onChanged.removeListener(storageListeners);
-						};
+						browser.storage.onChanged.addListener(storageListeners);
+						window.addEventListener("pagehide", () => {
+							browser.storage.onChanged.removeListener(storageListeners);
+						});
 						break;
 					}
-					case "setRememberedVolume": {
-						const { remembered_volumes: existingRememberedVolumeStringified } = await chrome.storage.local.get("remembered_volumes");
-						const existingRememberedVolumes = parseStoredValue(existingRememberedVolumeStringified as string) as RememberedVolumes;
-						void chrome.storage.local.set({ remembered_volumes: JSON.stringify({ ...existingRememberedVolumes, ...message.data }) });
+					case "setVolumeBoostAmount": {
+						const { volumeBoost: existingVolumeBoost } = (await browser.storage.local.get("volumeBoost")) as configuration;
+						void browser.storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
 						break;
 					}
-					case "videoHistoryOne": {
-						const { data } = message;
-						if (!data) return;
-						const { video_history_entry } = data;
-						if (!video_history_entry) return;
-						const { id, status, timestamp } = video_history_entry;
-						setVideoHistory(id, timestamp, status);
+					/**
+					 * ⚠ Test-only entrypoint.
+					 * Directly writes to browser.storage.local via content script pipeline.
+					 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+					 */
+					case "test_setConfigValue": {
+						const {
+							data: { key, value }
+						} = message;
+						const config = await browser.storage.local.get();
+						const keys = key.split(".");
+						let current = config;
+						for (const segment of keys.slice(0, -1)) {
+							current = current[segment] as Record<string, unknown>;
+						}
+						current[keys.at(-1)!] = value;
+						await browser.storage.local.set(config);
 						break;
 					}
 				}
@@ -164,36 +175,11 @@ document.addEventListener("yte-message-from-youtube", () => {
 		}
 	})();
 });
-const storageListeners = (changes: StorageChanges, areaName: string) => {
+const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
-	const changeKeys = Object.keys(
-		changes as {
-			[K in keyof configuration]?: {
-				newValue: configuration[K] | undefined;
-				oldValue: configuration[K] | undefined;
-			};
-		}
-	);
+	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
-};
-const castStorageChanges = (changes: StorageChanges) => {
-	return Object.fromEntries(Object.entries(changes).map(([key, change]) => [key, change as { newValue?: unknown; oldValue?: unknown }])) as {
-		[K in keyof configuration]: { newValue?: string; oldValue?: string };
-	};
-};
-const getStoredSettings = async (): Promise<configuration> => {
-	const options: configuration = await new Promise((resolve) => {
-		void chrome.storage.local.get<configuration>((settings) => {
-			const storedSettings: Partial<configuration> = (
-				Object.keys(settings)
-					.filter((key) => typeof key === "string")
-					.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string)) as configurationKeys[]
-			).reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-			resolve(storedSettings as configuration);
-		});
-	});
-	return options;
 };
 const deepEqual = (a: unknown, b: unknown): boolean => {
 	if (a === b) return true;
@@ -210,392 +196,152 @@ const deepEqual = (a: unknown, b: unknown): boolean => {
 	return true;
 };
 const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
-	if (change?.newValue === undefined || change?.oldValue === undefined) {
-		return false;
+	if (change?.newValue === undefined || change?.oldValue === undefined) return false;
+	return !deepEqual(change.oldValue, change.newValue);
+};
+const castStorageChanges = (changes: StorageChanges<configuration>) => {
+	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
+	for (const [key, change] of Object.entries(changes)) {
+		if (key in defaultConfiguration) {
+			const typedKey = key as keyof configuration;
+			result[typedKey] = change as { newValue?: unknown; oldValue?: unknown };
+		}
 	}
-	const parsedOldValue = parseStoredValue(change.oldValue as string);
-	const parsedNewValue = parseStoredValue(change.newValue as string);
-	return !deepEqual(parsedOldValue, parsedNewValue);
+	return result;
 };
-const storageChangeHandler = async (changes: StorageChanges, areaName: string) => {
+
+type PathEvent<P extends Path<configuration>, E extends keyof ExtensionSendOnlyMessageMappings> = {
+	build: (args: {
+		newValue: PathValue<configuration, P>;
+		oldValue: PathValue<configuration, P>;
+		options: configuration;
+		path: P;
+	}) => ExtensionSendOnlyMessageMappings[E]["data"];
+	event: E;
+};
+function getProp(obj: unknown, key: string): unknown {
+	return isRecord(obj) ? obj[key] : undefined;
+}
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null;
+}
+const changeHandlers: {
+	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
+} = {
+	"featureMenu.openType": {
+		build: ({ newValue }) => ({
+			featureMenuOpenType: newValue
+		}),
+		event: "featureMenuOpenTypeChange"
+	},
+	language: {
+		build: ({ newValue }) => ({
+			language: newValue
+		}),
+		event: "languageChange"
+	}
+};
+function emitPathEvent<P extends keyof typeof changeHandlers>({
+	newValue,
+	oldValue,
+	options,
+	path
+}: {
+	newValue: PathValue<configuration, P>;
+	oldValue: PathValue<configuration, P>;
+	options: configuration;
+	path: P;
+}): void {
+	const { [path]: def } = changeHandlers;
+	if (!def) return;
+
+	sendExtensionOnlyMessage(def.event, def.build({ newValue, oldValue, options, path }));
+}
+const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
 	if (areaName !== "local") return;
-
-	// Convert changes to a typed object
 	const castedChanges = castStorageChanges(changes);
-
-	// Get the current configuration options from local storage
 	const options = await getStoredSettings();
-	const keyActions: {
-		[K in keyof configuration]?: (oldValue: configuration[K], newValue: configuration[K]) => void;
-	} = {
-		button_placements: (oldValue, newValue) => {
-			sendExtensionOnlyMessage("buttonPlacementChange", {
-				buttonPlacement: buttonNames.reduce(
-					(acc, feature) => {
-						const { [feature]: oldPlacement } = oldValue;
-						const { [feature]: newPlacement } = newValue;
-						return Object.assign(acc, {
-							[feature]: {
-								new: newPlacement,
-								old: oldPlacement
-							}
-						});
-					},
-					{} as Record<AllButtonNames, { new: ButtonPlacement; old: ButtonPlacement }>
-				)
-			});
-		},
-		custom_css_code: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("customCSSChange", {
-				customCSSCode: newValue,
-				customCSSEnabled: options.enable_custom_css
-			});
-		},
-		deep_dark_custom_theme_colors: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: newValue,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
-		deep_dark_preset: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: newValue,
-				deepDarkThemeEnabled: options.enable_deep_dark_theme
-			});
-		},
-		enable_automatic_theater_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticTheaterModeChange", {
-				automaticTheaterModeEnabled: newValue
-			});
-		},
-		enable_automatically_disable_ambient_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableAmbientModeChange", {
-				automaticallyDisableAmbientModeEnabled: newValue
-			});
-		},
-		enable_automatically_disable_autoplay: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableAutoPlayChange", {
-				automaticallyDisableAutoPlayEnabled: newValue
-			});
-		},
-		enable_automatically_disable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyDisableClosedCaptionsChange", {
-				automaticallyDisableClosedCaptionsEnabled: newValue
-			});
-		},
-		enable_automatically_enable_closed_captions: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyEnableClosedCaptionsChange", {
-				automaticallyEnableClosedCaptionsEnabled: newValue
-			});
-		},
-		enable_automatically_maximize_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("automaticallyMaximizePlayerChange", {
-				automaticallyMaximizePlayerEnabled: newValue
-			});
-		},
-		enable_automatically_show_more_videos_on_end_screen: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
-				hideEndScreenCardsButtonEnabled: newValue
-			});
-		},
-		enable_comments_mini_player: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("commentsMiniPlayerChange", {
-				miniPlayerEnabled: newValue
-			});
-		},
-		enable_comments_mini_player_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerButtonChange", {
-				miniPlayerButtonEnabled: newValue
-			});
-		},
-		enable_copy_timestamp_url_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("copyTimestampUrlButtonChange", {
-				copyTimestampUrlButtonEnabled: newValue
-			});
-		},
-		enable_custom_css: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("customCSSChange", { customCSSCode: options.custom_css_code, customCSSEnabled: newValue });
-		},
-		enable_deep_dark_theme: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("deepDarkThemeChange", {
-				deepDarkCustomThemeColors: options.deep_dark_custom_theme_colors,
-				deepDarkPreset: options.deep_dark_preset,
-				deepDarkThemeEnabled: newValue
-			});
-		},
-		enable_default_to_original_audio_track(__oldValue, newValue) {
-			sendExtensionOnlyMessage("defaultToOriginalAudioTrackChange", {
-				defaultToOriginalAudioTrackEnabled: newValue
-			});
-		},
-		enable_forced_playback_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playerSpeedChange", {
-				enableForcedPlaybackSpeed: newValue,
-				playerSpeed: options.player_speed
-			});
-		},
-		enable_forward_rewind_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
-				forwardRewindButtonsEnabled: newValue
-			});
-		},
-		enable_global_volume: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("globalVolumeChange", {
-				globalVolumeEnabled: newValue
-			});
-		},
-		enable_hide_artificial_intelligence_summary: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideArtificialIntelligenceSummaryChange", {
-				hideArtificialIntelligenceSummaryEnabled: newValue
-			});
-		},
-		enable_hide_end_screen_cards: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsChange", {
-				hideEndScreenCardsButtonPlacement: options.button_placements["hideEndScreenCardsButton"],
-				hideEndScreenCardsEnabled: newValue
-			});
-		},
-		enable_hide_end_screen_cards_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideEndScreenCardsButtonChange", {
-				hideEndScreenCardsButtonEnabled: newValue
-			});
-		},
-		enable_hide_live_stream_chat: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideLiveStreamChatChange", {
-				hideLiveStreamChatEnabled: newValue
-			});
-		},
-		enable_hide_members_only_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideMembersOnlyVideosChange", {
-				hideMembersOnlyVideosEnabled: newValue
-			});
-		},
-		enable_hide_official_artist_videos_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideOfficialArtistVideosFromHomePageChange", { hideOfficialArtistVideosFromHomePageEnabled: newValue });
-		},
-		enable_hide_paid_promotion_banner: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePaidPromotionBannerChange", {
-				hidePaidPromotionBannerEnabled: newValue
-			});
-		},
-		enable_hide_playables: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePlayablesChange", {
-				hidePlayablesEnabled: newValue
-			});
-		},
-		enable_hide_playlist_recommendations_from_home_page: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hidePlaylistRecommendationsFromHomePageChange", {
-				hidePlaylistRecommendationsFromHomePageEnabled: newValue
-			});
-		},
-		enable_hide_scrollbar: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideScrollBarChange", {
-				hideScrollBarEnabled: newValue
-			});
-		},
-		enable_hide_shorts: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideShortsChange", {
-				hideShortsEnabled: newValue
-			});
-		},
-		enable_hide_sidebar_recommended_videos: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideSidebarRecommendedVideosChange", {
-				hideSidebarRecommendedVideosEnabled: newValue
-			});
-		},
-		enable_hide_translate_comment: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("hideTranslateCommentChange", {
-				hideTranslateCommentEnabled: newValue
-			});
-		},
-		enable_loop_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("loopButtonChange", {
-				loopButtonEnabled: newValue
-			});
-		},
-		enable_maximize_player_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("maximizeButtonChange", {
-				maximizePlayerButtonEnabled: newValue
-			});
-		},
-		enable_open_transcript_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("openTranscriptButtonChange", {
-				openTranscriptButtonEnabled: newValue
-			});
-		},
-		enable_open_youtube_settings_on_hover: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("openYTSettingsOnHoverChange", {
-				openYouTubeSettingsOnHoverEnabled: newValue
-			});
-		},
-		enable_pausing_background_players: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("pauseBackgroundPlayersChange", {
-				pauseBackgroundPlayersEnabled: newValue
-			});
-		},
-		enable_playback_speed_buttons: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: options.playback_buttons_speed,
-				playbackSpeedButtonsEnabled: newValue
-			});
-		},
-		enable_playlist_length: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistLengthChange", {
-				playlistLengthEnabled: newValue
-			});
-		},
-		enable_playlist_remove_button: (_oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistRemoveButtonChange", {
-				playlistRemoveButtonEnabled: newValue
-			});
-		},
-		enable_playlist_reset_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playlistResetButtonChange", {
-				playlistResetButtonEnabled: newValue
-			});
-		},
-		enable_redirect_remover: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("removeRedirectChange", {
-				removeRedirectEnabled: newValue
-			});
-		},
-		enable_remaining_time: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("remainingTimeChange", {
-				remainingTimeEnabled: newValue
-			});
-		},
-		enable_remember_last_volume: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("rememberVolumeChange", {
-				rememberVolumeEnabled: newValue
-			});
-		},
-		enable_restore_fullscreen_scrolling: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("restoreFullscreenScrollingChange", {
-				restoreFullscreenScrollingEnabled: newValue
-			});
-		},
-		enable_save_to_watch_later_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("saveToWatchLaterButtonChange", {
-				saveToWatchLaterButtonEnabled: newValue
-			});
-		},
-		enable_screenshot_button: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("screenshotButtonChange", {
-				screenshotButtonEnabled: newValue
-			});
-		},
-		enable_scroll_wheel_speed_control: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("scrollWheelSpeedControlChange", {
-				scrollWheelSpeedControlEnabled: newValue
-			});
-		},
-		enable_scroll_wheel_volume_control: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("scrollWheelVolumeControlChange", {
-				scrollWheelVolumeControlEnabled: newValue
-			});
-		},
-		enable_share_shortener: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("shareShortenerChange", {
-				shareShortenerEnabled: newValue
-			});
-		},
-		enable_shorts_auto_scroll: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("shortsAutoScrollChange", {
-				shortsAutoScrollEnabled: newValue
-			});
-		},
-		enable_skip_continue_watching: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("skipContinueWatchingChange", {
-				skipContinueWatchingEnabled: newValue
-			});
-		},
-		enable_timestamp_peek: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("timestampPeekChange", {
-				timestampPeekEnabled: newValue
-			});
-		},
-		enable_video_history: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("videoHistoryChange", {
-				videoHistoryEnabled: newValue
-			});
-		},
-		enable_volume_boost: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostEnabled: newValue,
-				volumeBoostMode: options.volume_boost_mode
-			});
-		},
-		feature_menu_open_type: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("featureMenuOpenTypeChange", {
-				featureMenuOpenType: newValue
-			});
-		},
-		forward_rewind_buttons_time: () => {
-			sendExtensionOnlyMessage("forwardRewindButtonsChange", {
-				forwardRewindButtonsEnabled: options.enable_forward_rewind_buttons
-			});
-		},
-		language: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("languageChange", {
-				language: newValue
-			});
-		},
-		mini_player_default_position: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
-				defaultPosition: newValue,
-				defaultSize: options.mini_player_default_size
-			});
-		},
-		mini_player_default_size: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("miniPlayerDefaultsChange", {
-				defaultPosition: options.mini_player_default_position,
-				defaultSize: newValue
-			});
-		},
-		playback_buttons_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playbackSpeedButtonsChange", {
-				playbackButtonsSpeed: newValue,
-				playbackSpeedButtonsEnabled: options.enable_playback_speed_buttons
-			});
-		},
-		player_speed: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("playerSpeedChange", {
-				enableForcedPlaybackSpeed: options.enable_forced_playback_speed,
-				playerSpeed: newValue
-			});
-		},
-		playlist_length_get_method: () => {
-			sendExtensionOnlyMessage("playlistLengthGetMethodChange", undefined);
-		},
-		playlist_watch_time_get_method: () => {
-			sendExtensionOnlyMessage("playlistWatchTimeGetMethodChange", undefined);
-		},
-		volume_boost_amount: (newValue) => {
-			sendExtensionOnlyMessage("volumeBoostAmountChange", {
-				volumeBoostAmount: newValue,
-				volumeBoostEnabled: options.enable_volume_boost,
-				volumeBoostMode: options.volume_boost_mode
-			});
-		},
-
-		volume_boost_mode: (__oldValue, newValue) => {
-			sendExtensionOnlyMessage("volumeBoostChange", {
-				volumeBoostEnabled: options.enable_volume_boost,
-				volumeBoostMode: newValue
-			});
+	const featureUpdates = new Map<FeatureKeys, { configChanged: boolean; stateChanged: boolean }>();
+	handleConfigChanges(castedChanges, ({ newValue, oldValue, path }) => {
+		const rootKey = getRootKey(path);
+		if (isFeatureKey(rootKey)) {
+			let entry = featureUpdates.get(rootKey);
+			if (!entry) {
+				entry = { configChanged: false, stateChanged: false };
+				featureUpdates.set(rootKey, entry);
+			}
+			entry.configChanged = true;
+			if ((path.endsWith(".enabled") && typeof newValue === "boolean") || path.endsWith(".placement")) {
+				entry.stateChanged = true;
+			}
 		}
-	};
-	Object.entries(castedChanges).forEach(([key, change]) => {
-		if (isValidChange(change)) {
-			if (!change.newValue) return;
-			if (!change.oldValue) return;
-			const oldValue = parseStoredValue(change.oldValue) as configuration[typeof key];
-			const newValue = parseStoredValue(change.newValue) as configuration[typeof key];
-			const { [key]: handler } = keyActions;
-			if (!handler) return;
-			(handler as (oldValue: configuration[typeof key], newValue: configuration[typeof key]) => void)(oldValue, newValue);
-		}
+		emitPathEvent({
+			newValue,
+			oldValue,
+			options,
+			path
+		});
 	});
+	for (const [feature, update] of featureUpdates) {
+		const { [feature]: config } = options;
+		if (update.configChanged) {
+			sendExtensionOnlyMessage("featureConfigChange", {
+				config,
+				id: feature
+			});
+		}
+		if (update.stateChanged) {
+			sendExtensionOnlyMessage("featureEnabledStateChange", {
+				config,
+				enabled: resolveEnabled(config),
+				id: feature
+			});
+		}
+	}
 };
+type ConfigPathChange<P extends keyof typeof changeHandlers> = {
+	newValue: PathValue<configuration, P>;
+	oldValue: PathValue<configuration, P>;
+	path: P;
+};
+function getRootKey(path: string): keyof configuration {
+	return path.split(".")[0] as keyof configuration;
+}
+function handleConfigChanges(
+	changes: Partial<Record<keyof configuration, chrome.storage.StorageChange>>,
+	handler: <P extends keyof typeof changeHandlers>(change: ConfigPathChange<P>) => void
+): void {
+	for (const rootKey of Object.keys(changes)) {
+		const { [rootKey]: change } = changes;
+		if (!change) continue;
+
+		// skip changes that are structurally equal
+		if (!isValidChange({ newValue: change.newValue, oldValue: change.oldValue })) continue;
+
+		const walk = (oldObj: unknown, newObj: unknown, path: string): void => {
+			if (deepEqual(oldObj, newObj)) return;
+
+			const isObject = typeof newObj === "object" && newObj !== null;
+			const isOldObject = typeof oldObj === "object" && oldObj !== null;
+
+			// leaf-only: call handler only if at least one side is non-object
+			if (!isObject || !isOldObject) {
+				handler({
+					newValue: newObj as PathValue<configuration, keyof typeof changeHandlers>,
+					oldValue: oldObj as PathValue<configuration, keyof typeof changeHandlers>,
+					path: path as keyof typeof changeHandlers
+				});
+				return;
+			}
+
+			// combine keys to handle added/removed properties
+			const keys = new Set([...Object.keys(newObj as Record<string, unknown>), ...Object.keys(oldObj as Record<string, unknown>)]);
+
+			for (const key of keys) {
+				walk(getProp(oldObj, key), getProp(newObj, key), `${path}.${key}`);
+			}
+		};
+
+		walk(change.oldValue, change.newValue, rootKey);
+	}
+}

@@ -1,7 +1,11 @@
-.yte-hide-ytp-fullscreen-grid {
-	display: none !important;
+body.yte-hide-ytp-fullscreen-grid {
+	div.ytp-fullscreen-grid {
+		display: none !important;
+	}
 }
 
-.yte-show-html5-endscreen {
-	display: block !important;
+body.yte-show-html5-endscreen {
+	div.html5-endscreen {
+		display: block !important;
+	}
 }

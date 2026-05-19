@@ -1,6 +1,6 @@
-import React, { type ChangeEvent, useId } from "react";
+import React, { type ChangeEvent } from "react";
 
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import { useSettings } from "../../Settings/Settings";
 
@@ -9,14 +9,14 @@ export type CheckboxProps = {
 	className?: string;
 	disabled?: boolean;
 	disabledReason?: string;
+	id: string;
 	label: string;
 	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 	title: string;
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ checked, className, disabled = false, disabledReason, label, onChange, title }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ checked, className, disabled = false, disabledReason, id, label, onChange, title }) => {
 	const { direction } = useSettings();
-	const id = useId();
 	return (
 		<div className={cn("flex items-start", className)} title={title}>
 			<input

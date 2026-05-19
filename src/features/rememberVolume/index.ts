@@ -1,42 +1,40 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { isLivePage, isShortsPage, isWatchPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { waitForElement } from "@/src/utils/dom/wait";
+import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
-import { setRememberedVolume, setupVolumeChangeListener } from "./utils";
+import { metadata } from "./index.metadata";
+import { setupVolumeChangeListener } from "./utils";
 
-/**
- * Sets the remembered volume based on the options received from a specific message.
- * It restores the last volume if the option is enabled.
- *
- * @returns {Promise<void>} A promise that resolves once the remembered volume is set.
- */
-export default async function enableRememberVolume(): Promise<void> {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: { enable_remember_last_volume: enableRememberVolume, remembered_volumes: rememberedVolumes }
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch", "live", "shorts"] },
+	onDisable: () => eventManager.removeEventListeners("rememberVolume"),
+	onEnable: async (_, stateAPI) => {
+		const { shortsPageVolume, watchPageVolume } = stateAPI.getState();
+		const IsWatchPage = isWatchPage();
+		const IsLivePage = isLivePage();
+		const IsShortsPage = isShortsPage();
+		// Get the player container element
+		const playerContainer =
+			IsWatchPage || IsLivePage ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+			: IsShortsPage ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
+			: null;
+		// If player container is not available, return
+		if (!playerContainer) return;
+		// If setVolume method is not available in the player container, return
+		if (!playerContainer.setVolume) return;
+		if ((IsWatchPage || IsLivePage) && watchPageVolume) {
+			await playerContainer.setVolume(watchPageVolume);
+		} else if (IsShortsPage && shortsPageVolume) {
+			await playerContainer.setVolume(shortsPageVolume);
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the volume is not being remembered, return
-	if (!enableRememberVolume) return;
-	const IsWatchPage = isWatchPage();
-	const IsLivePage = isLivePage();
-	const IsShortsPage = isShortsPage();
-	// Get the player container element
-	const playerContainer =
-		IsWatchPage || IsLivePage ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: IsShortsPage ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-		: null;
-	// If player container is not available, return
-	if (!playerContainer) return;
-	// If setVolume method is not available in the player container, return
-	if (!playerContainer.setVolume) return;
-	void setRememberedVolume({
-		enableRememberVolume,
-		isShortsPage: IsShortsPage,
-		isWatchPage: IsWatchPage || IsLivePage,
-		playerContainer,
-		rememberedVolumes
-	});
-	void setupVolumeChangeListener();
-}
+		await setupVolumeChangeListener();
+	},
+	state: {
+		shortsPageVolume: 25,
+		watchPageVolume: 25
+	}
+});

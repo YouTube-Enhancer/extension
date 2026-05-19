@@ -1,18 +1,16 @@
 import type { Nullable } from "@/src/types";
 
-import { getVideoHref, handleTimestampElementsHover, observeTimestampElements } from "@/src/features/timestampPeek/utils";
-import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { getVideoHref, handleTimestampElementsHover, observeTimestampElements, resetState } from "@/src/features/timestampPeek/utils";
+import { waitForAllElements } from "@/src/utils/dom/wait";
 
 import "./index.css";
+import { metadata } from "./index.metadata";
 
 let timestampElementObserver: Nullable<MutationObserver> = null;
 const navigateStartHandler = () => {
-	disableTimestampPeek();
-};
-export function disableTimestampPeek() {
 	eventManager.removeEventListeners("timestampPeek");
-	document.removeEventListener("yt-navigate-start", navigateStartHandler);
 	cleanupTimestampObserver();
 	const overlay = document.getElementById("yte-timestamp-peek-overlay");
 	if (overlay) overlay.remove();
@@ -20,25 +18,8 @@ export function disableTimestampPeek() {
 	if (placeholder) placeholder.remove();
 	const shield = document.getElementById("yte-timestamp-peek-hover-shield");
 	if (shield) shield.remove();
-}
-
-export async function enableTimestampPeek() {
-	const {
-		data: {
-			options: { enable_timestamp_peek }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_timestamp_peek || !isWatchPage()) return;
-	await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
-	const videoHref = getVideoHref();
-	if (!videoHref) return;
-	eventManager.removeEventListeners("timestampPeek");
-	document.addEventListener("yt-navigate-start", navigateStartHandler);
-	cleanupTimestampObserver();
-	handleTimestampElementsHover();
-	const obs = observeTimestampElements();
-	if (obs) setTimestampObserver(obs);
-}
+	resetState();
+};
 
 function cleanupTimestampObserver() {
 	timestampElementObserver?.disconnect();
@@ -49,3 +30,30 @@ function setTimestampObserver(observer: MutationObserver) {
 	timestampElementObserver?.disconnect();
 	timestampElementObserver = observer;
 }
+
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onDisable: () => {
+		eventManager.removeEventListeners("timestampPeek");
+		document.removeEventListener("yt-navigate-start", navigateStartHandler);
+		cleanupTimestampObserver();
+		const overlay = document.getElementById("yte-timestamp-peek-overlay");
+		if (overlay) overlay.remove();
+		const placeholder = document.getElementById("yte-timestamp-peek-placeholder");
+		if (placeholder) placeholder.remove();
+		const shield = document.getElementById("yte-timestamp-peek-hover-shield");
+		if (shield) shield.remove();
+	},
+	onEnable: async () => {
+		await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
+		const videoHref = getVideoHref();
+		if (!videoHref) return;
+		eventManager.removeEventListeners("timestampPeek");
+		document.addEventListener("yt-navigate-start", navigateStartHandler);
+		cleanupTimestampObserver();
+		await handleTimestampElementsHover();
+		const obs = await observeTimestampElements();
+		if (obs) setTimestampObserver(obs);
+	}
+});
