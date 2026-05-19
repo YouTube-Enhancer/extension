@@ -1,4 +1,8 @@
-import { disableFeature, enableFeature, expect, getValueFromYouTubePlayer, navigateToPageType, setOption, test } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 
 const testPages = ["watch", "shorts"] as const;
 const speeds = [2, 0.5, 1.5] as const;

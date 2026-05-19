@@ -1,5 +1,8 @@
-import { adjustWithScrollWheel, speed, test } from "playwright.config";
+import { test } from "playwright.config";
 
+import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
+
+export const speed = 0.25;
 const testPages = ["watch", "shorts"] as const;
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 

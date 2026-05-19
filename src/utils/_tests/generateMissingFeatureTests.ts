@@ -1,7 +1,7 @@
 import { copyFileSync, existsSync, readdirSync } from "fs";
 import { join } from "path";
 import { cwd } from "process";
-export function checkTests() {
+export function generateMissingFeatureTests() {
 	// Get the list of feature names
 	const featureNames = getFeatureNames();
 	// Loop through the feature names

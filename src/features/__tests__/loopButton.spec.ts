@@ -1,14 +1,8 @@
-import {
-	clickFeatureButton,
-	disableFeature,
-	enableFeature,
-	expect,
-	expectFeatureButtonToBeFalsy,
-	expectFeatureButtonToBeTruthy,
-	navigateToPageType,
-	setOption,
-	test
-} from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 const placement = "player_controls_left";
 test.describe("loopButton", () => {
 	test("loop button should be enabled", async ({ page }) => {

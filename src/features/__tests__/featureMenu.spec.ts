@@ -1,13 +1,8 @@
-import {
-	disableFeature,
-	enableFeature,
-	expect,
-	expectFeatureMenuItemToBeFalsy,
-	expectFeatureMenuItemToBeTruthy,
-	navigateToPageType,
-	setOption,
-	test
-} from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { expectFeatureMenuItemToBeFalsy, expectFeatureMenuItemToBeTruthy } from "@/src/utils/_tests/assertions";
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const watchPage = "watch" as const;
 test.describe("featureMenu", () => {

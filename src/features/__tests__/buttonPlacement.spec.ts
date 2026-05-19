@@ -1,19 +1,16 @@
 import type { Page } from "@playwright/test";
 
+import { expect, test } from "playwright.config";
+
 import {
-	clickFeatureButton,
-	disableFeature,
-	enableFeature,
-	expect,
 	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
 	expectFeatureButtonToBeTruthy,
 	expectFeatureMenuItemToBeFalsy,
-	expectFeatureMenuItemToBeTruthy,
-	navigateToPageType,
-	setOption,
-	test
-} from "playwright.config";
+	expectFeatureMenuItemToBeTruthy
+} from "@/src/utils/_tests/assertions";
+import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const watchPage = "watch" as const;
 

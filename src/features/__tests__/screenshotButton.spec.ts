@@ -1,4 +1,8 @@
-import { clickFeatureButton, enableFeature, expect, expectFeatureButtonToBeTruthy, navigateToPageType, setOption, test } from "playwright.config";
+import { expect, test } from "playwright.config";
+
+import { expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { clickFeatureButton, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const testPages = ["watch", "live"] as const;
 
