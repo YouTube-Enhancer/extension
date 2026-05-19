@@ -30,6 +30,7 @@ test.describe("rememberVolume", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "rememberVolume.enabled");
 			await setVolume(page, 50, pageType);
+			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "rememberVolume.enabled");
 			const currentVolume = await getCurrentVolume(page, pageType);
