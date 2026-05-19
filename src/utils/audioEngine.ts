@@ -32,7 +32,7 @@ export function getAudioEngine(video?: HTMLMediaElement): AudioEngine | null {
 	volumeGain.connect(context.destination);
 
 	window.engine = { context, input: source, monoEnabled: false, source, volumeGain };
-	return engine;
+	return window.engine;
 }
 
 function createAudioContext(): AudioContext {
