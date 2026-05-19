@@ -9,6 +9,7 @@ import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
+import { isLivePage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 import { applyVolumeBoostDb, clampDb, setupVolumeBoost, STEP_DB } from "./utils";
@@ -32,7 +33,7 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	const playerContainer = await waitForElement<YouTubePlayerDiv>(isWatchPage() || isLivePage() ? "div#movie_player" : "div#shorts-player");
 	if (!playerContainer) return;
 	new OnScreenDisplayManager(
 		{
