@@ -5,6 +5,7 @@ import { test as base, type BrowserContext, chromium, defineConfig, devices, fir
 import { join } from "path";
 import { withExtension } from "playwright-webextext";
 import { cwd } from "process";
+import PlayerStates from "youtube-player/dist/constants/PlayerStates";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
@@ -466,7 +467,7 @@ export async function navigateToPageType(page: Page, pageType: PageType, alterna
 		typeof objOrString === "string" ? objOrString
 		: alternative ? objOrString.alt
 		: objOrString.main;
-	await navigateToYoutubePage(page, url, pageType === "live");
+	await navigateToYoutubePage(page, url, pageType);
 }
 
 export async function setOption<P extends Page, K extends Path<configuration>, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
@@ -501,14 +502,15 @@ export async function setVolume(page: Page, volume: number, pageType: PageType =
 		[playerSelector, volume] as const
 	);
 }
-async function navigateToYoutubePage(page: Page, pageUrl: string, isLive: boolean = false) {
+async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
 	if (normalizeUrl(page.url()) !== normalizeUrl(pageUrl)) {
 		await navigateToPage(page, pageUrl);
 	}
 	await page.bringToFront();
 	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
 	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
-	await page.waitForLoadState(!isLive ? "networkidle" : "domcontentloaded");
+	await page.waitForLoadState("domcontentloaded");
+	if (["live", "shorts", "watch"].includes(pageType)) await waitForYoutubePlayerReady(page);
 	await handleYoutubeAds(page);
 	await handleYoutubePromos(page);
 	await handleYoutubeSuggestedActions(page);
@@ -517,6 +519,26 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, isLive: boolea
 
 function normalizeUrl(url: string): string {
 	return url.replace(/\/$/, "");
+}
+async function waitForYoutubePlayerReady(page: Page): Promise<void> {
+	await page.waitForFunction(async () => {
+		const player = document.querySelector("#movie_player") as unknown as Nullable<YouTubePlayer>;
+		if (!player) return false;
+		if (typeof player.getPlayerState !== "function") return false;
+		if (typeof player.getCurrentTime !== "function") return false;
+		try {
+			const state = await player.getPlayerState();
+			// -1 = unstarted
+			// 0 = ended
+			// 1 = playing
+			// 2 = paused
+			// 3 = buffering
+			// 5 = video cued
+			return state !== undefined && state !== null && state !== PlayerStates["UNSTARTED"];
+		} catch {
+			return false;
+		}
+	});
 }
 let _cachedDefaultConfig: configuration | null = null;
 async function loadDefaultConfig(): Promise<configuration> {
