@@ -33,6 +33,7 @@ export default createFeature({
 		}
 		await setupVolumeChangeListener();
 	},
+	persistState: true,
 	state: {
 		shortsPageVolume: 25,
 		watchPageVolume: 25
