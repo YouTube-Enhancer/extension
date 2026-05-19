@@ -68,12 +68,7 @@ test.describe("loopButton", () => {
 			await enableFeature(page, "loopButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
 			await clickFeatureButton(page, "yte-feature-loopButton-button", placement);
-			const loop = await page.evaluate((selector) => {
-				const videoElement = document.querySelector(selector) as unknown as HTMLVideoElement | null;
-				if (!videoElement) return null;
-				return videoElement.hasAttribute("loop");
-			}, "div#movie_player video");
-			expect(loop).toBeTruthy();
+			await expect(page.locator("div#movie_player video")).toHaveAttribute("loop");
 		});
 	}
 });
@@ -85,12 +80,10 @@ async function toggleFullscreen(page: Page, fullscreen: boolean): Promise<void> 
 
 async function waitForFullscreenState(page: Page, fullscreen: boolean): Promise<void> {
 	const ytdApp = page.locator("ytd-app");
-
 	if (fullscreen) {
 		await expect(ytdApp).toHaveAttribute("fullscreen", "");
 		return;
 	}
-
 	await expect(ytdApp).not.toHaveAttribute("fullscreen", "");
 }
 test.describe("fullscreen", () => {
@@ -112,10 +105,8 @@ test.describe("fullscreen", () => {
 		await setOption(page, "screenshotButton.button.fullscreenPlacement", "player_controls_left");
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_right");
-
 		await toggleFullscreen(page, true);
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_left");
-
 		await toggleFullscreen(page, false);
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_right");
 	});
@@ -126,10 +117,8 @@ test.describe("fullscreen", () => {
 		await setOption(page, "loopButton.button.fullscreenPlacement", "same");
 		await enableFeature(page, "loopButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", "player_controls_right");
-
 		await toggleFullscreen(page, true);
 		await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", "player_controls_right");
-
 		await toggleFullscreen(page, false);
 		await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", "player_controls_right");
 	});
@@ -140,11 +129,9 @@ test.describe("fullscreen", () => {
 		await setOption(page, "screenshotButton.button.fullscreenPlacement", "feature_menu");
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_left");
-
 		await toggleFullscreen(page, true);
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-screenshotButton-button");
 		await expectFeatureMenuItemToBeTruthy(page, "yte-feature-screenshotButton-menuitem");
-
 		await toggleFullscreen(page, false);
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_left");
 		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-screenshotButton-menuitem");
@@ -156,10 +143,8 @@ test.describe("fullscreen", () => {
 		await setOption(page, "screenshotButton.button.fullscreenPlacement", "player_controls_left");
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "below_player");
-
 		await toggleFullscreen(page, true);
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "player_controls_left");
-
 		await toggleFullscreen(page, false);
 		await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", "below_player");
 	});
