@@ -1,7 +1,5 @@
 import { expect, test } from "playwright.config";
 
-import type { FeatureButtonId } from "@/src/types";
-
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -24,24 +22,16 @@ test.describe("maximizePlayerButton", () => {
 		test(`player should be maximized on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await setOption(page, "maximizePlayerButton.button.placement", placement);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
 			await clickFeatureButton(page, "yte-feature-maximizePlayerButton-button", placement);
-			const isMaximized = await page.evaluate(() => {
-				return document.body.hasAttribute("yte-maximized");
-			});
-			expect(isMaximized).toBeTruthy();
-			expect(isMaximized).toBe(true);
+			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
 		});
 		test(`player shouldn't be maximized on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "maximizePlayerButton.button.enabled");
-			await setOption(page, "maximizePlayerButton.button.placement", placement);
-			const maximizePlayerButton = page.locator(`#yte-feature-maximizePlayerButton-button` satisfies `#${FeatureButtonId}`);
-			await expect(maximizePlayerButton).not.toBeAttached();
-			const isMaximized = await page.evaluate(() => {
-				return document.body.hasAttribute("yte-maximized");
-			});
-			expect(isMaximized).toBeFalsy();
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+			await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 		});
 	}
 });
