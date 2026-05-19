@@ -53,8 +53,8 @@ export function getSettings(): Promise<configuration> {
 				const storedSettings: Partial<configuration> = Object.keys(settings)
 					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key as unknown as string))
 					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-				const castedSettings = storedSettings as configuration;
-				return resolve(castedSettings);
+				const mergedSettings = { ...defaultConfiguration, ...storedSettings } as configuration;
+				return resolve(mergedSettings);
 			} catch (error) {
 				if (error instanceof Error) {
 					return reject(error);
@@ -120,7 +120,9 @@ export default function Settings() {
 			const nextValue = extractValue(event);
 			const currentValue = getPathValue(settingsRef.current, key);
 			if (currentValue === nextValue) return;
-			settingsMutate.mutate(updateConfigAtPath(settingsRef.current, key, nextValue));
+			const newSettings = updateConfigAtPath(settingsRef.current, key, nextValue);
+			queryClient.setQueryData(["settings"], newSettings);
+			settingsMutate.mutate(newSettings);
 		};
 	}
 	const setCheckboxOption = <P extends BooleanPath<configuration>>(key: P) =>
@@ -156,6 +158,7 @@ export default function Settings() {
 					<Setting
 						checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
 						featureId="global"
+						id="openSettingsOnMajorOrMinorVersionChange"
 						label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
 						onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
 						parentSetting={null}

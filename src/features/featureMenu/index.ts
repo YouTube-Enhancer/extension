@@ -137,7 +137,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 }
 
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsSpan = document.querySelector<HTMLSpanElement>("div.video-ads.ytp-ad-module span.ytp-ad-preview-container");
+	const adsSpan = document.querySelector<HTMLSpanElement>("div.video-ads.ytp-ad-module span.ytp-ad-player-overlay-layout__skip-or-preview-container");
 	if (!adsSpan) return;
 	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
 	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";

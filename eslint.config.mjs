@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export default [
 	{
-		ignores: ["**/watch.js", "dist/**/*", "releases/**/*"]
+		ignores: ["**/watch.js", "dist/**/*", "releases/**/*", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts"]
 	},
 	eslintJavascript.configs.recommended,
 	...typescriptEslint.configs.recommendedTypeChecked.map((config) => ({

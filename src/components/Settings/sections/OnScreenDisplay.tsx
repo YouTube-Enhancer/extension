@@ -148,6 +148,7 @@ export default function OnScreenDisplaySection() {
 			/>
 			<Setting
 				disabled={isOSDDisabled}
+				id="onScreenDisplay.opacity"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.opacity.label)}
 				max={100}
 				min={1}
@@ -159,6 +160,7 @@ export default function OnScreenDisplaySection() {
 			/>
 			<Setting
 				disabled={isOSDDisabled}
+				id="onScreenDisplay.hideTime"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.hide.label)}
 				min={1}
 				onChange={setValueOption("onScreenDisplay.hideTime")}
@@ -169,6 +171,7 @@ export default function OnScreenDisplaySection() {
 			/>
 			<Setting
 				disabled={isOSDDisabled}
+				id="onScreenDisplay.padding"
 				label={t((translations) => translations.settings.sections.onScreenDisplaySettings.settings.padding.label)}
 				min={0}
 				onChange={setValueOption("onScreenDisplay.padding")}

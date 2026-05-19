@@ -1,43 +1,45 @@
-import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+import type { Page } from "@playwright/test";
 
-import { disableFeature, enableFeature, expect, navigateToOptionsPage, navigateToYoutubePage, test } from "playwright.config";
+import { disableFeature, enableFeature, expect, navigateToPageType, test } from "playwright.config";
 
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
-test("should enable automatic theater mode", async ({ page }) => {
-	await enableFeature(page, "enable_automatic_theater_mode");
-});
-test("should disable automatic theater mode", async ({ page }) => {
-	await disableFeature(page, "enable_automatic_theater_mode");
-});
-test("theater mode should be enabled", async ({ page }) => {
-	await enableFeature(page, "enable_automatic_theater_mode");
-	await navigateToYoutubePage(page);
-	const theaterModeEnabled = await page.evaluate(async () => {
-		const container = document.querySelector("div#movie_player") as unknown as YouTubePlayer | null;
-		if (!container) return null;
-		const { width: playerWidth } = await container.getSize();
-		const {
-			documentElement: { clientWidth }
-		} = document;
-		return playerWidth === clientWidth;
+const testPages = ["watch", "live"] as const;
+
+export async function isTheaterMode(page: Page): Promise<boolean> {
+	return await page.evaluate(() => {
+		const flexy = document.querySelector("ytd-watch-flexy");
+		if (!flexy) return false;
+
+		return flexy.hasAttribute("theater");
 	});
-	expect(theaterModeEnabled).toBeTruthy();
-	expect(theaterModeEnabled).toBe(true);
-});
-test("theater mode should be disabled", async ({ page }) => {
-	await disableFeature(page, "enable_automatic_theater_mode");
-	await navigateToYoutubePage(page);
-	const theaterModeEnabled = await page.evaluate(async () => {
-		const container = document.querySelector("div#movie_player") as unknown as YouTubePlayer | null;
-		if (!container) return null;
-		const { width: playerWidth } = await container.getSize();
-		const {
-			documentElement: { clientWidth }
-		} = document;
-		return playerWidth === clientWidth;
-	});
-	expect(theaterModeEnabled).toBeFalsy();
-	expect(theaterModeEnabled).toBe(false);
+}
+
+test.describe("automaticTheaterMode", () => {
+	for (const pageType of testPages) {
+		test(`theater mode should be enabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "automaticTheaterMode.enabled");
+			const theaterModeEnabled = await isTheaterMode(page);
+			expect(theaterModeEnabled).toBeTruthy();
+			expect(theaterModeEnabled).toBe(true);
+		});
+		test(`theater mode should be disabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "automaticTheaterMode.enabled");
+			const theaterModeEnabled = await isTheaterMode(page);
+			expect(theaterModeEnabled).toBeFalsy();
+			expect(theaterModeEnabled).toBe(false);
+		});
+		test(`theater mode should be applied after navigation when enabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "automaticTheaterMode.enabled");
+			let theaterModeEnabled = await isTheaterMode(page);
+			expect(theaterModeEnabled).toBeTruthy();
+			expect(theaterModeEnabled).toBe(true);
+			await navigateToPageType(page, "watch");
+			await enableFeature(page, "automaticTheaterMode.enabled");
+			theaterModeEnabled = await isTheaterMode(page);
+			expect(theaterModeEnabled).toBeTruthy();
+			expect(theaterModeEnabled).toBe(true);
+		});
+	}
 });

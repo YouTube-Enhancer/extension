@@ -146,6 +146,7 @@ export default function SettingsGenerator() {
 						disabled={isDisabled}
 						disabledReason={disabledReason}
 						featureId={featureId}
+						id={settingId}
 						key={settingId}
 						label={node.label(t)}
 						onChange={setCheckboxOption(settingId as Parameters<typeof setCheckboxOption>[0])}
@@ -162,6 +163,7 @@ export default function SettingsGenerator() {
 						disabled={isDisabled}
 						disabledReason={disabledReason}
 						featureId={featureId}
+						id={settingId}
 						key={settingId}
 						label={node.label(t)}
 						max={node.max}
@@ -243,6 +245,7 @@ export default function SettingsGenerator() {
 						disabled={isDisabled}
 						disabledReason={disabledReason}
 						featureId={featureId}
+						id={settingId}
 						input_type={node.input_type ?? "text"}
 						key={settingId}
 						label={node.label(t)}

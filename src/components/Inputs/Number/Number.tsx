@@ -1,7 +1,7 @@
 import type { ClassValue } from "clsx";
 import type { ChangeEvent } from "react";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import useDebounceFn from "@/src/hooks/useDebounce";
 import { type Nullable } from "@/src/types";
@@ -14,6 +14,7 @@ export type NumberInputProps = {
 	className?: string;
 	disabled: boolean;
 	disabledReason?: string;
+	id: string;
 	label: string;
 	max?: number;
 	min?: number;
@@ -26,6 +27,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 	className,
 	disabled,
 	disabledReason,
+	id,
 	label,
 	max = undefined,
 	min = 0,
@@ -35,7 +37,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
 }) => {
 	const inputElement = useRef<Nullable<HTMLInputElement>>(null);
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
-	const id = useId();
 	const { direction } = useSettings();
 	const [localValue, setLocalValue] = useState<string>(() => value.toString());
 	useEffect(() => {

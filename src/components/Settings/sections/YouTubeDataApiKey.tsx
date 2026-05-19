@@ -16,6 +16,7 @@ export default function YouTubeDataApiKeySection() {
 			<SettingTitle />
 			<Setting
 				disabled={false}
+				id="youtubeDataApiV3Key"
 				input_type="password"
 				label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
 				onChange={setValueOption("youtubeDataApiV3Key")}

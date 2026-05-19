@@ -1,7 +1,7 @@
 import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
 
 import type { i18nInstanceType } from "./i18n";
-import type { Nullable, YouTubeNavigateStart, YoutubePlayerQualityLabel } from "./types";
+import type { Nullable, YouTubeNavigateStart } from "./types";
 
 declare module "*.svg" {
 	import React from "react";
@@ -141,4 +141,5 @@ declare module "zod-error/lib/functions/generate-error-message/index" {
 	import type { ErrorMessageOptions } from "zod-error";
 	export function generateErrorMessage(issues: $ZodIssue[], options?: ErrorMessageOptions): string;
 }
-export {};
+export { };
+

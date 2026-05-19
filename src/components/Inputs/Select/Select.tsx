@@ -40,6 +40,7 @@ const Select = <Key extends configurationId>({
 	className,
 	disabled = false,
 	disabledReason,
+	id,
 	label,
 	loading = false,
 	onChange,
@@ -66,7 +67,7 @@ const Select = <Key extends configurationId>({
 				"items-baseline": !isSelectVisible
 			})}
 		>
-			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={label}>
+			<label className={cn(className, { "mt-2": isSelectVisible })} htmlFor={id}>
 				{label}
 			</label>
 			<div className="flex flex-col" ref={selectRef}>
@@ -78,7 +79,7 @@ const Select = <Key extends configurationId>({
 						disabledButtonClasses
 					)}
 					disabled={loading || disabled}
-					id={label}
+					id={id}
 					key={selectedOption}
 					onClick={toggleSelect}
 					type="button"

@@ -1,19 +1,25 @@
-import { disableFeature, enableFeature, expect, navigateToOptionsPage, navigateToYoutubePage, test } from "playwright.config";
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
+import { disableFeature, enableFeature, expect, navigateToPageType, test } from "playwright.config";
 
-test("should enable open youtube settings on hover", async ({ page }) => {
-	await enableFeature(page, "enable_open_youtube_settings_on_hover");
-});
-test("should disable open youtube settings on hover", async ({ page }) => {
-	await disableFeature(page, "enable_open_youtube_settings_on_hover");
-});
-test("youtube settings should open on hover", async ({ page }) => {
-	await enableFeature(page, "enable_open_youtube_settings_on_hover");
-	await navigateToYoutubePage(page);
-	const settingsButton = await page.waitForSelector(".ytp-settings-button");
-	await settingsButton.hover();
-	const settingsMenu = await page.waitForSelector(".ytp-settings-menu:not(#yte-feature-menu)");
-	expect(settingsMenu).toBeTruthy();
+const testPages = ["watch", "live"] as const;
+
+test.describe("openYouTubeSettingsOnHover", () => {
+	for (const pageType of testPages) {
+		test(`youtube settings should open on hover when enabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+			const settingsButton = await page.waitForSelector(".ytp-settings-button");
+			await settingsButton.hover();
+			const settingsMenu = await page.waitForSelector(".ytp-settings-menu:not(#yte-feature-menu)");
+			expect(settingsMenu).toBeTruthy();
+		});
+		test(`youtube settings should not open on hover when disabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
+			const settingsButton = await page.waitForSelector(".ytp-settings-button");
+			await settingsButton.hover();
+			await page.waitForTimeout(500);
+			const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+			await expect(settingsMenu).not.toBeVisible();
+		});
+	}
 });
