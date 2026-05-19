@@ -14,7 +14,6 @@ test.describe("videoHistory", () => {
 		await navigateToPageType(page, "home");
 		// Navigate back to the same video
 		await navigateToPageType(page, "watch", true);
-		await enableFeature(page, "videoHistory.enabled");
 		// Check if the resume prompt appears
 		const resumePrompt = page.locator("#resume-prompt");
 		await expect(resumePrompt).toBeAttached();
@@ -33,7 +32,6 @@ test.describe("videoHistory", () => {
 		await navigateToPageType(page, "home");
 		// Return to same video
 		await navigateToPageType(page, "watch", true);
-		await enableFeature(page, "videoHistory.enabled");
 		// Verify prompt appears
 		const resumePrompt = page.locator("#resume-prompt");
 		await expect(resumePrompt).toBeAttached();
@@ -61,7 +59,6 @@ test.describe("videoHistory", () => {
 		expect(watchedTime).toBeGreaterThan(1);
 		await navigateToPageType(page, "home");
 		await navigateToPageType(page, "watch", true);
-		await enableFeature(page, "videoHistory.enabled");
 		await page.waitForFunction(() => {
 			const v = document.querySelector<HTMLVideoElement>("div#movie_player video");
 			return v && v.readyState >= 2;

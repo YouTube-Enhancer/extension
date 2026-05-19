@@ -16,7 +16,6 @@ test.describe("rememberVolume", () => {
 			// Navigate to home and back to another video to verify volume persists
 			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "rememberVolume.enabled");
 			const currentVolume = await getCurrentVolume(page, pageType);
 			expect(currentVolume).toBeTruthy();
 			expect(currentVolume).toBe(volume);
@@ -37,7 +36,6 @@ test.describe("rememberVolume", () => {
 			await setVolume(page, 50, pageType);
 			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "rememberVolume.enabled");
 			const currentVolume = await getCurrentVolume(page, pageType);
 			expect(currentVolume).toBeTruthy();
 			expect(currentVolume).toBe(50);
@@ -50,7 +48,6 @@ test.describe("rememberVolume", () => {
 		await navigateToPageType(page, "home");
 		await navigateToPageType(page, "shorts");
 		await navigateToPageType(page, "watch");
-		await enableFeature(page, "rememberVolume.enabled");
 		const currentVolume = await getCurrentVolume(page);
 		expect(currentVolume).toBeTruthy();
 		expect(currentVolume).toBe(volume);
