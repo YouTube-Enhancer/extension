@@ -7,13 +7,12 @@ import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const testPages = ["watch", "live"] as const;
 
-export async function isTheaterMode(page: Page): Promise<boolean> {
-	return await page.evaluate(() => {
-		const flexy = document.querySelector("ytd-watch-flexy");
-		if (!flexy) return false;
+export async function expectNotTheaterMode(page: Page): Promise<void> {
+	await expect(page.locator("ytd-watch-flexy")).not.toHaveAttribute("theater");
+}
 
-		return flexy.hasAttribute("theater");
-	});
+export async function expectTheaterMode(page: Page): Promise<void> {
+	await expect(page.locator("ytd-watch-flexy")).toHaveAttribute("theater");
 }
 
 test.describe("automaticTheaterMode", () => {
@@ -21,28 +20,19 @@ test.describe("automaticTheaterMode", () => {
 		test(`theater mode should be enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticTheaterMode.enabled");
-			const theaterModeEnabled = await isTheaterMode(page);
-			expect(theaterModeEnabled).toBeTruthy();
-			expect(theaterModeEnabled).toBe(true);
+			await expectTheaterMode(page);
 		});
 		test(`theater mode should be disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "automaticTheaterMode.enabled");
-			const theaterModeEnabled = await isTheaterMode(page);
-			expect(theaterModeEnabled).toBeFalsy();
-			expect(theaterModeEnabled).toBe(false);
+			await expectNotTheaterMode(page);
 		});
 		test(`theater mode should be applied after navigation when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticTheaterMode.enabled");
-			let theaterModeEnabled = await isTheaterMode(page);
-			expect(theaterModeEnabled).toBeTruthy();
-			expect(theaterModeEnabled).toBe(true);
+			await expectTheaterMode(page);
 			await navigateToPageType(page, "watch");
-			await enableFeature(page, "automaticTheaterMode.enabled");
-			theaterModeEnabled = await isTheaterMode(page);
-			expect(theaterModeEnabled).toBeTruthy();
-			expect(theaterModeEnabled).toBe(true);
+			await expectTheaterMode(page);
 		});
 	}
 });
