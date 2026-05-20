@@ -31,7 +31,8 @@ test.describe("automaticTheaterMode", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticTheaterMode.enabled");
 			await expectTheaterMode(page);
-			await navigateToPageType(page, "watch");
+			await navigateToPageType(page, "home");
+			await navigateToPageType(page, pageType);
 			await expectTheaterMode(page);
 		});
 	}
