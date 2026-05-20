@@ -8,7 +8,7 @@ export const pageUrlMap: Record<PageType, Record<"alt" | "main", string> | strin
 	channel_home: "https://www.youtube.com/@RickAstleyYT",
 	channel_videos: "https://www.youtube.com/@RickAstleyYT/videos",
 	home: "https://www.youtube.com",
-	live: "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+	live: "https://www.youtube.com/channel/UC4R8DWoMoI7CAwX8_LjQHig",
 	playlist: "https://www.youtube.com/playlist?list=UUuAXFkgsw1L7xaCfnd5JJOw",
 	search: "https://www.youtube.com/results?search_query=test",
 	shorts: "https://www.youtube.com/shorts/Ay8lynMZ4mE",
@@ -25,12 +25,32 @@ export async function navigateToPage(page: Page, url: string) {
 }
 
 export async function navigateToPageType(page: Page, pageType: PageType, alternative: boolean = false): Promise<void> {
+	if (pageType === "live")
+		return await expect(async () => {
+			await navigateToLiveVideo(page);
+			await expect(page.locator(".ytp-live-badge")).toBeVisible();
+		}).toPass({
+			timeout: 120_000
+		});
 	const { [pageType]: objOrString } = pageUrlMap;
 	const url =
 		typeof objOrString === "string" ? objOrString
 		: alternative ? objOrString.alt
 		: objOrString.main;
 	await navigateToYoutubePage(page, url, pageType);
+}
+async function navigateToLiveVideo(page: Page): Promise<void> {
+	const channelUrl = pageUrlMap.live as string;
+	await navigateToPage(page, channelUrl);
+	const firstVideo = page.locator('ytd-rich-item-renderer a[id="thumbnail"]').first();
+	await expect(firstVideo).toBeVisible();
+	await Promise.all([page.waitForURL(/youtube\.com\/watch\?/), firstVideo.click()]);
+	await page.bringToFront();
+	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
+	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	await page.waitForLoadState("domcontentloaded");
+	await waitForYoutubePlayerReady(page);
+	await pageSetup(page);
 }
 
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
