@@ -5,18 +5,19 @@ export interface AudioEngine {
 	source: MediaElementAudioSourceNode;
 	volumeGain: GainNode;
 }
-
-let engine: AudioEngine | null = null;
+window.engine = null;
 
 export function destroyAudioEngine(): void {
+	const { engine } = window;
 	if (!engine) return;
 	engine.source.disconnect();
 	engine.volumeGain.disconnect();
 	void engine.context.close();
-	engine = null;
+	window.engine = null;
 }
 
 export function getAudioEngine(video?: HTMLMediaElement): AudioEngine | null {
+	const { engine } = window;
 	const player = video ?? document.querySelector<HTMLMediaElement>("video");
 	if (!player) return null;
 	// If we already have an engine for the same player, return it
@@ -30,7 +31,7 @@ export function getAudioEngine(video?: HTMLMediaElement): AudioEngine | null {
 	source.connect(volumeGain);
 	volumeGain.connect(context.destination);
 
-	engine = { context, input: source, monoEnabled: false, source, volumeGain };
+	window.engine = { context, input: source, monoEnabled: false, source, volumeGain };
 	return engine;
 }
 

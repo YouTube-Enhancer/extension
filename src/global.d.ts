@@ -1,5 +1,7 @@
 import type { $ZodIssue } from "zod/v4/core/errors.d.cts";
 
+import type { AudioEngine } from "@/src/utils/audioEngine";
+
 import type { i18nInstanceType } from "./i18n";
 import type { Nullable, YouTubeNavigateStart } from "./types";
 
@@ -123,16 +125,14 @@ declare global {
 		keys<T>(o: T): (keyof T)[];
 	}
 	interface Window {
-		audioCtx: AudioContext;
 		cachedPlaylistDuration: Nullable<{ playlistId: string; totalTimeSeconds: number }>;
 		cleanupFeatureMenuListeners: (() => void) | null;
-		gainNode: GainNode;
+		engine: Nullable<AudioEngine>;
 		i18nextInstance: i18nInstanceType;
 		trustedTypes?: {
 			createPolicy(name: string, options: { createHTML: (input: string) => string });
 			defaultPolicy;
 		};
-		webkitAudioContext: AudioContext;
 	}
 }
 // Override zod-error generateErrorMessage function type
