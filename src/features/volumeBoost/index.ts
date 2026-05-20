@@ -9,10 +9,11 @@ import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
+import { clampDb, STEP_DB } from "@/src/utils/misc";
 import { isLivePage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
-import { applyVolumeBoostDb, clampDb, setupVolumeBoost, STEP_DB } from "./utils";
+import { applyVolumeBoostDb, setupVolumeBoost } from "./utils";
 
 let isVolumeBoostEnabled = false;
 async function handleVolumeBoostScroll(event: WheelEvent) {
