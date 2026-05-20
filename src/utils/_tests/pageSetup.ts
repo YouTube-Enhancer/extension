@@ -3,27 +3,36 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import type { Nullable } from "@/src/types";
 
 const YOUTUBE_AD_SELECTORS = {
+	adCount: "div.video-ads .ytp-ad-player-overlay-layout__ad-info-container .ytp-ad-pod-index .ad-simple-attributed-string",
 	adShowing: "#movie_player.ad-showing",
-	remainingTime: ".ytp-ad-duration-remaining .ytp-ad-text",
+	remainingTime: ".ytp-time-display .ytp-time-duration",
 	skipButton: [".ytp-skip-ad-button", ".ytp-ad-skip-button", ".ytp-ad-skip-button-modern"].join(", ")
 } as const;
+const parseAdPodIndex = (text: Nullable<string>): Nullable<{ index: number; total: number }> => {
+	if (!text) return null;
+	const match = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
+	if (!match) return null;
+	return {
+		index: Number(match[1]),
+		total: Number(match[2])
+	};
+};
+
 async function handleYoutubeAds(page: Page): Promise<void> {
-	const getAdInfo = async (): Promise<{
-		isShowing: boolean;
-		isSkippable: boolean;
-		remainingSeconds: Nullable<number>;
-	}> => {
+	const getAdInfo = async () => {
 		return await page.evaluate((selectors) => {
 			const isShowing = document.querySelector(selectors.adShowing) !== null;
 			if (!isShowing) {
 				return {
 					isShowing: false,
 					isSkippable: false,
+					podText: null,
 					remainingSeconds: null
 				};
 			}
 			const skipButton = document.querySelector<HTMLElement>(selectors.skipButton);
 			const remainingText = document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
+			const podText = document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
 			let remainingSeconds: Nullable<number> = null;
 			if (remainingText) {
 				const [hours = 0, minutes = 0, seconds = 0] = remainingText.split(":").map((value) => Number.parseInt(value, 10));
@@ -32,6 +41,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			return {
 				isShowing: true,
 				isSkippable: skipButton !== null && skipButton.offsetParent !== null,
+				podText,
 				remainingSeconds
 			};
 		}, YOUTUBE_AD_SELECTORS);
@@ -49,22 +59,28 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			return false;
 		}
 	};
-	const adInfo = await getAdInfo();
-	if (!adInfo.isShowing) return;
-	if (adInfo.isSkippable) {
-		await clickSkipButton();
-		return;
-	}
-	const maxWaitTime = adInfo.remainingSeconds !== null ? Math.min(adInfo.remainingSeconds * 1000, 120_000) : 30_000;
-	const start = Date.now();
-	while (Date.now() - start < maxWaitTime) {
-		const current = await getAdInfo();
-		if (!current.isShowing) return;
-		if (await clickSkipButton()) {
-			await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0);
-			return;
+	let lastPodKey: Nullable<string> = null;
+	while (true) {
+		const adInfo = await getAdInfo();
+		if (!adInfo.isShowing) break;
+		if (adInfo.isSkippable) await clickSkipButton();
+		const maxWaitTime = adInfo.remainingSeconds !== null ? Math.min(adInfo.remainingSeconds * 1000, 120_000) : 30_000;
+		const start = Date.now();
+		while (Date.now() - start < maxWaitTime) {
+			const current = await getAdInfo();
+			if (!current.isShowing) return;
+			const currentPod = parseAdPodIndex(current.podText);
+			const currentKey = currentPod ? `${currentPod.index}/${currentPod.total}` : null;
+			if (await clickSkipButton()) {
+				await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0);
+				return;
+			}
+			if (currentKey && lastPodKey && currentKey !== lastPodKey) {
+				break; // next ad in pod started
+			}
+			lastPodKey = currentKey;
+			await page.waitForTimeout(500);
 		}
-		await page.waitForTimeout(500);
 	}
 	await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0, {
 		timeout: 30_000
