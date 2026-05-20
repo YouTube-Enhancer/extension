@@ -279,6 +279,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "HALL4Y",
+      "name": "Hall4y",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35395608?v=4",
+      "profile": "https://github.com/HALL4Y",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
