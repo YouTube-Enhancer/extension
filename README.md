@@ -32,138 +32,196 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 ## 🌟 Introduction
 
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
-
-## 🎛️ Features
-
-### Miscellaneous Settings
-
-- **Remember Last Volume:** This option remembers the last volume set for Shorts and the Watch page separately, applying the appropriate volume when you revisit each type of video content.
-
-- **Maximize Player Button:** Adds a button to the player to maximize the video player for a better viewing experience.
-
-- **Remaining Time:** Keep track of the time remaining on your video with a dynamic display.
-
-- **Pause background players:** Pauses video players in background tabs when you start a new player in the foreground.
-
-- **Loop Button:** Adds a dedicated button to toggle the video player loop.
-
-- **Hide Scrollbar:** Hides the pages scroll bar.
-
-- **Automatic Theater Mode:** Automatically enables theater mode when you load a video
-
-- **Open Transcript Button:** Adds a button to the feature menu to open the video transcript (available if the video has a transcript).
-
-- **Open YouTube Settings On Hover:** Opens the settings menu when you hover over the settings button.
-
-- **Remove YouTube `/redirect` URLs**: Enhance link navigation by eliminating YouTube /redirect URLs and get straight to the content you want.
-
-- **Shorten YouTube video share link**: Enhance your shared YouTube links with a shortened and cleaner appearance, intelligently excluding unnecessary query parameters like `si`, `pp`, and `feature` for a more user-friendly experience.
-
-- **Skip "Video is paused. Continue watching?" popup**: Skips the idle dialog that pauses video playback.
-
-- **Shorts auto scroll**: Enjoy seamless viewing with automatic scrolling through YouTube Shorts.
-
-- **Hide shorts**: Enhance your browsing experience by hiding distracting YouTube Shorts content.
-
-- **Hide live stream chat**: Hide the chat section of live streams.
-
-- **Hide translate comment button**: Hides the `Translate to Language` button under comments.
-
-- **Hide end screen cards:**: Hide the end screen cards on videos.
-
-### Video history settings
-
-- **Track watched videos:** Keeps track of where you left off on videos you were watching and enables resuming playback
-- **Resume type:** Select how you want to resume playback (Automatic, Prompt)
-
-### On-Screen Display Settings
-
-- **Color:** Select the color for the On-Screen Display (red, green, blue, orange, yellow, white, pink)
-
-- **Type:** Select the type of On-Screen Display (text, line, round, no display).
-
-- **Position:** Select the position of the On-Screen Display (top left, top right, bottom left, bottom right, center).
-
-- **Opacity:** Adjust the transparency of the On-Screen Display.
-
-- **Hide Delay:** Specify the time, in milliseconds, before automatically hiding the On-Screen Display.
-
-- **Padding:** Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display.
-
-### Scroll Wheel Speed Control Settings
-
-- **Scroll Wheel Speed Control:** Enables adjusting video speed with scroll wheel while holding the modifier key down.
-
-- **Modifier Key:** Select the modifier key for use with scroll wheel speed control.
-
-- **Speed Change Per Scroll:** The amount the speed is changed per scroll.
-
-### Scroll Wheel Volume Control Settings
-
-- **Scroll Wheel Volume Control:** Control video volume with your mouse's scroll wheel for quick and easy adjustments.
-
-- **Enable when holding modifier key**: Optionally, enable holding a modifier key to adjust the volume only when the specified key is held down during scroll wheel actions.
-
-- **Enable when holding right click**: Optionally, enable holding down the right mouse button during scroll wheel actions.
-
-- **Amount to Adjust Volume per Scroll:** Define how much the volume should change with each scroll.
-
-### Automatic Quality Settings
-
-- **Automatically Set Quality:** Automatically sets the video quality to the chosen level.
-
-- **Player Quality:** Choose the desired video quality for playback.
-
-### Playback Speed Settings
-
-- **Forced Playback Speed:** Allows users to force videos to play at a specific speed.
-
-- **Playback speed buttons:** Adds buttons to adjust the playback speed.
-
-- **Player Speed:** Define the playback speed for videos.
-
-- **Playback buttons speed:** Define the speed adjustment per button press.
-
-### Volume Boost Settings
-
-- **Volume Boost:** Enables the volume boost feature.
-
-- **Volume Boost Mode Selection:** You can select 'Per Video' mode to enable volume boost for each video individually, or 'Global' mode to apply volume boost to all videos when the feature is enabled.
-
-- **Volume Boost Amount (dB):** Specify the amount by which to boost the volume. This setting applies to both 'Per Video' and 'Global' modes.
-
-### Screenshot Settings
-
-- **Screenshot Button:** Adds a button to the player for taking screenshots of videos.
-
-- **Screenshot Save Type:** Choose whether to save screenshots as files or to the clipboard.
-
-- **Screenshot Format:** Define the format in which screenshots should be saved (PNG, JPEG, or WEBP).
-
-### YouTube Deep Dark Settings
-
-- **Enable selected theme:** Enables the selected YouTube Deep Dark theme.
-
-- **Select theme:** Select the YouTube Deep Dark theme to use (9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark).
-
-- **Accent color:** Select the accent color for the "Custom" theme.
-
-- **Main background color:** Select the main background color for the "Custom" theme.
-
-- **Secondary background color:** Select the secondary background color for the "Custom" theme.
-
-- **Hover background color:** Select the hover background color for the "Custom" theme.
-
-- **Main text color:** Select the main text color for the "Custom" theme.
-
-- **Secondary text color:** Select the secondary text color for the "Custom" theme.
-
-- **Shadow color:** Select the shadow color for the "Custom" theme.
-
-### Custom CSS Settings
-
-- **Enable custom CSS:** Applies the custom CSS from the editor to the YouTube page.
-
+<!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
+
+## 🎛️ Features • 64 features
+
+<details>
+<summary>Miscellaneous • 40 features</summary>
+
+- **Automatic Theater Mode**: Automatically enables theater mode when you load a video
+- **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
+- **Automatically Disable Autoplay**: Automatically disables autoplay when you load a video
+- **Automatically Disable Closed Captions**: Automatically disables closed captions when you load a video
+- **Automatically Enable Closed Captions**: Automatically enables closed captions when you load a video
+- **Automatically Maximize Player**: Automatically maximizes the player when you load a video
+- **Automatically Show More Videos On End Screen**: Automatically shows more videos on end screen when you load a video
+- **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
+- **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
+- **Default To Original Audio Track**: Always default to the original audio track
+- **Horizontal Video Flip Button**: Adds a button to flip the video horizontally
+- **Vertical Video Flip Button**: Adds a button to flip the video vertically
+- **Hide AI Summary**: Hides the artificial intelligence summary below videos
+- **Hide End Screen Cards**: Hides the cards at the end of the video
+- **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
+- **Hide Live Stream Chat**: Hides the live stream chat
+- **Hide Members-only Videos**: Hides videos that are only visible to members
+- **Hide Official Artist Videos**: Hide Official Artist Videos from Home Page
+- **Hide Paid Promotion Banner**: Hides the banner that appears when you watch a video that has a paid promotion
+- **Hide Playables**: Hides all playables
+- **Hide Playlists From Homepage**: Get rid of playlists from homepage
+- **Hide Posts**: Hides posts from the home page
+- **Hide Scrollbar**: Hides the pages scrollbar
+- **Hide Recommended Videos**: Hides the sidebar that recommends videos
+- **Hide Translate Comment Button**: Hides 'Translate to Language' button under comments
+- **Loop Button**: Adds a button to the feature menu to loop the video you're watching
+- **Maximize Player Button**: Adds a button to the feature menu to maximize the player
+- **Mono To Stereo Button**: Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.
+- **Open Transcript Button**: Adds a button to the feature menu to open the transcript of the video you're watching
+- **Open You Tube Settings On Hover**: Opens the YouTube settings menu when you hover over the settings button
+- **Pause Background Players**: Pauses video players in background tabs when you start a new player in foreground tab
+- **Remaining Time**: Shows the remaining time of the video you're watching
+- **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
+- **Remove You Tube /redirect URLs**: Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue
+- **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
+- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
+- **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
+- **Shorts Auto Scroll**: Automatically scrolls to the next short
+- **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
+- **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
+</details>
+
+<details>
+<summary>Deep Dark CSS</summary>
+
+- **Deep Dark Theme**: Activate the selected theme for the page
+- **Select Theme**: Select a theme to be applied to the page
+  - Options: 9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark
+- **Accent Color**: Color for accent
+- **Main Background Color**: Color for main background
+- **Secondary Background Color**: Color for secondary background
+- **Hover Background Color**: Color for hover background
+- **Main Text Color**: Color for main text
+- **Secondary Text Color**: Color for secondary text
+- **Shadow Color**: Color for shadows
+</details>
+
+<details>
+<summary>Forward Rewind Buttons</summary>
+
+- **Forward/rewind Buttons**: Adds forward and rewind buttons to the video player
+- **Forward/rewind Time**: The amount of time to forward/rewind the video by
+</details>
+
+<details>
+<summary>Global Volume</summary>
+
+- **Always Start Videos With This Volume**: Makes all videos begin at your selected volume automatically
+- **Video Start Volume**: The volume applied to every video when it begins playing
+</details>
+
+<details>
+<summary>Hide Shorts • 5 features</summary>
+
+- **Hide On Channel Pages**: Removes the Shorts shelf and tab on channel pages
+- **Hide On Home Feed**: Removes the Shorts section from the Home feed
+- **Hide In Search Results**: Removes Shorts videos from search results
+- **Hide In Sidebar**: Removes the Shorts button from the sidebar
+- **Hide On Watch Pages**: Removes Shorts videos from recommendations on watch pages
+</details>
+
+<details>
+<summary>Mini Player • 2 features (2 settings)</summary>
+
+- **Open Mini Player When Viewing Comments**: Automatically opens the Mini Player when you scroll to comments.
+- **Mini Player Button**: Adds a button that opens the Mini Player
+- **Default Mini Player Position**: Sets the starting position before you move the Mini Player.
+  - Options: Bottom center, Bottom left, Bottom right, Top center, Top left, Top right
+- **Default Mini Player Size**: Sets the initial size before you resize the Mini Player.
+  - Options: 320x180, 400x225, 480x270, 560x315
+</details>
+
+<details>
+<summary>Player Quality</summary>
+
+- **Automatic Quality Adjustment**: Automatically adjusts the video quality to the selected level.
+- **Player Quality**: The quality to set the video to
+  - Options: Auto, 4320p, 2880p, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, 144p
+- **Quality Fallback Strategy**: The strategy to use when the selected quality is not available
+  - Options: Higher, Lower
+</details>
+
+<details>
+<summary>Player Speed • 2 features (2 settings)</summary>
+
+- **Playback Speed Buttons**: Adds buttons to increase or decrease the playback speed of the video you're watching
+- **Forced Playback Speed**: Sets the video speed to what you choose below
+- **Playback Buttons Speed**: Amount of speed to be changed per click
+- **Player Speed**: The speed to set the video to
+</details>
+
+<details>
+<summary>Playlist Length</summary>
+
+- **Display Playlist Length Information**: Shows the total length of the playlist, how much has been watched, and how much remains.
+- **Method To Get Playlist Length**: The way to get playlist length information (API method will fallback to HTML if an error occurs)
+  - Options: API, HTML
+- **Method To Get Watched Time**: The way to get the amount of time watched (Video Length type only used on watch page)
+  - Options: Video Length, Video Watch Time
+</details>
+
+<details>
+<summary>Playlist Management Buttons • 2 features</summary>
+
+- **Remove Video Button**: Adds a button to remove videos from the playlist
+- **Mark As Unwatched Button**: Adds a button to mark videos as unwatched
+</details>
+
+<details>
+<summary>Screenshot Button</summary>
+
+- **Screenshot Button**: Adds a button to the player to take a screenshot of the video
+- **Screenshot Format**: The format to save the screenshot in
+  - Options: PNG, JPEG, WEBP
+- **Screenshot Save Type**: The screenshot save type
+  - Options: File, Clipboard, Both (File and Clipboard)
+</details>
+
+<details>
+<summary>Scroll Wheel Speed Control</summary>
+
+- **Scroll Wheel Speed Control**: Press a modifier key to enable speed adjustment with the scroll wheel.
+- **Modifier Key**: The modifier key to use
+  - Options: Alt key, Ctrl key, Shift key
+- **Speed Change Per Scroll**: Adjust the speed change per scroll
+</details>
+
+<details>
+<summary>Scroll Wheel Volume Control • 3 features (2 settings)</summary>
+
+- **Scroll Wheel Volume Control**: Lets you use the scroll wheel to control the volume of the video you're watching
+- **When Holding Right Click**: Hold right click to enable scroll wheel volume control
+- **When Holding Modifier Key**: Press a modifier key to enable volume adjustment with the scroll wheel.
+- **Modifier Key**: The modifier key to use
+  - Options: Alt key, Ctrl key, Shift key
+- **Volume Change Per Scroll**: Adjust the volume change per scroll
+</details>
+
+<details>
+<summary>Video History</summary>
+
+- **Track Watched Videos**: Keeps track of where you left off on videos you were watching and enables resuming playback
+- **Resume Type**: Select how you want to resume videos
+  - Options: Automatic, Prompt
+</details>
+
+<details>
+<summary>Volume Boost</summary>
+
+- **Volume Boost**: Enable volume boost
+- **Volume Boost Mode**: Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled.
+  - Options: Global, Per video
+- **Volume Boost Amount (dB)**: The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it.
+</details>
+
+<details>
+<summary>Custom CSS</summary>
+
+- **Custom CSS**: Enables custom CSS to be applied to the page
+- **CSS Code**: Custom CSS code input
+</details>
+
+<!-- YOUTUBE-ENHANCER-FEATURES-LIST:END -->
 ## Installing from pre-built zip archive
 
 To install the YouTube Enhancer Extension from the latest release, follow these steps:
@@ -298,32 +356,33 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/crvt7"><img src="https://avatars.githubusercontent.com/u/79649679?v=4?s=100" width="100px;" alt="Patryk Popardowski"/><br /><sub><b>Patryk Popardowski</b></sub></a><br /><a href="#translation-crvt7" title="Translation">🌍</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://artkfwks.carrd.co"><img src="https://avatars.githubusercontent.com/u/285081322?v=4&s=100" width="100px;" alt="artkfwks"/><br /><sub><b>artkfwks</b></sub></a><br /><a href="#design-artkfwks" title="Design">🎨</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/luisaosan"><img src="https://avatars.githubusercontent.com/u/48157083?v=4?s=100" width="100px;" alt="Luis Felipe"/><br /><sub><b>Luis Felipe</b></sub></a><br /><a href="#translation-luisaosan" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://nosesisaid.com"><img src="https://avatars.githubusercontent.com/u/74506415?v=4?s=100" width="100px;" alt="Vic"/><br /><sub><b>Vic</b></sub></a><br /><a href="#translation-v1ctorio" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rado84-github"><img src="https://avatars.githubusercontent.com/u/41172201?v=4?s=100" width="100px;" alt="rado84"/><br /><sub><b>rado84</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/issues?q=author%3Arado84-github" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pulsar2105"><img src="https://avatars.githubusercontent.com/u/54115653?v=4?s=100" width="100px;" alt="pulsar2105"/><br /><sub><b>pulsar2105</b></sub></a><br /><a href="#translation-pulsar2105" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/G-Ran-Berg"><img src="https://avatars.githubusercontent.com/u/12037193?v=4?s=100" width="100px;" alt="Granberg"/><br /><sub><b>Granberg</b></sub></a><br /><a href="#translation-G-Ran-Berg" title="Translation">🌍</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Secret-Peter"><img src="https://avatars.githubusercontent.com/u/166921574?v=4?s=100" width="100px;" alt="Secret-Peter"/><br /><sub><b>Secret-Peter</b></sub></a><br /><a href="#translation-Secret-Peter" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/szaumoor"><img src="https://avatars.githubusercontent.com/u/78204388?v=4?s=100" width="100px;" alt="Marcos C.R."/><br /><sub><b>Marcos C.R.</b></sub></a><br /><a href="#ideas-szaumoor" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/charlymoon741"><img src="https://avatars.githubusercontent.com/u/62484941?v=4?s=100" width="100px;" alt="Carlos Ramos Luna"/><br /><sub><b>Carlos Ramos Luna</b></sub></a><br /><a href="#ideas-charlymoon741" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Angsimosaurus"><img src="https://avatars.githubusercontent.com/u/79510039?v=4?s=100" width="100px;" alt="앙시모사우루스"/><br /><sub><b>앙시모사우루스</b></sub></a><br /><a href="#translation-Angsimosaurus" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mabra51"><img src="https://avatars.githubusercontent.com/u/12016338?v=4?s=100" width="100px;" alt="Mabra51"/><br /><sub><b>Mabra51</b></sub></a><br /><a href="#ideas-Mabra51" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://eduardozgz.com"><img src="https://avatars.githubusercontent.com/u/30407412?v=4?s=100" width="100px;" alt="Eduardo Aznar"/><br /><sub><b>Eduardo Aznar</b></sub></a><br /><a href="#translation-eduardozgz" title="Translation">🌍</a> <a href="https://github.com/YouTube-Enhancer/extension/commits?author=eduardozgz" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://notyasho.netlify.app/blogs"><img src="https://avatars.githubusercontent.com/u/90166733?v=4?s=100" width="100px;" alt="pyrix"/><br /><sub><b>pyrix</b></sub></a><br /><a href="#ideas-at-pyrix" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-at-pyrix" title="Design">🎨</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CaiCheng-Li"><img src="https://avatars.githubusercontent.com/u/150627108?v=4?s=100" width="100px;" alt="CaiCheng-Li"/><br /><sub><b>CaiCheng-Li</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/issues?q=author%3ACaiCheng-Li" title="Bug reports">🐛</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CaiCheng-Li"><img src="https://avatars.githubusercontent.com/u/150627108?v=4?s=100" width="100px;" alt="CaiCheng-Li"/><br /><sub><b>CaiCheng-Li</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/issues?q=author%3ACaiCheng-Li" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sites.google.com/u/0/d/1OdIAWachs1svsjOS4lT9jqwlE632B6rP"><img src="https://avatars.githubusercontent.com/u/121247693?v=4?s=100" width="100px;" alt="Lexiosity"/><br /><sub><b>Lexiosity</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/issues?q=author%3ALexiosity" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/HelloIamarandomperson"><img src="https://avatars.githubusercontent.com/u/136181387?v=4?s=100" width="100px;" alt="HelloIamarandomperson"/><br /><sub><b>HelloIamarandomperson</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/commits?author=HelloIamarandomperson" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/TheMajor-GitHub"><img src="https://avatars.githubusercontent.com/u/94167392?v=4?s=100" width="100px;" alt="The Major"/><br /><sub><b>The Major</b></sub></a><br /><a href="#ideas-TheMajor-GitHub" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dnicolson"><img src="https://avatars.githubusercontent.com/u/2276355?v=4?s=100" width="100px;" alt="Dave Nicolson"/><br /><sub><b>Dave Nicolson</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/commits?author=dnicolson" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dheatly23"><img src="https://avatars.githubusercontent.com/u/71598333?v=4?s=100" width="100px;" alt="Dheatly23"/><br /><sub><b>Dheatly23</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/commits?author=Dheatly23" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/minkses"><img src="https://avatars.githubusercontent.com/u/33008182?v=4?s=100" width="100px;" alt="Minks S"/><br /><sub><b>Minks S</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/issues?q=author%3Aminkses" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kindofabuzz"><img src="https://avatars.githubusercontent.com/u/1378108?v=4?s=100" width="100px;" alt="kindofabuzz"/><br /><sub><b>kindofabuzz</b></sub></a><br /><a href="#security-kindofabuzz" title="Security">🛡️</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kindofabuzz"><img src="https://avatars.githubusercontent.com/u/1378108?v=4?s=100" width="100px;" alt="kindofabuzz"/><br /><sub><b>kindofabuzz</b></sub></a><br /><a href="#security-kindofabuzz" title="Security">🛡️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jtoya85"><img src="https://avatars.githubusercontent.com/u/90115330?v=4?s=100" width="100px;" alt="jtoya85"/><br /><sub><b>jtoya85</b></sub></a><br /><a href="#ideas-jtoya85" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SoSeDiK"><img src="https://avatars.githubusercontent.com/u/19875118?v=4?s=100" width="100px;" alt="Illia Bondar"/><br /><sub><b>Illia Bondar</b></sub></a><br /><a href="#ideas-SoSeDiK" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/HALL4Y"><img src="https://avatars.githubusercontent.com/u/35395608?v=4?s=100" width="100px;" alt="Hall4y"/><br /><sub><b>Hall4y</b></sub></a><br /><a href="#translation-HALL4Y" title="Translation">🌍</a></td>

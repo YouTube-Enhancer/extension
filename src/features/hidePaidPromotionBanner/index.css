@@ -1,5 +1,5 @@
 body.yte-hide-paid-promotion-banner {
-	& .ytp-paid-content-overlay {
+	.ytp-paid-content-overlay, ytm-paid-content-overlay-renderer {
 		display: none !important;
 	}
 }

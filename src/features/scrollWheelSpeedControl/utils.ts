@@ -1,7 +1,8 @@
+import eventManager from "@/src/events/EventManager";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { type Selector, youtubePlayerMinSpeed } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, round } from "@/src/utils/utilities";
+import { browserColorLog } from "@/src/utils/logging";
+import { round } from "@/src/utils/math";
 
 /**
  * Adjust the speed based on the scroll direction.

@@ -1,0 +1,79 @@
+{
+	"Feature (default export, minimal)": {
+		"prefix": "feature",
+		"body": [
+			"import { createFeature } from \"@/src/features/_registry/createFeature\";",
+			"import { z } from \"zod/v4-mini\";",
+			"",
+			"export default createFeature({",
+			"\tdefaults: { enabled: ${2:false} },",
+			"\tid: \"${1:myFeature}\",",
+			"\tonDisable: async (config) => {",
+			"\t\t// feature enabled logic",
+			"\t},",
+			"\tonEnable: async (config) => {",
+			"\t\t// feature disabled logic",
+			"\t},",
+			"\tschema: z.object({ enabled: z.boolean() })",
+			"});",
+			""
+		],
+		"description": "Minimal feature with default export and only onEnable/onDisable"
+	},
+	"Feature (with buttons)": {
+		"prefix": "feature-btn",
+		"body": [
+			"import { createFeature } from \"@/src/features/_registry/createFeature\";",
+			"import { z } from \"zod/v4-mini\";",
+			"import { buttonPlacements } from \"@/src/types\";",
+			"",
+			"export default createFeature({",
+			"\tdefaults: {",
+			"\t\tbutton: {",
+			"\t\t\tenabled: ${2:false},",
+			"\t\t\tplacement: \"${3:player_controls_right}\"",
+			"\t\t}",
+			"\t},",
+			"\tid: \"${1:myFeature}\",",
+			"\tonDisable: async (config) => {",
+			"\t\t// feature disabled logic",
+			"\t},",
+			"\tonEnable: async (config) => {",
+			"\t\t// feature enabled logic",
+			"\t},",
+			"\tschema: z.object({",
+			"\t\tbutton: z.object({",
+			"\t\t\tenabled: z.boolean(),",
+			"\t\t\tplacement: z.enum(buttonPlacements)",
+			"\t\t})",
+			"\t})",
+			"});",
+			""
+		],
+		"description": "Feature with single button config (enabled + placement) and default export"
+	},
+	"Feature (with onConfigChange)": {
+		"prefix": "feature-cfg",
+		"body": [
+			"import { createFeature } from \"@/src/features/_registry/createFeature\";",
+			"import { z } from \"zod/v4-mini\";",
+			"",
+			"export default createFeature({",
+			"\tdefaults: { enabled: ${2:false} },",
+			"\tid: \"${1:myFeature}\",",
+			"\tonConfigChange: async (config) => {",
+			"\t\t// config change logic",
+			"\t},",
+			"\tonDisable: async (config) => {",
+			"\t\t// feature disabled logic",
+			"\t},",
+			"\tonEnable: async (config) => {",
+			"\t\t// feature enabled logic",
+			"\t},",
+			"\tschema: z.object({ enabled: z.boolean() })",
+			"});",
+			""
+		],
+		"description": "Feature with onEnable, onDisable, and onConfigChange methods"
+	}
+}

@@ -8,6 +8,25 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Manipulação de Áudio Mono",
+						"toggle": {
+							"on": "Mono → Saída Estéreo",
+							"off": "Áudio Original"
+						}
+					}
+				},
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Inverter vídeo horizontalmente"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Inverter o vídeo verticalmente"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Copiar URL do vídeo com a minutagem"
@@ -35,8 +54,8 @@
 					"button": {
 						"label": "Ocultar cards finais",
 						"toggle": {
-							"off": "Exibir cards finais",
-							"on": "Ocultar cards finais"
+							"off": "Ocultar cards finais",
+							"on": "Exibir cards finais"
 						}
 					}
 				},
@@ -62,8 +81,8 @@
 					"button": {
 						"label": "Mini Player",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini Player desligado",
+							"on": "Mini Player ligado"
 						}
 					}
 				},
@@ -122,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Aumento de volume",
+						"label": "Ganho de Volume ({{value}} dB)",
 						"toggle": {
 							"off": "Aumento de volume desativado",
-							"on": "Aumento de volume ativado"
+							"on": "Ganho de volume ({{value}} dB)"
 						}
 					}
 				}
@@ -160,11 +179,14 @@
 							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 							"loopButton": "Botão Repetir",
 							"maximizePlayerButton": "Botão Maximizar",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Botão do Mini Player",
 							"openTranscriptButton": "Abrir botão de transcrição",
 							"rewindButton": "Botão Voltar",
 							"screenshotButton": "Botão de captura de tela",
-							"volumeBoostButton": "Botão de ganho de volume"
+							"volumeBoostButton": "Botão de ganho de volume",
+							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
+							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente",
+							"monoToStereoButton": "Botão Mono para Estéreo"
 						},
 						"options": {
 							"below_player": {
@@ -229,8 +251,8 @@
 					"title": "Idioma"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Abrir a página de configurações na atualização",
+					"title": "Abre a página de configurações quando uma versão maior ou menor do YouTube Enhancer é instalada"
 				},
 				"optionDisabled": {
 					"either": {
@@ -244,9 +266,9 @@
 					"singular": "Ative o '{{OPTION}}' para configurar esta opção",
 					"specificOption": {
 						"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"globalVolume": "Desative 'Lembrar último volume' para configurar esta opção",
+						"rememberVolume": "Desative 'Lembrar último volume' para configurar esta opção",
+						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
 				},
 				"scrollForMoreSettings": "Role para mais opções",
@@ -264,6 +286,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
@@ -283,37 +320,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "CSS personalizado",
@@ -386,6 +392,50 @@
 				},
 				"title": "Opções de avançar/voltar"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Sempre iniciar vídeos com este volume",
+					"title": "Faz com que todos os vídeos comecem no seu volume selecionado automaticamente"
+				},
+				"settings": {
+					"amount": {
+						"label": "Volume inicial de vídeo",
+						"title": "O volume aplicado a cada vídeo quando ele começa a reproduzir"
+					}
+				},
+				"title": "Substituição de Volume Global"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Botão do Mini Player",
+					"title": "Adiciona um botão que abre o Mini Player"
+				},
+				"enable": {
+					"label": "Abrir Mini Player ao ver comentários",
+					"title": "Abrir automaticamente o Mini Player ao rolar para os comentários."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Posição padrão Mini Player",
+							"options": {
+								"bottomCenter": "Centro inferior",
+								"bottomLeft": "Canto inferior esquerdo",
+								"bottomRight": "Canto inferior direito",
+								"topCenter": "Superior no centro",
+								"topLeft": "Superior Esquerdo",
+								"topRight": "Superior direita"
+							},
+							"title": "Define a posição inicial antes de mover o Mini Player."
+						}
+					},
+					"size": {
+						"label": "Tamanho padrão do Mini Player",
+						"title": "Define o tamanho inicial antes de redimensionar o Mini Player."
+					}
+				},
+				"title": "Configurações do Mini Player"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -430,6 +480,18 @@
 							"title": "Mostra automaticamente mais vídeos na tela final do vídeo"
 						}
 					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Bloquear tecla de número em busca",
+							"title": "Impede que se pule 0-9 para uma porcentagem do vídeo"
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "Esconder postagem",
+							"title": "Oculta postagens da página inicial"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Copiar URL do vídeo com o botão de minutagem",
@@ -472,6 +534,12 @@
 							"title": "Oculta vídeos que só membros são permitidos a assistir"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Botão Mono para Estéreo",
+							"title": "Adiciona um botão para converter áudio mono para estéreo. Faixas estéreo permanecem inalteradas."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Ocultar vídeos de artistas originais",
@@ -500,12 +568,6 @@
 						"enable": {
 							"label": "Ocultar barra de rolagem",
 							"title": "Oculta a barra de rolagem da página"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Ocultar \"Shorts\"",
-							"title": "Oculta a função \"Shorts\""
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -600,12 +662,49 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Pré-visualização de Timestamp",
+							"title": "Pré-visualize o vídeo passando o mouse sobre um timestamp. Clique na pré-visualização para começar a reprodução a partir daquele momento."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Botão de girar vídeo horizontal",
+							"title": "Adiciona um botão para virar o vídeo horizontalmente"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Botão de girar vídeo verticalmente",
+							"title": "Adiciona um botão para virar o vídeo verticalmente"
 						}
 					}
 				},
 				"title": "Diversos"
+			},
+			"hideShorts": {
+				"title": "Ocultar Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Ocultar na barra lateral",
+						"title": "Remove o botão Shorts da barra lateral"
+					},
+					"home": {
+						"label": "Ocultar no feed da Home",
+						"title": "Remove o botão Shorts da feed da Home"
+					},
+					"channel": {
+						"label": "Esconder na página de Inscrições",
+						"title": "Remove o Shorts na página de inscrições"
+					},
+					"search": {
+						"label": "Ocultar nos resultados de pesquisa",
+						"title": "Remove os vídeos do Shorts dos resultados de pesquisa"
+					},
+					"videos": {
+						"label": "Esconder na página de reprodução",
+						"title": "Remove o Shorts das recomendações na página de reprodução"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -856,7 +955,11 @@
 				"settings": {
 					"amount": {
 						"label": "Aumento de volume (dB)",
-						"title": "O valor para aumentar o volume"
+						"title": "O valor para ganho do volume. Você também pode rolar sobre o botão de impulso de volume (Shift/Ctrl para ganhos maiores) para ajustá-lo."
+					},
+					"amount_global_only": {
+						"label": "Quantidade de ganho de volume (dB)",
+						"title": "Valor de ganho de volume por."
 					},
 					"mode": {
 						"select": {
@@ -870,19 +973,6 @@
 					}
 				},
 				"title": "Opções de aumento de volume"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}

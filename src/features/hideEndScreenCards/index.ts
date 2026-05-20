@@ -1,97 +1,51 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
+import type { ToggleIcon } from "@/src/icons";
+import type { ButtonPlacement } from "@/src/types";
 
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureMenuItem } from "@/src/features/featureMenu/utils";
-import { getFeatureIcon, type ToggleIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
-import { isWatchPage, modifyElementClassList, waitForAllElements, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { getFeatureIcon } from "@/src/icons";
+import { modifyElementClassList } from "@/src/utils/dom/classList";
+import { waitForAllElements } from "@/src/utils/dom/wait";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import "./index.css";
-export async function disableHideEndScreenCards() {
-	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
-	showEndScreenCards();
-}
+import { metadata } from "./index.metadata";
 
-export async function enableHideEndScreenCards() {
-	const {
-		data: {
-			options: { enable_hide_end_screen_cards: enableHideEndScreenCards }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideEndScreenCards) return;
-	if (!isWatchPage()) return;
-	await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
-	hideEndScreenCards();
-}
-export const addHideEndScreenCardsButton: AddButtonFunction = async () => {
-	const {
-		data: {
-			options: {
-				button_placements: { hideEndScreenCardsButton: hideEndScreenCardsButtonPlacement },
-				enable_hide_end_screen_cards_button: enableHideEndScreenCardsButton
+export default createFeature({
+	...metadata,
+	dependencies: { includePages: ["watch"] },
+	onConfigChange: async ({ enabled }) => {
+		const {
+			data: {
+				options: {
+					hideEndScreenCardsButton: {
+						button: { placement }
+					}
+				}
 			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enableHideEndScreenCardsButton) return;
-	if (!isWatchPage()) return;
-	// Get the player container element
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-	if (!playerContainer) return;
-	const videoData = await playerContainer.getVideoData();
-	if (videoData.isLive) return;
-	const endScreenCardsAreHidden = isEndScreenCardsHidden();
-	const handleButtonClick = (placement: ButtonPlacement, checked?: boolean) => {
-		if (placement === "feature_menu") {
-			if (checked && !isEndScreenCardsHidden()) hideEndScreenCards();
-			else if (!checked && isEndScreenCardsHidden()) showEndScreenCards();
-		} else {
-			updateFeatureButtonTitle(
-				"hideEndScreenCardsButton",
-				window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.toggle[checked ? "on" : "off"])
-			);
-			if (checked && isEndScreenCardsHidden()) showEndScreenCards();
-			else if (!checked && !isEndScreenCardsHidden()) hideEndScreenCards();
-		}
-	};
-	await addFeatureButton(
-		"hideEndScreenCardsButton",
-		hideEndScreenCardsButtonPlacement,
-		window.i18nextInstance.t((translations) =>
-			hideEndScreenCardsButtonPlacement === "feature_menu" ?
-				translations.pages.content.features.hideEndScreenCardsButton.button.label
-			:	translations.pages.content.features.hideEndScreenCardsButton.button.toggle[!endScreenCardsAreHidden ? "on" : "off"]
-		),
-		getFeatureIcon("hideEndScreenCardsButton", hideEndScreenCardsButtonPlacement),
-		(checked) => handleButtonClick(hideEndScreenCardsButtonPlacement, checked),
-		true,
-		hideEndScreenCardsButtonPlacement !== "feature_menu" ? !endScreenCardsAreHidden : endScreenCardsAreHidden
-	);
-};
-export const removeHideEndScreenCardsButton: RemoveButtonFunction = async (placement) => {
-	if (!isWatchPage()) return;
-	await removeFeatureButton("hideEndScreenCardsButton", placement);
-	eventManager.removeEventListeners("hideEndScreenCardsButton");
-};
-export function isEndScreenCardsHidden(): boolean {
-	const elem = document.querySelector("div#movie_player.yte-hide-end-screen-cards");
-	return elem !== null;
-}
-function hideEndScreenCards() {
-	modifyElementClassList("add", {
-		className: "yte-hide-end-screen-cards",
-		element: document.querySelector("div#movie_player")
-	});
-}
-function showEndScreenCards() {
-	modifyElementClassList("remove", {
-		className: "yte-hide-end-screen-cards",
-		element: document.querySelector("div#movie_player")
-	});
-}
-export const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icon: ToggleIcon, checked: boolean) => {
+		} = await waitForSpecificMessage("options", "request_data", "content");
+		const hideEndScreenCardsIcon = getFeatureIcon("hideEndScreenCardsButton", "below_player");
+		if (hideEndScreenCardsIcon instanceof SVGSVGElement) return;
+		const playerButtonChecked = enabled;
+		updateHideEndScreenCardsButtonState(placement, hideEndScreenCardsIcon, playerButtonChecked);
+	},
+	onDisable: async () => {
+		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
+		modifyElementClassList("remove", {
+			className: "yte-hide-end-screen-cards",
+			element: document.body
+		});
+	},
+	onEnable: async () => {
+		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
+		modifyElementClassList("add", {
+			className: "yte-hide-end-screen-cards",
+			element: document.body
+		});
+	}
+});
+const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icon: ToggleIcon, checked: boolean) => {
 	if (hideEndScreenCardsPlacement === "feature_menu") {
 		const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
 		if (!hideEndScreenCardsMenuItem) return;
@@ -99,7 +53,7 @@ export const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement:
 	} else {
 		const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
 		if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
-		updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "on" : "off"]);
+		updateFeatureButtonIcon(hideEndScreenCardsButton, icon[checked ? "off" : "on"]);
 		updateFeatureButtonTitle(
 			"hideEndScreenCardsButton",
 			window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.toggle[checked ? "on" : "off"])

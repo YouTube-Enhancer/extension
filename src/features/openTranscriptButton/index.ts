@@ -1,24 +1,51 @@
-import { removeFeatureButton } from "@/src/features/buttonPlacement";
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
-import { waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { getFeatureIcon } from "@/src/icons";
+import { waitForElement } from "@/src/utils/dom/wait";
 
-import { addOpenTranscriptButton } from "./utils";
+import { metadata } from "./index.metadata";
 
-export async function openTranscriptButton() {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: { enable_open_transcript_button: enableOpenTranscriptButton }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the open transcript button option is disabled, return
-	if (!enableOpenTranscriptButton) return;
-	const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button");
-	const transcriptButtonMenuItem = getFeatureButton("openTranscriptButton");
-	// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item
-	if (!transcriptButton && transcriptButtonMenuItem) await removeFeatureButton("openTranscriptButton");
-	// If the transcript button isn't found return
+function transcriptButtonClickerListener() {
+	const transcriptButton = document.querySelector<HTMLButtonElement>("ytd-video-description-transcript-section-renderer button");
 	if (!transcriptButton) return;
-	// If the transcript button is found and the "openTranscriptButton" menu item does not exist, add the transcript button menu item
-	void addOpenTranscriptButton();
+	transcriptButton.click();
 }
+
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement } }) => {
+				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150);
+				const transcriptButtonMenuItem = getFeatureButton("openTranscriptButton");
+				// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item
+				if (!transcriptButton && transcriptButtonMenuItem) await removeFeatureButton("openTranscriptButton");
+				// If the transcript button isn't found return
+				if (!transcriptButton) return;
+				// If the transcript button is found and the "openTranscriptButton" menu item does not exist, add the transcript button menu item
+				await addFeatureButton(
+					"openTranscriptButton",
+					placement,
+					window.i18nextInstance.t((translations) => translations.pages.content.features.openTranscriptButton.button.label),
+					getFeatureIcon("openTranscriptButton", placement),
+					transcriptButtonClickerListener,
+					false,
+					false,
+					fullscreenPlacement
+				);
+			},
+			name: "openTranscriptButton",
+			remove: async (placement) => {
+				await removeFeatureButton("openTranscriptButton", placement);
+				eventManager.removeEventListeners("openTranscriptButton");
+			},
+			shouldRender: async () => {
+				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150);
+				return !!transcriptButton;
+			}
+		}
+	],
+	dependencies: { includePages: ["watch"] }
+});
