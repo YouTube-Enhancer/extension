@@ -101,7 +101,7 @@
     "tsx": "^4.21.0",
     "typescript": "6.0",
     "typescript-eslint": "^8.46.2",
-    "vite": "^7.3.2",
+    "vite": "^8.0.13",
     "zod": "^4.1.12",
     "zod-error": "^2.0.0"
   }
