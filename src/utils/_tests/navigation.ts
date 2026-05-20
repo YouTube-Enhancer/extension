@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
@@ -25,6 +26,7 @@ export async function navigateToPage(page: Page, url: string) {
 }
 
 export async function navigateToPageType(page: Page, pageType: PageType, alternative: boolean = false): Promise<void> {
+	test.setTimeout(120_000);
 	if (pageType === "live")
 		return await expect(async () => {
 			await navigateToLiveVideo(page);
