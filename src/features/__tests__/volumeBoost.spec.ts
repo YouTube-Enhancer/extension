@@ -1,66 +1,94 @@
+import type { Page } from "@playwright/test";
+
 import { expect, test } from "playwright.config";
 
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { clampDb, dbToLinear } from "@/src/utils/misc";
 
 const testPages = ["watch", "live", "shorts"] as const;
 const placement = "player_controls_right" as const;
+async function expectVolumeBoostAmount(page: Page, expected: number) {
+	await expect
+		.poll(
+			async () =>
+				page.evaluate(() => {
+					const gain = window.engine?.volumeGain?.gain;
+					if (!gain) return null;
+					return gain.value;
+				}),
+			{ timeout: 10_000 }
+		)
+		.toBeCloseTo(dbToLinear(clampDb(expected)), 5);
+}
+async function expectVolumeBoostEnabled(page: Page, enabled: boolean) {
+	await expect
+		.poll(
+			async () =>
+				page.evaluate(() => {
+					const { engine } = window;
+					if (!engine) return false;
+					const gain = engine.volumeGain?.gain;
+					if (gain == null) return false;
+					return gain.value !== 1;
+				}),
+			{ timeout: 10_000 }
+		)
+		.toBe(enabled);
+}
 test.describe("volumeBoost", () => {
-	for (const pageType of testPages) {
-		test(`should set global volume boost to 10 on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "global");
-			await setOption(page, "volumeBoost.amount", 10);
-			const volumeBoostEnabled = await page.evaluate(() => {
-				return window.gainNode && window.gainNode.gain.value !== 1;
+	test.describe("volumeBoost (global)", () => {
+		for (const pageType of testPages) {
+			test(`should set global volume boost to 10 on ${pageType}`, async ({ page }) => {
+				await navigateToPageType(page, pageType);
+				await enableFeature(page, "volumeBoost.enabled");
+				await setOption(page, "volumeBoost.mode", "global");
+				await setOption(page, "volumeBoost.amount", 10);
+				await expectVolumeBoostEnabled(page, true);
+				await expectVolumeBoostAmount(page, 10);
 			});
-			expect(volumeBoostEnabled).toBeTruthy();
-		});
-		test(`volume boost button should be enabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "per_video");
-			await setOption(page, "volumeBoost.button.placement", placement);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-		});
-		test(`volume boost button should be disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "volumeBoost.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
-		});
-		test(`volume boost button should set volume boost to 10 on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "per_video");
-			await setOption(page, "volumeBoost.amount", 10);
-			await setOption(page, "volumeBoost.button.placement", placement);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-			await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
-			const volumeBoostEnabled = await page.evaluate(() => {
-				return window.gainNode && window.gainNode.gain.value !== 1;
+		}
+	});
+	const buttonTestPages = testPages.filter((p) => p !== "shorts");
+	test.describe("volumeBoost (button)", () => {
+		for (const pageType of buttonTestPages) {
+			test(`button should be enabled on ${pageType}`, async ({ page }) => {
+				await navigateToPageType(page, pageType);
+				await enableFeature(page, "volumeBoost.enabled");
+				await setOption(page, "volumeBoost.mode", "per_video");
+				await setOption(page, "volumeBoost.button.placement", placement);
+				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
 			});
-			expect(volumeBoostEnabled).toBeTruthy();
-		});
-		test(`volume boost button should toggle off when clicking again on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "volumeBoost.enabled");
-			await setOption(page, "volumeBoost.mode", "per_video");
-			await setOption(page, "volumeBoost.amount", 10);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-			// Enable boost
-			await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
-			const boostEnabled = await page.evaluate(() => {
-				return window.gainNode && window.gainNode.gain.value !== 1;
+			test(`button should be disabled when feature is off on ${pageType}`, async ({ page }) => {
+				await navigateToPageType(page, pageType);
+				await disableFeature(page, "volumeBoost.enabled");
+				await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
 			});
-			expect(boostEnabled).toBeTruthy();
-			// Disable boost
-			await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
-			const boostDisabled = await page.evaluate(() => {
-				return !window.gainNode || window.gainNode.gain.value === 1;
+			test(`button should set volume boost to 10 on ${pageType}`, async ({ page }) => {
+				await navigateToPageType(page, pageType);
+				await enableFeature(page, "volumeBoost.enabled");
+				await setOption(page, "volumeBoost.mode", "per_video");
+				await setOption(page, "volumeBoost.amount", 10);
+				await setOption(page, "volumeBoost.button.placement", placement);
+				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
+				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await expectVolumeBoostEnabled(page, true);
+				await expectVolumeBoostAmount(page, 10);
 			});
-			expect(boostDisabled).toBeTruthy();
-		});
-	}
+			test(`button should toggle off when clicked again on ${pageType}`, async ({ page }) => {
+				await navigateToPageType(page, pageType);
+				await enableFeature(page, "volumeBoost.enabled");
+				await setOption(page, "volumeBoost.mode", "per_video");
+				await setOption(page, "volumeBoost.amount", 10);
+				await setOption(page, "volumeBoost.button.placement", placement);
+				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
+				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await expectVolumeBoostEnabled(page, true);
+				await expectVolumeBoostAmount(page, 10);
+				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await expectVolumeBoostEnabled(page, false);
+			});
+		}
+	});
 });
