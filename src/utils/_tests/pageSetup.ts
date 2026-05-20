@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 
 import type { Nullable } from "@/src/types";
 
@@ -116,36 +116,18 @@ async function handleYoutubeErrors(page: Page): Promise<void> {
 	const interval = setInterval(() => void check(), 1500);
 	page.once("close", () => clearInterval(interval));
 }
-const YOUTUBE_PROMO_SELECTORS = {
-	dialog: "tp-yt-paper-dialog:has(yt-mealbar-promo-renderer)",
-	dismissButton: ["yt-button-renderer#dismiss-button button", 'button[aria-label="No thanks"]', 'yt-button-shape button:has-text("No thanks")'].join(
-		", "
-	)
-} as const;
+const YOUTUBE_PROMO_SELECTOR = `
+	tp-yt-paper-dialog:has(> yt-mealbar-promo-renderer)
+	> yt-mealbar-promo-renderer
+`;
 
-async function handleYoutubePromos(page: Page): Promise<void> {
-	const dialog = page.locator(YOUTUBE_PROMO_SELECTORS.dialog);
-	const closeOne = async (d: Locator): Promise<boolean> => {
-		try {
-			if (!(await d.isVisible().catch(() => false))) return false;
-			const btn = d.locator(YOUTUBE_PROMO_SELECTORS.dismissButton).first();
-			if ((await btn.count()) === 0) return false;
-			await btn.click({ force: true, timeout: 1000 });
-			await d.waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
-			return true;
-		} catch {
-			return false;
-		}
-	};
-	const dismissAll = async (): Promise<void> => {
-		const count = await dialog.count();
-		for (let i = 0; i < count; i++) {
-			await closeOne(dialog.nth(i));
-		}
-	};
-	await dismissAll();
-	page.on("domcontentloaded", () => {
-		void dismissAll();
+export async function handleYoutubePromos(page: Page): Promise<void> {
+	await page.addStyleTag({
+		content: `
+			${YOUTUBE_PROMO_SELECTOR} {
+				display: none !important;
+			}
+		`
 	});
 }
 const YOUTUBE_OVERLAY_SELECTORS = {
