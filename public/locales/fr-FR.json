@@ -61,19 +61,19 @@
 				},
 				"loopButton": {
 					"button": {
-						"label": "Loop",
+						"label": "Boucle",
 						"toggle": {
-							"off": "Loop off",
-							"on": "Loop on"
+							"off": "Boucle désactivée",
+							"on": "Boucle activée"
 						}
 					}
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Agrandir",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "Agrandissement désactivé",
+							"on": "Agrandissement activé"
 						}
 					}
 				},
@@ -88,46 +88,46 @@
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Open transcript"
+						"label": "Ouvrir la transcription"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Decrease Speed to {{SPEED}}"
+							"label": "Réduire la vitesse à {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Increase Speed to {{SPEED}}"
+							"label": "Augmenter la vitesse à {{SPEED}}"
 						}
 					},
 					"extras": {
-						"decreaseLimit": "Can't decrease further ({{SPEED}})",
-						"increaseLimit": "Can't increase further ({{SPEED}})"
+						"decreaseLimit": "Impossible de réduire davantage ({{SPEED}})",
+						"increaseLimit": "Impossible d'augmenter davantage ({{SPEED}})"
 					}
 				},
 				"playlistLength": {
-					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
+					"title": "La durée totale peut être inexacte si certaines vidéos sont masquées ou si vous n'avez pas chargé suffisamment de vidéos pour obtenir la durée complète."
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-						"failedToRemoveVideo": "Failed to remove video",
-						"markAsUnwatched": "Mark as unwatched",
-						"markingAsUnwatched": "Marking as unwatched…",
-						"removeVideo": "Remove video",
-						"removingVideo": "Removing video…"
+						"failedToMarkAsUnwatched": "Échec du marquage de la vidéo comme non visionnée",
+						"failedToRemoveVideo": "Échec de la suppression de la vidéo",
+						"markAsUnwatched": "Marquer comme non visionnée",
+						"markingAsUnwatched": "Marquage comme non visionnée…",
+						"removeVideo": "Supprimer la vidéo",
+						"removingVideo": "Suppression de la vidéo…"
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Failed to save video to Watch Later",
-						"saveVideo": "Save to Watch Later",
-						"savingVideo": "Saving to Watch Later…"
+						"failedToSaveVideo": "Échec de l'enregistrement dans À regarder plus tard",
+						"saveVideo": "Enregistrer dans À regarder plus tard",
+						"savingVideo": "Enregistrement dans À regarder plus tard…"
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Capture d'écran"
 					},
 					"extras": {
 						"copiedToClipboard": "Capture d'écran copiée dans le presse-papiers"
@@ -143,7 +143,7 @@
 					"button": {
 						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
-							"off": "Volume boost off",
+							"off": "Amplification du volume désactivée",
 							"on": "Volume boost ({{value}} dB)"
 						}
 					}
@@ -173,49 +173,49 @@
 					"select": {
 						"buttonNames": {
 							"copyTimestampUrlButton": "Bouton copier l'URL avec timestamp",
-							"decreasePlaybackSpeedButton": "Decrease Speed button",
-							"forwardButton": "Fast Forward button",
-							"hideEndScreenCardsButton": "Hide end screen cards button",
-							"increasePlaybackSpeedButton": "Increase Speed button",
-							"loopButton": "Loop button",
-							"maximizePlayerButton": "Maximize button",
+							"decreasePlaybackSpeedButton": "Bouton Réduire la vitesse",
+							"forwardButton": "Bouton Avancer",
+							"hideEndScreenCardsButton": "Bouton Masquer les cartes de fin",
+							"increasePlaybackSpeedButton": "Bouton Augmenter la vitesse",
+							"loopButton": "Bouton Boucle",
+							"maximizePlayerButton": "Bouton Agrandir",
 							"miniPlayerButton": "Mini Player button",
-							"openTranscriptButton": "Open Transcript button",
-							"rewindButton": "Rewind button",
-							"screenshotButton": "Screenshot button",
-							"volumeBoostButton": "Volume Boost button",
+							"openTranscriptButton": "Bouton Ouvrir la transcription",
+							"rewindButton": "Bouton Reculer",
+							"screenshotButton": "Bouton Capture d'écran",
+							"volumeBoostButton": "Bouton Amplification du volume",
 							"flipVideoVerticalButton": "Flip video vertically button",
 							"flipVideoHorizontalButton": "Flip video horizontally button",
 							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
-								"placement": "below the player controls",
-								"value": "Below Player"
+								"placement": "sous les contrôles du lecteur",
+								"value": "Sous le lecteur"
 							},
 							"feature_menu": {
-								"placement": "in the feature menu",
-								"value": "Feature Menu"
+								"placement": "dans le menu des fonctionnalités",
+								"value": "Menu des fonctionnalités"
 							},
 							"player_controls_left": {
-								"placement": "on the left side of player controls",
-								"value": "Left Controls"
+								"placement": "à gauche des contrôles du lecteur",
+								"value": "Contrôles à gauche"
 							},
 							"player_controls_right": {
-								"placement": "on the right side of player controls",
-								"value": "Right Controls"
+								"placement": "à droite des contrôles du lecteur",
+								"value": "Contrôles à droite"
 							},
 							"same": {
 								"placement": "in the same position",
 								"value": "Same as normal"
 							}
 						},
-						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"title": "Placer le {{BUTTON_NAME}} {{PLACEMENT}}",
 						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
 						"fullscreenLabel": "Fullscreen",
 						"normalLabel": "Normal"
 					},
-					"title": "Button placement settings"
+					"title": "Paramètres de placement des boutons"
 				},
 				"clearData": {
 					"allDataDeleted": "Toutes les données ont été supprimées.",
@@ -263,32 +263,32 @@
 				},
 				"optionDisabled": {
 					"either": {
-						"label": "Enable {{OPTIONS}} to configure this option",
-						"separator": " or "
+						"label": "Activez {{OPTIONS}} pour configurer cette option",
+						"separator": " ou "
 					},
 					"plural": {
-						"label": "Enable {{OPTIONS}} to configure this option",
-						"separator": " and "
+						"label": "Activez {{OPTIONS}} pour configurer cette option",
+						"separator": " et "
 					},
-					"singular": "Enable '{{OPTION}}' to configure this option",
+					"singular": "Activez « {{OPTION}} » pour configurer cette option",
 					"specificOption": {
-						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+						"featureMenu": "Configurez au moins un bouton à placer dans le menu des fonctionnalités pour configurer cette option.",
 						"globalVolume": "Disable 'Remember last volume' to configure this option",
 						"rememberVolume": "Disable 'Global volume' to configure this option",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
+						"screenshotButtonFileFormat": "Définissez le type d'enregistrement de capture d'écran sur « Fichier » ou « Les deux » pour configurer cette option"
 					}
 				},
 				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
-					"placeholder": "Search for a setting"
+					"placeholder": "Rechercher un paramètre"
 				},
 				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "You can get one from here",
+					"getApiKeyLinkText": "Vous pouvez en obtenir une ici",
 					"input": {
-						"label": "API Key",
-						"title": "Enter your Youtube Data API V3 key."
+						"label": "Clé API",
+						"title": "Saisissez votre clé YouTube Data API V3."
 					},
-					"title": "YouTube API V3 key"
+					"title": "Clé API YouTube V3"
 				}
 			},
 			"notifications": {
@@ -308,7 +308,7 @@
 						"resolveConflict": "Please resolve all conflicts before applying.",
 						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Cette option ne peut pas être activée tant que « {{OPTION}} » est activée.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "La touche de contrôle de la vitesse de la molette ne peut pas être la même que la touche de contrôle du volume par la molette de défilement.",
@@ -329,75 +329,75 @@
 		"sections": {
 			"customCSS": {
 				"enable": {
-					"label": "Custom CSS",
-					"title": "Enables custom CSS to be applied to the page"
+					"label": "CSS personnalisé",
+					"title": "Permet d'appliquer un CSS personnalisé à la page"
 				},
 				"extras": {
-					"collapse": "Collapse Editor",
-					"expand": "Expand Editor",
+					"collapse": "Réduire l'éditeur",
+					"expand": "Développer l'éditeur",
 					"noProblems": "Aucun problème détecté."
 				},
-				"title": "Custom CSS settings"
+				"title": "Paramètres CSS personnalisé"
 			},
 			"deepDarkCSS": {
 				"enable": {
-					"label": "Deep Dark Theme",
-					"title": "Activate the selected theme for the page"
+					"label": "Thème Deep Dark",
+					"title": "Activer le thème sélectionné pour la page"
 				},
 				"extras": {
-					"author": "Author",
-					"co-authors": "Co-authors"
+					"author": "Auteur",
+					"co-authors": "Co-auteurs"
 				},
 				"settings": {
 					"colorShadow": {
-						"label": "Shadow color",
-						"title": "Color for shadows"
+						"label": "Couleur des ombres",
+						"title": "Couleur appliquée aux ombres"
 					},
 					"dimmerText": {
-						"label": "Secondary text color",
-						"title": "Color for secondary text"
+						"label": "Couleur du texte secondaire",
+						"title": "Couleur appliquée au texte secondaire"
 					},
 					"hoverBackground": {
-						"label": "Hover background color",
-						"title": "Color for hover background"
+						"label": "Couleur d'arrière-plan au survol",
+						"title": "Couleur appliquée à l'arrière-plan au survol"
 					},
 					"mainBackground": {
-						"label": "Main background color",
-						"title": "Color for main background"
+						"label": "Couleur d'arrière-plan principal",
+						"title": "Couleur appliquée à l'arrière-plan principal"
 					},
 					"mainColor": {
-						"label": "Accent color",
-						"title": "Color for accent"
+						"label": "Couleur d'accentuation",
+						"title": "Couleur appliquée aux accents"
 					},
 					"mainText": {
-						"label": "Main text color",
-						"title": "Color for main text"
+						"label": "Couleur du texte principal",
+						"title": "Couleur appliquée au texte principal"
 					},
 					"secondBackground": {
-						"label": "Secondary background color",
-						"title": "Color for secondary background"
+						"label": "Couleur d'arrière-plan secondaire",
+						"title": "Couleur appliquée à l'arrière-plan secondaire"
 					},
 					"theme": {
 						"select": {
-							"label": "Select theme",
-							"title": "Select a theme to be applied to the page"
+							"label": "Sélectionner le thème",
+							"title": "Sélectionner un thème à appliquer à la page"
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Paramètres YouTube Deep Dark"
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Forward/rewind buttons",
-					"title": "Adds forward and rewind buttons to the video player"
+					"label": "Boutons Avancer/Reculer",
+					"title": "Ajoute des boutons Avancer et Reculer au lecteur vidéo"
 				},
 				"settings": {
 					"time": {
-						"label": "Forward/rewind time",
-						"title": "The amount of time to forward/rewind the video by"
+						"label": "Durée d'avance/recul",
+						"title": "Durée du saut avant/arrière dans la vidéo"
 					}
 				},
-				"title": "Forward/rewind button settings"
+				"title": "Paramètres des boutons Avancer/Reculer"
 			},
 			"globalVolume": {
 				"enable": {
@@ -453,38 +453,38 @@
 					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
-							"label": "Automatically disable ambient mode",
-							"title": "Automatically disables ambient mode when you load a video"
+							"label": "Désactiver automatiquement le mode ambiant",
+							"title": "Désactive automatiquement le mode ambiant lors du chargement d'une vidéo"
 						}
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "Automatically disable autoplay",
-							"title": "Automatically disables autoplay when you load a video"
+							"label": "Désactiver automatiquement la lecture automatique",
+							"title": "Désactive automatiquement la lecture automatique lors du chargement d'une vidéo"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
 						"enable": {
-							"label": "Automatically disable closed captions",
-							"title": "Automatically disables closed captions when you load a video"
+							"label": "Désactiver automatiquement les sous-titres",
+							"title": "Désactive automatiquement les sous-titres lors du chargement d'une vidéo"
 						}
 					},
 					"automaticallyEnableClosedCaptions": {
 						"enable": {
-							"label": "Automatically enable closed captions",
-							"title": "Automatically enables closed captions when you load a video"
+							"label": "Activer automatiquement les sous-titres",
+							"title": "Active automatiquement les sous-titres lors du chargement d'une vidéo"
 						}
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "Automatically maximize player",
-							"title": "Automatically maximizes the player when you load a video"
+							"label": "Agrandir automatiquement le lecteur",
+							"title": "Agrandit automatiquement le lecteur lors du chargement d'une vidéo"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
-							"label": "Automatically show more videos on end screen",
-							"title": "Automatically shows more videos on end screen when you load a video"
+							"label": "Afficher automatiquement plus de vidéos sur l'écran de fin",
+							"title": "Affiche automatiquement plus de vidéos sur l'écran de fin lors du chargement d'une vidéo"
 						}
 					},
 					"blockNumberKeySeeking": {
@@ -507,38 +507,38 @@
 					},
 					"defaultToOriginalAudioTrack": {
 						"enable": {
-							"label": "Default to original audio track",
-							"title": "Always default to the original audio track"
+							"label": "Utiliser la piste audio originale par défaut",
+							"title": "Toujours utiliser la piste audio originale par défaut"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI summary",
-							"title": "Hides the artificial intelligence summary below videos"
+							"label": "Masquer le résumé IA",
+							"title": "Masque le résumé par intelligence artificielle situé sous les vidéos"
 						}
 					},
 					"hideEndScreenCards": {
 						"enable": {
-							"label": "Hide end screen cards",
-							"title": "Hides the cards at the end of the video"
+							"label": "Masquer les cartes de fin",
+							"title": "Masque les cartes à la fin de la vidéo"
 						}
 					},
 					"hideEndScreenCardsButton": {
 						"enable": {
-							"label": "Hide end screen cards button",
-							"title": "Adds a button to show/hide the cards at the end of the video"
+							"label": "Bouton Masquer les cartes de fin",
+							"title": "Ajoute un bouton pour afficher/masquer les cartes à la fin de la vidéo"
 						}
 					},
 					"hideLiveStreamChat": {
 						"enable": {
-							"label": "Hide live stream chat",
-							"title": "Hides the live stream chat"
+							"label": "Masquer le chat en direct",
+							"title": "Masque le chat en direct"
 						}
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Masquer les vidéos réservées aux membres",
+							"title": "Masque les vidéos uniquement visibles par les membres"
 						}
 					},
 					"monoToStereoButton": {
@@ -549,13 +549,13 @@
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
-							"label": "Hide Official Artist Videos",
-							"title": "Hide Official Artist Videos from Home Page"
+							"label": "Masquer les vidéos d'artistes officiels",
+							"title": "Masquer les vidéos d'artistes officiels de la page d'accueil"
 						}
 					},
 					"hidePaidPromotionBanner": {
 						"enable": {
-							"label": "Hide paid promotion banner",
+							"label": "Masquer la bannière de promotion payée",
 							"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 						}
 					},
@@ -645,8 +645,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+							"label": "Activer le bouton « Enregistrer dans À regarder plus tard »",
+							"title": "Ajoute un bouton sur les vidéos de l'Accueil et des Abonnements pour les enregistrer dans la playlist « À regarder plus tard »"
 						}
 					},
 					"shareShortener": {
@@ -769,7 +769,7 @@
 						"title": "Sélectionnez le type d'affichage à l'écran"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "Paramètres d'affichage à l'écran"
 			},
 			"playerQuality": {
 				"enable": {
@@ -937,8 +937,8 @@
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Track watched videos",
-					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
+					"label": "Suivre les vidéos visionnées",
+					"title": "Mémorise où vous vous êtes arrêté dans les vidéos en cours et permet de reprendre la lecture"
 				},
 				"settings": {
 					"resumeType": {
@@ -952,7 +952,7 @@
 						}
 					}
 				},
-				"title": "Video history settings"
+				"title": "Paramètres de l'historique vidéo"
 			},
 			"volumeBoost": {
 				"enable": {
