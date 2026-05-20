@@ -79,10 +79,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Mini-lecteur",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini-lecteur désactivé",
+							"on": "Mini-lecteur activé"
 						}
 					}
 				},
@@ -141,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost ({{value}} dB)",
+						"label": "Amplification du volume ({{value}} dB)",
 						"toggle": {
 							"off": "Amplification du volume désactivée",
-							"on": "Volume boost ({{value}} dB)"
+							"on": "Amplification du volume ({{value}} dB)"
 						}
 					}
 				}
@@ -179,14 +179,14 @@
 							"increasePlaybackSpeedButton": "Bouton Augmenter la vitesse",
 							"loopButton": "Bouton Boucle",
 							"maximizePlayerButton": "Bouton Agrandir",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Bouton Mini-lecteur",
 							"openTranscriptButton": "Bouton Ouvrir la transcription",
 							"rewindButton": "Bouton Reculer",
 							"screenshotButton": "Bouton Capture d'écran",
 							"volumeBoostButton": "Bouton Amplification du volume",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"flipVideoVerticalButton": "Bouton Retourner la vidéo verticalement",
+							"flipVideoHorizontalButton": "Bouton Retourner la vidéo horizontalement",
+							"monoToStereoButton": "Bouton Mono vers stéréo"
 						},
 						"options": {
 							"below_player": {
@@ -206,13 +206,13 @@
 								"value": "Contrôles à droite"
 							},
 							"same": {
-								"placement": "in the same position",
-								"value": "Same as normal"
+								"placement": "à la même position",
+								"value": "Identique au mode normal"
 							}
 						},
 						"title": "Placer le {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenLabel": "Fullscreen",
+						"fullscreenTitle": "En plein écran, placer le {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Plein écran",
 						"normalLabel": "Normal"
 					},
 					"title": "Paramètres de placement des boutons"
@@ -258,8 +258,8 @@
 					"title": "Langue"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Ouvrir la page des paramètres lors d'une mise à jour",
+					"title": "Ouvre la page des paramètres lorsqu'une version majeure ou mineure de YouTube Enhancer est installée"
 				},
 				"optionDisabled": {
 					"either": {
@@ -273,12 +273,12 @@
 					"singular": "Activez « {{OPTION}} » pour configurer cette option",
 					"specificOption": {
 						"featureMenu": "Configurez au moins un bouton à placer dans le menu des fonctionnalités pour configurer cette option.",
-						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"globalVolume": "Désactivez « Mémoriser le dernier volume » pour configurer cette option",
+						"rememberVolume": "Désactivez « Volume global » pour configurer cette option",
 						"screenshotButtonFileFormat": "Définissez le type d'enregistrement de capture d'écran sur « Fichier » ou « Les deux » pour configurer cette option"
 					}
 				},
-				"scrollForMoreSettings": "Scroll for more settings",
+				"scrollForMoreSettings": "Faites défiler pour plus de paramètres",
 				"settingSearch": {
 					"placeholder": "Rechercher un paramètre"
 				},
@@ -294,19 +294,19 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Apply",
-						"cancel": "Cancel",
+						"apply": "Appliquer",
+						"cancel": "Annuler",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+							"description": "« {{FEATURE_A}} » et « {{FEATURE_B}} » ne peuvent pas être activés en même temps. Choisissez lequel conserver."
 						},
-						"keepFirst": "Keep {{FEATURE}}",
-						"keepSecond": "Keep {{FEATURE}}",
+						"keepFirst": "Conserver {{FEATURE}}",
+						"keepSecond": "Conserver {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
-							"selectNewKey": "Change modifier key:"
+							"description": "« {{FEATURE_A}} » et « {{FEATURE_B}} » ne peuvent pas utiliser la même touche modificatrice.",
+							"selectNewKey": "Modifier la touche modificatrice :"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
-						"title": "Import Conflicts Detected"
+						"resolveConflict": "Veuillez résoudre tous les conflits avant d'appliquer.",
+						"title": "Conflits d'importation détectés"
 					},
 					"optionConflict": "Cette option ne peut pas être activée tant que « {{OPTION}} » est activée.",
 					"scrollWheelHoldModifierKey": {
@@ -401,47 +401,47 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Toujours démarrer les vidéos à ce volume",
+					"title": "Lance automatiquement toutes les vidéos au volume sélectionné"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "Volume de démarrage vidéo",
+						"title": "Volume appliqué à chaque vidéo au début de la lecture"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Forçage du volume global"
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "Bouton Mini-lecteur",
+					"title": "Ajoute un bouton qui ouvre le mini-lecteur"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "Ouvrir le mini-lecteur lors de la consultation des commentaires",
+					"title": "Ouvre automatiquement le mini-lecteur lorsque vous faites défiler jusqu'aux commentaires."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "Default Mini Player position",
+							"label": "Position par défaut du mini-lecteur",
 							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
+								"bottomCenter": "En bas au centre",
+								"bottomLeft": "En bas à gauche",
+								"bottomRight": "En bas à droite",
+								"topCenter": "En haut au centre",
+								"topLeft": "En haut à gauche",
+								"topRight": "En haut à droite"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Définit la position initiale avant que vous ne déplaciez le mini-lecteur."
 						}
 					},
 					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"label": "Taille par défaut du mini-lecteur",
+						"title": "Définit la taille initiale avant que vous ne redimensionniez le mini-lecteur."
 					}
 				},
-				"title": "Mini Player settings"
+				"title": "Paramètres du mini-lecteur"
 			},
 			"miscellaneous": {
 				"settings": {
@@ -489,14 +489,14 @@
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Bloquer la navigation par touches numériques",
+							"title": "Empêche les touches 0 à 9 de faire sauter à un pourcentage de la vidéo"
 						}
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "Masquer les publications",
+							"title": "Masque les publications sur la page d'accueil"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -543,8 +543,8 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"label": "Bouton Mono vers stéréo",
+							"title": "Ajoute un bouton pour convertir l'audio mono en stéréo. Les pistes stéréo restent inchangées."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -556,19 +556,19 @@
 					"hidePaidPromotionBanner": {
 						"enable": {
 							"label": "Masquer la bannière de promotion payée",
-							"title": "Hides the banner that appears when you watch a video that has a paid promotion"
+							"title": "Masque la bannière affichée lorsque vous regardez une vidéo avec promotion payée"
 						}
 					},
 					"hidePlayables": {
 						"enable": {
-							"label": "Hide playables",
-							"title": "Hides all playables"
+							"label": "Masquer les playables",
+							"title": "Masque tous les playables"
 						}
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from homepage",
-							"title": "Get rid of playlists from homepage"
+							"label": "Masquer les playlists de la page d'accueil",
+							"title": "Supprimer les playlists de la page d'accueil"
 						}
 					},
 					"hideScrollbar": {
@@ -579,14 +579,14 @@
 					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
-							"label": "Hide recommended videos",
-							"title": "Hides the sidebar that recommends videos"
+							"label": "Masquer les vidéos recommandées",
+							"title": "Masque la barre latérale qui recommande des vidéos"
 						}
 					},
 					"hideTranslateComment": {
 						"enable": {
-							"label": "Hide translate comment button",
-							"title": "Hides 'Translate to Language' button under comments"
+							"label": "Masquer le bouton « Traduire le commentaire »",
+							"title": "Masque le bouton 'Traduire en Langue' dans les commentaires"
 						}
 					},
 					"loopButton": {
@@ -615,8 +615,8 @@
 					},
 					"pauseBackgroundPlayers": {
 						"enable": {
-							"label": "Pause background players",
-							"title": "Pauses video players in background tabs when you start a new player in foreground tab"
+							"label": "Mettre en pause les lecteurs en arrière-plan",
+							"title": "Met en pause les lecteurs vidéo dans les onglets en arrière-plan lorsque vous lancez un nouveau lecteur dans l'onglet au premier plan"
 						}
 					},
 					"remainingTime": {
@@ -633,14 +633,14 @@
 					},
 					"removeRedirect": {
 						"enable": {
-							"label": "Remove YouTube /redirect URLs",
-							"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
+							"label": "Supprimer les URLs YouTube /redirect",
+							"title": "Remplace les redirections YouTube par les URLs réelles, en évitant la boîte de dialogue d'avertissement"
 						}
 					},
 					"restoreFullscreenScrolling": {
 						"enable": {
-							"label": "Restore fullscreen scrolling",
-							"title": "Restores scrolling in fullscreen mode"
+							"label": "Restaurer le défilement en plein écran",
+							"title": "Restaure le défilement en mode plein écran"
 						}
 					},
 					"saveToWatchLaterButton": {
@@ -651,65 +651,65 @@
 					},
 					"shareShortener": {
 						"enable": {
-							"label": "Shorten YouTube video share link",
-							"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
+							"label": "Raccourcir le lien de partage de vidéo YouTube",
+							"title": "Raccourcit le lien de partage de vidéo YouTube (youtu.be) en supprimant les paramètres si/feature"
 						}
 					},
 					"shortsAutoScroll": {
 						"enable": {
-							"label": "Shorts auto scroll",
-							"title": "Automatically scrolls to the next short"
+							"label": "Défilement automatique des Shorts",
+							"title": "Défile automatiquement vers le Short suivant"
 						}
 					},
 					"skipContinueWatching": {
 						"enable": {
-							"label": "Skip \"Video is paused. Continue watching?\"",
-							"title": "Skips the idle dialog that pauses video playback"
+							"label": "Ignorer « La vidéo est en pause. Voulez-vous continuer à regarder ? »",
+							"title": "Ignore la boîte de dialogue d'inactivité qui met la vidéo en pause"
 						}
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Aperçu d'horodatage",
+							"title": "Affichez un aperçu de la vidéo en survolant un horodatage. Cliquez sur l'aperçu pour lancer la lecture à ce moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Bouton de retournement horizontal de la vidéo",
+							"title": "Ajoute un bouton pour retourner la vidéo horizontalement"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"label": "Bouton de retournement vertical de la vidéo",
+							"title": "Ajoute un bouton pour retourner la vidéo verticalement"
 						}
 					}
 				},
 				"title": "Autre paramètres"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Masquer les Shorts",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "Masquer dans la barre latérale",
+						"title": "Supprime le bouton Shorts de la barre latérale"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "Masquer sur la page d'accueil",
+						"title": "Supprime la section Shorts de la page d'accueil"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "Masquer sur les pages de chaîne",
+						"title": "Supprime la section et l'onglet Shorts sur les pages de chaîne"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "Masquer dans les résultats de recherche",
+						"title": "Supprime les vidéos Shorts des résultats de recherche"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "Masquer sur les pages de lecture",
+						"title": "Supprime les vidéos Shorts des recommandations sur les pages de lecture"
 					}
 				}
 			},
@@ -760,7 +760,7 @@
 						"label": "Type",
 						"select": {
 							"options": {
-								"circle": "Circle",
+								"circle": "Cercle",
 								"line": "Ligne",
 								"no_display": "Cacher",
 								"text": "Texte"
@@ -785,12 +785,12 @@
 					},
 					"qualityFallbackStrategy": {
 						"select": {
-							"label": "Quality fallback strategy",
+							"label": "Stratégie de repli de qualité",
 							"options": {
-								"higher": "Higher",
-								"lower": "Lower"
+								"higher": "Supérieure",
+								"lower": "Inférieure"
 							},
-							"title": "The strategy to use when the selected quality is not available"
+							"title": "Stratégie à utiliser lorsque la qualité sélectionnée n'est pas disponible"
 						}
 					}
 				},
@@ -803,12 +803,12 @@
 				},
 				"settings": {
 					"buttons": {
-						"label": "Playback speed buttons",
+						"label": "Boutons de vitesse de lecture",
 						"select": {
-							"label": "Playback buttons speed",
-							"title": "Amount of speed to be changed per click"
+							"label": "Pas des boutons de vitesse",
+							"title": "Variation de vitesse par clic"
 						},
-						"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+						"title": "Ajoute des boutons pour augmenter ou diminuer la vitesse de lecture de la vidéo en cours"
 					},
 					"speed": {
 						"select": {
@@ -821,45 +821,45 @@
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"label": "Afficher les informations de durée de playlist",
+					"title": "Affiche les informations de durée totale, temps visionné, et durée restante, pour la playlist"
 				},
 				"settings": {
 					"wayToGetLength": {
 						"select": {
-							"label": "Method to get playlist length",
-							"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+							"label": "Méthode pour obtenir la durée de la playlist",
+							"title": "Méthode utilisée pour obtenir les informations de durée de la playlist (la méthode API se rabattra sur HTML en cas d'erreur)"
 						}
 					},
 					"wayToGetWatchTime": {
 						"select": {
-							"label": "Method to get watched time",
+							"label": "Méthode pour obtenir le temps visionné",
 							"options": {
-								"duration": "Video Length",
-								"youtube": "Video Watch Time"
+								"duration": "Durée de la vidéo",
+								"youtube": "Temps de visionnage"
 							},
-							"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
+							"title": "Méthode utilisée pour obtenir le temps visionné (le type Durée de la vidéo n'est utilisé que sur la page de lecture)"
 						}
 					}
 				},
-				"title": "Playlist length settings"
+				"title": "Paramètres de durée de playlist"
 			},
 			"playlistManagementButtons": {
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "Mark as unwatched button",
-							"title": "Adds a button to mark videos as unwatched"
+							"label": "Bouton Marquer comme non visionnée",
+							"title": "Ajoute un bouton pour marquer les vidéos comme non visionnées"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "Remove video button",
-							"title": "Adds a button to remove videos from the playlist"
+							"label": "Bouton Supprimer la vidéo",
+							"title": "Ajoute un bouton pour supprimer des vidéos de la playlist"
 						}
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Paramètres de gestion de playlist"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -875,7 +875,7 @@
 						"select": {
 							"label": "Type de sauvegarde de la capture d'écran",
 							"options": {
-								"both": "Both (File and Clipboard)",
+								"both": "Les deux (Fichier et Presse-papier)",
 								"clipboard": "Presse-papiers",
 								"file": "Fichier"
 							},
@@ -943,12 +943,12 @@
 				"settings": {
 					"resumeType": {
 						"select": {
-							"label": "Resume type",
+							"label": "Type de reprise",
 							"options": {
-								"automatic": "Automatic",
-								"prompt": "Prompt"
+								"automatic": "Automatique",
+								"prompt": "Demander"
 							},
-							"title": "Select how you want to resume videos"
+							"title": "Sélectionnez comment reprendre les vidéos"
 						}
 					}
 				},
@@ -962,11 +962,11 @@
 				"settings": {
 					"amount": {
 						"label": "Gain du volume (dB)",
-						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+						"title": "Quantité d'amplification du volume. Vous pouvez aussi utiliser la molette sur le bouton d'amplification du volume (Maj/Ctrl pour des pas plus importants) pour l'ajuster."
 					},
 					"amount_global_only": {
-						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"label": "Quantité d'amplification du volume (dB)",
+						"title": "Quantité d'amplification par laquelle le volume augmente à chaque pas."
 					},
 					"mode": {
 						"select": {
