@@ -10,21 +10,21 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Gestion audio mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"on": "Sortie mono → stéréo",
+							"off": "Audio original"
 						}
 					}
 				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Retourner la vidéo horizontalement"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Retourner la vidéo verticalement"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -32,30 +32,30 @@
 						"label": "Copier l'URL de la vidéo avec le timestamp"
 					},
 					"extras": {
-						"copied": "Copied!"
+						"copied": "Copié !"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Feature menu"
+						"label": "Menu des fonctionnalités"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Fast forward by {{TIME}}"
+							"label": "Avancer de {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "Reculer de {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Hide end screen cards",
+						"label": "Masquer les cartes de fin",
 						"toggle": {
-							"off": "Hide end screen cards",
-							"on": "Show end screen cards"
+							"off": "Masquer les cartes de fin",
+							"on": "Afficher les cartes de fin"
 						}
 					}
 				},
