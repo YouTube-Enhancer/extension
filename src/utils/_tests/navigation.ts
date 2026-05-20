@@ -51,6 +51,7 @@ async function navigateToLiveVideo(page: Page): Promise<void> {
 	await page.waitForLoadState("domcontentloaded");
 	await waitForYoutubePlayerReady(page);
 	await pageSetup(page);
+	await page.waitForTimeout(100);
 }
 
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
