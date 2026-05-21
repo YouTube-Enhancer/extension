@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "à direita dos controles do player",
 								"value": "Controles direitos"
+							},
+							"same": {
+								"placement": "na mesma posição",
+								"value": "Igual ao normal"
 							}
 						},
-						"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}"
+						"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}",
+						"fullscreenTitle": "Quando estiver em tela cheia, coloque o {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Tela cheia",
+						"normalLabel": "Normal"
 					},
 					"title": "Configurações de posicionamento dos botões"
 				},
@@ -287,19 +294,19 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Apply",
-						"cancel": "Cancel",
+						"apply": "Aplicar",
+						"cancel": "Cancelar",
 						"enabledConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' não podem ser ambos habilitados. Escolha o qual manter."
 						},
-						"keepFirst": "Keep {{FEATURE}}",
-						"keepSecond": "Keep {{FEATURE}}",
+						"keepFirst": "Manter {{FEATURE}}",
+						"keepSecond": "Manter {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
-							"selectNewKey": "Change modifier key:"
+							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' não pode usar a mesma chave modificadora.",
+							"selectNewKey": "Alterar tecla modificadora:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
-						"title": "Import Conflicts Detected"
+						"resolveConflict": "Por favor, resolva todos os conflitos antes de aplicar.",
+						"title": "Conflitos de importação detectados"
 					},
 					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada.",
 					"scrollWheelHoldModifierKey": {

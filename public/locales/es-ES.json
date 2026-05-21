@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "a la derecha de los controles del reproductor",
 								"value": "Controles a la derecha"
+							},
+							"same": {
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}"
+						"title": "Coloca el {{BUTTON_NAME}} a la {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Ajustes de ubicación de botones"
 				},
@@ -290,12 +297,12 @@
 						"apply": "Apply",
 						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
 							"selectNewKey": "Change modifier key:"
 						},
 						"resolveConflict": "Please resolve all conflicts before applying.",
