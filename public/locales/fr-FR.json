@@ -278,7 +278,6 @@
 						"screenshotButtonFileFormat": "Définissez le type d'enregistrement de capture d'écran sur « Fichier » ou « Les deux » pour configurer cette option"
 					}
 				},
-				"scrollForMoreSettings": "Faites défiler pour plus de paramètres",
 				"settingSearch": {
 					"placeholder": "Rechercher un paramètre"
 				},

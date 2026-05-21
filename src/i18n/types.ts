@@ -255,7 +255,6 @@ export type OldTranslationStruct = {
 				screenshotButtonFileFormat: string;
 			};
 		};
-		scrollForMoreSettings: string;
 		sections: {
 			automaticQuality: {
 				enable: {
@@ -969,7 +968,6 @@ export type NewTranslationStruct = {
 						screenshotButtonFileFormat: string;
 					};
 				};
-				scrollForMoreSettings: string;
 				settingSearch: { placeholder: string };
 				youtubeDataApiV3Key: {
 					getApiKeyLinkText: string;

@@ -159,7 +159,6 @@ export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = objec
 				screenshotButtonFileFormat: string()
 			})
 		}),
-		scrollForMoreSettings: string(),
 		sections: object({
 			automaticQuality: object({
 				enable: object({
@@ -804,7 +803,6 @@ function migrate(old: OldTranslationStruct): NewTranslationStruct {
 					importExportSettings: old.settings.sections.importExportSettings,
 					language: old.settings.sections.language,
 					optionDisabled: old.settings.optionDisabled,
-					scrollForMoreSettings: old.settings.scrollForMoreSettings,
 					settingSearch: old.settings.sections.settingSearch,
 					youtubeDataApiV3Key: old.settings.sections.youtubeDataApiV3Key
 				},
