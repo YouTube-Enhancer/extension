@@ -1,5 +1,3 @@
-import type { Nullable } from "@/src/types";
-
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
@@ -15,12 +13,8 @@ export default createFeature({
 	onEnable: async () => {
 		const settingsButton = await waitForElement<HTMLButtonElement>(".ytp-button.ytp-settings-button");
 		if (!settingsButton) return;
-		const featureMenuButton = await waitForElement<HTMLButtonElement>("#yte-feature-menu-button");
-		if (!featureMenuButton) return;
 		const settingsMenu = await waitForElement<HTMLDivElement>(settingsPanelMenuSelector);
 		if (!settingsMenu) return;
-		const featureMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu#yte-feature-menu");
-		if (!featureMenu) return;
 		// Get the player element
 		const playerContainer =
 			isWatchPage() || isLivePage() ?
@@ -30,23 +24,36 @@ export default createFeature({
 			:	null;
 		// If player element is not available, return
 		if (!playerContainer) return;
+		const isSettingsOpen = () => settingsButton.getAttribute("aria-expanded") === "true";
+		let isHoveringButtonOrMenu = false;
 		const showSettings = () => {
-			if (settingsMenu.style.display !== "none") return;
+			if (isSettingsOpen()) return;
 			settingsButton.click();
 		};
-		const hideSettings = (event: Event) => {
-			if (settingsMenu.style.display === "none") return;
-			if (event.target && (event.target as HTMLDivElement).classList.contains("ytp-popup-animating")) return;
-			settingsButton.click();
+		const hideSettings = () => {
+			if (!isSettingsOpen()) return;
+			if (!isHoveringButtonOrMenu) settingsButton.click();
 		};
-		const settingsButtonMouseLeaveListener = (event: Event) => {
-			if (event.target === settingsButton) return;
-			if (settingsMenu.contains(event.target as Nullable<Node>)) return;
-			hideSettings(event);
+		const onMouseEnter = () => {
+			isHoveringButtonOrMenu = true;
+			showSettings();
 		};
-		eventManager.addEventListener(settingsButton, "mouseenter", showSettings, "openYouTubeSettingsOnHover");
-		eventManager.addEventListener(settingsButton, "mouseleave", settingsButtonMouseLeaveListener, "openYouTubeSettingsOnHover");
-		eventManager.addEventListener(settingsMenu, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
-		eventManager.addEventListener(playerContainer, "mouseleave", hideSettings, "openYouTubeSettingsOnHover");
+		const onMouseLeave = () => {
+			isHoveringButtonOrMenu = false;
+			// Give a tiny delay to allow moving into the menu
+			setTimeout(hideSettings, 50);
+		};
+		eventManager.addEventListener(settingsButton, "mouseenter", onMouseEnter, "openYouTubeSettingsOnHover");
+		eventManager.addEventListener(settingsButton, "mouseleave", onMouseLeave, "openYouTubeSettingsOnHover");
+		eventManager.addEventListener(settingsMenu, "mouseenter", () => (isHoveringButtonOrMenu = true), "openYouTubeSettingsOnHover");
+		eventManager.addEventListener(
+			settingsMenu,
+			"mouseleave",
+			() => {
+				isHoveringButtonOrMenu = false;
+				setTimeout(hideSettings, 50);
+			},
+			"openYouTubeSettingsOnHover"
+		);
 	}
 });
