@@ -10,21 +10,21 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Обработка Mono Аудио",
 						"toggle": {
-							"on": "Mono → Stereo Output",
-							"off": "Original Audio"
+							"on": "Mono → Stereo Выход",
+							"off": "Исходное Аудио"
 						}
 					}
 				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Flip video horizontally"
+						"label": "Отразить видео горизонтально"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Flip video vertically"
+						"label": "Отразить видео вертикально"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -79,10 +79,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Мини-плеер",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Мини-плеер выкл",
+							"on": "Мини-плеер вкл"
 						}
 					}
 				},
@@ -110,19 +110,19 @@
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-						"failedToRemoveVideo": "Failed to remove video",
-						"markAsUnwatched": "Mark as unwatched",
-						"markingAsUnwatched": "Marking as unwatched…",
-						"removeVideo": "Remove video",
-						"removingVideo": "Removing video…"
+						"failedToMarkAsUnwatched": "Не удалось пометить видео как непросмотренное",
+						"failedToRemoveVideo": "Не удалось удалить видео",
+						"markAsUnwatched": "Отметить как непросмотренное",
+						"markingAsUnwatched": "Помечается как непросмотренное…",
+						"removeVideo": "Удалить видео",
+						"removingVideo": "Удаляется видео…"
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Failed to save video to Watch Later",
-						"saveVideo": "Save to Watch Later",
-						"savingVideo": "Saving to Watch Later…"
+						"failedToSaveVideo": "Не удалось сохранить видео в Смотреть позже",
+						"saveVideo": "Сохранить в Смотреть позже",
+						"savingVideo": "Сохраняется в Смотреть позже…"
 					}
 				},
 				"screenshotButton": {
@@ -141,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Volume Boost ({{value}} dB)",
+						"label": "Усиление громкости ({{value}} dB)",
 						"toggle": {
 							"off": "Увеличение громкости выключено",
-							"on": "Volume boost ({{value}} dB)"
+							"on": "Усиление громкости ({{value}} dB)"
 						}
 					}
 				}
@@ -179,14 +179,14 @@
 							"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 							"loopButton": "Кнопка «Зациклить»",
 							"maximizePlayerButton": "Кнопка «Развернуть»",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Кнопка мини-плеера",
 							"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 							"rewindButton": "Кнопка перемотки назад",
 							"screenshotButton": "Кнопка «Скриншот»",
 							"volumeBoostButton": "Кнопка «Усиление громкости»",
-							"flipVideoVerticalButton": "Flip video vertically button",
-							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"flipVideoVerticalButton": "Кнопка «Отразить видео вертикально»",
+							"flipVideoHorizontalButton": "Кнопка «Отразить видео горизонтально»",
+							"monoToStereoButton": "Кнопка «Mono → Stereo»"
 						},
 						"options": {
 							"below_player": {
@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "с правой стороны панели управления",
 								"value": "Справа"
+							},
+							"same": {
+								"placement": "в том же положении",
+								"value": "То же, что и в обычном"
 							}
 						},
-						"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}"
+						"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Обычный"
 					},
 					"title": "Button placement settings"
 				},
@@ -271,7 +278,7 @@
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
-				"scrollForMoreSettings": "Прокрутите для других настроек",
+				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
 					"placeholder": "Поиск настроек"
 				},
@@ -290,12 +297,12 @@
 						"apply": "Apply",
 						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
 							"selectNewKey": "Change modifier key:"
 						},
 						"resolveConflict": "Please resolve all conflicts before applying.",

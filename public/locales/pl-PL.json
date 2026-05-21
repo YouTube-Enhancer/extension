@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "on the right side of player controls",
 								"value": "Prawostronne Sterowanie"
+							},
+							"same": {
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}"
+						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Button placement settings"
 				},
@@ -271,7 +278,7 @@
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
-				"scrollForMoreSettings": "Przewiń, aby zobaczyć więcej ustawień",
+				"scrollForMoreSettings": "Scroll for more settings",
 				"settingSearch": {
 					"placeholder": "Szukaj ustawienia"
 				},
@@ -290,12 +297,12 @@
 						"apply": "Apply",
 						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
 							"selectNewKey": "Change modifier key:"
 						},
 						"resolveConflict": "Please resolve all conflicts before applying.",

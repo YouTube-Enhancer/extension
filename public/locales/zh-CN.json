@@ -204,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "位于播放器控制按键右侧",
 								"value": "控件居右"
+							},
+							"same": {
+								"placement": "在同一位置",
+								"value": "与正常相同"
 							}
 						},
-						"title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}"
+						"title": "把 {{BUTTON_NAME}} 按钮放在 {{PLACEMENT}}",
+						"fullscreenTitle": "处于全屏时，将 {{BUTTON_NAME}} 放置在 {{PLACEMENT}}",
+						"fullscreenLabel": "全屏",
+						"normalLabel": "正常"
 					},
 					"title": "按钮位置设置"
 				},
@@ -287,19 +294,19 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Apply",
-						"cancel": "Cancel",
+						"apply": "应用",
+						"cancel": "取消",
 						"enabledConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' 和 '{{FEATURE_B}}' 无法同时启用。请选择需要开启的一个。"
 						},
-						"keepFirst": "Keep {{FEATURE}}",
-						"keepSecond": "Keep {{FEATURE}}",
+						"keepFirst": "启用 {{FEATURE}}",
+						"keepSecond": "启用 {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "{{FEATURE_A}} and {{FEATURE_B}} cannot use the same modifier key.",
-							"selectNewKey": "Change modifier key:"
+							"description": "'{{FEATURE_A}}' 和 '{{FEATURE_B}}' 无法使用同一个修改键位。",
+							"selectNewKey": "更换修改键位："
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
-						"title": "Import Conflicts Detected"
+						"resolveConflict": "请在应用之前解决所有冲突。",
+						"title": "检测到导入冲突"
 					},
 					"optionConflict": "当 '{{OPTION}}' 启用时，该选项无法启用。",
 					"scrollWheelHoldModifierKey": {
