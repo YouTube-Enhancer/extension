@@ -51,7 +51,7 @@ async function navigateToLiveVideo(page: Page): Promise<void> {
 	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
 	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
 	await page.waitForLoadState("domcontentloaded");
-	await waitForYoutubePlayerReady(page);
+	await waitForYoutubePlayerReady(page, "live");
 	await pageSetup(page);
 	await page.waitForTimeout(100);
 }
@@ -64,7 +64,7 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: Page
 	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
 	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
 	await page.waitForLoadState("domcontentloaded");
-	if (["live", "shorts", "watch"].includes(pageType)) await waitForYoutubePlayerReady(page);
+	if (["live", "shorts", "watch"].includes(pageType)) await waitForYoutubePlayerReady(page, pageType);
 	await pageSetup(page);
 }
 function normalizeUrl(url: string): string {

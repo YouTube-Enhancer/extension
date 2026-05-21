@@ -24,7 +24,7 @@ test.describe("maximizePlayerButton", () => {
 			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await setOption(page, "maximizePlayerButton.button.placement", placement);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
-			await clickFeatureButton(page, "yte-feature-maximizePlayerButton-button", placement);
+			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", placement);
 			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
 		});
 		test(`player shouldn't be maximized on ${pageType}`, async ({ page }) => {
