@@ -175,7 +175,6 @@ interface EnUS {
 						screenshotButtonFileFormat: "Set screenshot save type to 'File' or 'Both' to configure this option";
 					};
 				};
-				scrollForMoreSettings: "Scroll for more settings";
 				settingSearch: { placeholder: "Search for a setting" };
 				youtubeDataApiV3Key: {
 					getApiKeyLinkText: "You can get one from here";
