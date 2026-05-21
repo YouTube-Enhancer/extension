@@ -14,8 +14,9 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		// Create a canvas element and get its context
 		const canvas = document.createElement("canvas");
 		const context = canvas.getContext("2d");
-		// Set the dimensions of the canvas to the video's dimensions
-		const { videoHeight, videoWidth } = videoElement;
+		// Set the dimensions of the canvas to the video's dimensions (fallback for unavailable streams)
+		const videoWidth = videoElement.videoWidth || videoElement.offsetWidth || 640;
+		const videoHeight = videoElement.videoHeight || videoElement.offsetHeight || 360;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
 		// Draw the video element onto the canvas
