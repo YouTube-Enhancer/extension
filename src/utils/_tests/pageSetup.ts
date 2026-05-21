@@ -1,5 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 
+import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
 const YOUTUBE_AD_SELECTORS = {
@@ -154,8 +155,14 @@ export const pageSetup = async (page: Page): Promise<void> => {
 	await handleYoutubeSuggestedActions(page);
 	await handleYoutubeAds(page);
 };
-export async function ensurePlayerControlsVisible(page: Page) {
-	const player = page.locator("#movie_player");
-	await player.hover();
+export async function ensurePlayerControlsVisible(page: Page, pageType: PageType) {
+	const isShorts = pageType === "shorts";
+	const playerSelector = isShorts ? "#shorts-player" : "#movie_player";
+	const player = page.locator(playerSelector);
+	await player.evaluate((el) => {
+		el.dispatchEvent(new MouseEvent("mousemove", { bubbles: true }));
+		el.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+		el.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+	});
 	await page.mouse.move(500, 300);
 }

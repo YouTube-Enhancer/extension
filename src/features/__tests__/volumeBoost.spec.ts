@@ -72,7 +72,7 @@ test.describe("volumeBoost", () => {
 				await setOption(page, "volumeBoost.amount", 10);
 				await setOption(page, "volumeBoost.button.placement", placement);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
 				await expectVolumeBoostEnabled(page, true);
 				await expectVolumeBoostAmount(page, 10);
 			});
@@ -83,10 +83,10 @@ test.describe("volumeBoost", () => {
 				await setOption(page, "volumeBoost.amount", 10);
 				await setOption(page, "volumeBoost.button.placement", placement);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
 				await expectVolumeBoostEnabled(page, true);
 				await expectVolumeBoostAmount(page, 10);
-				await clickFeatureButton(page, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
 				await expectVolumeBoostEnabled(page, false);
 			});
 		}

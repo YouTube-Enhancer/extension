@@ -5,7 +5,7 @@ import { clickFeatureButton, enableFeature, setOption } from "@/src/utils/_tests
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
 const testPages = ["watch", "live"] as const;
-
+const pageType = "watch";
 test.describe("screenshotButton", () => {
 	for (const pageType of testPages) {
 		test(`should take a screenshot and save as file on ${pageType}`, async ({ page }) => {
@@ -15,7 +15,7 @@ test.describe("screenshotButton", () => {
 			await setOption(page, "screenshotButton.button.placement", "player_controls_left");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 			const downloadPromise = page.waitForEvent("download");
-			await clickFeatureButton(page, "yte-feature-screenshotButton-button", "player_controls_left");
+			await clickFeatureButton(page, pageType, "yte-feature-screenshotButton-button", "player_controls_left");
 			const download = await downloadPromise;
 			expect(download).toBeTruthy();
 		});
@@ -27,13 +27,13 @@ test.describe("screenshotButton", () => {
 			})();
 		});
 		const screenshotFormat = "png";
-		await navigateToPageType(page, "watch");
+		await navigateToPageType(page, pageType);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "clipboard");
 		await setOption(page, "screenshotButton.format", screenshotFormat);
 		await setOption(page, "screenshotButton.button.placement", "player_controls_left");
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
-		await clickFeatureButton(page, "yte-feature-screenshotButton-button", "player_controls_left");
+		await clickFeatureButton(page, pageType, "yte-feature-screenshotButton-button", "player_controls_left");
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
 		const copiedToClipboard = page.getByText("Screenshot copied to clipboard");
 		await expect(copiedToClipboard).toBeVisible();
@@ -44,13 +44,13 @@ test.describe("screenshotButton", () => {
 		expect(await screenshotCopied.jsonValue()).toBeTruthy();
 	});
 	test("should take a screenshot and save as file and copy to clipboard", async ({ page }) => {
-		await navigateToPageType(page, "watch");
+		await navigateToPageType(page, pageType);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "both");
 		await setOption(page, "screenshotButton.button.placement", "player_controls_left");
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 		const downloadPromise = page.waitForEvent("download");
-		await clickFeatureButton(page, "yte-feature-screenshotButton-button", "player_controls_left");
+		await clickFeatureButton(page, pageType, "yte-feature-screenshotButton-button", "player_controls_left");
 		const download = await downloadPromise;
 		expect(download).toBeTruthy();
 		// Verify clipboard got image data

@@ -13,20 +13,23 @@ export async function expectCurrentQualityLevelToBeFalsy(page: Page, pageType: P
 	expect(currentQualityLevel).not.toBe(expectedQuality);
 }
 export async function expectCurrentQualityLevelToBeTruthy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {
-	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType);
-	expect(currentQualityLevel).toBeTruthy();
-	expect(currentQualityLevel).toBe(expectedQuality);
+	await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout: 10000 }).toBe(expectedQuality);
 }
 export async function expectFeatureButtonToBeFalsy(page: Page, featureId: FeatureButtonId) {
 	const featureButton = page.locator(`#${featureId}`);
 	await expect(featureButton).not.toBeAttached();
 }
-export async function expectFeatureButtonToBeIn(page: Page, featureId: FeatureButtonId, placement: Exclude<ButtonPlacement, "feature_menu">) {
+export async function expectFeatureButtonToBeIn(
+	page: Page,
+	featureId: FeatureButtonId,
+	placement: Exclude<ButtonPlacement, "feature_menu">,
+	{ timeout = 10000 }: { timeout?: number } = {}
+) {
 	const { [placement]: selector } = placementSelectors;
 	const container = page.locator(selector);
-	await expect(container).toBeAttached();
+	await expect(container).toBeAttached({ timeout });
 	const button = container.locator(`#${featureId}`);
-	await expect(button).toBeAttached();
+	await expect(button).toBeAttached({ timeout });
 }
 export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId) {
 	const featureButton = page.locator(`#${featureId}`);

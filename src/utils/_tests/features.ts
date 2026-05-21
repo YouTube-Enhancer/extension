@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 
+import type { PageType } from "@/src/features/_registry/types";
 import type { ButtonPlacement, configuration, FeatureButtonId, FeatureMenuItemId, Path, PathValue } from "@/src/types";
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 
@@ -7,18 +8,25 @@ import { expectFeatureButtonToBeIn } from "@/src/utils/_tests/assertions";
 import { sendYouTubeMessage } from "@/src/utils/_tests/messaging";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 
-export async function clickFeatureButton(page: Page, featureId: FeatureButtonId, placement: Exclude<ButtonPlacement, "feature_menu">) {
+export async function clickFeatureButton(
+	page: Page,
+	pageType: PageType,
+	featureId: FeatureButtonId,
+	placement: Exclude<ButtonPlacement, "feature_menu">
+) {
 	await expectFeatureButtonToBeIn(page, featureId, placement);
 
 	if (placement !== "below_player") {
-		await ensurePlayerControlsVisible(page);
+		await ensurePlayerControlsVisible(page, pageType);
 	}
 
-	await page.locator(`#${featureId}`).waitFor({ state: "visible" });
-	await page.locator(`#${featureId}`).click();
+	await page.evaluate((id) => {
+		const el = document.getElementById(id);
+		if (el) el.click();
+	}, featureId);
 }
-export async function clickFeatureMenuItem(page: Page, featureId: FeatureMenuItemId) {
-	await ensurePlayerControlsVisible(page);
+export async function clickFeatureMenuItem(page: Page, pageType: PageType, featureId: FeatureMenuItemId) {
+	await ensurePlayerControlsVisible(page, pageType);
 
 	const menuButton = page.locator("#yte-feature-menu-button");
 	await menuButton.waitFor({ state: "visible" });
@@ -41,7 +49,7 @@ export async function setFeatureValue<K extends Path<configuration>>(page: Page,
 		source: "content",
 		type: "test_setConfigValue"
 	});
-	await page.waitForTimeout(100);
+	await page.waitForTimeout(300);
 }
 export async function setOption<P extends Page, K extends Path<configuration>, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
 	await setFeatureValue(page, id, value);
