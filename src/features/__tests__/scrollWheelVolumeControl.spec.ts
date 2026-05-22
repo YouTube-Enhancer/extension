@@ -9,10 +9,10 @@ const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 test.describe("scrollWheelVolumeControl", () => {
 	for (const pageType of testPages) {
 		test(`should increase volume on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", page, pageType, value: volume });
+			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
 		});
 		test(`should decrease volume on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "down", page, pageType, value: volume });
+			await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, pageType, steps: 5 });
 		});
 	}
 	for (const modifierKey of modifierKeys) {
@@ -26,9 +26,10 @@ test.describe("scrollWheelVolumeControl", () => {
 				await adjustWithScrollWheel({
 					controlType: "Volume",
 					direction: "up",
+					initialValue: volume,
 					modifierKey,
 					page,
-					value: volume,
+					steps: 5,
 					withModifierKey: true,
 					withRightClick
 				});
@@ -41,9 +42,10 @@ test.describe("scrollWheelVolumeControl", () => {
 				await adjustWithScrollWheel({
 					controlType: "Volume",
 					direction: "down",
+					initialValue: volume,
 					modifierKey,
 					page,
-					value: volume,
+					steps: 5,
 					withModifierKey: true,
 					withRightClick
 				});
@@ -51,9 +53,9 @@ test.describe("scrollWheelVolumeControl", () => {
 		}
 	}
 	test("should increase volume when holding 'Right' click", async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", page, value: volume, withRightClick: true });
+		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, steps: 5, withRightClick: true });
 	});
 	test("should decrease volume when holding 'Right' click", async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", page, value: volume, withRightClick: true });
+		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, steps: 5, withRightClick: true });
 	});
 });

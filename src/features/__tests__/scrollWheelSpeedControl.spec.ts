@@ -2,17 +2,19 @@ import { test } from "playwright.config";
 
 import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
 
-export const speed = 0.25;
+// Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
+const speed = 1.0;
+const steps = 0.25;
 const testPages = ["watch", "shorts"] as const;
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 
 test.describe("scrollWheelSpeedControl", () => {
 	for (const pageType of testPages) {
 		test(`should increase speed on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", page, pageType, value: speed });
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps, withModifierKey: true });
 		});
 		test(`should decrease speed on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", page, pageType, value: speed });
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", initialValue: speed, page, pageType, steps, withModifierKey: true });
 		});
 	}
 	for (const modifierKey of modifierKeys) {
@@ -21,14 +23,14 @@ test.describe("scrollWheelSpeedControl", () => {
 			: modifierKey === "ctrlKey" ? "Ctrl"
 			: "Shift"
 		}' modifier key`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", modifierKey, page, value: speed, withModifierKey: true });
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, modifierKey, page, steps, withModifierKey: true });
 		});
 		test(`should decrease speed when holding '${
 			modifierKey === "altKey" ? "Alt"
 			: modifierKey === "ctrlKey" ? "Ctrl"
 			: "Shift"
 		}' modifier key`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", modifierKey, page, value: speed, withModifierKey: true });
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", initialValue: speed, modifierKey, page, steps, withModifierKey: true });
 		});
 	}
 });

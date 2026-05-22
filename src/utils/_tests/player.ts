@@ -9,38 +9,34 @@ import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@
 import type { ModifierKey, Nullable } from "@/src/types";
 import type { ControlType, YouTubePlayerGetKeysWithoutParams, YouTubePlayerGetReturnType, YouTubePlayerSetKeys } from "@/src/utils/_tests/types";
 
-import { enableFeature, loadDefaultConfig, setOption } from "@/src/utils/_tests/features";
+import { enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { clamp } from "@/src/utils/math";
-import { getPathValue } from "@/src/utils/misc";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 
 export async function adjustWithScrollWheel({
 	controlType,
 	direction,
+	initialValue,
 	modifierKey = "altKey",
 	page,
 	pageType = "watch",
-	value,
+	steps,
 	withModifierKey = false,
 	withRightClick = false
 }: {
 	controlType: ControlType;
 	direction: "down" | "up";
+	initialValue: number;
 	modifierKey?: ModifierKey;
 	page: Page;
 	pageType?: PageType;
-	value: number;
+	steps: number;
 	withModifierKey?: boolean;
 	withRightClick?: boolean;
 }) {
-	const defaultConfiguration = await loadDefaultConfig();
-	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
-	const { [modifierKey]: keyToPress } = {
-		altKey: "Alt",
-		ctrlKey: "Control",
-		shiftKey: "Shift"
-	};
+	await navigateToPageType(page, pageType);
+	await setOption(page, `scrollWheel${controlType}Control.steps`, steps);
 	if (withModifierKey) {
 		if (controlType === "Volume") await enableFeature(page, `scrollWheel${controlType}Control.holdModifierKey`);
 		await setOption(page, `scrollWheel${controlType}Control.modifierKey`, modifierKey);
@@ -48,71 +44,43 @@ export async function adjustWithScrollWheel({
 	if (controlType === "Volume" && withRightClick) {
 		await enableFeature(page, `scrollWheel${controlType}Control.holdRightClick`);
 	}
-	const playerSelector = pageType === "shorts" ? "div#shorts-player" : "div#movie_player";
-	await navigateToPageType(page, pageType);
-	await page.evaluate(
-		async ({ key, selector, value }) => {
-			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
-			if (!container) return null;
-			try {
-				await (container[key] as (...args: number[]) => Promise<void>)(value);
-			} catch (error) {
-				console.error(error);
-			}
-		},
-		{ key: `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, selector: playerSelector, value } as const
-	);
-	const originalValue: unknown = await page.evaluate(
-		async ([selector, key]) => {
-			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
-			if (!container) return null;
-			const result: unknown = await container[key]();
-			return result;
-		},
-		[playerSelector, controlType === "Speed" ? "getPlaybackRate" : "getVolume"] as const
-	);
+	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
+	await setValueOnYouTubePlayer(page, pageType, `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, initialValue);
+	const originalValue = await getValueFromYouTubePlayer(page, `get${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, pageType);
 	expect(originalValue).toBeTruthy();
-	expect(originalValue).toBe(value);
-	const playerContainer = page.locator(playerSelector);
-	await playerContainer.hover();
-	const playerContainerBoundingBox = await playerContainer.boundingBox();
-	expect(playerContainerBoundingBox).toBeTruthy();
-	const {
-		height: playerContainerHeight,
-		width: playerContainerWidth,
-		x: playerContainerX,
-		y: playerContainerY
-	} = playerContainerBoundingBox as { height: number; width: number; x: number; y: number };
-
+	if (!originalValue) return;
+	expect(originalValue).toBe(initialValue);
+	// Dispatch the wheel event directly on the container element the feature listens on.
+	// Using page.mouse.wheel() on div#movie_player can be swallowed by YouTube's own
+	// wheel handlers before it bubbles up to div#player where the extension listens.
+	const wheelContainerSelector = pageType === "shorts" ? "#player-container:has(#shorts-player)" : "div#player";
+	const wheelInit: Record<string, unknown> = {
+		bubbles: true,
+		cancelable: true,
+		deltaMode: 0,
+		deltaY: direction === "up" ? -1 : 1
+	};
 	if (withModifierKey) {
-		await page.keyboard.down(keyToPress);
+		wheelInit[modifierKey] = true;
 	}
 	if (withRightClick) {
-		await page.mouse.move(playerContainerX + playerContainerWidth / 2, playerContainerY + playerContainerHeight / 2);
-		await page.mouse.down({
-			button: "right"
-		});
+		wheelInit.buttons = 2;
 	}
-	await page.mouse.wheel(0, direction === "up" ? -1 : 1);
-	if (withModifierKey) {
-		await page.keyboard.up(keyToPress);
-	}
-	if (withRightClick) {
-		await page.mouse.move(playerContainerX + playerContainerWidth / 2, playerContainerY + playerContainerHeight / 2);
-		await page.mouse.up({
-			button: "right"
-		});
-	}
-	const valueAfterScroll: unknown = await page.evaluate(
-		async ([selector, key]) => {
-			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
-			if (!container) return null;
-			const result: unknown = await container[key]();
-			return result;
+	await page.evaluate(
+		([selector, init]) => {
+			const el = document.querySelector(selector);
+			if (el) el.dispatchEvent(new WheelEvent("wheel", init as WheelEventInit));
 		},
-		[playerSelector, controlType === "Speed" ? "getPlaybackRate" : "getVolume"] as const
+		[wheelContainerSelector, wheelInit] as const
 	);
-	const expectedValue = value + (direction === "up" ? 1 : -1) * Number(getPathValue(defaultConfiguration, `scrollWheel${controlType}Control.steps`));
+	let valueAfterScroll: unknown = null;
+	const endTime = Date.now() + 5000;
+	while (Date.now() < endTime) {
+		await page.waitForTimeout(100);
+		valueAfterScroll = await getValueFromYouTubePlayer(page, controlType === "Speed" ? "getPlaybackRate" : "getVolume", pageType);
+		if (valueAfterScroll !== null && valueAfterScroll !== originalValue) break;
+	}
+	const expectedValue = originalValue + steps * (direction === "up" ? 1 : -1);
 	expect(valueAfterScroll).toBeTruthy();
 	expect(valueAfterScroll).toBe(controlType === "Speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
 }
