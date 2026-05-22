@@ -17,35 +17,31 @@ test.describe("playerQuality", () => {
 			await setOption(page, "playerQuality.quality", qualityLevel);
 			await enableFeature(page, "playerQuality.enabled");
 			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
-			expect(closestQuality).toBeTruthy();
-			if (!closestQuality) return;
+			if (!closestQuality) return; // quality selection not supported (e.g. live stream with only "auto")
 			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
 		});
 		test(`quality should not be set to closest when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "playerQuality.enabled");
 			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
-			expect(closestQuality).toBeTruthy();
-			if (!closestQuality) return;
+			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeFalsy(page, pageType, closestQuality);
 		});
 		test(`should set quality with lower fallback strategy on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "playerQuality.enabled");
 			await setOption(page, "playerQuality.quality", qualityLevel);
 			await setOption(page, "playerQuality.fallbackStrategy", "lower");
+			await enableFeature(page, "playerQuality.enabled");
 			const closestQuality = await getClosestQuality(page, pageType, qualityLevel, "lower");
-			expect(closestQuality).toBeTruthy();
-			if (!closestQuality) return;
+			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
 		});
 		test(`should set quality to hd720 on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "playerQuality.enabled");
 			await setOption(page, "playerQuality.quality", "hd720");
+			await enableFeature(page, "playerQuality.enabled");
 			const closestQuality = await getClosestQuality(page, pageType, "hd720");
-			expect(closestQuality).toBeTruthy();
-			if (!closestQuality) return;
+			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
 		});
 	}

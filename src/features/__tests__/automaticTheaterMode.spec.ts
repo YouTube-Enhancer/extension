@@ -8,11 +8,33 @@ import { navigateToPageType } from "@/src/utils/_tests/navigation";
 const testPages = ["watch", "live"] as const;
 
 export async function expectNotTheaterMode(page: Page): Promise<void> {
-	await expect(page.locator("ytd-watch-flexy")).not.toHaveAttribute("theater");
+	await expect
+		.poll(
+			async () => {
+				return await page.evaluate(() => {
+					const flexy = document.querySelector("ytd-watch-flexy");
+					const grid = document.querySelector("ytd-watch-grid");
+					return flexy?.hasAttribute("theater") || grid?.hasAttribute("theater");
+				});
+			},
+			{ timeout: 10000 }
+		)
+		.toBeFalsy();
 }
 
 export async function expectTheaterMode(page: Page): Promise<void> {
-	await expect(page.locator("ytd-watch-flexy")).toHaveAttribute("theater");
+	await expect
+		.poll(
+			async () => {
+				return await page.evaluate(() => {
+					const flexy = document.querySelector("ytd-watch-flexy");
+					const grid = document.querySelector("ytd-watch-grid");
+					return flexy?.hasAttribute("theater") || grid?.hasAttribute("theater");
+				});
+			},
+			{ timeout: 10000 }
+		)
+		.toBeTruthy();
 }
 
 test.describe("automaticTheaterMode", () => {

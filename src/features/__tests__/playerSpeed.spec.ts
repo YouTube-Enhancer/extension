@@ -14,9 +14,7 @@ test.describe("playerSpeed", () => {
 				await navigateToPageType(page, pageType);
 				await setOption(page, "playerSpeed.speed", speed);
 				await enableFeature(page, "playerSpeed.enabled");
-				const playbackRate = await getValueFromYouTubePlayer(page, "getPlaybackRate", pageType);
-				expect(playbackRate).toBeTruthy();
-				expect(playbackRate).toBe(speed);
+				await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackRate", pageType), { timeout: 5000 }).toBe(speed);
 			});
 		}
 		test(`should not set playback speed when disabled on ${pageType}`, async ({ page }) => {

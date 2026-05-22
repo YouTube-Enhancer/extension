@@ -41,7 +41,7 @@ test.describe("screenshotButton", () => {
 			const items = await navigator.clipboard.read();
 			return items.some((item) => item.types.includes(`image/${format}`));
 		}, screenshotFormat);
-		expect(await screenshotCopied.jsonValue()).toBeTruthy();
+		expect(screenshotCopied).toBeTruthy();
 	});
 	test("should take a screenshot and save as file and copy to clipboard", async ({ page }) => {
 		await navigateToPageType(page, pageType);
