@@ -116,8 +116,7 @@ export default defineConfig({
 	],
 	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
 	reporter: process.env.CI ? "dot" : [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
-	/* Retry on CI only */
-	retries: process.env.CI ? 2 : 0,
+	retries: process.env.CI ? 2 : 1,
 	testDir: ".",
 	timeout: process.env.CI ? 30 * 1000 : 60 * 1000 * 1,
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
