@@ -44,7 +44,11 @@ export async function navigateToPageType(page: Page, pageType: PageType, alterna
 async function navigateToLiveVideo(page: Page): Promise<void> {
 	const channelUrl = pageUrlMap.live as string;
 	await navigateToPage(page, channelUrl);
-	const firstVideo = page.locator('ytd-rich-item-renderer a[id="thumbnail"]').first();
+	const firstVideo = page
+		.locator(
+			'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
+		)
+		.first();
 	await expect(firstVideo).toBeVisible();
 	await Promise.all([page.waitForURL(/youtube\.com\/watch\?/), firstVideo.click()]);
 	await page.bringToFront();
