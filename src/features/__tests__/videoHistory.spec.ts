@@ -68,8 +68,8 @@ test.describe("videoHistory", () => {
 		expect(resumedTime).toBeLessThan(watchedTime + 10);
 	});
 	test("video history resume prompt should not appear when disabled", async ({ page }) => {
-		await disableFeature(page, "videoHistory.enabled");
 		await navigateToPageType(page, "watch", true);
+		await disableFeature(page, "videoHistory.enabled");
 		// Wait some time
 		await page.waitForTimeout(2000);
 		// Navigate away
