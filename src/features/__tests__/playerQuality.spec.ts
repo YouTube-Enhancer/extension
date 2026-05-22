@@ -1,4 +1,4 @@
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 
@@ -8,6 +8,9 @@ import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getClosestQuality } from "@/src/utils/_tests/player";
 
 const testPages = ["watch", "shorts", "live"] as const;
+// Live streams don't reliably enforce exact quality levels via setPlaybackQualityRange;
+// only run the specific-quality tests (lower fallback, hd720) on VOD page types.
+const vodPages = ["watch", "shorts"] as const;
 
 export const qualityLevel = "hd2160" as YoutubePlayerQualityLevel;
 test.describe("playerQuality", () => {
@@ -27,6 +30,8 @@ test.describe("playerQuality", () => {
 			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeFalsy(page, pageType, closestQuality);
 		});
+	}
+	for (const pageType of vodPages) {
 		test(`should set quality with lower fallback strategy on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerQuality.quality", qualityLevel);
