@@ -141,5 +141,4 @@ declare module "zod-error/lib/functions/generate-error-message/index" {
 	import type { ErrorMessageOptions } from "zod-error";
 	export function generateErrorMessage(issues: $ZodIssue[], options?: ErrorMessageOptions): string;
 }
-export { };
-
+export {};

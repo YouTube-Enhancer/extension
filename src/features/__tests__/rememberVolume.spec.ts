@@ -12,7 +12,7 @@ test.describe("rememberVolume", () => {
 		test(`video volume should be remembered on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "rememberVolume.enabled");
-			await setVolume(page, volume, pageType);
+			await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 			// Navigate to home and back to another video to verify volume persists
 			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
@@ -23,7 +23,7 @@ test.describe("rememberVolume", () => {
 		test(`video volume shouldn't be remembered when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "rememberVolume.enabled");
-			await setVolume(page, volume, pageType);
+			await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
 			const currentVolume = await getCurrentVolume(page, pageType);
@@ -33,7 +33,7 @@ test.describe("rememberVolume", () => {
 		test(`video volume should be remembered at different levels on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "rememberVolume.enabled");
-			await setVolume(page, 50, pageType);
+			await setValueOnYouTubePlayer(page, pageType, "setVolume", 50);
 			await navigateToPageType(page, "home");
 			await navigateToPageType(page, pageType);
 			const currentVolume = await getCurrentVolume(page, pageType);
@@ -44,7 +44,7 @@ test.describe("rememberVolume", () => {
 	test("video volume should be remembered across multiple navigations", async ({ page }) => {
 		await navigateToPageType(page, "watch");
 		await enableFeature(page, "rememberVolume.enabled");
-		await setVolume(page, volume);
+		await setValueOnYouTubePlayer(page, "watch", "setVolume", volume);
 		await navigateToPageType(page, "home");
 		await navigateToPageType(page, "shorts");
 		await navigateToPageType(page, "watch");

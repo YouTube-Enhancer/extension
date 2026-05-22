@@ -153,6 +153,7 @@ export async function getValueFromYouTubePlayer<P extends Page, K extends YouTub
 }
 export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubePlayerSetKeys, V extends Parameters<YouTubePlayer[K]>>(
 	page: P,
+	pageType: PageType = "watch",
 	key: K,
 	...value: V
 ) {
@@ -161,12 +162,16 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
 			if (!container) return null;
 			try {
+				if (key === "setPlaybackRate" && typeof value === "number") {
+					const video = document.querySelector<HTMLVideoElement>(`${selector} video`);
+					if (video) video.playbackRate = value;
+				}
 				await (container[key] as (...args: V[]) => Promise<void>)(...value);
 			} catch (error) {
 				console.error(error);
 			}
 		},
-		{ key, selector: "div#movie_player", value } as const
+		{ key, selector: pageType === "shorts" ? "div#shorts-player" : "div#movie_player", value } as const
 	);
 }
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
