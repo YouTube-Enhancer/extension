@@ -3,7 +3,7 @@ import type { Page } from "@playwright/test";
 export async function sendExtensionMessage(page: Page, message: Record<string, unknown>): Promise<void> {
 	await page.evaluate((msg) => {
 		const provider = document.getElementById("yte-message-from-extension");
-		if (!provider) return;
+		if (!provider) throw new Error(`Must be used inside a YouTube page`);
 		provider.textContent = JSON.stringify(msg);
 		document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
 	}, message);
@@ -12,7 +12,7 @@ export async function sendExtensionMessage(page: Page, message: Record<string, u
 export async function sendYouTubeMessage(page: Page, message: Record<string, unknown>): Promise<void> {
 	await page.evaluate((msg) => {
 		const provider = document.getElementById("yte-message-from-youtube");
-		if (!provider) return;
+		if (!provider) throw new Error(`Must be used inside a YouTube page`);
 
 		provider.textContent = JSON.stringify(msg);
 		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));

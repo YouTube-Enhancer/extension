@@ -36,9 +36,27 @@ export async function clickFeatureMenuItem(page: Page, pageType: PageType, featu
 	await item.waitFor({ state: "visible" });
 	await item.click();
 }
+/**
+ * Disables a feature in the extension configuration.
+ *
+ * This helper must be used after navigating to a YouTube page,
+ * otherwise the extension context and injected APIs may not be available.
+ *
+ * @param page - The active Playwright page instance.
+ * @param feature - The boolean feature key to disable.
+ */
 export async function disableFeature(page: Page, feature: FilterKeysByValueType<configuration, boolean>) {
 	await setFeatureValue(page, feature, false);
 }
+/**
+ * Enables a feature in the extension configuration.
+ *
+ * This helper must be used after navigating to a YouTube page,
+ * otherwise the extension context and injected APIs may not be available.
+ *
+ * @param page - The active Playwright page instance.
+ * @param feature - The boolean feature key to enable.
+ */
 export async function enableFeature(page: Page, feature: FilterKeysByValueType<configuration, boolean>) {
 	await setFeatureValue(page, feature, true);
 }
@@ -51,6 +69,20 @@ export async function setFeatureValue<K extends Path<configuration>>(page: Page,
 	});
 	await page.waitForTimeout(300);
 }
+/**
+ * Sets a configuration option for the extension.
+ *
+ * This helper must be used after navigating to a YouTube page,
+ * otherwise the extension context and injected APIs may not be available.
+ *
+ * @template P - The Playwright page type.
+ * @template K - The configuration path key.
+ * @template V - The value type for the provided configuration path.
+ *
+ * @param page - The active Playwright page instance.
+ * @param id - The configuration option path to update.
+ * @param value - The value to assign to the configuration option.
+ */
 export async function setOption<P extends Page, K extends Path<configuration>, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
 	await setFeatureValue(page, id, value);
 }
