@@ -180,9 +180,9 @@ export async function setVolume(page: Page, volume: number, pageType: PageType =
 		[playerSelector, volume] as const
 	);
 }
-export async function waitForYoutubePlayerReady(page: Page): Promise<void> {
-	await page.waitForFunction(async () => {
-		const player = document.querySelector("#movie_player") as unknown as Nullable<YouTubePlayer>;
+export async function waitForYoutubePlayerReady(page: Page, pageType: PageType): Promise<void> {
+	await page.waitForFunction(async (pageType) => {
+		const player = document.querySelector(pageType === "shorts" ? "div#shorts-player" : "#movie_player") as unknown as Nullable<YouTubePlayer>;
 		if (!player) return false;
 		if (typeof player.getPlayerState !== "function") return false;
 		if (typeof player.getCurrentTime !== "function") return false;
@@ -198,5 +198,5 @@ export async function waitForYoutubePlayerReady(page: Page): Promise<void> {
 		} catch {
 			return false;
 		}
-	});
+	}, pageType);
 }
