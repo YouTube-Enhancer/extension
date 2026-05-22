@@ -133,6 +133,9 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 				if (key === "setPlaybackRate" && typeof value === "number") {
 					const video = document.querySelector<HTMLVideoElement>(`${selector} video`);
 					if (video) video.playbackRate = value;
+				} else if (key === "setVolume" && typeof value === "number") {
+					const video = document.querySelector<HTMLVideoElement>(`${selector} video`);
+					if (video) video.volume = value;
 				}
 				await (container[key] as (...args: V[]) => Promise<void>)(...value);
 			} catch (error) {
