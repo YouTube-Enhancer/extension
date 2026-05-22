@@ -175,15 +175,7 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 	);
 }
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
-	const playerSelector = pageType === "shorts" ? "div#shorts-player" : "div#movie_player";
-	await page.evaluate(
-		async ([selector, volume]) => {
-			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
-			if (!container) return null;
-			await container.setVolume(volume);
-		},
-		[playerSelector, volume] as const
-	);
+	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 }
 export async function waitForYoutubePlayerReady(page: Page, pageType: PageType): Promise<void> {
 	await page.waitForFunction(async (pageType) => {
