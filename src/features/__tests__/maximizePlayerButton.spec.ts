@@ -10,8 +10,8 @@ test.describe("maximizePlayerButton", () => {
 	for (const pageType of testPages) {
 		test(`maximize player button should be enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await setOption(page, "maximizePlayerButton.button.placement", placement);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
 		});
 		test(`maximize player button should be disabled on ${pageType}`, async ({ page }) => {
@@ -21,8 +21,8 @@ test.describe("maximizePlayerButton", () => {
 		});
 		test(`player should be maximized on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await setOption(page, "maximizePlayerButton.button.placement", placement);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
 			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", placement);
 			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
