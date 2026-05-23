@@ -25,6 +25,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "monoToStereoButton.button.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.monoToStereoButton.enable.label),
+			section: "playbackControls",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.monoToStereoButton.enable.title)
 		}
 	]

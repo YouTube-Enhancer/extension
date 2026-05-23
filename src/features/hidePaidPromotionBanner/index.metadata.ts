@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hidePaidPromotionBanner.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePaidPromotionBanner.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePaidPromotionBanner.enable.title)
 		}
 	]

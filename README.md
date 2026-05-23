@@ -37,7 +37,25 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 ## 🎛️ Features • 64 features
 
 <details>
-<summary>Miscellaneous • 40 features</summary>
+<summary>Miscellaneous • 13 features</summary>
+
+- **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
+- **Horizontal Video Flip Button**: Adds a button to flip the video horizontally
+- **Vertical Video Flip Button**: Adds a button to flip the video vertically
+- **Loop Button**: Adds a button to the feature menu to loop the video you're watching
+- **Maximize Player Button**: Adds a button to the feature menu to maximize the player
+- **Open Transcript Button**: Adds a button to the feature menu to open the transcript of the video you're watching
+- **Open You Tube Settings On Hover**: Opens the YouTube settings menu when you hover over the settings button
+- **Remaining Time**: Shows the remaining time of the video you're watching
+- **Remove You Tube /redirect URLs**: Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue
+- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
+- **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
+- **Shorts Auto Scroll**: Automatically scrolls to the next short
+- **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
+</details>
+
+<details>
+<summary>Automatic Behaviors • 7 features</summary>
 
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
@@ -46,11 +64,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Automatically Enable Closed Captions**: Automatically enables closed captions when you load a video
 - **Automatically Maximize Player**: Automatically maximizes the player when you load a video
 - **Automatically Show More Videos On End Screen**: Automatically shows more videos on end screen when you load a video
-- **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
-- **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
-- **Default To Original Audio Track**: Always default to the original audio track
-- **Horizontal Video Flip Button**: Adds a button to flip the video horizontally
-- **Vertical Video Flip Button**: Adds a button to flip the video vertically
+</details>
+
+<details>
+<summary>Content Filtering • 13 features</summary>
+
 - **Hide AI Summary**: Hides the artificial intelligence summary below videos
 - **Hide End Screen Cards**: Hides the cards at the end of the video
 - **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
@@ -64,21 +82,6 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Hide Scrollbar**: Hides the pages scrollbar
 - **Hide Recommended Videos**: Hides the sidebar that recommends videos
 - **Hide Translate Comment Button**: Hides 'Translate to Language' button under comments
-- **Loop Button**: Adds a button to the feature menu to loop the video you're watching
-- **Maximize Player Button**: Adds a button to the feature menu to maximize the player
-- **Mono To Stereo Button**: Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.
-- **Open Transcript Button**: Adds a button to the feature menu to open the transcript of the video you're watching
-- **Open You Tube Settings On Hover**: Opens the YouTube settings menu when you hover over the settings button
-- **Pause Background Players**: Pauses video players in background tabs when you start a new player in foreground tab
-- **Remaining Time**: Shows the remaining time of the video you're watching
-- **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
-- **Remove You Tube /redirect URLs**: Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue
-- **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
-- **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
-- **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
-- **Shorts Auto Scroll**: Automatically scrolls to the next short
-- **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
-- **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
 </details>
 
 <details>
@@ -129,6 +132,18 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
   - Options: Bottom center, Bottom left, Bottom right, Top center, Top left, Top right
 - **Default Mini Player Size**: Sets the initial size before you resize the Mini Player.
   - Options: 320x180, 400x225, 480x270, 560x315
+</details>
+
+<details>
+<summary>Playback Controls • 7 features</summary>
+
+- **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
+- **Default To Original Audio Track**: Always default to the original audio track
+- **Mono To Stereo Button**: Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.
+- **Pause Background Players**: Pauses video players in background tabs when you start a new player in foreground tab
+- **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
+- **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
+- **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
 </details>
 
 <details>

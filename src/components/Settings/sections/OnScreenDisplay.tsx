@@ -111,7 +111,10 @@ export default function OnScreenDisplaySection() {
 		]
 	} satisfies parentSetting;
 	return (
-		<SettingSection title={t((translations) => translations.settings.sections.onScreenDisplaySettings.title)}>
+		<SettingSection
+			className="mb-3 break-inside-avoid rounded-xl bg-[var(--card-bg)] p-2 shadow-sm"
+			title={t((translations) => translations.settings.sections.onScreenDisplaySettings.title)}
+		>
 			<SettingTitle />
 			<Setting
 				disabled={isOSDDisabled}

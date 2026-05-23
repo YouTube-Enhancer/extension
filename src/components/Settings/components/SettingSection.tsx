@@ -5,11 +5,12 @@ import { textMatcher } from "@/src/utils/string";
 interface SettingSectionProps {
 	children: React.ReactNode[];
 	className?: string;
+	description?: string;
 	featureIds?: string[];
 	title: string;
 }
 
-export default function SettingSection({ children, className = "", featureIds = [], title: sectionTitle }: SettingSectionProps) {
+export default function SettingSection({ children, className = "", description, featureIds = [], title: sectionTitle }: SettingSectionProps) {
 	const { filter } = useSettingsFilter();
 	const matchesText = textMatcher(filter);
 	const shouldSectionBeVisible =
@@ -20,7 +21,7 @@ export default function SettingSection({ children, className = "", featureIds = 
 			return matchesText(featureId ?? "") || matchesText(label ?? "") || matchesText(title ?? "");
 		});
 	return shouldSectionBeVisible ?
-			<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
+			<SectionTitleProvider className={className} description={description} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
 				{children}
 			</SectionTitleProvider>
 		:	null;

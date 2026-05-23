@@ -1,13 +1,14 @@
-import type { CheckboxProps } from "@/src/components/Inputs/CheckBox/CheckBox";
 import type { ColorPickerProps } from "@/src/components/Inputs/ColorPicker/ColorPicker";
 import type { CSSEditorProps } from "@/src/components/Inputs/CSSEditor/CSSEditor";
 import type { NumberInputProps } from "@/src/components/Inputs/Number/Number";
 import type { SelectProps } from "@/src/components/Inputs/Select/Select";
 import type { SliderProps } from "@/src/components/Inputs/Slider/Slider";
+import type { SwitchProps } from "@/src/components/Inputs/Switch/Switch";
 import type { TextInputProps } from "@/src/components/Inputs/TextInput/TextInput";
 import type { configurationId, Nullable, TSelectorFunc } from "@/src/types";
 
-import { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
+import { ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
+import Switch from "@/src/components/Inputs/Switch/Switch";
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 import { textMatcher } from "@/src/utils/string";
@@ -25,12 +26,12 @@ export type parentSetting =
 			value: TSelectorFunc;
 	  };
 export type SettingInputProps<ID extends configurationId> = (
-	| (CheckboxProps & { type: "checkbox" })
 	| (ColorPickerProps & { type: "color-picker" })
 	| (CSSEditorProps & { type: "css-editor" })
 	| (NumberInputProps & { type: "number" })
 	| (SelectProps<ID> & { type: "select" })
 	| (SliderProps & { type: "slider" })
+	| (SwitchProps & { type: "checkbox" })
 	| (TextInputProps & { type: "text-input" })
 ) & {
 	alwaysVisible?: boolean;
@@ -85,7 +86,7 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 		case "checkbox": {
 			const { checked, className, disabled, disabledReason, label, onChange, title } = settingProps;
 			return (
-				<Checkbox
+				<Switch
 					checked={checked}
 					className={className}
 					disabled={disabled}

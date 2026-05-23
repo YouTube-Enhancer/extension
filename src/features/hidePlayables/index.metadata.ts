@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hidePlayables.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePlayables.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePlayables.enable.title)
 		}
 	]

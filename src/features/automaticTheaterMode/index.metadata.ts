@@ -16,6 +16,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "automaticTheaterMode.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticTheaterMode.enable.label),
+			section: "automaticBehaviors",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticTheaterMode.enable.title)
 		}
 	]

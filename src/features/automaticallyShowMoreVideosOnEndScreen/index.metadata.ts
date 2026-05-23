@@ -16,6 +16,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "automaticallyShowMoreVideosOnEndScreen.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyShowMoreVideosOnEndScreen.enable.label),
+			section: "automaticBehaviors",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyShowMoreVideosOnEndScreen.enable.title)
 		}
 	]

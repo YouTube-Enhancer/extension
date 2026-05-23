@@ -361,3 +361,135 @@ button[id="openinnewtab_button"] {
 	border-radius: var(--border-radius-md);
 	padding: 10px 14px;
 }
+
+/* ── Theme overrides ── */
+
+[data-theme="light"] {
+	--accent: #2979ff;
+	background-color: #f8f8f8;
+	color: #1a1a1a;
+}
+
+[data-theme="dark"] {
+	--accent: #2979ff;
+	background-color: #181a1b;
+	color: #ffffff;
+}
+
+[data-theme="oled"] {
+	--accent: #2979ff;
+	--neutral-darker: #0a0a0a;
+	background-color: #000000;
+	color: #ffffff;
+}
+
+[data-theme="purple"] {
+	--accent: #a855f7;
+	--accent-dark: #9333ea;
+	background-color: #1a0a2e;
+	color: #e8d5ff;
+}
+
+[data-theme="ocean"] {
+	--accent: #38bdf8;
+	--accent-dark: #0ea5e9;
+	background-color: #0a1628;
+	color: #cce4ff;
+}
+
+/* ── Theme-aware layout variables ── */
+:root {
+	--card-bg: #ffffff;
+	--card-text-muted: #9ca3af;
+	--section-heading: #374151;
+	--sidebar-bg: #f5f5f5;
+	--sidebar-border: #e5e7eb;
+	--btn-secondary-bg: #ffffff;
+	--btn-secondary-text: #4b5563;
+	--btn-secondary-border: #d1d5db;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--card-bg: rgba(31, 41, 55, 0.3);
+		--card-text-muted: #6b7280;
+		--section-heading: #d1d5db;
+		--sidebar-bg: #181a1b;
+		--sidebar-border: rgba(55, 65, 81, 0.5);
+		--btn-secondary-bg: rgba(31, 41, 55, 0.4);
+		--btn-secondary-text: #d1d5db;
+		--btn-secondary-border: #4b5563;
+	}
+}
+
+[data-theme="light"] {
+	--card-bg: #ffffff;
+	--card-text-muted: #9ca3af;
+	--section-heading: #374151;
+	--sidebar-bg: #f5f5f5;
+	--sidebar-border: #e5e7eb;
+	--btn-secondary-bg: #ffffff;
+	--btn-secondary-text: #4b5563;
+	--btn-secondary-border: #d1d5db;
+}
+
+[data-theme="dark"] {
+	--card-bg: rgba(31, 41, 55, 0.3);
+	--card-text-muted: #6b7280;
+	--section-heading: #d1d5db;
+	--sidebar-bg: #181a1b;
+	--sidebar-border: rgba(55, 65, 81, 0.5);
+	--btn-secondary-bg: rgba(31, 41, 55, 0.4);
+	--btn-secondary-text: #d1d5db;
+	--btn-secondary-border: #4b5563;
+}
+
+[data-theme="oled"] {
+	--card-bg: rgba(15, 15, 15, 0.7);
+	--card-text-muted: #6b7280;
+	--section-heading: #d1d5db;
+	--sidebar-bg: #000000;
+	--sidebar-border: rgba(31, 31, 31, 0.9);
+	--btn-secondary-bg: rgba(15, 15, 15, 0.5);
+	--btn-secondary-text: #d1d5db;
+	--btn-secondary-border: #374151;
+}
+
+[data-theme="purple"] {
+	--card-bg: rgba(45, 15, 80, 0.5);
+	--card-text-muted: #a78bfa;
+	--section-heading: #e9d5ff;
+	--sidebar-bg: #16062a;
+	--sidebar-border: rgba(109, 40, 217, 0.3);
+	--btn-secondary-bg: rgba(45, 15, 80, 0.4);
+	--btn-secondary-text: #e9d5ff;
+	--btn-secondary-border: #7c3aed;
+}
+
+[data-theme="ocean"] {
+	--card-bg: rgba(10, 30, 60, 0.5);
+	--card-text-muted: #60a5fa;
+	--section-heading: #bfdbfe;
+	--sidebar-bg: #0a1628;
+	--sidebar-border: rgba(29, 78, 216, 0.3);
+	--btn-secondary-bg: rgba(10, 30, 60, 0.4);
+	--btn-secondary-text: #bfdbfe;
+	--btn-secondary-border: #1d4ed8;
+}
+
+/* ── Welcome modal animation ── */
+
+@keyframes modalIn {
+	from {
+		opacity: 0;
+		transform: scale(0.92);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.welcome-modal {
+	animation: modalIn 250ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

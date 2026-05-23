@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hideMembersOnlyVideos.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideMembersOnlyVideos.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideMembersOnlyVideos.enable.title)
 		}
 	]

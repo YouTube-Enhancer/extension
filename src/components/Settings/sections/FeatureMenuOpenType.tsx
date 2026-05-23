@@ -13,7 +13,10 @@ export default function FeatureMenuOpenTypeSection() {
 	} = useSettings();
 	const featureMenuAvailable = hasAnyFeatureMenuButton(settings);
 	return (
-		<SettingSection title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}>
+		<SettingSection
+			className="mb-3 break-inside-avoid rounded-xl bg-[var(--card-bg)] p-2 shadow-sm"
+			title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}
+		>
 			<SettingTitle />
 			<Setting
 				disabled={!featureMenuAvailable}
