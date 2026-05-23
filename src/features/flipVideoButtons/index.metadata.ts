@@ -18,6 +18,7 @@ export const metadata = createFeatureMetadata({
 			}
 		}
 	},
+	dependencies: { includePages: ["watch", "live"] },
 	id: "flipVideoButtons",
 	schemaInput: {
 		buttons: z.object({

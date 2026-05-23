@@ -54,7 +54,6 @@ async function runInit(params: PlaylistLengthParameters) {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "playlist"] },
 	onConfigChange: async (config) => {
 		if (!config.enabled) return;
 		await registry.updateFeatureEnabledState("playlistLength", false, config);

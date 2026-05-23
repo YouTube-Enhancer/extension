@@ -68,6 +68,5 @@ export default createFeature({
 				document.removeEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
 			}
 		}
-	],
-	dependencies: { includePages: ["watch", "live"] }
+	]
 });

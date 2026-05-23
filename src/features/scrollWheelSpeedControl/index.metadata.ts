@@ -5,6 +5,7 @@ import { modifierKeys } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, modifierKey: "altKey", steps: 0.25 },
+	dependencies: { includePages: ["watch", "shorts"] },
 	id: "scrollWheelSpeedControl",
 	schemaInput: { enabled: z.boolean(), modifierKey: z.enum(modifierKeys), steps: z.number() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.title),

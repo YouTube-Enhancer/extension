@@ -20,6 +20,7 @@ const qualityLabels: Record<string, string> = {
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, fallbackStrategy: "lower", quality: "hd1080" },
+	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
 	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), quality: z.enum(youtubePlayerQualityLevels) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),

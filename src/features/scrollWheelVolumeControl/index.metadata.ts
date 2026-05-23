@@ -5,6 +5,7 @@ import { modifierKeys } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, holdModifierKey: false, holdRightClick: false, modifierKey: "ctrlKey", steps: 5 },
+	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "scrollWheelVolumeControl",
 	schemaInput: {
 		enabled: z.boolean(),

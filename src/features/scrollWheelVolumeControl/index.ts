@@ -17,7 +17,6 @@ let suppressContextMenu = false;
 const HIDE_TIMEOUT = 100;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live", "shorts"] },
 	onDisable: () => {
 		modifyElementClassList("remove", { className: "yte-scroll-wheel-volume-control", element: document.body });
 		eventManager.removeEventListeners("scrollWheelVolumeControl");

@@ -33,7 +33,6 @@ function setTimestampObserver(observer: MutationObserver) {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: () => {
 		eventManager.removeEventListeners("timestampPeek");
 		document.removeEventListener("yt-navigate-start", navigateStartHandler);

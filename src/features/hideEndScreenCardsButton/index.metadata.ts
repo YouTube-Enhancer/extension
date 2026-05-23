@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	defaults: {
 		button: { enabled: false, fullscreenPlacement: "same", placement: "player_controls_right" }
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "hideEndScreenCardsButton",
 	schemaInput: {
 		button: z.object({

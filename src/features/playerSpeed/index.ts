@@ -109,7 +109,6 @@ async function updatePlaybackSpeedButtons(currentSpeed: number) {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "shorts"] },
 	onConfigChange: async ({ enabled, speed }) => {
 		if (!enabled) return;
 		await setPlayerSpeed(speed);

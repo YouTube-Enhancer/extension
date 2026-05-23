@@ -42,7 +42,6 @@ const cleanupPlaylistManagementButtons = () => {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["playlist"] },
 	onConfigChange: async (config) => {
 		cleanupPlaylistManagementButtons();
 		await registry.updateFeatureEnabledState("playlistManagementButtons", false, config);

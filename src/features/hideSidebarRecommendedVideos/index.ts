@@ -7,7 +7,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: () => {
 		modifyElementClassList("remove", {
 			className: "yte-hide-sidebar-recommended-videos",

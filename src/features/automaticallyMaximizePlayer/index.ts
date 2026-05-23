@@ -5,7 +5,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: minimizePlayer,
 	onEnable: maximizePlayer
 });

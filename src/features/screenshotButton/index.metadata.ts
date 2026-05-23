@@ -14,6 +14,7 @@ export const metadata = createFeatureMetadata({
 		format: "png",
 		saveAs: "file"
 	},
+	dependencies: { includePages: ["watch", "live"] },
 	id: "screenshotButton",
 	schemaInput: {
 		button: z.object({

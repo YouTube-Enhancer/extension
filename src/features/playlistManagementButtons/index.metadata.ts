@@ -4,6 +4,7 @@ import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMet
 
 export const metadata = createFeatureMetadata({
 	defaults: { removeButton: { enabled: false }, resetButton: { enabled: false } },
+	dependencies: { includePages: ["playlist"] },
 	id: "playlistManagementButtons",
 	schemaInput: { removeButton: z.object({ enabled: z.boolean() }), resetButton: z.object({ enabled: z.boolean() }) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.title),

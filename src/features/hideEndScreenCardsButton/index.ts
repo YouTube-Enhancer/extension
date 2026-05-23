@@ -59,6 +59,5 @@ export default createFeature({
 				eventManager.removeEventListeners("hideEndScreenCardsButton");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch"] }
+	]
 });

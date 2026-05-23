@@ -7,7 +7,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: async () => {
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 1000);
 		if (!playerContainer) return;

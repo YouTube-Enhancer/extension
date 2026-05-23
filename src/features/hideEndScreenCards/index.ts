@@ -14,7 +14,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onConfigChange: async ({ enabled }) => {
 		const {
 			data: {

@@ -8,7 +8,6 @@ import { metadata } from "./index.metadata";
 let captionsWhereEnabled = false;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: async () => {
 		// Get the player element
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");

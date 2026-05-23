@@ -14,6 +14,7 @@ const positionOptions: { key: PositionKeys; value: (typeof miniPlayerPositions)[
 
 export const metadata = createFeatureMetadata({
 	defaults: { defaultPosition: "bottom_right", defaultSize: "400x225", enabled: false },
+	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayer",
 	schemaInput: { defaultPosition: z.enum(miniPlayerPositions), defaultSize: z.enum(miniPlayerSizes), enabled: z.boolean() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.miniPlayer.title),

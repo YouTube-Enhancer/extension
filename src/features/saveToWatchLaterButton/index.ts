@@ -28,7 +28,6 @@ const CONTAINER = "ytd-two-column-browse-results-renderer:is([page-subtype='home
 let videosObserver: MutationObserver | null = null;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["home", "subscriptions"] },
 	onDisable: () => {
 		if (videosObserver) {
 			videosObserver.disconnect();

@@ -84,7 +84,6 @@ export default createFeature({
 			}
 		}
 	],
-	dependencies: { includePages: ["watch"] },
 	onConfigChange: ({ time }) => {
 		updateFeatureButtonTitle(
 			"forwardButton",

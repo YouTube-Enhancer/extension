@@ -27,7 +27,6 @@ function playerTimeUpdateListener() {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: () => {
 		const remainingTimeElement = document.querySelector("span#ytp-time-remaining");
 		if (!remainingTimeElement) return;

@@ -53,6 +53,5 @@ export default createFeature({
 				await removeFeatureButton("flipVideoVerticalButton", placement);
 			}
 		}
-	],
-	dependencies: { includePages: ["watch", "live"] }
+	]
 });

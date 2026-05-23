@@ -10,7 +10,6 @@ interface YtdWatchElement extends Element {
 let youthereDataChanged_: () => void;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: () => {
 		browserColorLog("Disabling skipContinueWatching", "FgMagenta");
 		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
