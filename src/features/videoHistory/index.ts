@@ -167,7 +167,6 @@ function createVideoId(id: string): VideoId {
 }
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: () => {
 		eventManager.removeEventListeners("videoHistory");
 		document.getElementById(promptId)?.remove();

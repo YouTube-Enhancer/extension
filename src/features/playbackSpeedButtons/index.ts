@@ -196,7 +196,6 @@ export default createFeature({
 			}
 		}
 	],
-	dependencies: { includePages: ["watch"] },
 	onConfigChange: async ({ speed: playbackSpeedPerClick }) => {
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 		if (!playerContainer) return;

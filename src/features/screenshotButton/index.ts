@@ -115,6 +115,5 @@ export default createFeature({
 				eventManager.removeEventListeners("screenshotButton");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch", "live"] }
+	]
 });

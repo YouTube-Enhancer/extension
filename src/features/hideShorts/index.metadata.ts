@@ -20,6 +20,7 @@ export const metadata = createFeatureMetadata({
 			enabled: false
 		}
 	},
+	dependencies: { includePages: ["watch", "home", "search", "channel_home"] },
 	id: "hideShorts",
 	schemaInput: {
 		channel: z.object({

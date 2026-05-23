@@ -5,6 +5,7 @@ import { videoHistoryResumeTypes, videoHistoryStatuses } from "@/src/features/vi
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, resumeType: "prompt" },
+	dependencies: { includePages: ["watch"] },
 	id: "videoHistory",
 	schemaInput: { enabled: z.boolean(), resumeType: z.enum(videoHistoryResumeTypes) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.videoHistory.title),

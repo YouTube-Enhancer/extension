@@ -46,6 +46,5 @@ export default createFeature({
 				return !!transcriptButton;
 			}
 		}
-	],
-	dependencies: { includePages: ["watch"] }
+	]
 });

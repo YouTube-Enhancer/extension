@@ -6,7 +6,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["home"] },
 	onDisable: () => {
 		modifyElementClassList("remove", {
 			className: "yte-hide-posts",

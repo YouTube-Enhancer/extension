@@ -6,6 +6,7 @@ import { playlistLengthGetMethod, playlistWatchTimeGetMethod } from "./types";
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, lengthGetMethod: "api", watchTimeGetMethod: "youtube" },
+	dependencies: { includePages: ["watch", "playlist"] },
 	id: "playlistLength",
 	schemaInput: {
 		enabled: z.boolean(),

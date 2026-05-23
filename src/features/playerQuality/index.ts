@@ -11,7 +11,6 @@ import { metadata } from "./index.metadata";
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "shorts", "live"] },
 	onDisable: async () => {
 		if (!currentQuality) return;
 		// Get the player element

@@ -4,6 +4,7 @@ import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMet
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false },
+	dependencies: { includePages: ["watch", "shorts", "live", "search"] },
 	id: "shareShortener",
 	schemaInput: { enabled: z.boolean() },
 	settings: [

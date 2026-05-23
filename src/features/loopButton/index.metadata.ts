@@ -10,6 +10,7 @@ export const metadata = createFeatureMetadata({
 			placement: "feature_menu"
 		}
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "loopButton",
 	schemaInput: {
 		button: z.object({

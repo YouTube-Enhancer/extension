@@ -61,7 +61,6 @@ export default createFeature({
 			}
 		}
 	],
-	dependencies: { includePages: ["watch", "live"] },
 	state: {
 		header: {
 			timeout: null,

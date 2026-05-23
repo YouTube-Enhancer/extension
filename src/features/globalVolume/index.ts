@@ -17,7 +17,6 @@ async function getPlayerContainer(): Promise<Nullable<YouTubePlayerDiv>> {
 }
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live", "shorts"] },
 	onDisable: async () => {
 		const playerContainer = await getPlayerContainer();
 		if (!playerContainer) return;

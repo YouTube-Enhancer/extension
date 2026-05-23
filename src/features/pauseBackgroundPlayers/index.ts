@@ -20,7 +20,6 @@ const PauseBackgroundPlayers = () => {
 };
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: () => {
 		const videoPlayerContainer: HTMLElement | null = document.querySelector(".html5-main-video");
 		if (videoPlayerContainer) {

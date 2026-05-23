@@ -6,6 +6,7 @@ export const metadata = createFeatureMetadata({
 	defaults: {
 		enabled: false
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "automaticallyDisableAutoPlay",
 	schemaInput: {
 		enabled: z.boolean()

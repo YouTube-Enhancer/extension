@@ -77,6 +77,5 @@ export default createFeature({
 				eventManager.removeEventListeners("loopButton");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch"] }
+	]
 });

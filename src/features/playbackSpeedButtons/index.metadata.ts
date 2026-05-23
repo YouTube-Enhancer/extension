@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 		},
 		speed: 0.25
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "playbackSpeedButtons",
 	schemaInput: {
 		button: z.object({

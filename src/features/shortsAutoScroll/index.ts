@@ -9,7 +9,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["shorts"] },
 	onDisable: () => eventManager.removeEventListeners("shortsAutoScroll"),
 	onEnable: async () => {
 		// Get the shorts container

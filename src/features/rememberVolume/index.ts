@@ -10,7 +10,6 @@ import { setupVolumeChangeListener } from "./utils";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live", "shorts"] },
 	onDisable: () => eventManager.removeEventListeners("rememberVolume"),
 	onEnable: async (_, stateAPI) => {
 		const { shortsPageVolume, watchPageVolume } = stateAPI.getState();

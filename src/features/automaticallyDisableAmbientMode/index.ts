@@ -96,7 +96,6 @@ async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "shorts"] },
 	onDisable: async () => {
 		if (!ambientModeWasEnabled) return;
 		await toggleAmbientMode(true);

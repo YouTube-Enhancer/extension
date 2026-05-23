@@ -20,7 +20,6 @@ function getFullscreenScrollPairs(): ElementClassPair[] {
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: async () => {
 		await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
 		modifyElementsClassList("remove", getFullscreenScrollPairs());

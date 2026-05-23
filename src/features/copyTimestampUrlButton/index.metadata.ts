@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			placement: "player_controls_right"
 		}
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "copyTimestampUrlButton",
 	schemaInput: {
 		button: z.object({

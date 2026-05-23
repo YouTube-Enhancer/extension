@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			placement: "feature_menu"
 		}
 	},
+	dependencies: { includePages: ["watch"] },
 	id: "openTranscriptButton",
 	schemaInput: {
 		button: z.object({

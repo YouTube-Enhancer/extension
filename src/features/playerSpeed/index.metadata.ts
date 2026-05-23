@@ -5,6 +5,7 @@ import { youtubePlayerMaxSpeed, youtubePlayerMinSpeed, youtubePlayerSpeedStep } 
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, speed: 1 },
+	dependencies: { includePages: ["watch", "shorts"] },
 	id: "playerSpeed",
 	schemaInput: { enabled: z.boolean(), speed: z.number() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerSpeed.title),

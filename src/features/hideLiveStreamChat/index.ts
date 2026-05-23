@@ -10,7 +10,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["live"] },
 	onDisable: async () => {
 		const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 		if (!player) return;

@@ -4,6 +4,7 @@ import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMet
 
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false },
+	dependencies: { includePages: ["live"] },
 	id: "hideLiveStreamChat",
 	schemaInput: { enabled: z.boolean() },
 	settings: [

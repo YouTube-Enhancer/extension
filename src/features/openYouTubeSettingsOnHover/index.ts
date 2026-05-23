@@ -8,7 +8,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: () => eventManager.removeEventListeners("openYouTubeSettingsOnHover"),
 	onEnable: async () => {
 		const settingsButton = await waitForElement<HTMLButtonElement>(".ytp-button.ytp-settings-button");
