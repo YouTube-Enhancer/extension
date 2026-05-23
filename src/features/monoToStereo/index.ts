@@ -39,6 +39,5 @@ export default createFeature({
 				eventManager.removeEventListeners("monoToStereoButton");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch", "live"] }
+	]
 });

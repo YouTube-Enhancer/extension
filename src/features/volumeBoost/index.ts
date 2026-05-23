@@ -134,7 +134,6 @@ export default createFeature({
 			shouldRender: ({ mode }) => mode === "per_video"
 		}
 	],
-	dependencies: { includePages: ["watch", "live", "shorts"] },
 	onConfigChange: ({ amount, enabled, mode }) => {
 		if (!enabled) return;
 		if (mode === "global") applyVolumeBoostDb(amount);

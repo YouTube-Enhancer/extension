@@ -5,6 +5,7 @@ import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	defaults: { button: { enabled: false, fullscreenPlacement: "same", placement: "player_controls_right" }, time: 5 },
+	dependencies: { includePages: ["watch"] },
 	id: "forwardRewindButtons",
 	schemaInput: {
 		button: z.object({

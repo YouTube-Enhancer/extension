@@ -17,6 +17,7 @@ export const metadata = createFeatureMetadata({
 		enabled: false,
 		mode: "global"
 	},
+	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "volumeBoost",
 	schemaInput: {
 		amount: z.number(),

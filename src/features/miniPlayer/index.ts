@@ -145,7 +145,6 @@ export const setMiniPlayerManual = async (checked: boolean) => {
 export const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onConfigChange: ({ defaultPosition, defaultSize }) => {
 		setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
 	},

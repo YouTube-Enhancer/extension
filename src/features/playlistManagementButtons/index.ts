@@ -8,6 +8,7 @@ import { registry } from "@/src/features/_registry/featureRegistry";
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
+import { waitForElement } from "@/src/utils/dom/wait";
 
 import { getPlaylistId } from "../playlistLength/utils";
 import { metadata } from "./index.metadata";
@@ -27,21 +28,28 @@ const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-vi
 const THUMBNAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 
 let playlistObserver: MutationObserver | null = null;
+
+const cleanupPlaylistManagementButtons = () => {
+	if (playlistObserver) {
+		playlistObserver.disconnect();
+		playlistObserver = null;
+	}
+	const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
+	playlistItems.forEach((item) => {
+		item.querySelectorAll(".yte-remove-button, .yte-reset-button").forEach((btn) => btn.remove());
+	});
+};
+
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["playlist"] },
-	onDisable: () => {
-		if (playlistObserver) {
-			playlistObserver.disconnect();
-			playlistObserver = null;
-		}
-		const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
-		playlistItems.forEach((item) => {
-			item.querySelectorAll(".yte-remove-button, .yte-reset-button").forEach((btn) => btn.remove());
-		});
+	onConfigChange: async (config) => {
+		cleanupPlaylistManagementButtons();
+		await registry.updateFeatureEnabledState("playlistManagementButtons", false, config);
+		await registry.updateFeatureEnabledState("playlistManagementButtons", true, config);
 	},
+	onDisable: cleanupPlaylistManagementButtons,
 	onEnable: async ({ removeButton: { enabled: enable_playlist_remove_button }, resetButton: { enabled: enable_playlist_reset_button } }) => {
-		if (!document.querySelector("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)")) {
+		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)", 2500, "optional"))) {
 			return;
 		}
 

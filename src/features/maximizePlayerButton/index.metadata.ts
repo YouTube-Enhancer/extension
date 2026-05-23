@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			placement: "feature_menu"
 		}
 	},
+	dependencies: { includePages: ["watch", "live"] },
 	id: "maximizePlayerButton",
 	schemaInput: {
 		button: z.object({

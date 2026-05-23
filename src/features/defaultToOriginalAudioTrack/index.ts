@@ -10,7 +10,6 @@ import { findDefaultTrack, parseAudioTrack, type ParsedAudioTrack } from "./util
 let originalAudioTrack: Nullable<ParsedAudioTrack> = null;
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "shorts"] },
 	onDisable: async () => {
 		// Determine the correct player container selector based on page type
 		const playerContainerSelector = isShortsPage() ? "#shorts-player" : "div#movie_player";

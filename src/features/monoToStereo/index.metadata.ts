@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			placement: "player_controls_left"
 		}
 	},
+	dependencies: { includePages: ["watch", "live"] },
 	id: "monoToStereoButton",
 	schemaInput: {
 		button: z.object({

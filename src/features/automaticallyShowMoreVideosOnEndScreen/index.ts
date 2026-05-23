@@ -6,7 +6,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch"] },
 	onDisable: hideMoreVideosOnEndScreen,
 	onEnable: showMoreVideosOnEndScreen
 });

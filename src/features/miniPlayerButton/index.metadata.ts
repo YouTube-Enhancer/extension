@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			placement: "below_player"
 		}
 	},
+	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayerButton",
 	schemaInput: {
 		button: z.object({

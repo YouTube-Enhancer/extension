@@ -6,7 +6,6 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "home", "search", "channel_home"] },
 	onConfigChange: ({
 		channel: { enabled: channel },
 		home: { enabled: home },

@@ -80,6 +80,5 @@ export default createFeature({
 				videoElement.removeAttribute("loop");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch"] }
+	]
 });

@@ -73,10 +73,6 @@ export type FeatureBaseWithoutState<K extends Exclude<FeatureKeys, FeatureKeysWi
 		 */
 		buttons?: K extends FeatureKeysWithButtons ? FeatureButton<K>[] : never;
 		/**
-		 * Optional dependencies for the feature
-		 */
-		dependencies?: FeatureDependencies;
-		/**
 		 * Schema for validation (used to build validation schema dynamically)
 		 * @param config The configuration to validate
 		 * @returns A promise that resolves when the validation has finished
@@ -95,10 +91,6 @@ export type FeatureBaseWithState<K extends FeatureKeysWithState> = FeatureMetada
 		 * @remarks Only features with buttons can define this
 		 */
 		buttons?: K extends FeatureKeysWithButtons ? FeatureButton<K>[] : never;
-		/**
-		 * Optional dependencies for the feature
-		 */
-		dependencies?: FeatureDependencies;
 		/**
 		 * Schema for validation (used to build validation schema dynamically)
 		 * @param config The configuration to validate
@@ -307,6 +299,10 @@ type FeatureMetadataBase<K extends FeatureKeys> = {
 	 * @remarks These values must contain the enabled property.
 	 */
 	defaults: MustContainEnabled<configuration[K]>;
+	/**
+	 * Optional dependencies for the feature
+	 */
+	dependencies?: FeatureDependencies;
 	/**
 	 * Unique identifier for the feature
 	 */

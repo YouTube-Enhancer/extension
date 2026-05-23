@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 		enabled: false,
 		volume: 25
 	},
+	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "globalVolume",
 	schemaInput: {
 		enabled: z.boolean(),

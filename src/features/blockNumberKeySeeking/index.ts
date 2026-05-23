@@ -14,7 +14,6 @@ const keydownHandler = (event: KeyboardEvent): void => {
 };
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: () => document.removeEventListener("keydown", keydownHandler, { capture: true }),
 	onEnable: () => document.addEventListener("keydown", keydownHandler, { capture: true })
 });

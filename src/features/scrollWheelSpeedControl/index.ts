@@ -15,7 +15,6 @@ import { adjustSpeed, setupScrollListeners } from "./utils";
 
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "shorts"] },
 	onDisable: () => eventManager.removeEventListeners("scrollWheelSpeedControl"),
 	onEnable: async () => {
 		let optionsData = await waitForSpecificMessage("options", "request_data", "content");

@@ -55,6 +55,5 @@ export default createFeature({
 				eventManager.removeEventListeners("copyTimestampUrlButton");
 			}
 		}
-	],
-	dependencies: { includePages: ["watch"] }
+	]
 });

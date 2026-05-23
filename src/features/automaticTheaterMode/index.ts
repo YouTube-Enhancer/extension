@@ -5,7 +5,6 @@ import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 import { metadata } from "./index.metadata";
 export default createFeature({
 	...metadata,
-	dependencies: { includePages: ["watch", "live"] },
 	onDisable: async () => {
 		// Get the size button
 		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
