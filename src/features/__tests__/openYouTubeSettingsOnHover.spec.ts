@@ -1,9 +1,10 @@
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/openYouTubeSettingsOnHover/index.metadata";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-
-const testPages = ["watch", "live"] as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 async function forcePlayerVisible(page: Parameters<typeof enableFeature>[0]) {
 	// Force player containers visible — on some videos (e.g. ended live streams) YouTube

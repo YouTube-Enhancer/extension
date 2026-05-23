@@ -1,16 +1,18 @@
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/maximizePlayerButton/index.metadata";
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-
-const testPages = ["watch", "live"] as const;
-const placement = "player_controls_left" as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const { left } = placementRecord;
 test.describe("maximizePlayerButton", () => {
 	for (const pageType of testPages) {
 		test(`maximize player button should be enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await setOption(page, "maximizePlayerButton.button.placement", placement);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
 			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
 		});
@@ -21,10 +23,10 @@ test.describe("maximizePlayerButton", () => {
 		});
 		test(`player should be maximized on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await setOption(page, "maximizePlayerButton.button.placement", placement);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
 			await enableFeature(page, "maximizePlayerButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
-			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", placement);
+			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", left);
 			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
 		});
 		test(`player shouldn't be maximized on ${pageType}`, async ({ page }) => {

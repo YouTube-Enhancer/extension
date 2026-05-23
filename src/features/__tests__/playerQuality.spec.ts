@@ -2,15 +2,16 @@ import { test } from "playwright.config";
 
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 
+import { metadata } from "@/src/features/playerQuality/index.metadata";
 import { expectCurrentQualityLevelToBeFalsy, expectCurrentQualityLevelToBeTruthy } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getClosestQuality } from "@/src/utils/_tests/player";
-
-const testPages = ["watch", "shorts", "live"] as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // Live streams don't reliably enforce exact quality levels via setPlaybackQualityRange;
 // only run the specific-quality tests (lower fallback, hd720) on VOD page types.
-const vodPages = ["watch", "shorts"] as const;
+const vodPages = testPages.filter((p) => p !== "live");
 
 export const qualityLevel = "hd2160" as YoutubePlayerQualityLevel;
 test.describe("playerQuality", () => {

@@ -1,11 +1,13 @@
 import { test } from "playwright.config";
 
+import { metadata } from "@/src/features/scrollWheelSpeedControl/index.metadata";
 import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
 const speed = 1.0;
 const steps = 0.25;
-const testPages = ["watch", "shorts"] as const;
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 
 test.describe("scrollWheelSpeedControl", () => {

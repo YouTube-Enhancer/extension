@@ -2,13 +2,16 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/volumeBoost/index.metadata";
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { clampDb, dbToLinear } from "@/src/utils/misc";
+const { right } = placementRecord;
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
-const testPages = ["watch", "live", "shorts"] as const;
-const placement = "player_controls_right" as const;
 async function expectVolumeBoostAmount(page: Page, expected: number) {
 	await expect
 		.poll(
@@ -57,7 +60,7 @@ test.describe("volumeBoost", () => {
 				await navigateToPageType(page, pageType);
 				await enableFeature(page, "volumeBoost.enabled");
 				await setOption(page, "volumeBoost.mode", "per_video");
-				await setOption(page, "volumeBoost.button.placement", placement);
+				await setOption(page, "volumeBoost.button.placement", right);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
 			});
 			test(`button should be disabled when feature is off on ${pageType}`, async ({ page }) => {
@@ -70,9 +73,9 @@ test.describe("volumeBoost", () => {
 				await enableFeature(page, "volumeBoost.enabled");
 				await setOption(page, "volumeBoost.mode", "per_video");
 				await setOption(page, "volumeBoost.amount", 10);
-				await setOption(page, "volumeBoost.button.placement", placement);
+				await setOption(page, "volumeBoost.button.placement", right);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", right);
 				await expectVolumeBoostEnabled(page, true);
 				await expectVolumeBoostAmount(page, 10);
 			});
@@ -81,12 +84,12 @@ test.describe("volumeBoost", () => {
 				await enableFeature(page, "volumeBoost.enabled");
 				await setOption(page, "volumeBoost.mode", "per_video");
 				await setOption(page, "volumeBoost.amount", 10);
-				await setOption(page, "volumeBoost.button.placement", placement);
+				await setOption(page, "volumeBoost.button.placement", right);
 				await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
-				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", right);
 				await expectVolumeBoostEnabled(page, true);
 				await expectVolumeBoostAmount(page, 10);
-				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", placement);
+				await clickFeatureButton(page, pageType, "yte-feature-volumeBoostButton-button", right);
 				await expectVolumeBoostEnabled(page, false);
 			});
 		}

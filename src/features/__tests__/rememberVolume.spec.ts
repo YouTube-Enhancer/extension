@@ -1,14 +1,14 @@
 import { expect, test } from "playwright.config";
 
-import { volume } from "@/src/utils/_tests/constants";
+import { metadata } from "@/src/features/rememberVolume/index.metadata";
+import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const VOLUME_SAVE_WAIT = 500;
-
-const testPages = ["watch", "live", "shorts"] as const;
-const watch = "watch";
-const home = "home";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const { home, watch } = pageTypeRecord;
 test.describe("rememberVolume", () => {
 	for (const pageType of testPages) {
 		test(`video volume should be remembered on ${pageType}`, async ({ page }) => {

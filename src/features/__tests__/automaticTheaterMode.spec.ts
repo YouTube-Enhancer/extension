@@ -2,10 +2,11 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/automaticTheaterMode/index.metadata";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-
-const testPages = ["watch", "live"] as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 export async function expectNotTheaterMode(page: Page): Promise<void> {
 	await expect

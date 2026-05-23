@@ -215,7 +215,8 @@ export type ObjectSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & 
 	component: "css-editor";
 };
 
-export type PageType = "channel_home" | "channel_videos" | "home" | "live" | "playlist" | "search" | "shorts" | "subscriptions" | "watch";
+export const pageTypes = ["channel_home", "channel_videos", "home", "live", "playlist", "search", "shorts", "subscriptions", "watch"] as const;
+export type PageType = (typeof pageTypes)[number];
 
 export type PrefixedPath<K extends FeatureKeys> = K extends K ? `${K}.${Path<configuration[K]>}` : never;
 

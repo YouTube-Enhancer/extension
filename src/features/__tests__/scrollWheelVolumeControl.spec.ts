@@ -1,9 +1,10 @@
 import { test } from "playwright.config";
 
+import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
 import { volume } from "@/src/utils/_tests/constants";
 import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
-
-const testPages = ["watch", "live", "shorts"] as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 
 test.describe("scrollWheelVolumeControl", () => {

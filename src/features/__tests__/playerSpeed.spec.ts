@@ -1,10 +1,11 @@
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/playerSpeed/index.metadata";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
-
-const testPages = ["watch", "shorts"] as const;
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const speeds = [2, 0.5, 1.5] as const;
 
 test.describe("playerSpeed", () => {
