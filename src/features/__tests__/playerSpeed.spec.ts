@@ -3,7 +3,7 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/playerSpeed/index.metadata";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
+import { getCurrentSpeed } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const speeds = [2, 0.5, 1.5] as const;
@@ -15,15 +15,13 @@ test.describe("playerSpeed", () => {
 				await navigateToPageType(page, pageType);
 				await setOption(page, "playerSpeed.speed", speed);
 				await enableFeature(page, "playerSpeed.enabled");
-				await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackRate", pageType), { timeout: 5000 }).toBe(speed);
+				await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(speed);
 			});
 		}
 		test(`should not set playback speed when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "playerSpeed.enabled");
-			const playbackRate = await getValueFromYouTubePlayer(page, "getPlaybackRate", pageType);
-			expect(playbackRate).toBeTruthy();
-			expect(playbackRate).not.toBe(2);
+			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).not.toBe(2);
 		});
 	}
 });

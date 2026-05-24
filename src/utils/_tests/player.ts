@@ -97,6 +97,10 @@ export async function getClosestQuality(
 	const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
 	return closestQuality;
 }
+export async function getCurrentSpeed(page: Page, pageType: PageType = "watch") {
+	const currentSpeed = await getValueFromYouTubePlayer(page, "getPlaybackRate", pageType);
+	return currentSpeed;
+}
 export async function getCurrentVolume(page: Page, pageType: PageType = "watch") {
 	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume", pageType);
 	return currentVolume;
