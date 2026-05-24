@@ -67,7 +67,7 @@ export async function setFeatureValue<K extends Path<configuration>>(page: Page,
 		source: "content",
 		type: "test_setConfigValue"
 	});
-	await page.waitForTimeout(300);
+	await page.waitForTimeout(500);
 }
 /**
  * Sets a configuration option for the extension.
