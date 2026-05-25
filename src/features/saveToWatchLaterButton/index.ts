@@ -6,6 +6,7 @@ import type { YtActionEvent } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
+import { getCurrentPageType } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -22,8 +23,6 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 		createHTML: (input: string) => input
 	});
 }
-
-const CONTAINER = "ytd-two-column-browse-results-renderer:is([page-subtype='home'], [page-subtype='subscriptions'])";
 
 let videosObserver: MutationObserver | null = null;
 export default createFeature({
@@ -53,8 +52,10 @@ export default createFeature({
 			fetch: (...args) => fetch(...args)
 		});
 
+		const containerSelector = `ytd-two-column-browse-results-renderer[page-subtype='${await getCurrentPageType()}']`;
+
 		function addButtonToVideoItems() {
-			document.querySelectorAll(`${CONTAINER} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`).forEach((video) => {
+			document.querySelectorAll(`${containerSelector} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`).forEach((video) => {
 				const ytLockupViewModel = video as YTLockupViewModel;
 				if (
 					!ytLockupViewModel.rawProps ||
@@ -96,7 +97,7 @@ export default createFeature({
 			}
 
 			addButtonToVideoItems();
-			const container = document.querySelector(CONTAINER);
+			const container = document.querySelector(containerSelector);
 			if (container) {
 				videosObserver = new MutationObserver(addButtonToVideoItems);
 				videosObserver.observe(container, { childList: true, subtree: true });
