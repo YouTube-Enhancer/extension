@@ -366,7 +366,7 @@ Follow a strict workflow cycle:
 2.  **Development Cycle:** Implement small, focused changes. When designing logic, adopt the **Red-Green-Refactor** methodology.
 3.  **Modification:** After implementing logic, first explore existing subdirectories in `src/utils/` (e.g., dom, format, logging, math, messaging, plugins, style, color, deep-dark-theme) to see if your utility fits into an existing category. If so, place it there. Otherwise, update `src/utils/utilities.ts` for general-purpose utilities.
 4.  **Committing:** Commit only when the feature is functionally complete and manually verified.
-5.  **Conventional Commits:** All commits **must** follow the Conventional Commits specification ($\text{type}(\text{scope}): \text{message}$).
+5. **Conventional Commits:** All commits **must** follow the Conventional Commits specification (`type(scope): message`).
     - **feat:** For new features.
     - **fix:** For bug fixes.
     - **refactor:** For code restructuring without adding features or fixing bugs.
