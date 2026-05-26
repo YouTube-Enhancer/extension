@@ -95,10 +95,19 @@ export async function navigateToPage(page: Page, url: string) {
 export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureCapabilities[] = []): Promise<void> {
 	test.setTimeout(120_000);
 	if (pageType === "live") {
-		return await expect(async () => {
-			await navigateToLiveVideo(page);
-			await expect(page.locator(".ytp-live-badge")).toBeVisible();
-		}).toPass({ timeout: 120_000 });
+		await navigateToLiveVideo(page);
+		await expect
+			.poll(
+				async () => {
+					return await page.locator(".ytp-live-badge").isVisible();
+				},
+				{
+					intervals: [500],
+					timeout: 120_000
+				}
+			)
+			.toBe(true);
+		return;
 	}
 	const fixture = getFixture(pageType, requirements);
 	await navigateToYoutubePage(page, fixture.url, pageType);
@@ -108,20 +117,64 @@ async function navigateToLiveVideo(page: Page): Promise<void> {
 		live: [{ url: channelUrl }]
 	} = pageFixtures;
 	await navigateToPage(page, channelUrl);
-	const firstVideo = page
-		.locator(
-			'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
-		)
-		.first();
-	await expect(firstVideo).toBeVisible();
-	await Promise.all([page.waitForURL(/youtube\.com\/watch\?/), firstVideo.click()]);
-	await page.bringToFront();
-	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
-	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
-	await page.waitForLoadState("domcontentloaded");
-	await waitForYoutubePlayerReady(page, "live");
-	await pageSetup(page);
-	await page.waitForTimeout(100);
+	const liveVideoLocator = page.locator(
+		'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
+	);
+	await expect(liveVideoLocator.first()).toBeVisible({
+		timeout: 60_000
+	});
+	const initialUrl = normalizeUrl(page.url());
+	for (let attempt = 0; attempt < 5; attempt++) {
+		const liveVideo = liveVideoLocator.first();
+		await expect(liveVideo).toBeVisible({
+			timeout: 15_000
+		});
+		await liveVideo.click();
+		const navigated = await expect
+			.poll(
+				() => {
+					const url = normalizeUrl(page.url());
+					if (url === initialUrl) {
+						return false;
+					}
+					return /youtube\.com\/watch\?/.test(url);
+				},
+				{
+					intervals: [250, 500, 1000],
+					timeout: 15_000
+				}
+			)
+			.toBeTruthy()
+			.then(() => true)
+			.catch(() => false);
+		if (!navigated) {
+			await page.goto(channelUrl, {
+				waitUntil: "domcontentloaded"
+			});
+			continue;
+		}
+		const watchShell = page.locator("ytd-watch-flexy,ytd-watch-grid");
+		const watchLoaded = await expect(watchShell)
+			.toBeAttached({
+				timeout: 15_000
+			})
+			.then(() => true)
+			.catch(() => false);
+		if (!watchLoaded) {
+			await page.goto(channelUrl, {
+				waitUntil: "domcontentloaded"
+			});
+			continue;
+		}
+		await page.bringToFront();
+		await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
+		await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+		await waitForYoutubePlayerReady(page, "live");
+		await pageSetup(page);
+		await page.waitForTimeout(100);
+		return;
+	}
+	throw new Error("Failed to navigate to a live video after multiple attempts");
 }
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
 	if (normalizeUrl(page.url()) !== normalizeUrl(pageUrl)) {
