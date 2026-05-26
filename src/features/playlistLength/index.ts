@@ -3,6 +3,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { type Nullable } from "@/src/types";
 import { playlistItemsSelector } from "@/src/utils/dom/selectors";
+import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -67,13 +68,15 @@ export default createFeature({
 		resizeObserver = null;
 		document.querySelector("#yte-playlist-length-ui")?.remove();
 	},
-	onEnable: ({ lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }) => {
+	onEnable: async ({ lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }) => {
 		const pageType = isWatchPage() ? "watch" : "playlist";
 		const params: PlaylistLengthParameters = {
 			pageType,
 			playlistLengthGetMethod,
 			playlistWatchTimeGetMethod
 		};
+		await waitForElement(playlistItemsSelector());
+		await runInit(params);
 		observePlaylistItems(params);
 		resizeObserver?.disconnect();
 		resizeObserver = new ResizeObserver(() => {
