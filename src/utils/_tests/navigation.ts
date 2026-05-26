@@ -6,61 +6,82 @@ import type { PageType } from "@/src/features/_registry/types";
 import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 
-export type FixtureRequirement = "ambientMode" | "autoPlay" | "captions" | "videoHistory";
+export const fixtureCapabilities = ["ambientMode", "autoPlay", "captions", "videoHistory", "monoAudio", "playlistLength"] as const;
+
+export type FixtureCapabilities = (typeof fixtureCapabilities)[number];
 
 export type VideoFixture = {
-	surfaces: Partial<Record<FixtureRequirement, boolean>>;
+	capabilities: FixtureCapabilities[];
 	url: string;
 };
 export const pageFixtures: Record<PageType, VideoFixture[]> = {
-	channel_home: [{ surfaces: {}, url: "https://www.youtube.com/@RickAstleyYT" }],
-	channel_videos: [{ surfaces: {}, url: "https://www.youtube.com/@RickAstleyYT/videos" }],
-	home: [{ surfaces: {}, url: "https://www.youtube.com" }],
+	channel_home: [
+		{
+			capabilities: [],
+			url: "https://www.youtube.com/@RickAstleyYT"
+		}
+	],
+	channel_videos: [
+		{
+			capabilities: [],
+			url: "https://www.youtube.com/@RickAstleyYT/videos"
+		}
+	],
+	home: [
+		{
+			capabilities: [],
+			url: "https://www.youtube.com"
+		}
+	],
 	live: [
 		{
-			surfaces: {},
+			capabilities: [],
 			url: "https://www.youtube.com/channel/UC4R8DWoMoI7CAwX8_LjQHig"
 		}
 	],
 	playlist: [
 		{
-			surfaces: {},
+			capabilities: ["playlistLength"],
 			url: "https://www.youtube.com/playlist?list=UUuAXFkgsw1L7xaCfnd5JJOw"
 		}
 	],
 	search: [
 		{
-			surfaces: {},
+			capabilities: [],
 			url: "https://www.youtube.com/results?search_query=test"
 		}
 	],
 	shorts: [
 		{
-			surfaces: { ambientMode: true },
+			capabilities: ["ambientMode"],
 			url: "https://www.youtube.com/shorts/Ay8lynMZ4mE"
 		}
 	],
 	subscriptions: [
 		{
-			surfaces: {},
+			capabilities: [],
 			url: "https://www.youtube.com/feed/subscriptions"
 		}
 	],
 	watch: [
 		{
-			surfaces: { ambientMode: true, autoPlay: false, captions: true, videoHistory: false },
-			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+			capabilities: ["ambientMode", "captions", "playlistLength"],
+			url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=UUuAXFkgsw1L7xaCfnd5JJOw"
 		},
 		{
-			surfaces: { ambientMode: true, autoPlay: true, captions: true, videoHistory: true },
+			capabilities: ["ambientMode", "autoPlay", "captions", "videoHistory"],
 			url: "https://www.youtube.com/watch?v=epUk3T2Kfno"
+		},
+		{
+			capabilities: ["monoAudio"],
+			url: "https://www.youtube.com/watch?v=ReYYEs-tHx4"
 		}
 	]
 };
 
-export function getFixture(pageType: PageType, requirements: FixtureRequirement[] = []): VideoFixture {
+export function getFixture(pageType: PageType, requirements: FixtureCapabilities[] = []): VideoFixture {
 	const { [pageType]: pool } = pageFixtures;
-	const match = pool.find((fixture) => requirements.every((req) => fixture.surfaces?.[req] === true));
+	const match = pool.find((fixture) => requirements.every((surface) => fixture.capabilities.includes(surface)));
 	if (!match) {
 		throw new Error(`No fixture for ${pageType} matching requirements: ${requirements.join(", ")}`);
 	}
@@ -71,7 +92,7 @@ export async function navigateToPage(page: Page, url: string) {
 	await page.waitForLoadState("domcontentloaded");
 	expect(normalizeUrl(page.url())).toBe(normalizeUrl(url));
 }
-export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureRequirement[] = []): Promise<void> {
+export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureCapabilities[] = []): Promise<void> {
 	test.setTimeout(120_000);
 	if (pageType === "live") {
 		return await expect(async () => {
