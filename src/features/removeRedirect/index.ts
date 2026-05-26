@@ -26,10 +26,12 @@ export default createFeature({
 			if (node.hasAttribute("href")) unwrapRedirect(node);
 			node.querySelectorAll<HTMLElement>("[href]").forEach((link: HTMLElement) => unwrapRedirect(link));
 		};
-		const initialLinks: NodeListOf<HTMLElement> = document.querySelectorAll(
-			".yt-core-attributed-string__link, .yt-simple-endpoint.style-scope.yt-formatted-string"
-		);
-		initialLinks.forEach((link: HTMLElement) => unwrapRedirect(link));
+		const processDocument = (): void => {
+			document.querySelectorAll("[href]").forEach((link) => {
+				unwrapRedirect(link);
+			});
+		};
+		processDocument();
 		const observer = new MutationObserver((mutations: MutationRecord[]) => {
 			for (const mutation of mutations) {
 				if (mutation.type !== "childList") continue;
