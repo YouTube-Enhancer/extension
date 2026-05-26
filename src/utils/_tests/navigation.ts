@@ -69,7 +69,7 @@ export function getFixture(pageType: PageType, requirements: FixtureRequirement[
 export async function navigateToPage(page: Page, url: string) {
 	await page.goto(url);
 	await page.waitForLoadState("domcontentloaded");
-	expect(page.url().replace(/\/$/, "")).toBe(url.replace(/\/$/, ""));
+	expect(normalizeUrl(page.url())).toBe(normalizeUrl(url));
 }
 export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureRequirement[] = []): Promise<void> {
 	test.setTimeout(120_000);
@@ -103,7 +103,9 @@ async function navigateToLiveVideo(page: Page): Promise<void> {
 	await page.waitForTimeout(100);
 }
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
-	await navigateToPage(page, pageUrl);
+	if (normalizeUrl(page.url()) !== normalizeUrl(pageUrl)) {
+		await navigateToPage(page, pageUrl);
+	}
 	await page.bringToFront();
 	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
 	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
@@ -112,4 +114,7 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: Page
 		await waitForYoutubePlayerReady(page, pageType);
 	}
 	await pageSetup(page);
+}
+function normalizeUrl(url: string): string {
+	return url.replace(/\/$/, "");
 }
