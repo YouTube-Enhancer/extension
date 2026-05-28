@@ -85,7 +85,7 @@ class FeatureStateManager extends FeatureManagerBase {
 						const manualRaw = localStorage.getItem("yte_mini_player_manual_override");
 						if (!rectRaw && !manualRaw) return undefined;
 						return {
-							manualOverride: manualRaw ? (JSON.parse(manualRaw) as boolean) : false,
+							manualOverride: manualRaw ? Boolean(JSON.parse(manualRaw)) : false,
 							rect: rectRaw ? (JSON.parse(rectRaw) as MiniPlayerRect) : null
 						} as FeatureState[`state:${K}`];
 					}
