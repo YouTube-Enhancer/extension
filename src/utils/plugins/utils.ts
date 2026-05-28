@@ -1,15 +1,23 @@
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
-import { join, resolve } from "path";
+import { dirname, join, resolve } from "path";
+import { fileURLToPath } from "url";
 
-import type { AvailableLocales } from "@/src/i18n/constants";
+import type { AvailableLocales } from "../../i18n/constants";
 
 import { outputFolderName } from "../../../src/utils/constants";
 export type LocaleFile = {
 	[key: string]: LocaleValue;
 };
 export type LocaleValue = string | { [key: string]: LocaleValue };
-export const rootDir = resolve(__dirname, "../../../");
+const getDirname = () => {
+	if (typeof import.meta !== "undefined" && import.meta.url) {
+		return dirname(fileURLToPath(import.meta.url));
+	}
+	return dirname(require.main?.filename ?? process.cwd());
+};
+
+export const rootDir = resolve(getDirname(), "../../../");
 export const srcDir = resolve(rootDir, "src");
 export const outDir = resolve(rootDir, outputFolderName);
 export const publicDir = resolve(rootDir, "public");
@@ -65,6 +73,7 @@ export const emptyOutputFolder = () => {
 	const files = readdirSync(outDir);
 	for (const file of files) {
 		if (file.endsWith(".zip")) continue;
+		if (file === "temp") continue;
 		const filePath = resolve(outDir, file);
 		const fileStat = statSync(filePath);
 		if (fileStat.isDirectory()) {

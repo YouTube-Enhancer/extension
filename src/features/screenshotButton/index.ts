@@ -1,19 +1,22 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { type Nullable } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip } from "@/src/utils/dom/tooltip";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
+
+import { metadata } from "./index.metadata";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
 		// Create a canvas element and get its context
 		const canvas = document.createElement("canvas");
 		const context = canvas.getContext("2d");
-		// Set the dimensions of the canvas to the video's dimensions
-		const { videoHeight, videoWidth } = videoElement;
+		// Set the dimensions of the canvas to the video's dimensions (fallback for unavailable streams)
+		const videoWidth = videoElement.videoWidth || videoElement.offsetWidth || 640;
+		const videoHeight = videoElement.videoHeight || videoElement.offsetHeight || 360;
 		canvas.width = videoWidth;
 		canvas.height = videoHeight;
 		// Draw the video element onto the canvas
@@ -22,7 +25,9 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		// Wait for the options message and get the format from it
 		const {
 			data: {
-				options: { screenshot_format, screenshot_save_as }
+				options: {
+					screenshotButton: { format, saveAs }
+				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
 
@@ -49,67 +54,66 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				}, 1200);
 			} catch (err) {
 				remove();
-				console.log(err);
+				console.error("[screenshotButton] Failed to copy screenshot to clipboard:", err);
 			}
 		};
 
 		const saveToFile = async () => {
-			const mimeType = `image/${screenshot_format}`;
+			const mimeType = `image/${format}`;
 			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
 			if (!blob) return;
 			const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
-			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${screenshot_format}`;
+			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${format}`;
 			a.click();
 		};
 
-		if (screenshot_save_as === "clipboard" || screenshot_save_as === "both") {
+		if (saveAs === "clipboard" || saveAs === "both") {
 			await copyToClipboard();
 		}
-		if (screenshot_save_as === "file" || screenshot_save_as === "both") {
+		if (saveAs === "file" || saveAs === "both") {
 			await saveToFile();
 		}
 	} catch (_error) {}
 }
 
-export const addScreenshotButton: AddButtonFunction = async () => {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				button_placements: { screenshotButton: screenshotButtonPlacement },
-				enable_screenshot_button: enableScreenshotButton
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement } }) => {
+				// Add a click event listener to the screenshot button
+				function screenshotButtonClickListener() {
+					void (async () => {
+						// Get the video element
+						const videoElement = document.querySelector<HTMLVideoElement>("video");
+						// If video element is not available, return
+						if (!videoElement) return;
+						try {
+							// Take a screenshot
+							await takeScreenshot(videoElement);
+						} catch (error) {
+							console.error("[screenshotButton] Failed to take screenshot:", error);
+						}
+					})();
+				}
+				await addFeatureButton(
+					"screenshotButton",
+					placement,
+					window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
+					getFeatureIcon("screenshotButton", placement),
+					screenshotButtonClickListener,
+					false,
+					false,
+					fullscreenPlacement
+				);
+			},
+			name: "screenshotButton",
+			remove: async (placement) => {
+				await removeFeatureButton("screenshotButton", placement);
+				eventManager.removeEventListeners("screenshotButton");
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the screenshot button option is disabled, return
-	if (!enableScreenshotButton) return;
-	// Add a click event listener to the screenshot button
-	function screenshotButtonClickListener() {
-		void (async () => {
-			// Get the video element
-			const videoElement = document.querySelector<HTMLVideoElement>("video");
-			// If video element is not available, return
-			if (!videoElement) return;
-			try {
-				// Take a screenshot
-				await takeScreenshot(videoElement);
-			} catch (error) {
-				console.error(error);
-			}
-		})();
-	}
-	await addFeatureButton(
-		"screenshotButton",
-		screenshotButtonPlacement,
-		window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
-		getFeatureIcon("screenshotButton", screenshotButtonPlacement),
-		screenshotButtonClickListener,
-		false
-	);
-};
-export const removeScreenshotButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("screenshotButton", placement);
-	eventManager.removeEventListeners("screenshotButton");
-};
+	]
+});

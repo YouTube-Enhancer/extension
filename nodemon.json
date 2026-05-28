@@ -1,9 +1,9 @@
 {
 	"env": {
-		"__DEV__": "true"
+		"NODE_ENV": "development"
 	},
 	"exec": "npm run build",
 	"ext": "ts,tsx,css,html,json",
-	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts"],
+	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts", "dist", "releases"],
 	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"]
 }

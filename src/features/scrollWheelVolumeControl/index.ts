@@ -1,135 +1,120 @@
-import type { YouTubePlayerDiv } from "@/src/types";
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { type YouTubePlayerDiv } from "@/src/types";
+import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
+import { type ModifyElementAction, modifyElementClassList } from "@/src/utils/dom/classList";
+import { preventScroll } from "@/src/utils/dom/events";
+import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
+import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import "./index.css";
-
-import eventManager from "@/src/utils/EventManager";
-import OnScreenDisplayManager from "@/src/utils/OnScreenDisplayManager";
-import {
-	isLivePage,
-	isShortsPage,
-	isWatchPage,
-	modifyElementClassList,
-	preventScroll,
-	waitForAllElements,
-	waitForElement,
-	waitForSpecificMessage
-} from "@/src/utils/utilities";
-
+import { metadata } from "./index.metadata";
 import { adjustVolume, setupScrollListeners } from "./utils";
-
-export function disableScrollWheelVolumeControl() {
-	modifyElementClassList("remove", {
-		className: "yte-scroll-wheel-volume-control",
-		element: document.body
-	});
-	eventManager.removeEventListeners("scrollWheelVolumeControl");
-}
-/**
- * Adjusts the volume on scroll wheel events.
- * It listens for scroll wheel events on specified container selectors,
- * adjusts the volume based on the scroll direction and options,
- * and updates the volume display.
- *
- * @returns {Promise<void>} A promise that resolves once the volume adjustment is completed.
- */
-export default async function enableScrollWheelVolumeControl(): Promise<void> {
-	// Wait for the "options" message from the content script
-	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
-	const {
-		data: {
-			options: { enable_scroll_wheel_volume_control: enableScrollWheelVolumeControl }
-		}
-	} = optionsData;
-	// If scroll wheel volume control is disabled, return
-	if (!enableScrollWheelVolumeControl) return;
-	const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
-	// Wait for the specified container selectors to be available on the page
-	await waitForAllElements(containerSelectors);
-
-	// Define the event handler for the scroll wheel events
-	const handleWheel = async (event: Event) => {
-		const settingsPanelMenu = await waitForElement<HTMLDivElement>("div.ytp-settings-menu:not(#yte-feature-menu)");
-		// If the settings panel menu is targeted return
-		if (settingsPanelMenu && settingsPanelMenu.contains(event.target as Node)) return;
-		const setOptionsData = async () => {
-			return (optionsData = await waitForSpecificMessage("options", "request_data", "content"));
+let suppressContextMenu = false;
+const HIDE_TIMEOUT = 100;
+export default createFeature({
+	...metadata,
+	onDisable: () => {
+		modifyElementClassList("remove", { className: "yte-scroll-wheel-volume-control", element: document.body });
+		eventManager.removeEventListeners("scrollWheelVolumeControl");
+		suppressContextMenu = false;
+	},
+	onEnable: async () => {
+		let optionsData = await waitForSpecificMessage("options", "request_data", "content");
+		const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
+		// Wait for the specified container selectors to be available on the page
+		await waitForAllElements(containerSelectors);
+		// Get the player element
+		const playerContainer =
+			isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+			: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
+			: null;
+		// If player element is not available, return
+		if (!playerContainer) return;
+		const refreshOptions = async () => {
+			optionsData = await waitForSpecificMessage("options", "request_data", "content");
+			return optionsData;
 		};
-		void (async () => {
-			if (!optionsData) {
-				return void (await setOptionsData());
-			}
+		// Define the event handler for the scroll wheel events
+		const handleWheel = async (event: WheelEvent) => {
+			const volumeBoostButton = getFeatureButton("volumeBoostButton");
+			if (volumeBoostButton && event.target === volumeBoostButton) return;
+			const settingsPanelMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
+			// If the settings panel menu is targeted return
+			if (settingsPanelMenu?.contains(event.target as Node)) return;
+			if (!optionsData) return void (await refreshOptions());
 			const {
 				data: {
 					options: {
-						enable_scroll_wheel_speed_control,
-						enable_scroll_wheel_volume_control_hold_modifier_key,
-						enable_scroll_wheel_volume_control_hold_right_click,
-						osd_display_color,
-						osd_display_hide_time,
-						osd_display_opacity,
-						osd_display_padding,
-						osd_display_position,
-						osd_display_type,
-						scroll_wheel_speed_control_modifier_key,
-						scroll_wheel_volume_control_modifier_key,
-						volume_adjustment_steps
+						onScreenDisplay: { color, hideTime, opacity, padding, position, type },
+						scrollWheelSpeedControl: { enabled: scrollWheelSpeedControlEnabled, modifierKey: speedModifierKey },
+						scrollWheelVolumeControl: {
+							holdModifierKey: volumeHoldModifierKey,
+							holdRightClick: volumeHoldRightClick,
+							modifierKey: volumeModifierKey,
+							steps: volumeAdjustmentSteps
+						}
 					}
 				}
 			} = optionsData;
-			const wheelEvent = event as WheelEvent;
 			// If scroll wheel speed control is enabled and the modifier key is pressed return
-			if (enable_scroll_wheel_speed_control && wheelEvent[scroll_wheel_speed_control_modifier_key]) return void (await setOptionsData());
+			if (scrollWheelSpeedControlEnabled && event[speedModifierKey]) return void (await refreshOptions());
 			// If the modifier key is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_modifier_key && !wheelEvent[scroll_wheel_volume_control_modifier_key])
-				return void (await setOptionsData());
+			if (volumeHoldModifierKey && !event[volumeModifierKey]) return void (await refreshOptions());
 			// If the right click is required and not pressed, return
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons !== 2) return void (await setOptionsData());
+			if (volumeHoldRightClick && event.buttons !== 2) return void (await refreshOptions());
 			// If the right click is required and is pressed hide the context menu
-			if (enable_scroll_wheel_volume_control_hold_right_click && wheelEvent.buttons === 2) {
-				const contextMenu = await waitForElement<HTMLDivElement>("div.ytp-popup.ytp-contextmenu");
-				if (contextMenu) contextMenu.style.display = "none";
+			if (volumeHoldRightClick && event.buttons === 2) {
+				toggleContextMenuVisibility("add");
+				suppressContextMenu = true;
 			}
 			// Only prevent default scroll wheel behavior
 			// if we are going to handle the event
-			preventScroll(wheelEvent);
-			// Update the options data after preventScroll()
-			await setOptionsData();
-			// Get the player element
-			const playerContainer =
-				isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-				: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-				: null;
-			// If player element is not available, return
-			if (!playerContainer) return;
+			preventScroll(event);
+			await refreshOptions();
 			// Adjust the volume based on the scroll direction
-			const scrollDelta = wheelEvent.deltaY < 0 ? 1 : -1;
+			const scrollDelta = event.deltaY < 0 ? 1 : -1;
 			// Adjust the volume based on the scroll direction and options
-			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, volume_adjustment_steps);
+			const { newVolume } = await adjustVolume(playerContainer, scrollDelta, volumeAdjustmentSteps);
 			new OnScreenDisplayManager(
 				{
-					displayColor: osd_display_color,
-					displayHideTime: osd_display_hide_time,
-					displayOpacity: osd_display_opacity,
-					displayPadding: osd_display_padding,
-					displayPosition: osd_display_position,
-					displayType: osd_display_type,
-					playerContainer: playerContainer
+					displayColor: color,
+					displayHideTime: hideTime,
+					displayOpacity: opacity,
+					displayPadding: padding,
+					displayPosition: position,
+					displayType: type,
+					playerContainer
 				},
 				"yte-osd",
-				{
-					max: 100,
-					type: "volume",
-					value: newVolume
-				}
+				{ max: 100, type: "volume", value: newVolume }
 			);
-		})();
-	};
-	// Set up the scroll wheel event listeners on the specified container selectors
-	for (const selector of containerSelectors) {
-		setupScrollListeners(selector, handleWheel);
+		};
+		const onMouseUp = (e: MouseEvent) => {
+			if (suppressContextMenu && playerContainer.contains(e.target as Node)) {
+				setTimeout(() => {
+					suppressContextMenu = false;
+					toggleContextMenuVisibility("remove");
+				}, HIDE_TIMEOUT);
+			}
+		};
+		const onContextMenu = (e: MouseEvent) => {
+			if (suppressContextMenu && playerContainer.contains(e.target as Node)) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				toggleContextMenuVisibility("remove");
+				suppressContextMenu = false;
+			}
+		};
+		eventManager.addEventListener(document.documentElement, "mouseup", (e) => onMouseUp(e as MouseEvent), "scrollWheelVolumeControl");
+		eventManager.addEventListener(document.documentElement, "contextmenu", (e) => onContextMenu(e as MouseEvent), "scrollWheelVolumeControl");
+		containerSelectors.forEach((selector) => setupScrollListeners(selector, (e) => void handleWheel(e as WheelEvent)));
+		modifyElementClassList("add", { className: "yte-scroll-wheel-volume-control", element: document.body });
 	}
-	modifyElementClassList("add", {
-		className: "yte-scroll-wheel-volume-control",
-		element: document.body
-	});
+});
+function toggleContextMenuVisibility(action: ModifyElementAction) {
+	modifyElementClassList(action, { className: "yte-context-menu-visible", element: document.body });
 }

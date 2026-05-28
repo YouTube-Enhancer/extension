@@ -1,63 +1,72 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-
 import "./index.css";
 
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
-import { createTooltip, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createTooltip } from "@/src/utils/dom/tooltip";
 
+import { metadata } from "./index.metadata";
 import { maximizePlayer, minimizePlayer } from "./utils";
-export const addMaximizePlayerButton: AddButtonFunction = async () => {
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: {
-				button_placements: { maximizePlayerButton: maximizePlayerButtonPlacement },
-				enable_maximize_player_button: enableMaximizePlayerButton
+
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement } }) => {
+				const isPlayerMaximized = document.body.getAttribute("yte-maximized") === "";
+				await addFeatureButton(
+					"maximizePlayerButton",
+					placement,
+					placement === "feature_menu" ?
+						window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+					:	window.i18nextInstance.t(
+							(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
+						),
+					getFeatureIcon("maximizePlayerButton", placement),
+					(checked) => {
+						if (checked === undefined) return;
+						const button = getFeatureButton("maximizePlayerButton");
+						if (!button) return;
+						const featureName = "maximizePlayerButton";
+						const { remove } = createTooltip({
+							direction: placement === "below_player" ? "down" : "up",
+							element: button,
+							featureName,
+							id: `yte-feature-${featureName}-tooltip`
+						});
+						updateFeatureButtonTitle(
+							"maximizePlayerButton",
+							window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[checked ? "on" : "off"]
+							)
+						);
+						if (checked) {
+							remove();
+							maximizePlayer();
+						} else {
+							minimizePlayer();
+						}
+					},
+					true,
+					isPlayerMaximized,
+					fullscreenPlacement
+				);
+			},
+			name: "maximizePlayerButton",
+			remove: async (placement) => {
+				await removeFeatureButton("maximizePlayerButton", placement);
+				eventManager.removeEventListeners("maximizePlayerButton");
 			}
 		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the maximize player button option is disabled, return
-	if (!enableMaximizePlayerButton) return;
-	const isPlayerMaximized = document.body.getAttribute("yte-maximized") === "";
-	await addFeatureButton(
-		"maximizePlayerButton",
-		maximizePlayerButtonPlacement,
-		maximizePlayerButtonPlacement === "feature_menu" ?
-			window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
-		:	window.i18nextInstance.t(
-				(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
-			),
-		getFeatureIcon("maximizePlayerButton", maximizePlayerButtonPlacement),
-		(checked) => {
-			if (checked === undefined) return;
-			const button = getFeatureButton("maximizePlayerButton");
-			if (!button) return;
-			const featureName = "maximizePlayerButton";
-			const { remove } = createTooltip({
-				direction: maximizePlayerButtonPlacement === "below_player" ? "down" : "up",
-				element: button,
-				featureName,
-				id: `yte-feature-${featureName}-tooltip`
-			});
-			updateFeatureButtonTitle(
-				"maximizePlayerButton",
-				window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[checked ? "on" : "off"])
-			);
-			if (checked) {
-				remove();
-				maximizePlayer();
-			} else {
-				minimizePlayer();
-			}
+	],
+	state: {
+		header: {
+			timeout: null,
+			visible: true
 		},
-		true,
-		isPlayerMaximized
-	);
-};
-export const removeMaximizePlayerButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("maximizePlayerButton", placement);
-	eventManager.removeEventListeners("maximizePlayerButton");
-};
+		isProgrammaticClick: false,
+		listenersAttached: false
+	}
+});

@@ -1,8 +1,9 @@
 import { type ReactElement, useEffect, useState } from "react";
 
-import type { Notification } from "@/src/types";
+import type { Notification, Nullable } from "@/src/types";
 
-import { isNotStrictEqual } from "@/src/utils/utilities";
+import { type i18nInstanceType, i18nService } from "@/src/i18n";
+import { isNotStrictEqual } from "@/src/utils/predicate";
 
 import {
 	type AddNotification,
@@ -14,12 +15,19 @@ import {
 } from "./context";
 type NotificationProviderProps = { children: ReactElement | ReactElement[] };
 export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
+	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
+	useEffect(() => {
+		void (async () => {
+			const instance = await i18nService("en-US");
+			setI18nInstance(instance);
+		})();
+	}, []);
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const notificationIsEqual = (a: Notification, b: Notification) => {
-		return a.type === b.type && a.message === b.message && a.action === b.action;
+		return a.type === b.type && i18nInstance?.t(a.message) === i18nInstance?.t(b.message) && a.action === b.action;
 	};
 	const createNotification: CreateNotification = (type, message, action) => {
-		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 5_000;
+		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 2_500;
 		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
 		return notification;
 	};
@@ -41,7 +49,7 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		setNotifications((notifications) => notifications.filter(isNotStrictEqual(notification)));
 	};
 	useEffect(() => {
-		let animationFrameId: null | number = null;
+		let animationFrameId: Nullable<number> = null;
 		const updateNotifications = () => {
 			const now = Date.now();
 			setNotifications((prevNotifications) => {
