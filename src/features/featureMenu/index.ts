@@ -67,49 +67,35 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
 			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
 			break;
-		case "hover":
-			eventManager.addEventListener(
-				featureMenuButton,
-				"mouseover",
-				() => {
-					hideYouTubeSettings();
-					showFeatureMenuTooltip();
-					showFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				featureMenuButton,
-				"mouseleave",
-				(e) => {
-					if (!(e instanceof MouseEvent)) return;
-					const rt = e.relatedTarget as Node | null;
-					if (rt && (rt === featureMenu || rt === featureMenuButton || featureMenu.contains(rt))) return;
+		case "hover": {
+			let hideTimer: Nullable<number> = null;
+			const cancelHide = () => {
+				if (hideTimer) {
+					clearTimeout(hideTimer);
+					hideTimer = null;
+				}
+			};
+			const scheduleHide = () => {
+				cancelHide();
+				hideTimer = window.setTimeout(() => {
 					removeFeatureMenuTooltip();
 					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				featureMenu,
-				"mouseleave",
-				() => {
-					removeFeatureMenuTooltip();
-					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				playerContainer,
-				"mouseleave",
-				() => {
-					removeFeatureMenuTooltip();
-					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
+				}, 80);
+			};
+			const show = () => {
+				cancelHide();
+				hideYouTubeSettings();
+				showFeatureMenuTooltip();
+				showFeatureMenu();
+			};
+			eventManager.addEventListener(featureMenuButton, "pointerenter", show, "featureMenu");
+			eventManager.addEventListener(featureMenuButton, "pointerleave", scheduleHide, "featureMenu");
+			eventManager.addEventListener(featureMenu, "pointerenter", cancelHide, "featureMenu");
+			eventManager.addEventListener(featureMenu, "pointerleave", scheduleHide, "featureMenu");
+			eventManager.addEventListener(playerContainer, "pointerleave", scheduleHide, "featureMenu");
 			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
 			break;
+		}
 	}
 
 	observer = new MutationObserver((mutations) => {
