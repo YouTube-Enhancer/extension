@@ -44,9 +44,9 @@ export default createFeature({
 						);
 						if (checked) {
 							remove();
-							maximizePlayer();
+							void maximizePlayer();
 						} else {
-							minimizePlayer();
+							void minimizePlayer();
 						}
 					},
 					true,
