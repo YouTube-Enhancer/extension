@@ -165,7 +165,7 @@ async function createFeatureMenuButton() {
 		classlist: ["ytp-button"],
 		elementId: "yte-feature-menu-button",
 		elementType: "button",
-		styles: { display: "none", visibility: "hidden" }
+		styles: { display: "flex", visibility: "hidden" }
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
