@@ -1,5 +1,7 @@
 import "./index.css";
 
+import type { Nullable } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
@@ -45,13 +47,13 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 		menuVisible = true;
 		adjustAdsContainerStyles(true);
 		bottomControls.style.opacity = "1";
-		featureMenu.style.display = "block";
+		featureMenu.style.visibility = "visible";
 	};
 	const hideFeatureMenu = () => {
 		if (!menuVisible) return;
 		menuVisible = false;
 		adjustAdsContainerStyles(false);
-		featureMenu.style.display = "none";
+		featureMenu.style.visibility = "hidden";
 		bottomControls.style.opacity = "";
 	};
 	const clickOutsideListener = (event: Event) => {
@@ -67,49 +69,35 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
 			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
 			break;
-		case "hover":
-			eventManager.addEventListener(
-				featureMenuButton,
-				"mouseover",
-				() => {
-					hideYouTubeSettings();
-					showFeatureMenuTooltip();
-					showFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				featureMenuButton,
-				"mouseleave",
-				(e) => {
-					if (!(e instanceof MouseEvent)) return;
-					const rt = e.relatedTarget as Node | null;
-					if (rt && (rt === featureMenu || rt === featureMenuButton || featureMenu.contains(rt))) return;
+		case "hover": {
+			let hideTimer: Nullable<number> = null;
+			const cancelHide = () => {
+				if (hideTimer) {
+					clearTimeout(hideTimer);
+					hideTimer = null;
+				}
+			};
+			const scheduleHide = () => {
+				cancelHide();
+				hideTimer = window.setTimeout(() => {
 					removeFeatureMenuTooltip();
 					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				featureMenu,
-				"mouseleave",
-				() => {
-					removeFeatureMenuTooltip();
-					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
-			eventManager.addEventListener(
-				playerContainer,
-				"mouseleave",
-				() => {
-					removeFeatureMenuTooltip();
-					hideFeatureMenu();
-				},
-				"featureMenu"
-			);
+				}, 80);
+			};
+			const show = () => {
+				cancelHide();
+				hideYouTubeSettings();
+				showFeatureMenuTooltip();
+				showFeatureMenu();
+			};
+			eventManager.addEventListener(featureMenuButton, "pointerenter", show, "featureMenu");
+			eventManager.addEventListener(featureMenuButton, "pointerleave", scheduleHide, "featureMenu");
+			eventManager.addEventListener(featureMenu, "pointerenter", cancelHide, "featureMenu");
+			eventManager.addEventListener(featureMenu, "pointerleave", scheduleHide, "featureMenu");
+			eventManager.addEventListener(playerContainer, "pointerleave", scheduleHide, "featureMenu");
 			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
 			break;
+		}
 	}
 
 	observer = new MutationObserver((mutations) => {
@@ -149,7 +137,7 @@ function createFeatureMenu() {
 		classlist: ["ytp-popup", "ytp-settings-menu"],
 		elementId: "yte-feature-menu",
 		elementType: "div",
-		styles: { display: "none", zIndex: "2050" }
+		styles: { display: "block", visibility: "hidden", zIndex: "2050" }
 	});
 	// Create the feature menu panel
 	const featureMenuPanel = createStyledElement({
@@ -177,7 +165,7 @@ async function createFeatureMenuButton() {
 		classlist: ["ytp-button"],
 		elementId: "yte-feature-menu-button",
 		elementType: "button",
-		styles: { display: "none" }
+		styles: { display: "none", visibility: "hidden" }
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
@@ -200,6 +188,23 @@ async function createFeatureMenuButton() {
 	const playerContainer = isWatchPage() ? document.querySelector<HTMLDivElement>("#movie_player") : null;
 	if (!playerContainer) return () => {};
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
+	const updateMenuPosition = () => {
+		const buttonRect = featureMenuButton.getBoundingClientRect();
+		const playerRect = playerContainer.getBoundingClientRect();
+		const { offsetWidth: menuWidth } = featureMenu;
+		const buttonCenterX = buttonRect.x - playerRect.x + buttonRect.width / 2;
+		const anchorRatio = 0.6556;
+		const anchorOffset = menuWidth * anchorRatio;
+		const left = buttonCenterX - anchorOffset;
+		featureMenu.style.left = `${left}px`;
+	};
+	updateMenuPosition();
+	const resizeObserver = new ResizeObserver(() => {
+		requestAnimationFrame(updateMenuPosition);
+	});
+	resizeObserver.observe(playerContainer);
+	window.addEventListener("resize", updateMenuPosition);
+	window.addEventListener("yte-feature-menu-resized", updateMenuPosition);
 	const {
 		data: {
 			options: {
@@ -208,7 +213,13 @@ async function createFeatureMenuButton() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	await waitForAllElements([MENU_ID, BUTTON_ID]);
-	return setupFeatureMenuEventListeners(openType);
+	const cleanup = setupFeatureMenuEventListeners(openType);
+	return () => {
+		window.removeEventListener("resize", updateMenuPosition);
+		window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
+		resizeObserver.disconnect();
+		cleanup();
+	};
 }
 function makeFeatureMenuIcon() {
 	return createSVGElement(

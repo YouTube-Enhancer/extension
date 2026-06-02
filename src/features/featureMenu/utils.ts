@@ -84,9 +84,12 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	}
 	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
+	const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
+	if (featureMenuButton) {
+		featureMenuButton.style.display = "flex";
+		featureMenuButton.style.visibility = "visible";
+	}
 	updateMenuSize(featureMenu, panel);
-	const featureMenuButton = document.querySelector<HTMLDivElement>(MENU_BUTTON_ID);
-	if (featureMenuButton) featureMenuButton.style.display = "flex";
 }
 /**
  * Gets the IDs for a feature item.
@@ -134,7 +137,7 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	updateMenuSize(featureMenu, featureMenuPanel);
 
 	if (featureMenuPanel.childElementCount === 0) {
-		featureMenu.style.display = "none";
+		featureMenu.style.visibility = "hidden";
 		const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
 		if (featureMenuButton) featureMenuButton.style.display = "none";
 	}
@@ -177,4 +180,5 @@ function setMenuItemChecked(item: HTMLDivElement, value: boolean) {
 function updateMenuSize(menu: HTMLDivElement, panel: HTMLDivElement) {
 	menu.style.height = `${ITEM_HEIGHT * panel.childElementCount + MENU_PADDING}px`;
 	menu.style.width = "fit-content";
+	window.dispatchEvent(new CustomEvent("yte-feature-menu-resized"));
 }
