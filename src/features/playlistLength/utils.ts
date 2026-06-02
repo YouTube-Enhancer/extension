@@ -86,7 +86,12 @@ export function createPlaylistLengthUIElement(
 			}),
 			...conditionalStyles({
 				condition: pageType === "playlist",
-				marginTop: getPlaylistId() === "WL" ? "0px" : "24px",
+				marginTop:
+					getPlaylistId() === "WL" ?
+						window.matchMedia("(max-width: 1080px)").matches ?
+							"16px"
+						:	"0px"
+					:	"24px",
 				width: "99%"
 			})
 		}
