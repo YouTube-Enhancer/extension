@@ -84,12 +84,12 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	}
 	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
-	updateMenuSize(featureMenu, panel);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
 	if (featureMenuButton) {
 		featureMenuButton.style.display = "flex";
 		featureMenuButton.style.visibility = "visible";
 	}
+	updateMenuSize(featureMenu, panel);
 }
 /**
  * Gets the IDs for a feature item.
