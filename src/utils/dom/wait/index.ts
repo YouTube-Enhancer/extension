@@ -138,7 +138,7 @@ export async function waitForPlayerLoaded(player: Nullable<YouTubePlayer>, timeo
 		const check = (): void => {
 			try {
 				const state = player.getPlayerStateObject();
-				if (!state.isUnstarted) {
+				if (!state.isUnstarted || (!state.isBuffering && state.isUnstarted)) {
 					resolve(player);
 					return;
 				}
