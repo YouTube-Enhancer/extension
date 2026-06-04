@@ -1,4 +1,4 @@
-.yte-maximized-video {
+body[yte-maximized] video.video-stream.html5-main-video {
 	width: 100vw !important;
 	height: auto !important;
 	max-height: 100vh !important;
@@ -13,7 +13,7 @@ body[yte-maximized] div.html5-video-container {
 	display: flex !important;
 }
 
-.yte-maximized-video-container {
+body[yte-maximized] div#movie_player {
 	position: sticky !important;
 	top: 0 !important;
 	left: 0 !important;
@@ -23,7 +23,7 @@ body[yte-maximized] div.html5-video-container {
 	background: black !important;
 }
 
-.yte-maximized-width {
+body[yte-maximized] div.ytp-chrome-bottom {
 	width: calc(100vw - 24px) !important;
 }
 body[yte-maximized]:not(:has(ytd-watch-flexy[fullscreen])) #full-bleed-container {

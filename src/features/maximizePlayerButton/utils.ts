@@ -4,7 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { getFeatureIcon } from "@/src/icons";
-import { type ModifyElementAction, modifyElementsClassList } from "@/src/utils/dom/classList";
+import { type ModifyElementAction } from "@/src/utils/dom/classList";
 import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 const maximizePlayerButtonStateAPI = registry.stateManager.getStateAPI("maximizePlayerButton");
@@ -57,7 +57,6 @@ function handleUserClick() {
 	const state = getPlayerControllerState();
 	if (state.isProgrammaticClick) return;
 	void minimizePlayer();
-	void changeMaximizeButtonToOff();
 }
 function hideHeader() {
 	const header = document.querySelector<HTMLElement>("#masthead-container");
@@ -158,18 +157,14 @@ function runProgrammaticClick(fn: () => void) {
 }
 const navigateStartHandler = (e: CustomEvent<YouTubeNavigateStart>) => {
 	if (e.detail.pageType === "watch") return;
-	showHeader();
-	clearHeaderTimeout();
-	destroyPlayerController();
 	void minimizePlayer();
 };
 const onKeyDown = (e: KeyboardEvent) => {
-	if (e.key !== "t" || (e.target as HTMLElement | null)?.closest("input, textarea, [contenteditable='true']")) return;
+	if (!["Escape", "t"].includes(e.key) || (e.target as HTMLElement | null)?.closest("input, textarea, [contenteditable='true']")) return;
 	const state = getPlayerControllerState();
 	if (!state.listenersAttached) return;
 	e.preventDefault();
 	void minimizePlayer();
-	void changeMaximizeButtonToOff();
 };
 export async function maximizePlayer() {
 	const videoPlayer = await waitForElement<HTMLVideoElement>("video.html5-main-video");
@@ -201,6 +196,9 @@ export async function minimizePlayer() {
 	if (lastState === "default" && sizeElement) clickAndRestore(sizeElement);
 	adjustPlayer("remove");
 	destroyPlayerController();
+	showHeader();
+	clearHeaderTimeout();
+	void changeMaximizeButtonToOff();
 }
 
 function adjustPlayer(action: ModifyElementAction) {
@@ -214,21 +212,6 @@ function adjustPlayer(action: ModifyElementAction) {
 			document.body.removeAttribute("yte-maximized");
 			break;
 	}
-
-	modifyElementsClassList(action, [
-		{
-			className: "yte-maximized-video",
-			element: document.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video")
-		},
-		{
-			className: "yte-maximized-video-container",
-			element: document.querySelector<YouTubePlayerDiv>("#movie_player")
-		},
-		{
-			className: "yte-maximized-width",
-			element: document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom")
-		}
-	]);
 }
 function attachRuntimeListeners() {
 	const state = getPlayerControllerState();
