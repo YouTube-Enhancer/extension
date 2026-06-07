@@ -288,6 +288,32 @@
 						"title": "YouTube API V3キーを入力してください。"
 					},
 					"title": "YouTube API V3キー"
+				},
+				"welcome": {
+					"title": "Welcome to YouTube Enhancer!",
+					"subtitle": "We've pre-selected some great settings for new users. You can change them anytime.",
+					"getStarted": "Get Started",
+					"customize": "Customize Settings",
+					"recommendedLabel": "Recommended Settings"
+				},
+				"tabs": {
+					"basic": "Basic",
+					"advanced": "Advanced",
+					"appearance": "Appearance"
+				},
+				"appearance": {
+					"title": "Appearance",
+					"themePresets": "Theme Presets",
+					"accentColor": "Accent Color",
+					"resetTheme": "Reset to Default",
+					"themes": {
+						"system": "System",
+						"light": "Light",
+						"dark": "Dark",
+						"oled": "OLED Black",
+						"purple": "Purple Night",
+						"ocean": "Ocean Blue"
+					}
 				}
 			},
 			"notifications": {
@@ -979,6 +1005,15 @@
 					}
 				},
 				"title": "音量ブーストの設定"
+			},
+			"automaticBehaviors": {
+				"title": "Automatic Behaviors"
+			},
+			"contentFiltering": {
+				"title": "Content Filtering"
+			},
+			"playbackControls": {
+				"title": "Playback Controls"
 			}
 		}
 	}

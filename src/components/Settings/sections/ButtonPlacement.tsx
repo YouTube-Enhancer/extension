@@ -31,7 +31,10 @@ export default function ButtonPlacementSection() {
 		value: p
 	}));
 	return (
-		<SettingSection title={t((translations) => translations.pages.options.extras.buttonPlacement.title)}>
+		<SettingSection
+			className="mb-3 break-inside-avoid rounded-xl bg-[var(--card-bg)] p-2 shadow-sm"
+			title={t((translations) => translations.pages.options.extras.buttonPlacement.title)}
+		>
 			<SettingTitle />
 			{buttonNames.map((buttonName) => {
 				const label = t((translations) => translations.pages.options.extras.buttonPlacement.select.buttonNames[buttonName]);

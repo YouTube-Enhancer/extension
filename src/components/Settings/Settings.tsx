@@ -1,16 +1,21 @@
 import type { ChangeEvent } from "react";
 
 import { useMutation, type UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { MdBuild, MdPalette, MdTune } from "react-icons/md";
 import browser from "webextension-polyfill";
 
+import type { TabId } from "@/src/components/Settings/components/TabBar";
 import type { configuration, Nullable, Path, PathValue } from "@/src/types";
+import type { UiTheme } from "@/src/utils/uiTheme";
 
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
-import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
-import SettingsHeader from "@/src/components/Settings/components/SettingsHeader";
+import ImportExportSection from "@/src/components/Settings/components/ImportExportSection";
+import SettingSearch from "@/src/components/Settings/components/SettingSearch";
+import DataManagementSection from "@/src/components/Settings/components/SettingsFooter";
+import WelcomeModal, { shouldShowWelcomeModal } from "@/src/components/Settings/components/WelcomeModal";
 import {
 	ButtonPlacementSection,
 	FeatureMenuOpenTypeSection,
@@ -19,15 +24,19 @@ import {
 	YouTubeDataApiKeySection
 } from "@/src/components/Settings/sections";
 import SettingsGenerator from "@/src/components/Settings/SettingsGenerator";
+import AppearanceTab from "@/src/components/Settings/tabs/AppearanceTab";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { localeDirection } from "@/src/i18n/constants";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
 import { getPathValue } from "@/src/utils/misc";
+import { cn } from "@/src/utils/style";
+import { applyTheme, getUiTheme } from "@/src/utils/uiTheme";
 
 import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
+
 type BooleanPath<T> = {
 	[P in Path<T>]: PathValue<T, P> extends boolean ? P : never;
 }[Path<T>];
@@ -89,6 +98,9 @@ export default function Settings() {
 	});
 	const [lastToastTime, setLastToastTime] = useState(0);
 	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
+	const [activeTab, setActiveTab] = useState<TabId>("basic");
+	const [showWelcome, setShowWelcome] = useState(false);
+	const wrapperRef = useRef<HTMLDivElement>(null);
 	const { addNotification } = useNotifications();
 	const settingsRef = useRef(settings);
 	useEffect(() => {
@@ -102,6 +114,20 @@ export default function Settings() {
 			})();
 		}
 	}, [settings]);
+	useEffect(() => {
+		void shouldShowWelcomeModal().then(setShowWelcome);
+	}, []);
+	useEffect(() => {
+		void (async () => {
+			const theme = await getUiTheme();
+			if (wrapperRef.current) applyTheme(theme, wrapperRef.current);
+		})();
+	}, []);
+
+	const handleThemeChange = useCallback((theme: UiTheme) => {
+		if (wrapperRef.current) applyTheme(theme, wrapperRef.current);
+	}, []);
+
 	if (!settings || !i18nInstance || (i18nInstance && i18nInstance.isInitialized === false)) {
 		return <Loader />;
 	}
@@ -134,7 +160,13 @@ export default function Settings() {
 	function getSelectedOption(key: StringPath<configuration>): string {
 		return getPathValue(settings, key);
 	}
-	// TODO: add "default player mode" setting (theater, fullscreen, etc.) feature
+
+	const tabs = [
+		{ icon: <MdTune size={16} />, id: "basic" as TabId, label: "Basic" },
+		{ icon: <MdBuild size={16} />, id: "advanced" as TabId, label: "Advanced" },
+		{ icon: <MdPalette size={16} />, id: "appearance" as TabId, label: "Appearance" }
+	];
+
 	return (
 		<SettingsContext.Provider
 			value={{
@@ -148,29 +180,83 @@ export default function Settings() {
 			}}
 		>
 			<div
-				className="flex min-h-screen w-fit flex-col bg-[#f5f5f5] text-black dark:multi-['bg-[#181a1b];text-white']"
+				className="flex h-screen overflow-hidden bg-[#f5f5f5] text-black dark:bg-[#181a1b] dark:text-white"
 				dir={localeDirection[settings.language]}
+				ref={wrapperRef}
 			>
-				<SettingsHeader />
-				<div className="flex-1 overflow-auto">
-					<Setting
-						checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
-						featureId="global"
-						label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
-						onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
-						parentSetting={null}
-						title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
-						type="checkbox"
-					/>
-					<LanguageSettingsSection />
-					<FeatureMenuOpenTypeSection />
-					<ButtonPlacementSection />
-					<YouTubeDataApiKeySection />
-					<OnScreenDisplaySection />
-					<SettingsGenerator />
+				{/* Sidebar navigation */}
+				<aside className="flex w-56 shrink-0 flex-col border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)]">
+					<div className="flex items-center gap-3 px-4 py-5">
+						<img alt="YouTube Enhancer" className="size-10" src="/icons/icon_128.png" />
+						<div>
+							<p className="text-sm font-bold leading-tight">YouTube Enhancer</p>
+							<p className="text-xs text-gray-500" dir="ltr">
+								v{chrome.runtime.getManifest().version}
+							</p>
+						</div>
+					</div>
+					<nav className="flex flex-col gap-0.5 px-2">
+						{tabs.map((tab) => (
+							<button
+								className={cn(
+									"flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors",
+									activeTab === tab.id ?
+										"bg-[var(--accent)]/10 text-[var(--accent)]"
+									:	"text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800/40"
+								)}
+								key={tab.id}
+								onClick={() => setActiveTab(tab.id)}
+								type="button"
+							>
+								<span className="text-base leading-none">{tab.icon}</span>
+								{tab.label}
+							</button>
+						))}
+					</nav>
+					<div className="mt-auto flex flex-col gap-2 p-3">
+						<ImportExportSection />
+						<DataManagementSection />
+					</div>
+				</aside>
+
+				{/* Main content area */}
+				<div className="flex flex-1 flex-col overflow-hidden">
+					<div className="shrink-0 border-b border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] px-4 py-2">
+						<SettingSearch />
+					</div>
+					<main className="flex-1 overflow-y-auto p-4">
+						{activeTab === "basic" && (
+							<div className="columns-1 gap-3 lg:columns-2">
+								<div className="mb-3 break-inside-avoid [column-span:all] rounded-xl bg-[var(--card-bg)] p-2 shadow-sm">
+									<Setting
+										checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
+										featureId="global"
+										label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
+										onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
+										parentSetting={null}
+										title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
+										type="checkbox"
+									/>
+								</div>
+								<LanguageSettingsSection />
+								<SettingsGenerator tab="basic" />
+							</div>
+						)}
+						{activeTab === "advanced" && (
+							<div className="columns-1 gap-3 lg:columns-2">
+								<FeatureMenuOpenTypeSection />
+								<ButtonPlacementSection />
+								<YouTubeDataApiKeySection />
+								<OnScreenDisplaySection />
+								<SettingsGenerator tab="advanced" />
+							</div>
+						)}
+						{activeTab === "appearance" && <AppearanceTab onThemeChange={handleThemeChange} />}
+					</main>
 				</div>
-				<SettingsFooter />
+
 				<SettingsNotifications />
+				{showWelcome && <WelcomeModal onDismiss={() => setShowWelcome(false)} />}
 			</div>
 		</SettingsContext.Provider>
 	);

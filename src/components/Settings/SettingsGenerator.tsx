@@ -1,5 +1,6 @@
 import { type ChangeEvent, Fragment } from "react";
 
+import type { TabId } from "@/src/components/Settings/components/TabBar";
 import type { configuration, Nullable, TSelectFunc } from "@/src/types";
 
 import Link from "@/src/components/Link";
@@ -23,7 +24,50 @@ import { getPathValue } from "@/src/utils/misc";
 import { cn } from "@/src/utils/style";
 type ConditionSetting = "equals" | "notEquals";
 
+const BASIC_SECTIONS = new Set<SettingsSectionId>([
+	"automaticBehaviors",
+	"contentFiltering",
+	"hideShorts",
+	"miscellaneous",
+	"playbackControls",
+	"playerQuality",
+	"playerSpeed",
+	"scrollWheelVolumeControl"
+]);
+
+const SECTION_DESCRIPTIONS: Partial<Record<SettingsSectionId, string>> = {
+	automaticBehaviors: "Actions that trigger automatically when you load or watch a video",
+	buttonPlacement: "Configure where feature buttons appear in the player",
+	contentFiltering: "Hide or remove specific UI elements and content types",
+	customCSS: "Inject your own CSS styles into YouTube pages",
+	deepDarkCSS: "Apply a custom dark theme to YouTube's interface",
+	featureMenu: "Settings for the floating feature menu overlay",
+	forwardRewindButtons: "Skip forward or backward by a set number of seconds",
+	globalVolume: "Force every video to start at a specific volume level",
+	hideShorts: "Remove or manage YouTube Shorts across the site",
+	miscellaneous: "General quality-of-life improvements and player button toggles",
+	miniPlayer: "Watch videos in a floating mini window while browsing",
+	onScreenDisplaySettings: "Visual overlay for volume and speed feedback",
+	playbackControls: "Fine-tune how audio and video playback behaves",
+	playerQuality: "Automatically set your preferred video quality",
+	playerSpeed: "Control default and custom playback speeds",
+	playlistLength: "View total duration and timing for playlists",
+	playlistManagementButtons: "Enhanced controls for managing playlists",
+	screenshotButton: "Capture still frames from any video",
+	scrollWheelSpeedControl: "Change playback speed using your mouse scroll wheel",
+	scrollWheelVolumeControl: "Adjust volume using your mouse scroll wheel",
+	videoHistory: "Track and manage your video watch history",
+	volumeBoost: "Amplify volume beyond the normal 100% limit"
+};
+
 const DEFAULT_SECTION: SettingsSectionId = "miscellaneous";
+
+const SECTION_TITLE_FALLBACKS: Partial<Record<SettingsSectionId, TSelectFunc>> = {
+	automaticBehaviors: (t) => t((tr) => tr.settings.sections.automaticBehaviors.title),
+	contentFiltering: (t) => t((tr) => tr.settings.sections.contentFiltering.title),
+	miscellaneous: (t) => t((tr) => tr.settings.sections.miscellaneous.title),
+	playbackControls: (t) => t((tr) => tr.settings.sections.playbackControls.title)
+};
 
 type SectionData = {
 	featureMap: Map<number, FeatureKeys>;
@@ -46,7 +90,7 @@ export function evaluateConditions<F extends FeatureKeys>(
 	return conditions.every((condition) => evaluateCondition(condition, settings));
 }
 
-export default function SettingsGenerator() {
+export default function SettingsGenerator({ tab }: { tab: Exclude<TabId, "appearance"> }) {
 	const {
 		i18nInstance: { t },
 		setCheckboxOption,
@@ -66,17 +110,22 @@ export default function SettingsGenerator() {
 			sections[sectionId].settings.push({ featureId: feature.id, node: node as FeatureSettingNode<FeatureKeys> });
 			if (sectionTitle) {
 				sections[sectionId].sectionTitle = sectionTitle;
-			} else if (sectionId === "miscellaneous" && !sections[sectionId].sectionTitle) {
-				sections[sectionId].sectionTitle = (tr) => tr((tr) => tr.settings.sections.miscellaneous.title);
+			} else if (!sections[sectionId].sectionTitle) {
+				const fallback = SECTION_TITLE_FALLBACKS[sectionId as SettingsSectionId];
+				if (fallback) sections[sectionId].sectionTitle = fallback;
 			}
 		}
 	}
-	const sectionKeys = Object.keys(sections).sort((a, b) => {
+	const allSectionKeys = Object.keys(sections).sort((a, b) => {
 		if (a === "miscellaneous") return -1;
 		if (b === "miscellaneous") return 1;
 		if (a === "customCSS") return 1;
 		if (b === "customCSS") return -1;
 		return a.localeCompare(b);
+	});
+	const sectionKeys = allSectionKeys.filter((id) => {
+		const isBasic = BASIC_SECTIONS.has(id);
+		return tab === "basic" ? isBasic : !isBasic;
 	});
 	for (const sectionId of sectionKeys) {
 		const { [sectionId]: section } = sections;
@@ -286,7 +335,13 @@ export default function SettingsGenerator() {
 				const { featureMap: sectionFeatureMap, sectionTitle: storedSectionTitle, settings: sectionSettingsList } = sectionData;
 
 				return (
-					<SettingSection featureIds={Array.from(sectionFeatureMap.values())} key={sectionId} title={storedSectionTitle ? storedSectionTitle(t) : ""}>
+					<SettingSection
+						className="mb-3 break-inside-avoid rounded-xl bg-[var(--card-bg)] p-2 shadow-sm"
+						description={SECTION_DESCRIPTIONS[sectionId]}
+						featureIds={Array.from(sectionFeatureMap.values())}
+						key={sectionId}
+						title={storedSectionTitle ? storedSectionTitle(t) : ""}
+					>
 						<SettingTitle />
 						{sectionSettingsList.map((entry, index: number) => {
 							return renderNode(entry.node as FeatureSettingNode<FeatureKeys>, entry.featureId, index);

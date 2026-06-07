@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hideTranslateComment.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideTranslateComment.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideTranslateComment.enable.title)
 		}
 	]

@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hideOfficialArtistVideosFromHomePage.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable.title)
 		}
 	]

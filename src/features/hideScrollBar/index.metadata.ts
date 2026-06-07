@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hideScrollBar.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideScrollbar.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideScrollbar.enable.title)
 		}
 	]

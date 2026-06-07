@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export type SectionTitleContextProps = {
+	description?: string;
 	shouldBeVisible: boolean;
 	title: string;
 };

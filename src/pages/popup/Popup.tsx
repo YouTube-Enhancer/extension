@@ -2,27 +2,21 @@ import type { JSX } from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import Settings from "@/src/components/Settings/Settings";
-import { NotificationsProvider } from "@/src/hooks/useNotifications/provider";
-import { SettingsFilterProvider } from "@/src/hooks/useSettingsFilter/provider";
+import PopupView from "@/src/pages/popup/PopupView";
 
-export default function Options(): JSX.Element {
+export default function Popup(): JSX.Element {
 	const client = new QueryClient({
 		defaultOptions: {
 			queries: {
-				refetchInterval: 75,
+				refetchInterval: 500,
 				refetchOnWindowFocus: true,
 				staleTime: 250
 			}
 		}
 	});
 	return (
-		<NotificationsProvider>
-			<SettingsFilterProvider>
-				<QueryClientProvider client={client}>
-					<Settings />
-				</QueryClientProvider>
-			</SettingsFilterProvider>
-		</NotificationsProvider>
+		<QueryClientProvider client={client}>
+			<PopupView />
+		</QueryClientProvider>
 	);
 }

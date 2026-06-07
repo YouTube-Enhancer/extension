@@ -81,6 +81,20 @@ interface EnUS {
 		};
 		options: {
 			extras: {
+				appearance: {
+					accentColor: "Accent Color";
+					resetTheme: "Reset to Default";
+					themePresets: "Theme Presets";
+					themes: {
+						dark: "Dark";
+						light: "Light";
+						ocean: "Ocean Blue";
+						oled: "OLED Black";
+						purple: "Purple Night";
+						system: "System";
+					};
+					title: "Appearance";
+				};
 				bottomButtons: {
 					clear: {
 						title: "Clears all data this extension has stored on your machine";
@@ -176,6 +190,14 @@ interface EnUS {
 					};
 				};
 				settingSearch: { placeholder: "Search for a setting" };
+				tabs: { advanced: "Advanced"; appearance: "Appearance"; basic: "Basic" };
+				welcome: {
+					customize: "Customize Settings";
+					getStarted: "Get Started";
+					recommendedLabel: "Recommended Settings";
+					subtitle: "We've pre-selected some great settings for new users. You can change them anytime.";
+					title: "Welcome to YouTube Enhancer!";
+				};
 				youtubeDataApiV3Key: {
 					getApiKeyLinkText: "You can get one from here";
 					input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
@@ -216,6 +238,8 @@ interface EnUS {
 	};
 	settings: {
 		sections: {
+			automaticBehaviors: { title: "Automatic Behaviors" };
+			contentFiltering: { title: "Content Filtering" };
 			customCSS: {
 				enable: { label: "Custom CSS"; title: "Enables custom CSS to be applied to the page" };
 				extras: {
@@ -590,6 +614,7 @@ interface EnUS {
 				};
 				title: "On-screen display settings";
 			};
+			playbackControls: { title: "Playback Controls" };
 			playerQuality: {
 				enable: {
 					label: "Automatic quality adjustment";

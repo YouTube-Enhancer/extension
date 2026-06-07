@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "hidePosts.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePosts.enable.label),
+			section: "contentFiltering",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePosts.enable.title)
 		}
 	]

@@ -16,6 +16,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "automaticallyDisableAutoPlay.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyDisableAutoPlay.enable.label),
+			section: "automaticBehaviors",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyDisableAutoPlay.enable.title)
 		}
 	]

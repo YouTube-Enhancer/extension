@@ -1,12 +1,10 @@
 body {
-	width: fit-content;
-	margin: 12px !important;
+	width: 360px;
+	margin: 0 !important;
+	background: transparent;
 	font-family:
 		-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	min-width: 400px;
-	max-width: 640px;
 	position: relative;
-	overflow-y: scroll;
 }

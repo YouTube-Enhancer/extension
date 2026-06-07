@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "pauseBackgroundPlayers.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.pauseBackgroundPlayers.enable.label),
+			section: "playbackControls",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.pauseBackgroundPlayers.enable.title)
 		}
 	]

@@ -112,7 +112,9 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 	type ValidComponent = (typeof validComponents)[number];
 
 	const validSectionIds = [
+		"automaticBehaviors",
 		"buttonPlacement",
+		"contentFiltering",
 		"customCSS",
 		"deepDarkCSS",
 		"featureMenu",
@@ -123,10 +125,13 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		"maximizePlayerButton",
 		"miniPlayer",
 		"miscellaneous",
+		"onScreenDisplaySettings",
 		"openTranscriptButton",
+		"playbackControls",
 		"playerQuality",
 		"playerSpeed",
 		"playlistLength",
+		"playlistManagementButtons",
 		"scrollWheelSpeedControl",
 		"scrollWheelVolumeControl",
 		"screenshotButton",

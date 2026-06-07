@@ -12,6 +12,7 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			id: "timestampPeek.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.timestampPeek.enable.label),
+			section: "playbackControls",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.timestampPeek.enable.title)
 		}
 	]

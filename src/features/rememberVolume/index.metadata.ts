@@ -14,6 +14,7 @@ export const metadata = createFeatureMetadata({
 			disabledWhen: [{ equals: true, feature: "globalVolume", setting: "globalVolume.enabled" }],
 			id: "rememberVolume.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.label),
+			section: "playbackControls",
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.title)
 		}
 	],
