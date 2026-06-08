@@ -510,10 +510,10 @@
 							"title": "Sempre retornar à faixa de vídeo original"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Ocultar resumo IA",
-							"title": "Oculta a seção de resumo IA de um vídeo"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
