@@ -438,7 +438,7 @@ export type OldTranslationStruct = {
 						label: string;
 						title: string;
 					};
-					hideArtificialIntelligenceSummary: {
+					hideArtificialIntelligence: {
 						label: string;
 						title: string;
 					};
@@ -1089,7 +1089,7 @@ export type NewTranslationStruct = {
 							title: string;
 						};
 					};
-					hideArtificialIntelligenceSummary: {
+					hideArtificialIntelligence: {
 						enable: {
 							label: string;
 							title: string;

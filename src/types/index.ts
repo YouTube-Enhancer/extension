@@ -252,7 +252,7 @@ export type configuration = {
 		enabled: boolean;
 		volume: number;
 	};
-	hideArtificialIntelligenceSummary: { enabled: boolean };
+	hideArtificialIntelligence: { enabled: boolean };
 	hideEndScreenCards: { enabled: boolean };
 	hideEndScreenCardsButton: {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };

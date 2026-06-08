@@ -51,7 +51,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Default To Original Audio Track**: Always default to the original audio track
 - **Horizontal Video Flip Button**: Adds a button to flip the video horizontally
 - **Vertical Video Flip Button**: Adds a button to flip the video vertically
-- **Hide AI Summary**: Hides the artificial intelligence summary below videos
+- **Hide AI**: Hides AI-powered features, such as video summaries, Ask AI
 - **Hide End Screen Cards**: Hides the cards at the end of the video
 - **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
 - **Hide Live Stream Chat**: Hides the live stream chat

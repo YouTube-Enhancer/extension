@@ -73,7 +73,7 @@ export function migrateConfiguration(
 		enable_forced_playback_speed: "playerSpeed",
 		enable_forward_rewind_buttons: "forwardRewindButtons",
 		enable_global_volume: "globalVolume",
-		enable_hide_artificial_intelligence_summary: "hideArtificialIntelligenceSummary",
+		enable_hide_artificial_intelligence_summary: "hideArtificialIntelligence",
 		enable_hide_end_screen_cards: "hideEndScreenCards",
 		enable_hide_end_screen_cards_button: "hideEndScreenCardsButton",
 		enable_hide_live_stream_chat: "hideLiveStreamChat",

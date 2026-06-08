@@ -1,4 +1,4 @@
-body.yte-hide-ai-summary {
+body.yte-hide-ai {
 	& #expandable-metadata [has-video-summary],
 	div#video-summary [has-video-summary],
 	yt-button-view-model .you-chat-entrypoint-button,
@@ -7,4 +7,7 @@ body.yte-hide-ai-summary {
 	button-view-model:has(svg path[d="M19 0a5 5 0 01-5 5 5 5 0 015 5 5 5 0 015-5 5 5 0 01-5-5Zm-8 2a9 9 0 105.641 16.013c.044.07.094.135.152.194l3.5 3.5a1 1 0 001.414-1.414l-3.5-3.5a1.001 1.001 0 00-.194-.152A8.96 8.96 0 0019.945 12H17.93a7 7 0 11-5.99-7.938l1.675-1.676A9 9 0 0011 2Z"]) {
 		display: none !important;
 	}
+}
+body.yte-hide-ai ytd-menu-renderer[has-items] yt-button-shape.ytd-menu-renderer {
+	margin-left: 0 !important;
 }

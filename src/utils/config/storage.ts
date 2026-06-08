@@ -31,6 +31,17 @@ export async function updateStoredSettings() {
 		if (isLegacyConfiguration(settings)) {
 			settings = migrateConfiguration(settings, defaultConfiguration);
 		}
+		const featureIdRenames: Record<string, keyof configuration> = {
+			hideArtificialIntelligenceSummary: "hideArtificialIntelligence"
+		};
+		for (const [oldKey, newKey] of Object.entries(featureIdRenames)) {
+			const config = settings as Record<string, unknown>;
+			if (oldKey in config) {
+				const { [oldKey]: value } = config;
+				config[newKey] = value;
+				delete config[oldKey];
+			}
+		}
 		const validKeys = new Set([...Object.keys(defaultConfiguration), ...metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const)]);
 		const removedKeys = rawKeys.filter((key) => !validKeys.has(key));
 
