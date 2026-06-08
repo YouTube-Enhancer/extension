@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "隐藏AI",
+							"title": "隐藏AI功能，例如视频摘要，询问AI"
 						}
 					},
 					"hideEndScreenCards": {
