@@ -510,10 +510,10 @@
 							"title": "常にオリジナルのオーディオトラックをデフォルトにする"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "AIサマリーを非表示",
-							"title": "動画の下のAIサマリーを非表示にする"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
