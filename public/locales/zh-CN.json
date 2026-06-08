@@ -510,10 +510,10 @@
 							"title": "总是默认原始音轨"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "隐藏 AI 摘要",
-							"title": "隐藏视频下方的人工智能摘要"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
