@@ -510,10 +510,10 @@
 							"title": "Använd alltid originalljudspåret som standard"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Dölj AI-sammanfattning",
-							"title": "Döljer sammanfattningen av artificiell intelligens under videorna"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
