@@ -343,7 +343,7 @@ const featureKeys = Object.keys({
 	flipVideoButtons: "",
 	forwardRewindButtons: "",
 	globalVolume: "",
-	hideArtificialIntelligenceSummary: "",
+	hideArtificialIntelligence: "",
 	hideEndScreenCards: "",
 	hideEndScreenCardsButton: "",
 	hideLiveStreamChat: "",

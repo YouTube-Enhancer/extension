@@ -344,7 +344,7 @@ export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = objec
 						label: string(),
 						title: string()
 					}),
-					hideArtificialIntelligenceSummary: object({
+					hideArtificialIntelligence: object({
 						label: string(),
 						title: string()
 					}),

@@ -9,13 +9,13 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		modifyElementClassList("remove", {
-			className: "yte-hide-ai-summary",
+			className: "yte-hide-ai",
 			element: document.body
 		});
 	},
 	onEnable: () => {
 		modifyElementClassList("add", {
-			className: "yte-hide-ai-summary",
+			className: "yte-hide-ai",
 			element: document.body
 		});
 	}

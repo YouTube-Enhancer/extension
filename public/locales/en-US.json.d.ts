@@ -392,10 +392,10 @@ interface EnUS {
 							title: "Adds a button to flip the video vertically";
 						};
 					};
-					hideArtificialIntelligenceSummary: {
+					hideArtificialIntelligence: {
 						enable: {
-							label: "Hide AI summary";
-							title: "Hides the artificial intelligence summary below videos";
+							label: "Hide AI";
+							title: "Hides AI-powered features, such as video summaries, Ask AI";
 						};
 					};
 					hideEndScreenCards: {
