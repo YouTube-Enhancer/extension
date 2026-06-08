@@ -8,6 +8,25 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Mono Ses İşlemesi",
+						"toggle": {
+							"on": "Mono'dan Stereo'ya Çıkış",
+							"off": "Orjinal Ses"
+						}
+					}
+				},
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Videoyu yatay olarak çevir"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Videoyu dikey olarak çevir"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Geçerli zamana ait video URL'sini kopyala"
@@ -35,8 +54,8 @@
 					"button": {
 						"label": "Bitiş ekranı kartlarını gizle",
 						"toggle": {
-							"off": "Bitiş ekranı kartlarını göster",
-							"on": "Bitiş ekranı kartlarını gizle"
+							"off": "Bitiş ekranı kartlarını gizle",
+							"on": "Bitiş ekranı kartlarını göster"
 						}
 					}
 				},
@@ -60,10 +79,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Mini Oynatıcı",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Mini Oynatıcı kapalı",
+							"on": "Mini Oynatıcı açık"
 						}
 					}
 				},
@@ -122,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Ses Yükseltici",
+						"label": "Ses Seviyesi Artışı ({{value}} dB)",
 						"toggle": {
 							"off": "Ses Yükseltici Devredışı",
-							"on": "Ses Yükseltici Aktif"
+							"on": "Ses seviyesi artışı ({{value}} dB)"
 						}
 					}
 				}
@@ -160,11 +179,14 @@
 							"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 							"loopButton": "Döngü düğmesi",
 							"maximizePlayerButton": "Tam ekran düğmesi",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Mini Oynatıcı düğmesi",
 							"openTranscriptButton": "Transkripti Aç butonu",
 							"rewindButton": "Geri sarma düğmesi",
 							"screenshotButton": "Ekran görüntüsü düğmesi",
-							"volumeBoostButton": "Ses güçlendirme düğmesi"
+							"volumeBoostButton": "Ses güçlendirme düğmesi",
+							"flipVideoVerticalButton": "Videoyu dikey çevirme düğmesi",
+							"flipVideoHorizontalButton": "Videoyu yatay çevirme düğmesi",
+							"monoToStereoButton": "Mono'dan Stereo'ya düğmesi"
 						},
 						"options": {
 							"below_player": {
@@ -182,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "oynatıcı kontrollerinin sağ tarafında",
 								"value": "Sağ Kontroller"
+							},
+							"same": {
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir"
+						"title": "{{BUTTON_NAME}} düğmesini {{PLACEMENT}} konumuna yerleştir",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Düğme yerleşim ayarları"
 				},
@@ -244,12 +273,11 @@
 					"singular": "Bu seçeneği yapılandırmak için '{{OPTION}}' öğesini etkinleştirin",
 					"specificOption": {
 						"featureMenu": "Bu seçeneği yapılandırmak için özellik menüsüne yerleştirilecek en az bir düğmeyi yapılandırın.",
-						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın",
 						"globalVolume": "Bu seçeneği yapılandırmak için 'Son ses seviyesini hatırla' seçeneğini devre dışı bırakın",
-						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın"
+						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın",
+						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 					}
 				},
-				"scrollForMoreSettings": "Daha fazla ayar için kaydırın",
 				"settingSearch": {
 					"placeholder": "Bir ayar arayın"
 				},
@@ -264,6 +292,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
@@ -283,37 +326,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Özel CSS'yi etkinleştir",
@@ -386,6 +398,50 @@
 				},
 				"title": "İleri/geri sarma düğmesi ayarları"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
+					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video başlangıç sesi",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Oynatıcı düğmesi",
+					"title": "Mini Oynatıcıyı açan bir düğme ekler"
+				},
+				"enable": {
+					"label": "Yorumları görüntülemek için Mini Oynatıcıyı açın",
+					"title": "Yorumlara geldiğinizde Mini Oynatıcı otomatik olarak açılır."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Varsayılan Mini Oynatıcı pozisyonu",
+							"options": {
+								"bottomCenter": "Alt orta",
+								"bottomLeft": "Sol alt",
+								"bottomRight": "Sağ alt",
+								"topCenter": "Üst orta",
+								"topLeft": "Sol üst",
+								"topRight": "Sağ üst"
+							},
+							"title": "Mini Oynatıcı'yı hareket ettirmeden önce başlangıç pozisyonunu ayarlar."
+						}
+					},
+					"size": {
+						"label": "Varsayılan Mini Oynatıcı boyutu",
+						"title": "Mini Oynatıcı'nın boyutunu değiştirmeden önce başlangıç boyutunu ayarlar."
+					}
+				},
+				"title": "Mini Oynatıcı ayarları"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -430,6 +486,18 @@
 							"title": "Video yüklediğinizde bitiş ekranında otomatik olarak daha fazla video gösterilir"
 						}
 					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Numara tuşlarıyla atlamayı engelle",
+							"title": "0-9 tuşlarına basıldığında videonun belirli bir yüzdesine atlamayı engeller."
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "Gönderileri gizle",
+							"title": "Ana sayfadaki gönderileri gizler"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Video URL'sini zaman damgası düğmesiyle kopyala",
@@ -472,6 +540,12 @@
 							"title": "Sadece üyelere görünen videoları gizle"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono'dan Stereo'ya düğmesi",
+							"title": "Mono ses dosyalarını stereo'ya dönüştürmek için bir düğme ekler. Stereo parçalarda herhangi bir değişiklik yapılmaz."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Resmi Sanatçı Videolarını Gizle",
@@ -500,12 +574,6 @@
 						"enable": {
 							"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 							"title": "Sayfa kaydırma çubuğunu gizler"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Kısa videoları gizle",
-							"title": "Tüm kısa videoları gizler"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -600,12 +668,49 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Zaman Damgası Önizlemesi",
+							"title": "Bir zaman damgasının üzerine gelerek videoyu önizleyin. O andan itibaren oynatmayı başlatmak için önizlemeye tıklayın."
+						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Yatay video çevirme düğmesi",
+							"title": "Videoyu yatay olarak çevirmeyi sağlayan bir düğme ekler"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Dikey video çevirme düğmesi",
+							"title": "Videoyu dikey olarak çevirmeyi sağlayan bir düğme ekler"
 						}
 					}
 				},
 				"title": "Çeşitli ayarlar"
+			},
+			"hideShorts": {
+				"title": "Shortları gizle",
+				"settings": {
+					"sidebar": {
+						"label": "Kenar çubuğunda gizle",
+						"title": "Kenar çubuğundan Shorts düğmesini kaldırır"
+					},
+					"home": {
+						"label": "Ana sayfa akışında gizle",
+						"title": "Ana sayfadaki Shorts bölümünü kaldırır"
+					},
+					"channel": {
+						"label": "Kanal sayfalarında gizle",
+						"title": "Kanal sayfasındaki Shorts bölümünü kaldırır"
+					},
+					"search": {
+						"label": "Arama sonuçlarında gizle",
+						"title": "Arama sonuçlarından Shorts videolarını kaldırır"
+					},
+					"videos": {
+						"label": "İzleme sayfasında gizle",
+						"title": "İzleme sayfasındaki önerilelerden Shorts videolarını kaldırır"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -856,7 +961,11 @@
 				"settings": {
 					"amount": {
 						"label": "Ses güçlendirme miktarı (dB)",
-						"title": "Ses güçlendirme miktarı"
+						"title": "Ses seviyesini artırmak için gereken miktar. Ses seviyesini ayarlamak için farenizi ses artırma düğmesinin üzerine getirebilir (daha büyük adımlar için Shift/Ctrl tuşlarını kullanabilirsiniz) ve kaydırma yapabilirsiniz."
+					},
+					"amount_global_only": {
+						"label": "Ses seviyesi artırma miktarı (dB)",
+						"title": "Ses seviyesini artırmak için gereken miktar."
 					},
 					"mode": {
 						"select": {
@@ -870,19 +979,6 @@
 					}
 				},
 				"title": "Ses güçlendirme ayarları"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Videoları her zaman bu ses seviyesiyle başlatın",
-					"title": "Tüm videoların otomatik olarak seçtiğiniz ses seviyesinde başlamasını sağlar"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video başlangıç sesi",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}

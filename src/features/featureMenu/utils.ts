@@ -1,6 +1,7 @@
 import type { ListenerType } from "@/src/features/buttonPlacement/utils";
 import type { BasicIcon } from "@/src/icons";
 
+import eventManager from "@/src/events/EventManager";
 import {
 	type AllButtonNames,
 	type FeatureMenuItemIconId,
@@ -11,9 +12,8 @@ import {
 	type SingleButtonFeatureNames,
 	type WithId
 } from "@/src/types";
-import eventManager from "@/src/utils/EventManager";
-import { findKeyByValue, waitForAllElements } from "@/src/utils/utilities";
-
+import { waitForElement } from "@/src/utils/dom/wait";
+import { findKeyByValue } from "@/src/utils/feature";
 export const featuresInMenu = new Set<AllButtonNames>();
 const MENU_ID = "#yte-feature-menu";
 const PANEL_ID = "#yte-panel-menu";
@@ -42,7 +42,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	// Add the feature name to the set of features in the menu
 	featuresInMenu.add(buttonName);
 	// Wait for the feature menu to exist
-	await waitForAllElements([MENU_ID]);
+	await waitForElement(MENU_ID);
 	// Get the feature menu
 	const featureMenu = getMenu();
 	if (!featureMenu) return;
@@ -82,11 +82,14 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.appendChild(menuItemToggle);
 		setMenuItemChecked(menuItem, initialChecked);
 	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem!, listener, isToggle), featureName);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
+	const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
+	if (featureMenuButton) {
+		featureMenuButton.style.display = "flex";
+		featureMenuButton.style.visibility = "visible";
+	}
 	updateMenuSize(featureMenu, panel);
-	const featureMenuButton = document.querySelector<HTMLDivElement>(MENU_BUTTON_ID);
-	if (featureMenuButton) featureMenuButton.style.display = "flex";
 }
 /**
  * Gets the IDs for a feature item.
@@ -134,14 +137,10 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 	updateMenuSize(featureMenu, featureMenuPanel);
 
 	if (featureMenuPanel.childElementCount === 0) {
-		featureMenu.style.display = "none";
+		featureMenu.style.visibility = "hidden";
 		const featureMenuButton = document.querySelector<HTMLButtonElement>(MENU_BUTTON_ID);
 		if (featureMenuButton) featureMenuButton.style.display = "none";
 	}
-}
-export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: string) {
-	const featureMenuItemLabel = getFeatureMenuItemLabel(buttonName);
-	if (featureMenuItemLabel) featureMenuItemLabel.textContent = label;
 }
 /**
  *	Updates the title for the feature menu button.
@@ -158,7 +157,7 @@ function featureMenuClickListener<Toggle extends boolean>(menuItem: HTMLDivEleme
 
 	const newState = !getMenuItemChecked(menuItem);
 	setMenuItemChecked(menuItem, newState);
-	listener(newState as any);
+	listener(newState);
 }
 
 function getMenu(): HTMLDivElement | null {
@@ -181,4 +180,5 @@ function setMenuItemChecked(item: HTMLDivElement, value: boolean) {
 function updateMenuSize(menu: HTMLDivElement, panel: HTMLDivElement) {
 	menu.style.height = `${ITEM_HEIGHT * panel.childElementCount + MENU_PADDING}px`;
 	menu.style.width = "fit-content";
+	window.dispatchEvent(new CustomEvent("yte-feature-menu-resized"));
 }

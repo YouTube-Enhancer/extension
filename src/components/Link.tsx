@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 type LinkProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> & {
 	children: ReactNode;

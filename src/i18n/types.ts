@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-modules */
-import type EnUS from "public/locales/en-US.json";
+import type EnUS from "@/public/locales/en-US.json.d";
 
 // -------------------------
 // Core primitives
@@ -255,7 +255,6 @@ export type OldTranslationStruct = {
 				screenshotButtonFileFormat: string;
 			};
 		};
-		scrollForMoreSettings: string;
 		sections: {
 			automaticQuality: {
 				enable: {
@@ -439,7 +438,7 @@ export type OldTranslationStruct = {
 						label: string;
 						title: string;
 					};
-					hideArtificialIntelligenceSummary: {
+					hideArtificialIntelligence: {
 						label: string;
 						title: string;
 					};
@@ -969,7 +968,6 @@ export type NewTranslationStruct = {
 						screenshotButtonFileFormat: string;
 					};
 				};
-				scrollForMoreSettings: string;
 				settingSearch: { placeholder: string };
 				youtubeDataApiV3Key: {
 					getApiKeyLinkText: string;
@@ -1091,7 +1089,7 @@ export type NewTranslationStruct = {
 							title: string;
 						};
 					};
-					hideArtificialIntelligenceSummary: {
+					hideArtificialIntelligence: {
 						enable: {
 							label: string;
 							title: string;

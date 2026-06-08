@@ -1,12 +1,13 @@
-import type { AddButtonFunction, RemoveButtonFunction } from "@/src/features";
-import type { ButtonPlacement } from "@/src/types";
-
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
 import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
 import { getFeatureIcon } from "@/src/icons";
-import eventManager from "@/src/utils/EventManager";
-import { waitForSpecificMessage } from "@/src/utils/utilities";
+import { type ButtonPlacement } from "@/src/types";
+
+import { metadata } from "./index.metadata";
+
 let currentPlacement: ButtonPlacement | null = null;
 function syncMiniPlayerButtonUI(active: boolean) {
 	if (!currentPlacement) return;
@@ -28,42 +29,44 @@ function syncMiniPlayerButtonUI(active: boolean) {
 		if (btn) btn.ariaChecked = active.toString();
 	}
 }
-export const addMiniPlayerButton: AddButtonFunction = async () => {
-	const {
-		data: {
-			options: {
-				button_placements: { miniPlayerButton },
-				enable_comments_mini_player_button
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_comments_mini_player_button) return;
-	currentPlacement = miniPlayerButton;
-	await addFeatureButton(
-		"miniPlayerButton",
-		miniPlayerButton,
-		miniPlayerButton === "feature_menu" ?
-			window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
-		:	window.i18nextInstance.t(
-				(translations) => translations.pages.content.features.miniPlayerButton.button.toggle[isMiniPlayerActive() ? "on" : "off"]
-			),
-		getFeatureIcon("miniPlayerButton", miniPlayerButton),
-		(checked) => {
-			if (typeof checked === "boolean") void setMiniPlayerManual(checked);
-			else void toggleMiniPlayerManual();
-		},
-		true,
-		isMiniPlayerActive()
-	);
-	document.addEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
-};
-export const removeMiniPlayerButton: RemoveButtonFunction = async (placement) => {
-	await removeFeatureButton("miniPlayerButton", placement);
-	eventManager.removeEventListeners("miniPlayerButton");
-	currentPlacement = null;
-	document.removeEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
-};
 function yteMiniPlayerStateHandler(e: unknown) {
 	const evt = e as CustomEvent<{ active: boolean }>;
 	syncMiniPlayerButtonUI(Boolean(evt.detail?.active));
 }
+
+export default createFeature({
+	...metadata,
+	buttons: [
+		{
+			add: async ({ button: { fullscreenPlacement, placement } }) => {
+				currentPlacement = placement;
+				const miniPlayerActive = isMiniPlayerActive();
+				await addFeatureButton(
+					"miniPlayerButton",
+					placement,
+					placement === "feature_menu" ?
+						window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
+					:	window.i18nextInstance.t(
+							(translations) => translations.pages.content.features.miniPlayerButton.button.toggle[miniPlayerActive ? "on" : "off"]
+						),
+					getFeatureIcon("miniPlayerButton", placement),
+					(checked) => {
+						if (typeof checked === "boolean") void setMiniPlayerManual(checked);
+						else void toggleMiniPlayerManual();
+					},
+					true,
+					miniPlayerActive,
+					fullscreenPlacement
+				);
+				document.addEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
+			},
+			name: "miniPlayerButton",
+			remove: async (placement) => {
+				await removeFeatureButton("miniPlayerButton", placement);
+				eventManager.removeEventListeners("miniPlayerButton");
+				currentPlacement = null;
+				document.removeEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
+			}
+		}
+	]
+});

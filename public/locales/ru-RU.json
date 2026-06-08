@@ -8,6 +8,25 @@
 	"pages": {
 		"content": {
 			"features": {
+				"monoToStereoButton": {
+					"button": {
+						"label": "Обработка Mono Аудио",
+						"toggle": {
+							"on": "Mono → Stereo Выход",
+							"off": "Исходное Аудио"
+						}
+					}
+				},
+				"flipVideoHorizontalButton": {
+					"button": {
+						"label": "Отразить видео горизонтально"
+					}
+				},
+				"flipVideoVerticalButton": {
+					"button": {
+						"label": "Отразить видео вертикально"
+					}
+				},
 				"copyTimestampUrlButton": {
 					"button": {
 						"label": "Копировать URL видео с таймкодом"
@@ -35,8 +54,8 @@
 					"button": {
 						"label": "Скрыть заставки следующих видео",
 						"toggle": {
-							"off": "Показать заставки следующих видео",
-							"on": "Скрыть заставки следующих видео"
+							"off": "Скрыть заставки следующих видео",
+							"on": "Показать заставки следующих видео"
 						}
 					}
 				},
@@ -60,10 +79,10 @@
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini Player",
+						"label": "Мини-плеер",
 						"toggle": {
-							"off": "Mini Player off",
-							"on": "Mini Player on"
+							"off": "Мини-плеер выкл",
+							"on": "Мини-плеер вкл"
 						}
 					}
 				},
@@ -91,19 +110,19 @@
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
-						"failedToRemoveVideo": "Failed to remove video",
-						"markAsUnwatched": "Mark as unwatched",
-						"markingAsUnwatched": "Marking as unwatched…",
-						"removeVideo": "Remove video",
-						"removingVideo": "Removing video…"
+						"failedToMarkAsUnwatched": "Не удалось пометить видео как непросмотренное",
+						"failedToRemoveVideo": "Не удалось удалить видео",
+						"markAsUnwatched": "Отметить как непросмотренное",
+						"markingAsUnwatched": "Помечается как непросмотренное…",
+						"removeVideo": "Удалить видео",
+						"removingVideo": "Удаляется видео…"
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Failed to save video to Watch Later",
-						"saveVideo": "Save to Watch Later",
-						"savingVideo": "Saving to Watch Later…"
+						"failedToSaveVideo": "Не удалось сохранить видео в Смотреть позже",
+						"saveVideo": "Сохранить в Смотреть позже",
+						"savingVideo": "Сохраняется в Смотреть позже…"
 					}
 				},
 				"screenshotButton": {
@@ -122,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Усиление громкости",
+						"label": "Усиление громкости ({{value}} dB)",
 						"toggle": {
 							"off": "Увеличение громкости выключено",
-							"on": "Увеличение громкости включено"
+							"on": "Усиление громкости ({{value}} dB)"
 						}
 					}
 				}
@@ -160,11 +179,14 @@
 							"increasePlaybackSpeedButton": "Кнопка увеличения скорости видео",
 							"loopButton": "Кнопка «Зациклить»",
 							"maximizePlayerButton": "Кнопка «Развернуть»",
-							"miniPlayerButton": "Mini Player button",
+							"miniPlayerButton": "Кнопка мини-плеера",
 							"openTranscriptButton": "Кнопка «Открыть стенограмму»",
 							"rewindButton": "Кнопка перемотки назад",
 							"screenshotButton": "Кнопка «Скриншот»",
-							"volumeBoostButton": "Кнопка «Усиление громкости»"
+							"volumeBoostButton": "Кнопка «Усиление громкости»",
+							"flipVideoVerticalButton": "Кнопка «Отразить видео вертикально»",
+							"flipVideoHorizontalButton": "Кнопка «Отразить видео горизонтально»",
+							"monoToStereoButton": "Кнопка «Mono → Stereo»"
 						},
 						"options": {
 							"below_player": {
@@ -182,9 +204,16 @@
 							"player_controls_right": {
 								"placement": "с правой стороны панели управления",
 								"value": "Справа"
+							},
+							"same": {
+								"placement": "в том же положении",
+								"value": "То же, что и в обычном"
 							}
 						},
-						"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}"
+						"title": "Поместить {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Обычный"
 					},
 					"title": "Button placement settings"
 				},
@@ -244,12 +273,11 @@
 					"singular": "Включите '{{OPTION}}' для настройки этого параметра",
 					"specificOption": {
 						"featureMenu": "Включите по крайней мере одну кнопку, которая будет размещена в меню функций для настройки этой опции.",
-						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option",
 						"globalVolume": "Disable 'Remember last volume' to configure this option",
-						"rememberVolume": "Disable 'Global volume' to configure this option"
+						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
-				"scrollForMoreSettings": "Прокрутите для других настроек",
 				"settingSearch": {
 					"placeholder": "Поиск настроек"
 				},
@@ -264,6 +292,21 @@
 			},
 			"notifications": {
 				"error": {
+					"importConflict": {
+						"apply": "Apply",
+						"cancel": "Cancel",
+						"enabledConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+						},
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
+						"modifierKeyConflict": {
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
+						},
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
+					},
 					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
@@ -283,37 +326,6 @@
 	},
 	"settings": {
 		"sections": {
-			"miniPlayer": {
-				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
-				},
-				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
-				},
-				"settings": {
-					"position": {
-						"select": {
-							"label": "Default Mini Player position",
-							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
-							},
-							"title": "Sets the starting position before you move the Mini Player."
-						}
-					},
-					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
-					}
-				},
-				"title": "Mini Player settings"
-			},
 			"customCSS": {
 				"enable": {
 					"label": "Включить пользовательский CSS",
@@ -386,6 +398,50 @@
 				},
 				"title": "Настройки кнопок перемотки вперёд/назад"
 			},
+			"globalVolume": {
+				"enable": {
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
+				},
+				"settings": {
+					"amount": {
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
+					}
+				},
+				"title": "Global Volume Override"
+			},
+			"miniPlayer": {
+				"button": {
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
+				},
+				"enable": {
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
+				},
+				"settings": {
+					"position": {
+						"select": {
+							"label": "Default Mini Player position",
+							"options": {
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
+							},
+							"title": "Sets the starting position before you move the Mini Player."
+						}
+					},
+					"size": {
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
+					}
+				},
+				"title": "Mini Player settings"
+			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
@@ -430,6 +486,18 @@
 							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
+					"blockNumberKeySeeking": {
+						"enable": {
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+						}
+					},
+					"hidePosts": {
+						"enable": {
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
+						}
+					},
 					"copyTimestampUrlButton": {
 						"enable": {
 							"label": "Кнопка «Копировать URL видео с таймкодом»",
@@ -472,6 +540,12 @@
 							"title": "Hides videos that are only visible to members"
 						}
 					},
+					"monoToStereoButton": {
+						"enable": {
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+						}
+					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Скрывать официальные видео исполнителя",
@@ -500,12 +574,6 @@
 						"enable": {
 							"label": "Включить скрытие полосы прокрутки страницы",
 							"title": "Скрывает полосу прокрутки страницы"
-						}
-					},
-					"hideShorts": {
-						"enable": {
-							"label": "Скрыть Shorts",
-							"title": "Скрывает все Shorts"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -603,9 +671,46 @@
 							"label": "Timestamp Preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
+					},
+					"flipVideoHorizontalButton": {
+						"enable": {
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
+						}
+					},
+					"flipVideoVerticalButton": {
+						"enable": {
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
+						}
 					}
 				},
 				"title": "Прочие параметры"
+			},
+			"hideShorts": {
+				"title": "Hide Shorts",
+				"settings": {
+					"sidebar": {
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
+					},
+					"home": {
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
+					},
+					"channel": {
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
+					},
+					"search": {
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
+					},
+					"videos": {
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
+					}
+				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -856,7 +961,11 @@
 				"settings": {
 					"amount": {
 						"label": "Значение увеличения громкости (дБ)",
-						"title": "Значение, на которое будет увеличена громкость"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+					},
+					"amount_global_only": {
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {
@@ -870,19 +979,6 @@
 					}
 				},
 				"title": "Настройки усиления громкости"
-			},
-			"globalVolume": {
-				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
-				},
-				"settings": {
-					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
-					}
-				},
-				"title": "Global Volume Override"
 			}
 		}
 	}
