@@ -510,10 +510,10 @@
 							"title": "Traccia audio originale sempre predefinita"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Nascondi riepilogo IA",
-							"title": "Nasconde il riepilogo dell'intelligenza artificiale sotto i video"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
