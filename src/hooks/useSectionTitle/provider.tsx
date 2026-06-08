@@ -1,4 +1,4 @@
-import { cn } from "@/src/utils/utilities";
+import { cn } from "@/src/utils/style";
 
 import { SectionTitleContext, type SectionTitleContextProps } from "./context";
 export const SectionTitleProvider = (

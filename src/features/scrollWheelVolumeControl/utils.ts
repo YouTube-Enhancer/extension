@@ -1,7 +1,8 @@
 import type { Selector, YouTubePlayerDiv } from "@/src/types";
 
-import eventManager from "@/src/utils/EventManager";
-import { browserColorLog, clamp, toDivisible } from "@/src/utils/utilities";
+import eventManager from "@/src/events/EventManager";
+import { browserColorLog } from "@/src/utils/logging";
+import { clamp, toDivisible } from "@/src/utils/math";
 
 /**
  * Adjust the volume based on the scroll direction.

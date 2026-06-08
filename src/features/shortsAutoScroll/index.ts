@@ -1,30 +1,25 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import eventManager from "@/src/events/EventManager";
+import { createFeature } from "@/src/features/_registry/createFeature";
 import { setupAutoScroll } from "@/src/features/shortsAutoScroll/utils";
-import eventManager from "@/src/utils/EventManager";
-import { isShortsPage, waitForElement, waitForSpecificMessage } from "@/src/utils/utilities";
+import { waitForElement } from "@/src/utils/dom/wait";
 
-export function disableShortsAutoScroll() {
-	eventManager.removeEventListeners("shortsAutoScroll");
-}
-export async function enableShortsAutoScroll() {
-	if (!isShortsPage()) return;
-	// Wait for the "options" message from the content script
-	const {
-		data: {
-			options: { enable_shorts_auto_scroll }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	// If the shorts auto scroll option is disabled, return
-	if (!enable_shorts_auto_scroll) return;
-	// Get the shorts container
-	const shortsContainer = await waitForElement<YouTubePlayerDiv>("#shorts-player");
-	// If shorts container is not available, return
-	if (!shortsContainer) return;
-	// Get the video element
-	const video = shortsContainer.querySelector<HTMLVideoElement>("video");
-	// If video element is not available, return
-	if (!video) return;
-	// Setup auto scroll
-	setupAutoScroll(shortsContainer, video);
-}
+import { metadata } from "./index.metadata";
+
+export default createFeature({
+	...metadata,
+	onDisable: () => eventManager.removeEventListeners("shortsAutoScroll"),
+	onEnable: async () => {
+		// Get the shorts container
+		const shortsContainer = await waitForElement<YouTubePlayerDiv>("#shorts-player");
+		// If shorts container is not available, return
+		if (!shortsContainer) return;
+		// Get the video element
+		const video = shortsContainer.querySelector<HTMLVideoElement>("video");
+		// If video element is not available, return
+		if (!video) return;
+		// Setup auto scroll
+		setupAutoScroll(shortsContainer, video);
+	}
+});

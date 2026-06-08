@@ -1,20 +1,10 @@
-import { type ElementClassPair, modifyElementsClassList, waitForAllElements, waitForSpecificMessage } from "@/src/utils/utilities";
+import { createFeature } from "@/src/features/_registry/createFeature";
+import { type ElementClassPair, modifyElementsClassList } from "@/src/utils/dom/classList";
+import { waitForAllElements } from "@/src/utils/dom/wait";
 
 import "./index.css";
-export async function disableRestoreFullscreenScrolling() {
-	await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
-	modifyElementsClassList("remove", getFullscreenScrollPairs());
-}
-export async function enableRestoreFullscreenScrolling() {
-	const {
-		data: {
-			options: { enable_restore_fullscreen_scrolling }
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	if (!enable_restore_fullscreen_scrolling) return;
-	await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
-	modifyElementsClassList("add", getFullscreenScrollPairs());
-}
+import { metadata } from "./index.metadata";
+
 function getFullscreenScrollPairs(): ElementClassPair[] {
 	return [
 		{
@@ -27,3 +17,15 @@ function getFullscreenScrollPairs(): ElementClassPair[] {
 		}
 	];
 }
+
+export default createFeature({
+	...metadata,
+	onDisable: async () => {
+		await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
+		modifyElementsClassList("remove", getFullscreenScrollPairs());
+	},
+	onEnable: async () => {
+		await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
+		modifyElementsClassList("add", getFullscreenScrollPairs());
+	}
+});

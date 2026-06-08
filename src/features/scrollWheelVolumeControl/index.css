@@ -34,3 +34,8 @@ body.yte-scroll-wheel-volume-control {
 		}
 	}
 }
+.yte-context-menu-visible {
+	div.ytp-popup.ytp-contextmenu {
+		display: none !important;
+	}
+}

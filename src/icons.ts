@@ -1,6 +1,6 @@
-import type { AllButtonNames, ButtonPlacement } from "./types";
+import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 
-import { createSVGElement } from "./utils/utilities";
+import { createSVGElement } from "@/src/utils/dom/elements";
 export type BasicIcon = SVGSVGElement;
 export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
 export const toggleFeatures = Object.keys({
@@ -8,6 +8,7 @@ export const toggleFeatures = Object.keys({
 	loopButton: "",
 	maximizePlayerButton: "",
 	miniPlayerButton: "",
+	monoToStereoButton: "",
 	volumeBoostButton: ""
 } satisfies Partial<Record<AllButtonNames, "">>);
 export type FeatureIconMap = {
@@ -205,15 +206,12 @@ const decreasePlaybackSpeedButtonSVG = createSVGElement(
 		height: "24px",
 		stroke: "white",
 		"stroke-width": "1",
+		transform: "scale(-1,1)",
 		viewBox: "0 0 24 24",
 		width: "24px"
 	},
 	createSVGElement("path", {
-		d: "M10,8v8l6-4L10,8L10,8z M6.3,5L5.7,4.2C7.2,3,9,2.2,11,2l0.1,1C9.3,3.2,7.7,3.9,6.3,5z M5,6.3L4.2,5.7C3,7.2,2.2,9,2,11 l1,.1C3.2,9.3,3.9,7.7,5,6.3z M5,17.7c-1.1-1.4-1.8-3.1-2-4.8L2,13c0.2,2,1,3.8,2.2,5.4L5,17.7z M11.1,21c-1.8-0.2-3.4-0.9-4.8-2 l-0.6,.8C7.2,21,9,21.8,11,22L11.1,21z M22,12c0-5.2-3.9-9.4-9-10l-0.1,1c4.6,.5,8.1,4.3,8.1,9s-3.5,8.5-8.1,9l0.1,1 C18.2,21.5,22,17.2,22,12z",
-		fill: "white"
-	}),
-	createSVGElement("path", {
-		d: "M16 4.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z",
+		d: "M12 1c1.44 0 2.87.28 4.21.83a11 11 0 0 1 3.45 2.27l-1.81 1.05A9 9 0 0 0 3 12a9 9 0 0 0 18-.00l-.01-.44a8.99 8.99 0 0 0-.14-1.20l1.81-1.05A11.00 11.00 0 0 1 10.51 22.9 11 11 0 0 1 12 1Zm7.08 6.25-7.96 3.25a1.74 1.74 0 1 0 1.73 2.99l6.8-5.26a.57.57 0 0 0-.56-.98Z",
 		fill: "white"
 	})
 );
@@ -227,11 +225,7 @@ const increasePlaybackSpeedButtonSVG = createSVGElement(
 		width: "24px"
 	},
 	createSVGElement("path", {
-		d: "M10,8v8l6-4L10,8L10,8z M6.3,5L5.7,4.2C7.2,3,9,2.2,11,2l0.1,1C9.3,3.2,7.7,3.9,6.3,5z M5,6.3L4.2,5.7C3,7.2,2.2,9,2,11 l1,.1C3.2,9.3,3.9,7.7,5,6.3z M5,17.7c-1.1-1.4-1.8-3.1-2-4.8L2,13c0.2,2,1,3.8,2.2,5.4L5,17.7z M11.1,21c-1.8-0.2-3.4-0.9-4.8-2 l-0.6,.8C7.2,21,9,21.8,11,22L11.1,21z M22,12c0-5.2-3.9-9.4-9-10l-0.1,1c4.6,.5,8.1,4.3,8.1,9s-3.5,8.5-8.1,9l0.1,1 C18.2,21.5,22,17.2,22,12z",
-		fill: "white"
-	}),
-	createSVGElement("path", {
-		d: "M20 2a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z",
+		d: "M12 1c1.44 0 2.87.28 4.21.83a11 11 0 0 1 3.45 2.27l-1.81 1.05A9 9 0 0 0 3 12a9 9 0 0 0 18-.00l-.01-.44a8.99 8.99 0 0 0-.14-1.20l1.81-1.05A11.00 11.00 0 0 1 10.51 22.9 11 11 0 0 1 12 1Zm7.08 6.25-7.96 3.25a1.74 1.74 0 1 0 1.73 2.99l6.8-5.26a.57.57 0 0 0-.56-.98Z",
 		fill: "white"
 	})
 );
@@ -326,7 +320,98 @@ export const miniPlayerOffSVG = createSVGElement(
 		"stroke-width": "1.25"
 	})
 );
+const flipHorizontalButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "none",
+		height: "24px",
+		stroke: "white",
+		"stroke-width": "2",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	// Center vertical line
+	createSVGElement("path", {
+		d: "M12 2v20",
+		"stroke-linecap": "round"
+	}),
+	// Left arrow
+	createSVGElement("path", {
+		d: "M8 12H2m0 0 4-4m-4 4 4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	}),
+	// Right arrow
+	createSVGElement("path", {
+		d: "M16 12h6m0 0-4-4m4 4-4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	})
+);
+const flipVerticalButtonSVG = createSVGElement(
+	"svg",
+	{
+		fill: "none",
+		height: "24px",
+		stroke: "white",
+		"stroke-width": "2",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M2 12h20",
+		"stroke-linecap": "round"
+	}),
+	createSVGElement("path", {
+		d: "M12 8V2m0 0-4 4m4-4 4 4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	}),
+	createSVGElement("path", {
+		d: "M12 16v6m0 0-4-4m4 4 4-4",
+		"stroke-linecap": "round",
+		"stroke-linejoin": "round"
+	})
+);
+export const monoToStereoOnSVG = createSVGElement(
+	"svg",
+	{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
+	createSVGElement("path", {
+		d: "M3 9v6h4l5 5V4L7 9H3z", // speaker body
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M15 6c1.5 1.5 1.5 12 0 12", // left wave, pushed left
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M18 4c2 2 2 16 0 16", // right wave, pushed right
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	})
+);
 
+export const monoToStereoOffSVG = createSVGElement(
+	"svg",
+	{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
+	createSVGElement("path", {
+		d: "M3 9v6h4l5 5V4L7 9H3z", // speaker body
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	}),
+	createSVGElement("path", {
+		d: "M15 12c1 0 1 0 0 0", // mono wave stays centered
+		fill: "none",
+		stroke: "white",
+		"stroke-width": 2
+	})
+);
 export const featureIcons = {
 	copyTimestampUrlButton: {
 		feature_menu: copyURLWithTimestampSVG,
@@ -335,6 +420,14 @@ export const featureIcons = {
 	decreasePlaybackSpeedButton: {
 		feature_menu: decreasePlaybackSpeedButtonSVG,
 		shared_icon_position: decreasePlaybackSpeedButtonSVG
+	},
+	flipVideoHorizontalButton: {
+		feature_menu: flipHorizontalButtonSVG,
+		shared_icon_position: flipHorizontalButtonSVG
+	},
+	flipVideoVerticalButton: {
+		feature_menu: flipVerticalButtonSVG,
+		shared_icon_position: flipVerticalButtonSVG
 	},
 	forwardButton: {
 		feature_menu: forwardButtonSVG,
@@ -370,6 +463,13 @@ export const featureIcons = {
 		shared_icon_position: {
 			off: miniPlayerOffSVG,
 			on: miniPlayerOnSVG
+		}
+	},
+	monoToStereoButton: {
+		feature_menu: monoToStereoOffSVG,
+		shared_icon_position: {
+			off: monoToStereoOffSVG,
+			on: monoToStereoOnSVG
 		}
 	},
 	openTranscriptButton: {
