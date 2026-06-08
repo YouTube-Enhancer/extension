@@ -510,10 +510,10 @@
 							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "AI özetini gizle",
-							"title": "Videoların altındaki yapay zeka özetini gizler"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries, Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
