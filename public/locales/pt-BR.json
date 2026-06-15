@@ -173,7 +173,7 @@
 					"select": {
 						"buttonNames": {
 							"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minutagem",
-							"decreasePlaybackSpeedButton": "Botão de diminuir velocidade",
+							"decreasePlaybackSpeedButton": "Knapp för att minska hastigheten",
 							"forwardButton": "Botão de avançar rápido",
 							"hideEndScreenCardsButton": "Ocultar botão de cards finais",
 							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
@@ -263,23 +263,23 @@
 				},
 				"optionDisabled": {
 					"either": {
-						"label": "Ative o {{OPTIONS}} para configurar esta opção",
+						"label": "Ativar {{OPTIONS}} para configurar esta opção",
 						"separator": " ou "
 					},
 					"plural": {
 						"label": "Ative o {{OPTIONS}} para configurar esta opção",
 						"separator": " e "
 					},
-					"singular": "Ative o '{{OPTION}}' para configurar esta opção",
+					"singular": "Ativar {{OPTION}} para configurar esta opção",
 					"specificOption": {
-						"featureMenu": "Altere pelo menos um botão no menu de recursos para configurar esta opção.",
-						"globalVolume": "Desative 'Lembrar último volume' para configurar esta opção",
-						"rememberVolume": "Desative 'Lembrar último volume' para configurar esta opção",
-						"screenshotButtonFileFormat": "Defina o tipo de salvamento da captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
+						"featureMenu": "Configure pelo menos um botão no menu de recursos para configurar esta opção.",
+						"globalVolume": "Desativar 'Lembrar último volume' para configurar esta opção",
+						"rememberVolume": "Desativar 'Volume global' para configurar esta opção",
+						"screenshotButtonFileFormat": "Definir tipo de salvamento de captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
 				},
 				"settingSearch": {
-					"placeholder": "Buscar por ajustes"
+					"placeholder": "Buscar uma configuração"
 				},
 				"youtubeDataApiV3Key": {
 					"getApiKeyLinkText": "Você pode obter uma aqui",
@@ -316,7 +316,7 @@
 					}
 				},
 				"info": {
-					"reset": "Opções redefinidas ao padrão.\nSalve as mudanças clicando em \"Confirmar\" ou desfaça delas fechando a página, ou esta notificação."
+					"reset": "Todas as opções foram redefinidas para seus valores padrão. \nSalve as alterações clicando em \"Confirmar\", ou descarte-as fechando a página ou esta notificação."
 				},
 				"success": {
 					"saved": "Opções salvas."
@@ -358,11 +358,11 @@
 					},
 					"hoverBackground": {
 						"label": "Cor de fundo ao passar o cursor",
-						"title": "Cor de fundo ao passar o cursor"
+						"title": "Cor para fundo ao passar o cursor"
 					},
 					"mainBackground": {
 						"label": "Cor de fundo principal",
-						"title": "Cor principal para o fundo"
+						"title": "Cor para fundo principal"
 					},
 					"mainColor": {
 						"label": "Cor de destaque",
@@ -387,21 +387,21 @@
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Botões de avançar/voltar",
-					"title": "Adiciona botões de avançar/voltar ao player de vídeo"
+					"label": "Botões de avançar/retroceder",
+					"title": "Adiciona botões de avançar e de retroceder ao player de vídeo"
 				},
 				"settings": {
 					"time": {
-						"label": "Avançar/voltar tempo",
-						"title": "O tanto de tempo para avançar/voltar"
+						"label": "Avançar/retroceder tempo",
+						"title": "Quantidade de tempo para avançar/retroceder o vídeo"
 					}
 				},
-				"title": "Opções de avançar/voltar"
+				"title": "Configurações do botão de avançar/retroceder"
 			},
 			"globalVolume": {
 				"enable": {
 					"label": "Sempre iniciar vídeos com este volume",
-					"title": "Faz com que todos os vídeos comecem no seu volume selecionado automaticamente"
+					"title": "Faz com que todos os vídeos iniciem automaticamente no volume selecionado"
 				},
 				"settings": {
 					"amount": {
@@ -418,7 +418,7 @@
 				},
 				"enable": {
 					"label": "Abrir Mini Player ao ver comentários",
-					"title": "Abrir automaticamente o Mini Player ao rolar para os comentários."
+					"title": "Abre automaticamente o Mini Player ao rolar para os comentários."
 				},
 				"settings": {
 					"position": {
@@ -428,9 +428,9 @@
 								"bottomCenter": "Centro inferior",
 								"bottomLeft": "Canto inferior esquerdo",
 								"bottomRight": "Canto inferior direito",
-								"topCenter": "Superior no centro",
-								"topLeft": "Superior Esquerdo",
-								"topRight": "Superior direita"
+								"topCenter": "Centro superior",
+								"topLeft": "Canto superior esquerdo",
+								"topRight": "Canto superior direito"
 							},
 							"title": "Define a posição inicial antes de mover o Mini Player."
 						}
@@ -453,19 +453,19 @@
 					"automaticallyDisableAmbientMode": {
 						"enable": {
 							"label": "Desativar automaticamente o modo ambiente",
-							"title": "Desativa o modo ambiente automaticamente ao carregar um vídeo"
+							"title": "Desativa automaticamente o modo ambiente ao carregar um vídeo"
 						}
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "Desativar reprodução automática",
+							"label": "Desativar automaticamente a reprodução automática",
 							"title": "Desativa automaticamente a reprodução automática ao carregar um vídeo"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
 						"enable": {
 							"label": "Desativar legendas automaticamente",
-							"title": "Desativa as legendas ao carregar um vídeo"
+							"title": "Desativa automaticamente as legendas ao carregar um vídeo"
 						}
 					},
 					"automaticallyEnableClosedCaptions": {
@@ -483,7 +483,7 @@
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
 							"label": "Exibir automaticamente mais vídeos na tela final",
-							"title": "Mostra automaticamente mais vídeos na tela final do vídeo"
+							"title": "Exibe automaticamente mais vídeos na tela final do vídeo"
 						}
 					},
 					"blockNumberKeySeeking": {
@@ -494,7 +494,7 @@
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Esconder postagem",
+							"label": "Ocultar postagens",
 							"title": "Oculta postagens da página inicial"
 						}
 					},
@@ -506,8 +506,8 @@
 					},
 					"defaultToOriginalAudioTrack": {
 						"enable": {
-							"label": "Retornar à faixa de vídeo original",
-							"title": "Sempre retornar à faixa de vídeo original"
+							"label": "Usar faixa de áudio original como padrão",
+							"title": "Sempre usar faixa de áudio original como padrão"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
@@ -530,14 +530,14 @@
 					},
 					"hideLiveStreamChat": {
 						"enable": {
-							"label": "Ocultar chat da transmissão",
-							"title": "Oculta o chat da transmissão"
+							"label": "Ocultar chat da transmissão ao vivo",
+							"title": "Oculta o chat da transmissão ao vivo"
 						}
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
 							"label": "Ocultar vídeos exclusivos para membros",
-							"title": "Oculta vídeos que só membros são permitidos a assistir"
+							"title": "Oculta vídeos que só os membros podem assistir"
 						}
 					},
 					"monoToStereoButton": {
@@ -548,20 +548,20 @@
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
-							"label": "Ocultar vídeos de artistas originais",
-							"title": "Ocultar vídeos de artistas originais do início"
+							"label": "Ocultar Vídeos Oficiais do Artista",
+							"title": "Oculta Vídeos Oficiais do Artista da Página Inicial"
 						}
 					},
 					"hidePaidPromotionBanner": {
 						"enable": {
 							"label": "Ocultar banner de promoção paga",
-							"title": "Oculta o banner ao assistir um vídeo com promoção paga incluída"
+							"title": "Oculta o banner que aparece ao assistir a um vídeo que contém promoção paga"
 						}
 					},
 					"hidePlayables": {
 						"enable": {
-							"label": "Ocultar jogáveis",
-							"title": "Oculta a seção de jogáveis"
+							"label": "Ocultar reproduzíveis",
+							"title": "Oculta todos os reproduzíveis"
 						}
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
@@ -585,31 +585,31 @@
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Ocultar botão de traduzir comentário",
-							"title": "Oculta o botão de tradução de comentário"
+							"title": "Oculta o botão de tradução abaixo dos comentários"
 						}
 					},
 					"loopButton": {
 						"enable": {
 							"label": "Botão Repetir",
-							"title": "Adiciona um botão para repetir o vídeo que está assistindo"
+							"title": "Adiciona ao menu um botão para repetir o vídeo que está vendo"
 						}
 					},
 					"maximizePlayerButton": {
 						"enable": {
 							"label": "Botão de maximizar player",
-							"title": "Adiciona um botão para maximizar o player"
+							"title": "Adiciona ao menu um botão para maximizar o player"
 						}
 					},
 					"openTranscriptButton": {
 						"enable": {
-							"label": "Abrir botão de transcrição",
-							"title": "Adiciona um botão para abrir a transcrição do vídeo que está assistindo"
+							"label": "Botão para abrir transcrição",
+							"title": "Adiciona ao menu um botão para abrir a transcrição do vídeo que está vendo"
 						}
 					},
 					"openYouTubeSettingsOnHover": {
 						"enable": {
-							"label": "Abrir opções do YouTube ao passar o cursor",
-							"title": "Abre as opções do YouTube ao passar o cursor sobre o botão Opções"
+							"label": "Abrir configurações do YouTube ao passar o cursor",
+							"title": "Abre o menu de configurações do YouTube ao passar o cursor sobre o botão de configurações"
 						}
 					},
 					"pauseBackgroundPlayers": {
@@ -627,13 +627,13 @@
 					"rememberVolume": {
 						"enable": {
 							"label": "Lembrar volume anterior",
-							"title": "Lembra do aumento de volume do vídeo anterior e aplica-o ao novo vídeo."
+							"title": "Lembra o volume do último vídeo que estava vendo e aplica-o ao novo vídeo"
 						}
 					},
 					"removeRedirect": {
 						"enable": {
-							"label": "Remover URLs de redireção do YouTube",
-							"title": "Substitui a redireção do YouTube por URLs reais, pulando o aviso de redireção"
+							"label": "Remover URLs de redirecionamento do YouTube",
+							"title": "Substitui o redirecionamento do YouTube por URLs reais, evitando o aviso de redirecionamento"
 						}
 					},
 					"restoreFullscreenScrolling": {
