@@ -536,7 +536,7 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Ocultar vídeos exclusivos para membros",
+							"label": "Dölj videor som endast är för medlemmar",
 							"title": "Oculta vídeos que só os membros podem assistir"
 						}
 					},
