@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Manipulação de Áudio Mono",
 						"toggle": {
-							"on": "Mono → Saída Estéreo",
+							"on": "Mono → Stereo Output",
 							"off": "Áudio Original"
 						}
 					}
@@ -46,7 +46,7 @@
 							"label": "Avançar {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Voltar {{TIME}}"
+							"label": "Retroceder por {{TIME}}"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximização",
+						"label": "Maximize",
 						"toggle": {
-							"off": "Minimizar",
-							"on": "Minimizar"
+							"off": "Maximizar desligado",
+							"on": "Maximizar em"
 						}
 					}
 				},
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Fazer captura de tela"
+						"label": "Pré-visualizar"
 					},
 					"extras": {
 						"copiedToClipboard": "Captura copiada a área de transferência"
@@ -154,18 +154,18 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Limpa todos os dados armazenados pela extensão",
+						"title": "Limpa todos os dados que esta extensão armazenou em sua máquina",
 						"value": "Limpar dados"
 					},
 					"confirm": {
-						"title": "Confirma a redefinição de dados",
+						"title": "Confirmar redefinição de configuração",
 						"value": "Confirmar"
 					},
 					"openTab": {
-						"title": "Abre as opções numa nova aba"
+						"title": "Abrir configurações da extensão em uma nova aba"
 					},
 					"reset": {
-						"title": "Redefine as opções para o padrão, confirme para salvar as mudanças",
+						"title": "Redefine todas as configurações para seus padrões, clique no botão confirmar para salvar as alterações",
 						"value": "Redefinir"
 					}
 				},
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minutagem",
 							"decreasePlaybackSpeedButton": "Botão de diminuir velocidade",
-							"forwardButton": "Botão de acelerar velocidade",
+							"forwardButton": "Botão de avançar rápido",
 							"hideEndScreenCardsButton": "Ocultar botão de cards finais",
 							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 							"loopButton": "Botão Repetir",
 							"maximizePlayerButton": "Botão Maximizar",
 							"miniPlayerButton": "Botão do Mini Player",
 							"openTranscriptButton": "Abrir botão de transcrição",
-							"rewindButton": "Botão Voltar",
+							"rewindButton": "Botão de voltar",
 							"screenshotButton": "Botão de captura de tela",
 							"volumeBoostButton": "Botão de ganho de volume",
 							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
@@ -199,11 +199,11 @@
 							},
 							"player_controls_left": {
 								"placement": "à esquerda dos controles do player",
-								"value": "Controles esquerdos"
+								"value": "Controles Esquerdos"
 							},
 							"player_controls_right": {
 								"placement": "à direita dos controles do player",
-								"value": "Controles direitos"
+								"value": "Controles de direita"
 							},
 							"same": {
 								"placement": "na mesma posição",
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "Todos os dados foram excluídos.",
-					"confirmAlert": "Fechar a página desfará todas as mudanças feitas. Prosseguir?"
+					"confirmAlert": "Isto irá apagar todos os dados da extensão relacionados às opções. Continuar?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,31 +229,31 @@
 								"click": "Clicar",
 								"hover": "Passar o cursor"
 							},
-							"title": "Define o método para ativar o menu de recursos"
+							"title": "Selecione o método para ativar o menu de recursos"
 						},
-						"title": "Opções do menu de recursos"
+						"title": "Configurações do menu de recursos"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Mudanças aplicadas!",
-						"title": "Exportar opções para arquivo JSON",
-						"value": "Exportar opções"
+						"success": "Configurações exportadas com sucesso",
+						"title": "Exportar configurações para um arquivo JSON",
+						"value": "Configurações de exportação"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Ocorreu um erro ao importar opções. Verifique o formato do arquivo importado.",
-							"validation": "Erro ao importar opções. Verifique o formato do arquivo importado.\n{{ERROR_MESSAGE}}"
+							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+							"validation": "Erro ao importar configurações. Por favor, verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "Opções importadas com sucesso!",
-						"title": "Importe as opções dum arquivo JSON",
-						"value": "Importar opções"
+						"success": "Configurações importadas com sucesso",
+						"title": "Importar configurações de um arquivo JSON",
+						"value": "Configurações de importação"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "Idioma",
-						"title": "O idioma da extensão"
+						"title": "A linguagem a ser usada para a extensão"
 					},
 					"title": "Idioma"
 				},
@@ -510,10 +510,10 @@
 							"title": "Sempre retornar à faixa de vídeo original"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Ocultar resumo de IA",
+							"title": "Oculta o resumo da inteligência artificial abaixo de vídeos"
 						}
 					},
 					"hideEndScreenCards": {
