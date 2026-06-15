@@ -46,7 +46,7 @@
 							"label": "{{TIME}} तक तेज़ी से आगे बढ़ाएँ"
 						},
 						"rewindButton": {
-							"label": "{{TIME}} तक पीछे ले जाएँ"
+							"label": "Rewind by {{TIME}}"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "अधिकतम करें",
+						"label": "Maximize",
 						"toggle": {
-							"off": "अधिकतम बंद",
-							"on": "अधिकतम चालू"
+							"off": "Maximize off",
+							"on": "Maximize on"
 						}
 					}
 				},
@@ -237,8 +237,8 @@
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Settings successfully exported",
-						"title": "सेटिंग्स को JSON फ़ाइल में निर्यात करें",
-						"value": "निर्यात सेटिंग्स"
+						"title": "Export settings to a JSON file",
+						"value": "Export Settings"
 					},
 					"importButton": {
 						"error": {
@@ -510,10 +510,10 @@
 							"title": "Always default to the original audio track"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Hide AI summary",
+							"title": "Hides the artificial intelligence summary below videos"
 						}
 					},
 					"hideEndScreenCards": {
