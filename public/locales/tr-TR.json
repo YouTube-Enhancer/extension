@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Mono Ses İşlemesi",
 						"toggle": {
-							"on": "Mono'dan Stereo'ya Çıkış",
+							"on": "Mono → Stereo Output",
 							"off": "Orjinal Ses"
 						}
 					}
@@ -46,7 +46,7 @@
 							"label": "{{TIME}} hızlı ileri sar"
 						},
 						"rewindButton": {
-							"label": "{{TIME}} kadar geri sar"
+							"label": "Rewind by {{TIME}}"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Ekranı kapla",
+						"label": "Maximize",
 						"toggle": {
-							"off": "Tam ekran kapalı",
-							"on": "Tam ekran açıl"
+							"off": "Maximize off",
+							"on": "Maximize on"
 						}
 					}
 				},
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Ekran görüntüsü"
+						"label": "Screenshot"
 					},
 					"extras": {
 						"copiedToClipboard": "Ekran görüntüsü panoya kopyalandı"
@@ -154,18 +154,18 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Bu uzantının makinenizde sakladığı tüm verileri temizler",
+						"title": "Clears all data this extension has stored on your machine",
 						"value": "Veriyi Temizle"
 					},
 					"confirm": {
-						"title": "Ayarı sıfırlamayı onayla",
+						"title": "Confirm setting reset",
 						"value": "Onayla"
 					},
 					"openTab": {
-						"title": "Uzantı ayarlarını yeni bir sekmede açın"
+						"title": "Open extension settings in a new tab"
 					},
 					"reset": {
-						"title": "Tüm ayarları varsayılan değerlerine sıfırlar. Değişiklikleri kaydetmek için onayla düğmesine tıklayın",
+						"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
 						"value": "Sıfırla"
 					}
 				},
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "Video bağlantısını zaman damgasıyla kopyala butonu",
 							"decreasePlaybackSpeedButton": "Hızı Düşürme Butonu",
-							"forwardButton": "Hızlı İleri düğmesi",
+							"forwardButton": "Fast Forward button",
 							"hideEndScreenCardsButton": "Bitiş ekranı kartlarını gizleme düğmesi",
 							"increasePlaybackSpeedButton": "Hızı Artırma Butonu",
 							"loopButton": "Döngü düğmesi",
 							"maximizePlayerButton": "Tam ekran düğmesi",
 							"miniPlayerButton": "Mini Oynatıcı düğmesi",
-							"openTranscriptButton": "Transkripti Aç butonu",
-							"rewindButton": "Geri sarma düğmesi",
+							"openTranscriptButton": "Open Transcript button",
+							"rewindButton": "Rewind button",
 							"screenshotButton": "Ekran görüntüsü düğmesi",
 							"volumeBoostButton": "Ses güçlendirme düğmesi",
 							"flipVideoVerticalButton": "Videoyu dikey çevirme düğmesi",
@@ -199,11 +199,11 @@
 							},
 							"player_controls_left": {
 								"placement": "oynatıcı kontrollerinin sol tarafında",
-								"value": "Sol Kontroller"
+								"value": "Left Controls"
 							},
 							"player_controls_right": {
 								"placement": "oynatıcı kontrollerinin sağ tarafında",
-								"value": "Sağ Kontroller"
+								"value": "Right Controls"
 							},
 							"same": {
 								"placement": "in the same position",
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "Tüm veriler silindi.",
-					"confirmAlert": "Bu seçeneklerle ilgili tüm uzantı verilerini silecektir. Devam etmek istiyor musunuz?"
+					"confirmAlert": "This will delete all extension data related to options. Continue?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,31 +229,31 @@
 								"click": "Tıkla",
 								"hover": "İmleci Üzerine Getir"
 							},
-							"title": "Özellik menüsünü etkinleştirme yöntemini seçin"
+							"title": "Select the method to activate the feature menu"
 						},
-						"title": "Özellik menüsü ayarları"
+						"title": "Feature menu settings"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Ayarlar başarıyla dışa aktarıldı",
-						"title": "Ayarları JSON dosyasından içe aktar",
-						"value": "Ayarları Dışa Aktar"
+						"success": "Settings successfully exported",
+						"title": "Export settings to a JSON file",
+						"value": "Export Settings"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\nBilinmeyen bir hata oluştu.",
-							"validation": "Ayarlar içe aktarılırken hata oluştu. Lütfen dosya formatını kontrol edin.\n{{ERROR_MESSAGE}}"
+							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "Ayarlar başarıyla içe aktarıldı",
-						"title": "Ayarları JSON dosyasından içe aktar",
-						"value": "Ayarları İçe Aktar"
+						"success": "Settings imported successfully",
+						"title": "Import settings from a JSON file",
+						"value": "Import Settings"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "Dil",
-						"title": "Uzuntı için kullanılacak dil"
+						"title": "The language to use for the extension"
 					},
 					"title": "Dil"
 				},
@@ -510,10 +510,10 @@
 							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Hide AI summary",
+							"title": "Hides the artificial intelligence summary below videos"
 						}
 					},
 					"hideEndScreenCards": {
