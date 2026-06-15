@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Monoljudshantering",
 						"toggle": {
-							"on": "Mono → Stereo-utgång",
+							"on": "Mono → Stereo Output",
 							"off": "Originalljud"
 						}
 					}
@@ -46,7 +46,7 @@
 							"label": "Snabbspola med {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Återspola med {{TIME}}"
+							"label": "Spola tillbaka från {{TIME}}"
 						}
 					}
 				},
@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Dölj slutskärmskort",
 						"toggle": {
-							"off": "Hide end screen cards",
-							"on": "Show end screen cards"
+							"off": "Dölj slutskärmskort",
+							"on": "Visa slutskärmskort"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximera",
+						"label": "Maximize",
 						"toggle": {
 							"off": "Maximera av",
-							"on": "Maximera på"
+							"on": "Maximera den"
 						}
 					}
 				},
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Skärmbild"
+						"label": "Skärmdump"
 					},
 					"extras": {
 						"copiedToClipboard": "Skärmbild kopierad till urklipp"
@@ -154,11 +154,11 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Rensar all data som detta tillägg har lagrat på din dator",
+						"title": "Rensar all data som detta tillägg har lagrat på din maskin",
 						"value": "Rensa data"
 					},
 					"confirm": {
-						"title": "Bekräfta återställning av inställningar",
+						"title": "Bekräfta återställning",
 						"value": "Bekräfta"
 					},
 					"openTab": {
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "Kopiera videons webbadress med tidsstämpelknappen",
 							"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-							"forwardButton": "Snabbspolningsknapp",
+							"forwardButton": "Snabb framåt-knapp",
 							"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 							"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 							"loopButton": "Slingknapp",
 							"maximizePlayerButton": "Maximeraknapp",
 							"miniPlayerButton": "Minispelarknapp",
-							"openTranscriptButton": "Transkriptknapp",
-							"rewindButton": "Återspolningsknapp",
+							"openTranscriptButton": "Öppna avskrivningsknappen",
+							"rewindButton": "Spola tillbaka knappen",
 							"screenshotButton": "Skärmbildsknapp",
 							"volumeBoostButton": "Volymökningsknapp",
 							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
@@ -206,20 +206,20 @@
 								"value": "Höger kontroller"
 							},
 							"same": {
-								"placement": "in the same position",
-								"value": "Same as normal"
+								"placement": "i samma position",
+								"value": "Samma som normalt"
 							}
 						},
 						"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenLabel": "Fullscreen",
+						"fullscreenTitle": "Placera {{BUTTON_NAME}} {{PLACEMENT}} i helskärm",
+						"fullscreenLabel": "Helskärm",
 						"normalLabel": "Normal"
 					},
 					"title": "Inställningar för knapplacering"
 				},
 				"clearData": {
 					"allDataDeleted": "All data har tagits bort.",
-					"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
+					"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativ. Fortsätt?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -231,14 +231,14 @@
 							},
 							"title": "Välj metod för att aktivera funktionsmenyn"
 						},
-						"title": "Inställningar för funktionsmeny"
+						"title": "Inställningar för funktionsmenyn"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Inställningar har exporterats",
-						"title": "Exportera inställningarna till en JSON-fil",
-						"value": "Exportera Inställningar"
+						"success": "Inställningar exporterades framgångsrikt",
+						"title": "Exportera inställningar till en JSON-fil",
+						"value": "Exportera inställningar"
 					},
 					"importButton": {
 						"error": {
@@ -246,14 +246,14 @@
 							"validation": "Fel vid import av inställningar. Kontrollera filformatet.\n{{ERROR_MESSAGE}}"
 						},
 						"success": "Inställningar har importerats",
-						"title": "Importera inställningarna från en JSON-fil",
+						"title": "Importera inställningar från en JSON-fil",
 						"value": "Importera inställningar"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "Språk",
-						"title": "Språket som ska användas för tillägget"
+						"title": "Språket att använda för tillägget"
 					},
 					"title": "Språk"
 				},
@@ -293,19 +293,19 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Apply",
-						"cancel": "Cancel",
+						"apply": "Tillämpa",
+						"cancel": "Avbryt",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte båda aktiveras. Välj vilken som ska behållas."
 						},
-						"keepFirst": "Keep {{FEATURE}}",
-						"keepSecond": "Keep {{FEATURE}}",
+						"keepFirst": "Behåll {{FEATURE}}",
+						"keepSecond": "Behåll {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
-							"selectNewKey": "Change modifier key:"
+							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte använda samma modifieringsnyckel.",
+							"selectNewKey": "Ändra modifieringsnyckel:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
-						"title": "Import Conflicts Detected"
+						"resolveConflict": "Lös alla konflikter innan du ansöker.",
+						"title": "Importera konflikter upptäckta"
 					},
 					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
@@ -494,8 +494,8 @@
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "Dölj inlägg",
+							"title": "Döljer inlägg från startsidan"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -510,10 +510,10 @@
 							"title": "Använd alltid originalljudspåret som standard"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Dölj AI sammanfattning",
+							"title": "Döljer sammanfattningen av artificiell intelligens nedan videor"
 						}
 					},
 					"hideEndScreenCards": {
@@ -688,27 +688,27 @@
 				"title": "Övriga inställningar"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Dölj Shorts",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "Dölj i sidofältet",
+						"title": "Tar bort Shorts knappen från sidofältet"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "Dölj i hemmatningsflödet",
+						"title": "Tar bort Shorts sektionen från Home Feed"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "Dölj på kanalsidor",
+						"title": "Tar bort Shorts hylla och flik på kanalsidor"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "Dölj i sökresultat",
+						"title": "Tar bort Shorts videor från sökresultat"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "Dölj på bevakningssidor",
+						"title": "Tar bort Shorts videor från rekommendationer på titta på sidor"
 					}
 				}
 			},
