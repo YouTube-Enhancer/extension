@@ -46,7 +46,7 @@
 							"label": "快轉{{TIME}}"
 						},
 						"rewindButton": {
-							"label": "倒帶{{TIME}}"
+							"label": "Rewind by {{TIME}}"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "最大化",
+						"label": "Maximize",
 						"toggle": {
-							"off": "關閉最大化",
-							"on": "啟用最大化"
+							"off": "Maximize off",
+							"on": "Maximize on"
 						}
 					}
 				},
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "螢幕截圖"
+						"label": "Screenshot"
 					},
 					"extras": {
 						"copiedToClipboard": "螢幕截圖已複製剪貼簿"
@@ -154,18 +154,18 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "清除這個擴充套件儲存在此機上的資料",
+						"title": "Clears all data this extension has stored on your machine",
 						"value": "清除資料"
 					},
 					"confirm": {
-						"title": "確認重設設定",
+						"title": "Confirm setting reset",
 						"value": "確認"
 					},
 					"openTab": {
-						"title": "於新頁面開啟擴充套件設定"
+						"title": "Open extension settings in a new tab"
 					},
 					"reset": {
-						"title": "將所以設定回復到初始值，按確認儲存變更",
+						"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
 						"value": "重置"
 					}
 				},
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "複製目前播放時間的影片網址按鈕",
 							"decreasePlaybackSpeedButton": "減慢速度按鈕",
-							"forwardButton": "快轉按鈕",
+							"forwardButton": "Fast Forward button",
 							"hideEndScreenCardsButton": "隱藏片尾資訊卡按鈕",
 							"increasePlaybackSpeedButton": "加快速度按妞",
 							"loopButton": "循環播放按鈕",
 							"maximizePlayerButton": "最大化按鈕",
 							"miniPlayerButton": "Mini Player button",
-							"openTranscriptButton": "開啟文字記錄按鈕",
-							"rewindButton": "倒帶按鈕",
+							"openTranscriptButton": "Open Transcript button",
+							"rewindButton": "Rewind button",
 							"screenshotButton": "螢幕截圖按鈕",
 							"volumeBoostButton": "音量增強按鈕",
 							"flipVideoVerticalButton": "Flip video vertically button",
@@ -199,11 +199,11 @@
 							},
 							"player_controls_left": {
 								"placement": "於播放器左邊",
-								"value": "播放器左邊"
+								"value": "Left Controls"
 							},
 							"player_controls_right": {
 								"placement": "於播放器右邊",
-								"value": "播放器右邊"
+								"value": "Right Controls"
 							},
 							"same": {
 								"placement": "in the same position",
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "所有資料已重置。",
-					"confirmAlert": "將會清除這個擴充套件的相關選項，繼續？"
+					"confirmAlert": "This will delete all extension data related to options. Continue?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,31 +229,31 @@
 								"click": "點擊",
 								"hover": "游標懸浮"
 							},
-							"title": "選擇選單開啟方式"
+							"title": "Select the method to activate the feature menu"
 						},
-						"title": "功能選單設定"
+						"title": "Feature menu settings"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "設定已成功匯出",
-						"title": "匯出設定至 JSON 檔案",
-						"value": "匯出設定"
+						"success": "Settings successfully exported",
+						"title": "Export settings to a JSON file",
+						"value": "Export Settings"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "設定匯入失敗，請檢查檔案格式。\n發生不明錯誤。",
-							"validation": "設定匯入失敗，請檢查檔案格式。{{ERROR_MESSAGE}}"
+							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "設定已成功匯入",
-						"title": "由 JSON 檔案匯入設定",
-						"value": "匯入設定"
+						"success": "Settings imported successfully",
+						"title": "Import settings from a JSON file",
+						"value": "Import Settings"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "語言",
-						"title": "擴充套件使用的語言"
+						"title": "The language to use for the extension"
 					},
 					"title": "語言"
 				},
@@ -510,10 +510,10 @@
 							"title": "Always default to the original audio track"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Hide AI summary",
+							"title": "Hides the artificial intelligence summary below videos"
 						}
 					},
 					"hideEndScreenCards": {
