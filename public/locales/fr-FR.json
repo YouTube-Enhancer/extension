@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Gestion audio mono",
 						"toggle": {
-							"on": "Sortie mono → stéréo",
+							"on": "Mono → Stereo Output",
 							"off": "Audio original"
 						}
 					}
@@ -158,7 +158,7 @@
 						"value": "Effacer les données"
 					},
 					"confirm": {
-						"title": "Confirmer la réinitialisation des réglages",
+						"title": "Confirmer la réinitialisation des paramètres",
 						"value": "Confirmer"
 					},
 					"openTab": {
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "Toutes les données ont été supprimées.",
-					"confirmAlert": "Ceci supprimera toutes les données d'extension liées aux options. On continue ?"
+					"confirmAlert": "Ceci supprimera toutes les données d'extension liées aux options. Continuer ?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,16 +229,16 @@
 								"click": "Clic",
 								"hover": "Survol"
 							},
-							"title": "Sélectionnez la méthode pour activer le menu de fonctionnalités"
+							"title": "Sélectionnez la méthode pour activer le menu des fonctionnalités"
 						},
-						"title": "Paramètres du menu de fonctionnalités"
+						"title": "Paramètres du menu des fonctionnalités"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Réglages exportés avec succès",
+						"success": "Paramètres exportés avec succès",
 						"title": "Exporter les paramètres vers un fichier JSON",
-						"value": "Exporter les paramètres"
+						"value": "Paramètres d'exportation"
 					},
 					"importButton": {
 						"error": {
@@ -510,10 +510,10 @@
 							"title": "Toujours utiliser la piste audio originale par défaut"
 						}
 					},
-					"hideArtificialIntelligence": {
+					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries, Ask AI"
+							"label": "Masquer le résumé de l'IA",
+							"title": "Masque le résumé de l'intelligence artificielle sous les vidéos"
 						}
 					},
 					"hideEndScreenCards": {
