@@ -740,17 +740,17 @@
 					},
 					"padding": {
 						"label": "Margem interna",
-						"title": "Ajusta o alinhamento de informações em exibição (em píxeis)."
+						"title": "Ajusta o espaçamento, em pixels, ao redor das informações em exibição. Isso se aplica especificamente às informações exibidas nos cantos da tela."
 					},
 					"position": {
 						"label": "Posição",
 						"select": {
 							"options": {
-								"bottom_left": "Inferior esquerdo",
-								"bottom_right": "Inferior direito",
+								"bottom_left": "Canto inferior esquerdo",
+								"bottom_right": "Canto inferior direito",
 								"center": "Centro",
-								"top_left": "Superior esquerdo",
-								"top_right": "Superior direito"
+								"top_left": "Canto superior esquerdo",
+								"top_right": "Canto superior direito"
 							}
 						},
 						"title": "Seleciona a posição da exibição na tela"
@@ -772,14 +772,14 @@
 			},
 			"playerQuality": {
 				"enable": {
-					"label": "Ajustador automático de resolução",
+					"label": "Ajuste automático de resolução",
 					"title": "Define automaticamente a resolução do vídeo para o nível desejado."
 				},
 				"settings": {
 					"quality": {
 						"select": {
 							"label": "Resolução do player",
-							"title": "A resolução para definir no vídeo"
+							"title": "Resolução a ser usada no vídeo"
 						}
 					},
 					"qualityFallbackStrategy": {
@@ -793,21 +793,21 @@
 						}
 					}
 				},
-				"title": "Opções de resolução automática"
+				"title": "Configurações de resolução automática"
 			},
 			"playerSpeed": {
 				"enable": {
-					"label": "Velocidade de playback forçada",
-					"title": "Define a velocidade do vídeo ao valor que você inserir"
+					"label": "Velocidade de reprodução forçada",
+					"title": "Define a velocidade do vídeo para o valor escolhido abaixo"
 				},
 				"settings": {
 					"buttons": {
-						"label": "Velocidade de playback",
+						"label": "Botões de velocidade de reprodução",
 						"select": {
-							"label": "Velocidade do playback",
-							"title": "O tanto de velocidade a ser pulado num clique"
+							"label": "Velocidade dos botões de reprodução",
+							"title": "O quanto de velocidade será alterado por clique"
 						},
-						"title": "Adiciona botões para acelerar/desacelerar o playback do vídeo"
+						"title": "Adiciona botões para acelerar ou desacelerar a reprodução do vídeo que está vendo"
 					},
 					"speed": {
 						"select": {
@@ -816,18 +816,18 @@
 						}
 					}
 				},
-				"title": "Opções de playback"
+				"title": "Configurações de velocidade de reprodução"
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Exibir informações de duração da playlist",
-					"title": "Exibe a duração da playlist, quantas vezes foi visualizada, e o tempo restante."
+					"label": "Exibir informações de duração da lista de reprodução",
+					"title": "Exibe a duração total da lista de reprodução, o quanto foi assistido e o tempo restante."
 				},
 				"settings": {
 					"wayToGetLength": {
 						"select": {
-							"label": "Forma de obter a duração da playlist",
-							"title": "A forma de obter a duração da playlist (O método API voltará a HTML se ocorrer um erro)"
+							"label": "Método para obter a duração da lista de reprodução",
+							"title": "A forma de obter informação da duração da lista de reprodução (método API voltará a HTML se ocorrer um erro)"
 						}
 					},
 					"wayToGetWatchTime": {
@@ -841,7 +841,7 @@
 						}
 					}
 				},
-				"title": "Opções de duração da playlist"
+				"title": "Configurações de duração da lista de reprodução"
 			},
 			"playlistManagementButtons": {
 				"settings": {
@@ -854,7 +854,7 @@
 					"removeVideoButton": {
 						"enable": {
 							"label": "Botão \"Remover vídeo\"",
-							"title": "Adicione um botão aos itens da lista de reprodução para remover vídeos da lista"
+							"title": "Adiciona um botão para remover vídeos da lista de reprodução"
 						}
 					}
 				},
@@ -863,7 +863,7 @@
 			"screenshotButton": {
 				"enable": {
 					"label": "Botão de captura de tela",
-					"title": "Adiciona um botão ao reprodutor para tirar uma captura de tela do vídeo"
+					"title": "Adiciona um botão ao player para fazer uma captura de tela do vídeo"
 				},
 				"settings": {
 					"format": {
@@ -882,7 +882,7 @@
 						}
 					}
 				},
-				"title": "Opções de captura de tela"
+				"title": "Configurações de captura de tela"
 			},
 			"scrollWheelSpeedControl": {
 				"enable": {
@@ -894,7 +894,7 @@
 				},
 				"settings": {
 					"adjustmentSteps": {
-						"label": "Alterar volume por rolagem",
+						"label": "Mudança de velocidade por rolagem",
 						"title": "Ajusta a mudança de velocidade por rolagem"
 					},
 					"modifierKey": {
@@ -904,7 +904,7 @@
 						}
 					}
 				},
-				"title": "Opções de controle do volume na roda do mouse"
+				"title": "Configurações de controle de velocidade na roda do mouse"
 			},
 			"scrollWheelVolumeControl": {
 				"enable": {
@@ -932,12 +932,12 @@
 						"title": "Segure o botão direito para ajustar o volume pela roda."
 					}
 				},
-				"title": "Opções de ajuste de volume pela roda"
+				"title": "Configurações de controle de volume pela roda"
 			},
 			"videoHistory": {
 				"enable": {
 					"label": "Rastrear vídeos assistidos",
-					"title": "Registrar a minutagem do vídeo em que parou e permite a retomada do playback"
+					"title": "Registra a minutagem em que parou os vídeos que estava vendo e permite retomar a reprodução"
 				},
 				"settings": {
 					"resumeType": {
@@ -960,12 +960,12 @@
 				},
 				"settings": {
 					"amount": {
-						"label": "Aumento de volume (dB)",
-						"title": "O valor para ganho do volume. Você também pode rolar sobre o botão de impulso de volume (Shift/Ctrl para ganhos maiores) para ajustá-lo."
+						"label": "Quantidade de ganho de volume (dB)",
+						"title": "O valor para ganho do volume. Você também pode rolar sobre o botão de aumento de volume (Shift/Ctrl para ganhos maiores) para ajustá-lo."
 					},
 					"amount_global_only": {
 						"label": "Quantidade de ganho de volume (dB)",
-						"title": "Valor de ganho de volume por."
+						"title": "O valor para ganho do volume."
 					},
 					"mode": {
 						"select": {
@@ -978,7 +978,7 @@
 						}
 					}
 				},
-				"title": "Opções de aumento de volume"
+				"title": "Configurações de aumento de volume"
 			}
 		}
 	}
