@@ -158,7 +158,7 @@
 						"value": "Удалить данные"
 					},
 					"confirm": {
-						"title": "Подтвердите сброс настроек",
+						"title": "Подтвердить сброс настроек",
 						"value": "Подтвердить"
 					},
 					"openTab": {
@@ -301,8 +301,8 @@
 						"keepFirst": "Оставить {{FEATURE}}",
 						"keepSecond": "Оставить {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не может использовать тот же ключ модификатора.",
-							"selectNewKey": "Изменить ключ модификатора:"
+							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не могут использовать одну и ту же клавишу-модификатор.",
+							"selectNewKey": "Измените клавишу-модификатор:"
 						},
 						"resolveConflict": "Пожалуйста, разрешите все конфликты перед тем, как применить.",
 						"title": "Обнаружены конфликты импорта"
@@ -383,7 +383,7 @@
 						}
 					}
 				},
-				"title": "Настройки глубоких тёмных YouTube"
+				"title": "Настройки темы YouTube Deep Dark"
 			},
 			"forwardRewindButtons": {
 				"enable": {
