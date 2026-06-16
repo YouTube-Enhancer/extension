@@ -242,7 +242,7 @@
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+							"unknown": "Ocorreu um erro ao importar opções. Verifique o formato do arquivo importado.",
 							"validation": "Erro ao importar configurações. Por favor, verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
 						},
 						"success": "Configurações importadas com sucesso",
