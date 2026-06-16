@@ -650,8 +650,8 @@
 					},
 					"shareShortener": {
 						"enable": {
-							"label": "Encurtar link de compartilha de vídeo",
-							"title": "Encurta os links de compartilha de vídeo (youtu.be) removendo os parâmetros si/features."
+							"label": "Encurtar link de compartilhamento de vídeo do YouTube",
+							"title": "Encurta os links de compartilhamento de vídeo do YouTube (youtu.be) removendo os parâmetros si/features"
 						}
 					},
 					"shortsAutoScroll": {
@@ -662,19 +662,19 @@
 					},
 					"skipContinueWatching": {
 						"enable": {
-							"label": "Pular aviso de ausência",
-							"title": "Remove o aviso \"O vídeo está pausado. Continuar assistindo?\""
+							"label": "Ignorar \"O vídeo está pausado. Continuar assistindo?",
+							"title": "Ignora o aviso de inatividade que pausa a reprodução do vídeo"
 						}
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Pré-visualização de Timestamp",
-							"title": "Pré-visualize o vídeo passando o mouse sobre um timestamp. Clique na pré-visualização para começar a reprodução a partir daquele momento."
+							"label": "Prévia da Minutagem",
+							"title": "Pré-visualize o vídeo passando o cursor sobre a minutagem. Clique na pré-visualização para começar a reprodução a partir daquele momento."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Botão de girar vídeo horizontal",
+							"label": "Botão de girar vídeo horizontalmente",
 							"title": "Adiciona um botão para virar o vídeo horizontalmente"
 						}
 					},
@@ -685,7 +685,7 @@
 						}
 					}
 				},
-				"title": "Diversos"
+				"title": "Configurações diversas"
 			},
 			"hideShorts": {
 				"title": "Ocultar Shorts",
@@ -695,12 +695,12 @@
 						"title": "Remove o botão Shorts da barra lateral"
 					},
 					"home": {
-						"label": "Ocultar no feed da Home",
-						"title": "Remove o botão Shorts da feed da Home"
+						"label": "Ocultar no feed da página inicial",
+						"title": "Remove a sessão Shorts do feed da página inicial"
 					},
 					"channel": {
-						"label": "Esconder na página de Inscrições",
-						"title": "Remove o Shorts na página de inscrições"
+						"label": "Ocultar nas páginas do canal",
+						"title": "Remove a estante e a aba de Shorts nas páginas do canal"
 					},
 					"search": {
 						"label": "Ocultar nos resultados de pesquisa",
@@ -739,7 +739,7 @@
 						"title": "Ajusta a transparência das informações em exibição"
 					},
 					"padding": {
-						"label": "Alinhamento",
+						"label": "Margem interna",
 						"title": "Ajusta o alinhamento de informações em exibição (em píxeis)."
 					},
 					"position": {
