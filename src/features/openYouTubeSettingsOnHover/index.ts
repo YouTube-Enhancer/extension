@@ -25,12 +25,20 @@ export default createFeature({
 		if (!playerContainer) return;
 		const isSettingsOpen = () => settingsButton.getAttribute("aria-expanded") === "true";
 		let isHoveringButtonOrMenu = false;
+		let suppressCloseTimeout: null | ReturnType<typeof setTimeout> = null;
 		const showSettings = () => {
 			if (isSettingsOpen()) return;
 			settingsButton.click();
 		};
+		const cancelSuppressClose = () => {
+			if (suppressCloseTimeout) {
+				clearTimeout(suppressCloseTimeout);
+				suppressCloseTimeout = null;
+			}
+		};
 		const hideSettings = () => {
 			if (!isSettingsOpen()) return;
+			if (settingsMenu.matches(":hover") || settingsButton.matches(":hover")) return;
 			if (!isHoveringButtonOrMenu) settingsButton.click();
 		};
 		const onMouseEnter = () => {
@@ -51,6 +59,18 @@ export default createFeature({
 			() => {
 				isHoveringButtonOrMenu = false;
 				setTimeout(hideSettings, 50);
+			},
+			"openYouTubeSettingsOnHover"
+		);
+		eventManager.addEventListener(
+			settingsMenu,
+			"click",
+			() => {
+				cancelSuppressClose();
+				suppressCloseTimeout = setTimeout(() => {
+					suppressCloseTimeout = null;
+					hideSettings();
+				}, 300);
 			},
 			"openYouTubeSettingsOnHover"
 		);
