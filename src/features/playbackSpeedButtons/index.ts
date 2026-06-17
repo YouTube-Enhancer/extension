@@ -16,6 +16,7 @@ import { metadata } from "./index.metadata";
 let currentPlaybackSpeed = 1;
 const maxSpeed = 16;
 export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
+	if (!isFinite(speed) || !isFinite(playbackSpeedPerClick) || playbackSpeedPerClick <= 0) return isFinite(speed) ? speed : 1;
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
 	const calculatedSpeed =
 		speed >= maxSpeed && direction == "increase" ? maxSpeed
@@ -35,6 +36,7 @@ export function getMinSpeed(playbackSpeedPerClick: number) {
 	);
 }
 export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: number, playbackSpeedPerClick: number) {
+	if (!isFinite(currentPlaybackSpeed) || !isFinite(playbackSpeedPerClick) || playbackSpeedPerClick <= 0) return;
 	const {
 		data: {
 			options: {
@@ -131,6 +133,8 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 			try {
 				({ playbackRate: currentPlaybackSpeed } = videoElement);
 				if (
+					!isFinite(currentPlaybackSpeed) ||
+					!isFinite(currentPlaybackSpeed + adjustmentAmount) ||
 					currentPlaybackSpeed + adjustmentAmount > maxSpeed ||
 					currentPlaybackSpeed + adjustmentAmount < minSpeed ||
 					currentPlaybackSpeed + adjustmentAmount <= 0
