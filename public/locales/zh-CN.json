@@ -46,7 +46,7 @@
 							"label": "向前快进 {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "向后快退 {{TIME}}"
 						}
 					}
 				},
@@ -243,7 +243,7 @@
 					"importButton": {
 						"error": {
 							"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
-							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+							"validation": "导入设置出错。请检查文件格式。\n{{ERROR_MESSAGE}}"
 						},
 						"success": "成功导入设置",
 						"title": "从 JSON 文件导入设置",
