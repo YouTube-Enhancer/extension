@@ -6,5 +6,9 @@ import { metadata } from "./index.metadata";
 export default createFeature({
 	...metadata,
 	onDisable: () => minimizePlayer(),
-	onEnable: () => maximizePlayer()
+	onEnable: () => maximizePlayer(15000),
+	onNavigate: async () => {
+		await minimizePlayer();
+		await maximizePlayer(15000);
+	}
 });
