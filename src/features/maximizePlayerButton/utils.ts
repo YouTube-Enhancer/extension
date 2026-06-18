@@ -193,7 +193,10 @@ export async function maximizePlayer() {
 export async function minimizePlayer() {
 	const lastState = document.body.getAttribute("yte-size-button-state");
 	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
-	if (lastState === "default" && sizeElement) clickAndRestore(sizeElement);
+	if (lastState === "default" && sizeElement) {
+		const autoTheaterConfig = registry.configManager.getLast("automaticTheaterMode");
+		if (!("enabled" in autoTheaterConfig) || !autoTheaterConfig.enabled) clickAndRestore(sizeElement);
+	}
 	adjustPlayer("remove");
 	destroyPlayerController();
 	showHeader();
