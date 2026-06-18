@@ -6,6 +6,8 @@ import { metadata } from "./index.metadata";
 export default createFeature({
 	...metadata,
 	onDisable: async () => {
+		const isMaximized = document.body.getAttribute("yte-maximized") === "";
+		if (isMaximized) return;
 		// Get the size button
 		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 		// If the size button is not available return
@@ -17,6 +19,8 @@ export default createFeature({
 		}
 	},
 	onEnable: async () => {
+		const isMaximized = document.body.getAttribute("yte-maximized") === "";
+		if (isMaximized) return;
 		// Get the size button
 		const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 		// If the size button is not available return

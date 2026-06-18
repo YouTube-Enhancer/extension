@@ -8,6 +8,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "automaticallyMaximizePlayer",
+	priority: 1,
 	schemaInput: {
 		enabled: z.boolean()
 	},
