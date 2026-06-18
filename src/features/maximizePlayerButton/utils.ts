@@ -166,15 +166,15 @@ const onKeyDown = (e: KeyboardEvent) => {
 	e.preventDefault();
 	void minimizePlayer();
 };
-export async function maximizePlayer() {
-	const videoPlayer = await waitForElement<HTMLVideoElement>("video.html5-main-video");
+export async function maximizePlayer(timeout = 2500) {
+	const videoPlayer = await waitForElement<HTMLVideoElement>("video.html5-main-video", timeout);
 	if (!videoPlayer) return;
-	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
+	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button", timeout);
 	if (!sizeElement) return;
-	const header = await waitForElement<HTMLElement>("#masthead-container");
+	const header = await waitForElement<HTMLElement>("#masthead-container", timeout);
 	if (!header) return;
 	// Wait for player to be fully loaded
-	const moviePlayer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	const moviePlayer = await waitForElement<YouTubePlayerDiv>("div#movie_player", timeout);
 	if (!moviePlayer) return;
 	await waitForPlayerLoaded(moviePlayer);
 	const inTheaterMode =
