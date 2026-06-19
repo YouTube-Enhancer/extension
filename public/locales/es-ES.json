@@ -510,10 +510,10 @@
 							"title": "Siempre usar pista de audio original"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Ocultar resumen IA",
-							"title": "Oculta el resumen de inteligencia artificial a continuación de vídeos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
