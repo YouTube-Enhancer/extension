@@ -215,7 +215,7 @@
 						"fullscreenLabel": "Fullscreen",
 						"normalLabel": "Обычный"
 					},
-					"title": "Button placement settings"
+					"title": "Настройки размещения кнопок"
 				},
 				"clearData": {
 					"allDataDeleted": "Все данные были удалены.",
@@ -258,8 +258,8 @@
 					"title": "Язык"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Open settings page on update",
-					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
+					"label": "Открыть страницу настроек при обновлении",
+					"title": "Открывает страницу настроек при установке обновления YouTube Enhancer"
 				},
 				"optionDisabled": {
 					"either": {
@@ -287,27 +287,27 @@
 						"label": "API ключ",
 						"title": "Введите ваш ключ Youtube Data API V3."
 					},
-					"title": "YouTube API V3 key"
+					"title": "Ключ YouTube API V3"
 				}
 			},
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Apply",
-						"cancel": "Cancel",
+						"apply": "Применить",
+						"cancel": "Отмена",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
+							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не могут работать одновременно. Выберите одну из функций."
 						},
-						"keepFirst": "Keep {{FEATURE}}",
-						"keepSecond": "Keep {{FEATURE}}",
+						"keepFirst": "Оставить {{FEATURE}}",
+						"keepSecond": "Оставить {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
-							"selectNewKey": "Change modifier key:"
+							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не могут использовать одну и ту же клавишу-модификатор.",
+							"selectNewKey": "Измените клавишу-модификатор:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
-						"title": "Import Conflicts Detected"
+						"resolveConflict": "Пожалуйста, разрешите все конфликты перед тем, как применить.",
+						"title": "Обнаружены конфликты импорта"
 					},
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "Эта опция не может быть включена, пока '{{OPTION}}' включен.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Клавиша-модификатор для управления скоростью воспроизведения с помощью колеса мыши не может совпадать с клавишей-модификатором для управления громкостью.",
@@ -336,7 +336,7 @@
 					"expand": "Расширить редактор",
 					"noProblems": "Проблем не найдено."
 				},
-				"title": "Custom CSS settings"
+				"title": "Пользовательские настройки CSS"
 			},
 			"deepDarkCSS": {
 				"enable": {
@@ -383,7 +383,7 @@
 						}
 					}
 				},
-				"title": "YouTube deep dark settings"
+				"title": "Настройки темы YouTube Deep Dark"
 			},
 			"forwardRewindButtons": {
 				"enable": {
@@ -400,47 +400,47 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Always start videos with this volume",
-					"title": "Makes all videos begin at your selected volume automatically"
+					"label": "Всегда запускать видео с этой громкостью",
+					"title": "Автоматическое включение всех видео при выбранной громкости"
 				},
 				"settings": {
 					"amount": {
-						"label": "Video start volume",
-						"title": "The volume applied to every video when it begins playing"
+						"label": "Начальная громкость видео",
+						"title": "Громкость применена к каждому видео после начала воспроизведения"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Глобальное переопределение громкости"
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Player button",
-					"title": "Adds a button that opens the Mini Player"
+					"label": "Кнопка Mini Player",
+					"title": "Добавляет кнопку, открывающую мини-плеер"
 				},
 				"enable": {
-					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"label": "Открывать Mini Player при просмотре комментариев",
+					"title": "Автоматически открывает мини-плеер при прокрутке к комментариям."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "Default Mini Player position",
+							"label": "Позиция Mini Player по умолчанию",
 							"options": {
-								"bottomCenter": "Bottom center",
-								"bottomLeft": "Bottom left",
-								"bottomRight": "Bottom right",
-								"topCenter": "Top center",
-								"topLeft": "Top left",
-								"topRight": "Top right"
+								"bottomCenter": "Нижний центр",
+								"bottomLeft": "Внизу слева",
+								"bottomRight": "Внизу справа",
+								"topCenter": "Верхний центр",
+								"topLeft": "Вверху слева",
+								"topRight": "Вверху справа"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Устанавливает начальную позицию перед перемещением Мини-игрока."
 						}
 					},
 					"size": {
-						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"label": "По умолчанию размер мини-плеера",
+						"title": "Устанавливает начальный размер перед изменением размера Мини-игрока."
 					}
 				},
-				"title": "Mini Player settings"
+				"title": "Настройки мини-плеера"
 			},
 			"miscellaneous": {
 				"settings": {
@@ -458,8 +458,8 @@
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "Automatically disable autoplay",
-							"title": "Automatically disables autoplay when you load a video"
+							"label": "Автоматически отключать автовоспроизведение",
+							"title": "Автоматически отключает автовоспроизведение при загрузке видео"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
@@ -470,32 +470,32 @@
 					},
 					"automaticallyEnableClosedCaptions": {
 						"enable": {
-							"label": "Automatically enable closed captions",
-							"title": "Automatically enables closed captions when you load a video"
+							"label": "Автоматически включать субтитры",
+							"title": "Автоматически включать субтитры при загрузке видео"
 						}
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "Automatically maximize player",
-							"title": "Automatically maximizes the player when you load a video"
+							"label": "Автоматически максимизировать плеер",
+							"title": "Автоматически разворачивает плеер при загрузке видео"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
-							"label": "Automatically show more videos on end screen",
-							"title": "Automatically shows more videos on end screen when you load a video"
+							"label": "Автоматически показывать больше видео на конечном экране",
+							"title": "Автоматически показывать больше видео на конечном экране при загрузке видео"
 						}
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Block number key seeking",
-							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
+							"label": "Заблокировать ключ номера",
+							"title": "Предотвращает нажатие 0-9 от прыжков до процентов от видео"
 						}
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Hide posts",
-							"title": "Hides posts from the home page"
+							"label": "Скрыть записи",
+							"title": "Скрывает сообщения с главной страницы"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Прятать краткое содержание от ИИ",
-							"title": "Прячет краткое содержание видео от ИИ под описанием"
+							"label": "Скрыть итог ИИ",
+							"title": "Скрывает искусственный интеллект резюме ниже видео"
 						}
 					},
 					"hideEndScreenCards": {
@@ -536,14 +536,14 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Скрыть видео только для участников",
+							"title": "Скрывает видео, которые видны только участникам"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
-							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
+							"label": "Кнопка Моно Стерео",
+							"title": "Добавляет кнопку для преобразования моно аудио в стерео. Стерео треки остаются неизменными."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -578,8 +578,8 @@
 					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
-							"label": "Hide recommended videos",
-							"title": "Hides the sidebar that recommends videos"
+							"label": "Скрыть рекомендованные видео",
+							"title": "Скрывает боковую панель, которая рекомендует видео"
 						}
 					},
 					"hideTranslateComment": {
@@ -644,8 +644,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Enable save to Watch Later button",
-							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
+							"label": "Включить сохранение в Смотреть позже",
+							"title": "Добавляет кнопку \"Домой\" и \"Подписки\" для сохранения видео в плейлист \"Смотреть позже\""
 						}
 					},
 					"shareShortener": {
@@ -668,47 +668,47 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
-							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
+							"label": "Временная метка",
+							"title": "Предварительный просмотр видео, наведя курсор на метку времени. Нажмите на превью для начала воспроизведения с этого момента."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
-							"title": "Adds a button to flip the video horizontally"
+							"label": "Кнопка горизонтальной ориентации видео",
+							"title": "Добавляет кнопку, чтобы перевернуть видео по горизонтали"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
-							"title": "Adds a button to flip the video vertically"
+							"label": "Вертикальная кнопка видео",
+							"title": "Добавляет кнопку для переворачивания видео вертикально"
 						}
 					}
 				},
 				"title": "Прочие параметры"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Скрыть шорты",
 				"settings": {
 					"sidebar": {
-						"label": "Hide in sidebar",
-						"title": "Removes the Shorts button from the sidebar"
+						"label": "Скрыть в боковой панели",
+						"title": "Удаляет кнопку шорты из боковой панели"
 					},
 					"home": {
-						"label": "Hide on Home feed",
-						"title": "Removes the Shorts section from the Home feed"
+						"label": "Скрыть на домашней ленте новостей",
+						"title": "Удаляет раздел шорты из домашней ленты новостей"
 					},
 					"channel": {
-						"label": "Hide on Channel pages",
-						"title": "Removes the Shorts shelf and tab on channel pages"
+						"label": "Скрыть на страницах каналов",
+						"title": "Удаляет полку шортов и вкладку на страницах канала"
 					},
 					"search": {
-						"label": "Hide in Search results",
-						"title": "Removes Shorts videos from search results"
+						"label": "Скрыть в результатах поиска",
+						"title": "Удаляет короткие видео из результатов поиска"
 					},
 					"videos": {
-						"label": "Hide on watch pages",
-						"title": "Removes Shorts videos from recommendations on watch pages"
+						"label": "Скрыть на страницах просмотра",
+						"title": "Удаляет короткие видео с рекомендаций на страницах просмотра"
 					}
 				}
 			},
@@ -768,7 +768,7 @@
 						"title": "Выберите тип отображения на экране (OSD)"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "Настройки экрана"
 			},
 			"playerQuality": {
 				"enable": {
@@ -847,18 +847,18 @@
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "Mark as unwatched button",
-							"title": "Adds a button to mark videos as unwatched"
+							"label": "Пометить как непросмотренную кнопку",
+							"title": "Добавляет кнопку, чтобы отметить видео как непросмотренные"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "Remove video button",
-							"title": "Adds a button to remove videos from the playlist"
+							"label": "Удалить кнопку видео",
+							"title": "Добавляет кнопку удаления видео из плейлиста"
 						}
 					}
 				},
-				"title": "Playlist management settings"
+				"title": "Настройки управления плейлистом"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -874,7 +874,7 @@
 						"select": {
 							"label": "Тип сохранения скриншота",
 							"options": {
-								"both": "Both (File and Clipboard)",
+								"both": "Оба (Файл/Буфер обмена)",
 								"clipboard": "Буфер обмена",
 								"file": "Файл"
 							},
@@ -961,11 +961,11 @@
 				"settings": {
 					"amount": {
 						"label": "Значение увеличения громкости (дБ)",
-						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
+						"title": "Количество увеличения громкости. Вы также можете переключаться на кнопку увеличения громкости (Shift/Ctrl для больших шагов), чтобы настроить его."
 					},
 					"amount_global_only": {
-						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"label": "Увеличение громкости (дБ)",
+						"title": "Количество увеличения громкости."
 					},
 					"mode": {
 						"select": {
