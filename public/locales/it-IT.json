@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Gestione audio mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Audio mono/stereo",
 							"off": "Audio originale"
 						}
 					}
@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Ingrandisci",
 						"toggle": {
 							"off": "Massimizza spento",
 							"on": "Massimizza il"
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "Schermata"
 					},
 					"extras": {
 						"copiedToClipboard": "Schermata copiata negli Appunti"
