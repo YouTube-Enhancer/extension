@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximaliseren",
 						"toggle": {
 							"off": "Maximaliseer uit",
 							"on": "Maximaliseren op"
