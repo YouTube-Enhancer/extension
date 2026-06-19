@@ -10,7 +10,7 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Mono to Stereo",
 						"toggle": {
 							"on": "Mono → Stereo Output",
 							"off": "Original Audio"
@@ -186,7 +186,7 @@
 							"volumeBoostButton": "볼륨 부스트 버튼",
 							"flipVideoVerticalButton": "Flip video vertically button",
 							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "Mono to stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -285,7 +285,7 @@
 					"getApiKeyLinkText": "You can get one from here",
 					"input": {
 						"label": "API Key",
-						"title": "Enter your Youtube Data API V3 key."
+						"title": "Enter your YouTube Data API V3 key"
 					},
 					"title": "YouTube API V3 key"
 				}
@@ -301,13 +301,13 @@
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key",
 							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
+						"resolveConflict": "Please resolve all conflicts before applying",
 						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "중복되는 키가 설정되어 있습니다.",
@@ -409,7 +409,7 @@
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Global volume override"
 			},
 			"miniPlayer": {
 				"button": {
@@ -418,7 +418,7 @@
 				},
 				"enable": {
 					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"title": "Automatically opens the Mini Player when you scroll to comments"
 				},
 				"settings": {
 					"position": {
@@ -432,12 +432,12 @@
 								"topLeft": "Top left",
 								"topRight": "Top right"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Sets the starting position before you move the Mini Player"
 						}
 					},
 					"size": {
 						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"title": "Sets the initial size before you resize the Mini Player"
 					}
 				},
 				"title": "Mini Player settings"
@@ -507,13 +507,13 @@
 					"defaultToOriginalAudioTrack": {
 						"enable": {
 							"label": "Default to original audio track",
-							"title": "Always default to the original audio track"
+							"title": "Always defaults to the original audio track"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI summary",
-							"title": "Hides the artificial intelligence summary below videos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -536,20 +536,20 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Hide member-only videos",
+							"title": "Hides videos that only members can watch"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
+							"label": "Mono to stereo button",
 							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
-							"label": "Hide Official Artist Videos",
-							"title": "Hide Official Artist Videos from Home Page"
+							"label": "Hide official artist videos",
+							"title": "Hides official artist videos from the home page"
 						}
 					},
 					"hidePaidPromotionBanner": {
@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from home page",
-							"title": "Get rid of playlists from home page"
+							"label": "Hide playlists from the home page",
+							"title": "Removes playlists from the home page"
 						}
 					},
 					"hideScrollbar": {
@@ -668,19 +668,19 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
+							"label": "Timestamp preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
+							"label": "Flip video horizontally button",
 							"title": "Adds a button to flip the video horizontally"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
+							"label": "Flip video vertically button",
 							"title": "Adds a button to flip the video vertically"
 						}
 					}
@@ -688,7 +688,7 @@
 				"title": "기타 설정"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Hide shorts",
 				"settings": {
 					"sidebar": {
 						"label": "Hide in sidebar",
@@ -768,7 +768,7 @@
 						"title": "온 스크린 디스플레이가 어떻게 표시될지 선택합니다."
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "On-Screen Display settings"
 			},
 			"playerQuality": {
 				"enable": {
@@ -821,13 +821,13 @@
 			"playlistLength": {
 				"enable": {
 					"label": "Display playlist length information",
-					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
+					"title": "Shows the total length of the playlist, how much has been watched, and how much remains"
 				},
 				"settings": {
 					"wayToGetLength": {
 						"select": {
 							"label": "Method to get playlist length",
-							"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
+							"title": "The way to get playlist length information (API method will fall back to HTML if an error occurs)"
 						}
 					},
 					"wayToGetWatchTime": {
@@ -965,7 +965,7 @@
 					},
 					"amount_global_only": {
 						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"title": "The amount to boost the volume by"
 					},
 					"mode": {
 						"select": {
