@@ -3,7 +3,6 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-tooltip {
 	font-weight: 500 !important;
 	line-height: 15px !important;
 	padding: 5px 9px;
-	transform: translate(-50%, -150%) !important;
 	pointer-events: none !important;
 	color: #eee !important;
 	border-radius: 4px !important;
@@ -19,10 +18,12 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-tooltip {
 	-webkit-backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px)) !important;
 	backdrop-filter: var(--yt-frosted-glass-backdrop-filter-override, blur(16px)) !important;
 	padding: 5px 9px;
-	transform: translate(-50%, -150%) !important;
 	pointer-events: none !important;
 	color: #eee !important;
 	border-radius: 8px !important;
 	background-color: var(--yt-spec-overlay-background-medium-light, rgba(0, 0, 0, 0.3)) !important;
 	text-shadow: 0 0 2px #000 !important;
+	max-width: min(320px, calc(100vw - 16px)) !important;
+	white-space: normal !important;
+	overflow-wrap: anywhere !important;
 }

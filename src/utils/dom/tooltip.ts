@@ -1,7 +1,6 @@
 import type { AllButtonNames, SingleButtonNames } from "@/src/types";
 
 import eventManager, { type FeatureName } from "@/src/events/EventManager";
-import { conditionalStyles } from "@/src/utils/style";
 import { isModernYouTubeVideoLayout } from "@/src/utils/url";
 /**
  * Creates a tooltip element and adds it to the element or a parent element.
@@ -27,19 +26,14 @@ export function createTooltip({
 	text?: string;
 }) {
 	function makeTooltip() {
-		const isModern = isModernYouTubeVideoLayout();
 		const isMiniPlayer = document.documentElement.classList.contains("yte-mini-player-active");
-
-		const styles = getTooltipPositionStyles({
-			direction,
-			element,
-			isMiniPlayer,
-			isModern
-		});
 
 		const tooltip = createTooltipElement({
 			id,
-			styles,
+			styles: {
+				visibility: "hidden",
+				zIndex: isMiniPlayer ? "2147483647" : "99999"
+			},
 			text: text ?? element.dataset.title ?? ""
 		});
 
@@ -62,12 +56,14 @@ export function createTooltip({
 				if (playerContainer?.offsetParent) playerContainer.appendChild(tooltip);
 				else document.body.appendChild(tooltip);
 			}
+			positionTooltip({ direction, element, tooltip });
 		},
 		remove: () => document.getElementById(id)?.remove(),
 		update: () => {
 			const tooltip = document.getElementById(id);
 			if (!tooltip) return;
 			tooltip.textContent = element.dataset.title ?? "";
+			positionTooltip({ direction, element, tooltip });
 		}
 	};
 }
@@ -90,38 +86,46 @@ function createTooltipElement<T extends Record<string, unknown>>({ id, styles, t
 	Object.assign(tooltip.style, styles);
 	return tooltip;
 }
-function getTooltipPositionStyles(params: {
+function positionTooltip(params: {
 	direction: "down" | "left" | "right" | "up";
 	element: HTMLElement;
-	isMiniPlayer: boolean;
-	isModern: boolean;
+	tooltip: HTMLElement;
 }) {
-	const { direction, element, isMiniPlayer, isModern } = params;
+	const { direction, element, tooltip } = params;
 	const rect = element.getBoundingClientRect();
+	const tooltipRect = tooltip.getBoundingClientRect();
+	const isModern = isModernYouTubeVideoLayout();
+	const gap = isModern ? 8 : 6;
+	const viewportPadding = 8;
+	const maxLeft = window.innerWidth - tooltipRect.width - viewportPadding;
+	const maxTop = window.innerHeight - tooltipRect.height - viewportPadding;
 
-	return {
-		...conditionalStyles({
-			condition: direction === "down" || direction === "up",
-			left: `${rect.left + rect.width / 2}px`
-		}),
-		...conditionalStyles({
-			condition: direction === "up",
-			top: `${rect.top - (isModern ? 6 : 1)}px`
-		}),
-		...conditionalStyles({
-			condition: direction === "down",
-			top: `${rect.bottom + rect.height}px`
-		}),
-		...conditionalStyles({
-			condition: direction === "left",
-			left: `${rect.left - rect.width}px`,
-			top: `${rect.bottom}px`
-		}),
-		...conditionalStyles({
-			condition: direction === "right",
-			left: `${rect.right + rect.width}px`,
-			top: `${rect.bottom}px`
-		}),
-		zIndex: isMiniPlayer ? "2147483647" : "99999"
-	};
+	const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+	let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+	let top = rect.top - tooltipRect.height - gap;
+
+	if (direction === "down") {
+		top = rect.bottom + gap;
+		if (top > maxTop) top = rect.top - tooltipRect.height - gap;
+	}
+
+	if (direction === "left") {
+		left = rect.left - tooltipRect.width - gap;
+		top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+	}
+
+	if (direction === "right") {
+		left = rect.right + gap;
+		top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+	}
+
+	if (direction === "up" && top < viewportPadding) top = rect.bottom + gap;
+
+	Object.assign(tooltip.style, {
+		left: `${clamp(left, viewportPadding, Math.max(viewportPadding, maxLeft))}px`,
+		top: `${clamp(top, viewportPadding, Math.max(viewportPadding, maxTop))}px`,
+		transform: "none",
+		visibility: "visible"
+	});
 }
