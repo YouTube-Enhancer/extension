@@ -2,69 +2,69 @@
 	"langCode": "cs-CZ",
 	"langName": "Čeština",
 	"messages": {
-		"resumingVideo": "Obnovení videa na {{VIDEO_TIME}}",
-		"settingVolume": "Nastavení zesílení hlasitosti na {{VOLUME_BOOST_AMOUNT}}"
+		"resumingVideo": "Resuming video at {{VIDEO_TIME}}",
+		"settingVolume": "Setting volume boost to {{VOLUME_BOOST_AMOUNT}}"
 	},
 	"pages": {
 		"content": {
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Manipulace se zvukem Mono",
+						"label": "Mono Audio Handling",
 						"toggle": {
 							"on": "Mono → Stereo Output",
-							"off": "Původní zvuk"
+							"off": "Original Audio"
 						}
 					}
 				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "Překlopit video vodorovně"
+						"label": "Flip video horizontally"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Překlopit video svisle"
+						"label": "Flip video vertically"
 					}
 				},
 				"copyTimestampUrlButton": {
 					"button": {
-						"label": "Kopírovat URL videa s časovou značkou"
+						"label": "Copy video URL with timestamp"
 					},
 					"extras": {
-						"copied": "Zkopírováno!"
+						"copied": "Copied!"
 					}
 				},
 				"featureMenu": {
 					"button": {
-						"label": "Nabídka funkcí"
+						"label": "Feature menu"
 					}
 				},
 				"forwardRewindButtons": {
 					"buttons": {
 						"forwardButton": {
-							"label": "Rychlé vpřed {{TIME}}"
+							"label": "Fast forward by {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Převrátit od {{TIME}}"
+							"label": "Rewind by {{TIME}}"
 						}
 					}
 				},
 				"hideEndScreenCardsButton": {
 					"button": {
-						"label": "Skrýt karty na konci obrazovky",
+						"label": "Hide end screen cards",
 						"toggle": {
-							"off": "Skrýt karty na konci obrazovky",
-							"on": "Zobrazit karty na konci obrazovky"
+							"off": "Hide end screen cards",
+							"on": "Show end screen cards"
 						}
 					}
 				},
 				"loopButton": {
 					"button": {
-						"label": "Smyčka",
+						"label": "Loop",
 						"toggle": {
-							"off": "Smyčka vypnuta",
-							"on": "Smyčka zapnuta"
+							"off": "Loop off",
+							"on": "Loop on"
 						}
 					}
 				},
@@ -72,79 +72,79 @@
 					"button": {
 						"label": "Maximize",
 						"toggle": {
-							"off": "Maximalizovat vypnuto",
-							"on": "Maximalizovat na"
+							"off": "Maximize off",
+							"on": "Maximize on"
 						}
 					}
 				},
 				"miniPlayerButton": {
 					"button": {
-						"label": "Mini přehrávač",
+						"label": "Mini Player",
 						"toggle": {
-							"off": "Mini přehrávač vypnut",
-							"on": "Mini přehrávač zapnut"
+							"off": "Mini Player off",
+							"on": "Mini Player on"
 						}
 					}
 				},
 				"openTranscriptButton": {
 					"button": {
-						"label": "Otevřít přepis"
+						"label": "Open transcript"
 					}
 				},
 				"playbackSpeedButtons": {
 					"buttons": {
 						"decreasePlaybackSpeedButton": {
-							"label": "Snížit rychlost na {{SPEED}}"
+							"label": "Decrease Speed to {{SPEED}}"
 						},
 						"increasePlaybackSpeedButton": {
-							"label": "Zvýšit rychlost na {{SPEED}}"
+							"label": "Increase Speed to {{SPEED}}"
 						}
 					},
 					"extras": {
-						"decreaseLimit": "Nelze snížit další ({{SPEED}})",
-						"increaseLimit": "Nelze zvýšit další ({{SPEED}})"
+						"decreaseLimit": "Can't decrease further ({{SPEED}})",
+						"increaseLimit": "Can't increase further ({{SPEED}})"
 					}
 				},
 				"playlistLength": {
-					"title": "Celková délka nemusí být přesná, pokud jsou některá videa skrytá nebo pokud jste nenačetli dostatek videí, abyste získali celou délku."
+					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "Nepodařilo se označit video jako nezhlédnuté",
-						"failedToRemoveVideo": "Nepodařilo se odstranit video",
-						"markAsUnwatched": "Označit jako nezhlédnuté",
-						"markingAsUnwatched": "Označování jako nezhlédnuté…",
-						"removeVideo": "Odstranit video",
-						"removingVideo": "Odstraňování videa…"
+						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
+						"failedToRemoveVideo": "Failed to remove video",
+						"markAsUnwatched": "Mark as unwatched",
+						"markingAsUnwatched": "Marking as unwatched…",
+						"removeVideo": "Remove video",
+						"removingVideo": "Removing video…"
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Nepodařilo se uložit video do hodinek později",
-						"saveVideo": "Uložit do sledování později",
-						"savingVideo": "Ukládání do sledování později…"
+						"failedToSaveVideo": "Failed to save video to Watch Later",
+						"saveVideo": "Save to Watch Later",
+						"savingVideo": "Saving to Watch Later…"
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Snímek obrazovky"
+						"label": "Screenshot"
 					},
 					"extras": {
-						"copiedToClipboard": "Snímek obrazovky zkopírován do schránky"
+						"copiedToClipboard": "Screenshot copied to clipboard"
 					}
 				},
 				"videoHistory": {
 					"extras": {
-						"resumeButton": "Pokračovat",
-						"resumePromptClose": "Zavřít"
+						"resumeButton": "Resume",
+						"resumePromptClose": "Close"
 					}
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "Zvýšení hlasitosti ({{value}} dB)",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
-							"off": "Zesílení hlasitosti vypnuto",
-							"on": "Zvýšení hlasitosti ({{value}} dB)"
+							"off": "Volume boost off",
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -154,172 +154,172 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Vymaže všechna data, která toto rozšíření uložilo na vašem počítači",
-						"value": "Vymazat data"
+						"title": "Clears all data this extension has stored on your machine",
+						"value": "Clear Data"
 					},
 					"confirm": {
-						"title": "Potvrdit obnovení nastavení",
-						"value": "Potvrdit"
+						"title": "Confirm setting reset",
+						"value": "Confirm"
 					},
 					"openTab": {
-						"title": "Otevřít nastavení rozšíření na nové kartě"
+						"title": "Open extension settings in a new tab"
 					},
 					"reset": {
-						"title": "Obnoví všechna nastavení na jejich výchozí nastavení, klikněte na tlačítko Potvrdit pro uložení změn",
+						"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
 						"value": "Reset"
 					}
 				},
 				"buttonPlacement": {
 					"select": {
 						"buttonNames": {
-							"copyTimestampUrlButton": "Kopírovat URL videa pomocí tlačítka časové značky",
-							"decreasePlaybackSpeedButton": "Tlačítko Snížit rychlost",
-							"forwardButton": "Tlačítko rychlého přesměrování",
-							"hideEndScreenCardsButton": "Skrýt tlačítko \"Koncové obrazovky\"",
-							"increasePlaybackSpeedButton": "Tlačítko Zvyšovat rychlost",
-							"loopButton": "Tlačítko smyčky",
-							"maximizePlayerButton": "Maximalizovat tlačítko",
-							"miniPlayerButton": "Tlačítko Mini přehrávač",
-							"openTranscriptButton": "Otevřít tlačítko přepsání",
-							"rewindButton": "Tlačítko znovu",
-							"screenshotButton": "Tlačítko snímku obrazovky",
-							"volumeBoostButton": "Tlačítko Zrychlení hlasitosti",
-							"flipVideoVerticalButton": "Překlopit video svisle tlačítko",
-							"flipVideoHorizontalButton": "Překlopit video vodorovným tlačítkem",
-							"monoToStereoButton": "Mono až Stereo tlačítko"
+							"copyTimestampUrlButton": "Copy video URL with timestamp button",
+							"decreasePlaybackSpeedButton": "Decrease Speed button",
+							"forwardButton": "Fast Forward button",
+							"hideEndScreenCardsButton": "Hide end screen cards button",
+							"increasePlaybackSpeedButton": "Increase Speed button",
+							"loopButton": "Loop button",
+							"maximizePlayerButton": "Maximize button",
+							"miniPlayerButton": "Mini Player button",
+							"openTranscriptButton": "Open Transcript button",
+							"rewindButton": "Rewind button",
+							"screenshotButton": "Screenshot button",
+							"volumeBoostButton": "Volume Boost button",
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
-								"placement": "pod ovládacími prvky hráče",
-								"value": "Pod hráčem"
+								"placement": "below the player controls",
+								"value": "Below Player"
 							},
 							"feature_menu": {
-								"placement": "v nabídce funkce",
-								"value": "Nabídka funkcí"
+								"placement": "in the feature menu",
+								"value": "Feature Menu"
 							},
 							"player_controls_left": {
-								"placement": "na levé straně ovládacích prvků hráče",
-								"value": "Levé ovládací prvky"
+								"placement": "on the left side of player controls",
+								"value": "Left Controls"
 							},
 							"player_controls_right": {
-								"placement": "na pravé straně ovládacích prvků hráče",
-								"value": "Pravé ovládací prvky"
+								"placement": "on the right side of player controls",
+								"value": "Right Controls"
 							},
 							"same": {
-								"placement": "ve stejné pozici",
-								"value": "Stejné jako normální"
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
-						"title": "Umístěte {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenTitle": "Při celé obrazovce umístěte {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenLabel": "Celá obrazovka",
-						"normalLabel": "Normální"
+						"title": "Place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
-					"title": "Nastavení umístění tlačítek"
+					"title": "Button placement settings"
 				},
 				"clearData": {
-					"allDataDeleted": "Všechna data byla smazána.",
-					"confirmAlert": "Tímto smažete všechna data rozšíření týkající se možností. Pokračovat?"
+					"allDataDeleted": "All data has been deleted.",
+					"confirmAlert": "This will delete all extension data related to options. Continue?"
 				},
 				"featureMenu": {
 					"openType": {
 						"select": {
-							"label": "Typ aktivace nabídky",
+							"label": "Menu Activation Type",
 							"options": {
 								"click": "Click",
 								"hover": "Hover"
 							},
-							"title": "Vyberte metodu pro aktivaci nabídky funkce"
+							"title": "Select the method to activate the feature menu"
 						},
-						"title": "Nastavení nabídky funkcí"
+						"title": "Feature menu settings"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Nastavení úspěšně exportováno",
-						"title": "Exportovat nastavení do souboru JSON",
-						"value": "Nastavení exportu"
+						"success": "Settings successfully exported",
+						"title": "Export settings to a JSON file",
+						"value": "Export Settings"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Chyba při importu nastavení. Zkontrolujte formát souboru.\nDošlo k neznámé chybě.",
-							"validation": "Chyba při importu nastavení. Zkontrolujte prosím formát souboru.\n{{ERROR_MESSAGE}}"
+							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
+							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "Nastavení úspěšně importováno",
-						"title": "Importovat nastavení ze souboru JSON",
-						"value": "Importovat nastavení"
+						"success": "Settings imported successfully",
+						"title": "Import settings from a JSON file",
+						"value": "Import Settings"
 					}
 				},
 				"language": {
 					"select": {
-						"label": "Jazyk",
-						"title": "Jazyk, který má být použit pro rozšíření"
+						"label": "Language",
+						"title": "The language to use for the extension"
 					},
-					"title": "Jazyk"
+					"title": "Language"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "Otevřít stránku nastavení při aktualizaci",
-					"title": "Otevře stránku s nastavením, když je nainstalována hlavní nebo menší verze YouTube Enhancer"
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
 				},
 				"optionDisabled": {
 					"either": {
-						"label": "Pro konfiguraci této volby povolte {{OPTIONS}}",
-						"separator": " nebo "
+						"label": "Enable {{OPTIONS}} to configure this option",
+						"separator": " or "
 					},
 					"plural": {
-						"label": "Pro konfiguraci této volby povolte {{OPTIONS}}",
-						"separator": " a "
+						"label": "Enable {{OPTIONS}} to configure this option",
+						"separator": " and "
 					},
-					"singular": "Povolte '{{OPTION}}' pro konfiguraci této volby",
+					"singular": "Enable '{{OPTION}}' to configure this option",
 					"specificOption": {
-						"featureMenu": "Nakonfigurujte alespoň jedno tlačítko, které bude umístěno v nabídce funkcí pro konfiguraci této možnosti.",
-						"globalVolume": "Zakažte 'Zapamatovat si poslední hlasitost' pro nastavení této volby",
-						"rememberVolume": "Zakažte 'Globální hlasitost' pro nastavení této volby",
-						"screenshotButtonFileFormat": "Pro nastavení této volby nastavte typ uložení snímku obrazovky na 'Soubor' nebo 'Both'"
+						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
 				"settingSearch": {
-					"placeholder": "Hledat nastavení"
+					"placeholder": "Search for a setting"
 				},
 				"youtubeDataApiV3Key": {
-					"getApiKeyLinkText": "Můžete získat jeden odsud",
+					"getApiKeyLinkText": "You can get one from here",
 					"input": {
-						"label": "API klíč",
-						"title": "Zadejte svůj YouTube Data API klíč V3."
+						"label": "API Key",
+						"title": "Enter your Youtube Data API V3 key."
 					},
-					"title": "YouTube API V3 klíč"
+					"title": "YouTube API V3 key"
 				}
 			},
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Použít",
-						"cancel": "Zrušit",
+						"apply": "Apply",
+						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' a '{{FEATURE_B}}' nelze povolit. Vyberte, který z nich chcete zachovat."
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
-						"keepFirst": "Ponechat {{FEATURE}}",
-						"keepSecond": "Ponechat {{FEATURE}}",
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' a '{{FEATURE_B}}' nemůže použít stejný modifikační klíč.",
-							"selectNewKey": "Změnit klíč modifikátoru:"
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Před podáním žádosti vyřešte všechny konflikty.",
-						"title": "Zjištěny konflikty importu"
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "Tuto možnost nelze povolit, pokud je '{{OPTION}}' povoleno.",
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "Modifikátor řízení rychlosti kol nemůže být stejný jako modifikátor ovládání hlasitosti posuvu.",
-							"volumeControl": "Modifikátor ovládání hlasitosti posuvníku kola nemůže být stejný jako modifikátor otáček kolečka."
+							"speedControl": "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.",
+							"volumeControl": "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key."
 						}
 					}
 				},
 				"info": {
-					"reset": "Všechny možnosti byly resetovány na jejich výchozí hodnoty.\nNyní můžete uložit změny kliknutím na tlačítko \"Potvrdit\" nebo je zahodit zavřením této stránky nebo ignorováním tohoto oznámení."
+					"reset": "All options have been reset to their default values.\nYou can now save the changes by clicking the \"Confirm\" button or discard them by closing this page or ignore this notification."
 				},
 				"success": {
-					"saved": "Možnosti uloženy."
+					"saved": "Options saved."
 				}
 			}
 		}
@@ -329,656 +329,656 @@
 			"customCSS": {
 				"enable": {
 					"label": "Custom CSS",
-					"title": "Umožňuje použít vlastní CSS na stránku"
+					"title": "Enables custom CSS to be applied to the page"
 				},
 				"extras": {
-					"collapse": "Sbalit editor",
-					"expand": "Rozbalit editor",
-					"noProblems": "Nenalezeny žádné problémy."
+					"collapse": "Collapse Editor",
+					"expand": "Expand Editor",
+					"noProblems": "No problems found."
 				},
-				"title": "Vlastní nastavení CSS"
+				"title": "Custom CSS settings"
 			},
 			"deepDarkCSS": {
 				"enable": {
-					"label": "Hluboký tmavý motiv",
-					"title": "Aktivovat vybraný motiv pro stránku"
+					"label": "Deep Dark Theme",
+					"title": "Activate the selected theme for the page"
 				},
 				"extras": {
-					"author": "Autor",
-					"co-authors": "Spoluautoři"
+					"author": "Author",
+					"co-authors": "Co-authors"
 				},
 				"settings": {
 					"colorShadow": {
-						"label": "Barva stínu",
-						"title": "Barva pro stíny"
+						"label": "Shadow color",
+						"title": "Color for shadows"
 					},
 					"dimmerText": {
-						"label": "Barva sekundárního textu",
-						"title": "Barva pro sekundární text"
+						"label": "Secondary text color",
+						"title": "Color for secondary text"
 					},
 					"hoverBackground": {
-						"label": "Barva pozadí při přechodu",
-						"title": "Barva pro přejetí na pozadí"
+						"label": "Hover background color",
+						"title": "Color for hover background"
 					},
 					"mainBackground": {
-						"label": "Hlavní barva pozadí",
-						"title": "Barva pro hlavní pozadí"
+						"label": "Main background color",
+						"title": "Color for main background"
 					},
 					"mainColor": {
-						"label": "Barva zvýraznění",
-						"title": "Barva pro zvýraznění"
+						"label": "Accent color",
+						"title": "Color for accent"
 					},
 					"mainText": {
-						"label": "Hlavní barva textu",
-						"title": "Barva pro hlavní text"
+						"label": "Main text color",
+						"title": "Color for main text"
 					},
 					"secondBackground": {
-						"label": "Barva sekundárního pozadí",
-						"title": "Barva pro sekundární pozadí"
+						"label": "Secondary background color",
+						"title": "Color for secondary background"
 					},
 					"theme": {
 						"select": {
-							"label": "Vybrat motiv",
-							"title": "Vyberte motiv, který bude použit na stránku"
+							"label": "Select theme",
+							"title": "Select a theme to be applied to the page"
 						}
 					}
 				},
-				"title": "Nastavení hlubokého tmavého YouTube"
+				"title": "YouTube deep dark settings"
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Tlačítka Vpřed/Vrátit zpět",
-					"title": "Přidá tlačítka vpřed a znovu převrátit do video přehrávače"
+					"label": "Forward/rewind buttons",
+					"title": "Adds forward and rewind buttons to the video player"
 				},
 				"settings": {
 					"time": {
-						"label": "Doba převodu/převrácení",
-						"title": "Časový limit dopředu/rewind videa od"
+						"label": "Forward/rewind time",
+						"title": "The amount of time to forward/rewind the video by"
 					}
 				},
-				"title": "Nastavení tlačítek Vpřed/Vrátit zpět"
+				"title": "Forward/rewind button settings"
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "Vždy spouštět videa s touto hlasitostí",
-					"title": "Automaticky spustí všechna videa při vybrané hlasitosti"
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
 				},
 				"settings": {
 					"amount": {
-						"label": "Počáteční hlasitost videa",
-						"title": "Hlasitost aplikovaná na každé video při jeho přehrávání"
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "Přepsání globální hlasitosti"
+				"title": "Global Volume Override"
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Tlačítko Mini přehrávač",
-					"title": "Přidá tlačítko, které otevře Mini přehrávač"
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
 				},
 				"enable": {
-					"label": "Otevřít Mini přehrávač při prohlížení komentářů",
-					"title": "Automaticky otevře Mini přehrávač při posouvání na komentáře."
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "Výchozí pozice Mini přehrávače",
+							"label": "Default Mini Player position",
 							"options": {
-								"bottomCenter": "Dolní střed",
-								"bottomLeft": "Vlevo dole",
-								"bottomRight": "Dolní pravé",
-								"topCenter": "Nahoře uprostřed",
-								"topLeft": "Vlevo nahoře",
-								"topRight": "Vpravo nahoře"
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
 							},
-							"title": "Nastaví počáteční pozici před přesunem mini přehrávače."
+							"title": "Sets the starting position before you move the Mini Player."
 						}
 					},
 					"size": {
-						"label": "Výchozí velikost mini přehrávače",
-						"title": "Nastaví počáteční velikost před změnou velikosti Mini Player."
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
 					}
 				},
-				"title": "Nastavení mini přehrávače"
+				"title": "Mini Player settings"
 			},
 			"miscellaneous": {
 				"settings": {
 					"automaticTheaterMode": {
 						"enable": {
-							"label": "Automatický mód divadla",
-							"title": "Automaticky povolit divadelní mód při načtení videa"
+							"label": "Automatic theater mode",
+							"title": "Automatically enables theater mode when you load a video"
 						}
 					},
 					"automaticallyDisableAmbientMode": {
 						"enable": {
-							"label": "Automaticky zakázat ambientní režim",
-							"title": "Automaticky vypne ambientní režim, když nahrajete video"
+							"label": "Automatically disable ambient mode",
+							"title": "Automatically disables ambient mode when you load a video"
 						}
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "Automaticky zakázat automatické přehrávání",
-							"title": "Automaticky zakáže automatické přehrávání při načtení videa"
+							"label": "Automatically disable autoplay",
+							"title": "Automatically disables autoplay when you load a video"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
 						"enable": {
-							"label": "Automaticky zakázat uzavřené titulky",
-							"title": "Automaticky zakáže zavřené titulky při načtení videa"
+							"label": "Automatically disable closed captions",
+							"title": "Automatically disables closed captions when you load a video"
 						}
 					},
 					"automaticallyEnableClosedCaptions": {
 						"enable": {
-							"label": "Automaticky povolit uzavřené titulky",
-							"title": "Automaticky povolit zavřené titulky při načtení videa"
+							"label": "Automatically enable closed captions",
+							"title": "Automatically enables closed captions when you load a video"
 						}
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "Automaticky maximalizovat přehrávač",
-							"title": "Automaticky maximalizuje přehrávač při načtení videa"
+							"label": "Automatically maximize player",
+							"title": "Automatically maximizes the player when you load a video"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
-							"label": "Automaticky zobrazit více videí na konci obrazovky",
-							"title": "Automaticky zobrazit více videí na konečné obrazovce při načtení videa"
+							"label": "Automatically show more videos on end screen",
+							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "Hledání klíče blokového čísla",
-							"title": "Zabraňuje přeskakování 0-9 na procento videa"
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "Skrýt příspěvky",
-							"title": "Skryje příspěvky z domovské stránky"
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
 						}
 					},
 					"copyTimestampUrlButton": {
 						"enable": {
-							"label": "Kopírovat URL videa pomocí tlačítka časové značky",
-							"title": "Kopírovat URL videa s časovým razítkem (?t=123)"
+							"label": "Copy video URL with timestamp button",
+							"title": "Copies video URL with timestamp (?t=123)"
 						}
 					},
 					"defaultToOriginalAudioTrack": {
 						"enable": {
-							"label": "Výchozí původní zvuková stopa",
-							"title": "Vždy výchozí k původní zvukové stopě"
+							"label": "Default to original audio track",
+							"title": "Always default to the original audio track"
 						}
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Skrýt shrnutí AI",
-							"title": "Skryje souhrn umělé inteligence pod videi"
+							"label": "Hide AI summary",
+							"title": "Hides the artificial intelligence summary below videos"
 						}
 					},
 					"hideEndScreenCards": {
 						"enable": {
-							"label": "Skrýt karty na konci obrazovky",
-							"title": "Skryje karty na konci videa"
+							"label": "Hide end screen cards",
+							"title": "Hides the cards at the end of the video"
 						}
 					},
 					"hideEndScreenCardsButton": {
 						"enable": {
-							"label": "Skrýt tlačítko \"Koncové obrazovky\"",
-							"title": "Přidá tlačítko pro zobrazení/skrytí karet na konci videa"
+							"label": "Hide end screen cards button",
+							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
 					"hideLiveStreamChat": {
 						"enable": {
-							"label": "Skrýt chat živého streamu",
-							"title": "Skryje živý stream chat"
+							"label": "Hide live stream chat",
+							"title": "Hides the live stream chat"
 						}
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Skrýt videa pouze pro členy",
-							"title": "Skryje videa, která jsou viditelná pouze pro členy"
+							"label": "Hide members-only videos",
+							"title": "Hides videos that are only visible to members"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono až Stereo tlačítko",
-							"title": "Přidá tlačítko pro převod mono zvuku na stereo. Stereo stopy zůstávají nezměněny."
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
-							"label": "Skrýt oficiální videa umělců",
-							"title": "Skrýt oficiální videa umělců z domovské stránky"
+							"label": "Hide Official Artist Videos",
+							"title": "Hide Official Artist Videos from Home Page"
 						}
 					},
 					"hidePaidPromotionBanner": {
 						"enable": {
-							"label": "Skrýt placený propagační banner",
-							"title": "Skryje banner, který se objeví při sledování videa, které má placené akce"
+							"label": "Hide paid promotion banner",
+							"title": "Hides the banner that appears when you watch a video that has a paid promotion"
 						}
 					},
 					"hidePlayables": {
 						"enable": {
-							"label": "Skrýt přehrávače",
-							"title": "Skryje všechny přehrávače"
+							"label": "Hide playables",
+							"title": "Hides all playables"
 						}
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Skrýt seznamy skladeb z domovské stránky",
-							"title": "Zbavte se seznamu skladeb z domovské stránky"
+							"label": "Hide playlists from homepage",
+							"title": "Get rid of playlists from homepage"
 						}
 					},
 					"hideScrollbar": {
 						"enable": {
 							"label": "Hide scrollbar",
-							"title": "Skryje posuvník stránek"
+							"title": "Hides the pages scrollbar"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
-							"label": "Skrýt doporučená videa",
-							"title": "Skryje postranní panel, který doporučuje videa"
+							"label": "Hide recommended videos",
+							"title": "Hides the sidebar that recommends videos"
 						}
 					},
 					"hideTranslateComment": {
 						"enable": {
-							"label": "Skrýt tlačítko překladu komentáře",
-							"title": "Skryje tlačítko 'Přeložit do jazyka' pod komentáři"
+							"label": "Hide translate comment button",
+							"title": "Hides 'Translate to Language' button under comments"
 						}
 					},
 					"loopButton": {
 						"enable": {
-							"label": "Tlačítko smyčky",
-							"title": "Přidá tlačítko do nabídky funkcí pro smyčku videa, které sledujete"
+							"label": "Loop button",
+							"title": "Adds a button to the feature menu to loop the video you're watching"
 						}
 					},
 					"maximizePlayerButton": {
 						"enable": {
-							"label": "Maximalizovat tlačítko přehrávače",
-							"title": "Přidá tlačítko do nabídky funkcí pro maximalizaci přehrávače"
+							"label": "Maximize player button",
+							"title": "Adds a button to the feature menu to maximize the player"
 						}
 					},
 					"openTranscriptButton": {
 						"enable": {
-							"label": "Otevřít tlačítko přepisu",
-							"title": "Přidá tlačítko do nabídky funkcí pro otevření přepisu videa, které sledujete"
+							"label": "Open transcript button",
+							"title": "Adds a button to the feature menu to open the transcript of the video you're watching"
 						}
 					},
 					"openYouTubeSettingsOnHover": {
 						"enable": {
-							"label": "Otevřít nastavení YouTube při přejetí myší",
-							"title": "Otevře nabídku nastavení YouTube při přejetí tlačítka nastavení"
+							"label": "Open YouTube settings on hover",
+							"title": "Opens the YouTube settings menu when you hover over the settings button"
 						}
 					},
 					"pauseBackgroundPlayers": {
 						"enable": {
-							"label": "Pozastavit hráče na pozadí",
-							"title": "Pozastaví video přehrávače na pozadí při spuštění nového přehrávače v popředí"
+							"label": "Pause background players",
+							"title": "Pauses video players in background tabs when you start a new player in foreground tab"
 						}
 					},
 					"remainingTime": {
 						"enable": {
-							"label": "Zbývající čas",
-							"title": "Zobrazí zbývající čas videa, které sledujete"
+							"label": "Remaining time",
+							"title": "Shows the remaining time of the video you're watching"
 						}
 					},
 					"rememberVolume": {
 						"enable": {
-							"label": "Zapamatovat poslední hlasitost",
-							"title": "Pamatuje si hlasitost posledního videa, které jsi sledoval, a nastaví ho při otevření nového videa"
+							"label": "Remember last volume",
+							"title": "Remembers the volume of the last video you were watching and sets it when you open a new video"
 						}
 					},
 					"removeRedirect": {
 						"enable": {
-							"label": "Odstranit YouTube /přesměrování URL",
-							"title": "Nahradí přesměrování YouTube pomocí aktuálních URL, přeskočení dialogu varování přesměrováním"
+							"label": "Remove YouTube /redirect URLs",
+							"title": "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue"
 						}
 					},
 					"restoreFullscreenScrolling": {
 						"enable": {
-							"label": "Obnovit posouvání přes celou obrazovku",
-							"title": "Obnovit posun v režimu celé obrazovky"
+							"label": "Restore fullscreen scrolling",
+							"title": "Restores scrolling in fullscreen mode"
 						}
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "Povolit uložení na tlačítko Později",
-							"title": "Přidá tlačítko do domovské a odebírací videa pro uložení videa do playlistu 'Sledujte později'"
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"shareShortener": {
 						"enable": {
-							"label": "Zkrátit odkaz na sdílení videa na YouTube",
-							"title": "Zkrátí YouTube odkaz pro sdílení videa (youtu.be) odstraněním parametrů si/feature parametrů"
+							"label": "Shorten YouTube video share link",
+							"title": "Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it"
 						}
 					},
 					"shortsAutoScroll": {
 						"enable": {
-							"label": "Zkratky automatického posouvání",
-							"title": "Automaticky posouvat na další krátkou pozici"
+							"label": "Shorts auto scroll",
+							"title": "Automatically scrolls to the next short"
 						}
 					},
 					"skipContinueWatching": {
 						"enable": {
-							"label": "Přeskočit \"Video je pozastaveno. Pokračovat ve sledování?\"",
-							"title": "Přeskočí nečinný dialog, který pozastaví přehrávání videa"
+							"label": "Skip \"Video is paused. Continue watching?\"",
+							"title": "Skips the idle dialog that pauses video playback"
 						}
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Náhled časového razítka",
-							"title": "Náhled videa zobrazením časového razítka. Klepnutím na náhled začnete přehrávat od tohoto okamžiku."
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontální tlačítko otočení videa",
-							"title": "Přidá tlačítko pro horizontální otočení videa"
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertikální video otočení",
-							"title": "Přidá tlačítko pro otočení videa svisle"
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
 						}
 					}
 				},
-				"title": "Různá nastavení"
+				"title": "Miscellaneous settings"
 			},
 			"hideShorts": {
-				"title": "Skrýt krátké",
+				"title": "Hide Shorts",
 				"settings": {
 					"sidebar": {
-						"label": "Skrýt v postranním panelu",
-						"title": "Odstraní tlačítko Krátky z postranního panelu"
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
 					},
 					"home": {
-						"label": "Skrýt na domovském kanálu",
-						"title": "Odstraní krátkou sekci z domovského kanálu"
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
 					},
 					"channel": {
-						"label": "Skrýt na stránkách kanálů",
-						"title": "Odstraní zkrácený plášť a záložku na kanálech"
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
 					},
 					"search": {
-						"label": "Skrýt ve výsledcích hledání",
-						"title": "Odstraní krátká videa z výsledků vyhledávání"
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
 					},
 					"videos": {
-						"label": "Skrýt na stránkách hodinek",
-						"title": "Odstraní krátká videa z doporučení na hodinkách"
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
 					}
 				}
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
 					"color": {
-						"label": "Barva",
+						"label": "Color",
 						"select": {
 							"options": {
-								"blue": "Modrá",
-								"green": "Zelená",
-								"orange": "Oranžová",
-								"pink": "Růžová",
-								"purple": "Fialová",
-								"red": "Červená",
-								"white": "Bílý",
-								"yellow": "Žlutá"
+								"blue": "Blue",
+								"green": "Green",
+								"orange": "Orange",
+								"pink": "Pink",
+								"purple": "Purple",
+								"red": "Red",
+								"white": "White",
+								"yellow": "Yellow"
 							}
 						},
-						"title": "Vyberte barvu pro zobrazení na obrazovce"
+						"title": "Select the color for the On-Screen Display"
 					},
 					"hide": {
-						"label": "Skrýt zpoždění",
-						"title": "Určete čas, v milisekundách před automatickým skrýváním displeje na obrazovce"
+						"label": "Hide Delay",
+						"title": "Specify the time, in milliseconds, before automatically hiding the On-Screen Display"
 					},
 					"opacity": {
-						"label": "Neprůhlednost",
-						"title": "Nastavení průhlednosti displeje na obrazovce"
+						"label": "Opacity",
+						"title": "Adjust the transparency of the On-Screen Display"
 					},
 					"padding": {
 						"label": "Padding",
-						"title": "Upravte mezery kolem displeje na obrazovce v pixelech. To se týká konkrétně rohů na displeji."
+						"title": "Adjust the spacing around the On-Screen Display in pixels. This applies specifically to corner On-Screen Display."
 					},
 					"position": {
-						"label": "Pozice",
+						"label": "Position",
 						"select": {
 							"options": {
-								"bottom_left": "Vlevo dole",
-								"bottom_right": "Vpravo dole",
-								"center": "Střed",
-								"top_left": "Vlevo nahoře",
-								"top_right": "Vpravo nahoře"
+								"bottom_left": "Bottom Left",
+								"bottom_right": "Bottom Right",
+								"center": "Center",
+								"top_left": "Top Left",
+								"top_right": "Top Right"
 							}
 						},
-						"title": "Vyberte pozici displeje na obrazovce"
+						"title": "Select the position of the On-Screen Display"
 					},
 					"type": {
-						"label": "Typ",
+						"label": "Type",
 						"select": {
 							"options": {
-								"circle": "Kruh",
-								"line": "Řádek",
-								"no_display": "Žádné zobrazení",
+								"circle": "Circle",
+								"line": "Line",
+								"no_display": "No display",
 								"text": "Text"
 							}
 						},
-						"title": "Vyberte typ displeje na obrazovce"
+						"title": "Select the type of On-Screen Display"
 					}
 				},
-				"title": "Nastavení zobrazení na obrazovce"
+				"title": "On-screen display settings"
 			},
 			"playerQuality": {
 				"enable": {
-					"label": "Automatická úprava kvality",
-					"title": "Automaticky přizpůsobí kvalitu videa na vybranou úroveň."
+					"label": "Automatic quality adjustment",
+					"title": "Automatically adjusts the video quality to the selected level."
 				},
 				"settings": {
 					"quality": {
 						"select": {
-							"label": "Kvalita přehrávače",
-							"title": "Kvalita pro nastavení videa na"
+							"label": "Player quality",
+							"title": "The quality to set the video to"
 						}
 					},
 					"qualityFallbackStrategy": {
 						"select": {
-							"label": "Strategie zabezpečení kvality",
+							"label": "Quality fallback strategy",
 							"options": {
-								"higher": "Vyšší",
-								"lower": "Nižší"
+								"higher": "Higher",
+								"lower": "Lower"
 							},
-							"title": "Strategie, která se použije, když vybraná kvalita není k dispozici"
+							"title": "The strategy to use when the selected quality is not available"
 						}
 					}
 				},
-				"title": "Automatické nastavení kvality"
+				"title": "Automatic quality settings"
 			},
 			"playerSpeed": {
 				"enable": {
-					"label": "Vynucená rychlost přehrávání",
-					"title": "Nastaví rychlost videa podle toho, co si vyberete níže"
+					"label": "Forced playback speed",
+					"title": "Sets the video speed to what you choose below"
 				},
 				"settings": {
 					"buttons": {
-						"label": "Tlačítka rychlosti přehrávání",
+						"label": "Playback speed buttons",
 						"select": {
-							"label": "Rychlost přehrávání tlačítek",
-							"title": "Velikost rychlosti, která má být změněna na kliknutí"
+							"label": "Playback buttons speed",
+							"title": "Amount of speed to be changed per click"
 						},
-						"title": "Přidá tlačítka pro zvýšení nebo snížení rychlosti přehrávání videa, které sledujete"
+						"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
 					},
 					"speed": {
 						"select": {
-							"label": "Rychlost hráče",
-							"title": "Rychlost nastavení videa na"
+							"label": "Player speed",
+							"title": "The speed to set the video to"
 						}
 					}
 				},
-				"title": "Nastavení rychlosti přehrávání"
+				"title": "Playback speed settings"
 			},
 			"playlistLength": {
 				"enable": {
-					"label": "Zobrazit informace o délce playlistu",
-					"title": "Zobrazuje celkovou délku seznamu skladeb, kolik bylo sledováno a kolik zůstává."
+					"label": "Display playlist length information",
+					"title": "Shows the total length of the playlist, how much has been watched, and how much remains."
 				},
 				"settings": {
 					"wayToGetLength": {
 						"select": {
-							"label": "Metoda pro získání délky playlistu",
-							"title": "Způsob, jak získat informace o délce playlistu (API metoda se vrátí na HTML, pokud dojde k chybě)"
+							"label": "Method to get playlist length",
+							"title": "The way to get playlist length information (API method will fallback to HTML if an error occurs)"
 						}
 					},
 					"wayToGetWatchTime": {
 						"select": {
-							"label": "Metoda sledování času",
+							"label": "Method to get watched time",
 							"options": {
-								"duration": "Délka videa",
-								"youtube": "Čas přehrávání videa"
+								"duration": "Video Length",
+								"youtube": "Video Watch Time"
 							},
-							"title": "Způsob, jak získat množství sledovaného času (typ Video Délka se používá pouze na stránce hodinek)"
+							"title": "The way to get the amount of time watched (Video Length type only used on watch page)"
 						}
 					}
 				},
-				"title": "Nastavení délky playlistu"
+				"title": "Playlist length settings"
 			},
 			"playlistManagementButtons": {
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "Označit jako nezhlédnuté tlačítko",
-							"title": "Přidá tlačítko pro označení videí jako nezhlédnuté"
+							"label": "Mark as unwatched button",
+							"title": "Adds a button to mark videos as unwatched"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "Odstranit video tlačítko",
-							"title": "Přidá tlačítko pro odstranění videí ze seznamu skladeb"
+							"label": "Remove video button",
+							"title": "Adds a button to remove videos from the playlist"
 						}
 					}
 				},
-				"title": "Nastavení správy playlistu"
+				"title": "Playlist management settings"
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Tlačítko snímku obrazovky",
-					"title": "Přidá do přehrávače tlačítko pro pořízení snímku videa"
+					"label": "Screenshot button",
+					"title": "Adds a button to the player to take a screenshot of the video"
 				},
 				"settings": {
 					"format": {
-						"label": "Formát snímku obrazovky",
-						"title": "Formát pro uložení snímku obrazovky do"
+						"label": "Screenshot format",
+						"title": "The format to save the screenshot in"
 					},
 					"saveAs": {
 						"select": {
-							"label": "Typ snímku obrazovky",
+							"label": "Screenshot save type",
 							"options": {
-								"both": "Obojí (soubor i schránka)",
-								"clipboard": "Schránka",
-								"file": "Soubor"
+								"both": "Both (File and Clipboard)",
+								"clipboard": "Clipboard",
+								"file": "File"
 							},
-							"title": "Typ snímku obrazovky"
+							"title": "The screenshot save type"
 						}
 					}
 				},
-				"title": "Nastavení snímku obrazovky"
+				"title": "Screenshot settings"
 			},
 			"scrollWheelSpeedControl": {
 				"enable": {
-					"label": "Ovládání otáček kola",
-					"title": "Stisknutím modifikátoru povolíte úpravu rychlosti pomocí posuvného kola."
+					"label": "Scroll wheel speed control",
+					"title": "Press a modifier key to enable speed adjustment with the scroll wheel."
 				},
 				"extras": {
-					"optionLabel": "{{KEY}} klíč"
+					"optionLabel": "{{KEY}} key"
 				},
 				"settings": {
 					"adjustmentSteps": {
-						"label": "Změna rychlosti za posun",
-						"title": "Upravte změnu rychlosti na posun"
+						"label": "Speed Change Per Scroll",
+						"title": "Adjust the speed change per scroll"
 					},
 					"modifierKey": {
 						"select": {
 							"label": "Modifier key",
-							"title": "Modifikační klíč k použití"
+							"title": "The modifier key to use"
 						}
 					}
 				},
-				"title": "Nastavení řízení rychlosti posunu kola"
+				"title": "Scroll wheel speed control settings"
 			},
 			"scrollWheelVolumeControl": {
 				"enable": {
-					"label": "Ovládání hlasitosti posunu kola",
-					"title": "Umožňuje použít kolečko pro ovládání hlasitosti videa, které sledujete"
+					"label": "Scroll wheel volume control",
+					"title": "Lets you use the scroll wheel to control the volume of the video you're watching"
 				},
 				"extras": {
-					"optionLabel": "{{KEY}} klíč"
+					"optionLabel": "{{KEY}} key"
 				},
 				"settings": {
 					"adjustmentSteps": {
-						"label": "Změna hlasitosti na posun",
-						"title": "Upravte změnu hlasitosti na posun"
+						"label": "Volume Change Per Scroll",
+						"title": "Adjust the volume change per scroll"
 					},
 					"holdModifierKey": {
-						"label": "Když držíte klíč modifikátoru",
+						"label": "When holding modifier key",
 						"select": {
 							"label": "Modifier key",
-							"title": "Modifikační klíč k použití"
+							"title": "The modifier key to use"
 						},
-						"title": "Stisknutím modifikátoru povolíte úpravu hlasitosti pomocí posuvného kola."
+						"title": "Press a modifier key to enable volume adjustment with the scroll wheel."
 					},
 					"holdRightClick": {
-						"label": "Při podržení klikněte pravým tlačítkem",
-						"title": "Podržením pravého tlačítka myši povolíte ovládání hlasitosti kol"
+						"label": "When holding right click",
+						"title": "Hold right click to enable scroll wheel volume control"
 					}
 				},
-				"title": "Nastavení ovládání hlasitosti posunu kol"
+				"title": "Scroll wheel volume control settings"
 			},
 			"videoHistory": {
 				"enable": {
-					"label": "Sledovat zhlédnuté videa",
-					"title": "Sleduje místo, kde jste skončili na videích, která jste sledovali, a umožňuje obnovení přehrávání"
+					"label": "Track watched videos",
+					"title": "Keeps track of where you left off on videos you were watching and enables resuming playback"
 				},
 				"settings": {
 					"resumeType": {
 						"select": {
-							"label": "Pokračovat v typu",
+							"label": "Resume type",
 							"options": {
-								"automatic": "Automaticky",
+								"automatic": "Automatic",
 								"prompt": "Prompt"
 							},
-							"title": "Vyberte, jak chcete obnovit videa"
+							"title": "Select how you want to resume videos"
 						}
 					}
 				},
-				"title": "Nastavení historie videa"
+				"title": "Video history settings"
 			},
 			"volumeBoost": {
 				"enable": {
-					"label": "Zesílení hlasitosti",
-					"title": "Povolit zesílení hlasitosti"
+					"label": "Volume boost",
+					"title": "Enable volume boost"
 				},
 				"settings": {
 					"amount": {
-						"label": "Hodnota zvýšení hlasitosti (dB)",
-						"title": "Množství pro zesílení hlasitosti. Můžete také posunout přes tlačítko zvýšení hlasitosti (Shift/Ctrl pro větší kroky) jej upravit."
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
 					},
 					"amount_global_only": {
-						"label": "Hodnota zvýšení hlasitosti (dB)",
-						"title": "Částka pro zvýšení hlasitosti."
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {
-							"label": "Režim zesílení hlasitosti",
+							"label": "Volume boost mode",
 							"options": {
-								"global": "Globální",
-								"perVideo": "Na video"
+								"global": "Global",
+								"perVideo": "Per video"
 							},
-							"title": "Zvolte, jak se použije zrychlení hlasitosti. \"Na jedno video\" umožňuje zvýšit hlasitost každého videa v nabídce funkce. 'Globální' znamená zesílení všech videí, když je povoleno zvýšení hlasitosti."
+							"title": "Choose how volume boost is applied. 'Per video' allows enabling boost for each video individually in the feature menu. 'Global' applies boost to all videos when volume boost is enabled."
 						}
 					}
 				},
-				"title": "Nastavení zesílení hlasitosti"
+				"title": "Volume boost settings"
 			}
 		}
 	}

@@ -158,7 +158,7 @@
 						"value": "Effacer les données"
 					},
 					"confirm": {
-						"title": "Confirmer la réinitialisation des paramètres",
+						"title": "Confirmer la réinitialisation des réglages",
 						"value": "Confirmer"
 					},
 					"openTab": {
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "Toutes les données ont été supprimées.",
-					"confirmAlert": "Ceci supprimera toutes les données d'extension liées aux options. Continuer ?"
+					"confirmAlert": "Ceci supprimera toutes les données d'extension liées aux options. On continue ?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,16 +229,16 @@
 								"click": "Clic",
 								"hover": "Survol"
 							},
-							"title": "Sélectionnez la méthode pour activer le menu des fonctionnalités"
+							"title": "Sélectionnez la méthode pour activer le menu de fonctionnalités"
 						},
-						"title": "Paramètres du menu des fonctionnalités"
+						"title": "Paramètres du menu de fonctionnalités"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Paramètres exportés avec succès",
+						"success": "Réglages exportés avec succès",
 						"title": "Exporter les paramètres vers un fichier JSON",
-						"value": "Paramètres d'exportation"
+						"value": "Exporter les paramètres"
 					},
 					"importButton": {
 						"error": {
@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Masquer le résumé de l'IA",
-							"title": "Masque le résumé de l'intelligence artificielle sous les vidéos"
+							"label": "Masquer le résumé IA",
+							"title": "Masque le résumé par intelligence artificielle situé sous les vidéos"
 						}
 					},
 					"hideEndScreenCards": {

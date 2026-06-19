@@ -10,21 +10,21 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "モノラルオーディオの処理",
+						"label": "Mono Audio Handling",
 						"toggle": {
 							"on": "Mono → Stereo Output",
-							"off": "元のオーディオ"
+							"off": "Original Audio"
 						}
 					}
 				},
 				"flipVideoHorizontalButton": {
 					"button": {
-						"label": "ビデオを水平方向に反転"
+						"label": "Flip video horizontally"
 					}
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "ビデオを垂直方向に反転"
+						"label": "Flip video vertically"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -46,7 +46,7 @@
 							"label": "{{TIME}}で早送する"
 						},
 						"rewindButton": {
-							"label": "巻き戻し： {{TIME}}"
+							"label": "{{TIME}}でリワインドする"
 						}
 					}
 				},
@@ -54,8 +54,8 @@
 					"button": {
 						"label": "終了画面のカードを非表示にする",
 						"toggle": {
-							"off": "終了画面のカードを隠す",
-							"on": "終了画面のカードを表示"
+							"off": "終了画面のカードを非表示にする",
+							"on": "終了画面のカードを表示にする"
 						}
 					}
 				},
@@ -73,7 +73,7 @@
 						"label": "最大表示",
 						"toggle": {
 							"off": "最大表示オフ",
-							"on": "最大化"
+							"on": "最大表示オン"
 						}
 					}
 				},
@@ -110,7 +110,7 @@
 				},
 				"playlistManagementButtons": {
 					"extras": {
-						"failedToMarkAsUnwatched": "ビデオを未視聴としてマークできませんでした",
+						"failedToMarkAsUnwatched": "Failed to mark video as unwatched",
 						"failedToRemoveVideo": "動画を削除できませんでした",
 						"markAsUnwatched": "未視聴にする",
 						"markingAsUnwatched": "Marking as unwatched…",
@@ -120,8 +120,8 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "後で見ることに失敗しました",
-						"saveVideo": "後でウォッチに保存",
+						"failedToSaveVideo": "Failed to save video to Watch Later",
+						"saveVideo": "Save to Watch Later",
 						"savingVideo": "Saving to Watch Later…"
 					}
 				},
@@ -141,10 +141,10 @@
 				},
 				"volumeBoostButton": {
 					"button": {
-						"label": "音量ブースト（{{value}} dB）",
+						"label": "Volume Boost ({{value}} dB)",
 						"toggle": {
 							"off": "音量ブーストオフ",
-							"on": "音量ブースト ({{value}} dB)"
+							"on": "Volume boost ({{value}} dB)"
 						}
 					}
 				}
@@ -154,18 +154,18 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "この拡張機能がマシンに保存されているすべてのデータを消去します",
+						"title": "マシンに保存されているすべてのエクステンションデータを消去します",
 						"value": "データの消去"
 					},
 					"confirm": {
-						"title": "設定のリセットを確認",
+						"title": "設定リセットを確認する",
 						"value": "確認"
 					},
 					"openTab": {
-						"title": "拡張機能の設定を新しいタブで開く"
+						"title": "新しいブラウザタブに拡張機能設定を開けるする"
 					},
 					"reset": {
-						"title": "すべての設定をデフォルトにリセットします。確認ボタンをクリックして変更を保存します。",
+						"title": "すべての設定をデフォルトにリセットします。「確認」ボタンをクリックして変更を保存します。",
 						"value": "リセット"
 					}
 				},
@@ -174,19 +174,19 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "タイムスタンプ付きの動画URLをコピーのボタン",
 							"decreasePlaybackSpeedButton": "速度を下げるボタン",
-							"forwardButton": "高速転送ボタン",
+							"forwardButton": "早送ボタン",
 							"hideEndScreenCardsButton": "終了画面のカードボタンを非表示にする",
 							"increasePlaybackSpeedButton": "速度を上げるボタン",
 							"loopButton": "ループボタン",
 							"maximizePlayerButton": "最大表示ボタン",
-							"miniPlayerButton": "Mini Playerボタン",
-							"openTranscriptButton": "トランスクリプトボタンを開く",
-							"rewindButton": "巻き戻すボタン",
+							"miniPlayerButton": "Mini Player button",
+							"openTranscriptButton": "文字起こしを見せるボタン",
+							"rewindButton": "リワインドボタン",
 							"screenshotButton": "スクリーンショットボタン",
 							"volumeBoostButton": "音量ブーストボタン",
-							"flipVideoVerticalButton": "ビデオを垂直方向に反転",
-							"flipVideoHorizontalButton": "ビデオを水平方向に反転",
-							"monoToStereoButton": "モノラルからステレオへのボタン"
+							"flipVideoVerticalButton": "Flip video vertically button",
+							"flipVideoHorizontalButton": "Flip video horizontally button",
+							"monoToStereoButton": "Mono to Stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -199,27 +199,27 @@
 							},
 							"player_controls_left": {
 								"placement": "プレイヤーコントローラーの左側",
-								"value": "左コントロール"
+								"value": "左のコントロール"
 							},
 							"player_controls_right": {
 								"placement": "プレイヤーコントローラーの右側",
-								"value": "右コントロール"
+								"value": "右のコントロール"
 							},
 							"same": {
-								"placement": "同じ位置で",
-								"value": "通常と同じ"
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
 						"title": "{{PLACEMENT}}に{{BUTTON_NAME}}を置き方する",
-						"fullscreenTitle": "フルスクリーンの場合、 {{BUTTON_NAME}} {{PLACEMENT}} を配置します",
-						"fullscreenLabel": "全画面",
-						"normalLabel": "標準"
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "ボタン置き方設定"
 				},
 				"clearData": {
 					"allDataDeleted": "すべてのデータが削除されました。",
-					"confirmAlert": "オプションに関連するすべての拡張データを削除します。続行しますか？"
+					"confirmAlert": "オプションに関連するすべてのデータを削除します。続行しますか？"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,53 +229,53 @@
 								"click": "ボタンクリック",
 								"hover": "マウスホバー"
 							},
-							"title": "フィーチャーメニューを有効にする方法を選択してください"
+							"title": "フィーチャー・メニューを有効化にする方法を選択します"
 						},
-						"title": "機能メニューの設定"
+						"title": "フィーチャー・メニュー設定"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "設定を正常にエクスポートしました",
-						"title": "設定を JSON ファイルにエクスポート",
+						"success": "設定がエクスポートをされました",
+						"title": "JSONファイルで設定がエクスポートする",
 						"value": "エクスポート設定"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "設定のインポート中にエラーが発生しました。ファイル形式を確認してください。\n不明なエラーが発生しました。",
-							"validation": "設定のインポートエラー。ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
+							"unknown": "設定がインポートを失敗されました。ファイル形式を確認してください。\n未知数なエラーが起こった。",
+							"validation": "設定のインポート失敗、ファイル形式を確認してください。\n{{ERROR_MESSAGE}}"
 						},
-						"success": "設定が正常にインポートされました",
-						"title": "JSONファイルから設定をインポート",
+						"success": "設定がインポートをされました",
+						"title": "JSONファイルから設定がインポートする",
 						"value": "インポート設定"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "言語",
-						"title": "拡張機能に使用する言語"
+						"title": "エクステンションに使用する言語"
 					},
 					"title": "言語"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
-					"label": "更新時に設定ページを開く",
-					"title": "YouTube Enhancer のメジャーバージョンまたはマイナーバージョンがインストールされている場合、設定ページを開きます。"
+					"label": "Open settings page on update",
+					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
 				},
 				"optionDisabled": {
 					"either": {
-						"label": "このオプションを設定するには {{OPTIONS}} を有効にしてください",
+						"label": "Enable {{OPTIONS}} to configure this option",
 						"separator": " や "
 					},
 					"plural": {
-						"label": "このオプションを設定するには {{OPTIONS}} を有効にしてください",
+						"label": "Enable {{OPTIONS}} to configure this option",
 						"separator": " と "
 					},
 					"singular": "'{{OPTION}}' 設定を有効にする",
 					"specificOption": {
-						"featureMenu": "このオプションを設定するには、少なくとも1つのボタンをフィーチャーメニューに配置するように設定します。",
-						"globalVolume": "このオプションを設定するには「最後のボリュームを記憶する」を無効にします",
-						"rememberVolume": "このオプションを設定するには「グローバルボリューム」を無効にしてください",
-						"screenshotButtonFileFormat": "このオプションを設定するには、スクリーンショットの保存タイプを「ファイル」または「両方」に設定します"
+						"featureMenu": "Configure at least one button to be placed in the feature menu to configure this option.",
+						"globalVolume": "Disable 'Remember last volume' to configure this option",
+						"rememberVolume": "Disable 'Global volume' to configure this option",
+						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
 				},
 				"settingSearch": {
@@ -293,21 +293,21 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "適用",
-						"cancel": "キャンセル",
+						"apply": "Apply",
+						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' と '{{FEATURE_B}}' の両方を有効にすることはできません。"
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
-						"keepFirst": "{{FEATURE}} を維持",
-						"keepSecond": "{{FEATURE}} を維持",
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' と '{{FEATURE_B}}' は同じ修飾キーを使用できません。",
-							"selectNewKey": "修飾キーを変更:"
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "申し込む前にすべての競合を解決してください。",
-						"title": "インポートの競合が検出されました"
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "このオプションは '{{OPTION}}' が有効な間は有効にできません。",
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "スクロールホイール再生速度制御キーバインドは、スクロールホイール音量制御キーバインドと同じにすることはできません。",
@@ -400,47 +400,47 @@
 			},
 			"globalVolume": {
 				"enable": {
-					"label": "このボリュームでビデオを常に開始",
-					"title": "選択したボリュームからすべてのビデオを自動的に開始します"
+					"label": "Always start videos with this volume",
+					"title": "Makes all videos begin at your selected volume automatically"
 				},
 				"settings": {
 					"amount": {
-						"label": "ビデオの開始音量",
-						"title": "再生開始時にすべてのビデオに適用される音量"
+						"label": "Video start volume",
+						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "グローバル音量の上書き"
+				"title": "Global Volume Override"
 			},
 			"miniPlayer": {
 				"button": {
-					"label": "Mini Playerボタン",
-					"title": "ミニプレーヤーを開くボタンを追加します"
+					"label": "Mini Player button",
+					"title": "Adds a button that opens the Mini Player"
 				},
 				"enable": {
-					"label": "コメントを表示するときにミニプレーヤーを開く",
-					"title": "コメントにスクロールすると、自動的に Mini Player が開きます。"
+					"label": "Open Mini Player when viewing comments",
+					"title": "Automatically opens the Mini Player when you scroll to comments."
 				},
 				"settings": {
 					"position": {
 						"select": {
-							"label": "既定の Mini Player位置",
+							"label": "Default Mini Player position",
 							"options": {
-								"bottomCenter": "中央下",
-								"bottomLeft": "左下",
-								"bottomRight": "右下",
-								"topCenter": "中央上",
-								"topLeft": "左上",
-								"topRight": "右上へ"
+								"bottomCenter": "Bottom center",
+								"bottomLeft": "Bottom left",
+								"bottomRight": "Bottom right",
+								"topCenter": "Top center",
+								"topLeft": "Top left",
+								"topRight": "Top right"
 							},
-							"title": "Mini Playerを動かす前の開始位置を設定します。"
+							"title": "Sets the starting position before you move the Mini Player."
 						}
 					},
 					"size": {
-						"label": "既定の Mini Playerサイズ",
-						"title": "Mini Player のサイズを変更する前に、初期サイズを設定します。"
+						"label": "Default Mini Player size",
+						"title": "Sets the initial size before you resize the Mini Player."
 					}
 				},
-				"title": "Mini Playerの設定"
+				"title": "Mini Player settings"
 			},
 			"miscellaneous": {
 				"settings": {
@@ -458,8 +458,8 @@
 					},
 					"automaticallyDisableAutoPlay": {
 						"enable": {
-							"label": "自動再生を無効にする",
-							"title": "動画の読み込み時に自動再生を無効にする"
+							"label": "Automatically disable autoplay",
+							"title": "Automatically disables autoplay when you load a video"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
@@ -470,32 +470,32 @@
 					},
 					"automaticallyEnableClosedCaptions": {
 						"enable": {
-							"label": "字幕を自動的に有効にする",
-							"title": "ビデオの読み込み時に自動的にクローズドキャプションを有効にする"
+							"label": "Automatically enable closed captions",
+							"title": "Automatically enables closed captions when you load a video"
 						}
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "自動的にプレイヤーを最大化する",
-							"title": "ビデオを読み込んだ時にプレーヤーを自動的に最大化します"
+							"label": "Automatically maximize player",
+							"title": "Automatically maximizes the player when you load a video"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
 						"enable": {
-							"label": "自動的に終了画面に動画を表示する",
-							"title": "ビデオを読み込んだ時に、自動的にさらに多くのビデオをエンドスクリーンに表示する"
+							"label": "Automatically show more videos on end screen",
+							"title": "Automatically shows more videos on end screen when you load a video"
 						}
 					},
 					"blockNumberKeySeeking": {
 						"enable": {
-							"label": "ブロック番号キーシーク中",
-							"title": "0-9キーを押すとビデオの割合にジャンプできなくなります"
+							"label": "Block number key seeking",
+							"title": "Prevents pressing 0-9 from jumping to a percentage of the video"
 						}
 					},
 					"hidePosts": {
 						"enable": {
-							"label": "投稿を非表示",
-							"title": "ホームページから投稿を非表示"
+							"label": "Hide posts",
+							"title": "Hides posts from the home page"
 						}
 					},
 					"copyTimestampUrlButton": {
@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "AIの概要を非表示",
-							"title": "人工知能の概要をビデオの下に隠します"
+							"label": "AIサマリーを非表示",
+							"title": "動画の下のAIサマリーを非表示にする"
 						}
 					},
 					"hideEndScreenCards": {
@@ -536,14 +536,14 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "メンバーのみの動画を隠す",
-							"title": "メンバーのみに表示されるビデオを非表示にします"
+							"label": "Hide members-only videos",
+							"title": "Hides videos that are only visible to members"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "モノラルからステレオへのボタン",
-							"title": "モノラルオーディオをステレオに変換するボタンを追加します。ステレオトラックは変更されません。"
+							"label": "Mono to Stereo button",
+							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
@@ -560,14 +560,14 @@
 					},
 					"hidePlayables": {
 						"enable": {
-							"label": "プレイ可能ファイルを隠す",
-							"title": "すべてのプレイ可能アイテムを隠す"
+							"label": "Hide playables",
+							"title": "Hides all playables"
 						}
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "プレイリストをホームページから隠す",
-							"title": "ホームページからプレイリストを削除する"
+							"label": "Hide playlists from homepage",
+							"title": "Get rid of playlists from homepage"
 						}
 					},
 					"hideScrollbar": {
@@ -578,8 +578,8 @@
 					},
 					"hideSidebarRecommendedVideos": {
 						"enable": {
-							"label": "推奨動画を隠す",
-							"title": "推奨するサイドバーを非表示にします"
+							"label": "Hide recommended videos",
+							"title": "Hides the sidebar that recommends videos"
 						}
 					},
 					"hideTranslateComment": {
@@ -644,8 +644,8 @@
 					},
 					"saveToWatchLaterButton": {
 						"enable": {
-							"label": "後で見るボタンに保存を有効にする",
-							"title": "ホームビデオとサブスクリプションビデオにボタンを追加して、「後で見る」プレイリストにビデオを保存します"
+							"label": "Enable save to Watch Later button",
+							"title": "Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist"
 						}
 					},
 					"shareShortener": {
@@ -668,47 +668,47 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "タイムスタンプのプレビュー",
-							"title": "タイムスタンプにカーソルを合わせてプレビューします。プレビューをクリックすると、その瞬間から再生が開始されます。"
+							"label": "Timestamp Preview",
+							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "横方向のビデオフリップボタン",
-							"title": "動画を水平方向に反転するボタンを追加します"
+							"label": "Horizontal video flip button",
+							"title": "Adds a button to flip the video horizontally"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "垂直方向のビデオフリップボタン",
-							"title": "動画を垂直方向に反転するボタンを追加します。"
+							"label": "Vertical video flip button",
+							"title": "Adds a button to flip the video vertically"
 						}
 					}
 				},
 				"title": "他の設定"
 			},
 			"hideShorts": {
-				"title": "ショーツを隠す",
+				"title": "Hide Shorts",
 				"settings": {
 					"sidebar": {
-						"label": "サイドバーで隠す",
-						"title": "サイドバーから Short ボタンを削除します。"
+						"label": "Hide in sidebar",
+						"title": "Removes the Shorts button from the sidebar"
 					},
 					"home": {
-						"label": "ホームフィードで非表示",
-						"title": "ホームフィードからShortsセクションを削除します"
+						"label": "Hide on Home feed",
+						"title": "Removes the Shorts section from the Home feed"
 					},
 					"channel": {
-						"label": "チャンネルページで非表示",
-						"title": "チャンネルページの Shorts 棚とタブを削除します"
+						"label": "Hide on Channel pages",
+						"title": "Removes the Shorts shelf and tab on channel pages"
 					},
 					"search": {
-						"label": "検索結果に隠す",
-						"title": "検索結果から短縮形の動画を削除します。"
+						"label": "Hide in Search results",
+						"title": "Removes Shorts videos from search results"
 					},
 					"videos": {
-						"label": "ウォッチページで非表示",
-						"title": "ウォッチページでおすすめのショートビデオを削除します。"
+						"label": "Hide on watch pages",
+						"title": "Removes Shorts videos from recommendations on watch pages"
 					}
 				}
 			},
@@ -847,18 +847,18 @@
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "未視聴ボタンとしてマーク",
-							"title": "動画を未視聴としてマークするボタンを追加します"
+							"label": "Mark as unwatched button",
+							"title": "Adds a button to mark videos as unwatched"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "ビデオボタンを削除",
-							"title": "プレイリストから動画を削除するボタンを追加します"
+							"label": "Remove video button",
+							"title": "Adds a button to remove videos from the playlist"
 						}
 					}
 				},
-				"title": "プレイリスト管理設定"
+				"title": "Playlist management settings"
 			},
 			"screenshotButton": {
 				"enable": {
@@ -874,7 +874,7 @@
 						"select": {
 							"label": "スクリーンショットセーブ型",
 							"options": {
-								"both": "両方（ファイルとクリップボード）",
+								"both": "Both (File and Clipboard)",
 								"clipboard": "クリップボード",
 								"file": "ファイル"
 							},
@@ -961,11 +961,11 @@
 				"settings": {
 					"amount": {
 						"label": "音量ブーストの量(dB)",
-						"title": "音量をブーストする金額。音量のブーストボタンをスクロールして調整することもできます。"
+						"title": "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it."
 					},
 					"amount_global_only": {
-						"label": "音量ブースト量 (dB)",
-						"title": "ボリュームを上げるための金額。"
+						"label": "Volume boost amount (dB)",
+						"title": "The amount to boost the volume by."
 					},
 					"mode": {
 						"select": {

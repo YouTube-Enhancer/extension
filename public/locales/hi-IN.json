@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from home page",
-							"title": "Get rid of playlists from home page"
+							"label": "Hide playlists from homepage",
+							"title": "Get rid of playlists from homepage"
 						}
 					},
 					"hideScrollbar": {

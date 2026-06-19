@@ -54,8 +54,8 @@
 					"button": {
 						"label": "Nascondi le schede finali",
 						"toggle": {
-							"off": "Nascondi schede di fine schermo",
-							"on": "Mostra schede di fine schermo"
+							"off": "Nascondi le schede finali",
+							"on": "Mostra le schede finali"
 						}
 					}
 				},
@@ -72,8 +72,8 @@
 					"button": {
 						"label": "Ingrandisci",
 						"toggle": {
-							"off": "Massimizza spento",
-							"on": "Massimizza il"
+							"off": "Massimizza NO",
+							"on": "Massimizza SÌ"
 						}
 					}
 				},
@@ -162,10 +162,10 @@
 						"value": "Conferma"
 					},
 					"openTab": {
-						"title": "Apri le impostazioni delle estensioni in una nuova scheda"
+						"title": "Apri impostazioni estensione in una nuova scheda"
 					},
 					"reset": {
-						"title": "Reimposta tutte le impostazioni ai valori predefiniti, fare clic sul pulsante di conferma per salvare le modifiche",
+						"title": "Reimposta le impostazioni ai valori predefiniti, clicca il pulsante di conferma per salvare le modifiche",
 						"value": "Reimposta"
 					}
 				},
@@ -180,8 +180,8 @@
 							"loopButton": "Pulsante Ripeti",
 							"maximizePlayerButton": "Pulsante Massimizza",
 							"miniPlayerButton": "Pulsante Mini riproduttore",
-							"openTranscriptButton": "Apri pulsante Trascrizione",
-							"rewindButton": "Pulsante riavvolgi",
+							"openTranscriptButton": "Pulsante Apri trascrizione",
+							"rewindButton": "Pulsante Riavvolgi",
 							"screenshotButton": "Pulsante Schermata",
 							"volumeBoostButton": "Pulsante Aumento volume",
 							"flipVideoVerticalButton": "Pulsante 'Ribalta video verticalmente'",
@@ -199,27 +199,27 @@
 							},
 							"player_controls_left": {
 								"placement": "alla sinistra dei controlli di riproduzione",
-								"value": "Controlli A Sinistra"
+								"value": "A sinistra"
 							},
 							"player_controls_right": {
 								"placement": "alla destra dei controlli di riproduzione",
-								"value": "Controlli Destri"
+								"value": "A destra"
 							},
 							"same": {
-								"placement": "nella stessa posizione",
-								"value": "Come normale"
+								"placement": "in the same position",
+								"value": "Same as normal"
 							}
 						},
 						"title": "Posiziona {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenTitle": "Quando a schermo intero, posiziona l' {{BUTTON_NAME}} {{PLACEMENT}}",
-						"fullscreenLabel": "Schermo",
-						"normalLabel": "Normale"
+						"fullscreenTitle": "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}",
+						"fullscreenLabel": "Fullscreen",
+						"normalLabel": "Normal"
 					},
 					"title": "Impostazioni posizione pulsanti"
 				},
 				"clearData": {
 					"allDataDeleted": "Tutti i dati sono stati eliminati.",
-					"confirmAlert": "Questo eliminerà tutti i dati relativi alle estensioni relative alle opzioni. Continuare?"
+					"confirmAlert": "Questo eliminerà tutti i dati delle estensioni relativi alle opzioni. Continuare?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,25 +229,25 @@
 								"click": "Clic",
 								"hover": "Sorvola"
 							},
-							"title": "Seleziona il metodo per attivare il menu funzionalità"
+							"title": "Seleziona il metodo per attivare il menu' funzioni"
 						},
-						"title": "Impostazioni menu funzionalità"
+						"title": "Impostazioni menu' funzioni"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Impostazioni esportate con successo",
-						"title": "Esporta le impostazioni in un file JSON",
-						"value": "Esporta Impostazioni"
+						"success": "Impostazioni esportate correttamente",
+						"title": "Esporta impostazioni in un file JSON",
+						"value": "Esporta impostazioni"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Errore nell'importazione delle impostazioni. Si prega di controllare il formato del file.\nSi è verificato un errore sconosciuto.",
-							"validation": "Errore nell'importazione delle impostazioni. Controlla il formato del file.\n{{ERROR_MESSAGE}}"
+							"unknown": "Errore nell'importazione delle impostazioni. Controllare il formato del file.\nSi è verificato un errore sconosciuto.",
+							"validation": "Errore nell'importazione delle impostazioni. Controllare il formato del file.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "Impostazioni importate con successo",
-						"title": "Importa le impostazioni da un file JSON",
-						"value": "Impostazioni Di Importazione"
+						"success": "Impostazioni importate correttamente",
+						"title": "Importa impostazioni da un file JSON",
+						"value": "Importa impostazioni"
 					}
 				},
 				"language": {
@@ -293,19 +293,19 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Applica",
-						"cancel": "Annulla",
+						"apply": "Apply",
+						"cancel": "Cancel",
 						"enabledConflict": {
-							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' non possono essere abilitati entrambi. Scegli quale mantenere."
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep."
 						},
-						"keepFirst": "Mantieni {{FEATURE}}",
-						"keepSecond": "Mantieni {{FEATURE}}",
+						"keepFirst": "Keep {{FEATURE}}",
+						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' non può usare la stessa chiave modificatore.",
-							"selectNewKey": "Cambia tasto modificatore:"
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Si prega di risolvere tutti i conflitti prima di applicare.",
-						"title": "Importa Conflitti Rilevati"
+						"resolveConflict": "Please resolve all conflicts before applying.",
+						"title": "Import Conflicts Detected"
 					},
 					"optionConflict": "Questa opzione non può essere abilitata mentre '{{OPTION}}' è abilitato.",
 					"scrollWheelHoldModifierKey": {
