@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Manipulação de Áudio Mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Mono → Saída Estéreo",
 							"off": "Áudio Original"
 						}
 					}
@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximização",
 						"toggle": {
 							"off": "Maximizar desligado",
 							"on": "Maximizar em"
