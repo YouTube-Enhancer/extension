@@ -72,8 +72,8 @@
 					"button": {
 						"label": "最大化",
 						"toggle": {
-							"off": "最大化关闭",
-							"on": "最大化开启"
+							"off": "关闭最大化",
+							"on": "最大化"
 						}
 					}
 				},
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "复制带有时间戳的视频 URL 按钮",
 							"decreasePlaybackSpeedButton": "降低速度按钮",
-							"forwardButton": "快进按钮",
+							"forwardButton": "快速转发按钮",
 							"hideEndScreenCardsButton": "隐藏结束界面卡片按钮",
 							"increasePlaybackSpeedButton": "增加速度按钮",
 							"loopButton": "循环按钮",
 							"maximizePlayerButton": "最大化按钮",
 							"miniPlayerButton": "迷你播放器按钮",
-							"openTranscriptButton": "转写文稿按钮",
-							"rewindButton": "快退按钮",
+							"openTranscriptButton": "打开字幕按钮",
+							"rewindButton": "返回按钮",
 							"screenshotButton": "屏幕截图按钮",
 							"volumeBoostButton": "音量增强按钮",
 							"flipVideoVerticalButton": "垂直翻转视频按钮",
@@ -199,11 +199,11 @@
 							},
 							"player_controls_left": {
 								"placement": "位于播放器控制按键左侧",
-								"value": "控件居左"
+								"value": "左控件"
 							},
 							"player_controls_right": {
 								"placement": "位于播放器控制按键右侧",
-								"value": "控件居右"
+								"value": "右侧控制"
 							},
 							"same": {
 								"placement": "在同一位置",
@@ -229,14 +229,14 @@
 								"click": "点击",
 								"hover": "悬停"
 							},
-							"title": "设置打开功能菜单的方式"
+							"title": "选择激活功能菜单的方法"
 						},
 						"title": "功能菜单设置"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "导出配置成功",
+						"success": "设置导出成功",
 						"title": "导出设置到 JSON 文件",
 						"value": "导出设置"
 					},
@@ -245,7 +245,7 @@
 							"unknown": "导入设置时出错。请检查文件格式。\n发生未知错误。",
 							"validation": "导入设置出错。请检查文件格式。\n{{ERROR_MESSAGE}}"
 						},
-						"success": "设置导入成功",
+						"success": "成功导入设置",
 						"title": "从 JSON 文件导入设置",
 						"value": "导入设置"
 					}
@@ -253,7 +253,7 @@
 				"language": {
 					"select": {
 						"label": "语言",
-						"title": "用于扩展的语言"
+						"title": "扩展使用的语言"
 					},
 					"title": "语言"
 				},
@@ -513,7 +513,7 @@
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
 							"label": "隐藏 AI 摘要",
-							"title": "隐藏视频下方的人工智能摘要"
+							"title": "隐藏视频下面的人造情报摘要"
 						}
 					},
 					"hideEndScreenCards": {

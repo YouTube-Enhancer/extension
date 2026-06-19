@@ -31,7 +31,7 @@ interface EnUS {
 				};
 				monoToStereoButton: {
 					button: {
-						label: "Mono Audio Handling";
+						label: "Mono to Stereo";
 						toggle: { off: "Original Audio"; on: "Mono → Stereo Output" };
 					};
 				};
@@ -89,7 +89,7 @@ interface EnUS {
 					confirm: { title: "Confirm setting reset"; value: "Confirm" };
 					openTab: { title: "Open extension settings in a new tab" };
 					reset: {
-						title: "Resets all settings to their defaults, Click the confirm button to save the changes";
+						title: "Resets all settings to their defaults. Click the confirm button to save the changes";
 						value: "Reset";
 					};
 				};
@@ -100,17 +100,17 @@ interface EnUS {
 							decreasePlaybackSpeedButton: "Decrease Speed button";
 							flipVideoHorizontalButton: "Flip video horizontally button";
 							flipVideoVerticalButton: "Flip video vertically button";
-							forwardButton: "Fast Forward button";
+							forwardButton: "Fast forward button";
 							hideEndScreenCardsButton: "Hide end screen cards button";
 							increasePlaybackSpeedButton: "Increase Speed button";
 							loopButton: "Loop button";
-							maximizePlayerButton: "Maximize button";
+							maximizePlayerButton: "Maximize player button";
 							miniPlayerButton: "Mini Player button";
-							monoToStereoButton: "Mono to Stereo button";
-							openTranscriptButton: "Open Transcript button";
+							monoToStereoButton: "Mono to stereo button";
+							openTranscriptButton: "Open transcript button";
 							rewindButton: "Rewind button";
 							screenshotButton: "Screenshot button";
-							volumeBoostButton: "Volume Boost button";
+							volumeBoostButton: "Volume boost button";
 						};
 						fullscreenLabel: "Fullscreen";
 						fullscreenTitle: "When in fullscreen, place the {{BUTTON_NAME}} {{PLACEMENT}}";
@@ -118,8 +118,8 @@ interface EnUS {
 						options: {
 							below_player: { placement: "below the player controls"; value: "Below Player" };
 							feature_menu: { placement: "in the feature menu"; value: "Feature Menu" };
-							player_controls_left: { placement: "on the left side of player controls"; value: "Left Controls" };
-							player_controls_right: { placement: "on the right side of player controls"; value: "Right Controls" };
+							player_controls_left: { placement: "on the left side of the player controls"; value: "Left Controls" };
+							player_controls_right: { placement: "on the right side of the player controls"; value: "Right Controls" };
 							same: { placement: "in the same position"; value: "Same as normal" };
 						};
 						title: "Place the {{BUTTON_NAME}} {{PLACEMENT}}";
@@ -178,7 +178,7 @@ interface EnUS {
 				settingSearch: { placeholder: "Search for a setting" };
 				youtubeDataApiV3Key: {
 					getApiKeyLinkText: "You can get one from here";
-					input: { label: "API Key"; title: "Enter your Youtube Data API V3 key." };
+					input: { label: "API Key"; title: "Enter your YouTube Data API V3 key" };
 					title: "YouTube API V3 key";
 				};
 			};
@@ -193,22 +193,22 @@ interface EnUS {
 						keepFirst: "Keep {{FEATURE}}";
 						keepSecond: "Keep {{FEATURE}}";
 						modifierKeyConflict: {
-							description: "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.";
+							description: "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key";
 							selectNewKey: "Change modifier key:";
 						};
-						resolveConflict: "Please resolve all conflicts before applying.";
+						resolveConflict: "Please resolve all conflicts before applying";
 						title: "Import Conflicts Detected";
 					};
-					optionConflict: "This option cannot be enabled while '{{OPTION}}' is enabled.";
+					optionConflict: "This option cannot be enabled while '{{OPTION}}' is enabled";
 					scrollWheelHoldModifierKey: {
 						sameKey: {
-							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key.";
-							volumeControl: "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key.";
+							speedControl: "The scroll wheel speed control modifier key cannot be the same as the scroll wheel volume control modifier key";
+							volumeControl: "The scroll wheel volume control modifier key cannot be the same as the scroll wheel speed control modifier key";
 						};
 					};
 				};
 				info: {
-					reset: 'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button or discard them by closing this page or ignore this notification.';
+					reset: 'All options have been reset to their default values.\nYou can now save the changes by clicking the "Confirm" button, or discard them by closing this page, or ignore this notification.';
 				};
 				success: { saved: "Options saved." };
 			};
@@ -226,7 +226,7 @@ interface EnUS {
 				title: "Custom CSS settings";
 			};
 			deepDarkCSS: {
-				enable: { label: "Deep Dark Theme"; title: "Activate the selected theme for the page" };
+				enable: { label: "Deep dark theme"; title: "Activates the selected theme for the page" };
 				extras: { author: "Author"; "co-authors": "Co-authors" };
 				settings: {
 					colorShadow: { label: "Shadow color"; title: "Color for shadows" };
@@ -266,7 +266,7 @@ interface EnUS {
 						title: "The volume applied to every video when it begins playing";
 					};
 				};
-				title: "Global Volume Override";
+				title: "Global volume override";
 			};
 			hideShorts: {
 				settings: {
@@ -288,13 +288,13 @@ interface EnUS {
 						title: "Removes Shorts videos from recommendations on watch pages";
 					};
 				};
-				title: "Hide Shorts";
+				title: "Hide shorts";
 			};
 			miniPlayer: {
 				button: { label: "Mini Player button"; title: "Adds a button that opens the Mini Player" };
 				enable: {
 					label: "Open Mini Player when viewing comments";
-					title: "Automatically opens the Mini Player when you scroll to comments.";
+					title: "Automatically opens the Mini Player when you scroll to comments";
 				};
 				settings: {
 					position: {
@@ -308,12 +308,12 @@ interface EnUS {
 								topLeft: "Top left";
 								topRight: "Top right";
 							};
-							title: "Sets the starting position before you move the Mini Player.";
+							title: "Sets the starting position before you move the Mini Player";
 						};
 					};
 					size: {
 						label: "Default Mini Player size";
-						title: "Sets the initial size before you resize the Mini Player.";
+						title: "Sets the initial size before you resize the Mini Player";
 					};
 				};
 				title: "Mini Player settings";
@@ -377,25 +377,25 @@ interface EnUS {
 					defaultToOriginalAudioTrack: {
 						enable: {
 							label: "Default to original audio track";
-							title: "Always default to the original audio track";
+							title: "Always defaults to the original audio track";
 						};
 					};
 					flipVideoHorizontalButton: {
 						enable: {
-							label: "Horizontal video flip button";
+							label: "Flip video horizontally button";
 							title: "Adds a button to flip the video horizontally";
 						};
 					};
 					flipVideoVerticalButton: {
 						enable: {
-							label: "Vertical video flip button";
+							label: "Flip video vertically button";
 							title: "Adds a button to flip the video vertically";
 						};
 					};
 					hideArtificialIntelligence: {
 						enable: {
 							label: "Hide AI";
-							title: "Hides AI-powered features, such as video summaries, Ask AI";
+							title: "Hides AI-powered features, such as video summaries and Ask AI";
 						};
 					};
 					hideEndScreenCards: {
@@ -413,14 +413,14 @@ interface EnUS {
 					hideLiveStreamChat: { enable: { label: "Hide live stream chat"; title: "Hides the live stream chat" } };
 					hideMembersOnlyVideos: {
 						enable: {
-							label: "Hide members-only videos";
-							title: "Hides videos that are only visible to members";
+							label: "Hide member-only videos";
+							title: "Hides videos that only members can watch";
 						};
 					};
 					hideOfficialArtistVideosFromHomePage: {
 						enable: {
-							label: "Hide Official Artist Videos";
-							title: "Hide Official Artist Videos from Home Page";
+							label: "Hide official artist videos";
+							title: "Hides official artist videos from the home page";
 						};
 					};
 					hidePaidPromotionBanner: {
@@ -432,12 +432,12 @@ interface EnUS {
 					hidePlayables: { enable: { label: "Hide playables"; title: "Hides all playables" } };
 					hidePlaylistRecommendationsFromHomePage: {
 						enable: {
-							label: "Hide playlists from homepage";
-							title: "Get rid of playlists from homepage";
+							label: "Hide playlists from the home page";
+							title: "Removes playlists from the home page";
 						};
 					};
 					hidePosts: { enable: { label: "Hide posts"; title: "Hides posts from the home page" } };
-					hideScrollbar: { enable: { label: "Hide scrollbar"; title: "Hides the pages scrollbar" } };
+					hideScrollbar: { enable: { label: "Hide scrollbar"; title: "Hides the page scrollbar" } };
 					hideSidebarRecommendedVideos: {
 						enable: {
 							label: "Hide recommended videos";
@@ -464,7 +464,7 @@ interface EnUS {
 					};
 					monoToStereoButton: {
 						enable: {
-							label: "Mono to Stereo button";
+							label: "Mono to stereo button";
 							title: "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.";
 						};
 					};
@@ -483,7 +483,7 @@ interface EnUS {
 					pauseBackgroundPlayers: {
 						enable: {
 							label: "Pause background players";
-							title: "Pauses video players in background tabs when you start a new player in foreground tab";
+							title: "Pauses video players in background tabs when you start a new player in the foreground tab";
 						};
 					};
 					remainingTime: {
@@ -501,7 +501,7 @@ interface EnUS {
 					removeRedirect: {
 						enable: {
 							label: "Remove YouTube /redirect URLs";
-							title: "Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue";
+							title: "Replaces YouTube redirect URLs with actual URLs, skipping the redirect warning dialogue";
 						};
 					};
 					restoreFullscreenScrolling: {
@@ -533,7 +533,7 @@ interface EnUS {
 					};
 					timestampPeek: {
 						enable: {
-							label: "Timestamp Preview";
+							label: "Timestamp preview";
 							title: "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.";
 						};
 					};
@@ -583,17 +583,17 @@ interface EnUS {
 					type: {
 						label: "Type";
 						select: {
-							options: { circle: "Circle"; line: "Line"; no_display: "No display"; text: "Text" };
+							options: { circle: "Circle"; line: "Line"; no_display: "No Display"; text: "Text" };
 						};
 						title: "Select the type of On-Screen Display";
 					};
 				};
-				title: "On-screen display settings";
+				title: "On-Screen Display settings";
 			};
 			playerQuality: {
 				enable: {
 					label: "Automatic quality adjustment";
-					title: "Automatically adjusts the video quality to the selected level.";
+					title: "Automatically adjusts the video quality to the selected level";
 				};
 				settings: {
 					quality: { select: { label: "Player quality"; title: "The quality to set the video to" } };
@@ -628,13 +628,13 @@ interface EnUS {
 			playlistLength: {
 				enable: {
 					label: "Display playlist length information";
-					title: "Shows the total length of the playlist, how much has been watched, and how much remains.";
+					title: "Shows the total length of the playlist, how much has been watched, and how much remains";
 				};
 				settings: {
 					wayToGetLength: {
 						select: {
 							label: "Method to get playlist length";
-							title: "The way to get playlist length information (API method will fallback to HTML if an error occurs)";
+							title: "The way to get playlist length information (API method will fall back to HTML if an error occurs)";
 						};
 					};
 					wayToGetWatchTime: {
@@ -684,11 +684,11 @@ interface EnUS {
 			scrollWheelSpeedControl: {
 				enable: {
 					label: "Scroll wheel speed control";
-					title: "Press a modifier key to enable speed adjustment with the scroll wheel.";
+					title: "Press a modifier key to enable speed adjustment with the scroll wheel";
 				};
 				extras: { optionLabel: "{{KEY}} key" };
 				settings: {
-					adjustmentSteps: { label: "Speed Change Per Scroll"; title: "Adjust the speed change per scroll" };
+					adjustmentSteps: { label: "Speed change per scroll"; title: "Adjust the speed change per scroll" };
 					modifierKey: { select: { label: "Modifier key"; title: "The modifier key to use" } };
 				};
 				title: "Scroll wheel speed control settings";
@@ -701,17 +701,17 @@ interface EnUS {
 				extras: { optionLabel: "{{KEY}} key" };
 				settings: {
 					adjustmentSteps: {
-						label: "Volume Change Per Scroll";
+						label: "Volume change per scroll";
 						title: "Adjust the volume change per scroll";
 					};
 					holdModifierKey: {
 						label: "When holding modifier key";
 						select: { label: "Modifier key"; title: "The modifier key to use" };
-						title: "Press a modifier key to enable volume adjustment with the scroll wheel.";
+						title: "Press a modifier key to enable volume adjustment with the scroll wheel";
 					};
 					holdRightClick: {
 						label: "When holding right click";
-						title: "Hold right click to enable scroll wheel volume control";
+						title: "Holds right click to enable scroll wheel volume control";
 					};
 				};
 				title: "Scroll wheel volume control settings";
@@ -739,7 +739,7 @@ interface EnUS {
 						label: "Volume boost amount (dB)";
 						title: "The amount to boost the volume by. You can also scroll over the volume boost button (Shift/Ctrl for larger steps) to adjust it.";
 					};
-					amount_global_only: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by." };
+					amount_global_only: { label: "Volume boost amount (dB)"; title: "The amount to boost the volume by" };
 					mode: {
 						select: {
 							label: "Volume boost mode";
