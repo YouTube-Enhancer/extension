@@ -46,7 +46,7 @@
 							"label": "{{TIME}} तक तेज़ी से आगे बढ़ाएँ"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} तक पीछे ले जाएँ"
 						}
 					}
 				},
@@ -54,8 +54,8 @@
 					"button": {
 						"label": "अंतिम स्क्रीन कार्ड छिपाएँ",
 						"toggle": {
-							"off": "Hide end screen cards",
-							"on": "Show end screen cards"
+							"off": "अंतिम स्क्रीन कार्ड छिपाएँ",
+							"on": "अंतिम स्क्रीन कार्ड दिखाएँ"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "अधिकतम करें",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "अधिकतम बंद",
+							"on": "अधिकतम चालू"
 						}
 					}
 				},
@@ -237,8 +237,8 @@
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Settings successfully exported",
-						"title": "Export settings to a JSON file",
-						"value": "Export Settings"
+						"title": "सेटिंग्स को JSON फ़ाइल में निर्यात करें",
+						"value": "निर्यात सेटिंग्स"
 					},
 					"importButton": {
 						"error": {
@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from homepage",
-							"title": "Get rid of playlists from homepage"
+							"label": "Hide playlists from home page",
+							"title": "Get rid of playlists from home page"
 						}
 					},
 					"hideScrollbar": {
