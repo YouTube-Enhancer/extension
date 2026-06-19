@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Powiększ okno",
 						"toggle": {
 							"off": "Maksymalizuj",
 							"on": "Maksymalizuj na"
