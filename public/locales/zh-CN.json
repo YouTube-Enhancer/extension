@@ -12,7 +12,7 @@
 					"button": {
 						"label": "单声道处理",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "单声道 → 立体声输出",
 							"off": "原始音频"
 						}
 					}
@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "最大化",
 						"toggle": {
 							"off": "关闭最大化",
 							"on": "最大化"
