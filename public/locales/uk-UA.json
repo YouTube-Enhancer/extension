@@ -510,10 +510,10 @@
 							"title": "Завжди перед оригінальною аудіо-доріжкою"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Приховати резюме AI",
-							"title": "Приховує нижче відео резюме штучного інтелекту"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
