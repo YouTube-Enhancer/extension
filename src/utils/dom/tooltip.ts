@@ -86,11 +86,7 @@ function createTooltipElement<T extends Record<string, unknown>>({ id, styles, t
 	Object.assign(tooltip.style, styles);
 	return tooltip;
 }
-function positionTooltip(params: {
-	direction: "down" | "left" | "right" | "up";
-	element: HTMLElement;
-	tooltip: HTMLElement;
-}) {
+function positionTooltip(params: { direction: "down" | "left" | "right" | "up"; element: HTMLElement; tooltip: HTMLElement }) {
 	const { direction, element, tooltip } = params;
 	const rect = element.getBoundingClientRect();
 	const tooltipRect = tooltip.getBoundingClientRect();
