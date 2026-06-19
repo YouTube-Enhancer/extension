@@ -1,15 +1,14 @@
 import { Innertube } from "youtubei.js/web";
 
 type EditPlaylistResponse = {
-	data: {
-		frameworkUpdates: {
-			entityBatchUpdate: unknown;
-		};
-		newHeader: {
-			playlistHeaderRenderer: unknown;
-		};
+	frameworkUpdates: {
+		entityBatchUpdate: Record<string, unknown>;
+	};
+	newHeader: {
+		playlistHeaderRenderer: Record<string, unknown>;
 	};
 };
+
 export async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
 	const response = await youtube.actions.execute("/browse/edit_playlist", {
 		actions: [
@@ -21,8 +20,9 @@ export async function removeFromPlaylist(youtube: Innertube, playlistId: string,
 		params: "CAFAAQ%3D%3D",
 		playlistId
 	});
-	// Not the best typing but it'll do for now
-	const castResponse = response as unknown as EditPlaylistResponse;
+
+	const editPlaylistResponse = response.data as EditPlaylistResponse;
+
 	document.querySelector("ytd-app")?.dispatchEvent(
 		new CustomEvent("yt-action", {
 			detail: {
@@ -33,25 +33,34 @@ export async function removeFromPlaylist(youtube: Innertube, playlistId: string,
 		})
 	);
 
-	// triggers a sidebar update for regular playlists
-	if (castResponse?.data?.frameworkUpdates?.entityBatchUpdate) {
-		document.querySelector("ytd-app")?.dispatchEvent(
-			new CustomEvent("yt-action", {
-				detail: {
-					actionName: "yt-entity-update-command",
-					args: [{ entityUpdateCommand: { entityBatchUpdate: castResponse.data.frameworkUpdates.entityBatchUpdate } }],
-					returnValue: []
-				}
-			})
-		);
-	}
+	const updateRegularPlaylistSidebar = () => {
+		const { entityBatchUpdate } = editPlaylistResponse.frameworkUpdates || {};
 
-	// triggers a sidebar update for the WL playlist
-	if (castResponse?.data?.newHeader?.playlistHeaderRenderer) {
-		document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
-			new CustomEvent("yt-new-playlist-header", {
-				detail: castResponse.data.newHeader.playlistHeaderRenderer
-			})
-		);
-	}
+		if (entityBatchUpdate) {
+			document.querySelector("ytd-app")?.dispatchEvent(
+				new CustomEvent("yt-action", {
+					detail: {
+						actionName: "yt-entity-update-command",
+						args: [{ entityUpdateCommand: { entityBatchUpdate } }],
+						returnValue: []
+					}
+				})
+			);
+		}
+	};
+
+	const updateWatchLaterPlaylistSidebar = () => {
+		const { playlistHeaderRenderer } = editPlaylistResponse.newHeader || {};
+
+		if (playlistHeaderRenderer) {
+			document.querySelector("ytd-playlist-header-renderer")?.dispatchEvent(
+				new CustomEvent("yt-new-playlist-header", {
+					detail: playlistHeaderRenderer
+				})
+			);
+		}
+	};
+
+	updateRegularPlaylistSidebar();
+	updateWatchLaterPlaylistSidebar();
 }
