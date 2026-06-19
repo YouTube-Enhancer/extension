@@ -10,7 +10,7 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Mono to Stereo",
 						"toggle": {
 							"on": "Mono → Stereo Output",
 							"off": "Original-Audio"
@@ -510,10 +510,10 @@
 							"title": "Immer standardmäßig auf die ursprüngliche Audiospur"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "KI-Zusammenfassung ausblenden",
-							"title": "Versteckt die Zusammenfassung der künstlichen Intelligenz unten auf Videos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
