@@ -510,10 +510,10 @@
 							"title": "Vždy výchozí k původní zvukové stopě"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Skrýt shrnutí AI",
-							"title": "Skryje souhrn umělé inteligence pod videi"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
