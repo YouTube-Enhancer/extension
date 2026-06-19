@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Розгорнути",
 						"toggle": {
 							"off": "Розгорнути",
 							"on": "Максимізувати"
@@ -242,8 +242,8 @@
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+							"unknown": "Помилка імпорту налаштувань. Перевірте формат файлу. \nВідбулась невідома помилка.",
+							"validation": "Помилка імпорту налаштувань. Перевірте формат файлу.\n{{ERROR_MESSAGE}}"
 						},
 						"success": "Налаштування успішно імпортовано",
 						"title": "Імпортувати налаштування з файлу JSON",
