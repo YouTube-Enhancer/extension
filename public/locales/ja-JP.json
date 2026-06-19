@@ -70,9 +70,9 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "最大表示",
 						"toggle": {
-							"off": "Maximize off",
+							"off": "最大表示オフ",
 							"on": "最大化"
 						}
 					}
