@@ -48,20 +48,20 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Automatically Show More Videos On End Screen**: Automatically shows more videos on end screen when you load a video
 - **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
 - **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
-- **Default To Original Audio Track**: Always default to the original audio track
-- **Horizontal Video Flip Button**: Adds a button to flip the video horizontally
-- **Vertical Video Flip Button**: Adds a button to flip the video vertically
-- **Hide AI**: Hides AI-powered features, such as video summaries, Ask AI
+- **Default To Original Audio Track**: Always defaults to the original audio track
+- **Flip Video Horizontally Button**: Adds a button to flip the video horizontally
+- **Flip Video Vertically Button**: Adds a button to flip the video vertically
+- **Hide AI**: Hides AI-powered features, such as video summaries and Ask AI
 - **Hide End Screen Cards**: Hides the cards at the end of the video
 - **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
 - **Hide Live Stream Chat**: Hides the live stream chat
-- **Hide Members-only Videos**: Hides videos that are only visible to members
-- **Hide Official Artist Videos**: Hide Official Artist Videos from Home Page
+- **Hide Member-only Videos**: Hides videos that only members can watch
+- **Hide Official Artist Videos**: Hides official artist videos from the home page
 - **Hide Paid Promotion Banner**: Hides the banner that appears when you watch a video that has a paid promotion
 - **Hide Playables**: Hides all playables
-- **Hide Playlists From Homepage**: Get rid of playlists from homepage
+- **Hide Playlists From The Home Page**: Removes playlists from the home page
 - **Hide Posts**: Hides posts from the home page
-- **Hide Scrollbar**: Hides the pages scrollbar
+- **Hide Scrollbar**: Hides the page scrollbar
 - **Hide Recommended Videos**: Hides the sidebar that recommends videos
 - **Hide Translate Comment Button**: Hides 'Translate to Language' button under comments
 - **Loop Button**: Adds a button to the feature menu to loop the video you're watching
@@ -69,10 +69,10 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Mono To Stereo Button**: Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.
 - **Open Transcript Button**: Adds a button to the feature menu to open the transcript of the video you're watching
 - **Open You Tube Settings On Hover**: Opens the YouTube settings menu when you hover over the settings button
-- **Pause Background Players**: Pauses video players in background tabs when you start a new player in foreground tab
+- **Pause Background Players**: Pauses video players in background tabs when you start a new player in the foreground tab
 - **Remaining Time**: Shows the remaining time of the video you're watching
 - **Remember Last Volume**: Remembers the volume of the last video you were watching and sets it when you open a new video
-- **Remove You Tube /redirect URLs**: Replaces YouTube redirect by actual URLs, skipping redirect warning dialogue
+- **Remove You Tube /redirect URLs**: Replaces YouTube redirect URLs with actual URLs, skipping the redirect warning dialogue
 - **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
 - **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
 - **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
@@ -84,7 +84,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 <details>
 <summary>Deep Dark CSS</summary>
 
-- **Deep Dark Theme**: Activate the selected theme for the page
+- **Deep Dark Theme**: Activates the selected theme for the page
 - **Select Theme**: Select a theme to be applied to the page
   - Options: 9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark
 - **Accent Color**: Color for accent
@@ -123,18 +123,18 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 <details>
 <summary>Mini Player • 2 features (2 settings)</summary>
 
-- **Open Mini Player When Viewing Comments**: Automatically opens the Mini Player when you scroll to comments.
+- **Open Mini Player When Viewing Comments**: Automatically opens the Mini Player when you scroll to comments
 - **Mini Player Button**: Adds a button that opens the Mini Player
-- **Default Mini Player Position**: Sets the starting position before you move the Mini Player.
+- **Default Mini Player Position**: Sets the starting position before you move the Mini Player
   - Options: Bottom center, Bottom left, Bottom right, Top center, Top left, Top right
-- **Default Mini Player Size**: Sets the initial size before you resize the Mini Player.
+- **Default Mini Player Size**: Sets the initial size before you resize the Mini Player
   - Options: 320x180, 400x225, 480x270, 560x315
 </details>
 
 <details>
 <summary>Player Quality</summary>
 
-- **Automatic Quality Adjustment**: Automatically adjusts the video quality to the selected level.
+- **Automatic Quality Adjustment**: Automatically adjusts the video quality to the selected level
 - **Player Quality**: The quality to set the video to
   - Options: Auto, 4320p, 2880p, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, 144p
 - **Quality Fallback Strategy**: The strategy to use when the selected quality is not available
@@ -153,8 +153,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 <details>
 <summary>Playlist Length</summary>
 
-- **Display Playlist Length Information**: Shows the total length of the playlist, how much has been watched, and how much remains.
-- **Method To Get Playlist Length**: The way to get playlist length information (API method will fallback to HTML if an error occurs)
+- **Display Playlist Length Information**: Shows the total length of the playlist, how much has been watched, and how much remains
+- **Method To Get Playlist Length**: The way to get playlist length information (API method will fall back to HTML if an error occurs)
   - Options: API, HTML
 - **Method To Get Watched Time**: The way to get the amount of time watched (Video Length type only used on watch page)
   - Options: Video Length, Video Watch Time
@@ -180,7 +180,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 <details>
 <summary>Scroll Wheel Speed Control</summary>
 
-- **Scroll Wheel Speed Control**: Press a modifier key to enable speed adjustment with the scroll wheel.
+- **Scroll Wheel Speed Control**: Press a modifier key to enable speed adjustment with the scroll wheel
 - **Modifier Key**: The modifier key to use
   - Options: Alt key, Ctrl key, Shift key
 - **Speed Change Per Scroll**: Adjust the speed change per scroll
@@ -190,8 +190,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 <summary>Scroll Wheel Volume Control • 3 features (2 settings)</summary>
 
 - **Scroll Wheel Volume Control**: Lets you use the scroll wheel to control the volume of the video you're watching
-- **When Holding Right Click**: Hold right click to enable scroll wheel volume control
-- **When Holding Modifier Key**: Press a modifier key to enable volume adjustment with the scroll wheel.
+- **When Holding Right Click**: Holds right click to enable scroll wheel volume control
+- **When Holding Modifier Key**: Press a modifier key to enable volume adjustment with the scroll wheel
 - **Modifier Key**: The modifier key to use
   - Options: Alt key, Ctrl key, Shift key
 - **Volume Change Per Scroll**: Adjust the volume change per scroll
