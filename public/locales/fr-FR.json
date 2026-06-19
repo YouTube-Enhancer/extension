@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Gestion audio mono",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Sortie mono → stéréo",
 							"off": "Audio original"
 						}
 					}
