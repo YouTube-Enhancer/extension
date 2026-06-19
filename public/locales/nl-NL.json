@@ -510,10 +510,10 @@
 							"title": "Altijd standaard voor het originele audiotrack."
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Verberg AI samenvatting",
-							"title": "Verbergt de kunstmatige intelligentie samenvatting onder video's"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
