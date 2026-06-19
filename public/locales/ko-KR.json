@@ -46,7 +46,7 @@
 							"label": "{{TIME}} 초 빨리 감기"
 						},
 						"rewindButton": {
-							"label": "Rewind by {{TIME}}"
+							"label": "{{TIME}} 초 되감기"
 						}
 					}
 				},
@@ -54,8 +54,8 @@
 					"button": {
 						"label": "최종 화면 숨기기",
 						"toggle": {
-							"off": "Hide end screen cards",
-							"on": "Show end screen cards"
+							"off": "최종 화면 숨기기",
+							"on": "최종 화면 보기"
 						}
 					}
 				},
@@ -70,10 +70,10 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "화면 크기에 맞추기",
 						"toggle": {
-							"off": "Maximize off",
-							"on": "Maximize on"
+							"off": "끄기",
+							"on": "켜기"
 						}
 					}
 				},
@@ -127,7 +127,7 @@
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Screenshot"
+						"label": "스크린샷"
 					},
 					"extras": {
 						"copiedToClipboard": "현재 화면 클립보드에 복사"
@@ -154,18 +154,18 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Clears all data this extension has stored on your machine",
+						"title": "확장과 관련된 데이터를 PC에서 모두 삭제합니다.",
 						"value": "데이터 삭제"
 					},
 					"confirm": {
-						"title": "Confirm setting reset",
+						"title": "작업을 진행하려면 다시 누르세요",
 						"value": "확인"
 					},
 					"openTab": {
-						"title": "Open extension settings in a new tab"
+						"title": "새 탭에서 설정 열기"
 					},
 					"reset": {
-						"title": "Resets all settings to their defaults, Click the confirm button to save the changes",
+						"title": "모든 설정을 기본값으로 변경합니다. 진행을 원하시면 확인을 누르세요",
 						"value": "초기화"
 					}
 				},
@@ -174,14 +174,14 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "현재 시간 주소 복사 버튼",
 							"decreasePlaybackSpeedButton": "속도 조절 버튼",
-							"forwardButton": "Fast Forward button",
+							"forwardButton": "빨리 감기 버튼",
 							"hideEndScreenCardsButton": "최종 화면 숨기기",
 							"increasePlaybackSpeedButton": "속도 조절 버튼",
 							"loopButton": "연속 재생 버튼",
 							"maximizePlayerButton": "화면 크기에 맞추기 버튼",
 							"miniPlayerButton": "Mini Player button",
-							"openTranscriptButton": "Open Transcript button",
-							"rewindButton": "Rewind button",
+							"openTranscriptButton": "스크립트 보기 버튼",
+							"rewindButton": "되감기 버튼",
 							"screenshotButton": "스크린샷 버튼",
 							"volumeBoostButton": "볼륨 부스트 버튼",
 							"flipVideoVerticalButton": "Flip video vertically button",
@@ -199,11 +199,11 @@
 							},
 							"player_controls_left": {
 								"placement": "플레이어 컨트롤의 왼쪽",
-								"value": "Left Controls"
+								"value": "왼쪽"
 							},
 							"player_controls_right": {
 								"placement": "플레이어 컨트롤의 오른쪽",
-								"value": "Right Controls"
+								"value": "오른쪽"
 							},
 							"same": {
 								"placement": "in the same position",
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "모든 데이터가 삭제되었습니다.",
-					"confirmAlert": "This will delete all extension data related to options. Continue?"
+					"confirmAlert": "모든 데이터가 삭제됩니다. 진행할까요?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -229,31 +229,31 @@
 								"click": "클릭 시",
 								"hover": "마우스 커서를 올릴 때"
 							},
-							"title": "Select the method to activate the feature menu"
+							"title": "추가 기능 메뉴를 어떤 방식으로 열지 선택하세요"
 						},
-						"title": "Feature menu settings"
+						"title": "추가 기능 설정"
 					}
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Settings successfully exported",
-						"title": "Export settings to a JSON file",
-						"value": "Export Settings"
+						"success": "설정을 성공적으로 내보냈습니다.",
+						"title": "설정 JSON로 내보내기",
+						"value": "설정 내보내기"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Error importing settings. Please check the file format.\nAn unknown error occurred.",
-							"validation": "Error importing settings. Please check the file format.\n{{ERROR_MESSAGE}}"
+							"unknown": "설정 가져오기에 오류가 있습니다. 파일 형식을 확인하십시오.",
+							"validation": "설정 가져 오기에 오류가 있습니다. 파일 형식을 확인하십시오.\n{{ERROR_MESSAGE}}"
 						},
-						"success": "Settings imported successfully",
-						"title": "Import settings from a JSON file",
-						"value": "Import Settings"
+						"success": "설정 파일을 성공적으로 가져왔습니다.",
+						"title": "JSON 파일에서 설정 가져오기",
+						"value": "설정 가져오기"
 					}
 				},
 				"language": {
 					"select": {
 						"label": "언어",
-						"title": "The language to use for the extension"
+						"title": "이곳에서 언어를 변경할 수 있습니다."
 					},
 					"title": "언어"
 				},
@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from homepage",
-							"title": "Get rid of playlists from homepage"
+							"label": "Hide playlists from home page",
+							"title": "Get rid of playlists from home page"
 						}
 					},
 					"hideScrollbar": {
