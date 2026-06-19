@@ -10,7 +10,7 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Mono to Stereo",
 						"toggle": {
 							"on": "Mono → Stereo Output",
 							"off": "Original Audio"
@@ -186,7 +186,7 @@
 							"volumeBoostButton": "音量增強按鈕",
 							"flipVideoVerticalButton": "Flip video vertically button",
 							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "Mono to stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -301,13 +301,13 @@
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key",
 							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
+						"resolveConflict": "Please resolve all conflicts before applying",
 						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "滾輪播放速度輔助按鍵不能跟音量增強輔助按鍵相同。",
@@ -409,7 +409,7 @@
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Global volume override"
 			},
 			"miniPlayer": {
 				"button": {
@@ -418,7 +418,7 @@
 				},
 				"enable": {
 					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"title": "Automatically opens the Mini Player when you scroll to comments"
 				},
 				"settings": {
 					"position": {
@@ -432,12 +432,12 @@
 								"topLeft": "Top left",
 								"topRight": "Top right"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Sets the starting position before you move the Mini Player"
 						}
 					},
 					"size": {
 						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"title": "Sets the initial size before you resize the Mini Player"
 					}
 				},
 				"title": "Mini Player settings"
@@ -507,13 +507,13 @@
 					"defaultToOriginalAudioTrack": {
 						"enable": {
 							"label": "Default to original audio track",
-							"title": "Always default to the original audio track"
+							"title": "Always defaults to the original audio track"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI summary",
-							"title": "Hides the artificial intelligence summary below videos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -536,13 +536,13 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Hide member-only videos",
+							"title": "Hides videos that only members can watch"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
+							"label": "Mono to stereo button",
 							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from home page",
-							"title": "Get rid of playlists from home page"
+							"label": "Hide playlists from the home page",
+							"title": "Removes playlists from the home page"
 						}
 					},
 					"hideScrollbar": {
@@ -668,19 +668,19 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
+							"label": "Timestamp preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
+							"label": "Flip video horizontally button",
 							"title": "Adds a button to flip the video horizontally"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
+							"label": "Flip video vertically button",
 							"title": "Adds a button to flip the video vertically"
 						}
 					}
@@ -688,7 +688,7 @@
 				"title": "其他設定"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Hide shorts",
 				"settings": {
 					"sidebar": {
 						"label": "Hide in sidebar",
@@ -768,7 +768,7 @@
 						"title": "選擇屏幕顥示風格"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "On-Screen Display settings"
 			},
 			"playerQuality": {
 				"enable": {
@@ -965,7 +965,7 @@
 					},
 					"amount_global_only": {
 						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"title": "The amount to boost the volume by"
 					},
 					"mode": {
 						"select": {
