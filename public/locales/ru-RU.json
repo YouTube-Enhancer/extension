@@ -510,10 +510,10 @@
 							"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Скрыть итог ИИ",
-							"title": "Скрывает искусственный интеллект резюме ниже видео"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
