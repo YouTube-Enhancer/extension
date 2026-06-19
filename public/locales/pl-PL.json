@@ -510,10 +510,10 @@
 							"title": "Zawsze domyślnie dla oryginalnej ścieżki audio"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Ukryj podsumowanie AI",
-							"title": "Ukrywa podsumowanie sztucznej inteligencji pod filmami"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
