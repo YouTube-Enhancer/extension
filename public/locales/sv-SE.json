@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Monoljudshantering",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Mono → Stereo-ljud",
 							"off": "Originalljud"
 						}
 					}
@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximize",
+						"label": "Maximera",
 						"toggle": {
 							"off": "Maximera av",
 							"on": "Maximera den"
@@ -180,8 +180,8 @@
 							"loopButton": "Slingknapp",
 							"maximizePlayerButton": "Maximeraknapp",
 							"miniPlayerButton": "Minispelarknapp",
-							"openTranscriptButton": "Öppna avskrivningsknappen",
-							"rewindButton": "Spola tillbaka knappen",
+							"openTranscriptButton": "Transkriptknapp",
+							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
 							"volumeBoostButton": "Volymökningsknapp",
 							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
@@ -207,19 +207,19 @@
 							},
 							"same": {
 								"placement": "i samma position",
-								"value": "Samma som normalt"
+								"value": "Samma som normal"
 							}
 						},
 						"title": "Placera {{BUTTON_NAME}} {{PLACEMENT}}",
 						"fullscreenTitle": "Placera {{BUTTON_NAME}} {{PLACEMENT}} i helskärm",
-						"fullscreenLabel": "Helskärm",
+						"fullscreenLabel": "Fullskärm",
 						"normalLabel": "Normal"
 					},
 					"title": "Inställningar för knapplacering"
 				},
 				"clearData": {
 					"allDataDeleted": "All data har tagits bort.",
-					"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativ. Fortsätt?"
+					"confirmAlert": "Detta kommer att ta bort alla tilläggsdata relaterade till alternativen. Fortsätta?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -236,7 +236,7 @@
 				},
 				"importExportSettings": {
 					"exportButton": {
-						"success": "Inställningar exporterades framgångsrikt",
+						"success": "Inställningar har exporterats",
 						"title": "Exportera inställningar till en JSON-fil",
 						"value": "Exportera inställningar"
 					},
@@ -253,7 +253,7 @@
 				"language": {
 					"select": {
 						"label": "Språk",
-						"title": "Språket att använda för tillägget"
+						"title": "Språket som ska användas för tillägget"
 					},
 					"title": "Språk"
 				},
@@ -293,7 +293,7 @@
 			"notifications": {
 				"error": {
 					"importConflict": {
-						"apply": "Tillämpa",
+						"apply": "Verkställ",
 						"cancel": "Avbryt",
 						"enabledConflict": {
 							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte båda aktiveras. Välj vilken som ska behållas."
@@ -304,7 +304,7 @@
 							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte använda samma modifieringsnyckel.",
 							"selectNewKey": "Ändra modifieringsnyckel:"
 						},
-						"resolveConflict": "Lös alla konflikter innan du ansöker.",
+						"resolveConflict": "Lös alla konflikter innan du verkställer.",
 						"title": "Importera konflikter upptäckta"
 					},
 					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
@@ -566,8 +566,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Dölj spellistor från hemsidan",
-							"title": "Bli av med spellistor från hemsidan"
+							"label": "Dölj spellistor från startsidan",
+							"title": "Bli av med spellistor från startsidan"
 						}
 					},
 					"hideScrollbar": {
@@ -645,7 +645,7 @@
 					"saveToWatchLaterButton": {
 						"enable": {
 							"label": "Aktivera knappen spara för att titta på senare",
-							"title": "Lägger till en knapp på hem- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
+							"title": "Lägger till en knapp på start- och prenumerationsvideor för att spara videon till spellistan \"Titta på senare\""
 						}
 					},
 					"shareShortener": {
@@ -695,8 +695,8 @@
 						"title": "Tar bort Shorts knappen från sidofältet"
 					},
 					"home": {
-						"label": "Dölj i hemmatningsflödet",
-						"title": "Tar bort Shorts sektionen från Home Feed"
+						"label": "Dölj på startflödet",
+						"title": "Tar bort Shorts-sektionen från startflödet"
 					},
 					"channel": {
 						"label": "Dölj på kanalsidor",
