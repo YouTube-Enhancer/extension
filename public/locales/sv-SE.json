@@ -305,7 +305,7 @@
 							"selectNewKey": "Ändra modifieringsnyckel:"
 						},
 						"resolveConflict": "Lös alla konflikter innan du verkställer.",
-						"title": "Importera konflikter upptäckta"
+						"title": "Importkonflikter upptäcktes"
 					},
 					"optionConflict": "Detta alternativ kan inte aktiveras medan '{{OPTION}}' är aktiverat.",
 					"scrollWheelHoldModifierKey": {
@@ -316,7 +316,7 @@
 					}
 				},
 				"info": {
-					"reset": "Alla alternativ har återställts till sina standardvärden.\nDu kan nu spara ändringarna genom att klicka på knappen \"Bekräfta\" eller örkasta dem genom att stänga denna sida eller ignorera detta meddelande."
+					"reset": "Alla alternativ har återställts till sina standardvärden.\nDu kan nu spara ändringarna genom att klicka på knappen \"Bekräfta\" eller förkasta dem genom att stänga denna sida eller ignorera detta meddelande."
 				},
 				"success": {
 					"saved": "Inställningarna sparade."
@@ -329,7 +329,7 @@
 			"customCSS": {
 				"enable": {
 					"label": "Anpassad CSS",
-					"title": "Aktiverar anpassad CSS som ska tillämpas på sidan"
+					"title": "Aktiverar anpassad CSS som ska användas på sidan"
 				},
 				"extras": {
 					"collapse": "Fäll ihop redigeraren",
@@ -340,7 +340,7 @@
 			},
 			"deepDarkCSS": {
 				"enable": {
-					"label": "Aktivera valt tema",
+					"label": "Mörkt tema",
 					"title": "Aktivera det valda temat för sidan"
 				},
 				"extras": {
@@ -357,7 +357,7 @@
 						"title": "Färg för sekundärtext"
 					},
 					"hoverBackground": {
-						"label": "Bakgrundsfärg för musöver",
+						"label": "Musöver bakgrundsfärg",
 						"title": "Bakgrundsfärg för musöver"
 					},
 					"mainBackground": {
@@ -379,29 +379,29 @@
 					"theme": {
 						"select": {
 							"label": "Välj tema",
-							"title": "Välj ett tema som ska tillämpas på sidan"
+							"title": "Välj ett tema som ska användas på sidan"
 						}
 					}
 				},
-				"title": "Deep Dark-inställningar för YouTube"
+				"title": "YouTube mörkt temainställningar"
 			},
 			"forwardRewindButtons": {
 				"enable": {
-					"label": "Aktivera spola framåt-/återspolningsknappar",
-					"title": "Lägger till spola framåt- och återspolningsknappar till videospelaren"
+					"label": "Knappar för framåt-/bakåtspolning",
+					"title": "Lägger till spola framåt- och bakåtknappar till videospelaren"
 				},
 				"settings": {
 					"time": {
-						"label": "Spola framåt-/återspolningstid",
-						"title": "Tiden som videon ska spolas framåt/återspolas med"
+						"label": "Framåt-/bakåtspolningstid",
+						"title": "Tiden som videon ska spolas framåt/bakåt med"
 					}
 				},
-				"title": "Inställningar för knapparna spola framåt/återspola"
+				"title": "Inställningar för knapparna spola framåt/bakåt"
 			},
 			"globalVolume": {
 				"enable": {
 					"label": "Starta alltid videor med den här volymen",
-					"title": "Får alla videor att börja med din valda volym"
+					"title": "Får alla videor att börja med din valda volym automatiskt"
 				},
 				"settings": {
 					"amount": {
@@ -459,19 +459,19 @@
 					"automaticallyDisableAutoPlay": {
 						"enable": {
 							"label": "Inaktivera automatisk uppspelning",
-							"title": "Inaktiverar automatiskt uppspelning när du startar en video"
+							"title": "Inaktiverar automatiskt uppspelning när du laddar en video"
 						}
 					},
 					"automaticallyDisableClosedCaptions": {
 						"enable": {
-							"label": "Inaktivera textning automatiskt",
-							"title": "Inaktiverar textning automatiskt när du laddar en video"
+							"label": "Inaktiverar automatisk undertexter",
+							"title": "Inaktiverar automatiskt undertexter när du laddar en video"
 						}
 					},
 					"automaticallyEnableClosedCaptions": {
 						"enable": {
 							"label": "Aktivera undertexter automatiskt",
-							"title": "Aktiverar automatiskt undertexter när du startar en video"
+							"title": "Aktiverar automatiskt undertexter när du laddar en video"
 						}
 					},
 					"automaticallyMaximizePlayer": {
@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligenceSummary": {
 						"enable": {
-							"label": "Dölj AI sammanfattning",
-							"title": "Döljer sammanfattningen av artificiell intelligens nedan videor"
+							"label": "Dölj AI-sammanfattning",
+							"title": "Döljer sammanfattningen av artificiell intelligens under videorna"
 						}
 					},
 					"hideEndScreenCards": {
@@ -537,19 +537,19 @@
 					"hideMembersOnlyVideos": {
 						"enable": {
 							"label": "Dölj videor som endast är för medlemmar",
-							"title": "Döljer videor som endast är synliga för medlemmar"
+							"title": "Döljer videor som endast går att titta på för medlemmar"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Knapp för mono till stereo",
-							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrad."
+							"label": "Mono till stereoknapp",
+							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrat."
 						}
 					},
 					"hideOfficialArtistVideosFromHomePage": {
 						"enable": {
 							"label": "Dölj officiella artistvideor",
-							"title": "Dölj officiella artistvideor från startsidan"
+							"title": "Döljer officiella artistvideor från startsidan"
 						}
 					},
 					"hidePaidPromotionBanner": {
@@ -560,8 +560,8 @@
 					},
 					"hidePlayables": {
 						"enable": {
-							"label": "Dölj spelbara",
-							"title": "Döljer alla spelbara"
+							"label": "Dölj spelbart",
+							"title": "Döljer spel"
 						}
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
@@ -639,7 +639,7 @@
 					"restoreFullscreenScrolling": {
 						"enable": {
 							"label": "Återställ fullskärmsrullning",
-							"title": "Återställer rullning i helskärmsläge"
+							"title": "Återställer rullning i fullskärmsläge"
 						}
 					},
 					"saveToWatchLaterButton": {
@@ -700,15 +700,15 @@
 					},
 					"channel": {
 						"label": "Dölj på kanalsidor",
-						"title": "Tar bort Shorts hylla och flik på kanalsidor"
+						"title": "Tar bort Shorts-hylla och flik på kanalsidor"
 					},
 					"search": {
 						"label": "Dölj i sökresultat",
-						"title": "Tar bort Shorts videor från sökresultat"
+						"title": "Tar bort Shorts-videor från sökresultat"
 					},
 					"videos": {
-						"label": "Dölj på bevakningssidor",
-						"title": "Tar bort Shorts videor från rekommendationer på titta på sidor"
+						"label": "Dölj på titta på-sidor",
+						"title": "Tar bort Shorts videor från rekommendationer på titta på-sidor"
 					}
 				}
 			},
@@ -731,7 +731,7 @@
 						"title": "Välj färgen för On-Screen Display"
 					},
 					"hide": {
-						"label": "Döljfördröjning",
+						"label": "Dölj fördröjning",
 						"title": "Ange tiden i millisekunder innan On-Screen Display automatiskt döljs"
 					},
 					"opacity": {
@@ -760,7 +760,7 @@
 						"select": {
 							"options": {
 								"circle": "Cirkel",
-								"line": "Rad",
+								"line": "Linje",
 								"no_display": "Ingen visning",
 								"text": "Text"
 							}
