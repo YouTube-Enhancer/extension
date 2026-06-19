@@ -301,10 +301,10 @@
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key",
 							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
+						"resolveConflict": "Please resolve all conflicts before applying",
 						"title": "Import Conflicts Detected"
 					},
 					"optionConflict": "'{{OPTION}}' etkinken bu seçenek etkinleştirilemez.",
@@ -409,7 +409,7 @@
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Global volume override"
 			},
 			"miniPlayer": {
 				"button": {
@@ -510,10 +510,10 @@
 							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "AI özetini gizle",
-							"title": "Videoların altındaki yapay zeka özetini gizler"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
