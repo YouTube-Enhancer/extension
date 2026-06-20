@@ -126,7 +126,15 @@ export default function Settings() {
 	const setCheckboxOption = <P extends BooleanPath<configuration>>(key: P) =>
 		createOptionSetter(key, (e: ChangeEvent<HTMLInputElement>) => e.currentTarget.checked);
 	const setValueOption = <P extends Path<configuration>>(key: P) =>
-		createOptionSetter(key, (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => e.currentTarget.value as PathValue<configuration, P>);
+		createOptionSetter(key, (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+			const {
+				currentTarget: { value }
+			} = e;
+			if (settingsRef.current && typeof getPathValue(settingsRef.current, key) === "number") {
+				return Number(value) as PathValue<configuration, P>;
+			}
+			return value as PathValue<configuration, P>;
+		});
 	function getSelectedOption<K extends Path<configuration>>(
 		key: K & (PathValue<configuration, K> extends string ? K : never)
 	): PathValue<configuration, K>;
