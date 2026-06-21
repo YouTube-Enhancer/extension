@@ -24,7 +24,7 @@
 				},
 				"flipVideoVerticalButton": {
 					"button": {
-						"label": "Inverter o vídeo verticalmente"
+						"label": "Inverter vídeo verticalmente"
 					}
 				},
 				"copyTimestampUrlButton": {
@@ -46,7 +46,7 @@
 							"label": "Avançar {{TIME}}"
 						},
 						"rewindButton": {
-							"label": "Retroceder por {{TIME}}"
+							"label": "Retroceder {{TIME}}"
 						}
 					}
 				},
@@ -72,8 +72,8 @@
 					"button": {
 						"label": "Maximizar",
 						"toggle": {
-							"off": "Maximizar desligado",
-							"on": "Maximizar em"
+							"off": "Maximização desativada",
+							"on": "Maximização ativada"
 						}
 					}
 				},
@@ -81,8 +81,8 @@
 					"button": {
 						"label": "Mini Player",
 						"toggle": {
-							"off": "Mini Player desligado",
-							"on": "Mini Player ligado"
+							"off": "Mini Player desativado",
+							"on": "Mini Player ativado"
 						}
 					}
 				},
@@ -106,7 +106,7 @@
 					}
 				},
 				"playlistLength": {
-					"title": "O comprimento pode não ser exato se alguns vídeos estão ocultos ou se você não carregou vídeos o suficiente para obter o comprimento máximo."
+					"title": "A duração total pode não ser exata se alguns vídeos estiverem ocultos ou se você não tiver carregado vídeos suficientes para obter o comprimento completo."
 				},
 				"playlistManagementButtons": {
 					"extras": {
@@ -120,17 +120,17 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToSaveVideo": "Não foi possível salvar o vídeo em \"Assistir mais tarde\"",
+						"failedToSaveVideo": "Falha ao salvar o vídeo em \"Assistir mais tarde\"",
 						"saveVideo": "Salvar em \"Assistir mais tarde\"",
 						"savingVideo": "Salvando em \"Assistir mais tarde\"…"
 					}
 				},
 				"screenshotButton": {
 					"button": {
-						"label": "Pré-visualizar"
+						"label": "Captura de tela"
 					},
 					"extras": {
-						"copiedToClipboard": "Captura copiada a área de transferência"
+						"copiedToClipboard": "Captura de tela copiada para a área de transferência"
 					}
 				},
 				"videoHistory": {
@@ -154,7 +154,7 @@
 			"extras": {
 				"bottomButtons": {
 					"clear": {
-						"title": "Limpa todos os dados que esta extensão armazenou em sua máquina",
+						"title": "Limpa todos os dados armazenados pela extensão no seu dispositivo",
 						"value": "Limpar dados"
 					},
 					"confirm": {
@@ -172,20 +172,20 @@
 				"buttonPlacement": {
 					"select": {
 						"buttonNames": {
-							"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minutagem",
-							"decreasePlaybackSpeedButton": "Knapp för att minska hastigheten",
+							"copyTimestampUrlButton": "Botão de Copiar URL do vídeo com a minutagem",
+							"decreasePlaybackSpeedButton": "Botão de Desacelerar",
 							"forwardButton": "Botão de Avançar rápido",
-							"hideEndScreenCardsButton": "Ocultar botão de cards finais",
-							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
-							"loopButton": "Botão Repetir",
+							"hideEndScreenCardsButton": "Botão de Ocultar cards finais",
+							"increasePlaybackSpeedButton": "Botão de Acelerar",
+							"loopButton": "Botão de Repetir",
 							"maximizePlayerButton": "Botão de Maximizar",
 							"miniPlayerButton": "Botão do Mini Player",
 							"openTranscriptButton": "Botão de Abrir transcrição",
-							"rewindButton": "Botão de voltar",
-							"screenshotButton": "Botão de captura de tela",
+							"rewindButton": "Botão de Retroceder",
+							"screenshotButton": "Botão de Captura de tela",
 							"volumeBoostButton": "Botão de Ganho de volume",
-							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
-							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente",
+							"flipVideoVerticalButton": "Botão de Inverter o vídeo verticalmente",
+							"flipVideoHorizontalButton": "Botão de Inverter o vídeo horizontalmente",
 							"monoToStereoButton": "Botão de Mono para Estéreo"
 						},
 						"options": {
@@ -199,18 +199,18 @@
 							},
 							"player_controls_left": {
 								"placement": "à esquerda dos controles do player",
-								"value": "Controles Esquerdos"
+								"value": "Controles à esquerda"
 							},
 							"player_controls_right": {
 								"placement": "à direita dos controles do player",
-								"value": "Controles de direita"
+								"value": "Controles à direita"
 							},
 							"same": {
 								"placement": "na mesma posição",
 								"value": "Igual ao normal"
 							}
 						},
-						"title": "Coloque o {{BUTTON_NAME}} em {{PLACEMENT}}",
+						"title": "Coloque o {{BUTTON_NAME}} {{PLACEMENT}}",
 						"fullscreenTitle": "Quando estiver em tela cheia, coloque o {{BUTTON_NAME}} {{PLACEMENT}}",
 						"fullscreenLabel": "Tela cheia",
 						"normalLabel": "Normal"
@@ -219,7 +219,7 @@
 				},
 				"clearData": {
 					"allDataDeleted": "Todos os dados foram excluídos.",
-					"confirmAlert": "Isto irá apagar todos os dados da extensão relacionados às opções. Continuar?"
+					"confirmAlert": "Isso apagará todos os dados da extensão relacionados às opções. Continuar?"
 				},
 				"featureMenu": {
 					"openType": {
@@ -238,16 +238,16 @@
 					"exportButton": {
 						"success": "Configurações exportadas com sucesso",
 						"title": "Exportar configurações para um arquivo JSON",
-						"value": "Configurações de exportação"
+						"value": "Exportar Configurações"
 					},
 					"importButton": {
 						"error": {
-							"unknown": "Ocorreu um erro ao importar opções. Verifique o formato do arquivo importado.",
+							"unknown": "Erro ao importar configurações. Por favor, verifique o formato do arquivo.\nOcorreu um erro desconhecido.",
 							"validation": "Erro ao importar configurações. Por favor, verifique o formato do arquivo.\n{{ERROR_MESSAGE}}"
 						},
 						"success": "Configurações importadas com sucesso",
 						"title": "Importar configurações de um arquivo JSON",
-						"value": "Configurações de importação"
+						"value": "Importar Configurações"
 					}
 				},
 				"language": {
@@ -267,7 +267,7 @@
 						"separator": " ou "
 					},
 					"plural": {
-						"label": "Ative o {{OPTIONS}} para configurar esta opção",
+						"label": "Ativar {{OPTIONS}} para configurar esta opção",
 						"separator": " e "
 					},
 					"singular": "Ativar {{OPTION}} para configurar esta opção",
@@ -341,7 +341,7 @@
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Tema meia-noite",
-					"title": "Ativar tema selecionado para a página"
+					"title": "Ativa o tema selecionado para a página"
 				},
 				"extras": {
 					"author": "Autor",
@@ -418,7 +418,7 @@
 				},
 				"enable": {
 					"label": "Abrir Mini Player ao ver comentários",
-					"title": "Abre automaticamente o Mini Player ao rolar para os comentários."
+					"title": "Abre automaticamente o Mini Player ao rolar para os comentários"
 				},
 				"settings": {
 					"position": {
@@ -432,12 +432,12 @@
 								"topLeft": "Canto superior esquerdo",
 								"topRight": "Canto superior direito"
 							},
-							"title": "Define a posição inicial antes de mover o Mini Player."
+							"title": "Define a posição inicial antes de mover o Mini Player"
 						}
 					},
 					"size": {
 						"label": "Tamanho padrão do Mini Player",
-						"title": "Define o tamanho inicial antes de redimensionar o Mini Player."
+						"title": "Define o tamanho inicial antes de redimensionar o Mini Player"
 					}
 				},
 				"title": "Configurações do Mini Player"
@@ -446,7 +446,7 @@
 				"settings": {
 					"automaticTheaterMode": {
 						"enable": {
-							"label": "Modo teatro automático",
+							"label": "Modo Teatro automático",
 							"title": "Ativa automaticamente o modo teatro ao carregar um vídeo"
 						}
 					},
@@ -476,8 +476,8 @@
 					},
 					"automaticallyMaximizePlayer": {
 						"enable": {
-							"label": "Maximizar o vídeo automaticamente",
-							"title": "Maximiza automaticamente o reprodutor ao carregar um vídeo"
+							"label": "Maximizar o Player automaticamente",
+							"title": "Maximiza automaticamente o Player ao carregar um vídeo"
 						}
 					},
 					"automaticallyShowMoreVideosOnEndScreen": {
@@ -489,7 +489,7 @@
 					"blockNumberKeySeeking": {
 						"enable": {
 							"label": "Bloquear tecla de número em busca",
-							"title": "Impede que se pule 0-9 para uma porcentagem do vídeo"
+							"title": "Impede que se pule para uma porcentagem do vídeo ao pressionar 0-9"
 						}
 					},
 					"hidePosts": {
@@ -500,8 +500,8 @@
 					},
 					"copyTimestampUrlButton": {
 						"enable": {
-							"label": "Copiar URL do vídeo com o botão de minutagem",
-							"title": "Copia o URL do vídeo com a minutagem (?t=123)"
+							"label": "Botão de Copiar URL do vídeo com a minutagem",
+							"title": "Copia URL do vídeo com a minutagem (?t=123)"
 						}
 					},
 					"defaultToOriginalAudioTrack": {
@@ -512,8 +512,8 @@
 					},
 					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+							"label": "Ocultar IA",
+							"title": "Oculta os recursos de IA, como resumos de vídeo e Perguntar à IA"
 						}
 					},
 					"hideEndScreenCards": {
@@ -524,7 +524,7 @@
 					},
 					"hideEndScreenCardsButton": {
 						"enable": {
-							"label": "Ocultar botão de cards finais",
+							"label": "Botão de Ocultar cards finais",
 							"title": "Adiciona um botão para exibir/ocultar cards finais"
 						}
 					},
@@ -536,7 +536,7 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Dölj videor som endast är för medlemmar",
+							"label": "Ocultar vídeos exclusivos para membros",
 							"title": "Oculta vídeos que só os membros podem assistir"
 						}
 					},
@@ -567,7 +567,7 @@
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Ocultar listas de reprodução da página inicial",
-							"title": "Remova as listas de reprodução da página inicial"
+							"title": "Remove as listas de reprodução da página inicial"
 						}
 					},
 					"hideScrollbar": {
@@ -590,19 +590,19 @@
 					},
 					"loopButton": {
 						"enable": {
-							"label": "Botão Repetir",
+							"label": "Botão de Repetir",
 							"title": "Adiciona ao menu um botão para repetir o vídeo que está vendo"
 						}
 					},
 					"maximizePlayerButton": {
 						"enable": {
-							"label": "Botão de maximizar player",
+							"label": "Botão de Maximizar player",
 							"title": "Adiciona ao menu um botão para maximizar o player"
 						}
 					},
 					"openTranscriptButton": {
 						"enable": {
-							"label": "Botão para abrir transcrição",
+							"label": "Botão de Abrir transcrição",
 							"title": "Adiciona ao menu um botão para abrir a transcrição do vídeo que está vendo"
 						}
 					},
@@ -626,7 +626,7 @@
 					},
 					"rememberVolume": {
 						"enable": {
-							"label": "Lembrar volume anterior",
+							"label": "Lembrar último volume",
 							"title": "Lembra o volume do último vídeo que estava vendo e aplica-o ao novo vídeo"
 						}
 					},
@@ -662,7 +662,7 @@
 					},
 					"skipContinueWatching": {
 						"enable": {
-							"label": "Ignorar \"O vídeo está pausado. Continuar assistindo?",
+							"label": "Ignorar \"O vídeo está pausado. Continuar assistindo?\"",
 							"title": "Ignora o aviso de inatividade que pausa a reprodução do vídeo"
 						}
 					},
@@ -674,13 +674,13 @@
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Botão de girar vídeo horizontalmente",
+							"label": "Botão de Inverter vídeo horizontalmente",
 							"title": "Adiciona um botão para virar o vídeo horizontalmente"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Botão de girar vídeo verticalmente",
+							"label": "Botão de Inverter vídeo verticalmente",
 							"title": "Adiciona um botão para virar o vídeo verticalmente"
 						}
 					}
@@ -707,7 +707,7 @@
 						"title": "Remove os vídeos do Shorts dos resultados de pesquisa"
 					},
 					"videos": {
-						"label": "Esconder na página de reprodução",
+						"label": "Ocultar na página de reprodução",
 						"title": "Remove o Shorts das recomendações na página de reprodução"
 					}
 				}
@@ -773,7 +773,7 @@
 			"playerQuality": {
 				"enable": {
 					"label": "Ajuste automático de resolução",
-					"title": "Define automaticamente a resolução do vídeo para o nível desejado."
+					"title": "Define automaticamente a resolução do vídeo para o nível desejado"
 				},
 				"settings": {
 					"quality": {
@@ -821,7 +821,7 @@
 			"playlistLength": {
 				"enable": {
 					"label": "Exibir informações de duração da lista de reprodução",
-					"title": "Exibe a duração total da lista de reprodução, o quanto foi assistido e o tempo restante."
+					"title": "Exibe a duração total da lista de reprodução, o quanto foi assistido e o tempo restante"
 				},
 				"settings": {
 					"wayToGetLength": {
@@ -847,13 +847,13 @@
 				"settings": {
 					"markAsUnwatchedButton": {
 						"enable": {
-							"label": "Botão \"Marcar como não assistido\"",
+							"label": "Botão de Marcar como não assistido",
 							"title": "Adiciona um botão para marcar vídeos como não assistidos"
 						}
 					},
 					"removeVideoButton": {
 						"enable": {
-							"label": "Botão \"Remover vídeo\"",
+							"label": "Botão de Remover vídeo",
 							"title": "Adiciona um botão para remover vídeos da lista de reprodução"
 						}
 					}
@@ -862,7 +862,7 @@
 			},
 			"screenshotButton": {
 				"enable": {
-					"label": "Botão de captura de tela",
+					"label": "Botão de Captura de tela",
 					"title": "Adiciona um botão ao player para fazer uma captura de tela do vídeo"
 				},
 				"settings": {
@@ -887,7 +887,7 @@
 			"scrollWheelSpeedControl": {
 				"enable": {
 					"label": "Controle de velocidade da roda do mouse",
-					"title": "Pressiona uma tecla modificadora para ativar o ajuste de velocidade com a roda do mouse."
+					"title": "Pressione uma tecla modificadora para ativar o ajuste de velocidade com a roda do mouse"
 				},
 				"extras": {
 					"optionLabel": "Tecla {{KEY}}"
@@ -925,11 +925,11 @@
 							"label": "Tecla de modificação",
 							"title": "A tecla de modificação para uso"
 						},
-						"title": "Segure a tecla de modificação para ajustar o volume com a roda do cursor."
+						"title": "Segure a tecla de modificação para ajustar o volume com a roda do cursor"
 					},
 					"holdRightClick": {
 						"label": "Ao segurar o botão direito",
-						"title": "Segure o botão direito para ajustar o volume pela roda."
+						"title": "Segure o botão direito para ajustar o volume pela roda"
 					}
 				},
 				"title": "Configurações de controle de volume pela roda"
@@ -951,7 +951,7 @@
 						}
 					}
 				},
-				"title": "Opções de histórico de vídeo"
+				"title": "Configurações de histórico de vídeo"
 			},
 			"volumeBoost": {
 				"enable": {
@@ -965,7 +965,7 @@
 					},
 					"amount_global_only": {
 						"label": "Quantidade de ganho de volume (dB)",
-						"title": "O valor para ganho do volume."
+						"title": "O valor para ganho do volume"
 					},
 					"mode": {
 						"select": {
