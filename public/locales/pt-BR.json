@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Manipulação de Áudio Mono",
 						"toggle": {
-							"on": "Mono → Saída Estéreo",
+							"on": "Saída Mono → Estéreo",
 							"off": "Áudio Original"
 						}
 					}
@@ -70,7 +70,7 @@
 				},
 				"maximizePlayerButton": {
 					"button": {
-						"label": "Maximização",
+						"label": "Maximizar",
 						"toggle": {
 							"off": "Maximizar desligado",
 							"on": "Maximizar em"
@@ -165,7 +165,7 @@
 						"title": "Abrir configurações da extensão em uma nova aba"
 					},
 					"reset": {
-						"title": "Redefine todas as configurações para seus padrões, clique no botão confirmar para salvar as alterações",
+						"title": "Redefine todas as configurações para seus padrões. Clique no botão confirmar para salvar as alterações",
 						"value": "Redefinir"
 					}
 				},
@@ -174,19 +174,19 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "Copiar URL do vídeo com o botão de minutagem",
 							"decreasePlaybackSpeedButton": "Knapp för att minska hastigheten",
-							"forwardButton": "Botão de avançar rápido",
+							"forwardButton": "Botão de Avançar rápido",
 							"hideEndScreenCardsButton": "Ocultar botão de cards finais",
 							"increasePlaybackSpeedButton": "Botão de aumentar velocidade",
 							"loopButton": "Botão Repetir",
-							"maximizePlayerButton": "Botão Maximizar",
+							"maximizePlayerButton": "Botão de Maximizar",
 							"miniPlayerButton": "Botão do Mini Player",
-							"openTranscriptButton": "Abrir botão de transcrição",
+							"openTranscriptButton": "Botão de Abrir transcrição",
 							"rewindButton": "Botão de voltar",
 							"screenshotButton": "Botão de captura de tela",
-							"volumeBoostButton": "Botão de ganho de volume",
+							"volumeBoostButton": "Botão de Ganho de volume",
 							"flipVideoVerticalButton": "Botão para Inverter o vídeo verticalmente",
 							"flipVideoHorizontalButton": "Botão para Inverter o vídeo horizontalmente",
-							"monoToStereoButton": "Botão Mono para Estéreo"
+							"monoToStereoButton": "Botão de Mono para Estéreo"
 						},
 						"options": {
 							"below_player": {
@@ -285,7 +285,7 @@
 					"getApiKeyLinkText": "Você pode obter uma aqui",
 					"input": {
 						"label": "Chave API",
-						"title": "Insira sua chave API YouTube Data V3."
+						"title": "Insira sua chave API YouTube Data V3"
 					},
 					"title": "Chave da API YouTube Data v3"
 				}
@@ -301,13 +301,13 @@
 						"keepFirst": "Manter {{FEATURE}}",
 						"keepSecond": "Manter {{FEATURE}}",
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' não pode usar a mesma chave modificadora.",
+							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' não pode usar a mesma chave modificadora",
 							"selectNewKey": "Alterar tecla modificadora:"
 						},
-						"resolveConflict": "Por favor, resolva todos os conflitos antes de aplicar.",
+						"resolveConflict": "Por favor, resolva todos os conflitos antes de aplicar",
 						"title": "Conflitos de importação detectados"
 					},
-					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada.",
+					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "A tecla alternadora da velocidade de rolagem não pode ser a mesma que a tecla alternadora do volume.",
