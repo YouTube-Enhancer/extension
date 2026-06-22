@@ -7,26 +7,13 @@ import type { Nullable, VideoDetails } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { playlistItemsSelector } from "@/src/utils/dom/selectors";
+import { NO_PADDING_HEADER_SELECTOR, PLAYLIST_PAGE_HEADER_SELECTORS, playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
-const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelNoPadding";
-const CINEMATIC_HEADER_SELECTOR =
-	"yt-page-header-renderer yt-page-header-view-model.ytPageHeaderViewModelHost.ytPageHeaderViewModelCinematicContainerOverflowBoundary.ytPageHeaderViewModelDisplayAsSidebar .ytPageHeaderViewModelContent";
-const IMMERSIVE_HEADER_SELECTOR = "ytd-playlist-header-renderer .immersive-header-container .immersive-header-content";
-const selectFirstWithWidth = (...selectors: string[]): HTMLElement | null => {
-	for (const selector of selectors) {
-		const elements = document.querySelectorAll<HTMLElement>(selector);
-		for (const el of elements) {
-			if ((el.clientWidth ?? 0) > 0) return el;
-		}
-	}
-	return null;
-};
 export const getHeaderSelectors = () => {
-	const playlistSelectors = [IMMERSIVE_HEADER_SELECTOR, NO_PADDING_HEADER_SELECTOR, CINEMATIC_HEADER_SELECTOR];
+	const playlistSelectors = PLAYLIST_PAGE_HEADER_SELECTORS;
 	const playlist =
 		playlistSelectors.find((selector) => {
 			const el = document.querySelector<HTMLElement>(selector);
