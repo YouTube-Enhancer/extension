@@ -118,6 +118,12 @@
 						"removingVideo": "Removing video…"
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "Не вдалося зберегти відео для перегляду пізніше",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "Призупинити фонові плеєри",
 							"title": "Призупиняє відео-плеєри у фонових вкладках при запуску нового плеєра на передньому плані"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
