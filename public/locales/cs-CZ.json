@@ -118,6 +118,12 @@
 						"removingVideo": "Odstraňování videa…"
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "Nepodařilo se uložit video do hodinek později",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "Pozastavit hráče na pozadí",
 							"title": "Pozastaví video přehrávače na pozadí při spuštění nového přehrávače v popředí"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
