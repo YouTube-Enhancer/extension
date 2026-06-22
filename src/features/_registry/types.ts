@@ -216,7 +216,18 @@ export type ObjectSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & 
 	component: "css-editor";
 };
 
-export type PageType = "channel_home" | "channel_videos" | "home" | "live" | "playlist" | "search" | "shorts" | "subscriptions" | "watch";
+export type PageType =
+	| "channel_home"
+	| "channel_posts"
+	| "channel_streams"
+	| "channel_videos"
+	| "home"
+	| "live"
+	| "playlist"
+	| "search"
+	| "shorts"
+	| "subscriptions"
+	| "watch";
 
 export type PrefixedPath<K extends FeatureKeys> = K extends K ? `${K}.${Path<configuration[K]>}` : never;
 

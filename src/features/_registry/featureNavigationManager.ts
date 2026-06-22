@@ -122,6 +122,38 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				}
 				return "channel_home:unknown";
 			}
+			case "channel_posts": {
+				// Channel posts page: youtube.com/@channelname/posts
+				// Handle /@channelname/posts format
+				if (pathParts[0]?.startsWith("@") && pathParts[1] === "posts") {
+					const [channelId] = pathParts;
+					const paramsString = processExclusions(pathParts, 2);
+					return `channel_posts:${channelId}${paramsString}`;
+				}
+				// Handle /c/channelname/posts format
+				else if (pathParts[0] === "c" && pathParts[1] && pathParts[2] === "posts") {
+					const [, channelId] = pathParts;
+					const paramsString = processExclusions(pathParts, 3);
+					return `channel_posts:${channelId}${paramsString}`;
+				}
+				return "channel_posts:unknown";
+			}
+			case "channel_streams": {
+				// Channel streams page: youtube.com/@channelname/streams
+				// Handle /@channelname/streams format
+				if (pathParts[0]?.startsWith("@") && pathParts[1] === "streams") {
+					const [channelId] = pathParts;
+					const paramsString = processExclusions(pathParts, 2);
+					return `channel_streams:${channelId}${paramsString}`;
+				}
+				// Handle /c/channelname/streams format
+				else if (pathParts[0] === "c" && pathParts[1] && pathParts[2] === "streams") {
+					const [, channelId] = pathParts;
+					const paramsString = processExclusions(pathParts, 3);
+					return `channel_streams:${channelId}${paramsString}`;
+				}
+				return "channel_streams:unknown";
+			}
 			case "channel_videos": {
 				// Channel videos page: youtube.com/@channelname/videos or youtube.com/c/channelname/videos
 				// Handle /@channelname/videos format
