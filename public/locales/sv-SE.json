@@ -118,6 +118,12 @@
 						"removingVideo": "Tar bort video…"
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "Det gick inte att spara videon till titta på senare",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "Pausa spelare i bakgrunden",
 							"title": "Pausar videospelare i bakgrundsflikar när du startar en ny videospelare i en förgrundsflik"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
