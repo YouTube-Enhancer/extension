@@ -118,6 +118,12 @@
 						"removingVideo": "Video kaldırılıyor…"
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "Videoyu daha sonra izlemek üzere kaydetme işlemi başarısız oldu",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "Arka plan oynatıcılarını duraklat",
 							"title": "Ön plan sekmesinde yeni bir oynatıcı başlattığınızda arka plan sekmelerindeki video oynatıcıları duraklatır"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
