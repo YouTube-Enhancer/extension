@@ -118,6 +118,12 @@
 						"removingVideo": "ビデオの削除..."
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "後で見ることに失敗しました",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "背後タブのビデオプレイヤーを一時停止",
 							"title": "前景タブに新規プレイヤー開始にして、背後タブのビデオプレイヤーを一時停止します"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
