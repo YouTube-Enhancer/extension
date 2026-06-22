@@ -317,6 +317,7 @@ export type configuration = {
 		removeButton: { enabled: boolean };
 		resetButton: { enabled: boolean };
 	};
+	playlistReverseButton: { enabled: boolean };
 	remainingTime: { enabled: boolean };
 	rememberVolume: { enabled: boolean };
 	removeRedirect: { enabled: boolean };

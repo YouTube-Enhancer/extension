@@ -370,6 +370,7 @@ const featureKeys = Object.keys({
 	playerSpeed: "",
 	playlistLength: "",
 	playlistManagementButtons: "",
+	playlistReverseButton: "",
 	remainingTime: "",
 	rememberVolume: "",
 	removeRedirect: "",

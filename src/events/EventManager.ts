@@ -47,6 +47,7 @@ export type FeatureName =
 	| "playerSpeed"
 	| "playlistLength"
 	| "playlistManagementButtons"
+	| "playlistReverseButton"
 	| "remainingTime"
 	| "rememberVolume"
 	| "removeRedirect"

@@ -59,6 +59,7 @@ interface EnUS {
 						removingVideo: "Removing video…";
 					};
 				};
+				playlistReverseButton: { toggle: { off: "Normal order"; on: "Reversed order" } };
 				saveToWatchLaterButton: {
 					extras: {
 						failedToSaveVideo: "Failed to save video to Watch Later";
@@ -484,6 +485,12 @@ interface EnUS {
 						enable: {
 							label: "Pause background players";
 							title: "Pauses video players in background tabs when you start a new player in the foreground tab";
+						};
+					};
+					playlistReverseButton: {
+						enable: {
+							label: "Reverse playlist button";
+							title: "Adds a button to reverse the order of videos in playlists";
 						};
 					};
 					remainingTime: {
