@@ -172,6 +172,7 @@ export type FeatureState = {
 		rect: Nullable<MiniPlayerRect>;
 	};
 	"state:playerSpeed": { playbackSpeed: number };
+	"state:playlistReverseButton": { isReversed: boolean };
 	"state:rememberVolume": RememberedVolumes;
 	"state:videoHistory": { storage: VideoHistoryStorage };
 };
