@@ -118,6 +118,12 @@
 						"removingVideo": "Removing video…"
 					}
 				},
+				"playlistReverseButton": {
+					"toggle": {
+						"off": "Normal order",
+						"on": "Reversed order"
+					}
+				},
 				"saveToWatchLaterButton": {
 					"extras": {
 						"failedToSaveVideo": "Failed to save video to Watch Later",
@@ -616,6 +622,12 @@
 						"enable": {
 							"label": "暫停背景播放程序",
 							"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
