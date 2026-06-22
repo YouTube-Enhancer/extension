@@ -310,8 +310,8 @@
 					"optionConflict": "Esta opção não pode ser ativada enquanto '{{OPTION}}' estiver habilitada",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
-							"speedControl": "A tecla alternadora da velocidade de rolagem não pode ser a mesma que a tecla alternadora do volume.",
-							"volumeControl": "A tecla alternadora do volume não pode ser a mesma que a tecla alternadora da velocidade de rolagem."
+							"speedControl": "A tecla modificadora para controlar a velocidade por rolagem deve ser diferente da tecla modificadora para controlar o volume por rolagem",
+							"volumeControl": "A tecla modificadora para controlar o volume por rolagem deve ser diferente da tecla modificadora para controlar a velocidade por rolagem"
 						}
 					}
 				},
@@ -340,7 +340,7 @@
 			},
 			"deepDarkCSS": {
 				"enable": {
-					"label": "Tema meia-noite",
+					"label": "Tema Deep Dark",
 					"title": "Ativa o tema selecionado para a página"
 				},
 				"extras": {
