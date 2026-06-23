@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Verberg op horloge pagina's",
 						"title": "Verwijdert Korte video's van aanbevelingen op horloge pagina's"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
