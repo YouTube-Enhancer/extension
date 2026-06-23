@@ -89,7 +89,7 @@ class FeatureButtonManager extends FeatureManagerBase {
 			try {
 				const prevState = stateMap[btn.name] ?? {
 					enabled: false,
-					fullscreenPlacement: "same" as FullscreenPlacement,
+					fullscreenPlacement: "same",
 					initialized: false,
 					placement: undefined
 				};

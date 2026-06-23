@@ -1,4 +1,4 @@
-import type { VideoHistoryEntry, VideoHistoryResumeType, VideoHistoryStorage } from "@/src/features/videoHistory/types";
+import type { VideoHistoryEntry, VideoHistoryResumeType } from "@/src/features/videoHistory/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
@@ -188,7 +188,7 @@ export default createFeature({
 	},
 	persistState: true,
 	state: {
-		storage: {} as VideoHistoryStorage
+		storage: {}
 	}
 });
 async function handleVideoChange(resumeType: VideoHistoryResumeType) {

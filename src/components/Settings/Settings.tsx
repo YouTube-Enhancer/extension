@@ -51,7 +51,7 @@ export function getSettings(): Promise<configuration> {
 		void browser.storage.local.get(null).then((settings) => {
 			try {
 				const storedSettings: Partial<configuration> = Object.keys(settings)
-					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key as unknown as string))
+					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key))
 					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
 				const castedSettings = storedSettings as configuration;
 				return resolve(castedSettings);
