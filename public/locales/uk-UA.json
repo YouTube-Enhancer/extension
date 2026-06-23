@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Сховати на сторінках з годинником",
 						"title": "Видалення коротких відео з рекомендацій на сторінках перегляду"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
