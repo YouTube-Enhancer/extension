@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Скрыть на страницах просмотра",
 						"title": "Удаляет короткие видео с рекомендаций на страницах просмотра"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
