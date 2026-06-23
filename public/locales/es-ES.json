@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Ocultar en páginas de reloj",
 						"title": "Elimina los videos cortos de las recomendaciones en las páginas de seguimiento"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
