@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 65 features
+## 🎛️ Features • 66 features
 
 <details>
 <summary>Miscellaneous • 41 features</summary>
@@ -112,13 +112,14 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Hide Shorts • 5 features</summary>
+<summary>Hide Shorts • 6 features</summary>
 
 - **Hide On Channel Pages**: Removes the Shorts shelf and tab on channel pages
 - **Hide On Home Feed**: Removes the Shorts section from the Home feed
 - **Hide In Search Results**: Removes Shorts videos from search results
 - **Hide In Sidebar**: Removes the Shorts button from the sidebar
 - **Hide On Watch Pages**: Removes Shorts videos from recommendations on watch pages
+- **Hide On Subscriptions Feed**: Removes the Shorts section from the Subscriptions feed
 </details>
 
 <details>

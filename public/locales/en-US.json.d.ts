@@ -284,6 +284,10 @@ interface EnUS {
 						title: "Removes Shorts videos from search results";
 					};
 					sidebar: { label: "Hide in sidebar"; title: "Removes the Shorts button from the sidebar" };
+					subscriptions: {
+						label: "Hide on Subscriptions feed";
+						title: "Removes the Shorts section from the Subscriptions feed";
+					};
 					videos: {
 						label: "Hide on watch pages";
 						title: "Removes Shorts videos from recommendations on watch pages";

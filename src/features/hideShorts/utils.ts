@@ -1,6 +1,6 @@
 import { modifyElementClassList } from "@/src/utils/dom/classList";
 
-export type ShortsSection = "channel" | "home" | "search" | "sidebar" | "videos";
+export type ShortsSection = "channel" | "home" | "search" | "sidebar" | "subscriptions" | "videos";
 
 export type ShortsVisibilitySettings = Record<ShortsSection, boolean>;
 
@@ -9,6 +9,7 @@ const shortsClassMap: Record<ShortsSection, string> = {
 	home: "yte-hide-shorts-home",
 	search: "yte-hide-shorts-search",
 	sidebar: "yte-hide-shorts-sidebar",
+	subscriptions: "yte-hide-shorts-subscriptions",
 	videos: "yte-hide-shorts-videos"
 };
 

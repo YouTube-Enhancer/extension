@@ -16,11 +16,14 @@ export const metadata = createFeatureMetadata({
 		sidebar: {
 			enabled: false
 		},
+		subscriptions: {
+			enabled: false
+		},
 		videos: {
 			enabled: false
 		}
 	},
-	dependencies: { includePages: ["watch", "home", "search", "channel_home", "channel_videos", "channel_posts", "channel_streams"] },
+	dependencies: { includePages: ["watch", "home", "search", "channel_home", "channel_videos", "channel_posts", "channel_streams", "subscriptions"] },
 	id: "hideShorts",
 	schemaInput: {
 		channel: z.object({
@@ -33,6 +36,9 @@ export const metadata = createFeatureMetadata({
 			enabled: z.boolean()
 		}),
 		sidebar: z.object({
+			enabled: z.boolean()
+		}),
+		subscriptions: z.object({
 			enabled: z.boolean()
 		}),
 		videos: z.object({
@@ -77,6 +83,13 @@ export const metadata = createFeatureMetadata({
 					label: (t) => t((tr) => tr.settings.sections.hideShorts.settings.videos.label),
 					section: "hideShorts",
 					title: (t) => t((tr) => tr.settings.sections.hideShorts.settings.videos.title)
+				},
+				{
+					component: "checkbox",
+					id: "hideShorts.subscriptions.enabled",
+					label: (t) => t((tr) => tr.settings.sections.hideShorts.settings.subscriptions.label),
+					section: "hideShorts",
+					title: (t) => t((tr) => tr.settings.sections.hideShorts.settings.subscriptions.title)
 				}
 			],
 			section: "hideShorts",
