@@ -76,10 +76,10 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 
 				if (conflict.featureA === "globalVolume" || conflict.featureA === "rememberVolume") {
 					(resolved.globalVolume as { enabled: boolean }).enabled = featureToKeep === "globalVolume";
-					(resolved.rememberVolume as { enabled: boolean }).enabled = featureToKeep === "rememberVolume";
+					resolved.rememberVolume.enabled = featureToKeep === "rememberVolume";
 				} else if (conflict.featureA === "automaticallyDisableClosedCaptions" || conflict.featureA === "automaticallyEnableClosedCaptions") {
-					(resolved.automaticallyDisableClosedCaptions as { enabled: boolean }).enabled = featureToKeep === "automaticallyDisableClosedCaptions";
-					(resolved.automaticallyEnableClosedCaptions as { enabled: boolean }).enabled = featureToKeep === "automaticallyEnableClosedCaptions";
+					resolved.automaticallyDisableClosedCaptions.enabled = featureToKeep === "automaticallyDisableClosedCaptions";
+					resolved.automaticallyEnableClosedCaptions.enabled = featureToKeep === "automaticallyEnableClosedCaptions";
 				}
 			} else if (conflict.type === "modifierKey") {
 				const { [conflictId]: newKey } = modifiedKeys;

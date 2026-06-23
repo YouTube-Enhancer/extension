@@ -54,7 +54,7 @@ const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
 		void browser.storage.local.get(null).then((settings) => {
 			const storedSettings = Object.keys(settings)
-				.filter((key) => Object.keys(defaultConfiguration).includes(key as unknown as string))
+				.filter((key) => Object.keys(defaultConfiguration).includes(key))
 				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {}) as configuration;
 			return resolve(storedSettings);
 		});
@@ -184,8 +184,8 @@ const castStorageChanges = (changes: StorageChanges<configuration>) => {
 	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
 	for (const [key, change] of Object.entries(changes)) {
 		if (key in defaultConfiguration) {
-			const typedKey = key as keyof configuration;
-			result[typedKey] = change as { newValue?: unknown; oldValue?: unknown };
+			const typedKey = key;
+			result[typedKey] = change;
 		}
 	}
 	return result;

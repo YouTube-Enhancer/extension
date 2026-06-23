@@ -45,7 +45,7 @@ export default function SettingsFooter() {
 		void (async () => {
 			const { target } = event;
 			if (!target) return;
-			const { files } = target as HTMLInputElement;
+			const { files } = target;
 			const file = files?.[0];
 			if (!file) return;
 			try {

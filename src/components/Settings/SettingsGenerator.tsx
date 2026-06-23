@@ -63,7 +63,7 @@ export default function SettingsGenerator() {
 			if (!sections[sectionId]) {
 				sections[sectionId] = { featureMap: new Map(), sectionTitle: undefined, settings: [] };
 			}
-			sections[sectionId].settings.push({ featureId: feature.id, node: node as FeatureSettingNode<FeatureKeys> });
+			sections[sectionId].settings.push({ featureId: feature.id, node: node });
 			if (sectionTitle) {
 				sections[sectionId].sectionTitle = sectionTitle;
 			} else if (sectionId === "miscellaneous" && !sections[sectionId].sectionTitle) {

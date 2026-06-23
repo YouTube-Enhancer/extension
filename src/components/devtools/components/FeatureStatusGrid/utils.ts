@@ -8,7 +8,7 @@ import type { SubFeatureInfo } from "./types";
 export function getEnabledPathFromMetadata<F extends FeatureKeys>(settings: FeatureSettingNode<F>[], featureId: string): Nullable<string> {
 	for (const node of settings) {
 		if (isSettingNode(node) && String(node.id).endsWith(".enabled")) {
-			return node.id as string;
+			return node.id;
 		}
 		if (isGroupNode(node) && node.children) {
 			const found = getEnabledPathFromMetadata(node.children, featureId);

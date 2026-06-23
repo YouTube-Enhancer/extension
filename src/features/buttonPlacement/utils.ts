@@ -94,9 +94,9 @@ export async function makeFeatureButton<Name extends AllButtonNames, Placement e
 	icon = await modifyIconForLightTheme(icon, isToggle, placement !== "below_player");
 	if (isToggle) {
 		setChecked(button, initialChecked);
-		appendIcon(button, icon as ToggleIcon, initialChecked);
+		appendIcon(button, icon, initialChecked);
 	} else {
-		appendIcon(button, icon as SVGSVGElement);
+		appendIcon(button, icon);
 	}
 	eventManager.removeEventListener(button, "mouseover", featureName);
 	eventManager.addEventListener(button, "mouseover", tooltipListener, featureName);

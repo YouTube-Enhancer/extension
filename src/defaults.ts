@@ -33,7 +33,7 @@ export async function setDefaultValues(): Promise<configuration> {
 		}
 		// Deep merge objects
 		if (typeof storedValue === "object" && storedValue !== null && typeof defaultValue === "object" && defaultValue !== null) {
-			storedValue = deepMerge(defaultValue as Record<string, unknown>, storedValue as Record<string, unknown>);
+			storedValue = deepMerge(defaultValue, storedValue as Record<string, unknown>);
 		}
 		// Queue instead of writing immediately
 		setPartialSetting(chromeUpdates, option, storedValue as configuration[typeof option]);

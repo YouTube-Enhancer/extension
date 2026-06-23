@@ -1,4 +1,4 @@
-import { createInstance, type Resource } from "i18next";
+import { createInstance } from "i18next";
 
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
@@ -52,7 +52,7 @@ export async function i18nService(locale: AvailableLocales = "en-US") {
 					escapeValue: false
 				},
 				lng: locale,
-				resources: resources as unknown as { [key: string]: Resource },
+				resources: resources,
 				returnObjects: true
 			},
 			(err) => {

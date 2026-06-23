@@ -82,6 +82,6 @@ export default createFeature({
 				}
 			);
 		};
-		containerSelectors.forEach((selector) => setupScrollListeners(selector, (e) => void handleWheel(e as WheelEvent)));
+		containerSelectors.forEach((selector) => setupScrollListeners(selector, (e) => void handleWheel(e)));
 	}
 });

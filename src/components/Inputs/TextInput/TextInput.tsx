@@ -36,7 +36,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReas
 			...event,
 			currentTarget: { ...input, value: input.value },
 			target: { ...input, value: input.value }
-		} as ChangeEvent<HTMLInputElement>);
+		});
 		// Restore cursor position after re-render
 		requestAnimationFrame(() => {
 			const { current: el } = inputRef;
