@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Nascondi nelle pagine dell'orologio",
 						"title": "Rimuove i video dei corti dai consigli nelle pagine dell'orologio"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
