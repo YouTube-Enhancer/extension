@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Masquer sur les pages de lecture",
 						"title": "Supprime les vidéos Shorts des recommandations sur les pages de lecture"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
