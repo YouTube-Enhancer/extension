@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Dölj på titta på-sidor",
 						"title": "Tar bort Shorts videor från rekommendationer på titta på-sidor"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
