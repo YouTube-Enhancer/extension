@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "ウォッチページで非表示",
 						"title": "ウォッチページでおすすめのショートビデオを削除します。"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
