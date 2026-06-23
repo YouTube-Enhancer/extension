@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Ocultar na página de reprodução",
 						"title": "Remove o Shorts das recomendações na página de reprodução"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
