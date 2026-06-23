@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Auf Beobachtungsseiten ausblenden",
 						"title": "Entfernt Kurzvideos von Empfehlungen auf Beobachtungsseiten"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
