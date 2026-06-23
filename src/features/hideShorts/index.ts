@@ -11,6 +11,7 @@ export default createFeature({
 		home: { enabled: home },
 		search: { enabled: search },
 		sidebar: { enabled: sidebar },
+		subscriptions: { enabled: subscriptions },
 		videos: { enabled: videos }
 	}) => {
 		applyShortsVisibility({
@@ -18,6 +19,7 @@ export default createFeature({
 			home,
 			search,
 			sidebar,
+			subscriptions,
 			videos
 		});
 	},
@@ -27,6 +29,7 @@ export default createFeature({
 			home: false,
 			search: false,
 			sidebar: false,
+			subscriptions: false,
 			videos: false
 		});
 	},
@@ -35,6 +38,7 @@ export default createFeature({
 		home: { enabled: home },
 		search: { enabled: search },
 		sidebar: { enabled: sidebar },
+		subscriptions: { enabled: subscriptions },
 		videos: { enabled: videos }
 	}) => {
 		applyShortsVisibility({
@@ -42,6 +46,7 @@ export default createFeature({
 			home,
 			search,
 			sidebar,
+			subscriptions,
 			videos
 		});
 	}

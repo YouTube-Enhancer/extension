@@ -23,6 +23,11 @@ body.yte-hide-shorts-search {
 		display: none !important;
 	}
 }
+body.yte-hide-shorts-subscriptions {
+	ytd-browse[page-subtype="subscriptions"] ytd-rich-section-renderer:has([is-shorts]) {
+		display: none !important;
+	}
+}
 body.yte-hide-shorts-videos {
 	ytd-video-renderer:not([is-search]):has([overlay-style="SHORTS"]),
 	ytd-watch-next-secondary-results-renderer ytd-reel-shelf-renderer:has(#title-container) {

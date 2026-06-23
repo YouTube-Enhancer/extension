@@ -270,6 +270,7 @@ export type configuration = {
 		home: { enabled: boolean };
 		search: { enabled: boolean };
 		sidebar: { enabled: boolean };
+		subscriptions: { enabled: boolean };
 		videos: { enabled: boolean };
 	};
 	hideSidebarRecommendedVideos: { enabled: boolean };
