@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "在观看页面中隐藏",
 						"title": "从观看页面的推荐列表移除短视频"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
