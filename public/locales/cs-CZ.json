@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Skrýt na stránkách hodinek",
 						"title": "Odstraní krátká videa z doporučení na hodinkách"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
