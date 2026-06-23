@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Ukryj na stronach zegarka",
 						"title": "Usuwa filmy Skróty z rekomendacji na stronach zegarka"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
