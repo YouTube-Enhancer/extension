@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "Hide on watch pages",
 						"title": "Removes Shorts videos from recommendations on watch pages"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
