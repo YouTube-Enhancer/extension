@@ -721,6 +721,10 @@
 					"videos": {
 						"label": "İzleme sayfasında gizle",
 						"title": "İzleme sayfasındaki önerilelerden Shorts videolarını kaldırır"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
