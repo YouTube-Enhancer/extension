@@ -1,8 +1,7 @@
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { delay } from "@/src/utils/async";
-import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -14,52 +13,75 @@ let previousAutoPlayState: Nullable<boolean> = null;
 // whatever the user chose.
 let hasOverriddenDefault = false;
 
-// Click the toggle until autoplay reaches `desired`, returning whether it got
-// there. The control can be present in the DOM before YouTube wires up its click
-// handler, so a single click is unreliable. Retry, re-querying the live element,
-// until aria-checked actually changes.
-async function clickToggleUntil(player: ParentNode, desired: boolean): Promise<boolean> {
-	for (let attempt = 0; attempt < 24 && readAutoPlayState(player) !== desired; attempt++) {
-		player.querySelector<HTMLButtonElement>(".ytp-autonav-toggle")?.click();
-		await delay(300);
-	}
-	return readAutoPlayState(player) === desired;
+// Restore autoplay to the state before the feature first intervened.
+function makeDisableTask(): () => boolean {
+	return (): boolean => {
+		if (!isWatchPage() || previousAutoPlayState === null) return true;
+		const toggle = document.querySelector<HTMLButtonElement>(".ytp-autonav-toggle");
+		if (!toggle) return false;
+		const current = readAutoPlayState();
+		if (current === previousAutoPlayState) {
+			previousAutoPlayState = null;
+			hasOverriddenDefault = false;
+			return true;
+		}
+		toggle.click();
+		return false;
+	};
 }
 
-// Resolve the player once it is ready enough to trust the autoplay toggle.
-// waitForPlayerLoaded clears the initial unstarted/buffering load (where the
-// toggle can read a premature "false"), then we wait for the toggle itself,
-// which YouTube only adds a few seconds into playback. The settle loop in
-// onEnable absorbs any aria-checked lag that remains.
-async function getReadyPlayer(): Promise<Nullable<YouTubePlayerDiv>> {
-	const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-	if (!player) return null;
-	try {
-		await waitForPlayerLoaded(player, 20000);
-	} catch {
-		return null;
-	}
-	const toggle = await waitForElement(".ytp-autonav-toggle-button", player, 15000);
-	return toggle ? player : null;
+function makeEnableTask(): () => boolean {
+	let settleAttempts = 0;
+
+	return (): boolean => {
+		if (hasOverriddenDefault) return true;
+		const toggle = document.querySelector<HTMLButtonElement>(".ytp-autonav-toggle");
+		if (!toggle) return false;
+		const current = readAutoPlayState();
+
+		// aria-checked can briefly read a premature "false" just after playback
+		// starts; wait for a non-false value before trusting it.
+		if (current === false || current === null) {
+			settleAttempts++;
+			if (settleAttempts < 10) return false;
+			// After 10 retries the state is genuinely off (or unreachable).
+			previousAutoPlayState ??= false;
+			hasOverriddenDefault = true;
+			return true;
+		}
+
+		previousAutoPlayState ??= current;
+
+		if (current) {
+			toggle.click();
+			hasOverriddenDefault = true;
+			return false;
+		}
+
+		hasOverriddenDefault = true;
+		return true;
+	};
+}
+
+function makeNavigateTask(): () => boolean {
+	// Only override on the first session navigation; once the user has made their
+	// choice, later videos keep whatever they chose.
+	return (): boolean => {
+		if (hasOverriddenDefault) return true;
+		const toggle = document.querySelector<HTMLButtonElement>(".ytp-autonav-toggle");
+		if (!toggle) return false;
+		const current = readAutoPlayState();
+		if (current) {
+			toggle.click();
+		}
+		return true;
+	};
 }
 
 // Read the live autoplay state, re-querying so we never read a detached node.
-function readAutoPlayState(player: ParentNode): Nullable<boolean> {
-	const toggle = player.querySelector(".ytp-autonav-toggle-button");
+function readAutoPlayState(): Nullable<boolean> {
+	const toggle = document.querySelector(".ytp-autonav-toggle-button");
 	return toggle ? toggle.getAttribute("aria-checked") === "true" : null;
-}
-
-async function toggleAutoPlayOff() {
-	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 1000);
-	if (!playerContainer) return;
-	const autoPlayButtonElem = await waitForElement<HTMLButtonElement>(".ytp-autonav-toggle", playerContainer, 1000);
-	if (!autoPlayButtonElem) return;
-	const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
-	if (!autoPlayButtonElemChecked) return;
-	const current = autoPlayButtonElemChecked.getAttribute("aria-checked") === "true";
-	if (current) {
-		autoPlayButtonElem.click();
-	}
 }
 
 export default createFeature({
@@ -69,36 +91,24 @@ export default createFeature({
 		// including when that happens off a watch page where onDisable never runs.
 		if (!config.enabled) hasOverriddenDefault = false;
 	},
-	onDisable: async () => {
-		// Restore only when the feature is switched off while on a watch page, not
-		// when navigating away, which would otherwise wrongly re-enable autoplay.
-		if (!isWatchPage() || previousAutoPlayState === null) return;
-		const player = await getReadyPlayer();
-		if (!player) return;
-		await clickToggleUntil(player, previousAutoPlayState);
-		previousAutoPlayState = null;
-		hasOverriddenDefault = false;
+	onDisable: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
+			interval: 300,
+			maxAttempts: 24,
+			waitForLoaded: true
+		});
 	},
-	onEnable: async () => {
-		if (hasOverriddenDefault) return;
-		const player = await getReadyPlayer();
-		if (!player) return;
-		// aria-checked can briefly read a premature "false" just after playback
-		// starts; allow a short window for it to settle before trusting it.
-		let current = readAutoPlayState(player);
-		for (let attempt = 0; attempt < 10 && current === false; attempt++) {
-			await delay(200);
-			current = readAutoPlayState(player);
-		}
-		if (current === null) return;
-		previousAutoPlayState ??= current;
-		// If the click never lands (e.g. a YouTube re-render rebinds the control),
-		// leave the session unmarked so the next video tries again instead of
-		// silently giving up.
-		if (current && !(await clickToggleUntil(player, false))) return;
-		hasOverriddenDefault = true;
+	onEnable: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
+			interval: 300,
+			maxAttempts: 30,
+			waitForLoaded: true
+		});
 	},
-	onNavigate: async () => {
-		await toggleAutoPlayOff();
+	onNavigate: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
+			maxAttempts: 10,
+			waitForLoaded: true
+		});
 	}
 });
