@@ -5,6 +5,11 @@ import { waitForAllElements } from "@/src/utils/dom/wait";
 import "./index.css";
 import { metadata } from "./index.metadata";
 
+async function addFullscreenScrollClasses() {
+	await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
+	modifyElementsClassList("add", getFullscreenScrollPairs());
+}
+
 function getFullscreenScrollPairs(): ElementClassPair[] {
 	return [
 		{
@@ -25,7 +30,9 @@ export default createFeature({
 		modifyElementsClassList("remove", getFullscreenScrollPairs());
 	},
 	onEnable: async () => {
-		await waitForAllElements(["ytd-watch-flexy", "ytd-app"]);
-		modifyElementsClassList("add", getFullscreenScrollPairs());
+		await addFullscreenScrollClasses();
+	},
+	onNavigate: async () => {
+		await addFullscreenScrollClasses();
 	}
 });
