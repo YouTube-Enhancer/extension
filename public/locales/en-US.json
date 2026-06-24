@@ -119,10 +119,12 @@
 					}
 				},
 				"playlistReverseButton": {
-					"button": {
-						"toggle": {
-							"off": "Normal order",
-							"on": "Reversed order"
+					"extras":{
+						"button": {
+							"toggle": {
+								"off": "Normal order",
+								"on": "Reversed order"
+							}
 						}
 					}
 				},
