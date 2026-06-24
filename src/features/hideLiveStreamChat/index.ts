@@ -15,19 +15,32 @@ export default createFeature({
 		if (!player) return;
 		const playerData = await player.getVideoData();
 		if (!playerData.isLive) return;
-		modifyElementClassList("remove", {
-			className: "yte-hide-live-stream-chat",
-			element: document.body
-		});
+		removeLiveChatHide();
 	},
 	onEnable: async () => {
-		const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-		if (!player) return;
-		const playerData = await player.getVideoData();
-		if (!playerData.isLive) return;
+		await applyLiveChatVisibility();
+	},
+	onNavigate: async () => {
+		await applyLiveChatVisibility();
+	}
+});
+
+async function applyLiveChatVisibility() {
+	const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+	if (!player) return;
+	const playerData = await player.getVideoData();
+	if (playerData.isLive) {
 		modifyElementClassList("add", {
 			className: "yte-hide-live-stream-chat",
 			element: document.body
 		});
+	} else {
+		removeLiveChatHide();
 	}
-});
+}
+function removeLiveChatHide() {
+	modifyElementClassList("remove", {
+		className: "yte-hide-live-stream-chat",
+		element: document.body
+	});
+}
