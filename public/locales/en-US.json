@@ -119,9 +119,11 @@
 					}
 				},
 				"playlistReverseButton": {
-					"toggle": {
-						"off": "Normal order",
-						"on": "Reversed order"
+					"button": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
