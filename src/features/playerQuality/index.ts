@@ -159,6 +159,7 @@ export default createFeature({
 		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
 		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
 			maxAttempts: 30,
+			onPlayerStateChange: true,
 			pageTypes: ["watch", "live", "shorts"],
 			waitForLoaded: true
 		});
