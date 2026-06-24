@@ -3,11 +3,17 @@ import { cleanSearchPage, observeShareURLInput, removeObserver } from "@/src/fea
 
 import { metadata } from "./index.metadata";
 
+const setupShareShortener = () => {
+	cleanSearchPage(window.location.href);
+	observeShareURLInput();
+};
+
 export default createFeature({
 	...metadata,
 	onDisable: removeObserver,
-	onEnable: () => {
-		cleanSearchPage(window.location.href);
-		observeShareURLInput();
+	onEnable: setupShareShortener,
+	onNavigate: () => {
+		removeObserver();
+		setupShareShortener();
 	}
 });
