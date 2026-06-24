@@ -119,11 +119,11 @@
 					}
 				},
 				"playlistReverseButton": {
-					"extras":{
-							"toggle": {
-								"off": "Normal order",
-								"on": "Reversed order"
-							}
+					"extras": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -794,6 +794,17 @@
 					"title": "Automatically adjusts the video quality to the selected level"
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "Frame rate preference",
+							"options": {
+								"default": "Default",
+								"higher": "Higher FPS",
+								"lower": "Lower FPS"
+							},
+							"title": "Prefer higher or lower frame rate when multiple formats are available"
+						}
+					},
 					"quality": {
 						"select": {
 							"label": "Player quality",

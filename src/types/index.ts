@@ -14,7 +14,7 @@ import type {
 } from "@/src/features/_registry/types";
 import type { FeatureMenuOpenType } from "@/src/features/featureMenu/types";
 import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlayer/types";
-import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
+import type { FpsPreference, PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
 import type { ScreenshotFormat, ScreenshotType } from "@/src/features/screenshotButton/types";
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";
@@ -308,7 +308,12 @@ export type configuration = {
 	openYouTubeSettingsOnHover: { enabled: boolean };
 	pauseBackgroundPlayers: { enabled: boolean };
 	playbackSpeedButtons: { button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement }; speed: number };
-	playerQuality: { enabled: boolean; fallbackStrategy: PlayerQualityFallbackStrategy; quality: YoutubePlayerQualityLevel };
+	playerQuality: {
+		enabled: boolean;
+		fallbackStrategy: PlayerQualityFallbackStrategy;
+		fpsPreference: FpsPreference;
+		quality: YoutubePlayerQualityLevel;
+	};
 	playerSpeed: {
 		enabled: boolean;
 		speed: number;
