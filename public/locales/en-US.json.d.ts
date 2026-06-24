@@ -614,6 +614,10 @@ interface EnUS {
 							title: "Prefer higher or lower frame rate when multiple formats are available";
 						};
 					};
+					preferPremium: {
+						label: "Prefer Premium enhanced bitrate";
+						title: "Use Premium itags (356/721) when available. Requires YouTube Premium.";
+					};
 					quality: { select: { label: "Player quality"; title: "The quality to set the video to" } };
 					qualityFallbackStrategy: {
 						select: {
