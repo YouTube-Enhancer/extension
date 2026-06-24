@@ -120,8 +120,8 @@
 				},
 				"playlistReverseButton": {
 					"toggle": {
-						"off": "Normal order",
-						"on": "Reversed order"
+						"off": "通常顺序",
+						"on": "倒序排序"
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -626,8 +626,8 @@
 					},
 					"playlistReverseButton": {
 						"enable": {
-							"label": "Reverse playlist button",
-							"title": "Adds a button to reverse the order of videos in playlists"
+							"label": "倒序播放列表按钮",
+							"title": "添加按钮以反转播放列表中视频的顺序"
 						}
 					},
 					"remainingTime": {
@@ -723,8 +723,8 @@
 						"title": "从观看页面的推荐列表移除短视频"
 					},
 					"subscriptions": {
-						"label": "Hide on Subscriptions feed",
-						"title": "Removes the Shorts section from the Subscriptions feed"
+						"label": "在订阅动态中隐藏",
+						"title": "从订阅源中移除短视频"
 					}
 				}
 			},
