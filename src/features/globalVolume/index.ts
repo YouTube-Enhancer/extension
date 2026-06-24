@@ -26,5 +26,10 @@ export default createFeature({
 		const playerContainer = await getPlayerContainer();
 		if (!playerContainer) return;
 		await setPlayerVolume(playerContainer, volume);
+	},
+	onNavigate: async ({ volume }) => {
+		const playerContainer = await getPlayerContainer();
+		if (!playerContainer) return;
+		await setPlayerVolume(playerContainer, volume);
 	}
 });
