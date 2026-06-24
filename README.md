@@ -139,7 +139,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Automatic Quality Adjustment**: Automatically adjusts the video quality to the selected level
 - **Prefer Premium Enhanced Bitrate**: Use Premium itags (356/721) when available. Requires YouTube Premium.
 - **Player Quality**: The quality to set the video to
-  - Options: Auto, 4320p, 2880p, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, 144p
+  - Options: 4320p, 2880p, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, 144p
 - **Quality Fallback Strategy**: The strategy to use when the selected quality is not available
   - Options: Higher, Lower
 - **Frame Rate Preference**: Prefer higher or lower frame rate when multiple formats are available

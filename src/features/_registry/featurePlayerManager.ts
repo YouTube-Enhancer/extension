@@ -29,6 +29,7 @@ type ActiveRetryState = {
 type PlayerStateHookEntry = {
 	cooldownId: Nullable<ReturnType<typeof setTimeout>>;
 	featureId: FeatureKeys;
+	handler: () => void;
 	lastRun: number;
 	trigger: () => void;
 };
@@ -184,15 +185,27 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const entry = this.stateHooks.get(featureId);
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
+		const player = document.querySelector<YouTubePlayerDiv>(isShortsPage() ? "div#shorts-player" : "div#movie_player");
+		if (player) {
+			player.removeEventListener("onStateChange", entry.handler);
+		}
 		this.stateHooks.delete(featureId);
 	}
 
 	private setupStateHook(featureId: FeatureKeys, trigger: () => void): void {
 		this.removeStateHook(featureId);
 
+		const handler = (): void => {
+			const now = Date.now();
+			if (now - entry.lastRun < 5000) return;
+			entry.lastRun = now;
+			trigger();
+		};
+
 		const entry: PlayerStateHookEntry = {
 			cooldownId: null,
 			featureId,
+			handler,
 			lastRun: 0,
 			trigger
 		};
@@ -201,13 +214,6 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 		const player = document.querySelector<YouTubePlayerDiv>(isShortsPage() ? "div#shorts-player" : "div#movie_player");
 		if (!player) return;
-
-		const handler = (): void => {
-			const now = Date.now();
-			if (now - entry.lastRun < 5000) return;
-			entry.lastRun = now;
-			trigger();
-		};
 
 		player.addEventListener("onStateChange", handler);
 	}

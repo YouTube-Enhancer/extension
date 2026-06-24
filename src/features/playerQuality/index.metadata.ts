@@ -17,12 +17,18 @@ const qualityLabels: Record<string, string> = {
 	small: "240p",
 	tiny: "144p"
 };
-
+const youtubePlayerQualityLevelsNoAuto = youtubePlayerQualityLevels.filter((q) => q !== "auto");
 export const metadata = createFeatureMetadata({
 	defaults: { enabled: false, fallbackStrategy: "lower", fpsPreference: "default", preferPremium: false, quality: "hd1080" },
 	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
-	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), fpsPreference: z.enum(FpsPreference), preferPremium: z.boolean(), quality: z.enum(youtubePlayerQualityLevels) },
+	schemaInput: {
+		enabled: z.boolean(),
+		fallbackStrategy: z.enum(PlayerQualityFallbackStrategy),
+		fpsPreference: z.enum(FpsPreference),
+		preferPremium: z.boolean(),
+		quality: z.enum(youtubePlayerQualityLevelsNoAuto)
+	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [
 		{
@@ -38,7 +44,7 @@ export const metadata = createFeatureMetadata({
 					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
 					id: "playerQuality.quality",
 					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.quality.select.label),
-					optionsFrom: () => [...youtubePlayerQualityLevels].reverse().map((value) => ({ label: () => qualityLabels[value] ?? value, value })),
+					optionsFrom: () => [...youtubePlayerQualityLevelsNoAuto].reverse().map((value) => ({ label: () => qualityLabels[value] ?? value, value })),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
