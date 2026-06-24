@@ -19,10 +19,10 @@ const qualityLabels: Record<string, string> = {
 };
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, fallbackStrategy: "lower", fpsPreference: "default", quality: "hd1080" },
+	defaults: { enabled: false, fallbackStrategy: "lower", fpsPreference: "default", preferPremium: false, quality: "hd1080" },
 	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
-	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), fpsPreference: z.enum(FpsPreference), quality: z.enum(youtubePlayerQualityLevels) },
+	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), fpsPreference: z.enum(FpsPreference), preferPremium: z.boolean(), quality: z.enum(youtubePlayerQualityLevels) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [
 		{
@@ -76,6 +76,13 @@ export const metadata = createFeatureMetadata({
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
 					},
 					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.title)
+				},
+				{
+					component: "checkbox",
+					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
+					id: "playerQuality.preferPremium",
+					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.preferPremium.label),
+					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.preferPremium.title)
 				}
 			],
 			section: "playerQuality",

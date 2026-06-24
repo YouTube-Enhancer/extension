@@ -12,7 +12,7 @@ import { metadata } from "./index.metadata";
 
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
 
-function chooseBestFormat(closestQuality: string, fpsPreference: FpsPreference): Nullable<number> {
+function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPreference: FpsPreference): Nullable<number> {
 	const player = getPlayer();
 	if (!player?.getAvailableQualityData) return null;
 
@@ -21,10 +21,15 @@ function chooseBestFormat(closestQuality: string, fpsPreference: FpsPreference):
 	if (!matching.length) return null;
 
 	if (matching.length === 1) {
-		return null;
+		return matching[0].paygatedQualityDetails ? matching[0].formatId : null;
 	}
 
 	const sorted = [...matching].sort((a, b) => {
+		if (preferPremium) {
+			const aPremium = !!a.paygatedQualityDetails;
+			const bPremium = !!b.paygatedQualityDetails;
+			if (aPremium !== bPremium) return aPremium ? -1 : 1;
+		}
 		if (fpsPreference !== "default") {
 			const aEntry = lookupItag(a.formatId);
 			const bEntry = lookupItag(b.formatId);
@@ -40,7 +45,7 @@ function chooseBestFormat(closestQuality: string, fpsPreference: FpsPreference):
 	const [best] = sorted;
 	const entry = lookupItag(best.formatId);
 	browserColorLog(
-		`Selected format ${best.formatId} (${entry?.codec ?? "unknown"}, ${entry?.fps ?? "?"}fps) for ${closestQuality}`,
+		`Selected format ${best.formatId} (${entry?.codec ?? "unknown"}, ${entry?.fps ?? "?"}fps${best.paygatedQualityDetails ? " premium" : ""}) for ${closestQuality}`,
 		"FgMagenta"
 	);
 	return best.formatId;
@@ -57,6 +62,7 @@ function getPlayer(): Nullable<YouTubePlayerDiv> {
 function makeApplyQualityTask(
 	fallbackStrategy: PlayerQualityFallbackStrategy,
 	quality: YoutubePlayerQualityLevel,
+	preferPremium: boolean,
 	fpsPreference: FpsPreference
 ): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
@@ -70,7 +76,7 @@ function makeApplyQualityTask(
 			const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
 			if (!closestQuality) return false;
 
-			const qualityFormatId = chooseBestFormat(closestQuality, fpsPreference);
+			const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
 
 			if (qualityFormatId) {
 				await player.setPlaybackQualityRange(closestQuality, closestQuality, qualityFormatId);
@@ -107,14 +113,14 @@ export default createFeature({
 			waitForLoaded: true
 		});
 	},
-	onEnable: async ({ fallbackStrategy, fpsPreference, quality }) => {
+	onEnable: async ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		const player = getPlayer();
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
 		}
 		void registry.playerManager.executeWithRetries(
 			metadata.id,
-			[makeApplyQualityTask(fallbackStrategy, quality, fpsPreference ?? "default")],
+			[makeApplyQualityTask(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default")],
 			["applyQuality"],
 			{
 				maxAttempts: 30,
@@ -124,10 +130,10 @@ export default createFeature({
 			}
 		);
 	},
-	onNavigate: ({ fallbackStrategy, fpsPreference, quality }) => {
+	onNavigate: ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		void registry.playerManager.executeWithRetries(
 			metadata.id,
-			[makeApplyQualityTask(fallbackStrategy, quality, fpsPreference ?? "default")],
+			[makeApplyQualityTask(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default")],
 			["applyQuality"],
 			{
 				maxAttempts: 30,

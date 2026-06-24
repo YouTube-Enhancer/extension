@@ -312,6 +312,7 @@ export type configuration = {
 		enabled: boolean;
 		fallbackStrategy: PlayerQualityFallbackStrategy;
 		fpsPreference: FpsPreference;
+		preferPremium: boolean;
 		quality: YoutubePlayerQualityLevel;
 	};
 	playerSpeed: {
