@@ -11,7 +11,7 @@
 	padding: 8px;
 }
 #yte-playlist-reverse-button:hover {
-	background: var(--yt-sys-color-baseline--button-chip-background-hover, rgba(255,255,255,0.2));
+	background: var(--yt-sys-color-baseline--button-chip-background-hover, rgba(255, 255, 255, 0.2));
 }
 yt-flexible-actions-view-model #yte-playlist-reverse-button {
 	background: var(--yt-sys-color-baseline--additive-background, rgba(255, 255, 255, 0.1));
