@@ -1,12 +1,12 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
-import { type YouTubePlayerDiv } from "@/src/types";
+import { type Nullable, type YouTubePlayerDiv } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { type ModifyElementAction, modifyElementClassList } from "@/src/utils/dom/classList";
 import { preventScroll } from "@/src/utils/dom/events";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
-import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
@@ -33,15 +33,25 @@ export default createFeature({
 async function setupVolumeScrollControl() {
 	let optionsData = await waitForSpecificMessage("options", "request_data", "content");
 	const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
-	// Wait for the specified container selectors to be available on the page
-	await waitForAllElements(containerSelectors);
-	// Get the player element
-	const playerContainer =
-		isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-		: null;
-	// If player element is not available, return
-	if (!playerContainer) return;
+
+	let _playerContainer: Nullable<YouTubePlayerDiv> = null;
+
+	const findPlayerTask = (): boolean => {
+		const el =
+			isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
+		if (el) _playerContainer = el;
+		return _playerContainer !== null;
+	};
+
+	await registry.playerManager.executeWithRetries("scrollWheelVolumeControl", [findPlayerTask], ["find player"], {
+		maxAttempts: 15,
+		waitForLoaded: false
+	});
+
+	if (!_playerContainer) return;
+	const playerContainer: YouTubePlayerDiv = _playerContainer;
 	const refreshOptions = async () => {
 		optionsData = await waitForSpecificMessage("options", "request_data", "content");
 		return optionsData;
