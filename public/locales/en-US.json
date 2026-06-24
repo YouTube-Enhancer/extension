@@ -120,12 +120,10 @@
 				},
 				"playlistReverseButton": {
 					"extras":{
-						"button": {
 							"toggle": {
 								"off": "Normal order",
 								"on": "Reversed order"
 							}
-						}
 					}
 				},
 				"saveToWatchLaterButton": {
