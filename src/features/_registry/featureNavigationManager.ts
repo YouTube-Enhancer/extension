@@ -5,7 +5,7 @@ import { getCurrentPageType } from "@/src/utils/url";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
-export type NavigationEventType = "finish" | "popstate" | "start";
+export type NavigationEventType = "finish" | "popstate" | "start" | "updated";
 
 type NavigationSignature = `${string}${"" | `:${string}`}`;
 
@@ -14,7 +14,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private currentPage: Nullable<string> = null;
 	private isInitialized = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
-	private navigationListener?: () => void;
+	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
@@ -35,12 +35,12 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	}
 
 	destroyListener() {
-		if (!this.navigationListener) return;
-		window.removeEventListener("popstate", this.navigationListener);
-		window.removeEventListener("yt-navigate-start", this.navigationListener);
-		window.removeEventListener("yt-navigate-finish", this.navigationListener);
-		window.removeEventListener("yt-page-data-updated", this.navigationListener);
-		const { pushStateWrapper, replaceStateWrapper } = this;
+		const { navigationListeners, pushStateWrapper, replaceStateWrapper } = this;
+		if (!navigationListeners.popstate) return;
+		window.removeEventListener("popstate", navigationListeners.popstate);
+		window.removeEventListener("yt-navigate-start", navigationListeners.start);
+		window.removeEventListener("yt-navigate-finish", navigationListeners.finish);
+		window.removeEventListener("yt-page-data-updated", navigationListeners.updated);
 		// Restore original history methods
 		if (pushStateWrapper) {
 			const { original: pushStateOriginal } = pushStateWrapper;
@@ -50,7 +50,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			const { original: replaceStateOriginal } = replaceStateWrapper;
 			history.replaceState = replaceStateOriginal;
 		}
-		this.navigationListener = undefined;
+		this.navigationListeners = {};
 		this.navigationPatched = false;
 		this.currentNavigationSignature = null;
 		this.pushStateWrapper = undefined;
@@ -255,11 +255,14 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 
 		wrapHistoryMethod("pushState");
 		wrapHistoryMethod("replaceState");
-		this.navigationListener = createRunner("popstate"); // Keep a reference for cleanup
-		window.addEventListener("popstate", this.navigationListener);
-		window.addEventListener("yt-navigate-start", createRunner("start"));
-		window.addEventListener("yt-navigate-finish", createRunner("finish"));
-		window.addEventListener("yt-page-data-updated", createRunner("popstate"));
+		this.navigationListeners.popstate = createRunner("popstate");
+		this.navigationListeners.start = createRunner("start");
+		this.navigationListeners.finish = createRunner("finish");
+		this.navigationListeners.updated = createRunner("updated");
+		window.addEventListener("popstate", this.navigationListeners.popstate);
+		window.addEventListener("yt-navigate-start", this.navigationListeners.start);
+		window.addEventListener("yt-navigate-finish", this.navigationListeners.finish);
+		window.addEventListener("yt-page-data-updated", this.navigationListeners.updated);
 	}
 
 	private updateNavigationSignature(signature: Nullable<NavigationSignature>) {
