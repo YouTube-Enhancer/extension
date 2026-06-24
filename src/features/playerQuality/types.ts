@@ -16,3 +16,5 @@ export const youtubePlayerQualityLevels = [
 export type YoutubePlayerQualityLevel = (typeof youtubePlayerQualityLevels)[number];
 export const PlayerQualityFallbackStrategy = ["higher", "lower"] as const;
 export type PlayerQualityFallbackStrategy = (typeof PlayerQualityFallbackStrategy)[number];
+export const FpsPreference = ["default", "higher", "lower"] as const;
+export type FpsPreference = (typeof FpsPreference)[number];

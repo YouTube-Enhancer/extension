@@ -2,7 +2,7 @@ import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
 
-import { PlayerQualityFallbackStrategy, youtubePlayerQualityLevels } from "./types";
+import { FpsPreference, PlayerQualityFallbackStrategy, youtubePlayerQualityLevels } from "./types";
 
 const qualityLabels: Record<string, string> = {
 	auto: "Auto",
@@ -19,10 +19,10 @@ const qualityLabels: Record<string, string> = {
 };
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, fallbackStrategy: "lower", quality: "hd1080" },
+	defaults: { enabled: false, fallbackStrategy: "lower", fpsPreference: "default", quality: "hd1080" },
 	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
-	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), quality: z.enum(youtubePlayerQualityLevels) },
+	schemaInput: { enabled: z.boolean(), fallbackStrategy: z.enum(PlayerQualityFallbackStrategy), fpsPreference: z.enum(FpsPreference), quality: z.enum(youtubePlayerQualityLevels) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [
 		{
@@ -60,6 +60,22 @@ export const metadata = createFeatureMetadata({
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
 					},
 					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.title)
+				},
+				{
+					component: "select",
+					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
+					id: "playerQuality.fpsPreference",
+					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.label),
+					optionsFrom: () =>
+						FpsPreference.map((value) => ({
+							label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.options[value]),
+							value
+						})),
+					parentSetting: {
+						type: "singular",
+						value: (tr) => tr.settings.sections.playerQuality.enable.label
+					},
+					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.title)
 				}
 			],
 			section: "playerQuality",
