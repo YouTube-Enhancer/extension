@@ -119,9 +119,11 @@
 					}
 				},
 				"playlistReverseButton": {
-					"toggle": {
-						"off": "通常顺序",
-						"on": "倒序排序"
+					"extras": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
