@@ -98,8 +98,10 @@ declare module "youtube-player/dist/types" {
 		getProgressState(): ProgressState;
 		getVideoBytesLoaded(): Promise<number>;
 		getVideoData(): Promise<VideoData>;
+		getVideoStats(): { fmt: number; lbw: string; optimal_format: string; vh: number; vw: number };
 		loadModule(moduleName: string): void;
 		setAudioTrack(audioTrack: audioTrack): Promise<void>;
+		setPlaybackQuality(suggestedQuality: string): Promise<void>;
 		setPlaybackQualityRange(suggestedQuality: string, rangeQuality?: string, formatId?: number): Promise<void>;
 		unloadModule(moduleName: string): void;
 	}

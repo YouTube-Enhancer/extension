@@ -21,7 +21,12 @@ function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPre
 	if (!matching.length) return null;
 
 	if (matching.length === 1) {
-		return matching[0].paygatedQualityDetails ? matching[0].formatId : null;
+		const entry = lookupItag(matching[0].formatId);
+		browserColorLog(
+			`Selected format ${matching[0].formatId} (${entry?.codec ?? "unknown"}, ${entry?.fps ?? "?"}fps${matching[0].paygatedQualityDetails ? " premium" : ""}) for ${closestQuality}`,
+			"FgMagenta"
+		);
+		return matching[0].formatId;
 	}
 
 	const sorted = [...matching].sort((a, b) => {
@@ -59,38 +64,59 @@ function getPlayer(): Nullable<YouTubePlayerDiv> {
 	);
 }
 
-function makeApplyQualityTask(
+function makeApplyQualityTasks(
 	fallbackStrategy: PlayerQualityFallbackStrategy,
 	quality: YoutubePlayerQualityLevel,
 	preferPremium: boolean,
 	fpsPreference: FpsPreference
-): () => Promise<boolean> {
-	return async (): Promise<boolean> => {
+): [() => Promise<boolean>, () => Promise<boolean>] {
+	let appliedQuality: Nullable<string> = null;
+	let appliedFormatId: Nullable<number> = null;
+
+	const applyTask = async (): Promise<boolean> => {
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
+		const currentQuality = await player.getPlaybackQuality();
+		if (!currentQuality || currentQuality === "unknown") return false;
 
 		const availableLevels = (await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
-		if (!availableLevels.length || availableLevels[0] === "auto") return false;
+		if (!availableLevels.length) return false;
 
-		if (quality && quality !== "auto") {
-			const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
-			if (!closestQuality) return false;
+		if (!quality || quality === "auto") return true;
 
-			const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
+		const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
+		if (!closestQuality) return false;
 
-			if (qualityFormatId) {
-				await player.setPlaybackQualityRange(closestQuality, closestQuality, qualityFormatId);
-			} else {
-				await player.setPlaybackQualityRange(closestQuality);
-			}
+		const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
 
-			player.dataset.defaultQuality = closestQuality;
-			const playbackQuality = await player.getPlaybackQuality();
-			return playbackQuality === closestQuality;
+		if (qualityFormatId) {
+			await player.setPlaybackQualityRange(closestQuality, closestQuality, qualityFormatId);
+		} else {
+			await player.setPlaybackQualityRange(closestQuality, closestQuality);
+		}
+		if (player.setPlaybackQuality) {
+			await player.setPlaybackQuality(closestQuality);
 		}
 
+		player.dataset.defaultQuality = closestQuality;
+		appliedQuality = closestQuality;
+		appliedFormatId = qualityFormatId;
 		return true;
 	};
+
+	const verifyTask = async (): Promise<boolean> => {
+		if (!appliedQuality) return false;
+		const player = getPlayer();
+		if (!player) return false;
+		if (appliedFormatId) {
+			const stats = player.getVideoStats();
+			return stats.fmt === appliedFormatId;
+		}
+		const playbackQuality = await player.getPlaybackQuality();
+		return playbackQuality === appliedQuality;
+	};
+
+	return [applyTask, verifyTask];
 }
 
 function makeRestoreQualityTask(): () => Promise<boolean> {
@@ -98,7 +124,10 @@ function makeRestoreQualityTask(): () => Promise<boolean> {
 		if (!currentQuality) return true;
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality) return false;
-		await player.setPlaybackQualityRange(currentQuality);
+		await player.setPlaybackQualityRange(currentQuality, currentQuality);
+		if (player.setPlaybackQuality) {
+			await player.setPlaybackQuality(currentQuality);
+		}
 		player.dataset.defaultQuality = currentQuality;
 		return true;
 	};
@@ -118,29 +147,20 @@ export default createFeature({
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
 		}
-		void registry.playerManager.executeWithRetries(
-			metadata.id,
-			[makeApplyQualityTask(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default")],
-			["applyQuality"],
-			{
-				maxAttempts: 30,
-				onPlayerStateChange: true,
-				pageTypes: ["watch", "live", "shorts"],
-				waitForLoaded: true
-			}
-		);
+		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
+		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
+			maxAttempts: 30,
+			onPlayerStateChange: true,
+			pageTypes: ["watch", "live", "shorts"],
+			waitForLoaded: true
+		});
 	},
 	onNavigate: ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
-		void registry.playerManager.executeWithRetries(
-			metadata.id,
-			[makeApplyQualityTask(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default")],
-			["applyQuality"],
-			{
-				maxAttempts: 30,
-				onPlayerStateChange: true,
-				pageTypes: ["watch", "live", "shorts"],
-				waitForLoaded: true
-			}
-		);
+		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
+		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
+			maxAttempts: 30,
+			pageTypes: ["watch", "live", "shorts"],
+			waitForLoaded: true
+		});
 	}
 });
