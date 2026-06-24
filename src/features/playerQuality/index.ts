@@ -1,6 +1,6 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { type Nullable, type YouTubePlayerDiv } from "@/src/types";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
@@ -8,59 +8,91 @@ import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "./types";
 
 import { metadata } from "./index.metadata";
+
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
-async function applyQuality(fallbackStrategy: PlayerQualityFallbackStrategy, quality: undefined | YoutubePlayerQualityLevel) {
-	// Get the player element
-	const playerContainer =
-		isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-		: null;
-	// If player element is not available, return
-	if (!playerContainer) return;
-	// If setPlaybackQuality method is not available in the player, return
-	if (!playerContainer.setPlaybackQuality) return;
-	// Get the available quality levels
-	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
-	// Check if the specified player quality is available
-	if (quality && quality !== "auto") {
-		const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
-		if (!closestQuality) return;
-		// Log the message indicating the player quality being set
-		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
-		// Set the playback quality and update the default quality in the dataset
-		await playerContainer.setPlaybackQualityRange(closestQuality);
-		playerContainer.dataset.defaultQuality = closestQuality;
-	}
+
+function getPlayer(): Nullable<YouTubePlayerDiv> {
+	return (
+		isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+		: null
+	);
 }
+
+function makeApplyQualityTask(
+	fallbackStrategy: PlayerQualityFallbackStrategy,
+	quality: YoutubePlayerQualityLevel
+): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		const player = getPlayer();
+		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
+
+		const availableLevels = (await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
+		if (!availableLevels.length || availableLevels[0] === "auto") return false;
+
+		if (quality && quality !== "auto") {
+			const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
+			if (!closestQuality) return false;
+
+			browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
+			await player.setPlaybackQualityRange(closestQuality);
+			player.dataset.defaultQuality = closestQuality;
+			const playbackQuality = await player.getPlaybackQuality();
+			return playbackQuality === closestQuality;
+		}
+
+		return true;
+	};
+}
+
+function makeRestoreQualityTask(): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		if (!currentQuality) return true;
+		const player = getPlayer();
+		if (!player || !player.setPlaybackQuality) return false;
+		await player.setPlaybackQualityRange(currentQuality);
+		player.dataset.defaultQuality = currentQuality;
+		return true;
+	};
+}
+
 export default createFeature({
 	...metadata,
-	onDisable: async () => {
-		if (!currentQuality) return;
-		// Get the player element
-		const playerContainer =
-			isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-			: null;
-		// If player element is not available, return
-		if (!playerContainer) return;
-		// If setPlaybackQuality method is not available in the player, return
-		if (!playerContainer.setPlaybackQuality) return;
-		await playerContainer.setPlaybackQualityRange(currentQuality);
+	onDisable: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
+			maxAttempts: 10,
+			pageTypes: ["watch", "live", "shorts"],
+			waitForLoaded: true
+		});
 	},
 	onEnable: async ({ fallbackStrategy, quality }) => {
-		// Get the player element
-		const playerContainer =
-			isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-			: null;
-		// If player element is not available, return
-		if (!playerContainer) return;
-		// If setPlaybackQuality method is not available in the player, return
-		if (!playerContainer.setPlaybackQuality) return;
-		currentQuality = (await playerContainer.getPlaybackQuality()) as YoutubePlayerQualityLevel;
-		await applyQuality(fallbackStrategy, quality);
+		const player = getPlayer();
+		if (player && player.getPlaybackQuality) {
+			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
+		}
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeApplyQualityTask(fallbackStrategy, quality)],
+			["applyQuality"],
+			{
+				maxAttempts: 30,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "live", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	},
-	onNavigate: async ({ fallbackStrategy, quality }) => {
-		await applyQuality(fallbackStrategy, quality);
+	onNavigate: ({ fallbackStrategy, quality }) => {
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeApplyQualityTask(fallbackStrategy, quality)],
+			["applyQuality"],
+			{
+				maxAttempts: 30,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "live", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	}
 });
