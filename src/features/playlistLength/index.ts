@@ -1,7 +1,8 @@
+import type { configuration, Nullable } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { type Nullable } from "@/src/types";
 import { playlistItemsSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -53,6 +54,33 @@ async function runInit(params: PlaylistLengthParameters) {
 	documentObserver = await initPlaylistLength(params);
 }
 
+const cleanupPlaylistLength = () => {
+	eventManager.removeEventListeners("playlistLength");
+	documentObserver?.disconnect();
+	documentObserver = null;
+	resizeObserver?.disconnect();
+	resizeObserver = null;
+	document.querySelector("#yte-playlist-length-ui")?.remove();
+};
+
+async function setupPlaylistLength(config: configuration["playlistLength"]) {
+	const { lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod } = config;
+	const pageType = isWatchPage() ? "watch" : "playlist";
+	const params: PlaylistLengthParameters = {
+		pageType,
+		playlistLengthGetMethod,
+		playlistWatchTimeGetMethod
+	};
+	await waitForElement(playlistItemsSelector());
+	await runInit(params);
+	observePlaylistItems(params);
+	resizeObserver?.disconnect();
+	resizeObserver = new ResizeObserver(() => {
+		void runInit(params);
+	});
+	resizeObserver.observe(document.documentElement);
+}
+
 export default createFeature({
 	...metadata,
 	onConfigChange: async (config) => {
@@ -60,28 +88,12 @@ export default createFeature({
 		await registry.updateFeatureEnabledState("playlistLength", false, config);
 		await registry.updateFeatureEnabledState("playlistLength", true, config);
 	},
-	onDisable: () => {
-		eventManager.removeEventListeners("playlistLength");
-		documentObserver?.disconnect();
-		documentObserver = null;
-		resizeObserver?.disconnect();
-		resizeObserver = null;
-		document.querySelector("#yte-playlist-length-ui")?.remove();
+	onDisable: cleanupPlaylistLength,
+	onEnable: async (config) => {
+		await setupPlaylistLength(config);
 	},
-	onEnable: async ({ lengthGetMethod: playlistLengthGetMethod, watchTimeGetMethod: playlistWatchTimeGetMethod }) => {
-		const pageType = isWatchPage() ? "watch" : "playlist";
-		const params: PlaylistLengthParameters = {
-			pageType,
-			playlistLengthGetMethod,
-			playlistWatchTimeGetMethod
-		};
-		await waitForElement(playlistItemsSelector());
-		await runInit(params);
-		observePlaylistItems(params);
-		resizeObserver?.disconnect();
-		resizeObserver = new ResizeObserver(() => {
-			void runInit(params);
-		});
-		resizeObserver.observe(document.documentElement);
+	onNavigate: async () => {
+		cleanupPlaylistLength();
+		await setupPlaylistLength(registry.configManager.getLast("playlistLength"));
 	}
 });
