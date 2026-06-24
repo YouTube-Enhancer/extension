@@ -49,5 +49,22 @@ export default createFeature({
 			subscriptions,
 			videos
 		});
+	},
+	onNavigate: ({
+		channel: { enabled: channel },
+		home: { enabled: home },
+		search: { enabled: search },
+		sidebar: { enabled: sidebar },
+		subscriptions: { enabled: subscriptions },
+		videos: { enabled: videos }
+	}) => {
+		applyShortsVisibility({
+			channel,
+			home,
+			search,
+			sidebar,
+			subscriptions,
+			videos
+		});
 	}
 });
