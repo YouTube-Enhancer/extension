@@ -136,13 +136,23 @@ export async function waitForPlayerLoaded(player: Nullable<YouTubePlayer>, timeo
 	const start = performance.now();
 	return new Promise((resolve, reject) => {
 		const check = (): void => {
+			let loaded = false;
 			try {
 				const state = player.getPlayerStateObject();
 				if (!state.isUnstarted || (!state.isBuffering && state.isUnstarted)) {
-					resolve(player);
-					return;
+					loaded = true;
 				}
 			} catch {}
+			if (!loaded) {
+				const video = (player as unknown as HTMLElement).querySelector("video");
+				if (video && video.readyState >= 2) {
+					loaded = true;
+				}
+			}
+			if (loaded) {
+				resolve(player);
+				return;
+			}
 			if (performance.now() - start >= timeout) {
 				reject(new Error("Timed out waiting for player to load"));
 				return;
