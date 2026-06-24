@@ -1,39 +1,52 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { waitForElement } from "@/src/utils/dom/wait";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
-async function disableTheaterMode() {
-	const isMaximized = document.body.getAttribute("yte-maximized") === "";
-	if (isMaximized) return;
-	// Get the size button
-	const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
-	// If the size button is not available return
-	if (!sizeButton) return;
-	const inTheaterMode =
-		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
-	if (inTheaterMode) {
-		sizeButton.click();
-	}
+
+function clickSizeButton(): boolean {
+	const sizeButton = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
+	if (!sizeButton) return false;
+	sizeButton.click();
+	return true;
 }
 
-async function enableTheaterMode() {
+function isInTheaterMode(): boolean {
 	const isMaximized = document.body.getAttribute("yte-maximized") === "";
-	if (isMaximized) return;
-	// Get the size button
-	const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
-	// If the size button is not available return
-	if (!sizeButton) return;
-	const inTheaterMode =
-		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
-	if (!inTheaterMode) {
-		sizeButton.click();
-	}
+	if (isMaximized) return false;
+	const container = document.querySelector<HTMLElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+	return container?.hasAttribute("theater") ?? false;
+}
+
+function makeTheaterTask(desired: boolean) {
+	return (): boolean => {
+		const current = isInTheaterMode();
+		if (current === desired) return true;
+		return clickSizeButton();
+	};
 }
 
 export default createFeature({
 	...metadata,
-	onDisable: () => disableTheaterMode(),
-	onEnable: () => enableTheaterMode(),
-	onNavigate: () => enableTheaterMode()
+	onDisable: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(false)], ["disableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
+	},
+	onEnable: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
+	},
+	onNavigate: () => {
+		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
+			interval: 300,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
+	}
 });
