@@ -8,6 +8,13 @@ interface YtdWatchElement extends Element {
 	youthereDataChanged_: () => void;
 }
 let youthereDataChanged_: () => void;
+
+function patchContinueWatching() {
+	const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+	if (ytdWatchElement) {
+		ytdWatchElement.youthereDataChanged_ = function () {};
+	}
+}
 export default createFeature({
 	...metadata,
 	onDisable: () => {
@@ -22,7 +29,10 @@ export default createFeature({
 		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
 		if (ytdWatchElement) {
 			({ youthereDataChanged_ } = ytdWatchElement);
-			ytdWatchElement.youthereDataChanged_ = function () {};
 		}
+		patchContinueWatching();
+	},
+	onNavigate: () => {
+		patchContinueWatching();
 	}
 });
