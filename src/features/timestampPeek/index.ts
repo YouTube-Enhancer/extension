@@ -31,6 +31,18 @@ function setTimestampObserver(observer: MutationObserver) {
 	timestampElementObserver = observer;
 }
 
+async function setupTimestampPeek() {
+	await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
+	const videoHref = getVideoHref();
+	if (!videoHref) return;
+	eventManager.removeEventListeners("timestampPeek");
+	document.addEventListener("yt-navigate-start", navigateStartHandler);
+	cleanupTimestampObserver();
+	await handleTimestampElementsHover();
+	const obs = await observeTimestampElements();
+	if (obs) setTimestampObserver(obs);
+}
+
 export default createFeature({
 	...metadata,
 	onDisable: () => {
@@ -44,15 +56,6 @@ export default createFeature({
 		const shield = document.getElementById("yte-timestamp-peek-hover-shield");
 		if (shield) shield.remove();
 	},
-	onEnable: async () => {
-		await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
-		const videoHref = getVideoHref();
-		if (!videoHref) return;
-		eventManager.removeEventListeners("timestampPeek");
-		document.addEventListener("yt-navigate-start", navigateStartHandler);
-		cleanupTimestampObserver();
-		await handleTimestampElementsHover();
-		const obs = await observeTimestampElements();
-		if (obs) setTimestampObserver(obs);
-	}
+	onEnable: setupTimestampPeek,
+	onNavigate: setupTimestampPeek
 });
