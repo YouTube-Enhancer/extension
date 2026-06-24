@@ -406,15 +406,15 @@ export class MiniPlayerController {
 		writeSavedState({ height, width, x, y });
 	}
 }
+export function readManualOverride(): boolean {
+	return stateAPI.getState().manualOverride;
+}
 export function setManualOverride(enabled: boolean) {
 	stateAPI.setState((prev) => ({ ...prev, manualOverride: enabled }));
 }
 function parseSizePreset(preset: MiniPlayerSize): { height: number; width: number } {
 	const [w, h] = preset.split("x").map((n) => parseInt(n, 10));
 	return { height: h, width: w };
-}
-function readManualOverride(): boolean {
-	return stateAPI.getState().manualOverride;
 }
 function readSavedState(): Nullable<MiniPlayerRect> {
 	try {

@@ -5,10 +5,33 @@ import { browserColorLog } from "@/src/utils/logging";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
-import type { YoutubePlayerQualityLevel } from "./types";
+import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "./types";
 
 import { metadata } from "./index.metadata";
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
+async function applyQuality(fallbackStrategy: PlayerQualityFallbackStrategy, quality: undefined | YoutubePlayerQualityLevel) {
+	// Get the player element
+	const playerContainer =
+		isWatchPage() || isLivePage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
+		: null;
+	// If player element is not available, return
+	if (!playerContainer) return;
+	// If setPlaybackQuality method is not available in the player, return
+	if (!playerContainer.setPlaybackQuality) return;
+	// Get the available quality levels
+	const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
+	// Check if the specified player quality is available
+	if (quality && quality !== "auto") {
+		const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
+		if (!closestQuality) return;
+		// Log the message indicating the player quality being set
+		browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
+		// Set the playback quality and update the default quality in the dataset
+		await playerContainer.setPlaybackQualityRange(closestQuality);
+		playerContainer.dataset.defaultQuality = closestQuality;
+	}
+}
 export default createFeature({
 	...metadata,
 	onDisable: async () => {
@@ -35,17 +58,9 @@ export default createFeature({
 		// If setPlaybackQuality method is not available in the player, return
 		if (!playerContainer.setPlaybackQuality) return;
 		currentQuality = (await playerContainer.getPlaybackQuality()) as YoutubePlayerQualityLevel;
-		// Get the available quality levels
-		const availableQualityLevels = (await playerContainer.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
-		// Check if the specified player quality is available
-		if (quality && quality !== "auto") {
-			const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
-			if (!closestQuality) return;
-			// Log the message indicating the player quality being set
-			browserColorLog(`Setting player quality to ${closestQuality}`, "FgMagenta");
-			// Set the playback quality and update the default quality in the dataset
-			await playerContainer.setPlaybackQualityRange(closestQuality);
-			playerContainer.dataset.defaultQuality = closestQuality;
-		}
+		await applyQuality(fallbackStrategy, quality);
+	},
+	onNavigate: async ({ fallbackStrategy, quality }) => {
+		await applyQuality(fallbackStrategy, quality);
 	}
 });

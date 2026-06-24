@@ -281,6 +281,11 @@ export class FeatureRegistry {
 			await this.safelyExecute(id, "navigate", async () => this.lifecycleManager.navigateFeature(feature, config, navigationType), {
 				subPhase: "lifecycle"
 			});
+			if (this.hasButtons(feature, id)) {
+				await this.safelyExecute(id, "navigate", async () => this.buttonManager.handleButtonPlacement(feature, config, true), {
+					subPhase: "buttons"
+				});
+			}
 		}
 	}
 }

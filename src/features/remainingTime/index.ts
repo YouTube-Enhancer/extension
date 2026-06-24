@@ -34,36 +34,43 @@ export default createFeature({
 		eventManager.removeEventListeners("remainingTime");
 	},
 	onEnable: async () => {
-		// Get the player element
-		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 75);
-		// If player element is not available, return
-		if (!playerContainer) return;
-		// Get the video element
-		const [videoElement, remainingTimeElement] = await Promise.all([
-			waitForElement<HTMLVideoElement>("video", playerContainer, 75),
-			waitForElement<HTMLSpanElement>("span#ytp-time-remaining", 75, "optional")
-		]);
-		// If video element is not available, return
-		if (!videoElement) return;
-		const timeDisplay = playerContainer.querySelector<HTMLDivElement>(".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents");
-		if (!timeDisplay) return;
-		const [playerVideoData, remainingTime] = await Promise.all([
-			playerContainer.getVideoData(),
-			calculateRemainingTime({ playerContainer, videoElement })
-		]);
-		if (playerVideoData.isLive) {
-			if (remainingTimeElement) remainingTimeElement.remove();
-			return;
-		}
-		const el =
-			remainingTimeElement ??
-			(() => {
-				const span = document.createElement("span");
-				span.id = "ytp-time-remaining";
-				timeDisplay.appendChild(span);
-				return span;
-			})();
-		el.textContent = remainingTime;
-		eventManager.addEventListener(videoElement, "timeupdate", playerTimeUpdateListener, "remainingTime");
+		await setupRemainingTime();
+	},
+	onNavigate: async () => {
+		await setupRemainingTime();
 	}
 });
+
+async function setupRemainingTime() {
+	// Get the player element
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 75);
+	// If player element is not available, return
+	if (!playerContainer) return;
+	// Get the video element
+	const [videoElement, remainingTimeElement] = await Promise.all([
+		waitForElement<HTMLVideoElement>("video", playerContainer, 75),
+		waitForElement<HTMLSpanElement>("span#ytp-time-remaining", 75, "optional")
+	]);
+	// If video element is not available, return
+	if (!videoElement) return;
+	const timeDisplay = playerContainer.querySelector<HTMLDivElement>(".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents");
+	if (!timeDisplay) return;
+	const [playerVideoData, remainingTime] = await Promise.all([
+		playerContainer.getVideoData(),
+		calculateRemainingTime({ playerContainer, videoElement })
+	]);
+	if (playerVideoData.isLive) {
+		if (remainingTimeElement) remainingTimeElement.remove();
+		return;
+	}
+	const el =
+		remainingTimeElement ??
+		(() => {
+			const span = document.createElement("span");
+			span.id = "ytp-time-remaining";
+			timeDisplay.appendChild(span);
+			return span;
+		})();
+	el.textContent = remainingTime;
+	eventManager.addEventListener(videoElement, "timeupdate", playerTimeUpdateListener, "remainingTime");
+}

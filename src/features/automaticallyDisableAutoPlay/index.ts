@@ -49,6 +49,19 @@ function readAutoPlayState(player: ParentNode): Nullable<boolean> {
 	return toggle ? toggle.getAttribute("aria-checked") === "true" : null;
 }
 
+async function toggleAutoPlayOff() {
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 1000);
+	if (!playerContainer) return;
+	const autoPlayButtonElem = await waitForElement<HTMLButtonElement>(".ytp-autonav-toggle", playerContainer, 1000);
+	if (!autoPlayButtonElem) return;
+	const autoPlayButtonElemChecked = autoPlayButtonElem.querySelector(".ytp-autonav-toggle-button");
+	if (!autoPlayButtonElemChecked) return;
+	const current = autoPlayButtonElemChecked.getAttribute("aria-checked") === "true";
+	if (current) {
+		autoPlayButtonElem.click();
+	}
+}
+
 export default createFeature({
 	...metadata,
 	onConfigChange: (config) => {
@@ -84,5 +97,8 @@ export default createFeature({
 		// silently giving up.
 		if (current && !(await clickToggleUntil(player, false))) return;
 		hasOverriddenDefault = true;
+	},
+	onNavigate: async () => {
+		await toggleAutoPlayOff();
 	}
 });

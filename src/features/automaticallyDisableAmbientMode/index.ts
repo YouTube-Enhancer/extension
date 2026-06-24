@@ -1,3 +1,5 @@
+import type { Nullable } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { delay } from "@/src/utils/async";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
@@ -6,7 +8,7 @@ import { getLayoutType, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
-let ambientModeWasEnabled = false;
+let ambientModeWasEnabled: Nullable<boolean> = null;
 const ambientModePathSelectors: Record<"shorts" | "watch", Record<"legacy" | "modern", string>> = {
 	shorts: {
 		legacy:
@@ -39,7 +41,7 @@ async function toggleAmbientMode(desiredState: boolean): Promise<void> {
 	const {
 		[pageType]: { [layoutType]: ambientModeSelector }
 	} = ambientModePathSelectors;
-	if (!desiredState) {
+	if (!desiredState && ambientModeWasEnabled === null) {
 		ambientModeWasEnabled = isAmbientEnabled();
 	}
 	if (pageType === "watch") {
@@ -112,6 +114,9 @@ export default createFeature({
 		await toggleAmbientMode(true);
 	},
 	onEnable: async () => {
+		await toggleAmbientMode(false);
+	},
+	onNavigate: async () => {
 		await toggleAmbientMode(false);
 	}
 });

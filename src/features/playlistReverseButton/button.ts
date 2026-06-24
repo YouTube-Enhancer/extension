@@ -41,7 +41,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 	reverseButton = document.createElement("button");
 	reverseButton.id = "yte-playlist-reverse-button";
 	reverseButton.className = "yte-playlist-reverse-button";
-	const tooltipText = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.toggle[isReversed ? "on" : "off"]);
+	const tooltipText = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]);
 	reverseButton.dataset.title = tooltipText;
 	reverseButton.appendChild(createReverseIcon());
 
@@ -79,7 +79,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 				applyPlaylistPageReversal();
 			}
 
-			const label = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.toggle[newReversed ? "on" : "off"]);
+			const label = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[newReversed ? "on" : "off"]);
 			reverseButton!.dataset.title = label;
 			tooltipUpdate?.();
 			removeTooltipFn();
