@@ -1,9 +1,8 @@
 import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { delay } from "@/src/utils/async";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { getLayoutType, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -31,92 +30,98 @@ function isAmbientEnabled(): boolean {
 	return false;
 }
 
-async function toggleAmbientMode(desiredState: boolean): Promise<void> {
-	const layoutType = getLayoutType();
-	const pageType =
-		isWatchPage() ? "watch"
-		: isShortsPage() ? "shorts"
-		: null;
-	if (!pageType) return;
-	const {
-		[pageType]: { [layoutType]: ambientModeSelector }
-	} = ambientModePathSelectors;
-	if (!desiredState && ambientModeWasEnabled === null) {
-		ambientModeWasEnabled = isAmbientEnabled();
-	}
-	if (pageType === "watch") {
-		const settingsButton = await waitForElement<HTMLButtonElement>("button.ytp-settings-button");
-		const settingsMenu = await waitForElement<HTMLDivElement>(settingsPanelMenuSelector);
-		if (!settingsButton || !settingsMenu) return;
-		const settingsPanelMenu = settingsMenu.querySelector<HTMLDivElement>("div.ytp-panel-menu");
-		if (!settingsPanelMenu) return;
-		if (!settingsPanelMenu.hasChildNodes()) {
-			settingsMenu.classList.add("hidden");
-			settingsButton.click();
-			await waitForElement<HTMLDivElement>("div.ytp-menuitem", settingsPanelMenu, 1000);
-			settingsButton.click();
+function makeAmbientToggleTask(desiredState: boolean): () => boolean {
+	return (): boolean => {
+		const layoutType = getLayoutType();
+		const pageType =
+			isWatchPage() ? "watch"
+			: isShortsPage() ? "shorts"
+			: null;
+		if (!pageType) return false;
+		const {
+			[pageType]: { [layoutType]: ambientModeSelector }
+		} = ambientModePathSelectors;
+		if (!desiredState && ambientModeWasEnabled === null) {
+			ambientModeWasEnabled = isAmbientEnabled();
 		}
-		const ambientModeMenuItem = await waitForElement<HTMLDivElement>(ambientModeSelector, settingsPanelMenu, 1000);
-		if (!ambientModeMenuItem) {
+		if (pageType === "watch") {
+			const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
+			const settingsMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
+			if (!settingsButton || !settingsMenu) return false;
+			const settingsPanelMenu = settingsMenu.querySelector<HTMLDivElement>("div.ytp-panel-menu");
+			if (!settingsPanelMenu) return false;
+			if (!settingsPanelMenu.hasChildNodes()) {
+				settingsMenu.classList.add("hidden");
+				settingsButton.click();
+				settingsButton.click();
+				return false;
+			}
+			const ambientModeMenuItem = document.querySelector<HTMLDivElement>(ambientModeSelector);
+			if (!ambientModeMenuItem) {
+				settingsMenu.classList.remove("hidden");
+				return false;
+			}
+			const ambientModeEnabled = isAmbientEnabled();
+			if (ambientModeEnabled !== desiredState) {
+				ambientModeMenuItem.click();
+			}
 			settingsMenu.classList.remove("hidden");
-			return;
+			return isAmbientEnabled() === desiredState;
+		}
+		// Shorts page
+		const shortsPlayer = document.querySelector("#shorts-player");
+		if (!shortsPlayer) return false;
+		const menuButton = document.querySelector<HTMLButtonElement>("div#menu-button ytd-menu-renderer yt-button-shape button");
+		const popupContainer = document.querySelector<HTMLDivElement>("ytd-popup-container");
+		if (!menuButton || !popupContainer) return false;
+		const {
+			style: { display: originalDisplay }
+		} = popupContainer;
+		popupContainer.style.display = "none";
+		menuButton.click();
+		const popup = document.querySelector<HTMLDivElement>("tp-yt-iron-dropdown");
+		const ambientModeItem = document.querySelector<HTMLButtonElement>(ambientModeSelector);
+		if (!popup || !ambientModeItem) {
+			popupContainer.style.display = originalDisplay;
+			return false;
+		}
+		const ambientModeItemToggle = ambientModeItem.querySelector<HTMLInputElement>("tp-yt-paper-toggle-button");
+		if (!ambientModeItemToggle) {
+			popupContainer.style.display = originalDisplay;
+			return false;
 		}
 		const ambientModeEnabled = isAmbientEnabled();
 		if (ambientModeEnabled !== desiredState) {
-			ambientModeMenuItem.click();
-			await delay(25);
+			ambientModeItem.click();
 		}
-		settingsMenu.classList.remove("hidden");
-		return;
-	}
-	await waitForElement("#shorts-player");
-	const [menuButton, popupContainer] = await Promise.all([
-		waitForElement<HTMLButtonElement>("div#menu-button ytd-menu-renderer yt-button-shape button"),
-		waitForElement<HTMLDivElement>("ytd-popup-container")
-	]);
-	if (!menuButton || !popupContainer) return;
-	const {
-		style: { display: originalDisplay }
-	} = popupContainer;
-	popupContainer.style.display = "none";
-	// Click menu button to hydrate menu
-	menuButton.click();
-	const [popup, ambientModeItem] = await Promise.all([
-		waitForElement<HTMLDivElement>("tp-yt-iron-dropdown", popupContainer),
-		waitForElement<HTMLButtonElement>(ambientModeSelector, popupContainer)
-	]);
-	if (!popup || !ambientModeItem) {
-		popupContainer.style.display = originalDisplay;
-		return;
-	}
-	// Wait for the toggle inside ambient mode item
-	const ambientModeItemToggle = await waitForElement<HTMLInputElement>("tp-yt-paper-toggle-button", ambientModeItem);
-	if (!ambientModeItemToggle) {
-		popupContainer.style.display = originalDisplay;
-		return;
-	}
-	// Determine current state
-	const ambientModeEnabled = isAmbientEnabled();
-	// Toggle if needed
-	if (ambientModeEnabled !== desiredState) {
-		ambientModeItem.click();
-		await delay(25);
-	}
-	// Close menu and restore display
-	menuButton.click();
-	popupContainer.style.display = originalDisplay || "";
+		menuButton.click();
+		popupContainer.style.display = originalDisplay || "";
+		return isAmbientEnabled() === desiredState;
+	};
 }
 
 export default createFeature({
 	...metadata,
-	onDisable: async () => {
+	onDisable: () => {
 		if (!ambientModeWasEnabled) return;
-		await toggleAmbientMode(true);
+		void registry.playerManager.executeWithRetries("automaticallyDisableAmbientMode", [makeAmbientToggleTask(true)], ["restoreAmbient"], {
+			interval: 500,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	},
-	onEnable: async () => {
-		await toggleAmbientMode(false);
+	onEnable: () => {
+		void registry.playerManager.executeWithRetries("automaticallyDisableAmbientMode", [makeAmbientToggleTask(false)], ["disableAmbient"], {
+			interval: 500,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	},
-	onNavigate: async () => {
-		await toggleAmbientMode(false);
+	onNavigate: () => {
+		void registry.playerManager.executeWithRetries("automaticallyDisableAmbientMode", [makeAmbientToggleTask(false)], ["disableAmbient"], {
+			interval: 500,
+			maxAttempts: 20,
+			waitForLoaded: false
+		});
 	}
 });
