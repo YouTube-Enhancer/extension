@@ -5,7 +5,6 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
-import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
@@ -16,23 +15,19 @@ const speedValueRegex = /(\d+(?:\.\d+)?)/;
 
 export async function setPlayerSpeed(speed: number) {
 	const playerContainer =
-		isWatchPage() ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
+		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
-	// If player element is not available, return
 	if (!playerContainer) return;
-	// If setPlaybackRate method is not available in the player, return
 	if (!playerContainer.setPlaybackRate) return;
 	const playerVideoData = await playerContainer.getVideoData();
-	// If the video is live return
 	if (playerVideoData.isLive) return;
-	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video");
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!video) return;
-	// Set the playback speed
 	await playerContainer.setPlaybackRate(speed);
-	// Set the video playback speed
 	if (video) video.playbackRate = speed;
 }
+
 async function getPlaybackSpeedPerClick() {
 	const {
 		data: {
@@ -42,6 +37,22 @@ async function getPlaybackSpeedPerClick() {
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	return speed;
+}
+function makePlayerSpeedTask(speed: number): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		const playerContainer =
+			isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
+		if (!playerContainer || !playerContainer.setPlaybackRate) return false;
+		const playerVideoData = await playerContainer.getVideoData();
+		if (playerVideoData.isLive) return true;
+		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+		if (!video) return false;
+		await playerContainer.setPlaybackRate(speed);
+		video.playbackRate = speed;
+		return true;
+	};
 }
 function setupPlaybackSpeedChangeListener() {
 	const documentObserver = new MutationObserver(() => {
@@ -58,7 +69,7 @@ function setupPlaybackSpeedChangeListener() {
 			if (speed === lastSpeed) return;
 			lastSpeed = speed;
 			void updateSpeedButtons(speed);
-			const stateAPI = registry.stateManager.getStateAPI("playerSpeed");
+			const stateAPI = registry.stateManager.getStateAPI(metadata.id);
 			stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
 		};
 		const parseSpeed = (text: Nullable<string>): Nullable<number> => {
@@ -81,14 +92,14 @@ function setupPlaybackSpeedChangeListener() {
 			// Slider
 			const slider = speedPanel.querySelector<HTMLInputElement>(".ytp-input-slider.ytp-speedslider");
 			if (slider) {
-				eventManager.removeEventListener(slider, "input", "playerSpeed");
-				eventManager.addEventListener(slider, "input", () => handleSliderChange(slider), "playerSpeed");
+				eventManager.removeEventListener(slider, "input", metadata.id);
+				eventManager.addEventListener(slider, "input", () => handleSliderChange(slider), metadata.id);
 			}
 			// Preset buttons
 			const presets = speedPanel.querySelectorAll<HTMLButtonElement>(".ytp-variable-speed-panel-preset-button");
 			presets.forEach((preset) => {
-				eventManager.removeEventListener(preset, "click", "playerSpeed");
-				eventManager.addEventListener(preset, "click", () => handlePresetClick(preset), "playerSpeed");
+				eventManager.removeEventListener(preset, "click", metadata.id);
+				eventManager.addEventListener(preset, "click", () => handlePresetClick(preset), metadata.id);
 			});
 			// Display span (catch programmatic updates)
 			const displaySpan = speedPanel.querySelector<HTMLSpanElement>(".ytp-variable-speed-panel-display span, .ytp-speedslider-text");
@@ -114,25 +125,34 @@ export default createFeature({
 		await setPlayerSpeed(speed);
 		await updatePlaybackSpeedButtons(speed);
 	},
-	onDisable: async () => {
-		// Get the saved player speed from the local storage
-		const speed = registry.stateManager.getStateAPI("playerSpeed").getState()?.playbackSpeed ?? 1;
-		// Log the message indicating the player speed being set
+	onDisable: () => {
+		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
-		await setPlayerSpeed(speed);
-		await updatePlaybackSpeedButtons(speed);
+		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
+			maxAttempts: 10,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		});
+		void updatePlaybackSpeedButtons(speed);
 	},
-	onEnable: async ({ speed }) => {
-		// Log the message indicating the player speed being set
+	onEnable: ({ speed }) => {
 		browserColorLog(`Setting player speed to ${speed}`, "FgMagenta");
-		await setPlayerSpeed(speed);
-		await updatePlaybackSpeedButtons(speed);
+		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["setSpeed"], {
+			maxAttempts: 10,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		});
+		void updatePlaybackSpeedButtons(speed);
 	},
 	onInit: setupPlaybackSpeedChangeListener,
-	onNavigate: async ({ speed }) => {
+	onNavigate: ({ speed }) => {
 		browserColorLog(`Setting player speed to ${speed} (navigation)`, "FgMagenta");
-		await setPlayerSpeed(speed);
-		await updatePlaybackSpeedButtons(speed);
+		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["setSpeed"], {
+			maxAttempts: 10,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		});
+		void updatePlaybackSpeedButtons(speed);
 	},
 	persistState: true,
 	state: {
