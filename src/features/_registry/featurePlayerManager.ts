@@ -1,4 +1,4 @@
-import type { FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type { FeatureKeys, FeatureKeysWithState, PageType } from "@/src/features/_registry/types";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
@@ -10,7 +10,7 @@ export type PlayerRetryConfig = {
 	maxAttempts?: number;
 	onPlayerStateChange?: boolean;
 	overallTimeout?: number;
-	pageTypes?: string[];
+	pageTypes?: PageType[];
 	waitForLoaded?: boolean;
 };
 
@@ -28,7 +28,7 @@ type ActiveRetryState = {
 
 type PlayerStateHookEntry = {
 	cooldownId: Nullable<ReturnType<typeof setTimeout>>;
-	featureId: string;
+	featureId: FeatureKeys;
 	lastRun: number;
 	trigger: () => void;
 };
@@ -43,10 +43,10 @@ const DEFAULT_CONFIG: Required<PlayerRetryConfig> = {
 };
 
 export class FeaturePlayerManager extends FeatureManagerBase {
-	private activeRetries = new Map<string, ActiveRetryState>();
-	private stateHooks = new Map<string, PlayerStateHookEntry>();
+	private activeRetries = new Map<FeatureKeys, ActiveRetryState>();
+	private stateHooks = new Map<FeatureKeys, PlayerStateHookEntry>();
 
-	cleanup(featureId?: string): void {
+	cleanup(featureId?: FeatureKeys): void {
 		if (featureId) {
 			this.abortRetry(featureId);
 			this.removeStateHook(featureId);
@@ -60,7 +60,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		}
 	}
 
-	async executeWithRetries(featureId: string, tasks: PlayerTask[], taskNames: string[], config?: PlayerRetryConfig): Promise<boolean[]> {
+	async executeWithRetries(featureId: FeatureKeys, tasks: PlayerTask[], taskNames: string[], config?: PlayerRetryConfig): Promise<boolean[]> {
 		const resolved: Required<PlayerRetryConfig> = { ...DEFAULT_CONFIG, ...config };
 
 		this.abortRetry(featureId);
@@ -155,7 +155,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		return "playerManager" as FeatureKeys;
 	}
 
-	private abortRetry(featureId: string): void {
+	private abortRetry(featureId: FeatureKeys): void {
 		const state = this.activeRetries.get(featureId);
 		if (!state) return;
 		state.aborted = true;
@@ -165,7 +165,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		this.activeRetries.delete(featureId);
 	}
 
-	private isOnAllowedPage(pageTypes: string[]): boolean {
+	private isOnAllowedPage(pageTypes: PageType[]): boolean {
 		return pageTypes.some((type) => {
 			switch (type) {
 				case "live":
@@ -180,14 +180,14 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		});
 	}
 
-	private removeStateHook(featureId: string): void {
+	private removeStateHook(featureId: FeatureKeys): void {
 		const entry = this.stateHooks.get(featureId);
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
 		this.stateHooks.delete(featureId);
 	}
 
-	private setupStateHook(featureId: string, trigger: () => void): void {
+	private setupStateHook(featureId: FeatureKeys, trigger: () => void): void {
 		this.removeStateHook(featureId);
 
 		const entry: PlayerStateHookEntry = {
