@@ -6,7 +6,7 @@ import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import type { MiniPlayerOptions } from "./types";
 
-import { MiniPlayerController, setManualOverride } from "./controller";
+import { MiniPlayerController, readManualOverride, setManualOverride } from "./controller";
 import { metadata } from "./index.metadata";
 
 const MINI_PLAYER_STATE_EVENT = "yte-mini-player-state";
@@ -143,6 +143,16 @@ export const setMiniPlayerManual = async (checked: boolean) => {
 	emitMiniPlayerState(miniPlayer.isActive());
 };
 export const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
+
+async function setupMiniPlayer(defaultPosition: MiniPlayerOptions["defaultPosition"], defaultSize: MiniPlayerOptions["defaultSize"]) {
+	const miniPlayer = ensureController({
+		defaultPosition,
+		defaultSize
+	});
+	await attachCommentsAutoMiniPlayer(miniPlayer);
+	emitMiniPlayerState(miniPlayer.isActive());
+}
+
 export default createFeature({
 	...metadata,
 	onConfigChange: ({ defaultPosition, defaultSize }) => {
@@ -160,12 +170,29 @@ export default createFeature({
 	},
 	onEnable: async ({ defaultPosition, defaultSize }) => {
 		setManualOverride(false);
-		const miniPlayer = ensureController({
-			defaultPosition,
-			defaultSize
-		});
-		await attachCommentsAutoMiniPlayer(miniPlayer);
-		emitMiniPlayerState(miniPlayer.isActive());
+		await setupMiniPlayer(defaultPosition, defaultSize);
+	},
+	onNavigate: async ({ defaultPosition, defaultSize }) => {
+		cleanupAutoObservers();
+		const sentinel = document.getElementById(SENTINEL_ID);
+		sentinel?.remove();
+
+		const wasManualActive = miniPlayerController?.isActive() ? readManualOverride() : false;
+
+		if (miniPlayerController) {
+			miniPlayerController.destroy();
+			miniPlayerController = null;
+		}
+
+		if (wasManualActive) {
+			const miniPlayer = ensureController({
+				defaultPosition,
+				defaultSize
+			});
+			miniPlayer.toggleManual();
+		}
+
+		await setupMiniPlayer(defaultPosition, defaultSize);
 	},
 	persistState: true,
 	state: {
