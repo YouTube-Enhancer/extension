@@ -1,56 +1,75 @@
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import { isShortsPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 import { findDefaultTrack, parseAudioTrack, type ParsedAudioTrack } from "./utils";
 
 let originalAudioTrack: Nullable<ParsedAudioTrack> = null;
-async function setDefaultAudioTrack() {
-	// Determine the correct player container selector based on page type
-	const playerContainerSelector = isShortsPage() ? "#shorts-player" : "div#movie_player";
-	const playerContainer = await waitForElement<YouTubePlayerDiv>(playerContainerSelector);
-	if (!playerContainer) return;
-	await waitForPlayerLoaded(playerContainer);
-	const audioTracks = await playerContainer.getAvailableAudioTracks();
-	const defaultAudioTrack = findDefaultTrack(audioTracks);
-	if (!defaultAudioTrack) return;
-	const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
-	if (!currentAudioTrack) return;
-	// If the current audio track is the same as the default audio track, do nothing
-	if (defaultAudioTrack.track.id === currentAudioTrack.track.id) return;
-	// Set the audio track to the default audio track
-	await playerContainer.setAudioTrack(defaultAudioTrack.track);
+
+function makeRestoreAudioTrackTask(): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		if (!originalAudioTrack) return true;
+		const playerContainer =
+			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (!playerContainer || !playerContainer.setAudioTrack) return false;
+		await playerContainer.setAudioTrack(originalAudioTrack.track);
+		originalAudioTrack = null;
+		return true;
+	};
 }
+
+function makeSaveTrackTask(): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		if (originalAudioTrack) return true;
+		const playerContainer =
+			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (!playerContainer || !playerContainer.getAudioTrack) return false;
+		const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
+		if (!currentAudioTrack) return false;
+		originalAudioTrack = currentAudioTrack;
+		return true;
+	};
+}
+
+function makeSetDefaultAudioTrackTask(): () => Promise<boolean> {
+	return async (): Promise<boolean> => {
+		const playerContainer =
+			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		if (!playerContainer || !playerContainer.getAvailableAudioTracks) return false;
+		const audioTracks = await playerContainer.getAvailableAudioTracks();
+		const defaultAudioTrack = findDefaultTrack(audioTracks);
+		if (!defaultAudioTrack) return false;
+		const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
+		if (!currentAudioTrack) return false;
+		if (defaultAudioTrack.track.id === currentAudioTrack.track.id) return true;
+		await playerContainer.setAudioTrack(defaultAudioTrack.track);
+		return true;
+	};
+}
+
 export default createFeature({
 	...metadata,
-	onDisable: async () => {
-		// Determine the correct player container selector based on page type
-		const playerContainerSelector = isShortsPage() ? "#shorts-player" : "div#movie_player";
-		const playerContainer = await waitForElement<YouTubePlayerDiv>(playerContainerSelector);
-		if (!playerContainer) return;
-		// If the original audio track is not stored, do nothing
-		if (!originalAudioTrack) return;
-		// Revert the audio track to the one that was selected by the user
-		await playerContainer.setAudioTrack(originalAudioTrack.track);
-		// Reset the original audio track
-		originalAudioTrack = null;
+	onDisable: () => {
+		void registry.playerManager.executeWithRetries("defaultToOriginalAudioTrack", [makeRestoreAudioTrackTask()], ["restoreAudio"], {
+			maxAttempts: 15,
+			waitForLoaded: true
+		});
 	},
-	onEnable: async () => {
-		// Determine the correct player container selector based on page type
-		const playerContainerSelector = isShortsPage() ? "#shorts-player" : "div#movie_player";
-		const playerContainer = await waitForElement<YouTubePlayerDiv>(playerContainerSelector);
-		if (!playerContainer) return;
-		await waitForPlayerLoaded(playerContainer);
-		const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
-		if (!currentAudioTrack) return;
-		// Store the original audio track in the "originalAudioTrack" variable
-		if (!originalAudioTrack) originalAudioTrack = currentAudioTrack;
-		await setDefaultAudioTrack();
+	onEnable: () => {
+		void registry.playerManager.executeWithRetries(
+			"defaultToOriginalAudioTrack",
+			[makeSaveTrackTask(), makeSetDefaultAudioTrackTask()],
+			["saveTrack", "setDefault"],
+			{ maxAttempts: 15, waitForLoaded: true }
+		);
 	},
-	onNavigate: async () => {
-		await setDefaultAudioTrack();
+	onNavigate: () => {
+		void registry.playerManager.executeWithRetries("defaultToOriginalAudioTrack", [makeSetDefaultAudioTrackTask()], ["setDefault"], {
+			maxAttempts: 15,
+			waitForLoaded: true
+		});
 	}
 });
