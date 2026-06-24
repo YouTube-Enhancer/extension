@@ -129,6 +129,11 @@ export default createFeature({
 		await updatePlaybackSpeedButtons(speed);
 	},
 	onInit: setupPlaybackSpeedChangeListener,
+	onNavigate: async ({ speed }) => {
+		browserColorLog(`Setting player speed to ${speed} (navigation)`, "FgMagenta");
+		await setPlayerSpeed(speed);
+		await updatePlaybackSpeedButtons(speed);
+	},
 	persistState: true,
 	state: {
 		playbackSpeed: 1
