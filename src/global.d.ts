@@ -49,6 +49,14 @@ declare module "youtube-player/dist/types" {
 		seekableStart: number;
 		viewerLivestreamJoinMediaTime: number;
 	}
+	interface QualityDataEntry {
+		formatId: number;
+		paygatedQualityDetails?: {
+			paygatedIndicatorText: string;
+		};
+		quality: string;
+		qualityLabel: string;
+	}
 	interface VideoData {
 		allowLiveDvr: boolean;
 		author: string;
@@ -73,9 +81,12 @@ declare module "youtube-player/dist/types" {
 		video_quality: string;
 		video_quality_features: string[];
 	}
+
 	interface YouTubePlayer {
 		getAudioTrack(): Promise<audioTrack>;
 		getAvailableAudioTracks(): Promise<audioTrack[]>;
+		getAvailableQualityData(): QualityDataEntry[];
+		getPlaybackQuality(): Promise<string>;
 		getPlayerResponse(): {
 			storyboards?: {
 				playerStoryboardSpecRenderer?: {
@@ -89,7 +100,7 @@ declare module "youtube-player/dist/types" {
 		getVideoData(): Promise<VideoData>;
 		loadModule(moduleName: string): void;
 		setAudioTrack(audioTrack: audioTrack): Promise<void>;
-		setPlaybackQualityRange(suggestedQuality: string): Promise<void>;
+		setPlaybackQualityRange(suggestedQuality: string, rangeQuality?: string, formatId?: number): Promise<void>;
 		unloadModule(moduleName: string): void;
 	}
 }

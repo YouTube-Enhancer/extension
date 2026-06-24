@@ -6,6 +6,7 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { FeatureLifecycleManager } from "@/src/features/_registry/featureLifecycleManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager, type NavigationEventType } from "@/src/features/_registry/featureNavigationManager";
+import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 
 import type { PerfId, Phase, SubPhase } from "./featurePerformanceTracker";
 
@@ -19,6 +20,7 @@ export class FeatureRegistry {
 	public lifecycleManager = new FeatureLifecycleManager(this.stateManager, this.configManager);
 	navigationListener?: () => void;
 	public navigationManager = featureNavigationManager;
+	public playerManager = featurePlayerManager;
 	private enableAllPromise: null | Promise<void> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
 	private features = new Map<FeatureKeys, AnyFeatureBase>();
@@ -90,6 +92,7 @@ export class FeatureRegistry {
 	}
 	async initialize(cb: (navigationType: string, eventType: NavigationEventType) => Promise<void>) {
 		await this.navigationManager.initialize(async (navigationType, eventType) => {
+			this.playerManager.cleanup();
 			await this.safelyExecute<void>("navigationCallback", "navigate", () => cb(navigationType, eventType), { subPhase: "callback" });
 			for (const feature of this.getFeaturesSortedByPriority()) {
 				await this.updateFeatureOnNavigation(feature.id, navigationType);
