@@ -152,5 +152,10 @@ export default createFeature({
 	onEnable: ({ amount, mode }) => {
 		setupVolumeBoost();
 		if (mode === "global") applyVolumeBoostDb(amount);
+	},
+	onNavigate: ({ amount, mode }) => {
+		setupVolumeBoost();
+		if (mode === "global") applyVolumeBoostDb(amount);
+		else if (isVolumeBoostEnabled) applyVolumeBoostDb(amount);
 	}
 });
