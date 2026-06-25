@@ -796,18 +796,18 @@
 				"settings": {
 					"fpsPreference": {
 						"select": {
-							"label": "Frame rate preference",
+							"label": "帧率设置",
 							"options": {
-								"default": "Default",
-								"higher": "Higher FPS",
-								"lower": "Lower FPS"
+								"default": "默认",
+								"higher": "高帧率",
+								"lower": "低帧率"
 							},
-							"title": "Prefer higher or lower frame rate when multiple formats are available"
+							"title": "当多个格式可用时，优先选择较高或较低帧率"
 						}
 					},
 					"preferPremium": {
-						"label": "Prefer Premium enhanced bitrate",
-						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+						"label": "优先选择高码率",
+						"title": "当可用时使用 Premium itags (356/721) 。需要Youtube Premium。"
 					},
 					"quality": {
 						"select": {
