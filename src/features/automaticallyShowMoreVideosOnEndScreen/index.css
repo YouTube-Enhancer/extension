@@ -5,7 +5,9 @@ body.yte-hide-ytp-fullscreen-grid {
 }
 
 body.yte-show-html5-endscreen {
-	div.html5-endscreen {
-		display: block !important;
+	#movie_player.ended-mode {
+		div.html5-endscreen {
+			display: block !important;
+		}
 	}
 }
