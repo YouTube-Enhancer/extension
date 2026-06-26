@@ -33,6 +33,10 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
 	const expandButtonRef = useRef<Nullable<HTMLInputElement>>(null);
+	const onChangeRef = useRef(onChange);
+	useEffect(() => {
+		onChangeRef.current = onChange;
+	}, [onChange]);
 	const [state, dispatch] = useReducer(reducer, {
 		editorValue: value,
 		initialBodyOverflow: "",
@@ -41,9 +45,8 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 		problems: [],
 		viewportHeight: document.documentElement.clientHeight
 	});
-	if (value !== state.editorValue) dispatch({ payload: value, type: "SET_EDITOR_VALUE" });
 	const debouncedOnChange = useDebounceFn((val: string) => {
-		onChange(val);
+		onChangeRef.current(val);
 	}, 500);
 	const expandedEditorHeight = useMemo(() => {
 		const expandButtonHeight = expandButtonRef.current?.clientHeight ?? 0;
@@ -52,8 +55,8 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 	}, [state.viewportHeight, state.problems]);
 	const flushSave = useCallback(() => {
 		const currentValue = editorRef.current?.getValue() ?? "";
-		onChange(currentValue);
-	}, [onChange]);
+		onChangeRef.current(currentValue);
+	}, []);
 	const handleEditorDidMount = useCallback(
 		(editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
 			editorRef.current = editorInstance;
