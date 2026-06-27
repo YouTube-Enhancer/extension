@@ -121,8 +121,8 @@
 				"playlistReverseButton": {
 					"extras": {
 						"toggle": {
-							"off": "Normal order",
-							"on": "Reversed order"
+							"off": "В обычном порядке",
+							"on": "В обратном порядке"
 						}
 					}
 				},
