@@ -67,8 +67,9 @@ export default function SettingsFooter() {
 				} else {
 					importedSettings = configEntries as configuration;
 				}
+				const castSettings = deepMerge(defaultConfiguration, importedSettings) as configuration;
 				// Validate the imported settings.
-				const result = configurationImportSchema.safeParse(importedSettings);
+				const result = configurationImportSchema.safeParse(castSettings);
 				if (!result.success) {
 					const errorMessage = generateErrorMessage(result.error.issues);
 					window.alert(
@@ -76,7 +77,6 @@ export default function SettingsFooter() {
 					);
 					return;
 				}
-				const castSettings = deepMerge(defaultConfiguration, importedSettings) as configuration;
 				// Validate number constraints
 				try {
 					validateNumbers(castSettings, numberConstraints);
