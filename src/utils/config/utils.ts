@@ -1,11 +1,21 @@
 import type { DeepDarkPreset } from "@/src/deepDarkPresets";
 import type { FeatureMenuOpenType } from "@/src/features/featureMenu/types";
+import type { ShortsSection } from "@/src/features/hideShorts/utils";
 import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlayer/types";
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";
 import type { VolumeBoostMode } from "@/src/features/volumeBoost/types";
 import type { AvailableLocales } from "@/src/i18n/constants";
 import type { ButtonPlacement, configuration, ParentType, Path, PathSegments, PathValue } from "@/src/types";
 import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType } from "@/src/ui/OnScreenDisplayManager/types";
+
+const HIDE_SHORTS_SECTIONS = Object.keys({
+	channel: "",
+	home: "",
+	search: "",
+	sidebar: "",
+	subscriptions: "",
+	videos: ""
+} satisfies Record<ShortsSection, "">);
 
 export function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
 	const merged: Record<string, unknown> = { ...target };
@@ -118,16 +128,9 @@ export function migrateConfiguration(
 			const { [target]: targetValue } = newConfig;
 			if (!targetValue || typeof targetValue !== "object") continue;
 			if (target === "hideShorts") {
-				for (const section of ["channel", "home", "search", "sidebar", "videos"] as const) {
-					(
-						targetValue as {
-							channel: { enabled: boolean };
-							home: { enabled: boolean };
-							search: { enabled: boolean };
-							sidebar: { enabled: boolean };
-							videos: { enabled: boolean };
-						}
-					)[section].enabled = value;
+				const hideShorts = targetValue as Record<ShortsSection, { enabled: boolean }>;
+				for (const section of HIDE_SHORTS_SECTIONS) {
+					hideShorts[section].enabled = value;
 				}
 				continue;
 			}
