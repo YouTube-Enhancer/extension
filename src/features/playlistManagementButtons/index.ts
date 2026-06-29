@@ -157,9 +157,7 @@ export default createFeature({
 		setupPlaylistManagementButtons(config);
 	},
 	onDisable: cleanupPlaylistManagementButtons,
-	onEnable: (config) => {
-		setupPlaylistManagementButtons(config);
-	},
+	onEnable: setupPlaylistManagementButtons,
 	onNavigate: () => {
 		cleanupPlaylistManagementButtons();
 		setupPlaylistManagementButtons(registry.configManager.getLast("playlistManagementButtons"));
