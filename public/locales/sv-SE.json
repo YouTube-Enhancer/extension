@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Behåll {{FEATURE}}",
 						"keepSecond": "Behåll {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte använda samma modifieringsnyckel.",
 							"selectNewKey": "Ändra modifieringsnyckel:"
