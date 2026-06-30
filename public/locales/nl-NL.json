@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Houd {{FEATURE}}",
 						"keepSecond": "Houd {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' en '{{FEATURE_B}}' kan niet dezelfde wijzigingssleutel gebruiken.",
 							"selectNewKey": "Verander modifier sleutel:"
