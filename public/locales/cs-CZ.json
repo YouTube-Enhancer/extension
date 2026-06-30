@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Ponechat {{FEATURE}}",
 						"keepSecond": "Ponechat {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' a '{{FEATURE_B}}' nemůže použít stejný modifikační klíč.",
 							"selectNewKey": "Změnit klíč modifikátoru:"
