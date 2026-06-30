@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Zachowaj {{FEATURE}}",
 						"keepSecond": "Zachowaj {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' i '{{FEATURE_B}}' nie można użyć tego samego klucza modyfikującego.",
 							"selectNewKey": "Zmień klucz modyfikujący:"
