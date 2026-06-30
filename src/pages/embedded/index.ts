@@ -1,10 +1,12 @@
+import browser from "webextension-polyfill";
+
 import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { i18nService } from "@/src/i18n";
-import { type ExtensionSendOnlyMessages, type Messages } from "@/src/types";
+import { type ExtensionSendOnlyMessages, type Messages, type Nullable } from "@/src/types";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { browserColorLog } from "@/src/utils/logging";
@@ -155,8 +157,15 @@ window.addEventListener("pagehide", () => {
 });
 window.addEventListener("pageshow", initialize);
 
+const EXTENSION_ORIGIN = browser.runtime.getURL("").replace(/\/$/, "");
+
+function isExtensionError(filename: string, stack?: Nullable<string>): boolean {
+	return filename.startsWith(EXTENSION_ORIGIN) || (stack ? stack.includes(EXTENSION_ORIGIN) : false);
+}
+
 // Error handling
 window.addEventListener("error", (event: ErrorEvent) => {
+	if (!isExtensionError(event.filename, event.error instanceof Error ? event.error.stack : null)) return;
 	event.preventDefault();
 	const errorLine =
 		event.error instanceof Error && typeof event.error.stack === "string" ? event.error.stack : `${event.filename}:${event.lineno}:${event.colno}`;
@@ -165,6 +174,7 @@ window.addEventListener("error", (event: ErrorEvent) => {
 });
 
 window.addEventListener("unhandledrejection", (event) => {
+	if (!isExtensionError("", event.reason instanceof Error ? event.reason.stack : null)) return;
 	event.preventDefault();
 	const errorLine = event.reason instanceof Error && event.reason?.stack ? event.reason.stack : "Stack trace not available";
 	browserColorLog(`Unhandled rejection: ${event.reason}\nAt: ${errorLine}`, "FgRed");
