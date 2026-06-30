@@ -21,7 +21,7 @@ type Conflict = {
 	featureA: string;
 	featureB: string;
 	key?: string;
-	type: "enabled" | "modifierKey";
+	type: "autoQuality" | "enabled" | "modifierKey";
 };
 
 export default function SettingsFooter() {
@@ -35,6 +35,7 @@ export default function SettingsFooter() {
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const [conflicts, setConflicts] = useState<Conflict[]>([]);
 	const [pendingSettings, setPendingSettings] = useState<configuration | null>(null);
+	const pendingStateEntriesRef = useRef<Record<string, unknown>>({});
 	const defaultConfiguration = getDefaultConfiguration();
 	const configurationImportSchema = getConfigurationImportSchema();
 	async function refreshSettings() {
@@ -88,6 +89,7 @@ export default function SettingsFooter() {
 				// Detect conflicts
 				const { conflicts: detectedConflicts, resolved } = detectConflicts(castSettings);
 				if (detectedConflicts.length > 0) {
+					pendingStateEntriesRef.current = { ...stateEntries };
 					setPendingSettings(resolved);
 					setConflicts(detectedConflicts);
 					return;
@@ -112,8 +114,9 @@ export default function SettingsFooter() {
 			} catch (_) {
 				// Handle any import errors.
 				window.alert(t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.unknown));
+			} finally {
+				if (settingsImportRef.current) settingsImportRef.current.value = "";
 			}
-			if (settingsImportRef.current) settingsImportRef.current.value = "";
 		})();
 	};
 	function resetOptions() {
@@ -251,6 +254,7 @@ export default function SettingsFooter() {
 				<ConflictResolutionDialog
 					conflicts={conflicts}
 					onCancel={() => {
+						pendingStateEntriesRef.current = {};
 						setConflicts([]);
 						setPendingSettings(null);
 					}}
@@ -258,10 +262,20 @@ export default function SettingsFooter() {
 						void (async () => {
 							const validKeys = new Set(Object.keys(defaultConfiguration));
 							const filteredConfig = Object.fromEntries(Object.entries(resolvedConfig).filter(([key]) => validKeys.has(key)));
-							await browser.storage.local.set(filteredConfig);
+							const stateKeys = metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const);
+							const filteredState = Object.fromEntries(
+								Object.entries(pendingStateEntriesRef.current).filter(([key]) => {
+									return stateKeys.includes(key as string);
+								})
+							);
+							await browser.storage.local.set({
+								...filteredConfig,
+								...filteredState
+							});
 							await refreshSettings();
 							setConflicts([]);
 							setPendingSettings(null);
+							pendingStateEntriesRef.current = {};
 						})();
 					}}
 					pendingSettings={pendingSettings}
@@ -293,6 +307,14 @@ function detectConflicts(settings: configuration): { conflicts: Conflict[]; reso
 			featureB: "scrollWheelSpeedControl",
 			key: resolved.scrollWheelVolumeControl.modifierKey,
 			type: "modifierKey"
+		});
+	}
+
+	if (resolved.playerQuality?.quality === "auto") {
+		conflicts.push({
+			featureA: "playerQuality",
+			featureB: "auto",
+			type: "autoQuality"
 		});
 	}
 
