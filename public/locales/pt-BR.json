@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Manter {{FEATURE}}",
 						"keepSecond": "Manter {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' e '{{FEATURE_B}}' não pode usar a mesma chave modificadora",
 							"selectNewKey": "Alterar tecla modificadora:"
