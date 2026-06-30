@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Conserver {{FEATURE}}",
 						"keepSecond": "Conserver {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "« {{FEATURE_A}} » et « {{FEATURE_B}} » ne peuvent pas utiliser la même touche modificatrice.",
 							"selectNewKey": "Modifier la touche modificatrice :"
