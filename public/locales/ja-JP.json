@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "{{FEATURE}} を維持",
 						"keepSecond": "{{FEATURE}} を維持",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' と '{{FEATURE_B}}' は同じ修飾キーを使用できません。",
 							"selectNewKey": "修飾キーを変更:"
