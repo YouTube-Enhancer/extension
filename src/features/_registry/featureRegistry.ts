@@ -392,6 +392,7 @@ const featureKeys = Object.keys({
 	skipContinueWatching: "",
 	timestampPeek: "",
 	videoHistory: "",
+	videosPerRow: "",
 	volumeBoost: ""
 } satisfies Record<FeatureKeys, "">);
 

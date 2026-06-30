@@ -342,6 +342,7 @@ export type configuration = {
 	skipContinueWatching: { enabled: boolean };
 	timestampPeek: { enabled: boolean };
 	videoHistory: { enabled: boolean; resumeType: VideoHistoryResumeType };
+	videosPerRow: { enabled: boolean; videosPerRow: number };
 	volumeBoost: {
 		amount: number;
 		button: { fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
