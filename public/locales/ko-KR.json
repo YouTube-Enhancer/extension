@@ -986,6 +986,19 @@
 				},
 				"title": "동영상 시청 기록 설정"
 			},
+			"videosPerRow": {
+				"enable": {
+					"label": "Videos per row",
+					"title": "Changes the number of videos displayed per row on YouTube feeds"
+				},
+				"settings": {
+					"count": {
+						"label": "Number of videos per row",
+						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+					}
+				},
+				"title": "Videos per row settings"
+			},
 			"volumeBoost": {
 				"enable": {
 					"label": "볼륨 부스트",
