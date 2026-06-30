@@ -27,7 +27,7 @@ export const metadata = createFeatureMetadata({
 		fallbackStrategy: z.enum(PlayerQualityFallbackStrategy),
 		fpsPreference: z.enum(FpsPreference),
 		preferPremium: z.boolean(),
-		quality: z.enum(youtubePlayerQualityLevelsNoAuto)
+		quality: z.enum(youtubePlayerQualityLevels)
 	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [

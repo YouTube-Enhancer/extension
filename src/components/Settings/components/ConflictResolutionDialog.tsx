@@ -3,6 +3,7 @@ import { useState } from "react";
 import type { configuration } from "@/src/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
+import { youtubePlayerQualityLabels, youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
 
 const modifierKeyOptions = [
 	{ label: "Ctrl", value: "ctrlKey" },
@@ -10,11 +11,16 @@ const modifierKeyOptions = [
 	{ label: "Shift", value: "shiftKey" }
 ] as const;
 
+const qualityOptions = youtubePlayerQualityLevels
+	.map((level, i) => ({ label: youtubePlayerQualityLabels[i], value: level }))
+	.filter((option) => option.value !== "auto")
+	.reverse();
+
 type Conflict = {
 	featureA: string;
 	featureB: string;
 	key?: string;
-	type: "enabled" | "modifierKey";
+	type: "autoQuality" | "enabled" | "modifierKey";
 };
 
 type Props = {
@@ -58,6 +64,10 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 			const { [getConflictId(conflict)]: currentKey } = modifiedKeys;
 			return currentKey !== conflict.key;
 		}
+		if (conflict.type === "autoQuality") {
+			const { [getConflictId(conflict)]: selectedQuality } = selections;
+			return selectedQuality !== undefined;
+		}
 		return false;
 	};
 
@@ -85,6 +95,11 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 				const { [conflictId]: newKey } = modifiedKeys;
 				if (newKey && newKey !== conflict.key) {
 					(resolved.scrollWheelVolumeControl as { modifierKey: string }).modifierKey = newKey;
+				}
+			} else if (conflict.type === "autoQuality") {
+				const { [conflictId]: selectedQuality } = selections;
+				if (selectedQuality) {
+					(resolved.playerQuality as { quality: string }).quality = selectedQuality;
 				}
 			}
 		}
@@ -137,6 +152,45 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 	);
 }
 
+function AutoQualityConflictItem({
+	isResolved,
+	onSelectionChange,
+	selectedQuality
+}: {
+	isResolved: boolean;
+	onSelectionChange: (quality: string) => void;
+	selectedQuality: string;
+}) {
+	const { i18nInstance } = useSettings();
+	const { t } = i18nInstance;
+
+	return (
+		<div
+			className={`rounded-lg border p-4 ${isResolved ? "border-green-500 bg-white dark:border-green-600 dark:bg-[#23272a]" : "border-red-500 bg-white dark:border-red-600 dark:bg-[#23272a]"}`}
+		>
+			<p className="mb-3 text-sm text-black dark:text-white">
+				{t((tr) => tr.pages.options.notifications.error.importConflict.autoQualityConflict.description)}
+			</p>
+			<div className="flex items-center gap-2">
+				<span className="text-sm text-black dark:text-white">
+					{t((tr) => tr.pages.options.notifications.error.importConflict.autoQualityConflict.selectQuality)}
+				</span>
+				<select
+					className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-black dark:multi-['border-gray-700;bg-[#2f3335];text-white']"
+					onChange={(e) => onSelectionChange(e.target.value)}
+					value={selectedQuality}
+				>
+					{qualityOptions.map((option) => (
+						<option key={option.value} value={option.value}>
+							{option.label}
+						</option>
+					))}
+				</select>
+			</div>
+		</div>
+	);
+}
+
 function ConflictItem({
 	conflict,
 	conflictId,
@@ -178,6 +232,10 @@ function ConflictItem({
 				onKeyChange={onKeyChange}
 			/>
 		);
+	}
+
+	if (conflict.type === "autoQuality") {
+		return <AutoQualityConflictItem isResolved={isResolved} onSelectionChange={onSelectionChange} selectedQuality={selectedFeature} />;
 	}
 
 	return null;
