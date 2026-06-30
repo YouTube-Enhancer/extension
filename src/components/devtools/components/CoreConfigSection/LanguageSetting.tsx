@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 
 import { useEffect, useState } from "react";
+import browser from "webextension-polyfill";
 
 import type EnUS from "@/public/locales/en-US.json.d";
 
@@ -23,7 +24,7 @@ export default function LanguageSetting({ onChange, value }: Props): JSX.Element
 		void (async () => {
 			const promises = availableLocales.map(async (locale) => {
 				try {
-					const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+					const response = await fetch(`${browser.runtime.getURL("")}locales/${locale}.json`);
 					const localeData = (await response.json()) as EnUS;
 					return {
 						label: `${localeData.langName} (${localePercentages[locale] ?? 0}%)`,

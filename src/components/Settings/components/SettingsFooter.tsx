@@ -178,8 +178,8 @@ export default function SettingsFooter() {
 		}
 	};
 	const openInNewTab = (path: string) => {
-		const url = chrome.runtime.getURL(path);
-		void chrome.tabs.create({ url });
+		const url = browser.runtime.getURL(path);
+		void browser.tabs.create({ url });
 	};
 	return (
 		<div className="sticky bottom-0 left-0 z-10 flex justify-between gap-1 bg-[#f5f5f5] p-2 shadow-[0_-4px_12px_rgba(0,0,0,0.15)] dark:bg-[#181a1b] dark:shadow-[0_-4px_12px_rgba(0,0,0,0.7)]">

@@ -25,7 +25,7 @@ const defaultConfiguration = getDefaultConfiguration();
  * Also creates a hidden div element with a specific ID to receive messages from the extension.
  */
 const script = document.createElement("script");
-script.src = chrome.runtime.getURL("src/pages/embedded/index.js");
+script.src = browser.runtime.getURL("src/pages/embedded/index.js");
 script.type = "text/javascript";
 function initializeCommunicationElement() {
 	const element = document.createElement("div");
