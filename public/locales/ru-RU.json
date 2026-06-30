@@ -308,6 +308,10 @@
 						},
 						"keepFirst": "Оставить {{FEATURE}}",
 						"keepSecond": "Оставить {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не могут использовать одну и ту же клавишу-модификатор.",
 							"selectNewKey": "Измените клавишу-модификатор:"
