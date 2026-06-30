@@ -42,6 +42,11 @@ export async function updateStoredSettings() {
 				delete config[oldKey];
 			}
 		}
+
+		const playerQuality = (settings as Record<string, unknown>).playerQuality as Record<string, unknown> | undefined;
+		if (playerQuality?.quality === "auto") {
+			playerQuality.quality = "hd1080";
+		}
 		const validKeys = new Set([...Object.keys(defaultConfiguration), ...metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const)]);
 		const removedKeys = rawKeys.filter((key) => !validKeys.has(key));
 

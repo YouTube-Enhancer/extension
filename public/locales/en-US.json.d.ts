@@ -187,6 +187,10 @@ interface EnUS {
 				error: {
 					importConflict: {
 						apply: "Apply";
+						autoQualityConflict: {
+							description: 'The imported settings use "Auto" quality, which has been removed. Please choose a specific quality:';
+							selectQuality: "Quality:";
+						};
 						cancel: "Cancel";
 						enabledConflict: {
 							description: "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot both be enabled. Choose which one to keep.";
