@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 67 features
+## 🎛️ Features • 68 features
 
 <details>
 <summary>Miscellaneous • 41 features</summary>
@@ -208,6 +208,13 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Track Watched Videos**: Keeps track of where you left off on videos you were watching and enables resuming playback
 - **Resume Type**: Select how you want to resume videos
   - Options: Automatic, Prompt
+</details>
+
+<details>
+<summary>Videos Per Row</summary>
+
+- **Videos Per Row**: Changes the number of videos displayed per row on YouTube feeds
+- **Number Of Videos Per Row**: The number of videos to show per row on the subscription, home, and channel video pages
 </details>
 
 <details>

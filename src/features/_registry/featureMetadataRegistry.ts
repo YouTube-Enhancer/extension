@@ -132,6 +132,7 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		"screenshotButton",
 		"shareShortener",
 		"videoHistory",
+		"videosPerRow",
 		"volumeBoost",
 		"youTubeDataApiV3Key"
 	] as const;

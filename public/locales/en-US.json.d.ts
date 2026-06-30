@@ -754,6 +754,19 @@ interface EnUS {
 				};
 				title: "Video history settings";
 			};
+			videosPerRow: {
+				enable: {
+					label: "Videos per row";
+					title: "Changes the number of videos displayed per row on YouTube feeds";
+				};
+				settings: {
+					count: {
+						label: "Number of videos per row";
+						title: "The number of videos to show per row on the subscription, home, and channel video pages";
+					};
+				};
+				title: "Videos per row settings";
+			};
 			volumeBoost: {
 				enable: { label: "Volume boost"; title: "Enable volume boost" };
 				settings: {

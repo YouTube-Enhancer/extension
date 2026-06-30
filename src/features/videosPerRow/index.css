@@ -1,0 +1,46 @@
+body.yte-videos-per-row {
+	& #contents > ytd-rich-grid-row,
+	& #contents > ytd-rich-grid-row > #contents {
+		display: contents;
+	}
+
+	& ytd-rich-grid-renderer {
+		--ytd-rich-grid-items-per-row: var(--yte-videos-per-row-count) !important;
+		--ytd-rich-grid-posts-per-row: var(--yte-videos-per-row-count) !important;
+	}
+
+	@media (width <= 1700px) {
+		& ytd-rich-grid-renderer {
+			--ytd-rich-grid-items-per-row: min(5, var(--yte-videos-per-row-count)) !important;
+			--ytd-rich-grid-posts-per-row: min(5, var(--yte-videos-per-row-count)) !important;
+		}
+	}
+
+	@media (width <= 1400px) {
+		& ytd-rich-grid-renderer {
+			--ytd-rich-grid-items-per-row: min(4, var(--yte-videos-per-row-count)) !important;
+			--ytd-rich-grid-posts-per-row: min(4, var(--yte-videos-per-row-count)) !important;
+		}
+	}
+
+	@media (width <= 1100px) {
+		& ytd-rich-grid-renderer {
+			--ytd-rich-grid-items-per-row: min(3, var(--yte-videos-per-row-count)) !important;
+			--ytd-rich-grid-posts-per-row: min(3, var(--yte-videos-per-row-count)) !important;
+		}
+	}
+
+	@media (width <= 800px) {
+		& ytd-rich-grid-renderer {
+			--ytd-rich-grid-items-per-row: min(2, var(--yte-videos-per-row-count)) !important;
+			--ytd-rich-grid-posts-per-row: min(2, var(--yte-videos-per-row-count)) !important;
+		}
+	}
+
+	@media (width <= 600px) {
+		& ytd-rich-grid-renderer {
+			--ytd-rich-grid-items-per-row: min(1, var(--yte-videos-per-row-count)) !important;
+			--ytd-rich-grid-posts-per-row: min(1, var(--yte-videos-per-row-count)) !important;
+		}
+	}
+}
