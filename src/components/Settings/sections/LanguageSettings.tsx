@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useReducer } from "react";
+import browser from "webextension-polyfill";
 
 import type EnUS from "@/public/locales/en-US.json.d";
 import type { SelectOption } from "@/src/components/Inputs";
@@ -55,7 +56,7 @@ export default function LanguageSettingsSection() {
 async function getLanguageOptions() {
 	const promises = availableLocales.map(async (locale) => {
 		try {
-			const response = await fetch(`${chrome.runtime.getURL("")}locales/${locale}.json`);
+			const response = await fetch(`${browser.runtime.getURL("")}locales/${locale}.json`);
 			const localeData = await response.json();
 			const languageOption: SelectOption<"language"> = {
 				label: `${(localeData as EnUS).langName} (${localePercentages[locale] ?? 0}%)`,
