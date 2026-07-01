@@ -1,3 +1,4 @@
+import type { FeatureKeys } from "@/src/features/_registry/types";
 export interface EventListenerInfo {
 	callback: EventListenerOrEventListenerObject;
 	eventName: string;
@@ -21,47 +22,15 @@ export type EventManager = {
 	removeEventListeners: (featureName: FeatureName) => void;
 };
 
-export type FeatureName =
-	| "automaticTheaterMode"
-	| "copyTimestampUrlButton"
-	| "featureMenu"
-	| "flipVideoHorizontalButton"
-	| "flipVideoVerticalButton"
-	| "forwardRewindButtons"
-	| "hideEndScreenCardsButton"
-	| "hideScrollBar"
-	| "hideShorts"
-	| "loopButton"
-	| "maximizePlayerButton"
-	| "miniPlayer"
-	| "miniPlayerButton"
-	| "monoToStereoButton"
-	| "openTranscriptButton"
-	| "openYouTubeSettingsOnHover"
-	| "playbackSpeedButtons"
-	| "playerQuality"
-	| "playerSpeed"
-	| "playlistLength"
-	| "playlistManagementButtons"
-	| "playlistReverseButton"
-	| "remainingTime"
-	| "rememberVolume"
-	| "removeRedirect"
-	| "saveToWatchLaterButton"
-	| "screenshotButton"
-	| "scrollWheelSpeedControl"
-	| "scrollWheelVolumeControl"
-	| "shareShortener"
-	| "shortsAutoScroll"
-	| "timestampPeek"
-	| "videoHistory"
-	| "volumeBoostButton";
-
+export type FeatureName = ButtonNameEvents | CoreFeatureEvents | FeatureKeys;
 export type TargetedListeners = Map<AcceptedTarget, Map<string, EventListenerInfo[]>>;
-
 type AcceptedEventMap = DocumentEventMap & HTMLElementEventMap & WindowEventMap;
 
 type AcceptedTarget = Document | HTMLElement | Window;
+
+type ButtonNameEvents = "flipVideoHorizontalButton" | "flipVideoVerticalButton" | "volumeBoostButton";
+
+type CoreFeatureEvents = "featureMenu";
 
 const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
