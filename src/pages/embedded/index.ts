@@ -1,179 +1,42 @@
-import eventManager from "@/src/events/EventManager";
-import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
-import { registry } from "@/src/features/_registry/featureRegistry";
-import { setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
-import { i18nService } from "@/src/i18n";
-import { type ExtensionSendOnlyMessages, type Messages } from "@/src/types";
-import { DEV_MODE } from "@/src/utils/config/env";
-import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
+import type { Nullable } from "@/src/types";
+
+import { setupYouTubePage } from "@/src/_setup/embedded/lifecycle";
 import { browserColorLog } from "@/src/utils/logging";
-import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
-import { setupDevToolsListener } from "@/src/utils/messaging/devtools.embedded";
 import { formatError } from "@/utils/format/error";
-// TODO: Add always show progressbar feature
-let isFirstLoad = true;
-let isInitializing = false;
-/**
- * Creates a hidden div element with a specific ID that can be used to receive messages from YouTube.
- * The element is appended to the document's root element.
- */
-const element = document.createElement("div");
-element.style.display = "none";
-element.id = "yte-message-from-youtube";
-document.documentElement.appendChild(element);
 
-let isEnablingFeatures = false;
-let cleanupFeatureMenuListeners: (() => void) | null = null;
+let cleanupHandle: Nullable<{ dispose(): void }> = null;
 
-const enableFeatures = async () => {
-	// Don't enable features if already enabling
-	if (isEnablingFeatures) return;
-	isEnablingFeatures = true;
-	browserColorLog(`Enabling features...`, "FgMagenta");
-	try {
-		const {
-			data: { options }
-		} = await waitForSpecificMessage("options", "request_data", "content");
-		await registry.enableAll(options);
-	} finally {
-		isEnablingFeatures = false;
-	}
-};
-
-const initialize = function () {
-	void (async () => {
-		if (isInitializing) return;
-		isInitializing = true;
-		try {
-			const {
-				data: {
-					options: { language }
-				}
-			} = await waitForSpecificMessage("options", "request_data", "content");
-			const i18nextInstance = await i18nService(language);
-			window.i18nextInstance = i18nextInstance;
-			if (isFirstLoad) {
-				await registerAllFeatures();
-				await getButtonColor();
-				await registry.initialize(enableFeatures);
-				new MutationObserver(() => {
-					buttonColorCache.clear();
-				}).observe(document.documentElement, { attributeFilter: ["dark"], attributes: true });
-				await enableFeatures();
-			}
-			isFirstLoad = false;
-		} finally {
-			isInitializing = false;
-		}
-
-		if (DEV_MODE) {
-			setupDevToolsListener();
-		}
-		/**
-		 * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
-		 *
-		 * @returns {void}
-		 */
-		document.addEventListener("yte-message-from-extension", () => {
-			void (async () => {
-				const provider = document.querySelector("div#yte-message-from-extension");
-				if (!provider) return;
-				const { textContent: stringifiedMessage } = provider;
-				if (!stringifiedMessage) return;
-				let message;
-				try {
-					message = JSON.parse(stringifiedMessage) as ExtensionSendOnlyMessages | Messages["response"];
-				} catch (error) {
-					console.error("[Embedded] Failed to parse incoming message:", error);
-					return;
-				}
-				if (!message) return;
-				switch (message.type) {
-					case "featureConfigChange": {
-						await registry.notifyConfigChange(message.data.id, message.data.config);
-						break;
-					}
-					case "featureEnabledStateChange": {
-						await registry.updateFeatureEnabledState(message.data.id, message.data.enabled, message.data.config);
-						break;
-					}
-					case "featureMenuOpenTypeChange": {
-						const {
-							data: { featureMenuOpenType }
-						} = message;
-						// Cleanup previous listeners if they exist
-						if (cleanupFeatureMenuListeners) {
-							cleanupFeatureMenuListeners();
-							cleanupFeatureMenuListeners = null;
-						}
-						// Setup new listeners and store cleanup function
-						cleanupFeatureMenuListeners = setupFeatureMenuEventListeners(featureMenuOpenType);
-						break;
-					}
-					case "languageChange": {
-						const {
-							data: { language }
-						} = message;
-						window.i18nextInstance = await i18nService(language);
-						const {
-							data: { options }
-						} = await waitForSpecificMessage("options", "request_data", "content");
-						const {
-							i18nextInstance: { t }
-						} = window;
-						await registry.disableAll();
-						await registry.enableAll(options);
-						if (featuresInMenu.size > 0) {
-							updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
-						}
-						break;
-					}
-					default: {
-						return;
-					}
-				}
-			})();
-		});
-		sendContentOnlyMessage("pageLoaded", undefined);
-	})();
-};
+function initSetup() {
+	setupYouTubePage()
+		.then((handle) => {
+			cleanupHandle = handle;
+			return undefined;
+		})
+		.catch((err) => browserColorLog(`Setup failed: ${formatError(err)}`, "FgRed"));
+}
 
 if (window.self === window.top) {
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initialize);
+		document.addEventListener("DOMContentLoaded", initSetup);
 	} else {
-		initialize();
+		initSetup();
 	}
 }
 
 window.addEventListener("pagehide", () => {
-	registry.destroyNavigationListener();
-	eventManager.removeAllEventListeners();
-	window.cleanupFeatureMenuListeners?.();
-	element.remove();
+	cleanupHandle?.dispose();
+	cleanupHandle = null;
 });
-window.addEventListener("pageshow", initialize);
-
-let EXTENSION_ORIGIN = "";
-
-function isExtensionError(filename: string, stack?: string | null): boolean {
-	if (!EXTENSION_ORIGIN) return false;
-	return filename.startsWith(EXTENSION_ORIGIN) || (stack ? stack.includes(EXTENSION_ORIGIN) : false);
-}
-
-void (async () => {
-	try {
-		const response = await waitForSpecificMessage("extensionURL", "request_data", "content");
-		if (response?.data?.extensionURL) {
-			EXTENSION_ORIGIN = response.data.extensionURL.replace(/\/$/, "");
-		}
-	} catch {
-		// Extension origin unavailable — errors won't be filtered
+window.addEventListener("pageshow", () => {
+	if (!cleanupHandle) {
+		initSetup();
 	}
-})();
-
-// Error handling
+});
+function isExtensionError(filename: string, stack?: Nullable<string>): boolean {
+	const origin = getExtensionOrigin();
+	if (!origin) return false;
+	return filename.startsWith(origin) || (stack ? stack.includes(origin) : false);
+}
 window.addEventListener("error", (event: ErrorEvent) => {
 	if (!isExtensionError(event.filename, event.error instanceof Error ? event.error.stack : null)) return;
 	event.preventDefault();
@@ -187,5 +50,18 @@ window.addEventListener("unhandledrejection", (event) => {
 	if (!isExtensionError("", event.reason instanceof Error ? event.reason.stack : null)) return;
 	event.preventDefault();
 	const errorLine = event.reason instanceof Error && event.reason?.stack ? event.reason.stack : "Stack trace not available";
-	browserColorLog(`Unhandled rejection: ${event.reason}\nAt: ${errorLine}`, "FgRed");
+	browserColorLog(`Unhandled rejection: ${errorLine}`, "FgRed");
 });
+
+// Lazy extension origin — computed on first error, avoids module-level webextension-polyfill import
+function getExtensionOrigin(): string {
+	const polyfill = (globalThis as Record<string, unknown>).browser as undefined | { runtime?: { getURL: (path: string) => string } };
+	const chromeApi = (globalThis as Record<string, unknown>).chrome as undefined | { runtime?: { getURL: (path: string) => string } };
+	const getURL = polyfill?.runtime?.getURL ?? chromeApi?.runtime?.getURL;
+	if (!getURL) return "";
+	try {
+		return getURL("").replace(/\/$/, "");
+	} catch {
+		return "";
+	}
+}
