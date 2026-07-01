@@ -1,26 +1,22 @@
-export interface EventListenerInfo<K extends keyof HTMLElementEventMap> {
-	callback: EventCallback<K>;
-	eventName: K;
-	target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap];
+export interface EventListenerInfo {
+	callback: EventListenerOrEventListenerObject;
+	eventName: string;
+	target: AcceptedTarget;
 }
 export type EventManager = {
-	addEventListener: <K extends keyof HTMLElementEventMap>(
-		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
+	addEventListener: <K extends keyof AcceptedEventMap>(
+		target: AcceptedTarget,
 		eventName: K,
-		callback: EventCallback<keyof HTMLElementEventMap>,
+		callback: (event: AcceptedEventMap[K]) => void,
 		featureName: FeatureName,
 		options?: AddEventListenerOptions | boolean
 	) => void;
 
-	listeners: Map<string, TargetedListeners<keyof HTMLElementEventMap>>;
+	listeners: Map<string, TargetedListeners>;
 
 	removeAllEventListeners: (exclude?: FeatureName[]) => void;
 
-	removeEventListener: <T extends keyof HTMLElementEventMap>(
-		target: HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
-		eventName: T,
-		featureName: FeatureName
-	) => void;
+	removeEventListener: (target: AcceptedTarget, eventName: string, featureName: FeatureName) => void;
 
 	removeEventListeners: (featureName: FeatureName) => void;
 };
@@ -61,30 +57,28 @@ export type FeatureName =
 	| "videoHistory"
 	| "volumeBoostButton";
 
-export type TargetedListeners<K extends keyof HTMLElementEventMap> = Map<
-	HTMLElementTagNameMap[keyof HTMLElementTagNameMap],
-	Map<K, EventListenerInfo<K>[]>
->;
-type EventCallback<K extends keyof HTMLElementEventMap> = (event: HTMLElementEventMap[K]) => void;
+export type TargetedListeners = Map<AcceptedTarget, Map<string, EventListenerInfo[]>>;
+
+type AcceptedEventMap = DocumentEventMap & HTMLElementEventMap & WindowEventMap;
+
+type AcceptedTarget = Document | HTMLElement | Window;
 
 const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
 	// Adds an event listener for the given target, eventName, and featureName
 	addEventListener: function (target, eventName, callback, featureName, options) {
 		// Get the map of listeners for the feature, or create it if it doesn't exist
-		const targetListeners =
-			this.listeners.get(featureName) ||
-			new Map<HTMLElementTagNameMap[keyof HTMLElementTagNameMap], Map<keyof HTMLElementEventMap, EventListenerInfo<keyof HTMLElementEventMap>[]>>();
+		const targetListeners = this.listeners.get(featureName) || new Map<AcceptedTarget, Map<string, EventListenerInfo[]>>();
 		// Get the map of listeners for the target element, or create it if it doesn't exist
-		const eventListeners = targetListeners.get(target) || new Map<keyof HTMLElementEventMap, EventListenerInfo<keyof HTMLElementEventMap>[]>();
+		const eventListeners = targetListeners.get(target) || new Map<string, EventListenerInfo[]>();
 		// Get any existing listeners for the event, or create an empty array if it doesn't exist
 		const existingListeners = eventListeners.get(eventName) || [];
 		// See if the listener has already been added
 		const existingListener = existingListeners.find((listener) => listener.callback === callback);
 		// If the listener hasn't been added, add it
 		if (!existingListener) {
-			const listenerInfo: EventListenerInfo<keyof HTMLElementEventMap> = {
-				callback,
+			const listenerInfo: EventListenerInfo = {
+				callback: callback as EventListenerOrEventListenerObject,
 				eventName,
 				target
 			};
@@ -92,11 +86,12 @@ const eventManager: EventManager = {
 			eventListeners.set(eventName, existingListeners);
 			targetListeners.set(target, eventListeners);
 			this.listeners.set(featureName, targetListeners);
-			target.addEventListener(eventName, callback, options);
+			target.addEventListener(eventName, callback as EventListenerOrEventListenerObject, options);
 		}
 	},
+
 	// event listener info objects
-	listeners: new Map<string, TargetedListeners<keyof HTMLElementEventMap>>(),
+	listeners: new Map<string, TargetedListeners>(),
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {
 		// Iterate over all registered listeners
