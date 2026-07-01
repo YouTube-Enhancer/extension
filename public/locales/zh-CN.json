@@ -309,8 +309,8 @@
 						"keepFirst": "启用 {{FEATURE}}",
 						"keepSecond": "启用 {{FEATURE}}",
 						"autoQualityConflict": {
-							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
-							"selectQuality": "Quality:"
+							"description": "导入的设置使用已被删除的“自动”质量。请选择一个特定的质量：",
+							"selectQuality": "质量："
 						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' 和 '{{FEATURE_B}}' 无法使用同一个修改键位。",
@@ -992,16 +992,16 @@
 			},
 			"videosPerRow": {
 				"enable": {
-					"label": "Videos per row",
-					"title": "Changes the number of videos displayed per row on YouTube feeds"
+					"label": "每行视频数",
+					"title": "更改 YouTube Feed 上每行显示的视频数量"
 				},
 				"settings": {
 					"count": {
-						"label": "Number of videos per row",
-						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+						"label": "每行视频数量",
+						"title": "每行在订阅、家庭和频道视频页面上显示的视频数量"
 					}
 				},
-				"title": "Videos per row settings"
+				"title": "每行设置视频数"
 			},
 			"volumeBoost": {
 				"enable": {
