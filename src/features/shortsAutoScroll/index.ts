@@ -14,6 +14,7 @@ export default createFeature({
 		await setupShortsAutoScroll();
 	},
 	onNavigate: async () => {
+		eventManager.removeEventListeners("shortsAutoScroll");
 		await setupShortsAutoScroll();
 	}
 });

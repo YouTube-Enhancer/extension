@@ -18,7 +18,7 @@ export const setupAutoScroll = (playerContainer: YouTubePlayerDiv, video: HTMLVi
 			}
 			return;
 		}
-		if (currentTime >= duration * 0.99) {
+		if (duration > 0 && currentTime >= duration * 0.99) {
 			wasNearEnd = true;
 		}
 		if (wasNearEnd && currentTime < 0.3) {

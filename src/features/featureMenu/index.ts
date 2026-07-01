@@ -15,10 +15,12 @@ import type { FeatureMenuOpenType } from "./types";
 const MENU_ID = "#yte-feature-menu";
 const BUTTON_ID = "#yte-feature-menu-button";
 
+let cleanupFeatureMenuListeners: (() => void) | null = null;
+
 export async function enableFeatureMenu() {
 	if (document.querySelector(BUTTON_ID)) return;
-	if (window.cleanupFeatureMenuListeners) window.cleanupFeatureMenuListeners();
-	window.cleanupFeatureMenuListeners = await createFeatureMenuButton();
+	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
+	cleanupFeatureMenuListeners = await createFeatureMenuButton();
 }
 
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType): () => void {

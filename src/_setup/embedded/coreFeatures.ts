@@ -1,0 +1,45 @@
+import type { AvailableLocales } from "@/src/i18n/constants";
+
+import { registry } from "@/src/features/_registry/featureRegistry";
+import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
+import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { i18nService } from "@/src/i18n";
+import { waitForSpecificMessage } from "@/src/utils/messaging";
+
+let cleanupListeners: (() => void) | null = null;
+
+export const coreFeatures = {
+	destroy() {
+		if (cleanupListeners) {
+			cleanupListeners();
+			cleanupListeners = null;
+		}
+	},
+
+	handleConfigChange(_id: string, data: { featureMenuOpenType: "click" | "hover" }) {
+		if (cleanupListeners) {
+			cleanupListeners();
+			cleanupListeners = null;
+		}
+		cleanupListeners = setupFeatureMenuEventListeners(data.featureMenuOpenType);
+	},
+
+	async handleLanguageChange(language: AvailableLocales) {
+		window.i18nextInstance = await i18nService(language);
+		const {
+			data: { options }
+		} = await waitForSpecificMessage("options", "request_data", "content");
+		const {
+			i18nextInstance: { t }
+		} = window;
+		await registry.disableAll();
+		await registry.enableAll(options);
+		if (featuresInMenu.size > 0) {
+			updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
+		}
+	},
+
+	async register() {
+		await enableFeatureMenu();
+	}
+};

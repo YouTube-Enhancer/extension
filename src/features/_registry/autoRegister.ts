@@ -1,4 +1,4 @@
-import type { AnyFeatureBase } from "@/src/features/_registry/types";
+import type { AnyFeatureBase, FeatureKeysWithState, FeatureState } from "@/src/features/_registry/types";
 
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
@@ -8,9 +8,9 @@ import { registry } from "./featureRegistry";
  * Eagerly imports each feature and registers it with the registry.
  * Uses default export
  */
-export async function registerAllFeatures() {
+export async function registerAllFeatures(initialState?: Record<FeatureKeysWithState, FeatureState[`state:${FeatureKeysWithState}`]>) {
 	const modules = import.meta.glob<{ default?: AnyFeatureBase }>("/src/features/*/index.ts", { eager: true });
-	const { data: state } = await waitForSpecificMessage("state", "request_data", "extension");
+	const state = initialState ?? (await waitForSpecificMessage("state", "request_data", "extension")).data;
 	for (const path in modules) {
 		const { [path]: featureModule } = modules;
 		const feature = featureModule?.default;

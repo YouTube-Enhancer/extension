@@ -139,7 +139,6 @@ declare global {
 	}
 	interface Window {
 		cachedPlaylistDuration: Nullable<{ playlistId: string; totalTimeSeconds: number }>;
-		cleanupFeatureMenuListeners: (() => void) | null;
 		engine: Nullable<AudioEngine>;
 		i18nextInstance: i18nInstanceType;
 		trustedTypes?: {
