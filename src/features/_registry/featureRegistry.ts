@@ -7,6 +7,7 @@ import { FeatureLifecycleManager } from "@/src/features/_registry/featureLifecyc
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager, type NavigationEventType } from "@/src/features/_registry/featureNavigationManager";
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
+import { cleanupRegistry } from "@/src/utils/cleanup";
 
 import type { PerfId, Phase, SubPhase } from "./featurePerformanceTracker";
 
@@ -192,6 +193,7 @@ export class FeatureRegistry {
 			}
 			if (!canEnable && prevEnabled) {
 				await this.safelyExecute(id, "disable", async () => this.lifecycleManager.disableFeature(feature, config), { subPhase: "lifecycle" });
+				cleanupRegistry.run(id);
 			}
 		} finally {
 			this.updatingFeatures.delete(id);

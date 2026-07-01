@@ -3,6 +3,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { cleanupRegistry } from "@/src/utils/cleanup";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { clamp } from "@/src/utils/math";
 
@@ -16,7 +17,6 @@ export type MiniPlayerRect = {
 };
 type MiniPlayerBarState = {
 	barRoot: HTMLDivElement;
-	cleanupFns: Array<() => void>;
 	controlsVisibilityTarget: HTMLElement;
 	hideTimeout: Nullable<ReturnType<typeof setTimeout>>;
 	playedRatio: number;
@@ -60,15 +60,15 @@ export class MiniPlayerController {
 	private resizeHandleElement: Nullable<HTMLDivElement> = null;
 	constructor(options: MiniPlayerOptions) {
 		this.options = options;
-		window.addEventListener("resize", this.handleViewportResize, { passive: true });
+		eventManager.addEventListener(window, "resize", this.handleViewportResize, "miniPlayer");
 	}
 	close() {
 		setManualOverride(false);
 		this.disable();
 	}
 	destroy() {
-		window.removeEventListener("resize", this.handleViewportResize);
 		eventManager.removeEventListeners("miniPlayer");
+		cleanupRegistry.run("miniPlayer");
 		this.disable();
 		this.overlayElement?.remove();
 		this.overlayElement = null;
@@ -160,7 +160,7 @@ export class MiniPlayerController {
 			this.dragHandleElement,
 			"pointerdown",
 			(e) => {
-				const evt = e as PointerEvent;
+				const evt = e;
 				isDragging = true;
 				this.overlayElement!.classList.add("yte-mini-player-dragging");
 				this.dragHandleElement!.setPointerCapture(evt.pointerId);
@@ -175,7 +175,7 @@ export class MiniPlayerController {
 			"pointermove",
 			(e) => {
 				if (!isDragging) return;
-				const evt = e as PointerEvent;
+				const evt = e;
 				const dx = evt.clientX - dragStartX;
 				const dy = evt.clientY - dragStartY;
 				const savedRect = readSavedState();
@@ -203,7 +203,7 @@ export class MiniPlayerController {
 			this.resizeHandleElement,
 			"pointerdown",
 			(e) => {
-				const evt = e as PointerEvent;
+				const evt = e;
 				isResizing = true;
 				this.overlayElement!.classList.add("yte-mini-player-resizing");
 				this.resizeHandleElement!.setPointerCapture(evt.pointerId);
@@ -222,7 +222,7 @@ export class MiniPlayerController {
 			"pointermove",
 			(e) => {
 				if (!isResizing) return;
-				const evt = e as PointerEvent;
+				const evt = e;
 				const dx = evt.clientX - resizeStartX;
 				const dy = evt.clientY - resizeStartY;
 				const delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
@@ -451,8 +451,8 @@ type miniPlayerWindow = {
 };
 export function disableMiniPlayerCustomProgress() {
 	if (!miniPlayerBarState) return;
-	const { barRoot, cleanupFns } = miniPlayerBarState;
-	for (const fn of cleanupFns) fn();
+	const { barRoot } = miniPlayerBarState;
+	cleanupRegistry.run("miniPlayer");
 	barRoot.remove();
 	miniPlayerBarState = null;
 }
@@ -464,9 +464,9 @@ export function enableMiniPlayerCustomProgress(playerElement: HTMLElement, overl
 	const { barRoot, progressBar } = buildMiniBar();
 	overlayElement.appendChild(barRoot);
 	const restoreNative = hideNativeProgress(playerElement);
+	cleanupRegistry.add("miniPlayer", restoreNative);
 	const barState: MiniPlayerBarState = {
 		barRoot,
-		cleanupFns: [restoreNative],
 		controlsVisibilityTarget,
 		hideTimeout: null,
 		playedRatio: 0,
@@ -517,7 +517,7 @@ export function enableMiniPlayerCustomProgress(playerElement: HTMLElement, overl
 	document.addEventListener("yt-navigate-finish", onPlayerUpdated);
 	document.addEventListener("yt-player-updated", onPlayerUpdated);
 	videoElement.addEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-	barState.cleanupFns.push(() => {
+	cleanupRegistry.add("miniPlayer", () => {
 		document.removeEventListener("yt-navigate-finish", onPlayerUpdated);
 		document.removeEventListener("yt-player-updated", onPlayerUpdated);
 		miniPlayerBarState?.videoElement.removeEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
@@ -597,19 +597,21 @@ function attachMiniBarEvents(barState: MiniPlayerBarState) {
 	barState.controlsVisibilityTarget.addEventListener("pointermove", onPlayerMove);
 	const mo = new MutationObserver(() => syncMiniBarVisibility(barState));
 	mo.observe(barState.controlsVisibilityTarget, { attributeFilter: ["class"], attributes: true });
-	barState.cleanupFns.push(() => mo.disconnect());
-	barState.cleanupFns.push(() => barState.controlsVisibilityTarget.removeEventListener("pointerenter", onPlayerEnter));
-	barState.cleanupFns.push(() => barState.controlsVisibilityTarget.removeEventListener("pointermove", onPlayerMove));
 	videoElement.addEventListener("timeupdate", onTimeUpdate);
 	videoElement.addEventListener("progress", onProgress);
 	videoElement.addEventListener("durationchange", onDuration);
-	barState.cleanupFns.push(() => barRoot.removeEventListener("pointerdown", onPointerDown));
-	barState.cleanupFns.push(() => barRoot.removeEventListener("pointermove", onPointerMove));
-	barState.cleanupFns.push(() => barRoot.removeEventListener("pointerleave", onPointerUp));
-	barState.cleanupFns.push(() => barRoot.removeEventListener("pointerup", onPointerUp));
-	barState.cleanupFns.push(() => videoElement.removeEventListener("timeupdate", onTimeUpdate));
-	barState.cleanupFns.push(() => videoElement.removeEventListener("progress", onProgress));
-	barState.cleanupFns.push(() => videoElement.removeEventListener("durationchange", onDuration));
+	cleanupRegistry.add("miniPlayer", () => {
+		mo.disconnect();
+		barState.controlsVisibilityTarget.removeEventListener("pointerenter", onPlayerEnter);
+		barState.controlsVisibilityTarget.removeEventListener("pointermove", onPlayerMove);
+		barRoot.removeEventListener("pointerdown", onPointerDown);
+		barRoot.removeEventListener("pointermove", onPointerMove);
+		barRoot.removeEventListener("pointerleave", onPointerUp);
+		barRoot.removeEventListener("pointerup", onPointerUp);
+		videoElement.removeEventListener("timeupdate", onTimeUpdate);
+		videoElement.removeEventListener("progress", onProgress);
+		videoElement.removeEventListener("durationchange", onDuration);
+	});
 }
 function buildMiniBar(): Pick<MiniPlayerBarState, "barRoot" | "progressBar"> {
 	const barRoot = document.createElement("div");
