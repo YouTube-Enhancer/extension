@@ -171,7 +171,7 @@ async function createFeatureMenuButton() {
 	});
 	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
-	const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls");
+	const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
 	if (!rightControls) return () => {};
 	const containerId = "yte-right-controls-container";
 	let container = rightControls.querySelector<HTMLDivElement>(`#${containerId}`);
