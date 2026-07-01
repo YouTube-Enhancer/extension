@@ -1,12 +1,10 @@
-import browser from "webextension-polyfill";
-
 import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
 import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
 import { i18nService } from "@/src/i18n";
-import { type ExtensionSendOnlyMessages, type Messages, type Nullable } from "@/src/types";
+import { type ExtensionSendOnlyMessages, type Messages } from "@/src/types";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { browserColorLog } from "@/src/utils/logging";
@@ -157,11 +155,23 @@ window.addEventListener("pagehide", () => {
 });
 window.addEventListener("pageshow", initialize);
 
-const EXTENSION_ORIGIN = browser.runtime.getURL("").replace(/\/$/, "");
+let EXTENSION_ORIGIN = "";
 
-function isExtensionError(filename: string, stack?: Nullable<string>): boolean {
+function isExtensionError(filename: string, stack?: string | null): boolean {
+	if (!EXTENSION_ORIGIN) return false;
 	return filename.startsWith(EXTENSION_ORIGIN) || (stack ? stack.includes(EXTENSION_ORIGIN) : false);
 }
+
+void (async () => {
+	try {
+		const response = await waitForSpecificMessage("extensionURL", "request_data", "content");
+		if (response?.data?.extensionURL) {
+			EXTENSION_ORIGIN = response.data.extensionURL.replace(/\/$/, "");
+		}
+	} catch {
+		// Extension origin unavailable — errors won't be filtered
+	}
+})();
 
 // Error handling
 window.addEventListener("error", (event: ErrorEvent) => {
