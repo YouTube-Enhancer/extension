@@ -145,7 +145,7 @@ export async function placeButton(button: HTMLButtonElement, placement: Exclude<
 			break;
 		}
 		case "player_controls_right": {
-			const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls");
+			const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
 			if (!rightControls) return;
 			const containerId = "yte-right-controls-container";
 			let container = rightControls.querySelector<HTMLDivElement>(`#${containerId}`);
@@ -323,7 +323,7 @@ async function getPlacementRoot(placement: ButtonPlacement) {
 		case "player_controls_left":
 			return await waitForElement<HTMLDivElement>(".ytp-left-controls");
 		case "player_controls_right":
-			return await waitForElement<HTMLDivElement>(".ytp-right-controls");
+			return await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
 	}
 }
 
