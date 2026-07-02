@@ -5,7 +5,6 @@ import { featureButtonManager } from "@/src/features/_registry/featureButtonMana
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureNavigationManager } from "@/src/features/_registry/featureNavigationManager";
-import { cleanupRegistry } from "@/src/utils/cleanup";
 
 import type { FeatureRegistry } from "./featureRegistry";
 
@@ -164,7 +163,6 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				await this.safelyExecute(id, "disable", async () => this.registry.lifecycleManager.disableFeature(feature, config), {
 					subPhase: "lifecycle"
 				});
-				cleanupRegistry.run(id);
 			}
 		} finally {
 			this.updatingFeatures.delete(id);
