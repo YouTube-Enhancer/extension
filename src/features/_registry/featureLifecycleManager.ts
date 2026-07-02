@@ -1,7 +1,7 @@
 import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { configuration } from "@/src/types";
 
-import { hasState } from "@/src/features/_registry/featureRegistry";
+import { hasState } from "@/src/features/_registry/featureRegistryCore";
 
 import type { featureConfigManager } from "./featureConfigManager";
 import type { featureStateManager } from "./featureStateManager";
