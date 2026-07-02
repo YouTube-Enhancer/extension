@@ -9,7 +9,7 @@ import { featurePerformanceTracker } from "./featurePerformanceTracker";
  * Base class for feature registry managers that provides common error logging functionality.
  */
 export abstract class FeatureManagerBase {
-	private perf = featurePerformanceTracker;
+	protected perf = featurePerformanceTracker;
 	/**
 	 * Subclasses must override this to provide a specific feature ID for error logging.
 	 */
@@ -50,8 +50,6 @@ export abstract class FeatureManagerBase {
 			trackTiming?: boolean;
 		} = {}
 	): Promise<Nullable<T>> {
-		const shouldTrackTiming = options.trackTiming !== false;
-
 		// Parse operation string to extract phase and subPhase
 		const [basePhase, baseSubPhase] = operation.split(":");
 		const phase = basePhase as Phase;
@@ -60,9 +58,17 @@ export abstract class FeatureManagerBase {
 		// Use options.subPhase if provided, otherwise use subPhase from operation string
 		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
 
-		if (shouldTrackTiming) {
+		if (options.trackTiming !== false) {
 			// Delegate to performance tracker for timing and error handling
-			return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase);
+			try {
+				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase);
+			} catch (error) {
+				// Error already recorded by track(). Honor shouldRethrow/fallback.
+				if (options.shouldRethrow) {
+					throw error;
+				}
+				return options.fallback ?? null;
+			}
 		} else {
 			// Just error handling without timing tracking
 			try {
