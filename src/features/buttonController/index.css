@@ -49,4 +49,3 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left {
 #movie_player.ytp-autohide .yte-button-player-controls-left {
 	display: none !important;
 }
-

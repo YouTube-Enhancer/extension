@@ -2,8 +2,8 @@ import type { MiniPlayerOptions, MiniPlayerSize } from "@/src/features/miniPlaye
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
+import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { cleanupRegistry } from "@/src/utils/cleanup";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { clamp } from "@/src/utils/math";
 

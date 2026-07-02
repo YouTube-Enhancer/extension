@@ -6,6 +6,7 @@ import { hasState } from "@/src/features/_registry/featureRegistryCore";
 import type { featureConfigManager } from "./featureConfigManager";
 import type { featureStateManager } from "./featureStateManager";
 
+import { cleanupRegistry } from "./cleanupRegistry";
 import { FeatureManagerBase } from "./featureManagerBase";
 
 export class FeatureLifecycleManager extends FeatureManagerBase {
@@ -40,6 +41,7 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			},
 			{ shouldRethrow: true }
 		);
+		cleanupRegistry.run(feature.id);
 	}
 
 	async enableFeature<K extends FeatureKeys>(feature: AnyFeatureBase, config: configuration[K]) {
