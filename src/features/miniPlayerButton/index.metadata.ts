@@ -5,6 +5,7 @@ import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
+	button: "miniPlayerButton",
 	config: {
 		button: {
 			...buttonField,

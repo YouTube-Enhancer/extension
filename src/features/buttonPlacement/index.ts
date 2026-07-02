@@ -1,17 +1,12 @@
 import type { GetIconType } from "@/src/icons";
 
-import { enableFeatureMenu } from "@/src/features/featureMenu";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 
 import "./index.css";
 
+import { enableFeatureMenu } from "@/src/features/featureMenu";
 import { addFeatureItemToMenu, getFeatureMenuItem, removeFeatureItemFromMenu } from "@/src/features/featureMenu/utils";
-import {
-	type AllButtonNames,
-	buttonNameToSettingName,
-	type ButtonPlacement,
-	type FullscreenPlacement,
-	type SingleButtonFeatureNames
-} from "@/src/types";
+import { type AllButtonNames, type ButtonPlacement, type FullscreenPlacement, type SingleButtonFeatureNames } from "@/src/types";
 import { removeTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
@@ -74,8 +69,9 @@ export async function addFeatureButton<Name extends AllButtonNames, Placement ex
 	trackButton(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked);
 }
 export async function removeFeatureButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
+	const featureName = metadataRegistry.getButtonFeature(buttonName);
+	if (!featureName) return;
 	untrackButton(buttonName);
-	const { [buttonName]: featureName } = buttonNameToSettingName;
 	if (placement === undefined) {
 		const {
 			data: { options }

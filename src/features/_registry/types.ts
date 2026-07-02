@@ -7,6 +7,7 @@ import type { MiniPlayerRect } from "@/src/features/miniPlayer/controller";
 import type { RememberedVolumes } from "@/src/features/rememberVolume/types";
 import type { VideoHistoryStorage } from "@/src/features/videoHistory/types";
 import type {
+	AllButtonNames,
 	buttonNameToSettingName,
 	ButtonPlacement,
 	configuration,
@@ -149,6 +150,14 @@ export type FeatureMetadata<K extends FeatureKeys> =
 	:	FeatureMetadataWithoutState<Exclude<K, FeatureKeysWithState>>;
 export type FeatureMetadataBase<K extends FeatureKeys> = {
 	/**
+	 * Optional button mappings (only features with buttons)
+	 * @remarks Declares which button names this feature owns and where their config lives
+	 */
+	button?: {
+		names: AllButtonNames[];
+		path: "button" | "buttons";
+	};
+	/**
 	 * Default values for the feature. These values are used to build the defaultConfig.
 	 * @remarks These values must contain the enabled property.
 	 */
@@ -274,13 +283,13 @@ export type SettingComponent<F extends FeatureKeys> = SettingNode<F>["component"
 
 export type SettingCondition<F extends FeatureKeys> = SettingConditionWithFeature | SettingConditionWithoutFeature<F>;
 export type SettingConfig<F extends FeatureKeys> =
-	| BooleanSettingConfig<F>
-	| ColorPickerSettingConfig<F>
-	| NumberSettingConfig<F>
-	| ObjectSettingConfig<F>
-	| SelectSettingConfig<F>
-	| SliderSettingConfig<F>
-	| TextInputSettingConfig<F>;
+	| (BooleanSettingConfig<F> & { id: BooleanPaths<F> })
+	| (ColorPickerSettingConfig<F> & { id: StringPaths<F> })
+	| (NumberSettingConfig<F> & { id: NumberPaths<F> })
+	| (ObjectSettingConfig<F> & { id: StringPaths<F> })
+	| (SelectSettingConfig<F> & { id: StringPaths<F> })
+	| (SliderSettingConfig<F> & { id: NumberPaths<F> })
+	| (TextInputSettingConfig<F> & { id: StringPaths<F> });
 export type SettingId<F extends FeatureKeys> = PrefixedPath<F>;
 
 export type SettingNode<F extends FeatureKeys> = SettingConfig<F>;
@@ -315,6 +324,9 @@ type BaseSettingConfig<F extends FeatureKeys> = {
 	type?: never;
 	visibleWhen?: SettingCondition<F>[];
 };
+type BooleanPaths<F extends FeatureKeys> = {
+	[P in SettingId<F>]: PathValue<configuration, P> extends boolean ? P : never;
+}[SettingId<F>];
 
 type ConditionRule<K extends FeatureKeys, P extends PrefixedPath<K>> = {
 	equals?: PathValue<configuration, P>;
@@ -425,6 +437,10 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	state: FeatureState[`state:${K}`];
 };
 
+type NumberPaths<F extends FeatureKeys> = {
+	[P in SettingId<F>]: PathValue<configuration, P> extends number ? P : never;
+}[SettingId<F>];
+
 type RuleSet<K extends FeatureKeys> = {
 	[P in PrefixedPath<K>]: ConditionRule<K, PrefixedPath<K>>;
 }[PrefixedPath<K>];
@@ -434,6 +450,9 @@ type SettingConditionWithFeature = {
 	};
 }[FeatureKeys];
 type SettingConditionWithoutFeature<K extends FeatureKeys> = RuleSet<K> & { feature?: never };
+type StringPaths<F extends FeatureKeys> = {
+	[P in SettingId<F>]: PathValue<configuration, P> extends string ? P : never;
+}[SettingId<F>];
 
 type ZodShapeExact<T extends object> = {
 	[K in keyof T]: z.ZodMiniType<T[K]>;

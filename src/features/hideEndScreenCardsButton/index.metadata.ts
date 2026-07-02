@@ -2,9 +2,10 @@ import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
 import { buttonField, field } from "@/src/features/_registry/defineConfig";
-import { buttonPlacements, fullscreenPlacements } from "@/src/types";
+import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
+	button: "hideEndScreenCardsButton",
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") } },
 	dependencies: { includePages: ["watch"] },
 	id: "hideEndScreenCardsButton",

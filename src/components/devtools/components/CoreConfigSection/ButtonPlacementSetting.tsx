@@ -8,8 +8,9 @@ import type { i18nInstanceType } from "@/src/i18n";
 import DevToolsLoader from "@/components/devtools/components/DevToolsLoader";
 import { coreConfigQuery } from "@/components/devtools/hooks/useDevToolsQuery";
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";
-import { type AllButtonNames, buttonNames, buttonNameToSettingName, type configuration, fullscreenPlacements, type Nullable } from "@/src/types";
+import { type AllButtonNames, type configuration, fullscreenPlacements } from "@/src/types";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 type ButtonConfig = {
@@ -58,7 +59,7 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 	return (
 		<div className="flex flex-col gap-4 rounded border border-[#3c3c3c] p-4">
 			<h3 className="text-sm font-medium text-[#d4d4d4]">{t((tr) => tr.pages.options.extras.buttonPlacement.title)}</h3>
-			{buttonNames.map((buttonName) => {
+			{metadataRegistry.getAllButtonNames().map((buttonName) => {
 				const info = getButtonPlacementInfo(buttonName);
 				const fullscreenInfo = getFullscreenPlacementInfo(buttonName);
 				if (!info || !fullscreenInfo) return null;
@@ -132,46 +133,19 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 	);
 }
 
-function getButtonPlacementInfo(buttonName: AllButtonNames): Nullable<{ featureId: FeatureKeys; path: string }> {
-	const featureId = buttonNameToSettingName[buttonName] as FeatureKeys | undefined;
-	if (!featureId) return null;
-
-	switch (buttonName) {
-		case "decreasePlaybackSpeedButton":
-		case "increasePlaybackSpeedButton":
-			return { featureId, path: "playbackSpeedButtons.button.placement" };
-		case "flipVideoHorizontalButton":
-		case "flipVideoVerticalButton":
-			return { featureId, path: `flipVideoButtons.buttons.${buttonName}.placement` };
-		case "forwardButton":
-		case "rewindButton":
-			return { featureId, path: "forwardRewindButtons.button.placement" };
-		case "volumeBoostButton":
-			return { featureId, path: "volumeBoost.button.placement" };
-		default:
-			return { featureId, path: `${featureId}.button.placement` };
-	}
+function buildButtonInfo(buttonName: AllButtonNames, suffix: "fullscreenPlacement" | "placement"): null | { featureId: FeatureKeys; path: string } {
+	const featureId = metadataRegistry.getButtonFeature(buttonName);
+	const configPath = metadataRegistry.getButtonConfigPath(buttonName);
+	if (!featureId || !configPath) return null;
+	return { featureId, path: `${featureId}.${configPath}.${suffix}` };
 }
 
-function getFullscreenPlacementInfo(buttonName: AllButtonNames): Nullable<{ featureId: FeatureKeys; path: string }> {
-	const featureId = buttonNameToSettingName[buttonName] as FeatureKeys | undefined;
-	if (!featureId) return null;
+function getButtonPlacementInfo(buttonName: AllButtonNames) {
+	return buildButtonInfo(buttonName, "placement");
+}
 
-	switch (buttonName) {
-		case "decreasePlaybackSpeedButton":
-		case "increasePlaybackSpeedButton":
-			return { featureId, path: "playbackSpeedButtons.button.fullscreenPlacement" };
-		case "flipVideoHorizontalButton":
-		case "flipVideoVerticalButton":
-			return { featureId, path: `flipVideoButtons.buttons.${buttonName}.fullscreenPlacement` };
-		case "forwardButton":
-		case "rewindButton":
-			return { featureId, path: "forwardRewindButtons.button.fullscreenPlacement" };
-		case "volumeBoostButton":
-			return { featureId, path: "volumeBoost.button.fullscreenPlacement" };
-		default:
-			return { featureId, path: `${featureId}.button.fullscreenPlacement` };
-	}
+function getFullscreenPlacementInfo(buttonName: AllButtonNames) {
+	return buildButtonInfo(buttonName, "fullscreenPlacement");
 }
 
 function getPlacementDescription(placement: string, t: i18nInstanceType["t"]): string {
