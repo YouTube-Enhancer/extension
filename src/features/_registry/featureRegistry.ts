@@ -27,9 +27,6 @@ export class FeatureRegistry extends FeatureManagerBase {
 	private sortedFeaturesCache: AnyFeatureBase[] | null = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
-	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
-		return "featureRegistry" as FeatureKeys;
-	}
 	destroyNavigationListener() {
 		this.navigationManager.destroyListener();
 	}
@@ -200,6 +197,9 @@ export class FeatureRegistry extends FeatureManagerBase {
 			this.updatingFeatures.delete(id);
 		}
 	}
+	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
+		return "featureRegistry" as FeatureKeys;
+	}
 	private getFeaturesSortedByPriority(): AnyFeatureBase[] {
 		if (!this.sortedFeaturesCache || this.sortedFeaturesCacheDirty) {
 			this.sortedFeaturesCache = Array.from(this.features.values()).sort((a, b) => {
@@ -233,6 +233,4 @@ export class FeatureRegistry extends FeatureManagerBase {
 		}
 	}
 }
-
 export const registry = new FeatureRegistry();
-export { hasState, isFeature, isFeatureKey, resolveEnabled } from "./featureRegistryCore";

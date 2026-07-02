@@ -6,7 +6,7 @@ import type { configuration, Path, PathValue } from "@/src/types";
 
 import { type AllConfigsData, allConfigsQuery, featureListQuery } from "@/components/devtools/hooks/useDevToolsQuery";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import { resolveEnabled } from "@/src/features/_registry/featureRegistry";
+import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { updateConfigAtPath } from "@/src/utils/config/utils";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 import { getPathValue } from "@/src/utils/misc";
