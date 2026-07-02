@@ -6,7 +6,12 @@ import { buttonPlacements } from "@/src/types";
 
 import { screenshotFormats, screenshotTypes } from "./types";
 export const metadata = createFeatureMetadata({
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") }, format: field(z.enum(screenshotFormats), "png"), saveAs: field(z.enum(screenshotTypes), "file") },
+	button: "screenshotButton",
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") },
+		format: field(z.enum(screenshotFormats), "png"),
+		saveAs: field(z.enum(screenshotTypes), "file")
+	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "screenshotButton",
 	sectionTitle: (t) => t((tr) => tr.settings.sections.screenshotButton.title),

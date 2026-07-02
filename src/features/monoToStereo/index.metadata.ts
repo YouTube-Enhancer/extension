@@ -5,6 +5,7 @@ import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
+	button: "monoToStereoButton",
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") } },
 	dependencies: { includePages: ["watch", "live"] },
 	id: "monoToStereoButton",

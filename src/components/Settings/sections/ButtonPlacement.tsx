@@ -4,7 +4,8 @@ import { Select } from "@/src/components/Inputs";
 import SettingSection from "@/src/components/Settings/components/SettingSection";
 import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
-import { type AllButtonNames, buttonNames, type configuration, fullscreenPlacements, type Path } from "@/src/types";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { type AllButtonNames, type configuration, fullscreenPlacements, type Path } from "@/src/types";
 import { isButtonSelectDisabled } from "@/src/utils/settings";
 
 export default function ButtonPlacementSection() {
@@ -33,11 +34,11 @@ export default function ButtonPlacementSection() {
 	return (
 		<SettingSection title={t((translations) => translations.pages.options.extras.buttonPlacement.title)}>
 			<SettingTitle />
-			{buttonNames.map((buttonName) => {
+			{metadataRegistry.getAllButtonNames().map((buttonName) => {
 				const label = t((translations) => translations.pages.options.extras.buttonPlacement.select.buttonNames[buttonName]);
 				const valuePath = getPlacementPath(buttonName);
 				const fullscreenValuePath = getFullscreenPlacementPath(buttonName);
-				if (!valuePath || !fullscreenValuePath) return null;
+
 				const disabled = isButtonSelectDisabled(buttonName, settings);
 				const tooltip = t((translations) => translations.pages.options.extras.buttonPlacement.select.title, {
 					BUTTON_NAME: label.toLowerCase(),
@@ -85,38 +86,18 @@ export default function ButtonPlacementSection() {
 function getFullscreenPlacementPath(
 	buttonName: AllButtonNames
 ): (`${string}.button.fullscreenPlacement` & Path<configuration>) | (`${string}.buttons.${string}.fullscreenPlacement` & Path<configuration>) {
-	switch (buttonName) {
-		case "decreasePlaybackSpeedButton":
-		case "increasePlaybackSpeedButton":
-			return "playbackSpeedButtons.button.fullscreenPlacement";
-		case "flipVideoHorizontalButton":
-		case "flipVideoVerticalButton":
-			return `flipVideoButtons.buttons.${buttonName}.fullscreenPlacement`;
-		case "forwardButton":
-		case "rewindButton":
-			return "forwardRewindButtons.button.fullscreenPlacement";
-		case "volumeBoostButton":
-			return "volumeBoost.button.fullscreenPlacement";
-		default:
-			return `${buttonName}.button.fullscreenPlacement`;
-	}
+	const featureId = metadataRegistry.getButtonFeature(buttonName)!;
+	const configPath = metadataRegistry.getButtonConfigPath(buttonName)!;
+	return `${featureId}.${configPath}.fullscreenPlacement` as
+		| (`${string}.button.fullscreenPlacement` & Path<configuration>)
+		| (`${string}.buttons.${string}.fullscreenPlacement` & Path<configuration>);
 }
 function getPlacementPath(
 	buttonName: AllButtonNames
 ): (`${string}.button.placement` & Path<configuration>) | (`${string}.buttons.${string}.placement` & Path<configuration>) {
-	switch (buttonName) {
-		case "decreasePlaybackSpeedButton":
-		case "increasePlaybackSpeedButton":
-			return "playbackSpeedButtons.button.placement";
-		case "flipVideoHorizontalButton":
-		case "flipVideoVerticalButton":
-			return `flipVideoButtons.buttons.${buttonName}.placement`;
-		case "forwardButton":
-		case "rewindButton":
-			return "forwardRewindButtons.button.placement";
-		case "volumeBoostButton":
-			return "volumeBoost.button.placement";
-		default:
-			return `${buttonName}.button.placement`;
-	}
+	const featureId = metadataRegistry.getButtonFeature(buttonName)!;
+	const configPath = metadataRegistry.getButtonConfigPath(buttonName)!;
+	return `${featureId}.${configPath}.placement` as
+		| (`${string}.button.placement` & Path<configuration>)
+		| (`${string}.buttons.${string}.placement` & Path<configuration>);
 }

@@ -5,6 +5,7 @@ import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
+	button: "loopButton",
 	config: {
 		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "feature_menu") }
 	},

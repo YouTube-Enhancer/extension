@@ -12,6 +12,7 @@ type ModeKeys = SnakeToCamel<(typeof volumeBoostModes)[number]>;
 const modeKeys: ModeKeys[] = volumeBoostModes.map((value) => value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as ModeKeys);
 
 export const metadata = createFeatureMetadata({
+	button: "volumeBoostButton",
 	config: {
 		amount: field(z.number(), 5),
 		button: {

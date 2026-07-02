@@ -1,14 +1,15 @@
 import type { AllButtonNames, configuration } from "@/src/types";
 
-import { buttonNameToSettingName } from "@/src/types";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 
 export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: configuration) {
+	const settingName = metadataRegistry.getButtonFeature(buttonName);
+	if (!settingName) return true;
 	switch (buttonName) {
 		case "volumeBoostButton": {
-			return settings.volumeBoost.mode === "global" || settings[buttonNameToSettingName[buttonName]].enabled === false;
+			return settings.volumeBoost.mode === "global" || (settings[settingName] as { enabled?: boolean }).enabled === false;
 		}
 		default: {
-			const { [buttonName]: settingName } = buttonNameToSettingName;
 			const { [settingName]: featureSetting } = settings;
 			if (!featureSetting) return true;
 			if ("buttons" in featureSetting) {
@@ -18,7 +19,7 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 				}
 			}
 			if ("button" in featureSetting) {
-				return featureSetting.button.enabled === false;
+				return (featureSetting as { button: { enabled: boolean } }).button.enabled === false;
 			}
 			return false;
 		}

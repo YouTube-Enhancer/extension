@@ -1,9 +1,8 @@
-import { z } from "zod/v4-mini";
-
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
 import { buttonField } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
+	button: "openTranscriptButton",
 	config: { button: buttonField },
 	dependencies: { includePages: ["watch"] },
 	id: "openTranscriptButton",

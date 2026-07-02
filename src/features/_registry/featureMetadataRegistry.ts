@@ -1,6 +1,7 @@
 import { z } from "zod/v4-mini";
 
 import type { FeatureKeys, FeatureMetadata } from "@/src/features/_registry/types";
+import type { AllButtonNames } from "@/src/types";
 
 interface ValidationError {
 	message: string;
@@ -8,12 +9,30 @@ interface ValidationError {
 }
 
 class FeatureMetadataRegistry {
+	private buttonNameToFeature = new Map<string, FeatureKeys>();
+	private featureToButtonNames = new Map<FeatureKeys, string[]>();
 	private metadataMap = new Map<FeatureKeys, FeatureMetadata<FeatureKeys>>();
 	get<K extends FeatureKeys>(id: K): FeatureMetadata<K> | undefined {
 		return this.metadataMap.get(id) as FeatureMetadata<K> | undefined;
 	}
 	getAll(): FeatureMetadata<FeatureKeys>[] {
 		return Array.from(this.metadataMap.values());
+	}
+	getAllButtonNames(): AllButtonNames[] {
+		return Array.from(this.buttonNameToFeature.keys()) as AllButtonNames[];
+	}
+	getButtonConfigPath(buttonName: string): string | undefined {
+		const featureKey = this.buttonNameToFeature.get(buttonName);
+		if (!featureKey) return undefined;
+		const metadata = this.metadataMap.get(featureKey);
+		if (!metadata?.button) return undefined;
+		return metadata.button.path === "buttons" ? `buttons.${buttonName}` : "button";
+	}
+	getButtonFeature(buttonName: string): FeatureKeys | undefined {
+		return this.buttonNameToFeature.get(buttonName);
+	}
+	getButtonNamesForFeature(featureKey: FeatureKeys): string[] | undefined {
+		return this.featureToButtonNames.get(featureKey);
 	}
 	getDefaults(): Partial<Record<FeatureKeys, unknown>> {
 		const result: Partial<Record<FeatureKeys, unknown>> = {};
@@ -46,6 +65,12 @@ class FeatureMetadataRegistry {
 		validateSettingsIds(metadata);
 		validateSettingsStructure(metadata);
 		validateStateSchemaInput(metadata);
+		if (metadata.button) {
+			for (const name of metadata.button.names) {
+				this.buttonNameToFeature.set(name, metadata.id);
+			}
+			this.featureToButtonNames.set(metadata.id, metadata.button.names);
+		}
 		this.metadataMap.set(metadata.id, metadata);
 	}
 }
