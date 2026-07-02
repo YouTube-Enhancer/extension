@@ -1,13 +1,13 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 import { youtubePlayerMaxSpeed, youtubePlayerMinSpeed, youtubePlayerSpeedStep } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, speed: 1 },
+	config: { enabled: field(z.boolean(), false), speed: field(z.number(), 1) },
 	dependencies: { includePages: ["watch", "shorts"] },
 	id: "playerSpeed",
-	schemaInput: { enabled: z.boolean(), speed: z.number() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerSpeed.title),
 	settings: [
 		{
@@ -37,5 +37,5 @@ export const metadata = createFeatureMetadata({
 			type: "group"
 		}
 	],
-	stateSchemaInput: { playbackSpeed: z.number() }
+	state: { playbackSpeed: field(z.number(), 1) }
 });

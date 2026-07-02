@@ -2,35 +2,23 @@ import { z } from "zod/v4-mini";
 
 import { deepDarkPreset } from "@/src/deepDarkPresets";
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
+	config: {
 		colors: {
-			colorShadow: "#383c4a4d",
-			dimmerText: "#cccccc",
-			hoverBackground: "#4e5467",
-			mainBackground: "#22242d",
-			mainColor: "#367bf0",
-			mainText: "#eeeeee",
-			secondBackground: "#242730"
+			colorShadow: field(z.string(), "#383c4a4d"),
+			dimmerText: field(z.string(), "#cccccc"),
+			hoverBackground: field(z.string(), "#4e5467"),
+			mainBackground: field(z.string(), "#22242d"),
+			mainColor: field(z.string(), "#367bf0"),
+			mainText: field(z.string(), "#eeeeee"),
+			secondBackground: field(z.string(), "#242730")
 		},
-		enabled: false,
-		preset: "Deep-Dark"
+		enabled: field(z.boolean(), false),
+		preset: field(z.enum(deepDarkPreset), "Deep-Dark")
 	},
 	id: "deepDarkCSS",
-	schemaInput: {
-		colors: z.object({
-			colorShadow: z.string(),
-			dimmerText: z.string(),
-			hoverBackground: z.string(),
-			mainBackground: z.string(),
-			mainColor: z.string(),
-			mainText: z.string(),
-			secondBackground: z.string()
-		}),
-		enabled: z.boolean(),
-		preset: z.enum(deepDarkPreset)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.deepDarkCSS.title),
 	settings: [
 		{

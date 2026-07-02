@@ -3,31 +3,26 @@ import { z } from "zod/v4-mini";
 import type { SnakeToCamel } from "@/src/types";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { volumeBoostModes } from "@/src/features/volumeBoost/types";
-import { buttonPlacements, fullscreenPlacements } from "@/src/types";
+import { buttonPlacements } from "@/src/types";
 
 type ModeKeys = SnakeToCamel<(typeof volumeBoostModes)[number]>;
 
 const modeKeys: ModeKeys[] = volumeBoostModes.map((value) => value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as ModeKeys);
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		amount: 5,
-		button: { fullscreenPlacement: "same", placement: "player_controls_left" },
-		enabled: false,
-		mode: "global"
+	config: {
+		amount: field(z.number(), 5),
+		button: {
+			fullscreenPlacement: buttonField.fullscreenPlacement,
+			placement: field(z.enum(buttonPlacements), "player_controls_left")
+		},
+		enabled: field(z.boolean(), false),
+		mode: field(z.enum(volumeBoostModes), "global")
 	},
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "volumeBoost",
-	schemaInput: {
-		amount: z.number(),
-		button: z.object({
-			fullscreenPlacement: z.enum(fullscreenPlacements),
-			placement: z.enum(buttonPlacements)
-		}),
-		enabled: z.boolean(),
-		mode: z.enum(volumeBoostModes)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.volumeBoost.title),
 	settings: [
 		{

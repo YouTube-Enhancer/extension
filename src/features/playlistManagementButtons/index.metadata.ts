@@ -1,12 +1,12 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: { removeButton: { enabled: false }, resetButton: { enabled: false } },
+	config: { removeButton: { enabled: field(z.boolean(), false) }, resetButton: { enabled: field(z.boolean(), false) } },
 	dependencies: { includePages: ["playlist"] },
 	id: "playlistManagementButtons",
-	schemaInput: { removeButton: z.object({ enabled: z.boolean() }), resetButton: z.object({ enabled: z.boolean() }) },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.title),
 	settings: [
 		{

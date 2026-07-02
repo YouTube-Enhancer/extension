@@ -120,7 +120,7 @@ export default createFeature({
 					volumeBoostButton,
 					"wheel",
 					(event) => {
-						void handleVolumeBoostScroll(event as WheelEvent);
+						void handleVolumeBoostScroll(event);
 					},
 					"volumeBoostButton",
 					{ passive: false }

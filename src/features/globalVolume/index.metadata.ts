@@ -1,18 +1,12 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		enabled: false,
-		volume: 25
-	},
+	config: { enabled: field(z.boolean(), false), volume: field(z.number(), 25) },
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "globalVolume",
-	schemaInput: {
-		enabled: z.boolean(),
-		volume: z.number()
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.globalVolume.title),
 	settings: [
 		{

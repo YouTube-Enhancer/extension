@@ -1,27 +1,13 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
-import { buttonPlacements, fullscreenPlacements, youtubePlayerSpeedStep } from "@/src/types";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
+import { buttonPlacements, youtubePlayerSpeedStep } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		button: {
-			enabled: false,
-			fullscreenPlacement: "same",
-			placement: "player_controls_left"
-		},
-		speed: 0.25
-	},
+	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") }, speed: field(z.number(), 0.25) },
 	dependencies: { includePages: ["watch"] },
 	id: "playbackSpeedButtons",
-	schemaInput: {
-		button: z.object({
-			enabled: z.boolean(),
-			fullscreenPlacement: z.enum(fullscreenPlacements),
-			placement: z.enum(buttonPlacements)
-		}),
-		speed: z.number()
-	},
 	settings: [
 		{
 			component: "checkbox",

@@ -66,7 +66,7 @@ const getStoredState = async (): Promise<{
 }> => {
 	const stateKeys = metadataRegistry
 		.getAll()
-		.filter((feature) => feature.stateSchemaInput !== undefined)
+		.filter((feature) => "stateSchemaInput" in feature)
 		.map((feature) => `state:${feature.id}` as const);
 	const result = await browser.storage.local.get(stateKeys);
 	const state = stateKeys.reduce((acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }), {}) as {

@@ -1,50 +1,19 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		channel: {
-			enabled: false
-		},
-		home: {
-			enabled: false
-		},
-		search: {
-			enabled: false
-		},
-		sidebar: {
-			enabled: false
-		},
-		subscriptions: {
-			enabled: false
-		},
-		videos: {
-			enabled: false
-		}
+	config: {
+		channel: { enabled: field(z.boolean(), false) },
+		home: { enabled: field(z.boolean(), false) },
+		search: { enabled: field(z.boolean(), false) },
+		sidebar: { enabled: field(z.boolean(), false) },
+		subscriptions: { enabled: field(z.boolean(), false) },
+		videos: { enabled: field(z.boolean(), false) }
 	},
 	dependencies: { includePages: ["watch", "home", "search", "channel_home", "channel_videos", "channel_posts", "channel_streams", "subscriptions"] },
 	id: "hideShorts",
-	schemaInput: {
-		channel: z.object({
-			enabled: z.boolean()
-		}),
-		home: z.object({
-			enabled: z.boolean()
-		}),
-		search: z.object({
-			enabled: z.boolean()
-		}),
-		sidebar: z.object({
-			enabled: z.boolean()
-		}),
-		subscriptions: z.object({
-			enabled: z.boolean()
-		}),
-		videos: z.object({
-			enabled: z.boolean()
-		})
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.hideShorts.title),
 	settings: [
 		{

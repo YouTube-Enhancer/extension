@@ -37,8 +37,9 @@ class FeatureMetadataRegistry {
 	getStateSchema<K extends FeatureKeys>(id: K) {
 		const metadata = this.metadataMap.get(id) as FeatureMetadata<K> | undefined;
 		if (!metadata) return undefined;
-		if (!metadata.stateSchemaInput) return undefined;
-		return z.object(metadata.stateSchemaInput);
+		const { stateSchemaInput } = metadata as FeatureMetadata<K> & { stateSchemaInput?: Record<string, unknown> };
+		if (!stateSchemaInput) return undefined;
+		return z.object(stateSchemaInput);
 	}
 	register<K extends FeatureKeys>(metadata: FeatureMetadata<K>) {
 		validateDefaults(metadata);
@@ -309,9 +310,10 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 }
 
 function validateStateSchemaInput<K extends FeatureKeys>(metadata: FeatureMetadata<K>): void {
-	if (!metadata.stateSchemaInput) return;
+	const { stateSchemaInput } = metadata as FeatureMetadata<K> & { stateSchemaInput?: Record<string, unknown> };
+	if (!stateSchemaInput) return;
 	try {
-		z.object(metadata.stateSchemaInput);
+		z.object(stateSchemaInput);
 	} catch (e) {
 		throw new Error(`Feature "${metadata.id}" stateSchemaInput is not a valid Zod shape: ${(e as Error).message}`);
 	}

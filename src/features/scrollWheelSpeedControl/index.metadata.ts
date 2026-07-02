@@ -1,13 +1,13 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 import { modifierKeys } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, modifierKey: "altKey", steps: 0.25 },
+	config: { enabled: field(z.boolean(), false), modifierKey: field(z.enum(modifierKeys), "altKey"), steps: field(z.number(), 0.25) },
 	dependencies: { includePages: ["watch", "shorts"] },
 	id: "scrollWheelSpeedControl",
-	schemaInput: { enabled: z.boolean(), modifierKey: z.enum(modifierKeys), steps: z.number() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.title),
 	settings: [
 		{

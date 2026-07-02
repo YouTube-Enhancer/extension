@@ -147,6 +147,39 @@ export type FeatureKeysWithState = {
 export type FeatureMetadata<K extends FeatureKeys> =
 	K extends FeatureKeysWithState ? FeatureMetadataWithState<Extract<K, FeatureKeysWithState>>
 	:	FeatureMetadataWithoutState<Exclude<K, FeatureKeysWithState>>;
+export type FeatureMetadataBase<K extends FeatureKeys> = {
+	/**
+	 * Default values for the feature. These values are used to build the defaultConfig.
+	 * @remarks These values must contain the enabled property.
+	 */
+	defaults: MustContainEnabled<configuration[K]>;
+	/**
+	 * Optional dependencies for the feature
+	 */
+	dependencies?: FeatureDependencies;
+	/**
+	 * Unique identifier for the feature
+	 */
+	id: K;
+	/**
+	 * Execution priority for the feature. Lower numbers execute first.
+	 * @remarks Optional, defaults to 0 if not specified
+	 */
+	priority?: number;
+	/**
+	 * The shape of the configuration input.
+	 * @remarks This means that the configuration input must have the exact same keys as the defaults.
+	 */
+	schemaInput: ZodShapeExact<MustContainEnabled<configuration[K]>>;
+	/**
+	 * Section title for the feature's settings
+	 */
+	sectionTitle?: TSelectFunc;
+	/**
+	 * Settings metadata for the feature's configuration UI
+	 */
+	settings: FeatureSettingsSection<NoInfer<K>>;
+};
 export type FeatureMetadataWithoutState<K extends FeatureKeys> = FeatureMetadataBase<K> & {
 	/**
 	 * Features without state do not require state schema input
@@ -163,6 +196,7 @@ export type FeatureMetadataWithState<K extends FeatureKeysWithState> = FeatureMe
 	stateSchemaInput: ZodShapeExact<FeatureState[`state:${K}`]>;
 };
 export type FeatureSettingNode<F extends FeatureKeys> = DividerNode | GroupNode<F> | SettingNode<F> | TextNode;
+
 export type FeatureSettingsSection<F extends FeatureKeys> = FeatureSettingNode<F>[];
 
 export type FeatureState = {
@@ -185,13 +219,14 @@ export type FeatureStateAPI<K extends FeatureKeysWithState> = {
 export type FeatureStateKeys = {
 	[K in keyof FeatureState]: K;
 }[keyof FeatureState];
-
 export type GroupNode<F extends FeatureKeys> = {
 	attribution?: AttributionEntry[];
 	children: FeatureSettingNode<F>[];
 	section?: SettingsSectionId;
 	type: "group";
 };
+
+export type MustContainEnabled<T> = ContainsEnabled<T> extends true ? T : never;
 
 export type NavigationType =
 	| `history`
@@ -230,15 +265,14 @@ export type PageType =
 	| "watch";
 
 export type PrefixedPath<K extends FeatureKeys> = K extends K ? `${K}.${Path<configuration[K]>}` : never;
-
 export type SelectSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
 	component: "select";
 	options?: { label: TSelectFunc; value: PathValue<configuration, SettingId<F>> }[];
 	optionsFrom?: () => { label: TSelectFunc; value: PathValue<configuration, SettingId<F>> }[];
 };
 export type SettingComponent<F extends FeatureKeys> = SettingNode<F>["component"];
-export type SettingCondition<F extends FeatureKeys> = SettingConditionWithFeature | SettingConditionWithoutFeature<F>;
 
+export type SettingCondition<F extends FeatureKeys> = SettingConditionWithFeature | SettingConditionWithoutFeature<F>;
 export type SettingConfig<F extends FeatureKeys> =
 	| BooleanSettingConfig<F>
 	| ColorPickerSettingConfig<F>
@@ -248,16 +282,17 @@ export type SettingConfig<F extends FeatureKeys> =
 	| SliderSettingConfig<F>
 	| TextInputSettingConfig<F>;
 export type SettingId<F extends FeatureKeys> = PrefixedPath<F>;
+
 export type SettingNode<F extends FeatureKeys> = SettingConfig<F>;
 
 export type SettingsSectionId = keyof EnUS["settings"]["sections"];
-
 export type SliderSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
 	component: "slider";
 	max: number;
 	min: number;
 	step: number;
 };
+
 export type TextInputSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
 	component: "text-input";
 	input_type: "password" | "text";
@@ -302,42 +337,8 @@ type ContainsEnabled<T> =
 			true
 		:	false
 	:	false;
-
 type DynamicParentSetting<F extends configurationKeys> = (settings: configuration[F]) => Nullable<parentSetting>;
 type FeatureKeyFromStateKey<K extends FeatureStateKeys> = K extends `state:${infer V}` ? V : never;
-type FeatureMetadataBase<K extends FeatureKeys> = {
-	/**
-	 * Default values for the feature. These values are used to build the defaultConfig.
-	 * @remarks These values must contain the enabled property.
-	 */
-	defaults: MustContainEnabled<configuration[K]>;
-	/**
-	 * Optional dependencies for the feature
-	 */
-	dependencies?: FeatureDependencies;
-	/**
-	 * Unique identifier for the feature
-	 */
-	id: K;
-	/**
-	 * Execution priority for the feature. Lower numbers execute first.
-	 * @remarks Optional, defaults to 0 if not specified
-	 */
-	priority?: number;
-	/**
-	 * The shape of the configuration input.
-	 * @remarks This means that the configuration input must have the exact same keys as the defaults.
-	 */
-	schemaInput: ZodShapeExact<MustContainEnabled<configuration[K]>>;
-	/**
-	 * Section title for the feature's settings
-	 */
-	sectionTitle?: TSelectFunc;
-	/**
-	 * Settings metadata for the feature's configuration UI
-	 */
-	settings: FeatureSettingsSection<NoInfer<K>>;
-};
 
 type FeatureWithoutStateBranch<K extends FeatureKeys> = {
 	/**
@@ -423,7 +424,6 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	 */
 	state: FeatureState[`state:${K}`];
 };
-type MustContainEnabled<T> = ContainsEnabled<T> extends true ? T : never;
 
 type RuleSet<K extends FeatureKeys> = {
 	[P in PrefixedPath<K>]: ConditionRule<K, PrefixedPath<K>>;
