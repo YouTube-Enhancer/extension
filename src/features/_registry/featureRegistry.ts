@@ -1,5 +1,5 @@
 import type { AnyFeatureBase, FeatureButton, FeatureKeys, FeatureKeysWithState, FeatureState } from "@/src/features/_registry/types";
-import type { configuration, Nullable } from "@/src/types";
+import type { configuration } from "@/src/types";
 
 import { featureButtonManager } from "@/src/features/_registry/featureButtonManager";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -9,13 +9,11 @@ import { featureNavigationManager, type NavigationEventType } from "@/src/featur
 import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 import { cleanupRegistry } from "@/src/utils/cleanup";
 
-import type { PerfId, Phase, SubPhase } from "./featurePerformanceTracker";
-
-import { featurePerformanceTracker } from "./featurePerformanceTracker";
+import { FeatureManagerBase } from "./featureManagerBase";
 import { hasState, isFeature, resolveEnabled } from "./featureRegistryCore";
 import { featureStateManager } from "./featureStateManager";
 
-export class FeatureRegistry {
+export class FeatureRegistry extends FeatureManagerBase {
 	public buttonManager = featureButtonManager;
 	public configManager = featureConfigManager;
 	public stateManager = featureStateManager;
@@ -26,10 +24,12 @@ export class FeatureRegistry {
 	private enableAllPromise: null | Promise<void> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
 	private features = new Map<FeatureKeys, AnyFeatureBase>();
-	private perf = featurePerformanceTracker;
 	private sortedFeaturesCache: AnyFeatureBase[] | null = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
+	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
+		return "featureRegistry" as FeatureKeys;
+	}
 	destroyNavigationListener() {
 		this.navigationManager.destroyListener();
 	}
@@ -200,68 +200,6 @@ export class FeatureRegistry {
 			this.updatingFeatures.delete(id);
 		}
 	}
-	/**
-	 * Safely executes an async operation, automatically logging errors and optionally tracking timing via the performance tracker.
-	 *
-	 * @param id - Feature ID or string identifier for error tracking
-	 * @param operation - Description of the operation for error logging (format: "phase:subPhase" or just "phase")
-	 * @param fn - The async operation to execute
-	 * @param options - Configuration options
-	 * @param options.fallback - Value to return if the operation fails (optional)
-	 * @param options.shouldRethrow - Whether to rethrow the error after logging (default: false)
-	 * @param options.trackTiming - Whether to track execution timing (default: true)
-	 * @param options.subPhase - Optional sub-phase for more detailed timing tracking (overrides operation subPhase)
-	 * @returns The operation result, or the fallback value if provided and operation fails
-	 */
-	protected async safelyExecute<T>(
-		id: PerfId,
-		operation: string,
-		fn: () => Promise<T>,
-		options: {
-			fallback?: T;
-			shouldRethrow?: boolean;
-			subPhase?: string;
-			trackTiming?: boolean;
-		} = {}
-	): Promise<Nullable<T>> {
-		// Parse operation string to extract phase and subPhase
-		const [basePhase, baseSubPhase] = operation.split(":");
-		const phase = basePhase as Phase;
-		const subPhaseFromOperation = baseSubPhase as SubPhase | undefined;
-
-		// Use options.subPhase if provided, otherwise use subPhase from operation string
-		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
-
-		if (options.trackTiming !== false) {
-			// Delegate to performance tracker for timing and error handling
-			try {
-				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase);
-			} catch (error) {
-				// The error has already been recorded by the track method.
-				if (options.shouldRethrow) {
-					throw error;
-				}
-				return options.fallback ?? null;
-			}
-		} else {
-			// Just error handling without timing tracking
-			try {
-				return await fn();
-			} catch (error) {
-				// Construct operation string for error recording
-				const operationString = finalSubPhase ? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}` : operation;
-
-				this.perf.recordError(id, operationString, error);
-
-				if (options.shouldRethrow) {
-					throw error;
-				}
-
-				return options.fallback ?? null;
-			}
-		}
-	}
-
 	private getFeaturesSortedByPriority(): AnyFeatureBase[] {
 		if (!this.sortedFeaturesCache || this.sortedFeaturesCacheDirty) {
 			this.sortedFeaturesCache = Array.from(this.features.values()).sort((a, b) => {
