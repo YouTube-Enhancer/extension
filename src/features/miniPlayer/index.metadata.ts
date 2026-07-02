@@ -3,6 +3,7 @@ import { z } from "zod/v4-mini";
 import type { SnakeToCamel } from "@/src/types";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 import { miniPlayerPositions, miniPlayerSizes } from "@/src/features/miniPlayer/types";
 
 type PositionKeys = SnakeToCamel<(typeof miniPlayerPositions)[number]>;
@@ -13,10 +14,13 @@ const positionOptions: { key: PositionKeys; value: (typeof miniPlayerPositions)[
 }));
 
 export const metadata = createFeatureMetadata({
-	defaults: { defaultPosition: "bottom_right", defaultSize: "400x225", enabled: false },
+	config: {
+		defaultPosition: field(z.enum(miniPlayerPositions), "bottom_right"),
+		defaultSize: field(z.enum(miniPlayerSizes), "400x225"),
+		enabled: field(z.boolean(), false)
+	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayer",
-	schemaInput: { defaultPosition: z.enum(miniPlayerPositions), defaultSize: z.enum(miniPlayerSizes), enabled: z.boolean() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.miniPlayer.title),
 	settings: [
 		{
@@ -66,8 +70,8 @@ export const metadata = createFeatureMetadata({
 			type: "group"
 		}
 	],
-	stateSchemaInput: {
-		manualOverride: z.boolean(),
-		rect: z.nullable(z.object({ height: z.number(), width: z.number(), x: z.number(), y: z.number() }))
+	state: {
+		manualOverride: field(z.boolean(), false),
+		rect: field(z.nullable(z.object({ height: z.number(), width: z.number(), x: z.number(), y: z.number() })), null)
 	}
 });

@@ -1,12 +1,12 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false },
+	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "rememberVolume",
-	schemaInput: { enabled: z.boolean() },
 	settings: [
 		{
 			component: "checkbox",
@@ -17,5 +17,5 @@ export const metadata = createFeatureMetadata({
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.title)
 		}
 	],
-	stateSchemaInput: { shortsPageVolume: z.number(), watchPageVolume: z.number() }
+	state: { shortsPageVolume: field(z.number(), 100), watchPageVolume: field(z.number(), 100) }
 });

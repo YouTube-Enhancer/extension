@@ -1,6 +1,7 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 import { FpsPreference, PlayerQualityFallbackStrategy, youtubePlayerQualityLevels } from "./types";
 
@@ -19,16 +20,15 @@ const qualityLabels: Record<string, string> = {
 };
 const youtubePlayerQualityLevelsNoAuto = youtubePlayerQualityLevels.filter((q) => q !== "auto");
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, fallbackStrategy: "lower", fpsPreference: "default", preferPremium: false, quality: "hd1080" },
+	config: {
+		enabled: field(z.boolean(), false),
+		fallbackStrategy: field(z.enum(PlayerQualityFallbackStrategy), "lower"),
+		fpsPreference: field(z.enum(FpsPreference), "default"),
+		preferPremium: field(z.boolean(), false),
+		quality: field(z.enum(youtubePlayerQualityLevels), "hd1080")
+	},
 	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
-	schemaInput: {
-		enabled: z.boolean(),
-		fallbackStrategy: z.enum(PlayerQualityFallbackStrategy),
-		fpsPreference: z.enum(FpsPreference),
-		preferPremium: z.boolean(),
-		quality: z.enum(youtubePlayerQualityLevels)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [
 		{

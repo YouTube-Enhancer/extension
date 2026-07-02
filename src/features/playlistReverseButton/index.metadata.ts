@@ -1,12 +1,12 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false },
+	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["playlist", "watch"] },
 	id: "playlistReverseButton",
-	schemaInput: { enabled: z.boolean() },
 	settings: [
 		{
 			component: "checkbox",
@@ -15,5 +15,5 @@ export const metadata = createFeatureMetadata({
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.playlistReverseButton.enable.title)
 		}
 	],
-	stateSchemaInput: { isReversed: z.boolean() }
+	state: { isReversed: field(z.boolean(), false) }
 });

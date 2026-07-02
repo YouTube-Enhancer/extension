@@ -1,11 +1,11 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, videosPerRow: 4 },
+	config: { enabled: field(z.boolean(), false), videosPerRow: field(z.number(), 4) },
 	id: "videosPerRow",
-	schemaInput: { enabled: z.boolean(), videosPerRow: z.number() },
 	sectionTitle: (t) => t((tr) => tr.settings.sections.videosPerRow.title),
 	settings: [
 		{

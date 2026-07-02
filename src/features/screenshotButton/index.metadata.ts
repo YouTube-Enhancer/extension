@@ -1,30 +1,14 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
-import { buttonPlacements, fullscreenPlacements } from "@/src/types";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
+import { buttonPlacements } from "@/src/types";
 
 import { screenshotFormats, screenshotTypes } from "./types";
 export const metadata = createFeatureMetadata({
-	defaults: {
-		button: {
-			enabled: false,
-			fullscreenPlacement: "same",
-			placement: "player_controls_left"
-		},
-		format: "png",
-		saveAs: "file"
-	},
+	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") }, format: field(z.enum(screenshotFormats), "png"), saveAs: field(z.enum(screenshotTypes), "file") },
 	dependencies: { includePages: ["watch", "live"] },
 	id: "screenshotButton",
-	schemaInput: {
-		button: z.object({
-			enabled: z.boolean(),
-			fullscreenPlacement: z.enum(fullscreenPlacements),
-			placement: z.enum(buttonPlacements)
-		}),
-		format: z.enum(screenshotFormats),
-		saveAs: z.enum(screenshotTypes)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.screenshotButton.title),
 	settings: [
 		{

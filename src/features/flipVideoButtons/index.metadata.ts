@@ -1,39 +1,18 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
+	config: {
 		buttons: {
-			flipVideoHorizontalButton: {
-				enabled: false,
-				fullscreenPlacement: "same",
-				placement: "player_controls_right"
-			},
-			flipVideoVerticalButton: {
-				enabled: false,
-				fullscreenPlacement: "same",
-				placement: "player_controls_right"
-			}
+			flipVideoHorizontalButton: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") },
+			flipVideoVerticalButton: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") }
 		}
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "flipVideoButtons",
-	schemaInput: {
-		buttons: z.object({
-			flipVideoHorizontalButton: z.object({
-				enabled: z.boolean(),
-				fullscreenPlacement: z.enum(fullscreenPlacements),
-				placement: z.enum(buttonPlacements)
-			}),
-			flipVideoVerticalButton: z.object({
-				enabled: z.boolean(),
-				fullscreenPlacement: z.enum(fullscreenPlacements),
-				placement: z.enum(buttonPlacements)
-			})
-		})
-	},
 	settings: [
 		{
 			component: "checkbox",

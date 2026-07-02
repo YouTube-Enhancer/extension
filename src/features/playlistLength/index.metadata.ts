@@ -1,18 +1,18 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 import { playlistLengthGetMethod, playlistWatchTimeGetMethod } from "./types";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, lengthGetMethod: "api", watchTimeGetMethod: "youtube" },
+	config: {
+		enabled: field(z.boolean(), false),
+		lengthGetMethod: field(z.enum(playlistLengthGetMethod), "api"),
+		watchTimeGetMethod: field(z.enum(playlistWatchTimeGetMethod), "youtube")
+	},
 	dependencies: { includePages: ["watch", "playlist"] },
 	id: "playlistLength",
-	schemaInput: {
-		enabled: z.boolean(),
-		lengthGetMethod: z.enum(playlistLengthGetMethod),
-		watchTimeGetMethod: z.enum(playlistWatchTimeGetMethod)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistLength.title),
 	settings: [
 		{

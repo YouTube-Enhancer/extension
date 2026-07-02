@@ -1,19 +1,13 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 import { modifierKeys } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: { enabled: false, holdModifierKey: false, holdRightClick: false, modifierKey: "ctrlKey", steps: 5 },
+	config: { enabled: field(z.boolean(), false), holdModifierKey: field(z.boolean(), false), holdRightClick: field(z.boolean(), false), modifierKey: field(z.enum(modifierKeys), "ctrlKey"), steps: field(z.number(), 5) },
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "scrollWheelVolumeControl",
-	schemaInput: {
-		enabled: z.boolean(),
-		holdModifierKey: z.boolean(),
-		holdRightClick: z.boolean(),
-		modifierKey: z.enum(modifierKeys),
-		steps: z.number()
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.title),
 	settings: [
 		{

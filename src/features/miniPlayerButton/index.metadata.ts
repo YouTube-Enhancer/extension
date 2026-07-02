@@ -1,25 +1,19 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
+	config: {
 		button: {
-			enabled: false,
-			fullscreenPlacement: "player_controls_right",
-			placement: "below_player"
+			...buttonField,
+			fullscreenPlacement: field(z.enum(fullscreenPlacements), "player_controls_right"),
+			placement: field(z.enum(buttonPlacements), "below_player")
 		}
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayerButton",
-	schemaInput: {
-		button: z.object({
-			enabled: z.boolean(),
-			fullscreenPlacement: z.enum(fullscreenPlacements),
-			placement: z.enum(buttonPlacements)
-		})
-	},
 	settings: [
 		{
 			component: "checkbox",

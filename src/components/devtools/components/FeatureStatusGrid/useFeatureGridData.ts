@@ -84,7 +84,7 @@ export function useFeatureGridData() {
 				enabledPath,
 				hasConfigurableSettings: hasConfigSettings,
 				hasNestedEnabled: hasNested,
-				hasState: Boolean(feature.stateSchemaInput),
+				hasState: Boolean((feature as AnyFeatureBase & { stateSchemaInput?: unknown }).stateSchemaInput),
 				id,
 				subFeatures: finalSubFeatures
 			};

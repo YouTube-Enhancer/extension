@@ -1,21 +1,13 @@
 import { z } from "zod/v4-mini";
 
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		button: { enabled: false, fullscreenPlacement: "same", placement: "player_controls_right" }
-	},
+	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") } },
 	dependencies: { includePages: ["watch"] },
 	id: "hideEndScreenCardsButton",
-	schemaInput: {
-		button: z.object({
-			enabled: z.boolean(),
-			fullscreenPlacement: z.enum(fullscreenPlacements),
-			placement: z.enum(buttonPlacements)
-		})
-	},
 	settings: [
 		{
 			component: "checkbox",

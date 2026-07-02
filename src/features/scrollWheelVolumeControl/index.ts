@@ -127,7 +127,7 @@ async function setupVolumeScrollControl() {
 			suppressContextMenu = false;
 		}
 	};
-	eventManager.addEventListener(document.documentElement, "mouseup", (e) => onMouseUp(e as MouseEvent), "scrollWheelVolumeControl");
+	eventManager.addEventListener(document.documentElement, "mouseup", (e) => onMouseUp(e), "scrollWheelVolumeControl");
 	eventManager.addEventListener(document.documentElement, "contextmenu", (e) => onContextMenu(e as MouseEvent), "scrollWheelVolumeControl");
 	containerSelectors.forEach((selector) => setupScrollListeners(selector, (e) => void handleWheel(e as WheelEvent)));
 	modifyElementClassList("add", { className: "yte-scroll-wheel-volume-control", element: document.body });
