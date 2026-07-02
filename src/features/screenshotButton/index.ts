@@ -1,7 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { addFeatureButton, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type Nullable } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";

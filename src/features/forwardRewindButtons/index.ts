@@ -2,8 +2,7 @@ import { Measure, seconds } from "safe-units";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { addFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv } from "@/src/types";
 import { waitForElement } from "@/src/utils/dom/wait";

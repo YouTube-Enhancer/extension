@@ -2,7 +2,7 @@ import type { Nullable, YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/typ
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type ModifyElementAction } from "@/src/utils/dom/classList";
 import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";

@@ -1,8 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, getFeatureButtonId } from "@/src/features/buttonPlacement/utils";
-import { getFeatureIds } from "@/src/features/featureMenu/utils";
+import { addFeatureButton, getFeatureButton, getFeatureButtonId, getFeatureIds, removeFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement, type SingleButtonFeatureNames } from "@/src/types";
 

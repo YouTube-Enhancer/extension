@@ -1,7 +1,7 @@
 import { z } from "zod/v4-mini";
 
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import { featureMenuOpenTypes } from "@/src/features/featureMenu/types";
+import { featureMenuOpenTypes } from "@/src/features/buttonController/types";
 import { availableLocales } from "@/src/i18n/constants";
 import { onScreenDisplayColors, onScreenDisplayPositions, onScreenDisplayTypes } from "@/src/ui/OnScreenDisplayManager/types";
 

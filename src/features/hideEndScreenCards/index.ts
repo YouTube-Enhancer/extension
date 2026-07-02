@@ -2,8 +2,7 @@ import type { ToggleIcon } from "@/src/icons";
 import type { ButtonPlacement } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { getFeatureMenuItem } from "@/src/features/featureMenu/utils";
+import { getFeatureButton, getFeatureMenuItem, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
 import { waitForAllElements } from "@/src/utils/dom/wait";

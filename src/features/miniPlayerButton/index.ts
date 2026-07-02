@@ -1,7 +1,12 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import {
+	addFeatureButton,
+	getFeatureButton,
+	removeFeatureButton,
+	updateFeatureButtonIcon,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement } from "@/src/types";
