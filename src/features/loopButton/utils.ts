@@ -1,4 +1,4 @@
-import { updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
+import { updateFeatureButtonTitle } from "@/src/features/buttonController";
 
 export function loopButtonClickListener(checked?: boolean) {
 	if (checked !== undefined) {

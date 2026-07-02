@@ -1,7 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { checkIfFeatureButtonExists, getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { addFeatureButton, checkIfFeatureButtonExists, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";

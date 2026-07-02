@@ -1,8 +1,7 @@
 import type { AvailableLocales } from "@/src/i18n/constants";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { enableFeatureMenu, setupFeatureMenuEventListeners } from "@/src/features/featureMenu";
-import { featuresInMenu, updateFeatureMenuTitle } from "@/src/features/featureMenu/utils";
+import { enableFeatureMenu, featuresInMenu, setupFeatureMenuEventListeners, updateFeatureMenuTitle } from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 

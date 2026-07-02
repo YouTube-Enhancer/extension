@@ -4,7 +4,7 @@ import type { CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, FeatureState, 
 
 import { invalidateDevToolsCache } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistry";
+import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import {
 	type configuration,
 	type ContentSendOnlyMessages,

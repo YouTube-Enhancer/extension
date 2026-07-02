@@ -1,8 +1,13 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
-import { getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonPlacement/utils";
-import { getFeatureIds, getFeatureMenuItem } from "@/src/features/featureMenu/utils";
+import {
+	addFeatureButton,
+	getFeatureButton,
+	getFeatureIds,
+	getFeatureMenuItem,
+	removeFeatureButton,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";

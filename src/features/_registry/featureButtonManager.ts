@@ -1,7 +1,7 @@
 import type { AnyFeatureBase, ButtonTrackedState, FeatureButton, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
-import { checkIfFeatureButtonExists, updateTrackedButtonConfig } from "@/src/features/buttonPlacement/utils";
+import { checkIfFeatureButtonExists, updateTrackedButtonConfig } from "@/src/features/buttonController";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 

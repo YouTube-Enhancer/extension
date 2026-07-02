@@ -12,7 +12,7 @@ import type {
 	FeatureState,
 	NonFeatureKeys
 } from "@/src/features/_registry/types";
-import type { FeatureMenuOpenType } from "@/src/features/featureMenu/types";
+import type { FeatureMenuOpenType } from "@/src/features/buttonController/types";
 import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlayer/types";
 import type { FpsPreference, PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";

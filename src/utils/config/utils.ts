@@ -1,5 +1,5 @@
 import type { DeepDarkPreset } from "@/src/deepDarkPresets";
-import type { FeatureMenuOpenType } from "@/src/features/featureMenu/types";
+import type { FeatureMenuOpenType } from "@/src/features/buttonController/types";
 import type { ShortsSection } from "@/src/features/hideShorts/utils";
 import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlayer/types";
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";

@@ -1,5 +1,5 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
+import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { flipVideoVertical } from "@/src/features/flipVideoButtons/utils";
 import { getFeatureIcon } from "@/src/icons";
 

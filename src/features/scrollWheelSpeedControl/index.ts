@@ -1,7 +1,7 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { getFeatureButton } from "@/src/features/buttonPlacement/utils";
+import { getFeatureButton } from "@/src/features/buttonController";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { type Nullable, type YouTubePlayerDiv } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
