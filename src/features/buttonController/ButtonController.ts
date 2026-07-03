@@ -12,6 +12,7 @@ import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
+import { buttonContainerId } from "./constants";
 import "./index.css";
 
 const menuId = "#yte-feature-menu";
@@ -19,7 +20,7 @@ const menuButtonId = "#yte-feature-menu-button";
 const panelId = "#yte-panel-menu";
 const itemHeight = 40;
 const menuPadding = 16;
-export const buttonContainerId = "yte-button-container";
+export { buttonContainerId };
 
 // ─── Module-level state ───────────────────────────────────────────
 
