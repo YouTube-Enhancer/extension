@@ -2,7 +2,6 @@ export {
 	addButton,
 	addButton as addFeatureButton,
 	addFeatureItemToMenu,
-	buttonContainerId,
 	checkIfFeatureButtonExists,
 	enableFeatureMenu,
 	enableFeatureMenuButton,
