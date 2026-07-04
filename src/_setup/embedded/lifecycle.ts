@@ -15,10 +15,13 @@ export interface CleanupHandle {
 }
 
 export async function setupYouTubePage(): Promise<CleanupHandle> {
-	const element = document.createElement("div");
-	element.style.display = "none";
-	element.id = "yte-message-from-youtube";
-	document.documentElement.appendChild(element);
+	let element = document.getElementById("yte-message-from-youtube");
+	if (!element) {
+		element = document.createElement("div");
+		element.style.display = "none";
+		element.id = "yte-message-from-youtube";
+		document.documentElement.appendChild(element);
+	}
 
 	const [
 		{
