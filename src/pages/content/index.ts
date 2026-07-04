@@ -28,10 +28,13 @@ const script = document.createElement("script");
 script.src = browser.runtime.getURL("src/pages/embedded/index.js");
 script.type = "text/javascript";
 function initializeCommunicationElement() {
-	const element = document.createElement("div");
-	element.style.display = "none";
-	element.id = "yte-message-from-extension";
-	document.documentElement.appendChild(element);
+	let element = document.getElementById("yte-message-from-extension");
+	if (!element) {
+		element = document.createElement("div");
+		element.style.display = "none";
+		element.id = "yte-message-from-extension";
+		document.documentElement.appendChild(element);
+	}
 }
 initializeCommunicationElement();
 document.documentElement.appendChild(script);
