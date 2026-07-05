@@ -17,8 +17,12 @@ import {
 } from "@/src/types";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
+import { parseStoredValue } from "@/src/utils/config/utils";
 import { sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
 import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
+
+// Polyfill may return Chrome's native (partial) browser API which can lack storage.
+const storage = browser.storage ?? chrome.storage;
 const defaultConfiguration = getDefaultConfiguration();
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
@@ -41,7 +45,7 @@ document.documentElement.appendChild(script);
 if (DEV_MODE) {
 	setupContentScriptBridge();
 	const seenKeys = new Set<string>();
-	browser.storage.onChanged.addListener((changes, areaName) => {
+	storage.onChanged.addListener((changes, areaName) => {
 		if (areaName !== "local") return;
 		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
 		if (!keys.length) return;
@@ -55,10 +59,10 @@ if (DEV_MODE) {
 }
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
-		void browser.storage.local.get(null).then((settings) => {
+		void storage.local.get(null).then((settings) => {
 			const storedSettings = Object.keys(settings)
 				.filter((key) => Object.keys(defaultConfiguration).includes(key))
-				.reduce((acc, key) => Object.assign(acc, { [key]: settings[key] }), {}) as configuration;
+				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
 			return resolve(storedSettings);
 		});
 	});
@@ -71,7 +75,7 @@ const getStoredState = async (): Promise<{
 		.getAll()
 		.filter((feature) => "stateSchemaInput" in feature)
 		.map((feature) => `state:${feature.id}` as const);
-	const result = await browser.storage.local.get(stateKeys);
+	const result = await storage.local.get(stateKeys);
 	const state = stateKeys.reduce((acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }), {}) as {
 		[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
 	};
@@ -137,21 +141,21 @@ document.addEventListener("yte-message-from-youtube", () => {
 						const {
 							data: { id, state }
 						} = message;
-						await browser.storage.local.set({
+						await storage.local.set({
 							[`state:${id}`]: state
 						});
 						break;
 					}
 					case "pageLoaded": {
-						browser.storage.onChanged.addListener(storageListeners);
+						storage.onChanged.addListener(storageListeners);
 						window.addEventListener("pagehide", () => {
-							browser.storage.onChanged.removeListener(storageListeners);
+							storage.onChanged.removeListener(storageListeners);
 						});
 						break;
 					}
 					case "setVolumeBoostAmount": {
-						const { volumeBoost: existingVolumeBoost } = (await browser.storage.local.get("volumeBoost")) as configuration;
-						void browser.storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
+						const { volumeBoost: existingVolumeBoost } = (await storage.local.get("volumeBoost")) as configuration;
+						void storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
 						break;
 					}
 				}

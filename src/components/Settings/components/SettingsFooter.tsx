@@ -61,6 +61,13 @@ export default function SettingsFooter() {
 						configEntries[key] = value;
 					}
 				}
+				// Normalize numeric strings in imported config (handle bug from previous versions where speed was exported as string)
+				for (const key of Object.keys(configEntries)) {
+					configEntries[key] = parseStoredValue(configEntries[key] as string);
+				}
+				for (const key of Object.keys(stateEntries)) {
+					stateEntries[key] = parseStoredValue(stateEntries[key] as string);
+				}
 				let importedSettings: configuration;
 				// Legacy configuration migration
 				if (isLegacyConfiguration(configEntries)) {
