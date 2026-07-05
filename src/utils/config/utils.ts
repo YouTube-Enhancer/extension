@@ -297,11 +297,23 @@ export function parseStoredValue(value: string) {
 		// Attempt to parse the value as JSON
 		const parsedValue = JSON.parse(value);
 		// Check if the parsed value is a boolean or a number
-		if (typeof parsedValue === "boolean" || typeof parsedValue === "number" || typeof parsedValue === "object") {
-			return parsedValue; // Return the parsed value
+		if (typeof parsedValue === "boolean" || typeof parsedValue === "number") {
+			return parsedValue; // Return the parsed value;
 		}
-	} catch {}
-	// If parsing or type checking fails, return the original value as a string
+		if (typeof parsedValue === "object" && parsedValue !== null) {
+			return convertNumericStrings(parsedValue as Record<string, unknown>);
+		}
+		if (typeof parsedValue === "string" && !isNaN(Number(parsedValue)) && parsedValue.trim() !== "") {
+			return Number(parsedValue);
+		}
+	} catch {
+		if (typeof value === "string" && !isNaN(Number(value)) && value.trim() !== "") {
+			return Number(value);
+		}
+		if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+			return convertNumericStrings(value);
+		}
+	}
 	return value;
 }
 
@@ -329,4 +341,18 @@ export function updateConfigAtPath<P extends Path<configuration>>(
 	}
 	parent[lastKey as keyof Parent] = nextValue as Parent[keyof Parent];
 	return updatedState;
+}
+
+function convertNumericStrings(obj: Record<string, unknown>): Record<string, unknown> {
+	const result: Record<string, unknown> = {};
+	for (const [key, val] of Object.entries(obj)) {
+		if (typeof val === "string" && !isNaN(Number(val)) && val.trim() !== "") {
+			result[key] = Number(val);
+		} else if (typeof val === "object" && val !== null && !Array.isArray(val)) {
+			result[key] = convertNumericStrings(val as Record<string, unknown>);
+		} else {
+			result[key] = val;
+		}
+	}
+	return result;
 }
