@@ -41,6 +41,7 @@ async function setupSpeedScrollControl() {
 
 	await registry.playerManager.executeWithRetries("scrollWheelSpeedControl", [findPlayerTask], ["find player"], {
 		maxAttempts: 15,
+		pageTypes: ["watch", "shorts"],
 		waitForLoaded: false
 	});
 
