@@ -47,6 +47,7 @@ async function setupVolumeScrollControl() {
 
 	await registry.playerManager.executeWithRetries("scrollWheelVolumeControl", [findPlayerTask], ["find player"], {
 		maxAttempts: 15,
+		pageTypes: ["watch", "live", "shorts"],
 		waitForLoaded: false
 	});
 
