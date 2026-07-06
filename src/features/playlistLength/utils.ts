@@ -5,10 +5,9 @@ import { Innertube } from "youtubei.js/web";
 import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
 import type { Nullable, VideoDetails } from "@/src/types";
 
-import eventManager from "@/src/events/EventManager";
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { NO_PADDING_HEADER_SELECTOR, PLAYLIST_PAGE_HEADER_SELECTORS, playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
-import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
+import { NO_PADDING_HEADER_SELECTOR, PLAYLIST_PAGE_HEADER_SELECTORS, selectFirstWithWidth } from "@/src/utils/dom/selectors";
+import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
@@ -31,13 +30,9 @@ export type PlaylistLengthParameters = {
 	playlistLengthGetMethod: PlaylistLengthGetMethod;
 	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod;
 };
+export type VideoTimeState = { totalTimeSeconds: number; watchedTimeSeconds: number };
 type PageType = "playlist" | "watch";
-type VideoTimeState = { totalTimeSeconds: number; watchedTimeSeconds: number };
-type WatchTimeParameters = {
-	pageType: PageType;
-	playlistItemsVideoDetails: VideoDetails[];
-	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod;
-};
+
 export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement): Promise<boolean> {
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist]);
@@ -47,6 +42,23 @@ export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTM
 	headerContents.append(playlistLengthUIElement);
 	return true;
 }
+export function calculateWatchedTime(
+	pageType: PageType,
+	playlistItemsVideoDetails: VideoDetails[],
+	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod
+): number {
+	if (pageType === "watch") {
+		const playlistItemsWithoutCurrentVideo = playlistItemsVideoDetails.filter((video) => video.videoId !== getCurrentVideoId());
+		return (
+			playlistItemsWithoutCurrentVideo.reduce(
+				(total, video) => total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration),
+				0
+			) + getCurrentVideoTime()
+		);
+	}
+	return playlistItemsVideoDetails.reduce((total, video) => total + video.progress, 0);
+}
+
 export function createPlaylistLengthUIElement(
 	initialState: VideoTimeState,
 	pageType: PageType
@@ -133,158 +145,11 @@ export function createPlaylistLengthUIElement(
 		update: updateElement
 	};
 }
-export async function getDataForPlaylistLengthUIElement({
-	pageType,
-	playlistLengthGetMethod,
-	playlistWatchTimeGetMethod
-}: PlaylistLengthParameters): Promise<VideoTimeState> {
-	const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
-	const playlistItemsVideoDetails = getPlaylistItemsWatchedProgress(playlistItems);
-	let totalTimeSeconds = 0;
-	if (playlistLengthGetMethod === "api") {
-		const playlistId = getPlaylistId();
-		if (!playlistId) return { totalTimeSeconds: 0, watchedTimeSeconds: 0 };
-		// Return cached duration if available
-		if (window.cachedPlaylistDuration?.playlistId === playlistId) {
-			({
-				cachedPlaylistDuration: { totalTimeSeconds }
-			} = window);
-		} else {
-			totalTimeSeconds = await getDurationFromAPI(playlistId);
-			// Cache the duration
-			window.cachedPlaylistDuration = { playlistId, totalTimeSeconds };
-		}
-	} else if (playlistLengthGetMethod === "html") {
-		({ totalTimeSeconds } = getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }));
-	}
-	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
-	return { totalTimeSeconds, watchedTimeSeconds };
-}
-export function getPlaylistId(): Nullable<string> {
-	const playlistId = new URLSearchParams(window.location.search).get("list");
-	return playlistId;
-}
-function getPlaylistItems(selector: string): HTMLElement[] {
-	const el = document.querySelector(selector);
-	return el ? (Array.from(el.children) as HTMLElement[]) : [];
-}
-export const getPlaylistItemsFromWatchPage = () =>
-	getPlaylistItems(
-		isNewYouTubeVideoLayout() ? "#page-manager > ytd-watch-grid #playlist #items" : "#page-manager > ytd-watch-flexy #playlist #items"
-	);
-export const getPlaylistItemsFromPlaylistPage = () => getPlaylistItems("ytd-playlist-video-list-renderer div#contents");
-export function getPlaylistItemsWatchedProgress(playlistItems: HTMLElement[]): VideoDetails[] {
-	return playlistItems.map(getVideoDetails);
-}
-export async function initializePlaylistLength({
-	pageType,
-	playlistLengthGetMethod,
-	playlistWatchTimeGetMethod
-}: PlaylistLengthParameters): Promise<Nullable<MutationObserver>> {
-	const { playlist, watch } = getHeaderSelectors();
-	let headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstWithWidth(playlist);
-	if (!headerContents) {
-		headerContents = await waitForElement(isWatchPage() ? watch : playlist);
-	}
-	if (!headerContents) return null;
-	const videoElement = getVideoElement();
-	let playlistItemsElement = document.querySelector(playlistItemsSelector());
-	if (!playlistItemsElement) playlistItemsElement = await waitForElement(playlistItemsSelector());
-	if (!playlistItemsElement) return null;
-	const { playbackRate: playerSpeed = 1 } = videoElement || {};
-	const { totalTimeSeconds, watchedTimeSeconds } = await getDataForPlaylistLengthUIElement({
-		pageType,
-		playlistLengthGetMethod,
-		playlistWatchTimeGetMethod
-	});
-	const { element, update } = createPlaylistLengthUIElement(
-		{
-			totalTimeSeconds: Math.floor(totalTimeSeconds / playerSpeed),
-			watchedTimeSeconds: Math.floor(watchedTimeSeconds / playerSpeed)
-		},
-		pageType
-	);
-	await appendPlaylistLengthUIElement(element);
-	let updateTimeout: Nullable<number> = null;
-	let lastPlaylistLength: Nullable<number> = null;
-	let lastUpdate: Nullable<{ total: number; watched: number }> = null;
-	const debounceDelay = 300;
-	async function safeUpdate() {
-		const videoElement = getVideoElement();
-		const { playbackRate: playerSpeed = 1 } = videoElement || {};
-		if (playlistLengthGetMethod === "api") {
-			const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
-			const { length: currentLength } = playlistItems;
-			if (lastPlaylistLength === null) {
-				lastPlaylistLength = currentLength;
-			} else if (currentLength !== lastPlaylistLength) {
-				window.cachedPlaylistDuration = null;
-				lastPlaylistLength = currentLength;
-			}
-		}
-		const data = await getDataForPlaylistLengthUIElement({
-			pageType,
-			playlistLengthGetMethod,
-			playlistWatchTimeGetMethod
-		});
-		const newTotal = Math.floor(data.totalTimeSeconds / playerSpeed);
-		const newWatched = Math.floor(data.watchedTimeSeconds / playerSpeed);
-		if (lastUpdate && lastUpdate.total === newTotal && lastUpdate.watched === newWatched) {
-			return;
-		}
-		lastUpdate = { total: newTotal, watched: newWatched };
-		update({
-			totalTimeSeconds: newTotal,
-			watchedTimeSeconds: newWatched
-		});
-	}
-	function debouncedUpdate() {
-		if (updateTimeout !== null) {
-			clearTimeout(updateTimeout);
-		}
-		updateTimeout = window.setTimeout(() => {
-			updateTimeout = null;
-			void safeUpdate();
-		}, debounceDelay);
-	}
-	const documentObserver = new MutationObserver(() => {
-		debouncedUpdate();
-	});
-	documentObserver.observe(document.documentElement, { childList: true, subtree: true });
-	if (videoElement) {
-		eventManager.addEventListener(videoElement, "timeupdate", () => void safeUpdate(), "playlistLength");
-	}
-	return documentObserver;
-}
 
-function calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }: WatchTimeParameters): number {
-	if (pageType === "watch") {
-		const playlistItemsWithoutCurrentVideo = playlistItemsVideoDetails.filter((video) => video.videoId !== getCurrentVideoId());
-		return (
-			playlistItemsWithoutCurrentVideo.reduce(
-				(total, video) => total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration),
-				0
-			) + getCurrentVideoTime()
-		);
-	} else {
-		return playlistItemsVideoDetails.reduce((total, video) => total + video.progress, 0);
+export async function getDurationFromAPI(playlistId: string): Promise<number> {
+	if (playlistId.startsWith("UU")) {
+		throw new Error(`API not supported for playlist ID: ${playlistId}`);
 	}
-}
-const getVideoElement = () => document.querySelector<HTMLVideoElement>("video");
-function getCurrentVideoId() {
-	const videoId = new URLSearchParams(window.location.search).get("v");
-	return videoId;
-}
-function getCurrentVideoTime() {
-	return getVideoElement()?.currentTime ?? 0;
-}
-
-function getDurationAndWatchedTimeHTML({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod }: WatchTimeParameters): VideoTimeState {
-	const totalTimeSeconds = playlistItemsVideoDetails.reduce((total, video) => total + video.duration, 0);
-	const watchedTimeSeconds = calculateWatchedTime({ pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod });
-	return { totalTimeSeconds, watchedTimeSeconds };
-}
-async function getDurationFromAPI(playlistId: string): Promise<number> {
 	const youtube = await Innertube.create({
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)
@@ -314,6 +179,42 @@ async function getDurationFromAPI(playlistId: string): Promise<number> {
 		});
 	}
 }
+
+export function getPlaylistId(): Nullable<string> {
+	return new URLSearchParams(window.location.search).get("list");
+}
+
+export function getPlaylistItemsFromPlaylistPage(): HTMLElement[] {
+	const selectors = ["ytd-playlist-video-list-renderer div#contents", "yt-item-section-renderer div#contents"];
+	for (const selector of selectors) {
+		const el = document.querySelector(selector);
+		if (el) {
+			const children = Array.from(el.children) as HTMLElement[];
+			if (children.some((child) => child.tagName === "YTD-RICH-GRID-RENDERER")) return [];
+			return children;
+		}
+	}
+	return [];
+}
+
+export function getPlaylistItemsFromWatchPage(): HTMLElement[] {
+	const selector = isNewYouTubeVideoLayout() ? "#page-manager > ytd-watch-grid #playlist #items" : "#page-manager > ytd-watch-flexy #playlist #items";
+	const el = document.querySelector(selector);
+	return el ? (Array.from(el.children) as HTMLElement[]) : [];
+}
+
+export function getPlaylistItemsVideoDetails(playlistItems: HTMLElement[]): VideoDetails[] {
+	return playlistItems.map(getVideoDetails);
+}
+
+function getCurrentVideoId(): Nullable<string> {
+	return new URLSearchParams(window.location.search).get("v");
+}
+
+function getCurrentVideoTime(): number {
+	return getVideoElement()?.currentTime ?? 0;
+}
+
 function getVideoDetails(videoElement: Element): VideoDetails {
 	return {
 		duration: getVideoDurationInSeconds(videoElement),
@@ -321,24 +222,47 @@ function getVideoDetails(videoElement: Element): VideoDetails {
 		videoId: getVideoId(videoElement)
 	};
 }
+
 function getVideoDurationInSeconds(videoElement: Element): number {
-	const durationElement = videoElement.querySelector<HTMLElement>("ytd-thumbnail-overlay-time-status-renderer > div#time-status");
+	const oldSelector = "ytd-thumbnail-overlay-time-status-renderer > div#time-status";
+	const newSelector = "badge-shape .ytBadgeShapeText";
+	let durationElement = videoElement.querySelector<HTMLElement>(oldSelector);
+	if (!durationElement || !durationElement.textContent?.trim()) {
+		durationElement = videoElement.querySelector<HTMLElement>(newSelector);
+	}
 	if (!durationElement || !durationElement.textContent?.trim()) return 0;
 	return timeStringToSeconds(durationElement.textContent.trim());
 }
+
+function getVideoElement(): Nullable<HTMLVideoElement> {
+	return document.querySelector<HTMLVideoElement>("video");
+}
+
 function getVideoId(videoElement: Element): Nullable<string> {
-	const videoIdElement = videoElement.querySelector<HTMLAnchorElement>("a#thumbnail");
+	const oldSelector = "a#thumbnail";
+	const newSelector = "a.ytLockupViewModelContentImage";
+	let videoIdElement = videoElement.querySelector<HTMLAnchorElement>(oldSelector);
+	if (!videoIdElement) {
+		videoIdElement = videoElement.querySelector<HTMLAnchorElement>(newSelector);
+	}
 	if (!videoIdElement) return null;
 	const url = new URL(`https://youtube.com${videoIdElement.href}`);
 	return url.searchParams.get("v");
 }
+
 function getVideoProgress(videoElement: Element): number {
 	const duration = getVideoDurationInSeconds(videoElement);
 	const percent = getWatchedPercentage(videoElement);
 	return Math.floor((percent / 100) * duration);
 }
+
 function getWatchedPercentage(videoElement: Element): number {
-	const progressBar = videoElement.querySelector<HTMLElement>(".ytd-thumbnail-overlay-resume-playback-renderer,#progress");
+	const oldSelector = ".ytd-thumbnail-overlay-resume-playback-renderer,#progress";
+	const newSelector = ".ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment";
+	let progressBar = videoElement.querySelector<HTMLElement>(oldSelector);
+	if (!progressBar) {
+		progressBar = videoElement.querySelector<HTMLElement>(newSelector);
+	}
 	if (!progressBar) return 0;
 	return parseFloat(progressBar.style.width) || 0;
 }

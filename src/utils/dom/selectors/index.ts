@@ -10,8 +10,12 @@ export const getCommentsPanelSelector = () =>
 	isNewYouTubeVideoLayout() ?
 		"ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section'] ytd-item-section-renderer[section-identifier='comment-item-section']"
 	:	"ytd-comments.ytd-watch-flexy ytd-item-section-renderer[section-identifier='comment-item-section']";
+const NEW_LAYOUT_PLAYLIST_SELECTOR = "yt-item-section-renderer div#contents";
+const OLD_LAYOUT_PLAYLIST_SELECTOR = "ytd-playlist-video-list-renderer div#contents";
 export const playlistItemsSelector = () =>
-	isWatchPage() ? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items" : "ytd-playlist-video-list-renderer div#contents";
+	isWatchPage() ?
+		"ytd-playlist-panel-renderer:not([hidden]) div#container div#items"
+	:	`${OLD_LAYOUT_PLAYLIST_SELECTOR}, ${NEW_LAYOUT_PLAYLIST_SELECTOR}`;
 export const selectFirstWithWidth = (...selectors: string[]): HTMLElement | null => {
 	for (const selector of selectors) {
 		const elements = document.querySelectorAll<HTMLElement>(selector);
