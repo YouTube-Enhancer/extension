@@ -138,7 +138,6 @@ declare global {
 		keys<T>(o: T): (keyof T)[];
 	}
 	interface Window {
-		cachedPlaylistDuration: Nullable<{ playlistId: string; totalTimeSeconds: number }>;
 		engine: Nullable<AudioEngine>;
 		i18nextInstance: i18nInstanceType;
 		trustedTypes?: {
