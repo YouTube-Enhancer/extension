@@ -428,12 +428,13 @@ The YouTube Enhancer Extension is open-source and available under the [MIT Licen
 
 ![Alt](https://repobeats.axiom.co/api/embed/262a11c40b9db9e119db0a64a23049ead4eaed96.svg "Repobeats analytics image")
 
-## 🌟 Star History
+## Star History
 
-<a href="https://star-history.com/#VampireChicken12/youtube-enhancer&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=VampireChicken12/youtube-enhancer&type=Date" />
-  </picture>
+<a href="https://www.star-history.com/?type=date&repos=VampireChicken12%2Fyoutube-enhancer">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&theme=dark&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=VampireChicken12/youtube-enhancer&type=date&legend=top-left&sealed_token=uN6fZDtbTJDNjgdDQ802A9COexMJZijo0BGdT6wvQXlVSNFfSb8PEZoQaHlVArJdtyKKWqOBrXIBrY4MdSjKDfh_-tCAJM31Onfs62xho7Lghl1jtLKpZvV641IoHfqYYcfN6lA0uLHEbZJv7dHp9UzDWUnsIvudrVlbdL3cTGvp5tSXIvCLEEfkqvRw" />
+ </picture>
 </a>
+
