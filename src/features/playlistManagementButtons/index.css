@@ -11,7 +11,6 @@
 
 .yte-remove-button:hover,
 .yte-reset-button:hover {
-	background: black;
 	transition: background 0.2s;
 }
 
