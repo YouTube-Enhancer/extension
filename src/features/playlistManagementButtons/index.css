@@ -15,6 +15,29 @@
 	transition: background 0.2s;
 }
 
+.yte-remove-all-watched-button {
+	background-color: var(--yt-spec-brand-background-solid, rgba(0, 0, 0, 0.05));
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	margin-left: auto;
+	margin-right: 24px;
+	padding: 6px 16px;
+}
+
+.yte-remove-all-watched-button:hover {
+	background-color: var(--yt-spec-brand-background-hover, rgba(0, 0, 0, 0.1));
+}
+
+html[dark] .yte-remove-all-watched-button {
+	background-color: var(--yt-spec-brand-background-solid, rgba(255, 255, 255, 0.1));
+	color: var(--yt-spec-text-primary, white);
+}
+
+html[dark] .yte-remove-all-watched-button:hover {
+	background-color: var(--yt-spec-brand-background-hover, rgba(255, 255, 255, 0.2));
+}
+
 @keyframes yte-spin {
 	from {
 		transform: rotate(0deg);
