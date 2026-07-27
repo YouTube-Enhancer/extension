@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Не вдалося видалити відео",
 						"markAsUnwatched": "Позначити як непереглянуте",
 						"markingAsUnwatched": "Позначається як непереглянутий…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Видалити відео",
-						"removingVideo": "Removing video…"
+						"removingVideo": "Removing video…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Видалити кнопку відео",
 							"title": "Додає кнопку для видалення відео зі списку відтворення"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
