@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Failed to remove video",
 						"markAsUnwatched": "Mark as unwatched",
 						"markingAsUnwatched": "Marking as unwatched…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Remove video",
-						"removingVideo": "Removing video…"
+						"removingVideo": "Removing video…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Remove video button",
 							"title": "Adds a button to remove videos from the playlist"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
