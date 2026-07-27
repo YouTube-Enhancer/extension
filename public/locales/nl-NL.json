@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Verwijderen van video is mislukt",
 						"markAsUnwatched": "Markeer als niet bekeken",
 						"markingAsUnwatched": "Marking as unwatched…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Video verwijderen",
-						"removingVideo": "Removing video…"
+						"removingVideo": "Removing video…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Videoknop verwijderen",
 							"title": "Voegt een knop toe om video's van de afspeellijst te verwijderen"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
