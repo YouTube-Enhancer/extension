@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "動画を削除できませんでした",
 						"markAsUnwatched": "未視聴にする",
 						"markingAsUnwatched": "Marking as unwatched…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "ビデオを削除",
-						"removingVideo": "ビデオの削除..."
+						"removingVideo": "ビデオの削除...",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "ビデオボタンを削除",
 							"title": "プレイリストから動画を削除するボタンを追加します"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
