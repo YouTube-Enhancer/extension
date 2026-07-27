@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Nie udało się usunąć wideo",
 						"markAsUnwatched": "Oznacz jako nieobejrzane",
 						"markingAsUnwatched": "Oznaczanie jako nieobejrzane…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Usuń film",
-						"removingVideo": "Usuwanie wideo…"
+						"removingVideo": "Usuwanie wideo…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Usuń przycisk wideo",
 							"title": "Dodaje przycisk do usuwania filmów z listy odtwarzania"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
