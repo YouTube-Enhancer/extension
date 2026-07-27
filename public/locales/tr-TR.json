@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Video kaldırılamadı",
 						"markAsUnwatched": "İzlenmemiş olarak işaretle",
 						"markingAsUnwatched": "İzlenmemiş olarak işaretleniyor…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Videoyu kaldır",
-						"removingVideo": "Video kaldırılıyor…"
+						"removingVideo": "Video kaldırılıyor…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Video düğmesini kaldır",
 							"title": "Oynatma listesinden videoları kaldırmak için bir düğme ekler"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
