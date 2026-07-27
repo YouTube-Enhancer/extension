@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Det gick inte att ta bort video",
 						"markAsUnwatched": "Markera som ej sedd",
 						"markingAsUnwatched": "Markerar som ej sedd…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Ta bort video",
-						"removingVideo": "Tar bort video…"
+						"removingVideo": "Tar bort video…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Ta bort videoknappen",
 							"title": "Lägger till en knapp för att ta bort videor från spellistan"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
