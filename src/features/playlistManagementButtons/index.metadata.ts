@@ -4,7 +4,11 @@ import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMet
 import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	config: { removeButton: { enabled: field(z.boolean(), false) }, resetButton: { enabled: field(z.boolean(), false) } },
+	config: {
+		removeAllButton: { enabled: field(z.boolean(), false) },
+		removeButton: { enabled: field(z.boolean(), false) },
+		resetButton: { enabled: field(z.boolean(), false) }
+	},
 	dependencies: { includePages: ["playlist"] },
 	id: "playlistManagementButtons",
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.title),
@@ -22,6 +26,12 @@ export const metadata = createFeatureMetadata({
 					id: "playlistManagementButtons.resetButton.enabled",
 					label: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.label),
 					title: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.title)
+				},
+				{
+					component: "checkbox",
+					id: "playlistManagementButtons.removeAllButton.enabled",
+					label: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton.enable.label),
+					title: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton.enable.title)
 				}
 			],
 			section: "playlistManagementButtons",

@@ -108,6 +108,7 @@ export function migrateConfiguration(
 		enable_redirect_remover: "removeRedirect",
 		enable_remaining_time: "remainingTime",
 		enable_remember_last_volume: "rememberVolume",
+		enable_remove_all_watched_button: "playlistManagementButtons",
 		enable_restore_fullscreen_scrolling: "restoreFullscreenScrolling",
 		enable_save_to_watch_later_button: "saveToWatchLaterButton",
 		enable_screenshot_button: "screenshotButton",
