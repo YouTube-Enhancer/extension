@@ -321,6 +321,7 @@ export type configuration = {
 	};
 	playlistLength: { enabled: boolean; lengthGetMethod: PlaylistLengthGetMethod; watchTimeGetMethod: PlaylistWatchTimeGetMethod };
 	playlistManagementButtons: {
+		removeAllButton: { enabled: boolean };
 		removeButton: { enabled: boolean };
 		resetButton: { enabled: boolean };
 	};

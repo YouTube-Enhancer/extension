@@ -34,7 +34,7 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 68 features
+## 🎛️ Features • 69 features
 
 <details>
 <summary>Miscellaneous • 41 features</summary>
@@ -166,10 +166,11 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Playlist Management Buttons • 2 features</summary>
+<summary>Playlist Management Buttons • 3 features</summary>
 
 - **Remove Video Button**: Adds a button to remove videos from the playlist
 - **Mark As Unwatched Button**: Adds a button to mark videos as unwatched
+- **Remove All Watched Videos Button**: Adds a button to remove all watched videos from the playlist
 </details>
 
 <details>

@@ -651,8 +651,11 @@ export type OldTranslationStruct = {
 				failedToRemoveVideo: string;
 				markAsUnwatched: string;
 				markingAsUnwatched: string;
+				removeAllWatchedVideo: string;
+				removeAllWatchedVideos: string;
 				removeVideo: string;
 				removingVideo: string;
+				removingWatchedVideos: string;
 			};
 			saveToWatchLaterButton: {
 				failedToSaveVideo: string;
@@ -1335,6 +1338,12 @@ export type NewTranslationStruct = {
 			playlistManagementButtons: {
 				settings: {
 					markAsUnwatchedButton: {
+						enable: {
+							label: string;
+							title: string;
+						};
+					};
+					removeAllWatchedVideosButton: {
 						enable: {
 							label: string;
 							title: string;
