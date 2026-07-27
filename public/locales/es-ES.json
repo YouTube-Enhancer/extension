@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Error al eliminar el vídeo",
 						"markAsUnwatched": "Marcar como no visto",
 						"markingAsUnwatched": "Marcando como no visto…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Eliminar vídeo",
-						"removingVideo": "Eliminando vídeo…"
+						"removingVideo": "Eliminando vídeo…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Quitar botón de vídeo",
 							"title": "Añade un botón para eliminar vídeos de la lista de reproducción"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
