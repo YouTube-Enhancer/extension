@@ -114,8 +114,11 @@
 						"failedToRemoveVideo": "Nepodařilo se odstranit video",
 						"markAsUnwatched": "Označit jako nezhlédnuté",
 						"markingAsUnwatched": "Označování jako nezhlédnuté…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Odstranit video",
-						"removingVideo": "Odstraňování videa…"
+						"removingVideo": "Odstraňování videa…",
+						"removingWatchedVideos": "Removing watched videos…"
 					}
 				},
 				"playlistReverseButton": {
@@ -892,6 +895,12 @@
 						"enable": {
 							"label": "Odstranit video tlačítko",
 							"title": "Přidá tlačítko pro odstranění videí ze seznamu skladeb"
+						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
 						}
 					}
 				},
