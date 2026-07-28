@@ -114,11 +114,11 @@
 						"failedToRemoveVideo": "移除视频失败",
 						"markAsUnwatched": "标记为未观看",
 						"markingAsUnwatched": "正在标记为未观看…",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideo": "删除 {{count}} 已观看视频",
+						"removeAllWatchedVideos": "删除 {{count}} 已观看视频",
 						"removeVideo": "删除视频",
 						"removingVideo": "正在移除视频…",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "正在删除已观看的视频…"
 					}
 				},
 				"playlistReverseButton": {
@@ -899,8 +899,8 @@
 					},
 					"removeAllWatchedVideosButton": {
 						"enable": {
-							"label": "Remove all watched videos button",
-							"title": "Adds a button to remove all watched videos from the playlist"
+							"label": "删除所有已观看视频按钮",
+							"title": "添加一个按钮从播放列表中删除所有已观看的视频"
 						}
 					}
 				},
