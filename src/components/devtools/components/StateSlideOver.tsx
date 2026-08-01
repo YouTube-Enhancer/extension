@@ -3,18 +3,19 @@ import type { JSX } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import type { FeatureKeysWithState } from "@/src/features/_registry/types";
+import type { Nullable } from "@/src/types";
 
 import { featureStateQuery } from "../hooks/useDevToolsQuery";
 import DevToolsLoader from "./DevToolsLoader";
 import { DevToolsError } from "./DevToolsMessage";
 
 type StateSlideOverProps = {
-	featureId: FeatureKeysWithState | null;
+	featureId: Nullable<FeatureKeysWithState>;
 	isOpen: boolean;
 	onClose: () => void;
 };
 
-export default function StateSlideOver({ featureId, isOpen, onClose }: StateSlideOverProps): JSX.Element | null {
+export default function StateSlideOver({ featureId, isOpen, onClose }: StateSlideOverProps): Nullable<JSX.Element> {
 	const { data: stateData, isLoading } = useQuery(featureStateQuery(featureId as FeatureKeysWithState));
 
 	if (!isOpen || !featureId) return null;

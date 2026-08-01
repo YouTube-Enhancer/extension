@@ -16,8 +16,8 @@ const state: {
 		objectFit: string;
 		width: string;
 	}>;
-	overlayParent: HTMLElement | null;
-	placeholder: HTMLDivElement | null;
+	overlayParent: Nullable<HTMLElement>;
+	placeholder: Nullable<HTMLDivElement>;
 } = {
 	hideTimer: null,
 	originalVideoStyles: null,
@@ -27,9 +27,9 @@ const state: {
 
 const getVideo = () => document.querySelector<HTMLVideoElement>("video.html5-main-video");
 
-const getOverlay = () => document.getElementById("yte-timestamp-peek-overlay") as HTMLDivElement | null;
+const getOverlay = () => document.getElementById("yte-timestamp-peek-overlay") as Nullable<HTMLDivElement>;
 
-const getShield = () => document.getElementById("yte-timestamp-peek-hover-shield") as HTMLDivElement | null;
+const getShield = () => document.getElementById("yte-timestamp-peek-hover-shield") as Nullable<HTMLDivElement>;
 
 export function getTimestampFromString(href: string) {
 	const tParam = new URLSearchParams(href).get("t") ?? "0";

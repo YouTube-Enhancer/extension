@@ -1,5 +1,7 @@
 import { config } from "dotenv";
 
+import type { Nullable } from "@/src/types";
+
 import checkLocalesForMissingKeys from "@/src/i18n/checkLocalesForMissingKeys";
 import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
@@ -15,7 +17,7 @@ export async function runPostBuildPipeline(retries = 3): Promise<void> {
 	console.log("[Build Pipeline] Running post-build steps...");
 	const start = Date.now();
 
-	let lastError: Error | null = null;
+	let lastError: Nullable<Error> = null;
 	for (let attempt = 1; attempt <= retries; attempt++) {
 		try {
 			await timedStep("Generating manifests", () => generateManifests());

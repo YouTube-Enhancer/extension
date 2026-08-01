@@ -9,7 +9,7 @@ export type FeatureGridData = {
 };
 
 export type FeatureInfo = {
-	config: configuration[FeatureKeys] | null;
+	config: Nullable<configuration[FeatureKeys]>;
 	enabled: boolean;
 	enabledPath: Nullable<string>;
 	hasConfigurableSettings: boolean;

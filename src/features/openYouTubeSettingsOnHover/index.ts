@@ -1,3 +1,5 @@
+import type { Nullable } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
@@ -31,7 +33,7 @@ async function setupHoverListeners() {
 	if (!playerContainer) return;
 	const isSettingsOpen = () => settingsButton.getAttribute("aria-expanded") === "true";
 	let isHoveringButtonOrMenu = false;
-	let suppressCloseTimeout: null | ReturnType<typeof setTimeout> = null;
+	let suppressCloseTimeout: Nullable<ReturnType<typeof setTimeout>> = null;
 	const showSettings = () => {
 		if (isSettingsOpen()) return;
 		settingsButton.click();

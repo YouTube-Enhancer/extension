@@ -1,5 +1,5 @@
 import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
-import type { configuration } from "@/src/types";
+import type { configuration, Nullable } from "@/src/types";
 
 import { featureButtonManager } from "@/src/features/_registry/featureButtonManager";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -12,9 +12,9 @@ import { FeatureManagerBase } from "./featureManagerBase";
 import { resolveEnabled } from "./featureRegistryCore";
 
 export class FeatureOrchestrator extends FeatureManagerBase {
-	private enableAllPromise: null | Promise<void> = null;
+	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
-	private sortedFeaturesCache: AnyFeatureBase[] | null = null;
+	private sortedFeaturesCache: Nullable<AnyFeatureBase[]> = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
 

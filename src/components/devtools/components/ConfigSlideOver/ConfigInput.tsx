@@ -3,7 +3,7 @@ import type { JSX } from "react";
 import { HexAlphaColorPicker, HexColorInput } from "react-colorful";
 
 import type { FeatureKeys } from "@/src/features/_registry/types";
-import type { configuration } from "@/src/types";
+import type { configuration, Nullable } from "@/src/types";
 
 import { CSSEditor } from "@/src/components/Inputs/CSSEditor";
 import { evaluateConditions } from "@/src/components/Settings/SettingsGenerator";
@@ -20,7 +20,7 @@ export default function ConfigInput<F extends FeatureKeys>({
 	onChange,
 	setting,
 	t
-}: ConfigInputProps<F>): JSX.Element | null {
+}: ConfigInputProps<F>): Nullable<JSX.Element> {
 	const configObj = { ...allConfigs } as configuration;
 	const isDisabled = evaluateConditions(setting.disabledWhen, configObj, "disabled");
 	const disabled = isDisabled;

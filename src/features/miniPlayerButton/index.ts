@@ -9,11 +9,11 @@ import {
 } from "@/src/features/buttonController";
 import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement } from "@/src/types";
+import { type ButtonPlacement, type Nullable } from "@/src/types";
 
 import { metadata } from "./index.metadata";
 
-let currentPlacement: ButtonPlacement | null = null;
+let currentPlacement: Nullable<ButtonPlacement> = null;
 function syncMiniPlayerButtonUI(active: boolean) {
 	if (!currentPlacement) return;
 	if (currentPlacement !== "feature_menu") {

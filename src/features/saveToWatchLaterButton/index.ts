@@ -1,7 +1,7 @@
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { Innertube } from "youtubei.js/web";
 
-import type { configuration, YtActionEvent } from "@/src/types";
+import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
@@ -24,7 +24,7 @@ if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
 	});
 }
 
-let videosObserver: MutationObserver | null = null;
+let videosObserver: Nullable<MutationObserver> = null;
 
 async function setupSaveToWatchLaterButtons(config: configuration["saveToWatchLaterButton"]) {
 	document.addEventListener("yt-action", (event) => {
