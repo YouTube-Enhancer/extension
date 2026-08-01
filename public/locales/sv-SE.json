@@ -326,7 +326,7 @@
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "Rullningshjulets modifieringstangent för hastighetsreglering kan inte vara densamma modifieringstangent som rullningshjulets volymreglering.",
-							"volumeControl": "Rullningshjulets modifieringstangent för volymreglering kan inte vara densamma modifieringstangent som rullningshjulets hastighetsreglering."
+							"volumeControl": "Rullningshjulets modifieringstangent för volymreglering kan inte vara densamma som modifieringstangent för rullningshjulets hastighetsreglering"
 						}
 					}
 				},
@@ -355,8 +355,8 @@
 			},
 			"deepDarkCSS": {
 				"enable": {
-					"label": "Mörkt tema",
-					"title": "Aktivera det valda temat för sidan"
+					"label": "Djupt mörkt tema",
+					"title": "Aktiverar det markerade temat för sidan"
 				},
 				"extras": {
 					"author": "Skapare",
@@ -433,7 +433,7 @@
 				},
 				"enable": {
 					"label": "Öppna Minispelare när du tittar på kommentarer",
-					"title": "Öppnar automatiskt Minispelaren när du bläddrar i kommentarerna."
+					"title": "Öppna Minispelaren automatiskt när du rullar till kommentarerna"
 				},
 				"settings": {
 					"position": {
@@ -557,7 +557,7 @@
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono till stereoknapp",
+							"label": "Knapp för mono till stereo",
 							"title": "Lägger till en knapp för att konvertera monoljud till stereo. Stereoljud förblir oförändrat."
 						}
 					},
@@ -582,7 +582,7 @@
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Dölj spellistor från startsidan",
-							"title": "Bli av med spellistor från startsidan"
+							"title": "Tar bort spellistor från startsidan"
 						}
 					},
 					"hideScrollbar": {
@@ -689,7 +689,7 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Förhandsgranskning för tidsstämpel",
+							"label": "Förhandsvisning av tidsstämpel",
 							"title": "Förhandsgranska videon genom att hålla muspekaren över en tidsstämpel. Klicka på förhandsgranskningen för att starta uppspelningen från det ögonblicket."
 						}
 					},
@@ -709,7 +709,7 @@
 				"title": "Övriga inställningar"
 			},
 			"hideShorts": {
-				"title": "Dölj Shorts",
+				"title": "Dölj shorts",
 				"settings": {
 					"sidebar": {
 						"label": "Dölj i sidofältet",
@@ -1024,7 +1024,7 @@
 					},
 					"amount_global_only": {
 						"label": "Volymökningsmängd (dB)",
-						"title": "Hur mycket ska ljudet ökas med."
+						"title": "Hur mycket ljudet ska öka med"
 					},
 					"mode": {
 						"select": {
