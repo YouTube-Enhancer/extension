@@ -10,7 +10,7 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Monoljudshantering",
+						"label": "Mono till stereo",
 						"toggle": {
 							"on": "Mono → Stereo-ljud",
 							"off": "Originalljud"
@@ -114,18 +114,18 @@
 						"failedToRemoveVideo": "Det gick inte att ta bort video",
 						"markAsUnwatched": "Markera som ej sedd",
 						"markingAsUnwatched": "Markerar som ej sedd…",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideo": "Ta bort {{count}} sedd video",
+						"removeAllWatchedVideos": "Ta bort {{count}} sedda videor",
 						"removeVideo": "Ta bort video",
 						"removingVideo": "Tar bort video…",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "Tar bort sedda videor…"
 					}
 				},
 				"playlistReverseButton": {
 					"extras": {
 						"toggle": {
-							"off": "Normal order",
-							"on": "Reversed order"
+							"off": "Normal ordning",
+							"on": "Omvänd ordning"
 						}
 					}
 				},
@@ -185,13 +185,13 @@
 						"buttonNames": {
 							"copyTimestampUrlButton": "Kopiera videons webbadress med tidsstämpelknappen",
 							"decreasePlaybackSpeedButton": "Knapp för att mindska hastigheten",
-							"forwardButton": "Snabb framåt-knapp",
+							"forwardButton": "Snabbspolningsknapp",
 							"hideEndScreenCardsButton": "Dölj knappen för slutskärmskort",
 							"increasePlaybackSpeedButton": "Knapp för att öka hastigheten",
 							"loopButton": "Slingknapp",
-							"maximizePlayerButton": "Maximeraknapp",
+							"maximizePlayerButton": "Maximera spelarknappen",
 							"miniPlayerButton": "Minispelarknapp",
-							"openTranscriptButton": "Transkriptknapp",
+							"openTranscriptButton": "Öppna transkriptknapp",
 							"rewindButton": "Återspolningsknapp",
 							"screenshotButton": "Skärmbildsknapp",
 							"volumeBoostButton": "Volymökningsknapp",
@@ -312,8 +312,8 @@
 						"keepFirst": "Behåll {{FEATURE}}",
 						"keepSecond": "Behåll {{FEATURE}}",
 						"autoQualityConflict": {
-							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
-							"selectQuality": "Quality:"
+							"description": "De importerade inställningarna använder \"Auto\"-kvalitet, som har tagits bort. Välj en specifik kvalitet:",
+							"selectQuality": "Kvalitet:"
 						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' och '{{FEATURE_B}}' kan inte använda samma modifieringsnyckel.",
@@ -527,8 +527,8 @@
 					},
 					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+							"label": "Dölj AI",
+							"title": "Döljer AI-drivna funktioner, såsom videosammanfattningar och Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -635,8 +635,8 @@
 					},
 					"playlistReverseButton": {
 						"enable": {
-							"label": "Reverse playlist button",
-							"title": "Adds a button to reverse the order of videos in playlists"
+							"label": "Knapp för omvänd spellista",
+							"title": "Lägger till en knapp för att vända ordningen på videor i spellistor"
 						}
 					},
 					"remainingTime": {
@@ -732,8 +732,8 @@
 						"title": "Tar bort Shorts videor från rekommendationer på titta på-sidor"
 					},
 					"subscriptions": {
-						"label": "Hide on Subscriptions feed",
-						"title": "Removes the Shorts section from the Subscriptions feed"
+						"label": "Dölj i prenumerationsflödet",
+						"title": "Tar bort Shorts-sektionen från prenumerationsflödet"
 					}
 				}
 			},
@@ -786,7 +786,7 @@
 							"options": {
 								"circle": "Cirkel",
 								"line": "Linje",
-								"no_display": "Ingen visning",
+								"no_display": "Visas ej",
 								"text": "Text"
 							}
 						},
@@ -803,18 +803,18 @@
 				"settings": {
 					"fpsPreference": {
 						"select": {
-							"label": "Frame rate preference",
+							"label": "Inställning för bildhastighet",
 							"options": {
-								"default": "Default",
-								"higher": "Higher FPS",
-								"lower": "Lower FPS"
+								"default": "Standard",
+								"higher": "Högre FPS",
+								"lower": "Lägre FPS"
 							},
-							"title": "Prefer higher or lower frame rate when multiple formats are available"
+							"title": "Föredrar högre eller lägre bildfrekvens när flera format är tillgängliga"
 						}
 					},
 					"preferPremium": {
-						"label": "Prefer Premium enhanced bitrate",
-						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+						"label": "Föredra Premium förbättrad bithastighet",
+						"title": "Använd Premium itags (356/721) när det är tillgängligt. Kräver YouTube Premium."
 					},
 					"quality": {
 						"select": {
@@ -899,8 +899,8 @@
 					},
 					"removeAllWatchedVideosButton": {
 						"enable": {
-							"label": "Remove all watched videos button",
-							"title": "Adds a button to remove all watched videos from the playlist"
+							"label": "Knapp för att ta bort alla sedda videoklipp",
+							"title": "Lägger till en knapp för att ta bort alla sedda videor från spellistan"
 						}
 					}
 				},
@@ -1001,16 +1001,16 @@
 			},
 			"videosPerRow": {
 				"enable": {
-					"label": "Videos per row",
-					"title": "Changes the number of videos displayed per row on YouTube feeds"
+					"label": "Videor per rad",
+					"title": "Ändrar antalet videor som visas per rad på YouTube-flöden"
 				},
 				"settings": {
 					"count": {
-						"label": "Number of videos per row",
-						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+						"label": "Antal videor per rad",
+						"title": "Antalet videoklipp att visa per rad på prenumeration, hem och kanalvideosidor"
 					}
 				},
-				"title": "Videos per row settings"
+				"title": "Inställningar för videor per rad"
 			},
 			"volumeBoost": {
 				"enable": {
