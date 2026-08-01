@@ -11,7 +11,7 @@ const PauseBackgroundPlayers = () => {
 		const isInVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
 		const isInDocumentPiP =
 			"documentPictureInPicture" in window &&
-			!!(window as Window & { documentPictureInPicture?: { window: null | Window } }).documentPictureInPicture?.window;
+			!!(window as Window & { documentPictureInPicture?: { window: Nullable<Window> } }).documentPictureInPicture?.window;
 		if (!isInVideoPiP && !isInDocumentPiP) return;
 	}
 	sendContentToBackgroundMessage("pauseBackgroundPlayers").catch((error) => {
@@ -21,7 +21,7 @@ const PauseBackgroundPlayers = () => {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		const videoPlayerContainer: HTMLElement | null = document.querySelector(".html5-main-video");
+		const videoPlayerContainer: Nullable<HTMLElement> = document.querySelector(".html5-main-video");
 		if (videoPlayerContainer) {
 			videoPlayerContainer.removeEventListener("playing", PauseBackgroundPlayers);
 		}
@@ -39,7 +39,7 @@ function setupPlayerMonitoring() {
 	// ignore home page and channel pages
 	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;
 	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");
-	let videoPlayerContainer: HTMLVideoElement | null = null;
+	let videoPlayerContainer: Nullable<HTMLVideoElement> = null;
 	if (!videoPlayerContainer) {
 		videoPlayerContainer = document.querySelector(".html5-main-video");
 	}

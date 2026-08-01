@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import { Innertube } from "youtubei.js/web";
 
-import type { configuration, YtActionEvent } from "@/src/types";
+import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
@@ -31,9 +31,9 @@ const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-vi
 const THUMBNAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 
-let playlistObserver: MutationObserver | null = null;
-let preparePageDisposeListener: ((event: Event) => void) | null = null;
-let removeAllButton: HTMLButtonElement | null = null;
+let playlistObserver: Nullable<MutationObserver> = null;
+let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
+let removeAllButton: Nullable<HTMLButtonElement> = null;
 
 const cleanupPlaylistManagementButtons = () => {
 	if (playlistObserver) {

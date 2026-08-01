@@ -110,7 +110,7 @@ export function coreConfigUpdateMutation(path: CoreFeatureKeys | NonFeatureKeys,
 	} as const;
 }
 
-let invalidateListener: (() => void) | null = null;
+let invalidateListener: Nullable<() => void> = null;
 let messageListenerAdded = false;
 
 export async function invalidateDevToolsCache(keys: string[]): Promise<void> {

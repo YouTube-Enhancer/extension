@@ -1,4 +1,4 @@
-import type { configuration } from "@/src/types";
+import type { configuration, Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
@@ -9,7 +9,7 @@ import type { PlaylistLengthParameters } from "./utils";
 import { PlaylistLengthController } from "./controller";
 import { metadata } from "./index.metadata";
 
-let controller: null | PlaylistLengthController = null;
+let controller: Nullable<PlaylistLengthController> = null;
 
 function cleanupPlaylistLength() {
 	controller?.destroy();

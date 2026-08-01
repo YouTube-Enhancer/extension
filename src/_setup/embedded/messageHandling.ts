@@ -1,4 +1,4 @@
-import type { ExtensionSendOnlyMessages, Messages } from "@/src/types";
+import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
 
@@ -8,7 +8,7 @@ export function setupMessageListener(): () => void {
 	const handler = (_event: Event) => {
 		const provider = document.querySelector("div#yte-message-from-extension");
 		if (!provider?.textContent) return;
-		let message: ExtensionSendOnlyMessages | Messages["response"] | null = null;
+		let message: Nullable<ExtensionSendOnlyMessages | Messages["response"]> = null;
 		try {
 			message = JSON.parse(provider.textContent) as ExtensionSendOnlyMessages | Messages["response"];
 		} catch (error) {

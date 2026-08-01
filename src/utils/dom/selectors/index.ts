@@ -1,3 +1,5 @@
+import type { Nullable } from "@/src/types";
+
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 
 export const CINEMATIC_HEADER_SELECTOR =
@@ -16,7 +18,7 @@ export const playlistItemsSelector = () =>
 	isWatchPage() ?
 		"ytd-playlist-panel-renderer:not([hidden]) div#container div#items"
 	:	`${OLD_LAYOUT_PLAYLIST_SELECTOR}, ${NEW_LAYOUT_PLAYLIST_SELECTOR}`;
-export const selectFirstWithWidth = (...selectors: string[]): HTMLElement | null => {
+export const selectFirstWithWidth = (...selectors: string[]): Nullable<HTMLElement> => {
 	for (const selector of selectors) {
 		const elements = document.querySelectorAll<HTMLElement>(selector);
 		for (const el of elements) {

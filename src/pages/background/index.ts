@@ -1,4 +1,4 @@
-import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages } from "@/src/types";
+import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } from "@/src/types";
 
 import { updateStoredSettings } from "@/src/utils/config/storage";
 
@@ -102,7 +102,7 @@ chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessag
 									const hasVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
 									const hasDocumentPiP =
 										"documentPictureInPicture" in window &&
-										!!(window as Window & { documentPictureInPicture?: { window: null | Window } }).documentPictureInPicture?.window;
+										!!(window as Window & { documentPictureInPicture?: { window: Nullable<Window> } }).documentPictureInPicture?.window;
 									if (hasVideoPiP || hasDocumentPiP) return;
 									const videos = document.querySelectorAll("video");
 									videos.forEach((video) => {
