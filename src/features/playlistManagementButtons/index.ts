@@ -163,22 +163,6 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				return;
 			}
 
-			const existingButton = document.getElementById("yte-remove-all-watched-button");
-			if (existingButton) {
-				const text = window.i18nextInstance.t(
-					(translations) =>
-						translations.pages.content.features.playlistManagementButtons.extras[
-							watchedCount === 1 ? "removeAllWatchedVideo" : "removeAllWatchedVideos"
-						],
-					{ count: watchedCount }
-				);
-				existingButton.children[1].textContent = text;
-				return;
-			}
-
-			const button = document.createElement("button");
-			button.id = "yte-remove-all-watched-button";
-			button.className = "yte-remove-all-watched-button";
 			const text = window.i18nextInstance.t(
 				(translations) =>
 					translations.pages.content.features.playlistManagementButtons.extras[
@@ -187,6 +171,15 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				{ count: watchedCount }
 			);
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
+			const existingButton = document.getElementById("yte-remove-all-watched-button");
+			if (existingButton) {
+				existingButton.innerHTML = trashIcon + text;
+				return;
+			}
+
+			const button = document.createElement("button");
+			button.id = "yte-remove-all-watched-button";
+			button.className = "yte-remove-all-watched-button";
 			button.innerHTML = trashIcon + text;
 			removeAllButton = button;
 
