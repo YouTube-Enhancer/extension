@@ -10,7 +10,7 @@ import { coreConfigQuery } from "@/components/devtools/hooks/useDevToolsQuery";
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";
-import { type AllButtonNames, type configuration, fullscreenPlacements, type Nullable } from "@/src/types";
+import { type AllButtonNames, type configuration, fullscreenPlacements } from "@/src/types";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 type ButtonConfig = {
@@ -133,10 +133,7 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 	);
 }
 
-function buildButtonInfo(
-	buttonName: AllButtonNames,
-	suffix: "fullscreenPlacement" | "placement"
-): Nullable<{ featureId: FeatureKeys; path: string }> {
+function buildButtonInfo(buttonName: AllButtonNames, suffix: "fullscreenPlacement" | "placement"): null | { featureId: FeatureKeys; path: string } {
 	const featureId = metadataRegistry.getButtonFeature(buttonName);
 	const configPath = metadataRegistry.getButtonConfigPath(buttonName);
 	if (!featureId || !configPath) return null;

@@ -1,5 +1,3 @@
-import type { Nullable } from "@/src/types";
-
 let flipX = false;
 let flipY = false;
 
@@ -22,6 +20,6 @@ function applyVideoFlip() {
 	video.style.transformOrigin = "center center";
 }
 
-function getVideo(): Nullable<HTMLVideoElement> {
+function getVideo(): HTMLVideoElement | null {
 	return document.querySelector("video");
 }

@@ -705,38 +705,12 @@ interface EnUS {
 					title: "Adds a button to the player to take a screenshot of the video";
 				};
 				settings: {
-					dateFormat: {
-						select: {
-							label: "Date format";
-							options: {
-								date: "YYYY-MM-DD";
-								dateTime: "YYYY-MM-DD_HH-MM-SS";
-								dayMonthYear: "DD-MM-YYYY";
-								iso: "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)";
-							};
-							title: "The format used for the {date} placeholder";
-						};
-					};
-					filename: {
-						error: "Unknown placeholder(s):";
-						hint: "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.";
-						label: "Screenshot file name template";
-						placeholdersLabel: "Available placeholders:";
-						title: "The template used to name the screenshot file";
-					};
 					format: { label: "Screenshot format"; title: "The format to save the screenshot in" };
 					saveAs: {
 						select: {
 							label: "Screenshot save type";
 							options: { both: "Both (File and Clipboard)"; clipboard: "Clipboard"; file: "File" };
 							title: "The screenshot save type";
-						};
-					};
-					timestampFormat: {
-						select: {
-							label: "Video timestamp format";
-							options: { auto: "MM-SS or HH-MM-SS"; hhmmss: "HH-MM-SS"; mmss: "MM-SS" };
-							title: "The format used for the {video timestamp} placeholder";
 						};
 					};
 				};

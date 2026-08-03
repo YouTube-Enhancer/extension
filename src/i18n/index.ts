@@ -1,13 +1,11 @@
 import { createInstance } from "i18next";
 
-import type { Nullable } from "@/src/types";
-
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 
 // Store the initialized i18n instance
-let i18nInstance: Nullable<i18nInstanceType> = null;
+let i18nInstance: i18nInstanceType | null = null;
 export async function i18nService(locale: AvailableLocales = "en-US") {
 	// Return the existing instance if already initialized
 	if (i18nInstance) {

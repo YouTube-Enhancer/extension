@@ -1,6 +1,6 @@
 import type { AllConfigsData } from "@/components/devtools/hooks/useDevToolsQuery";
 import type { FeatureKeys, SettingConfig, SettingId, SettingNode } from "@/src/features/_registry/types";
-import type { configuration, Nullable } from "@/src/types";
+import type { configuration } from "@/src/types";
 
 export type ConfigInputProps<F extends FeatureKeys> = {
 	allConfigs: AllConfigsData;
@@ -12,7 +12,7 @@ export type ConfigInputProps<F extends FeatureKeys> = {
 
 export type ConfigSlideOverProps<F extends FeatureKeys> = {
 	allConfigs: AllConfigsData;
-	currentConfig: Nullable<configuration[F]>;
+	currentConfig: configuration[F] | null;
 	featureId: F;
 	isOpen: boolean;
 	onClose: () => void;

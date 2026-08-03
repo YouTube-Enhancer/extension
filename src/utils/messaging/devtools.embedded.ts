@@ -217,7 +217,7 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				const {
 					data: { options }
 				} = await waitForSpecificMessage("options", "request_data", "extension");
-				let updatedConfig: Nullable<configuration> = null;
+				let updatedConfig: configuration | null = null;
 				try {
 					updatedConfig = updateConfigAtPath(options, path as Path<configuration>, value as PathValue<configuration, Path<configuration>>);
 					window.postMessage(

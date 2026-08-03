@@ -217,27 +217,6 @@ export default function SettingsGenerator() {
 					/>
 				);
 			}
-			if (node.component === "file-name-template") {
-				const value = typeof currentValue === "string" ? currentValue : "";
-				return (
-					<Setting
-						alwaysVisible={node.alwaysVisible}
-						disabled={isDisabled}
-						disabledReason={disabledReason}
-						error={node.error(t)}
-						featureId={featureId}
-						hint={node.hint(t)}
-						key={settingId}
-						label={node.label(t)}
-						onChange={setValueOption(settingId)}
-						parentSetting={parentSettingValue}
-						placeholdersLabel={node.placeholdersLabel(t)}
-						title={node.title(t)}
-						type="file-name-template"
-						value={value}
-					/>
-				);
-			}
 			if (node.component === "color-picker") {
 				const value = typeof currentValue === "string" ? currentValue : "";
 				return (

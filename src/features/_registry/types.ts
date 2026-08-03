@@ -205,6 +205,7 @@ export type FeatureMetadataWithState<K extends FeatureKeysWithState> = FeatureMe
 	stateSchemaInput: ZodShapeExact<FeatureState[`state:${K}`]>;
 };
 export type FeatureSettingNode<F extends FeatureKeys> = DividerNode | GroupNode<F> | SettingNode<F> | TextNode;
+
 export type FeatureSettingsSection<F extends FeatureKeys> = FeatureSettingNode<F>[];
 
 export type FeatureState = {
@@ -227,13 +228,6 @@ export type FeatureStateAPI<K extends FeatureKeysWithState> = {
 export type FeatureStateKeys = {
 	[K in keyof FeatureState]: K;
 }[keyof FeatureState];
-
-export type FileNameTemplateSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
-	component: "file-name-template";
-	error: TSelectFunc;
-	hint: TSelectFunc;
-	placeholdersLabel: TSelectFunc;
-};
 export type GroupNode<F extends FeatureKeys> = {
 	attribution?: AttributionEntry[];
 	children: FeatureSettingNode<F>[];
@@ -293,7 +287,6 @@ export type SettingCondition<F extends FeatureKeys> = SettingConditionWithFeatur
 export type SettingConfig<F extends FeatureKeys> =
 	| (BooleanSettingConfig<F> & { id: BooleanPaths<F> })
 	| (ColorPickerSettingConfig<F> & { id: StringPaths<F> })
-	| (FileNameTemplateSettingConfig<F> & { id: StringPaths<F> })
 	| (NumberSettingConfig<F> & { id: NumberPaths<F> })
 	| (ObjectSettingConfig<F> & { id: StringPaths<F> })
 	| (SelectSettingConfig<F> & { id: StringPaths<F> })

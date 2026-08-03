@@ -18,7 +18,6 @@ type TypeToZodSchema<T> = ZodObject<{
 	: T[K] extends object ? ZodObject<TypeToZod<T[K]>>
 	: ZodType<T[K]>;
 }>;
-// @ts-expect-error Old translation schema doesn't need to be updated
 export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = object({
 	langCode: string(),
 	langName: string(),
@@ -742,7 +741,6 @@ function backupFile(filePath: string) {
 
 /* Migrates old translations as of commit (87f87bddfba0480923e198f7538baefc5bb1d103) v1.31.1*/
 function migrate(old: OldTranslationStruct): NewTranslationStruct {
-	// @ts-nocheck this code is mostly not needed probably idk lol
 	return {
 		langCode: old.langCode,
 		langName: old.langName,
@@ -938,7 +936,6 @@ function migrate(old: OldTranslationStruct): NewTranslationStruct {
 					title: old.settings.sections.playlistLength.title
 				},
 				playlistManagementButtons: {
-					// @ts-expect-error no need to update
 					settings: {
 						markAsUnwatchedButton: {
 							enable: old.settings.sections.playlistManagement.features.markAsUnwatchedButton

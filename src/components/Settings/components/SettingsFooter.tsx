@@ -4,7 +4,7 @@ import browser from "webextension-polyfill";
 import { generateErrorMessage } from "zod-error";
 
 import type { FeatureState } from "@/src/features/_registry/types";
-import type { configuration, Nullable } from "@/src/types";
+import type { configuration } from "@/src/types";
 
 import ConflictResolutionDialog from "@/src/components/Settings/components/ConflictResolutionDialog";
 import { getSettings, useSettings } from "@/src/components/Settings/Settings";
@@ -34,7 +34,7 @@ export default function SettingsFooter() {
 	const { addNotification, notifications, removeNotification } = useNotifications();
 	const settingsImportRef = useRef<HTMLInputElement>(null);
 	const [conflicts, setConflicts] = useState<Conflict[]>([]);
-	const [pendingSettings, setPendingSettings] = useState<Nullable<configuration>>(null);
+	const [pendingSettings, setPendingSettings] = useState<configuration | null>(null);
 	const pendingStateEntriesRef = useRef<Record<string, unknown>>({});
 	const defaultConfiguration = getDefaultConfiguration();
 	const configurationImportSchema = getConfigurationImportSchema();

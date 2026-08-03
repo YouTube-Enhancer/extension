@@ -1,11 +1,9 @@
-import type { Nullable } from "@/src/types";
-
 import { getAudioEngine } from "@/src/utils/audioEngine";
 
-let splitter: Nullable<ChannelSplitterNode> = null;
-let merger: Nullable<ChannelMergerNode> = null;
-let gainL: Nullable<GainNode> = null;
-let gainR: Nullable<GainNode> = null;
+let splitter: ChannelSplitterNode | null = null;
+let merger: ChannelMergerNode | null = null;
+let gainL: GainNode | null = null;
+let gainR: GainNode | null = null;
 let enabled = false;
 
 export function disableMonoToStereo(): void {

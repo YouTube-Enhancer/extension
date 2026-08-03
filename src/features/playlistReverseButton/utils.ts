@@ -1,5 +1,3 @@
-import type { Nullable } from "@/src/types";
-
 import { createSVGElement } from "@/src/utils/dom/elements";
 import { PLAYLIST_PAGE_HEADER_SELECTORS, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
@@ -100,7 +98,7 @@ export function getHeaderSelector(): string {
 		:	"#page-manager > ytd-watch-flexy #playlist #start-actions";
 }
 
-export function getPlaylistData(): Nullable<{ autoplay: AutoplayData; playlist: PlaylistData; watchFlexy: WatchFlexyElement }> {
+export function getPlaylistData(): null | { autoplay: AutoplayData; playlist: PlaylistData; watchFlexy: WatchFlexyElement } {
 	const watchFlexy = document.querySelector<WatchFlexyElement>("ytd-watch-flexy, ytd-watch-grid");
 	if (!watchFlexy) return null;
 	const { data } = watchFlexy;
@@ -111,7 +109,7 @@ export function getPlaylistData(): Nullable<{ autoplay: AutoplayData; playlist: 
 	return { autoplay, playlist, watchFlexy };
 }
 
-export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; contents: PlaylistContentsItem[] }> {
+export function getPlaylistPageData(): null | { browse: BrowseElement; contents: PlaylistContentsItem[] } {
 	const browse = document.querySelector<BrowseElement>("ytd-browse[page-subtype='playlist']");
 	if (!browse) return null;
 	const data = browse.data as PlaylistPageDataContents | undefined;
@@ -123,7 +121,7 @@ export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; content
 	return { browse, contents };
 }
 
-export async function poll<T>(fn: () => T, predicate: (result: T) => boolean, interval = 100, timeout = 3000): Promise<Nullable<T>> {
+export async function poll<T>(fn: () => T, predicate: (result: T) => boolean, interval = 100, timeout = 3000): Promise<null | T> {
 	const start = Date.now();
 	while (Date.now() - start < timeout) {
 		const result = fn();
@@ -145,7 +143,7 @@ export const FEATURE_NAME = "playlistReverseButton";
 
 export const PLAYLIST_PAGE_WAIT_SELECTOR = "ytd-playlist-video-list-renderer";
 
-export function findVisibleActionRow(): Nullable<HTMLElement> {
+export function findVisibleActionRow(): HTMLElement | null {
 	const header = findVisiblePlaylistPageHeader();
 	if (!header) return null;
 	const rows = header.querySelectorAll<HTMLElement>(".ytFlexibleActionsViewModelActionRow");
@@ -159,11 +157,11 @@ export function findVisibleActionRow(): Nullable<HTMLElement> {
 	return null;
 }
 
-export function findVisiblePlaylistPageHeader(): Nullable<HTMLElement> {
+export function findVisiblePlaylistPageHeader(): HTMLElement | null {
 	return selectFirstWithWidth(...PLAYLIST_PAGE_HEADER_SELECTORS);
 }
 
-export function getPlaylistPageActionRow(timeout = 5000): Promise<Nullable<HTMLElement>> {
+export function getPlaylistPageActionRow(timeout = 5000): Promise<HTMLElement | null> {
 	return poll(findVisibleActionRow, (r) => r !== null, 100, timeout);
 }
 

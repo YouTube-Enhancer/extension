@@ -1,7 +1,5 @@
 import "./index.css";
 
-import type { Nullable } from "@/src/types";
-
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { isWatchPage } from "@/src/utils/url";
@@ -40,7 +38,7 @@ export default createFeature({
 		}
 	},
 	onNavigate: async (_config, stateAPI) => {
-		let prevIndex: Nullable<number> = null;
+		let prevIndex: null | number = null;
 		if (isWatchPage()) {
 			prevIndex = getPlaylistData()?.playlist.currentIndex ?? null;
 		}

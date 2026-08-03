@@ -38,13 +38,13 @@ const trackedButtons = new Map<AllButtonNames, TrackedButtonInfo>();
 export const featuresInMenu = new Set<AllButtonNames>();
 
 let fullscreenObserverActive = false;
-let fullscreenObserver: Nullable<MutationObserver> = null;
-let fullscreenDomHandler: Nullable<() => void> = null;
+let fullscreenObserver: MutationObserver | null = null;
+let fullscreenDomHandler: (() => void) | null = null;
 
-let theaterModeObserver: Nullable<MutationObserver> = null;
-let theaterNavigationHandler: Nullable<() => void> = null;
+let theaterModeObserver: MutationObserver | null = null;
+let theaterNavigationHandler: (() => void) | null = null;
 
-let cleanupFeatureMenuListeners: Nullable<() => void> = null;
+let cleanupFeatureMenuListeners: (() => void) | null = null;
 let featureMenuCssInjected = false;
 
 // ─── Fullscreen helpers ───────────────────────────────────────────
@@ -475,7 +475,7 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 	});
 
 	let menuVisible = false;
-	let observer: Nullable<MutationObserver> = null;
+	let observer: MutationObserver | null = null;
 
 	const hideYouTubeSettings = () => {
 		const settingsMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
@@ -680,7 +680,7 @@ function getChecked(button: HTMLButtonElement) {
 	return button.getAttribute("aria-checked") === "true";
 }
 
-function getMenu(): Nullable<HTMLDivElement> {
+function getMenu(): HTMLDivElement | null {
 	return document.querySelector<HTMLDivElement>(menuId);
 }
 
@@ -690,11 +690,11 @@ function getMenuItemChecked(item: HTMLDivElement) {
 	return item.getAttribute("aria-checked") === "true";
 }
 
-function getMenuPanel(menu: HTMLDivElement): Nullable<HTMLDivElement> {
+function getMenuPanel(menu: HTMLDivElement): HTMLDivElement | null {
 	return menu.querySelector<HTMLDivElement>(panelId);
 }
 
-async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nullable<HTMLDivElement>> {
+async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<HTMLDivElement | null> {
 	let container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
 	if (container) return container;
 	container = createStyledElement({
@@ -720,7 +720,7 @@ async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nulla
 	return container;
 }
 
-async function getOrCreateRightControlsContainer(): Promise<Nullable<HTMLDivElement>> {
+async function getOrCreateRightControlsContainer(): Promise<HTMLDivElement | null> {
 	const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
 	if (!rightControls) return null;
 	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);

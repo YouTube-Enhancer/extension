@@ -1,14 +1,13 @@
 import type { CheckboxProps } from "@/src/components/Inputs/CheckBox/CheckBox";
 import type { ColorPickerProps } from "@/src/components/Inputs/ColorPicker/ColorPicker";
 import type { CSSEditorProps } from "@/src/components/Inputs/CSSEditor/CSSEditor";
-import type { FileNameTemplateProps } from "@/src/components/Inputs/FileNameTemplate/FileNameTemplate";
 import type { NumberInputProps } from "@/src/components/Inputs/Number/Number";
 import type { SelectProps } from "@/src/components/Inputs/Select/Select";
 import type { SliderProps } from "@/src/components/Inputs/Slider/Slider";
 import type { TextInputProps } from "@/src/components/Inputs/TextInput/TextInput";
 import type { configurationId, Nullable, TSelectorFunc } from "@/src/types";
 
-import { Checkbox, ColorPicker, CSSEditor, FileNameTemplate, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
+import { Checkbox, ColorPicker, CSSEditor, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 import { textMatcher } from "@/src/utils/string";
@@ -29,7 +28,6 @@ export type SettingInputProps<ID extends configurationId> = (
 	| (CheckboxProps & { type: "checkbox" })
 	| (ColorPickerProps & { type: "color-picker" })
 	| (CSSEditorProps & { type: "css-editor" })
-	| (FileNameTemplateProps & { type: "file-name-template" })
 	| (NumberInputProps & { type: "number" })
 	| (SelectProps<ID> & { type: "select" })
 	| (SliderProps & { type: "slider" })
@@ -115,23 +113,6 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 		case "css-editor": {
 			const { className, disabled, disabledReason, onChange, value } = settingProps;
 			return <CSSEditor className={className} disabled={disabled} disabledReason={disabledReason} onChange={onChange} value={value} />;
-		}
-		case "file-name-template": {
-			const { className, disabled, disabledReason, error, hint, label, onChange, placeholdersLabel, title, value } = settingProps;
-			return (
-				<FileNameTemplate
-					className={className}
-					disabled={disabled}
-					disabledReason={disabledReason}
-					error={error}
-					hint={hint}
-					label={label}
-					onChange={onChange}
-					placeholdersLabel={placeholdersLabel}
-					title={title}
-					value={value}
-				/>
-			);
 		}
 		case "number": {
 			const { className, disabled, disabledReason, label, max, min, onChange, step, value } = settingProps;

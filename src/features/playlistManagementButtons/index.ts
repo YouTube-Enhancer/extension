@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import { Innertube } from "youtubei.js/web";
 
-import type { configuration, Nullable, YtActionEvent } from "@/src/types";
+import type { configuration, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
@@ -31,9 +31,9 @@ const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-vi
 const THUMBNAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 
-let playlistObserver: Nullable<MutationObserver> = null;
-let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
-let removeAllButton: Nullable<HTMLButtonElement> = null;
+let playlistObserver: MutationObserver | null = null;
+let preparePageDisposeListener: ((event: Event) => void) | null = null;
+let removeAllButton: HTMLButtonElement | null = null;
 
 const cleanupPlaylistManagementButtons = () => {
 	if (playlistObserver) {
@@ -163,22 +163,6 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				return;
 			}
 
-			const existingButton = document.getElementById("yte-remove-all-watched-button");
-			if (existingButton) {
-				const text = window.i18nextInstance.t(
-					(translations) =>
-						translations.pages.content.features.playlistManagementButtons.extras[
-							watchedCount === 1 ? "removeAllWatchedVideo" : "removeAllWatchedVideos"
-						],
-					{ count: watchedCount }
-				);
-				existingButton.children[1].textContent = text;
-				return;
-			}
-
-			const button = document.createElement("button");
-			button.id = "yte-remove-all-watched-button";
-			button.className = "yte-remove-all-watched-button";
 			const text = window.i18nextInstance.t(
 				(translations) =>
 					translations.pages.content.features.playlistManagementButtons.extras[
@@ -187,6 +171,15 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				{ count: watchedCount }
 			);
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
+			const existingButton = document.getElementById("yte-remove-all-watched-button");
+			if (existingButton) {
+				existingButton.innerHTML = trashIcon + text;
+				return;
+			}
+
+			const button = document.createElement("button");
+			button.id = "yte-remove-all-watched-button";
+			button.className = "yte-remove-all-watched-button";
 			button.innerHTML = trashIcon + text;
 			removeAllButton = button;
 

@@ -160,7 +160,7 @@ const navigateStartHandler = (e: CustomEvent<YouTubeNavigateStart>) => {
 	void minimizePlayer();
 };
 const onKeyDown = (e: KeyboardEvent) => {
-	if (!["Escape", "t"].includes(e.key) || (e.target as Nullable<HTMLElement>)?.closest("input, textarea, [contenteditable='true']")) return;
+	if (!["Escape", "t"].includes(e.key) || (e.target as HTMLElement | null)?.closest("input, textarea, [contenteditable='true']")) return;
 	const state = getPlayerControllerState();
 	if (!state.listenersAttached) return;
 	e.preventDefault();

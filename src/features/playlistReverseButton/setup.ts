@@ -1,5 +1,4 @@
 import type { FeatureStateAPI } from "@/src/features/_registry/types";
-import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -10,8 +9,8 @@ import { FEATURE_NAME, getPlaylistPageActionRow, isCurrentlyReversed, isPlaylist
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
 
-let resizeObserver: Nullable<ResizeObserver> = null;
-let miniPlayerCheckTimer: Nullable<ReturnType<typeof setInterval>> = null;
+let resizeObserver: null | ResizeObserver = null;
+let miniPlayerCheckTimer: null | ReturnType<typeof setInterval> = null;
 
 function disconnectResizeObserver() {
 	resizeObserver?.disconnect();
@@ -66,7 +65,7 @@ async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	resizeObserver.observe(document.documentElement);
 }
 
-async function setupOnWatchPage(stateAPI: StateAPI, prevCurrentIndex: Nullable<number> = null) {
+async function setupOnWatchPage(stateAPI: StateAPI, prevCurrentIndex: null | number = null) {
 	const panel = await waitForElement("ytd-playlist-panel-renderer", 5000, "optional");
 	if (!panel) return;
 

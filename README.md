@@ -179,13 +179,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Screenshot Button**: Adds a button to the player to take a screenshot of the video
 - **Screenshot Format**: The format to save the screenshot in
   - Options: PNG, JPEG, WEBP
-- **Date Format**: The format used for the {date} placeholder
-  - Options: ISO (YYYY-MM-DDTHH-MM-SS-mmmZ), YYYY-MM-DD, YYYY-MM-DD_HH-MM-SS, DD-MM-YYYY
-- **Video Timestamp Format**: The format used for the {video timestamp} placeholder
-  - Options: MM-SS or HH-MM-SS, HH-MM-SS, MM-SS
 - **Screenshot Save Type**: The screenshot save type
   - Options: File, Clipboard, Both (File and Clipboard)
-- **Screenshot File Name Template**: The template used to name the screenshot file
 </details>
 
 <details>

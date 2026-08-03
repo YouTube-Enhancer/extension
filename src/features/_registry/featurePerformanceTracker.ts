@@ -35,7 +35,7 @@ interface TrackContext {
 	contextId: number;
 	depth: number;
 	id: PerfId;
-	parentContextId: Nullable<number>;
+	parentContextId: null | number;
 	phase: PhaseLabel;
 	start: number;
 }

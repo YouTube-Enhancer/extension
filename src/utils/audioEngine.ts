@@ -1,5 +1,3 @@
-import type { Nullable } from "@/src/types";
-
 export interface AudioEngine {
 	context: AudioContext;
 	input: AudioNode;
@@ -18,7 +16,7 @@ export function destroyAudioEngine(): void {
 	window.engine = null;
 }
 
-export function getAudioEngine(video?: HTMLMediaElement): Nullable<AudioEngine> {
+export function getAudioEngine(video?: HTMLMediaElement): AudioEngine | null {
 	const { engine } = window;
 	const player = video ?? document.querySelector<HTMLMediaElement>("video");
 	if (!player) return null;
