@@ -17,7 +17,7 @@ import {
 } from "@/src/types";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
-import { parseStoredValue } from "@/src/utils/config/utils";
+import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
 import { sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
 import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
 
@@ -62,8 +62,8 @@ const getStoredSettings = async (): Promise<configuration> => {
 		void storage.local.get(null).then((settings) => {
 			const storedSettings = Object.keys(settings)
 				.filter((key) => Object.keys(defaultConfiguration).includes(key))
-				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
-			return resolve(storedSettings);
+				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as Partial<configuration>;
+			return resolve(deepMerge(defaultConfiguration, storedSettings) as configuration);
 		});
 	});
 	return options;

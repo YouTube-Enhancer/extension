@@ -862,8 +862,12 @@ async function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonP
 			if (!leftControls) return;
 			const existingInContainer = leftControls.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
-			const timeDisplay = leftControls.querySelector<HTMLDivElement>(".ytp-time-display");
+			const timeDisplay =
+				leftControls.querySelector<HTMLElement>(".ytp-time-display") ??
+				leftControls.querySelector<HTMLElement>(".ytp-time-contents") ??
+				leftControls.querySelector<HTMLElement>(".ytp-chapter-container");
 			if (timeDisplay) timeDisplay.insertAdjacentElement("beforebegin", button);
+			else leftControls.append(button);
 			break;
 		}
 		case "player_controls_right": {

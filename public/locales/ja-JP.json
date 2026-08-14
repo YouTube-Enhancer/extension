@@ -147,6 +147,11 @@
 							"on": "音量ブースト ({{value}} dB)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "音量ブーストボタン",
 							"flipVideoVerticalButton": "ビデオを垂直方向に反転",
 							"flipVideoHorizontalButton": "ビデオを水平方向に反転",
-							"monoToStereoButton": "モノラルからステレオへのボタン"
+							"monoToStereoButton": "モノラルからステレオへのボタン",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "動画の再生速度",
 							"title": "動画の速度に設定する"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

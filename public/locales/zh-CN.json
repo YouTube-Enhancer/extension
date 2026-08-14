@@ -147,6 +147,11 @@
 							"on": "音量提升 ({{value}} 分贝)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "音量增强按钮",
 							"flipVideoVerticalButton": "垂直翻转视频按钮",
 							"flipVideoHorizontalButton": "水平翻转视频按钮",
-							"monoToStereoButton": "单声道转立体声按钮"
+							"monoToStereoButton": "单声道转立体声按钮",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "播放速度",
 							"title": "将视频播放速度设为"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

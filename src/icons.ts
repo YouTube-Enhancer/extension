@@ -246,26 +246,39 @@ const resetPlaybackSpeedButtonSVG = createSVGElement(
 );
 export function createResetPlaybackSpeedDisplaySVG(speed: number): SVGSVGElement {
 	const text = createSVGElement("text", {
-		"dominant-baseline": "middle",
+		"dominant-baseline": "central",
 		fill: "white",
 		"font-family": "Roboto, Arial, sans-serif",
-		"font-size": "10",
-		"font-weight": "500",
+		"font-weight": "700",
 		"text-anchor": "middle",
-		x: "12",
-		y: "13"
+		x: "50%",
+		y: "50%"
 	});
-	text.textContent = `${Number(speed.toFixed(2))}x`;
+	applyResetPlaybackSpeedLabel(text, speed);
 	return createSVGElement(
 		"svg",
 		{
 			fill: "white",
 			height: "24px",
+			overflow: "visible",
 			viewBox: "0 0 24 24",
 			width: "24px"
 		},
 		text
 	);
+}
+export function updateResetPlaybackSpeedDisplaySVG(svg: SVGSVGElement, speed: number): void {
+	const text = svg.querySelector("text");
+	if (!text) return;
+	applyResetPlaybackSpeedLabel(text, speed);
+}
+function applyResetPlaybackSpeedLabel(text: SVGTextElement, speed: number): void {
+	text.textContent = speed.toFixed(2);
+	// Inline CSS so YouTube's inherited ~12px font-size cannot shrink the glyph.
+	text.style.fontSize = "16px";
+	text.style.fontWeight = "700";
+	text.style.fontVariantNumeric = "tabular-nums";
+	text.style.textAnchor = "middle";
 }
 const hideEndScreenCardsButtonSVG = createSVGElement(
 	"svg",

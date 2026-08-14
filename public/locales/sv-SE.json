@@ -147,6 +147,11 @@
 							"on": "Volymökning ({{value}} dB)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "Volymökningsknapp",
 							"flipVideoVerticalButton": "Knapp för vänd videon vertikalt",
 							"flipVideoHorizontalButton": "Knapp för vänd videon horisontellt",
-							"monoToStereoButton": "Knapp för mono till stereo"
+							"monoToStereoButton": "Knapp för mono till stereo",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "Uppspelningshastighet",
 							"title": "Hastigheten att spela upp videon i"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

@@ -147,6 +147,11 @@
 							"on": "Volume boost ({{value}} dB)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "Volume boost knop",
 							"flipVideoVerticalButton": "Spiegel video verticaal knop",
 							"flipVideoHorizontalButton": "Spiegel video horizontaal knop",
-							"monoToStereoButton": "Mono naar Stereo knop"
+							"monoToStereoButton": "Mono naar Stereo knop",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "Snelheid videospeler",
 							"title": "De snelheid waarop je de video zet"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

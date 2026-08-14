@@ -147,6 +147,11 @@
 							"on": "Zwiększenie głośności ({{value}} dB)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "Przycisk Zwiększania Głośności",
 							"flipVideoVerticalButton": "Przerzuć przycisk wideo w pionie",
 							"flipVideoHorizontalButton": "Przerzuć przycisk wideo w poziomie",
-							"monoToStereoButton": "Przycisk Mono do Stereo"
+							"monoToStereoButton": "Przycisk Mono do Stereo",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "Szybkość odtwarzacza",
 							"title": "Szybkość ustawiania filmu na"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

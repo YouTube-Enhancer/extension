@@ -9,6 +9,7 @@
 	padding: 0;
 	position: relative;
 	align-items: center !important;
+	justify-content: center !important;
 	display: flex !important;
 	width: -webkit-fill-available !important;
 	max-width: var(--yt-delhi-pill-height, 48px) !important;
@@ -45,6 +46,11 @@ body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left {
 }
 .yte-button-player-controls-left svg {
 	padding: 8px !important;
+}
+#yte-feature-resetPlaybackSpeedButton-button svg {
+	display: block;
+	margin: auto;
+	overflow: visible;
 }
 #movie_player.ytp-autohide .yte-button-player-controls-left {
 	display: none !important;

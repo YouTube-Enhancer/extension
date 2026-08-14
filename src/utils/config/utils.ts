@@ -5,7 +5,7 @@ import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlay
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";
 import type { VolumeBoostMode } from "@/src/features/volumeBoost/types";
 import type { AvailableLocales } from "@/src/i18n/constants";
-import type { ButtonPlacement, configuration, ParentType, Path, PathSegments, PathValue } from "@/src/types";
+import type { ButtonPlacement, configuration, Path, PathSegments, PathValue } from "@/src/types";
 import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType } from "@/src/ui/OnScreenDisplayManager/types";
 
 const HIDE_SHORTS_SECTIONS = Object.keys({
@@ -324,23 +324,21 @@ export function updateConfigAtPath<P extends Path<configuration>>(
 	nextValue: PathValue<configuration, P>
 ): configuration {
 	type Segments = PathSegments<P>;
-	type Parent = ParentType<configuration, Segments>;
 	const keys = key.split(".") as unknown as Segments;
-	console.log("[DEBUG-BP] updateConfigAtPath", { keys });
 	const updatedState = structuredClone(state);
-	let parent: Parent = updatedState as Parent;
+	let parent: Record<string, unknown> = updatedState;
 	for (const k of keys.slice(0, -1)) {
-		if (typeof parent !== "object" || parent === null || !(k in parent)) {
-			console.log("[DEBUG-BP] path FAIL at segment:", k);
-			return state;
+		const segment = k as string;
+		if (typeof parent[segment] !== "object" || parent[segment] === null) {
+			parent[segment] = {};
 		}
-		parent = parent[k as keyof Parent] as Parent;
+		parent = parent[segment] as Record<string, unknown>;
 	}
 	const lastKey = keys.at(-1);
 	if (!lastKey || typeof parent !== "object" || parent === null) {
 		return state;
 	}
-	parent[lastKey as keyof Parent] = nextValue as Parent[keyof Parent];
+	parent[lastKey as string] = nextValue;
 	return updatedState;
 }
 

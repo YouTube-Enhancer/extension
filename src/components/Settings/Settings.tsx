@@ -22,7 +22,7 @@ import SettingsGenerator from "@/src/components/Settings/SettingsGenerator";
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { localeDirection } from "@/src/i18n/constants";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
-import { parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
+import { deepMerge, parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
 import { getPathValue } from "@/src/utils/misc";
 
 import Loader from "../Loader";
@@ -53,8 +53,7 @@ export function getSettings(): Promise<configuration> {
 				const storedSettings: Partial<configuration> = Object.keys(settings)
 					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key))
 					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
-				const castedSettings = storedSettings as configuration;
-				return resolve(castedSettings);
+				return resolve(deepMerge(defaultConfiguration, storedSettings) as configuration);
 			} catch (error) {
 				if (error instanceof Error) {
 					return reject(error);

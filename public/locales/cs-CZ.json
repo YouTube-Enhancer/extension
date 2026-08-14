@@ -147,6 +147,11 @@
 							"on": "Zvýšení hlasitosti ({{value}} dB)"
 						}
 					}
+				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
 				}
 			}
 		},
@@ -186,7 +191,8 @@
 							"volumeBoostButton": "Tlačítko Zrychlení hlasitosti",
 							"flipVideoVerticalButton": "Překlopit video svisle tlačítko",
 							"flipVideoHorizontalButton": "Překlopit video vodorovným tlačítkem",
-							"monoToStereoButton": "Mono až Stereo tlačítko"
+							"monoToStereoButton": "Mono až Stereo tlačítko",
+							"resetPlaybackSpeedButton": "Reset Speed button"
 						},
 						"options": {
 							"below_player": {
@@ -813,6 +819,16 @@
 						"select": {
 							"label": "Rychlost hráče",
 							"title": "Rychlost nastavení videa na"
+						}
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
 						}
 					}
 				},

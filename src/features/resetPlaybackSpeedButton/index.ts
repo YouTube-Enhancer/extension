@@ -1,5 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { registry } from "@/src/features/_registry/featureRegistry";
 import {
 	addFeatureButton,
 	checkIfFeatureButtonExists,
@@ -9,8 +10,8 @@ import {
 } from "@/src/features/buttonController";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
-import { createResetPlaybackSpeedDisplaySVG, getFeatureIcon } from "@/src/icons";
-import { type YouTubePlayerDiv, youtubePlayerMaxSpeed } from "@/src/types";
+import { createResetPlaybackSpeedDisplaySVG, getFeatureIcon, updateResetPlaybackSpeedDisplaySVG } from "@/src/icons";
+import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv, youtubePlayerMaxSpeed } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { round } from "@/src/utils/math";
@@ -20,8 +21,45 @@ import { metadata } from "./index.metadata";
 import { placeResetBetweenSpeedButtons } from "./placeResetBetweenSpeedButtons";
 import { getResetButtonTitle, getResetTargetSpeed, refreshResetButtonTooltip } from "./tooltip";
 
-function formatSpeedLabel(speed: number) {
-	return `${round(speed, 2)}x`;
+async function addResetPlaybackSpeedButton(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement, resetToPlayerSpeed: boolean) {
+	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video") ?? document.querySelector<HTMLVideoElement>("video");
+	if (!videoElement) return false;
+	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	if (!playerContainer) return false;
+	try {
+		const playerVideoData = await playerContainer.getVideoData();
+		if (playerVideoData?.isLive) {
+			if (await checkIfFeatureButtonExists("resetPlaybackSpeedButton", placement)) {
+				await removeFeatureButton("resetPlaybackSpeedButton", placement);
+				eventManager.removeEventListeners("resetPlaybackSpeedButton");
+			}
+			return true;
+		}
+	} catch {
+		return false;
+	}
+	if (await checkIfFeatureButtonExists("resetPlaybackSpeedButton", placement)) {
+		placeResetBetweenSpeedButtons();
+		return true;
+	}
+	const { playbackRate: currentSpeed } = videoElement;
+	const targetSpeed = await getResetTargetSpeed(resetToPlayerSpeed);
+	const icon =
+		placement === "feature_menu" ? getFeatureIcon("resetPlaybackSpeedButton", placement) : createResetPlaybackSpeedDisplaySVG(currentSpeed);
+	await addFeatureButton(
+		"resetPlaybackSpeedButton",
+		placement,
+		getResetButtonTitle(targetSpeed),
+		icon,
+		() => void resetPlaybackSpeedButtonClickListener(),
+		false,
+		false,
+		fullscreenPlacement
+	);
+	placeResetBetweenSpeedButtons();
+	eventManager.removeEventListener(videoElement, "ratechange", "resetPlaybackSpeedButton");
+	eventManager.addEventListener(videoElement, "ratechange", rateChangeListener, "resetPlaybackSpeedButton");
+	return true;
 }
 
 function rateChangeListener() {
@@ -37,13 +75,11 @@ async function resetPlaybackSpeedButtonClickListener() {
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 		if (!playerContainer) return;
 		const {
-			data: {
-				options: {
-					onScreenDisplay: { color, hideTime, opacity, padding, position },
-					playbackSpeedButtons: { speed: playbackSpeedPerClick }
-				}
-			}
+			data: { options }
 		} = await waitForSpecificMessage("options", "request_data", "content");
+		const { onScreenDisplay, playbackSpeedButtons } = options;
+		const { color, hideTime, opacity, padding, position } = onScreenDisplay;
+		const { speed: playbackSpeedPerClick = 0.25 } = playbackSpeedButtons ?? {};
 		const targetSpeed = await getResetTargetSpeed();
 		new OnScreenDisplayManager(
 			{
@@ -75,48 +111,24 @@ function updateResetSpeedDisplay(speed: number) {
 	if (!button || !(button instanceof HTMLButtonElement)) return;
 	const icon = button.querySelector("svg");
 	if (!icon) return;
-	const text = icon.querySelector("text");
-	if (!text) return;
-	text.textContent = formatSpeedLabel(speed);
+	updateResetPlaybackSpeedDisplaySVG(icon, speed);
 }
 
 export default createFeature({
 	...metadata,
 	buttons: [
 		{
-			add: async ({ button: { fullscreenPlacement, placement } }) => {
-				const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-				if (!videoElement) return;
-				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-				if (!playerContainer) return;
-				const playerVideoData = await playerContainer.getVideoData();
-				if (playerVideoData.isLive) {
-					if (await checkIfFeatureButtonExists("resetPlaybackSpeedButton", placement)) {
-						await removeFeatureButton("resetPlaybackSpeedButton", placement);
-						eventManager.removeEventListeners("resetPlaybackSpeedButton");
-					}
-					return;
-				}
-				const { playbackRate: currentSpeed } = videoElement;
-				const targetSpeed = await getResetTargetSpeed();
-				const icon =
-					placement === "feature_menu" ? getFeatureIcon("resetPlaybackSpeedButton", placement) : createResetPlaybackSpeedDisplaySVG(currentSpeed);
-				await addFeatureButton(
-					"resetPlaybackSpeedButton",
-					placement,
-					getResetButtonTitle(targetSpeed),
-					icon,
-					() => void resetPlaybackSpeedButtonClickListener(),
-					false,
-					false,
-					fullscreenPlacement
+			add: async ({ button: { fullscreenPlacement, placement }, resetToPlayerSpeed }) => {
+				await registry.playerManager.executeWithRetries(
+					metadata.id,
+					[() => addResetPlaybackSpeedButton(placement, fullscreenPlacement, resetToPlayerSpeed)],
+					["addResetButton"],
+					{ pageTypes: ["watch"], waitForLoaded: false }
 				);
-				placeResetBetweenSpeedButtons();
-				eventManager.removeEventListener(videoElement, "ratechange", "resetPlaybackSpeedButton");
-				eventManager.addEventListener(videoElement, "ratechange", rateChangeListener, "resetPlaybackSpeedButton");
 			},
 			name: "resetPlaybackSpeedButton",
 			remove: async (placement) => {
+				registry.playerManager.cleanup(metadata.id);
 				await removeFeatureButton("resetPlaybackSpeedButton", placement);
 				eventManager.removeEventListeners("resetPlaybackSpeedButton");
 			}
@@ -126,7 +138,7 @@ export default createFeature({
 		await refreshResetButtonTooltip();
 		const button = getFeatureButton("resetPlaybackSpeedButton");
 		if (!button || !(button instanceof HTMLButtonElement) || placement === "feature_menu") return;
-		const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+		const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video") ?? document.querySelector<HTMLVideoElement>("video");
 		if (!videoElement) return;
 		const icon = button.querySelector("svg");
 		if (icon?.querySelector("text")) {
@@ -134,8 +146,5 @@ export default createFeature({
 			return;
 		}
 		updateFeatureButtonIcon(button, createResetPlaybackSpeedDisplaySVG(videoElement.playbackRate));
-	},
-	onDisable: () => {
-		eventManager.removeEventListeners("resetPlaybackSpeedButton");
 	}
 });
