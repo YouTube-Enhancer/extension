@@ -105,6 +105,11 @@
 						"increaseLimit": "Can't increase further ({{SPEED}})"
 					}
 				},
+				"resetPlaybackSpeedButton": {
+					"button": {
+						"label": "Reset speed to {{SPEED}}"
+					}
+				},
 				"playlistLength": {
 					"title": "Total length may not be accurate if some videos are hidden or if you haven't loaded enough videos to get the full length."
 				},
@@ -192,6 +197,7 @@
 							"maximizePlayerButton": "Maximize player button",
 							"miniPlayerButton": "Mini Player button",
 							"openTranscriptButton": "Open transcript button",
+							"resetPlaybackSpeedButton": "Reset Speed button",
 							"rewindButton": "Rewind button",
 							"screenshotButton": "Screenshot button",
 							"volumeBoostButton": "Volume boost button",
@@ -848,6 +854,16 @@
 							"title": "Amount of speed to be changed per click"
 						},
 						"title": "Adds buttons to increase or decrease the playback speed of the video you're watching"
+					},
+					"resetPlaybackSpeedButton": {
+						"enable": {
+							"label": "Reset speed button",
+							"title": "Adds a button to reset the playback speed of the video you're watching"
+						},
+						"resetToPlayerSpeed": {
+							"label": "Reset to Player speed",
+							"title": "When enabled, the reset button uses your Player speed setting instead of 1x"
+						}
 					},
 					"speed": {
 						"select": {

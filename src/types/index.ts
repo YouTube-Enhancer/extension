@@ -190,6 +190,7 @@ export const buttonNames = Object.keys({
 	miniPlayerButton: "",
 	monoToStereoButton: "",
 	openTranscriptButton: "",
+	resetPlaybackSpeedButton: "",
 	rewindButton: "",
 	screenshotButton: "",
 	volumeBoostButton: ""
@@ -207,6 +208,7 @@ export const buttonNameToSettingName = {
 	miniPlayerButton: "miniPlayerButton",
 	monoToStereoButton: "monoToStereoButton",
 	openTranscriptButton: "openTranscriptButton",
+	resetPlaybackSpeedButton: "resetPlaybackSpeedButton",
 	rewindButton: "forwardRewindButtons",
 	screenshotButton: "screenshotButton",
 	volumeBoostButton: "volumeBoost"
@@ -329,6 +331,10 @@ export type configuration = {
 	remainingTime: { enabled: boolean };
 	rememberVolume: { enabled: boolean };
 	removeRedirect: { enabled: boolean };
+	resetPlaybackSpeedButton: {
+		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		resetToPlayerSpeed: boolean;
+	};
 	restoreFullscreenScrolling: { enabled: boolean };
 	saveToWatchLaterButton: { enabled: boolean };
 	screenshotButton: {

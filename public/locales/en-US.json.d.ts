@@ -63,6 +63,7 @@ interface EnUS {
 					};
 				};
 				playlistReverseButton: { extras: { toggle: { off: "Normal order"; on: "Reversed order" } } };
+				resetPlaybackSpeedButton: { button: { label: "Reset speed to {{SPEED}}" } };
 				saveToWatchLaterButton: {
 					extras: {
 						failedToSaveVideo: "Failed to save video to Watch Later";
@@ -112,6 +113,7 @@ interface EnUS {
 							miniPlayerButton: "Mini Player button";
 							monoToStereoButton: "Mono to stereo button";
 							openTranscriptButton: "Open transcript button";
+							resetPlaybackSpeedButton: "Reset Speed button";
 							rewindButton: "Rewind button";
 							screenshotButton: "Screenshot button";
 							volumeBoostButton: "Volume boost button";
@@ -649,6 +651,16 @@ interface EnUS {
 							title: "Amount of speed to be changed per click";
 						};
 						title: "Adds buttons to increase or decrease the playback speed of the video you're watching";
+					};
+					resetPlaybackSpeedButton: {
+						enable: {
+							label: "Reset speed button";
+							title: "Adds a button to reset the playback speed of the video you're watching";
+						};
+						resetToPlayerSpeed: {
+							label: "Reset to Player speed";
+							title: "When enabled, the reset button uses your Player speed setting instead of 1x";
+						};
 					};
 					speed: { select: { label: "Player speed"; title: "The speed to set the video to" } };
 				};

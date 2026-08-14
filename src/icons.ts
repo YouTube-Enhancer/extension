@@ -229,6 +229,44 @@ const increasePlaybackSpeedButtonSVG = createSVGElement(
 		fill: "white"
 	})
 );
+const resetPlaybackSpeedButtonSVG = createSVGElement(
+	"svg",
+	{
+		height: "24px",
+		stroke: "white",
+		"stroke-width": "1",
+		transform: "rotate(-45 12 12)",
+		viewBox: "0 0 24 24",
+		width: "24px"
+	},
+	createSVGElement("path", {
+		d: "M12 1c1.44 0 2.87.28 4.21.83a11 11 0 0 1 3.45 2.27l-1.81 1.05A9 9 0 0 0 3 12a9 9 0 0 0 18-.00l-.01-.44a8.99 8.99 0 0 0-.14-1.20l1.81-1.05A11.00 11.00 0 0 1 10.51 22.9 11 11 0 0 1 12 1Zm7.08 6.25-7.96 3.25a1.74 1.74 0 1 0 1.73 2.99l6.8-5.26a.57.57 0 0 0-.56-.98Z",
+		fill: "white"
+	})
+);
+export function createResetPlaybackSpeedDisplaySVG(speed: number): SVGSVGElement {
+	const text = createSVGElement("text", {
+		"dominant-baseline": "middle",
+		fill: "white",
+		"font-family": "Roboto, Arial, sans-serif",
+		"font-size": "10",
+		"font-weight": "500",
+		"text-anchor": "middle",
+		x: "12",
+		y: "13"
+	});
+	text.textContent = `${Number(speed.toFixed(2))}x`;
+	return createSVGElement(
+		"svg",
+		{
+			fill: "white",
+			height: "24px",
+			viewBox: "0 0 24 24",
+			width: "24px"
+		},
+		text
+	);
+}
 const hideEndScreenCardsButtonSVG = createSVGElement(
 	"svg",
 	{
@@ -475,6 +513,10 @@ export const featureIcons = {
 	openTranscriptButton: {
 		feature_menu: openTranscriptSVG,
 		shared_icon_position: openTranscriptSVG
+	},
+	resetPlaybackSpeedButton: {
+		feature_menu: resetPlaybackSpeedButtonSVG,
+		shared_icon_position: createResetPlaybackSpeedDisplaySVG(1)
 	},
 	rewindButton: {
 		feature_menu: rewindButtonSVG,
