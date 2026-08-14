@@ -1,77 +1,33 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonPlacement";
 import {
+	addFeatureButton,
 	checkIfFeatureButtonExists,
 	getFeatureButton,
-	getFeatureButtonId,
-	updateFeatureButtonIcon,
-	updateFeatureButtonTitle
-} from "@/src/features/buttonPlacement/utils";
+	removeFeatureButton,
+	updateFeatureButtonIcon
+} from "@/src/features/buttonController";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { createResetPlaybackSpeedDisplaySVG, getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type YouTubePlayerDiv, youtubePlayerMaxSpeed } from "@/src/types";
+import { type YouTubePlayerDiv, youtubePlayerMaxSpeed } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
-import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { round } from "@/src/utils/math";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import { metadata } from "./index.metadata";
+import { placeResetBetweenSpeedButtons } from "./placeResetBetweenSpeedButtons";
+import { getResetButtonTitle, getResetTargetSpeed, refreshResetButtonTooltip } from "./tooltip";
 
 function formatSpeedLabel(speed: number) {
 	return `${round(speed, 2)}x`;
-}
-
-function getResetButtonTitle(targetSpeed: number) {
-	return window.i18nextInstance.t((translations) => translations.pages.content.features.resetPlaybackSpeedButton.button.label, {
-		SPEED: round(targetSpeed, 2)
-	});
-}
-
-async function getResetTargetSpeed() {
-	const {
-		data: {
-			options: {
-				playerSpeed: { speed: playerSpeed },
-				resetPlaybackSpeedButton: { resetToPlayerSpeed }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	return resetToPlayerSpeed ? playerSpeed : 1;
-}
-
-function placeResetBetweenSpeedButtons() {
-	const decrease = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("decreasePlaybackSpeedButton")}`);
-	const increase = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("increasePlaybackSpeedButton")}`);
-	const reset = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("resetPlaybackSpeedButton")}`);
-	if (!decrease || !increase || !reset) return;
-	const { parentElement } = decrease;
-	if (!parentElement || parentElement !== increase.parentElement || parentElement !== reset.parentElement) return;
-	increase.before(reset);
 }
 
 function rateChangeListener() {
 	const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (!videoElement) return;
 	updateResetSpeedDisplay(videoElement.playbackRate);
-}
-
-async function refreshResetButtonTooltip(placement: ButtonPlacement) {
-	const button = getFeatureButton("resetPlaybackSpeedButton");
-	if (!button) return;
-	const targetSpeed = await getResetTargetSpeed();
-	const title = getResetButtonTitle(targetSpeed);
-	button.dataset.title = title;
-	updateFeatureButtonTitle("resetPlaybackSpeedButton", title);
-	const { update } = createTooltip({
-		direction: placement === "below_player" ? "down" : "up",
-		element: button,
-		featureName: "resetPlaybackSpeedButton",
-		id: "yte-feature-resetPlaybackSpeedButton-tooltip"
-	});
-	update();
 }
 
 async function resetPlaybackSpeedButtonClickListener() {
@@ -167,7 +123,7 @@ export default createFeature({
 		}
 	],
 	onConfigChange: async ({ button: { placement } }) => {
-		await refreshResetButtonTooltip(placement);
+		await refreshResetButtonTooltip();
 		const button = getFeatureButton("resetPlaybackSpeedButton");
 		if (!button || !(button instanceof HTMLButtonElement) || placement === "feature_menu") return;
 		const videoElement = document.querySelector<HTMLVideoElement>("video.html5-main-video");

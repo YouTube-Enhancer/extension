@@ -4,6 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
+import { refreshResetButtonTooltip } from "@/src/features/resetPlaybackSpeedButton/tooltip";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { browserColorLog } from "@/src/utils/logging";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
@@ -121,6 +122,7 @@ async function updatePlaybackSpeedButtons(currentSpeed: number) {
 export default createFeature({
 	...metadata,
 	onConfigChange: async ({ enabled, speed }) => {
+		await refreshResetButtonTooltip();
 		if (!enabled) return;
 		await setPlayerSpeed(speed);
 		await updatePlaybackSpeedButtons(speed);

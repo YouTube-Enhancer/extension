@@ -2,6 +2,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, checkIfFeatureButtonExists, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
+import { placeResetBetweenSpeedButtons } from "@/src/features/resetPlaybackSpeedButton/placeResetBetweenSpeedButtons";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
@@ -191,6 +192,7 @@ export default createFeature({
 		{
 			add: async ({ button: { fullscreenPlacement, placement }, speed }) => {
 				await addPlaybackSpeedButton("increasePlaybackSpeedButton", placement, speed, "increase", fullscreenPlacement);
+				placeResetBetweenSpeedButtons();
 			},
 			name: "increasePlaybackSpeedButton",
 			remove: async (placement) => {
