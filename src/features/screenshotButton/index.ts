@@ -4,9 +4,11 @@ import { addFeatureButton, getFeatureButton, removeFeatureButton } from "@/src/f
 import { getFeatureIcon } from "@/src/icons";
 import { type Nullable } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
+import { defaultScreenshotFilenameTemplate, formatScreenshotDate, resolveFilenameTemplate } from "@/src/utils/format/filenameTemplate";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import { metadata } from "./index.metadata";
+import { buildScreenshotFilenameContext } from "./utils";
 
 async function takeScreenshot(videoElement: HTMLVideoElement) {
 	try {
@@ -25,7 +27,7 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		const {
 			data: {
 				options: {
-					screenshotButton: { format, saveAs }
+					screenshotButton: { dateFormat = "iso", filename = defaultScreenshotFilenameTemplate, format, saveAs, timestampFormat = "auto" }
 				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
@@ -61,10 +63,26 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 			const mimeType = `image/${format}`;
 			const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
 			if (!blob) return;
-			const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+			const urlParams = new URLSearchParams(window.location.search);
+			const videoId = urlParams.get("v") ?? "";
+			const context = await buildScreenshotFilenameContext(
+				videoElement,
+				{
+					date: formatScreenshotDate(new Date(), dateFormat),
+					extension: format,
+					resolution: `${videoWidth}x${videoHeight}`,
+					videoId
+				},
+				timestampFormat
+			);
+			const name =
+				resolveFilenameTemplate(filename, context) ??
+				resolveFilenameTemplate(defaultScreenshotFilenameTemplate, context) ??
+				`Screenshot-${videoId}-${context.date}`;
+			const downloadName = name.toLowerCase().endsWith(`.${format.toLowerCase()}`) ? name : `${name}.${format}`;
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
-			a.download = `Screenshot-${location.href.match(/[\?|\&]v=([^&]+)/)?.[1]}-${timestamp}.${format}`;
+			a.download = downloadName;
 			a.click();
 		};
 
