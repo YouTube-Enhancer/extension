@@ -1,6 +1,11 @@
 import type { YouTubePlayerDiv } from "@/src/types";
 
-import { formatScreenshotTimestamp, type ScreenshotFilenameContext, type ScreenshotTimestampFormat } from "@/src/utils/format/filenameTemplate";
+import {
+	formatScreenshotTimestamp,
+	type ScreenshotFilenameContext,
+	type ScreenshotTimestampFormat,
+	type ScreenshotTimestampSeparator
+} from "@/src/utils/format/filenameTemplate";
 
 type ScreenshotWindow = typeof window & {
 	ytInitialPlayerResponse?: {
@@ -37,7 +42,8 @@ type ScreenshotWindow = typeof window & {
 export async function buildScreenshotFilenameContext(
 	videoElement: HTMLVideoElement,
 	staticContext: Pick<ScreenshotFilenameContext, "date" | "extension" | "resolution" | "videoId">,
-	timestampFormat: ScreenshotTimestampFormat = "auto"
+	timestampFormat: ScreenshotTimestampFormat = "auto",
+	timestampSeparator: ScreenshotTimestampSeparator = "auto"
 ): Promise<ScreenshotFilenameContext> {
 	const playerResponseData = getPlayerResponseData();
 	let channelName = playerResponseData?.videoDetails?.channel ?? "";
@@ -57,7 +63,7 @@ export async function buildScreenshotFilenameContext(
 		channelName,
 		chapterName: extractChapterName(playerResponseData, videoElement.currentTime),
 		...staticContext,
-		videoTimestamp: formatScreenshotTimestamp(videoElement.currentTime, timestampFormat)
+		videoTimestamp: formatScreenshotTimestamp(videoElement.currentTime, timestampFormat, timestampSeparator)
 	};
 }
 

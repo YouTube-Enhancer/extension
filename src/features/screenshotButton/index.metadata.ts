@@ -3,7 +3,12 @@ import { z } from "zod/v4-mini";
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
 import { buttonField, field } from "@/src/features/_registry/defineConfig";
 import { buttonPlacements } from "@/src/types";
-import { defaultScreenshotFilenameTemplate, screenshotDateFormats, screenshotTimestampFormats } from "@/src/utils/format/filenameTemplate";
+import {
+	defaultScreenshotFilenameTemplate,
+	screenshotDateFormats,
+	screenshotTimestampFormats,
+	screenshotTimestampSeparators
+} from "@/src/utils/format/filenameTemplate";
 
 import { screenshotFormats, screenshotTypes } from "./types";
 
@@ -15,7 +20,8 @@ export const metadata = createFeatureMetadata({
 		filename: field(z.string(), defaultScreenshotFilenameTemplate),
 		format: field(z.enum(screenshotFormats), "png"),
 		saveAs: field(z.enum(screenshotTypes), "file"),
-		timestampFormat: field(z.enum(screenshotTimestampFormats), "auto")
+		timestampFormat: field(z.enum(screenshotTimestampFormats), "auto"),
+		timestampSeparator: field(z.enum(screenshotTimestampSeparators), "auto")
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "screenshotButton",
@@ -109,6 +115,33 @@ export const metadata = createFeatureMetadata({
 						};
 					},
 					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.title)
+				},
+				{
+					component: "select",
+					disabledWhen: [
+						{ equals: false, setting: "screenshotButton.button.enabled" },
+						{ equals: "clipboard", setting: "screenshotButton.saveAs" }
+					],
+					id: "screenshotButton.timestampSeparator",
+					label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.label),
+					optionsFrom: () =>
+						screenshotTimestampSeparators.map((timestampSeparator) => ({
+							label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.options[timestampSeparator]),
+							value: timestampSeparator
+						})),
+					parentSetting: ({ button: { enabled }, saveAs }) => {
+						if (enabled && saveAs === "clipboard") {
+							return {
+								type: "specificOption",
+								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+							};
+						}
+						return {
+							type: "singular",
+							value: (tr) => tr.settings.sections.screenshotButton.enable.label
+						};
+					},
+					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.title)
 				},
 				{
 					component: "file-name-template",

@@ -44,6 +44,9 @@ export type ScreenshotDateFormat = (typeof screenshotDateFormats)[number];
 export const screenshotTimestampFormats = ["auto", "hhmmss", "mmss"] as const satisfies readonly VideoTimestampFormat[];
 export type ScreenshotTimestampFormat = (typeof screenshotTimestampFormats)[number];
 
+export const screenshotTimestampSeparators = ["auto", "colon", "hyphen"] as const;
+export type ScreenshotTimestampSeparator = (typeof screenshotTimestampSeparators)[number];
+
 const padDatePart = (value: number) => value.toString().padStart(2, "0");
 
 /**
@@ -84,9 +87,16 @@ export function formatScreenshotDate(date: Date, format: ScreenshotDateFormat = 
 	}
 }
 
-export function formatScreenshotTimestamp(seconds: number, format: ScreenshotTimestampFormat = "auto"): string {
-	// Filenames can't contain ":" so separators are hyphens (e.g. "13-44" or "01-42-55")
-	return formatVideoTimestamp(seconds, format).replace(/:/g, "-");
+/**
+ * Formats seconds since the start of the video for use in a screenshot file name.
+ * @param separator "auto" uses hyphens on Windows (where ":" is invalid in file names) and colons everywhere else.
+ */
+export function formatScreenshotTimestamp(
+	seconds: number,
+	format: ScreenshotTimestampFormat = "auto",
+	separator: ScreenshotTimestampSeparator = "auto"
+): string {
+	return formatVideoTimestamp(seconds, format).replace(/:/g, resolveTimestampSeparator(separator));
 }
 
 /**
@@ -119,4 +129,16 @@ export function resolveFilenameTemplate(template: string, context: ScreenshotFil
 export function sanitizeFilename(name: string): string {
 	// eslint-disable-next-line no-control-regex
 	return name.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_");
+}
+
+function isWindowsPlatform(): boolean {
+	if (typeof navigator === "undefined") return false;
+	return /win/i.test(navigator.platform) || /windows/i.test(navigator.userAgent);
+}
+
+function resolveTimestampSeparator(separator: ScreenshotTimestampSeparator): "-" | ":" {
+	if (separator === "colon") return ":";
+	if (separator === "hyphen") return "-";
+	// "auto": use hyphens on Windows (colons aren't allowed in file names there), colons elsewhere
+	return isWindowsPlatform() ? "-" : ":";
 }
