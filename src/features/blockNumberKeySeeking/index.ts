@@ -1,9 +1,11 @@
+import type { Nullable } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 
 import { metadata } from "./index.metadata";
 
 const keydownHandler = (event: KeyboardEvent): void => {
-	const target = event.target as HTMLElement | null;
+	const target = event.target as Nullable<HTMLElement>;
 	// Ignore typing in inputs / textareas / contenteditable
 	if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
 	// Top-row numbers 0–9

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import type { FeatureKeys, FeatureSettingNode } from "@/src/features/_registry/types";
-import type { configuration, Path } from "@/src/types";
+import type { configuration, Nullable, Path } from "@/src/types";
 
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getPathValue } from "@/src/utils/misc";
@@ -12,7 +12,7 @@ import { getSettingConfigs } from "./utils";
 
 export function useConfigSettings<F extends FeatureKeys>(
 	featureId: F,
-	currentConfig: configuration[F] | null
+	currentConfig: Nullable<configuration[F]>
 ): {
 	handleChange: (id: string, value: unknown) => void;
 	settings: SettingItem<F>[];

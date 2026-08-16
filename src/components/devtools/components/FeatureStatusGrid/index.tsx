@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { AllConfigsData } from "@/components/devtools/hooks/useDevToolsQuery";
 import type { FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type { Nullable } from "@/src/types";
 
 import ConfigSlideOver from "@/components/devtools/components/ConfigSlideOver";
 import DevToolsLoader from "@/components/devtools/components/DevToolsLoader";
@@ -34,8 +35,8 @@ export default function FeatureStatusGrid(): JSX.Element {
 		toggleExpanded
 	} = useFeatureGridData();
 
-	const [configFeatureId, setConfigFeatureId] = useState<FeatureKeys | null>(null);
-	const [stateFeatureId, setStateFeatureId] = useState<FeatureKeysWithState | null>(null);
+	const [configFeatureId, setConfigFeatureId] = useState<Nullable<FeatureKeys>>(null);
+	const [stateFeatureId, setStateFeatureId] = useState<Nullable<FeatureKeysWithState>>(null);
 
 	const configs: AllConfigsData = configsQuery.data ?? {};
 

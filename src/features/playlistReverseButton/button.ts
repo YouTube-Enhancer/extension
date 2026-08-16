@@ -1,4 +1,5 @@
 import type { FeatureStateAPI } from "@/src/features/_registry/types";
+import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createTooltip } from "@/src/utils/dom/tooltip";
@@ -10,10 +11,10 @@ import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isCurrentlyReversed
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
 
-let reverseButton: HTMLButtonElement | null = null;
-let reverseButtonContainer: HTMLDivElement | null = null;
-let headerContainerElement: HTMLElement | null = null;
-let tooltipUpdate: (() => void) | null = null;
+let reverseButton: Nullable<HTMLButtonElement> = null;
+let reverseButtonContainer: Nullable<HTMLDivElement> = null;
+let headerContainerElement: Nullable<HTMLElement> = null;
+let tooltipUpdate: Nullable<() => void> = null;
 
 async function ensureReversalSticks(stateAPI: StateAPI, reversal: () => boolean, inject: () => Promise<void>, maxTime = 3000): Promise<void> {
 	const start = Date.now();

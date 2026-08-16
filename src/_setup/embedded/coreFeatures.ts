@@ -1,11 +1,12 @@
 import type { AvailableLocales } from "@/src/i18n/constants";
+import type { Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { enableFeatureMenu, featuresInMenu, setupFeatureMenuEventListeners, updateFeatureMenuTitle } from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
-let cleanupListeners: (() => void) | null = null;
+let cleanupListeners: Nullable<() => void> = null;
 
 export const coreFeatures = {
 	destroy() {

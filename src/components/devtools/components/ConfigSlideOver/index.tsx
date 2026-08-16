@@ -9,7 +9,7 @@ import { featureConfigUpdateQuery } from "@/components/devtools/hooks/useDevTool
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";
-import { fullscreenPlacements } from "@/src/types";
+import { fullscreenPlacements, type Nullable } from "@/src/types";
 
 import type { ConfigSlideOverProps } from "./types";
 
@@ -30,7 +30,7 @@ export default function ConfigSlideOver<F extends FeatureKeys>({
 	isOpen,
 	onClose,
 	onConfigSaved
-}: ConfigSlideOverProps<F>): JSX.Element | null {
+}: ConfigSlideOverProps<F>): Nullable<JSX.Element> {
 	const { addNotification } = useNotifications();
 	const { handleChange, settings } = useConfigSettings<F>(featureId, currentConfig);
 	const t = useDevToolsTranslations();
@@ -106,7 +106,7 @@ function ButtonPlacementSelector({
 	config: unknown;
 	featureId: FeatureKeys;
 	onChange: (path: string, value: unknown) => void;
-}): JSX.Element | null {
+}): Nullable<JSX.Element> {
 	const t = useDevToolsTranslations();
 	const placementOptions = [
 		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.value), value: "below_player" },

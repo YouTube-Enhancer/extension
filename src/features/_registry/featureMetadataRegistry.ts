@@ -134,7 +134,7 @@ function validateSettingsIds<K extends FeatureKeys>(metadata: FeatureMetadata<K>
 }
 
 function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetadata<K>): void {
-	const validComponents = ["checkbox", "color-picker", "css-editor", "number", "select", "slider", "text-input"] as const;
+	const validComponents = ["checkbox", "color-picker", "css-editor", "file-name-template", "number", "select", "slider", "text-input"] as const;
 	type ValidComponent = (typeof validComponents)[number];
 
 	const validSectionIds = [
