@@ -27,7 +27,14 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		const {
 			data: {
 				options: {
-					screenshotButton: { dateFormat = "iso", filename = defaultScreenshotFilenameTemplate, format, saveAs, timestampFormat = "auto" }
+					screenshotButton: {
+						dateFormat = "iso",
+						filename = defaultScreenshotFilenameTemplate,
+						format,
+						saveAs,
+						timestampFormat = "auto",
+						timestampSeparator = "auto"
+					}
 				}
 			}
 		} = await waitForSpecificMessage("options", "request_data", "content");
@@ -73,7 +80,8 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 					resolution: `${videoWidth}x${videoHeight}`,
 					videoId
 				},
-				timestampFormat
+				timestampFormat,
+				timestampSeparator
 			);
 			const name =
 				resolveFilenameTemplate(filename, context) ??

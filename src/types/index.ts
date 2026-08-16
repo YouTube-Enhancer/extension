@@ -22,7 +22,7 @@ import type { VolumeBoostMode } from "@/src/features/volumeBoost/types";
 import type { i18nInstanceType } from "@/src/i18n";
 import type { AvailableLocales } from "@/src/i18n/constants";
 import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType } from "@/src/ui/OnScreenDisplayManager/types";
-import type { ScreenshotDateFormat, ScreenshotTimestampFormat } from "@/src/utils/format/filenameTemplate";
+import type { ScreenshotDateFormat, ScreenshotTimestampFormat, ScreenshotTimestampSeparator } from "@/src/utils/format/filenameTemplate";
 export type AnyFunction = (...args: any[]) => void;
 export type Brand<T, U> = T & { __brand: U };
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
@@ -339,6 +339,7 @@ export type configuration = {
 		format: ScreenshotFormat;
 		saveAs: ScreenshotType;
 		timestampFormat: ScreenshotTimestampFormat;
+		timestampSeparator: ScreenshotTimestampSeparator;
 	};
 	scrollWheelSpeedControl: { enabled: boolean; modifierKey: ModifierKey; steps: number };
 	scrollWheelVolumeControl: { enabled: boolean; holdModifierKey: boolean; holdRightClick: boolean; modifierKey: ModifierKey; steps: number };

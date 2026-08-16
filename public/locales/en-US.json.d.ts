@@ -739,6 +739,13 @@ interface EnUS {
 							title: "The format used for the {video timestamp} placeholder";
 						};
 					};
+					timestampSeparator: {
+						select: {
+							label: "Timestamp separator";
+							options: { auto: "Auto"; colon: "Colon (MM:SS)"; hyphen: "Hyphen (MM-SS)" };
+							title: "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there.";
+						};
+					};
 				};
 				title: "Screenshot settings";
 			};

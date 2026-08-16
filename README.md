@@ -147,12 +147,13 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 </details>
 
 <details>
-<summary>Player Speed • 2 features (2 settings)</summary>
+<summary>Player Speed • 2 features (3 settings)</summary>
 
 - **Playback Speed Buttons**: Adds buttons to increase or decrease the playback speed of the video you're watching
 - **Forced Playback Speed**: Sets the video speed to what you choose below
 - **Playback Buttons Speed**: Amount of speed to be changed per click
 - **Player Speed**: The speed to set the video to
+- **⚠️ Missing_label (player Speed.channel Speeds)**: ⚠️ missing_title (playerSpeed.channelSpeeds) ⚠️ [missing_label, missing_title]
 </details>
 
 <details>
@@ -183,6 +184,8 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
   - Options: ISO (YYYY-MM-DDTHH-MM-SS-mmmZ), YYYY-MM-DD, YYYY-MM-DD_HH-MM-SS, DD-MM-YYYY
 - **Video Timestamp Format**: The format used for the {video timestamp} placeholder
   - Options: MM-SS or HH-MM-SS, HH-MM-SS, MM-SS
+- **Timestamp Separator**: The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there.
+  - Options: Auto, Colon (MM:SS), Hyphen (MM-SS)
 - **Screenshot Save Type**: The screenshot save type
   - Options: File, Clipboard, Both (File and Clipboard)
 - **Screenshot File Name Template**: The template used to name the screenshot file
