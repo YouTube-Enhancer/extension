@@ -37,12 +37,12 @@ export function formatVideoTimestamp(seconds: number, format: VideoTimestampForm
 		return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
 	}
 	if (format === "mmss") {
-		return `${minutes}:${paddedSeconds}`;
+		return `${paddedMinutes}:${paddedSeconds}`;
 	}
 	if (hours > 0) {
 		return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
 	}
-	return `${minutes}:${paddedSeconds}`;
+	return `${paddedMinutes}:${paddedSeconds}`;
 }
 /**
  * Converts a time string in the format "HH:MM:SS" to a number of seconds.
