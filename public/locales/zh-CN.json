@@ -959,13 +959,13 @@
 					},
 					"timestampSeparator": {
 						"select": {
-							"label": "Timestamp separator",
+							"label": "时间戳分隔符",
 							"options": {
-								"auto": "Auto",
-								"colon": "Colon (MM:SS)",
-								"hyphen": "Hyphen (MM-SS)"
+								"auto": "自动",
+								"colon": "冒号 (分分:秒秒)",
+								"hyphen": "连字符 (分分-秒秒)"
 							},
-							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
+							"title": "在 {videotiestmp} 占位符中使用的分隔符。在Windows上的文件名中不允许括号，所以自动使用连字符。"
 						}
 					}
 				},
