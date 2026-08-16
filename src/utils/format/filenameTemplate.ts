@@ -125,10 +125,13 @@ export function resolveFilenameTemplate(template: string, context: ScreenshotFil
 
 /**
  * Replaces placeholder characters that are not allowed in file names.
+ * Colons are only replaced on Windows, where they're invalid in file names (so the "MM:SS"
+ * timestamp separator the user picked survives on platforms that allow it).
  */
 export function sanitizeFilename(name: string): string {
 	// eslint-disable-next-line no-control-regex
-	return name.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_");
+	const forbidden = isWindowsPlatform() ? /[\\/:*?"<>|\u0000-\u001f]/g : /[\\/*?"<>|\u0000-\u001f]/g;
+	return name.replace(forbidden, "_");
 }
 
 function isWindowsPlatform(): boolean {
