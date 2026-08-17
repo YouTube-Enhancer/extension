@@ -223,7 +223,6 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 		if (resumeType === "automatic") {
 			if (video_history_entry.timestamp >= duration) return;
 			try {
-				await playerContainer.playVideo?.();
 				void playerContainer.seekTo(video_history_entry.timestamp, true);
 			} catch {}
 		} else createResumePrompt(video_history_entry, playerContainer);
