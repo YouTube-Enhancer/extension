@@ -241,6 +241,19 @@ export type GroupNode<F extends FeatureKeys> = {
 	type: "group";
 };
 
+export type KeyValueListSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
+	addLabel: TSelectFunc;
+	channelIdLabel: TSelectFunc;
+	component: "key-value-list";
+	getChannelIdFromLinkLabel?: TSelectFunc;
+	max: number;
+	min: number;
+	pasteLinkPlaceholder?: TSelectFunc;
+	removeLabel: TSelectFunc;
+	speedLabel: TSelectFunc;
+	step: number;
+};
+
 export type MustContainEnabled<T> = ContainsEnabled<T> extends true ? T : never;
 
 export type NavigationType =
@@ -294,6 +307,7 @@ export type SettingConfig<F extends FeatureKeys> =
 	| (BooleanSettingConfig<F> & { id: BooleanPaths<F> })
 	| (ColorPickerSettingConfig<F> & { id: StringPaths<F> })
 	| (FileNameTemplateSettingConfig<F> & { id: StringPaths<F> })
+	| (KeyValueListSettingConfig<F> & { id: StringPaths<F> })
 	| (NumberSettingConfig<F> & { id: NumberPaths<F> })
 	| (ObjectSettingConfig<F> & { id: StringPaths<F> })
 	| (SelectSettingConfig<F> & { id: StringPaths<F> })
