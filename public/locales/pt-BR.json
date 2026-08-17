@@ -854,6 +854,16 @@
 							"label": "Velocidade do player",
 							"title": "A velocidade definida para o vídeo"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "Configurações de velocidade de reprodução"
