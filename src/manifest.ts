@@ -3,8 +3,9 @@ import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
 import { availableLocales } from "./i18n/constants";
 import { DEV_MODE } from "./utils/config/env";
+import { YOUTUBE_MATCH_PATTERNS } from "./utils/url/constants";
 const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
-const hostPermissions: Manifest.MatchPattern[] = ["https://*.youtube.com/*"];
+const hostPermissions: Manifest.MatchPattern[] = YOUTUBE_MATCH_PATTERNS;
 const baseResources = [
 	"contentStyle.css",
 	"/icons/icon_128.png",
@@ -41,7 +42,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 			all_frames: true,
 			css: ["contentStyle.css"],
 			js: ["src/pages/content/index.js"],
-			matches: ["https://*.youtube.com/*"],
+			matches: YOUTUBE_MATCH_PATTERNS,
 			run_at: "document_start"
 		}
 	],
@@ -57,7 +58,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 	version: pkg.version,
 	web_accessible_resources: [
 		{
-			matches: ["https://*.youtube.com/*"],
+			matches: YOUTUBE_MATCH_PATTERNS,
 			resources
 		}
 	],
@@ -82,7 +83,7 @@ const manifestV2: Manifest.WebExtensionManifest = {
 		{
 			css: ["contentStyle.css"],
 			js: ["src/pages/content/index.js"],
-			matches: ["https://*.youtube.com/*"],
+			matches: YOUTUBE_MATCH_PATTERNS,
 			run_at: "document_start"
 		}
 	],
