@@ -3,6 +3,8 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { waitForElement } from "@/src/utils/dom/wait";
 
+import { isSupportedYouTubeHostname } from "./constants";
+
 export function extractSectionsFromYouTubeURL(url: string): string[] {
 	let parsed: URL;
 	try {
@@ -10,9 +12,7 @@ export function extractSectionsFromYouTubeURL(url: string): string[] {
 	} catch {
 		throw new Error("Invalid URL");
 	}
-	const hostname = parsed.hostname.toLowerCase();
-	const allowedHostnames = new Set(["m.youtube.com", "www.youtube.com", "youtube.com"]);
-	if (!allowedHostnames.has(hostname)) return [];
+	if (!isSupportedYouTubeHostname(parsed.hostname)) return [];
 	return parsed.pathname.split("/").filter(Boolean);
 }
 
@@ -21,6 +21,7 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 		if (typeof window === "undefined" || typeof document === "undefined") {
 			return null;
 		}
+		if (!isSupportedYouTubeHostname(window.location.hostname)) return null;
 		const [first, second] = extractSectionsFromYouTubeURL(window.location.href);
 		if (first === undefined) {
 			return window.location.pathname === "/" ? "home" : null;

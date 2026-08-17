@@ -6,6 +6,7 @@ import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
 import { setupDevToolsListener } from "@/src/utils/messaging/devtools.embedded";
+import { isSupportedYouTubeHostname } from "@/src/utils/url/constants";
 
 import { coreFeatures } from "./coreFeatures";
 import { setupMessageListener } from "./messageHandling";
@@ -15,6 +16,9 @@ export interface CleanupHandle {
 }
 
 export async function setupYouTubePage(): Promise<CleanupHandle> {
+	if (!isSupportedYouTubeHostname(window.location.hostname)) {
+		return { dispose: () => {} };
+	}
 	let element = document.getElementById("yte-message-from-youtube");
 	if (!element) {
 		element = document.createElement("div");
