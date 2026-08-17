@@ -854,6 +854,16 @@
 							"label": "播放速度",
 							"title": "将视频播放速度设为"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "播放速度设置"
