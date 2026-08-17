@@ -275,6 +275,37 @@ export default function SettingsGenerator() {
 					/>
 				);
 			}
+			if (node.component === "key-value-list") {
+				const value = typeof currentValue === "string" ? currentValue : "";
+				const onChange = (newValue: string) => {
+					const event = { currentTarget: { value: newValue } } as ChangeEvent<HTMLInputElement>;
+					setValueOption(settingId)(event);
+				};
+				return (
+					<Setting
+						addLabel={node.addLabel(t)}
+						alwaysVisible={node.alwaysVisible}
+						channelIdLabel={node.channelIdLabel(t)}
+						disabled={isDisabled}
+						disabledReason={disabledReason}
+						featureId={featureId}
+						getChannelIdFromLinkLabel={node.getChannelIdFromLinkLabel?.(t)}
+						key={settingId}
+						label={node.label(t)}
+						max={node.max}
+						min={node.min}
+						onChange={onChange}
+						parentSetting={parentSettingValue}
+						pasteLinkPlaceholder={node.pasteLinkPlaceholder?.(t)}
+						removeLabel={node.removeLabel(t)}
+						speedLabel={node.speedLabel(t)}
+						step={node.step}
+						title={node.title(t)}
+						type="key-value-list"
+						value={value}
+					/>
+				);
+			}
 			if (node.component === "css-editor") {
 				const value = typeof currentValue === "string" ? currentValue : "";
 				const onChange = (newValue: string) => {

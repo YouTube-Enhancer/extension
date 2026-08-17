@@ -650,6 +650,16 @@ interface EnUS {
 						};
 						title: "Adds buttons to increase or decrease the playback speed of the video you're watching";
 					};
+					channelSpeeds: {
+						add: "Add";
+						channelId: "Channel ID";
+						getChannelIdFromLink: "Get ID from link";
+						label: "Per-channel playback speed";
+						pasteLinkPlaceholder: "youtube.com/@channel or video link";
+						remove: "Remove";
+						speed: "Speed";
+						title: "Sets a specific playback speed for videos from a channel";
+					};
 					speed: { select: { label: "Player speed"; title: "The speed to set the video to" } };
 				};
 				title: "Playback speed settings";

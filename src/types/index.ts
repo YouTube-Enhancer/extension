@@ -317,6 +317,7 @@ export type configuration = {
 		quality: YoutubePlayerQualityLevel;
 	};
 	playerSpeed: {
+		channelSpeeds: string;
 		enabled: boolean;
 		speed: number;
 	};

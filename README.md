@@ -153,7 +153,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Forced Playback Speed**: Sets the video speed to what you choose below
 - **Playback Buttons Speed**: Amount of speed to be changed per click
 - **Player Speed**: The speed to set the video to
-- **⚠️ Missing_label (player Speed.channel Speeds)**: ⚠️ missing_title (playerSpeed.channelSpeeds) ⚠️ [missing_label, missing_title]
+- **Per-channel Playback Speed**: Sets a specific playback speed for videos from a channel
 </details>
 
 <details>

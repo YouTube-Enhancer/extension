@@ -2,13 +2,14 @@ import type { CheckboxProps } from "@/src/components/Inputs/CheckBox/CheckBox";
 import type { ColorPickerProps } from "@/src/components/Inputs/ColorPicker/ColorPicker";
 import type { CSSEditorProps } from "@/src/components/Inputs/CSSEditor/CSSEditor";
 import type { FileNameTemplateProps } from "@/src/components/Inputs/FileNameTemplate/FileNameTemplate";
+import type { KeyValueListProps } from "@/src/components/Inputs/KeyValueList/KeyValueList";
 import type { NumberInputProps } from "@/src/components/Inputs/Number/Number";
 import type { SelectProps } from "@/src/components/Inputs/Select/Select";
 import type { SliderProps } from "@/src/components/Inputs/Slider/Slider";
 import type { TextInputProps } from "@/src/components/Inputs/TextInput/TextInput";
 import type { configurationId, Nullable, TSelectorFunc } from "@/src/types";
 
-import { Checkbox, ColorPicker, CSSEditor, FileNameTemplate, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
+import { Checkbox, ColorPicker, CSSEditor, FileNameTemplate, KeyValueList, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 import { textMatcher } from "@/src/utils/string";
@@ -30,6 +31,7 @@ export type SettingInputProps<ID extends configurationId> = (
 	| (ColorPickerProps & { type: "color-picker" })
 	| (CSSEditorProps & { type: "css-editor" })
 	| (FileNameTemplateProps & { type: "file-name-template" })
+	| (KeyValueListProps & { type: "key-value-list" })
 	| (NumberInputProps & { type: "number" })
 	| (SelectProps<ID> & { type: "select" })
 	| (SliderProps & { type: "slider" })
@@ -128,6 +130,46 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 					label={label}
 					onChange={onChange}
 					placeholdersLabel={placeholdersLabel}
+					title={title}
+					value={value}
+				/>
+			);
+		}
+		case "key-value-list": {
+			const {
+				addLabel,
+				channelIdLabel,
+				className,
+				disabled,
+				disabledReason,
+				getChannelIdFromLinkLabel,
+				label,
+				max,
+				min,
+				onChange,
+				pasteLinkPlaceholder,
+				removeLabel,
+				speedLabel,
+				step,
+				title,
+				value
+			} = settingProps;
+			return (
+				<KeyValueList
+					addLabel={addLabel}
+					channelIdLabel={channelIdLabel}
+					className={className}
+					disabled={disabled}
+					disabledReason={disabledReason}
+					getChannelIdFromLinkLabel={getChannelIdFromLinkLabel}
+					label={label}
+					max={max}
+					min={min}
+					onChange={onChange}
+					pasteLinkPlaceholder={pasteLinkPlaceholder}
+					removeLabel={removeLabel}
+					speedLabel={speedLabel}
+					step={step}
 					title={title}
 					value={value}
 				/>
