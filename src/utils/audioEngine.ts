@@ -7,7 +7,6 @@ export interface AudioEngine {
 	source: MediaElementAudioSourceNode;
 	volumeGain: GainNode;
 }
-window.engine = null;
 
 export function destroyAudioEngine(): void {
 	const { engine } = window;

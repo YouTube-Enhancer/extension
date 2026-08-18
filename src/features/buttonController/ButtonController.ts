@@ -286,6 +286,7 @@ export async function enableFeatureMenu() {
 // ─── Button DOM creation ──────────────────────────────────────────
 
 export async function enableFeatureMenuButton() {
+	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
 	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
 	if (!featureMenuCssInjected) {
@@ -311,7 +312,6 @@ export async function enableFeatureMenuButton() {
 	if (!container) return;
 	container.insertAdjacentElement("afterend", featureMenuButton);
 
-	if (!isWatchPage()) return;
 	const playerContainer = await waitForElement<HTMLDivElement>("#movie_player");
 	if (!playerContainer) return;
 	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
