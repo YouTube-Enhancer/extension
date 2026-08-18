@@ -856,14 +856,14 @@
 						}
 					},
 					"channelSpeeds": {
-						"add": "Add",
-						"channelId": "Channel ID",
-						"getChannelIdFromLink": "Get ID from link",
-						"label": "Per-channel playback speed",
-						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
-						"remove": "Remove",
-						"speed": "Speed",
-						"title": "Sets a specific playback speed for videos from a channel"
+						"add": "添加",
+						"channelId": "频道 ID",
+						"getChannelIdFromLink": "从链接获取 ID",
+						"label": "每个频道播放速度",
+						"pasteLinkPlaceholder": "youtube.com/@channel 或视频链接",
+						"remove": "移除",
+						"speed": "速度",
+						"title": "为来自某频道的视频设置特定的播放速度"
 					}
 				},
 				"title": "播放速度设置"
