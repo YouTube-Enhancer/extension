@@ -41,7 +41,19 @@ function initializeCommunicationElement() {
 	}
 }
 initializeCommunicationElement();
-document.documentElement.appendChild(script);
+let embeddedScriptAppended = false;
+const appendEmbeddedScript = () => {
+	if (embeddedScriptAppended) return;
+	embeddedScriptAppended = true;
+	document.documentElement.appendChild(script);
+};
+if (document.readyState === "loading") {
+	document.addEventListener("readystatechange", () => {
+		if (document.readyState === "interactive") appendEmbeddedScript();
+	});
+} else {
+	appendEmbeddedScript();
+}
 if (DEV_MODE) {
 	setupContentScriptBridge();
 	const seenKeys = new Set<string>();
