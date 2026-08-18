@@ -6,6 +6,7 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
+import { ensureTrustedTypesPolicy } from "@/src/utils/security/trustedTypes";
 import { getCurrentPageType } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -18,15 +19,10 @@ interface YTLockupViewModel extends HTMLElement {
 	};
 }
 
-if (window.trustedTypes && !window.trustedTypes.defaultPolicy) {
-	window.trustedTypes.createPolicy("default", {
-		createHTML: (input: string) => input
-	});
-}
-
 let videosObserver: Nullable<MutationObserver> = null;
 
 async function setupSaveToWatchLaterButtons(config: configuration["saveToWatchLaterButton"]) {
+	ensureTrustedTypesPolicy();
 	document.addEventListener("yt-action", (event) => {
 		if ((event as YtActionEvent).detail.actionName === "yt-prepare-page-dispose") {
 			void (async () => {
