@@ -48,7 +48,13 @@ export async function runPreBuildPipeline(): Promise<void> {
 	const shouldBypass = process.env.BYPASS_LOCALE_CHECK === "true";
 
 	if (!isDevelopment && !shouldBypass) {
-		checkLocalesForMissingKeys();
+		try {
+			checkLocalesForMissingKeys();
+		} catch (error) {
+			const details = error instanceof Error ? error.message : String(error);
+			console.error(localeCheckFailureMessage(details));
+			throw error;
+		}
 		await timedStep("Updating locale percentages", () => updateLocalePercentages());
 		console.log("[Build Pipeline] Locale validation complete");
 	} else {
@@ -56,6 +62,31 @@ export async function runPreBuildPipeline(): Promise<void> {
 	}
 	const elapsed = ((Date.now() - start) / 1000).toFixed(2);
 	console.log(`[Build Pipeline] Pre-build complete! (${elapsed}s total)`);
+}
+
+function localeCheckFailureMessage(details: string): string {
+	return [
+		"",
+		"=====================================================================================",
+		"!!! LOCALE CHECK FAILED — TRANSLATION FILES ARE MISSING KEYS !!!",
+		"=====================================================================================",
+		"",
+		details,
+		"",
+		"The build cannot continue with incomplete translations.",
+		"",
+		"To BYPASS this check and continue the build anyway, set the environment variable:",
+		"",
+		"    BYPASS_LOCALE_CHECK=true",
+		"",
+		"Examples:",
+		"    Unix:   BYPASS_LOCALE_CHECK=true npm run build",
+		"    cmd:    set BYPASS_LOCALE_CHECK=true && npm run build",
+		"    Powershell: $env:BYPASS_LOCALE_CHECK = 'true'; npm run build",
+		"",
+		"=====================================================================================",
+		""
+	].join("\n");
 }
 
 async function timedStep<T>(name: string, fn: () => Promise<T> | T): Promise<T> {
