@@ -114,8 +114,19 @@
 						"failedToRemoveVideo": "Error al eliminar el vídeo",
 						"markAsUnwatched": "Marcar como no visto",
 						"markingAsUnwatched": "Marcando como no visto…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Eliminar vídeo",
-						"removingVideo": "Eliminando vídeo…"
+						"removingVideo": "Eliminando vídeo…",
+						"removingWatchedVideos": "Removing watched videos…"
+					}
+				},
+				"playlistReverseButton": {
+					"extras": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -300,6 +311,10 @@
 						},
 						"keepFirst": "Mantener {{FEATURE}}",
 						"keepSecond": "Mantener {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' y '{{FEATURE_B}}' no pueden usar la misma tecla modificadora.",
 							"selectNewKey": "Cambiar tecla modificador:"
@@ -510,10 +525,10 @@
 							"title": "Siempre usar pista de audio original"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Ocultar resumen IA",
-							"title": "Oculta el resumen de inteligencia artificial a continuación de vídeos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -618,6 +633,12 @@
 							"title": "Pausa los reproductores de vídeo en pestañas de fondo cuando inicias un nuevo reproductor en la pestaña de inicio"
 						}
 					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
+						}
+					},
 					"remainingTime": {
 						"enable": {
 							"label": "Tiempo restante",
@@ -709,6 +730,10 @@
 					"videos": {
 						"label": "Ocultar en páginas de reloj",
 						"title": "Elimina los videos cortos de las recomendaciones en las páginas de seguimiento"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
@@ -776,6 +801,21 @@
 					"title": "Ajustar automáticamente la calidad del vídeo al nivel seleccionado."
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "Frame rate preference",
+							"options": {
+								"default": "Default",
+								"higher": "Higher FPS",
+								"lower": "Lower FPS"
+							},
+							"title": "Prefer higher or lower frame rate when multiple formats are available"
+						}
+					},
+					"preferPremium": {
+						"label": "Prefer Premium enhanced bitrate",
+						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+					},
 					"quality": {
 						"select": {
 							"label": "Calidad del reproductor",
@@ -814,6 +854,16 @@
 							"label": "Velocidad del reproductor",
 							"title": "La velocidad a la que ajustar el vídeo"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "Ajustes de velocidad de reproducción"
@@ -856,6 +906,12 @@
 							"label": "Quitar botón de vídeo",
 							"title": "Añade un botón para eliminar vídeos de la lista de reproducción"
 						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
+						}
 					}
 				},
 				"title": "Configuración de gestión de lista de reproducción"
@@ -866,6 +922,25 @@
 					"title": "Añade un botón al reproductor para capturar la pantalal del vídeo que estás viendo"
 				},
 				"settings": {
+					"dateFormat": {
+						"select": {
+							"label": "Date format",
+							"options": {
+								"date": "YYYY-MM-DD",
+								"dateTime": "YYYY-MM-DD_HH-MM-SS",
+								"dayMonthYear": "DD-MM-YYYY",
+								"iso": "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)"
+							},
+							"title": "The format used for the {date} placeholder"
+						}
+					},
+					"filename": {
+						"error": "Unknown placeholder(s):",
+						"hint": "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.",
+						"label": "Screenshot file name template",
+						"placeholdersLabel": "Available placeholders:",
+						"title": "The template used to name the screenshot file"
+					},
 					"format": {
 						"label": "Formato de captura de pantalla",
 						"title": "El formato en el que guardar la captura de pantalla"
@@ -879,6 +954,28 @@
 								"file": "Archivo"
 							},
 							"title": "Método de guardado sobre el que se guardará la captura de pantalla"
+						}
+					},
+					"timestampFormat": {
+						"select": {
+							"label": "Video timestamp format",
+							"options": {
+								"auto": "MM-SS or HH-MM-SS",
+								"hhmmss": "HH-MM-SS",
+								"mmss": "MM-SS"
+							},
+							"title": "The format used for the {video timestamp} placeholder"
+						}
+					},
+					"timestampSeparator": {
+						"select": {
+							"label": "Timestamp separator",
+							"options": {
+								"auto": "Auto",
+								"colon": "Colon (MM:SS)",
+								"hyphen": "Hyphen (MM-SS)"
+							},
+							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
 						}
 					}
 				},
@@ -952,6 +1049,19 @@
 					}
 				},
 				"title": "Ajustes del historial de vídeo"
+			},
+			"videosPerRow": {
+				"enable": {
+					"label": "Videos per row",
+					"title": "Changes the number of videos displayed per row on YouTube feeds"
+				},
+				"settings": {
+					"count": {
+						"label": "Number of videos per row",
+						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+					}
+				},
+				"title": "Videos per row settings"
 			},
 			"volumeBoost": {
 				"enable": {

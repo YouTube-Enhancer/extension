@@ -114,8 +114,19 @@
 						"failedToRemoveVideo": "Nepodařilo se odstranit video",
 						"markAsUnwatched": "Označit jako nezhlédnuté",
 						"markingAsUnwatched": "Označování jako nezhlédnuté…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Odstranit video",
-						"removingVideo": "Odstraňování videa…"
+						"removingVideo": "Odstraňování videa…",
+						"removingWatchedVideos": "Removing watched videos…"
+					}
+				},
+				"playlistReverseButton": {
+					"extras": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -300,6 +311,10 @@
 						},
 						"keepFirst": "Ponechat {{FEATURE}}",
 						"keepSecond": "Ponechat {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' a '{{FEATURE_B}}' nemůže použít stejný modifikační klíč.",
 							"selectNewKey": "Změnit klíč modifikátoru:"
@@ -510,10 +525,10 @@
 							"title": "Vždy výchozí k původní zvukové stopě"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Skrýt shrnutí AI",
-							"title": "Skryje souhrn umělé inteligence pod videi"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -618,6 +633,12 @@
 							"title": "Pozastaví video přehrávače na pozadí při spuštění nového přehrávače v popředí"
 						}
 					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
+						}
+					},
 					"remainingTime": {
 						"enable": {
 							"label": "Zbývající čas",
@@ -709,6 +730,10 @@
 					"videos": {
 						"label": "Skrýt na stránkách hodinek",
 						"title": "Odstraní krátká videa z doporučení na hodinkách"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
@@ -776,6 +801,21 @@
 					"title": "Automaticky přizpůsobí kvalitu videa na vybranou úroveň."
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "Frame rate preference",
+							"options": {
+								"default": "Default",
+								"higher": "Higher FPS",
+								"lower": "Lower FPS"
+							},
+							"title": "Prefer higher or lower frame rate when multiple formats are available"
+						}
+					},
+					"preferPremium": {
+						"label": "Prefer Premium enhanced bitrate",
+						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+					},
 					"quality": {
 						"select": {
 							"label": "Kvalita přehrávače",
@@ -814,6 +854,16 @@
 							"label": "Rychlost hráče",
 							"title": "Rychlost nastavení videa na"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "Nastavení rychlosti přehrávání"
@@ -856,6 +906,12 @@
 							"label": "Odstranit video tlačítko",
 							"title": "Přidá tlačítko pro odstranění videí ze seznamu skladeb"
 						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
+						}
 					}
 				},
 				"title": "Nastavení správy playlistu"
@@ -866,6 +922,25 @@
 					"title": "Přidá do přehrávače tlačítko pro pořízení snímku videa"
 				},
 				"settings": {
+					"dateFormat": {
+						"select": {
+							"label": "Date format",
+							"options": {
+								"date": "YYYY-MM-DD",
+								"dateTime": "YYYY-MM-DD_HH-MM-SS",
+								"dayMonthYear": "DD-MM-YYYY",
+								"iso": "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)"
+							},
+							"title": "The format used for the {date} placeholder"
+						}
+					},
+					"filename": {
+						"error": "Unknown placeholder(s):",
+						"hint": "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.",
+						"label": "Screenshot file name template",
+						"placeholdersLabel": "Available placeholders:",
+						"title": "The template used to name the screenshot file"
+					},
 					"format": {
 						"label": "Formát snímku obrazovky",
 						"title": "Formát pro uložení snímku obrazovky do"
@@ -879,6 +954,28 @@
 								"file": "Soubor"
 							},
 							"title": "Typ snímku obrazovky"
+						}
+					},
+					"timestampFormat": {
+						"select": {
+							"label": "Video timestamp format",
+							"options": {
+								"auto": "MM-SS or HH-MM-SS",
+								"hhmmss": "HH-MM-SS",
+								"mmss": "MM-SS"
+							},
+							"title": "The format used for the {video timestamp} placeholder"
+						}
+					},
+					"timestampSeparator": {
+						"select": {
+							"label": "Timestamp separator",
+							"options": {
+								"auto": "Auto",
+								"colon": "Colon (MM:SS)",
+								"hyphen": "Hyphen (MM-SS)"
+							},
+							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
 						}
 					}
 				},
@@ -952,6 +1049,19 @@
 					}
 				},
 				"title": "Nastavení historie videa"
+			},
+			"videosPerRow": {
+				"enable": {
+					"label": "Videos per row",
+					"title": "Changes the number of videos displayed per row on YouTube feeds"
+				},
+				"settings": {
+					"count": {
+						"label": "Number of videos per row",
+						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+					}
+				},
+				"title": "Videos per row settings"
 			},
 			"volumeBoost": {
 				"enable": {

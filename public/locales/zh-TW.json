@@ -10,7 +10,7 @@
 			"features": {
 				"monoToStereoButton": {
 					"button": {
-						"label": "Mono Audio Handling",
+						"label": "Mono to Stereo",
 						"toggle": {
 							"on": "Mono → Stereo Output",
 							"off": "Original Audio"
@@ -114,8 +114,19 @@
 						"failedToRemoveVideo": "Failed to remove video",
 						"markAsUnwatched": "Mark as unwatched",
 						"markingAsUnwatched": "Marking as unwatched…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Remove video",
-						"removingVideo": "Removing video…"
+						"removingVideo": "Removing video…",
+						"removingWatchedVideos": "Removing watched videos…"
+					}
+				},
+				"playlistReverseButton": {
+					"extras": {
+						"toggle": {
+							"off": "Normal order",
+							"on": "Reversed order"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -186,7 +197,7 @@
 							"volumeBoostButton": "音量增強按鈕",
 							"flipVideoVerticalButton": "Flip video vertically button",
 							"flipVideoHorizontalButton": "Flip video horizontally button",
-							"monoToStereoButton": "Mono to Stereo button"
+							"monoToStereoButton": "Mono to stereo button"
 						},
 						"options": {
 							"below_player": {
@@ -300,14 +311,18 @@
 						},
 						"keepFirst": "Keep {{FEATURE}}",
 						"keepSecond": "Keep {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
-							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key.",
+							"description": "'{{FEATURE_A}}' and '{{FEATURE_B}}' cannot use the same modifier key",
 							"selectNewKey": "Change modifier key:"
 						},
-						"resolveConflict": "Please resolve all conflicts before applying.",
+						"resolveConflict": "Please resolve all conflicts before applying",
 						"title": "Import Conflicts Detected"
 					},
-					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled.",
+					"optionConflict": "This option cannot be enabled while '{{OPTION}}' is enabled",
 					"scrollWheelHoldModifierKey": {
 						"sameKey": {
 							"speedControl": "滾輪播放速度輔助按鍵不能跟音量增強輔助按鍵相同。",
@@ -409,7 +424,7 @@
 						"title": "The volume applied to every video when it begins playing"
 					}
 				},
-				"title": "Global Volume Override"
+				"title": "Global volume override"
 			},
 			"miniPlayer": {
 				"button": {
@@ -418,7 +433,7 @@
 				},
 				"enable": {
 					"label": "Open Mini Player when viewing comments",
-					"title": "Automatically opens the Mini Player when you scroll to comments."
+					"title": "Automatically opens the Mini Player when you scroll to comments"
 				},
 				"settings": {
 					"position": {
@@ -432,12 +447,12 @@
 								"topLeft": "Top left",
 								"topRight": "Top right"
 							},
-							"title": "Sets the starting position before you move the Mini Player."
+							"title": "Sets the starting position before you move the Mini Player"
 						}
 					},
 					"size": {
 						"label": "Default Mini Player size",
-						"title": "Sets the initial size before you resize the Mini Player."
+						"title": "Sets the initial size before you resize the Mini Player"
 					}
 				},
 				"title": "Mini Player settings"
@@ -507,13 +522,13 @@
 					"defaultToOriginalAudioTrack": {
 						"enable": {
 							"label": "Default to original audio track",
-							"title": "Always default to the original audio track"
+							"title": "Always defaults to the original audio track"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI summary",
-							"title": "Hides the artificial intelligence summary below videos"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -536,13 +551,13 @@
 					},
 					"hideMembersOnlyVideos": {
 						"enable": {
-							"label": "Hide members-only videos",
-							"title": "Hides videos that are only visible to members"
+							"label": "Hide member-only videos",
+							"title": "Hides videos that only members can watch"
 						}
 					},
 					"monoToStereoButton": {
 						"enable": {
-							"label": "Mono to Stereo button",
+							"label": "Mono to stereo button",
 							"title": "Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged."
 						}
 					},
@@ -566,8 +581,8 @@
 					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
-							"label": "Hide playlists from home page",
-							"title": "Get rid of playlists from home page"
+							"label": "Hide playlists from the home page",
+							"title": "Removes playlists from the home page"
 						}
 					},
 					"hideScrollbar": {
@@ -616,6 +631,12 @@
 						"enable": {
 							"label": "暫停背景播放程序",
 							"title": "當前景分頁啟用新播放器時，自動凍結背景分頁影音"
+						}
+					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
 						}
 					},
 					"remainingTime": {
@@ -668,19 +689,19 @@
 					},
 					"timestampPeek": {
 						"enable": {
-							"label": "Timestamp Preview",
+							"label": "Timestamp preview",
 							"title": "Preview the video by hovering over a timestamp. Click the preview to start playback from that moment."
 						}
 					},
 					"flipVideoHorizontalButton": {
 						"enable": {
-							"label": "Horizontal video flip button",
+							"label": "Flip video horizontally button",
 							"title": "Adds a button to flip the video horizontally"
 						}
 					},
 					"flipVideoVerticalButton": {
 						"enable": {
-							"label": "Vertical video flip button",
+							"label": "Flip video vertically button",
 							"title": "Adds a button to flip the video vertically"
 						}
 					}
@@ -688,7 +709,7 @@
 				"title": "其他設定"
 			},
 			"hideShorts": {
-				"title": "Hide Shorts",
+				"title": "Hide shorts",
 				"settings": {
 					"sidebar": {
 						"label": "Hide in sidebar",
@@ -709,6 +730,10 @@
 					"videos": {
 						"label": "Hide on watch pages",
 						"title": "Removes Shorts videos from recommendations on watch pages"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
@@ -768,7 +793,7 @@
 						"title": "選擇屏幕顥示風格"
 					}
 				},
-				"title": "On-screen display settings"
+				"title": "On-Screen Display settings"
 			},
 			"playerQuality": {
 				"enable": {
@@ -776,6 +801,21 @@
 					"title": "自動調整到指定畫質"
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "Frame rate preference",
+							"options": {
+								"default": "Default",
+								"higher": "Higher FPS",
+								"lower": "Lower FPS"
+							},
+							"title": "Prefer higher or lower frame rate when multiple formats are available"
+						}
+					},
+					"preferPremium": {
+						"label": "Prefer Premium enhanced bitrate",
+						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+					},
 					"quality": {
 						"select": {
 							"label": "播放畫質",
@@ -814,6 +854,16 @@
 							"label": "播放速度",
 							"title": "設定影片播放速度為"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "播放速度設定"
@@ -856,6 +906,12 @@
 							"label": "Remove video button",
 							"title": "Adds a button to remove videos from the playlist"
 						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
+						}
 					}
 				},
 				"title": "Playlist management settings"
@@ -866,6 +922,25 @@
 					"title": "在播放器加入擷取螢幕截圖按鈕"
 				},
 				"settings": {
+					"dateFormat": {
+						"select": {
+							"label": "Date format",
+							"options": {
+								"date": "YYYY-MM-DD",
+								"dateTime": "YYYY-MM-DD_HH-MM-SS",
+								"dayMonthYear": "DD-MM-YYYY",
+								"iso": "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)"
+							},
+							"title": "The format used for the {date} placeholder"
+						}
+					},
+					"filename": {
+						"error": "Unknown placeholder(s):",
+						"hint": "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.",
+						"label": "Screenshot file name template",
+						"placeholdersLabel": "Available placeholders:",
+						"title": "The template used to name the screenshot file"
+					},
 					"format": {
 						"label": "螢幕截圖儲存格式",
 						"title": "螢幕截圖的儲存格式"
@@ -879,6 +954,28 @@
 								"file": "檔案"
 							},
 							"title": "螢幕截圖的儲存方式"
+						}
+					},
+					"timestampFormat": {
+						"select": {
+							"label": "Video timestamp format",
+							"options": {
+								"auto": "MM-SS or HH-MM-SS",
+								"hhmmss": "HH-MM-SS",
+								"mmss": "MM-SS"
+							},
+							"title": "The format used for the {video timestamp} placeholder"
+						}
+					},
+					"timestampSeparator": {
+						"select": {
+							"label": "Timestamp separator",
+							"options": {
+								"auto": "Auto",
+								"colon": "Colon (MM:SS)",
+								"hyphen": "Hyphen (MM-SS)"
+							},
+							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
 						}
 					}
 				},
@@ -953,6 +1050,19 @@
 				},
 				"title": "觀看記錄設定"
 			},
+			"videosPerRow": {
+				"enable": {
+					"label": "Videos per row",
+					"title": "Changes the number of videos displayed per row on YouTube feeds"
+				},
+				"settings": {
+					"count": {
+						"label": "Number of videos per row",
+						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+					}
+				},
+				"title": "Videos per row settings"
+			},
 			"volumeBoost": {
 				"enable": {
 					"label": "音量增強",
@@ -965,7 +1075,7 @@
 					},
 					"amount_global_only": {
 						"label": "Volume boost amount (dB)",
-						"title": "The amount to boost the volume by."
+						"title": "The amount to boost the volume by"
 					},
 					"mode": {
 						"select": {
