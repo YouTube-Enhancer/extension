@@ -114,8 +114,19 @@
 						"failedToRemoveVideo": "移除视频失败",
 						"markAsUnwatched": "标记为未观看",
 						"markingAsUnwatched": "正在标记为未观看…",
+						"removeAllWatchedVideo": "删除 {{count}} 已观看视频",
+						"removeAllWatchedVideos": "删除 {{count}} 已观看视频",
 						"removeVideo": "删除视频",
-						"removingVideo": "正在移除视频…"
+						"removingVideo": "正在移除视频…",
+						"removingWatchedVideos": "正在删除已观看的视频…"
+					}
+				},
+				"playlistReverseButton": {
+					"extras": {
+						"toggle": {
+							"off": "通常顺序",
+							"on": "倒序排序"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -300,6 +311,10 @@
 						},
 						"keepFirst": "启用 {{FEATURE}}",
 						"keepSecond": "启用 {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "导入的设置使用已被删除的“自动”质量。请选择一个特定的质量：",
+							"selectQuality": "质量："
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' 和 '{{FEATURE_B}}' 无法使用同一个修改键位。",
 							"selectNewKey": "更换修改键位："
@@ -510,10 +525,10 @@
 							"title": "总是默认原始音轨"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "隐藏 AI 摘要",
-							"title": "隐藏视频下面的人造情报摘要"
+							"label": "隐藏AI",
+							"title": "隐藏AI功能，例如视频摘要，询问AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -618,6 +633,12 @@
 							"title": "当您在前台标签中启用一个新播放器时，暂停后台标签中的视频播放器"
 						}
 					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "倒序播放列表按钮",
+							"title": "添加按钮以反转播放列表中视频的顺序"
+						}
+					},
 					"remainingTime": {
 						"enable": {
 							"label": "剩余时间",
@@ -709,6 +730,10 @@
 					"videos": {
 						"label": "在观看页面中隐藏",
 						"title": "从观看页面的推荐列表移除短视频"
+					},
+					"subscriptions": {
+						"label": "在订阅动态中隐藏",
+						"title": "从订阅源中移除短视频"
 					}
 				}
 			},
@@ -776,6 +801,21 @@
 					"title": "自动调整视频质量到所选等级。"
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "帧率设置",
+							"options": {
+								"default": "默认",
+								"higher": "高帧率",
+								"lower": "低帧率"
+							},
+							"title": "当多个格式可用时，优先选择较高或较低帧率"
+						}
+					},
+					"preferPremium": {
+						"label": "优先选择高码率",
+						"title": "当可用时使用 Premium itags (356/721) 。需要Youtube Premium。"
+					},
 					"quality": {
 						"select": {
 							"label": "播放质量",
@@ -814,6 +854,16 @@
 							"label": "播放速度",
 							"title": "将视频播放速度设为"
 						}
+					},
+					"channelSpeeds": {
+						"add": "添加",
+						"channelId": "频道 ID",
+						"getChannelIdFromLink": "从链接获取 ID",
+						"label": "每个频道播放速度",
+						"pasteLinkPlaceholder": "youtube.com/@channel 或视频链接",
+						"remove": "移除",
+						"speed": "速度",
+						"title": "为来自某频道的视频设置特定的播放速度"
 					}
 				},
 				"title": "播放速度设置"
@@ -856,6 +906,12 @@
 							"label": "移除视频按钮",
 							"title": "添加一个按钮从播放列表中移除视频"
 						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "删除所有已观看视频按钮",
+							"title": "添加一个按钮从播放列表中删除所有已观看的视频"
+						}
 					}
 				},
 				"title": "播放列表管理设置"
@@ -866,6 +922,25 @@
 					"title": "向播放器添加一个按钮以拍摄视频的截图"
 				},
 				"settings": {
+					"dateFormat": {
+						"select": {
+							"label": "日期格式",
+							"options": {
+								"date": "年年年年-月月-日日",
+								"dateTime": "年年年年-月月-日日_时时-分分-秒秒",
+								"dayMonthYear": "日日-月月-年年年年",
+								"iso": "ISO 标准时间（年-月-日 T 时-分-秒-毫秒 零时区）"
+							},
+							"title": "{date} 占位符使用的格式"
+						}
+					},
+					"filename": {
+						"error": "未知占位符(们)：",
+						"hint": "其值无法确定的占位符(例如该时刻没有章节)被空文本替换。 如果文件名为空，则使用默认名称。",
+						"label": "屏幕截图文件名模板",
+						"placeholdersLabel": "可用的占位符：",
+						"title": "用于命名屏幕截图文件的模板"
+					},
 					"format": {
 						"label": "截图格式",
 						"title": "保存屏幕截图的格式"
@@ -879,6 +954,28 @@
 								"file": "文件"
 							},
 							"title": "屏幕截图保存类型"
+						}
+					},
+					"timestampFormat": {
+						"select": {
+							"label": "视频时间戳格式",
+							"options": {
+								"auto": "分分-秒秒 或 时时-分分-秒秒",
+								"hhmmss": "时时-分分-秒秒",
+								"mmss": "分分-秒秒"
+							},
+							"title": "{video timestamp} 占位符使用的格式"
+						}
+					},
+					"timestampSeparator": {
+						"select": {
+							"label": "时间戳分隔符",
+							"options": {
+								"auto": "自动",
+								"colon": "冒号 (分分:秒秒)",
+								"hyphen": "连字符 (分分-秒秒)"
+							},
+							"title": "在 {videotiestmp} 占位符中使用的分隔符。在Windows上的文件名中不允许括号，所以自动使用连字符。"
 						}
 					}
 				},
@@ -952,6 +1049,19 @@
 					}
 				},
 				"title": "视频历史记录设置"
+			},
+			"videosPerRow": {
+				"enable": {
+					"label": "每行视频数",
+					"title": "更改 YouTube Feed 上每行显示的视频数量"
+				},
+				"settings": {
+					"count": {
+						"label": "每行视频数量",
+						"title": "每行在订阅、家庭和频道视频页面上显示的视频数量"
+					}
+				},
+				"title": "每行设置视频数"
 			},
 			"volumeBoost": {
 				"enable": {

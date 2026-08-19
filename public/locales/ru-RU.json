@@ -114,8 +114,19 @@
 						"failedToRemoveVideo": "Не удалось удалить видео",
 						"markAsUnwatched": "Отметить как непросмотренное",
 						"markingAsUnwatched": "Помечается как непросмотренное…",
+						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Удалить видео",
-						"removingVideo": "Удаляется видео…"
+						"removingVideo": "Удаляется видео…",
+						"removingWatchedVideos": "Removing watched videos…"
+					}
+				},
+				"playlistReverseButton": {
+					"extras": {
+						"toggle": {
+							"off": "В обычном порядке",
+							"on": "В обратном порядке"
+						}
 					}
 				},
 				"saveToWatchLaterButton": {
@@ -300,6 +311,10 @@
 						},
 						"keepFirst": "Оставить {{FEATURE}}",
 						"keepSecond": "Оставить {{FEATURE}}",
+						"autoQualityConflict": {
+							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
+							"selectQuality": "Quality:"
+						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' и '{{FEATURE_B}}' не могут использовать одну и ту же клавишу-модификатор.",
 							"selectNewKey": "Измените клавишу-модификатор:"
@@ -510,10 +525,10 @@
 							"title": "Всегда выставлять оригинальную аудио дорожку видео по умолчанию"
 						}
 					},
-					"hideArtificialIntelligenceSummary": {
+					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Скрыть итог ИИ",
-							"title": "Скрывает искусственный интеллект резюме ниже видео"
+							"label": "Hide AI",
+							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
 					"hideEndScreenCards": {
@@ -618,6 +633,12 @@
 							"title": "Ставит на паузу видео в фоновых вкладках при запуске видео в активной (текущей) вкладке"
 						}
 					},
+					"playlistReverseButton": {
+						"enable": {
+							"label": "Reverse playlist button",
+							"title": "Adds a button to reverse the order of videos in playlists"
+						}
+					},
 					"remainingTime": {
 						"enable": {
 							"label": "Включить отображение оставшегося времени",
@@ -709,6 +730,10 @@
 					"videos": {
 						"label": "Скрыть на страницах просмотра",
 						"title": "Удаляет короткие видео с рекомендаций на страницах просмотра"
+					},
+					"subscriptions": {
+						"label": "Hide on Subscriptions feed",
+						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
 			},
@@ -776,6 +801,21 @@
 					"title": "Автоматически настраивает качество видео на выбранный уровень."
 				},
 				"settings": {
+					"fpsPreference": {
+						"select": {
+							"label": "Frame rate preference",
+							"options": {
+								"default": "Default",
+								"higher": "Higher FPS",
+								"lower": "Lower FPS"
+							},
+							"title": "Prefer higher or lower frame rate when multiple formats are available"
+						}
+					},
+					"preferPremium": {
+						"label": "Prefer Premium enhanced bitrate",
+						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+					},
 					"quality": {
 						"select": {
 							"label": "Качество проигрывателя",
@@ -814,6 +854,16 @@
 							"label": "Скорость проигрывателя",
 							"title": "Скорость, которая будет задаваться для видео"
 						}
+					},
+					"channelSpeeds": {
+						"add": "Add",
+						"channelId": "Channel ID",
+						"getChannelIdFromLink": "Get ID from link",
+						"label": "Per-channel playback speed",
+						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"remove": "Remove",
+						"speed": "Speed",
+						"title": "Sets a specific playback speed for videos from a channel"
 					}
 				},
 				"title": "Настройки скорости воспроизведения"
@@ -856,6 +906,12 @@
 							"label": "Удалить кнопку видео",
 							"title": "Добавляет кнопку удаления видео из плейлиста"
 						}
+					},
+					"removeAllWatchedVideosButton": {
+						"enable": {
+							"label": "Remove all watched videos button",
+							"title": "Adds a button to remove all watched videos from the playlist"
+						}
 					}
 				},
 				"title": "Настройки управления плейлистом"
@@ -866,6 +922,25 @@
 					"title": "Добавляет кнопку в проигрыватель которая делает скриншот видео"
 				},
 				"settings": {
+					"dateFormat": {
+						"select": {
+							"label": "Date format",
+							"options": {
+								"date": "YYYY-MM-DD",
+								"dateTime": "YYYY-MM-DD_HH-MM-SS",
+								"dayMonthYear": "DD-MM-YYYY",
+								"iso": "ISO (YYYY-MM-DDTHH-MM-SS-mmmZ)"
+							},
+							"title": "The format used for the {date} placeholder"
+						}
+					},
+					"filename": {
+						"error": "Unknown placeholder(s):",
+						"hint": "Placeholders whose value can't be determined (e.g. no chapter at that moment) are replaced with empty text. If the file name would end up empty, the default name is used.",
+						"label": "Screenshot file name template",
+						"placeholdersLabel": "Available placeholders:",
+						"title": "The template used to name the screenshot file"
+					},
 					"format": {
 						"label": "Формат скриншота",
 						"title": "Формат, в котором будет сохраняться скриншот"
@@ -879,6 +954,28 @@
 								"file": "Файл"
 							},
 							"title": "Тип сохранения скриншота"
+						}
+					},
+					"timestampFormat": {
+						"select": {
+							"label": "Video timestamp format",
+							"options": {
+								"auto": "MM-SS or HH-MM-SS",
+								"hhmmss": "HH-MM-SS",
+								"mmss": "MM-SS"
+							},
+							"title": "The format used for the {video timestamp} placeholder"
+						}
+					},
+					"timestampSeparator": {
+						"select": {
+							"label": "Timestamp separator",
+							"options": {
+								"auto": "Auto",
+								"colon": "Colon (MM:SS)",
+								"hyphen": "Hyphen (MM-SS)"
+							},
+							"title": "The separator used in the {video timestamp} placeholder. Colons aren't allowed in file names on Windows, so Auto uses hyphens there."
 						}
 					}
 				},
@@ -952,6 +1049,19 @@
 					}
 				},
 				"title": "Настройки отслеживания"
+			},
+			"videosPerRow": {
+				"enable": {
+					"label": "Videos per row",
+					"title": "Changes the number of videos displayed per row on YouTube feeds"
+				},
+				"settings": {
+					"count": {
+						"label": "Number of videos per row",
+						"title": "The number of videos to show per row on the subscription, home, and channel video pages"
+					}
+				},
+				"title": "Videos per row settings"
 			},
 			"volumeBoost": {
 				"enable": {
