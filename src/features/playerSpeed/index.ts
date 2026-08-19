@@ -161,6 +161,7 @@ export default createFeature({
 		void updateEffectivePlaybackSpeedButtons(speed, channelSpeeds);
 	},
 	onDisable: () => {
+		registry.playerManager.cleanup(metadata.id);
 		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
