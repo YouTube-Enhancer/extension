@@ -1,3 +1,103 @@
+# [1.34.0](https://github.com/YouTube-Enhancer/extension/compare/v1.33.0...v1.34.0) (2026-08-20)
+
+
+### Bug Fixes
+
+* add missing pageTypes for shorts in scroll wheel volume/speed control ([cdc05f7](https://github.com/YouTube-Enhancer/extension/commit/cdc05f740514d761b93c8e3d0d6bad64c1fef62a))
+* Adjust tooltips ([8f85223](https://github.com/YouTube-Enhancer/extension/commit/8f852230f3bae1c4bffc7f52dfe2cf8b9714cf6d))
+* automatic theater mode and automatically maximize player conflict I think [#1318](https://github.com/YouTube-Enhancer/extension/issues/1318) ([0c16e34](https://github.com/YouTube-Enhancer/extension/commit/0c16e340bc6f57c606aeeb1e8b1dccc5fe537011))
+* **automaticallyDisableAmbientMode:** Re-disable ambient mode on navigation ([2a7bcd6](https://github.com/YouTube-Enhancer/extension/commit/2a7bcd6c2860e9289bfbafd76c906027687f312f))
+* **automaticallyDisableAutoPlay:** Re-disable autoplay on SPA navigation ([a45029c](https://github.com/YouTube-Enhancer/extension/commit/a45029cea63d21859f444597c52dc23eb2e9e4b8))
+* **automaticallyDisableClosedCaptions:** Re-disable closed captions on navigation ([36ef69c](https://github.com/YouTube-Enhancer/extension/commit/36ef69cdcacdee6f5f4f96f37ceb9364a54b0286))
+* **automaticallyEnableClosedCaptions:** Re-enable closed captions on navigation ([e7ad70d](https://github.com/YouTube-Enhancer/extension/commit/e7ad70d03973cf22f6fb3477b0d8416e590f778a))
+* **automaticallyShowMoreVideosOnEndScreen:** scope endscreen display to ended-mode to prevent blocking player controls ([#1335](https://github.com/YouTube-Enhancer/extension/issues/1335)) ([2195cb2](https://github.com/YouTube-Enhancer/extension/commit/2195cb2424298da5e844e9d53d63d41747e61786))
+* **autoplay:** disable autoplay reliably on slow player loads ([#1334](https://github.com/YouTube-Enhancer/extension/issues/1334)) ([04b86de](https://github.com/YouTube-Enhancer/extension/commit/04b86de9ba6fb2c505f702b16821294519843181))
+* conflict between automatically maximize player and automatic theater mode [#1318](https://github.com/YouTube-Enhancer/extension/issues/1318) ([5b5b3ce](https://github.com/YouTube-Enhancer/extension/commit/5b5b3ce68d91e1c4903fe717941f935617fb3e78))
+* **css-editor:** prevent editor content resetting to empty on settings search re-render ([ad46503](https://github.com/YouTube-Enhancer/extension/commit/ad4650367bdd67154b2c40fa828f775423528898))
+* **defaultToOriginalAudioTrack:** Re-apply default audio track on navigation ([33f7567](https://github.com/YouTube-Enhancer/extension/commit/33f7567bfe56f9bb0b37329b9fea9b25cd253d22))
+* defer embedded script and lazily create Trusted Types policy ([#1361](https://github.com/YouTube-Enhancer/extension/issues/1361)) ([27b02a6](https://github.com/YouTube-Enhancer/extension/commit/27b02a6f8ec77c7b03c1f85e9b5c6cd8a97cab0a))
+* devtools not loading because of invalid page path ([6401f11](https://github.com/YouTube-Enhancer/extension/commit/6401f11a1f21c2b09c82d5b09f06767f0c933a22))
+* **devtools:** Not working in firefox ([4a3cb68](https://github.com/YouTube-Enhancer/extension/commit/4a3cb686d9166425afe3a1d9288fcee707306acd))
+* ESLint auto-fix on save ([3905dda](https://github.com/YouTube-Enhancer/extension/commit/3905dda6a1f4febf48075090d4a30b50bd82b519))
+* **globalVolume:** Re-apply volume override on SPA navigation ([a80b9df](https://github.com/YouTube-Enhancer/extension/commit/a80b9df6e124c0fbe8bb17d2ba2767dd8bc4eca9))
+* handle 'auto' quality in playerQuality during migration and import ([4ccb5d2](https://github.com/YouTube-Enhancer/extension/commit/4ccb5d2da8b4f2f582ddec6c5a2768293694588c))
+* handle speed values stored as strings from previous version bug ([fe70bb7](https://github.com/YouTube-Enhancer/extension/commit/fe70bb7522e5b6d77b7897e9a6ccf21d004f9f5f))
+* **Hide AI:** hide "Ask Questions" section in video description ([73b538c](https://github.com/YouTube-Enhancer/extension/commit/73b538c44ab037d672f85ea2480f7619c8715db3))
+* **Hide AI:** Remove dependency array so the feature runs on all pages ([e5379b7](https://github.com/YouTube-Enhancer/extension/commit/e5379b738773600cef1afa88d637d8129fed2042))
+* **Hide playables:** Run on all pages ([f46b575](https://github.com/YouTube-Enhancer/extension/commit/f46b5756ef2cc7865cc37c98661b8659f528de3d))
+* **Hide Shorts:** Edge case where shorts wasn't hidden on other channel pages ([71f9b6e](https://github.com/YouTube-Enhancer/extension/commit/71f9b6e2c546010919f46361eb0593241c98d239))
+* **hideLiveStreamChat:** Re-evaluate live state and toggle chat on navigation ([265475e](https://github.com/YouTube-Enhancer/extension/commit/265475edbc3f0c820c1107c7a66b26b996957151))
+* **hideShorts:** Re-apply shorts section visibility on navigation ([3ce1d98](https://github.com/YouTube-Enhancer/extension/commit/3ce1d986f0ca0a686974306f2d6a3f6d9e798453))
+* improve en-US locale grammar, casing, and wording consistency ([8920e0a](https://github.com/YouTube-Enhancer/extension/commit/8920e0a9b18d2b3a3b65ea6326e4e847644aaac2))
+* increase waitForElement timeouts for button placement and feature menu ([6ef288f](https://github.com/YouTube-Enhancer/extension/commit/6ef288f296080d0a82ccf7f7100e30f00815248f))
+* lazily code-split features and heavy dependencies ([#1361](https://github.com/YouTube-Enhancer/extension/issues/1361)) ([9b581c5](https://github.com/YouTube-Enhancer/extension/commit/9b581c53e8283ad2504ab2f7dd96ae4aa0eaa3e4)), closes [#1346](https://github.com/YouTube-Enhancer/extension/issues/1346) [#1355](https://github.com/YouTube-Enhancer/extension/issues/1355) [#1319](https://github.com/YouTube-Enhancer/extension/issues/1319)
+* lazily defer audio engine init and feature menu button setup ([#1319](https://github.com/YouTube-Enhancer/extension/issues/1319)) ([ad8c906](https://github.com/YouTube-Enhancer/extension/commit/ad8c90642420828a94989117856ed2903063d4ea))
+* **loopButton:** Re-attach loop MutationObserver on navigation ([a8b545a](https://github.com/YouTube-Enhancer/extension/commit/a8b545a7950a179737cef51070ce63740ae9cfcc))
+* **miniPlayer:** Re-attach auto mini-player detection on navigation ([44223f7](https://github.com/YouTube-Enhancer/extension/commit/44223f7e77c97b98975d1749a23af2bb2adcd4c4))
+* only initialize messaging elements once ([24c9f28](https://github.com/YouTube-Enhancer/extension/commit/24c9f2864134fe8667f77b9d62f0cf07aac7710d))
+* **Open YouTube Settings On Hover:** menu closing when clicking setting e.g quality menu ([3186e75](https://github.com/YouTube-Enhancer/extension/commit/3186e75507b00f499ddfbc8659086d13c027d13c))
+* **openYouTubeSettingsOnHover:** Re-attach hover listeners on navigation ([3cb6c8d](https://github.com/YouTube-Enhancer/extension/commit/3cb6c8df19b867c2ae10c1381163bf82a9aa1bd7))
+* **pauseBackgroundPlayers:** Re-attach player observer and listener on navigation ([bd54ccc](https://github.com/YouTube-Enhancer/extension/commit/bd54ccc56a6d2d2d7559cf2f7ac1a2926fa43536))
+* **Playback Speed Buttons:** NaN showing in tooltip ([fac4b0f](https://github.com/YouTube-Enhancer/extension/commit/fac4b0f725f9922fa01dc9bf41b92f1624a64fd1))
+* **playback speed buttons:** NaN when increasing speed from popup [#1324](https://github.com/YouTube-Enhancer/extension/issues/1324) ([72d4b8a](https://github.com/YouTube-Enhancer/extension/commit/72d4b8a15ce18b8c6895294a60a58aef2244fd53))
+* **playerQuality:** Re-apply preferred quality on SPA navigation ([669c1d2](https://github.com/YouTube-Enhancer/extension/commit/669c1d2f86c0368849570b4eed0ef009595f9b96))
+* **playerSpeed:** Re-apply playback speed on SPA navigation ([8b69284](https://github.com/YouTube-Enhancer/extension/commit/8b69284eb6f1107581691313d3db61ea13dd8588))
+* **playerSpeed:** remove leaked player state hook on disable ([8a44076](https://github.com/YouTube-Enhancer/extension/commit/8a44076df502f10eb7767da9581241d23fb86cd1))
+* **playlist reverse button:** type error related to locale structure ([38313f9](https://github.com/YouTube-Enhancer/extension/commit/38313f95af85837e7826dc56376a41b72167338a))
+* **playlistLength:** Re-initialize playlist length UI on navigation ([fcf9f21](https://github.com/YouTube-Enhancer/extension/commit/fcf9f21ec8d2304126cdcb5c60f66965d20bab19))
+* **playlistManagementButtons:** Re-attach playlist management buttons on navigation ([edba87e](https://github.com/YouTube-Enhancer/extension/commit/edba87efe0bc45260e66d6504f2831003f1d28bc))
+* properly handle navigation handler cleanup ([43b4510](https://github.com/YouTube-Enhancer/extension/commit/43b4510bfa75166da60af6e48130ca41e64d08ed))
+* **Registry:** Re-place feature buttons on SPA navigation ([664bdcd](https://github.com/YouTube-Enhancer/extension/commit/664bdcd37984da56e83829adca9a4c729e1b2400))
+* **remainingTime:** Re-inject time display and re-attach listener on navigation ([5954e69](https://github.com/YouTube-Enhancer/extension/commit/5954e6935936e1c63fb4159b9432ec822913f785))
+* **rememberVolume:** Re-apply saved volume and re-attach listener on navigation ([36e02f2](https://github.com/YouTube-Enhancer/extension/commit/36e02f2d87c77d2e440828d9b6091a7850c85312))
+* Remove all videos button ([5fb461e](https://github.com/YouTube-Enhancer/extension/commit/5fb461e427e94e20a2cb9fb80be44442a3b00ced))
+* Remove light appearance background color ([e512515](https://github.com/YouTube-Enhancer/extension/commit/e5125159f5989365a1f3560c2ffab6322a93e2fe))
+* **restoreFullscreenScrolling:** Re-add CSS classes on navigation ([eee7279](https://github.com/YouTube-Enhancer/extension/commit/eee72791da86d20f2baa24380ef6690f035763d0))
+* **saveToWatchLaterButton:** Re-attach save watch later buttons on navigation ([27398e6](https://github.com/YouTube-Enhancer/extension/commit/27398e615dc965cace6a38b79576bc7363b85d49))
+* scope error handler to only catch extension-originated errors ([2092eeb](https://github.com/YouTube-Enhancer/extension/commit/2092eebc3ce1eb3807b29965612a1da0ef72efe1))
+* **screenshotButton:** preserve timestamp colons on non-Windows file names ([#1367](https://github.com/YouTube-Enhancer/extension/issues/1367)) ([840a486](https://github.com/YouTube-Enhancer/extension/commit/840a486c93dc11a16032eb1548870a8f25ef1e97))
+* **screenshotButton:** zero-pad timestamp minutes ([#1367](https://github.com/YouTube-Enhancer/extension/issues/1367)) ([d4ad884](https://github.com/YouTube-Enhancer/extension/commit/d4ad884312ef972a5c2a36fc412fd6da906cdf6f))
+* **scrollWheelSpeedControl:** Re-attach scroll wheel listeners on navigation ([4123f5a](https://github.com/YouTube-Enhancer/extension/commit/4123f5a1fbf24dcdd5930ddfd175bdf60662f067))
+* **scrollWheelVolumeControl:** Re-attach scroll wheel listeners on navigation ([ea65256](https://github.com/YouTube-Enhancer/extension/commit/ea652569a6279fcd2f573adb50aaf4cd1f4e484d))
+* settings import file input not reset on early returns, state keys lost during conflict resolution ([2457595](https://github.com/YouTube-Enhancer/extension/commit/2457595b3ef8ad8414c24c00da4761aa0e42b20e))
+* Settings import unable to import old settings properly ([c5f50d2](https://github.com/YouTube-Enhancer/extension/commit/c5f50d24b837a721ac008698a45cff4439ea47cc))
+* **settings:** reset rememberVolume enabled state on settings reset ([b407e5f](https://github.com/YouTube-Enhancer/extension/commit/b407e5f7fbad140b3138e028a689c8d485cffdf3))
+* **shareShortener:** Re-observe new share URL input and clean search page on navigation ([c8d678c](https://github.com/YouTube-Enhancer/extension/commit/c8d678cdedca419f7a73ec0f4ceb526b89b0e1bd))
+* **shortsAutoScroll:** Re-setup auto-scroll on shorts navigation ([c45ae2e](https://github.com/YouTube-Enhancer/extension/commit/c45ae2edc704a955113065ea2bb1806b52286c1b))
+* **skipContinueWatching:** Re-patch youthereDataChanged_ on navigation ([1a84895](https://github.com/YouTube-Enhancer/extension/commit/1a84895a57352588a134e54bc16db8188ab414c0))
+* stop extension from loading on unsupported YouTube hosts ([#1346](https://github.com/YouTube-Enhancer/extension/issues/1346)) ([8c09ac7](https://github.com/YouTube-Enhancer/extension/commit/8c09ac75acbfe83e99862c2a980ad667372f1697))
+* **timestampPeek:** Re-observe timestamp hover elements on navigation ([183d6c3](https://github.com/YouTube-Enhancer/extension/commit/183d6c3536c50845960905d98b9c6d95e5d036bd))
+* use messaging bridge for extension origin instead of webextension-polyfill in embedded script ([71ece9b](https://github.com/YouTube-Enhancer/extension/commit/71ece9bb711796b7a3401bdd0a89fda6cf58a6ae))
+* **videoHistory:** stop automatic resume from starting playback ([#1355](https://github.com/YouTube-Enhancer/extension/issues/1355)) ([2884094](https://github.com/YouTube-Enhancer/extension/commit/2884094dd8252a6cb5be9abb39d315c05039c0bd))
+* **volumeBoost:** Re-connect AudioContext and re-apply boost on navigation ([2e4dd19](https://github.com/YouTube-Enhancer/extension/commit/2e4dd19501ebb51a76932367f6ff0a9ecdec8054))
+* **waitForPlayerLoaded:** add readyState fallback for live streams ([#1337](https://github.com/YouTube-Enhancer/extension/issues/1337)) ([5874ff7](https://github.com/YouTube-Enhancer/extension/commit/5874ff739489e48479d94d2285a9809c725f0058))
+
+
+### Features
+
+* Add remove all videos button ([72514d1](https://github.com/YouTube-Enhancer/extension/commit/72514d1a74c231d5f98c7fc0ab054f80603f678e))
+* **Hide AI:** Expand hiding to ask youtube section in search dropdown ([9a2c933](https://github.com/YouTube-Enhancer/extension/commit/9a2c933488769b76a2969371c7274528be389d53))
+* **Hide Shorts:** Add option to hide on subscriptions page ([f931b1a](https://github.com/YouTube-Enhancer/extension/commit/f931b1a2361aab0226b4fb9a99c142d6a0f422d6))
+* **playerQuality:** add FPS preference controls ([#1337](https://github.com/YouTube-Enhancer/extension/issues/1337), [#434](https://github.com/YouTube-Enhancer/extension/issues/434)) ([20d5a5f](https://github.com/YouTube-Enhancer/extension/commit/20d5a5fc5a154a9a005ab64cbc35342da5ad069b))
+* **playerQuality:** add premium enhanced bitrate support ([#1337](https://github.com/YouTube-Enhancer/extension/issues/1337), [#434](https://github.com/YouTube-Enhancer/extension/issues/434)) ([f3c7d38](https://github.com/YouTube-Enhancer/extension/commit/f3c7d38a08bfa8465ea79889c0e0b04fd8946cdc))
+* **playerSpeed:** add per-channel playback speed overrides ([#1368](https://github.com/YouTube-Enhancer/extension/issues/1368)) ([b0c3a42](https://github.com/YouTube-Enhancer/extension/commit/b0c3a4286fa60e5218dffe5ec928056bf54200e0))
+* Reverse playlist button [#985](https://github.com/YouTube-Enhancer/extension/issues/985) ([6964265](https://github.com/YouTube-Enhancer/extension/commit/69642653fa5f3b4b0166520504e4cb7d21831136))
+* **screenshotButton:** add timestamp separator option ([#1367](https://github.com/YouTube-Enhancer/extension/issues/1367)) ([5520159](https://github.com/YouTube-Enhancer/extension/commit/5520159b862a3b416f64f9646a62c2ac47e2cc5b))
+* **screenshotButton:** customizable screenshot filename template ([#1367](https://github.com/YouTube-Enhancer/extension/issues/1367)) ([8c53917](https://github.com/YouTube-Enhancer/extension/commit/8c53917dde1a787bbb0e412f3fde05373cebf0b5))
+* **videosPerRow:** allow users to set the number of videos per row [#579](https://github.com/YouTube-Enhancer/extension/issues/579) ([7848f01](https://github.com/YouTube-Enhancer/extension/commit/7848f0101c0b0a3c919a8cea3fb1637ea97729cd))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.34.0-Chrome.zip | d63797c1c07f94b826ae5842e3c356b816038c30218cdb06816799b9a07f923a |
+| youtube-enhancer-v1.34.0-Chromium.zip | d63797c1c07f94b826ae5842e3c356b816038c30218cdb06816799b9a07f923a |
+| youtube-enhancer-v1.34.0-Edge.zip | d63797c1c07f94b826ae5842e3c356b816038c30218cdb06816799b9a07f923a |
+| youtube-enhancer-v1.34.0-Firefox.zip | a021e7f4d591d51475548dad743a09c5e9b01fca826846defea169c3f8f39eaa |
+
 # [1.33.0](https://github.com/YouTube-Enhancer/extension/compare/v1.32.0...v1.33.0) (2026-06-08)
 
 
