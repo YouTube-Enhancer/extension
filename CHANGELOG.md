@@ -1,3 +1,22 @@
+## [1.34.1](https://github.com/YouTube-Enhancer/extension/compare/v1.34.0...v1.34.1) (2026-08-20)
+
+
+### Bug Fixes
+
+* **settings:** merge defaults into stored settings to fix options page crash ([#1370](https://github.com/YouTube-Enhancer/extension/issues/1370)) ([ca5ee13](https://github.com/YouTube-Enhancer/extension/commit/ca5ee132789067306c5604b1abd571f1401aa379))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.34.1-Chrome.zip | a19492a0ea59467bf35548c8f9df681e078582a5b1dbd72a7211bcea4a994901 |
+| youtube-enhancer-v1.34.1-Chromium.zip | a19492a0ea59467bf35548c8f9df681e078582a5b1dbd72a7211bcea4a994901 |
+| youtube-enhancer-v1.34.1-Edge.zip | a19492a0ea59467bf35548c8f9df681e078582a5b1dbd72a7211bcea4a994901 |
+| youtube-enhancer-v1.34.1-Firefox.zip | fddaa8699a7e449e61d3f01ed7d0dae77479bfc5850bc7a7cb326b58c3cd3bb9 |
+
 # [1.34.0](https://github.com/YouTube-Enhancer/extension/compare/v1.33.0...v1.34.0) (2026-08-20)
 
 
