@@ -52,3 +52,7 @@ function setPartialSetting<K extends keyof configuration>(obj: Partial<configura
 function setSetting<K extends keyof configuration>(obj: configuration, key: K, value: configuration[K]) {
 	obj[key] = value;
 }
+
+void (async () => {
+	await setDefaultValues();
+})().catch((err) => console.error("[defaults] Failed to set default values:", err));
