@@ -238,7 +238,7 @@ export default function SettingsFooter() {
 							if (notificationToRemove) {
 								removeNotification(notificationToRemove);
 							}
-							void browser.storage.local.set({ ...defaultConfiguration, ...{ rememberVolume: settings.rememberVolume } });
+							void browser.storage.local.set(defaultConfiguration);
 							await refreshSettings();
 							addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
 						})();
