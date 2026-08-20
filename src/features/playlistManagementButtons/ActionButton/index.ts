@@ -1,7 +1,6 @@
 import type { IconType } from "react-icons";
 
 import React from "react";
-import { renderToString } from "react-dom/server";
 import { FaSpinner } from "react-icons/fa";
 
 import type { TSelectorFunc } from "@/src/types";
@@ -23,7 +22,7 @@ interface ActionButtonConfig {
 	translationProcessing: TSelectorFunc;
 }
 
-export function createActionButton({
+export async function createActionButton({
 	className,
 	featureName,
 	icon,
@@ -33,7 +32,8 @@ export function createActionButton({
 	translationError,
 	translationHover,
 	translationProcessing
-}: ActionButtonConfig): HTMLButtonElement {
+}: ActionButtonConfig): Promise<HTMLButtonElement> {
+	const { renderToString } = await import("react-dom/server");
 	const button = document.createElement("button");
 	button.innerHTML = renderToString(React.createElement(icon, { color: iconColor, size: iconSize }));
 	button.className = className + " yte-action-button";

@@ -1,4 +1,4 @@
-import { Innertube } from "youtubei.js/web";
+import type { Innertube } from "youtubei.js/web";
 
 type EditPlaylistResponse = {
 	frameworkUpdates: {

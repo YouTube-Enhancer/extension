@@ -1,7 +1,5 @@
 import React from "react";
-import { renderToString } from "react-dom/server";
 import { FaTrashAlt, FaUndoAlt } from "react-icons/fa";
-import { Innertube } from "youtubei.js/web";
 
 import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
@@ -65,17 +63,18 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			return;
 		}
 
+		const { Innertube } = await import("youtubei.js/web");
 		const youtube = await Innertube.create({
 			cookie: document.cookie,
 			fetch: (...args) => fetch(...args)
 		});
 
-		function addButtonToPlaylistItems() {
+		async function addButtonToPlaylistItems() {
 			const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
-			playlistItems.forEach((item) => {
+			for (const item of playlistItems) {
 				const menu = item.querySelector("#menu");
 				if (!menu) {
-					return;
+					continue;
 				}
 
 				const removeButton = item.querySelector(".yte-remove-button");
@@ -83,7 +82,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				const resumeOverlay = item.querySelector(THUMBNAIL_OVERLAY_SELECTOR);
 
 				if (enable_playlist_remove_button && !removeButton) {
-					const removeButton = createActionButton({
+					const removeButton = await createActionButton({
 						className: "yte-remove-button yte-action-button-large",
 						featureName: "playlistManagementButtons",
 						icon: FaTrashAlt,
@@ -94,18 +93,19 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
 							await removeFromPlaylist(youtube, playlistId, setVideoId);
-							addRemoveAllButton();
+							await addRemoveAllButton();
 						},
 						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToRemoveVideo,
 						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo,
 						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removingVideo
 					});
+					if (item.querySelector(".yte-remove-button")) continue;
 					removeButton.style.verticalAlign = "top";
 					menu.prepend(removeButton);
 				}
 
 				if (enable_playlist_reset_button && !resetButton && resumeOverlay) {
-					const resetButton = createActionButton({
+					const resetButton = await createActionButton({
 						className: "yte-reset-button yte-action-button-large",
 						featureName: "playlistManagementButtons",
 						icon: FaUndoAlt,
@@ -116,12 +116,13 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							await history.removeVideo(videoId, 5);
 							item.querySelector(THUMBNAIL_OVERLAY_SELECTOR)?.remove();
 							resetButton.remove();
-							addRemoveAllButton();
+							await addRemoveAllButton();
 						},
 						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToMarkAsUnwatched,
 						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched,
 						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markingAsUnwatched
 					});
+					if (item.querySelector(".yte-reset-button")) continue;
 					resetButton.style.verticalAlign = "top";
 					if (enable_playlist_remove_button && removeButton) {
 						removeButton.prepend(resetButton);
@@ -133,10 +134,10 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				Array.from(menu.children).forEach((child) => {
 					(child as HTMLElement).style.display = "inline-flex";
 				});
-			});
+			}
 		}
 
-		function addRemoveAllButton() {
+		async function addRemoveAllButton() {
 			if (!enable_remove_all_watched_button) return;
 
 			const header = document.querySelector<HTMLElement>(CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR);
@@ -167,6 +168,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					],
 				{ count: watchedCount }
 			);
+			const { renderToString } = await import("react-dom/server");
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
 			const existingButton = document.getElementById("yte-remove-all-watched-button");
 			if (existingButton) {
@@ -209,25 +211,25 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					removeAllButton.disabled = false;
 					removeAllButton.innerHTML = originalHTML;
 					removeAllButton.title = originalTitle;
-					addRemoveAllButton();
+					await addRemoveAllButton();
 				}
 			};
 
 			header.appendChild(removeAllButton);
 		}
 
-		function observePlaylist() {
+		async function observePlaylist() {
 			if (playlistObserver) {
 				return;
 			}
 
-			addButtonToPlaylistItems();
-			addRemoveAllButton();
+			await addButtonToPlaylistItems();
+			await addRemoveAllButton();
 			const container = document.querySelector("ytd-playlist-video-list-renderer");
 			if (container) {
 				playlistObserver = new MutationObserver(() => {
-					addButtonToPlaylistItems();
-					addRemoveAllButton();
+					void addButtonToPlaylistItems();
+					void addRemoveAllButton();
 				});
 				playlistObserver.observe(container, { childList: true, subtree: true });
 			}
@@ -239,7 +241,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			resetButton: { enabled: enable_playlist_reset_button }
 		} = config;
 
-		observePlaylist();
+		await observePlaylist();
 	})();
 }
 
