@@ -1,7 +1,5 @@
 import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVideo";
 
-import { Innertube } from "youtubei.js/web";
-
 import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
 import type { Nullable, VideoDetails } from "@/src/types";
 
@@ -150,6 +148,7 @@ export async function getDurationFromAPI(playlistId: string): Promise<number> {
 	if (playlistId.startsWith("UU")) {
 		throw new Error(`API not supported for playlist ID: ${playlistId}`);
 	}
+	const { Innertube } = await import("youtubei.js/web");
 	const youtube = await Innertube.create({
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)

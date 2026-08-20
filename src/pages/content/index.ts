@@ -30,7 +30,7 @@ const defaultConfiguration = getDefaultConfiguration();
  */
 const script = document.createElement("script");
 script.src = browser.runtime.getURL("src/pages/embedded/index.js");
-script.type = "text/javascript";
+script.type = "module";
 function initializeCommunicationElement() {
 	let element = document.getElementById("yte-message-from-extension");
 	if (!element) {

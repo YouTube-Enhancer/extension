@@ -1,5 +1,4 @@
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
-import { Innertube } from "youtubei.js/web";
 
 import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
@@ -31,6 +30,7 @@ async function setupSaveToWatchLaterButtons(config: configuration["saveToWatchLa
 		}
 	});
 
+	const { Innertube } = await import("youtubei.js/web");
 	const youtube = await Innertube.create({
 		cookie: document.cookie,
 		fetch: (...args) => fetch(...args)
@@ -38,18 +38,19 @@ async function setupSaveToWatchLaterButtons(config: configuration["saveToWatchLa
 
 	const containerSelector = `ytd-two-column-browse-results-renderer[page-subtype='${await getCurrentPageType()}']`;
 
-	function addButtonToVideoItems() {
-		document.querySelectorAll(`${containerSelector} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`).forEach((video) => {
+	async function addButtonToVideoItems() {
+		const videos = document.querySelectorAll(`${containerSelector} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`);
+		for (const video of videos) {
 			const ytLockupViewModel = video as YTLockupViewModel;
 			if (
 				!ytLockupViewModel.rawProps ||
 				(ytLockupViewModel.rawProps && !ytLockupViewModel.rawProps.data) ||
 				(ytLockupViewModel.rawProps && ytLockupViewModel.rawProps.data && typeof ytLockupViewModel.rawProps.data !== "function")
 			)
-				return;
+				continue;
 			const { contentId: videoId } = ytLockupViewModel.rawProps.data();
 
-			const saveButton = createActionButton({
+			const saveButton = await createActionButton({
 				className: "yte-save-to-watch-later-button",
 				featureName: "saveToWatchLaterButton",
 				icon: AiOutlineVideoCameraAdd,
@@ -72,23 +73,25 @@ async function setupSaveToWatchLaterButtons(config: configuration["saveToWatchLa
 					(child as HTMLElement).style.display = "inline-flex";
 				});
 			}
-		});
+		}
 	}
 
-	function observeVideos() {
+	async function observeVideos() {
 		if (videosObserver) {
 			return;
 		}
 
-		addButtonToVideoItems();
+		await addButtonToVideoItems();
 		const container = document.querySelector(containerSelector);
 		if (container) {
-			videosObserver = new MutationObserver(addButtonToVideoItems);
+			videosObserver = new MutationObserver(() => {
+				void addButtonToVideoItems();
+			});
 			videosObserver.observe(container, { childList: true, subtree: true });
 		}
 	}
 
-	observeVideos();
+	await observeVideos();
 }
 
 export default createFeature({
