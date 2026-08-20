@@ -10,3 +10,6 @@ body {
 	position: relative;
 	overflow-y: scroll;
 }
+html {
+	width: fit-content
+}
