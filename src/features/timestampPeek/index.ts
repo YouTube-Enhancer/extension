@@ -10,15 +10,12 @@ import { metadata } from "./index.metadata";
 
 let timestampElementObserver: Nullable<MutationObserver> = null;
 const navigateStartHandler = () => {
-	eventManager.removeEventListeners("timestampPeek");
-	cleanupTimestampObserver();
 	const overlay = document.getElementById("yte-timestamp-peek-overlay");
 	if (overlay) overlay.remove();
 	const placeholder = document.getElementById("yte-timestamp-peek-placeholder");
 	if (placeholder) placeholder.remove();
 	const shield = document.getElementById("yte-timestamp-peek-hover-shield");
 	if (shield) shield.remove();
-	resetState();
 };
 
 function cleanupTimestampObserver() {
@@ -36,8 +33,10 @@ async function setupTimestampPeek() {
 	const videoHref = getVideoHref();
 	if (!videoHref) return;
 	eventManager.removeEventListeners("timestampPeek");
+	document.removeEventListener("yt-navigate-start", navigateStartHandler);
 	document.addEventListener("yt-navigate-start", navigateStartHandler);
 	cleanupTimestampObserver();
+	resetState();
 	await handleTimestampElementsHover();
 	const obs = await observeTimestampElements();
 	if (obs) setTimestampObserver(obs);
@@ -55,6 +54,7 @@ export default createFeature({
 		if (placeholder) placeholder.remove();
 		const shield = document.getElementById("yte-timestamp-peek-hover-shield");
 		if (shield) shield.remove();
+		resetState();
 	},
 	onEnable: setupTimestampPeek,
 	onNavigate: setupTimestampPeek

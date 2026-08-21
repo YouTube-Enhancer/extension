@@ -19,16 +19,16 @@ export function adjustVolume(
 ): Promise<{ newVolume: number; oldVolume: number }> {
 	return new Promise((resolve) => {
 		void (async () => {
-			if (!playerContainer.getVolume) return;
-			if (!playerContainer.setVolume) return;
-			if (!playerContainer.isMuted) return;
-			if (!playerContainer.unMute) return;
+			if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;
 			const [volume, isMuted] = await Promise.all([playerContainer.getVolume(), playerContainer.isMuted()]);
 			const newVolume = clamp(toDivisible(volume + scrollDelta * volumeStep, volumeStep), 0, 100);
 			browserColorLog(`Adjusting volume by ${volumeStep} to ${newVolume}. Old volume was ${volume}`, "FgMagenta");
 			await playerContainer.setVolume(newVolume);
+			const video = playerContainer.querySelector<HTMLVideoElement>("video");
+			if (video) video.volume = newVolume / 100;
 			if (isMuted) {
 				if (typeof playerContainer.unMute === "function") await playerContainer.unMute();
+				if (video) video.muted = false;
 			}
 			resolve({ newVolume, oldVolume: volume });
 		})();

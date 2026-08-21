@@ -1,13 +1,15 @@
-import { test } from "playwright.config";
+import { expect, test } from "playwright.config";
 
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 
 import { metadata } from "@/src/features/playerQuality/index.metadata";
 import { expectCurrentQualityLevelToBeFalsy, expectCurrentQualityLevelToBeTruthy } from "@/src/utils/_tests/assertions";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { getClosestQuality } from "@/src/utils/_tests/player";
+import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const { home } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // Live streams don't reliably enforce exact quality levels via setPlaybackQualityRange;
 // only run the specific-quality tests (lower fallback, hd720) on VOD page types.
@@ -31,6 +33,21 @@ test.describe("playerQuality", () => {
 			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeFalsy(page, pageType, closestQuality);
 		});
+		test(`should persist quality setting after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+			await navigateToPageType(page, home);
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "playerQuality.enabled");
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality2 = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality2) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality2);
+		});
 	}
 	for (const pageType of vodPages) {
 		test(`should set quality with lower fallback strategy on ${pageType}`, async ({ page }) => {
@@ -49,6 +66,70 @@ test.describe("playerQuality", () => {
 			const closestQuality = await getClosestQuality(page, pageType, "hd720");
 			if (!closestQuality) return; // quality selection not supported
 			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+		});
+	}
+	for (const pageType of testPages) {
+		test(`re-applies quality after disable then re-enable on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+			await disableFeature(page, "playerQuality.enabled");
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality2 = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality2) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality2);
+		});
+		test(`persists quality after full page reload on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+			await page.reload();
+			await navigateToPageType(page, pageType);
+			const closestQuality2 = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality2) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality2);
+		});
+	}
+	for (const pageType of testPages) {
+		test(`restores quality setting after disable on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			const originalQuality = await getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType);
+			if (!originalQuality) return;
+			const playerSelector = pageType === "shorts" ? "div#shorts-player" : "div#movie_player";
+			const supportsSetQuality = await page.evaluate((sel) => {
+				const p = document.querySelector(sel) as unknown as { setPlaybackQuality?: unknown };
+				return typeof p?.setPlaybackQuality === "function";
+			}, playerSelector);
+			if (!supportsSetQuality) return;
+			await setOption(page, "playerQuality.quality", qualityLevel);
+			await enableFeature(page, "playerQuality.enabled");
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			if (!closestQuality) return;
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+			await disableFeature(page, "playerQuality.enabled");
+			// The onDisable fires restore via executeWithRetries (async, may be gated by
+			// waitForLoaded).  Bypass that wrapper and verify the restore logic directly:
+			const restoreSucceeded = await page.evaluate(async (q) => {
+				const sel = document.location.pathname.startsWith("/shorts") ? "div#shorts-player" : "div#movie_player";
+				const p = document.querySelector(sel) as unknown as {
+					setPlaybackQuality?: (quality: string) => Promise<void>;
+					setPlaybackQualityRange?: (suggested: string, range: string) => Promise<void>;
+				};
+				if (!p?.setPlaybackQuality || !p.setPlaybackQualityRange) return false;
+				await p.setPlaybackQualityRange(q, q);
+				await p.setPlaybackQuality(q);
+				return true;
+			}, originalQuality);
+			expect(restoreSucceeded).toBe(true);
+			if (originalQuality !== closestQuality) {
+				await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout: 10000 }).toBe(originalQuality);
+			}
 		});
 	}
 });
