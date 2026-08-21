@@ -24,14 +24,14 @@
     "build": "tsx src/pipeline/runBuilds.ts",
     "dev": "nodemon",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "playwright test",
-    "test:auth": "node scripts/auth-setup.mjs",
     "format": "prettier --write .",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
     "update:deepdark": "concurrently \"node scripts/updateDeepDarkMaterialCSS.js\" \"node scripts/updateDeepDarkPresets.js\"",
     "update:deepdark-css": "node scripts/updateDeepDarkMaterialCSS.js",
-    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js"
+    "update:deepdark-presets": "node scripts/updateDeepDarkPresets.js",
+    "test": "playwright test",
+    "test:auth": "node scripts/auth-setup.mjs"
   },
   "type": "module",
   "optionalDependencies": {
