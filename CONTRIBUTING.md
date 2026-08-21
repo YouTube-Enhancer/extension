@@ -12,17 +12,39 @@ Contributions are welcome from developers interested in:
 
 ---
 
+## 🌿 Branching Strategy (Important)
+
+All contributions **must** be based on the `dev` branch — **not** `main`.
+
+- **`dev`** is the active development branch. All new features and bug fixes land here first.
+- **`main`** is reserved for stable releases. It is updated only when `dev` is merged into it as part of cutting a new release.
+
+```text
+feature/your-feature ──► dev ──► main (release only)
+```
+
+What this means for you:
+
+1. Fork/clone the repo and check out `dev`: `git checkout dev`
+2. Create your working branch from `dev`: `git checkout -b feature/your-feature-name`
+3. Open your PR targeting **`dev`**, never `main`
+
+PRs opened against `main` will be asked to retarget `dev`.
+
+---
+
 ## ⚡ Quick Start (TL;DR)
 
-1. Install dependencies: `npm install`
-2. Start dev server: `npm run dev`
-3. Create a feature in `src/features/MyNewFeature/`:
+1. Check out `dev` and branch from it: `git checkout dev && git checkout -b feature/your-feature-name`
+2. Install dependencies: `npm install`
+3. Start dev server: `npm run dev`
+4. Create a feature in `src/features/MyNewFeature/`:
    - `index.metadata.ts` → schema + settings UI + i18n
    - `index.ts` → lifecycle + logic
 
-4. Add translations in `public/locales/`
-5. Manually test on multiple YouTube pages
-6. Submit a PR using Conventional Commits
+5. Add translations in `public/locales/`
+6. Manually test on multiple YouTube pages
+7. Submit a PR targeting `dev`, using Conventional Commits
 
 ---
 
@@ -349,6 +371,7 @@ Do not manually manipulate the DOM where utilities exist.
 
 ## ✅ Pull Request Requirements
 
+- Targets the `dev` branch (not `main`)
 - Follows Feature Contract
 - Fully localized (no hardcoded strings)
 - No console errors/warnings
@@ -362,7 +385,7 @@ Do not manually manipulate the DOM where utilities exist.
 
 Follow a strict workflow cycle:
 
-1.  **Branching:** Always create a new branch before working: `git checkout -b feature/your-feature-name`.
+1.  **Branching:** Always branch from `dev` — never from `main`. `dev` holds the latest features and fixes; `main` is only updated when `dev` is merged in for a release. Run: `git checkout dev && git checkout -b feature/your-feature-name`.
 2.  **Development Cycle:** Implement small, focused changes. When designing logic, adopt the **Red-Green-Refactor** methodology.
 3.  **Modification:** After implementing logic, first explore existing subdirectories in `src/utils/` (e.g., dom, format, logging, math, messaging, plugins, style, color, deep-dark-theme) to see if your utility fits into an existing category. If so, place it there. Otherwise, update `src/utils/utilities.ts` for general-purpose utilities.
 4.  **Committing:** Commit only when the feature is functionally complete and manually verified.
@@ -371,3 +394,4 @@ Follow a strict workflow cycle:
     - **fix:** For bug fixes.
     - **refactor:** For code restructuring without adding features or fixing bugs.
     - **chore:** For build scripts or tooling changes.
+6.  **Pull Request:** Open your PR against the **`dev`** branch. PRs targeting `main` will be redirected to `dev`, as `main` is reserved for release merges.
