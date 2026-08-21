@@ -1,0 +1,247 @@
+import type { Page } from "@playwright/test";
+import type { YouTubePlayer } from "youtube-player/dist/types";
+
+import { expect } from "playwright.config";
+import PlayerStates from "youtube-player/dist/constants/PlayerStates.js";
+
+import type { PageType } from "@/src/features/_registry/types";
+import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
+import type { ModifierKey, Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { ControlType, YouTubePlayerGetKeysWithoutParams, YouTubePlayerGetReturnType, YouTubePlayerSetKeys } from "@/src/utils/_tests/types";
+
+import { enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { clamp } from "@/src/utils/math";
+import { chooseClosestQuality } from "@/src/utils/player/quality";
+
+export async function adjustWithScrollWheel({
+	controlType,
+	direction,
+	initialValue,
+	modifierKey = "altKey",
+	page,
+	pageType = "watch",
+	steps,
+	withModifierKey = false,
+	withRightClick = false
+}: {
+	controlType: ControlType;
+	direction: "down" | "up";
+	initialValue: number;
+	modifierKey?: ModifierKey;
+	page: Page;
+	pageType?: PageType;
+	steps: number;
+	withModifierKey?: boolean;
+	withRightClick?: boolean;
+}) {
+	await navigateToPageType(page, pageType);
+	await setOption(page, `scrollWheel${controlType}Control.steps`, steps);
+	if (withModifierKey) {
+		if (controlType === "Volume") await enableFeature(page, `scrollWheel${controlType}Control.holdModifierKey`);
+		await setOption(page, `scrollWheel${controlType}Control.modifierKey`, modifierKey);
+	}
+	if (controlType === "Volume" && withRightClick) {
+		await enableFeature(page, `scrollWheel${controlType}Control.holdRightClick`);
+	}
+	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
+	await setValueOnYouTubePlayer(page, pageType, `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, initialValue);
+	const originalValue = await getValueFromYouTubePlayer(page, `get${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, pageType);
+	expect(originalValue).toBeTruthy();
+	if (!originalValue) return;
+	expect(originalValue).toBe(initialValue);
+	// Dispatch the wheel event directly on the container element the feature listens on.
+	// Using page.mouse.wheel() on div#movie_player can be swallowed by YouTube's own
+	// wheel handlers before it bubbles up to div#player where the extension listens.
+	const wheelContainerSelector = pageType === "shorts" ? "#player-container:has(#shorts-player)" : "div#player";
+	const wheelInit: Record<string, unknown> = {
+		bubbles: true,
+		cancelable: true,
+		deltaMode: 0,
+		deltaY: direction === "up" ? -1 : 1
+	};
+	if (withModifierKey) {
+		wheelInit[modifierKey] = true;
+	}
+	if (withRightClick) {
+		wheelInit.buttons = 2;
+	}
+	await page.evaluate(
+		([selector, init]) => {
+			const el = document.querySelector(selector);
+			if (el) el.dispatchEvent(new WheelEvent("wheel", init as WheelEventInit));
+		},
+		[wheelContainerSelector, wheelInit] as const
+	);
+	let valueAfterScroll: unknown = null;
+	const endTime = Date.now() + 5000;
+	while (Date.now() < endTime) {
+		await page.waitForTimeout(100);
+		valueAfterScroll = await getValueFromYouTubePlayer(page, controlType === "Speed" ? "getPlaybackRate" : "getVolume", pageType);
+		if (valueAfterScroll !== null && valueAfterScroll !== originalValue) break;
+	}
+	const expectedValue = originalValue + steps * (direction === "up" ? 1 : -1);
+	expect(valueAfterScroll).toBeTruthy();
+	expect(valueAfterScroll).toBe(controlType === "Speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
+}
+export async function ensureCaptionsState(page: Page, desired: boolean): Promise<void> {
+	const btn = page.locator("button.ytp-subtitles-button");
+	if ((await btn.count()) === 0) return;
+	if (await isCaptionsUnavailable(page)) return;
+	const current = await getCaptionsState(page);
+	if (current === null) return;
+	if (current === desired) return;
+	await btn.click({ force: true });
+	await page.waitForTimeout(150);
+	await expect.poll(async () => getCaptionsState(page)).toBe(desired);
+}
+export async function expectStableCaptionsState(page: Page, expected: boolean) {
+	let stableCount = 0;
+	await expect
+		.poll(async () => {
+			const state = await getCaptionsState(page);
+			if (state === expected) stableCount++;
+			else stableCount = 0;
+			return stableCount;
+		})
+		.toBe(2);
+}
+export async function freezeAndGetTime(page: Page, pageType: PageType) {
+	await page.evaluate(() => {
+		const video = document.querySelector<HTMLVideoElement>("video");
+		if (!video) return;
+		video.pause();
+	});
+	return await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+}
+export async function getCaptionsState(page: Page): Promise<boolean | null> {
+	const btn = page.locator("button.ytp-subtitles-button");
+	if ((await btn.count()) === 0) return null;
+	const pressed = await btn.getAttribute("aria-pressed");
+	if (!pressed) return null;
+	return pressed === "true";
+}
+export async function getClosestQuality(
+	page: Page,
+	pageType: PageType = "watch",
+	quality: YoutubePlayerQualityLevel,
+	fallbackStrategy: PlayerQualityFallbackStrategy = "higher"
+) {
+	const availableQualityLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels", pageType);
+	expect(availableQualityLevels).toBeTruthy();
+	if (!availableQualityLevels) return;
+	const closestQuality = chooseClosestQuality(quality, availableQualityLevels, fallbackStrategy);
+	return closestQuality;
+}
+export async function getCurrentSpeed(page: Page, pageType: PageType = "watch") {
+	const currentSpeed = await getValueFromYouTubePlayer(page, "getPlaybackRate", pageType);
+	return currentSpeed;
+}
+export async function getCurrentVolume(page: Page, pageType: PageType = "watch") {
+	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume", pageType);
+	return currentVolume;
+}
+
+export async function getValueFromYouTubePlayer<P extends Page, K extends YouTubePlayerGetKeysWithoutParams>(
+	page: P,
+	key: K,
+	pageType: PageType = "watch"
+) {
+	const playerSelector = pageType === "shorts" ? "div#shorts-player" : "div#movie_player";
+	const value: unknown = await page.evaluate(
+		async ([selector, key]) => {
+			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayer>;
+			if (!container) return null;
+			const result: unknown = await container[key]();
+			return result;
+		},
+		[playerSelector, key] as const
+	);
+	return value as Nullable<YouTubePlayerGetReturnType<K>>;
+}
+export async function isCaptionsUnavailable(page: Page): Promise<boolean> {
+	const btn = page.locator("button.ytp-subtitles-button");
+	if ((await btn.count()) === 0) return true;
+	const ariaLabel = await btn.getAttribute("aria-label");
+	return ariaLabel?.includes("unavailable") === true || ariaLabel?.includes("not available") === true;
+}
+export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubePlayerSetKeys, V extends Parameters<YouTubePlayer[K]>>(
+	page: P,
+	pageType: PageType = "watch",
+	key: K,
+	...value: V
+) {
+	await page.evaluate(
+		async ({ key, selector, value }) => {
+			const container = document.querySelector(selector) as unknown as Nullable<YouTubePlayerDiv>;
+			if (!container) return null;
+			try {
+				const video = container.querySelector<HTMLVideoElement>("video");
+				if (key === "setPlaybackRate" && typeof value === "number") {
+					if (video) video.playbackRate = value;
+				}
+				await (container[key] as (...args: V[]) => Promise<void>)(...value);
+			} catch (error) {
+				console.error(error);
+			}
+		},
+		{ key, selector: pageType === "shorts" ? "div#shorts-player" : "div#movie_player", value } as const
+	);
+}
+export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
+	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
+}
+export async function waitForStableTime(page: Page, pageType: PageType, threshold = 150) {
+	let last = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+	let stableFor = 0;
+	while (stableFor < threshold) {
+		await page.waitForTimeout(50);
+		const now = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+		expect(now).not.toBeNull();
+		expect(last).not.toBeNull();
+		if (Math.abs(now! - last!) < 0.05) {
+			stableFor += 50;
+		} else {
+			stableFor = 0;
+		}
+		last = now;
+	}
+	return last;
+}
+
+export async function waitForYoutubePlayerReady(page: Page, pageType: PageType): Promise<void> {
+	await page.waitForFunction(
+		async (pageType) => {
+			const player = document.querySelector(pageType === "shorts" ? "div#shorts-player" : "#movie_player") as unknown as Nullable<YouTubePlayerDiv>;
+			if (!player) return false;
+			if (typeof player.getPlayerState !== "function") return false;
+			if (typeof player.getCurrentTime !== "function") return false;
+			if (typeof player.setVolume !== "function") return false;
+			try {
+				const state = await player.getPlayerState();
+				// -1 = unstarted
+				// 0 = ended
+				// 1 = playing
+				// 2 = paused
+				// 3 = buffering
+				// 5 = video cued
+				if (state === undefined || state === null || state === PlayerStates["UNSTARTED"]) return false;
+				const video = player.querySelector<HTMLVideoElement>("video");
+				if (!video) return false;
+				const { currentTime, networkState, readyState, seeking, volume } = video;
+				if (readyState < 2) return false;
+				if (seeking) return false;
+				if (networkState === 2) return false;
+				const v1 = volume;
+				const t1 = currentTime;
+				await new Promise((resolve) => setTimeout(resolve, 200));
+				const { currentTime: t2, volume: v2 } = video;
+				return v1 === v2 && t1 === t2;
+			} catch {
+				return false;
+			}
+		},
+		pageType,
+		{ timeout: 30_000 }
+	);
+}
