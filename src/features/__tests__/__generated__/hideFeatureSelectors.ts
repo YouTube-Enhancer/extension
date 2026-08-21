@@ -51,7 +51,10 @@ export const hideFeatureSelectors = {
 	hidePosts: { bodyClass: "yte-hide-posts", selectors: ["ytd-rich-section-renderer:has([is-post])"] },
 	hideShortsChannel: {
 		bodyClass: "yte-hide-shorts-channel",
-		selectors: ['ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)', 'yt-tab-shape[tab-title="Shorts"]']
+		selectors: [
+			'ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)',
+			'yt-tab-shape[tab-title="Shorts"]'
+		]
 	},
 	hideShortsHome: { bodyClass: "yte-hide-shorts-home", selectors: ['ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has([is-shorts])'] },
 	hideShortsSearch: {

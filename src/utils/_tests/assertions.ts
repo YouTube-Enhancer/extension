@@ -7,10 +7,10 @@ import type { ButtonPlacement, FeatureButtonId, FeatureMenuItemId } from "@/src/
 import { placementSelectors } from "@/src/utils/_tests/constants";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 
-export async function expectBodyWithClass(page: Page, bodyClass: string, { timeout }: { timeout?: number } = {}): Promise<void> {
+export async function expectBodyWithClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
 	await expect(page.locator("body")).toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
 }
-export async function expectBodyWithoutClass(page: Page, bodyClass: string, { timeout }: { timeout?: number } = {}): Promise<void> {
+export async function expectBodyWithoutClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
 	await expect(page.locator("body")).not.toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
 }
 export async function expectCurrentQualityLevelToBeFalsy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {

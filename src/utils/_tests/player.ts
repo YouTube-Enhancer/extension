@@ -46,7 +46,8 @@ export async function adjustWithScrollWheel({
 	}
 	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
 	await setValueOnYouTubePlayer(page, pageType, `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, initialValue);
-	const originalValue = await getValueFromYouTubePlayer(page, `get${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, pageType);
+	const getter = controlType === "Volume" ? getCurrentVolume : getCurrentSpeed;
+	const originalValue = await getter(page, pageType);
 	expect(originalValue).toBeTruthy();
 	if (!originalValue) return;
 	expect(originalValue).toBe(initialValue);
@@ -69,31 +70,42 @@ export async function adjustWithScrollWheel({
 	await page.evaluate(
 		([selector, init]) => {
 			const el = document.querySelector(selector);
-			if (el) el.dispatchEvent(new WheelEvent("wheel", init as WheelEventInit));
+			if (el) el.dispatchEvent(new WheelEvent("wheel", init));
 		},
 		[wheelContainerSelector, wheelInit] as const
 	);
 	let valueAfterScroll: unknown = null;
-	const endTime = Date.now() + 5000;
+	const pollTimeout = pageType === "live" ? 10000 : 5000;
+	const endTime = Date.now() + pollTimeout;
 	while (Date.now() < endTime) {
 		await page.waitForTimeout(100);
-		valueAfterScroll = await getValueFromYouTubePlayer(page, controlType === "Speed" ? "getPlaybackRate" : "getVolume", pageType);
+		valueAfterScroll = await getter(page, pageType);
 		if (valueAfterScroll !== null && valueAfterScroll !== originalValue) break;
 	}
 	const expectedValue = originalValue + steps * (direction === "up" ? 1 : -1);
 	expect(valueAfterScroll).toBeTruthy();
 	expect(valueAfterScroll).toBe(controlType === "Speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
 }
-export async function ensureCaptionsState(page: Page, desired: boolean): Promise<void> {
+export async function ensureCaptionsState(page: Page, desired: boolean): Promise<boolean> {
 	const btn = page.locator("button.ytp-subtitles-button");
-	if ((await btn.count()) === 0) return;
-	if (await isCaptionsUnavailable(page)) return;
+	if ((await btn.count()) === 0) return false;
+	if (await isCaptionsUnavailable(page)) return false;
 	const current = await getCaptionsState(page);
-	if (current === null) return;
-	if (current === desired) return;
-	await btn.click({ force: true });
+	if (current === null) return false;
+	if (current === desired) return true;
+	await page
+		.locator("#movie_player")
+		.hover({ timeout: 5000 })
+		.catch(() => {});
+	await page.waitForTimeout(200);
+	await btn.evaluate((el) => (el as HTMLButtonElement).click());
 	await page.waitForTimeout(150);
-	await expect.poll(async () => getCaptionsState(page)).toBe(desired);
+	try {
+		await expect.poll(async () => getCaptionsState(page)).toBe(desired);
+		return true;
+	} catch {
+		return false;
+	}
 }
 export async function expectStableCaptionsState(page: Page, expected: boolean) {
 	let stableCount = 0;
@@ -134,10 +146,25 @@ export async function getClosestQuality(
 	return closestQuality;
 }
 export async function getCurrentSpeed(page: Page, pageType: PageType = "watch") {
+	if (pageType === "shorts") {
+		const videoSpeed = await page.evaluate(() => {
+			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+			return video?.playbackRate ?? null;
+		});
+		if (videoSpeed !== null) return videoSpeed;
+	}
 	const currentSpeed = await getValueFromYouTubePlayer(page, "getPlaybackRate", pageType);
 	return currentSpeed;
 }
 export async function getCurrentVolume(page: Page, pageType: PageType = "watch") {
+	if (pageType === "shorts") {
+		const videoVolume = await page.evaluate(() => {
+			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+			if (!video) return null;
+			return Math.round(video.volume * 100);
+		});
+		if (videoVolume !== null) return videoVolume;
+	}
 	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume", pageType);
 	return currentVolume;
 }
