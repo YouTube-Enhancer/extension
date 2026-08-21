@@ -1,4 +1,4 @@
-import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import {
 	clickFeatureMenuItem,
@@ -38,7 +38,7 @@ test("player should be maximized", async ({ page }) => {
 	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-maximizePlayerButton-menuitem");
 	await clickFeatureMenuItem(page, "yte-feature-maximizePlayerButton-menuitem");
 	const isMaximized = await page.evaluate(async (selector) => {
-		const container = document.querySelector(selector) as unknown as YouTubePlayer | null;
+		const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
 		if (!container) return null;
 		const { height: playerHeight, width: playerWidth } = await container.getSize();
 		const {
@@ -56,7 +56,7 @@ test("player shouldn't be maximized", async ({ page }) => {
 	const maximizePlayerButton = page.locator(`#yte-feature-maximizePlayerButton-menuitem`);
 	await expect(maximizePlayerButton).not.toBeAttached();
 	const isMaximized = await page.evaluate(async (selector) => {
-		const container = document.querySelector(selector) as unknown as YouTubePlayer | null;
+		const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
 		if (!container) return null;
 		const { height: playerHeight, width: playerWidth } = await container.getSize();
 		const {
