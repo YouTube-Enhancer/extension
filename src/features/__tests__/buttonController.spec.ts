@@ -65,6 +65,9 @@ test.describe("buttonController", () => {
 			await featureMenuButton.click();
 			const featureMenu = page.locator("#yte-feature-menu");
 			await expect(featureMenu).toBeVisible();
+			// Move cursor away from the menu so it doesn't intercept the next click
+			await page.mouse.move(0, 0);
+			await page.waitForTimeout(200);
 			// Close the menu
 			await featureMenuButton.click();
 			await expect(featureMenu).not.toBeVisible();

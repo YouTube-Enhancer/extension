@@ -28,7 +28,7 @@ export class PlaylistLengthController {
 	private lastPlaylistLength: Nullable<number> = null;
 	private lastUpdate: Nullable<{ total: number; watched: number }> = null;
 	private resizeObserver: Nullable<ResizeObserver> = null;
-	private ui: Nullable<{ element: HTMLDivElement; update: (state: VideoTimeState) => void }> = null;
+	private ui: null | { element: HTMLDivElement; update: (state: VideoTimeState) => void } = null;
 	private updateTimeout: Nullable<number> = null;
 
 	constructor(config: PlaylistLengthParameters) {
