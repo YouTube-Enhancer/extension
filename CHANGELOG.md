@@ -1,3 +1,24 @@
+## [1.34.2](https://github.com/YouTube-Enhancer/extension/compare/v1.34.1...v1.34.2) (2026-08-21)
+
+
+### Bug Fixes
+
+* **miniPlayer:** ensure Trusted Types policy globally and harden enable/restore flow ([e6566be](https://github.com/YouTube-Enhancer/extension/commit/e6566bef1edc319502f31a9c2f1eab8ab75ed49d))
+* **playerSpeed:** respect manual playback speed adjustments over forced speed ([#1372](https://github.com/YouTube-Enhancer/extension/issues/1372)) ([ae48b59](https://github.com/YouTube-Enhancer/extension/commit/ae48b59da51edc34757c87688827ceb53eda2e35))
+* **popup:** constrain html to fit-content so popup width no longer stretches to Chrome's max canvas ([9ca2466](https://github.com/YouTube-Enhancer/extension/commit/9ca2466b9c7018413794a21e6b803584f6268e80))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.34.2-Chrome.zip | 9ad9d6224c0698c5d96ddc54d4b7f09a6c224bf773a6835e6f03994c5a971638 |
+| youtube-enhancer-v1.34.2-Chromium.zip | 9ad9d6224c0698c5d96ddc54d4b7f09a6c224bf773a6835e6f03994c5a971638 |
+| youtube-enhancer-v1.34.2-Edge.zip | 9ad9d6224c0698c5d96ddc54d4b7f09a6c224bf773a6835e6f03994c5a971638 |
+| youtube-enhancer-v1.34.2-Firefox.zip | c7cf64b6f6eb17de1f91098ef7fadf5a9f0279e6a988182f6d03464aa2896629 |
+
 ## [1.34.1](https://github.com/YouTube-Enhancer/extension/compare/v1.34.0...v1.34.1) (2026-08-20)
 
 
