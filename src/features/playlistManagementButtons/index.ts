@@ -63,7 +63,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 	};
 	document.addEventListener("yt-action", preparePageDisposeListener);
 	void (async () => {
-		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)", 2500, "optional"))) {
+		if (!(await waitForElement(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`, 5000, "optional"))) {
 			return;
 		}
 		if (isStale()) return;
