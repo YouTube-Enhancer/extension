@@ -21,6 +21,7 @@ const parseAdPodIndex = (text: Nullable<string>): Nullable<{ index: number; tota
 
 async function handleYoutubeAds(page: Page): Promise<void> {
 	const GLOBAL_TIMEOUT = 60_000;
+	const AD_WAIT_TIMEOUT = 15_000;
 	const startTime = Date.now();
 
 	const getAdInfo = async () => {
@@ -30,6 +31,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 				return {
 					isShowing: false,
 					isSkippable: false,
+					playerExists: document.querySelector("#movie_player") !== null,
 					podText: null,
 					remainingSeconds: null
 				};
@@ -45,6 +47,7 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			return {
 				isShowing: true,
 				isSkippable: skipButton !== null && skipButton.offsetParent !== null,
+				playerExists: true,
 				podText,
 				remainingSeconds
 			};
@@ -64,8 +67,13 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 		}
 	};
 	let lastPodKey: Nullable<string> = null;
+	// Initial poll: wait for player and ads to potentially start
+	let adInfo = await getAdInfo();
+	while (!adInfo.isShowing && !adInfo.playerExists && Date.now() - startTime < AD_WAIT_TIMEOUT) {
+		await page.waitForTimeout(500);
+		adInfo = await getAdInfo();
+	}
 	while (Date.now() - startTime < GLOBAL_TIMEOUT) {
-		const adInfo = await getAdInfo();
 		if (!adInfo.isShowing) break;
 		if (adInfo.isSkippable) await clickSkipButton();
 		const maxWaitTime = adInfo.remainingSeconds !== null ? Math.min(adInfo.remainingSeconds * 1000, 120_000) : 30_000;
@@ -85,48 +93,87 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			lastPodKey = currentKey;
 			await page.waitForTimeout(500);
 		}
+		adInfo = await getAdInfo();
 	}
 	await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0, {
 		timeout: 30_000
 	});
 }
 const YOUTUBE_ERROR_SELECTORS = {
+	contentWarningProceed: "button:has-text('I understand and wish to proceed')",
 	error: ".ytp-error",
 	reason: ".ytp-error-content-wrap-reason"
 } as const;
+async function dismissContentWarning(page: Page): Promise<void> {
+	const button = page.locator(YOUTUBE_ERROR_SELECTORS.contentWarningProceed);
+	if ((await button.count()) > 0) {
+		await button.click();
+		await page.waitForTimeout(2000);
+	}
+}
+
+async function getErrorReason(page: Page): Promise<null | string> {
+	if (!(await hasYoutubeError(page))) {
+		return null;
+	}
+	const reason = await page
+		.locator(YOUTUBE_ERROR_SELECTORS.reason)
+		.first()
+		.textContent()
+		.catch(() => null);
+	return reason?.trim() || null;
+}
 
 async function handleYoutubeErrors(page: Page): Promise<void> {
+	await dismissContentWarning(page);
 	let lastReload = 0;
-	const COOLDOWN = 10_000;
-	const check = async (): Promise<void> => {
+	const reloadCooldown = 30_000;
+	const pollInterval = 5_000;
+	const checkForErrors = async (): Promise<void> => {
+		if (page.isClosed()) return;
 		try {
-			if (page.isClosed()) return;
-			const errorRoot = page.locator(YOUTUBE_ERROR_SELECTORS.error);
-			if ((await errorRoot.count()) === 0) return;
-			const reason = await page
-				.locator(YOUTUBE_ERROR_SELECTORS.reason)
-				.first()
-				.textContent()
-				.catch(() => "");
-			if (!reason?.trim()) return;
+			await dismissContentWarning(page);
+			if (await isAdShowing(page)) return;
+			const reason = await getErrorReason(page);
+			if (!reason) return;
 			const now = Date.now();
-			if (now - lastReload < COOLDOWN) return;
+			if (now - lastReload < reloadCooldown) return;
 			lastReload = now;
-			await page.reload({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+			await page.reload({
+				waitUntil: "domcontentloaded"
+			});
 			await expect
-				.poll(
-					async () => {
-						if (page.isClosed()) return true;
-						return (await page.locator(YOUTUBE_ERROR_SELECTORS.error).count()) === 0;
-					},
-					{ intervals: [500], timeout: 30_000 }
-				)
+				.poll(async () => page.isClosed() || !(await hasYoutubeError(page)), {
+					intervals: [500],
+					timeout: 30_000
+				})
 				.toBe(true);
-		} catch {}
+		} catch {
+			// Ignore transient navigation / detached DOM errors.
+		}
 	};
-	await check();
-	const interval = setInterval(() => void check(), 1500);
-	page.once("close", () => clearInterval(interval));
+	await checkForErrors();
+	void (async () => {
+		while (!page.isClosed()) {
+			await checkForErrors();
+			if (page.isClosed()) {
+				break;
+			}
+			try {
+				await page.waitForTimeout(pollInterval);
+			} catch {
+				break;
+			}
+		}
+	})();
+}
+
+async function hasYoutubeError(page: Page): Promise<boolean> {
+	return (await page.locator(YOUTUBE_ERROR_SELECTORS.error).count()) > 0;
+}
+
+async function isAdShowing(page: Page): Promise<boolean> {
+	return (await page.locator(YOUTUBE_AD_SELECTORS.adShowing).count()) > 0;
 }
 const YOUTUBE_PROMO_SELECTOR = `
 	tp-yt-paper-dialog:has(> yt-mealbar-promo-renderer)
@@ -154,16 +201,21 @@ const YOUTUBE_OVERLAY_SELECTORS = {
 } as const;
 
 async function handleYoutubeSuggestedActions(page: Page): Promise<void> {
-	await page.addStyleTag({
-		content: `
-			${YOUTUBE_OVERLAY_SELECTORS.container} ${YOUTUBE_OVERLAY_SELECTORS.suggested},
-			${YOUTUBE_OVERLAY_SELECTORS.container} ${YOUTUBE_OVERLAY_SELECTORS.featured} {
-				display: none !important;
-				visibility: hidden !important;
-				pointer-events: none !important;
-			}
-		`
-	});
+	try {
+		await page.addStyleTag({
+			content: `
+				${YOUTUBE_OVERLAY_SELECTORS.container} ${YOUTUBE_OVERLAY_SELECTORS.suggested},
+				${YOUTUBE_OVERLAY_SELECTORS.container} ${YOUTUBE_OVERLAY_SELECTORS.featured} {
+					display: none !important;
+					visibility: hidden !important;
+					pointer-events: none !important;
+				}
+			`
+		});
+	} catch (e) {
+		if (e instanceof Error && e.message.includes("Execution context was destroyed")) return;
+		throw e;
+	}
 }
 export const pageSetup = async (page: Page): Promise<void> => {
 	await handleYoutubeErrors(page);

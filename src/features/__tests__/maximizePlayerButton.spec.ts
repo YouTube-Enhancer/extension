@@ -1,13 +1,21 @@
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/maximizePlayerButton/index.metadata";
-import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
-import { placementRecord } from "@/src/utils/_tests/constants";
+import {
+	expectFeatureButtonToBeFalsy,
+	expectFeatureButtonToBeIn,
+	expectFeatureButtonToBeTruthy,
+	expectFeatureMenuItemToBeTruthy
+} from "@/src/utils/_tests/assertions";
+import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { left } = placementRecord;
+const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
+const { left, right } = placementRecord;
+const { home, watch } = pageTypeRecord;
 test.describe("maximizePlayerButton", () => {
 	for (const pageType of testPages) {
 		test(`maximize player button should be enabled on ${pageType}`, async ({ page }) => {
@@ -35,5 +43,124 @@ test.describe("maximizePlayerButton", () => {
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
 			await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
 		});
+		test(`clicking maximize button again should un-maximize player on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", left);
+			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
+			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", left);
+			await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
+		});
+		test(`maximize player button should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+			await disableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		});
+		test(`maximize player button should persist after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+			await navigateToPageType(page, home);
+			await navigateToPageType(page, pageType);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		});
 	}
+
+	test(`maximize player button should persist after full page reload`, async ({ page }) => {
+		await navigateToPageType(page, testPages[0]);
+		await setOption(page, "maximizePlayerButton.button.placement", left);
+		await enableFeature(page, "maximizePlayerButton.button.enabled");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		await page.reload();
+		await navigateToPageType(page, testPages[0]);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+	});
+
+	test(`should not create maximize player button on non-target page`, async ({ page }) => {
+		await navigateToPageType(page, nonTargetPage!);
+		await enableFeature(page, "maximizePlayerButton.button.enabled");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+	});
+
+	test.describe("feature conflicts", () => {
+		test.describe("automaticallyMaximizePlayer vs automaticTheaterMode", () => {
+			test("maximize is active when enabled after theater on watch", async ({ page }) => {
+				await navigateToPageType(page, watch);
+				await enableFeature(page, "automaticTheaterMode.enabled");
+				await enableFeature(page, "automaticallyMaximizePlayer.enabled");
+				await expect.poll(async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized"))).toBeTruthy();
+			});
+
+			test("theater mode is active when enabled after maximize on watch", async ({ page }) => {
+				await navigateToPageType(page, watch);
+				await enableFeature(page, "automaticallyMaximizePlayer.enabled");
+				await enableFeature(page, "automaticTheaterMode.enabled");
+				await expect
+					.poll(
+						async () =>
+							await page.evaluate(() => {
+								const flexy = document.querySelector("ytd-watch-flexy");
+								const grid = document.querySelector("ytd-watch-grid");
+								return flexy?.hasAttribute("theater") || grid?.hasAttribute("theater");
+							}),
+						{ timeout: 15000 }
+					)
+					.toBeTruthy();
+			});
+		});
+	});
+
+	test.describe("button placement", () => {
+		for (const placement of [left, right] as const) {
+			test(`should render button in ${placement}`, async ({ page }) => {
+				await navigateToPageType(page, watch);
+				await setOption(page, "maximizePlayerButton.button.placement", placement);
+				await enableFeature(page, "maximizePlayerButton.button.enabled");
+				await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+				await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", placement);
+			});
+		}
+
+		test("should render button in feature menu", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "maximizePlayerButton.button.placement", "feature_menu");
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureMenuItemToBeTruthy(page, "yte-feature-maximizePlayerButton-menuitem");
+		});
+	});
+
+	test.describe("fullscreen transition", () => {
+		test("should move button from left to right on fullscreen enter/exit", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await setOption(page, "maximizePlayerButton.button.fullscreenPlacement", right);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
+			await toggleFullscreen(page, true);
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", right);
+			await toggleFullscreen(page, false);
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
+		});
+
+		test("should not move button when fullscreenPlacement is same", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "maximizePlayerButton.button.placement", right);
+			await setOption(page, "maximizePlayerButton.button.fullscreenPlacement", "same");
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", right);
+			await toggleFullscreen(page, true);
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", right);
+			await toggleFullscreen(page, false);
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", right);
+		});
+	});
 });

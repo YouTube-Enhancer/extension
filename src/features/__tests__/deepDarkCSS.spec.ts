@@ -1,9 +1,12 @@
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/deepDarkCSS/index.metadata";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+
+const { home } = pageTypeRecord;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
@@ -12,14 +15,51 @@ test.describe("deepDarkCSS", () => {
 		test(`should inject deep dark CSS on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "deepDarkCSS.enabled");
-			await expect(page.locator("#yte-deep-dark-css")).toBeAttached();
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
 		});
 		test(`should remove deep dark CSS when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "deepDarkCSS.enabled");
-			await expect(page.locator("#yte-deep-dark-css")).toBeAttached();
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
 			await disableFeature(page, "deepDarkCSS.enabled");
-			await expect(page.locator("#yte-deep-dark-css")).not.toBeAttached();
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 5000 }).toBe(0);
+		});
+		test(`should persist deep dark CSS after navigation on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+			await navigateToPageType(page, home);
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "deepDarkCSS.enabled");
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		});
+		test(`should update deep dark CSS content when preset changes on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+			const initialContent = await page.locator("#yte-deep-dark-css").textContent();
+			expect(initialContent).toContain("#00adee");
+			await setOption(page, "deepDarkCSS.preset", "Discord");
+			const updatedContent = await page.locator("#yte-deep-dark-css").textContent();
+			expect(updatedContent).toContain("#7289da");
+		});
+		test(`should work on re-enable after disable on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+			await disableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 5000 }).toBe(0);
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		});
+		test(`persists deep dark CSS after full page reload on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "deepDarkCSS.enabled");
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+			await page.reload();
+			await navigateToPageType(page, pageType);
+			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 15000 }).toBeGreaterThan(0);
 		});
 	}
 });

@@ -1,5 +1,6 @@
 import { test as base, type BrowserContext, chromium, defineConfig, devices, firefox, type Page } from "@playwright/test";
-import { mkdtemp } from "fs/promises";
+import { existsSync } from "fs";
+import { cp, mkdtemp, rm } from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { withExtension } from "playwright-webextext";
@@ -10,6 +11,8 @@ import { generateMissingFeatureTests } from "@/src/utils/_tests/generateMissingF
 generateMissingFeatureTests();
 
 const isCI = !!process.env.CI;
+const AUTH_PROFILE = join(cwd(), "playwright", ".auth-profile");
+
 type Fixtures = {
 	context: BrowserContext;
 	page: Page;
@@ -19,17 +22,24 @@ type OptionsFixtures = Fixtures & {
 	extensionId: string;
 };
 
-async function createExtensionContext(browserName: string): Promise<BrowserContext> {
+async function createExtensionContext(browserName: string): Promise<{ context: BrowserContext; userDataDir: string }> {
 	const pathToExtension = getExtensionPath(browserName);
 	const baseBrowser = browserName === "firefox" ? firefox : chromium;
 	const browserType = withExtension(baseBrowser, pathToExtension);
 	const userDataDir = await mkdtemp(join(tmpdir(), `pw-${browserName}-`));
-	return await browserType.launchPersistentContext(userDataDir, {
+	if (!isCI && existsSync(AUTH_PROFILE)) {
+		await cp(AUTH_PROFILE, userDataDir, { recursive: true });
+	}
+	const context = await browserType.launchPersistentContext(userDataDir, {
 		acceptDownloads: true,
 		args: isCI && browserName === "chromium" ? ["--headless=chrome"] : [],
 		downloadsPath: join(cwd(), "playwright-downloads"),
 		headless: false
 	});
+	await context.addInitScript(() => {
+		localStorage.setItem("yt-remote-theme-name", "dark");
+	});
+	return { context, userDataDir };
 }
 
 async function getExtensionOrigin(context: BrowserContext): Promise<string> {
@@ -71,11 +81,12 @@ async function getPrimaryPage(context: BrowserContext): Promise<Page> {
 
 export const test = base.extend<Fixtures>({
 	context: async ({ browserName }, use) => {
-		const context = await createExtensionContext(browserName);
+		const { context, userDataDir } = await createExtensionContext(browserName);
 		try {
 			await use(context);
 		} finally {
 			await context.close();
+			await rm(userDataDir, { force: true, recursive: true });
 		}
 	},
 	page: async ({ context }, use) => {
@@ -85,11 +96,12 @@ export const test = base.extend<Fixtures>({
 });
 export const optionsTest = base.extend<OptionsFixtures>({
 	context: async ({ browserName }, use) => {
-		const context = await createExtensionContext(browserName);
+		const { context, userDataDir } = await createExtensionContext(browserName);
 		try {
 			await use(context);
 		} finally {
 			await context.close();
+			await rm(userDataDir, { force: true, recursive: true });
 		}
 	},
 
