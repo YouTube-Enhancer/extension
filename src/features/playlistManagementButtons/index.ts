@@ -9,7 +9,6 @@ import { createActionButton } from "@/src/features/playlistManagementButtons/Act
 import { removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { ensureTrustedTypesPolicy } from "@/src/utils/security/trustedTypes";
 
 import { getPlaylistId } from "../playlistLength/utils";
 import { metadata } from "./index.metadata";
@@ -49,7 +48,6 @@ const cleanupPlaylistManagementButtons = () => {
 };
 
 function setupPlaylistManagementButtons(config: configuration["playlistManagementButtons"]) {
-	ensureTrustedTypesPolicy();
 	preparePageDisposeListener = (event) => {
 		if ((event as YtActionEvent).detail.actionName !== "yt-prepare-page-dispose") {
 			return;

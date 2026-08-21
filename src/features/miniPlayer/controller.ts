@@ -245,7 +245,7 @@ export class MiniPlayerController {
 		);
 	}
 	private disable() {
-		if (!this.isActiveState) return;
+		if (!this.isActiveState && !this.detachedPlayer) return;
 		this.restorePlayer();
 		if (this.overlayElement) this.overlayElement.style.display = "none";
 		this.isActiveState = false;
@@ -255,15 +255,23 @@ export class MiniPlayerController {
 		if (this.isActiveState) return;
 		this.ensureOverlay();
 		if (!this.overlayElement) return;
-		const ok = this.movePlayerIntoOverlay();
-		if (!ok) return;
-		this.applyInitialRect();
-		this.overlayElement.style.display = "block";
-		this.isActiveState = true;
-		document.documentElement.classList.add("yte-mini-player-active");
+		try {
+			const ok = this.movePlayerIntoOverlay();
+			if (!ok) return;
+			this.applyInitialRect();
+			this.overlayElement.style.display = "block";
+			this.isActiveState = true;
+			document.documentElement.classList.add("yte-mini-player-active");
+		} catch (error) {
+			console.error("[miniPlayer] Failed to enable mini player, restoring player:", error);
+			this.restorePlayer();
+			if (this.overlayElement) this.overlayElement.style.display = "none";
+			document.documentElement.classList.remove("yte-mini-player-active");
+		}
 	}
 	private ensureOverlay() {
 		if (this.overlayElement) return;
+		document.querySelectorAll<HTMLDivElement>("#yte-mini-player-overlay").forEach((stale) => stale.remove());
 		const overlay = createStyledElement({
 			classlist: ["yte-mini-player"],
 			elementId: "yte-mini-player-overlay",
@@ -324,6 +332,7 @@ export class MiniPlayerController {
 	private movePlayerIntoOverlay() {
 		const player = document.querySelector<HTMLElement>("#movie_player");
 		if (!player) return false;
+		if (this.detachedPlayer === player) return true;
 		const { parentElement: parent } = player;
 		if (!parent) return false;
 		if (!this.playerPlaceholder) {
@@ -360,20 +369,38 @@ export class MiniPlayerController {
 		player.style.height = "100%";
 		player.style.position = "relative";
 		this.detachedPlayer = player;
-		enableMiniPlayerCustomProgress(this.detachedPlayer, this.overlayElement);
+		try {
+			enableMiniPlayerCustomProgress(this.detachedPlayer, this.overlayElement);
+		} catch (error) {
+			console.error("[miniPlayer] Failed to attach custom progress bar:", error);
+		}
 		return true;
 	}
 	private restorePlayer() {
 		const { detachedPlayer } = this;
-		if (this.originalPlayerParent && this.playerPlaceholder && detachedPlayer) {
-			this.originalPlayerParent.insertBefore(detachedPlayer, this.playerPlaceholder);
-		}
-		if (this.playerPlaceholder) this.playerPlaceholder.remove();
 		if (detachedPlayer) {
-			detachedPlayer.style.width = "";
-			detachedPlayer.style.height = "";
-			detachedPlayer.style.position = "";
+			try {
+				const { originalPlayerParent, playerPlaceholder } = this;
+				if (originalPlayerParent && playerPlaceholder && originalPlayerParent.contains(playerPlaceholder)) {
+					originalPlayerParent.insertBefore(detachedPlayer, playerPlaceholder);
+				} else {
+					const fallbackContainer =
+						document.querySelector<HTMLElement>("ytd-player #container") ??
+						document.querySelector<HTMLElement>("#full-bleed-container #container") ??
+						document.querySelector<HTMLElement>("#player-container #container");
+					if (fallbackContainer && fallbackContainer !== detachedPlayer.parentElement) {
+						fallbackContainer.appendChild(detachedPlayer);
+					}
+				}
+				if (!detachedPlayer.isConnected) console.error("[miniPlayer] Player could not be reattached to the page after restore");
+				detachedPlayer.style.width = "";
+				detachedPlayer.style.height = "";
+				detachedPlayer.style.position = "";
+			} catch (error) {
+				console.error("[miniPlayer] Failed to restore player into page:", error);
+			}
 		}
+		this.playerPlaceholder?.remove();
 		disableMiniPlayerCustomProgress();
 		window.dispatchEvent(new Event("resize"));
 		this.playerPlaceholder = null;
@@ -407,13 +434,21 @@ export class MiniPlayerController {
 	}
 }
 export function readManualOverride(): boolean {
-	return stateAPI.getState().manualOverride;
+	try {
+		return stateAPI.getState().manualOverride;
+	} catch {
+		return false;
+	}
 }
 export function setManualOverride(enabled: boolean) {
-	stateAPI.setState((prev) => ({ ...prev, manualOverride: enabled }));
+	try {
+		stateAPI.setState((prev) => ({ ...prev, manualOverride: enabled }));
+	} catch (error) {
+		console.error("[miniPlayer] Failed to update manual override:", error);
+	}
 }
 function parseSizePreset(preset: MiniPlayerSize): { height: number; width: number } {
-	const [w, h] = preset.split("x").map((n) => parseInt(n, 10));
+	const [w, h] = (preset ?? "400x225").split("x").map((n) => parseInt(n, 10));
 	return { height: h, width: w };
 }
 function readSavedState(): Nullable<MiniPlayerRect> {
@@ -428,7 +463,11 @@ function readSavedState(): Nullable<MiniPlayerRect> {
 	}
 }
 function writeSavedState(s: MiniPlayerRect) {
-	stateAPI.setState((prev) => ({ ...prev, rect: s }));
+	try {
+		stateAPI.setState((prev) => ({ ...prev, rect: s }));
+	} catch (error) {
+		console.error("[miniPlayer] Failed to persist mini player rect:", error);
+	}
 }
 let miniPlayerBarState: Nullable<MiniPlayerBarState> = null;
 type miniPlayerWindow = {
