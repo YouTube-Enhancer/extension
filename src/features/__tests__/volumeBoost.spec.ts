@@ -39,7 +39,7 @@ test("should set global volume boost to 10", async ({ page }) => {
 	await setValue(page, "volume_boost_amount", 10);
 	await navigateToYoutubePage(page);
 	const volumeBoostEnabled = await page.evaluate(() => {
-		return window.gainNode && window.gainNode.gain.value !== 1;
+		return window.engine && window.engine.volumeGain.gain.value !== 1;
 	});
 	expect(volumeBoostEnabled).toBeTruthy();
 });
@@ -51,7 +51,7 @@ test("should set per video volume boost to 10", async ({ page }) => {
 	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-volumeBoostButton-menuitem");
 	await clickFeatureMenuItem(page, "yte-feature-volumeBoostButton-menuitem");
 	const volumeBoostEnabled = await page.evaluate(() => {
-		return window.gainNode && window.gainNode.gain.value !== 1;
+		return window.engine && window.engine.volumeGain.gain.value !== 1;
 	});
 	expect(volumeBoostEnabled).toBeTruthy();
 });

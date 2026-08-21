@@ -27,6 +27,7 @@
 			"@/utils/*": ["./src/utils/*"],
 			"@/hooks": ["./src/hooks/index"],
 			"@/hooks/*": ["./src/hooks/*"],
+			"playwright.config": ["./playwright.config.ts"],
 			"monaco-editor/esm/*": ["./node_modules/monaco-editor/esm/*"],
 			"youtubei.js/dist/*": ["./node_modules/youtubei.js/dist/*"],
 			"rollup/*": ["./node_modules/rollup/dist/*"],
