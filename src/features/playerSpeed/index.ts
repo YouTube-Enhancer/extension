@@ -5,12 +5,14 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
 import { browserColorLog } from "@/src/utils/logging";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
+import { clearManualOverride, isManualOverrideActive, isOwnWrite, markExtensionAppliedRate, markManualOverride } from "./manualOverride";
 import { parseChannelSpeeds } from "./utils";
 
 const speedValueRegex = /(\d+(?:\.\d+)?)/;
@@ -58,17 +60,17 @@ function makePlayerSpeedTask(speed: number, channelSpeeds?: string): () => Promi
 		const playerVideoData = await playerContainer.getVideoData();
 		if (playerVideoData.isLive) return true;
 		// After SPA navigation the player briefly reports the previous video's data.
-		// Only resolve the channel-specific speed once the player has switched to the loaded video,
-		// otherwise a stale channel override would be applied to the wrong video.
-		// Until then fall back to the base speed so a stale override never sticks.
+		// Retry until the player has switched to the video the URL points to instead of
+		// writing a possibly-stale speed onto the previous video.
 		const urlVideoId = getUrlVideoId();
-		let effectiveSpeed = speed;
-		if (!urlVideoId || playerVideoData.video_id === urlVideoId) {
-			const channelId = await getCurrentChannelId();
-			effectiveSpeed = resolveEffectiveSpeed(speed, channelSpeeds, channelId);
-		}
+		if (!urlVideoId || playerVideoData.video_id !== urlVideoId) return false;
+		// A manual adjustment on this video wins over enforcement until navigation.
+		if (isManualOverrideActive(urlVideoId)) return true;
+		const channelId = await getCurrentChannelId();
+		const effectiveSpeed = resolveEffectiveSpeed(speed, channelSpeeds, channelId);
 		const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 		if (!video) return false;
+		markExtensionAppliedRate(effectiveSpeed);
 		await playerContainer.setPlaybackRate(effectiveSpeed);
 		video.playbackRate = effectiveSpeed;
 		return true;
@@ -139,6 +141,42 @@ function setupPlaybackSpeedChangeListener() {
 		}).observe(settingsPanelMenu, { attributeFilter: ["style"], attributes: true });
 	}
 }
+let lastRecordedSpeed: Nullable<number> = null;
+
+function detachRateChangeListener() {
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (!video) return;
+	eventManager.removeEventListener(video, "ratechange", metadata.id);
+}
+
+function handleRateChange(video: HTMLVideoElement) {
+	const { playbackRate: rate } = video;
+	const urlVideoId = getUrlVideoId();
+	// Once a manual override is active, every change is recorded so restore-on-disable
+	// tracks the user's latest choice — including rates that match an enforced value.
+	if (!isManualOverrideActive(urlVideoId) && isOwnWrite(rate)) return;
+	markManualOverride(urlVideoId);
+	void recordExternalSpeed(rate);
+}
+
+async function recordExternalSpeed(speed: number) {
+	if (speed === lastRecordedSpeed) return;
+	lastRecordedSpeed = speed;
+	const stateAPI = registry.stateManager.getStateAPI(metadata.id);
+	stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
+	await updatePlaybackSpeedButtons(speed);
+}
+
+function resetRecordedSpeed() {
+	lastRecordedSpeed = null;
+}
+
+async function setupRateChangeListener() {
+	const video = await waitForElement<HTMLVideoElement>("video.html5-main-video", 15000);
+	if (!video) return;
+	eventManager.removeEventListener(video, "ratechange", metadata.id);
+	eventManager.addEventListener(video, "ratechange", () => handleRateChange(video), metadata.id);
+}
 async function updateEffectivePlaybackSpeedButtons(speed: number, channelSpeeds?: string) {
 	const channelId = await getCurrentChannelId();
 	await updatePlaybackSpeedButtons(resolveEffectiveSpeed(speed, channelSpeeds, channelId));
@@ -162,6 +200,9 @@ export default createFeature({
 	},
 	onDisable: () => {
 		registry.playerManager.cleanup(metadata.id);
+		detachRateChangeListener();
+		clearManualOverride();
+		resetRecordedSpeed();
 		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
@@ -173,6 +214,9 @@ export default createFeature({
 	},
 	onEnable: ({ channelSpeeds, speed }) => {
 		browserColorLog(`Setting player speed to ${speed}`, "FgMagenta");
+		void setupRateChangeListener();
+		clearManualOverride();
+		resetRecordedSpeed();
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
 			onPlayerStateChange: true,
@@ -184,6 +228,9 @@ export default createFeature({
 	onInit: setupPlaybackSpeedChangeListener,
 	onNavigate: ({ channelSpeeds, speed }) => {
 		browserColorLog(`Setting player speed to ${speed} (navigation)`, "FgMagenta");
+		void setupRateChangeListener();
+		clearManualOverride();
+		resetRecordedSpeed();
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
 			onPlayerStateChange: true,
