@@ -1,4 +1,5 @@
-import { navigateToOptionsPage, test } from "playwright.config";
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
+import { test } from "playwright.config";
+
+test.describe("saveToWatchLaterButton", () => {
+	test.skip(`Unable to test saveToWatchLaterButton because of login requirement`, () => {});
 });
