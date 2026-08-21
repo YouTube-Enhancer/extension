@@ -1,25 +1,26 @@
-import { disableFeature, enableFeature, expect, navigateToOptionsPage, navigateToYoutubePage, test } from "playwright.config";
+import { expect, test } from "playwright.config";
 
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
+import { metadata } from "@/src/features/remainingTime/index.metadata";
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-test("should enable remaining time", async ({ page }) => {
-	await enableFeature(page, "enable_remaining_time");
-});
-test("should disable remaining time", async ({ page }) => {
-	await disableFeature(page, "enable_remaining_time");
-});
-test("remaining time should be displayed", async ({ page }) => {
-	await enableFeature(page, "enable_remaining_time");
-	await navigateToYoutubePage(page);
-	const remainingTimeElement = page.locator("span#ytp-time-remaining");
-	await expect(remainingTimeElement).toBeAttached();
-	expect(await remainingTimeElement.textContent()).toBeTruthy();
-});
-test("remaining time shouldn't be displayed", async ({ page }) => {
-	await disableFeature(page, "enable_remaining_time");
-	await navigateToYoutubePage(page);
-	const remainingTimeElement = page.locator("span#ytp-time-remaining");
-	await expect(remainingTimeElement).not.toBeAttached();
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+
+test.describe("remainingTime", () => {
+	for (const pageType of testPages) {
+		test(`remaining time should be displayed on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "remainingTime.enabled");
+			const remainingTimeElement = page.locator("span#ytp-time-remaining");
+			await expect(remainingTimeElement).toBeAttached();
+			expect(await remainingTimeElement.textContent()).toBeTruthy();
+		});
+		test(`remaining time shouldn't be displayed on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "remainingTime.enabled");
+			const remainingTimeElement = page.locator("span#ytp-time-remaining");
+			await expect(remainingTimeElement).not.toBeAttached();
+		});
+	}
 });

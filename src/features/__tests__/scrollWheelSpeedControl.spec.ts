@@ -1,30 +1,38 @@
-import { adjustWithScrollWheel, disableFeature, enableFeature, navigateToOptionsPage, speed, test } from "../../../playwright.config";
+import { test } from "playwright.config";
 
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
+import { metadata } from "@/src/features/scrollWheelSpeedControl/index.metadata";
+import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-test("should enable scroll wheel speed control", async ({ page }) => {
-	await enableFeature(page, "enable_scroll_wheel_speed_control");
-});
-test("should disable scroll wheel speed control", async ({ page }) => {
-	await disableFeature(page, "enable_scroll_wheel_speed_control");
-});
-test("should increase speed when holding 'Alt' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "up", modifierKey: "altKey", page, value: speed, withModifierKey: true });
-});
-test("should decrease speed when holding 'Alt' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "down", modifierKey: "altKey", page, value: speed, withModifierKey: true });
-});
-test("should increase speed when holding 'Ctrl' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "up", modifierKey: "ctrlKey", page, value: speed, withModifierKey: true });
-});
-test("should decrease speed when holding 'Ctrl' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "down", modifierKey: "ctrlKey", page, value: speed, withModifierKey: true });
-});
-test("should increase speed when holding 'Shift' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "up", modifierKey: "shiftKey", page, value: speed, withModifierKey: true });
-});
-test("should decrease speed when holding 'Shift' modifier key", async ({ page }) => {
-	await adjustWithScrollWheel({ controlType: "speed", direction: "down", modifierKey: "shiftKey", page, value: speed, withModifierKey: true });
+// Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
+const speed = 1.0;
+const steps = 0.25;
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
+
+test.describe("scrollWheelSpeedControl", () => {
+	for (const pageType of testPages) {
+		test(`should increase speed on ${pageType}`, async ({ page }) => {
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps, withModifierKey: true });
+		});
+		test(`should decrease speed on ${pageType}`, async ({ page }) => {
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", initialValue: speed, page, pageType, steps, withModifierKey: true });
+		});
+	}
+	for (const modifierKey of modifierKeys) {
+		test(`should increase speed when holding '${
+			modifierKey === "altKey" ? "Alt"
+			: modifierKey === "ctrlKey" ? "Ctrl"
+			: "Shift"
+		}' modifier key`, async ({ page }) => {
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, modifierKey, page, steps, withModifierKey: true });
+		});
+		test(`should decrease speed when holding '${
+			modifierKey === "altKey" ? "Alt"
+			: modifierKey === "ctrlKey" ? "Ctrl"
+			: "Shift"
+		}' modifier key`, async ({ page }) => {
+			await adjustWithScrollWheel({ controlType: "Speed", direction: "down", initialValue: speed, modifierKey, page, steps, withModifierKey: true });
+		});
+	}
 });
