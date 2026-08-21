@@ -1,4 +1,4 @@
-import type { YouTubePlayer } from "node_modules/@types/youtube-player/dist/types";
+import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import { disableFeature, enableFeature, expect, navigateToOptionsPage, navigateToYoutubePage, test } from "playwright.config";
 
@@ -15,7 +15,7 @@ test("theater mode should be enabled", async ({ page }) => {
 	await enableFeature(page, "enable_automatic_theater_mode");
 	await navigateToYoutubePage(page);
 	const theaterModeEnabled = await page.evaluate(async () => {
-		const container = document.querySelector("div#movie_player") as unknown as YouTubePlayer | null;
+		const container = document.querySelector("div#movie_player") as unknown as null | YouTubePlayer;
 		if (!container) return null;
 		const { width: playerWidth } = await container.getSize();
 		const {
@@ -30,7 +30,7 @@ test("theater mode should be disabled", async ({ page }) => {
 	await disableFeature(page, "enable_automatic_theater_mode");
 	await navigateToYoutubePage(page);
 	const theaterModeEnabled = await page.evaluate(async () => {
-		const container = document.querySelector("div#movie_player") as unknown as YouTubePlayer | null;
+		const container = document.querySelector("div#movie_player") as unknown as null | YouTubePlayer;
 		if (!container) return null;
 		const { width: playerWidth } = await container.getSize();
 		const {
