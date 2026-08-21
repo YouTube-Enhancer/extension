@@ -1,69 +1,39 @@
-import type { YouTubePlayer } from "youtube-player/dist/types";
+import { expect, test } from "playwright.config";
 
-import {
-	clickFeatureMenuItem,
-	disableFeature,
-	enableFeature,
-	expect,
-	expectFeatureMenuItemToBeFalsy,
-	expectFeatureMenuItemToBeTruthy,
-	navigateToOptionsPage,
-	navigateToYoutubePage,
-	test
-} from "playwright.config";
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
-
-test("should enable maximize player button", async ({ page }) => {
-	await enableFeature(page, "enable_maximize_player_button");
-});
-test("should disable maximize player button", async ({ page }) => {
-	await disableFeature(page, "enable_maximize_player_button");
-});
-test("maximize player button should be enabled", async ({ page }) => {
-	await enableFeature(page, "enable_maximize_player_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-maximizePlayerButton-menuitem");
-});
-test("maximize player button should be disabled", async ({ page }) => {
-	await disableFeature(page, "enable_maximize_player_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
-});
-test("player should be maximized", async ({ page }) => {
-	// TODO: fix this test failing
-	await enableFeature(page, "enable_maximize_player_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-maximizePlayerButton-menuitem");
-	await clickFeatureMenuItem(page, "yte-feature-maximizePlayerButton-menuitem");
-	const isMaximized = await page.evaluate(async (selector) => {
-		const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
-		if (!container) return null;
-		const { height: playerHeight, width: playerWidth } = await container.getSize();
-		const {
-			documentElement: { clientHeight, clientWidth }
-		} = document;
-		console.log({ clientHeight, clientWidth, playerHeight, playerWidth });
-		return playerHeight === clientHeight && playerWidth === clientWidth;
-	}, "div#movie_player");
-	expect(isMaximized).toBeTruthy();
-	expect(isMaximized).toBe(true);
-});
-test("player shouldn't be maximized", async ({ page }) => {
-	await disableFeature(page, "enable_maximize_player_button");
-	await navigateToYoutubePage(page);
-	const maximizePlayerButton = page.locator(`#yte-feature-maximizePlayerButton-menuitem`);
-	await expect(maximizePlayerButton).not.toBeAttached();
-	const isMaximized = await page.evaluate(async (selector) => {
-		const container = document.querySelector(selector) as unknown as null | YouTubePlayer;
-		if (!container) return null;
-		const { height: playerHeight, width: playerWidth } = await container.getSize();
-		const {
-			documentElement: { clientHeight, clientWidth }
-		} = document;
-		console.log({ clientHeight, clientWidth, playerHeight, playerWidth });
-		return playerHeight === clientHeight && playerWidth === clientWidth;
-	}, "div#movie_player");
-	expect(isMaximized).toBeFalsy();
+import { metadata } from "@/src/features/maximizePlayerButton/index.metadata";
+import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { placementRecord } from "@/src/utils/_tests/constants";
+import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const { left } = placementRecord;
+test.describe("maximizePlayerButton", () => {
+	for (const pageType of testPages) {
+		test(`maximize player button should be enabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+		});
+		test(`maximize player button should be disabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+		});
+		test(`player should be maximized on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-maximizePlayerButton-button");
+			await clickFeatureButton(page, pageType, "yte-feature-maximizePlayerButton-button", left);
+			await expect(page.locator("body")).toHaveAttribute("yte-maximized");
+		});
+		test(`player shouldn't be maximized on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+			await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
+		});
+	}
 });

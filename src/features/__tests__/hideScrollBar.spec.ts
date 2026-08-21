@@ -1,27 +1,43 @@
-import { disableFeature, enableFeature, expect, navigateToOptionsPage, navigateToYoutubePage, test } from "playwright.config";
+import { expect, test } from "playwright.config";
 
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
-test("should enable hide scrollbar", async ({ page }) => {
-	await enableFeature(page, "enable_hide_scrollbar");
-});
-test("should disable hide scrollbar", async ({ page }) => {
-	await disableFeature(page, "enable_hide_scrollbar");
-});
-test("Scrollbar should be hidden", async ({ page }) => {
-	await enableFeature(page, "enable_hide_scrollbar");
-	await navigateToYoutubePage(page);
-	const scrollBarHidden = await page.evaluate(() => {
-		return document.documentElement.clientWidth >= window.innerWidth;
-	});
-	expect(scrollBarHidden).toBe(true);
-});
-test("Scrollbar should be visible", async ({ page }) => {
-	await disableFeature(page, "enable_hide_scrollbar");
-	await navigateToYoutubePage(page);
-	const scrollBarHidden = await page.evaluate(() => {
-		return document.documentElement.clientWidth >= window.innerWidth;
-	});
-	expect(scrollBarHidden).toBe(false);
+import { metadata } from "@/src/features/hideScrollBar/index.metadata";
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+
+test.describe("hideScrollBar", () => {
+	for (const pageType of testPages) {
+		if (pageType === "shorts") {
+			test.skip(`scrollbar tests are not applicable on shorts`, async () => {});
+			continue;
+		}
+		test(`scrollbar should be hidden on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "hideScrollBar.enabled");
+			await expect
+				.poll(
+					() =>
+						page.evaluate(() => {
+							return document.documentElement.clientWidth >= window.innerWidth;
+						}),
+					{ timeout: 5000 }
+				)
+				.toBe(true);
+		});
+		test(`scrollbar should be visible when disabled on ${pageType}`, async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "hideScrollBar.enabled");
+			await expect
+				.poll(
+					() =>
+						page.evaluate(() => {
+							return document.documentElement.clientWidth >= window.innerWidth;
+						}),
+					{ timeout: 5000 }
+				)
+				.toBe(false);
+		});
+	}
 });
