@@ -1,9 +1,12 @@
 import { expect, test } from "playwright.config";
 
+import { metadata } from "@/src/features/videoHistory/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolveNonTargetPage } from "@/src/utils/_tests/utils";
 const { home, watch } = pageTypeRecord;
+const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 async function getCurrentTime(page: Parameters<typeof navigateToPageType>[0]): Promise<number> {
 	return await page.evaluate(() => {
@@ -13,6 +16,14 @@ async function getCurrentTime(page: Parameters<typeof navigateToPageType>[0]): P
 }
 
 test.describe("videoHistory", () => {
+	test("toggling video history should not crash the page", async ({ page }) => {
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+		await enableFeature(page, "videoHistory.enabled");
+		await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+		await disableFeature(page, "videoHistory.enabled");
+		await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	});
 	test("video history resume prompt should appear when navigating back", async ({ page }) => {
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		await enableFeature(page, "videoHistory.enabled");
@@ -51,6 +62,22 @@ test.describe("videoHistory", () => {
 		expect(resumedTime).toBeGreaterThan(watchedTime - 2);
 		expect(resumedTime).toBeLessThan(watchedTime + 10);
 	});
+	test("video history close button should hide the resume prompt", async ({ page }) => {
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await enableFeature(page, "videoHistory.enabled");
+		await setOption(page, "videoHistory.resumeType", "prompt");
+		await expect.poll(() => getCurrentTime(page), { timeout: 15000 }).toBeGreaterThan(0);
+		await navigateToPageType(page, home);
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await disableFeature(page, "videoHistory.enabled");
+		await enableFeature(page, "videoHistory.enabled");
+		const resumePrompt = page.locator("#resume-prompt");
+		await expect(resumePrompt).toBeAttached({ timeout: 10000 });
+		const closeButton = page.locator("#resume-prompt-close-button");
+		await expect(closeButton).toBeVisible();
+		await closeButton.click();
+		await expect(resumePrompt).not.toBeVisible();
+	});
 	test("video history should automatically resume when navigating back", async ({ page }) => {
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		await enableFeature(page, "videoHistory.enabled");
@@ -79,5 +106,26 @@ test.describe("videoHistory", () => {
 		await navigateToPageType(page, watch, ["videoHistory"]);
 		const resumePrompt = page.locator("#resume-prompt");
 		await expect(resumePrompt).not.toBeAttached();
+	});
+	test("video history should persist after full page reload", async ({ page }) => {
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		await enableFeature(page, "videoHistory.enabled");
+		await setOption(page, "videoHistory.resumeType", "prompt");
+		await expect.poll(() => getCurrentTime(page), { timeout: 15000 }).toBeGreaterThan(0);
+		await navigateToPageType(page, home);
+		await page.reload();
+		await navigateToPageType(page, watch, ["videoHistory"]);
+		const resumePrompt = page.locator("#resume-prompt");
+		await expect(resumePrompt).toBeAttached({ timeout: 15000 });
+	});
+	test("video history should not create resume prompt on live video", async ({ page }) => {
+		await navigateToPageType(page, "live");
+		await enableFeature(page, "videoHistory.enabled");
+		await expect(page.locator("#resume-prompt")).not.toBeAttached();
+	});
+	test(`should not create resume prompt on non-target page`, async ({ page }) => {
+		await navigateToPageType(page, nonTargetPage!);
+		await enableFeature(page, "videoHistory.enabled");
+		await expect(page.locator("#resume-prompt")).not.toBeAttached();
 	});
 });

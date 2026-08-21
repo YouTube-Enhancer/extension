@@ -401,3 +401,4 @@ package-lock.json
 /playwright-data/
 /playwright-downloads/
 .VSCodeCounter/
+playwright/.auth-profile

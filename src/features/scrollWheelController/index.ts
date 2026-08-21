@@ -141,7 +141,13 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const [volume, isMuted] = await Promise.all([playerContainer.getVolume(), playerContainer.isMuted()]);
 	const newVolume = clamp(toDivisible(volume + steps * volumeConfig.steps, volumeConfig.steps), 0, 100);
 	await playerContainer.setVolume(newVolume);
-	if (isMuted) await playerContainer.unMute();
+	// Keep the underlying video element in sync; the shorts player does not always reflect setVolume immediately.
+	const video = playerContainer.querySelector<HTMLVideoElement>("video");
+	if (video) video.volume = newVolume / 100;
+	if (isMuted) {
+		await playerContainer.unMute();
+		if (video) video.muted = false;
+	}
 	showOnScreenDisplay(onScreenDisplay, playerContainer, { max: 100, type: "volume", value: newVolume });
 }
 

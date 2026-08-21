@@ -1,11 +1,23 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
-import { pageSetup } from "@/src/utils/_tests/pageSetup";
-import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
+import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
+import { getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 
-export const fixtureCapabilities = ["ambientMode", "autoPlay", "captions", "timestamps", "videoHistory", "monoAudio", "playlistLength"] as const;
+export const fixtureCapabilities = [
+	"ambientMode",
+	"autoPlay",
+	"captions",
+	"dubbedAudio",
+	"endScreenCards",
+	"playlistManagementButtons",
+	"playlistLength",
+	"timestamps",
+	"videoHistory",
+	"monoAudio"
+] as const;
 
 export type FixtureCapabilities = (typeof fixtureCapabilities)[number];
 
@@ -54,6 +66,10 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 		{
 			capabilities: ["playlistLength"],
 			url: "https://www.youtube.com/playlist?list=UUuAXFkgsw1L7xaCfnd5JJOw"
+		},
+		{
+			capabilities: ["playlistLength", "playlistManagementButtons"],
+			url: "https://www.youtube.com/playlist?list=PLA-lApStgDt8"
 		}
 	],
 	search: [
@@ -66,6 +82,10 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 		{
 			capabilities: ["ambientMode"],
 			url: "https://www.youtube.com/shorts/Ay8lynMZ4mE"
+		},
+		{
+			capabilities: ["dubbedAudio"],
+			url: "https://www.youtube.com/shorts/BUJWQiqhWLM"
 		}
 	],
 	subscriptions: [
@@ -89,7 +109,15 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 		},
 		{
 			capabilities: ["timestamps"],
-			url: "https://www.youtube.com/watch?v=QCsJbLGpY_A"
+			url: "https://www.youtube.com/watch?v=yk4I80XVuk4"
+		},
+		{
+			capabilities: ["dubbedAudio"],
+			url: "https://www.youtube.com/watch?v=BUJWQiqhWLM"
+		},
+		{
+			capabilities: ["endScreenCards"],
+			url: "https://www.youtube.com/watch?v=GBHR9XZazv4"
 		}
 	]
 };
@@ -116,7 +144,8 @@ export async function navigateToPage(page: Page, url: string) {
 }
 export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureCapabilities[] = []): Promise<void> {
 	if (pageType === "live") {
-		await navigateToLiveVideo(page);
+		test.setTimeout(120_000);
+		await navigateToLiveVideo(page, requirements);
 		await expect
 			.poll(
 				async () => {
@@ -133,77 +162,44 @@ export async function navigateToPageType(page: Page, pageType: PageType, require
 	const fixture = getFixture(pageType, requirements);
 	await navigateToYoutubePage(page, fixture.url, pageType);
 }
-async function navigateToLiveVideo(page: Page): Promise<void> {
+async function finishLiveVideoSetup(page: Page): Promise<void> {
+	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
+	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	await waitForYoutubePlayerReady(page, "live");
+	await pageSetup(page);
+	await page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+		await player?.playVideo?.();
+	});
+	await page.waitForTimeout(100);
+}
+async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities[] = []): Promise<void> {
 	const {
 		live: [{ url: channelUrl }]
 	} = pageFixtures;
-	await navigateToPage(page, channelUrl);
-	const liveVideoLocator = page.locator(
-		'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
-	);
-	await expect(liveVideoLocator.first()).toBeVisible({
-		timeout: 60_000
-	});
-	const initialUrl = normalizeUrl(page.url());
 	for (let attempt = 0; attempt < 5; attempt++) {
-		const liveVideo = liveVideoLocator.first();
-		await expect(liveVideo).toBeVisible({
-			timeout: 15_000
+		await navigateToPage(page, channelUrl);
+		const liveVideos = page.locator(
+			'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
+		);
+		await expect(liveVideos.first()).toBeVisible({
+			timeout: 60_000
 		});
-		await liveVideo.click();
-		const navigated = await expect
-			.poll(
-				() => {
-					const url = normalizeUrl(page.url());
-					if (url === initialUrl) {
-						return false;
-					}
-					return /youtube\.com\/watch\?/.test(url);
-				},
-				{
-					intervals: [250, 500, 1000],
-					timeout: 15_000
-				}
-			)
-			.toBeTruthy()
-			.then(() => true)
-			.catch(() => false);
-		if (!navigated) {
-			try {
-				await page.goto(channelUrl, {
-					waitUntil: "domcontentloaded"
-				});
-			} catch {
-				await page.waitForTimeout(3000);
+		const count = await liveVideos.count();
+		for (let index = 0; index < count; index++) {
+			const video = liveVideos.nth(index);
+			if (!(await tryOpenLiveVideo(page, video, channelUrl))) {
+				continue;
 			}
-			continue;
+			await finishLiveVideoSetup(page);
+			if (requirements.length === 0 || (await videoMeetsCapabilities(page, requirements))) {
+				return;
+			}
+			await navigateToPage(page, channelUrl);
 		}
-		const watchShell = page.locator("ytd-watch-flexy,ytd-watch-grid");
-		const watchLoaded = await expect(watchShell)
-			.toBeAttached({
-				timeout: 15_000
-			})
-			.then(() => true)
-			.catch(() => false);
-		if (!watchLoaded) {
-			await page.goto(channelUrl, {
-				waitUntil: "domcontentloaded"
-			});
-			continue;
-		}
-		await page.bringToFront();
-		await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
-		await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
-		await waitForYoutubePlayerReady(page, "live");
-		await pageSetup(page);
-		await page.evaluate(() => {
-			const player = document.querySelector<HTMLDivElement & { playVideo?: () => Promise<void> }>("#movie_player");
-			if (player?.playVideo) void player.playVideo();
-		});
-		await page.waitForTimeout(100);
-		return;
 	}
-	throw new Error("Failed to navigate to a live video after multiple attempts");
+	const reqMsg = requirements.length > 0 ? ` matching requirements: ${requirements.join(", ")}` : "";
+	throw new Error(`Failed to navigate to a live video${reqMsg} after multiple attempts`);
 }
 async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: PageType = "watch") {
 	if (normalizeUrl(page.url()) !== normalizeUrl(pageUrl)) {
@@ -220,4 +216,61 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: Page
 }
 function normalizeUrl(url: string): string {
 	return url.replace(/\/$/, "");
+}
+async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string): Promise<boolean> {
+	await expect(video).toBeVisible();
+	await page.bringToFront();
+	try {
+		await Promise.all([
+			page.waitForURL(/youtube\.com\/watch\?/, {
+				timeout: 15_000
+			}),
+			video.click()
+		]);
+	} catch {
+		return false;
+	}
+	const watchShell = page.locator("ytd-watch-flexy,ytd-watch-grid");
+	try {
+		await expect(watchShell).toBeAttached({
+			timeout: 15_000
+		});
+	} catch {
+		await navigateToPage(page, channelUrl);
+		return false;
+	}
+	try {
+		await expect
+			.poll(
+				async () => {
+					return await page.evaluate(async () => {
+						const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
+						const result = await player?.getVideoData?.();
+						return result?.isLive === true;
+					});
+				},
+				{
+					intervals: [500],
+					timeout: 30_000
+				}
+			)
+			.toBe(true);
+	} catch {
+		await navigateToPage(page, channelUrl);
+		return false;
+	}
+	return true;
+}
+async function videoMeetsCapabilities(page: Page, requirements: FixtureCapabilities[]): Promise<boolean> {
+	for (const req of requirements) {
+		switch (req) {
+			case "captions": {
+				await ensurePlayerControlsVisible(page, "live");
+				const state = await getCaptionsState(page);
+				if (state === null) return false;
+				break;
+			}
+		}
+	}
+	return true;
 }

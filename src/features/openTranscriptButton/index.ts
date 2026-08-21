@@ -17,7 +17,7 @@ export default createFeature({
 	buttons: [
 		{
 			add: async ({ button: { fullscreenPlacement, placement } }) => {
-				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150, "optional");
+				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 5000, "optional");
 				const transcriptButtonMenuItem = getFeatureButton("openTranscriptButton");
 				// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item
 				if (!transcriptButton && transcriptButtonMenuItem) await removeFeatureButton("openTranscriptButton");
@@ -41,7 +41,7 @@ export default createFeature({
 				eventManager.removeEventListeners("openTranscriptButton");
 			},
 			shouldRender: async () => {
-				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150, "optional");
+				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 5000, "optional");
 				return !!transcriptButton;
 			}
 		}

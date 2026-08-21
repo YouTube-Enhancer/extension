@@ -18,18 +18,16 @@ import { parseChannelSpeeds } from "./utils";
 const speedValueRegex = /(\d+(?:\.\d+)?)/;
 
 export async function setPlayerSpeed(speed: number) {
+	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+	if (video) video.playbackRate = speed;
 	const playerContainer =
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
-	if (!playerContainer) return;
-	if (!playerContainer.setPlaybackRate) return;
+	if (!playerContainer || !playerContainer.setPlaybackRate) return;
 	const playerVideoData = await playerContainer.getVideoData();
 	if (playerVideoData.isLive) return;
-	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-	if (!video) return;
 	await playerContainer.setPlaybackRate(speed);
-	if (video) video.playbackRate = speed;
 }
 
 async function getPlaybackSpeedPerClick() {
