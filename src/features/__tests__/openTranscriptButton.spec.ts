@@ -1,44 +1,47 @@
-import {
-	clickFeatureMenuItem,
-	disableFeature,
-	enableFeature,
-	expect,
-	expectFeatureMenuItemToBeFalsy,
-	expectFeatureMenuItemToBeTruthy,
-	navigateToOptionsPage,
-	navigateToYoutubePage,
-	test
-} from "playwright.config";
-test.beforeEach(async ({ extensionId, page }) => {
-	await navigateToOptionsPage(page, extensionId);
-});
+import { expect, test } from "playwright.config";
 
-test("should enable open transcript button", async ({ page }) => {
-	await enableFeature(page, "enable_open_transcript_button");
-});
-test("should disable open transcript button", async ({ page }) => {
-	await disableFeature(page, "enable_open_transcript_button");
-});
-test("open transcript button should be enabled", async ({ page }) => {
-	await enableFeature(page, "enable_open_transcript_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-openTranscriptButton-menuitem");
-});
-test("open transcript button should be disabled", async ({ page }) => {
-	await disableFeature(page, "enable_open_transcript_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeFalsy(page, "yte-feature-openTranscriptButton-menuitem");
-});
-test("transcript should be shown", async ({ page }) => {
-	await enableFeature(page, "enable_open_transcript_button");
-	await navigateToYoutubePage(page);
-	await expectFeatureMenuItemToBeTruthy(page, "yte-feature-openTranscriptButton-menuitem");
-	await clickFeatureMenuItem(page, "yte-feature-openTranscriptButton-menuitem");
-	const isTranscriptShown = await page.evaluate((selector) => {
-		const transcript = document.querySelector(selector) as unknown as HTMLDivElement | null;
-		if (!transcript) return null;
-		return transcript.getAttribute("visibility") !== "ENGAGEMENT_PANEL_VISIBILITY_HIDDEN";
-	}, "ytd-engagement-panel-section-list-renderer[target-id=engagement-panel-searchable-transcript");
-	expect(isTranscriptShown).toBeTruthy();
-	expect(isTranscriptShown).toBe(true);
+import { metadata } from "@/src/features/openTranscriptButton/index.metadata";
+import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import { placementRecord } from "@/src/utils/_tests/constants";
+import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
+
+const { left } = placementRecord;
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+test.describe("openTranscriptButton", () => {
+	for (const pageType of testPages) {
+		test("open transcript button should be enabled", async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "openTranscriptButton.button.enabled");
+			await setOption(page, "openTranscriptButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+		});
+		test("open transcript button should be disabled", async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "openTranscriptButton.button.enabled");
+			await setOption(page, "openTranscriptButton.button.placement", left);
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
+		});
+		test("transcript should be shown when clicking the transcript button", async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await enableFeature(page, "openTranscriptButton.button.enabled");
+			await setOption(page, "openTranscriptButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
+			await clickFeatureButton(page, pageType, "yte-feature-openTranscriptButton-button", left);
+			await expect(page.locator("ytd-engagement-panel-section-list-renderer[target-id=PAmodern_transcript_view]")).toHaveAttribute(
+				"visibility",
+				"ENGAGEMENT_PANEL_VISIBILITY_EXPANDED",
+				{ timeout: 10000 }
+			);
+		});
+		test("transcript should not be shown when disabled", async ({ page }) => {
+			await navigateToPageType(page, pageType);
+			await disableFeature(page, "openTranscriptButton.button.enabled");
+			await expect(page.locator("ytd-engagement-panel-section-list-renderer[target-id=engagement-panel-searchable-transcript]")).toHaveAttribute(
+				"visibility",
+				"ENGAGEMENT_PANEL_VISIBILITY_HIDDEN"
+			);
+		});
+	}
 });
