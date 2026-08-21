@@ -68,10 +68,10 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Merge changes from main into dev
+      - name: Rebase dev onto main
         if: success()
         run: |
           git checkout dev
           git pull --rebase origin dev
-          git merge origin/main --no-edit || echo "No merge necessary"
-          git push origin dev
+          git rebase origin/main || { git rebase --abort; exit 1; }
+          git push --force-with-lease origin dev
