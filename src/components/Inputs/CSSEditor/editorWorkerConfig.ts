@@ -1,6 +1,6 @@
 import { loader } from "@monaco-editor/react";
-import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
-import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
+import editorWorker from "monaco-editor/esm/vs/editor/editor.worker.js?worker";
+import cssWorker from "monaco-editor/esm/vs/language/css/css.worker.js?worker";
 
 import { monaco } from "@/src/utils/monaco";
 self.MonacoEnvironment = {

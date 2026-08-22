@@ -37,6 +37,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 	useEffect(() => {
 		onChangeRef.current = onChange;
 	}, [onChange]);
+	const lastEmittedValueRef = useRef(value);
 	const [state, dispatch] = useReducer(reducer, {
 		editorValue: value,
 		initialBodyOverflow: "",
@@ -45,7 +46,15 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 		problems: [],
 		viewportHeight: document.documentElement.clientHeight
 	});
+	// Sync external value changes (e.g. settings import/reset) into the editor
+	useEffect(() => {
+		if (value !== lastEmittedValueRef.current) {
+			lastEmittedValueRef.current = value;
+			dispatch({ payload: value, type: "SET_EDITOR_VALUE" });
+		}
+	}, [value]);
 	const debouncedOnChange = useDebounceFn((val: string) => {
+		lastEmittedValueRef.current = val;
 		onChangeRef.current(val);
 	}, 500);
 	const expandedEditorHeight = useMemo(() => {
@@ -55,6 +64,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 	}, [state.viewportHeight, state.problems]);
 	const flushSave = useCallback(() => {
 		const currentValue = editorRef.current?.getValue() ?? "";
+		lastEmittedValueRef.current = currentValue;
 		onChangeRef.current(currentValue);
 	}, []);
 	const handleEditorDidMount = useCallback(
@@ -113,7 +123,7 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 			/>
 			<Editor
 				className={cn("size-full grow", { "cursor-not-allowed pointer-events-none": disabled })}
-				height={state.isExpanded ? expandedEditorHeight : 400}
+				height={state.isExpanded ? expandedEditorHeight : 500}
 				language="css"
 				onChange={disabled ? () => {} : handleEditorChange}
 				onMount={handleEditorDidMount}
@@ -121,11 +131,11 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 				options={editorOptions}
 				theme="vs-dark"
 				value={state.editorValue}
-				width={state.isExpanded ? document.documentElement.clientWidth : 500}
+				width={state.isExpanded ? document.documentElement.clientWidth : 600}
 				wrapperProps={{ className: cn({ "cursor-not-allowed": disabled }) }}
 			/>
 			<EditorProblems
-				className={cn("max-h-32 w-[500px] overflow-y-auto", {
+				className={cn("max-h-32 w-[600px] overflow-y-auto", {
 					"cursor-not-allowed": disabled,
 					"fixed bottom-0 left-0 w-full": state.isExpanded
 				})}

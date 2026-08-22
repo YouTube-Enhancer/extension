@@ -67,7 +67,10 @@ export default defineConfig({
 			"@/hooks": hooksDir,
 			"@/pages": pagesDir,
 			"@/src": srcDir,
-			"@/utils": utilsDir
+			"@/utils": utilsDir,
+			// monaco-editor 0.56's exports map breaks deep ESM imports (path doubling),
+			// so resolve its esm folder directly on disk
+			"monaco-editor/esm": resolve(__dirname, "node_modules/monaco-editor/esm")
 		}
 	}
 });
