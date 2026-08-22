@@ -10,6 +10,24 @@ Contributions are welcome from developers interested in:
 - React + TypeScript
 - Complex state and lifecycle management
 
+Non-developers can contribute too — see [Internationalization](#-internationalization-i18n) for translations.
+
+---
+
+## 🌐 Internationalization (i18n)
+
+### Crowdin Translation Project
+
+YouTube Enhancer supports multiple languages to provide a more inclusive experience for users around the world. We use [Crowdin](https://crowdin.com/project/youtube-enhancer) for managing translations.
+
+### Contributing Translations
+
+We welcome contributions to improve translations and make the extension accessible to a wider audience:
+
+1. Visit our [Crowdin project](https://crowdin.com/project/youtube-enhancer)
+2. Select your language and start translating
+3. If your language is not listed, feel free to request its addition
+
 ---
 
 ## 🌿 Branching Strategy (Important)
@@ -56,6 +74,19 @@ PRs opened against `main` will be asked to retarget `dev`.
 4. **Testing:**
    Automated testing is planned. For now, all testing is **manual verification**.
    Your feature must be validated across multiple YouTube states (watch, live, navigation, etc.).
+
+---
+
+## 🔧 Code Quality
+
+Before new code gets merged into the repository, automated lint tests verify the format of the code.
+
+It is recommended to test your code before committing by running:
+
+1. Lint check: `npm run lint`
+2. Fix lint errors: `npm run lint:fix`
+
+> You won't need to do this if you use a [supported editor](https://eslint.org/docs/latest/use/integrations#editors), as the process is automated.
 
 ---
 
@@ -366,12 +397,19 @@ Do not manually manipulate the DOM where utilities exist.
 - Always clean up in `onDisable`
 - Follow existing patterns (don’t introduce new ones unnecessarily)
 - Avoid heavy logic in navigation/event loops
+- [DRY principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+- [Rule of three](<https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)>)
+- [Single source of truth](https://en.wikipedia.org/wiki/Single_source_of_truth)
 
 ---
 
 ## ✅ Pull Request Requirements
 
+When creating [Bug Report issues](https://github.com/YouTube-Enhancer/extension/issues/new?assignees=&labels=&projects=&template=bug_report.md&title=), follow the template and explain the issue in a clear and straightforward manner.
+
 - Targets the `dev` branch (not `main`)
+- Meaningful, descriptive title — Conventional Commits format is preferred for PR titles, though not strictly enforced
+- Description briefly explains the goal of the PR and the changes it brings to the codebase
 - Follows Feature Contract
 - Fully localized (no hardcoded strings)
 - No console errors/warnings
@@ -389,7 +427,7 @@ Follow a strict workflow cycle:
 2.  **Development Cycle:** Implement small, focused changes. When designing logic, adopt the **Red-Green-Refactor** methodology.
 3.  **Modification:** After implementing logic, first explore existing subdirectories in `src/utils/` (e.g., dom, format, logging, math, messaging, plugins, style, color, deep-dark-theme) to see if your utility fits into an existing category. If so, place it there. Otherwise, update `src/utils/utilities.ts` for general-purpose utilities.
 4.  **Committing:** Commit only when the feature is functionally complete and manually verified.
-5.  **Conventional Commits:** All commits **must** follow the Conventional Commits specification (`type(scope): message`).
+5.  **Conventional Commits:** All commits **must** follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification (`type(scope): message`), with messages that meaningfully describe the change itself. Because our release CI/CD workflow is automated, we rely on this convention for semantic versioning ([why](https://www.conventionalcommits.org/en/v1.0.0/#why-use-conventional-commits)).
     - **feat:** For new features.
     - **fix:** For bug fixes.
     - **refactor:** For code restructuring without adding features or fixing bugs.
