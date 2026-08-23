@@ -135,12 +135,16 @@ src/features/MyNewFeature/
 ### Step 1: Update Global Configuration
 
 - Open `src/types/index.ts`
-- Add your feature:
+- Add your feature to the `configuration` type:
 
 ```ts
-myNewFeature: {
-	enabled: boolean;
-}
+// #region Configuration types
+export type configuration = {
+	// ... other existing features ...
+	myNewFeature: {
+		enabled: boolean;
+	};
+};
 ```
 
 Why: Ensures the feature is globally recognized and configurable.
@@ -150,7 +154,7 @@ Why: Ensures the feature is globally recognized and configurable.
 ### Step 2: Define Metadata & Settings UI
 
 - Create `index.metadata.ts`
-- Use `createFeatureMetadata()`
+- Use `createFeatureMetadata()` to define your feature metadata, and export it as a named `metadata` const, the feature registry will discover features by that exact export name
 
 #### Requirements
 
@@ -186,35 +190,36 @@ export const metadata = createFeatureMetadata({
 		anotherSetting: z.number().min(1).max(100)
 	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.myNewFeature.title),
-  settings: [
- 		{
- 			section: "myNewFeature",
- 			type: "group",
- 			children: [
- 				{
- 					component: "checkbox",
- 					id: "enabled",
- 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.label),
- 					title: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.title)
- 				},
- 				{
- 					component: "input",
- 					id: "someSetting",
- 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.label),
- 					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.title)
- 				},
- 				{
- 					component: "number",
- 					id: "anotherSetting",
- 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.label),
- 					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.title),
- 					min: 1,
- 					max: 100,
- 					step: 1
- 				}
- 			]
- 		}
- 	]
+	settings: [
+		{
+			section: "myNewFeature",
+			type: "group",
+			children: [
+				{
+					component: "checkbox",
+					id: "enabled",
+					label: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.label),
+					title: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.title)
+				},
+				{
+					component: "input",
+					id: "someSetting",
+					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.label),
+					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.title)
+				},
+				{
+					component: "number",
+					id: "anotherSetting",
+					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.label),
+					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.title),
+					min: 1,
+					max: 100,
+					step: 1
+				}
+			]
+		}
+	]
+});
 ```
 
 📌 Add translations in:
