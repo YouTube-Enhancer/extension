@@ -12,6 +12,22 @@ import { metadata } from "./index.metadata";
 
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
 
+type EnforcementState = {
+	appliedFormatId: Nullable<number>;
+	appliedQuality: Nullable<string>;
+	overrideDetected: boolean;
+	pendingOwnApply: boolean;
+	verifiedOnce: boolean;
+};
+
+const enforcement: EnforcementState = {
+	appliedFormatId: null,
+	appliedQuality: null,
+	overrideDetected: false,
+	pendingOwnApply: false,
+	verifiedOnce: false
+};
+
 function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPreference: FpsPreference): Nullable<number> {
 	const player = getPlayer();
 	if (!player?.getAvailableQualityData) return null;
@@ -64,15 +80,28 @@ function getPlayer(): Nullable<YouTubePlayerDiv> {
 	);
 }
 
+async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
+	if (!enforcement.appliedQuality || enforcement.pendingOwnApply) return false;
+
+	const stats = player.getVideoStats();
+	if (enforcement.appliedFormatId != null && typeof stats?.fmt === "number") {
+		return stats.fmt !== enforcement.appliedFormatId;
+	}
+
+	const playbackQuality = await player.getPlaybackQuality();
+	return !!playbackQuality && playbackQuality !== "unknown" && playbackQuality !== enforcement.appliedQuality;
+}
+
+function isAdShowing(): boolean {
+	return !!document.querySelector(".ad-showing, .ytp-ad-player-overlay");
+}
+
 function makeApplyQualityTasks(
 	fallbackStrategy: PlayerQualityFallbackStrategy,
 	quality: YoutubePlayerQualityLevel,
 	preferPremium: boolean,
 	fpsPreference: FpsPreference
 ): [() => Promise<boolean>, () => Promise<boolean>] {
-	let appliedQuality: Nullable<string> = null;
-	let appliedFormatId: Nullable<number> = null;
-
 	const applyTask = async (): Promise<boolean> => {
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
@@ -87,33 +116,48 @@ function makeApplyQualityTasks(
 		const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
 		if (!closestQuality) return false;
 
+		if (enforcement.verifiedOnce && !isAdShowing() && (await hasForeignQuality(player))) {
+			markManualOverride();
+			return true;
+		}
+
 		const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
 
-		if (qualityFormatId) {
-			await player.setPlaybackQualityRange(closestQuality, closestQuality, qualityFormatId);
-		} else {
-			await player.setPlaybackQualityRange(closestQuality, closestQuality);
-		}
-		if (player.setPlaybackQuality) {
-			await player.setPlaybackQuality(closestQuality);
+		try {
+			enforcement.pendingOwnApply = true;
+			if (qualityFormatId) {
+				await player.setPlaybackQualityRange(closestQuality, closestQuality, qualityFormatId);
+			} else {
+				await player.setPlaybackQualityRange(closestQuality, closestQuality);
+			}
+			if (player.setPlaybackQuality) {
+				await player.setPlaybackQuality(closestQuality);
+			}
+		} finally {
+			enforcement.pendingOwnApply = false;
 		}
 
 		player.dataset.defaultQuality = closestQuality;
-		appliedQuality = closestQuality;
-		appliedFormatId = qualityFormatId;
+		enforcement.appliedQuality = closestQuality;
+		enforcement.appliedFormatId = qualityFormatId;
 		return true;
 	};
 
 	const verifyTask = async (): Promise<boolean> => {
-		if (!appliedQuality) return false;
+		if (enforcement.overrideDetected || isAdShowing()) return true;
+		if (!enforcement.appliedQuality) return false;
 		const player = getPlayer();
 		if (!player) return false;
-		if (appliedFormatId) {
+		let verified: boolean;
+		if (enforcement.appliedFormatId) {
 			const stats = player.getVideoStats();
-			return stats.fmt === appliedFormatId;
+			verified = stats.fmt === enforcement.appliedFormatId;
+		} else {
+			const playbackQuality = await player.getPlaybackQuality();
+			verified = playbackQuality === enforcement.appliedQuality;
 		}
-		const playbackQuality = await player.getPlaybackQuality();
-		return playbackQuality === appliedQuality;
+		enforcement.verifiedOnce = enforcement.verifiedOnce || verified;
+		return verified;
 	};
 
 	return [applyTask, verifyTask];
@@ -133,6 +177,21 @@ function makeRestoreQualityTask(): () => Promise<boolean> {
 	};
 }
 
+function markManualOverride(): void {
+	if (enforcement.overrideDetected) return;
+	enforcement.overrideDetected = true;
+	browserColorLog("Manual quality change detected - suspending enforcement until navigation or config change", "FgYellow");
+	registry.playerManager.cleanup(metadata.id);
+}
+
+function resetEnforcementState(): void {
+	enforcement.appliedFormatId = null;
+	enforcement.appliedQuality = null;
+	enforcement.overrideDetected = false;
+	enforcement.pendingOwnApply = false;
+	enforcement.verifiedOnce = false;
+}
+
 export default createFeature({
 	...metadata,
 	onDisable: () => {
@@ -143,6 +202,7 @@ export default createFeature({
 		});
 	},
 	onEnable: async ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
+		resetEnforcementState();
 		const player = getPlayer();
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
@@ -156,6 +216,7 @@ export default createFeature({
 		});
 	},
 	onNavigate: ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
+		resetEnforcementState();
 		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
 		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
 			maxAttempts: 30,
