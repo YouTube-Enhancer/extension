@@ -1,0 +1,34 @@
+name: Retarget PRs to dev
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull_requests: write
+
+concurrency:
+  group: retarget-prs-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  retarget-to-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retarget PRs opened against main to dev
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pr = context.payload.pull_request;
+            if (pr.base.ref !== "main") {
+              console.log(`PR #${pr.number} targets ${pr.base.ref}, nothing to do`);
+              return;
+            }
+            await github.rest.pulls.update({
+              owner,
+              repo,
+              pull_number: pr.number,
+              base: "dev"
+            });
+            console.log(`Retargeted PR #${pr.number} from main to dev`);
