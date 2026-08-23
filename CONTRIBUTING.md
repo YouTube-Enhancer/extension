@@ -56,7 +56,7 @@ PRs opened against `main` will be asked to retarget `dev`.
 1. Check out `dev` and branch from it: `git checkout dev && git checkout -b feature/your-feature-name`
 2. Install dependencies: `npm install`
 3. Start dev server: `npm run dev`
-4. Create a feature in `src/features/MyNewFeature/`:
+4. Create a feature in `src/features/myNewFeature/`:
    - `index.metadata.ts` → schema + settings UI + i18n
    - `index.ts` → lifecycle + logic
 
@@ -116,7 +116,7 @@ Every feature must follow this contract to ensure consistency and stability.
 ### 1. Directory Structure
 
 ```
-src/features/MyNewFeature/
+src/features/myNewFeature/
 ```
 
 ---
@@ -142,7 +142,9 @@ src/features/MyNewFeature/
 export type configuration = {
 	// ... other existing features ...
 	myNewFeature: {
+		anotherSetting: number;
 		enabled: boolean;
+		someSetting: string;
 	};
 };
 ```
