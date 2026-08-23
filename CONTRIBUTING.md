@@ -154,14 +154,14 @@ Why: Ensures the feature is globally recognized and configurable.
 ### Step 2: Define Metadata & Settings UI
 
 - Create `index.metadata.ts`
-- Use `createFeatureMetadata()` to define your feature metadata, and export it as a named `metadata` const, the feature registry will discover features by that exact export name
+- Use `createFeatureMetadata()` to define your feature metadata, and export it as a named `metadata` const. The feature registry discovers features by that exact export name.
 
 #### Requirements
 
-- `defaults` must include `enabled: false`
+- `config` describes every setting as a `field(schema, defaultValue)` — the registry derives defaults and validation from it
+- `config` must include an `enabled` field with a default of `false`
 - `id` must match the feature folder name
-- `schemaInput` must validate all settings
-- `settings` defines UI (required)
+- `settings` defines UI (required); setting ids are prefixed with the feature id (e.g. `myNewFeature.enabled`)
 
 #### i18n (Required)
 
@@ -175,48 +175,45 @@ Why: Prevents hardcoded UI and enables localization.
 
 ```ts
 import { z } from "zod/v4-mini";
+
 import { createFeatureMetadata } from "@/src/features/_registry/createFeatureMetadata";
+import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
-	defaults: {
-		enabled: false,
-		someSetting: "defaultValue",
-		anotherSetting: 5
+	config: {
+		enabled: field(z.boolean(), false),
+		someSetting: field(z.string(), "defaultValue"),
+		anotherSetting: field(z.number(), 5)
 	},
 	id: "myNewFeature",
-	schemaInput: {
-		enabled: z.boolean(),
-		someSetting: z.string(),
-		anotherSetting: z.number().min(1).max(100)
-	},
 	sectionTitle: (t) => t((tr) => tr.settings.sections.myNewFeature.title),
 	settings: [
 		{
-			section: "myNewFeature",
-			type: "group",
 			children: [
 				{
 					component: "checkbox",
-					id: "enabled",
+					id: "myNewFeature.enabled",
 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.label),
 					title: (t) => t((tr) => tr.settings.sections.myNewFeature.enable.title)
 				},
 				{
 					component: "input",
-					id: "someSetting",
+					id: "myNewFeature.someSetting",
 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.label),
 					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.someSetting.title)
 				},
 				{
 					component: "number",
-					id: "anotherSetting",
+					id: "myNewFeature.anotherSetting",
 					label: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.label),
-					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.title),
-					min: 1,
 					max: 100,
-					step: 1
+					min: 1,
+					step: 1,
+					title: (t) => t((tr) => tr.settings.sections.myNewFeature.settings.anotherSetting.title)
 				}
-			]
+			],
+			section: "myNewFeature",
+			type: "group"
 		}
 	]
 });
@@ -270,7 +267,7 @@ export default createFeature({
 ## ⚠️ Common Mistakes
 
 - Missing i18n (hardcoded strings)
-- Forgetting `enabled: false` in defaults
+- Forgetting the `enabled` field (default `false`) in `config`
 - Missing cleanup in `onDisable`
 - Direct state mutation instead of `stateAPI`
 - Ignoring SPA navigation (`onNavigate`)
