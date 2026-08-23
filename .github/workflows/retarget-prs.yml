@@ -5,7 +5,7 @@ on:
     types: [opened, edited, reopened]
 
 permissions:
-  pull_requests: write
+  pull-requests: write
 
 concurrency:
   group: retarget-prs-${{ github.event.pull_request.number }}
@@ -23,6 +23,12 @@ jobs:
             const pr = context.payload.pull_request;
             if (pr.base.ref !== "main") {
               console.log(`PR #${pr.number} targets ${pr.base.ref}, nothing to do`);
+              return;
+            }
+            const trusted = ["OWNER", "MEMBER", "COLLABORATOR"];
+            const assoc = pr.author_association;
+            if (trusted.includes(assoc)) {
+              console.log(`PR #${pr.number} authored by ${pr.user.login} (${assoc}), not retargeting`);
               return;
             }
             await github.rest.pulls.update({
