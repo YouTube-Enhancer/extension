@@ -19,8 +19,11 @@ interface YTLockupViewModel extends HTMLElement {
 
 let videosObserver: Nullable<MutationObserver> = null;
 let pageDisposeListener: Nullable<(event: Event) => void> = null;
+// Teardown increments the generation. A setup that awaited across a teardown sees the change and aborts.
+let setupGeneration = 0;
 
 async function setupSaveToWatchLaterButtons() {
+	const generation = setupGeneration;
 	// Register the listener one time. Each setup run must not add one more copy.
 	if (!pageDisposeListener) {
 		pageDisposeListener = (event) => {
@@ -41,8 +44,11 @@ async function setupSaveToWatchLaterButtons() {
 
 	const containerSelector = `ytd-two-column-browse-results-renderer[page-subtype='${await getCurrentPageType()}']`;
 	const icon = await getYouTubeIcon("watchLater");
+	// A teardown ran while this setup awaited. Stop before this setup touches the new page.
+	if (generation !== setupGeneration) return;
 
 	async function addButtonToVideoItems() {
+		if (generation !== setupGeneration) return;
 		const videos = document.querySelectorAll(`${containerSelector} yt-lockup-view-model:not(:has(.yte-save-to-watch-later-button))`);
 		for (const video of videos) {
 			const ytLockupViewModel = video as YTLockupViewModel;
@@ -69,6 +75,8 @@ async function setupSaveToWatchLaterButtons() {
 				translationProcessing: (translations) => translations.pages.content.features.saveToWatchLaterButton.extras.savingVideo
 			});
 
+			// A teardown can run while createActionButton awaits. Do not insert stale buttons.
+			if (generation !== setupGeneration) return;
 			// A concurrent pass can add the button to this video while createActionButton awaits.
 			if (video.querySelector(".yte-save-to-watch-later-button")) continue;
 
@@ -104,6 +112,8 @@ async function setupSaveToWatchLaterButtons() {
 }
 
 function teardownSaveToWatchLaterButtons() {
+	setupGeneration++;
+
 	if (videosObserver) {
 		videosObserver.disconnect();
 		videosObserver = null;
