@@ -64,7 +64,7 @@
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/archiver": "^7.0.0",
-    "@types/chrome": "^0.1.36",
+    "@types/chrome": "^0.2.7",
     "@types/node": "^25.0.9",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
