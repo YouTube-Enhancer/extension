@@ -49,6 +49,10 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 	}
 }
 
+export function getCurrentVideoId(): Nullable<string> {
+	return new URLSearchParams(window.location.search).get("v");
+}
+
 export function getLayoutType(): "legacy" | "modern" {
 	return isModernYouTubeVideoLayout() ? "modern" : "legacy";
 }
