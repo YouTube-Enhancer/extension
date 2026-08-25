@@ -131,7 +131,9 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
+						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Opslaan van video om later te bekijken mislukt",
+						"removeVideo": "Remove from Watch Later",
 						"saveVideo": "Opslaan in Later bekijken",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
