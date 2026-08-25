@@ -660,6 +660,7 @@ export type OldTranslationStruct = {
 			saveToWatchLaterButton: {
 				failedToSaveVideo: string;
 				saveVideo: string;
+				savingVideo: string;
 			};
 			screenshotButton: {
 				enable: {

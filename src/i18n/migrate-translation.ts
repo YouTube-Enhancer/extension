@@ -563,7 +563,8 @@ export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = objec
 			}),
 			saveToWatchLaterButton: object({
 				failedToSaveVideo: string(),
-				saveVideo: string()
+				saveVideo: string(),
+				savingVideo: string()
 			}),
 			screenshotButton: object({
 				enable: object({
