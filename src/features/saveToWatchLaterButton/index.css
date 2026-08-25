@@ -1,17 +1,10 @@
-/* Use YouTube's own theme tokens. The literal values are fallbacks for when YouTube renames a token. */
-/* The html[dark] rules carry the dark fallbacks and win over the shared dark action-button rules. */
-.yte-action-button.yte-save-to-watch-later-button {
-	color: var(--yt-sys-color-baseline--text-primary, #0f0f0f);
+/* Make room for two buttons in the card menu area. YouTube sizes it for one. */
+/* The wrapper class is mirrored in index.ts (LOCKUP_MENU_WRAPPER_SELECTOR). Keep both in sync. */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button) .ytLockupMetadataViewModelMenuButton {
+	display: flex;
 }
 
-.yte-action-button.yte-save-to-watch-later-button:hover {
-	background: var(--yt-sys-color-baseline--additive-background, rgba(0, 0, 0, 0.05));
-}
-
-html[dark] .yte-action-button.yte-save-to-watch-later-button {
-	color: var(--yt-sys-color-baseline--text-primary, #f1f1f1);
-}
-
-html[dark] .yte-action-button.yte-save-to-watch-later-button:hover {
-	background: var(--yt-sys-color-baseline--additive-background, rgba(255, 255, 255, 0.1));
+/* 80px keeps the title clear of the two buttons. */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button) h3 {
+	padding-right: 80px;
 }

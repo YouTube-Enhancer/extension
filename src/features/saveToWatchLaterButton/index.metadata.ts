@@ -5,7 +5,7 @@ import { field } from "@/src/features/_registry/defineConfig";
 
 export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
-	dependencies: { includePages: ["home", "subscriptions"] },
+	dependencies: { includePages: ["home", "subscriptions", "watch"] },
 	id: "saveToWatchLaterButton",
 	settings: [
 		{
