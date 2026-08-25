@@ -133,7 +133,7 @@
 					"extras": {
 						"failedToSaveVideo": "Nie udało się zapisać filmu do obejrzenia później",
 						"saveVideo": "Zapisz aby obejrzeć później",
-						"savingVideo": "Zapisywanie do obejrzenia później…"
+						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {

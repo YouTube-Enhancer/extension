@@ -67,7 +67,6 @@ interface EnUS {
 					extras: {
 						failedToSaveVideo: "Failed to save video to Watch Later";
 						saveVideo: "Save to Watch Later";
-						savingVideo: "Saving to Watch Later…";
 						unavailable: "Save to Watch Later button is unavailable due to a YouTube change";
 					};
 				};
