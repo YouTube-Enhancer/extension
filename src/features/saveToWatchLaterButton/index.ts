@@ -112,15 +112,19 @@ async function setupSaveToWatchLaterButtons() {
 				removeButtonForGood();
 			} catch (error) {
 				setNativeButtonBusy(host, false);
-				const { listener } = createTooltip({
-					element: host,
-					featureName: "saveToWatchLaterButton",
-					id: "yte-feature-saveToWatchLaterButton-tooltip",
-					text: `${window.i18nextInstance.t((translations) => translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo)}: ${
-						error instanceof Error ? error.message : String(error)
-					}`
-				});
-				listener();
+				const message = `${window.i18nextInstance.t((translations) => translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo)}: ${
+					error instanceof Error ? error.message : String(error)
+				}`;
+				// This branch runs when the command pipeline was unavailable, so the toast can fail too.
+				if (!dispatchNativeCommand(buildToastCommand(message))) {
+					const { listener } = createTooltip({
+						element: host,
+						featureName: "saveToWatchLaterButton",
+						id: "yte-feature-saveToWatchLaterButton-tooltip",
+						text: message
+					});
+					listener();
+				}
 			} finally {
 				inFlightSaves.delete(videoId);
 			}
