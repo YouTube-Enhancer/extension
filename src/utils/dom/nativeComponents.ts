@@ -115,6 +115,18 @@ export function setNativeButtonBusy(host: YtButtonViewModelElement, busy: boolea
 	host.buttonOverrides = busy ? { state: "BUTTON_VIEW_MODEL_STATE_DISABLED" } : {};
 }
 
+// Wait for YouTube to register the component. On a slow load, it can register after us.
+// Resolve false after the timeout, so the caller can degrade instead of waiting forever.
+export function waitForNativeButtonComponent(timeout = 10000): Promise<boolean> {
+	if (isNativeButtonComponentAvailable()) return Promise.resolve(true);
+	return Promise.race([
+		customElements.whenDefined("yt-button-view-model").then(() => true),
+		new Promise<boolean>((resolve) => {
+			window.setTimeout(() => resolve(false), timeout);
+		})
+	]);
+}
+
 const customIconClasses = new Map<string, string>();
 
 function ensureCustomIconClass(svg: string): string {

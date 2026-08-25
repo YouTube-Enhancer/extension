@@ -3,7 +3,7 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { buildToastCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
-import { isNativeButtonComponentAvailable, readLockupData, type YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
+import { readLockupData, waitForNativeButtonComponent, type YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentPageType, getCurrentVideoId } from "@/src/utils/url";
@@ -22,8 +22,11 @@ let setupGeneration = 0;
 let warnedUnavailable = false;
 
 async function setupSaveToWatchLaterButtons() {
-	if (!isNativeButtonComponentAvailable()) {
-		if (!warnedUnavailable) {
+	const generation = setupGeneration;
+	const isCurrent = () => generation === setupGeneration;
+
+	if (!(await waitForNativeButtonComponent())) {
+		if (!warnedUnavailable && isCurrent()) {
 			warnedUnavailable = true;
 			browserColorLog("yt-button-view-model is not registered. YouTube may have changed its components.", "warning");
 			dispatchNativeCommand(
@@ -32,9 +35,7 @@ async function setupSaveToWatchLaterButtons() {
 		}
 		return;
 	}
-
-	const generation = setupGeneration;
-	const isCurrent = () => generation === setupGeneration;
+	if (!isCurrent()) return;
 
 	const pageType = await getCurrentPageType();
 	if (!isCurrent()) return;
