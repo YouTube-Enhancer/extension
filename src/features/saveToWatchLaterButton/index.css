@@ -1,12 +1,17 @@
-@keyframes yte-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+/* Use YouTube's own theme tokens. The literal values are fallbacks for when YouTube renames a token. */
+/* The html[dark] rules carry the dark fallbacks and win over the shared dark action-button rules. */
+.yte-action-button.yte-save-to-watch-later-button {
+	color: var(--yt-sys-color-baseline--text-primary, #0f0f0f);
 }
 
-.yte-spinning {
-	animation: yte-spin 2s linear infinite;
+.yte-action-button.yte-save-to-watch-later-button:hover {
+	background: var(--yt-sys-color-baseline--additive-background, rgba(0, 0, 0, 0.05));
+}
+
+html[dark] .yte-action-button.yte-save-to-watch-later-button {
+	color: var(--yt-sys-color-baseline--text-primary, #f1f1f1);
+}
+
+html[dark] .yte-action-button.yte-save-to-watch-later-button:hover {
+	background: var(--yt-sys-color-baseline--additive-background, rgba(255, 255, 255, 0.1));
 }
