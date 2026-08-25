@@ -17,7 +17,7 @@ export type NativeButtonIcon = NativeIconName | { svg: string };
 
 // Icon names verified against YouTube's icon set. Extend the union when you verify more names.
 // A wrong name renders an empty button with no error.
-export type NativeIconName = "WATCH_LATER";
+export type NativeIconName = "CHECK_CIRCLE_THICK" | "WATCH_LATER";
 
 export interface YtButtonViewModelElement extends HTMLElement {
 	buttonOverrides?: Record<string, unknown>;
