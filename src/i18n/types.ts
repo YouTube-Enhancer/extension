@@ -660,7 +660,6 @@ export type OldTranslationStruct = {
 			saveToWatchLaterButton: {
 				failedToSaveVideo: string;
 				saveVideo: string;
-				savingVideo: string;
 			};
 			screenshotButton: {
 				enable: {
@@ -873,7 +872,6 @@ export type NewTranslationStruct = {
 					extras: {
 						failedToSaveVideo: string;
 						saveVideo: string;
-						savingVideo: string;
 					};
 				};
 				screenshotButton: {

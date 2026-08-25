@@ -133,7 +133,7 @@
 					"extras": {
 						"failedToSaveVideo": "Nepodařilo se uložit video do hodinek později",
 						"saveVideo": "Uložit do sledování později",
-						"savingVideo": "Ukládání do sledování později…"
+						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {

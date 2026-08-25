@@ -133,7 +133,7 @@
 					"extras": {
 						"failedToSaveVideo": "Opslaan van video om later te bekijken mislukt",
 						"saveVideo": "Opslaan in Later bekijken",
-						"savingVideo": "Opslaan in Later…"
+						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
