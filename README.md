@@ -408,6 +408,7 @@ Contributions to the YouTube Enhancer Extension are welcome! If you'd like to co
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SoSeDiK"><img src="https://avatars.githubusercontent.com/u/19875118?v=4?s=100" width="100px;" alt="Illia Bondar"/><br /><sub><b>Illia Bondar</b></sub></a><br /><a href="#ideas-SoSeDiK" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/HALL4Y"><img src="https://avatars.githubusercontent.com/u/35395608?v=4?s=100" width="100px;" alt="Hall4y"/><br /><sub><b>Hall4y</b></sub></a><br /><a href="#translation-HALL4Y" title="Translation">🌍</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/adawolfa"><img src="https://avatars.githubusercontent.com/u/92433271?v=4?s=100" width="100px;" alt="adawolfa"/><br /><sub><b>adawolfa</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/commits?author=adawolfa" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hajosattila"><img src="https://avatars.githubusercontent.com/u/1567493?v=4?s=100" width="100px;" alt="Archttila"/><br /><sub><b>Archttila</b></sub></a><br /><a href="https://github.com/YouTube-Enhancer/extension/commits?author=hajosattila" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
