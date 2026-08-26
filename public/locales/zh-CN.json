@@ -134,6 +134,7 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "将视频保存到稍后观看失败",
 						"removeVideo": "Remove from Watch Later",
+						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "保存至稍后观看",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}

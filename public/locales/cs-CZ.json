@@ -134,6 +134,7 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Nepodařilo se uložit video do hodinek později",
 						"removeVideo": "Remove from Watch Later",
+						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "Uložit do sledování později",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
