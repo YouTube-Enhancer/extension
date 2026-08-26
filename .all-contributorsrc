@@ -306,6 +306,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hajosattila",
+      "name": "Archttila",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1567493?v=4",
+      "profile": "https://github.com/hajosattila",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
