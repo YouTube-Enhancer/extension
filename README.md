@@ -87,7 +87,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 
 - **Deep Dark Theme**: Activates the selected theme for the page
 - **Select Theme**: Select a theme to be applied to the page
-  - Options: 9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark
+  - Options: 9anime, Adapta-Breath-Nokto, Adapta-Nokto, Arc-Dark, Black-and-White, Breeze-Dark, Catppuccin-Mocha, Custom, Deep-Dark, Discord, Dracula, Firefox-57, Firefox-Alpenglow-Dark, Firefox-Dark, Firefox-Dark-91, Gruvbox-Dark, Gruvbox-Light, HavocOS, Inspired-Dark, Jisho, Mint-Y-Dark, NierAutomata-Dark, NierAutomata-Light, Orange, Solarized-Dark, Solarized-Light, Ubuntu-Grey, Ubuntu-Purple, Vertex-Dark, Yellow, Yellow-2, YouTube-Dark
 - **Accent Color**: Color for accent
 - **Main Background Color**: Color for main background
 - **Secondary Background Color**: Color for secondary background
