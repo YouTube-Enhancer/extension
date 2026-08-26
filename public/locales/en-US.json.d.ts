@@ -65,9 +65,11 @@ interface EnUS {
 				playlistReverseButton: { extras: { toggle: { off: "Normal order"; on: "Reversed order" } } };
 				saveToWatchLaterButton: {
 					extras: {
+						failedToRemoveVideo: "Failed to remove video from Watch Later";
 						failedToSaveVideo: "Failed to save video to Watch Later";
+						removeVideo: "Remove from Watch Later";
 						saveVideo: "Save to Watch Later";
-						savingVideo: "Saving to Watch Later…";
+						unavailable: "Save to Watch Later button is unavailable due to a YouTube change";
 					};
 				};
 				screenshotButton: {

@@ -131,9 +131,11 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
+						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Не вдалося зберегти відео для перегляду пізніше",
+						"removeVideo": "Remove from Watch Later",
 						"saveVideo": "Зберегти до годинника пізніше",
-						"savingVideo": "Збереження в режимі спостереження пізніше…"
+						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {
