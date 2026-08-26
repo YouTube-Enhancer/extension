@@ -131,9 +131,11 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
+						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Falha ao salvar o vídeo em \"Assistir mais tarde\"",
+						"removeVideo": "Remove from Watch Later",
 						"saveVideo": "Salvar em \"Assistir mais tarde\"",
-						"savingVideo": "Salvando em \"Assistir mais tarde\"…"
+						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
 				},
 				"screenshotButton": {

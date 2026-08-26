@@ -1,12 +1,10 @@
-@keyframes yte-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+/* Make room for two buttons in the card menu area. YouTube sizes it for one. */
+/* The wrapper class is mirrored in index.ts (LOCKUP_MENU_WRAPPER_SELECTOR). Keep both in sync. */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button) .ytLockupMetadataViewModelMenuButton {
+	display: flex;
 }
 
-.yte-spinning {
-	animation: yte-spin 2s linear infinite;
+/* 80px keeps the title clear of the two buttons. */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button) h3 {
+	padding-right: 80px;
 }
