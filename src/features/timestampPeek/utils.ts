@@ -1,7 +1,7 @@
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { isMiniPlayerActive } from "@/src/features/miniPlayer";
+import { suspendMiniPlayerOverlay } from "@/src/features/miniPlayer";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { timestampElementSelector } from "@/src/utils/dom/selectors";
 
@@ -18,11 +18,13 @@ const state: {
 	}>;
 	overlayParent: Nullable<HTMLElement>;
 	placeholder: Nullable<HTMLDivElement>;
+	restoreMiniPlayerOverlay: Nullable<() => void>;
 } = {
 	hideTimer: null,
 	originalVideoStyles: null,
 	overlayParent: null,
-	placeholder: null
+	placeholder: null,
+	restoreMiniPlayerOverlay: null
 };
 
 const getVideo = () => document.querySelector<HTMLVideoElement>("video.html5-main-video");
@@ -184,6 +186,8 @@ export function resetState() {
 	state.originalVideoStyles = null;
 	state.overlayParent = null;
 	state.placeholder = null;
+	state.restoreMiniPlayerOverlay?.();
+	state.restoreMiniPlayerOverlay = null;
 	timestampsWithListeners.clear();
 }
 
@@ -282,7 +286,6 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 	const video = getVideo();
 	if (!video) return;
 	const overlay = getOrCreateOverlay();
-	const miniPlayerActive = isMiniPlayerActive();
 	if (show) {
 		const { style } = video;
 		state.originalVideoStyles = {
@@ -309,9 +312,7 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 		positionOverlay(element, overlay);
 		video.pause();
 		await seekVideo(video, timestamp);
-		if (miniPlayerActive) {
-			document.querySelector<HTMLDivElement>("#yte-mini-player-overlay")!.style.display = "none";
-		}
+		state.restoreMiniPlayerOverlay ??= suspendMiniPlayerOverlay();
 		try {
 			await video.play();
 		} catch (err) {
@@ -333,9 +334,8 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 			}
 		}
 		overlay.style.display = "none";
-		if (miniPlayerActive) {
-			document.querySelector<HTMLDivElement>("#yte-mini-player-overlay")!.style.display = "block";
-		}
+		state.restoreMiniPlayerOverlay?.();
+		state.restoreMiniPlayerOverlay = null;
 	}
 }
 
