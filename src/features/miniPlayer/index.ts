@@ -143,6 +143,16 @@ export const setMiniPlayerManual = async (checked: boolean) => {
 	emitMiniPlayerState(miniPlayer.isActive());
 };
 export const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
+/**
+ * Temporarily hides the mini player overlay (e.g. while another feature
+ * borrows the video element). Returns a restore function. Both directions are
+ * no-ops when the mini player is not active, so this is always safe to call.
+ */
+export const suspendMiniPlayerOverlay = (): (() => void) => {
+	if (!miniPlayerController?.isActive()) return () => {};
+	miniPlayerController.setOverlayHidden(true);
+	return () => miniPlayerController?.setOverlayHidden(false);
+};
 
 async function setupMiniPlayer(defaultPosition: MiniPlayerOptions["defaultPosition"], defaultSize: MiniPlayerOptions["defaultSize"]) {
 	const miniPlayer = ensureController({

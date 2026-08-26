@@ -1,9 +1,11 @@
+import type { MiniSeekBar } from "@/src/features/miniPlayer/seekBar";
 import type { MiniPlayerOptions, MiniPlayerSize } from "@/src/features/miniPlayer/types";
-import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { attachMiniSeekBar } from "@/src/features/miniPlayer/seekBar";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { clamp } from "@/src/utils/math";
 
@@ -15,40 +17,6 @@ export type MiniPlayerRect = {
 	x: number;
 	y: number;
 };
-type MiniPlayerBarState = {
-	barRoot: HTMLDivElement;
-	controlsVisibilityTarget: HTMLElement;
-	hideTimeout: Nullable<ReturnType<typeof setTimeout>>;
-	playedRatio: number;
-	playerElement: HTMLElement;
-	progressBar: {
-		bufferedBar: HTMLDivElement;
-		hoverRange: HTMLDivElement;
-		playedBar: HTMLDivElement;
-		previewBox: HTMLDivElement;
-		previewThumbnail: HTMLDivElement;
-		previewTimestamp: HTMLDivElement;
-		scrubKnob: HTMLDivElement;
-	};
-	storyboardSheet: Nullable<StoryboardSheet>;
-	videoElement: HTMLVideoElement;
-};
-type PlayerStoryboardSpecRenderer = {
-	fineScrubbingRecommendedLevel?: number;
-	highResolutionRecommendedLevel?: number;
-	recommendedLevel?: number;
-	spec?: string;
-};
-type StoryboardSheet = {
-	baseUrl: string;
-	cols: number;
-	frameCount: number;
-	height: number;
-	rows: number;
-	selectedLevel?: number;
-	signature: string;
-	width: number;
-};
 export class MiniPlayerController {
 	private detachedPlayer: Nullable<HTMLElement> = null;
 	private dragHandleElement: Nullable<HTMLDivElement> = null;
@@ -58,6 +26,7 @@ export class MiniPlayerController {
 	private overlayElement: Nullable<HTMLDivElement> = null;
 	private playerPlaceholder: Nullable<HTMLDivElement> = null;
 	private resizeHandleElement: Nullable<HTMLDivElement> = null;
+	private seekBar: Nullable<MiniSeekBar> = null;
 	constructor(options: MiniPlayerOptions) {
 		this.options = options;
 		eventManager.addEventListener(window, "resize", this.handleViewportResize, "miniPlayer");
@@ -92,6 +61,10 @@ export class MiniPlayerController {
 		if (forceApply || (applyIfNoSavedState && !savedRect)) {
 			this.applyInitialRect({ ignoreSavedState: forceApply });
 		}
+	}
+	setOverlayHidden(hidden: boolean) {
+		if (!this.isActiveState || !this.overlayElement) return;
+		this.overlayElement.style.display = hidden ? "none" : "block";
 	}
 	toggleManual() {
 		if (this.isActiveState) {
@@ -369,11 +342,8 @@ export class MiniPlayerController {
 		player.style.height = "100%";
 		player.style.position = "relative";
 		this.detachedPlayer = player;
-		try {
-			enableMiniPlayerCustomProgress(this.detachedPlayer, this.overlayElement);
-		} catch (error) {
-			console.error("[miniPlayer] Failed to attach custom progress bar:", error);
-		}
+		this.seekBar?.destroy();
+		this.seekBar = attachMiniSeekBar({ host: this.overlayElement, playerElement: player });
 		return true;
 	}
 	private restorePlayer() {
@@ -401,7 +371,8 @@ export class MiniPlayerController {
 			}
 		}
 		this.playerPlaceholder?.remove();
-		disableMiniPlayerCustomProgress();
+		this.seekBar?.destroy();
+		this.seekBar = null;
 		window.dispatchEvent(new Event("resize"));
 		this.playerPlaceholder = null;
 		this.originalPlayerParent = null;
@@ -468,416 +439,4 @@ function writeSavedState(s: MiniPlayerRect) {
 	} catch (error) {
 		console.error("[miniPlayer] Failed to persist mini player rect:", error);
 	}
-}
-let miniPlayerBarState: Nullable<MiniPlayerBarState> = null;
-type miniPlayerWindow = {
-	ytInitialPlayerResponse?: {
-		storyboards?: {
-			playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
-		};
-	};
-	ytplayer?: {
-		config?: {
-			args?: {
-				raw_player_response?: {
-					storyboards?: {
-						playerStoryboardSpecRenderer?: PlayerStoryboardSpecRenderer;
-					};
-				};
-			};
-		};
-	};
-};
-export function disableMiniPlayerCustomProgress() {
-	if (!miniPlayerBarState) return;
-	const { barRoot } = miniPlayerBarState;
-	cleanupRegistry.run("miniPlayer");
-	barRoot.remove();
-	miniPlayerBarState = null;
-}
-export function enableMiniPlayerCustomProgress(playerElement: HTMLElement, overlayElement: HTMLElement) {
-	if (miniPlayerBarState) return;
-	const videoElement = qs<HTMLVideoElement>(playerElement, "video.html5-main-video");
-	if (!videoElement) return;
-	const controlsVisibilityTarget = qs<HTMLElement>(playerElement, ".html5-video-player") ?? playerElement;
-	const { barRoot, progressBar } = buildMiniBar();
-	overlayElement.appendChild(barRoot);
-	const restoreNative = hideNativeProgress(playerElement);
-	cleanupRegistry.add("miniPlayer", restoreNative);
-	const barState: MiniPlayerBarState = {
-		barRoot,
-		controlsVisibilityTarget,
-		hideTimeout: null,
-		playedRatio: 0,
-		playerElement,
-		progressBar,
-		storyboardSheet: null,
-		videoElement
-	};
-	function waitForPlayerResponse(timeout = 500) {
-		const start = performance.now();
-		return new Promise<Nullable<PlayerStoryboardSpecRenderer>>((resolve) => {
-			const check = () => {
-				const player = qs<YouTubePlayerDiv>(document.body, "#movie_player");
-				const resp = player?.getPlayerResponse?.()?.storyboards?.playerStoryboardSpecRenderer;
-				if (resp) resolve(resp);
-				else if (performance.now() - start > timeout) resolve(null);
-				else requestAnimationFrame(check);
-			};
-			check();
-		});
-	}
-	function refreshMiniPlayerStoryboard() {
-		void (async () => {
-			if (!miniPlayerBarState) return;
-			const { videoElement } = miniPlayerBarState;
-			const storyboardRenderer = await waitForPlayerResponse();
-			const specString = storyboardRenderer?.spec ?? getStoryboardSpec();
-			const storyboardSheet = specString ? parseStoryboard(specString, storyboardRenderer) : null;
-			miniPlayerBarState.storyboardSheet = storyboardSheet;
-			const { currentTime } = videoElement;
-			const seekWindow = getSeekWindow(videoElement);
-			if (seekWindow) updateStoryboardThumb(miniPlayerBarState, currentTime, seekWindow);
-		})();
-	}
-	const rebindVideo = () => {
-		const newVideo = qs<HTMLVideoElement>(playerElement, "video.html5-main-video");
-		if (!newVideo) return;
-		if (newVideo !== miniPlayerBarState!.videoElement) {
-			miniPlayerBarState!.videoElement.removeEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-			miniPlayerBarState!.videoElement = newVideo;
-			newVideo.addEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-		}
-	};
-	const onPlayerUpdated = () => {
-		rebindVideo();
-		queueMicrotask(refreshMiniPlayerStoryboard);
-	};
-	document.addEventListener("yt-navigate-finish", onPlayerUpdated);
-	document.addEventListener("yt-player-updated", onPlayerUpdated);
-	videoElement.addEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-	cleanupRegistry.add("miniPlayer", () => {
-		document.removeEventListener("yt-navigate-finish", onPlayerUpdated);
-		document.removeEventListener("yt-player-updated", onPlayerUpdated);
-		miniPlayerBarState?.videoElement.removeEventListener("loadedmetadata", refreshMiniPlayerStoryboard);
-	});
-	miniPlayerBarState = barState;
-	attachMiniBarEvents(miniPlayerBarState);
-	updateMiniBar();
-	setTimeout(refreshMiniPlayerStoryboard, 50);
-}
-function attachMiniBarEvents(barState: MiniPlayerBarState) {
-	const { barRoot, videoElement } = barState;
-	let isScrubbing = false;
-	syncMiniBarVisibility(barState);
-	const showUI = () => {
-		barState.progressBar.hoverRange.style.display = "block";
-		barState.progressBar.previewBox.style.display = "flex";
-	};
-	const hideUI = () => {
-		barState.progressBar.hoverRange.style.display = "none";
-		barState.progressBar.previewBox.style.display = "none";
-	};
-	const updateUI = (clientX: number) => {
-		const bounds = barRoot.getBoundingClientRect();
-		const hoverOffsetX = clamp(clientX - bounds.left, 0, bounds.width);
-		const hoverRatio = bounds.width > 0 ? hoverOffsetX / bounds.width : 0;
-		const played = clamp(barState.playedRatio, 0, 1);
-		const hovered = clamp(hoverRatio, 0, 1);
-		const left = Math.min(played, hovered);
-		const width = Math.abs(played - hovered);
-		barState.progressBar.hoverRange.style.left = `${left * 100}%`;
-		barState.progressBar.hoverRange.style.width = `${width * 100}%`;
-		const seekWindow = getSeekWindow(videoElement);
-		if (!seekWindow) return;
-		const { end, start } = seekWindow;
-		const t = start + (end - start) * hovered;
-		barState.progressBar.previewTimestamp.textContent = formatTime(t);
-		const previewWidth = 160;
-		const minX = previewWidth / 2;
-		const maxX = bounds.width - previewWidth / 2;
-		const clampedX = clamp(hoverOffsetX, minX, maxX);
-		barState.progressBar.previewBox.style.left = `${clampedX}px`;
-		updateStoryboardThumb(barState, t, seekWindow);
-	};
-	const onPointerDown = (e: PointerEvent) => {
-		isScrubbing = true;
-		barRoot.classList.add("yte-mini-player-progress--scrubbing");
-		barRoot.classList.add("yte-mini-player-progress--force");
-		barRoot.setPointerCapture(e.pointerId);
-		showUI();
-		updateUI(e.clientX);
-		seekFromClientX(e.clientX);
-		e.preventDefault();
-	};
-	const onPointerMove = (e: PointerEvent) => {
-		forceShowMiniBar(barState);
-		showUI();
-		updateUI(e.clientX);
-		if (isScrubbing) seekFromClientX(e.clientX);
-	};
-	const onPointerUp = () => {
-		isScrubbing = false;
-		barRoot.classList.remove("yte-mini-player-progress--scrubbing");
-		barRoot.classList.remove("yte-mini-player-progress--force");
-		syncMiniBarVisibility(barState);
-		hideUI();
-	};
-	barRoot.addEventListener("pointerdown", onPointerDown);
-	barRoot.addEventListener("pointermove", onPointerMove);
-	barRoot.addEventListener("pointerleave", onPointerUp);
-	barRoot.addEventListener("pointerup", onPointerUp);
-	const onTimeUpdate = () => updateMiniBar();
-	const onProgress = () => updateMiniBar();
-	const onDuration = () => updateMiniBar();
-	const onPlayerEnter = () => forceShowMiniBar(barState);
-	const onPlayerMove = () => forceShowMiniBar(barState);
-	barState.controlsVisibilityTarget.addEventListener("pointerenter", onPlayerEnter);
-	barState.controlsVisibilityTarget.addEventListener("pointermove", onPlayerMove);
-	const mo = new MutationObserver(() => syncMiniBarVisibility(barState));
-	mo.observe(barState.controlsVisibilityTarget, { attributeFilter: ["class"], attributes: true });
-	videoElement.addEventListener("timeupdate", onTimeUpdate);
-	videoElement.addEventListener("progress", onProgress);
-	videoElement.addEventListener("durationchange", onDuration);
-	cleanupRegistry.add("miniPlayer", () => {
-		mo.disconnect();
-		barState.controlsVisibilityTarget.removeEventListener("pointerenter", onPlayerEnter);
-		barState.controlsVisibilityTarget.removeEventListener("pointermove", onPlayerMove);
-		barRoot.removeEventListener("pointerdown", onPointerDown);
-		barRoot.removeEventListener("pointermove", onPointerMove);
-		barRoot.removeEventListener("pointerleave", onPointerUp);
-		barRoot.removeEventListener("pointerup", onPointerUp);
-		videoElement.removeEventListener("timeupdate", onTimeUpdate);
-		videoElement.removeEventListener("progress", onProgress);
-		videoElement.removeEventListener("durationchange", onDuration);
-	});
-}
-function buildMiniBar(): Pick<MiniPlayerBarState, "barRoot" | "progressBar"> {
-	const barRoot = document.createElement("div");
-	barRoot.className = "yte-mini-player-progress";
-	const barTrack = document.createElement("div");
-	barTrack.className = "yte-mini-player-progress__track";
-	const bufferedBar = document.createElement("div");
-	bufferedBar.className = "yte-mini-player-progress__loaded";
-	const playedBar = document.createElement("div");
-	playedBar.className = "yte-mini-player-progress__played";
-	const hoverRange = document.createElement("div");
-	hoverRange.className = "yte-mini-player-progress__hover";
-	hoverRange.style.display = "none";
-	const scrubKnob = document.createElement("div");
-	scrubKnob.className = "yte-mini-player-progress__knob";
-	const previewBox = document.createElement("div");
-	previewBox.className = "yte-mini-player-progress__preview";
-	previewBox.style.display = "none";
-	const previewThumbnail = document.createElement("div");
-	previewThumbnail.className = "yte-mini-player-progress__preview-thumb";
-	const previewTimestamp = document.createElement("div");
-	previewTimestamp.className = "yte-mini-player-progress__preview-time";
-	previewBox.appendChild(previewThumbnail);
-	previewBox.appendChild(previewTimestamp);
-	barTrack.appendChild(bufferedBar);
-	barTrack.appendChild(hoverRange);
-	barTrack.appendChild(playedBar);
-	barTrack.appendChild(scrubKnob);
-	barRoot.appendChild(barTrack);
-	barRoot.appendChild(previewBox);
-	return {
-		barRoot,
-		progressBar: {
-			bufferedBar,
-			hoverRange,
-			playedBar,
-			previewBox,
-			previewThumbnail,
-			previewTimestamp,
-			scrubKnob
-		}
-	};
-}
-function buildStoryboardUrl(storyBoardSheet: StoryboardSheet, imageIndex: number) {
-	const level = storyBoardSheet.selectedLevel ?? 3;
-	return buildStoryboardUrlForLevel(storyBoardSheet, imageIndex, level);
-}
-function buildStoryboardUrlForLevel(storyBoardSheet: StoryboardSheet, imageIndex: number, level: number) {
-	let url = storyBoardSheet.baseUrl.replace("$L", String(level)).replace("$N", `M${imageIndex}`);
-	if (url.startsWith("//")) url = `https:${url}`;
-	if (!/([?&])sigh=/.test(url)) {
-		const join = url.includes("?") ? "&" : "?";
-		url = `${url}${join}sigh=${encodeURIComponent(storyBoardSheet.signature)}`;
-	}
-	return url;
-}
-function forceShowMiniBar(barState: MiniPlayerBarState) {
-	const { barRoot } = barState;
-	barRoot.classList.add("yte-mini-player-progress--force");
-	syncMiniBarVisibility(barState);
-	if (barState.hideTimeout) clearTimeout(barState.hideTimeout);
-	barState.hideTimeout = setTimeout(() => {
-		barRoot.classList.remove("yte-mini-player-progress--force");
-		syncMiniBarVisibility(barState);
-	}, 1200);
-}
-function formatTime(seconds: number) {
-	const s = Math.max(0, Math.floor(seconds));
-	const hh = Math.floor(s / 3600);
-	const mm = Math.floor((s % 3600) / 60);
-	const ss = s % 60;
-	return hh > 0 ? `${hh}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}` : `${mm}:${String(ss).padStart(2, "0")}`;
-}
-function getPreferredStoryboardLevel(storyboardRenderer: Nullable<PlayerStoryboardSpecRenderer>) {
-	const rec =
-		storyboardRenderer?.highResolutionRecommendedLevel ?? storyboardRenderer?.recommendedLevel ?? storyboardRenderer?.fineScrubbingRecommendedLevel;
-	return Number.isFinite(rec) ? (rec as number) : 3;
-}
-function getSeekWindow(video: HTMLVideoElement) {
-	const { duration, seekable } = video;
-	if (Number.isFinite(duration) && duration > 0) {
-		return { end: duration, start: 0 };
-	}
-	try {
-		if (seekable && seekable.length) {
-			const start = seekable.start(0);
-			const end = seekable.end(seekable.length - 1);
-			if (Number.isFinite(start) && Number.isFinite(end) && end > start) return { end, start };
-		}
-	} catch {}
-	return null;
-}
-function getStoryboardSpec(): Nullable<string> {
-	const player = document.querySelector<YouTubePlayerDiv>("#movie_player");
-	return (
-		player?.getPlayerResponse?.()?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		(window as miniPlayerWindow).ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		(window as miniPlayerWindow).ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		null
-	);
-}
-function hideNativeProgress(player: HTMLElement) {
-	const native = qs<HTMLElement>(player, ".ytp-progress-bar-container");
-	if (!native) return () => {};
-	const {
-		style: { display: prev }
-	} = native;
-	native.style.display = "none";
-	return () => {
-		native.style.display = prev;
-	};
-}
-function parseStoryboard(specString: string, storyboardRenderer: Nullable<PlayerStoryboardSpecRenderer>): Nullable<StoryboardSheet> {
-	try {
-		const parts = specString.split("|");
-		const [baseUrl] = parts;
-		const layer = parts.at(-1);
-		if (!baseUrl || !layer) return null;
-		const [w, h, count, c, r, _a, _b, signature] = layer.split("#");
-		const width = parseInt(w, 10);
-		const height = parseInt(h, 10);
-		const frameCount = parseInt(count, 10);
-		const cols = parseInt(c, 10);
-		const rows = parseInt(r, 10);
-		if (![width, height, frameCount, cols, rows].every(Number.isFinite)) return null;
-		if (!signature) return null;
-		return {
-			baseUrl,
-			cols,
-			frameCount,
-			height,
-			rows,
-			selectedLevel: getPreferredStoryboardLevel(storyboardRenderer),
-			signature,
-			width
-		};
-	} catch {
-		return null;
-	}
-}
-function qs<T extends Element>(root: ParentNode, sel: string) {
-	return root.querySelector<T>(sel);
-}
-function seekFromClientX(clientX: number) {
-	if (!miniPlayerBarState) return;
-	const { barRoot, videoElement } = miniPlayerBarState;
-	const bounds = barRoot.getBoundingClientRect();
-	const barOffsetX = clamp(clientX - bounds.left, 0, bounds.width);
-	const seekRatio = bounds.width > 0 ? barOffsetX / bounds.width : 0;
-	const seekWindow = getSeekWindow(videoElement);
-	if (!seekWindow) return;
-	const { end, start } = seekWindow;
-	videoElement.currentTime = start + (end - start) * seekRatio;
-}
-function syncMiniBarVisibility({ barRoot, controlsVisibilityTarget }: MiniPlayerBarState) {
-	const autohide = controlsVisibilityTarget.classList.contains("ytp-autohide");
-	const interacting =
-		barRoot.classList.contains("yte-mini-player-progress--scrubbing") || barRoot.classList.contains("yte-mini-player-progress--force");
-	barRoot.classList.toggle("yte-mini-player-progress--hidden", autohide && !interacting);
-}
-function updateMiniBar() {
-	if (!miniPlayerBarState) return;
-	const {
-		progressBar: { bufferedBar, playedBar, scrubKnob },
-		videoElement
-	} = miniPlayerBarState;
-	const seekWindow = getSeekWindow(videoElement);
-	if (!seekWindow) return;
-	const { end, start } = seekWindow;
-	const timeRange = end - start;
-	const playedRatio = clamp((videoElement.currentTime - start) / timeRange, 0, 1);
-	miniPlayerBarState.playedRatio = playedRatio;
-	playedBar.style.transform = `scaleX(${playedRatio})`;
-	scrubKnob.style.left = `${playedRatio * 100}%`;
-	let bufferedEnd = start;
-	try {
-		const { buffered } = videoElement;
-		if (buffered && buffered.length) bufferedEnd = buffered.end(buffered.length - 1);
-	} catch {}
-	const loadedPct = clamp((bufferedEnd - start) / timeRange, 0, 1);
-	bufferedBar.style.transform = `scaleX(${loadedPct})`;
-}
-function updateStoryboardThumb(
-	{ progressBar: { previewThumbnail }, storyboardSheet, videoElement }: MiniPlayerBarState,
-	timeSeconds: number,
-	seekWindow: { end: number; start: number }
-) {
-	if (!storyboardSheet) {
-		previewThumbnail.style.backgroundImage = "";
-		return;
-	}
-	const { end, start } = seekWindow;
-	const timeRange = end - start;
-	if (timeRange <= 0) return;
-	const timeRatio = clamp((timeSeconds - start) / timeRange, 0, 1);
-	const idx = Math.floor(timeRatio * Math.max(1, storyboardSheet.frameCount - 1));
-	const perImage = storyboardSheet.cols * storyboardSheet.rows;
-	const imageIndex = Math.floor(idx / perImage);
-	const within = idx % perImage;
-	const row = Math.floor(within / storyboardSheet.cols);
-	const col = within % storyboardSheet.cols;
-	const url = buildStoryboardUrl(storyboardSheet, imageIndex);
-	const videoWidth = videoElement.videoWidth || 16;
-	const videoHeight = videoElement.videoHeight || 9;
-	const aspect = videoWidth / videoHeight;
-	// maximum preview size
-	const maxW = 160;
-	const maxH = 90;
-	let outW = maxW;
-	let outH = maxH;
-	if (aspect > 1) {
-		// wide video
-		outH = Math.min(maxH, maxW / aspect);
-	} else {
-		// tall video
-		outW = Math.min(maxW, maxH * aspect);
-	}
-	const sx = outW / storyboardSheet.width;
-	const sy = outH / storyboardSheet.height;
-	const s = Math.min(sx, sy);
-	const bgW = storyboardSheet.cols * storyboardSheet.width * s;
-	const bgH = storyboardSheet.rows * storyboardSheet.height * s;
-	const px = col * storyboardSheet.width * s;
-	const py = row * storyboardSheet.height * s;
-	previewThumbnail.style.width = `${outW}px`;
-	previewThumbnail.style.height = `${outH}px`;
-	previewThumbnail.style.backgroundImage = `url("${url}")`;
-	previewThumbnail.style.backgroundSize = `${bgW}px ${bgH}px`;
-	previewThumbnail.style.backgroundPosition = `-${px}px -${py}px`;
 }
