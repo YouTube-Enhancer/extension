@@ -12,6 +12,7 @@ export const deepDarkPreset = [
 	"Arc-Dark",
 	"Black-and-White",
 	"Breeze-Dark",
+	"Catppuccin-Mocha",
 	"Custom",
 	"Deep-Dark",
 	"Discord",
@@ -106,6 +107,16 @@ export const deepDarkPresets = {
 		--main-text: #eff0f1;
 		--dimmer-text: #bdc3c7;
 		--shadow: 0 1px 0.5px rgba(0, 0, 0, .13);
+	}`,
+	'Catppuccin-Mocha': `
+		:root {
+			--main-color: #cba6f7;               /*Mauve*/
+			--main-background: #1e1e2e;          /*Base*/
+			--second-background: #181825;        /*Mantle*/
+			--hover-background: #313244;         /*Surface 0*/
+			--main-text: #cdd6f4;                /*Text*/
+			--dimmer-text: #a6adc8;              /*Subtext 1*/
+			--shadow: 0 1px 0.5px rgba(0, 0, 0, .15);
 	}`,
 	"Deep-Dark": `
 	:root {
