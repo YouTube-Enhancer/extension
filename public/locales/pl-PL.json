@@ -134,6 +134,7 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Nie udało się zapisać filmu do obejrzenia później",
 						"removeVideo": "Remove from Watch Later",
+						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "Zapisz aby obejrzeć później",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}

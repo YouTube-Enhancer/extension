@@ -134,6 +134,7 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "後で見ることに失敗しました",
 						"removeVideo": "Remove from Watch Later",
+						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "後でウォッチに保存",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}

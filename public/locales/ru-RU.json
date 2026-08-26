@@ -134,6 +134,7 @@
 						"failedToRemoveVideo": "Failed to remove video from Watch Later",
 						"failedToSaveVideo": "Не удалось сохранить видео в Смотреть позже",
 						"removeVideo": "Remove from Watch Later",
+						"removedVideo": "Removed from Watch Later",
 						"saveVideo": "Сохранить в Смотреть позже",
 						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
 					}
