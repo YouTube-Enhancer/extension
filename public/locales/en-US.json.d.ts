@@ -67,6 +67,7 @@ interface EnUS {
 					extras: {
 						failedToRemoveVideo: "Failed to remove video from Watch Later";
 						failedToSaveVideo: "Failed to save video to Watch Later";
+						removedVideo: "Removed from Watch Later";
 						removeVideo: "Remove from Watch Later";
 						saveVideo: "Save to Watch Later";
 						unavailable: "Save to Watch Later button is unavailable due to a YouTube change";

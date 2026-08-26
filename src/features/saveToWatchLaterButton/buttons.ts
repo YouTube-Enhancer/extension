@@ -2,6 +2,7 @@
 
 import type { Nullable } from "@/src/types";
 
+import { buildToastCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
 import {
 	type ButtonViewModelVariant,
 	createNativeButton,
@@ -115,6 +116,14 @@ export function createRowButtonController(isCurrent: () => boolean) {
 					if (!isCurrent()) return;
 					rowSaved.set(videoId, !saved);
 					swapButton(!saved);
+					// YouTube's pipeline shows a toast for a save, but not for a removal.
+					if (saved) {
+						dispatchNativeCommand(
+							buildToastCommand(
+								window.i18nextInstance.t((translations) => translations.pages.content.features.saveToWatchLaterButton.extras.removedVideo)
+							)
+						);
+					}
 				},
 				removing: saved,
 				videoId
