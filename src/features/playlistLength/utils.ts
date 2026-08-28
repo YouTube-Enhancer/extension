@@ -9,6 +9,7 @@ import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
+import { getWatchedPercentage } from "@/src/utils/video";
 export const getHeaderSelectors = () => {
 	const playlistSelectors = PLAYLIST_PAGE_HEADER_SELECTORS;
 	const playlist =
@@ -253,15 +254,4 @@ function getVideoProgress(videoElement: Element): number {
 	const duration = getVideoDurationInSeconds(videoElement);
 	const percent = getWatchedPercentage(videoElement);
 	return Math.floor((percent / 100) * duration);
-}
-
-function getWatchedPercentage(videoElement: Element): number {
-	const oldSelector = ".ytd-thumbnail-overlay-resume-playback-renderer,#progress";
-	const newSelector = ".ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment";
-	let progressBar = videoElement.querySelector<HTMLElement>(oldSelector);
-	if (!progressBar) {
-		progressBar = videoElement.querySelector<HTMLElement>(newSelector);
-	}
-	if (!progressBar) return 0;
-	return parseFloat(progressBar.style.width) || 0;
 }
