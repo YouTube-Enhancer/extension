@@ -5,12 +5,12 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { getPlaylistId } from "../playlistLength/utils";
+import { createActionButton } from "./button";
 import { metadata } from "./index.metadata";
 import "./index.css";
 
