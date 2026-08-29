@@ -108,7 +108,7 @@ export const deepDarkPresets = {
 		--dimmer-text: #bdc3c7;
 		--shadow: 0 1px 0.5px rgba(0, 0, 0, .13);
 	}`,
-	'Catppuccin-Mocha': `
+	"Catppuccin-Mocha": `
 		:root {
 			--main-color: #cba6f7;               /*Mauve*/
 			--main-background: #1e1e2e;          /*Base*/
