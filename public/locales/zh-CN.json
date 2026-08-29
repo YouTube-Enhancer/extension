@@ -134,7 +134,7 @@
 						"failedToRemoveVideo": "从稍后观察中删除视频失败",
 						"failedToSaveVideo": "将视频保存到稍后观看失败",
 						"removeVideo": "从稍后再看移除",
-						"removedVideo": "Removed from Watch Later",
+						"removedVideo": "已从稍后再看移除",
 						"saveVideo": "保存至稍后观看",
 						"unavailable": "由于YouTube的更改，保存到稍后再看按钮不可用"
 					}
