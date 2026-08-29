@@ -1,4 +1,6 @@
-import type { Innertube } from "youtubei.js/web";
+import { getInnertubeClient } from "@/src/utils/youtube";
+
+const youtube = await getInnertubeClient();
 
 type EditPlaylistResponse = {
 	frameworkUpdates: {
@@ -9,7 +11,12 @@ type EditPlaylistResponse = {
 	};
 };
 
-export async function removeFromPlaylist(youtube: Innertube, playlistId: string, setVideoId: string) {
+export async function removeFromHistory(videoId: string) {
+	const history = await youtube.getHistory();
+	await history.removeVideo(videoId, 5);
+}
+
+export async function removeFromPlaylist(playlistId: string, setVideoId: string) {
 	const response = await youtube.actions.execute("/browse/edit_playlist", {
 		actions: [
 			{
