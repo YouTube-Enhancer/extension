@@ -9,9 +9,8 @@ import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
-import { getInnertubeClient } from "@/src/utils/youtube";
-
 import { getWatchedPercentage } from "@/src/utils/video";
+import { getInnertubeClient } from "@/src/utils/youtube";
 export const getHeaderSelectors = () => {
 	const playlistSelectors = PLAYLIST_PAGE_HEADER_SELECTORS;
 	const playlist =
