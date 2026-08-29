@@ -5,7 +5,7 @@ import { FaSpinner } from "react-icons/fa";
 
 import type { TSelectorFunc } from "@/src/types";
 
-import "./index.css";
+import "./button.css";
 
 import { type FeatureName } from "@/src/events/EventManager";
 import { createTooltip } from "@/src/utils/dom/tooltip";
