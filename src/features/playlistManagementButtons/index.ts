@@ -5,12 +5,15 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
+
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
 import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
+import { getThumbnailOverlay, getWatchedPercentage } from "@/src/utils/video";
 
 import { getPlaylistId } from "../playlistLength/utils";
+import { createActionButton } from "./button";
 import { metadata } from "./index.metadata";
 import "./index.css";
 
@@ -21,7 +24,6 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 	playlistVideoId: string;
 }
 const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
-const THUMBNAIL_OVERLAY_SELECTOR = "#overlays ytd-thumbnail-overlay-resume-playback-renderer";
 const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 
 let playlistObserver: Nullable<MutationObserver> = null;
@@ -71,7 +73,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 				const removeButton = item.querySelector(".yte-remove-button");
 				const resetButton = item.querySelector(".yte-reset-button");
-				const resumeOverlay = item.querySelector(THUMBNAIL_OVERLAY_SELECTOR);
+				const hasWatchProgress = getWatchedPercentage(item) > 0;
 
 				if (enable_playlist_remove_button && !removeButton) {
 					const removeButton = await createActionButton({
@@ -96,7 +98,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					menu.prepend(removeButton);
 				}
 
-				if (enable_playlist_reset_button && !resetButton && resumeOverlay) {
+				if (enable_playlist_reset_button && !resetButton && hasWatchProgress) {
 					const resetButton = await createActionButton({
 						className: "yte-reset-button yte-action-button-large",
 						featureName: "playlistManagementButtons",
@@ -140,8 +142,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				const timeStatus = item.querySelector("ytd-thumbnail-overlay-time-status-renderer");
 				if (!timeStatus) return;
 
-				const progressBar = item.querySelector<HTMLElement>("ytd-thumbnail #progress");
-				const progressWidth = progressBar ? parseFloat(progressBar.style.width) : 0;
+				const progressWidth = getWatchedPercentage(item);
 				if (progressWidth === 100) {
 					watchedCount++;
 				}
@@ -187,8 +188,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 
 					for (const item of playlistItems) {
-						const progressBar = item.querySelector<HTMLElement>("ytd-thumbnail #progress");
-						const progressWidth = progressBar ? parseFloat(progressBar.style.width) : 0;
+						const progressWidth = getWatchedPercentage(item);
 						if (progressWidth === 100) {
 							const {
 								data: { setVideoId }
