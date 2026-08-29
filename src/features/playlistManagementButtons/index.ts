@@ -6,7 +6,7 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
-import { removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
+import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -61,12 +61,6 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			return;
 		}
 
-		const { Innertube } = await import("youtubei.js/web");
-		const youtube = await Innertube.create({
-			cookie: document.cookie,
-			fetch: (...args) => fetch(...args)
-		});
-
 		async function addButtonToPlaylistItems() {
 			const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
 			for (const item of playlistItems) {
@@ -90,7 +84,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(youtube, playlistId, setVideoId);
+							await removeFromPlaylist(playlistId, setVideoId);
 							await addRemoveAllButton();
 						},
 						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToRemoveVideo,
@@ -110,8 +104,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						iconColor: IsDarkMode() ? "white" : "black",
 						onClick: async () => {
 							const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
-							const history = await youtube.getHistory();
-							await history.removeVideo(videoId, 5);
+							await removeFromHistory(videoId);
 							item.querySelector(THUMBNAIL_OVERLAY_SELECTOR)?.remove();
 							resetButton.remove();
 							await addRemoveAllButton();

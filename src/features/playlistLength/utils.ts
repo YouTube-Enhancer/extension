@@ -9,6 +9,8 @@ import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
 import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
+import { getInnertubeClient } from "@/src/utils/youtube";
+
 export const getHeaderSelectors = () => {
 	const playlistSelectors = PLAYLIST_PAGE_HEADER_SELECTORS;
 	const playlist =
@@ -148,11 +150,9 @@ export async function getDurationFromAPI(playlistId: string): Promise<number> {
 	if (playlistId.startsWith("UU")) {
 		throw new Error(`API not supported for playlist ID: ${playlistId}`);
 	}
-	const { Innertube } = await import("youtubei.js/web");
-	const youtube = await Innertube.create({
-		cookie: document.cookie,
-		fetch: (...args) => fetch(...args)
-	});
+
+	const youtube = await getInnertubeClient();
+
 	try {
 		let feed = await youtube.getPlaylist(playlistId);
 		let totalSeconds = 0;
