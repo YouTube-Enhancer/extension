@@ -5,17 +5,15 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-
-import { createActionButton } from "@/src/features/playlistManagementButtons/ActionButton";
+import { createActionButton } from "@/src/features/playlistManagementButtons/button";
 import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getThumbnailOverlay, getWatchedPercentage } from "@/src/utils/video";
 
 import { getPlaylistId } from "../playlistLength/utils";
-import { createActionButton } from "./button";
-import { metadata } from "./index.metadata";
 import "./index.css";
+import { metadata } from "./index.metadata";
 
 interface YTDPlaylistVideoRenderer extends HTMLElement {
 	data: {
@@ -107,7 +105,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						onClick: async () => {
 							const { playlistVideoId: videoId } = item as YTDPlaylistVideoRenderer;
 							await removeFromHistory(videoId);
-							item.querySelector(THUMBNAIL_OVERLAY_SELECTOR)?.remove();
+							getThumbnailOverlay(item)?.remove();
 							resetButton.remove();
 							await addRemoveAllButton();
 						},
@@ -193,7 +191,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(youtube, playlistId, setVideoId);
+							await removeFromPlaylist(playlistId, setVideoId);
 						}
 					}
 				} catch (error) {
