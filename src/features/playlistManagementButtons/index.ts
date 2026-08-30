@@ -180,23 +180,30 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				removeAllButton.textContent = window.i18nextInstance.t(
 					(translations) => translations.pages.content.features.playlistManagementButtons.extras.removingWatchedVideos
 				);
+				playlistObserver?.disconnect();
 
 				try {
 					const playlistId = getPlaylistId()!;
 					const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 
-					for (const item of playlistItems) {
+					const videoIdsToRemove: string[] = [];
+					playlistItems.forEach((item) => {
 						const progressWidth = getWatchedPercentage(item);
 						if (progressWidth === 100) {
-							const {
-								data: { setVideoId }
-							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(playlistId, setVideoId);
+							videoIdsToRemove.push((item as YTDPlaylistVideoRenderer).data.setVideoId);
 						}
+					});
+
+					for (const setVideoId of videoIdsToRemove) {
+						await removeFromPlaylist(playlistId, setVideoId);
 					}
 				} catch (error) {
 					console.error("Failed to remove watched videos:", error);
 				} finally {
+					const container = document.querySelector("ytd-playlist-video-list-renderer");
+					if (container && playlistObserver) {
+						playlistObserver.observe(container, { childList: true, subtree: true });
+					}
 					removeAllButton.disabled = false;
 					removeAllButton.innerHTML = originalHTML;
 					removeAllButton.title = originalTitle;
