@@ -8,11 +8,30 @@ export interface AudioEngine {
 	volumeGain: GainNode;
 }
 
+let visibilityHandler: (() => void) | null = null;
+
+function setupVisibilityResume(context: AudioContext): void {
+	if (visibilityHandler) return;
+	visibilityHandler = () => {
+		if (!document.hidden && context.state === "suspended") {
+			void context.resume();
+		}
+	};
+	document.addEventListener("visibilitychange", visibilityHandler);
+}
+
+function teardownVisibilityResume(): void {
+	if (!visibilityHandler) return;
+	document.removeEventListener("visibilitychange", visibilityHandler);
+	visibilityHandler = null;
+}
+
 export function destroyAudioEngine(): void {
 	const { engine } = window;
 	if (!engine) return;
 	engine.source.disconnect();
 	engine.volumeGain.disconnect();
+	teardownVisibilityResume();
 	void engine.context.close();
 	window.engine = null;
 }
@@ -31,6 +50,7 @@ export function getAudioEngine(video?: HTMLMediaElement): Nullable<AudioEngine> 
 	volumeGain.gain.value = 1;
 	source.connect(volumeGain);
 	volumeGain.connect(context.destination);
+	setupVisibilityResume(context);
 
 	window.engine = { context, input: source, monoEnabled: false, source, volumeGain };
 	return engine;
