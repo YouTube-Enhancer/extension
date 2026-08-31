@@ -10,7 +10,11 @@ body.yte-hide-ai {
 	),
 	.ytSearchboxComponentReportButton,
 	.ytSearchboxComponentAiSuggestionsContainer,
-	yt-video-description-youchat-section-view-model {
+	yt-video-description-youchat-section-view-model,
+	ytd-live-chat-frame yt-live-chat-banner-renderer,
+	ytd-live-chat-frame [class*="ai-summary"],
+	ytd-live-chat-frame [class*="generative"],
+	ytd-live-chat-frame ytd-engagement-panel-section-list-renderer[target-id="PAyouchat"] {
 		display: none !important;
 	}
 }
