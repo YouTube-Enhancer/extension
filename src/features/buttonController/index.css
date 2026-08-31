@@ -14,7 +14,12 @@
 	max-width: var(--yt-delhi-pill-height, 48px) !important;
 }
 
+#yte-button-container {
+	pointer-events: none;
+}
+
 .yte-button-below-player {
+	pointer-events: auto;
 	place-content: center;
 	display: flex;
 	flex-wrap: wrap;
@@ -22,7 +27,6 @@
 	height: 48px;
 	width: 48px;
 	align-items: center;
-	display: flex;
 }
 
 body:not(:has(.ytp-delhi-modern)) .yte-button-player-controls-left,
