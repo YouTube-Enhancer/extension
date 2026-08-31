@@ -1668,8 +1668,8 @@ ytd-thumbnail-overlay-resume-playback-renderer[enable-refresh-signature-moments-
 	text-shadow: none !important;
 }
 /*2025-10-14 new style controls*/
-/*add back the old gradient*/
-.ytp-gradient-bottom {
+/*add back the old gradient - only when controls are visible*/
+.html5-video-player:not(.ytp-autohide) .ytp-gradient-bottom {
 	display: block !important;
 	height: 61px;
 	padding-top: 37px;
