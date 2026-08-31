@@ -23,6 +23,10 @@ body[yte-maximized] div#movie_player {
 	background: black !important;
 }
 
+body[yte-maximized] .ytp-cued-thumbnail-overlay {
+	z-index: 1 !important;
+}
+
 body[yte-maximized] div.ytp-chrome-bottom {
 	width: calc(100vw - 24px) !important;
 }
