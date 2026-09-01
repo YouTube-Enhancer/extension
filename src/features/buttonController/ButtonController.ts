@@ -44,6 +44,12 @@ let fullscreenDomHandler: Nullable<() => void> = null;
 let theaterModeObserver: Nullable<MutationObserver> = null;
 let theaterNavigationHandler: Nullable<() => void> = null;
 
+let buttonContainerElement: Nullable<HTMLDivElement> = null;
+let containerGeometryMutationObserver: Nullable<MutationObserver> = null;
+let containerGeometryObserver: Nullable<ResizeObserver> = null;
+let containerGeometryResizeHandler: Nullable<() => void> = null;
+let observedPlayerElement: Nullable<HTMLDivElement> = null;
+
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
 
@@ -61,7 +67,10 @@ function ensureContainerPosition() {
 			isNewLayout ? document.querySelector("ytd-watch-grid")
 			:	document.querySelector("ytd-watch-flexy")
 		:	document.querySelector("div#primary > div#primary-inner");
-	if (currentParent === expectedParent) return;
+	if (currentParent === expectedParent) {
+		syncContainerGeometry();
+		return;
+	}
 	if (inTheaterMode) {
 		const parent = expectedParent as HTMLElement;
 		const columns = parent?.querySelector("#columns");
@@ -70,6 +79,7 @@ function ensureContainerPosition() {
 		const player = expectedParent?.querySelector("#player");
 		if (player) player.insertAdjacentElement("afterend", container);
 	}
+	syncContainerGeometry();
 }
 
 async function getPlacementRoot(placement: ButtonPlacement) {
@@ -116,6 +126,30 @@ function onFullscreenChange() {
 	fullscreenDomHandler?.();
 }
 
+async function startContainerGeometryObserver() {
+	if (containerGeometryObserver) return;
+	const player = await waitForElement<HTMLDivElement>("#movie_player", 15000);
+	if (!player || containerGeometryObserver) return;
+	containerGeometryObserver = new ResizeObserver(() => {
+		requestAnimationFrame(syncContainerGeometry);
+	});
+	containerGeometryObserver.observe(player);
+	observedPlayerElement = player;
+	// Panels (live chat, description, ...) toggle via attributes on the watch
+	// element, so attribute mutations are a second sync trigger alongside the
+	// player's own resizes.
+	const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
+	if (watchElement) {
+		containerGeometryMutationObserver = new MutationObserver(() => {
+			requestAnimationFrame(syncContainerGeometry);
+		});
+		containerGeometryMutationObserver.observe(watchElement, { attributes: true });
+	}
+	containerGeometryResizeHandler = () => syncContainerGeometry();
+	window.addEventListener("resize", containerGeometryResizeHandler);
+	syncContainerGeometry();
+}
+
 function startFullscreenObserver(callback: () => void) {
 	fullscreenDomHandler = callback;
 	const target = document.querySelector("ytd-app");
@@ -140,11 +174,26 @@ async function startTheaterModeObserver() {
 		ensureContainerPosition();
 	});
 	theaterModeObserver.observe(sizeButton, { attributeFilter: ["class"], attributes: true, childList: true, subtree: true });
-	theaterNavigationHandler = () => stopTheaterModeObserver();
+	theaterNavigationHandler = () => {
+		stopTheaterModeObserver();
+		stopContainerGeometryObserver();
+	};
 	document.addEventListener("yt-navigate-start", theaterNavigationHandler);
 }
 
 // ─── Placement selector ───────────────────────────────────────────
+
+function stopContainerGeometryObserver() {
+	containerGeometryObserver?.disconnect();
+	containerGeometryObserver = null;
+	containerGeometryMutationObserver?.disconnect();
+	containerGeometryMutationObserver = null;
+	observedPlayerElement = null;
+	if (containerGeometryResizeHandler) {
+		window.removeEventListener("resize", containerGeometryResizeHandler);
+		containerGeometryResizeHandler = null;
+	}
+}
 
 function stopFullscreenObserver() {
 	fullscreenObserver?.disconnect();
@@ -162,6 +211,28 @@ function stopTheaterModeObserver() {
 	}
 	theaterModeObserver?.disconnect();
 	theaterModeObserver = null;
+}
+
+function syncContainerGeometry() {
+	const container = buttonContainerElement;
+	if (!container?.isConnected) return;
+	if (internalIsFullscreen()) return;
+	const player = document.querySelector<HTMLDivElement>("#movie_player");
+	if (!player) return;
+	if (observedPlayerElement !== player && containerGeometryObserver) {
+		// YouTube replaced the player element; re-anchor the observer.
+		containerGeometryObserver.disconnect();
+		containerGeometryObserver.observe(player);
+		observedPlayerElement = player;
+	}
+	const playerRect = player.getBoundingClientRect();
+	if (playerRect.width === 0) return;
+	container.style.width = `${playerRect.width}px`;
+	// Derive the offset from where the container would sit with no margin, so
+	// parent padding and RTL flow don't skew the alignment.
+	const currentMarginLeft = parseFloat(container.style.marginLeft) || 0;
+	const naturalLeft = container.getBoundingClientRect().left - currentMarginLeft;
+	container.style.marginLeft = `${playerRect.left - naturalLeft}px`;
 }
 
 // ─── DOM creation (container / button / menu) ─────────────────────
@@ -696,12 +767,16 @@ function getMenuPanel(menu: HTMLDivElement): Nullable<HTMLDivElement> {
 
 async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nullable<HTMLDivElement>> {
 	let container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-	if (container) return container;
+	if (container) {
+		buttonContainerElement = container;
+		return container;
+	}
 	container = createStyledElement({
 		elementId: buttonContainerId,
 		elementType: "div",
 		styles: { display: "flex", height: "48px", justifyContent: "center" }
 	});
+	buttonContainerElement = container;
 	if (inTheaterMode) {
 		const isNewLayout = isNewYouTubeVideoLayout();
 		const parent = isNewLayout ? document.querySelector<HTMLElement>("ytd-watch-grid") : document.querySelector<HTMLElement>("ytd-watch-flexy");
@@ -852,6 +927,7 @@ async function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonP
 			const container = await getOrCreateButtonContainer(inTheaterMode);
 			if (!container) return;
 			await startTheaterModeObserver();
+			await startContainerGeometryObserver();
 			const existingInContainer = container.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
 			container.append(button);
@@ -917,9 +993,12 @@ function trackButton(
 
 function untrackButton(buttonName: AllButtonNames) {
 	trackedButtons.delete(buttonName);
-	if (trackedButtons.size === 0 && fullscreenObserverActive) {
-		fullscreenObserverActive = false;
-		stopFullscreenObserver();
+	if (trackedButtons.size === 0) {
+		stopContainerGeometryObserver();
+		if (fullscreenObserverActive) {
+			fullscreenObserverActive = false;
+			stopFullscreenObserver();
+		}
 	}
 }
 
