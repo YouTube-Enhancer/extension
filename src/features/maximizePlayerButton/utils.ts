@@ -32,6 +32,20 @@ async function changeMaximizeButtonToOff() {
 		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle.off)
 	);
 }
+
+async function changeMaximizeButtonToOn() {
+	const button = getFeatureButton("maximizePlayerButton");
+	if (!button || !(button instanceof HTMLButtonElement)) return;
+	button.ariaChecked = "true";
+	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
+	if (icon && typeof icon === "object" && "on" in icon) {
+		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.on, true));
+	}
+	updateFeatureButtonTitle(
+		"maximizePlayerButton",
+		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle.on)
+	);
+}
 function clearHeaderTimeout() {
 	const state = getPlayerControllerState();
 	if (state.header.timeout) {
@@ -181,6 +195,7 @@ export async function maximizePlayer(timeout = 2500) {
 		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
 	if (!inTheaterMode) clickAndRestore(sizeElement);
 	adjustPlayer("add");
+	void changeMaximizeButtonToOn();
 	const { height } = header.getBoundingClientRect();
 	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
 	document.body.style.setProperty("--yte-header-height", `${height}px`);
