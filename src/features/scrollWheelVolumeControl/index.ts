@@ -1,17 +1,20 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { disableScrollWheelControl, enableScrollWheelControl, refreshScrollWheelOptions } from "@/src/features/scrollWheelController";
+import { disableScrollWheelControl, enableScrollWheelControl, updateScrollWheelConfig } from "@/src/features/scrollWheelController";
 
 import "./index.css";
 import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	onConfigChange: () => refreshScrollWheelOptions(),
-	onDisable: () => disableScrollWheelControl("volume"),
-	onEnable: async () => {
-		await enableScrollWheelControl("volume");
+	onConfigChange: (config) => updateScrollWheelConfig("volume", config),
+	onDisable: (config) => {
+		updateScrollWheelConfig("volume", config);
+		disableScrollWheelControl("volume");
 	},
-	onNavigate: async () => {
-		await enableScrollWheelControl("volume");
+	onEnable: async (config) => {
+		await enableScrollWheelControl("volume", config);
+	},
+	onNavigate: async (config) => {
+		await enableScrollWheelControl("volume", config);
 	}
 });
