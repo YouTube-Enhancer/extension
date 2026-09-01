@@ -1,16 +1,19 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { disableScrollWheelControl, enableScrollWheelControl, refreshScrollWheelOptions } from "@/src/features/scrollWheelController";
+import { disableScrollWheelControl, enableScrollWheelControl, updateScrollWheelConfig } from "@/src/features/scrollWheelController";
 
 import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	onConfigChange: () => refreshScrollWheelOptions(),
-	onDisable: () => disableScrollWheelControl("speed"),
-	onEnable: async () => {
-		await enableScrollWheelControl("speed");
+	onConfigChange: (config) => updateScrollWheelConfig("speed", config),
+	onDisable: (config) => {
+		updateScrollWheelConfig("speed", config);
+		disableScrollWheelControl("speed");
 	},
-	onNavigate: async () => {
-		await enableScrollWheelControl("speed");
+	onEnable: async (config) => {
+		await enableScrollWheelControl("speed", config);
+	},
+	onNavigate: async (config) => {
+		await enableScrollWheelControl("speed", config);
 	}
 });
