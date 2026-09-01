@@ -31,7 +31,8 @@ type ControlConfigMap = {
 	volume: configuration["scrollWheelVolumeControl"];
 };
 type ControlRuntime = {
-	applyQueue: Promise<void>;
+	applying: boolean;
+	pendingSteps: number;
 	playerContainer: YouTubePlayerDiv;
 	stepper: WheelStepper;
 };
@@ -86,7 +87,8 @@ export async function enableScrollWheelControl<T extends ScrollWheelControlType>
 		existing.playerContainer = playerContainer;
 	} else {
 		activeControls.set(type, {
-			applyQueue: Promise.resolve(),
+			applying: false,
+			pendingSteps: 0,
 			playerContainer,
 			stepper: createWheelStepper((steps) => queueSteps(type, steps))
 		});
@@ -224,10 +226,25 @@ function queueSteps(type: ScrollWheelControlType, wheelSteps: number) {
 	const runtime = activeControls.get(type);
 	if (!runtime) return;
 	// Wheel-down is positive, but scrolling down should decrease the value.
-	const steps = -wheelSteps;
-	runtime.applyQueue = runtime.applyQueue
-		.then(() => (type === "volume" ? applyVolumeSteps(runtime, steps) : applySpeedSteps(runtime, steps)))
-		.catch(() => {});
+	runtime.pendingSteps -= wheelSteps;
+	if (runtime.applying) return;
+	runtime.applying = true;
+	void (async () => {
+		try {
+			// Steps arriving while an apply is in flight merge into the next
+			// application instead of queueing one player call each.
+			while (runtime.pendingSteps !== 0) {
+				const { pendingSteps: steps } = runtime;
+				runtime.pendingSteps = 0;
+				if (type === "volume") await applyVolumeSteps(runtime, steps);
+				else await applySpeedSteps(runtime, steps);
+			}
+		} catch {
+			runtime.pendingSteps = 0;
+		} finally {
+			runtime.applying = false;
+		}
+	})();
 }
 
 function rebuildDispatchConfig() {
