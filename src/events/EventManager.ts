@@ -30,7 +30,7 @@ type AcceptedTarget = Document | HTMLElement | Window;
 
 type ButtonNameEvents = "flipVideoHorizontalButton" | "flipVideoVerticalButton" | "volumeBoostButton";
 
-type CoreFeatureEvents = "featureMenu";
+type CoreFeatureEvents = "featureMenu" | "scrollWheelController";
 
 const eventManager: EventManager = {
 	// Map of feature names to a map of targets to
