@@ -36,6 +36,21 @@ export function getMinSpeed(playbackSpeedPerClick: number) {
 }
 export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: number, playbackSpeedPerClick: number) {
 	if (!isFinite(currentPlaybackSpeed) || !isFinite(playbackSpeedPerClick) || playbackSpeedPerClick <= 0) return;
+	const videoElement = document.querySelector<HTMLVideoElement>("video");
+	if (!videoElement) return;
+	const buttons = [
+		{
+			button: getFeatureButton("increasePlaybackSpeedButton"),
+			buttonName: "increasePlaybackSpeedButton" as const,
+			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
+		},
+		{
+			button: getFeatureButton("decreasePlaybackSpeedButton"),
+			buttonName: "decreasePlaybackSpeedButton" as const,
+			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
+		}
+	];
+	if (buttons.every(({ button }) => !button)) return;
 	const {
 		data: {
 			options: {
@@ -45,21 +60,8 @@ export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: nu
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	const videoElement = document.querySelector<HTMLVideoElement>("video");
-	if (!videoElement) return;
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
-	const buttons = [
-		{
-			buttonName: "increasePlaybackSpeedButton" as const,
-			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
-		},
-		{
-			buttonName: "decreasePlaybackSpeedButton" as const,
-			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
-		}
-	];
-	for (const { buttonName, speed } of buttons) {
-		const button = getFeatureButton(buttonName);
+	for (const { button, buttonName, speed } of buttons) {
 		if (!button) continue;
 		const { update } = createTooltip({
 			direction: placement === "below_player" ? "down" : "up",
