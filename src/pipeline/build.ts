@@ -7,7 +7,7 @@ import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
 import { emptyOutputFolder } from "@/src/utils/plugins/utils";
 
-import { copyOutputs, generateManifests, makeReleaseZips, updateReadmeFeatures } from "./steps";
+import { copyOutputs, generateHideFeatureSelectors, generateManifests, makeReleaseZips, updateReadmeFeatures } from "./steps";
 
 config();
 
@@ -22,6 +22,7 @@ export async function runPostBuildPipeline(retries = 3): Promise<void> {
 		try {
 			await timedStep("Generating manifests", () => generateManifests());
 			await timedStep("Copying outputs", () => copyOutputs());
+			await timedStep("Generating hide feature selectors", () => generateHideFeatureSelectors());
 			await timedStep("Updating README features", () => updateReadmeFeatures());
 			await timedStep("Creating release ZIPs", () => makeReleaseZips());
 			const elapsed = ((Date.now() - start) / 1000).toFixed(2);
