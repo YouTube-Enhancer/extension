@@ -1,6 +1,7 @@
 import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 
 import { coreFeatures } from "./coreFeatures";
 
@@ -36,6 +37,9 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 			break;
 		case "languageChange":
 			await coreFeatures.handleLanguageChange(message.data.language);
+			break;
+		case "onScreenDisplayConfigChange":
+			setOnScreenDisplayConfig(message.data.onScreenDisplay);
 			break;
 	}
 }

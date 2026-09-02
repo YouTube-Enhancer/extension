@@ -2,6 +2,7 @@ import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { i18nService } from "@/src/i18n";
+import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
@@ -38,6 +39,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
+	setOnScreenDisplayConfig(options.onScreenDisplay);
+
 	await registerAllFeatures(state);
 
 	await getButtonColor();
@@ -53,6 +56,7 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 		const {
 			data: { options: navOptions }
 		} = await waitForSpecificMessage("options", "request_data", "content");
+		setOnScreenDisplayConfig(navOptions.onScreenDisplay);
 		await registry.enableAll(navOptions);
 	});
 
