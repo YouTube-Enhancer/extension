@@ -11,7 +11,11 @@ export const hideFeatureSelectors = {
 			'button-view-model:has( svg path[d="M19 0a5 5 0 01-5 5 5 5 0 015 5 5 5 0 015-5 5 5 0 01-5-5Zm-8 2a9 9 0 105.641 16.013c.044.07.094.135.152.194l3.5 3.5a1 1 0 001.414-1.414l-3.5-3.5a1.001 1.001 0 00-.194-.152A8.96 8.96 0 0019.945 12H17.93a7 7 0 11-5.99-7.938l1.675-1.676A9 9 0 0011 2Z"] )',
 			".ytSearchboxComponentReportButton",
 			".ytSearchboxComponentAiSuggestionsContainer",
-			"yt-video-description-youchat-section-view-model"
+			"yt-video-description-youchat-section-view-model",
+			"ytd-live-chat-frame yt-live-chat-banner-renderer",
+			'ytd-live-chat-frame [class*="ai-summary"]',
+			'ytd-live-chat-frame [class*="generative"]',
+			'ytd-live-chat-frame ytd-engagement-panel-section-list-renderer[target-id="PAyouchat"]'
 		]
 	},
 	hideEndScreenCards: { bodyClass: "yte-hide-end-screen-cards", selectors: [".ytp-ce-element", ".ytp-ce-hide-button-container"] },
@@ -51,10 +55,7 @@ export const hideFeatureSelectors = {
 	hidePosts: { bodyClass: "yte-hide-posts", selectors: ["ytd-rich-section-renderer:has([is-post])"] },
 	hideShortsChannel: {
 		bodyClass: "yte-hide-shorts-channel",
-		selectors: [
-			'ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)',
-			'yt-tab-shape[tab-title="Shorts"]'
-		]
+		selectors: ['ytd-item-section-renderer[page-subtype="channels"] ytd-reel-shelf-renderer:has(#title-container)', 'yt-tab-shape[tab-title="Shorts"]']
 	},
 	hideShortsHome: { bodyClass: "yte-hide-shorts-home", selectors: ['ytd-browse[page-subtype="home"] ytd-rich-section-renderer:has([is-shorts])'] },
 	hideShortsSearch: {
