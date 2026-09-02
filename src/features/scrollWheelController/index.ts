@@ -1,6 +1,7 @@
 import type { FeatureKeys } from "@/src/features/_registry/types";
 
 import eventManager from "@/src/events/EventManager";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getFeatureButtonId } from "@/src/features/buttonController";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
@@ -14,6 +15,7 @@ import {
 	youtubePlayerMaxSpeed,
 	youtubePlayerMinSpeed
 } from "@/src/types";
+import { getOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { type ModifyElementAction, modifyElementClassList } from "@/src/utils/dom/classList";
 import { preventScroll } from "@/src/utils/dom/events";
@@ -46,9 +48,9 @@ type DispatchConfig = {
 type OptionsData = MessageMappings["options"]["response"];
 
 const CONTEXT_MENU_HIDE_TIMEOUT = 100;
-// The snapshot only feeds cross-feature settings (OSD styling, playback speed
-// per click, the disabled-speed yield rule); a short TTL lets the two feature
-// enables in one navigation share a single fetch.
+// The snapshot only seeds cross-feature fallbacks and the disabled-speed
+// yield rule; a short TTL lets the two feature enables in one navigation
+// share a single fetch.
 const SNAPSHOT_TTL_MS = 1000;
 const controlFeatureIds: Record<ScrollWheelControlType, FeatureKeys> = {
 	speed: "scrollWheelSpeedControl",
@@ -110,10 +112,13 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	const { speed: speedConfig } = controlConfigs;
 	const snapshotOptions = optionsSnapshot?.data.options;
 	if (!speedConfig || !snapshotOptions) return;
-	const {
-		onScreenDisplay,
+	const onScreenDisplay = getOnScreenDisplayConfig() ?? snapshotOptions.onScreenDisplay;
+	let {
 		playbackSpeedButtons: { speed: speedPerClick }
 	} = snapshotOptions;
+	try {
+		({ speed: speedPerClick } = featureConfigManager.getLast("playbackSpeedButtons"));
+	} catch {}
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	const newSpeed = round(clamp(videoElement.playbackRate + steps * speedConfig.steps, youtubePlayerMinSpeed, youtubePlayerMaxSpeed), 2);
@@ -125,7 +130,7 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 
 async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const { volume: volumeConfig } = controlConfigs;
-	const onScreenDisplay = optionsSnapshot?.data.options.onScreenDisplay;
+	const onScreenDisplay = getOnScreenDisplayConfig() ?? optionsSnapshot?.data.options.onScreenDisplay;
 	if (!volumeConfig || !onScreenDisplay) return;
 	const { playerContainer } = runtime;
 	if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;

@@ -498,6 +498,7 @@ export type ExtensionSendOnlyMessageMappings = {
 	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
+	onScreenDisplayConfigChange: DataResponseMessage<"onScreenDisplayConfigChange", { onScreenDisplay: configuration["onScreenDisplay"] }>;
 };
 export type ExtensionSendOnlyMessages = ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
 

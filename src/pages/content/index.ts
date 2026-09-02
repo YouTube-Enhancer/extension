@@ -225,6 +225,9 @@ function getProp(obj: unknown, key: string): unknown {
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
 }
+// onScreenDisplay changes arrive per leaf path, so every field maps to the
+// same broadcast carrying the full fresh slice.
+const buildOnScreenDisplayChange = ({ options }: { options: configuration }) => ({ onScreenDisplay: options.onScreenDisplay });
 const changeHandlers: {
 	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
 } = {
@@ -239,7 +242,13 @@ const changeHandlers: {
 			language: newValue
 		}),
 		event: "languageChange"
-	}
+	},
+	"onScreenDisplay.color": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
+	"onScreenDisplay.hideTime": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
+	"onScreenDisplay.opacity": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
+	"onScreenDisplay.padding": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
+	"onScreenDisplay.position": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
+	"onScreenDisplay.type": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" }
 };
 function emitPathEvent<P extends keyof typeof changeHandlers>({
 	newValue,
