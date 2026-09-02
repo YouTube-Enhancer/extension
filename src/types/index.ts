@@ -367,6 +367,20 @@ export type ContentSendOnlyMessageMappings = {
 	featureStateUpdate: SendDataMessage<"send_data", "content", "featureStateUpdate", { id: FeatureKeys; state: unknown }>;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
+	/**
+	 * ⚠ Test-only entrypoint.
+	 * Directly writes to browser.storage.local via content script pipeline.
+	 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+	 */
+	test_setConfigValue: SendDataMessage<
+		"send_data",
+		"content",
+		"test_setConfigValue",
+		{
+			key: Path<configuration>;
+			value: PathValue<configuration, Path<configuration>>;
+		}
+	>;
 };
 export type ContentSendOnlyMessages = ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
 export type ContentToBackgroundSendOnlyMessageMappings = {
