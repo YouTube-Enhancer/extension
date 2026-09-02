@@ -1,4 +1,4 @@
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideEndScreenCards/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
