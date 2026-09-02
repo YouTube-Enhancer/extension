@@ -170,6 +170,25 @@ document.addEventListener("yte-message-from-youtube", () => {
 						void storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
 						break;
 					}
+					/**
+					 * ⚠ Test-only entrypoint.
+					 * Directly writes to browser.storage.local via content script pipeline.
+					 * Exists solely to support E2E tests (Playwright). Not a runtime feature.
+					 */
+					case "test_setConfigValue": {
+						const {
+							data: { key, value }
+						} = message;
+						const config = await storage.local.get();
+						const keys = key.split(".");
+						let current = config;
+						for (const segment of keys.slice(0, -1)) {
+							current = current[segment] as Record<string, unknown>;
+						}
+						current[keys.at(-1)!] = value;
+						await storage.local.set(config);
+						break;
+					}
 				}
 			}
 		}
