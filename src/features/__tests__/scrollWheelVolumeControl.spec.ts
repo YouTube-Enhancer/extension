@@ -1,12 +1,14 @@
-import { test } from "playwright.config";
+import type { Page } from "@playwright/test";
+
+import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
-import { disableFeature } from "@/src/utils/_tests/features";
+import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { adjustWithScrollWheel } from "@/src/utils/_tests/player";
+import { adjustWithScrollWheel, dispatchWheelNotches, getCurrentVolume, setVolume, waitForScrollWheelVolumeControl } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 
@@ -73,5 +75,40 @@ test.describe("scrollWheelVolumeControl", () => {
 	});
 	test("should decrease volume when holding 'Right' click", async ({ page }) => {
 		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, steps: 5, withRightClick: true });
+	});
+	test.describe("stepper", () => {
+		const steps = 5;
+		async function enableVolumeControl(page: Page) {
+			await navigateToPageType(page, watch);
+			await setOption(page, "scrollWheelVolumeControl.steps", steps);
+			await enableFeature(page, "scrollWheelVolumeControl.enabled");
+			await waitForScrollWheelVolumeControl(page, true);
+			await setVolume(page, volume, watch);
+			await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
+		}
+		test("applies every notch of a rapid wheel burst on watch", async ({ page }) => {
+			await enableVolumeControl(page);
+			// Five notches in one burst exceed the per-apply cap, so the stepper has to flush the remainder instead of dropping it.
+			await dispatchWheelNotches(page, watch, "up", 5);
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 5 * steps);
+		});
+		test("applies an updated step size without reloading on watch", async ({ page }) => {
+			await enableVolumeControl(page);
+			await dispatchWheelNotches(page, watch, "up");
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+			await setOption(page, "scrollWheelVolumeControl.steps", steps * 2);
+			await dispatchWheelNotches(page, watch, "up");
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps * 3);
+		});
+		test("stops adjusting volume once disabled on watch", async ({ page }) => {
+			await enableVolumeControl(page);
+			await dispatchWheelNotches(page, watch, "up");
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+			await disableFeature(page, "scrollWheelVolumeControl.enabled");
+			await waitForScrollWheelVolumeControl(page, false);
+			await dispatchWheelNotches(page, watch, "up");
+			await page.waitForTimeout(1000);
+			expect(await getCurrentVolume(page, watch)).toBe(volume + steps);
+		});
 	});
 });

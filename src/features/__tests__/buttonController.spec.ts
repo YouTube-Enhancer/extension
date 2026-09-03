@@ -9,7 +9,7 @@ import {
 	expectFeatureMenuItemToBeFalsy,
 	expectFeatureMenuItemToBeTruthy
 } from "@/src/utils/_tests/assertions";
-import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
+import { pageTypeRecord, placementRecord, placementSelectors } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 
@@ -153,7 +153,48 @@ test.describe("buttonController", () => {
 			}
 		});
 	});
+	test.describe("below player container", () => {
+		test("container ignores pointer events while its buttons stay clickable", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "screenshotButton.button.placement", below);
+			await enableFeature(page, "screenshotButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
+			await expect(page.locator(placementSelectors.below_player)).toHaveCSS("pointer-events", "none");
+			await expect(page.locator("#yte-feature-screenshotButton-button")).toHaveCSS("pointer-events", "auto");
+		});
+		test("container is centred on the player and follows theater mode on watch", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "screenshotButton.button.placement", below);
+			await enableFeature(page, "screenshotButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
+			await expectContainerToMatchPlayer(page);
+			await enableFeature(page, "automaticTheaterMode.enabled");
+			await expect
+				.poll(async () => page.evaluate(() => document.querySelector("ytd-watch-flexy, ytd-watch-grid")?.hasAttribute("theater") ?? false), {
+					timeout: 15000
+				})
+				.toBe(true);
+			await expectContainerToMatchPlayer(page);
+		});
+	});
 });
+
+async function expectContainerToMatchPlayer(page: Page): Promise<void> {
+	await expect
+		.poll(
+			async () =>
+				page.evaluate((selector) => {
+					const container = document.querySelector(selector);
+					const player = document.querySelector("#movie_player");
+					if (!container || !player) return false;
+					const containerRect = container.getBoundingClientRect();
+					const playerRect = player.getBoundingClientRect();
+					return Math.abs(containerRect.left - playerRect.left) <= 1 && Math.abs(containerRect.width - playerRect.width) <= 1;
+				}, placementSelectors.below_player),
+			{ timeout: 10000 }
+		)
+		.toBe(true);
+}
 
 async function toggleFullscreen(page: Page, fullscreen: boolean): Promise<void> {
 	await page.locator("div#movie_player").hover();
