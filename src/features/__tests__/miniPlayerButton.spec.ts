@@ -45,9 +45,6 @@ test.describe("miniPlayerButton", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
-		await disableFeature(page, "miniPlayerButton.button.enabled");
-		await enableFeature(page, "miniPlayerButton.button.enabled");
-		await setOption(page, "miniPlayerButton.button.placement", right);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-miniPlayerButton-button");
 	});
 

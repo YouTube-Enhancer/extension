@@ -4,7 +4,7 @@ import type { PageType } from "@/src/features/_registry/types";
 
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 
 const { home, search, watch } = pageTypeRecord;
 
@@ -26,8 +26,9 @@ test.describe("customCSS", () => {
 		await enableFeature(page, "customCSS.enabled");
 		await expect(page.locator("#yte-custom-css")).toBeAttached();
 		await setOption(page, "customCSS.code", "body { color: green !important; }");
-		const textContent = await page.locator("#yte-custom-css").textContent();
-		expect(textContent).toContain("green");
+		// <style> elements have no rendered text, so poll textContent instead of using the text matchers.
+		await expect.poll(async () => page.locator("#yte-custom-css").textContent()).toContain("green");
+		expect(await page.locator("#yte-custom-css").textContent()).not.toContain("blue");
 	});
 	test("persists custom CSS after navigation on watch", async ({ page }) => {
 		test.setTimeout(120_000);
@@ -37,9 +38,8 @@ test.describe("customCSS", () => {
 		await expect(page.locator("#yte-custom-css")).toBeAttached();
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
-		await disableFeature(page, "customCSS.enabled");
-		await enableFeature(page, "customCSS.enabled");
-		await expect(page.locator("#yte-custom-css")).toBeAttached();
+		await expect(page.locator("#yte-custom-css")).toBeAttached({ timeout: 15000 });
+		await expect.poll(async () => page.locator("#yte-custom-css").textContent()).toBe("body { background: red !important; }");
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -56,8 +56,7 @@ test.describe("customCSS", () => {
 		await setOption(page, "customCSS.code", "body { background: red !important; }");
 		await enableFeature(page, "customCSS.enabled");
 		await expect(page.locator("#yte-custom-css")).toBeAttached();
-		await page.reload();
-		await navigateToPageType(page, watch);
+		await reloadPage(page, watch);
 		await expect(page.locator("#yte-custom-css")).toBeAttached({ timeout: 15000 });
 	});
 });

@@ -3,6 +3,7 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/scrollWheelVolumeControl/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -28,8 +29,13 @@ test.describe("scrollWheelVolumeControl", () => {
 		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType: watch, steps: 5 });
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
-		await disableFeature(page, "scrollWheelVolumeControl.enabled");
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType: watch, steps: 5 });
+		// Asserted in place: adjustWithScrollWheel would navigate again and re-enable the feature, which would
+		// hide a listener that never re-attached after the navigation.
+		await waitForScrollWheelVolumeControl(page, true);
+		await setVolume(page, volume, watch);
+		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
+		await dispatchWheelNotches(page, watch, "up");
+		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 5);
 	});
 	// The modifier gate is a single boolean lookup on the wheel event and the direction is decided independently by
 	// the stepper sign, so only the increase direction is exercised per modifier plus one decrease control below.
@@ -112,8 +118,12 @@ test.describe("scrollWheelVolumeControl", () => {
 			await disableFeature(page, "scrollWheelVolumeControl.enabled");
 			await waitForScrollWheelVolumeControl(page, false);
 			await dispatchWheelNotches(page, watch, "up");
-			await page.waitForTimeout(1000);
-			expect(await getCurrentVolume(page, watch)).toBe(volume + steps);
+			await expectToStay(async () => getCurrentVolume(page, watch), volume + steps, { page });
+			// Re-enabling has to re-attach on the same document, which is the disabled state's counterpart.
+			await enableFeature(page, "scrollWheelVolumeControl.enabled");
+			await waitForScrollWheelVolumeControl(page, true);
+			await dispatchWheelNotches(page, watch, "up");
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + 2 * steps);
 		});
 	});
 });

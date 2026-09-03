@@ -42,11 +42,13 @@ test.describe("playbackSpeedButtons", () => {
 			await setOption(page, "playbackSpeedButtons.button.placement", left);
 			await enableFeature(page, "playbackSpeedButtons.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 			await disableFeature(page, "playbackSpeedButtons.button.enabled");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await setOption(page, "playbackSpeedButtons.button.placement", left);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 		});
 	}
 
@@ -55,15 +57,18 @@ test.describe("playbackSpeedButtons", () => {
 		await setOption(page, "playbackSpeedButtons.button.placement", left);
 		await enableFeature(page, "playbackSpeedButtons.button.enabled");
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 		await page.reload();
 		await navigateToPageType(page, testPages[0]);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 	});
 
 	test(`should not create speed buttons on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "playbackSpeedButtons.button.enabled");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-decreasePlaybackSpeedButton-button");
 	});
 
 	test.describe("feature conflicts", () => {
@@ -75,16 +80,9 @@ test.describe("playbackSpeedButtons", () => {
 				await setOption(page, "playbackSpeedButtons.button.placement", left);
 				await enableFeature(page, "playerSpeed.enabled");
 				await enableFeature(page, "playbackSpeedButtons.button.enabled");
-				await page.waitForTimeout(2000);
-
 				await expect(page.locator("#yte-feature-decreasePlaybackSpeedButton-button")).toBeAttached();
 				await expect(page.locator("#yte-feature-increasePlaybackSpeedButton-button")).toBeAttached();
-
-				const speed = await page.evaluate(() => {
-					const video = document.querySelector("video");
-					return video?.playbackRate ?? null;
-				});
-				expect(speed).toBe(2);
+				await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 10000 }).toBe(2);
 			});
 		});
 	});

@@ -20,8 +20,7 @@ test.describe("restoreFullscreenScrolling", () => {
 			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "restoreFullscreenScrolling.enabled");
-			await enableFeature(page, "restoreFullscreenScrolling.enabled");
+			// No disable/enable round trip: the assertions have to observe the state the navigation produced.
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
 			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
 		});
@@ -42,7 +41,9 @@ test.describe("restoreFullscreenScrolling", () => {
 	test(`should not add restore fullscreen scrolling classes on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "restoreFullscreenScrolling.enabled");
-		await expect(page.locator("ytd-watch-flexy")).not.toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
+		// ytd-watch-flexy does not exist on the non-target fixture, and not.toHaveClass on a missing element
+		// fails rather than passing - toHaveCount(0) is the assertion that actually expresses "never marked".
+		await expect(page.locator("ytd-watch-flexy.yte-ytd-watch-flexy-restore-fullscreen-scrolling")).toHaveCount(0);
 		await expect(page.locator("ytd-app")).not.toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
 	});
 });

@@ -6,7 +6,7 @@ import { metadata } from "@/src/features/volumeBoost/index.metadata";
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 import { clampDb, dbToLinear } from "@/src/utils/misc";
 const { right } = placementRecord;
@@ -27,15 +27,17 @@ async function expectVolumeBoostAmount(page: Page, expected: number) {
 		)
 		.toBeCloseTo(dbToLinear(clampDb(expected)), 5);
 }
+/**
+ * Polls the gain node the feature writes to. A missing engine yields null, so a torn-down or never-created
+ * engine fails instead of masquerading as "not boosted"; "not boosted" means a gain of exactly 1.
+ */
 async function expectVolumeBoostEnabled(page: Page, enabled: boolean) {
 	await expect
 		.poll(
 			async () =>
 				page.evaluate(() => {
-					const { engine } = window;
-					if (!engine) return false;
-					const gain = engine.volumeGain?.gain;
-					if (gain == null) return false;
+					const gain = window.engine?.volumeGain?.gain;
+					if (!gain) return null;
 					return gain.value !== 1;
 				}),
 			{ timeout: 10_000 }
@@ -102,6 +104,10 @@ test.describe("volumeBoost", () => {
 		// fixture costs up to 120 s; live button rendering stays covered by the test above.
 		test(`button should be disabled when feature is off on ${watch}`, async ({ page }) => {
 			await navigateToPageType(page, watch);
+			await enableFeature(page, "volumeBoost.enabled");
+			await setOption(page, "volumeBoost.mode", "per_video");
+			await setOption(page, "volumeBoost.button.placement", right);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
 			await disableFeature(page, "volumeBoost.enabled");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
 		});
@@ -120,7 +126,9 @@ test.describe("volumeBoost", () => {
 			await expectVolumeBoostEnabled(page, false);
 		});
 
-		test(`button should persist boost after full page reload on ${watch}`, async ({ page }) => {
+		// isVolumeBoostEnabled is a module-level flag that resets on every document load and the button is
+		// re-created unchecked, so the boost is expected to be gone after the reload.
+		test(`button reappears after reload on ${watch}`, async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await enableFeature(page, "volumeBoost.enabled");
 			await setOption(page, "volumeBoost.mode", "per_video");
@@ -130,15 +138,19 @@ test.describe("volumeBoost", () => {
 			await clickFeatureButton(page, watch, "yte-feature-volumeBoostButton-button", right);
 			await expectVolumeBoostEnabled(page, true);
 			await expectVolumeBoostAmount(page, 10);
-			await page.reload();
-			await navigateToPageType(page, watch);
+			await reloadPage(page, watch);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
+			await expectVolumeBoostEnabled(page, false);
 		});
 	});
 
 	test(`should not create volume boost button on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "volumeBoost.enabled");
+		// per_video mode plus a placement is what makes shouldRender ask for the button at all, so only the page
+		// gate can keep it away here.
+		await setOption(page, "volumeBoost.mode", "per_video");
+		await setOption(page, "volumeBoost.button.placement", right);
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-volumeBoostButton-button");
 	});
 

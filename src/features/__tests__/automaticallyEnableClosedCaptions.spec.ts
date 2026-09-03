@@ -4,12 +4,12 @@ import { metadata as disableCCMetadata } from "@/src/features/automaticallyDisab
 import { metadata } from "@/src/features/automaticallyEnableClosedCaptions/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { ensureCaptionsState, expectStableCaptionsState, getCaptionsState, isCaptionsUnavailable } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 
 test.describe("automaticallyEnableClosedCaptions", () => {
 	for (const pageType of testPages) {
@@ -28,11 +28,13 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 			if (!(await ensureCaptionsState(page, false))) return;
 			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
 			await expectStableCaptionsState(page, true);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType, ["captions"]);
+			// Turn captions off again so the assertion after the navigation can only pass because onNavigate acted.
+			if (!(await ensureCaptionsState(page, false))) return;
+			// onNavigate only runs on a real single-page navigation: on watch click through to a related video, on
+			// live navigateToPageType itself clicks a stream from the channel page.
+			if (pageType === watch) await spaNavigateToRelatedVideo(page);
+			else await navigateToPageType(page, pageType, ["captions"]);
 			if (await isCaptionsUnavailable(page)) return;
-			await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
 			await expectStableCaptionsState(page, true);
 		});
 	}
@@ -58,8 +60,10 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 		if (!(await ensureCaptionsState(page, false))) return;
 		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
 		await expectStableCaptionsState(page, true);
-		await page.reload();
-		await navigateToPageType(page, watch, ["captions"]);
+		// Click captions back off (this leaves the feature's captionsWhereEnabled untouched) so YouTube restores them
+		// off after the reload and the assertion below depends on the feature acting again.
+		if (!(await ensureCaptionsState(page, false))) return;
+		await reloadPage(page, watch);
 		if (await isCaptionsUnavailable(page)) return;
 		await expectStableCaptionsState(page, true);
 	});
@@ -68,7 +72,10 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 		await navigateToPageType(page, watch, ["captions"]);
 		if (await isCaptionsUnavailable(page)) return;
 		if (!(await ensureCaptionsState(page, false))) return;
-		await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		// The feature is disabled by default, so calling disableFeature would write an unchanged value and no hook
+		// would run at all. Reload with it off instead, so the enable-all pass on load is what is being observed.
+		await reloadPage(page, watch);
+		if (await isCaptionsUnavailable(page)) return;
 		await expectStableCaptionsState(page, false);
 	});
 
@@ -116,7 +123,9 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 				await expectStableCaptionsState(page, true);
 			});
 
-			test("disabling one feature allows the other to take effect on watch", async ({ page }) => {
+			// Captions come back because automaticallyDisableClosedCaptions.onDisable re-clicks the subtitles button, not
+			// because auto-enable acts, so the title names the restore path that is actually exercised.
+			test("auto-disable restores captions when it is turned off on watch", async ({ page }) => {
 				await navigateToPageType(page, watch, ["captions"]);
 				if (await isCaptionsUnavailable(page)) return;
 				const initial = await getCaptionsState(page);

@@ -3,23 +3,29 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/skipContinueWatching/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
+const { live } = pageTypeRecord;
+// The patch installs `function () {}` (index.ts:15); anything else is not this feature's handler.
+const EMPTY_FUNCTION_SOURCE = /^function\s*\w*\s*\(\s*\)\s*\{\s*\}$/;
 
 interface YtdWatchElement extends Element {
 	youthereDataChanged_: () => void;
 }
 
 async function expectHandlerReplaced(page: Page, original: null | string): Promise<void> {
+	// Without a captured original, "differs from original" is satisfied by anything - including a missing element.
+	expect(original).not.toBeNull();
 	await expect
 		.poll(
 			async () => {
 				const current = await getHandler(page);
-				return current !== null && current !== original;
+				return current !== null && current !== original && EMPTY_FUNCTION_SOURCE.test(current);
 			},
 			{ timeout: 15000 }
 		)
@@ -71,17 +77,19 @@ test.describe("skipContinueWatching", () => {
 			await expectHandlerReplaced(page, original);
 			await page.reload();
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "skipContinueWatching.enabled");
-			await enableFeature(page, "skipContinueWatching.enabled");
+			// No disable/enable round trip: after a reload YouTube reinstalls its own handler, so this only
+			// passes when the feature re-patched on its own.
 			await expectHandlerReplaced(page, original);
 		});
 	}
 
-	test(`should not patch on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
+	test("should not patch on non-target page", async ({ page }) => {
+		// live sits outside includePages but is still a /watch document, so ytd-watch-flexy exists and the
+		// handler is observable - on a channel page getHandler is null either way and nothing is asserted.
+		await navigateToPageType(page, live);
 		const before = await getHandler(page);
+		expect(before).not.toBeNull();
 		await enableFeature(page, "skipContinueWatching.enabled");
-		const after = await getHandler(page);
-		expect(after).toBe(before);
+		await expectToStay(async () => getHandler(page), before, { page });
 	});
 });

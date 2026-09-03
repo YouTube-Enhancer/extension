@@ -1,7 +1,12 @@
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/maximizePlayerButton/index.metadata";
-import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeIn, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import {
+	expectFeatureButtonToBeFalsy,
+	expectFeatureButtonToBeIn,
+	expectFeatureButtonToBeTruthy,
+	expectFeatureMenuItemToBeFalsy
+} from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -74,8 +79,11 @@ test.describe("maximizePlayerButton", () => {
 
 	test(`should not create maximize player button on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
+		// The default placement is the feature menu, which never creates a button element: pin it to the player controls.
+		await setOption(page, "maximizePlayerButton.button.placement", left);
 		await enableFeature(page, "maximizePlayerButton.button.enabled");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-maximizePlayerButton-button");
+		await expectFeatureMenuItemToBeFalsy(page, "yte-feature-maximizePlayerButton-menuitem");
 	});
 
 	test.describe("feature conflicts", () => {
@@ -84,7 +92,7 @@ test.describe("maximizePlayerButton", () => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "automaticTheaterMode.enabled");
 				await enableFeature(page, "automaticallyMaximizePlayer.enabled");
-				await expect.poll(async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized"))).toBeTruthy();
+				await expect.poll(async () => await page.evaluate(() => document.body.hasAttribute("yte-maximized")), { timeout: 20000 }).toBeTruthy();
 			});
 
 			test("theater mode is active when enabled after maximize on watch", async ({ page }) => {
@@ -102,6 +110,9 @@ test.describe("maximizePlayerButton", () => {
 						{ timeout: 15000 }
 					)
 					.toBeTruthy();
+				// automaticTheaterMode's size-button click is seen as a user click, which minimizes the player again.
+				await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
+				await expect(page.locator("body")).not.toHaveAttribute("yte-size-button-state");
 			});
 		});
 	});

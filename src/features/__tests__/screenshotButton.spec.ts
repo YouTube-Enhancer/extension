@@ -1,3 +1,6 @@
+import type { Download } from "@playwright/test";
+
+import { readFile } from "node:fs/promises";
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/screenshotButton/index.metadata";
@@ -10,6 +13,17 @@ const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { left } = placementRecord;
 const { home, watch } = pageTypeRecord;
+/**
+ * Asserts the saved screenshot matches the default filename template ("Screenshot-{video id}-{date}" with the
+ * iso date format) and that its contents really are a PNG, which is the configured default format.
+ */
+async function expectScreenshotDownload(download: Download, pageUrl: string): Promise<void> {
+	const videoId = new URL(pageUrl).searchParams.get("v") ?? "";
+	expect(videoId).not.toBe("");
+	expect(download.suggestedFilename()).toMatch(new RegExp(`^Screenshot-${videoId}-.+\\.png$`));
+	const contents = await readFile(await download.path());
+	expect([...contents.subarray(0, 4)]).toEqual([0x89, 0x50, 0x4e, 0x47]);
+}
 test.describe("screenshotButton", () => {
 	for (const pageType of testPages) {
 		test(`should take a screenshot and save as file on ${pageType}`, async ({ page }) => {
@@ -21,7 +35,7 @@ test.describe("screenshotButton", () => {
 			const downloadPromise = page.waitForEvent("download");
 			await clickFeatureButton(page, pageType, "yte-feature-screenshotButton-button", left);
 			const download = await downloadPromise;
-			expect(download).toBeTruthy();
+			await expectScreenshotDownload(download, page.url());
 		});
 	}
 
@@ -33,22 +47,19 @@ test.describe("screenshotButton", () => {
 				await dialog.accept();
 			})();
 		});
-		const screenshotFormat = "png";
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "screenshotButton.button.enabled");
 		await setOption(page, "screenshotButton.saveAs", "clipboard");
-		await setOption(page, "screenshotButton.format", screenshotFormat);
 		await setOption(page, "screenshotButton.button.placement", left);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 		await clickFeatureButton(page, watch, "yte-feature-screenshotButton-button", left);
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
-		const copiedToClipboard = page.getByText("Screenshot copied to clipboard");
-		await expect(copiedToClipboard).toBeVisible();
-		const screenshotCopied = await page.waitForFunction(async (format) => {
+		// copyToClipboard hardcodes image/png; screenshotButton.format only applies to the saved file.
+		const screenshotCopied = await page.waitForFunction(async () => {
 			const items = await navigator.clipboard.read();
-			return items.some((item) => item.types.includes(`image/${format}`));
-		}, screenshotFormat);
-		expect(screenshotCopied).toBeTruthy();
+			return items.some((item) => item.types.includes("image/png"));
+		});
+		expect(await screenshotCopied.jsonValue()).toBe(true);
 	});
 
 	test(`should take a screenshot and save as file and copy to clipboard on ${watch}`, async ({ page }) => {
@@ -64,15 +75,16 @@ test.describe("screenshotButton", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 		const downloadPromise = page.waitForEvent("download");
 		await clickFeatureButton(page, watch, "yte-feature-screenshotButton-button", left);
-		const download = await downloadPromise;
-		expect(download).toBeTruthy();
-		// Verify clipboard got image data
+		// index.ts writes the clipboard first and schedules the tooltip removal 1200 ms later, so it can be gone
+		// by the time the download resolves.
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
 		const screenshotCopied = await page.waitForFunction(async () => {
 			const items = await navigator.clipboard.read();
 			return items.some((item) => item.types.some((type) => type.startsWith("image/")));
 		});
-		expect(await screenshotCopied.jsonValue()).toBeTruthy();
+		expect(await screenshotCopied.jsonValue()).toBe(true);
+		const download = await downloadPromise;
+		await expectScreenshotDownload(download, page.url());
 	});
 
 	test(`screenshot button should persist after navigation on ${watch}`, async ({ page }) => {
