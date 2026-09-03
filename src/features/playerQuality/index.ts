@@ -165,11 +165,18 @@ function makeApplyQualityTasks(
 		// Suspension lasts until navigation or a config change resets the state, so neither a retry run that is
 		// still in flight nor one started by a later player state change may enforce anything any more.
 		if (enforcement.overrideDetected) return true;
+		// While an ad shows, the player answers for the ad: an "unknown" quality, the ad's level list and the ad's
+		// request, which would be applied now and then compared against the content video. Wait for the content;
+		// the player-state hook runs this again when the ad ends, even after this loop has used up its attempts.
+		if (isAdShowing()) return false;
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
 		attachQualityChangeListener(player);
 		const currentQuality = await player.getPlaybackQuality();
-		if (!currentQuality || currentQuality === "unknown") return false;
+		// A player that has not started reports no playback quality but already holds the video's levels, and a
+		// quality range set on it takes effect when playback starts. It is only trusted once it holds the video
+		// the page is on, so a player still carrying the previous video after a navigation waits for a later attempt.
+		if ((!currentQuality || currentQuality === "unknown") && !playerHoldsCurrentVideo(player)) return false;
 
 		const availableLevels = (await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 		if (!availableLevels.length) return false;
@@ -205,7 +212,10 @@ function makeApplyQualityTasks(
 			}
 			// Read back inside the guarded window: the player composes a request with its own limits, so what
 			// it reports as requested - not the level that was asked for - is what later reads compare against.
-			enforcement.requestedQuality = readRequestedQuality(player) ?? closestQuality;
+			// A player that has not taken the request yet (unstarted, or still on an ad) reads back "auto"; that
+			// is no baseline, so the verify task records one once the level is seen playing.
+			const requestedQuality = readRequestedQuality(player);
+			enforcement.requestedQuality = requestedQuality && requestedQuality !== "auto" ? requestedQuality : null;
 		} finally {
 			enforcement.pendingOwnApply = false;
 			enforcement.settleUntil = Date.now() + OWN_SWITCH_SETTLE_MS;
@@ -231,6 +241,9 @@ function makeApplyQualityTasks(
 			verified = playbackQuality === enforcement.appliedQuality;
 		}
 		enforcement.verifiedOnce = enforcement.verifiedOnce || verified;
+		if (verified && !enforcement.requestedQuality) {
+			enforcement.requestedQuality = readRequestedQuality(player) ?? enforcement.appliedQuality;
+		}
 		return verified;
 	};
 
@@ -263,6 +276,15 @@ function markManualOverride(): void {
  * quality menu and the public player API - updates this synchronously, while getPlaybackQuality() and
  * getVideoStats() only change once the switch has landed. Players that do not expose it fall back to null.
  */
+/** Whether the player reports the video the page is on, rather than the one it played before a navigation. */
+function playerHoldsCurrentVideo(player: YouTubePlayerDiv): boolean {
+	const { getVideoData } = player as unknown as { getVideoData?: () => undefined | { video_id?: string } };
+	if (typeof getVideoData !== "function") return false;
+	const videoId = getVideoData.call(player)?.video_id;
+	if (!videoId) return false;
+	const { pathname, searchParams } = new URL(window.location.href);
+	return searchParams.get("v") === videoId || pathname.endsWith(`/${videoId}`);
+}
 function readRequestedQuality(player: YouTubePlayerDiv): Nullable<string> {
 	const { getPreferredQuality } = player as PlayerQualityRequestApi & YouTubePlayerDiv;
 	if (typeof getPreferredQuality !== "function") return null;
