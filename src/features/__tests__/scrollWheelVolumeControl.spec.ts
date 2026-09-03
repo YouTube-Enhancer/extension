@@ -9,6 +9,7 @@ import { expectBodyWithClass, expectBodyWithoutClass, expectToStay } from "@/src
 import { pageTypeRecord, placementRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { pageSetup } from "@/src/utils/_tests/pageSetup";
 import {
 	adjustWithScrollWheel,
 	dispatchWheelNotches,
@@ -18,10 +19,11 @@ import {
 	setVolume,
 	waitForScrollWheelControl,
 	waitForScrollWheelVolumeControl,
+	waitForYoutubePlayerReady,
 	WHEEL_DELTA_PER_NOTCH
 } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-const { home, watch } = pageTypeRecord;
+const { home, shorts, watch } = pageTypeRecord;
 const { right } = placementRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
@@ -252,6 +254,27 @@ test.describe("scrollWheelVolumeControl", () => {
 		await expect.poll(async () => getCurrentVolume(page, watch)).toBe(volume);
 		await dispatchWheelNotches(page, watch, "up");
 		await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
+	});
+	test(`keeps adjusting the volume after moving to the next short on ${shorts}`, async ({ page }) => {
+		test.setTimeout(120_000);
+		await navigateToPageType(page, shorts);
+		await setOption(page, "scrollWheelVolumeControl.steps", steps);
+		await enableFeature(page, "scrollWheelVolumeControl.enabled");
+		await waitForScrollWheelVolumeControl(page, true);
+		// Moving to the next short is an in-page navigation after which YouTube swaps the shorts player element, so
+		// a control pinned to the element it found on enable would be driving a discarded player.
+		const before = page.url();
+		const next = page.locator("#navigation-button-down button, button[aria-label='Next video']").first();
+		await expect(next).toBeVisible({ timeout: 15000 });
+		await next.click();
+		await page.waitForURL((url) => url.toString() !== before && url.pathname.startsWith("/shorts/"), { timeout: 30000 });
+		await waitForYoutubePlayerReady(page, shorts);
+		await pageSetup(page);
+		await waitForScrollWheelVolumeControl(page, true);
+		await setVolume(page, volume, shorts);
+		await expect.poll(async () => getCurrentVolume(page, shorts)).toBe(volume);
+		await dispatchWheelNotches(page, shorts, "up");
+		await expect.poll(async () => getCurrentVolume(page, shorts), { timeout: 5000 }).toBe(volume + steps);
 	});
 	test.describe("stepper", () => {
 		test("applies every notch of a rapid wheel burst on watch", async ({ page }) => {
