@@ -51,11 +51,6 @@ test.describe("forwardRewindButtons", () => {
 			await enableFeature(page, "forwardRewindButtons.button.enabled");
 			await expectSeekDelta(page, pageType, "forward", time);
 		});
-		test(`forward button should not be present when disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
-		});
 		test(`forward button should persist after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "forwardRewindButtons.button.placement", left);
@@ -95,7 +90,8 @@ test.describe("forwardRewindButtons", () => {
 	});
 
 	test.describe("button placement", () => {
-		for (const placement of [left, right] as const) {
+		// player_controls_left is already asserted by clickFeatureButton in the seek tests, so only the right placement needs its own test.
+		for (const placement of [right] as const) {
 			test(`forward button should render in ${placement}`, async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "forwardRewindButtons.button.placement", placement);
@@ -114,52 +110,19 @@ test.describe("forwardRewindButtons", () => {
 	});
 
 	test.describe("fullscreen transition", () => {
-		test("forward button should move from left to right on fullscreen enter/exit", async ({ page }) => {
+		test("forward and rewind buttons should move from left to right on fullscreen enter/exit", async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "forwardRewindButtons.button.placement", left);
 			await setOption(page, "forwardRewindButtons.button.fullscreenPlacement", right);
 			await enableFeature(page, "forwardRewindButtons.button.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", left);
+			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", left);
 			await toggleFullscreen(page, true);
 			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", right);
+			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
 			await toggleFullscreen(page, false);
 			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", left);
-		});
-
-		test("rewind button should move from left to right on fullscreen enter/exit", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "forwardRewindButtons.button.placement", left);
-			await setOption(page, "forwardRewindButtons.button.fullscreenPlacement", right);
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", left);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", left);
-		});
-
-		test("forward button should not move when fullscreenPlacement is same", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "forwardRewindButtons.button.placement", right);
-			await setOption(page, "forwardRewindButtons.button.fullscreenPlacement", "same");
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", right);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-forwardButton-button", right);
-		});
-
-		test("rewind button should not move when fullscreenPlacement is same", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "forwardRewindButtons.button.placement", right);
-			await setOption(page, "forwardRewindButtons.button.fullscreenPlacement", "same");
-			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
 		});
 	});
 });

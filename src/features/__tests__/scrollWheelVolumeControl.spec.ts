@@ -17,64 +17,66 @@ test.describe("scrollWheelVolumeControl", () => {
 		test(`should increase volume on ${pageType}`, async ({ page }) => {
 			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
 		});
-		test(`should decrease volume on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, pageType, steps: 5 });
-		});
-		test(`should persist volume control after navigation on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "scrollWheelVolumeControl.enabled");
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
-		});
-		test(`re-applies volume control after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
-			await disableFeature(page, "scrollWheelVolumeControl.enabled");
-			await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType, steps: 5 });
-		});
 	}
+	// The only page-specific branch is findPlayerContainer's container lookup, which the increase test above already
+	// exercises on every page type; direction and navigation add no page-specific path, so these run on watch only
+	// (the live fixture re-crawls the channel and costs up to 120 s per iteration).
+	test(`should decrease volume on ${watch}`, async ({ page }) => {
+		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, pageType: watch, steps: 5 });
+	});
+	test(`should persist volume control after navigation on ${watch}`, async ({ page }) => {
+		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType: watch, steps: 5 });
+		await navigateToPageType(page, home);
+		await navigateToPageType(page, watch);
+		await disableFeature(page, "scrollWheelVolumeControl.enabled");
+		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, pageType: watch, steps: 5 });
+	});
+	// The modifier gate is a single boolean lookup on the wheel event and the direction is decided independently by
+	// the stepper sign, so only the increase direction is exercised per modifier plus one decrease control below.
 	for (const modifierKey of modifierKeys) {
-		for (const withRightClick of [false, true] as const) {
-			const suffix = withRightClick ? " and holding 'Right' click" : "";
-			test(`should increase volume when holding '${
-				modifierKey === "altKey" ? "Alt"
-				: modifierKey === "ctrlKey" ? "Ctrl"
-				: "Shift"
-			}' modifier key${suffix}`, async ({ page }) => {
-				await adjustWithScrollWheel({
-					controlType: "Volume",
-					direction: "up",
-					initialValue: volume,
-					modifierKey,
-					page,
-					steps: 5,
-					withModifierKey: true,
-					withRightClick
-				});
+		test(`should increase volume when holding '${
+			modifierKey === "altKey" ? "Alt"
+			: modifierKey === "ctrlKey" ? "Ctrl"
+			: "Shift"
+		}' modifier key`, async ({ page }) => {
+			await adjustWithScrollWheel({
+				controlType: "Volume",
+				direction: "up",
+				initialValue: volume,
+				modifierKey,
+				page,
+				steps: 5,
+				withModifierKey: true
 			});
-			test(`should decrease volume when holding '${
-				modifierKey === "altKey" ? "Alt"
-				: modifierKey === "ctrlKey" ? "Ctrl"
-				: "Shift"
-			}' modifier key${suffix}`, async ({ page }) => {
-				await adjustWithScrollWheel({
-					controlType: "Volume",
-					direction: "down",
-					initialValue: volume,
-					modifierKey,
-					page,
-					steps: 5,
-					withModifierKey: true,
-					withRightClick
-				});
-			});
-		}
+		});
 	}
+	test("should decrease volume when holding 'Ctrl' modifier key", async ({ page }) => {
+		await adjustWithScrollWheel({
+			controlType: "Volume",
+			direction: "down",
+			initialValue: volume,
+			modifierKey: "ctrlKey",
+			page,
+			steps: 5,
+			withModifierKey: true
+		});
+	});
+	// onWheel evaluates the modifier gate and the right-click gate as independent conjuncts, so a single combination
+	// is enough to prove they compose.
+	test("should increase volume when holding 'Alt' modifier key and holding 'Right' click", async ({ page }) => {
+		await adjustWithScrollWheel({
+			controlType: "Volume",
+			direction: "up",
+			initialValue: volume,
+			modifierKey: "altKey",
+			page,
+			steps: 5,
+			withModifierKey: true,
+			withRightClick: true
+		});
+	});
 	test("should increase volume when holding 'Right' click", async ({ page }) => {
 		await adjustWithScrollWheel({ controlType: "Volume", direction: "up", initialValue: volume, page, steps: 5, withRightClick: true });
-	});
-	test("should decrease volume when holding 'Right' click", async ({ page }) => {
-		await adjustWithScrollWheel({ controlType: "Volume", direction: "down", initialValue: volume, page, steps: 5, withRightClick: true });
 	});
 	test.describe("stepper", () => {
 		const steps = 5;

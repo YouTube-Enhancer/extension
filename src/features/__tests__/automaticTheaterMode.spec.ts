@@ -6,11 +6,10 @@ import { metadata } from "@/src/features/automaticTheaterMode/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 export async function expectNotTheaterMode(page: Page): Promise<void> {
 	await expect
 		.poll(
@@ -48,11 +47,6 @@ test.describe("automaticTheaterMode", () => {
 			await enableFeature(page, "automaticTheaterMode.enabled");
 			await expectTheaterMode(page);
 		});
-		test(`theater mode should be disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "automaticTheaterMode.enabled");
-			await expectNotTheaterMode(page);
-		});
 		test(`theater mode should be applied after navigation when enabled on ${pageType}`, async ({ page }) => {
 			if (pageType === "watch") test.setTimeout(120_000);
 			await navigateToPageType(page, pageType);
@@ -62,23 +56,6 @@ test.describe("automaticTheaterMode", () => {
 			await navigateToPageType(page, pageType);
 			await disableFeature(page, "automaticTheaterMode.enabled");
 			await enableFeature(page, "automaticTheaterMode.enabled");
-			await expectTheaterMode(page);
-		});
-		test(`theater mode should re-apply after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticTheaterMode.enabled");
-			await expectTheaterMode(page);
-			await disableFeature(page, "automaticTheaterMode.enabled");
-			await expectNotTheaterMode(page);
-			await enableFeature(page, "automaticTheaterMode.enabled");
-			await expectTheaterMode(page);
-		});
-		test(`theater mode should persist after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticTheaterMode.enabled");
-			await expectTheaterMode(page);
-			await page.reload();
-			await navigateToPageType(page, pageType);
 			await expectTheaterMode(page);
 		});
 		test(`restores theater mode to original state when disabled on ${pageType}`, async ({ page }) => {
@@ -106,9 +83,29 @@ test.describe("automaticTheaterMode", () => {
 		});
 	}
 
-	test(`should not enable theater mode on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "automaticTheaterMode.enabled");
+	// Watch only: disableFeature writes the already-default false, so this only re-checks the untouched initial state, which is page agnostic.
+	test(`theater mode should be disabled on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await disableFeature(page, "automaticTheaterMode.enabled");
 		await expectNotTheaterMode(page);
+	});
+	// Watch only: onEnable/onDisable call the same makeTheaterTask with no page-specific code (index.ts:31-44).
+	test(`theater mode should re-apply after disable then re-enable on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "automaticTheaterMode.enabled");
+		await expectTheaterMode(page);
+		await disableFeature(page, "automaticTheaterMode.enabled");
+		await expectNotTheaterMode(page);
+		await enableFeature(page, "automaticTheaterMode.enabled");
+		await expectTheaterMode(page);
+	});
+	// Watch only: the init path has no live-vs-VOD branch, and on live the post-reload navigateToPageType re-runs channel discovery and discards the reloaded page.
+	test(`theater mode should persist after full page reload on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "automaticTheaterMode.enabled");
+		await expectTheaterMode(page);
+		await page.reload();
+		await navigateToPageType(page, watch);
+		await expectTheaterMode(page);
 	});
 });

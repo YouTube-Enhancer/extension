@@ -3,13 +3,11 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/automaticallyDisableAutoPlay/index.metadata";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
 
 async function getAutoPlayState(page: Page) {
 	const toggle = page.locator(".ytp-autonav-toggle-button");
@@ -45,26 +43,6 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			await disableFeature(page, "automaticallyDisableAutoPlay.enabled");
 			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
 		});
-		test(`disables autoplay after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["autoPlay"]);
-			await setAutoPlayState(page, true);
-			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType, ["autoPlay"]);
-			await disableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
-		});
-		test(`should disable autoplay on re-enable after disable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["autoPlay"]);
-			await setAutoPlayState(page, true);
-			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
-			await disableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
-			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
-		});
 		test(`restores autoplay when disabled after being enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["autoPlay"]);
 			await setAutoPlayState(page, true);
@@ -72,6 +50,8 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
 			await disableFeature(page, "automaticallyDisableAutoPlay.enabled");
 			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(true);
+			await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
+			await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
 		});
 		test(`persists disable after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["autoPlay"]);

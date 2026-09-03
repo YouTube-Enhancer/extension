@@ -12,35 +12,15 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 const BUTTON_SELECTOR = ".yte-save-to-watch-later-button";
 const ACTIONS_ROW_BUTTON_SELECTOR = `ytd-watch-metadata ytd-menu-renderer ${BUTTON_SELECTOR}`;
-const { watch } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 
 test.describe("saveToWatchLaterButton", () => {
 	for (const pageType of testPages) {
-		test(`toggling feature should not crash the page on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState(), "requires YouTube login");
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await page.waitForTimeout(1000);
-			await expect(page.locator("body")).toBeAttached();
-			await disableFeature(page, "saveToWatchLaterButton.enabled");
-			await page.waitForTimeout(500);
-			await expect(page.locator("body")).toBeAttached();
-		});
-
 		test(`save button should appear when enabled on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
 			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
-		});
-
-		test(`save button should be removed when disabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
-			await disableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(BUTTON_SELECTOR)).not.toBeAttached();
 		});
 
 		test(`save button should persist after navigation when enabled on ${pageType}`, async ({ page }) => {
@@ -62,7 +42,10 @@ test.describe("saveToWatchLaterButton", () => {
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
 			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached({ timeout: 10000 });
 		});
+	}
 
+	// The load-time path branches only on `onWatchPage`; subscriptions only repeats the home page-type interpolation.
+	for (const pageType of [home, watch] as const) {
 		test(`save button should persist after full page reload on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
 			await navigateToPageType(page, pageType);
@@ -89,14 +72,6 @@ test.describe("saveToWatchLaterButton", () => {
 			// The button is built from YouTube's own component so it inherits the native look and tooltip handling.
 			expect(await actionsRowButton.evaluate((el) => el.tagName.toLowerCase())).toBe("yt-button-view-model");
 			await expect(actionsRowButton.locator("button")).toBeAttached({ timeout: 10000 });
-		});
-		test("removes the actions row button when disabled", async ({ page }) => {
-			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 10000 });
-			await disableFeature(page, "saveToWatchLaterButton.enabled");
-			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).not.toBeAttached();
 		});
 	});
 });

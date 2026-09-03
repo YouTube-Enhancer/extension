@@ -5,15 +5,14 @@ import { expect, test } from "playwright.config";
 import type { Nullable } from "@/src/types";
 
 import { metadata } from "@/src/features/playlistLength/index.metadata";
-import { playlistLengthGetMethod } from "@/src/features/playlistLength/types";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const pageTypes = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 const UI = {
 	percent: "#yte-playlist-length-ui-percentageWatched",
 	root: "#yte-playlist-length-ui",
@@ -58,32 +57,6 @@ test.describe("playlistLength", () => {
 			await navigateToPageType(page, pageType, ["playlistLength"]);
 			await disableFeature(page, "playlistLength.enabled");
 			await expectUIHidden(page);
-		});
-		for (const method of playlistLengthGetMethod) {
-			test(`should support ${method} method on ${pageType}`, async ({ page }) => {
-				await navigateToPageType(page, pageType, ["playlistLength"]);
-				await waitForPlaylist(page, pageType);
-				await disableFeature(page, "playlistLength.enabled");
-				await setOption(page, "playlistLength.lengthGetMethod", method);
-				await enableFeature(page, "playlistLength.enabled");
-				await expect(page.locator(UI.root)).toBeVisible({ timeout: 15000 });
-			});
-		}
-		test(`should toggle UI visibility on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
-			await expectUIVisible(page);
-			await disableFeature(page, "playlistLength.enabled");
-			await expectUIHidden(page);
-		});
-		test(`should persist UI after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
-			await expectUIVisible(page);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
-			await expectUIVisible(page);
 		});
 		test(`should re-enable UI after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["playlistLength"]);

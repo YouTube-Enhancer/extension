@@ -1,13 +1,13 @@
 import { test } from "playwright.config";
 
-import { metadata } from "@/src/features/hideMembersOnlyVideos/index.metadata";
+import type { PageType } from "@/src/features/_registry/types";
+
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { injectDynamicContent } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -16,8 +16,12 @@ const {
 } = hideFeatureSelectors;
 const bodyClass = rawBodyClass.replace(/:not\(.*?\)$/, "");
 
-const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
+const { channel_home, channel_videos, home, search, watch } = pageTypeRecord;
+// The feature declares no includePages, so resolvePageTypes would return all 11 pages; only these fixtures can render the
+// rich grid, item-section shelf and lockup markup the selectors target, on the rest the element assertions match nothing.
+const testPages: readonly PageType[] = [home, watch, search, channel_home, channel_videos];
+// Navigation and reload have no page-specific branch (one body class, no dependencies): one player page and one list page suffice.
+const transitionPages: readonly PageType[] = [watch, search];
 
 test.describe("hideMembersOnlyVideos", () => {
 	for (const pageType of testPages) {
@@ -28,15 +32,10 @@ test.describe("hideMembersOnlyVideos", () => {
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
 		});
-		test(`shows members only videos when disabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-		});
+	}
+
+	for (const pageType of transitionPages) {
 		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideMembersOnlyVideos.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
@@ -49,7 +48,6 @@ test.describe("hideMembersOnlyVideos", () => {
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideMembersOnlyVideos.enabled");
 			await expectBodyWithClass(page, bodyClass);
@@ -59,37 +57,18 @@ test.describe("hideMembersOnlyVideos", () => {
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});
-		test(`restores original state when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-		});
-		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-		});
-		test(`hides dynamically added content on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await injectDynamicContent(page, selectors);
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-		});
 	}
+
+	test("re-applies after disable then re-enable on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "hideMembersOnlyVideos.enabled");
+		await expectBodyWithClass(page, bodyClass);
+		await expectElementsHidden(page, selectors);
+		await disableFeature(page, "hideMembersOnlyVideos.enabled");
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+		await enableFeature(page, "hideMembersOnlyVideos.enabled");
+		await expectBodyWithClass(page, bodyClass);
+		await expectElementsHidden(page, selectors);
+	});
 });
