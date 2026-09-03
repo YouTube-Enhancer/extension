@@ -1,12 +1,11 @@
 import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
-import PlayerStates from "youtube-player/dist/constants/PlayerStates.js";
 
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/pauseBackgroundPlayers/index.metadata";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
+import { pageTypeRecord, PlayerStates } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
