@@ -1,12 +1,14 @@
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/openYouTubeSettingsOnHover/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const SETTINGS_MENU_SELECTOR = ".ytp-settings-menu:not(#yte-feature-menu)";
 
 async function forcePlayerVisible(page: Parameters<typeof enableFeature>[0]) {
 	// Force player containers visible — on some videos (e.g. ended live streams) YouTube
@@ -29,7 +31,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 			await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 			await forcePlayerVisible(page);
 			await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-			const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+			const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 			await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 		});
 	}
@@ -41,7 +43,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
 		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).not.toBeVisible({ timeout: 3000 });
 	});
 	test("youtube settings should close when leaving the settings button on watch", async ({ page }) => {
@@ -49,10 +51,10 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
 		const settingsButton = page.locator(".ytp-settings-button");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await settingsButton.dispatchEvent("mouseenter");
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
-		await page.waitForTimeout(500);
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
 		// Move mouse away so :hover doesn't prevent hideSettings from closing
 		await page.mouse.move(0, 0);
 		await page.waitForTimeout(100);
@@ -66,14 +68,22 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
 		const settingsButton = page.locator(".ytp-settings-button");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await settingsButton.dispatchEvent("mouseenter");
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
-		await page.waitForTimeout(500);
-		await settingsButton.dispatchEvent("mouseleave", {
-			relatedTarget: await settingsMenu.elementHandle()
-		});
-		await page.waitForTimeout(500);
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
+		// Moving from the button into the menu must keep it open. onMouseLeave ignores relatedTarget and
+		// schedules hideSettings 50 ms later, so the menu mouseenter has to land inside that window - both
+		// events are therefore dispatched synchronously in a single evaluate.
+		await page.evaluate((menuSelector) => {
+			const button = document.querySelector(".ytp-settings-button");
+			const menu = document.querySelector(menuSelector);
+			if (!button || !menu) throw new Error("settings button or menu not found");
+			button.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true, relatedTarget: menu }));
+			menu.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true, relatedTarget: button }));
+		}, SETTINGS_MENU_SELECTOR);
+		await expectToStay(async () => settingsButton.getAttribute("aria-expanded"), "true", { durationMs: 500, page });
+		await expect(settingsMenu).toBeVisible();
 		// Move mouse away so :hover doesn't prevent hideSettings from closing
 		await page.mouse.move(0, 0);
 		await page.waitForTimeout(100);
@@ -85,15 +95,12 @@ test.describe("openYouTubeSettingsOnHover", () => {
 	test("youtube settings should open on hover after navigation on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+		// A genuine in-document navigation, so the listeners under test are the ones onNavigate re-attaches
+		// rather than the ones a fresh onEnable would install.
+		await spaNavigateToRelatedVideo(page);
 		await forcePlayerVisible(page);
-		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
-		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
-		await forcePlayerVisible(page);
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
+		await expect(settingsMenu).not.toBeVisible();
 		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 	});
@@ -102,7 +109,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
 		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 		await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
@@ -115,7 +122,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 		await forcePlayerVisible(page);
 		await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-		const settingsMenu = page.locator(".ytp-settings-menu:not(#yte-feature-menu)");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
 		await page.reload();
 		await navigateToPageType(page, watch);

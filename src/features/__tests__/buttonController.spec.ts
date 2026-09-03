@@ -20,9 +20,14 @@ test.describe("buttonController", () => {
 	test.describe("featureMenu", () => {
 		test("feature menu should be disabled", async ({ page }) => {
 			await navigateToPageType(page, watch);
-			await disableFeature(page, "screenshotButton.button.enabled");
+			await enableFeature(page, "screenshotButton.button.enabled");
+			await setOption(page, "screenshotButton.button.placement", "feature_menu");
 			const featureMenuButton = page.locator("#yte-feature-menu-button");
-			await expect(featureMenuButton).not.toBeVisible();
+			await expect(featureMenuButton).toHaveCSS("display", "flex");
+			await expect(featureMenuButton).toBeVisible();
+			await disableFeature(page, "screenshotButton.button.enabled");
+			await expect(featureMenuButton).toHaveCSS("display", "none");
+			await expect(page.locator("#yte-feature-menu")).toHaveCSS("visibility", "hidden");
 		});
 		test("feature menu should open when button is clicked", async ({ page }) => {
 			await navigateToPageType(page, watch);

@@ -61,13 +61,17 @@ const subFeatures = [
 
 test.describe("hideShorts", () => {
 	for (const { bodyClass, config, page, selectors, subFeature } of subFeatures) {
+		// The away leg must be a different page type, otherwise navigateToYoutubePage skips the goto for an identical URL.
+		const intermediatePage: PageType = page === search ? watch : search;
+		// yt-tab-shape[tab-title="Shorts"] is structurally part of the channel tab bar, so at least one selector always matches there.
+		const hiddenMode = subFeature === "channel" ? "any" : "all";
 		test.describe(`${config}`, () => {
 			test(`hides on ${page}`, async ({ page: pageObj }) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
 				await enableFeature(pageObj, config);
 				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
+				await expectElementsHidden(pageObj, selectors, { mode: hiddenMode });
 			});
 			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({ page: pageObj }) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
@@ -75,10 +79,8 @@ test.describe("hideShorts", () => {
 				await enableFeature(pageObj, config);
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors);
-				await navigateToPageType(pageObj, home);
+				await navigateToPageType(pageObj, intermediatePage);
 				await navigateToPageType(pageObj, page);
-				await disableFeature(pageObj, config);
-				await enableFeature(pageObj, config);
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors);
 			});

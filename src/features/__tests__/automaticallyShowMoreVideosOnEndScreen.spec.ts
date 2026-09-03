@@ -2,12 +2,9 @@ import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/automaticallyShowMoreVideosOnEndScreen/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass } from "@/src/utils/_tests/assertions";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
-
-const { home } = pageTypeRecord;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
@@ -25,10 +22,12 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
-			await navigateToPageType(page, home);
+			// Hop to a page the includePages gate excludes, so the classes have to be absent there and can only come
+			// back because the feature ran again after navigating back.
+			await navigateToPageType(page, nonTargetPage!);
+			await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
+			await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
 		});
@@ -37,8 +36,7 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
-			await page.reload();
-			await navigateToPageType(page, pageType);
+			await reloadPage(page, pageType);
 			await expectBodyWithClass(page, "yte-show-html5-endscreen", { timeout: 15000 });
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid", { timeout: 15000 });
 		});

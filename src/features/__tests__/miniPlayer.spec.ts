@@ -1,16 +1,26 @@
+import type { Page } from "@playwright/test";
+
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/miniPlayer/index.metadata";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
+import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const { home, watch } = pageTypeRecord;
+const { right } = placementRecord;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
+
+type MiniPlayerStoredState = { manualOverride: boolean; rect: null | { height: number; width: number; x: number; y: number } };
+
+async function readMiniPlayerState(page: Page): Promise<MiniPlayerStoredState | undefined> {
+	const state = await readStoredState(page);
+	return state.miniPlayer as MiniPlayerStoredState | undefined;
+}
 
 test.describe("miniPlayer", () => {
 	for (const pageType of testPages) {
@@ -23,10 +33,13 @@ test.describe("miniPlayer", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "miniPlayer.enabled");
-			await enableFeature(page, "miniPlayer.enabled");
+			// No disable/re-enable cycle afterwards: the sentinel has to come back from the navigation itself. On watch
+			// that needs a genuine in-page navigation; on live navigateToPageType clicks through from the channel page.
+			if (pageType === watch) await spaNavigateToRelatedVideo(page);
+			else {
+				await navigateToPageType(page, home);
+				await navigateToPageType(page, pageType);
+			}
 			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
 		});
 	}
@@ -46,8 +59,7 @@ test.describe("miniPlayer", () => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "miniPlayer.enabled");
 		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-		await page.reload();
-		await navigateToPageType(page, watch);
+		await reloadPage(page, watch);
 		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
 	});
 
@@ -56,7 +68,9 @@ test.describe("miniPlayer", () => {
 		await enableFeature(page, "miniPlayer.enabled");
 		await expect(page.locator("#yte-mini-player-sentinel")).not.toBeAttached();
 	});
-	test(`should not leak sentinel when navigating from target to non-target page`, async ({ page }) => {
+	// navigateToPageType(nonTargetPage) is a document load, so this cannot observe cleanup across a navigation; it
+	// checks the includePages gate on a fresh load while the feature is already enabled.
+	test(`should not create sentinel when the feature is already enabled and the page is a non-target page`, async ({ page }) => {
 		await navigateToPageType(page, testPages[0]);
 		await enableFeature(page, "miniPlayer.enabled");
 		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
@@ -70,10 +84,24 @@ test.describe("miniPlayer", () => {
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
 
-			const state = await readStoredState(page);
-			const miniPlayerState = state.miniPlayer as undefined | { manualOverride: boolean; rect: unknown };
-			expect(miniPlayerState).toBeDefined();
-			expect(typeof miniPlayerState!.manualOverride).toBe("boolean");
+			const initialState = await readMiniPlayerState(page);
+			expect(initialState).toBeDefined();
+			// onEnable resets the override, so the stored value must be false and not merely "a boolean".
+			expect(initialState!.manualOverride).toBe(false);
+
+			// Activating through the button runs toggleManual, which flips manualOverride and persists the overlay rect.
+			await enableFeature(page, "miniPlayerButton.button.enabled");
+			await setOption(page, "miniPlayerButton.button.placement", right);
+			await clickFeatureButton(page, watch, "yte-feature-miniPlayerButton-button", right);
+			await expect(page.locator("html")).toHaveClass(/yte-mini-player-active/, { timeout: 10000 });
+
+			await expect.poll(async () => (await readMiniPlayerState(page))?.manualOverride, { timeout: 10000 }).toBe(true);
+			const activeState = await readMiniPlayerState(page);
+			const { rect } = activeState!;
+			expect(rect).not.toBeNull();
+			for (const value of [rect!.height, rect!.width, rect!.x, rect!.y]) {
+				expect(Number.isFinite(value)).toBe(true);
+			}
 		});
 	});
 });

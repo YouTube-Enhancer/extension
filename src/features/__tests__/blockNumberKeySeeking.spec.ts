@@ -5,11 +5,11 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/blockNumberKeySeeking/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] as const;
@@ -27,29 +27,30 @@ test.describe("blockNumberKeySeeking", () => {
 			await enableFeature(page, "blockNumberKeySeeking.enabled");
 			const start = await freezeAndGetTime(page, pageType);
 			expect(start).not.toBeNull();
-			if (!start) return;
+			// Narrow on null only: a currentTime of 0 is a valid reading, not a reason to skip the assertions.
+			if (start === null) return;
 			await pressNumberKeys(page);
 			const end = await freezeAndGetTime(page, pageType);
 			expect(end).not.toBeNull();
-			if (!end) return;
+			if (end === null) return;
 			expect(Math.abs(end - start)).toBeLessThan(0.5);
 			await disableFeature(page, "blockNumberKeySeeking.enabled");
 			const start2 = await freezeAndGetTime(page, pageType);
 			expect(start2).not.toBeNull();
-			if (!start2) return;
+			if (start2 === null) return;
 			await page.keyboard.press("9");
 			const end2 = await freezeAndGetTime(page, pageType);
 			expect(end2).not.toBeNull();
-			if (!end2) return;
+			if (end2 === null) return;
 			expect(Math.abs(end2 - start2)).toBeGreaterThan(30);
 			await enableFeature(page, "blockNumberKeySeeking.enabled");
 			const start3 = await freezeAndGetTime(page, pageType);
 			expect(start3).not.toBeNull();
-			if (!start3) return;
+			if (start3 === null) return;
 			await pressNumberKeys(page);
 			const end3 = await freezeAndGetTime(page, pageType);
 			expect(end3).not.toBeNull();
-			if (!end3) return;
+			if (end3 === null) return;
 			expect(Math.abs(end3 - start3)).toBeLessThan(0.5);
 		});
 	}
@@ -59,11 +60,11 @@ test.describe("blockNumberKeySeeking", () => {
 		await navigateToPageType(page, watch);
 		const start = await freezeAndGetTime(page, watch);
 		expect(start).not.toBeNull();
-		if (!start) return;
+		if (start === null) return;
 		await page.keyboard.press("9");
 		const end = await freezeAndGetTime(page, watch);
 		expect(end).not.toBeNull();
-		if (!end) return;
+		if (end === null) return;
 		expect(Math.abs(end - start)).toBeGreaterThan(30);
 	});
 	test(`blocks number key seeking after navigation on ${watch}`, async ({ page }) => {
@@ -71,46 +72,37 @@ test.describe("blockNumberKeySeeking", () => {
 		await enableFeature(page, "blockNumberKeySeeking.enabled");
 		const start = await freezeAndGetTime(page, watch);
 		expect(start).not.toBeNull();
-		if (!start) return;
+		if (start === null) return;
 		await pressNumberKeys(page);
 		const end = await freezeAndGetTime(page, watch);
 		expect(end).not.toBeNull();
-		if (!end) return;
+		if (end === null) return;
 		expect(Math.abs(end - start)).toBeLessThan(0.5);
-		await navigateToPageType(page, home);
-		await navigateToPageType(page, watch);
-		await disableFeature(page, "blockNumberKeySeeking.enabled");
-		await enableFeature(page, "blockNumberKeySeeking.enabled");
+		// A real in-page navigation keeps the document alive, so the assertion below depends on the listener
+		// surviving the navigation rather than on a fresh onEnable after a document load.
+		await spaNavigateToRelatedVideo(page);
 		const start2 = await freezeAndGetTime(page, watch);
 		expect(start2).not.toBeNull();
-		if (!start2) return;
+		if (start2 === null) return;
 		await pressNumberKeys(page);
 		const end2 = await freezeAndGetTime(page, watch);
 		expect(end2).not.toBeNull();
-		if (!end2) return;
+		if (end2 === null) return;
 		expect(Math.abs(end2 - start2)).toBeLessThan(0.5);
 	});
 	// Watch only: on live the post-reload navigateToPageType always re-runs navigateToLiveVideo, so the reload is never what is measured.
 	test(`persists after full page reload on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "blockNumberKeySeeking.enabled");
+		// The pre-reload press cycle duplicates the enable test above; the reload is the only thing under test here.
+		await reloadPage(page, watch);
 		const start = await freezeAndGetTime(page, watch);
 		expect(start).not.toBeNull();
-		if (!start) return;
+		if (start === null) return;
 		await pressNumberKeys(page);
 		const end = await freezeAndGetTime(page, watch);
 		expect(end).not.toBeNull();
-		if (!end) return;
+		if (end === null) return;
 		expect(Math.abs(end - start)).toBeLessThan(0.5);
-		await page.reload();
-		await navigateToPageType(page, watch);
-		const start2 = await freezeAndGetTime(page, watch);
-		expect(start2).not.toBeNull();
-		if (!start2) return;
-		await pressNumberKeys(page);
-		const end2 = await freezeAndGetTime(page, watch);
-		expect(end2).not.toBeNull();
-		if (!end2) return;
-		expect(Math.abs(end2 - start2)).toBeLessThan(0.5);
 	});
 });

@@ -1,11 +1,12 @@
-import { test } from "playwright.config";
+import { type Page } from "@playwright/test";
+import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideArtificialIntelligence/index.metadata";
-import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
+import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -16,6 +17,19 @@ const {
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;
+
+/**
+ * Computed `display` of every element matching the feature selectors, in document order. Used as a baseline so the
+ * disabled state can be compared against how the page looked before the feature ever ran, instead of assuming the
+ * matched elements are visible (YouTube hides plenty of them for its own reasons).
+ */
+async function getSelectorDisplays(page: Page): Promise<string[]> {
+	return page.evaluate(
+		(list) =>
+			list.flatMap((selector) => Array.from(document.querySelectorAll<HTMLElement>(selector), (element) => getComputedStyle(element).display)),
+		[...selectors]
+	);
+}
 
 test.describe("hideArtificialIntelligence", () => {
 	for (const pageType of testPages) {
@@ -37,8 +51,6 @@ test.describe("hideArtificialIntelligence", () => {
 		await expectElementsHidden(page, selectors);
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
-		await disableFeature(page, "hideArtificialIntelligence.enabled");
-		await enableFeature(page, "hideArtificialIntelligence.enabled");
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 		await expectElementsHidden(page, selectors);
 	});
@@ -47,20 +59,19 @@ test.describe("hideArtificialIntelligence", () => {
 		await enableFeature(page, "hideArtificialIntelligence.enabled");
 		await expectBodyWithClass(page, bodyClass);
 		await expectElementsHidden(page, selectors);
-		await page.reload();
-		await navigateToPageType(page, watch);
+		await reloadPage(page, watch);
 		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 		await expectElementsHidden(page, selectors);
 	});
 	test("re-applies after disable then re-enable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
+		const baselineDisplays = await getSelectorDisplays(page);
 		await enableFeature(page, "hideArtificialIntelligence.enabled");
 		await expectBodyWithClass(page, bodyClass);
 		await expectElementsHidden(page, selectors);
 		await disableFeature(page, "hideArtificialIntelligence.enabled");
 		await expectBodyWithoutClass(page, bodyClass);
-		const hasAnyMatch = await page.evaluate((sel) => sel.some((s) => document.querySelectorAll(s).length > 0), selectors);
-		if (hasAnyMatch) await expectElementsNotHidden(page, selectors, { mode: "any" });
+		await expect.poll(() => getSelectorDisplays(page)).toEqual(baselineDisplays);
 		await enableFeature(page, "hideArtificialIntelligence.enabled");
 		await expectBodyWithClass(page, bodyClass);
 		await expectElementsHidden(page, selectors);

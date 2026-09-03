@@ -4,8 +4,9 @@ import { expect, test } from "playwright.config";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/shortsAutoScroll/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -19,11 +20,9 @@ async function expectAutoScroll(page: Page, initialId: Nullable<string>): Promis
 }
 
 async function expectNoAutoScroll(page: Page, initialId: Nullable<string>): Promise<void> {
-	await expect
-		.poll(() => getShortId(page.url()), {
-			timeout: 3000
-		})
-		.toBe(initialId);
+	// expect.poll stops at its first passing sample, and the URL is necessarily still the initial one the
+	// moment the end of the short is simulated - so the absence of a scroll has to be held over a window.
+	await expectToStay(() => Promise.resolve(getShortId(page.url())), initialId, { durationMs: 3000, page });
 }
 
 function getShortId(url: string): Nullable<string> {
@@ -82,10 +81,15 @@ test.describe("shortsAutoScroll", () => {
 			const initialId = getShortId(page.url());
 			await seekToEnd(page);
 			await expectAutoScroll(page, initialId);
-			await navigateToPageType(page, pageType);
+			// Disabled in place: navigating again would install fresh listeners, so nothing would observe that
+			// onDisable removed the timeupdate listener.
 			await disableFeature(page, "shortsAutoScroll.enabled");
-			const newId = getShortId(page.url());
-			await expectNoAutoScroll(page, newId);
+			const disabledId = getShortId(page.url());
+			await seekToEnd(page);
+			await expectNoAutoScroll(page, disabledId);
+			await enableFeature(page, "shortsAutoScroll.enabled");
+			await seekToEnd(page);
+			await expectAutoScroll(page, disabledId);
 		});
 		test(`should persist auto-scroll after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -93,8 +97,9 @@ test.describe("shortsAutoScroll", () => {
 			const initialId = getShortId(page.url());
 			await seekToEnd(page);
 			await expectAutoScroll(page, initialId);
-			await page.reload();
-			await navigateToPageType(page, pageType);
+			// The URL is the advanced short now, so navigateToPageType would goto the fixture and discard the
+			// reloaded document; reloadPage keeps it and waits for the extension and player instead.
+			await reloadPage(page, pageType);
 			const newId = getShortId(page.url());
 			await seekToEnd(page);
 			await expectAutoScroll(page, newId);
