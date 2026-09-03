@@ -67,8 +67,8 @@ let suppressContextMenu = false;
 export function disableScrollWheelControl(type: ScrollWheelControlType) {
 	activeControls.get(type)?.stepper.cancel();
 	activeControls.delete(type);
+	modifyElementClassList("remove", { className: `yte-scroll-wheel-${type}-control`, element: document.body });
 	if (type === "volume") {
-		modifyElementClassList("remove", { className: "yte-scroll-wheel-volume-control", element: document.body });
 		toggleContextMenuVisibility("remove");
 		suppressContextMenu = false;
 	}
@@ -96,10 +96,11 @@ export async function enableScrollWheelControl<T extends ScrollWheelControlType>
 		});
 	}
 	attachWheelListeners(playerContainer);
+	// Marks the body while a control is attached; the volume class also drives the context-menu CSS.
+	modifyElementClassList("add", { className: `yte-scroll-wheel-${type}-control`, element: document.body });
 	if (type === "volume") {
 		eventManager.addEventListener(document.documentElement, "contextmenu", onContextMenu, "scrollWheelController");
 		eventManager.addEventListener(document.documentElement, "mouseup", onMouseUp, "scrollWheelController");
-		modifyElementClassList("add", { className: "yte-scroll-wheel-volume-control", element: document.body });
 	}
 }
 
