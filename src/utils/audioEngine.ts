@@ -52,8 +52,9 @@ export function getAudioEngine(video?: HTMLMediaElement): Nullable<AudioEngine> 
 	volumeGain.connect(context.destination);
 	setupVisibilityResume(context);
 
-	window.engine = { context, input: source, monoEnabled: false, source, volumeGain };
-	return engine;
+	const createdEngine: AudioEngine = { context, input: source, monoEnabled: false, source, volumeGain };
+	window.engine = createdEngine;
+	return createdEngine;
 }
 
 function createAudioContext(): AudioContext {
