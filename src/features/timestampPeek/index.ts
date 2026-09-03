@@ -2,7 +2,13 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { getVideoHref, handleTimestampElementsHover, observeTimestampElements, resetState } from "@/src/features/timestampPeek/utils";
+import {
+	getVideoHref,
+	handleTimestampElementsHover,
+	observeTimestampElements,
+	resetState,
+	restorePreviewedVideo
+} from "@/src/features/timestampPeek/utils";
 import { waitForAllElements } from "@/src/utils/dom/wait";
 
 import "./index.css";
@@ -10,6 +16,7 @@ import { metadata } from "./index.metadata";
 
 let timestampElementObserver: Nullable<MutationObserver> = null;
 const navigateStartHandler = () => {
+	restorePreviewedVideo();
 	const overlay = document.getElementById("yte-timestamp-peek-overlay");
 	if (overlay) overlay.remove();
 	const placeholder = document.getElementById("yte-timestamp-peek-placeholder");
@@ -48,6 +55,8 @@ export default createFeature({
 		eventManager.removeEventListeners("timestampPeek");
 		document.removeEventListener("yt-navigate-start", navigateStartHandler);
 		cleanupTimestampObserver();
+		// A preview that is showing holds the player's video element; give it back before the overlay goes.
+		restorePreviewedVideo();
 		const overlay = document.getElementById("yte-timestamp-peek-overlay");
 		if (overlay) overlay.remove();
 		const placeholder = document.getElementById("yte-timestamp-peek-placeholder");
