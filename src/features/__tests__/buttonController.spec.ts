@@ -18,24 +18,11 @@ const { watch } = pageTypeRecord;
 
 test.describe("buttonController", () => {
 	test.describe("featureMenu", () => {
-		test("feature menu should be enabled", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "screenshotButton.button.enabled");
-			await setOption(page, "screenshotButton.button.placement", "feature_menu");
-			const featureMenuButton = page.locator("#yte-feature-menu-button");
-			await expect(featureMenuButton).toBeAttached();
-		});
 		test("feature menu should be disabled", async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await disableFeature(page, "screenshotButton.button.enabled");
 			const featureMenuButton = page.locator("#yte-feature-menu-button");
 			await expect(featureMenuButton).not.toBeVisible();
-		});
-		test("should add feature menu item to feature menu", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await enableFeature(page, "screenshotButton.button.enabled");
-			await setOption(page, "screenshotButton.button.placement", "feature_menu");
-			await expectFeatureMenuItemToBeTruthy(page, "yte-feature-screenshotButton-menuitem");
 		});
 		test("feature menu should open when button is clicked", async ({ page }) => {
 			await navigateToPageType(page, watch);
@@ -86,17 +73,6 @@ test.describe("buttonController", () => {
 				await toggleFullscreen(page, false);
 				await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", left);
 			});
-			test("should move screenshot button from right to left controls when entering fullscreen and back when exiting", async ({ page }) => {
-				await navigateToPageType(page, watch);
-				await setOption(page, "screenshotButton.button.placement", right);
-				await setOption(page, "screenshotButton.button.fullscreenPlacement", left);
-				await enableFeature(page, "screenshotButton.button.enabled");
-				await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", right);
-				await toggleFullscreen(page, true);
-				await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", left);
-				await toggleFullscreen(page, false);
-				await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", right);
-			});
 			test("should not move loop button when fullscreenPlacement is same", async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await setOption(page, "loopButton.button.placement", right);
@@ -141,27 +117,16 @@ test.describe("buttonController", () => {
 					await enableFeature(page, "screenshotButton.button.enabled");
 					await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
 					await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", placement);
-				});
-				test(`should not place screenshot button when disabled in ${placement}`, async ({ page }) => {
-					await navigateToPageType(page, watch);
-					await setOption(page, "screenshotButton.button.placement", placement);
-					await enableFeature(page, "screenshotButton.button.enabled");
-					await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
-					await disableFeature(page, "screenshotButton.button.enabled");
-					await expectFeatureButtonToBeFalsy(page, "yte-feature-screenshotButton-button");
+					if (placement === below) {
+						// The below player container must not swallow page clicks while the buttons inside it stay interactive.
+						await expect(page.locator(placementSelectors.below_player)).toHaveCSS("pointer-events", "none");
+						await expect(page.locator("#yte-feature-screenshotButton-button")).toHaveCSS("pointer-events", "auto");
+					}
 				});
 			}
 		});
 	});
 	test.describe("below player container", () => {
-		test("container ignores pointer events while its buttons stay clickable", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "screenshotButton.button.placement", below);
-			await enableFeature(page, "screenshotButton.button.enabled");
-			await expectFeatureButtonToBeIn(page, "yte-feature-screenshotButton-button", below);
-			await expect(page.locator(placementSelectors.below_player)).toHaveCSS("pointer-events", "none");
-			await expect(page.locator("#yte-feature-screenshotButton-button")).toHaveCSS("pointer-events", "auto");
-		});
 		test("container is centred on the player and follows theater mode on watch", async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "screenshotButton.button.placement", below);

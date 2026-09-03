@@ -11,7 +11,7 @@ import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
@@ -55,35 +55,6 @@ test.describe("pauseBackgroundPlayers", () => {
 			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
 			await pageB.close();
 		});
-		test(`should not pause background players when disabled on ${pageType}`, async ({ context, page }) => {
-			test.setTimeout(120_000);
-			const pageA = page;
-			const pageB = await context.newPage();
-			await openAndPlayVideo(pageA, pageType);
-			await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await openAndPlayVideo(pageB, pageType);
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await pageB.close();
-		});
-		test(`should toggle background player pausing on ${pageType}`, async ({ context, page }) => {
-			test.setTimeout(120_000);
-			const pageA = page;
-			const pageB = await context.newPage();
-			await openAndPlayVideo(pageA, pageType);
-			await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await openAndPlayVideo(pageB, pageType);
-			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
-			await pageB.close();
-			await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
-			await pageA.evaluate(() => document.querySelector<HTMLVideoElement>("video")?.play());
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			const pageC = await context.newPage();
-			await openAndPlayVideo(pageC, pageType);
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await pageC.close();
-		});
 		test(`should persist background player pausing after navigation on ${pageType}`, async ({ context, page }) => {
 			const pageA = page;
 			const pageB = await context.newPage();
@@ -97,20 +68,21 @@ test.describe("pauseBackgroundPlayers", () => {
 			await navigateToPageType(pageA, pageType);
 			await ensureVideoIsPlaying(pageA, pageType);
 		});
-		test(`should persist background player pausing after full page reload on ${pageType}`, async ({ context, page }) => {
-			const pageA = page;
-			await openAndPlayVideo(pageA, pageType);
-			await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await pageA.reload();
-			await navigateToPageType(pageA, pageType);
-			await ensureVideoIsPlaying(pageA, pageType);
-			const pageB = await context.newPage();
-			await openAndPlayVideo(pageB, pageType);
-			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
-			await pageB.close();
-		});
 	}
+	// The feature has no live/VOD branch (a live page is a /watch document), so the disabled case runs on watch
+	// only; live-page gating is still proven by `pauses background players on live` and the live fixture costs
+	// up to 120 s per iteration.
+	test("should not pause background players when disabled on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		await openAndPlayVideo(pageB, watch);
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		await pageB.close();
+	});
 
 	test(`should not affect non-target page`, async ({ context, page }) => {
 		const pageA = page;

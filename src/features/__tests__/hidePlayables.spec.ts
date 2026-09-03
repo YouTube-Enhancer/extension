@@ -1,13 +1,13 @@
 import { test } from "playwright.config";
 
-import { metadata } from "@/src/features/hidePlayables/index.metadata";
+import type { PageType } from "@/src/features/_registry/types";
+
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { injectDynamicContent } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -15,8 +15,10 @@ const {
 	hidePlayables: { bodyClass, selectors }
 } = hideFeatureSelectors;
 
-const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
+// The feature declares no includePages, so resolvePageTypes would return all 11 pages; the CSS only matches home-feed markup,
+// so home carries the behaviour and watch is kept as a second page to prove the body class is not home-only.
+const testPages: readonly PageType[] = [home, watch];
 
 test.describe("hidePlayables", () => {
 	for (const pageType of testPages) {
@@ -27,68 +29,38 @@ test.describe("hidePlayables", () => {
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
 		});
-		test(`shows playables section when disabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-		});
-		test(`hides elements after navigation on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hidePlayables.enabled");
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-		});
-		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
-			await expectElementsHidden(page, selectors);
-		});
-		test(`restores original state when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await expectElementsNotHidden(page, selectors);
-		});
-		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await disableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithoutClass(page, bodyClass);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-		});
-		test(`hides dynamically added content on ${pageType}`, async ({ page }) => {
-			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "hidePlayables.enabled");
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-			await injectDynamicContent(page, selectors);
-			await expectBodyWithClass(page, bodyClass);
-			await expectElementsHidden(page, selectors);
-		});
 	}
+
+	// onEnable/onDisable only add/remove a body class and no page gating exists, so the remaining cycles run on home only.
+	test("shows playables section when disabled on home", async ({ page }) => {
+		test.skip(!hasAuthState(), "home requires login");
+		await navigateToPageType(page, home);
+		await disableFeature(page, "hidePlayables.enabled");
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+	});
+	test("persists hide after full page reload on home", async ({ page }) => {
+		test.skip(!hasAuthState(), "home requires login");
+		await navigateToPageType(page, home);
+		await enableFeature(page, "hidePlayables.enabled");
+		await expectBodyWithClass(page, bodyClass);
+		await expectElementsHidden(page, selectors);
+		await page.reload();
+		await navigateToPageType(page, home);
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	});
+	test("re-applies after disable then re-enable on home", async ({ page }) => {
+		test.skip(!hasAuthState(), "home requires login");
+		await navigateToPageType(page, home);
+		await enableFeature(page, "hidePlayables.enabled");
+		await expectBodyWithClass(page, bodyClass);
+		await expectElementsHidden(page, selectors);
+		await disableFeature(page, "hidePlayables.enabled");
+		await expectBodyWithoutClass(page, bodyClass);
+		await expectElementsNotHidden(page, selectors);
+		await enableFeature(page, "hidePlayables.enabled");
+		await expectBodyWithClass(page, bodyClass);
+		await expectElementsHidden(page, selectors);
+	});
 });

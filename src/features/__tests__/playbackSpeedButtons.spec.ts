@@ -10,7 +10,7 @@ import { getCurrentSpeed } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 const { left, right } = placementRecord;
 const speedAdjustment = 0.25;
 test.describe("playbackSpeedButtons", () => {
@@ -36,20 +36,6 @@ test.describe("playbackSpeedButtons", () => {
 			if (!currentSpeed) return;
 			await clickFeatureButton(page, pageType, "yte-feature-decreasePlaybackSpeedButton-button", left);
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { intervals: [200], timeout: 5000 }).toBe(currentSpeed - speedAdjustment);
-		});
-		test(`speed buttons should not be present when disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeFalsy(page, "yte-feature-increasePlaybackSpeedButton-button");
-		});
-		test(`speed buttons should persist after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "playbackSpeedButtons.button.placement", left);
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
 		});
 		test(`speed buttons should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -104,71 +90,32 @@ test.describe("playbackSpeedButtons", () => {
 	});
 
 	test.describe("button placement", () => {
-		for (const placement of [left, right] as const) {
-			test(`increase speed button should render in ${placement}`, async ({ page }) => {
-				await navigateToPageType(page, watch);
-				await setOption(page, "playbackSpeedButtons.button.placement", placement);
-				await enableFeature(page, "playbackSpeedButtons.button.enabled");
-				await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
-				await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", placement);
-			});
-			test(`decrease speed button should render in ${placement}`, async ({ page }) => {
-				await navigateToPageType(page, watch);
-				await setOption(page, "playbackSpeedButtons.button.placement", placement);
-				await enableFeature(page, "playbackSpeedButtons.button.enabled");
-				await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
-				await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", placement);
-			});
-		}
+		// player_controls_left is already asserted by clickFeatureButton in the increase/decrease click tests.
+		test(`speed buttons should render in ${right}`, async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "playbackSpeedButtons.button.placement", right);
+			await enableFeature(page, "playbackSpeedButtons.button.enabled");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-increasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", right);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-decreasePlaybackSpeedButton-button");
+			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
+		});
 	});
 
 	test.describe("fullscreen transition", () => {
-		test("increase speed button should move from left to right on fullscreen enter/exit", async ({ page }) => {
+		test("speed buttons should move from left to right on fullscreen enter/exit", async ({ page }) => {
 			await navigateToPageType(page, watch);
 			await setOption(page, "playbackSpeedButtons.button.placement", left);
 			await setOption(page, "playbackSpeedButtons.button.fullscreenPlacement", right);
 			await enableFeature(page, "playbackSpeedButtons.button.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", left);
+			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", left);
 			await toggleFullscreen(page, true);
 			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", right);
+			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
 			await toggleFullscreen(page, false);
 			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", left);
-		});
-
-		test("decrease speed button should move from left to right on fullscreen enter/exit", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "playbackSpeedButtons.button.placement", left);
-			await setOption(page, "playbackSpeedButtons.button.fullscreenPlacement", right);
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
 			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", left);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", left);
-		});
-
-		test("increase speed button should not move when fullscreenPlacement is same", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "playbackSpeedButtons.button.placement", right);
-			await setOption(page, "playbackSpeedButtons.button.fullscreenPlacement", "same");
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", right);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-increasePlaybackSpeedButton-button", right);
-		});
-
-		test("decrease speed button should not move when fullscreenPlacement is same", async ({ page }) => {
-			await navigateToPageType(page, watch);
-			await setOption(page, "playbackSpeedButtons.button.placement", right);
-			await setOption(page, "playbackSpeedButtons.button.fullscreenPlacement", "same");
-			await enableFeature(page, "playbackSpeedButtons.button.enabled");
-			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
-			await toggleFullscreen(page, true);
-			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
-			await toggleFullscreen(page, false);
-			await expectFeatureButtonToBeIn(page, "yte-feature-decreasePlaybackSpeedButton-button", right);
 		});
 	});
 });

@@ -22,17 +22,6 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
 			await expectStableCaptionsState(page, true);
 		});
-		test(`restores captions when feature disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["captions"]);
-			if (await isCaptionsUnavailable(page)) return;
-			const initial = await getCaptionsState(page);
-			if (initial === null) return;
-			if (!(await ensureCaptionsState(page, false))) return;
-			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, true);
-			await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, false);
-		});
 		test(`enables captions after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["captions"]);
 			if (await isCaptionsUnavailable(page)) return;
@@ -46,36 +35,43 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
 			await expectStableCaptionsState(page, true);
 		});
-		test(`should enable captions on re-enable after disable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["captions"]);
-			if (await isCaptionsUnavailable(page)) return;
-			if (!(await ensureCaptionsState(page, false))) return;
-			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, true);
-			await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, true);
-		});
-		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
-			if (pageType === "live") test.setTimeout(120_000);
-			await navigateToPageType(page, pageType, ["captions"]);
-			if (await isCaptionsUnavailable(page)) return;
-			if (!(await ensureCaptionsState(page, false))) return;
-			await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, true);
-			await page.reload();
-			await navigateToPageType(page, pageType, ["captions"]);
-			if (await isCaptionsUnavailable(page)) return;
-			await expectStableCaptionsState(page, true);
-		});
-		test(`should not enable captions when feature is off on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["captions"]);
-			if (await isCaptionsUnavailable(page)) return;
-			if (!(await ensureCaptionsState(page, false))) return;
-			await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
-			await expectStableCaptionsState(page, false);
-		});
 	}
+
+	// The cases below run on watch only: onEnable/onDisable have no live-vs-VOD branch (index.ts only touches div#movie_player and button.ytp-subtitles-button) and the live fixture costs up to 120 s.
+	test(`restores captions when feature disabled on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		const initial = await getCaptionsState(page);
+		if (initial === null) return;
+		if (!(await ensureCaptionsState(page, false))) return;
+		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, true);
+		await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, false);
+		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, true);
+	});
+	// On live the post-reload navigateToPageType goes back to the channel URL and opens a possibly different live video, discarding the reloaded page.
+	test(`persists after full page reload on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		if (!(await ensureCaptionsState(page, false))) return;
+		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, true);
+		await page.reload();
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		await expectStableCaptionsState(page, true);
+	});
+	// With the feature off no lifecycle hook runs on any page, so the live expansion adds nothing to this negative control.
+	test(`should not enable captions when feature is off on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		if (!(await ensureCaptionsState(page, false))) return;
+		await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, false);
+	});
+
 	test.describe("feature conflicts", () => {
 		type DisabledWhenCondition = { equals: boolean; feature: string; setting: string };
 

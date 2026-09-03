@@ -4,6 +4,10 @@ Branch `rebase/playwright-testing-onto-dev` (commit `d30fdfcd`), audited 2026-09
 
 This document has three jobs: list the tests that exist today, mark the ones that are not needed, and list the ones that are missing. Section 4 is the per-spec catalogue that does all three for every spec; sections 2 and 3 explain the patterns behind most of those verdicts so they can be fixed once rather than 60 times.
 
+## Status
+
+- 2026-09-03: every "Not needed" verdict in section 4 has been applied (see the commit "test(e2e): remove tests the audit judged unnecessary"). The suite went from 1353 to 461 generated cases per browser project. The "Tests we have" tables in section 4 describe the suite before that pass; the "Incorrect" and "Missing" tables are still open.
+
 ## 1. Summary
 
 | Metric | Value |

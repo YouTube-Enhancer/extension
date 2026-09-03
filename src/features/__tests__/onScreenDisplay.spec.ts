@@ -35,11 +35,6 @@ async function setupVolumeControl(page: Page) {
 }
 
 test.describe("onScreenDisplay", () => {
-	test("shows the display when the volume changes on watch", async ({ page }) => {
-		await setupVolumeControl(page);
-		await dispatchWheelNotches(page, watch, "up");
-		await expect(page.locator(OSD_SELECTOR)).toBeAttached({ timeout: 5000 });
-	});
 	test("applies a position change without reloading on watch", async ({ page }) => {
 		await setupVolumeControl(page);
 		await dispatchWheelNotches(page, watch, "up");

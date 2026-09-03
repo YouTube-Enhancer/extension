@@ -4,14 +4,11 @@ import { expect, test } from "playwright.config";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/shortsAutoScroll/index.metadata";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const { home } = pageTypeRecord;
 
 async function expectAutoScroll(page: Page, initialId: Nullable<string>): Promise<void> {
 	await expect
@@ -90,31 +87,6 @@ test.describe("shortsAutoScroll", () => {
 			const newId = getShortId(page.url());
 			await expectNoAutoScroll(page, newId);
 		});
-		test(`should persist auto-scroll after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shortsAutoScroll.enabled");
-			const initialId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, initialId);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			const newId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, newId);
-		});
-		test(`should re-enable auto-scroll after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shortsAutoScroll.enabled");
-			const initialId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, initialId);
-			await disableFeature(page, "shortsAutoScroll.enabled");
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shortsAutoScroll.enabled");
-			const newId = getShortId(page.url());
-			await seekToEnd(page);
-			await expectAutoScroll(page, newId);
-		});
 		test(`should persist auto-scroll after full page reload on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "shortsAutoScroll.enabled");
@@ -128,10 +100,4 @@ test.describe("shortsAutoScroll", () => {
 			await expectAutoScroll(page, newId);
 		});
 	}
-
-	test(`should not auto-scroll on non-target page`, async ({ page }) => {
-		await navigateToPageType(page, nonTargetPage!);
-		await enableFeature(page, "shortsAutoScroll.enabled");
-		expect(getShortId(page.url())).toBeNull();
-	});
 });

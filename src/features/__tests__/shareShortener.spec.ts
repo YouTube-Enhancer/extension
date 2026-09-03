@@ -8,8 +8,10 @@ import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const pageTypes = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
+// A live stream is a /watch document and neither index.ts nor utils.ts has a live/VOD branch, so the live case
+// duplicates watch while raising the test budget to 120 s and burning a channel crawl.
+const pageTypes = resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType !== "live");
+const { watch } = pageTypeRecord;
 
 const SHARE_URL_SELECTOR = "#share-url";
 const SHARE_PARAM_REGEXP = /(\?|&)(si|feature|pp)=[^&]*/;
@@ -51,46 +53,36 @@ test.describe("shareShortener", () => {
 			await openShareDialog(page, pageType);
 			await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
 		});
-		test(`should persist share params cleanup after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "shareShortener.enabled");
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-		});
-		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-			await disableFeature(page, "shareShortener.enabled");
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-		});
-		test(`persists after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-		});
-		test(`restores share params when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-			await disableFeature(page, "shareShortener.enabled");
-			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
-		});
 	}
+	// The lifecycle cases below only run removeObserver + setupShareShortener, which have no page-specific code
+	// path, so they run on watch only; the per-page dialog behaviour is covered by the two tests above.
+	test(`re-applies after disable then re-enable on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "shareShortener.enabled");
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await disableFeature(page, "shareShortener.enabled");
+		await enableFeature(page, "shareShortener.enabled");
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+	});
+	test(`persists after full page reload on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "shareShortener.enabled");
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await page.reload();
+		await navigateToPageType(page, watch);
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+	});
+	test(`restores share params when disabled after being enabled on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "shareShortener.enabled");
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await disableFeature(page, "shareShortener.enabled");
+		await openShareDialog(page, watch);
+		await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
+	});
 });
