@@ -1,13 +1,14 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "fs";
 import { join, resolve } from "path";
 import postcss from "postcss";
+import { format, resolveConfig } from "prettier";
 
 interface HideSelectorEntry {
 	bodyClass: string;
 	selectors: string[];
 }
 
-export default function generateHideFeatureSelectors(): void {
+export default async function generateHideFeatureSelectors(): Promise<void> {
 	const featuresDir = resolve(process.cwd(), "src/features");
 	const outputDir = resolve(featuresDir, "__tests__", "__generated__");
 	const outputFile = resolve(outputDir, "hideFeatureSelectors.ts");
@@ -65,7 +66,9 @@ export default function generateHideFeatureSelectors(): void {
 		mkdirSync(outputDir, { recursive: true });
 	}
 
-	const output = generateTypeScriptOutput(allEntries);
+	// Format with the project's prettier config so the generated file passes lint unchanged.
+	const prettierOptions = (await resolveConfig(outputFile)) ?? {};
+	const output = await format(generateTypeScriptOutput(allEntries), { ...prettierOptions, filepath: outputFile });
 
 	writeFileSync(outputFile, output, "utf-8");
 	console.log(`Generated ${outputFile}`);

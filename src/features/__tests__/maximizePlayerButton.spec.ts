@@ -163,4 +163,27 @@ test.describe("maximizePlayerButton", () => {
 			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", right);
 		});
 	});
+	test.describe("automatic maximize state sync", () => {
+		test("reflects automatic maximization in the button state on watch", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await setOption(page, "maximizePlayerButton.button.placement", left);
+			await enableFeature(page, "maximizePlayerButton.button.enabled");
+			await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
+			const button = page.locator("#yte-feature-maximizePlayerButton-button");
+			await expect(button).not.toHaveAttribute("aria-checked", "true");
+			const offTitle = await button.getAttribute("data-title");
+			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
+			await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 15000 });
+			await expect(button).toHaveAttribute("aria-checked", "true");
+			await expect.poll(async () => button.getAttribute("data-title")).not.toBe(offTitle);
+		});
+		test("keeps the cued thumbnail overlay above the maximized video on watch", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await enableFeature(page, "automaticallyMaximizePlayer.enabled");
+			await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 15000 });
+			const overlay = page.locator("#movie_player .ytp-cued-thumbnail-overlay");
+			await expect(overlay).toBeAttached();
+			await expect(overlay).toHaveCSS("z-index", "1");
+		});
+	});
 });
