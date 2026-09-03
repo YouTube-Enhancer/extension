@@ -56,7 +56,11 @@ async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	resizeObserver = new ResizeObserver(() => {
 		const { isReversed: currentlyReversed } = stateAPI.getState();
 		void getPlaylistPageActionRow().then((r) => {
-			if (r && document.getElementById("yte-button-container") && !r.contains(document.getElementById("yte-button-container"))) {
+			if (
+				r &&
+				document.getElementById("yte-playlist-reverse-button-container") &&
+				!r.contains(document.getElementById("yte-playlist-reverse-button-container"))
+			) {
 				void injectButton(stateAPI, r);
 				if (currentlyReversed && !isCurrentlyReversed()) applyPlaylistPageReversal();
 			}

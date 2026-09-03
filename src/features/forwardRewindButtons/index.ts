@@ -2,7 +2,7 @@ import { Measure, seconds } from "safe-units";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { addFeatureButton, getFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv } from "@/src/types";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -50,8 +50,11 @@ export default createFeature({
 			},
 			name: "rewindButton",
 			remove: async (placement) => {
+				// Only this button's listeners may go: the feature's other button can already have been re-added
+				// with fresh listeners registered under the same feature name.
+				const button = getFeatureButton("rewindButton");
 				await removeFeatureButton("rewindButton", placement);
-				eventManager.removeEventListeners("forwardRewindButtons");
+				if (button) eventManager.removeEventListenersForTarget(button, "forwardRewindButtons");
 			}
 		},
 		{
@@ -78,8 +81,11 @@ export default createFeature({
 			},
 			name: "forwardButton",
 			remove: async (placement) => {
+				// Only this button's listeners may go: the feature's other button can already have been re-added
+				// with fresh listeners registered under the same feature name.
+				const button = getFeatureButton("forwardButton");
 				await removeFeatureButton("forwardButton", placement);
-				eventManager.removeEventListeners("forwardRewindButtons");
+				if (button) eventManager.removeEventListenersForTarget(button, "forwardRewindButtons");
 			}
 		}
 	],

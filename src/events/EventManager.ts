@@ -20,6 +20,8 @@ export type EventManager = {
 	removeEventListener: (target: AcceptedTarget, eventName: string, featureName: FeatureName) => void;
 
 	removeEventListeners: (featureName: FeatureName) => void;
+
+	removeEventListenersForTarget: (target: AcceptedTarget, featureName: FeatureName) => void;
 };
 
 export type FeatureName = ButtonNameEvents | CoreFeatureEvents | FeatureKeys;
@@ -134,6 +136,29 @@ const eventManager: EventManager = {
 			// Remove the target listeners from the map
 			this.listeners.delete(featureName);
 		}
+	},
+
+	// Removes every event listener the given featureName registered on the given target, leaving the
+	// listeners it registered on its other targets alone
+	removeEventListenersForTarget: function (target, featureName) {
+		// Get the set of listeners for the feature
+		const targetListeners = this.listeners.get(featureName);
+		if (!targetListeners) return;
+		// Get the listeners for this target only
+		const eventListeners = targetListeners.get(target);
+		if (!eventListeners) return;
+		// For each event name that has listeners
+		eventListeners.forEach((listeners, eventName) => {
+			// For each listener
+			listeners.forEach(({ callback, options }) => {
+				// Remove the listener from the target
+				target.removeEventListener(eventName, callback, options);
+			});
+		});
+		// Remove the target from the feature's map
+		targetListeners.delete(target);
+		// If the feature has no targets left, remove it as well
+		if (targetListeners.size === 0) this.listeners.delete(featureName);
 	}
 };
 export default eventManager;
