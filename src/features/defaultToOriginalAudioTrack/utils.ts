@@ -31,53 +31,18 @@ export function findDefaultTrack(tracks: Record<string, unknown>[]): Nullable<Pa
 }
 
 export function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAudioTrack> {
-	let mainTrack: Nullable<audioTrack> = null;
-	let propertiesObject: Nullable<PropertiesObj> = null;
-
-	// Find the main track (has an "id" field that is a string)
-	// and the properties track (has name/isDefault/isAutoDubbed)
-	for (const value of Object.values(obj)) {
-		// Skip if not an object
-		if (typeof value !== "object" || value === null || Array.isArray(value)) {
-			continue;
-		}
-
-		// Check if this could be the main track (has string "id" field AND passes audioTrack check)
-		if ("id" in value && typeof value.id === "string" && isAudioTrack(value)) {
-			mainTrack = value;
-		}
-
-		// Check if this is the properties track (has name, isDefault, isAutoDubbed with correct types)
-		if (isAudioTrack(value)) {
-			propertiesObject = {
-				id: value.id,
-				isAutoDubbed: value.isAutoDubbed,
-				isDefault: value.isDefault,
-				name: value.name
-			};
-		}
-	}
-
-	// If we found both tracks, combine them
-	if (mainTrack && propertiesObject) {
-		return {
-			...propertiesObject,
-			track: mainTrack
-		};
-	}
-
-	// Fallback to original behavior if we can't separate them properly
-	for (const value of Object.values(obj)) {
-		if (!isAudioTrack(value)) continue;
-		return {
-			id: value.id,
-			isAutoDubbed: value.isAutoDubbed,
-			isDefault: value.isDefault,
-			name: value.name,
-			track: value
-		};
-	}
-	return null;
+	// The player's track objects carry their descriptor (name, id, flags) in a nested value. The descriptor is what
+	// comparisons use; the track object itself is what setAudioTrack accepts - handed the descriptor alone, the
+	// player throws. A track that carries the descriptor fields directly is taken as it is.
+	const descriptor = isAudioTrack(obj) ? obj : Object.values(obj).find(isAudioTrack);
+	if (!descriptor) return null;
+	return {
+		id: descriptor.id,
+		isAutoDubbed: descriptor.isAutoDubbed,
+		isDefault: descriptor.isDefault,
+		name: descriptor.name,
+		track: obj as unknown as audioTrack
+	};
 }
 
 function isAudioTrack(value: unknown): value is audioTrack & PropertiesObj {
