@@ -15,7 +15,7 @@ const {
 } = hideFeatureSelectors;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 
 test.describe("hidePosts", () => {
 	for (const pageType of testPages) {
@@ -33,10 +33,10 @@ test.describe("hidePosts", () => {
 			await enableFeature(page, "hidePosts.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
+			// The feature is gated to home by includePages, so leaving the page type must drop the class again.
+			await navigateToPageType(page, watch);
+			await expectBodyWithoutClass(page, bodyClass, { timeout: 15000 });
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hidePosts.enabled");
-			await enableFeature(page, "hidePosts.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});

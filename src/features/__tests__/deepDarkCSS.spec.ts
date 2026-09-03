@@ -12,30 +12,30 @@ test.describe("deepDarkCSS", () => {
 	test("should inject deep dark CSS on shorts", async ({ page }) => {
 		await navigateToPageType(page, shorts);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
 	});
 	test("should work on re-enable after disable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
 		await disableFeature(page, "deepDarkCSS.enabled");
 		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 5000 }).toBe(0);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
 	});
 	test("persists deep dark CSS after full page reload on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
 		await page.reload();
 		await navigateToPageType(page, watch);
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 15000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 15000 }).toBe(1);
 	});
 	test("applies every bundled preset on watch", async ({ page }) => {
 		test.setTimeout(180_000);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
 		const initialContent = await page.locator("#yte-deep-dark-css").textContent();
 		expect(initialContent).toContain("#00adee");
 		for (const preset of deepDarkPreset) {

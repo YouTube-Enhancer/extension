@@ -3,7 +3,7 @@ import { expect, test } from "playwright.config";
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 
 import { metadata } from "@/src/features/playerQuality/index.metadata";
-import { expectCurrentQualityLevelToBeFalsy, expectCurrentQualityLevelToBeTruthy } from "@/src/utils/_tests/assertions";
+import { expectCurrentQualityLevelToBeTruthy, expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
@@ -13,13 +13,16 @@ const { watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 export const qualityLevel = "hd2160" as YoutubePlayerQualityLevel;
+// Pinned so the expectation the helper computes and the strategy the feature runs with cannot drift apart.
+const fallbackStrategy = "lower";
 test.describe("playerQuality", () => {
 	for (const pageType of testPages) {
 		test(`should set quality to closest on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerQuality.quality", qualityLevel);
+			await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 			await enableFeature(page, "playerQuality.enabled");
-			const closestQuality = await getClosestQuality(page, pageType, qualityLevel);
+			const closestQuality = await getClosestQuality(page, pageType, qualityLevel, fallbackStrategy);
 			if (!closestQuality) return; // quality selection not supported (e.g. live stream with only "auto")
 			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
 		});
@@ -30,41 +33,44 @@ test.describe("playerQuality", () => {
 	test(`quality should not be set to closest when disabled on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel);
-		if (!closestQuality) return; // quality selection not supported
-		await expectCurrentQualityLevelToBeFalsy(page, watch, closestQuality);
+		// Whatever quality YouTube picks on its own says nothing about the feature; the observable signal is
+		// data-default-quality, which the feature writes on the player whenever it enforces or restores.
+		await expectToStay(async () => page.locator("div#movie_player").getAttribute("data-default-quality"), null, { page });
 	});
 	test(`should set quality to hd720 on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", "hd720");
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, "hd720");
+		const closestQuality = await getClosestQuality(page, watch, "hd720", fallbackStrategy);
 		if (!closestQuality) return; // quality selection not supported
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 	});
 	test(`re-applies quality after disable then re-enable on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", qualityLevel);
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel);
+		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		await disableFeature(page, "playerQuality.enabled");
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel);
+		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
 		if (!closestQuality2) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality2);
 	});
 	test(`persists quality after full page reload on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", qualityLevel);
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel);
+		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		await page.reload();
 		await navigateToPageType(page, watch);
-		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel);
+		const closestQuality2 = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
 		if (!closestQuality2) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality2);
 	});
@@ -78,25 +84,15 @@ test.describe("playerQuality", () => {
 		});
 		if (!supportsSetQuality) return;
 		await setOption(page, "playerQuality.quality", qualityLevel);
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, qualityLevel);
+		const closestQuality = await getClosestQuality(page, watch, qualityLevel, fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		await disableFeature(page, "playerQuality.enabled");
-		// The onDisable fires restore via executeWithRetries (async, may be gated by
-		// waitForLoaded).  Bypass that wrapper and verify the restore logic directly:
-		const restoreSucceeded = await page.evaluate(async (q) => {
-			const sel = document.location.pathname.startsWith("/shorts") ? "div#shorts-player" : "div#movie_player";
-			const p = document.querySelector(sel) as unknown as {
-				setPlaybackQuality?: (quality: string) => Promise<void>;
-				setPlaybackQualityRange?: (suggested: string, range: string) => Promise<void>;
-			};
-			if (!p?.setPlaybackQuality || !p.setPlaybackQualityRange) return false;
-			await p.setPlaybackQualityRange(q, q);
-			await p.setPlaybackQuality(q);
-			return true;
-		}, originalQuality);
-		expect(restoreSucceeded).toBe(true);
+		// onDisable restores the quality captured before enforcement and records it on the player element,
+		// so the restore has to be observed there rather than performed by the test itself.
+		await expect(page.locator(`div#movie_player[data-default-quality="${originalQuality}"]`)).toBeAttached({ timeout: 15000 });
 		if (originalQuality !== closestQuality) {
 			await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), { timeout: 10000 }).toBe(originalQuality);
 		}
@@ -108,8 +104,9 @@ test.describe("playerQuality", () => {
 		test.fixme(true, "manual quality override detection does not trigger when enforcement re-applies during the switch");
 		await navigateToPageType(page, watch);
 		await setOption(page, "playerQuality.quality", "hd720");
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
 		await enableFeature(page, "playerQuality.enabled");
-		const closestQuality = await getClosestQuality(page, watch, "hd720");
+		const closestQuality = await getClosestQuality(page, watch, "hd720", fallbackStrategy);
 		if (!closestQuality) return;
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 		const availableLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels", watch);

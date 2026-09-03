@@ -1,4 +1,4 @@
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideEndScreenCardsButton/index.metadata";
 import {
@@ -62,19 +62,18 @@ test.describe("hideEndScreenCardsButton", () => {
 
 	test.describe("feature conflicts", () => {
 		test.describe("hideEndScreenCardsButton → hideEndScreenCards", () => {
-			test("hideEndScreenCards state persists after navigation with button active on watch", async ({ page }) => {
+			test("hideEndScreenCards toggled by the button resets after navigation on watch", async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 				await setOption(page, "hideEndScreenCardsButton.button.placement", right);
-				await page.locator("#yte-feature-hideEndScreenCardsButton-button").click();
-				await expect(page.locator("body")).toHaveClass(/yte-hide-end-screen-cards/);
+				await clickFeatureButton(page, watch, "yte-feature-hideEndScreenCardsButton-button", right);
+				await expectBodyWithClass(page, "yte-hide-end-screen-cards");
 
 				await navigateToPageType(page, home);
-				await page.waitForTimeout(500);
 				await navigateToPageType(page, watch);
-				await page.waitForTimeout(2000);
-
-				await expect(page.locator("body")).not.toHaveClass(/yte-hide-end-screen-cards/);
+				// The button toggle is not written back to storage, so waiting for the re-added button is enough to prove the class is not restored.
+				await expectFeatureButtonToBeIn(page, "yte-feature-hideEndScreenCardsButton-button", right);
+				await expectBodyWithoutClass(page, "yte-hide-end-screen-cards");
 			});
 		});
 	});

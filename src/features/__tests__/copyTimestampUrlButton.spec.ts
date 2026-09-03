@@ -26,36 +26,32 @@ test.describe("copyTimestampUrlButton", () => {
 			await navigateToPageType(page, pageType);
 			await waitForYoutubePlayerReady(page, pageType);
 			const start = await freezeAndGetTime(page, pageType);
-			expect(start).toBeTruthy();
+			expect(start).not.toBeNull();
 			const expectedTimestamp = Math.round(start!);
 			await setOption(page, "copyTimestampUrlButton.button.placement", left);
 			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
 			await clickFeatureButton(page, pageType, "yte-feature-copyTimestampUrlButton-button", left);
-			await expect.poll(async () => await getClipboardText(page)).toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
+			// The label is only "Copied" for 1000 ms after the click, so read it before the (slower) clipboard.
 			await expect
 				.poll(async () => {
 					return await page.locator("#yte-feature-copyTimestampUrlButton-button").getAttribute("data-title");
 				})
 				.toContain("Copied");
+			await expect.poll(async () => await getClipboardText(page)).toMatch(new RegExp(`^https:\\/\\/youtu\\.be\\/.+\\?t=${expectedTimestamp}$`));
 		});
-		test(`copy timestamp url button should toggle copied state on second click on ${pageType}`, async ({ page }) => {
+		test(`copy timestamp url button should restore the button label one second after copying on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "copyTimestampUrlButton.button.placement", left);
 			await enableFeature(page, "copyTimestampUrlButton.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-copyTimestampUrlButton-button");
+			const button = page.locator("#yte-feature-copyTimestampUrlButton-button");
+			const label = await button.getAttribute("data-title");
+			expect(label).not.toBeNull();
 			await clickFeatureButton(page, pageType, "yte-feature-copyTimestampUrlButton-button", left);
-			await expect
-				.poll(async () => {
-					return await page.locator("#yte-feature-copyTimestampUrlButton-button").getAttribute("data-title");
-				})
-				.toContain("Copied");
-			await clickFeatureButton(page, pageType, "yte-feature-copyTimestampUrlButton-button", left);
-			await expect
-				.poll(async () => {
-					return await page.locator("#yte-feature-copyTimestampUrlButton-button").getAttribute("data-title");
-				})
-				.not.toContain("Copied");
+			await expect.poll(async () => await button.getAttribute("data-title")).toContain("Copied");
+			// The button is not a toggle: the click listener restores the original label 1000 ms later.
+			await expect.poll(async () => await button.getAttribute("data-title")).toBe(label);
 		});
 		test(`copy timestamp url button should persist after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);

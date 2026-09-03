@@ -4,50 +4,38 @@ import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/globalVolume/index.metadata";
 import { metadata as rememberVolumeMetadata } from "@/src/features/rememberVolume/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // live takes exactly the same `isWatchPage() || isLivePage() -> #movie_player` branch as watch (index.ts:12), so it adds no coverage while each navigateToPageType(live) re-runs the channel scan with a 120 s budget.
 const nonLiveTestPages: readonly PageType[] = [pageTypeRecord.watch, pageTypeRecord.shorts];
-const { home, watch } = pageTypeRecord;
+const { watch } = pageTypeRecord;
 test.describe("globalVolume", () => {
 	for (const pageType of testPages) {
 		test(`should set global volume to ${volume} when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "globalVolume.volume", volume);
 			await enableFeature(page, "globalVolume.enabled");
-			await page.waitForTimeout(1000);
 			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(volume);
 		});
 	}
 
 	for (const pageType of nonLiveTestPages) {
-		test(`should persist volume after navigation on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "globalVolume.volume", volume);
-			await enableFeature(page, "globalVolume.enabled");
-			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(volume);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "globalVolume.enabled");
-			await enableFeature(page, "globalVolume.enabled");
-			await expect
-				.poll(() => getCurrentVolume(page, pageType), {
-					intervals: [200],
-					timeout: 5000
-				})
-				.toBe(volume);
-		});
 		test(`re-applies volume after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "globalVolume.volume", volume);
+			const original = await getCurrentVolume(page, pageType);
+			expect(original).not.toBeNull();
 			await enableFeature(page, "globalVolume.enabled");
 			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(volume);
 			await disableFeature(page, "globalVolume.enabled");
-			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).not.toBe(volume);
+			// restorePlayerVolume puts back the exact volume captured before the feature ran, so assert that value
+			// instead of "anything but the configured one", which also passes when getCurrentVolume returns null.
+			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(original);
 			await enableFeature(page, "globalVolume.enabled");
 			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(volume);
 		});
@@ -57,8 +45,7 @@ test.describe("globalVolume", () => {
 			await setOption(page, "globalVolume.volume", volume);
 			await enableFeature(page, "globalVolume.enabled");
 			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 10000 }).toBe(volume);
-			await page.reload();
-			await navigateToPageType(page, pageType);
+			await reloadPage(page, pageType);
 			await expect.poll(async () => getCurrentVolume(page, pageType), { intervals: [200], timeout: 15000 }).toBe(volume);
 		});
 	}
@@ -66,9 +53,25 @@ test.describe("globalVolume", () => {
 	// Watch only: with enabled=false the orchestrator never calls enableFeature/navigateFeature, so getPlayerContainer and its watch/live vs shorts branch are never reached.
 	test(`should not set global volume when disabled on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
+		// Own both sides of the comparison: the volume the feature would apply if it ran, and the one the player is on.
+		await setOption(page, "globalVolume.volume", volume);
+		await setVolume(page, 55, watch);
 		await disableFeature(page, "globalVolume.enabled");
-		await page.waitForTimeout(1000);
-		await expect.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 }).not.toBe(volume);
+		await expectToStay(async () => getCurrentVolume(page, watch), 55, { page });
+	});
+
+	// Watch only: spaNavigateToRelatedVideo is the only genuine in-page navigation available, and on shorts the same
+	// round trip would be another document load, which the reload test already covers.
+	test(`should persist volume after navigation on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "globalVolume.volume", volume);
+		await enableFeature(page, "globalVolume.enabled");
+		await expect.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 }).toBe(volume);
+		// Move the player off the configured volume so the final assertion can only pass because onNavigate re-applied it.
+		await setVolume(page, 55, watch);
+		await expect.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 }).toBe(55);
+		await spaNavigateToRelatedVideo(page);
+		await expect.poll(async () => getCurrentVolume(page, watch), { intervals: [200], timeout: 10000 }).toBe(volume);
 	});
 
 	test.describe("feature conflicts", () => {
@@ -104,7 +107,7 @@ test.describe("globalVolume", () => {
 				});
 			});
 
-			test("last-enabled volume feature determines volume on watch", async ({ page }) => {
+			test("globalVolume overrides rememberVolume when enabled last on watch", async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "rememberVolume.enabled");
 				await setVolume(page, 50, watch);

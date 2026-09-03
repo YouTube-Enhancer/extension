@@ -46,14 +46,10 @@ test.describe("flipVideoButtons", () => {
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
 		await navigateToPageType(page, home);
 		await navigateToPageType(page, watch);
-		await disableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.placement", right);
-		await disableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
-		await setOption(page, "flipVideoButtons.buttons.flipVideoVerticalButton.placement", right);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoHorizontalButton-button");
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-flipVideoVerticalButton-button");
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoHorizontalButton-button", right);
+		await expectFeatureButtonToBeIn(page, "yte-feature-flipVideoVerticalButton-button", right);
 	});
 
 	// Enable/disable handling lives in featureButtonManager and is page-independent, so this only runs on watch.
@@ -94,7 +90,9 @@ test.describe("flipVideoButtons", () => {
 	test(`should not create flip video buttons on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "flipVideoButtons.buttons.flipVideoHorizontalButton.enabled");
+		await enableFeature(page, "flipVideoButtons.buttons.flipVideoVerticalButton.enabled");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoHorizontalButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-flipVideoVerticalButton-button");
 	});
 
 	test.describe("button placement", () => {

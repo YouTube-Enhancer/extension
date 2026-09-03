@@ -3,10 +3,17 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/scrollWheelSpeedControl/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { adjustWithScrollWheel, dispatchWheelNotches, getCurrentSpeed, setValueOnYouTubePlayer } from "@/src/utils/_tests/player";
+import {
+	adjustWithScrollWheel,
+	dispatchWheelNotches,
+	getCurrentSpeed,
+	setValueOnYouTubePlayer,
+	waitForScrollWheelControl
+} from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // Speed control always requires a modifier key; start at 1.0 so both increase (→1.25) and decrease (→0.75) are in range
@@ -29,8 +36,13 @@ test.describe("scrollWheelSpeedControl", () => {
 			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps: 0.25, withModifierKey: true });
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "scrollWheelSpeedControl.enabled");
-			await adjustWithScrollWheel({ controlType: "Speed", direction: "up", initialValue: speed, page, pageType, steps: 0.25, withModifierKey: true });
+			// Asserted in place: adjustWithScrollWheel would navigate again and re-enable the feature, which
+			// would hide a listener that never re-attached after the navigation.
+			await waitForScrollWheelControl(page, "speed", true);
+			await setValueOnYouTubePlayer(page, pageType, "setPlaybackRate", speed);
+			await expect.poll(async () => getCurrentSpeed(page, pageType)).toBe(speed);
+			await dispatchWheelNotches(page, pageType, "up", 1, { altKey: true });
+			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(speed + steps);
 		});
 	}
 	// The disable/re-enable transition has no shorts branch, and re-enabling on shorts is already exercised by the
@@ -55,8 +67,7 @@ test.describe("scrollWheelSpeedControl", () => {
 			await setOption(page, "scrollWheelSpeedControl.steps", steps);
 			await setOption(page, "scrollWheelSpeedControl.modifierKey", "altKey");
 			await enableFeature(page, "scrollWheelSpeedControl.enabled");
-			// The speed control leaves no DOM marker, so give it a moment to attach its listeners.
-			await page.waitForTimeout(1000);
+			await waitForScrollWheelControl(page, "speed", true);
 			await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", initialSpeed);
 			await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(initialSpeed);
 		}
@@ -70,10 +81,9 @@ test.describe("scrollWheelSpeedControl", () => {
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
 			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
 			await disableFeature(page, "scrollWheelSpeedControl.enabled");
-			await page.waitForTimeout(1000);
+			await waitForScrollWheelControl(page, "speed", false);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
-			await page.waitForTimeout(1000);
-			expect(await getCurrentSpeed(page, watch)).toBe(speed + steps);
+			await expectToStay(async () => getCurrentSpeed(page, watch), speed + steps, { page });
 		});
 	});
 });

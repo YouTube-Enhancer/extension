@@ -5,7 +5,7 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/shareShortener/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // A live stream is a /watch document and neither index.ts nor utils.ts has a live/VOD branch, so the live case
@@ -15,7 +15,21 @@ const { watch } = pageTypeRecord;
 
 const SHARE_URL_SELECTOR = "#share-url";
 const SHARE_PARAM_REGEXP = /(\?|&)(si|feature|pp)=[^&]*/;
+const SHARE_URL_REGEXP = /^https:\/\/(youtu\.be|(www\.)?youtube\.com)\//;
 
+/** The share panel is reused, so it has to be closed before it can be reopened for a fresh URL. */
+async function closeShareDialog(page: Page): Promise<void> {
+	await page.keyboard.press("Escape");
+	await expect(page.locator(SHARE_URL_SELECTOR)).toBeHidden({ timeout: 10000 });
+}
+/**
+ * An empty or not-yet-populated `#share-url` already satisfies `.not.toMatch(SHARE_PARAM_REGEXP)`, so the
+ * field has to hold a real share URL before the absence of the params means anything.
+ */
+async function expectShareUrlWithoutParams(page: Page): Promise<void> {
+	await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).toMatch(SHARE_URL_REGEXP);
+	await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).not.toMatch(SHARE_PARAM_REGEXP);
+}
 async function getShareUrl(page: Page): Promise<string> {
 	return await page.locator(SHARE_URL_SELECTOR).inputValue();
 }
@@ -45,7 +59,7 @@ test.describe("shareShortener", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "shareShortener.enabled");
 			await openShareDialog(page, pageType);
-			await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+			await expectShareUrlWithoutParams(page);
 		});
 		test(`should preserve share params when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -60,29 +74,31 @@ test.describe("shareShortener", () => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await expectShareUrlWithoutParams(page);
+		await closeShareDialog(page);
 		await disableFeature(page, "shareShortener.enabled");
 		await enableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await expectShareUrlWithoutParams(page);
 	});
 	test(`persists after full page reload on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
-		await page.reload();
-		await navigateToPageType(page, watch);
+		await expectShareUrlWithoutParams(page);
+		await reloadPage(page, watch);
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await expectShareUrlWithoutParams(page);
 	});
 	test(`restores share params when disabled after being enabled on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).not.toMatch(SHARE_PARAM_REGEXP);
+		await expectShareUrlWithoutParams(page);
+		// The panel is reused, so it has to be closed and reopened for YouTube to regenerate the URL.
+		await closeShareDialog(page);
 		await disableFeature(page, "shareShortener.enabled");
 		await openShareDialog(page, watch);
-		await expect.poll(async () => await getShareUrl(page)).toMatch(SHARE_PARAM_REGEXP);
+		await expect.poll(async () => getShareUrl(page), { timeout: 10000 }).toMatch(SHARE_PARAM_REGEXP);
 	});
 });

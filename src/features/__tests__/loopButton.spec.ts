@@ -22,11 +22,17 @@ test.describe("loopButton", () => {
 			await disableFeature(page, "loopButton.button.enabled");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-loopButton-button");
 		});
-		test("loop should be disabled when disabled", async ({ page }) => {
+		test("loop stays enabled on the video when the loop button is removed", async ({ page }) => {
 			await navigateToPageType(page, pageType);
+			await enableFeature(page, "loopButton.button.enabled");
+			await setOption(page, "loopButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
+			await clickFeatureButton(page, pageType, "yte-feature-loopButton-button", left);
+			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", true);
 			await disableFeature(page, "loopButton.button.enabled");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-loopButton-button");
-			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", false);
+			// remove() only detaches the button and its listeners, it never resets the video's loop attribute.
+			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", true);
 		});
 		test("loop should toggle off when clicking the loop button again", async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -40,16 +46,13 @@ test.describe("loopButton", () => {
 			await clickFeatureButton(page, pageType, "yte-feature-loopButton-button", left);
 			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", false);
 		});
-		test("loop should persist after navigation", async ({ page }) => {
+		test("loop button should persist after navigation", async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "loopButton.button.enabled");
 			await setOption(page, "loopButton.button.placement", left);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "loopButton.button.enabled");
-			await enableFeature(page, "loopButton.button.enabled");
-			await setOption(page, "loopButton.button.placement", left);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
 		});
 		test("loop button should persist after full page reload", async ({ page }) => {

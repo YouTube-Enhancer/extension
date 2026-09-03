@@ -3,6 +3,7 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
+import type { YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/forwardRewindButtons/index.metadata";
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeIn, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
@@ -10,7 +11,7 @@ import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
-import { freezeAndGetTime, waitForStableTime } from "@/src/utils/_tests/player";
+import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -20,19 +21,37 @@ const time = 10;
 const { left, right } = placementRecord;
 export async function expectSeekDelta(page: Page, pageType: PageType, direction: "backward" | "forward", expectedDelta: number) {
 	const tolerance = 2;
+	const baseline = 60;
 	const featureId = direction === "forward" ? "yte-feature-forwardButton-button" : "yte-feature-rewindButton-button";
+	// Seek to a known position first: navigation leaves the player near 0, where a rewind clamps and the delta is meaningless.
+	await page.evaluate(async (seconds) => {
+		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		await player?.seekTo(seconds, true);
+	}, baseline);
+	await expect
+		.poll(async () => getValueFromYouTubePlayer(page, "getCurrentTime", pageType), { intervals: [200], timeout: 10000 })
+		.toBeGreaterThanOrEqual(baseline - tolerance);
 	const start = await freezeAndGetTime(page, pageType);
-	expect(start).toBeDefined();
+	expect(start).not.toBeNull();
 	expect(Number.isFinite(start)).toBe(true);
-	if (!start) return;
+	if (start === null) return;
 	await clickFeatureButton(page, pageType, featureId, left);
-	const end = await waitForStableTime(page, pageType);
-	expect(end).toBeDefined();
-	expect(Number.isFinite(end)).toBe(true);
-	if (!end) return;
+	// The video is paused, so waiting for a "stable" time would return the pre-seek value: poll for the seeked value instead.
+	await expect
+		.poll(
+			async () => {
+				const current = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+				if (current === null) return null;
+				return direction === "forward" ? current - start : start - current;
+			},
+			{ intervals: [200], timeout: 10000 }
+		)
+		.toBeGreaterThanOrEqual(expectedDelta - tolerance);
+	const end = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);
+	expect(end).not.toBeNull();
+	if (end === null) return;
 	const delta = direction === "forward" ? end - start : start - end;
 	expect(Number.isFinite(delta)).toBe(true);
-	expect(delta).toBeGreaterThanOrEqual(expectedDelta - tolerance);
 	expect(delta).toBeLessThanOrEqual(expectedDelta + tolerance);
 }
 test.describe("forwardRewindButtons", () => {
@@ -60,16 +79,18 @@ test.describe("forwardRewindButtons", () => {
 			await navigateToPageType(page, pageType);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
 		});
-		test(`forward button should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
+		test(`forward and rewind buttons should re-appear after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "forwardRewindButtons.button.placement", left);
 			await enableFeature(page, "forwardRewindButtons.button.enabled");
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-rewindButton-button");
 			await disableFeature(page, "forwardRewindButtons.button.enabled");
 			await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
+			await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
 			await enableFeature(page, "forwardRewindButtons.button.enabled");
-			await setOption(page, "forwardRewindButtons.button.placement", left);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-forwardButton-button");
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-rewindButton-button");
 		});
 	}
 
@@ -87,6 +108,7 @@ test.describe("forwardRewindButtons", () => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "forwardRewindButtons.button.enabled");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
+		await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
 	});
 
 	test.describe("button placement", () => {

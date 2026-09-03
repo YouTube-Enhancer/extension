@@ -38,12 +38,21 @@ async function expectUIVisible(page: Page): Promise<void> {
 async function getTimes(page: Page): Promise<Nullable<string>> {
 	return await page.locator(UI.times).textContent();
 }
+/** Reads the total segment of `watched / total (- remaining)` in seconds. */
+async function getTotalSeconds(page: Page): Promise<Nullable<number>> {
+	const times = await getTimes(page);
+	const total = times?.split(" / ")[1]?.split(" (")[0];
+	if (!total) return null;
+	return total.split(":").reduce((acc, part) => acc * 60 + Number(part), 0);
+}
 
 async function waitForPlaylist(page: Page, pageType: string): Promise<void> {
-	if (pageType === "playlist") {
-		await page.waitForSelector("yt-item-section-renderer", { timeout: 15000 }).catch(() => {});
-		await page.waitForTimeout(2000);
-	}
+	if (pageType !== "playlist") return;
+	// The containers the controller reads its items from. Awaiting them replaces a swallowed selector
+	// timeout followed by an unconditional 2 s sleep.
+	await expect(page.locator("ytd-playlist-video-list-renderer div#contents > *, yt-item-section-renderer div#contents > *").first()).toBeVisible({
+		timeout: 15000
+	});
 }
 
 test.describe("playlistLength", () => {
@@ -72,20 +81,25 @@ test.describe("playlistLength", () => {
 			await enablePlaylistLength(page, pageType);
 			await expectUIVisible(page);
 			await page.reload();
+			// navigateToPageType only performs the readiness/ads wait here; re-enabling would replace the
+			// reloaded state with a fresh onEnable and hide a broken reload path.
 			await navigateToPageType(page, pageType, ["playlistLength"]);
-			await enablePlaylistLength(page, pageType);
 			await expectUIVisible(page);
 		});
 	}
 	test("should update UI when playback rate changes (watch only behavior)", async ({ page }) => {
-		await navigateToPageType(page, watch);
+		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enableFeature(page, "playlistLength.enabled");
-		const before = await getTimes(page);
-		await page.locator("video").evaluate((video: HTMLVideoElement) => {
+		await expectUIVisible(page);
+		const totalBefore = await getTotalSeconds(page);
+		expect(totalBefore).toBeTruthy();
+		// The watched time advances on its own, so only the total (playlist duration / playbackRate) is a
+		// valid observation. The video keeps playing so the timeupdate listener drives the recomputation.
+		await page.locator("video").evaluate(async (video: HTMLVideoElement) => {
 			video.playbackRate = 2;
-			video.dispatchEvent(new Event("ratechange"));
+			await video.play().catch(() => {});
 		});
-		await expect.poll(async () => await getTimes(page)).not.toBe(before);
+		await expect.poll(async () => getTotalSeconds(page), { timeout: 15000 }).toBeCloseTo(Math.floor(totalBefore! / 2), -1);
 	});
 
 	test("should not render UI on non-target page", async ({ page }) => {
