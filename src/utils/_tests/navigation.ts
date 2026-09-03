@@ -163,6 +163,35 @@ export async function navigateToPageType(page: Page, pageType: PageType, require
 	await navigateToYoutubePage(page, fixture.url, pageType);
 }
 /**
+ * Reloads the current document and waits for the extension and (on player pages) the player to be ready again.
+ * Use this instead of `page.reload()` followed by `navigateToPageType`, which on live pages hunts for a new
+ * stream and discards the reloaded document.
+ */
+export async function reloadPage(page: Page, pageType: PageType): Promise<void> {
+	await page.reload({ waitUntil: "domcontentloaded" });
+	await waitForExtensionReady(page);
+	if (["live", "shorts", "watch"].includes(pageType)) {
+		await waitForYoutubePlayerReady(page, pageType);
+	}
+	await pageSetup(page);
+}
+/**
+ * Performs a genuine single-page navigation from a watch page to another video by clicking a related video in
+ * the sidebar, so YouTube fires yt-navigate-start/finish and the extension's onNavigate hooks run.
+ * Resolves once the video id in the URL has changed and the player is ready again.
+ */
+export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
+	const before = new URL(page.url()).searchParams.get("v");
+	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"])`).first();
+	await expect(link).toBeAttached({ timeout: 15_000 });
+	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
+	await link.click();
+	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
+	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForYoutubePlayerReady(page, "watch");
+	await pageSetup(page);
+}
+/**
  * Waits until the extension has finished its initial setup on the current page.
  *
  * The content script only forwards storage changes once the embedded script reports the page as

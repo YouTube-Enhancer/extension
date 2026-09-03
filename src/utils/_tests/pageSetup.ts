@@ -124,8 +124,12 @@ async function getErrorReason(page: Page): Promise<null | string> {
 	return reason?.trim() || null;
 }
 
+const pagesWithErrorWatch = new WeakSet<Page>();
 async function handleYoutubeErrors(page: Page): Promise<void> {
 	await dismissContentWarning(page);
+	// pageSetup runs on every navigation; keep a single background watcher per page.
+	if (pagesWithErrorWatch.has(page)) return;
+	pagesWithErrorWatch.add(page);
 	let lastReload = 0;
 	const reloadCooldown = 30_000;
 	const pollInterval = 5_000;

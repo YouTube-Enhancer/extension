@@ -244,13 +244,18 @@ export async function setVolume(page: Page, volume: number, pageType: PageType =
 	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
 }
 /**
- * Waits for the scroll wheel volume control to finish attaching (or detaching) its listeners.
- * The controller marks the body while the volume control is active.
+ * Waits for a scroll wheel control to finish attaching (or detaching) its listeners.
+ * The controller marks the body with `yte-scroll-wheel-<type>-control` while that control is active.
  */
-export async function waitForScrollWheelVolumeControl(page: Page, active: boolean): Promise<void> {
+export async function waitForScrollWheelControl(page: Page, type: "speed" | "volume", active: boolean): Promise<void> {
 	await expect
-		.poll(async () => page.evaluate(() => document.body.classList.contains("yte-scroll-wheel-volume-control")), { timeout: 10_000 })
+		.poll(async () => page.evaluate((className) => document.body.classList.contains(className), `yte-scroll-wheel-${type}-control`), {
+			timeout: 10_000
+		})
 		.toBe(active);
+}
+export async function waitForScrollWheelVolumeControl(page: Page, active: boolean): Promise<void> {
+	await waitForScrollWheelControl(page, "volume", active);
 }
 export async function waitForStableTime(page: Page, pageType: PageType, threshold = 150) {
 	let last = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);

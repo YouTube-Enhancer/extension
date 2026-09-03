@@ -7,21 +7,49 @@ import type { ButtonPlacement, FeatureButtonId, FeatureMenuItemId } from "@/src/
 import { placementSelectors } from "@/src/utils/_tests/constants";
 import { getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 
+/** Fails when none of the selectors matches an element on the page. */
+export async function expectAnyMatch(page: Page, selectors: readonly string[], { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
+	await expect
+		.poll(async () => page.evaluate((list) => list.some((selector) => document.querySelector(selector) !== null), [...selectors]), {
+			message: `expected at least one element matching: ${selectors.join(", ")}`,
+			timeout
+		})
+		.toBe(true);
+}
 export async function expectBodyWithClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
 	await expect(page.locator("body")).toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
 }
 export async function expectBodyWithoutClass(page: Page, bodyClass: string, { timeout = 10000 }: { timeout?: number } = {}): Promise<void> {
 	await expect(page.locator("body")).not.toHaveClass(new RegExp(`(^|\\s)${bodyClass}(\\s|$)`), { timeout });
 }
+/**
+ * Asserts the player never reports `expectedQuality` during a settle window. Enforcement is asynchronous, so a
+ * single read would sample before the feature could have acted.
+ */
 export async function expectCurrentQualityLevelToBeFalsy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {
-	const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType);
-	expect(currentQualityLevel).toBeTruthy();
-	expect(currentQualityLevel).not.toBe(expectedQuality);
+	await expectToStay(
+		async () => {
+			const currentQualityLevel = await getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType);
+			expect(currentQualityLevel).toBeTruthy();
+			return currentQualityLevel !== expectedQuality;
+		},
+		true,
+		{ page }
+	);
 }
 export async function expectCurrentQualityLevelToBeTruthy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {
 	await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout: 10000 }).toBe(expectedQuality);
 }
-export async function expectElementsHidden(page: Page, selectors: readonly string[], { mode = "all" }: { mode?: "all" | "any" } = {}): Promise<void> {
+/**
+ * Asserts every element matching the selectors is hidden. With `mode: "any"` a single hidden match is enough.
+ * With `requireMatch` the assertion fails when no selector matches anything, instead of passing vacuously.
+ */
+export async function expectElementsHidden(
+	page: Page,
+	selectors: readonly string[],
+	{ mode = "all", requireMatch = false }: { mode?: "all" | "any"; requireMatch?: boolean } = {}
+): Promise<void> {
+	if (requireMatch) await expectAnyMatch(page, selectors);
 	for (const selector of selectors) {
 		const locator = page.locator(selector);
 		for (let count = await locator.count(), i = 0; i < count; i++) {
@@ -40,8 +68,9 @@ export async function expectElementsHidden(page: Page, selectors: readonly strin
 export async function expectElementsNotHidden(
 	page: Page,
 	selectors: readonly string[],
-	{ mode = "all" }: { mode?: "all" | "any" } = {}
+	{ mode = "all", requireMatch = false }: { mode?: "all" | "any"; requireMatch?: boolean } = {}
 ): Promise<void> {
+	if (requireMatch) await expectAnyMatch(page, selectors);
 	for (const selector of selectors) {
 		const locator = page.locator(selector);
 		for (let count = await locator.count(), i = 0; i < count; i++) {
@@ -84,4 +113,19 @@ export async function expectFeatureMenuItemToBeFalsy(page: Page, featureId: Feat
 export async function expectFeatureMenuItemToBeTruthy(page: Page, featureId: FeatureMenuItemId) {
 	const menuItem = page.locator(`#${featureId}`);
 	await expect(menuItem).toBeAttached();
+}
+/**
+ * Asserts that `getter` keeps returning `expected` for the whole settle window. Use it for negative tests
+ * ("X does not happen"), where a single poll would pass on its first sample before the feature could act.
+ */
+export async function expectToStay(
+	getter: () => Promise<unknown>,
+	expected: unknown,
+	{ durationMs = 3000, intervalMs = 250, page }: { durationMs?: number; intervalMs?: number; page: Page }
+): Promise<void> {
+	const end = Date.now() + durationMs;
+	do {
+		expect(await getter()).toEqual(expected);
+		await page.waitForTimeout(intervalMs);
+	} while (Date.now() < end);
 }
