@@ -114,6 +114,17 @@ export async function expectFeatureMenuItemToBeTruthy(page: Page, featureId: Fea
 	const menuItem = page.locator(`#${featureId}`);
 	await expect(menuItem).toBeAttached();
 }
+/** Asserts a toggle button's checked state (aria-checked) and, optionally, its title text. */
+export async function expectToggleButtonState(
+	page: Page,
+	featureId: FeatureButtonId,
+	checked: boolean,
+	{ timeout = 10000, title }: { timeout?: number; title?: RegExp | string } = {}
+): Promise<void> {
+	const button = page.locator(`#${featureId}`);
+	await expect(button).toHaveAttribute("aria-checked", String(checked), { timeout });
+	if (title !== undefined) await expect(button).toHaveAttribute("data-title", title, { timeout });
+}
 /**
  * Asserts that `getter` keeps returning `expected` for the whole settle window. Use it for negative tests
  * ("X does not happen"), where a single poll would pass on its first sample before the feature could act.
