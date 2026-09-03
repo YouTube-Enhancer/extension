@@ -191,6 +191,31 @@ export function resetState() {
 	timestampsWithListeners.clear();
 }
 
+/**
+ * Moves the real video element back into the player and hides the overlay. The preview borrows the player's
+ * own video element, so this has to run before the overlay is removed - on disable and on navigation -
+ * or the player is left without a video.
+ */
+export function restorePreviewedVideo() {
+	cancelHideTimer();
+	hideShield();
+	const video = getVideo();
+	if (video && state.overlayParent && state.placeholder) {
+		state.overlayParent.insertBefore(video, state.placeholder);
+		state.placeholder.remove();
+		state.placeholder = null;
+		state.overlayParent = null;
+		if (state.originalVideoStyles) {
+			Object.assign(video.style, state.originalVideoStyles);
+			state.originalVideoStyles = null;
+		}
+	}
+	const overlay = document.getElementById("yte-timestamp-peek-overlay");
+	if (overlay) overlay.style.display = "none";
+	state.restoreMiniPlayerOverlay?.();
+	state.restoreMiniPlayerOverlay = null;
+}
+
 function cancelHideTimer() {
 	if (state.hideTimer !== null) {
 		clearTimeout(state.hideTimer);
@@ -321,21 +346,7 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 			}
 		}
 	} else {
-		cancelHideTimer();
-		hideShield();
-		if (state.overlayParent && state.placeholder) {
-			state.overlayParent.insertBefore(video, state.placeholder);
-			state.placeholder.remove();
-			state.placeholder = null;
-			state.overlayParent = null;
-			if (state.originalVideoStyles) {
-				Object.assign(video.style, state.originalVideoStyles);
-				state.originalVideoStyles = null;
-			}
-		}
-		overlay.style.display = "none";
-		state.restoreMiniPlayerOverlay?.();
-		state.restoreMiniPlayerOverlay = null;
+		restorePreviewedVideo();
 	}
 }
 
