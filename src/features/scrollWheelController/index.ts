@@ -95,7 +95,7 @@ export async function enableScrollWheelControl<T extends ScrollWheelControlType>
 			stepper: createWheelStepper((steps) => queueSteps(type, steps))
 		});
 	}
-	attachWheelListeners(playerContainer);
+	attachWheelListener();
 	// Marks the body while a control is attached; the volume class also drives the context-menu CSS.
 	modifyElementClassList("add", { className: `yte-scroll-wheel-${type}-control`, element: document.body });
 	if (type === "volume") {
@@ -142,13 +142,13 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	showOnScreenDisplay(onScreenDisplay, playerContainer, { max: 100, type: "volume", value: newVolume });
 }
 
-function attachWheelListeners(playerContainer: YouTubePlayerDiv) {
-	const containerSelectors = ["div#player", isShortsPage() ? "#player-container:has(#shorts-player)" : "#player-container:has(#movie_player)"];
-	const targets = new Set<HTMLElement>(document.querySelectorAll<HTMLElement>(containerSelectors.join(", ")));
-	targets.add(playerContainer);
-	for (const target of targets) {
-		eventManager.addEventListener(target, "wheel", onWheel, "scrollWheelController", { passive: false });
-	}
+/**
+ * One capture-phase listener on the document. It runs before YouTube's own handlers on the controls, the
+ * overlays and the shorts reel can take the event, and it survives YouTube replacing the player element -
+ * which it does on shorts after an in-page navigation - because the player is resolved for every event.
+ */
+function attachWheelListener() {
+	eventManager.addEventListener(document, "wheel", onWheel, "scrollWheelController", { capture: true, passive: false });
 }
 
 async function ensureOptionsSnapshot() {
@@ -169,10 +169,7 @@ async function ensureOptionsSnapshot() {
 async function findPlayerContainer(type: ScrollWheelControlType): Promise<Nullable<YouTubePlayerDiv>> {
 	let playerContainer: Nullable<YouTubePlayerDiv> = null;
 	const findPlayerTask = (): boolean => {
-		const element =
-			isWatchPage() || (type === "volume" && isLivePage()) ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-			: null;
+		const element = queryPlayerContainer(type);
 		if (element) playerContainer = element;
 		return playerContainer !== null;
 	};
@@ -186,8 +183,7 @@ async function findPlayerContainer(type: ScrollWheelControlType): Promise<Nullab
 
 function onContextMenu(event: MouseEvent) {
 	if (!suppressContextMenu) return;
-	const volumeControl = activeControls.get("volume");
-	if (!volumeControl?.playerContainer.contains(event.target as Node)) return;
+	if (!wheelAreaOf("volume")?.contains(event.target as Node)) return;
 	event.preventDefault();
 	event.stopImmediatePropagation();
 	toggleContextMenuVisibility("remove");
@@ -196,8 +192,7 @@ function onContextMenu(event: MouseEvent) {
 
 function onMouseUp(event: MouseEvent) {
 	if (!suppressContextMenu) return;
-	const volumeControl = activeControls.get("volume");
-	if (!volumeControl?.playerContainer.contains(event.target as Node)) return;
+	if (!wheelAreaOf("volume")?.contains(event.target as Node)) return;
 	setTimeout(() => {
 		suppressContextMenu = false;
 		toggleContextMenuVisibility("remove");
@@ -217,6 +212,13 @@ function onWheel(event: WheelEvent) {
 	}
 	if (!type) return;
 	const { target } = event;
+	const runtime = activeControls.get(type);
+	if (!runtime) return;
+	// The listener sits on the document, so the event has to come from the player's area; the area is looked up
+	// now rather than at enable time because YouTube swaps the shorts player element after a navigation.
+	const playerContainer = queryPlayerContainer(type);
+	if (!playerContainer || !wheelAreaAround(playerContainer).contains(target as Node)) return;
+	runtime.playerContainer = playerContainer;
 	if (target instanceof HTMLElement && target.id === getFeatureButtonId("volumeBoostButton")) return;
 	const settingsPanelMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
 	if (settingsPanelMenu?.contains(target as Node)) return;
@@ -225,7 +227,14 @@ function onWheel(event: WheelEvent) {
 		suppressContextMenu = true;
 	}
 	preventScroll(event);
-	activeControls.get(type)?.stepper.feed(event);
+	runtime.stepper.feed(event);
+}
+
+/** The player element a control of this type drives on the current page, or null when the page has none. */
+function queryPlayerContainer(type: ScrollWheelControlType): Nullable<YouTubePlayerDiv> {
+	if (isWatchPage() || (type === "volume" && isLivePage())) return document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	if (isShortsPage()) return document.querySelector<YouTubePlayerDiv>("div#shorts-player");
+	return null;
 }
 
 function queueSteps(type: ScrollWheelControlType, wheelSteps: number) {
@@ -292,4 +301,17 @@ function showOnScreenDisplay(
 
 function toggleContextMenuVisibility(action: ModifyElementAction) {
 	modifyElementClassList(action, { className: "yte-context-menu-visible", element: document.body });
+}
+
+/**
+ * The area the controls react to. YouTube's wrapper containers carry overlays and controls the player's own
+ * box does not include, so the outermost of them around the player counts as well.
+ */
+function wheelAreaAround(playerContainer: YouTubePlayerDiv): HTMLElement {
+	return playerContainer.closest<HTMLElement>("div#player") ?? playerContainer.closest<HTMLElement>("#player-container") ?? playerContainer;
+}
+
+function wheelAreaOf(type: ScrollWheelControlType): Nullable<HTMLElement> {
+	const playerContainer = queryPlayerContainer(type) ?? activeControls.get(type)?.playerContainer ?? null;
+	return playerContainer ? wheelAreaAround(playerContainer) : null;
 }
