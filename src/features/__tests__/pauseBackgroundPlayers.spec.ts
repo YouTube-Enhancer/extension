@@ -130,6 +130,9 @@ test.describe("pauseBackgroundPlayers", () => {
 		// The navigated tab has to become the sender, otherwise nothing observes the listeners onNavigate re-attaches.
 		await navigateToPageType(pageA, home);
 		await navigateToPageType(pageA, watch);
+		// The navigated tab autoplays and may already have paused the other one. Starting that one again makes the
+		// pause below attributable to the listeners the navigated tab re-attached, not to its autoplay.
+		await ensureVideoIsPlaying(pageB, watch);
 		await expectPlayerState(pageB, PlayerStates.PLAYING, watch);
 		await ensureVideoIsPlaying(pageA, watch);
 		await expectPlayerState(pageB, PlayerStates.PAUSED, watch);

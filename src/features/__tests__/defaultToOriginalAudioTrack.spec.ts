@@ -113,6 +113,20 @@ async function isAutoDubbed(page: Page): Promise<boolean | null> {
 }
 
 /**
+ * Skips the test when this load did not start on an auto-dubbed track. YouTube auto-dubs the fixture for an
+ * en-US viewer on most loads but not all; without that start there is nothing for the feature to switch
+ * away from, and a "switches to original" assertion would pass without the feature doing anything.
+ */
+async function requireAutoDubbedStart(page: Page): Promise<void> {
+	const autoDubbed = await expect
+		.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 15000 })
+		.toBe(true)
+		.then(() => true)
+		.catch(() => false);
+	test.skip(!autoDubbed, "this load did not start on an auto-dubbed track, so there is nothing to switch away from");
+}
+
+/**
  * Walks YouTube's own history back, which is a single-page navigation: it fires popstate, so the extension's
  * onNavigate hooks run, and it lands on a video this spec already knows is auto-dubbed by default.
  */
@@ -127,6 +141,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 	for (const pageType of testPages) {
 		test(`should switch to original (non-auto-dubbed) audio track on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
+			await requireAutoDubbedStart(page);
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
 			await expect(page.locator(getPlayerSelector(pageType))).toBeVisible({ timeout: 10000 });
 			await expectOriginalAudioTrack(page);
@@ -134,6 +149,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 
 		test(`should restore original audio track when disabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
+			await requireAutoDubbedStart(page);
 			const originalTrackId = await getAudioTrackId(page);
 			expect(originalTrackId).not.toBeNull();
 
@@ -151,6 +167,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 
 		test(`should switch to original audio track after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType, ["dubbedAudio"]);
+			await requireAutoDubbedStart(page);
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
 			await expect(page.locator(getPlayerSelector(pageType))).toBeVisible({ timeout: 10000 });
 			await expectOriginalAudioTrack(page);
@@ -168,8 +185,8 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
 		await expect(page.locator(getPlayerSelector(watch))).toBeVisible({ timeout: 10000 });
-		// The dubbedAudio fixture starts on an auto-dubbed track; with the feature off it has to stay on it.
-		await expect.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 15000 }).toBe(true);
+		// With the feature off the auto-dubbed track this load started on has to stay selected.
+		await requireAutoDubbedStart(page);
 		await expectToStay(async () => isAutoDubbed(page), true, { durationMs: 3000, intervalMs: 500, page });
 	});
 
@@ -177,6 +194,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 	// loop never runs at all (see the note on testPages above).
 	test(`should re-apply the original audio track after an in-page navigation on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
+		await requireAutoDubbedStart(page);
 		const dubbedVideoId = new URL(page.url()).searchParams.get("v");
 		expect(dubbedVideoId).not.toBeNull();
 		await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
@@ -190,6 +208,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 	});
 	test(`should restore the current video's audio track, not the previous one's, after an in-page switch on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
+		await requireAutoDubbedStart(page);
 		await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
 		await expectOriginalAudioTrack(page);
 

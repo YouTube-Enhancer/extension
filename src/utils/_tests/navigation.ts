@@ -243,7 +243,8 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 	// The sidebar renders an aria-hidden thumbnail anchor ahead of the visible one for some lockups, and clicking
 	// that never resolves, so only links that can actually be clicked qualify.
 	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"]):visible`).first();
-	await expect(link).toBeAttached({ timeout: 15_000 });
+	// The sidebar renders late when an ad or a slow feed delays the watch page; give it time rather than fail.
+	await expect(link).toBeAttached({ timeout: 30_000 });
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
