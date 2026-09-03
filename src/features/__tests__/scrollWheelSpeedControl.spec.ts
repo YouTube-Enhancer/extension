@@ -54,23 +54,25 @@ test.describe("scrollWheelSpeedControl", () => {
 		});
 	}
 	test.describe("stepper", () => {
-		async function enableSpeedControl(page: Page) {
+		// YouTube's player API only reports rates up to 2x, so start low enough for a five-notch burst to stay in range.
+		const burstStartSpeed = 0.5;
+		async function enableSpeedControl(page: Page, initialSpeed: number) {
 			await navigateToPageType(page, watch);
 			await setOption(page, "scrollWheelSpeedControl.steps", steps);
 			await setOption(page, "scrollWheelSpeedControl.modifierKey", "altKey");
 			await enableFeature(page, "scrollWheelSpeedControl.enabled");
 			// The speed control leaves no DOM marker, so give it a moment to attach its listeners.
 			await page.waitForTimeout(1000);
-			await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", speed);
-			await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(speed);
+			await setValueOnYouTubePlayer(page, watch, "setPlaybackRate", initialSpeed);
+			await expect.poll(async () => getCurrentSpeed(page, watch)).toBe(initialSpeed);
 		}
 		test("applies every notch of a rapid wheel burst on watch", async ({ page }) => {
-			await enableSpeedControl(page);
+			await enableSpeedControl(page, burstStartSpeed);
 			await dispatchWheelNotches(page, watch, "up", 5, { altKey: true });
-			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + 5 * steps);
+			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(burstStartSpeed + 5 * steps);
 		});
 		test("stops adjusting speed once disabled on watch", async ({ page }) => {
-			await enableSpeedControl(page);
+			await enableSpeedControl(page, speed);
 			await dispatchWheelNotches(page, watch, "up", 1, { altKey: true });
 			await expect.poll(async () => getCurrentSpeed(page, watch), { timeout: 5000 }).toBe(speed + steps);
 			await disableFeature(page, "scrollWheelSpeedControl.enabled");
