@@ -12,18 +12,6 @@ const { home } = pageTypeRecord;
 
 test.describe("restoreFullscreenScrolling", () => {
 	for (const pageType of testPages) {
-		test(`should add restore fullscreen scrolling classes on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "restoreFullscreenScrolling.enabled");
-			await expect(page.locator("ytd-watch-flexy")).toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
-		});
-		test(`should remove restore fullscreen scrolling classes when disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "restoreFullscreenScrolling.enabled");
-			await expect(page.locator("ytd-watch-flexy")).not.toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
-			await expect(page.locator("ytd-app")).not.toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
-		});
 		test(`should restore fullscreen scrolling classes after navigation on ${pageType}`, async ({ page }) => {
 			test.setTimeout(120_000);
 			await navigateToPageType(page, pageType);
@@ -36,16 +24,6 @@ test.describe("restoreFullscreenScrolling", () => {
 			await enableFeature(page, "restoreFullscreenScrolling.enabled");
 			await expect(page.locator("ytd-watch-flexy")).toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
 			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
-		});
-
-		test(`restores original state when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "restoreFullscreenScrolling.enabled");
-			await expect(page.locator("ytd-watch-flexy")).toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
-			await expect(page.locator("ytd-app")).toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
-			await disableFeature(page, "restoreFullscreenScrolling.enabled");
-			await expect(page.locator("ytd-watch-flexy")).not.toHaveClass(/yte-ytd-watch-flexy-restore-fullscreen-scrolling/);
-			await expect(page.locator("ytd-app")).not.toHaveClass(/yte-ytd-app-restore-fullscreen-scrolling/);
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);

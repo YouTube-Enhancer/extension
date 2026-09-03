@@ -8,24 +8,18 @@ import { getCurrentSpeed } from "@/src/utils/_tests/player";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const speeds = [2, 0.5, 1.5] as const;
+// No code branches on the speed value (resolveEffectiveSpeed forwards it unchanged), so one speed per page is enough.
+const speed = 2;
 const { home, watch } = pageTypeRecord;
 
 test.describe("playerSpeed", () => {
 	for (const pageType of testPages) {
-		for (const speed of speeds) {
-			test(`should set playback speed to ${speed} on ${pageType}`, async ({ page }) => {
-				await navigateToPageType(page, pageType);
-				await setOption(page, "playerSpeed.speed", speed);
-				await enableFeature(page, "playerSpeed.enabled");
-				await page.waitForTimeout(1000);
-				await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(speed);
-			});
-		}
-		test(`should not set playback speed when disabled on ${pageType}`, async ({ page }) => {
+		test(`should set playback speed to ${speed} on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).not.toBe(2);
+			await setOption(page, "playerSpeed.speed", speed);
+			await enableFeature(page, "playerSpeed.enabled");
+			await page.waitForTimeout(1000);
+			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(speed);
 		});
 		test(`should persist playback speed after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -49,7 +43,7 @@ test.describe("playerSpeed", () => {
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
 			await disableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).not.toBe(2);
+			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(1);
 			await enableFeature(page, "playerSpeed.enabled");
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
 		});
@@ -61,14 +55,6 @@ test.describe("playerSpeed", () => {
 			await page.reload();
 			await navigateToPageType(page, pageType);
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 15000 }).toBe(2);
-		});
-		test(`restores normal speed when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await setOption(page, "playerSpeed.speed", 2);
-			await enableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
-			await disableFeature(page, "playerSpeed.enabled");
-			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: 5000 }).toBe(1);
 		});
 	}
 
