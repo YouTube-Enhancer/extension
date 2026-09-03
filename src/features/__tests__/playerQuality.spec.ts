@@ -276,11 +276,21 @@ test.describe("playerQuality", () => {
 		// The marker is the direct evidence that onNavigate ran a fresh apply, and it appears as soon as the
 		// level has been requested rather than once the player has finished switching to it.
 		await expect(page.locator(`div#movie_player[data-default-quality="${closestQualityAfterNavigation}"]`)).toBeAttached({ timeout: 30000 });
-		// Streaming the requested level takes longer than requesting it, so this waits longer than the shared
-		// quality assertion does.
+		// Streaming the requested level takes longer than requesting it, and a 4K level may never finish buffering
+		// here, so the level the player itself reports as requested counts as well as the level playing.
 		await expect
-			.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", watch), { timeout: 30000 })
-			.toBe(closestQualityAfterNavigation);
+			.poll(
+				async () =>
+					page.evaluate(() => {
+						const player = document.querySelector("div#movie_player") as unknown as null | {
+							getPlaybackQuality?: () => string;
+							getPreferredQuality?: () => string;
+						};
+						return [player?.getPlaybackQuality?.(), player?.getPreferredQuality?.()];
+					}),
+				{ timeout: 30000 }
+			)
+			.toContain(closestQualityAfterNavigation);
 	});
 	test(`suspends enforcement when quality is changed from the player settings menu on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);

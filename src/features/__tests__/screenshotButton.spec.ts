@@ -85,11 +85,17 @@ test.describe("screenshotButton", () => {
 		await clickFeatureButton(page, watch, "yte-feature-screenshotButton-button", left);
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
 		// copyToClipboard hardcodes image/png; screenshotButton.format only applies to the saved file.
-		const screenshotCopied = await page.waitForFunction(async () => {
-			const items = await navigator.clipboard.read();
-			return items.some((item) => item.types.includes("image/png"));
-		});
-		expect(await screenshotCopied.jsonValue()).toBe(true);
+		// The tooltip shows before the write finishes, so the clipboard is polled until the image lands.
+		await expect
+			.poll(
+				async () =>
+					page.evaluate(async () => {
+						const items = await navigator.clipboard.read();
+						return items.some((item) => item.types.includes("image/png"));
+					}),
+				{ timeout: 10000 }
+			)
+			.toBe(true);
 	});
 
 	test(`should take a screenshot and save as file and copy to clipboard on ${watch}`, async ({ page }) => {
@@ -108,11 +114,17 @@ test.describe("screenshotButton", () => {
 		// index.ts writes the clipboard first and schedules the tooltip removal 1200 ms later, so it can be gone
 		// by the time the download resolves.
 		await expect(page.getByText("Screenshot copied to clipboard")).toBeVisible();
-		const screenshotCopied = await page.waitForFunction(async () => {
-			const items = await navigator.clipboard.read();
-			return items.some((item) => item.types.some((type) => type.startsWith("image/")));
-		});
-		expect(await screenshotCopied.jsonValue()).toBe(true);
+		// The tooltip shows before the write finishes, so the clipboard is polled until the image lands.
+		await expect
+			.poll(
+				async () =>
+					page.evaluate(async () => {
+						const items = await navigator.clipboard.read();
+						return items.some((item) => item.types.some((type) => type.startsWith("image/")));
+					}),
+				{ timeout: 10000 }
+			)
+			.toBe(true);
 		const download = await downloadPromise;
 		await expectScreenshotDownload(download, page.url());
 	});
