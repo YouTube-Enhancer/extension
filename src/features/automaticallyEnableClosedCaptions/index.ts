@@ -13,6 +13,10 @@ async function enableCaptions() {
 	const subtitlesButton = document.querySelector<HTMLButtonElement>("button.ytp-subtitles-button");
 	// If player element or subtitles button is not available, return
 	if (!playerContainer || !subtitlesButton) return;
+	// If captions are already enabled, return: clicking the button would turn them off
+	if (subtitlesButton.getAttribute("aria-pressed") === "true") return;
+	// The feature is what turns captions on here, so onDisable has to turn them back off
+	captionsWhereEnabled = false;
 	// Enable captions
 	subtitlesButton.click();
 }
