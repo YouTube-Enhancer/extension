@@ -2,6 +2,10 @@ import type { Page } from "@playwright/test";
 
 import type { Nullable } from "@/src/types";
 
+/** Returns true when at least one of the selectors currently matches an element. */
+export async function hasAnyMatch(page: Page, selectors: readonly string[]): Promise<boolean> {
+	return page.evaluate((list) => list.some((selector) => document.querySelector(selector) !== null), [...selectors]);
+}
 /**
  * Injects a new DOM element matching one of the given selectors to simulate
  * content being added dynamically (e.g. by YouTube's frontend) after the
@@ -18,9 +22,15 @@ import type { Nullable } from "@/src/types";
  * Callers should assert the feature still applies afterwards, e.g. via
  * `expectElementsHidden` over the same selectors.
  *
- * @returns The selector that was injected, or `null` when no existing element matched.
+ * @returns The selector that was injected. Throws when no existing element matched, so a test can never pass
+ * without having injected anything.
  */
-export async function injectDynamicContent(page: Page, selectors: readonly string[]): Promise<Nullable<string>> {
+export async function injectDynamicContent(page: Page, selectors: readonly string[]): Promise<string> {
+	const injected = await injectDynamicContentIfPresent(page, selectors);
+	if (!injected) throw new Error(`injectDynamicContent: no element matched any of: ${selectors.join(", ")}`);
+	return injected;
+}
+async function injectDynamicContentIfPresent(page: Page, selectors: readonly string[]): Promise<Nullable<string>> {
 	return page.evaluate(
 		({ selectors }) => {
 			for (const selector of selectors) {
