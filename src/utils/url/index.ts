@@ -36,11 +36,16 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 			if (second === "videos") return "channel_videos";
 		}
 		if (first === "watch") {
-			const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-			if (player) {
-				const playerData = await player.getVideoData();
-				if (playerData?.isLive) return "live";
-			}
+			// On a cold load the player element can exist before its API is attached. Treat any failure
+			// here as a regular watch page instead of failing detection entirely, otherwise the registry
+			// never initialises and no page-gated feature can enable until a full reload.
+			try {
+				const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
+				if (player && typeof player.getVideoData === "function") {
+					const playerData = await player.getVideoData();
+					if (playerData?.isLive) return "live";
+				}
+			} catch {}
 			return "watch";
 		}
 		return null;
