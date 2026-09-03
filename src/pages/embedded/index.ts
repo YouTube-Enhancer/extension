@@ -5,12 +5,20 @@ import { browserColorLog } from "@/src/utils/logging";
 import { formatError } from "@/utils/format/error";
 
 let cleanupHandle: Nullable<{ dispose(): void }> = null;
+let setupInProgress = false;
 
 function initSetup() {
+	// `pageshow` fires right after `load`, usually before the async setup started on
+	// DOMContentLoaded has resolved, so guard against running the whole lifecycle twice.
+	if (setupInProgress || cleanupHandle) return;
+	setupInProgress = true;
 	setupYouTubePage()
 		.then((handle) => {
 			cleanupHandle = handle;
 			return undefined;
+		})
+		.finally(() => {
+			setupInProgress = false;
 		})
 		.catch((err) => browserColorLog(`Setup failed: ${formatError(err)}`, "FgRed"));
 }
