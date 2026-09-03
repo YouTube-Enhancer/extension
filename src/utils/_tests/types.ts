@@ -1,16 +1,16 @@
-import type PlayerStates from "youtube-player/dist/constants/PlayerStates";
 import type { PlayerSize, YouTubePlayer } from "youtube-player/dist/types";
 
 import type { YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 import type { Path, PathValue } from "@/src/types";
+import type { PlayerStates } from "@/src/utils/_tests/constants";
 
 export type ControlType = "Speed" | "Volume";
 
 export type FilterKeysByPrefix<O extends object, K extends keyof O, Prefix extends string> = K extends `${Prefix}${string}` ? K : never;
+
 export type FilterKeysByValueType<T, ValueType> = {
 	[P in Path<T>]: PathValue<T, P> extends ValueType ? P : never;
 }[Path<T>];
-
 export type FilterMethodsWithParameters<O extends object, K extends keyof O> = {
 	[Key in K]: O[Key] extends (...args: any[]) => any ?
 		Parameters<O[Key]> extends [] ?
@@ -18,6 +18,8 @@ export type FilterMethodsWithParameters<O extends object, K extends keyof O> = {
 		:	Key
 	:	never;
 }[K];
+
+export type PlayerState = (typeof PlayerStates)[keyof typeof PlayerStates];
 export type YouTubePlayerGetKeys = FilterKeysByPrefix<YouTubePlayer, keyof YouTubePlayer, "get">;
 
 export type YouTubePlayerGetKeysWithoutParams = Exclude<YouTubePlayerGetKeys, FilterMethodsWithParameters<YouTubePlayer, YouTubePlayerGetKeys>>;
@@ -29,7 +31,7 @@ export type YouTubePlayerGetReturnTypeMappings = {
 	getDuration: number;
 	getPlaybackQuality: YoutubePlayerQualityLevel;
 	getPlaybackRate: number;
-	getPlayerState: PlayerStates;
+	getPlayerState: PlayerState;
 	getSize: PlayerSize;
 	getVolume: number;
 };
