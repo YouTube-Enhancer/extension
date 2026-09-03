@@ -25,10 +25,10 @@ export { buttonContainerId };
 // ─── Module-level state ───────────────────────────────────────────
 
 type TrackedButtonInfo = {
+	checked: boolean;
 	currentEffectivePlacement: ButtonPlacement;
 	fullscreenPlacement: FullscreenPlacement;
 	icon: SVGSVGElement | ToggleIcon;
-	initialChecked: boolean;
 	isToggle: boolean;
 	label: string;
 	listener: ListenerType<boolean>;
@@ -306,7 +306,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		const labelEl = menuItem.querySelector<HTMLDivElement>(`#${featureMenuItemLabelId}`);
 		if (labelEl) labelEl.textContent = label;
 		eventManager.removeEventListener(menuItem, "click", featureName);
-		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem!, listener, isToggle), featureName);
+		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem!, listener, isToggle), featureName);
 		return;
 	}
 	menuItem = document.createElement("div");
@@ -333,7 +333,7 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.appendChild(menuItemToggle);
 		setMenuItemChecked(menuItem, initialChecked);
 	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(menuItem, listener, isToggle), featureName);
+	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem, listener, isToggle), featureName);
 	panel.appendChild(menuItem);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
 	if (featureMenuButton) {
@@ -653,6 +653,8 @@ export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: stri
 	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
 	if (button) {
 		button.dataset.title = title;
+		// The tracked label is what a relocated button is rebuilt from, so it has to follow the button's title.
+		updateTrackedButtonLabel(buttonName, title);
 		const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
 		if (tooltip) tooltip.textContent = title;
 	}
@@ -700,6 +702,7 @@ async function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FF
 }
 
 function buttonClickListener<Placement extends ButtonPlacement, Name extends AllButtonNames, Toggle extends boolean>(
+	buttonName: Name,
 	button: HTMLButtonElement,
 	icon: GetIconType<Name, Placement>,
 	listener: ListenerType<Toggle>,
@@ -708,6 +711,7 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	if (!isToggle) return listener();
 	const newState = !getChecked(button);
 	setChecked(button, newState);
+	updateTrackedButtonChecked(buttonName, newState);
 	if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, newState ? icon.on : icon.off);
 	else if (icon instanceof SVGSVGElement) updateFeatureButtonIcon(button, icon);
 	listener(newState);
@@ -740,10 +744,16 @@ function createFeatureMenuDom() {
 
 // ─── Button creation + placement ──────────────────────────────────
 
-function featureMenuClickListener<Toggle extends boolean>(menuItem: HTMLDivElement, listener: ListenerType<Toggle>, isToggle: boolean) {
+function featureMenuClickListener<Toggle extends boolean>(
+	buttonName: AllButtonNames,
+	menuItem: HTMLDivElement,
+	listener: ListenerType<Toggle>,
+	isToggle: boolean
+) {
 	if (!isToggle) return listener();
 	const newState = !getMenuItemChecked(menuItem);
 	setMenuItemChecked(menuItem, newState);
+	updateTrackedButtonChecked(buttonName, newState);
 	listener(newState);
 }
 
@@ -831,20 +841,12 @@ async function handleFullscreenChange() {
 
 		if (effectivePlacement !== "feature_menu") {
 			const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
-			const button = await makeFeatureButton(
-				buttonName,
-				effectivePlacement,
-				info.label,
-				placementIcon,
-				info.listener,
-				info.isToggle,
-				info.initialChecked
-			);
+			const button = await makeFeatureButton(buttonName, effectivePlacement, info.label, placementIcon, info.listener, info.isToggle, info.checked);
 			await placeButton(button, effectivePlacement);
 		} else {
 			const menuIcon = getFeatureIcon(buttonName, "feature_menu");
 			if (menuIcon instanceof SVGSVGElement) {
-				await addFeatureItemToMenu(buttonName, info.label, menuIcon, info.listener, info.isToggle, info.initialChecked);
+				await addFeatureItemToMenu(buttonName, info.label, menuIcon, info.listener, info.isToggle, info.checked);
 			}
 		}
 
@@ -899,7 +901,7 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 		button,
 		"click",
 		() => {
-			buttonClickListener<Placement, Name, Toggle>(button, icon, listener, isToggle);
+			buttonClickListener<Placement, Name, Toggle>(buttonName, button, icon, listener, isToggle);
 			update();
 		},
 		featureName
@@ -974,10 +976,10 @@ function trackButton(
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
 	trackedButtons.set(buttonName, {
+		checked: initialChecked,
 		currentEffectivePlacement: effectivePlacement,
 		fullscreenPlacement,
 		icon,
-		initialChecked,
 		isToggle,
 		label,
 		listener,
@@ -1006,6 +1008,18 @@ function updateMenuSize(menu: HTMLDivElement, panel: HTMLDivElement) {
 	menu.style.height = `${itemHeight * panel.childElementCount + menuPadding}px`;
 	menu.style.width = "fit-content";
 	window.dispatchEvent(new CustomEvent("yte-feature-menu-resized"));
+}
+
+// The tracked record is what a button is rebuilt from when it is relocated, so its checked state and label have
+// to follow the live button instead of staying on the values the button was added with.
+function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.checked = checked;
+}
+
+function updateTrackedButtonLabel(buttonName: AllButtonNames, label: string) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.label = label;
 }
 
 export type { ListenerType } from "./types";
