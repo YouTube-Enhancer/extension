@@ -113,17 +113,43 @@ async function isAutoDubbed(page: Page): Promise<boolean | null> {
 }
 
 /**
- * Skips the test when this load did not start on an auto-dubbed track. YouTube auto-dubs the fixture for an
- * en-US viewer on most loads but not all; without that start there is nothing for the feature to switch
- * away from, and a "switches to original" assertion would pass without the feature doing anything.
+ * Puts the player on an auto-dubbed track before the feature is enabled. YouTube auto-dubs the fixture for an
+ * en-US viewer on most loads but not all; when it did not, the auto-dubbed track is selected through the same
+ * player API the feature uses, so the test only skips when the video offers no auto-dubbed track at all.
+ * Without that start there is nothing for the feature to switch away from, and a "switches to original"
+ * assertion would pass without the feature doing anything.
  */
 async function requireAutoDubbedStart(page: Page): Promise<void> {
-	const autoDubbed = await expect
-		.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 15000 })
-		.toBe(true)
-		.then(() => true)
-		.catch(() => false);
-	test.skip(!autoDubbed, "this load did not start on an auto-dubbed track, so there is nothing to switch away from");
+	const startedAutoDubbed = await waitForAutoDubbed(page, 5000);
+	if (!startedAutoDubbed) {
+		const selected = await selectAutoDubbedTrack(page);
+		test.skip(!selected, "this video offers no auto-dubbed track, so there is nothing to switch away from");
+		const autoDubbed = await waitForAutoDubbed(page, 10000);
+		test.skip(!autoDubbed, "the player did not take the auto-dubbed track it offers");
+	}
+}
+
+/** Selects the video's auto-dubbed track through the player API; false when the video offers none. */
+async function selectAutoDubbedTrack(page: Page): Promise<boolean> {
+	return await page.evaluate(async () => {
+		const player = document.querySelector<
+			HTMLDivElement & {
+				getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[];
+				setAudioTrack?: (track: Record<string, unknown>) => unknown;
+			}
+		>("div#movie_player");
+		if (!player?.getAvailableAudioTracks || !player.setAudioTrack) return false;
+		const describesAutoDubbed = (value: unknown): boolean => {
+			if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+			const track = value as Record<string, unknown>;
+			return typeof track.id === "string" && track.isAutoDubbed === true;
+		};
+		const tracks = await player.getAvailableAudioTracks();
+		const autoDubbed = tracks.find((raw) => describesAutoDubbed(raw) || Object.values(raw).some(describesAutoDubbed));
+		if (!autoDubbed) return false;
+		await player.setAudioTrack(autoDubbed);
+		return true;
+	});
 }
 
 /**
@@ -135,6 +161,15 @@ async function spaNavigateBackToVideo(page: Page, expectedVideoId: string): Prom
 	await page.waitForURL((url) => url.searchParams.get("v") === expectedVideoId, { timeout: 30000 });
 	await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(expectedVideoId);
 	await waitForYoutubePlayerReady(page, watch);
+}
+
+/** Waits for the player to report an auto-dubbed track; false when it has not within the timeout. */
+async function waitForAutoDubbed(page: Page, timeout: number): Promise<boolean> {
+	return await expect
+		.poll(async () => isAutoDubbed(page), { intervals: [500], timeout })
+		.toBe(true)
+		.then(() => true)
+		.catch(() => false);
 }
 
 test.describe("defaultToOriginalAudioTrack", () => {
