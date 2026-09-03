@@ -176,6 +176,37 @@ export async function reloadPage(page: Page, pageType: PageType): Promise<void> 
 	await pageSetup(page);
 }
 /**
+ * Single-page navigation from a feed page (home, search, subscriptions, channel videos) to the first regular
+ * video it lists, so the extension's navigation hooks and includePages gate run for a watch page.
+ */
+export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
+	const link = page
+		.locator(
+			'ytd-rich-item-renderer a#video-title-link[href^="/watch?v="], ytd-video-renderer a#video-title[href^="/watch?v="], ytd-rich-item-renderer a#thumbnail[href^="/watch?v="]'
+		)
+		.first();
+	await expect(link).toBeAttached({ timeout: 15_000 });
+	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
+	await link.click();
+	await page.waitForURL((url) => url.pathname === "/watch", { timeout: 30_000 });
+	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForYoutubePlayerReady(page, "watch");
+	await pageSetup(page);
+}
+/**
+ * Single-page navigation to the home feed by clicking YouTube's logo, so features gated to other pages get
+ * their onNavigate/disable path instead of a full document load.
+ */
+export async function spaNavigateToHome(page: Page): Promise<void> {
+	const logo = page.locator("ytd-topbar-logo-renderer a#logo, a#logo").first();
+	await expect(logo).toBeAttached({ timeout: 15_000 });
+	await logo.click();
+	await page.waitForURL((url) => url.pathname === "/", { timeout: 30_000 });
+	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await expect(page.locator("ytd-rich-grid-renderer, ytd-two-column-browse-results-renderer").first()).toBeAttached({ timeout: 15_000 });
+	await pageSetup(page);
+}
+/**
  * Performs a genuine single-page navigation from a watch page to another video by clicking a related video in
  * the sidebar, so YouTube fires yt-navigate-start/finish and the extension's onNavigate hooks run.
  * Resolves once the video id in the URL has changed and the player is ready again.
