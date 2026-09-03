@@ -14,6 +14,12 @@ import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { clamp } from "@/src/utils/math";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 
+/**
+ * Pixel delta of a single mouse wheel notch. The scroll wheel controller's stepper normalises
+ * wheel deltas so that this many pixels equals exactly one step.
+ */
+export const WHEEL_DELTA_PER_NOTCH = 100;
+
 export async function adjustWithScrollWheel({
 	controlType,
 	direction,
@@ -59,7 +65,7 @@ export async function adjustWithScrollWheel({
 		bubbles: true,
 		cancelable: true,
 		deltaMode: 0,
-		deltaY: direction === "up" ? -1 : 1
+		deltaY: direction === "up" ? -WHEEL_DELTA_PER_NOTCH : WHEEL_DELTA_PER_NOTCH
 	};
 	if (withModifierKey) {
 		wheelInit[modifierKey] = true;
