@@ -3,12 +3,18 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
-import type { YouTubePlayerDiv } from "@/src/types";
+import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
 
 import { metadata } from "@/src/features/forwardRewindButtons/index.metadata";
-import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeIn, expectFeatureButtonToBeTruthy } from "@/src/utils/_tests/assertions";
+import {
+	expectFeatureButtonToBeFalsy,
+	expectFeatureButtonToBeIn,
+	expectFeatureButtonToBeTruthy,
+	expectFeatureMenuItemToBeTruthy,
+	expectToStay
+} from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
-import { clickFeatureButton, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
@@ -16,10 +22,16 @@ import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const { home, watch } = pageTypeRecord;
+const { home, live, watch } = pageTypeRecord;
 const time = 10;
-const { left, right } = placementRecord;
-export async function expectSeekDelta(page: Page, pageType: PageType, direction: "backward" | "forward", expectedDelta: number) {
+const { left, menu, right } = placementRecord;
+export async function expectSeekDelta(
+	page: Page,
+	pageType: PageType,
+	direction: "backward" | "forward",
+	expectedDelta: number,
+	placement: ButtonPlacement = left
+) {
 	const tolerance = 2;
 	const baseline = 60;
 	const featureId = direction === "forward" ? "yte-feature-forwardButton-button" : "yte-feature-rewindButton-button";
@@ -35,7 +47,11 @@ export async function expectSeekDelta(page: Page, pageType: PageType, direction:
 	expect(start).not.toBeNull();
 	expect(Number.isFinite(start)).toBe(true);
 	if (start === null) return;
-	await clickFeatureButton(page, pageType, featureId, left);
+	if (placement === "feature_menu") {
+		await clickFeatureMenuItem(page, pageType, direction === "forward" ? "yte-feature-forwardButton-menuitem" : "yte-feature-rewindButton-menuitem");
+	} else {
+		await clickFeatureButton(page, pageType, featureId, placement);
+	}
 	// The video is paused, so waiting for a "stable" time would return the pre-seek value: poll for the seeked value instead.
 	await expect
 		.poll(
@@ -109,6 +125,51 @@ test.describe("forwardRewindButtons", () => {
 		await enableFeature(page, "forwardRewindButtons.button.enabled");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-forwardButton-button");
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-rewindButton-button");
+	});
+
+	test("rewind button should still seek after the button placement is changed while enabled on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "forwardRewindButtons.time", time);
+		await setOption(page, "forwardRewindButtons.button.placement", left);
+		await enableFeature(page, "forwardRewindButtons.button.enabled");
+		await expectSeekDelta(page, watch, "backward", time);
+		await setOption(page, "forwardRewindButtons.button.placement", right);
+		await expectFeatureButtonToBeIn(page, "yte-feature-rewindButton-button", right);
+		await expectSeekDelta(page, watch, "backward", time, right);
+	});
+
+	test("changing forwardRewindButtons.time while enabled should update both button titles and the seek amount on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "forwardRewindButtons.time", 5);
+		await setOption(page, "forwardRewindButtons.button.placement", left);
+		await enableFeature(page, "forwardRewindButtons.button.enabled");
+		const forwardButton = page.locator("#yte-feature-forwardButton-button");
+		const rewindButton = page.locator("#yte-feature-rewindButton-button");
+		await expect(forwardButton).toHaveAttribute("data-title", /\b5\b/);
+		await expect(rewindButton).toHaveAttribute("data-title", /\b5\b/);
+		// A time-only change never re-adds the buttons: onConfigChange has to relabel them in place.
+		await setOption(page, "forwardRewindButtons.time", 20);
+		await expect(forwardButton).toHaveAttribute("data-title", /\b20\b/);
+		await expect(rewindButton).toHaveAttribute("data-title", /\b20\b/);
+		await expectSeekDelta(page, watch, "forward", 20);
+	});
+
+	test("both buttons should render in the feature menu and seek from it on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "forwardRewindButtons.time", time);
+		await setOption(page, "forwardRewindButtons.button.placement", menu);
+		await enableFeature(page, "forwardRewindButtons.button.enabled");
+		await expectFeatureMenuItemToBeTruthy(page, "yte-feature-forwardButton-menuitem");
+		await expectFeatureMenuItemToBeTruthy(page, "yte-feature-rewindButton-menuitem");
+		await expectSeekDelta(page, watch, "backward", time, menu);
+	});
+
+	test("forward and rewind buttons should not be added on a live stream", async ({ page }) => {
+		await navigateToPageType(page, live);
+		await setOption(page, "forwardRewindButtons.button.placement", left);
+		await enableFeature(page, "forwardRewindButtons.button.enabled");
+		// Seeking is meaningless on a live stream, so neither button may ever appear.
+		await expectToStay(async () => await page.locator("#yte-feature-forwardButton-button, #yte-feature-rewindButton-button").count(), 0, { page });
 	});
 
 	test.describe("button placement", () => {

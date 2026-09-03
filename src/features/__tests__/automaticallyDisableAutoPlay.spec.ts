@@ -4,11 +4,13 @@ import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/automaticallyDisableAutoPlay/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToFirstVideo, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+const { channel_videos: channelVideosPage, watch } = pageTypeRecord;
 
 async function getAutoPlayState(page: Page) {
 	const toggle = page.locator(".ytp-autonav-toggle-button");
@@ -67,4 +69,30 @@ test.describe("automaticallyDisableAutoPlay", () => {
 			await expect.poll(() => getAutoPlayState(page), { timeout: 15000 }).toBe(false);
 		});
 	}
+
+	// The cases below run on watch only: makeNavigateTask and makeEnableTask have no page branch beyond isWatchPage().
+	test(`keeps autoplay on for later videos once the user turns it back on on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["autoPlay"]);
+		await setAutoPlayState(page, true);
+		await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
+		await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(false);
+		// The user overrules the extension for the rest of the session; hasOverriddenDefault is already set, so the
+		// navigate task has to leave this choice alone.
+		await setAutoPlayState(page, true);
+		await spaNavigateToRelatedVideo(page);
+		// The navigate task gets 10 attempts at the default 500 ms interval, so watch longer than that window.
+		await expectToStay(() => getAutoPlayState(page), true, { durationMs: 6000, intervalMs: 500, page });
+	});
+	test(`disables autoplay after an in-page navigation from ${channelVideosPage} onto a watch page`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["autoPlay"]);
+		// YouTube remembers the autonav preference across loads, so turning it on here is what makes the video reached
+		// below start with autoplay on and the final assertion depend on the feature.
+		await setAutoPlayState(page, true);
+		await navigateToPageType(page, channelVideosPage);
+		// channel_videos is outside includePages, so enabling here only records the config: no lifecycle hook runs.
+		await enableFeature(page, "automaticallyDisableAutoPlay.enabled");
+		// The single-page navigation is what makes the dependencies met, so onEnable and onNavigate both run from it.
+		await spaNavigateToFirstVideo(page);
+		await expect.poll(() => getAutoPlayState(page), { timeout: 15000 }).toBe(false);
+	});
 });
