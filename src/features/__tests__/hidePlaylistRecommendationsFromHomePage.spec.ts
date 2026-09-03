@@ -27,8 +27,9 @@ const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { home, watch } = pageTypeRecord;
 
 /** A regular home feed video tile, i.e. one the feature's `:has(yt-collection-thumbnail-view-model)` rule must not match. */
+// Home tiles come in the classic renderer (a#video-title-link) and the lockup layout (yt-lockup-view-model).
 const regularTileSelector =
-	'ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(a#video-title-link):not(:has(yt-collection-thumbnail-view-model))';
+	'ytd-browse[page-subtype="home"] ytd-rich-item-renderer:has(a#video-title-link, yt-lockup-view-model a[href^="/watch?v="]):not(:has(yt-collection-thumbnail-view-model))';
 
 /** A single read would sample before the feature could have added the class, so hold the expectation for a settle window. */
 async function expectBodyClassToStayAbsent(page: Page): Promise<void> {
