@@ -20,6 +20,9 @@ export default createFeature({
 });
 
 async function setupHoverListeners() {
+	// onNavigate runs this again on the same player; a second set of listeners would click the settings button
+	// twice per hover and close the menu it just opened.
+	eventManager.removeEventListeners("openYouTubeSettingsOnHover");
 	const settingsButton = await waitForElement<HTMLButtonElement>(".ytp-button.ytp-settings-button");
 	if (!settingsButton) return;
 	const settingsMenu = await waitForElement<HTMLDivElement>(settingsPanelMenuSelector);
