@@ -72,7 +72,10 @@ async function markCardForVideo(page: Page, videoId: string): Promise<void> {
 async function readActionsRowIcon(page: Page): Promise<null | string> {
 	return page.evaluate((selector) => {
 		const host = document.querySelector<YtButtonViewModelElement>(selector);
-		const iconName: unknown = host?.rawProps?.data.iconName;
+		// The component exposes its data through a getter; the feature's function also carries the properties.
+		const data: unknown = host?.rawProps?.data;
+		const resolved = (typeof data === "function" ? (data as () => unknown)() : data) as null | Record<string, unknown> | undefined;
+		const iconName: unknown = resolved?.iconName;
 		return typeof iconName === "string" ? iconName : null;
 	}, ACTIONS_ROW_BUTTON_SELECTOR);
 }
@@ -267,7 +270,7 @@ test.describe("saveToWatchLaterButton", () => {
 			const actionsRowButton = page.locator(ACTIONS_ROW_BUTTON_SELECTOR);
 			await expect(actionsRowButton).toBeAttached({ timeout: 10000 });
 			// The button is built from YouTube's own component, so the props we set have to survive its render.
-			const iconName = await actionsRowButton.evaluate((el) => (el as YtButtonViewModelElement).rawProps?.data.iconName);
+			const iconName = await readActionsRowIcon(page);
 			expect(iconName).toBe("WATCH_LATER");
 			await expect(actionsRowButton.locator("button")).toHaveAccessibleName("Save to Watch Later", { timeout: 10000 });
 		});

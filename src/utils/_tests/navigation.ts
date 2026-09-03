@@ -227,7 +227,13 @@ export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 export async function spaNavigateToHome(page: Page): Promise<void> {
 	const logo = page.locator("ytd-topbar-logo-renderer a#logo, a#logo").first();
 	await expect(logo).toBeAttached({ timeout: 15_000 });
-	await logo.click();
+	// A maximized player slides the masthead out of the viewport; resting the pointer at the top edge brings it
+	// back, and when that does not happen in time the click is dispatched on the logo itself, which is still an
+	// in-page navigation through YouTube's own click handling.
+	await page.mouse.move(20, 0);
+	await logo.click({ timeout: 5_000 }).catch(async () => {
+		await logo.evaluate((el) => (el as HTMLElement).click());
+	});
 	await page.waitForURL((url) => url.pathname === "/", { timeout: 30_000 });
 	await expect(page.locator("html[yte-ready]")).toBeAttached();
 	await expect(page.locator("ytd-rich-grid-renderer, ytd-two-column-browse-results-renderer").first()).toBeAttached({ timeout: 15_000 });
@@ -318,7 +324,10 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: Page
 	await pageSetup(page);
 }
 function normalizeUrl(url: string): string {
-	return url.replace(/\/$/, "");
+	// A signed-in session can reload a page once with themeRefresh=1 appended; it is not part of the requested URL.
+	const parsed = new URL(url);
+	parsed.searchParams.delete("themeRefresh");
+	return parsed.toString().replace(/\/$/, "");
 }
 async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string): Promise<boolean> {
 	await expect(video).toBeVisible();

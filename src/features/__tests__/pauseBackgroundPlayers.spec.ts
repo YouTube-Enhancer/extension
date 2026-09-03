@@ -99,14 +99,22 @@ test.describe("pauseBackgroundPlayers", () => {
 		// Activating pageA is what puts pageB in the background; nothing before this point makes either tab the
 		// foreground one, so document.hidden would stay false on both.
 		await pageA.bringToFront();
-		// The early return only applies while the tab is genuinely hidden, so establish that first - otherwise the
-		// rest of the test would pass for the wrong reason. Some headless configurations report every page as
-		// visible, and there the guard simply cannot be exercised.
+		// The early return only applies while the tab is hidden, so establish that first - otherwise the rest of
+		// the test would pass for the wrong reason. Playwright's tabs do not always background each other (headless
+		// Chrome and separate windows both keep every page visible); the feature reads document.hidden at play
+		// time, so in that case the property is stubbed and the run says so.
 		const isHidden = await pageB
-			.waitForFunction(() => document.hidden, undefined, { timeout: 15000 })
+			.waitForFunction(() => document.hidden, undefined, { timeout: 5000 })
 			.then(() => true)
 			.catch(() => false);
-		test.skip(!isHidden, "this browser reports every tab as visible, so no tab can be hidden for the guard to apply");
+		if (!isHidden) {
+			await pageB.evaluate(() => {
+				Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
+				Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" });
+			});
+			test.info().annotations.push({ description: "document.hidden stubbed: this browser keeps every tab visible", type: "note" });
+		}
+		await expect.poll(async () => pageB.evaluate(() => document.hidden)).toBe(true);
 		await pageB.evaluate(async () => {
 			const video = document.querySelector<HTMLVideoElement>(".html5-main-video");
 			if (!video) return;
