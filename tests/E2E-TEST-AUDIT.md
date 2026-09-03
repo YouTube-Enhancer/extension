@@ -8,6 +8,7 @@ This document has three jobs: list the tests that exist today, mark the ones tha
 
 - 2026-09-03: every "Not needed" verdict in section 4 has been applied (see the commit "test(e2e): remove tests the audit judged unnecessary"). The suite went from 1353 to 461 generated cases per browser project. The "Tests we have" tables in section 4 describe the suite before that pass.
 - 2026-09-03: every "Incorrect" verdict in section 4 has been applied (commit "test(e2e): fix the tests the audit judged incorrect"), together with the harness changes from section 3.6 that they depended on (reloadPage, spaNavigateToRelatedVideo, expectToStay, requireMatch, a state-checking toggleFullscreen, a throwing injectDynamicContent, one error-watch loop per page) and a body marker for the speed control. Three product-side halves were deferred and are listed in the commit message. The "Missing" tables are still open.
+- 2026-09-03: every "Missing" verdict in section 4 has been applied (commit "test(e2e): add the tests the audit judged missing"). The suite now has 695 generated cases per browser project (Playwright `--list`, chromium; 19 of them in the Options spec). Where a new test exposed a product defect, the defect was fixed in its own `fix(...)` commit instead of leaving a `test.fixme` marker; section 3.10 records what was fixed and what is still open. Two specs were dropped as unneeded during this pass (`zz-debug-live.spec.ts`, `_registry.spec.ts`), and `onScreenDisplay.spec.ts` was added. Confirmation run: every test that failed on the first run of the new suite was re-run headless against the rebuilt extension after triage (42 tests across 25 specs, in two batches); all pass except `pauseBackgroundPlayers` "should not pause other tabs when playback starts in a hidden tab", which skips with a reason because headless Chrome reports every tab as visible, and `onScreenDisplay` "offsets the display below the shorts player controls", which skips on the newer shorts layout that has no `ytd-shorts-player-controls`. The full `playerQuality` and `playerSpeed` specs were re-run after the player-manager change (26 of 26 pass), and the in-page navigation test of `playerQuality` was repeated 8 times in a row without a failure. Live and shorts fixtures remain subject to YouTube throttling; a failure that starts inside the live-stream hunt or on a "Video unavailable" shorts page is the fixture, not the feature.
 
 ## 1. Summary
 
@@ -99,17 +100,43 @@ Core config keys with zero coverage: `featureMenu.openType`, `language`, `onScre
 
 `src/pages/content/index.ts` handles the `test_setConfigValue` message unconditionally. The message channel is a DOM element plus a custom event, which any script on youtube.com can use, so a page script can rewrite arbitrary extension configuration in released builds. Guard the handler behind a build-time flag and fail the build if the string reaches `dist`.
 
-### 3.10 Suspected product defects surfaced by the audit
+### 3.10 Product defects surfaced by the audit and by the missing-test pass
 
-These are code findings, not test findings; each deserves a look before a test is written around it.
+These are code findings, not test findings. The first list is the audit's original suspicions with their outcome; the second list is what the new tests found while they were being written. "Fixed" means a `fix(...)` commit exists on this branch (and, where noted, has been carried to `dev`).
 
-- `forwardRewindButtons/index.ts`: removing the rewind button calls `eventManager.removeEventListeners("forwardRewindButtons")`, which drops every listener of the feature, so a placement change of one button can strip the other's handler.
-- `miniPlayer/controller.ts` `close()` calls `setManualOverride(false)` and `disable()`; the audit could not find the path that unchecks `miniPlayerButton` afterwards.
-- `src/i18n/index.ts`: `i18nService(locale)` returns the cached instance whenever one exists, ignoring the requested locale, so a live language change re-renders with the old strings.
-- `featurePlayerManager` defaults `pageTypes` to `["watch", "live"]`; `automaticallyDisableAmbientMode` and `defaultToOriginalAudioTrack` declare `shorts` in `includePages` but do not pass `pageTypes`, so their shorts path is dead and the six shorts cases in each spec cannot observe anything.
-- `hideEndScreenCardsButton/index.ts`: the click handler treats `checked` as "hide" for the feature menu and as "show" for player placements; the asymmetry is untested.
-- `src/components/Inputs/Select/Select.tsx` renders `id={label}`, so `Options.spec.ts` locating `#language` most likely fails today; run the Options spec to confirm.
-- `playerQuality`: the manual-override suspension does not trigger when enforcement re-applies during the quality switch (already recorded as a `test.fixme` in the spec).
+Original suspicions:
+
+- `forwardRewindButtons/index.ts` dropped every listener of the feature when one button was removed. **Fixed** (`fix(buttons)`: listener removal is scoped to the button's own target).
+- `miniPlayer/controller.ts` `close()` never unchecked `miniPlayerButton`. **Fixed** (`fix(miniPlayer)`: the controller announces state changes and the button follows them).
+- `src/i18n/index.ts` returned the cached instance regardless of the requested locale. **Fixed** (`fix(i18n)`: one instance promise per locale).
+- `featurePlayerManager` defaults `pageTypes` to `["watch", "live"]`, so the shorts path of `automaticallyDisableAmbientMode` and `defaultToOriginalAudioTrack` is dead. **Open.** The shorts cases of those specs stay skipped with a visible reason until the features pass `pageTypes` that include `shorts`.
+- `hideEndScreenCardsButton/index.ts` used opposite `checked` conventions for the feature menu and the player placements. **Fixed** (`fix(hideEndScreenCardsButton)`: `aria-checked="true"` means the cards are hidden everywhere).
+- `Select.tsx` renders `id={label}`, so `#language` could not be located. **Resolved on the test side**: the Options spec locates selects by their label.
+- `playerQuality` did not suspend enforcement for a manual change made during its own switch. **Fixed** (`fix(playerQuality)`: manual changes are detected through the requested quality and the feature's own switches are settled first).
+
+Found by the missing-test pass:
+
+- `hideArtificialIntelligence` never reached the live chat, which lives in an iframe the embedded script does not run in. **Fixed** (`fix(hideArtificialIntelligence)`: a style element is injected into the chat frame and re-injected on reload).
+- `removeRedirect` kept its `MutationObserver` after being disabled. **Fixed** (`fix(removeRedirect)`).
+- `automaticallyDisableClosedCaptions` / `automaticallyEnableClosedCaptions` toggled the caption button blindly on navigation, so they could flip captions the wrong way. **Fixed** (`fix(closedCaptions)`: the state is read from `aria-pressed` first).
+- `defaultToOriginalAudioTrack` remembered one original track for the whole session. **Fixed** (`fix(defaultToOriginalAudioTrack)`: the track is keyed by video id).
+- `globalVolume` ignored a volume change made while the feature was enabled. **Fixed** (`fix(globalVolume)`).
+- `src/utils/url` read the live flag from the previous video right after a single-page navigation. **Fixed** (`fix(url)`).
+- `hideLiveStreamChat` left its hide class behind when disabled off a live page. **Fixed** (`fix(hideLiveStreamChat)`).
+- `src/utils/audioEngine.ts` returned `undefined` for the engine it had just created. **Fixed** (`fix(audioEngine)`).
+- `automaticallyDisableAutoPlay` treated a click on the autoplay toggle as done even when YouTube dropped it, which happens right after a single-page navigation. **Fixed** (`fix(automaticallyDisableAutoPlay)`: the click is only counted once the toggle reports the new state, with a retry budget).
+- `shareShortener` cached the first `#share-url` input; YouTube keeps closed dialogs in the DOM, so the second dialog was never cleaned. **Fixed** (`fix(shareShortener)`: every `#share-url` input is cleaned on each tick).
+- `videoHistory` compared the navigation signature (`watch:<id>`) with `"start"`/`"finish"`, so `onNavigate` never ran either branch. **Fixed** (`fix(videoHistory)`).
+- `playerQuality` applied while a pre-roll ad was showing (taking the ad's "unknown" quality, level list and request as its baseline) and, when the player reported nothing usable for 15 s, ran out of attempts and never enforced the quality for that video. **Fixed** (`fix(playerQuality)`: no apply while an ad shows, a quality range is set on a player that has not started yet as soon as it holds the current video, and the request baseline used to detect manual changes is only taken once the level is seen playing; `featurePlayerManager` installs the player-state re-run hook after a failed run too, re-runs when the player's `ad-showing` class clears because an ad ending is not always a state change, and discards a run that a navigation or a newer run superseded while it was still waiting for the player). The hook changes also apply to `playerSpeed`, the only other user of `onPlayerStateChange`.
+
+Still open (observed while writing tests, not fixed on this branch):
+
+- `maximizePlayer` never sets `header.visible = false` when it maximizes; the header stays in the state YouTube left it in.
+- `volumeBoost` leaves the gain node applied when the mode changes from global to per-video.
+- `useNotifications` hard-codes `en-US` for its provider instead of the configured language.
+- `scrollWheelController` pins the shorts player container at enable time; YouTube replaces that element after a navigation to `/shorts`, so the wheel control stops working there until the feature is re-enabled. The scroll wheel volume spec covers watch-to-watch navigation only for this reason.
+- `shareShortener/utils.ts` `observeShareURLInput` never assigns `inputObserver`, so `removeObserver` cannot disconnect an observer that has not disconnected itself.
+- `hideEndScreenCardsButton` uses the same icon pair in fullscreen as in the normal player (the fullscreen swap in `icons.ts` is unverified).
 
 ## 4. Per-spec catalogue
 
