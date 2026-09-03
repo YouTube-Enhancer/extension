@@ -2,6 +2,7 @@ import type { FeatureKeys } from "@/src/features/_registry/types";
 export interface EventListenerInfo {
 	callback: EventListenerOrEventListenerObject;
 	eventName: string;
+	options?: AddEventListenerOptions | boolean;
 	target: AcceptedTarget;
 }
 export type EventManager = {
@@ -51,6 +52,7 @@ const eventManager: EventManager = {
 			const listenerInfo: EventListenerInfo = {
 				callback: callback as EventListenerOrEventListenerObject,
 				eventName,
+				options,
 				target
 			};
 			existingListeners.push(listenerInfo);
@@ -74,9 +76,9 @@ const eventManager: EventManager = {
 					// Iterate over all event listeners for this target
 					eventListeners.forEach((listeners, eventName) => {
 						// Iterate over all listeners for this event on this target
-						listeners.forEach(({ callback }) => {
+						listeners.forEach(({ callback, options }) => {
 							// Remove the listener from the target
-							target.removeEventListener(eventName, callback);
+							target.removeEventListener(eventName, callback, options);
 						});
 					});
 				});
@@ -99,8 +101,8 @@ const eventManager: EventManager = {
 				const listeners = eventListeners.get(eventName);
 				if (listeners) {
 					// If we have listeners, we remove them
-					listeners.forEach(({ callback }) => {
-						target.removeEventListener(eventName, callback);
+					listeners.forEach(({ callback, options }) => {
+						target.removeEventListener(eventName, callback, options);
 					});
 					// And remove the event from the map
 					eventListeners.delete(eventName);
@@ -127,9 +129,9 @@ const eventManager: EventManager = {
 				// For each event name that has listeners
 				eventListeners.forEach((listeners, eventName) => {
 					// For each listener
-					listeners.forEach(({ callback }) => {
+					listeners.forEach(({ callback, options }) => {
 						// Remove the listener from the target
-						target.removeEventListener(eventName, callback);
+						target.removeEventListener(eventName, callback, options);
 					});
 				});
 			});
