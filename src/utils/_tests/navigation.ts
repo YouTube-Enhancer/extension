@@ -162,9 +162,20 @@ export async function navigateToPageType(page: Page, pageType: PageType, require
 	const fixture = getFixture(pageType, requirements);
 	await navigateToYoutubePage(page, fixture.url, pageType);
 }
-async function finishLiveVideoSetup(page: Page): Promise<void> {
+/**
+ * Waits until the extension has finished its initial setup on the current page.
+ *
+ * The content script only forwards storage changes once the embedded script reports the page as
+ * loaded (it marks this by setting `yte-ready` on the root element). Config changes sent before
+ * that point are silently dropped, so every helper that navigates must wait for the marker.
+ */
+export async function waitForExtensionReady(page: Page): Promise<void> {
 	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
 	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	await expect(page.locator("html[yte-ready]")).toBeAttached({ timeout: 30_000 });
+}
+async function finishLiveVideoSetup(page: Page): Promise<void> {
+	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "live");
 	await pageSetup(page);
 	await page.evaluate(async () => {
@@ -207,8 +218,7 @@ async function navigateToYoutubePage(page: Page, pageUrl: string, pageType: Page
 	}
 	await page.bringToFront();
 	await page.waitForLoadState("domcontentloaded");
-	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
-	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
+	await waitForExtensionReady(page);
 	if (["live", "shorts", "watch"].includes(pageType)) {
 		await waitForYoutubePlayerReady(page, pageType);
 	}
