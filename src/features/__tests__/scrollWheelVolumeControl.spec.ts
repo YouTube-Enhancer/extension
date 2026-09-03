@@ -97,8 +97,11 @@ test.describe("scrollWheelVolumeControl", () => {
 			await dispatchWheelNotches(page, watch, "up");
 			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps);
 			await setOption(page, "scrollWheelVolumeControl.steps", steps * 2);
+			// The control snaps the volume to a multiple of the step size, so start the second notch from one.
+			await setVolume(page, steps * 4, watch);
+			await expect.poll(async () => getCurrentVolume(page, watch)).toBe(steps * 4);
 			await dispatchWheelNotches(page, watch, "up");
-			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(volume + steps * 3);
+			await expect.poll(async () => getCurrentVolume(page, watch), { timeout: 5000 }).toBe(steps * 6);
 		});
 		test("stops adjusting volume once disabled on watch", async ({ page }) => {
 			await enableVolumeControl(page);

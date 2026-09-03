@@ -26,7 +26,8 @@ export type YouTubePlayerGetKeysWithoutParams = Exclude<YouTubePlayerGetKeys, Fi
 export type YouTubePlayerGetReturnType<K extends YouTubePlayerGetKeysWithoutParams> =
 	K extends keyof YouTubePlayerGetReturnTypeMappings ? YouTubePlayerGetReturnTypeMappings[K] : "Return type not implemented";
 export type YouTubePlayerGetReturnTypeMappings = {
-	getAvailableQualityLevels: Exclude<YoutubePlayerQualityLevel, "auto">[];
+	// YouTube reports "auto" as the last entry of the list.
+	getAvailableQualityLevels: YoutubePlayerQualityLevel[];
 	getCurrentTime: number;
 	getDuration: number;
 	getPlaybackQuality: YoutubePlayerQualityLevel;
