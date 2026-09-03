@@ -42,7 +42,14 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 			try {
 				const player = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 				if (player && typeof player.getVideoData === "function") {
-					const playerData = await player.getVideoData();
+					// After a single-page navigation the player still reports the previous video for a moment, so wait
+					// (briefly) until its video id matches the URL before trusting the live flag.
+					const urlVideoId = new URLSearchParams(window.location.search).get("v");
+					let playerData = await player.getVideoData();
+					for (let attempt = 0; attempt < 20 && urlVideoId && playerData?.video_id !== urlVideoId; attempt++) {
+						await new Promise((resolve) => setTimeout(resolve, 250));
+						playerData = await player.getVideoData();
+					}
 					if (playerData?.isLive) return "live";
 				}
 			} catch {}
