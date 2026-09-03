@@ -1,7 +1,6 @@
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import type { DisplayOptions, Value, ValueType } from "@/src/ui/OnScreenDisplayManager/types";
 
-import { createStyledElement } from "@/src/utils/dom/elements";
 import { browserColorLog } from "@/src/utils/logging";
 import { clamp, round } from "@/src/utils/math";
 import { calculateCanvasPosition } from "@/src/utils/style";
@@ -86,14 +85,16 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	}
 
 	private createCanvas(): HTMLCanvasElement {
-		const canvas = createStyledElement({
-			elementId: this.displayId,
-			elementType: "canvas",
-			styles: {
-				pointerEvents: "none",
-				position: "absolute",
-				zIndex: "2021"
-			}
+		// Always build a fresh element. Reusing the canvas that a previous display left behind would
+		// keep its position offsets (e.g. a top-left `left`/`top` on a bottom-right display) and let
+		// the previous display's removal timer cut this one short.
+		const { displayId } = this;
+		const canvas = document.createElement("canvas");
+		canvas.id = displayId;
+		Object.assign(canvas.style, {
+			pointerEvents: "none",
+			position: "absolute",
+			zIndex: "2021"
 		});
 		return canvas;
 	}
