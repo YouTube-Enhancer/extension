@@ -8,7 +8,8 @@ import { metadata } from "@/src/features/defaultToOriginalAudioTrack/index.metad
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 // "shorts" is dropped from the feature's includePages: the three executeWithRetries calls in index.ts pass no
@@ -59,13 +60,67 @@ async function getAudioTrackId(page: Page): Promise<null | string> {
 	return (await getAudioTrack(page))?.id ?? null;
 }
 
+/**
+ * Reads the ids of every audio track the current video offers together with the one the player is on, in a single
+ * evaluate so both describe the same moment: after an in-page switch the player keeps answering with the previous
+ * video's tracks for a while, and a list read then does not belong to the video that is playing now.
+ */
+async function getAudioTrackState(page: Page): Promise<{ availableIds: string[]; currentId: null | string }> {
+	return { availableIds: await getAvailableAudioTrackIds(page), currentId: await getAudioTrackId(page) };
+}
+/** Reads the ids of every audio track the current video offers, using the same descriptor shape the feature parses. */
+async function getAvailableAudioTrackIds(page: Page): Promise<string[]> {
+	return await page.evaluate(async () => {
+		const player = document.querySelector<
+			HTMLDivElement & { getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[] }
+		>("div#movie_player");
+		if (!player?.getAvailableAudioTracks) return [];
+		const parseId = (value: unknown): null | string => {
+			if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+			const track = value as Record<string, unknown>;
+			if (
+				typeof track.name === "string" &&
+				typeof track.isDefault === "boolean" &&
+				typeof track.isAutoDubbed === "boolean" &&
+				typeof track.id === "string"
+			) {
+				return track.id;
+			}
+			return null;
+		};
+		const tracks = await player.getAvailableAudioTracks();
+		const ids = tracks.map((raw) => parseId(raw) ?? Object.values(raw).map(parseId).find(Boolean) ?? null).filter((id): id is string => id !== null);
+		return [...new Set(ids)];
+	});
+}
 function getPlayerSelector(pageType: PageType) {
 	return pageType === "shorts" ? "#shorts-player" : "div#movie_player";
 }
-
+/** Reads the video id the player itself reports, so an assertion can tell which video a track belongs to. */
+async function getPlayerVideoId(page: Page): Promise<null | string> {
+	return await page.evaluate(async () => {
+		const player = document.querySelector<HTMLDivElement & { getVideoData?: () => Promise<{ video_id?: string }> | { video_id?: string } }>(
+			"div#movie_player"
+		);
+		if (!player?.getVideoData) return null;
+		const data = await player.getVideoData();
+		return data.video_id ?? null;
+	});
+}
 /** Reads whether the current track is auto-dubbed, or null while the player reports no usable descriptor. */
 async function isAutoDubbed(page: Page): Promise<boolean | null> {
 	return (await getAudioTrack(page))?.isAutoDubbed ?? null;
+}
+
+/**
+ * Walks YouTube's own history back, which is a single-page navigation: it fires popstate, so the extension's
+ * onNavigate hooks run, and it lands on a video this spec already knows is auto-dubbed by default.
+ */
+async function spaNavigateBackToVideo(page: Page, expectedVideoId: string): Promise<void> {
+	await page.evaluate(() => history.back());
+	await page.waitForURL((url) => url.searchParams.get("v") === expectedVideoId, { timeout: 30000 });
+	await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(expectedVideoId);
+	await waitForYoutubePlayerReady(page, watch);
 }
 
 test.describe("defaultToOriginalAudioTrack", () => {
@@ -116,5 +171,55 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		// The dubbedAudio fixture starts on an auto-dubbed track; with the feature off it has to stay on it.
 		await expect.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 15000 }).toBe(true);
 		await expectToStay(async () => isAutoDubbed(page), true, { durationMs: 3000, intervalMs: 500, page });
+	});
+
+	// Watch only: onNavigate takes the same code path on both pages the feature declares, and on /shorts the retry
+	// loop never runs at all (see the note on testPages above).
+	test(`should re-apply the original audio track after an in-page navigation on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["dubbedAudio"]);
+		const dubbedVideoId = new URL(page.url()).searchParams.get("v");
+		expect(dubbedVideoId).not.toBeNull();
+		await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
+		await expectOriginalAudioTrack(page);
+
+		// Leave and come back in-page. Every navigateToPageType in this spec is a document load that re-runs onEnable,
+		// whereas this round trip only fires onNavigate, and it lands back on a video that defaults to a dubbed track.
+		await spaNavigateToRelatedVideo(page);
+		await spaNavigateBackToVideo(page, dubbedVideoId!);
+		await expectOriginalAudioTrack(page);
+	});
+	test(`should restore the current video's audio track, not the previous one's, after an in-page switch on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["dubbedAudio"]);
+		await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
+		await expectOriginalAudioTrack(page);
+
+		// Switching video in-page runs onNavigate only, so the track to restore has to be captured again for the video
+		// that is playing now instead of staying the one from before the switch.
+		await spaNavigateToRelatedVideo(page);
+		const switchedVideoId = new URL(page.url()).searchParams.get("v");
+		expect(switchedVideoId).not.toBeNull();
+		await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(switchedVideoId);
+		// The player answers with the previous video's tracks for a moment after the switch, and a list read then
+		// would make the assertion below compare the restored track against the wrong video's offering.
+		await expect
+			.poll(
+				async () => {
+					const { availableIds, currentId } = await getAudioTrackState(page);
+					return currentId !== null && availableIds.includes(currentId);
+				},
+				{ intervals: [500], timeout: 30000 }
+			)
+			.toBe(true);
+		const { availableIds: switchedVideoTrackIds } = await getAudioTrackState(page);
+		expect(switchedVideoTrackIds.length).toBeGreaterThan(0);
+		await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
+
+		// Restoring has to put back a track of the video that is playing now, never one carried over from before:
+		// the previous video's saved track is not among this video's own, so it could not pass this.
+		await expect.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 }).not.toBeNull();
+		const { availableIds: restoredVideoTrackIds, currentId: restoredTrackId } = await getAudioTrackState(page);
+		expect(await getPlayerVideoId(page), "the restore must not move the player off the video it was on").toBe(switchedVideoId);
+		expect(restoredVideoTrackIds).toEqual(switchedVideoTrackIds);
+		expect(switchedVideoTrackIds).toContain(restoredTrackId);
 	});
 });

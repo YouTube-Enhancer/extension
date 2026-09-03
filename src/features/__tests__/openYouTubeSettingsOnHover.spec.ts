@@ -46,6 +46,43 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		await expect(settingsMenu).not.toBeVisible({ timeout: 3000 });
 	});
+	test("youtube settings should stop opening on hover after the feature is disabled on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+		await forcePlayerVisible(page);
+		const settingsButton = page.locator(".ytp-settings-button");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
+		// Starting from the enabled state is what makes this observe onDisable rather than the shipped default.
+		await settingsButton.dispatchEvent("mouseenter");
+		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		// Move mouse away so :hover doesn't prevent hideSettings from closing
+		await page.mouse.move(0, 0);
+		await page.waitForTimeout(100);
+		await settingsButton.dispatchEvent("mouseleave", {
+			relatedTarget: await page.locator("body").elementHandle()
+		});
+		await expect(settingsMenu).not.toBeVisible({ timeout: 5000 });
+		await disableFeature(page, "openYouTubeSettingsOnHover.enabled");
+		await settingsButton.dispatchEvent("mouseenter");
+		// onDisable removes the hover listeners, so the menu has to stay closed for the whole settle window.
+		await expectToStay(async () => settingsMenu.isVisible(), false, { page });
+	});
+	test("hovering should not close a settings menu that was opened by clicking the button on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+		await forcePlayerVisible(page);
+		const settingsButton = page.locator(".ytp-settings-button");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
+		// A scripted click leaves the pointer where it is, so the mouseenter below is the only hover the
+		// feature ever sees - a real click would move the mouse onto the button and fire it implicitly.
+		await settingsButton.evaluate((button: HTMLButtonElement) => button.click());
+		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
+		await settingsButton.dispatchEvent("mouseenter");
+		// showSettings must no-op while the menu is already open; a second click would close it again.
+		await expectToStay(async () => settingsMenu.isVisible(), true, { page });
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
+	});
 	test("youtube settings should close when leaving the settings button on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");

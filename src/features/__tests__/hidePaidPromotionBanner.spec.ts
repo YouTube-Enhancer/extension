@@ -2,8 +2,9 @@ import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePaidPromotionBanner/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden } from "@/src/utils/_tests/assertions";
+import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateBack, spaNavigateToHome, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -14,6 +15,7 @@ const {
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
+const { watch } = pageTypeRecord;
 
 test.describe("hidePaidPromotionBanner", () => {
 	for (const pageType of testPages) {
@@ -55,6 +57,19 @@ test.describe("hidePaidPromotionBanner", () => {
 			await expectElementsHidden(page, selectors);
 		});
 	}
+
+	test("removes the hide on in-page navigation away from watch and restores it on return", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "hidePaidPromotionBanner.enabled");
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		// Leaving watch in-page makes the includePages dependency unmet, so the gate has to drop the class without a
+		// fresh document load; the non-target test above only ever proves it is absent after a cold `page.goto`.
+		await spaNavigateToHome(page);
+		await expectBodyWithoutClass(page, bodyClass, { timeout: 15000 });
+		await spaNavigateBack(page, "watch");
+		await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
+		await expectElementsHidden(page, selectors);
+	});
 
 	test(`should not hide paid promotion banner on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);

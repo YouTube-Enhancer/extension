@@ -6,11 +6,11 @@ import { metadata } from "@/src/features/skipContinueWatching/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { live } = pageTypeRecord;
+const { live, watch } = pageTypeRecord;
 // The patch installs `function () {}` (index.ts:15); anything else is not this feature's handler.
 const EMPTY_FUNCTION_SOURCE = /^function\s*\w*\s*\(\s*\)\s*\{\s*\}$/;
 
@@ -82,6 +82,20 @@ test.describe("skipContinueWatching", () => {
 			await expectHandlerReplaced(page, original);
 		});
 	}
+
+	// Watch only: onNavigate has no live branch and the live fixture has no sidebar of regular videos to click
+	// through to.
+	test(`should keep the handler patched after in-page navigation to another video on ${watch}`, async ({ page }) => {
+		test.setTimeout(120_000);
+		await navigateToPageType(page, watch);
+		const original = await getHandler(page);
+		await enableFeature(page, "skipContinueWatching.enabled");
+		await expectHandlerReplaced(page, original);
+		// A genuine in-document navigation: every other navigation in this spec is a document load, which runs
+		// onEnable instead of onNavigate.
+		await spaNavigateToRelatedVideo(page);
+		await expectHandlerReplaced(page, original);
+	});
 
 	test("should not patch on non-target page", async ({ page }) => {
 		// live sits outside includePages but is still a /watch document, so ytd-watch-flexy exists and the

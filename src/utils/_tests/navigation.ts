@@ -176,13 +176,37 @@ export async function reloadPage(page: Page, pageType: PageType): Promise<void> 
 	await pageSetup(page);
 }
 /**
+ * Returns to the previous page through the browser history, which YouTube handles as a single-page navigation
+ * (popstate), so the extension's navigation hooks run without a document load. Use it as the "and back" leg of
+ * a navigation test: unlike spaNavigateToFirstVideo it does not depend on the feed listing any videos, which a
+ * logged-out home page does not.
+ */
+export async function spaNavigateBack(page: Page, pageType: PageType): Promise<void> {
+	const before = page.url();
+	await page.goBack();
+	await page.waitForURL((url) => url.toString() !== before, { timeout: 30_000 });
+	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	if (["live", "shorts", "watch"].includes(pageType)) {
+		await waitForYoutubePlayerReady(page, pageType);
+		// See spaNavigateToRelatedVideo: let a pre-roll ad start before pageSetup looks for one.
+		await page.waitForTimeout(1000);
+	}
+	await pageSetup(page);
+}
+/**
  * Single-page navigation from a feed page (home, search, subscriptions, channel videos) to the first regular
  * video it lists, so the extension's navigation hooks and includePages gate run for a watch page.
  */
 export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 	const link = page
 		.locator(
-			'ytd-rich-item-renderer a#video-title-link[href^="/watch?v="], ytd-video-renderer a#video-title[href^="/watch?v="], ytd-rich-item-renderer a#thumbnail[href^="/watch?v="]'
+			[
+				'ytd-rich-item-renderer a#video-title-link[href^="/watch?v="]',
+				'ytd-video-renderer a#video-title[href^="/watch?v="]',
+				'ytd-rich-item-renderer a#thumbnail[href^="/watch?v="]',
+				'ytd-rich-item-renderer yt-lockup-view-model a[href^="/watch?v="]',
+				'ytd-item-section-renderer yt-lockup-view-model a[href^="/watch?v="]'
+			].join(", ")
 		)
 		.first();
 	await expect(link).toBeAttached({ timeout: 15_000 });
@@ -191,6 +215,9 @@ export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 	await page.waitForURL((url) => url.pathname === "/watch", { timeout: 30_000 });
 	await expect(page.locator("html[yte-ready]")).toBeAttached();
 	await waitForYoutubePlayerReady(page, "watch");
+	// A pre-roll ad starts a moment after the player reports the new video; give it that moment so the ad
+	// handling in pageSetup sees it instead of the test running into it.
+	await page.waitForTimeout(1000);
 	await pageSetup(page);
 }
 /**
@@ -213,13 +240,18 @@ export async function spaNavigateToHome(page: Page): Promise<void> {
  */
 export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 	const before = new URL(page.url()).searchParams.get("v");
-	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"])`).first();
+	// The sidebar renders an aria-hidden thumbnail anchor ahead of the visible one for some lockups, and clicking
+	// that never resolves, so only links that can actually be clicked qualify.
+	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"]):visible`).first();
 	await expect(link).toBeAttached({ timeout: 15_000 });
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
 	await expect(page.locator("html[yte-ready]")).toBeAttached();
 	await waitForYoutubePlayerReady(page, "watch");
+	// A pre-roll ad starts a moment after the player reports the new video; give it that moment so the ad
+	// handling in pageSetup sees it instead of the test running into it.
+	await page.waitForTimeout(1000);
 	await pageSetup(page);
 }
 /**

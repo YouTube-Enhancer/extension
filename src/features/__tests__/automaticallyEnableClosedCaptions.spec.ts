@@ -1,15 +1,20 @@
-import { expect, test } from "playwright.config";
+import { expect, optionsTest, test } from "playwright.config";
 
 import { metadata as disableCCMetadata } from "@/src/features/automaticallyDisableClosedCaptions/index.metadata";
 import { metadata } from "@/src/features/automaticallyEnableClosedCaptions/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { setCheckbox } from "@/src/utils/_tests/options";
 import { ensureCaptionsState, expectStableCaptionsState, getCaptionsState, isCaptionsUnavailable } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { watch } = pageTypeRecord;
+// The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
+const autoDisableLabel = "Automatically disable closed captions";
+const autoEnableLabel = "Automatically enable closed captions";
 
 test.describe("automaticallyEnableClosedCaptions", () => {
 	for (const pageType of testPages) {
@@ -139,5 +144,44 @@ test.describe("automaticallyEnableClosedCaptions", () => {
 				await expectStableCaptionsState(page, true);
 			});
 		});
+	});
+
+	test(`keeps captions on when they were already enabled before the feature is enabled on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		if (!(await ensureCaptionsState(page, true))) return;
+		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		// onEnable records captions as already on and returns without clicking, so a stray click would show up as
+		// captions turning off during the settle window.
+		await expectToStay(async () => getCaptionsState(page), true, { durationMs: 4000, intervalMs: 500, page });
+		await disableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		// captionsWhereEnabled is true, so onDisable must not unload the captions module the user had switched on.
+		await expectToStay(async () => getCaptionsState(page), true, { durationMs: 4000, intervalMs: 500, page });
+	});
+	test(`keeps captions enabled after an in-page navigation to another video on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch, ["captions"]);
+		if (await isCaptionsUnavailable(page)) return;
+		if (!(await ensureCaptionsState(page, false))) return;
+		await enableFeature(page, "automaticallyEnableClosedCaptions.enabled");
+		await expectStableCaptionsState(page, true);
+		// Captions are left on: YouTube carries that choice into the next video, so onNavigate has to keep them on
+		// rather than click the button again.
+		await spaNavigateToRelatedVideo(page);
+		if (await isCaptionsUnavailable(page)) return;
+		await expectStableCaptionsState(page, true);
+	});
+});
+optionsTest.describe("automaticallyEnableClosedCaptions options", () => {
+	optionsTest("auto-enable checkbox is disabled and shows the conflict reason when auto-disable is enabled", async ({ page }) => {
+		const autoEnableCheckbox = page.getByLabel(autoEnableLabel, { exact: true });
+		await expect(autoEnableCheckbox).toBeEnabled({ timeout: 15000 });
+		const conflictReason = page.locator(`label:text-is("${autoEnableLabel}") + span`);
+		await expect(conflictReason).toHaveCount(0);
+		await setCheckbox(page, autoDisableLabel, true);
+		await expect(autoEnableCheckbox).toBeDisabled();
+		await expect(conflictReason).toHaveText(/cannot be enabled while/i);
+		await setCheckbox(page, autoDisableLabel, false);
+		await expect(autoEnableCheckbox).toBeEnabled();
+		await expect(conflictReason).toHaveCount(0);
 	});
 });
