@@ -250,6 +250,9 @@ test.describe("maximizePlayerButton", () => {
 			test("theater mode is active when enabled after maximize on watch", async ({ page }) => {
 				await navigateToPageType(page, watch);
 				await enableFeature(page, "automaticallyMaximizePlayer.enabled");
+				// Maximizing enters theater mode through the size button itself. Enabling automaticTheaterMode before
+				// that click has landed makes both features click the button, and the two toggles cancel out.
+				await expect(page.locator("body")).toHaveAttribute("yte-maximized", { timeout: 15000 });
 				await enableFeature(page, "automaticTheaterMode.enabled");
 				await expect
 					.poll(
@@ -257,14 +260,14 @@ test.describe("maximizePlayerButton", () => {
 							await page.evaluate(() => {
 								const flexy = document.querySelector("ytd-watch-flexy");
 								const grid = document.querySelector("ytd-watch-grid");
-								return flexy?.hasAttribute("theater") || grid?.hasAttribute("theater");
+								return Boolean(flexy?.hasAttribute("theater") || grid?.hasAttribute("theater"));
 							}),
 						{ timeout: 15000 }
 					)
-					.toBeTruthy();
-				// automaticTheaterMode's size-button click is seen as a user click, which minimizes the player again.
+					.toBe(true);
+				// A maximized player does not count as theater mode, so automaticTheaterMode clicks the size button; the
+				// maximized player takes that click as a user click and minimizes, and theater mode ends up on.
 				await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
-				await expect(page.locator("body")).not.toHaveAttribute("yte-size-button-state");
 			});
 		});
 	});

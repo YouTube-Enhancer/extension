@@ -58,7 +58,7 @@ test.describe("deepDarkCSS", () => {
 			await setOption(page, "deepDarkCSS.preset", preset);
 			await expect
 				.poll(async () => page.locator("#yte-deep-dark-css").textContent(), { timeout: 5000 })
-				.toMatch(new RegExp(`--main-color:\s*${mainColor}`));
+				.toMatch(new RegExp(`--main-color:\\s*${mainColor}`));
 		}
 	});
 	test("applies the Custom preset colors to the injected CSS on watch", async ({ page }) => {
