@@ -160,8 +160,11 @@ document.addEventListener("yte-message-from-youtube", () => {
 					}
 					case "pageLoaded": {
 						storage.onChanged.addListener(storageListeners);
+						// Marks the point from which config changes are forwarded to the page; e2e tests wait for it.
+						document.documentElement.setAttribute("yte-ready", "");
 						window.addEventListener("pagehide", () => {
 							storage.onChanged.removeListener(storageListeners);
+							document.documentElement.removeAttribute("yte-ready");
 						});
 						break;
 					}
