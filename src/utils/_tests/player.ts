@@ -51,7 +51,7 @@ export async function adjustWithScrollWheel({
 		await enableFeature(page, `scrollWheel${controlType}Control.holdRightClick`);
 	}
 	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
-	if (controlType === "Volume") await waitForScrollWheelVolumeControl(page, true);
+	await waitForScrollWheelControl(page, controlType === "Volume" ? "volume" : "speed", true);
 	await setValueOnYouTubePlayer(page, pageType, `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, initialValue);
 	const getter = controlType === "Volume" ? getCurrentVolume : getCurrentSpeed;
 	const originalValue = await getter(page, pageType);

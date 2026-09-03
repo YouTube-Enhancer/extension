@@ -4,7 +4,7 @@ import { metadata } from "@/src/features/hideLiveStreamChat/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -31,10 +31,10 @@ test.describe("hideLiveStreamChat", () => {
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
 			await navigateToPageType(page, home);
+			// The feature only includes live, so leaving it must drop the class again.
+			await expectBodyWithoutClass(page, bodyClass);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hideLiveStreamChat.enabled");
-			await enableFeature(page, "hideLiveStreamChat.enabled");
-			await expectBodyWithClass(page, bodyClass);
+			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});
 		test(`persists hide after full page reload on ${pageType}`, async ({ page }) => {
@@ -42,8 +42,7 @@ test.describe("hideLiveStreamChat", () => {
 			await enableFeature(page, "hideLiveStreamChat.enabled");
 			await expectBodyWithClass(page, bodyClass);
 			await expectElementsHidden(page, selectors);
-			await page.reload();
-			await navigateToPageType(page, pageType);
+			await reloadPage(page, pageType);
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});

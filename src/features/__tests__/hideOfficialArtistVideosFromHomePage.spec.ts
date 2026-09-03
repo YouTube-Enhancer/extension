@@ -15,11 +15,11 @@ const {
 } = hideFeatureSelectors;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const { home } = pageTypeRecord;
+const { channel_home, home } = pageTypeRecord;
 
 test.describe("hideOfficialArtistVideosFromHomePage", () => {
 	for (const pageType of testPages) {
-		test(`hides official artist videos on ${pageType}`, async ({ page }) => {
+		test(`adds the hide class on ${pageType}`, async ({ page }) => {
 			test.skip(!hasAuthState() && loginRequiredPages.includes(pageType), `${pageType} requires login`);
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
@@ -39,10 +39,10 @@ test.describe("hideOfficialArtistVideosFromHomePage", () => {
 			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
+			await navigateToPageType(page, channel_home);
+			// The feature only includes home, so leaving it must drop the class again.
+			await expectBodyWithoutClass(page, bodyClass);
 			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
-			await enableFeature(page, "hideOfficialArtistVideosFromHomePage.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});

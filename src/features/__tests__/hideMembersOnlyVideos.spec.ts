@@ -42,8 +42,6 @@ test.describe("hideMembersOnlyVideos", () => {
 			await expectElementsHidden(page, selectors);
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hideMembersOnlyVideos.enabled");
-			await enableFeature(page, "hideMembersOnlyVideos.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});

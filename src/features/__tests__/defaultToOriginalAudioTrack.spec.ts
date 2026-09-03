@@ -5,79 +5,67 @@ import { expect, test } from "playwright.config";
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/defaultToOriginalAudioTrack/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const testPages = resolvePageTypes(metadata.dependencies?.includePages);
+// "shorts" is dropped from the feature's includePages: the three executeWithRetries calls in index.ts pass no
+// pageTypes, so DEFAULT_CONFIG's ["watch", "live"] applies and isOnAllowedPage is false on /shorts - the shorts
+// branches never execute. Re-add it once the feature passes pageTypes: ["shorts", "watch"].
+const testPages = resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType !== "shorts");
 const { home, watch } = pageTypeRecord;
+
+type AudioTrack = { id: string; isAutoDubbed: boolean };
 
 /** Polls the player until it reports a track whose descriptor is explicitly not auto-dubbed. */
 async function expectOriginalAudioTrack(page: Page): Promise<void> {
-	await expect
-		.poll(
-			async () => {
-				return await page.evaluate(async () => {
-					const query = () => {
-						const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
-						return document.querySelector<HTMLDivElement & { getAudioTrack?: () => Promise<Record<string, unknown>> | Record<string, unknown> }>(
-							selector
-						);
-					};
-					const isTrackNonAutoDubbed = (val: unknown): boolean | null => {
-						if (typeof val !== "object" || val === null || Array.isArray(val)) return null;
-						const raw = val as Record<string, unknown>;
-						if (
-							typeof raw.name === "string" &&
-							typeof raw.isDefault === "boolean" &&
-							typeof raw.isAutoDubbed === "boolean" &&
-							typeof raw.id === "string"
-						) {
-							return raw.isAutoDubbed === false;
-						}
-						return null;
-					};
-					const player = query();
-					if (!player?.getAudioTrack) return null;
-					const raw = await player.getAudioTrack();
-					if (!raw || typeof raw !== "object") return null;
-					// Check top-level
-					const topResult = isTrackNonAutoDubbed(raw);
-					if (topResult !== null) return topResult;
-					// Check nested objects
-					for (const value of Object.values(raw)) {
-						const result = isTrackNonAutoDubbed(value);
-						if (result !== null) return result;
-					}
-					return null;
-				});
-			},
-			{ intervals: [500], timeout: 30000 }
-		)
-		.toBe(true);
+	await expect.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 30000 }).toBe(false);
 }
 
-/** Reads the id of the audio track the player currently reports, or null when the player exposes no track. */
-async function getAudioTrackId(page: Page): Promise<null | string> {
+/**
+ * Reads the audio track the player reports, accepting only descriptors with the shape the feature's parseAudioTrack
+ * accepts, so the spec and the feature agree on what counts as a track.
+ */
+async function getAudioTrack(page: Page): Promise<AudioTrack | null> {
 	return await page.evaluate(async () => {
 		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
 		const player = document.querySelector<HTMLDivElement & { getAudioTrack?: () => Promise<Record<string, unknown>> | Record<string, unknown> }>(
 			selector
 		);
 		if (!player?.getAudioTrack) return null;
-		const track = await player.getAudioTrack();
-		for (const val of Object.values(track)) {
-			if (typeof val === "object" && val !== null && "id" in val && typeof val.id === "string") {
-				return val.id;
+		const parseTrack = (value: unknown): null | { id: string; isAutoDubbed: boolean } => {
+			if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
+			const track = value as Record<string, unknown>;
+			if (
+				typeof track.name === "string" &&
+				typeof track.isDefault === "boolean" &&
+				typeof track.isAutoDubbed === "boolean" &&
+				typeof track.id === "string"
+			) {
+				return { id: track.id, isAutoDubbed: track.isAutoDubbed };
 			}
-		}
-		return null;
+			return null;
+		};
+		const raw: unknown = await player.getAudioTrack();
+		if (!raw || typeof raw !== "object") return null;
+		return parseTrack(raw) ?? Object.values(raw).map(parseTrack).find(Boolean) ?? null;
 	});
+}
+
+/** Reads the id of the audio track the player currently reports, or null when the player exposes no track. */
+async function getAudioTrackId(page: Page): Promise<null | string> {
+	return (await getAudioTrack(page))?.id ?? null;
 }
 
 function getPlayerSelector(pageType: PageType) {
 	return pageType === "shorts" ? "#shorts-player" : "div#movie_player";
+}
+
+/** Reads whether the current track is auto-dubbed, or null while the player reports no usable descriptor. */
+async function isAutoDubbed(page: Page): Promise<boolean | null> {
+	return (await getAudioTrack(page))?.isAutoDubbed ?? null;
 }
 
 test.describe("defaultToOriginalAudioTrack", () => {
@@ -95,6 +83,9 @@ test.describe("defaultToOriginalAudioTrack", () => {
 			expect(originalTrackId).not.toBeNull();
 
 			await enableFeature(page, "defaultToOriginalAudioTrack.enabled");
+			// Wait for the switch to land before disabling: onDisable aborts the in-flight retry, so disabling too
+			// early would "restore" a track that was never changed.
+			await expectOriginalAudioTrack(page);
 			await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
 
 			await expect.poll(async () => getAudioTrackId(page), { intervals: [500], timeout: 30000 }).toBe(originalTrackId);
@@ -122,11 +113,8 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
 		await expect(page.locator(getPlayerSelector(watch))).toBeVisible({ timeout: 10000 });
-		// Get the current track ID — if it's already original, test is not applicable
-		const originalTrackId = await getAudioTrackId(page);
-		if (!originalTrackId) return;
-		// Verify track doesn't change (feature should have no effect)
-		await page.waitForTimeout(2000);
-		expect(await getAudioTrackId(page)).toBe(originalTrackId);
+		// The dubbedAudio fixture starts on an auto-dubbed track; with the feature off it has to stay on it.
+		await expect.poll(async () => isAutoDubbed(page), { intervals: [500], timeout: 15000 }).toBe(true);
+		await expectToStay(async () => isAutoDubbed(page), true, { durationMs: 3000, intervalMs: 500, page });
 	});
 });

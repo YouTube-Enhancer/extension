@@ -21,13 +21,17 @@ async function isMonoEnabled(page: Page): Promise<boolean> {
 test.describe("monoToStereoButton", () => {
 	for (const pageType of testPages) {
 		test(`audio should switch to stereo on click on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType, ["monoAudio"]);
+			// videoMeetsCapabilities has no monoAudio case, so the requirement is silently ignored on live; the
+			// channel splitter reads channel 0 whatever the source is, so a mono source is not required there.
+			await navigateToPageType(page, pageType, pageType === "live" ? [] : ["monoAudio"]);
 			await enableFeature(page, "monoToStereoButton.button.enabled");
 			await setOption(page, "monoToStereoButton.button.placement", right);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-monoToStereoButton-button");
-			await expect.poll(async () => await isMonoEnabled(page)).toBeFalsy();
+			const button = page.locator("#yte-feature-monoToStereoButton-button");
+			await expect(button).toHaveAttribute("aria-checked", "false");
 			await clickFeatureButton(page, pageType, "yte-feature-monoToStereoButton-button", right);
 			await expect.poll(async () => await isMonoEnabled(page)).toBeTruthy();
+			await expect(button).toHaveAttribute("aria-checked", "true");
 		});
 	}
 
@@ -36,9 +40,13 @@ test.describe("monoToStereoButton", () => {
 		await navigateToPageType(page, watch, ["monoAudio"]);
 		await enableFeature(page, "monoToStereoButton.button.enabled");
 		await setOption(page, "monoToStereoButton.button.placement", right);
+		const button = page.locator("#yte-feature-monoToStereoButton-button");
 		await clickFeatureButton(page, watch, "yte-feature-monoToStereoButton-button", right);
+		await expect.poll(async () => await isMonoEnabled(page)).toBeTruthy();
+		await expect(button).toHaveAttribute("aria-checked", "true");
 		await clickFeatureButton(page, watch, "yte-feature-monoToStereoButton-button", right);
 		await expect.poll(async () => await isMonoEnabled(page)).toBeFalsy();
+		await expect(button).toHaveAttribute("aria-checked", "false");
 	});
 
 	test(`button should re-appear after disable then re-enable on ${watch}`, async ({ page }) => {

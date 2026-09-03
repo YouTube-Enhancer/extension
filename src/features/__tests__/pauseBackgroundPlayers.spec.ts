@@ -5,15 +5,15 @@ import { expect, test } from "playwright.config";
 import type { PageType } from "@/src/features/_registry/types";
 
 import { metadata } from "@/src/features/pauseBackgroundPlayers/index.metadata";
+import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, PlayerStates } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
-import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { home, watch } = pageTypeRecord;
+const { home, shorts, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
-const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 
 async function ensureVideoIsPlaying(page: Page, pageType: PageType): Promise<void> {
 	const state = await getValueFromYouTubePlayer(page, "getPlayerState", pageType);
@@ -55,20 +55,26 @@ test.describe("pauseBackgroundPlayers", () => {
 			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
 			await pageB.close();
 		});
-		test(`should persist background player pausing after navigation on ${pageType}`, async ({ context, page }) => {
-			const pageA = page;
-			const pageB = await context.newPage();
-			await openAndPlayVideo(pageA, pageType);
-			await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
-			await expectPlayerState(pageA, PlayerStates.PLAYING, pageType);
-			await openAndPlayVideo(pageB, pageType);
-			await expectPlayerState(pageA, PlayerStates.PAUSED, pageType, pageType === "live" ? 30000 : 15000);
-			await pageB.close();
-			await navigateToPageType(pageA, home);
-			await navigateToPageType(pageA, pageType);
-			await ensureVideoIsPlaying(pageA, pageType);
-		});
 	}
+	// Runs on watch only: the feature has no live/VOD branch and the live fixture costs up to 120 s per iteration.
+	test("should persist background player pausing after navigation on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		await openAndPlayVideo(pageB, watch);
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		// The navigated tab has to become the sender, otherwise nothing observes the listeners onNavigate re-attaches.
+		await navigateToPageType(pageA, home);
+		await navigateToPageType(pageA, watch);
+		await expectPlayerState(pageB, PlayerStates.PLAYING, watch);
+		await ensureVideoIsPlaying(pageA, watch);
+		await expectPlayerState(pageB, PlayerStates.PAUSED, watch);
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		await pageB.close();
+	});
 	// The feature has no live/VOD branch (a live page is a /watch document), so the disabled case runs on watch
 	// only; live-page gating is still proven by `pauses background players on live` and the live fixture costs
 	// up to 120 s per iteration.
@@ -84,13 +90,16 @@ test.describe("pauseBackgroundPlayers", () => {
 		await pageB.close();
 	});
 
-	test(`should not affect non-target page`, async ({ context, page }) => {
+	test("should not affect non-target page", async ({ context, page }) => {
+		test.setTimeout(120_000);
 		const pageA = page;
-		await navigateToPageType(pageA, nonTargetPage!);
-		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
 		const pageB = await context.newPage();
-		await navigateToPageType(pageB, testPages[0], []);
-		await expect(pageA.locator("body")).toBeAttached();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		// shorts sits outside includePages, so a player starting there must never pause the watch tab.
+		await openAndPlayVideo(pageB, shorts);
+		await expectToStay(async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageA });
 		await pageB.close();
 	});
 });

@@ -3,10 +3,11 @@ import { expect, test } from "playwright.config";
 import { metadata } from "@/src/features/playerSpeed/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getCurrentSpeed } from "@/src/utils/_tests/player";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // No code branches on the speed value (resolveEffectiveSpeed forwards it unchanged), so one speed per page is enough.
 const speed = 2;
@@ -18,7 +19,6 @@ test.describe("playerSpeed", () => {
 			await navigateToPageType(page, pageType);
 			await setOption(page, "playerSpeed.speed", speed);
 			await enableFeature(page, "playerSpeed.enabled");
-			await page.waitForTimeout(1000);
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(speed);
 		});
 		test(`should persist playback speed after navigation on ${pageType}`, async ({ page }) => {
@@ -28,14 +28,23 @@ test.describe("playerSpeed", () => {
 			await expect.poll(async () => getCurrentSpeed(page, pageType), { timeout: pageType === "shorts" ? 15000 : 5000 }).toBe(2);
 			await navigateToPageType(page, home);
 			await navigateToPageType(page, pageType);
-			await disableFeature(page, "playerSpeed.enabled");
-			await enableFeature(page, "playerSpeed.enabled");
+			// No disable/enable round trip: the assertion has to measure the navigation path, not a fresh onEnable.
 			await expect
 				.poll(() => getCurrentSpeed(page, pageType), {
 					intervals: [200],
-					timeout: 5000
+					timeout: 15000
 				})
 				.toBe(2);
+			if (pageType === watch) {
+				// A genuine in-document navigation is the only path that reaches onNavigate.
+				await spaNavigateToRelatedVideo(page);
+				await expect
+					.poll(() => getCurrentSpeed(page, watch), {
+						intervals: [200],
+						timeout: 15000
+					})
+					.toBe(2);
+			}
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
@@ -67,19 +76,17 @@ test.describe("playerSpeed", () => {
 
 			await page.locator("div#movie_player").hover();
 			await page.locator(".ytp-settings-button").click();
-			await page.waitForTimeout(1000);
+			await expect(page.locator(settingsPanelMenuSelector)).toBeVisible();
 			await page.evaluate(() => {
 				const speedItem = Array.from(document.querySelectorAll<HTMLDivElement>(".ytp-menuitem")).find((item) =>
 					item.querySelector(".ytp-menuitem-label")?.textContent?.toLowerCase().includes("speed")
 				);
 				speedItem?.click();
 			});
-			await page.waitForTimeout(1000);
-
-			const state = await readStoredState(page);
-			const playerSpeedState = state.playerSpeed as undefined | { playbackSpeed: number };
-			expect(playerSpeedState).toBeDefined();
-			expect(playerSpeedState!.playbackSpeed).toBe(2);
+			// The panel the feature observes to record the speed; waiting for it replaces the fixed sleeps.
+			await expect(page.locator(".ytp-variable-speed-panel-content")).toBeVisible();
+			// The state write travels content script -> background -> storage, so it has to be polled for.
+			await expect.poll(async () => (await readStoredState(page)).playerSpeed).toMatchObject({ playbackSpeed: 2 });
 		});
 	});
 });

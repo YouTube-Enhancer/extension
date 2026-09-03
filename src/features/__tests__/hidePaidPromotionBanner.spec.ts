@@ -2,9 +2,8 @@ import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hidePaidPromotionBanner/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden } from "@/src/utils/_tests/assertions";
-import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
@@ -15,7 +14,6 @@ const {
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const { home } = pageTypeRecord;
 
 test.describe("hidePaidPromotionBanner", () => {
 	for (const pageType of testPages) {
@@ -29,10 +27,9 @@ test.describe("hidePaidPromotionBanner", () => {
 			await enableFeature(page, "hidePaidPromotionBanner.enabled");
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
-			await navigateToPageType(page, home);
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "hidePaidPromotionBanner.enabled");
-			await enableFeature(page, "hidePaidPromotionBanner.enabled");
+			// A real in-page navigation, so the extension's navigation hooks run instead of a fresh document load
+			// (which the reload test already covers).
+			await spaNavigateToRelatedVideo(page);
 			await expectBodyWithClass(page, bodyClass, { timeout: 15000 });
 			await expectElementsHidden(page, selectors);
 		});

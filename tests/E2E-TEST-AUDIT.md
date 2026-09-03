@@ -6,7 +6,8 @@ This document has three jobs: list the tests that exist today, mark the ones tha
 
 ## Status
 
-- 2026-09-03: every "Not needed" verdict in section 4 has been applied (see the commit "test(e2e): remove tests the audit judged unnecessary"). The suite went from 1353 to 461 generated cases per browser project. The "Tests we have" tables in section 4 describe the suite before that pass; the "Incorrect" and "Missing" tables are still open.
+- 2026-09-03: every "Not needed" verdict in section 4 has been applied (see the commit "test(e2e): remove tests the audit judged unnecessary"). The suite went from 1353 to 461 generated cases per browser project. The "Tests we have" tables in section 4 describe the suite before that pass.
+- 2026-09-03: every "Incorrect" verdict in section 4 has been applied (commit "test(e2e): fix the tests the audit judged incorrect"), together with the harness changes from section 3.6 that they depended on (reloadPage, spaNavigateToRelatedVideo, expectToStay, requireMatch, a state-checking toggleFullscreen, a throwing injectDynamicContent, one error-watch loop per page) and a body marker for the speed control. Three product-side halves were deferred and are listed in the commit message. The "Missing" tables are still open.
 
 ## 1. Summary
 
