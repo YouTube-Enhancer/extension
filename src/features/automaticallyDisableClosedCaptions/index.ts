@@ -18,6 +18,10 @@ async function clickSubtitlesButton() {
 async function disableCaptions() {
 	const subtitlesButton = await clickSubtitlesButton();
 	if (!subtitlesButton) return;
+	// If captions are already disabled, return: clicking the button would turn them back on
+	if (subtitlesButton.getAttribute("aria-pressed") !== "true") return;
+	// Remember that captions were enabled so onDisable can restore them
+	captionsWhereEnabled = true;
 	// Disable captions
 	subtitlesButton.click();
 }
