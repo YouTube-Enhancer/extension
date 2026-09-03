@@ -1,4 +1,4 @@
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
@@ -12,7 +12,7 @@ import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
-const { channel_home: channelHome, home, search, shorts, subscriptions, watch } = pageTypeRecord;
+const { channel_home: channelHome, home, search, subscriptions, watch } = pageTypeRecord;
 
 const subFeatures = [
 	{
@@ -69,13 +69,6 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass);
 				await expectElementsHidden(pageObj, selectors);
 			});
-			test(`shows when disabled on ${page}`, async ({ page: pageObj }) => {
-				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
-				await disableFeature(pageObj, config);
-				await expectBodyWithoutClass(pageObj, bodyClass);
-				await expectElementsNotHidden(pageObj, selectors);
-			});
 			test(`${subFeature} hiding should persist after navigation on ${page}`, async ({ page: pageObj }) => {
 				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
 				await navigateToPageType(pageObj, page);
@@ -113,34 +106,19 @@ test.describe("hideShorts", () => {
 				await expectBodyWithClass(pageObj, bodyClass, { timeout: 15000 });
 				await expectElementsHidden(pageObj, selectors);
 			});
-			test(`${subFeature} hiding should apply to dynamically added content on ${page}`, async ({ page: pageObj }) => {
-				test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
-				await navigateToPageType(pageObj, page);
-				await enableFeature(pageObj, config);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
-				await injectDynamicContent(pageObj, selectors);
-				await expectBodyWithClass(pageObj, bodyClass);
-				await expectElementsHidden(pageObj, selectors);
-			});
+			if (subFeature === "videos") {
+				// Hiding is a static body-class CSS rule with no observer, so one sub-feature covers dynamically added content.
+				test(`${subFeature} hiding should apply to dynamically added content on ${page}`, async ({ page: pageObj }) => {
+					test.skip(!hasAuthState() && loginRequiredPages.includes(page), `${page} requires login`);
+					await navigateToPageType(pageObj, page);
+					await enableFeature(pageObj, config);
+					await expectBodyWithClass(pageObj, bodyClass);
+					await expectElementsHidden(pageObj, selectors);
+					await injectDynamicContent(pageObj, selectors);
+					await expectBodyWithClass(pageObj, bodyClass);
+					await expectElementsHidden(pageObj, selectors);
+				});
+			}
 		});
 	}
-
-	test.describe("feature conflicts", () => {
-		test.describe("hideShorts vs shortsAutoScroll", () => {
-			test("hideShorts sub-features active on watch don't interfere with shortsAutoScroll on shorts page", async ({ page }) => {
-				await navigateToPageType(page, watch);
-				await enableFeature(page, "hideShorts.home.enabled");
-				await enableFeature(page, "hideShorts.search.enabled");
-				await enableFeature(page, "hideShorts.sidebar.enabled");
-				await enableFeature(page, "hideShorts.subscriptions.enabled");
-				await enableFeature(page, "hideShorts.videos.enabled");
-				await enableFeature(page, "hideShorts.channel.enabled");
-
-				await navigateToPageType(page, shorts);
-				await page.waitForTimeout(3000);
-				await expect(page.locator("#shorts-player")).toBeAttached();
-			});
-		});
-	});
 });

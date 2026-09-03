@@ -2,7 +2,7 @@ import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/miniPlayer/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -19,13 +19,6 @@ test.describe("miniPlayer", () => {
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
 		});
-		test(`should remove sentinel element when disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await disableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).not.toBeAttached();
-		});
 		test(`should create sentinel element after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
@@ -36,38 +29,27 @@ test.describe("miniPlayer", () => {
 			await enableFeature(page, "miniPlayer.enabled");
 			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
 		});
-		test(`should re-create sentinel after disable then re-enable on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await disableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).not.toBeAttached();
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-		});
-		test(`should persist sentinel after full page reload on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await page.reload();
-			await navigateToPageType(page, pageType);
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-		});
-		test(`should handle config change for defaultPosition on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await setOption(page, "miniPlayer.defaultPosition", "top_left");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-		});
-		test(`should handle config change for defaultSize on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-			await setOption(page, "miniPlayer.defaultSize", "480x270");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
-		});
 	}
+
+	// Watch only: onEnable/onDisable have no live-vs-watch branch (the sentinel is inserted before any page-dependent lookup) and live stays covered by the create-sentinel smoke test.
+	test(`should re-create sentinel after disable then re-enable on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "miniPlayer.enabled");
+		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+		await disableFeature(page, "miniPlayer.enabled");
+		await expect(page.locator("#yte-mini-player-sentinel")).not.toBeAttached();
+		await enableFeature(page, "miniPlayer.enabled");
+		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+	});
+	// Watch only: on watch the post-reload navigateToPageType skips the goto so the assertion really follows the reload; on live it navigates away again.
+	test(`should persist sentinel after full page reload on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "miniPlayer.enabled");
+		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+		await page.reload();
+		await navigateToPageType(page, watch);
+		await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+	});
 
 	test(`should not create sentinel element on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);

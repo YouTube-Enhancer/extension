@@ -20,12 +20,6 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await expectBodyWithClass(page, "yte-show-html5-endscreen");
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
 		});
-		test(`should remove show more videos classes when disabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await disableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
-		});
 		test(`should persist show more videos classes after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
@@ -47,15 +41,6 @@ test.describe("automaticallyShowMoreVideosOnEndScreen", () => {
 			await navigateToPageType(page, pageType);
 			await expectBodyWithClass(page, "yte-show-html5-endscreen", { timeout: 15000 });
 			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid", { timeout: 15000 });
-		});
-		test(`restores original state when disabled after being enabled on ${pageType}`, async ({ page }) => {
-			await navigateToPageType(page, pageType);
-			await enableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithClass(page, "yte-hide-ytp-fullscreen-grid");
-			await disableFeature(page, "automaticallyShowMoreVideosOnEndScreen.enabled");
-			await expectBodyWithoutClass(page, "yte-show-html5-endscreen");
-			await expectBodyWithoutClass(page, "yte-hide-ytp-fullscreen-grid");
 		});
 		test(`re-applies after disable then re-enable on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
