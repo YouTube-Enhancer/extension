@@ -47,7 +47,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 	reverseButton.appendChild(createReverseIcon());
 
 	reverseButtonContainer = document.createElement("div");
-	reverseButtonContainer.id = "yte-button-container";
+	reverseButtonContainer.id = "yte-playlist-reverse-button-container";
 	reverseButtonContainer.appendChild(reverseButton);
 
 	insertButtonInto(headerContainerElement);
