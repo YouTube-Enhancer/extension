@@ -51,35 +51,21 @@ export async function adjustWithScrollWheel({
 		await enableFeature(page, `scrollWheel${controlType}Control.holdRightClick`);
 	}
 	await enableFeature(page, `scrollWheel${controlType}Control.enabled`);
+	if (controlType === "Volume") await waitForScrollWheelVolumeControl(page, true);
 	await setValueOnYouTubePlayer(page, pageType, `set${controlType === "Volume" ? "Volume" : "PlaybackRate"}`, initialValue);
 	const getter = controlType === "Volume" ? getCurrentVolume : getCurrentSpeed;
 	const originalValue = await getter(page, pageType);
 	expect(originalValue).toBeTruthy();
 	if (!originalValue) return;
 	expect(originalValue).toBe(initialValue);
-	// Dispatch the wheel event directly on the container element the feature listens on.
-	// Using page.mouse.wheel() on div#movie_player can be swallowed by YouTube's own
-	// wheel handlers before it bubbles up to div#player where the extension listens.
-	const wheelContainerSelector = pageType === "shorts" ? "#player-container:has(#shorts-player)" : "div#player";
-	const wheelInit: Record<string, unknown> = {
-		bubbles: true,
-		cancelable: true,
-		deltaMode: 0,
-		deltaY: direction === "up" ? -WHEEL_DELTA_PER_NOTCH : WHEEL_DELTA_PER_NOTCH
-	};
+	const wheelInit: Record<string, unknown> = {};
 	if (withModifierKey) {
 		wheelInit[modifierKey] = true;
 	}
 	if (withRightClick) {
 		wheelInit.buttons = 2;
 	}
-	await page.evaluate(
-		([selector, init]) => {
-			const el = document.querySelector(selector);
-			if (el) el.dispatchEvent(new WheelEvent("wheel", init));
-		},
-		[wheelContainerSelector, wheelInit] as const
-	);
+	await dispatchWheelNotches(page, pageType, direction, 1, wheelInit);
 	let valueAfterScroll: unknown = null;
 	const pollTimeout = pageType === "live" ? 10000 : 5000;
 	const endTime = Date.now() + pollTimeout;
@@ -91,6 +77,35 @@ export async function adjustWithScrollWheel({
 	const expectedValue = originalValue + steps * (direction === "up" ? 1 : -1);
 	expect(valueAfterScroll).toBeTruthy();
 	expect(valueAfterScroll).toBe(controlType === "Speed" ? clamp(expectedValue, 0.25, 4) : expectedValue);
+}
+/**
+ * Dispatches synthetic wheel notches on the container element the scroll wheel controller listens on.
+ *
+ * The events are dispatched directly instead of via `page.mouse.wheel()` because YouTube's own wheel
+ * handlers on the player can swallow real wheel input before it bubbles up to `div#player`.
+ */
+export async function dispatchWheelNotches(
+	page: Page,
+	pageType: PageType,
+	direction: "down" | "up",
+	notches = 1,
+	init: Record<string, unknown> = {}
+): Promise<void> {
+	const wheelInit: Record<string, unknown> = {
+		bubbles: true,
+		cancelable: true,
+		deltaMode: 0,
+		deltaY: direction === "up" ? -WHEEL_DELTA_PER_NOTCH : WHEEL_DELTA_PER_NOTCH,
+		...init
+	};
+	await page.evaluate(
+		([selector, eventInit, count]) => {
+			const el = document.querySelector(selector);
+			if (!el) throw new Error(`Wheel target ${selector} not found`);
+			for (let i = 0; i < count; i++) el.dispatchEvent(new WheelEvent("wheel", eventInit));
+		},
+		[getWheelContainerSelector(pageType), wheelInit, notches] as const
+	);
 }
 export async function ensureCaptionsState(page: Page, desired: boolean): Promise<boolean> {
 	const btn = page.locator("button.ytp-subtitles-button");
@@ -113,6 +128,7 @@ export async function ensureCaptionsState(page: Page, desired: boolean): Promise
 		return false;
 	}
 }
+
 export async function expectStableCaptionsState(page: Page, expected: boolean) {
 	let stableCount = 0;
 	await expect
@@ -174,7 +190,6 @@ export async function getCurrentVolume(page: Page, pageType: PageType = "watch")
 	const currentVolume = await getValueFromYouTubePlayer(page, "getVolume", pageType);
 	return currentVolume;
 }
-
 export async function getValueFromYouTubePlayer<P extends Page, K extends YouTubePlayerGetKeysWithoutParams>(
 	page: P,
 	key: K,
@@ -192,6 +207,10 @@ export async function getValueFromYouTubePlayer<P extends Page, K extends YouTub
 	);
 	return value as Nullable<YouTubePlayerGetReturnType<K>>;
 }
+export function getWheelContainerSelector(pageType: PageType): string {
+	return pageType === "shorts" ? "#player-container:has(#shorts-player)" : "div#player";
+}
+
 export async function isCaptionsUnavailable(page: Page): Promise<boolean> {
 	const btn = page.locator("button.ytp-subtitles-button");
 	if ((await btn.count()) === 0) return true;
@@ -223,6 +242,15 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 }
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
 	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
+}
+/**
+ * Waits for the scroll wheel volume control to finish attaching (or detaching) its listeners.
+ * The controller marks the body while the volume control is active.
+ */
+export async function waitForScrollWheelVolumeControl(page: Page, active: boolean): Promise<void> {
+	await expect
+		.poll(async () => page.evaluate(() => document.body.classList.contains("yte-scroll-wheel-volume-control")), { timeout: 10_000 })
+		.toBe(active);
 }
 export async function waitForStableTime(page: Page, pageType: PageType, threshold = 150) {
 	let last = await getValueFromYouTubePlayer(page, "getCurrentTime", pageType);

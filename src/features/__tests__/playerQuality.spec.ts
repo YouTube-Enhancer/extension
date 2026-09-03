@@ -9,7 +9,7 @@ import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/fea
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 // Live streams don't reliably enforce exact quality levels via setPlaybackQualityRange;
 // only run the specific-quality tests (lower fallback, hd720) on VOD page types.
@@ -132,4 +132,33 @@ test.describe("playerQuality", () => {
 			}
 		});
 	}
+	test("suspends enforcement after a manual quality change on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "playerQuality.quality", "hd720");
+		await enableFeature(page, "playerQuality.enabled");
+		const closestQuality = await getClosestQuality(page, watch, "hd720");
+		if (!closestQuality) return;
+		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
+		const availableLevels = await getValueFromYouTubePlayer(page, "getAvailableQualityLevels", watch);
+		const manualQuality = availableLevels?.filter((level) => level !== closestQuality).at(-1);
+		if (!manualQuality) return;
+		await page.evaluate(async (quality) => {
+			const player = document.querySelector("div#movie_player") as unknown as {
+				setPlaybackQuality(quality: string): Promise<void>;
+				setPlaybackQualityRange(suggested: string, range: string): Promise<void>;
+			};
+			await player.setPlaybackQualityRange(quality, quality);
+			await player.setPlaybackQuality(quality);
+		}, manualQuality);
+		await expectCurrentQualityLevelToBeTruthy(page, watch, manualQuality);
+		// Enforcement used to snap the quality straight back; it must now leave the manual choice alone.
+		for (let i = 0; i < 6; i++) {
+			await page.waitForTimeout(500);
+			expect(await getValueFromYouTubePlayer(page, "getPlaybackQuality", watch)).toBe(manualQuality);
+		}
+		// A config change clears the suspension and the configured quality is enforced again.
+		await disableFeature(page, "playerQuality.enabled");
+		await enableFeature(page, "playerQuality.enabled");
+		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
+	});
 });
