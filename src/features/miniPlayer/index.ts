@@ -34,7 +34,8 @@ function emitMiniPlayerState(active: boolean) {
 function ensureController(options: MiniPlayerOptions) {
 	const defaults = cachedMiniPlayerDefaults ?? options;
 	if (!miniPlayerController) {
-		miniPlayerController = new MiniPlayerController(defaults);
+		// The controller announces every activation itself, so paths that bypass setMiniPlayerManual (the overlay close button) still sync the button.
+		miniPlayerController = new MiniPlayerController(defaults, { onStateChange: emitMiniPlayerState });
 	} else {
 		miniPlayerController.setDefaults(defaults);
 	}

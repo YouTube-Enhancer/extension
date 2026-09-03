@@ -11,6 +11,10 @@ import { clamp } from "@/src/utils/math";
 
 import "./index.css";
 const stateAPI = registry.stateManager.getStateAPI("miniPlayer");
+export type MiniPlayerCallbacks = {
+	/** Notified whenever the overlay activates or deactivates, including from paths the button never goes through, like close(). */
+	onStateChange?: (active: boolean) => void;
+};
 export type MiniPlayerRect = {
 	height: number;
 	width: number;
@@ -21,14 +25,16 @@ export class MiniPlayerController {
 	private detachedPlayer: Nullable<HTMLElement> = null;
 	private dragHandleElement: Nullable<HTMLDivElement> = null;
 	private isActiveState = false;
+	private readonly onStateChange: MiniPlayerCallbacks["onStateChange"];
 	private options: MiniPlayerOptions;
 	private originalPlayerParent: Nullable<HTMLElement> = null;
 	private overlayElement: Nullable<HTMLDivElement> = null;
 	private playerPlaceholder: Nullable<HTMLDivElement> = null;
 	private resizeHandleElement: Nullable<HTMLDivElement> = null;
 	private seekBar: Nullable<MiniSeekBar> = null;
-	constructor(options: MiniPlayerOptions) {
+	constructor(options: MiniPlayerOptions, { onStateChange }: MiniPlayerCallbacks = {}) {
 		this.options = options;
+		this.onStateChange = onStateChange;
 		eventManager.addEventListener(window, "resize", this.handleViewportResize, "miniPlayer");
 	}
 	close() {
@@ -223,6 +229,8 @@ export class MiniPlayerController {
 		if (this.overlayElement) this.overlayElement.style.display = "none";
 		this.isActiveState = false;
 		document.documentElement.classList.remove("yte-mini-player-active");
+		// close() and destroy() get here without going through setMiniPlayerManual, so the state change is announced here.
+		this.onStateChange?.(this.isActiveState);
 	}
 	private enable() {
 		if (this.isActiveState) return;
@@ -235,11 +243,14 @@ export class MiniPlayerController {
 			this.overlayElement.style.display = "block";
 			this.isActiveState = true;
 			document.documentElement.classList.add("yte-mini-player-active");
+			this.onStateChange?.(this.isActiveState);
 		} catch (error) {
 			console.error("[miniPlayer] Failed to enable mini player, restoring player:", error);
 			this.restorePlayer();
 			if (this.overlayElement) this.overlayElement.style.display = "none";
+			this.isActiveState = false;
 			document.documentElement.classList.remove("yte-mini-player-active");
+			this.onStateChange?.(this.isActiveState);
 		}
 	}
 	private ensureOverlay() {
