@@ -17,6 +17,13 @@ async function getPlayerContainer(): Promise<Nullable<YouTubePlayerDiv>> {
 }
 export default createFeature({
 	...metadata,
+	onConfigChange: async ({ enabled, volume }) => {
+		// A volume edit only emits a config change, so apply it the same way onEnable does.
+		if (!enabled) return;
+		const playerContainer = await getPlayerContainer();
+		if (!playerContainer) return;
+		await setPlayerVolume(playerContainer, volume);
+	},
 	onDisable: async () => {
 		const playerContainer = await getPlayerContainer();
 		if (!playerContainer) return;
