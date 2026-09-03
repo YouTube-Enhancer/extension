@@ -8,7 +8,7 @@ import { metadata } from "@/src/features/rememberVolume/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -16,7 +16,7 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 // A live stream is a /watch document (isWatchPage() is true, isLivePage() is false), so restoreVolume and
 // setupVolumeChangeListener run the identical code path as on watch; the live fixture costs up to 120 s per test.
 const testPages = resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType !== "live");
-const { shorts, watch } = pageTypeRecord;
+const { live, shorts, watch } = pageTypeRecord;
 type RememberVolumeState = { shortsPageVolume: number; watchPageVolume: number };
 /** Reads the volume the feature has recorded for `pageType`, or undefined when it never recorded one. */
 async function readStoredVolume(page: Page, pageType: PageType): Promise<number | undefined> {
@@ -81,6 +81,78 @@ test.describe("rememberVolume", () => {
 				.toBe(volume);
 		});
 	}
+	test(`restores the per-page remembered volume across an in-page (SPA) navigation on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "rememberVolume.enabled");
+		await setVolume(page, volume, watch);
+		await expect.poll(() => getCurrentVolume(page, watch), { timeout: 10000 }).toBe(volume);
+		await expect.poll(async () => readStoredVolume(page, watch), { timeout: 10000 }).toBe(volume);
+		// A genuine in-document navigation is the only path that reaches onNavigate; every helper navigation
+		// used by the cases above tears the document down and runs onEnable instead.
+		await spaNavigateToRelatedVideo(page);
+		await expect
+			.poll(() => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: 10000
+			})
+			.toBe(volume);
+		// restoreVolume re-attaches the volumechange listener, so the video that is playing now has to be
+		// recorded as well - a lost listener would freeze the remembered volume at the previous video's value.
+		await setVolume(page, 45, watch);
+		await expect.poll(async () => readStoredVolume(page, watch), { timeout: 10000 }).toBe(45);
+	});
+	test(`remembered volume works on the ${live} page type`, async ({ page }) => {
+		await navigateToPageType(page, live);
+		await enableFeature(page, "rememberVolume.enabled");
+		await setVolume(page, volume, live);
+		await expect.poll(() => getCurrentVolume(page, live), { timeout: 10000 }).toBe(volume);
+		// getCurrentPageType() reports "live", yet the document is a /watch page, so the recording has to land
+		// in the watch bucket - a gating regression would leave the state untouched instead.
+		await expect.poll(async () => readStoredVolume(page, watch), { timeout: 10000 }).toBe(volume);
+		await disableFeature(page, "rememberVolume.enabled");
+		await setVolume(page, 80, live);
+		await expect.poll(() => getCurrentVolume(page, live), { timeout: 10000 }).toBe(80);
+		await enableFeature(page, "rememberVolume.enabled");
+		await expect.poll(() => getCurrentVolume(page, live), { timeout: 10000 }).toBe(volume);
+	});
+	test(`applies the built-in default remembered volume when nothing is stored on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		// hydrateState merges the feature's defaults into its in-page state only; storage is written by the
+		// volumechange listener, which has never run on this fresh profile - so nothing is stored yet.
+		expect(await readStoredVolume(page, watch)).toBeUndefined();
+		// The built-in default, from `state` in src/features/rememberVolume/index.ts.
+		const defaultVolume = 25;
+		const startingVolume = 80;
+		await setVolume(page, startingVolume, watch);
+		await expect.poll(() => getCurrentVolume(page, watch), { timeout: 10000 }).toBe(startingVolume);
+		await enableFeature(page, "rememberVolume.enabled");
+		// A first-time user is pulled onto the built-in default, not left on the volume they were watching at.
+		await expect
+			.poll(() => getCurrentVolume(page, watch), {
+				intervals: [200],
+				timeout: 10000
+			})
+			.toBe(defaultVolume);
+		// The restore is also what first puts the default into storage, which proves the value above came from
+		// the feature rather than from YouTube's own persisted volume.
+		await expect.poll(async () => readStoredVolume(page, watch), { timeout: 10000 }).toBe(defaultVolume);
+	});
+	test(`a stored volume of 0 is recorded but never restored on ${shorts}`, async ({ page }) => {
+		await navigateToPageType(page, shorts);
+		await enableFeature(page, "rememberVolume.enabled");
+		await setVolume(page, 0, shorts);
+		await expect.poll(() => getCurrentVolume(page, shorts), { timeout: 10000 }).toBe(0);
+		// The listener has no truthiness guard, so muting is recorded like any other volume.
+		await expect.poll(async () => readStoredVolume(page, shorts), { timeout: 10000 }).toBe(0);
+		// The intermediate watch visit moves the player off 0 so the missing restore is observable.
+		await navigateToPageType(page, watch);
+		await setVolume(page, volume, watch);
+		await expect.poll(() => getCurrentVolume(page, watch), { timeout: 10000 }).toBe(volume);
+		await navigateToPageType(page, shorts);
+		// restoreVolume guards on `shortsPageVolume` being truthy, so the muted preference is dropped.
+		await expectToStay(async () => (await getCurrentVolume(page, shorts)) !== 0, true, { page });
+	});
+
 	test.describe("state persistence", () => {
 		test("rememberVolume state is stored in extension storage", async ({ page }) => {
 			await navigateToPageType(page, watch);

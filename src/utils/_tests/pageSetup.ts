@@ -9,19 +9,24 @@ const YOUTUBE_AD_SELECTORS = {
 	remainingTime: ".ytp-time-display .ytp-time-duration",
 	skipButton: [".ytp-skip-ad-button", ".ytp-ad-skip-button", ".ytp-ad-skip-button-modern"].join(", ")
 } as const;
-const parseAdPodIndex = (text: Nullable<string>): Nullable<{ index: number; total: number }> => {
-	if (!text) return null;
-	const match = text.match(/(\d+)\s*(?:of|\/)\s*(\d+)/i);
-	if (!match) return null;
-	return {
-		index: Number(match[1]),
-		total: Number(match[2])
-	};
-};
 
+/** Seeks the ad's video to its end so YouTube moves on to the content instead of playing the ad out. */
+async function fastForwardAd(page: Page): Promise<void> {
+	await page
+		.evaluate((selector) => {
+			const video = document.querySelector<HTMLVideoElement>(`${selector} video`);
+			if (!video) return;
+			const { duration } = video;
+			if (!Number.isFinite(duration) || duration <= 0) return;
+			video.muted = true;
+			video.currentTime = duration;
+			if (video.paused) void video.play().catch(() => {});
+		}, YOUTUBE_AD_SELECTORS.adShowing)
+		.catch(() => {});
+}
 async function handleYoutubeAds(page: Page): Promise<void> {
-	const GLOBAL_TIMEOUT = 60_000;
-	const AD_WAIT_TIMEOUT = 15_000;
+	const GLOBAL_TIMEOUT = 90_000;
+	const PLAYER_WAIT_TIMEOUT = 15_000;
 	const startTime = Date.now();
 
 	const getAdInfo = async () => {
@@ -30,13 +35,11 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			if (!isShowing) {
 				return {
 					isShowing: false,
-					isSkippable: false,
 					playerExists: document.querySelector("#movie_player") !== null,
 					podText: null,
 					remainingSeconds: null
 				};
 			}
-			const skipButton = document.querySelector<HTMLElement>(selectors.skipButton);
 			const remainingText = document.querySelector<HTMLElement>(selectors.remainingTime)?.textContent?.trim() ?? null;
 			const podText = document.querySelector<HTMLElement>(selectors.adCount)?.textContent?.trim() ?? null;
 			let remainingSeconds: Nullable<number> = null;
@@ -46,7 +49,6 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			}
 			return {
 				isShowing: true,
-				isSkippable: skipButton !== null && skipButton.offsetParent !== null,
 				playerExists: true,
 				podText,
 				remainingSeconds
@@ -66,38 +68,26 @@ async function handleYoutubeAds(page: Page): Promise<void> {
 			return false;
 		}
 	};
-	let lastPodKey: Nullable<string> = null;
-	// Initial poll: wait for player and ads to potentially start
+	// Wait for the player to exist (or an ad to show) before deciding there is nothing to handle.
 	let adInfo = await getAdInfo();
-	while (!adInfo.isShowing && !adInfo.playerExists && Date.now() - startTime < AD_WAIT_TIMEOUT) {
+	while (!adInfo.isShowing && !adInfo.playerExists && Date.now() - startTime < PLAYER_WAIT_TIMEOUT) {
 		await page.waitForTimeout(500);
 		adInfo = await getAdInfo();
 	}
-	while (Date.now() - startTime < GLOBAL_TIMEOUT) {
-		if (!adInfo.isShowing) break;
-		if (adInfo.isSkippable) await clickSkipButton();
-		const maxWaitTime = adInfo.remainingSeconds !== null ? Math.min(adInfo.remainingSeconds * 1000, 120_000) : 30_000;
-		const podStart = Date.now();
-		while (Date.now() - podStart < maxWaitTime && Date.now() - startTime < GLOBAL_TIMEOUT) {
-			const current = await getAdInfo();
-			if (!current.isShowing) return;
-			const currentPod = parseAdPodIndex(current.podText);
-			const currentKey = currentPod ? `${currentPod.index}/${currentPod.total}` : null;
-			if (await clickSkipButton()) {
-				await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0);
-				return;
-			}
-			if (currentKey && lastPodKey && currentKey !== lastPodKey) {
-				break; // next ad in pod started
-			}
-			lastPodKey = currentKey;
-			await page.waitForTimeout(500);
-		}
+	// Every tick handles whatever ad is showing right now: seek it to its end, then click skip once the countdown
+	// allows it (the button is visible, but inert, while it counts down). Ads in a pod follow each other, so the
+	// loop keeps going until no ad is showing instead of assuming the first one seen was the only one.
+	while (adInfo.isShowing && Date.now() - startTime < GLOBAL_TIMEOUT) {
+		await fastForwardAd(page);
+		await clickSkipButton();
+		await page.waitForTimeout(500);
 		adInfo = await getAdInfo();
 	}
-	await expect(page.locator(YOUTUBE_AD_SELECTORS.adShowing)).toHaveCount(0, {
-		timeout: 30_000
-	});
+	if (adInfo.isShowing) {
+		throw new Error(
+			`An ad was still showing after ${GLOBAL_TIMEOUT / 1000}s (${adInfo.podText ?? "no pod info"}, ${adInfo.remainingSeconds ?? "?"}s remaining)`
+		);
+	}
 }
 const YOUTUBE_ERROR_SELECTORS = {
 	contentWarningProceed: "button:has-text('I understand and wish to proceed')",

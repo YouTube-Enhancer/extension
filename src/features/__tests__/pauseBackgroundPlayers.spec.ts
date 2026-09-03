@@ -57,6 +57,67 @@ test.describe("pauseBackgroundPlayers", () => {
 		});
 	}
 	// Runs on watch only: the feature has no live/VOD branch and the live fixture costs up to 120 s per iteration.
+	test("should not pause the tab that started playing on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
+		await openAndPlayVideo(pageB, watch);
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		// The background handler skips the sender tab, so the tab whose playback triggered the broadcast has
+		// to keep playing - without that skip the feature would pause the video the user just started.
+		await expectToStay(async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageB });
+		await pageB.close();
+	});
+	test("should stop pausing other tabs after being disabled on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await openAndPlayVideo(pageB, watch);
+		// Proves the listener was attached, so the silence after the disable below is attributable to onDisable.
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		await disableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		// Whether a tab gets paused is decided by the sender's listener, so the disabled tab has to become the
+		// sender: resuming it must no longer reach the background handler.
+		await pageA.bringToFront();
+		await ensureVideoIsPlaying(pageA, watch);
+		await expectToStay(async () => getValueFromYouTubePlayer(pageB, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageB });
+		await pageB.close();
+	});
+	test("should not pause other tabs when playback starts in a hidden tab on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageB, watch);
+		await enableFeature(pageB, "pauseBackgroundPlayers.enabled");
+		await openAndPlayVideo(pageA, watch);
+		await expectPlayerState(pageB, PlayerStates.PAUSED, watch);
+		// Activating pageA is what puts pageB in the background; nothing before this point makes either tab the
+		// foreground one, so document.hidden would stay false on both.
+		await pageA.bringToFront();
+		// The early return only applies while the tab is genuinely hidden, so establish that first - otherwise the
+		// rest of the test would pass for the wrong reason. Some headless configurations report every page as
+		// visible, and there the guard simply cannot be exercised.
+		const isHidden = await pageB
+			.waitForFunction(() => document.hidden, undefined, { timeout: 15000 })
+			.then(() => true)
+			.catch(() => false);
+		test.skip(!isHidden, "this browser reports every tab as visible, so no tab can be hidden for the guard to apply");
+		await pageB.evaluate(async () => {
+			const video = document.querySelector<HTMLVideoElement>(".html5-main-video");
+			if (!video) return;
+			video.muted = true;
+			await video.play().catch(() => {});
+		});
+		await expectPlayerState(pageB, PlayerStates.PLAYING, watch);
+		// A background tab resuming playback must never steal playback from the tab the user is watching.
+		await expectToStay(async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageA });
+		await pageB.close();
+	});
 	test("should persist background player pausing after navigation on watch", async ({ context, page }) => {
 		test.setTimeout(120_000);
 		const pageA = page;

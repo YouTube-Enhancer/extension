@@ -105,4 +105,31 @@ test.describe("blockNumberKeySeeking", () => {
 		if (end === null) return;
 		expect(Math.abs(end - start)).toBeLessThan(0.5);
 	});
+
+	test(`does not block digits typed in the search box on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "blockNumberKeySeeking.enabled");
+		const searchInput = page.locator('input#search, input[name="search_query"]').first();
+		await expect(searchInput).toBeVisible();
+		await searchInput.click();
+		await searchInput.fill("");
+		await page.keyboard.type("1234567890");
+		// The capture-phase handler bails out for inputs; without that guard preventDefault would swallow every digit
+		// typed anywhere on YouTube and the field would stay empty.
+		await expect(searchInput).toHaveValue("1234567890");
+	});
+	test(`does not block non-digit player shortcuts on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "blockNumberKeySeeking.enabled");
+		const start = await freezeAndGetTime(page, watch);
+		expect(start).not.toBeNull();
+		if (start === null) return;
+		// "l" is YouTube's seek-forward-10s shortcut: only the digit keys may be swallowed, everything else has to
+		// keep reaching the player.
+		await page.keyboard.press("l");
+		const end = await freezeAndGetTime(page, watch);
+		expect(end).not.toBeNull();
+		if (end === null) return;
+		expect(end - start).toBeGreaterThan(5);
+	});
 });
