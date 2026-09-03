@@ -27,6 +27,7 @@ type ActiveRetryState = {
 };
 
 type PlayerStateHookEntry = {
+	adObserver: Nullable<MutationObserver>;
 	cooldownId: Nullable<ReturnType<typeof setTimeout>>;
 	featureId: FeatureKeys;
 	handler: () => void;
@@ -45,6 +46,8 @@ const DEFAULT_CONFIG: Required<PlayerRetryConfig> = {
 
 export class FeaturePlayerManager extends FeatureManagerBase {
 	private activeRetries = new Map<FeatureKeys, ActiveRetryState>();
+	// Bumped by every abort; a run still waiting for the player compares against it before it registers.
+	private runGenerations = new Map<FeatureKeys, number>();
 	private stateHooks = new Map<FeatureKeys, PlayerStateHookEntry>();
 
 	cleanup(featureId?: FeatureKeys): void {
@@ -52,7 +55,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			this.abortRetry(featureId);
 			this.removeStateHook(featureId);
 		} else {
-			for (const id of this.activeRetries.keys()) {
+			for (const id of new Set([...this.activeRetries.keys(), ...this.runGenerations.keys()])) {
 				this.abortRetry(id);
 			}
 			for (const id of this.stateHooks.keys()) {
@@ -65,6 +68,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const resolved: Required<PlayerRetryConfig> = { ...DEFAULT_CONFIG, ...config };
 
 		this.abortRetry(featureId);
+		const generation = this.runGenerations.get(featureId);
 
 		if (!this.isOnAllowedPage(resolved.pageTypes)) {
 			return tasks.map(() => false);
@@ -73,7 +77,8 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const playerSelector = isShortsPage() ? "div#shorts-player" : "div#movie_player";
 		const player = await waitForElement<YouTubePlayerDiv>(playerSelector, resolved.overallTimeout);
 
-		if (!player) {
+		// A cleanup (navigation, disable) or a newer run for the feature superseded this one while it waited.
+		if (!player || this.runGenerations.get(featureId) !== generation) {
 			return tasks.map(() => false);
 		}
 
@@ -81,6 +86,9 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 			try {
 				await waitForPlayerLoaded(player, resolved.overallTimeout);
 			} catch {
+				return tasks.map(() => false);
+			}
+			if (this.runGenerations.get(featureId) !== generation) {
 				return tasks.map(() => false);
 			}
 		}
@@ -132,7 +140,10 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 					this.abortRetry(featureId);
 					resolve(state.taskResults);
 
-					if (resolved.onPlayerStateChange && allDone) {
+					// Installed after a failed run as well: a player that is still showing an ad or has not started
+					// gives the tasks nothing to act on, and the state change that ends that is the only signal
+					// that another attempt is worth making.
+					if (resolved.onPlayerStateChange) {
 						this.setupStateHook(featureId, () => {
 							void this.executeWithRetries(featureId, tasks, taskNames, {
 								...config,
@@ -157,6 +168,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 	}
 
 	private abortRetry(featureId: FeatureKeys): void {
+		this.runGenerations.set(featureId, (this.runGenerations.get(featureId) ?? 0) + 1);
 		const state = this.activeRetries.get(featureId);
 		if (!state) return;
 		state.aborted = true;
@@ -185,6 +197,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		const entry = this.stateHooks.get(featureId);
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
+		entry.adObserver?.disconnect();
 		const player = document.querySelector<YouTubePlayerDiv>(isShortsPage() ? "div#shorts-player" : "div#movie_player");
 		if (player) {
 			player.removeEventListener("onStateChange", entry.handler);
@@ -203,6 +216,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		};
 
 		const entry: PlayerStateHookEntry = {
+			adObserver: null,
 			cooldownId: null,
 			featureId,
 			handler,
@@ -216,6 +230,18 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		if (!player) return;
 
 		player.addEventListener("onStateChange", handler);
+		// An ad ending is not always a state change (the ad and the content both report "playing"), so the class
+		// YouTube keeps on the player while an ad shows is watched too; the tasks get their run once it clears.
+		let adWasShowing = player.classList.contains("ad-showing");
+		entry.adObserver = new MutationObserver(() => {
+			const adShowing = player.classList.contains("ad-showing");
+			if (adWasShowing && !adShowing) {
+				entry.lastRun = Date.now();
+				trigger();
+			}
+			adWasShowing = adShowing;
+		});
+		entry.adObserver.observe(player, { attributeFilter: ["class"], attributes: true });
 	}
 }
 
