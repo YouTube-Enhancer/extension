@@ -27,8 +27,12 @@ const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 let playlistObserver: Nullable<MutationObserver> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
 let removeAllButton: Nullable<HTMLButtonElement> = null;
+// Bumped on every setup and cleanup so a setup still awaiting DOM or network work cannot re-add
+// buttons (or re-install its observer) after it has been torn down.
+let setupGeneration = 0;
 
 const cleanupPlaylistManagementButtons = () => {
+	setupGeneration++;
 	if (playlistObserver) {
 		playlistObserver.disconnect();
 		playlistObserver = null;
@@ -48,6 +52,8 @@ const cleanupPlaylistManagementButtons = () => {
 };
 
 function setupPlaylistManagementButtons(config: configuration["playlistManagementButtons"]) {
+	const generation = ++setupGeneration;
+	const isStale = () => generation !== setupGeneration;
 	preparePageDisposeListener = (event) => {
 		if ((event as YtActionEvent).detail.actionName !== "yt-prepare-page-dispose") {
 			return;
@@ -60,8 +66,10 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)", 2500, "optional"))) {
 			return;
 		}
+		if (isStale()) return;
 
 		async function addButtonToPlaylistItems() {
+			if (isStale()) return;
 			const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
 			for (const item of playlistItems) {
 				const menu = item.querySelector("#menu");
@@ -93,6 +101,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					});
 					if (item.querySelector(".yte-remove-button")) continue;
 					removeButton.style.verticalAlign = "top";
+					if (isStale()) return;
 					menu.prepend(removeButton);
 				}
 
@@ -118,6 +127,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					if (enable_playlist_remove_button && removeButton) {
 						removeButton.prepend(resetButton);
 					} else {
+						if (isStale()) return;
 						menu.prepend(resetButton);
 					}
 				}
@@ -159,6 +169,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				{ count: watchedCount }
 			);
 			const { renderToString } = await import("react-dom/server");
+			if (isStale()) return;
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
 			const existingButton = document.getElementById("yte-remove-all-watched-button");
 			if (existingButton) {
@@ -214,9 +225,11 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 			await addButtonToPlaylistItems();
 			await addRemoveAllButton();
+			if (isStale()) return;
 			const container = document.querySelector("ytd-playlist-video-list-renderer");
 			if (container) {
 				playlistObserver = new MutationObserver(() => {
+					if (isStale()) return;
 					void addButtonToPlaylistItems();
 					void addRemoveAllButton();
 				});
