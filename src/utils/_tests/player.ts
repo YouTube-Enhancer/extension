@@ -2,13 +2,13 @@ import type { Page } from "@playwright/test";
 import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import { expect } from "playwright.config";
-import PlayerStates from "youtube-player/dist/constants/PlayerStates.js";
 
 import type { PageType } from "@/src/features/_registry/types";
 import type { PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
 import type { ModifierKey, Nullable, YouTubePlayerDiv } from "@/src/types";
 import type { ControlType, YouTubePlayerGetKeysWithoutParams, YouTubePlayerGetReturnType, YouTubePlayerSetKeys } from "@/src/utils/_tests/types";
 
+import { PlayerStates } from "@/src/utils/_tests/constants";
 import { enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { clamp } from "@/src/utils/math";
@@ -245,14 +245,14 @@ export async function waitForYoutubePlayerReady(page: Page, pageType: PageType):
 			if (typeof player.getCurrentTime !== "function") return false;
 			if (typeof player.setVolume !== "function") return false;
 			try {
-				const state = await player.getPlayerState();
+				const state: Nullable<number> = await player.getPlayerState();
 				// -1 = unstarted
 				// 0 = ended
 				// 1 = playing
 				// 2 = paused
 				// 3 = buffering
 				// 5 = video cued
-				if (state === undefined || state === null || state === PlayerStates["UNSTARTED"]) return false;
+				if (state === undefined || state === null || state === PlayerStates.UNSTARTED) return false;
 				const video = player.querySelector<HTMLVideoElement>("video");
 				if (!video) return false;
 				const { currentTime, networkState, readyState, seeking, volume } = video;
