@@ -228,4 +228,22 @@ test.describe("volumeBoost", () => {
 			await expectFeatureButtonToBeIn(page, "yte-feature-volumeBoostButton-button", right);
 		});
 	});
+	test.describe("audio engine", () => {
+		test("resumes a suspended audio context when the page becomes visible on watch", async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await enableFeature(page, "volumeBoost.enabled");
+			await setOption(page, "volumeBoost.mode", "global");
+			await setOption(page, "volumeBoost.amount", 10);
+			await expectVolumeBoostEnabled(page, true);
+			await page.evaluate(async () => {
+				const { engine } = window;
+				if (!engine) throw new Error("audio engine missing");
+				await engine.context.suspend();
+			});
+			await expect.poll(async () => page.evaluate(() => window.engine?.context.state)).toBe("suspended");
+			// Firefox suspends the context while the tab is hidden; the engine resumes it on the next visibility change.
+			await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+			await expect.poll(async () => page.evaluate(() => window.engine?.context.state), { timeout: 10000 }).toBe("running");
+		});
+	});
 });

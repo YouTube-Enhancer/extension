@@ -1,12 +1,13 @@
 import { expect, test } from "playwright.config";
 
+import { deepDarkPreset, deepDarkPresets } from "@/src/deepDarkPresets";
 import { metadata } from "@/src/features/deepDarkCSS/index.metadata";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { home } = pageTypeRecord;
+const { home, watch } = pageTypeRecord;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
@@ -62,4 +63,19 @@ test.describe("deepDarkCSS", () => {
 			await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 15000 }).toBeGreaterThan(0);
 		});
 	}
+	test("applies every bundled preset on watch", async ({ page }) => {
+		test.setTimeout(180_000);
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "deepDarkCSS.enabled");
+		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBeGreaterThan(0);
+		for (const preset of deepDarkPreset) {
+			if (preset === "Custom") continue;
+			const mainColor = /--main-color:\s*([^;]+);/.exec(deepDarkPresets[preset])?.[1]?.trim();
+			expect(mainColor, `${preset} declares --main-color`).toBeTruthy();
+			await setOption(page, "deepDarkCSS.preset", preset);
+			await expect
+				.poll(async () => page.locator("#yte-deep-dark-css").textContent(), { timeout: 5000 })
+				.toMatch(new RegExp(`--main-color:\\s*${mainColor}`));
+		}
+	});
 });
