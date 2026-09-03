@@ -114,8 +114,8 @@
 						"failedToRemoveVideo": "Не удалось удалить видео",
 						"markAsUnwatched": "Отметить как непросмотренное",
 						"markingAsUnwatched": "Помечается как непросмотренное…",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideo": "Удалить {{count}} просмотренных видео",
+						"removeAllWatchedVideos": "Удалить {{count}} просмотренных видео",
 						"removeVideo": "Удалить видео",
 						"removingVideo": "Удаляется видео…",
 						"removingWatchedVideos": "Removing watched videos…"
