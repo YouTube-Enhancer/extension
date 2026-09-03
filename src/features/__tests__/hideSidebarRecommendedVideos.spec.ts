@@ -1,4 +1,4 @@
-import { expect, test } from "playwright.config";
+import { test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideSidebarRecommendedVideos/index.metadata";
 import {
@@ -84,8 +84,8 @@ test.describe("hideSidebarRecommendedVideos", () => {
 	test(`should not hide sidebar recommended videos on non-target page`, async ({ page }) => {
 		await navigateToPageType(page, nonTargetPage!);
 		await enableFeature(page, "hideSidebarRecommendedVideos.enabled");
+		// The feature hides through the body class alone, and a channel page can carry hidden watch-layout sidebars
+		// in its DOM, so the absent class is the whole assertion here.
 		await expectBodyWithoutClass(page, bodyClass);
-		// Channel browse pages never render the watch-page sidebar, so state what is actually verified here.
-		await expect(page.locator(selectors[0])).toHaveCount(0);
 	});
 });
