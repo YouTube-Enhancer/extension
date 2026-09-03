@@ -18,3 +18,12 @@ export const PlayerQualityFallbackStrategy = ["higher", "lower"] as const;
 export type PlayerQualityFallbackStrategy = (typeof PlayerQualityFallbackStrategy)[number];
 export const FpsPreference = ["default", "higher", "lower"] as const;
 export type FpsPreference = (typeof FpsPreference)[number];
+/**
+ * Parts of YouTube's player API that the `youtube-player` typings do not cover. `getPreferredQuality()`
+ * returns the quality the player was last *asked* to play ("auto" when nothing is pinned) and is updated
+ * synchronously by `setPlaybackQualityRange()`, which is the call behind both YouTube's quality menu and the
+ * public player API. Optional because older players do not expose it.
+ */
+export type PlayerQualityRequestApi = {
+	getPreferredQuality?: () => string;
+};

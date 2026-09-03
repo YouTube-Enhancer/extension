@@ -6,17 +6,29 @@ import { lookupItag } from "@/src/utils/player/itagDb";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
-import type { FpsPreference, PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "./types";
+import type { FpsPreference, PlayerQualityFallbackStrategy, PlayerQualityRequestApi, YoutubePlayerQualityLevel } from "./types";
 
 import { metadata } from "./index.metadata";
 
+/**
+ * How long the streamed format is allowed to lag behind a request this feature made. A quality switch
+ * buffers, and that buffering re-runs the enforcement tasks while getVideoStats()/getPlaybackQuality() still
+ * report the previous format, so those two signals are only trusted again once the switch had time to land.
+ */
+const OWN_SWITCH_SETTLE_MS = 2000;
+/** Player event that fires whenever the playback quality changes, no matter who asked for the change. */
+const QUALITY_CHANGE_EVENT = "onPlaybackQualityChange";
+
 let currentQuality: Nullable<YoutubePlayerQualityLevel> = null;
+let qualityChangeTarget: Nullable<YouTubePlayerDiv> = null;
 
 type EnforcementState = {
 	appliedFormatId: Nullable<number>;
 	appliedQuality: Nullable<string>;
 	overrideDetected: boolean;
 	pendingOwnApply: boolean;
+	requestedQuality: Nullable<string>;
+	settleUntil: number;
 	verifiedOnce: boolean;
 };
 
@@ -25,8 +37,26 @@ const enforcement: EnforcementState = {
 	appliedQuality: null,
 	overrideDetected: false,
 	pendingOwnApply: false,
+	requestedQuality: null,
+	settleUntil: 0,
 	verifiedOnce: false
 };
+
+function attachQualityChangeListener(player: YouTubePlayerDiv): void {
+	if (qualityChangeTarget === player) return;
+	detachQualityChangeListener();
+	player.addEventListener(QUALITY_CHANGE_EVENT, handleQualityChange);
+	qualityChangeTarget = player;
+}
+
+/**
+ * Enforcement only ever stands down once it has been seen working: before that a mismatch is just the player
+ * still starting up. Ads are excluded because the ad player reports its own quality, and so is the moment the
+ * feature is placing its own request.
+ */
+function canDetectForeignQuality(): boolean {
+	return enforcement.verifiedOnce && !enforcement.overrideDetected && !enforcement.pendingOwnApply && !isAdShowing();
+}
 
 function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPreference: FpsPreference): Nullable<number> {
 	const player = getPlayer();
@@ -72,6 +102,12 @@ function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPre
 	return best.formatId;
 }
 
+function detachQualityChangeListener(): void {
+	if (!qualityChangeTarget) return;
+	qualityChangeTarget.removeEventListener(QUALITY_CHANGE_EVENT, handleQualityChange);
+	qualityChangeTarget = null;
+}
+
 function getPlayer(): Nullable<YouTubePlayerDiv> {
 	return (
 		isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
@@ -80,8 +116,21 @@ function getPlayer(): Nullable<YouTubePlayerDiv> {
 	);
 }
 
+/**
+ * Runs on every quality change the player announces. The event itself carries the quality that plays now,
+ * which lags behind the request that caused it, so the decision is taken on the requested quality instead.
+ */
+function handleQualityChange(): void {
+	const player = getPlayer();
+	if (!player) return;
+	if (hasForeignQualityRequest(player)) markManualOverride();
+}
+
 async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
-	if (!enforcement.appliedQuality || enforcement.pendingOwnApply) return false;
+	// The request is the signal that moves first: it is the only one that is not stale while the player is
+	// still buffering its way to a newly requested quality.
+	if (hasForeignQualityRequest(player)) return true;
+	if (!enforcement.appliedQuality || !canDetectForeignQuality() || Date.now() < enforcement.settleUntil) return false;
 
 	const stats = player.getVideoStats();
 	if (enforcement.appliedFormatId != null && typeof stats?.fmt === "number") {
@@ -90,6 +139,16 @@ async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
 
 	const playbackQuality = await player.getPlaybackQuality();
 	return !!playbackQuality && playbackQuality !== "unknown" && playbackQuality !== enforcement.appliedQuality;
+}
+
+/**
+ * Whether the quality the player was last asked to play is not the one this feature asked for. Reads nothing
+ * asynchronous, so it can also serve as the last check before the feature overwrites that request.
+ */
+function hasForeignQualityRequest(player: YouTubePlayerDiv): boolean {
+	if (!enforcement.requestedQuality || !canDetectForeignQuality()) return false;
+	const requestedQuality = readRequestedQuality(player);
+	return !!requestedQuality && requestedQuality !== enforcement.requestedQuality;
 }
 
 function isAdShowing(): boolean {
@@ -103,8 +162,12 @@ function makeApplyQualityTasks(
 	fpsPreference: FpsPreference
 ): [() => Promise<boolean>, () => Promise<boolean>] {
 	const applyTask = async (): Promise<boolean> => {
+		// Suspension lasts until navigation or a config change resets the state, so neither a retry run that is
+		// still in flight nor one started by a later player state change may enforce anything any more.
+		if (enforcement.overrideDetected) return true;
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
+		attachQualityChangeListener(player);
 		const currentQuality = await player.getPlaybackQuality();
 		if (!currentQuality || currentQuality === "unknown") return false;
 
@@ -116,12 +179,19 @@ function makeApplyQualityTasks(
 		const closestQuality = chooseClosestQuality(quality, availableLevels, fallbackStrategy);
 		if (!closestQuality) return false;
 
-		if (enforcement.verifiedOnce && !isAdShowing() && (await hasForeignQuality(player))) {
+		if (await hasForeignQuality(player)) {
 			markManualOverride();
 			return true;
 		}
 
 		const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
+
+		// Everything above awaits, and this task also runs on the player state change that a manual switch
+		// causes, so the request is read once more right before it would be overwritten.
+		if (hasForeignQualityRequest(player)) {
+			markManualOverride();
+			return true;
+		}
 
 		try {
 			enforcement.pendingOwnApply = true;
@@ -133,8 +203,12 @@ function makeApplyQualityTasks(
 			if (player.setPlaybackQuality) {
 				await player.setPlaybackQuality(closestQuality);
 			}
+			// Read back inside the guarded window: the player composes a request with its own limits, so what
+			// it reports as requested - not the level that was asked for - is what later reads compare against.
+			enforcement.requestedQuality = readRequestedQuality(player) ?? closestQuality;
 		} finally {
 			enforcement.pendingOwnApply = false;
+			enforcement.settleUntil = Date.now() + OWN_SWITCH_SETTLE_MS;
 		}
 
 		player.dataset.defaultQuality = closestQuality;
@@ -184,17 +258,37 @@ function markManualOverride(): void {
 	registry.playerManager.cleanup(metadata.id);
 }
 
+/**
+ * The quality the player was last asked to play. setPlaybackQualityRange() - the call behind both the
+ * quality menu and the public player API - updates this synchronously, while getPlaybackQuality() and
+ * getVideoStats() only change once the switch has landed. Players that do not expose it fall back to null.
+ */
+function readRequestedQuality(player: YouTubePlayerDiv): Nullable<string> {
+	const { getPreferredQuality } = player as PlayerQualityRequestApi & YouTubePlayerDiv;
+	if (typeof getPreferredQuality !== "function") return null;
+	try {
+		const requestedQuality: unknown = getPreferredQuality.call(player);
+		return typeof requestedQuality === "string" && requestedQuality !== "" && requestedQuality !== "unknown" ? requestedQuality : null;
+	} catch {
+		return null;
+	}
+}
+
 function resetEnforcementState(): void {
+	detachQualityChangeListener();
 	enforcement.appliedFormatId = null;
 	enforcement.appliedQuality = null;
 	enforcement.overrideDetected = false;
 	enforcement.pendingOwnApply = false;
+	enforcement.requestedQuality = null;
+	enforcement.settleUntil = 0;
 	enforcement.verifiedOnce = false;
 }
 
 export default createFeature({
 	...metadata,
 	onDisable: () => {
+		detachQualityChangeListener();
 		void registry.playerManager.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
 			maxAttempts: 10,
 			pageTypes: ["watch", "live", "shorts"],
