@@ -134,13 +134,13 @@ Found by the missing-test pass:
 - `timestampPeek` removed its preview overlay on disable and on navigation while the player's own video element was still inside it, which left the player without a video and made every later preview stay hidden. **Fixed** (`fix(timestampPeek)`: the video is moved back into the player before the overlay is removed).
 - `automaticTheaterMode` counted its size-button click as success. A maximized player takes that click as a user click and minimizes, and the click also toggles YouTube's theater mode off, so enabling theater mode on a maximized player ended with neither. **Fixed** (`fix(automaticTheaterMode)`: the task only ends once the mode reads as desired, with clicks spaced a second apart).
 - `defaultToOriginalAudioTrack` handed `setAudioTrack` the nested descriptor (name, id, flags) it had parsed out of a track instead of the track object itself; the player throws on that, so the feature never switched a track on the current player. Its tests only passed while YouTube had not auto-dubbed the fixture, which for an en-US profile is always, since the fixture's original is English. **Fixed** (`fix(defaultToOriginalAudioTrack)`: the parsed result keeps the track object for the player and the descriptor for comparisons); the spec now selects the auto-dubbed track through the player API when a load did not start on one.
+- `scrollWheelController` listened in the bubble phase on the player and its wrappers, so YouTube's own handlers on the controls and overlays could take the wheel event first, and it pinned the player element it found at enable time, so on shorts, where YouTube swaps the player element after an in-page navigation, the control drove a discarded player. **Fixed** (`fix(scrollWheelController)`: one capture-phase listener on the document, the player resolved per event and the runtime kept on the live element; the volume spec covers moving to the next short).
 
 Still open (observed while writing tests, not fixed on this branch):
 
 - `maximizePlayer` never sets `header.visible = false` when it maximizes; the header stays in the state YouTube left it in.
 - `volumeBoost` leaves the gain node applied when the mode changes from global to per-video.
 - `useNotifications` hard-codes `en-US` for its provider instead of the configured language.
-- `scrollWheelController` pins the shorts player container at enable time; YouTube replaces that element after a navigation to `/shorts`, so the wheel control stops working there until the feature is re-enabled. The scroll wheel volume spec covers watch-to-watch navigation only for this reason.
 - `shareShortener/utils.ts` `observeShareURLInput` never assigns `inputObserver`, so `removeObserver` cannot disconnect an observer that has not disconnected itself.
 - `hideEndScreenCardsButton` uses the same icon pair in fullscreen as in the normal player (the fullscreen swap in `icons.ts` is unverified).
 
