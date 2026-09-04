@@ -200,6 +200,15 @@ export async function spaNavigateBack(page: Page, pageType: PageType): Promise<v
 	await pageSetup(page);
 }
 /**
+ * Appended to a video tile or lockup so that neither a live stream nor a promoted video is the "video" a helper
+ * clicks. The extension treats a live page as its own page type, so features gated to watch drop out there, and
+ * its player has no autoplay toggle or timestamps; a promoted video is a short ad that ends before an assertion
+ * gets to it. Signed-in feeds and related lists rank both first often enough to matter. The hooks are the LIVE
+ * pill on the thumbnail (lockups), the legacy time-status overlay (older renderers) and the ad badge.
+ */
+const NOT_LIVE_OR_AD =
+	':not(:has(.ytBadgeShapeText:text-is("LIVE"))):not(:has(ytd-thumbnail-overlay-time-status-renderer[overlay-style="LIVE"])):not(:has(.ytBadgeShapeAd))';
+/**
  * Single-page navigation from a feed page (home, search, subscriptions, channel videos) to the first regular
  * video it lists, so the extension's navigation hooks and includePages gate run for a watch page.
  */
@@ -209,11 +218,11 @@ export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 	const link = page
 		.locator(
 			[
-				'ytd-rich-item-renderer a#video-title-link[href^="/watch?v="]',
-				'ytd-video-renderer a#video-title[href^="/watch?v="]',
-				'ytd-rich-item-renderer a#thumbnail[href^="/watch?v="]',
-				'ytd-rich-item-renderer yt-lockup-view-model a[href^="/watch?v="]',
-				'ytd-item-section-renderer yt-lockup-view-model a[href^="/watch?v="]'
+				`ytd-rich-item-renderer${NOT_LIVE_OR_AD} a#video-title-link[href^="/watch?v="]`,
+				`ytd-video-renderer${NOT_LIVE_OR_AD} a#video-title[href^="/watch?v="]`,
+				`ytd-rich-item-renderer${NOT_LIVE_OR_AD} a#thumbnail[href^="/watch?v="]`,
+				`ytd-rich-item-renderer${NOT_LIVE_OR_AD} yt-lockup-view-model a[href^="/watch?v="]`,
+				`ytd-item-section-renderer yt-lockup-view-model${NOT_LIVE_OR_AD} a[href^="/watch?v="]`
 			].join(", ")
 		)
 		.locator("visible=true")
@@ -256,8 +265,15 @@ export async function spaNavigateToHome(page: Page): Promise<void> {
 export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 	const before = new URL(page.url()).searchParams.get("v");
 	// The sidebar renders an aria-hidden thumbnail anchor ahead of the visible one for some lockups, and clicking
-	// that never resolves, so only links that can actually be clicked qualify.
-	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"]):visible`).first();
+	// that never resolves, so only links that can actually be clicked qualify; live streams and promoted videos are skipped (NOT_LIVE_OR_AD).
+	const link = page
+		.locator(
+			[
+				`ytd-watch-next-secondary-results-renderer yt-lockup-view-model${NOT_LIVE_OR_AD} a[href^="/watch?v="]:not([href*="v=${before}"]):visible`,
+				`ytd-watch-next-secondary-results-renderer ytd-compact-video-renderer${NOT_LIVE_OR_AD} a[href^="/watch?v="]:not([href*="v=${before}"]):visible`
+			].join(", ")
+		)
+		.first();
 	// The sidebar renders late when an ad or a slow feed delays the watch page, and on a throttled session not at
 	// all. The player's next button is an in-page navigation as well and does not depend on the sidebar.
 	const linkRendered = await expect(link)
