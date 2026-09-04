@@ -17,6 +17,9 @@ for (const contentScript of contentScripts) {
 		build: {
 			emptyOutDir: false,
 			minify: !DEV_MODE ? "esbuild" : false,
+			// The embedded script runs inside youtube.com. Vite's preload links for dynamic imports are resolved against
+			// the page URL there, so each import fired a 404 at youtube.com/src/<chunk>.js before the real import ran.
+			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
 			rollupOptions: {
 				input: contentScript,
