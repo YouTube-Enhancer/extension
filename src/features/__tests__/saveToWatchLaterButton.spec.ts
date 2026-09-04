@@ -159,6 +159,28 @@ async function readWatchLaterMembership(page: Page, videoId: string): Promise<bo
 	}
 }
 
+/**
+ * Best-effort removal of a video this spec added to Watch Later, for cleanup after a failed assertion. Membership reads
+ * can trail the add, so the page is reopened a few times until it shows the video as saved.
+ */
+async function removeFromWatchLater(page: Page, videoId: string): Promise<void> {
+	try {
+		for (let attempt = 0; attempt < 4; attempt++) {
+			await navigateToPage(page, `https://www.youtube.com/watch?v=${videoId}`);
+			await waitForExtensionReady(page);
+			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 20000 });
+			if ((await settleActionsRowIcon(page)) === SAVED_ICON) {
+				await clickActionsRowButton(page);
+				await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(UNSAVED_ICON);
+				return;
+			}
+			await page.waitForTimeout(10000);
+		}
+	} catch {
+		// cleanup is best effort; the assertion that failed is the error worth reporting
+	}
+}
+
 /** Scrolls the feed to its end until `predicate` holds. Returns false instead of failing when it never does. */
 async function scrollFeedUntil(page: Page, predicate: () => Promise<boolean>, timeout = 45000): Promise<boolean> {
 	try {
@@ -269,10 +291,14 @@ test.describe("saveToWatchLaterButton", () => {
 			await enableFeature(page, "saveToWatchLaterButton.enabled");
 			const actionsRowButton = page.locator(ACTIONS_ROW_BUTTON_SELECTOR);
 			await expect(actionsRowButton).toBeAttached({ timeout: 10000 });
-			// The button is built from YouTube's own component, so the props we set have to survive its render.
-			const iconName = await readActionsRowIcon(page);
-			expect(iconName).toBe("WATCH_LATER");
-			await expect(actionsRowButton.locator("button")).toHaveAccessibleName("Save to Watch Later", { timeout: 10000 });
+			// The button is built from YouTube's own component, so the props we set have to survive its render. The
+			// account decides which state it renders: the fixture video may already be in Watch Later, and the toggle
+			// test below can hold it there while this one runs on another worker.
+			const iconName = await settleActionsRowIcon(page);
+			expect([SAVED_ICON, UNSAVED_ICON], "the actions row button rendered an unknown icon").toContain(iconName);
+			await expect(actionsRowButton.locator("button")).toHaveAccessibleName(iconName === SAVED_ICON ? REMOVE_LABEL : SAVE_LABEL, {
+				timeout: 10000
+			});
 		});
 
 		test("clicking the actions row button toggles between the save and saved states", async ({ page }) => {
@@ -353,21 +379,35 @@ test.describe("saveToWatchLaterButton", () => {
 			const cardButton = markedLockup.locator(BUTTON_SELECTOR);
 			await expect(cardButton).toBeVisible();
 			await cardButton.click();
-			// markLockupSaved is the only thing stopping the next observer pass from re-adding the button, and
-			// the card itself has to stay put, so a vanished card cannot pass this for the wrong reason.
-			await expect(cardButton).not.toBeAttached({ timeout: 10000 });
-			await expectToStay(async () => ({ buttons: await cardButton.count(), cards: await markedLockup.count() }), { buttons: 0, cards: 1 }, { page });
-			// Only the saved card is skipped: its neighbours keep their buttons.
-			await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached();
-			// The save reached YouTube: the video's own page reports it as a member of Watch Later.
-			await navigateToPage(page, `https://www.youtube.com/watch?v=${videoId!}`);
-			await waitForExtensionReady(page);
-			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
-			await expect.poll(async () => readActionsRowIcon(page), { timeout: 30000 }).toBe(SAVED_ICON);
-			// Leave the account as it was found: the pre-check proved this video was not in Watch Later.
-			await clickActionsRowButton(page);
-			await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(UNSAVED_ICON);
-			await expectRemovedToast(page);
+			let savedByThisTest = true;
+			try {
+				// markLockupSaved is the only thing stopping the next observer pass from re-adding the button, and
+				// the card itself has to stay put, so a vanished card cannot pass this for the wrong reason.
+				await expect(cardButton).not.toBeAttached({ timeout: 10000 });
+				await expectToStay(
+					async () => ({ buttons: await cardButton.count(), cards: await markedLockup.count() }),
+					{ buttons: 0, cards: 1 },
+					{ page }
+				);
+				// Only the saved card is skipped: its neighbours keep their buttons.
+				await expect(page.locator(BUTTON_SELECTOR).first()).toBeAttached();
+				// The save reached YouTube. Its playlist service answers membership reads from a copy that can trail a
+				// successful edit by a good few seconds, and a watch page reads membership once on load, so wait for a
+				// fresh read to list the video before opening its page.
+				await expect.poll(async () => readWatchLaterMembership(page, videoId!), { intervals: [5000], timeout: 90000 }).toBe(true);
+				await navigateToPage(page, `https://www.youtube.com/watch?v=${videoId!}`);
+				await waitForExtensionReady(page);
+				await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
+				await expect.poll(async () => readActionsRowIcon(page), { timeout: 30000 }).toBe(SAVED_ICON);
+				// Leave the account as it was found: the pre-check proved this video was not in Watch Later.
+				await clickActionsRowButton(page);
+				await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(UNSAVED_ICON);
+				await expectRemovedToast(page);
+				savedByThisTest = false;
+			} finally {
+				// A failed assertion above must not leave the account changed either.
+				if (savedByThisTest) await removeFromWatchLater(page, videoId!);
+			}
 		});
 
 		test("card save button is placed in the lockup menu wrapper and keeps that wrapper visible", async ({ page }) => {

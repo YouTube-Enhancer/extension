@@ -10,7 +10,7 @@ import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src
 import { readStoredState } from "@/src/utils/_tests/storage";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const { home, watch } = pageTypeRecord;
+const { home, live, watch } = pageTypeRecord;
 const { right } = placementRecord;
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -97,15 +97,18 @@ async function toggleMiniPlayerFromButton(page: Page): Promise<void> {
 
 test.describe("miniPlayer", () => {
 	for (const pageType of testPages) {
+		// A live stream's player takes longer to settle than a video's, and the registry only enables page-gated
+		// features once it has read the player, so the sentinel arrives later there.
+		const sentinelTimeout = pageType === live ? 15000 : 5000;
 		test(`should create sentinel element on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached({ timeout: sentinelTimeout });
 		});
 		test(`should create sentinel element after navigation on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "miniPlayer.enabled");
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached({ timeout: sentinelTimeout });
 			// No disable/re-enable cycle afterwards: the sentinel has to come back from the navigation itself. On watch
 			// that needs a genuine in-page navigation; on live navigateToPageType clicks through from the channel page.
 			if (pageType === watch) await spaNavigateToRelatedVideo(page);
@@ -113,7 +116,7 @@ test.describe("miniPlayer", () => {
 				await navigateToPageType(page, home);
 				await navigateToPageType(page, pageType);
 			}
-			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached();
+			await expect(page.locator("#yte-mini-player-sentinel")).toBeAttached({ timeout: sentinelTimeout });
 		});
 	}
 
