@@ -24,15 +24,31 @@ async function forcePlayerVisible(page: Parameters<typeof enableFeature>[0]) {
 	});
 }
 
+/**
+ * Hovers the settings button until the menu opens. The feature attaches its listeners after several
+ * asynchronous element waits, so a single mouseenter right after enabling can land before they exist.
+ */
+async function hoverUntilSettingsOpen(page: Parameters<typeof enableFeature>[0]) {
+	const settingsButton = page.locator(".ytp-settings-button");
+	const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
+	await expect
+		.poll(
+			async () => {
+				await settingsButton.dispatchEvent("mouseenter");
+				return settingsMenu.isVisible();
+			},
+			{ intervals: [500], timeout: 15000 }
+		)
+		.toBe(true);
+}
+
 test.describe("openYouTubeSettingsOnHover", () => {
 	for (const pageType of testPages) {
 		test(`youtube settings should open on hover when enabled on ${pageType}`, async ({ page }) => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
 			await forcePlayerVisible(page);
-			await page.locator(".ytp-settings-button").dispatchEvent("mouseenter");
-			const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
-			await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+			await hoverUntilSettingsOpen(page);
 		});
 	}
 	// The remaining cases are page-agnostic mouse-event bookkeeping (index.ts has no live-specific branch), so
@@ -53,8 +69,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		const settingsButton = page.locator(".ytp-settings-button");
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
 		// Starting from the enabled state is what makes this observe onDisable rather than the shipped default.
-		await settingsButton.dispatchEvent("mouseenter");
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		await hoverUntilSettingsOpen(page);
 		// Move mouse away so :hover doesn't prevent hideSettings from closing
 		await page.mouse.move(0, 0);
 		await page.waitForTimeout(100);
@@ -89,8 +104,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await forcePlayerVisible(page);
 		const settingsButton = page.locator(".ytp-settings-button");
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
-		await settingsButton.dispatchEvent("mouseenter");
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		await hoverUntilSettingsOpen(page);
 		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
 		// Move mouse away so :hover doesn't prevent hideSettings from closing
 		await page.mouse.move(0, 0);
@@ -106,8 +120,7 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		await forcePlayerVisible(page);
 		const settingsButton = page.locator(".ytp-settings-button");
 		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
-		await settingsButton.dispatchEvent("mouseenter");
-		await expect(settingsMenu).toBeVisible({ timeout: 10000 });
+		await hoverUntilSettingsOpen(page);
 		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
 		// Moving from the button into the menu must keep it open. onMouseLeave ignores relatedTarget and
 		// schedules hideSettings 50 ms later, so the menu mouseenter has to land inside that window - both

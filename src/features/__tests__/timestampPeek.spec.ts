@@ -149,9 +149,21 @@ async function readTimestampSeconds(page: Page, selector: string): Promise<Nulla
 
 async function scrollToComments(page: Page) {
 	await expect(page.locator("#comments")).toBeAttached({ timeout: 15000 });
-	await page.locator("#comments").scrollIntoViewIfNeeded({ timeout: 5000 });
-	await page.waitForTimeout(500);
-	await expect(page.locator("ytd-comment-thread-renderer").first()).toBeAttached({ timeout: 30000 });
+	// YouTube loads comments when the section scrolls into view, but only once the watch-next response has
+	// attached the continuation; a single scroll that lands before that is never noticed and the section
+	// stays empty. Keep taking it out of view and bringing it back until the first thread renders.
+	await expect
+		.poll(
+			async () => {
+				await page.locator("#comments").evaluate((comments) => {
+					window.scrollTo(0, 0);
+					comments.scrollIntoView({ block: "start" });
+				});
+				return page.locator("ytd-comment-thread-renderer").count();
+			},
+			{ intervals: [1000], timeout: 30000 }
+		)
+		.toBeGreaterThan(0);
 	await page.waitForTimeout(500);
 }
 
