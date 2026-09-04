@@ -204,6 +204,8 @@ export async function spaNavigateBack(page: Page, pageType: PageType): Promise<v
  * video it lists, so the extension's navigation hooks and includePages gate run for a watch page.
  */
 export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
+	// Only a visible link can be clicked: a feature under test may already be hiding tiles (a mix listed first on a
+	// signed-in home feed is exactly what hidePlaylistRecommendationsFromHomePage removes).
 	const link = page
 		.locator(
 			[
@@ -214,6 +216,7 @@ export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 				'ytd-item-section-renderer yt-lockup-view-model a[href^="/watch?v="]'
 			].join(", ")
 		)
+		.locator("visible=true")
 		.first();
 	await expect(link).toBeAttached({ timeout: 15_000 });
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));

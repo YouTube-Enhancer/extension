@@ -108,7 +108,8 @@ export async function expectFeatureButtonToBeIn(
 	await expect(button).toBeAttached({ timeout });
 }
 /** The button controller places buttons once the player controls exist, which a live player renders late. */
-export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId, { timeout = 15000 }: { timeout?: number } = {}) {
+// 30 s: a live stream's player controls, where the buttons go, can take twice as long to settle as a video's.
+export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId, { timeout = 30000 }: { timeout?: number } = {}) {
 	const featureButton = page.locator(`#${featureId}`);
 	await expect(featureButton).toBeAttached({ timeout });
 }
