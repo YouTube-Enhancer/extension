@@ -111,7 +111,6 @@ async function getPlayerVideoId(page: Page): Promise<null | string> {
 async function isAutoDubbed(page: Page): Promise<boolean | null> {
 	return (await getAudioTrack(page))?.isAutoDubbed ?? null;
 }
-
 /**
  * Puts the player on an auto-dubbed track before the feature is enabled. YouTube auto-dubs the fixture for an
  * en-US viewer on most loads but not all; when it did not, the auto-dubbed track is selected through the same
@@ -161,6 +160,26 @@ async function spaNavigateBackToVideo(page: Page, expectedVideoId: string): Prom
 	await page.waitForURL((url) => url.searchParams.get("v") === expectedVideoId, { timeout: 30000 });
 	await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(expectedVideoId);
 	await waitForYoutubePlayerReady(page, watch);
+}
+
+/**
+ * Moves in-page to a related video that offers more than one audio track, which the restore assertion needs.
+ * Related videos are whatever YouTube suggests for the session, so it may take a few hops; when none within five
+ * qualifies, that is the recommendations of the run, not the feature.
+ */
+async function spaNavigateToMultiAudioVideo(page: Page): Promise<void> {
+	for (let hop = 0; hop < 5; hop++) {
+		await spaNavigateToRelatedVideo(page);
+		const videoId = new URL(page.url()).searchParams.get("v");
+		await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(videoId);
+		try {
+			await expect.poll(async () => (await getAvailableAudioTrackIds(page)).length > 1, { intervals: [500], timeout: 10000 }).toBe(true);
+			return;
+		} catch {
+			// this video has a single track; try the next related one
+		}
+	}
+	test.skip(true, "no related video within five hops offers more than one audio track");
 }
 
 /** Waits for the player to report an auto-dubbed track; false when it has not within the timeout. */
@@ -249,7 +268,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 
 		// Switching video in-page runs onNavigate only, so the track to restore has to be captured again for the video
 		// that is playing now instead of staying the one from before the switch.
-		await spaNavigateToRelatedVideo(page);
+		await spaNavigateToMultiAudioVideo(page);
 		const switchedVideoId = new URL(page.url()).searchParams.get("v");
 		expect(switchedVideoId).not.toBeNull();
 		await expect.poll(async () => getPlayerVideoId(page), { intervals: [500], timeout: 30000 }).toBe(switchedVideoId);

@@ -109,7 +109,9 @@ test.describe("blockNumberKeySeeking", () => {
 	test(`does not block digits typed in the search box on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "blockNumberKeySeeking.enabled");
-		const searchInput = page.locator('input#search, input[name="search_query"]').first();
+		// A signed-in masthead renders YouTube's newer search box, whose input is a different element from the legacy
+		// `input#search` (which stays in the DOM, hidden); the accessible role and label are what both layouts share.
+		const searchInput = page.getByRole("combobox", { name: /^Search/ }).first();
 		await expect(searchInput).toBeVisible();
 		await searchInput.click();
 		await searchInput.fill("");

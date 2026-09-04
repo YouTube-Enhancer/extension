@@ -5,7 +5,7 @@ import type { PageType } from "@/src/features/_registry/types";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
-import { injectDynamicContent } from "@/src/utils/_tests/dom";
+import { injectDynamicContentWhenPresent } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
@@ -116,7 +116,9 @@ test.describe("hideShorts", () => {
 					await enableFeature(pageObj, config);
 					await expectBodyWithClass(pageObj, bodyClass);
 					await expectElementsHidden(pageObj, selectors);
-					await injectDynamicContent(pageObj, selectors);
+					// The Shorts shelf is not part of every watch-next response, so there is only something to clone when YouTube served one.
+					const injected = await injectDynamicContentWhenPresent(pageObj, selectors);
+					test.skip(!injected, `${page} showed no Shorts to clone`);
 					await expectBodyWithClass(pageObj, bodyClass);
 					await expectElementsHidden(pageObj, selectors);
 				});
