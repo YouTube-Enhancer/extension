@@ -3,7 +3,6 @@ import { type ReactElement, useEffect, useState } from "react";
 import type { Notification, Nullable } from "@/src/types";
 
 import { type i18nInstanceType, i18nService } from "@/src/i18n";
-import { isNotStrictEqual } from "@/src/utils/predicate";
 
 import {
 	type AddNotification,
@@ -45,8 +44,12 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		setNotifications((notifications) => [notification, ...notifications]);
 		scheduleNotificationRemoval(notification, notification.removeAfterMs);
 	};
+	// The progress loop below replaces every notification object each frame, so the object a close or confirm
+	// button holds is rarely the one the state holds by the time the click lands. Match on what identifies a
+	// notification instead of on the reference, or those buttons only work when no frame ran in between.
+	const isSameNotification = (a: Notification, b: Notification) => a.timestamp === b.timestamp && a.type === b.type && a.action === b.action;
 	const removeNotification: RemoveNotification = (notification) => {
-		setNotifications((notifications) => notifications.filter(isNotStrictEqual(notification)));
+		setNotifications((notifications) => notifications.filter((candidate) => !isSameNotification(candidate, notification)));
 	};
 	useEffect(() => {
 		let animationFrameId: Nullable<number> = null;
