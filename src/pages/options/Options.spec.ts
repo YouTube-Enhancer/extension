@@ -158,6 +158,9 @@ test.describe("Options", () => {
 		const exportSettings = page.locator("#export_settings_button");
 		await expect(exportSettings).toBeAttached();
 		const [download] = await Promise.all([page.waitForEvent("download"), exportSettings.click()]);
+		// The toast lives 2.5 s; check it before reading the download back so a slow disk cannot outlast it.
+		const settingsExported = page.locator("#notifications > div").getByText("Settings successfully exported");
+		await expect(settingsExported).toBeAttached();
 		expect(download.suggestedFilename()).toMatch(/^youtube_enhancer_settings_.+\.json$/);
 		const exported = JSON.parse(await readFile(await download.path(), "utf8")) as Record<string, unknown>;
 		const defaultConfiguration = await loadDefaultConfig();
@@ -165,8 +168,6 @@ test.describe("Options", () => {
 			expect(exported).toHaveProperty(key);
 		}
 		expect(exported["state:rememberVolume"]).toEqual(SEEDED_STATE);
-		const settingsExported = page.locator("#notifications > div").getByText("Settings successfully exported");
-		await expect(settingsExported).toBeAttached();
 	});
 	test("should clear data", async ({ page }) => {
 		const defaultConfiguration = await loadDefaultConfig();
@@ -205,7 +206,7 @@ test.describe("Options", () => {
 		await expect(page.locator("#reset_button")).not.toBeAttached();
 		// The footer swaps the buttons purely off the presence of the reset notification, so closing it has to
 		// put the reset button back instead of leaving a permanent confirm button.
-		await page.locator("#notifications > div button").first().click();
+		await page.locator("#notifications > div").filter({ hasText: "All options have been reset" }).locator("button").click();
 		await expect(page.locator("#reset_button")).toBeAttached();
 		await expect(page.locator("#confirm_button")).not.toBeAttached();
 		// Dismissing is a cancel, so the seeded value must survive it.

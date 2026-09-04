@@ -15,7 +15,7 @@ import { getClosestQuality, getValueFromYouTubePlayer } from "@/src/utils/_tests
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { lookupItag } from "@/src/utils/player/itagDb";
-const { watch } = pageTypeRecord;
+const { live, watch } = pageTypeRecord;
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
 export const qualityLevel = "hd2160" as YoutubePlayerQualityLevel;
@@ -107,7 +107,8 @@ test.describe("playerQuality", () => {
 			await enableFeature(page, "playerQuality.enabled");
 			const closestQuality = await getClosestQuality(page, pageType, qualityLevel, fallbackStrategy);
 			if (!closestQuality) return; // quality selection not supported (e.g. live stream with only "auto")
-			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality);
+			// A live stream only plays the requested level once its next segments arrive at that level.
+			await expectCurrentQualityLevelToBeTruthy(page, pageType, closestQuality, { timeout: pageType === live ? 30000 : 10000 });
 		});
 	}
 	// The cases below have no live- or shorts-specific code path: the only page-dependent line is getPlayer's
