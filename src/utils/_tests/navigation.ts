@@ -142,11 +142,16 @@ export async function navigateToPage(page: Page, url: string) {
 		}
 	}
 }
-export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureCapabilities[] = []): Promise<void> {
+export async function navigateToPageType(
+	page: Page,
+	pageType: PageType,
+	requirements: FixtureCapabilities[] = [],
+	{ deadline }: { deadline?: number } = {}
+): Promise<void> {
 	if (pageType === "live") {
 		// The hunt needs the time; a test that already allowed more keeps it.
 		if (test.info().timeout < 120_000) test.setTimeout(120_000);
-		await navigateToLiveVideo(page, requirements);
+		await navigateToLiveVideo(page, requirements, deadline);
 		await expect
 			.poll(
 				async () => {
@@ -292,11 +297,16 @@ async function finishLiveVideoSetup(page: Page): Promise<void> {
 	});
 	await page.waitForTimeout(100);
 }
-async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities[] = []): Promise<void> {
+/**
+ * Opens a live stream from the fixture channel, walking its streams until one meets the requirements. `deadline`
+ * (epoch ms) stops the walk early so a caller can turn "ran out of time" into a skip before the test itself times out.
+ */
+async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities[] = [], deadline?: number): Promise<void> {
 	const {
 		live: [{ url: channelUrl }]
 	} = pageFixtures;
-	for (let attempt = 0; attempt < 5; attempt++) {
+	const outOfTime = () => deadline !== undefined && Date.now() > deadline;
+	for (let attempt = 0; attempt < 5 && !outOfTime(); attempt++) {
 		await navigateToPage(page, channelUrl);
 		const liveVideos = page.locator(
 			'ytd-rich-item-renderer a[id="thumbnail"].ytd-thumbnail:has(ytd-thumbnail-overlay-time-status-renderer div badge-shape.ytBadgeShapeThumbnailLive)'
@@ -307,6 +317,7 @@ async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities
 		const count = await liveVideos.count();
 		let everyStreamOpened = true;
 		for (let index = 0; index < count; index++) {
+			if (outOfTime()) throw new Error("Live stream hunt ran out of time before every stream was checked");
 			const video = liveVideos.nth(index);
 			if (!(await tryOpenLiveVideo(page, video, channelUrl))) {
 				everyStreamOpened = false;

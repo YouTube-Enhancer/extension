@@ -132,9 +132,10 @@ test.describe("maximizePlayerButton", () => {
 		await expectFeatureButtonToBeIn(page, "yte-feature-maximizePlayerButton-button", left);
 		await clickFeatureButton(page, watch, "yte-feature-maximizePlayerButton-button", left);
 		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
-		// The masthead is translated off screen while maximized, so focus the search box instead of clicking it.
+		// The masthead is translated off screen while maximized, so focus the search box instead of clicking it. The
+		// signed-in masthead renders YouTube's newer search box, so the accessible role and label are what both share.
 		await page
-			.locator('input#search, input[name="search_query"]')
+			.getByRole("combobox", { name: /^Search/ })
 			.first()
 			.evaluate((element: HTMLInputElement) => element.focus());
 		await page.keyboard.press("t");

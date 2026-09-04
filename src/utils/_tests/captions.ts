@@ -13,9 +13,10 @@ import { waitForCaptionsAvailable } from "@/src/utils/_tests/player";
  */
 export async function navigateToCaptionedPage(page: Page, pageType: PageType): Promise<void> {
 	if (pageType === "live") {
-		// The hunt opens every stream on the channel before it gives up, and a test may hunt twice; each hunt adds its own budget.
+		// The hunt opens every stream on the channel before it gives up, and a test may hunt twice; each hunt adds its own
+		// budget and stops within it, so a channel with many streams ends in a skip rather than a test timeout.
 		test.setTimeout(test.info().timeout + 240_000);
-		const reached = await navigateToPageType(page, pageType, ["captions"])
+		const reached = await navigateToPageType(page, pageType, ["captions"], { deadline: Date.now() + 200_000 })
 			.then(() => true)
 			.catch(() => false);
 		test.skip(!reached, "no live stream with captions is on air right now");
