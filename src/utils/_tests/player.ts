@@ -123,21 +123,27 @@ export async function ensureCaptionsState(page: Page, desired: boolean): Promise
 	await page.waitForTimeout(150);
 	try {
 		await expect.poll(async () => getCaptionsState(page)).toBe(desired);
-		return true;
 	} catch {
 		return false;
 	}
+	// The button reports the new state before the captions module has finished switching; a click that
+	// follows too closely - the feature's own, for one - can be swallowed, so let the toggle settle first.
+	await page.waitForTimeout(750);
+	return (await getCaptionsState(page)) === desired;
 }
 
-export async function expectStableCaptionsState(page: Page, expected: boolean) {
+export async function expectStableCaptionsState(page: Page, expected: boolean, { timeout = 5000 }: { timeout?: number } = {}) {
 	let stableCount = 0;
 	await expect
-		.poll(async () => {
-			const state = await getCaptionsState(page);
-			if (state === expected) stableCount++;
-			else stableCount = 0;
-			return stableCount;
-		})
+		.poll(
+			async () => {
+				const state = await getCaptionsState(page);
+				if (state === expected) stableCount++;
+				else stableCount = 0;
+				return stableCount;
+			},
+			{ timeout }
+		)
 		.toBe(2);
 }
 export async function freezeAndGetTime(page: Page, pageType: PageType) {
@@ -214,8 +220,29 @@ export function getWheelContainerSelector(pageType: PageType): string {
 export async function isCaptionsUnavailable(page: Page): Promise<boolean> {
 	const btn = page.locator("button.ytp-subtitles-button");
 	if ((await btn.count()) === 0) return true;
-	const ariaLabel = await btn.getAttribute("aria-label");
-	return ariaLabel?.includes("unavailable") === true || ariaLabel?.includes("not available") === true;
+	// YouTube hides the button while the video offers no caption track. The button's label is no signal: on the
+	// watch fixture it reads "unavailable" while the player lists five tracks. The player response's caption tracks
+	// decide: a video lists them there or has none. A live stream is the exception - it keeps its auto-generated
+	// track outside the response and lists it only once captions are on - so a live stream counts as available and
+	// a toggle is what proves it (see the live fixture hunt).
+	return btn.evaluate((el) => {
+		if ((el as HTMLElement).style.display === "none") return true;
+		const player = document.querySelector<
+			HTMLDivElement & {
+				getPlayerResponse?: () =>
+					| undefined
+					| { captions?: { playerCaptionsTracklistRenderer?: { captionTracks?: unknown[] } }; videoDetails?: { isLive?: boolean } };
+			}
+		>("div#movie_player");
+		try {
+			const response = player?.getPlayerResponse?.();
+			const captionTracks = response?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+			if (Array.isArray(captionTracks)) return captionTracks.length === 0;
+			return response?.videoDetails?.isLive !== true;
+		} catch {
+			return false;
+		}
+	});
 }
 export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubePlayerSetKeys, V extends Parameters<YouTubePlayer[K]>>(
 	page: P,
@@ -242,6 +269,18 @@ export async function setValueOnYouTubePlayer<P extends Page, K extends YouTubeP
 }
 export async function setVolume(page: Page, volume: number, pageType: PageType = "watch") {
 	await setValueOnYouTubePlayer(page, pageType, "setVolume", volume);
+}
+/**
+ * Waits for the video to offer captions. YouTube hides the subtitles button, or labels it unavailable, until the
+ * caption track has loaded - and again for a moment after a skipped pre-roll ad - so one sample right after
+ * navigation says nothing. Resolves false when the video still offers none after the timeout.
+ */
+export async function waitForCaptionsAvailable(page: Page, timeout = 10000): Promise<boolean> {
+	return await expect
+		.poll(async () => isCaptionsUnavailable(page), { intervals: [500], timeout })
+		.toBe(false)
+		.then(() => true)
+		.catch(() => false);
 }
 /**
  * Waits for a scroll wheel control to finish attaching (or detaching) its listeners.
