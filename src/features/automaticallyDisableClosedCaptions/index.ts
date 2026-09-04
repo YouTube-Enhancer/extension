@@ -2,7 +2,8 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { captionsAvailable, playerShowsPageVideo } from "@/src/utils/dom/captions";
+import { captionsAvailable } from "@/src/utils/dom/captions";
+import { playerShowsPageVideo } from "@/src/utils/dom/player";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { metadata } from "./index.metadata";
