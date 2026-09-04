@@ -88,10 +88,19 @@ declare module "youtube-player/dist/types" {
 		getAvailableQualityData(): QualityDataEntry[];
 		getPlaybackQuality(): Promise<string>;
 		getPlayerResponse(): {
+			captions?: {
+				playerCaptionsTracklistRenderer?: {
+					captionTracks?: unknown[];
+				};
+			};
 			storyboards?: {
 				playerStoryboardSpecRenderer?: {
 					spec?: string;
 				};
+			};
+			videoDetails?: {
+				isLive?: boolean;
+				videoId?: string;
 			};
 		};
 		getPlayerStateObject(): PlayerState;
