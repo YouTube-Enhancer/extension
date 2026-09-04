@@ -37,8 +37,13 @@ export async function expectCurrentQualityLevelToBeFalsy(page: Page, pageType: P
 		{ page }
 	);
 }
-export async function expectCurrentQualityLevelToBeTruthy(page: Page, pageType: PageType = "watch", expectedQuality: YoutubePlayerQualityLevel) {
-	await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout: 10000 }).toBe(expectedQuality);
+export async function expectCurrentQualityLevelToBeTruthy(
+	page: Page,
+	pageType: PageType = "watch",
+	expectedQuality: YoutubePlayerQualityLevel,
+	{ timeout = 10000 }: { timeout?: number } = {}
+) {
+	await expect.poll(async () => getValueFromYouTubePlayer(page, "getPlaybackQuality", pageType), { timeout }).toBe(expectedQuality);
 }
 /**
  * Asserts every element matching the selectors is hidden. With `mode: "any"` a single hidden match is enough.
@@ -102,9 +107,10 @@ export async function expectFeatureButtonToBeIn(
 	const button = container.locator(`#${featureId}`);
 	await expect(button).toBeAttached({ timeout });
 }
-export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId) {
+/** The button controller places buttons once the player controls exist, which a live player renders late. */
+export async function expectFeatureButtonToBeTruthy(page: Page, featureId: FeatureButtonId, { timeout = 15000 }: { timeout?: number } = {}) {
 	const featureButton = page.locator(`#${featureId}`);
-	await expect(featureButton).toBeAttached();
+	await expect(featureButton).toBeAttached({ timeout });
 }
 export async function expectFeatureMenuItemToBeFalsy(page: Page, featureId: FeatureMenuItemId) {
 	const menuItem = page.locator(`#${featureId}`);
