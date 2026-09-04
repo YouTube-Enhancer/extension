@@ -302,7 +302,9 @@ test.describe("Options", () => {
 		const editor = page.locator(".monaco-editor").first();
 		await expect(editor).toBeVisible({ timeout: 30000 });
 		await editor.click();
-		await page.keyboard.type("body{--yte-editor-test:1;}");
+		// Monaco auto-closes the brace and, when keystrokes arrive faster than it settles, the closing brace can land in the
+		// middle of the text. One input event carries the whole string through the same editor path without that race.
+		await page.keyboard.insertText("body{--yte-editor-test:1;}");
 		// The editor debounces for 500 ms and flushes on blur, so moving focus away is what commits the value.
 		await page.getByLabel(customCSSLabel, { exact: true }).focus();
 		await expect.poll(async () => readCustomCSSCode(page), { timeout: 15000 }).toContain("--yte-editor-test");

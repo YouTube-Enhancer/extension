@@ -25,10 +25,28 @@ export async function hasAnyMatch(page: Page, selectors: readonly string[]): Pro
  * @returns The selector that was injected. Throws when no existing element matched, so a test can never pass
  * without having injected anything.
  */
-export async function injectDynamicContent(page: Page, selectors: readonly string[]): Promise<string> {
-	const injected = await injectDynamicContentIfPresent(page, selectors);
+export async function injectDynamicContent(page: Page, selectors: readonly string[], options: { timeout?: number } = {}): Promise<string> {
+	const injected = await injectDynamicContentWhenPresent(page, selectors, options);
 	if (!injected) throw new Error(`injectDynamicContent: no element matched any of: ${selectors.join(", ")}`);
 	return injected;
+}
+/**
+ * Like {@link injectDynamicContent}, but resolves with `null` instead of throwing when nothing matched within
+ * `timeout`. Feeds and sidebars fill in asynchronously, so a matching element is given time to appear before giving
+ * up; the caller decides whether missing content is a failure or a reason to skip.
+ */
+export async function injectDynamicContentWhenPresent(
+	page: Page,
+	selectors: readonly string[],
+	{ timeout = 10_000 }: { timeout?: number } = {}
+): Promise<Nullable<string>> {
+	const deadline = Date.now() + timeout;
+	do {
+		const injected = await injectDynamicContentIfPresent(page, selectors);
+		if (injected) return injected;
+		await page.waitForTimeout(500);
+	} while (Date.now() < deadline);
+	return null;
 }
 async function injectDynamicContentIfPresent(page: Page, selectors: readonly string[]): Promise<Nullable<string>> {
 	return page.evaluate(
