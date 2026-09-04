@@ -4,7 +4,7 @@ import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
 import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
-import { getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
+import { ensureCaptionsState, getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 
 export const fixtureCapabilities = [
 	"ambientMode",
@@ -144,7 +144,8 @@ export async function navigateToPage(page: Page, url: string) {
 }
 export async function navigateToPageType(page: Page, pageType: PageType, requirements: FixtureCapabilities[] = []): Promise<void> {
 	if (pageType === "live") {
-		test.setTimeout(120_000);
+		// The hunt needs the time; a test that already allowed more keeps it.
+		if (test.info().timeout < 120_000) test.setTimeout(120_000);
 		await navigateToLiveVideo(page, requirements);
 		await expect
 			.poll(
@@ -249,10 +250,18 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 	// The sidebar renders an aria-hidden thumbnail anchor ahead of the visible one for some lockups, and clicking
 	// that never resolves, so only links that can actually be clicked qualify.
 	const link = page.locator(`ytd-watch-next-secondary-results-renderer a[href^="/watch?v="]:not([href*="v=${before}"]):visible`).first();
-	// The sidebar renders late when an ad or a slow feed delays the watch page; give it time rather than fail.
-	await expect(link).toBeAttached({ timeout: 30_000 });
-	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
-	await link.click();
+	// The sidebar renders late when an ad or a slow feed delays the watch page, and on a throttled session not at
+	// all. The player's next button is an in-page navigation as well and does not depend on the sidebar.
+	const linkRendered = await expect(link)
+		.toBeAttached({ timeout: 15_000 })
+		.then(() => true)
+		.catch(() => false);
+	if (linkRendered) {
+		await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
+		await link.click();
+	} else {
+		await page.locator("#movie_player .ytp-next-button").evaluate((el) => (el as HTMLButtonElement).click());
+	}
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
 	await expect(page.locator("html[yte-ready]")).toBeAttached();
 	await waitForYoutubePlayerReady(page, "watch");
@@ -296,9 +305,11 @@ async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities
 			timeout: 60_000
 		});
 		const count = await liveVideos.count();
+		let everyStreamOpened = true;
 		for (let index = 0; index < count; index++) {
 			const video = liveVideos.nth(index);
 			if (!(await tryOpenLiveVideo(page, video, channelUrl))) {
+				everyStreamOpened = false;
 				continue;
 			}
 			await finishLiveVideoSetup(page);
@@ -307,6 +318,8 @@ async function navigateToLiveVideo(page: Page, requirements: FixtureCapabilities
 			}
 			await navigateToPage(page, channelUrl);
 		}
+		// Every stream opened and none met the requirements; another pass over the same streams cannot change that.
+		if (requirements.length > 0 && everyStreamOpened) break;
 	}
 	const reqMsg = requirements.length > 0 ? ` matching requirements: ${requirements.join(", ")}` : "";
 	throw new Error(`Failed to navigate to a live video${reqMsg} after multiple attempts`);
@@ -380,6 +393,12 @@ async function videoMeetsCapabilities(page: Page, requirements: FixtureCapabilit
 				await ensurePlayerControlsVisible(page, "live");
 				const state = await getCaptionsState(page);
 				if (state === null) return false;
+				// The button reports a state on every stream, and a live stream lists its auto-generated track only once
+				// captions are on, so the one proof that a stream has captions is turning them on. A stream found with
+				// captions off is left that way, so that a feature under test, and not this probe, is what turns them on.
+				if (state) break;
+				if (!(await ensureCaptionsState(page, true))) return false;
+				if (!(await ensureCaptionsState(page, false))) return false;
 				break;
 			}
 		}
