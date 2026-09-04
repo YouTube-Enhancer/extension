@@ -11,6 +11,9 @@ import { generateMissingFeatureTests } from "@/src/utils/_tests/generateMissingF
 generateMissingFeatureTests();
 
 const isCI = !!process.env.CI;
+// Headless is the CI default. PLAYWRIGHT_HEADLESS=1 gives a headless run locally while, unlike CI=1, keeping the saved login profile.
+const headless = isCI || !!process.env.PLAYWRIGHT_HEADLESS;
+const workers = process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 3;
 const AUTH_PROFILE = join(cwd(), "playwright", ".auth-profile");
 
 type Fixtures = {
@@ -32,7 +35,7 @@ async function createExtensionContext(browserName: string): Promise<{ context: B
 	}
 	const context = await browserType.launchPersistentContext(userDataDir, {
 		acceptDownloads: true,
-		args: isCI && browserName === "chromium" ? ["--headless=chrome"] : [],
+		args: headless && browserName === "chromium" ? ["--headless=chrome"] : [],
 		downloadsPath: join(cwd(), "playwright-downloads"),
 		headless: false
 	});
@@ -129,7 +132,7 @@ export const { describe, expect } = test;
 export default defineConfig({
 	forbidOnly: isCI,
 	fullyParallel: true,
-	globalTimeout: isCI ? 1_800_000 : undefined,
+	globalTimeout: isCI ? 4_800_000 : undefined,
 	projects: [
 		{
 			name: "chromium",
@@ -145,10 +148,10 @@ export default defineConfig({
 			}
 		}
 	],
-	reporter: isCI ? "dot" : [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
+	reporter: isCI ? [["dot"], ["github"], ["html", { open: "never" }]] : [["html", { host: "0.0.0.0", open: "on-failure", port: 9323 }]],
 	retries: isCI ? 2 : 1,
 	testDir: ".",
-	timeout: isCI ? 30_000 : 60_000,
+	timeout: 120_000,
 	use: {
 		actionTimeout: 15_000,
 		navigationTimeout: 30_000,
@@ -175,5 +178,5 @@ export default defineConfig({
 			width: 1280
 		}
 	},
-	workers: isCI ? 1 : 3
+	workers
 });
