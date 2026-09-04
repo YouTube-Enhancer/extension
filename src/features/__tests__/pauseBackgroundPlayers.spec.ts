@@ -100,11 +100,13 @@ test.describe("pauseBackgroundPlayers", () => {
 		// foreground one, so document.hidden would stay false on both.
 		await pageA.bringToFront();
 		// The early return only applies while the tab is hidden, so establish that first - otherwise the rest of
-		// the test would pass for the wrong reason. Playwright's tabs do not always background each other (headless
-		// Chrome and separate windows both keep every page visible); the feature reads document.hidden at play
-		// time, so in that case the property is stubbed and the run says so.
+		// the test would pass for the wrong reason. Playwright keeps every page it drives visible: a background tab
+		// reports document.hidden === false headed or headless, with focus emulation off, even in a minimized window
+		// (checked 2026-09-04 on Playwright 1.62; its maintainers call this intentional). The feature reads
+		// document.hidden at play time, so the property is stubbed on the background tab and the run says so. The
+		// short probe stays so a Playwright that does hide tabs would be used as is.
 		const isHidden = await pageB
-			.waitForFunction(() => document.hidden, undefined, { timeout: 5000 })
+			.waitForFunction(() => document.hidden, undefined, { timeout: 1500 })
 			.then(() => true)
 			.catch(() => false);
 		if (!isHidden) {
@@ -112,7 +114,7 @@ test.describe("pauseBackgroundPlayers", () => {
 				Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
 				Object.defineProperty(document, "visibilityState", { configurable: true, get: () => "hidden" });
 			});
-			test.info().annotations.push({ description: "document.hidden stubbed: this browser keeps every tab visible", type: "note" });
+			test.info().annotations.push({ description: "document.hidden stubbed: Playwright keeps every page visible", type: "note" });
 		}
 		await expect.poll(async () => pageB.evaluate(() => document.hidden)).toBe(true);
 		await pageB.evaluate(async () => {
