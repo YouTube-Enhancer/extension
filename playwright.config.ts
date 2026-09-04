@@ -2,7 +2,7 @@ import { test as base, type BrowserContext, chromium, defineConfig, devices, fir
 import { existsSync } from "fs";
 import { cp, mkdtemp, rm } from "fs/promises";
 import { tmpdir } from "os";
-import { join } from "path";
+import { basename, join } from "path";
 import { withExtension } from "playwright-webextext";
 import { cwd } from "process";
 
@@ -15,6 +15,21 @@ const isCI = !!process.env.CI;
 const headless = isCI || !!process.env.PLAYWRIGHT_HEADLESS;
 const workers = process.env.PLAYWRIGHT_WORKERS ? Number(process.env.PLAYWRIGHT_WORKERS) : 3;
 const AUTH_PROFILE = join(cwd(), "playwright", ".auth-profile");
+// Left out of every profile copy: caches are worthless in a throwaway copy, and the saved service worker registration
+// is stale by definition. With it in place YouTube's service worker sat in front of every navigation and, under load,
+// sometimes never issued the fetch, which showed up as document requests that were never sent for 30 s at a time.
+const PROFILE_COPY_SKIP = new Set([
+	"BrowserMetrics",
+	"Cache",
+	"Code Cache",
+	"CrashpadMetrics-active.pma",
+	"DawnGraphiteCache",
+	"DawnWebGPUCache",
+	"GPUCache",
+	"GrShaderCache",
+	"Service Worker",
+	"ShaderCache"
+]);
 
 type Fixtures = {
 	context: BrowserContext;
@@ -31,13 +46,15 @@ async function createExtensionContext(browserName: string): Promise<{ context: B
 	const browserType = withExtension(baseBrowser, pathToExtension);
 	const userDataDir = await mkdtemp(join(tmpdir(), `pw-${browserName}-`));
 	if (!isCI && existsSync(AUTH_PROFILE)) {
-		await cp(AUTH_PROFILE, userDataDir, { recursive: true });
+		await cp(AUTH_PROFILE, userDataDir, { filter: (source) => !PROFILE_COPY_SKIP.has(basename(source)), recursive: true });
 	}
 	const context = await browserType.launchPersistentContext(userDataDir, {
 		acceptDownloads: true,
 		args: headless && browserName === "chromium" ? ["--headless=chrome"] : [],
 		downloadsPath: join(cwd(), "playwright-downloads"),
-		headless: false
+		headless: false,
+		// YouTube registers a service worker on the first load; see PROFILE_COPY_SKIP for what it did to navigations.
+		serviceWorkers: "block"
 	});
 	await context.addInitScript(() => {
 		localStorage.setItem("yt-remote-theme-name", "dark");
