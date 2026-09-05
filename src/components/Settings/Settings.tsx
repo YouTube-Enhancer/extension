@@ -9,6 +9,7 @@ import type { configuration, Nullable, Path, PathValue } from "@/src/types";
 import "@/assets/styles/tailwind.css";
 import "@/components/Settings/Settings.css";
 import { useNotifications } from "@/hooks";
+import Loader from "@/src/components/Loader";
 import SettingsFooter from "@/src/components/Settings/components/SettingsFooter";
 import SettingsHeader from "@/src/components/Settings/components/SettingsHeader";
 import {
@@ -25,7 +26,6 @@ import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { deepMerge, parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
 import { getPathValue } from "@/src/utils/misc";
 
-import Loader from "../Loader";
 import Setting from "./components/Setting";
 import SettingsNotifications from "./components/SettingNotifications";
 type BooleanPath<T> = {

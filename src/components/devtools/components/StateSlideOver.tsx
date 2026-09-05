@@ -5,7 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { featureStateQuery } from "../hooks/useDevToolsQuery";
+import { featureStateQuery } from "@/src/components/devtools/hooks/useDevToolsQuery";
+
 import DevToolsLoader from "./DevToolsLoader";
 import { DevToolsError } from "./DevToolsMessage";
 

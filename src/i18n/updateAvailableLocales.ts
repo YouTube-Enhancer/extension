@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, writeFileSync } from "fs";
 
-import { i18nDir, publicDir } from "../utils/plugins/utils";
+import { i18nDir, publicDir } from "@/src/utils/plugins/utils";
 export default function updateAvailableLocales() {
 	const availableLocales = readdirSync(`${publicDir}/locales`)
 		.filter((locale) => locale.endsWith(".json"))

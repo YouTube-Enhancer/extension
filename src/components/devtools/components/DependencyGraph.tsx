@@ -6,9 +6,9 @@ import { useMemo, useState } from "react";
 import type { PageType } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
+import { featureListQuery } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { cn } from "@/src/utils/style";
 
-import { featureListQuery } from "../hooks/useDevToolsQuery";
 import DevToolsLoader from "./DevToolsLoader";
 
 type FeatureDependencyInfo = {

@@ -2,8 +2,9 @@ import archiver from "archiver";
 import { createWriteStream, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
+import { browsers, outDir } from "@/src/utils/plugins/utils";
+
 import pkg from "../../../package.json";
-import { browsers, outDir } from "../../utils/plugins/utils";
 
 const releaseDir = resolve(process.cwd(), "releases");
 
