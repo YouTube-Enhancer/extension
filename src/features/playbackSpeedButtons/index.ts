@@ -39,18 +39,10 @@ export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: nu
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	const buttons = [
-		{
-			button: getFeatureButton("increasePlaybackSpeedButton"),
-			buttonName: "increasePlaybackSpeedButton" as const,
-			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "increase")
-		},
-		{
-			button: getFeatureButton("decreasePlaybackSpeedButton"),
-			buttonName: "decreasePlaybackSpeedButton" as const,
-			speed: calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, "decrease")
-		}
+		{ buttonName: "increasePlaybackSpeedButton" as const, direction: "increase" as const },
+		{ buttonName: "decreasePlaybackSpeedButton" as const, direction: "decrease" as const }
 	];
-	if (buttons.every(({ button }) => !button)) return;
+	if (buttons.every(({ buttonName }) => !getFeatureButton(buttonName))) return;
 	const {
 		data: {
 			options: {
@@ -61,8 +53,11 @@ export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: nu
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	const minSpeed = getMinSpeed(playbackSpeedPerClick);
-	for (const { button, buttonName, speed } of buttons) {
+	for (const { buttonName, direction } of buttons) {
+		// Resolved after the options request: a relocation or navigation that ran meanwhile has replaced the button.
+		const button = getFeatureButton(buttonName);
 		if (!button) continue;
+		const speed = calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, direction);
 		const { update } = createTooltip({
 			direction: placement === "below_player" ? "down" : "up",
 			element: button,
