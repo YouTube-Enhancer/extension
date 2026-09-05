@@ -5,13 +5,13 @@ import type { configuration, Nullable, YtActionEvent } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { getPlaylistId } from "@/src/features/playlistLength/utils";
 import { createActionButton } from "@/src/features/playlistManagementButtons/button";
 import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getThumbnailOverlay, getWatchedPercentage } from "@/src/utils/video";
 
-import { getPlaylistId } from "../playlistLength/utils";
 import "./index.css";
 import { metadata } from "./index.metadata";
 
