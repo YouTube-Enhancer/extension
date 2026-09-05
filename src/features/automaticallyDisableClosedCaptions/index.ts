@@ -22,6 +22,8 @@ async function clickSubtitlesButton() {
 }
 
 function disableCaptions() {
+	// Both describe the video this run is for: what the previous video had must not decide what onDisable restores.
+	captionsWhereEnabled = false;
 	quietAttempts = 0;
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
 	void registry.playerManager.executeWithRetries("automaticallyDisableClosedCaptions", [disableCaptionsTask], ["disableCaptions"], {
@@ -79,7 +81,6 @@ export default createFeature({
 		const subtitlesButton = await clickSubtitlesButton();
 		// If player element is not available, return
 		if (!subtitlesButton) return;
-		captionsWhereEnabled = false;
 		disableCaptions();
 	},
 	onNavigate: () => {

@@ -32,8 +32,11 @@ async function enableCaptionsTask(): Promise<boolean> {
 	if (playerContainer.classList.contains("ad-showing")) return false;
 	if (!(await playerShowsPageVideo(playerContainer))) return false;
 	if (!captionsAvailable(playerContainer, subtitlesButton)) return false;
-	// If captions are already enabled, return: clicking the button would turn them off
-	if (subtitlesButton.getAttribute("aria-pressed") === "true") return true;
+	// Captions the video already shows were not this feature's doing, so onDisable has to leave them alone
+	if (subtitlesButton.getAttribute("aria-pressed") === "true") {
+		captionsWhereEnabled = true;
+		return true;
+	}
 	// The feature is what turns captions on here, so onDisable has to turn them back off
 	captionsWhereEnabled = false;
 	subtitlesButton.click();
