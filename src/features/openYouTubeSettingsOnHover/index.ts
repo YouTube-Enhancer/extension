@@ -10,7 +10,11 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	onDisable: () => eventManager.removeEventListeners("openYouTubeSettingsOnHover"),
+	onDisable: () => {
+		// A setup still waiting for its elements would otherwise pass its generation check and install listeners after this.
+		setupGeneration++;
+		eventManager.removeEventListeners("openYouTubeSettingsOnHover");
+	},
 	onEnable: async () => {
 		await setupHoverListeners();
 	},
