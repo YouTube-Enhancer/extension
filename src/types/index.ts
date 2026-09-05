@@ -528,6 +528,7 @@ export type Messages = MessageMappings[keyof MessageMappings];
 export type MessageSource = "content" | "devtools" | "extension";
 export type Notification = {
 	action: NotificationAction;
+	id: number;
 	message: TSelectorFunc;
 	progress?: number;
 	removeAfterMs?: number;
