@@ -1,6 +1,8 @@
 import eventManager from "@/src/events/EventManager";
 import { registerAllFeatures } from "@/src/features/_registry/autoRegister";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { i18nService } from "@/src/i18n";
 import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 import { DEV_MODE } from "@/src/utils/config/env";
@@ -70,6 +72,22 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	const removeMessageListener = setupMessageListener();
 
 	sendContentOnlyMessage("pageLoaded", undefined);
+
+	// The content script only forwards storage changes from "pageLoaded" on, and the options above were read
+	// well before that, so a setting changed while this page was setting up (a few seconds on a slow load) would
+	// otherwise be lost until the next load. A second read after the forwarding is on catches up on any such change.
+	// The baseline is the config the orchestrator last applied, not the options read above: a change the forwarding
+	// has already delivered by now is then seen as applied instead of being applied a second time.
+	const {
+		data: { options: currentOptions }
+	} = await waitForSpecificMessage("options", "request_data", "content");
+	for (const feature of registry.getAll()) {
+		const { id } = feature;
+		const { [id]: current } = currentOptions;
+		if (!current || !featureConfigManager.hasChanged(featureConfigManager.getLast(id), current)) continue;
+		await registry.notifyConfigChange(id, current);
+		await registry.updateFeatureEnabledState(id, resolveEnabled(current), current);
+	}
 
 	return {
 		dispose() {

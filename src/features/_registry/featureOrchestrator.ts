@@ -14,6 +14,9 @@ import { resolveEnabled } from "./featureRegistryCore";
 export class FeatureOrchestrator extends FeatureManagerBase {
 	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
+	// The newest request that arrived for a feature while an update of it was in flight; it runs right after.
+	// Dropping it instead lost a setting changed while the page, or a navigation, was still being set up.
+	private pendingUpdates = new Map<FeatureKeys, { config: configuration[FeatureKeys]; enabled: boolean }>();
 	private sortedFeaturesCache: Nullable<AnyFeatureBase[]> = null;
 	private sortedFeaturesCacheDirty = true;
 	private updatingFeatures = new Set<FeatureKeys>();
@@ -134,7 +137,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 	async updateFeatureEnabledState<K extends FeatureKeys>(id: K, enabled: boolean, config: configuration[K]) {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
-		if (this.updatingFeatures.has(id)) return;
+		if (this.updatingFeatures.has(id)) {
+			this.pendingUpdates.set(id, { config, enabled });
+			return;
+		}
 		this.updatingFeatures.add(id);
 		try {
 			const prevEnabled = this.featureEnabledState.get(id) ?? false;
@@ -166,6 +172,11 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			}
 		} finally {
 			this.updatingFeatures.delete(id);
+			const pending = this.pendingUpdates.get(id);
+			if (pending) {
+				this.pendingUpdates.delete(id);
+				await this.updateFeatureEnabledState(id, pending.enabled, pending.config as configuration[K]);
+			}
 		}
 	}
 
