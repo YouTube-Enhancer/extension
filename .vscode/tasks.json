@@ -2,29 +2,17 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "eslint",
-			"problemMatcher": ["$eslint-stylish"],
-			"label": "eslint: lint whole folder",
-			"options": {
-				"windows": {
-					"shell": {
-						"executable": "cmd.exe",
-						"args": ["/d", "/c"]
-					}
-				},
-				"linux": {
-					"shell": {
-						"executable": "/bin/bash",
-						"args": ["-c"]
-					}
-				},
-				"osx": {
-					"shell": {
-						"executable": "/bin/bash",
-						"args": ["-c"]
-					}
-				}
-			}
+			"type": "npm",
+			"script": "lint",
+			"label": "oxlint: lint whole folder",
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"type": "npm",
+			"script": "lint:fix",
+			"label": "oxlint: fix whole folder",
+			"problemMatcher": []
 		}
 	]
 }

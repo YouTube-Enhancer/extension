@@ -41,8 +41,7 @@
 		"tailwind.config.ts",
 		"postcss.config.cjs",
 		"prettier.config.mjs",
-		"src/features/__tests__",
-		"eslint.config.mjs"
+		"src/features/__tests__"
 	],
 	"exclude": ["node_modules", "dist", "releases"]
 }

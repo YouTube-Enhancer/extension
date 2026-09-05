@@ -121,7 +121,7 @@ Modules inside `src/features/` that are not features include:
 - `npm run build:pre` / `npm run build:post` - Pre/post build steps
 - `npm run build:post-pipeline` - Post-build pipeline (`tsx src/pipeline/build.ts post`)
 - `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`)
-- `npm run lint` - Run linter (eslint with cache)
+- `npm run lint` - Run linter (oxlint, then a prettier check of the code files)
 - `npm run lint:fix` - Run linter with auto-fix
 - `npm run lint:locales` - Lint locale files
 - `npm run lint:i18n` - Lint i18n constants

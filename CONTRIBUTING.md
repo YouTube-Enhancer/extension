@@ -86,7 +86,7 @@ It is recommended to test your code before committing by running:
 1. Lint check: `npm run lint`
 2. Fix lint errors: `npm run lint:fix`
 
-> You won't need to do this if you use a [supported editor](https://eslint.org/docs/latest/use/integrations#editors), as the process is automated.
+> You won't need to do this if you use a [supported editor](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode), as the process is automated.
 
 ---
 
