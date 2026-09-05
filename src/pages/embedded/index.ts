@@ -8,8 +8,10 @@ let cleanupHandle: Nullable<{ dispose(): void }> = null;
 let setupInProgress = false;
 
 function initSetup() {
-	// `pageshow` fires right after `load`, usually before the async setup started on
-	// DOMContentLoaded has resolved, so guard against running the whole lifecycle twice.
+	/**
+	 * `pageshow` fires right after `load`, usually before the async setup started on DOMContentLoaded has resolved.
+	 * Without this guard the whole lifecycle would run twice.
+	 */
 	if (setupInProgress || cleanupHandle) return;
 	setupInProgress = true;
 	setupYouTubePage()

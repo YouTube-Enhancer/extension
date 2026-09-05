@@ -23,8 +23,10 @@ interface PolymerDataElement extends Element {
 	data?: unknown;
 }
 
-// Lockups to skip on later passes: confirmed non-videos (mixes, playlists), or already saved.
-// A lockup with no readable data is NOT added: its data can hydrate on a later pass.
+/**
+ * Lockups to skip on later passes: confirmed non-videos such as mixes and playlists, and videos already saved. A
+ * lockup with no readable data is not added, since its data can hydrate on a later pass.
+ */
 let skippedLockups = new WeakSet<Element>();
 let warnedSelectorDrift = false;
 
@@ -78,8 +80,10 @@ export function createRowButtonController(isCurrent: () => boolean) {
 	}
 
 	return {
-		// Never latch a permanent done flag. A hydration re-render after an SPA navigation can
-		// remove the inserted button. Each observer pass retries until the button is in place.
+		/**
+		 * Never latches a permanent done flag: a hydration re-render after an SPA navigation can remove the inserted
+		 * button, so each observer pass retries until the button is in place.
+		 */
 		async ensureButton() {
 			if (pending || document.querySelector(`${ACTIONS_ROW_SELECTOR} .${BUTTON_CLASS}`)) return;
 			const videoId = getCurrentVideoId();

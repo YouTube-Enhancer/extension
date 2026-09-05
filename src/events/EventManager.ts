@@ -36,8 +36,7 @@ type ButtonNameEvents = "flipVideoHorizontalButton" | "flipVideoVerticalButton" 
 type CoreFeatureEvents = "featureMenu" | "scrollWheelController";
 
 const eventManager: EventManager = {
-	// Map of feature names to a map of targets to
-	// Adds an event listener for the given target, eventName, and featureName
+	// Adds a listener for the event on the target under the feature name, unless that callback is already registered.
 	addEventListener: function (target, eventName, callback, featureName, options) {
 		// Get the map of listeners for the feature, or create it if it doesn't exist
 		const targetListeners = this.listeners.get(featureName) || new Map<AcceptedTarget, Map<string, EventListenerInfo[]>>();
@@ -63,7 +62,7 @@ const eventManager: EventManager = {
 		}
 	},
 
-	// event listener info objects
+	// Listeners by feature name, then by target, then by event name.
 	listeners: new Map<string, TargetedListeners>(),
 	// Removes all event listeners
 	removeAllEventListeners: function (exclude) {
@@ -140,8 +139,7 @@ const eventManager: EventManager = {
 		}
 	},
 
-	// Removes every event listener the given featureName registered on the given target, leaving the
-	// listeners it registered on its other targets alone
+	// Removes every listener the feature registered on this target and leaves its listeners on other targets alone.
 	removeEventListenersForTarget: function (target, featureName) {
 		// Get the set of listeners for the feature
 		const targetListeners = this.listeners.get(featureName);

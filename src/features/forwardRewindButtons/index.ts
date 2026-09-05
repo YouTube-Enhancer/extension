@@ -50,8 +50,10 @@ export default createFeature({
 			},
 			name: "rewindButton",
 			remove: async (placement) => {
-				// Only this button's listeners may go: the feature's other button can already have been re-added
-				// with fresh listeners registered under the same feature name.
+				/**
+				 * Remove only this button's listeners. The feature's other button may already have been re-added,
+				 * with fresh listeners registered under the same feature name.
+				 */
 				const button = getFeatureButton("rewindButton");
 				await removeFeatureButton("rewindButton", placement);
 				if (button) eventManager.removeEventListenersForTarget(button, "forwardRewindButtons");
@@ -81,8 +83,10 @@ export default createFeature({
 			},
 			name: "forwardButton",
 			remove: async (placement) => {
-				// Only this button's listeners may go: the feature's other button can already have been re-added
-				// with fresh listeners registered under the same feature name.
+				/**
+				 * Remove only this button's listeners. The feature's other button may already have been re-added,
+				 * with fresh listeners registered under the same feature name.
+				 */
 				const button = getFeatureButton("forwardButton");
 				await removeFeatureButton("forwardButton", placement);
 				if (button) eventManager.removeEventListenersForTarget(button, "forwardRewindButtons");

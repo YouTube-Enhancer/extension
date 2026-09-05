@@ -1,9 +1,7 @@
 /* eslint-disable perfectionist/sort-modules */
 import type EnUS from "@/public/locales/en-US.json.d";
 
-// -------------------------
-// Core primitives
-// -------------------------
+// ─── Core primitives ──────────────────────────────────────────────
 type Text = string;
 type StringMap = Record<string, Text>;
 
@@ -11,9 +9,7 @@ type Recursive<T> = {
 	[key: string]: Recursive<T> | T;
 };
 
-// -------------------------
-// Buttons & Toggles
-// -------------------------
+// ─── Buttons & Toggles ────────────────────────────────────────────
 export type ToggleStrings = {
 	off: Text;
 	on: Text;
@@ -33,9 +29,7 @@ export type SimpleButtonStrings = ButtonBase & {
 
 export type ButtonStrings = SimpleButtonStrings | ToggleButtonStrings;
 
-// -------------------------
-// Feature Strings
-// -------------------------
+// ─── Feature Strings ──────────────────────────────────────────────
 export type FeatureStrings = {
 	/**
 	 * Primary button
@@ -56,16 +50,12 @@ export type FeatureStrings = {
 	title?: Text;
 };
 
-// -------------------------
-// Pages Content
-// -------------------------
+// ─── Pages Content ────────────────────────────────────────────────
 export type PagesContentStrings = {
 	features: Record<string, FeatureStrings>;
 };
 
-// -------------------------
-// Pages Options / Notifications
-// -------------------------
+// ─── Pages Options / Notifications ────────────────────────────────
 export type OptionsNotificationLevel = "error" | "info" | "success";
 
 export type OptionNotificationStrings = {
@@ -77,17 +67,13 @@ export type PagesOptionsStrings = {
 	notifications?: OptionNotificationStrings;
 };
 
-// -------------------------
-// Pages
-// -------------------------
+// ─── Pages ────────────────────────────────────────────────────────
 export type PagesStrings = {
 	content: PagesContentStrings;
 	options: PagesOptionsStrings;
 };
 
-// -------------------------
-// Settings
-// -------------------------
+// ─── Settings ─────────────────────────────────────────────────────
 type BaseSettingStrings = {
 	label?: Text;
 	title?: Text;

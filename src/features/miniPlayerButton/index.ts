@@ -17,9 +17,11 @@ import { metadata } from "./index.metadata";
 let currentPlacement: Nullable<ButtonPlacement> = null;
 function syncMiniPlayerButtonUI(active: boolean) {
 	if (!currentPlacement) return;
-	// The mini player's state also changes without a click on the button, and the controller announces every change
-	// on the document, so the button controller is told the state: it keeps aria-checked, the menu item's checked
-	// class and the tracked record - which a relocated button is rebuilt from - together.
+	/**
+	 * The mini player's state also changes without a click on the button, and its controller announces every change
+	 * on the document. The button controller keeps aria-checked, the menu item's checked class and the tracked record
+	 * (which a relocated button is rebuilt from) in step, so it is told the new state.
+	 */
 	updateFeatureButtonChecked("miniPlayerButton", active);
 	if (currentPlacement === "feature_menu") return;
 	updateFeatureButtonTitle(

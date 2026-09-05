@@ -342,8 +342,11 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 		video.pause();
 		const { previewGeneration } = state;
 		await seekVideo(video, timestamp);
-		// Restored while the seek was pending - on disable, navigation or the pointer leaving - so the video is back in
-		// the player and must not be played, nor the mini-player overlay suspended, on this preview's behalf.
+		/**
+		 * The preview was restored while the seek was pending, on disable, navigation or the pointer leaving. The
+		 * video is back in the player, so it must not be played, nor the mini-player overlay suspended, on this
+		 * preview's behalf.
+		 */
 		if (previewGeneration !== state.previewGeneration) return;
 		state.restoreMiniPlayerOverlay ??= suspendMiniPlayerOverlay();
 		try {

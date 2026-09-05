@@ -48,9 +48,10 @@ type DispatchConfig = {
 type OptionsData = MessageMappings["options"]["response"];
 
 const CONTEXT_MENU_HIDE_TIMEOUT = 100;
-// The snapshot only seeds cross-feature fallbacks and the disabled-speed
-// yield rule; a short TTL lets the two feature enables in one navigation
-// share a single fetch.
+/**
+ * The snapshot only seeds the cross-feature fallbacks and the disabled-speed yield rule. A short TTL lets the two
+ * feature enables of one navigation share a single fetch.
+ */
 const SNAPSHOT_TTL_MS = 1000;
 const controlFeatureIds: Record<ScrollWheelControlType, FeatureKeys> = {
 	speed: "scrollWheelSpeedControl",
@@ -216,8 +217,10 @@ function onWheel(event: WheelEvent) {
 	const { target } = event;
 	const runtime = activeControls.get(type);
 	if (!runtime) return;
-	// The listener sits on the document, so the event has to come from the player's area; the area is looked up
-	// now rather than at enable time because YouTube swaps the shorts player element after a navigation.
+	/**
+	 * The listener sits on the document, so the event has to come from the player's area. The area is looked up now
+	 * rather than at enable time, because YouTube swaps the shorts player element after a navigation.
+	 */
 	const playerContainer = queryPlayerContainer(type);
 	if (!playerContainer || !wheelAreaAround(playerContainer).contains(target as Node)) return;
 	runtime.playerContainer = playerContainer;
@@ -248,8 +251,10 @@ function queueSteps(type: ScrollWheelControlType, wheelSteps: number) {
 	runtime.applying = true;
 	void (async () => {
 		try {
-			// Steps arriving while an apply is in flight merge into the next
-			// application instead of queueing one player call each.
+			/**
+			 * Steps that arrive while an apply is in flight merge into the next apply, instead of queueing one player
+			 * call each.
+			 */
 			while (runtime.pendingSteps !== 0) {
 				const { pendingSteps: steps } = runtime;
 				runtime.pendingSteps = 0;

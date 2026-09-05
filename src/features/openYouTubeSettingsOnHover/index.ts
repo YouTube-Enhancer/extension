@@ -23,9 +23,11 @@ export default createFeature({
 	}
 });
 
-// Bumped by every setup; a setup that finds itself outdated after its waits leaves the listeners to the newer one.
-// onEnable and onNavigate can run this concurrently on a page load, and two surviving sets would click the
-// settings button twice per hover, which opens the menu and closes it again.
+/**
+ * Bumped by every setup and by onDisable. A setup that finds itself outdated after its waits leaves the listeners to
+ * the newer one: onEnable and onNavigate can run concurrently on a page load, and two surviving listener sets would
+ * click the settings button twice per hover, opening the menu and closing it again.
+ */
 let setupGeneration = 0;
 
 async function setupHoverListeners() {
@@ -44,10 +46,12 @@ async function setupHoverListeners() {
 	if (!playerContainer) return;
 	if (generation !== setupGeneration) return;
 	const isSettingsOpen = () => settingsButton.getAttribute("aria-expanded") === "true";
-	// Where the pointer last was. The menu's hover state and its mouseleave cannot be trusted at the moment YouTube
-	// swaps the panel (opening the Quality or Playback speed submenu): the menu fires a mouseleave and stops matching
-	// :hover although the pointer has not moved, and acting on that closed the submenu the moment it opened. The
-	// pointer's position against the live menu and button rectangles is what decides instead.
+	/**
+	 * Where the pointer last was. The menu's hover state and its mouseleave cannot be trusted at the moment YouTube
+	 * swaps the panel to open the Quality or Playback speed submenu: the menu fires a mouseleave and stops matching
+	 * :hover although the pointer has not moved, and acting on that closed the submenu the moment it opened. The
+	 * pointer's position against the live menu and button rectangles decides instead.
+	 */
 	let pointer = { x: -1, y: -1 };
 	const trackPointer = (event: MouseEvent) => {
 		pointer = { x: event.clientX, y: event.clientY };

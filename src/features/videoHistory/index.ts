@@ -182,9 +182,11 @@ export default createFeature({
 		document.getElementById(promptId)?.remove();
 		resetState();
 	},
-	// onNavigate receives the navigation signature ("watch:VIDEO_ID"), not a "start"/"finish" event type, and
-	// the registry runs it once per navigation - so both halves happen here: the prompt belonging to the video
-	// being left is dropped, then the video being entered is picked up.
+	/**
+	 * onNavigate receives the navigation signature, such as "watch:VIDEO_ID", rather than a "start" or "finish" event
+	 * type, and the registry runs it once per navigation. Both halves therefore happen here: the prompt of the video
+	 * being left is dropped, then the video being entered is picked up.
+	 */
 	onNavigate: async ({ resumeType }) => {
 		document.getElementById(promptId)?.remove();
 		await handleVideoChange(resumeType);

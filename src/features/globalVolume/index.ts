@@ -10,7 +10,7 @@ import { restorePlayerVolume, setPlayerVolume } from "./utils";
 /**
  * Sets the volume once the player has loaded its video and checks that it stuck. A volume set while the player is
  * still starting - a live stream takes noticeably longer than a video - is overwritten by the player's own
- * initialisation, which reads YouTube's stored volume back.
+ * initialization, which reads YouTube's stored volume back.
  */
 function applyVolume(volume: number) {
 	void registry.playerManager.executeWithRetries("globalVolume", [() => applyVolumeTask(volume)], ["applyVolume"], {

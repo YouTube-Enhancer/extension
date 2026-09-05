@@ -53,9 +53,11 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		setNotifications((notifications) => [notification, ...notifications]);
 		scheduleNotificationRemoval(notification, notification.removeAfterMs);
 	};
-	// The progress loop below replaces every notification object each frame, so the object a close or confirm
-	// button holds is rarely the one the state holds by the time the click lands. Match on the id instead of on
-	// the reference, or those buttons only work when no frame ran in between.
+	/**
+	 * The progress loop below replaces every notification object each frame, so the object a close or confirm button
+	 * holds is rarely the one the state holds by the time the click lands. Matching on the id rather than on the
+	 * reference keeps those buttons working even when a frame ran in between.
+	 */
 	const isSameNotification = (a: Notification, b: Notification) => a.id === b.id;
 	const removeNotification: RemoveNotification = (notification) => {
 		setNotifications((notifications) => notifications.filter((candidate) => !isSameNotification(candidate, notification)));

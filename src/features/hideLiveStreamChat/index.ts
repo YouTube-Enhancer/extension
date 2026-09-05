@@ -11,9 +11,11 @@ import { metadata } from "./index.metadata";
 
 export default createFeature({
 	...metadata,
-	// The hide is a plain body class, so dropping it must not depend on the player: the disable path also runs
-	// when the includePages gate leaves `live` during an SPA navigation, and at that point the player is by
-	// definition no longer live - the old `isLive` guard returned early there and left the class on the body.
+	/**
+	 * The hide is a plain body class, so removing it must not depend on the player. The disable path also runs when
+	 * the includePages gate leaves "live" during an SPA navigation, and by then the player is no longer live: an
+	 * isLive guard here returned early and left the class on the body.
+	 */
 	onDisable: () => {
 		registry.playerManager.cleanup("hideLiveStreamChat");
 		removeLiveChatHide();

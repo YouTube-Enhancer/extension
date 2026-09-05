@@ -46,8 +46,10 @@ export default createFeature({
 	}
 });
 const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icons: ToggleIcon, cardsAreHidden: boolean) => {
-	// The controller keeps aria-checked, the menu item's checked class and the tracked record - which a relocated
-	// button is rebuilt from - together, so an external toggle goes through it rather than writing the attribute.
+	/**
+	 * The controller keeps aria-checked, the menu item's checked class and the tracked record (which a relocated
+	 * button is rebuilt from) in step, so an external toggle goes through it instead of writing the attribute itself.
+	 */
 	updateFeatureButtonChecked("hideEndScreenCardsButton", cardsAreHidden);
 	if (hideEndScreenCardsPlacement === "feature_menu") return;
 	const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");

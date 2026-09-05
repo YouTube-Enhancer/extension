@@ -23,8 +23,10 @@ export function performPlaylistEdit({
 }) {
 	if (inFlightSaves.has(videoId)) return;
 
-	// Try YouTube's pipeline first. It shows its own toast.
-	// Acceptance is not completion, but YouTube's own save UI is optimistic in the same way.
+	/**
+	 * YouTube's own pipeline goes first, and it shows its own toast. Acceptance is not completion, but YouTube's save
+	 * UI is optimistic in the same way.
+	 */
 	const action = removing ? "ACTION_REMOVE_VIDEO_BY_VIDEO_ID" : "ACTION_ADD_VIDEO";
 	if (dispatchNativeCommand(buildPlaylistEditCommand({ action, playlistId: "WL", videoId }))) {
 		onSuccess();

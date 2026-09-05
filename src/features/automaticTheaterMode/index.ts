@@ -26,9 +26,11 @@ function makeTheaterTask(desired: boolean) {
 	return (): boolean => {
 		const current = isInTheaterMode();
 		if (current === desired) return true;
-		// The click is not the result: YouTube flips the theater attribute in its own handler, and a maximized
-		// player consumes the click to minimize instead (which also toggles theater off). Only the mode reading
-		// as desired ends the attempt, so a later tick clicks again once the player has settled.
+		/**
+		 * A click is not proof of success. YouTube flips the theater attribute in its own handler, and a maximized
+		 * player uses the click to minimize instead, which also turns theater off. Only reading the desired mode ends
+		 * the attempt, so a later tick clicks again once the player has settled.
+		 */
 		if (Date.now() - lastClickAt < CLICK_INTERVAL) return false;
 		lastClickAt = Date.now();
 		clickSizeButton();

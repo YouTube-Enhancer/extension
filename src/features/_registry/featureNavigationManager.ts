@@ -85,9 +85,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		// Extract path parts once to avoid repetition
 		const pathParts = window.location.pathname.split("/").filter(Boolean);
 
-		// Single helper function to process data by excluding elements/keys
-		// For arrays (pathParts): exclude first 'count' elements (number)
-		// For URLSearchParams: exclude specified keys (string[])
+		/**
+		 * Builds the extra-identifier suffix of a signature from what is not already in it. For the path-parts array,
+		 * `exclude` is the number of leading elements to drop; for URLSearchParams, it is the list of keys to drop.
+		 */
 		const processExclusions = <T>(source: T, exclude: number | string[]): string => {
 			if (Array.isArray(source)) {
 				// Handle pathParts array: exclude first 'count' elements
@@ -107,8 +108,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 
 		switch (pageType) {
 			case "channel_home": {
-				// Channel home page: youtube.com/@channelname or youtube.com/c/channelname
-				// Handle /@channelname format
+				// Channel home page: youtube.com/@channelname (the /c/ form is handled below).
 				if (pathParts[0]?.startsWith("@")) {
 					const [channelId] = pathParts;
 					const paramsString = processExclusions(pathParts, 1);
@@ -123,8 +123,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				return "channel_home:unknown";
 			}
 			case "channel_posts": {
-				// Channel posts page: youtube.com/@channelname/posts
-				// Handle /@channelname/posts format
+				// Channel posts page: youtube.com/@channelname/posts (the /c/ form is handled below).
 				if (pathParts[0]?.startsWith("@") && pathParts[1] === "posts") {
 					const [channelId] = pathParts;
 					const paramsString = processExclusions(pathParts, 2);
@@ -139,8 +138,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				return "channel_posts:unknown";
 			}
 			case "channel_streams": {
-				// Channel streams page: youtube.com/@channelname/streams
-				// Handle /@channelname/streams format
+				// Channel streams page: youtube.com/@channelname/streams (the /c/ form is handled below).
 				if (pathParts[0]?.startsWith("@") && pathParts[1] === "streams") {
 					const [channelId] = pathParts;
 					const paramsString = processExclusions(pathParts, 2);
@@ -155,8 +153,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				return "channel_streams:unknown";
 			}
 			case "channel_videos": {
-				// Channel videos page: youtube.com/@channelname/videos or youtube.com/c/channelname/videos
-				// Handle /@channelname/videos format
+				// Channel videos page: youtube.com/@channelname/videos (the /c/ form is handled below).
 				if (pathParts[0]?.startsWith("@") && pathParts[1] === "videos") {
 					const [channelId] = pathParts;
 					const paramsString = processExclusions(pathParts, 2);
@@ -171,13 +168,11 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				return "channel_videos:unknown";
 			}
 			case "home": {
-				// Home page: youtube.com/
-				// No additional identifiers needed
+				// Home page: youtube.com/ needs no further identifiers.
 				return "home";
 			}
 			case "live": {
-				// For live streams, we can use the video ID from the watch URL
-				// Live streams use the same URL structure as watch but with isLive=true
+				// Live streams share the watch URL structure, so the video id comes from the same v parameter.
 				const urlParams = new URLSearchParams(window.location.search);
 				const videoId = urlParams.get("v");
 				const paramsString = processExclusions(urlParams, ["v"]);
@@ -193,9 +188,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				// Search page: youtube.com/results?search_query=term
 				const urlParams = new URLSearchParams(window.location.search);
 				const searchQuery = urlParams.get("search_query");
-				// For search, we might want to include the query to differentiate searches
-				// But to avoid too many signatures, we could hash it or just use a generic signature
-				// For now, let's use the query if it exists, otherwise generic
+				/**
+				 * Including the query tells searches apart. Hashing it, or a generic signature, would keep the number
+				 * of signatures down; for now the query is used when present and the generic form otherwise.
+				 */
 				if (searchQuery) {
 					// Truncate very long queries to prevent extremely long signatures
 					const truncatedQuery = searchQuery.length > 50 ? searchQuery.substring(0, 50) + "..." : searchQuery;
@@ -208,8 +204,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				return shortId ? `shorts:${shortId}` : "shorts:unknown";
 			}
 			case "subscriptions": {
-				// Subscriptions page: youtube.com/feed/subscriptions
-				// No additional identifiers needed in the URL
+				// Subscriptions page: youtube.com/feed/subscriptions needs no further identifiers.
 				return "subscriptions";
 			}
 			case "watch": {

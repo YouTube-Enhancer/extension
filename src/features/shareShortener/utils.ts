@@ -43,9 +43,11 @@ function cleanAndUpdateUrl() {
 		clearInterval(intervalId);
 		intervalId = null;
 	}
-	// Every share dialog brings its own #share-url input and YouTube leaves the closed ones in the DOM, so the
-	// inputs are looked up on each tick: a cached one would keep cleaning the dialog the user already closed
-	// and leave the tracking params of every later dialog untouched.
+	/**
+	 * Every share dialog brings its own #share-url input, and YouTube leaves closed dialogs in the DOM, so the inputs
+	 * are looked up on each tick. A cached input would keep cleaning the dialog the user already closed and leave the
+	 * tracking params of every later dialog untouched.
+	 */
 	intervalId = setInterval(() => {
 		for (const shareInput of document.querySelectorAll<HTMLInputElement>("#share-url")) {
 			if (!shareInput.value.match(regexp)) continue;

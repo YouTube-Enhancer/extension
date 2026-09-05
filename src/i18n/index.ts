@@ -5,9 +5,11 @@ import { waitForSpecificMessage } from "@/src/utils/messaging";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 type Translations = typeof import("../../public/locales/en-US.json");
 
-// Store the initialized i18n instances keyed by the locale they were created for. A single module
-// global that was returned regardless of the requested locale made a live language change re-render
-// with the strings of whichever locale happened to be loaded first.
+/**
+ * Initialized i18n instances, keyed by the locale they were created for. A single module-level instance returned
+ * regardless of the requested locale made a live language change re-render with the strings of whichever locale had
+ * loaded first.
+ */
 const i18nInstances = new Map<AvailableLocales, Promise<i18nInstanceType>>();
 
 export async function i18nService(locale: AvailableLocales = "en-US") {

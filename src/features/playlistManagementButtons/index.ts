@@ -27,8 +27,10 @@ const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 let playlistObserver: Nullable<MutationObserver> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
 let removeAllButton: Nullable<HTMLButtonElement> = null;
-// Bumped on every setup and cleanup so a setup still awaiting DOM or network work cannot re-add
-// buttons (or re-install its observer) after it has been torn down.
+/**
+ * Bumped on every setup and cleanup, so a setup still waiting on DOM or network work cannot re-add buttons or
+ * re-install its observer after it has been torn down.
+ */
 let setupGeneration = 0;
 
 const cleanupPlaylistManagementButtons = () => {

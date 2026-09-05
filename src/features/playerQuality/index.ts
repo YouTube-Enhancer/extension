@@ -127,8 +127,10 @@ function handleQualityChange(): void {
 }
 
 async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
-	// The request is the signal that moves first: it is the only one that is not stale while the player is
-	// still buffering its way to a newly requested quality.
+	/**
+	 * The request is the signal that moves first. It is the only one that is not stale while the player is still
+	 * buffering its way to a newly requested quality.
+	 */
 	if (hasForeignQualityRequest(player)) return true;
 	if (!enforcement.appliedQuality || !canDetectForeignQuality() || Date.now() < enforcement.settleUntil) return false;
 
@@ -162,20 +164,26 @@ function makeApplyQualityTasks(
 	fpsPreference: FpsPreference
 ): [() => Promise<boolean>, () => Promise<boolean>] {
 	const applyTask = async (): Promise<boolean> => {
-		// Suspension lasts until navigation or a config change resets the state, so neither a retry run that is
-		// still in flight nor one started by a later player state change may enforce anything any more.
+		/**
+		 * Suspension lasts until a navigation or a config change resets the state. Until then neither a retry run
+		 * still in flight nor one started by a later player state change may enforce anything.
+		 */
 		if (enforcement.overrideDetected) return true;
-		// While an ad shows, the player answers for the ad: an "unknown" quality, the ad's level list and the ad's
-		// request, which would be applied now and then compared against the content video. Wait for the content;
-		// the player-state hook runs this again when the ad ends, even after this loop has used up its attempts.
+		/**
+		 * While an ad shows, the player answers for the ad: an "unknown" quality, the ad's level list and the ad's
+		 * request. Applying those now would then be compared against the content video. Wait for the content instead;
+		 * the player-state hook runs this again when the ad ends, even after this loop has used up its attempts.
+		 */
 		if (isAdShowing()) return false;
 		const player = getPlayer();
 		if (!player || !player.setPlaybackQuality || !player.getAvailableQualityLevels) return false;
 		attachQualityChangeListener(player);
 		const currentQuality = await player.getPlaybackQuality();
-		// A player that has not started reports no playback quality but already holds the video's levels, and a
-		// quality range set on it takes effect when playback starts. It is only trusted once it holds the video
-		// the page is on, so a player still carrying the previous video after a navigation waits for a later attempt.
+		/**
+		 * A player that has not started reports no playback quality but already holds the video's levels, and a
+		 * quality range set on it takes effect when playback starts. It is only trusted once it holds the video the
+		 * page is on, so a player still carrying the previous video after a navigation waits for a later attempt.
+		 */
 		if ((!currentQuality || currentQuality === "unknown") && !playerHoldsCurrentVideo(player)) return false;
 
 		const availableLevels = (await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
@@ -193,8 +201,10 @@ function makeApplyQualityTasks(
 
 		const qualityFormatId = chooseBestFormat(closestQuality, preferPremium, fpsPreference);
 
-		// Everything above awaits, and this task also runs on the player state change that a manual switch
-		// causes, so the request is read once more right before it would be overwritten.
+		/**
+		 * Everything above awaits, and this task also runs on the player state change a manual switch causes, so the
+		 * request is read once more right before it would be overwritten.
+		 */
 		if (hasForeignQualityRequest(player)) {
 			markManualOverride();
 			return true;
@@ -210,10 +220,12 @@ function makeApplyQualityTasks(
 			if (player.setPlaybackQuality) {
 				await player.setPlaybackQuality(closestQuality);
 			}
-			// Read back inside the guarded window: the player composes a request with its own limits, so what
-			// it reports as requested - not the level that was asked for - is what later reads compare against.
-			// A player that has not taken the request yet (unstarted, or still on an ad) reads back "auto"; that
-			// is no baseline, so the verify task records one once the level is seen playing.
+			/**
+			 * Read back inside the guarded window. The player composes a request with its own limits, so what it
+			 * reports as requested, not the level that was asked for, is what later reads compare against. A player
+			 * that has not taken the request yet (unstarted, or still on an ad) reads back "auto"; that is no
+			 * baseline, so the verify task records one once the level is seen playing.
+			 */
 			const requestedQuality = readRequestedQuality(player);
 			enforcement.requestedQuality = requestedQuality && requestedQuality !== "auto" ? requestedQuality : null;
 		} finally {

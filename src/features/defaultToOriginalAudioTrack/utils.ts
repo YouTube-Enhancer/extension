@@ -31,9 +31,11 @@ export function findDefaultTrack(tracks: Record<string, unknown>[]): Nullable<Pa
 }
 
 export function parseAudioTrack(obj: Record<string, unknown>): Nullable<ParsedAudioTrack> {
-	// The player's track objects carry their descriptor (name, id, flags) in a nested value. The descriptor is what
-	// comparisons use; the track object itself is what setAudioTrack accepts - handed the descriptor alone, the
-	// player throws. A track that carries the descriptor fields directly is taken as it is.
+	/**
+	 * The player's track objects carry their descriptor (name, id, flags) in a nested value. Comparisons use the
+	 * descriptor, but setAudioTrack accepts only the track object itself and throws when handed the descriptor alone.
+	 * A track that carries the descriptor fields directly is used as it is.
+	 */
 	const descriptor = isAudioTrack(obj) ? obj : Object.values(obj).find(isAudioTrack);
 	if (!descriptor) return null;
 	return {
