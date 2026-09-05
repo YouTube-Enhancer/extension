@@ -71,6 +71,8 @@ export function disableScrollWheelControl(type: ScrollWheelControlType) {
 	if (type === "volume") {
 		toggleContextMenuVisibility("remove");
 		suppressContextMenu = false;
+		// The context-menu listeners are the volume control's alone; the wheel listener on the document stays for the other control.
+		eventManager.removeEventListenersForTarget(document.documentElement, "scrollWheelController");
 	}
 	if (activeControls.size === 0) eventManager.removeEventListeners("scrollWheelController");
 }
