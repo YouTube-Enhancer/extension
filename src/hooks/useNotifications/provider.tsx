@@ -13,6 +13,8 @@ import {
 	type ScheduleNotificationRemoval
 } from "./context";
 type NotificationProviderProps = { children: ReactElement | ReactElement[] };
+// Each notification gets its own id: the timestamp is not unique, and the message is not part of the identity.
+let nextNotificationId = 0;
 export const NotificationsProvider = ({ children }: NotificationProviderProps) => {
 	const [i18nInstance, setI18nInstance] = useState<Nullable<i18nInstanceType>>(null);
 	useEffect(() => {
@@ -27,7 +29,14 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 	};
 	const createNotification: CreateNotification = (type, message, action) => {
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 2_500;
-		const notification = { action, message, removeAfterMs: removeNotificationAfterMs, timestamp: +new Date(), type } satisfies Notification;
+		const notification = {
+			action,
+			id: nextNotificationId++,
+			message,
+			removeAfterMs: removeNotificationAfterMs,
+			timestamp: +new Date(),
+			type
+		} satisfies Notification;
 		return notification;
 	};
 	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (notification, removeAfterMs) => {
@@ -45,9 +54,9 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		scheduleNotificationRemoval(notification, notification.removeAfterMs);
 	};
 	// The progress loop below replaces every notification object each frame, so the object a close or confirm
-	// button holds is rarely the one the state holds by the time the click lands. Match on what identifies a
-	// notification instead of on the reference, or those buttons only work when no frame ran in between.
-	const isSameNotification = (a: Notification, b: Notification) => a.timestamp === b.timestamp && a.type === b.type && a.action === b.action;
+	// button holds is rarely the one the state holds by the time the click lands. Match on the id instead of on
+	// the reference, or those buttons only work when no frame ran in between.
+	const isSameNotification = (a: Notification, b: Notification) => a.id === b.id;
 	const removeNotification: RemoveNotification = (notification) => {
 		setNotifications((notifications) => notifications.filter((candidate) => !isSameNotification(candidate, notification)));
 	};
