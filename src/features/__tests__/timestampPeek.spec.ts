@@ -258,7 +258,7 @@ test.describe("timestampPeek", () => {
 		});
 
 		test(`should show preview overlay when hovering a timestamp in a comment on ${pageType}`, async ({ page }) => {
-			await setupWatchPage(page, pageType);
+			await navigateToPageType(page, pageType, ["commentTimestamps"]);
 			await enableFeature(page, "timestampPeek.enabled");
 			await scrollToComments(page);
 			await hoverFirstTimestamp(page, true);
@@ -266,7 +266,7 @@ test.describe("timestampPeek", () => {
 		});
 
 		test(`should seek to timestamp when clicking the preview overlay on a comment timestamp on ${pageType}`, async ({ page }) => {
-			await setupWatchPage(page, pageType);
+			await navigateToPageType(page, pageType, ["commentTimestamps"]);
 			await enableFeature(page, "timestampPeek.enabled");
 			await scrollToComments(page);
 

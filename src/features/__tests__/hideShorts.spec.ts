@@ -1,3 +1,5 @@
+import type { Page } from "@playwright/test";
+
 import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
@@ -59,6 +61,26 @@ const subFeatures = [
 	}
 ] satisfies { bodyClass: string; config: string; page: PageType; selectors: readonly string[]; subFeature: string }[];
 
+/**
+ * A watch page without a Shorts shelf gets a synthetic one. YouTube's Polymer element stamps its own template when
+ * it is connected and drops children parsed into it beforehand, so the shelf is connected first and only then given
+ * the title container the feature's selector keys on; it is forced visible so only the feature's rule can hide it.
+ */
+async function injectShortsShelfOnWatch(pageObj: Page): Promise<void> {
+	await pageObj.evaluate(() => {
+		const host = document.querySelector("ytd-watch-next-secondary-results-renderer");
+		if (!host) throw new Error("no watch-next renderer to inject into");
+		const shelf = document.createElement("ytd-reel-shelf-renderer");
+		shelf.id = "yte-test-shorts-shelf";
+		host.appendChild(shelf);
+		shelf.style.display = "block";
+		const title = document.createElement("div");
+		title.id = "title-container";
+		title.textContent = "Shorts";
+		shelf.appendChild(title);
+	});
+}
+
 test.describe("hideShorts", () => {
 	for (const { bodyClass, config, page, selectors, subFeature } of subFeatures) {
 		// The away leg must be a different page type, otherwise navigateToYoutubePage skips the goto for an identical URL.
@@ -116,11 +138,13 @@ test.describe("hideShorts", () => {
 					await enableFeature(pageObj, config);
 					await expectBodyWithClass(pageObj, bodyClass);
 					await expectElementsHidden(pageObj, selectors);
-					// The Shorts shelf is not part of every watch-next response, so there is only something to clone when YouTube served one.
-					const injected = await injectDynamicContentWhenPresent(pageObj, selectors);
-					test.skip(!injected, `${page} showed no Shorts to clone`);
+					// The Shorts shelf is not part of every watch-next response, so when YouTube served none a synthetic shelf
+					// stands in for the one it would render later; elsewhere there is only something to clone when a shelf exists.
+					const injected = await injectDynamicContentWhenPresent(pageObj, selectors, { timeout: page === watch ? 3000 : 10000 });
+					if (!injected && page === watch) await injectShortsShelfOnWatch(pageObj);
+					test.skip(!injected && page !== watch, `${page} showed no Shorts to clone`);
 					await expectBodyWithClass(pageObj, bodyClass);
-					await expectElementsHidden(pageObj, selectors);
+					await expectElementsHidden(pageObj, selectors, { requireMatch: true });
 				});
 			}
 		});
