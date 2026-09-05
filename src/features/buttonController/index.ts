@@ -19,6 +19,7 @@ export {
 	removeFeatureItemFromMenu,
 	setupFeatureMenuEventListeners,
 	updateButtonsIconColor,
+	updateFeatureButtonChecked,
 	updateFeatureButtonIcon,
 	updateFeatureButtonTitle,
 	updateFeatureMenuTitle,

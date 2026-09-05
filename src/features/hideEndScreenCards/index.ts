@@ -2,7 +2,7 @@ import type { ToggleIcon } from "@/src/icons";
 import type { ButtonPlacement } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { getFeatureButton, getFeatureMenuItem, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { getFeatureButton, updateFeatureButtonChecked, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getEndScreenCardsButtonIcon, getEndScreenCardsButtonTitle } from "@/src/features/hideEndScreenCardsButton/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
@@ -46,17 +46,12 @@ export default createFeature({
 	}
 });
 const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icons: ToggleIcon, cardsAreHidden: boolean) => {
-	if (hideEndScreenCardsPlacement === "feature_menu") {
-		const hideEndScreenCardsMenuItem = getFeatureMenuItem("hideEndScreenCardsButton");
-		if (!hideEndScreenCardsMenuItem) return;
-		hideEndScreenCardsMenuItem.ariaChecked = cardsAreHidden ? "true" : "false";
-		// The shared controller pairs aria-checked with this class, so an external toggle has to keep them together.
-		hideEndScreenCardsMenuItem.classList.toggle("ytp-menuitem-checked", cardsAreHidden);
-	} else {
-		const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
-		if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
-		updateFeatureButtonIcon(hideEndScreenCardsButton, getEndScreenCardsButtonIcon(icons, cardsAreHidden));
-		updateFeatureButtonTitle("hideEndScreenCardsButton", getEndScreenCardsButtonTitle(cardsAreHidden));
-		hideEndScreenCardsButton.ariaChecked = cardsAreHidden ? "true" : "false";
-	}
+	// The controller keeps aria-checked, the menu item's checked class and the tracked record - which a relocated
+	// button is rebuilt from - together, so an external toggle goes through it rather than writing the attribute.
+	updateFeatureButtonChecked("hideEndScreenCardsButton", cardsAreHidden);
+	if (hideEndScreenCardsPlacement === "feature_menu") return;
+	const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
+	if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
+	updateFeatureButtonIcon(hideEndScreenCardsButton, getEndScreenCardsButtonIcon(icons, cardsAreHidden));
+	updateFeatureButtonTitle("hideEndScreenCardsButton", getEndScreenCardsButtonTitle(cardsAreHidden));
 };

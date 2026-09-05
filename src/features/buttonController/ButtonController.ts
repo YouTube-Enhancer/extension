@@ -645,6 +645,18 @@ export function updateButtonsIconColor() {
 	}
 }
 
+/**
+ * Sets a toggle's checked state from outside the controller, for a feature whose state can change without a click on
+ * its button. The tracked record follows, since it is what a relocated button is rebuilt from.
+ */
+export function updateFeatureButtonChecked(buttonName: AllButtonNames, checked: boolean) {
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+	if (button) setChecked(button, checked);
+	const menuItem = getFeatureMenuItem(buttonName);
+	if (menuItem) setMenuItemChecked(menuItem, checked);
+	updateTrackedButtonChecked(buttonName, checked);
+}
+
 export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
 	button.replaceChildren(icon);
 }
