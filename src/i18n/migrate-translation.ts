@@ -742,7 +742,6 @@ function backupFile(filePath: string) {
 
 /* Migrates old translations as of commit (87f87bddfba0480923e198f7538baefc5bb1d103) v1.31.1*/
 function migrate(old: OldTranslationStruct): NewTranslationStruct {
-	// @ts-nocheck this code is mostly not needed probably idk lol
 	return {
 		langCode: old.langCode,
 		langName: old.langName,
