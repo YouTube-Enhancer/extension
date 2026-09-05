@@ -14,6 +14,9 @@ export async function sendExtensionMessage(page: Page, message: Record<string, u
 	await page.waitForTimeout(50);
 }
 export async function sendYouTubeMessage(page: Page, message: Record<string, unknown>): Promise<void> {
+	// YouTube sometimes replaces the document right after an in-page navigation (a live page reloads itself); the
+	// new document forwards config only once its extension setup has finished, which html[yte-ready] marks.
+	await page.locator("html[yte-ready]").waitFor({ state: "attached", timeout: 30_000 });
 	await safeEvaluate(
 		page,
 		(msg) => {

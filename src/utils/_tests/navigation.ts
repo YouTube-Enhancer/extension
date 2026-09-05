@@ -3,6 +3,7 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 import type { PageType } from "@/src/features/_registry/types";
 import type { YouTubePlayerDiv } from "@/src/types";
 
+import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
 import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
 import { ensureCaptionsState, getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 
@@ -10,6 +11,8 @@ export const fixtureCapabilities = [
 	"ambientMode",
 	"autoPlay",
 	"captions",
+	// Top comments that carry timestamp links (a mix with its tracklist in the comments).
+	"commentTimestamps",
 	"dubbedAudio",
 	"endScreenCards",
 	"playlistManagementButtons",
@@ -110,6 +113,12 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 		{
 			capabilities: ["timestamps"],
 			url: "https://www.youtube.com/watch?v=yk4I80XVuk4"
+		},
+		{
+			// yk4I80XVuk4 kept its description timestamps but its comments were cut to one on 2026-09-04, so the
+			// comment cases use a mix whose top comments list the tracks with timestamps.
+			capabilities: ["commentTimestamps"],
+			url: "https://www.youtube.com/watch?v=NvbbEBL9My4"
 		},
 		{
 			capabilities: ["dubbedAudio"],
@@ -419,6 +428,11 @@ async function tryOpenLiveVideo(page: Page, video: Locator, channelUrl: string):
 async function videoMeetsCapabilities(page: Page, requirements: FixtureCapabilities[]): Promise<boolean> {
 	for (const req of requirements) {
 		switch (req) {
+			case "ambientMode": {
+				await ensurePlayerControlsVisible(page, "live");
+				if (!(await hasAmbientModeMenuItem(page))) return false;
+				break;
+			}
 			case "captions": {
 				await ensurePlayerControlsVisible(page, "live");
 				const state = await getCaptionsState(page);
