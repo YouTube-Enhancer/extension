@@ -82,6 +82,37 @@ test.describe("openYouTubeSettingsOnHover", () => {
 		// onDisable removes the hover listeners, so the menu has to stay closed for the whole settle window.
 		await expectToStay(async () => settingsMenu.isVisible(), false, { page });
 	});
+	test("opening a submenu keeps a hover-opened settings menu open on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
+		await forcePlayerVisible(page);
+		const settingsButton = page.locator(".ytp-settings-button");
+		const settingsMenu = page.locator(SETTINGS_MENU_SELECTOR);
+		// Real pointer moves: the feature decides by where the pointer is, so dispatched events would not do.
+		await page.locator("#movie_player").hover();
+		await expect
+			.poll(
+				async () => {
+					await settingsButton.hover();
+					return settingsMenu.isVisible();
+				},
+				{ intervals: [500], timeout: 15000 }
+			)
+			.toBe(true);
+		// Opening a submenu makes YouTube swap the panel, which fires a mouseleave on the menu and drops its :hover
+		// while the pointer stays put; the feature used to read that as the pointer leaving and close the menu.
+		await settingsMenu
+			.locator(".ytp-menuitem")
+			.filter({ hasText: /Quality/ })
+			.first()
+			.click();
+		await expect(settingsMenu.locator(".ytp-panel-title")).toHaveText(/Quality/);
+		await expectToStay(async () => settingsMenu.isVisible(), true, { page });
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "true");
+		// Leaving still closes it.
+		await page.mouse.move(10, 300);
+		await expect(settingsButton).toHaveAttribute("aria-expanded", "false");
+	});
 	test("hovering should not close a settings menu that was opened by clicking the button on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "openYouTubeSettingsOnHover.enabled");
