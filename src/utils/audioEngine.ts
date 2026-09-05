@@ -10,22 +10,6 @@ export interface AudioEngine {
 
 let visibilityHandler: (() => void) | null = null;
 
-function setupVisibilityResume(context: AudioContext): void {
-	if (visibilityHandler) return;
-	visibilityHandler = () => {
-		if (!document.hidden && context.state === "suspended") {
-			void context.resume();
-		}
-	};
-	document.addEventListener("visibilitychange", visibilityHandler);
-}
-
-function teardownVisibilityResume(): void {
-	if (!visibilityHandler) return;
-	document.removeEventListener("visibilitychange", visibilityHandler);
-	visibilityHandler = null;
-}
-
 export function destroyAudioEngine(): void {
 	const { engine } = window;
 	if (!engine) return;
@@ -59,4 +43,20 @@ export function getAudioEngine(video?: HTMLMediaElement): Nullable<AudioEngine> 
 
 function createAudioContext(): AudioContext {
 	return window.AudioContext ? new AudioContext() : new (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext();
+}
+
+function setupVisibilityResume(context: AudioContext): void {
+	if (visibilityHandler) return;
+	visibilityHandler = () => {
+		if (!document.hidden && context.state === "suspended") {
+			void context.resume();
+		}
+	};
+	document.addEventListener("visibilitychange", visibilityHandler);
+}
+
+function teardownVisibilityResume(): void {
+	if (!visibilityHandler) return;
+	document.removeEventListener("visibilitychange", visibilityHandler);
+	visibilityHandler = null;
 }
