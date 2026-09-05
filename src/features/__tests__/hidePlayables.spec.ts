@@ -69,10 +69,15 @@ test.describe("hidePlayables", () => {
 			await navigateToPageType(page, pageType);
 			await enableFeature(page, "hidePlayables.enabled");
 			await expectBodyWithClass(page, bodyClass);
-			// The playables shelf is only served on some home feeds; without it the display assertion below would
-			// iterate over nothing and pass without checking anything.
-			test.skip(!(await hasAnyMatch(page, selectors)), "fixture has no playables shelf");
-			await expectElementsHidden(page, selectors, { requireMatch: true });
+			// The playables shelf is only served on some home feeds; without it the display assertion would iterate
+			// over nothing and pass without checking anything, so a synthetic shelf stands in for it on such a feed.
+			if (await hasAnyMatch(page, selectors)) {
+				await expectElementsHidden(page, selectors, { requireMatch: true });
+			} else {
+				await injectPlayablesShelf(page);
+				await expectInjectedSelectorsToMatch(page);
+				await expectElementsHidden(page, injectedSelectors, { requireMatch: true });
+			}
 		});
 	}
 
