@@ -4,6 +4,7 @@ import {
 	addFeatureButton,
 	getFeatureButton,
 	removeFeatureButton,
+	updateFeatureButtonChecked,
 	updateFeatureButtonIcon,
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
@@ -16,22 +17,20 @@ import { metadata } from "./index.metadata";
 let currentPlacement: Nullable<ButtonPlacement> = null;
 function syncMiniPlayerButtonUI(active: boolean) {
 	if (!currentPlacement) return;
-	if (currentPlacement !== "feature_menu") {
-		updateFeatureButtonTitle(
-			"miniPlayerButton",
-			window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"])
-		);
-		const btn = getFeatureButton("miniPlayerButton");
-		if (btn instanceof HTMLButtonElement) {
-			btn.ariaChecked = active.toString();
-			const icon = getFeatureIcon("miniPlayerButton", "below_player");
-			if (typeof icon === "object" && icon && "on" in icon && "off" in icon) {
-				updateFeatureButtonIcon(btn, active ? icon.on : icon.off);
-			}
-		}
-	} else {
-		const btn = getFeatureButton("miniPlayerButton");
-		if (btn) btn.ariaChecked = active.toString();
+	// The mini player's state also changes without a click on the button, and the controller announces every change
+	// on the document, so the button controller is told the state: it keeps aria-checked, the menu item's checked
+	// class and the tracked record - which a relocated button is rebuilt from - together.
+	updateFeatureButtonChecked("miniPlayerButton", active);
+	if (currentPlacement === "feature_menu") return;
+	updateFeatureButtonTitle(
+		"miniPlayerButton",
+		window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"])
+	);
+	const btn = getFeatureButton("miniPlayerButton");
+	if (!(btn instanceof HTMLButtonElement)) return;
+	const icon = getFeatureIcon("miniPlayerButton", "below_player");
+	if (typeof icon === "object" && icon && "on" in icon && "off" in icon) {
+		updateFeatureButtonIcon(btn, active ? icon.on : icon.off);
 	}
 }
 function yteMiniPlayerStateHandler(e: unknown) {
