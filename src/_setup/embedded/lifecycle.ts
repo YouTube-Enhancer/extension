@@ -81,6 +81,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	const {
 		data: { options: currentOptions }
 	} = await waitForSpecificMessage("options", "request_data", "content");
+	// The on-screen display is a core feature outside the registry, so the loop below does not cover its settings.
+	setOnScreenDisplayConfig(currentOptions.onScreenDisplay);
 	for (const feature of registry.getAll()) {
 		const { id } = feature;
 		const { [id]: current } = currentOptions;
