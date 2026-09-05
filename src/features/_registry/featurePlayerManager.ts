@@ -132,6 +132,13 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 				await Promise.all(promises);
 
+				// A newer run or a cleanup may have aborted this one while its tasks ran. Ending the run here would bump
+				// the generation a second time, and the newer run, still waiting for the player, would then drop its tasks.
+				if (state.aborted) {
+					resolve(state.taskResults);
+					return;
+				}
+
 				const allDone = state.taskResults.every(Boolean);
 				const timedOut = Date.now() - state.startTime >= resolved.overallTimeout;
 				const tooManyAttempts = state.attempts >= resolved.maxAttempts;
