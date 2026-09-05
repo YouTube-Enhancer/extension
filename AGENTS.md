@@ -137,4 +137,4 @@ Modules inside `src/features/` that are not features include:
 - Features follow a consistent pattern with metadata files
 - Component names use PascalCase
 - Files are organized by feature or function
-- Import paths should be relative to the src directory
+- Cross-module imports use the `@/src/...` alias, which is rooted at the src directory (for example `@/src/utils/dom/wait`); files in the same folder may import each other with `./`. Do not use `../` paths.
