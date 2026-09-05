@@ -2,10 +2,11 @@ import { readFileSync, writeFileSync } from "fs";
 import { z } from "zod";
 import { generateErrorMessage } from "zod-error";
 
-import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "../types";
+import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "@/src/types";
 
-import { formatError } from "../utils/format/error";
-import { i18nDir } from "../utils/plugins/utils";
+import { formatError } from "@/src/utils/format/error";
+import { i18nDir } from "@/src/utils/plugins/utils";
+
 import { type AvailableLocales } from "./constants";
 
 const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProgressResponse> = z.object({

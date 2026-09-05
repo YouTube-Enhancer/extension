@@ -6,10 +6,9 @@ import React, { useRef } from "react";
 import type { configuration, configurationId, PathValue } from "@/src/types";
 
 import { useComponentVisible } from "@/hooks";
+import Arrow from "@/src/components/Inputs/Number/Arrow";
+import Loader from "@/src/components/Loader";
 import { cn } from "@/src/utils/style";
-
-import Loader from "../../Loader";
-import Arrow from "../Number/Arrow";
 
 export type SelectOption<Key extends configurationId> = {
 	element?: React.ReactElement<SelectOptionProps>;

@@ -3,9 +3,13 @@ import { GetInstalledBrowsers } from "get-installed-browsers";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
 
-import type { AvailableLocales } from "../../i18n/constants";
+import type { AvailableLocales } from "@/src/i18n/constants";
 
-import { outputFolderName } from "../../../src/utils/constants";
+/**
+ * vite.config.ts imports this module, and Vite's config loader leaves the `@/src` alias for Node to resolve, which
+ * it cannot. A relative path is the only form that loads there; the type-only import above is erased first.
+ */
+import { outputFolderName } from "../constants";
 export type LocaleFile = {
 	[key: string]: LocaleValue;
 };

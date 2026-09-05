@@ -3,10 +3,10 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { i18nInstanceType } from "@/src/i18n";
 import type { Notification } from "@/src/types";
 
+import { useSettings } from "@/src/components/Settings/Settings";
 import { useNotifications } from "@/src/hooks";
 import { cn } from "@/src/utils/style";
 
-import { useSettings } from "../Settings";
 export default function SettingsNotifications() {
 	const { notifications } = useNotifications();
 	const [parentRef] = useAutoAnimate({ duration: 300 });

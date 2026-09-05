@@ -1,8 +1,8 @@
 import { existsSync, rmSync } from "fs";
 import { resolve } from "path";
 
-import terminalColorLog from "../../utils/logging";
-import { browsers, copyDirectorySync, outDir, publicDir } from "../../utils/plugins/utils";
+import terminalColorLog from "@/src/utils/logging";
+import { browsers, copyDirectorySync, outDir, publicDir } from "@/src/utils/plugins/utils";
 
 export default function copyOutputs(): void {
 	for (const browser of browsers) {

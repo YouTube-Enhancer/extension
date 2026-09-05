@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-import type { PhaseGroup } from "../types";
+import type { PhaseGroup } from "@/src/components/devtools/components/PerformanceMetrics/types";
 
 type DonutChartProps = {
 	phaseBreakdown: PhaseGroup[];

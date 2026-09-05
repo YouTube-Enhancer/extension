@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import { manifestV2, manifestV3 } from "../../manifest";
-import terminalColorLog from "../../utils/logging";
-import { browsers, outDir } from "../../utils/plugins/utils";
+import { manifestV2, manifestV3 } from "@/src/manifest";
+import terminalColorLog from "@/src/utils/logging";
+import { browsers, outDir } from "@/src/utils/plugins/utils";
 
 export default function generateManifests(): void {
 	for (const browser of browsers) {

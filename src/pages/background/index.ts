@@ -1,9 +1,9 @@
 import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } from "@/src/types";
 
+import { setDefaultValues } from "@/src/defaults";
 import { updateStoredSettings } from "@/src/utils/config/storage";
 
 import { version } from "../../../package.json";
-import { setDefaultValues } from "../../defaults";
 
 const sentRequestIds = new Set<string>();
 

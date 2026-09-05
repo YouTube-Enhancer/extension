@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-import type { PhaseGroup } from "../types";
+import type { PhaseGroup } from "@/src/components/devtools/components/PerformanceMetrics/types";
 
 type PhaseBarChartProps = {
 	phaseBreakdown: PhaseGroup[];

@@ -1,7 +1,7 @@
 import type EnUS from "@/public/locales/en-US.json.d";
 
-import { availableLocales } from "../i18n/constants";
-import { flattenLocaleValues, getLocaleFile, type LocaleFile } from "../utils/plugins/utils";
+import { availableLocales } from "@/src/i18n/constants";
+import { flattenLocaleValues, getLocaleFile, type LocaleFile } from "@/src/utils/plugins/utils";
 export default function checkLocalesForMissingKeys() {
 	const englishFile = getLocaleFile("en-US");
 	const missingKeys = availableLocales

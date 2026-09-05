@@ -3,11 +3,11 @@ import type { ChangeEvent } from "react";
 
 import React, { useEffect, useId, useRef, useState } from "react";
 
+import { useSettings } from "@/src/components/Settings/Settings";
 import useDebounceFn from "@/src/hooks/useDebounce";
 import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/style";
 
-import { useSettings } from "../../Settings/Settings";
 import Arrow from "./Arrow";
 import "./Number.css";
 export type NumberInputProps = {

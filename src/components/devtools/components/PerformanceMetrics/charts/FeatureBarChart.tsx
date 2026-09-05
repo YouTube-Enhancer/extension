@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-import type { FeatureGroup } from "../types";
+import type { FeatureGroup } from "@/src/components/devtools/components/PerformanceMetrics/types";
 
 type FeatureBarChartProps = {
 	featureBreakdown: FeatureGroup[];
