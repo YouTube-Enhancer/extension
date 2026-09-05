@@ -18,12 +18,15 @@ const state: {
 	}>;
 	overlayParent: Nullable<HTMLElement>;
 	placeholder: Nullable<HTMLDivElement>;
+	// Bumped whenever the video is given back to the player, so a preview still waiting on its seek stands down.
+	previewGeneration: number;
 	restoreMiniPlayerOverlay: Nullable<() => void>;
 } = {
 	hideTimer: null,
 	originalVideoStyles: null,
 	overlayParent: null,
 	placeholder: null,
+	previewGeneration: 0,
 	restoreMiniPlayerOverlay: null
 };
 
@@ -197,6 +200,7 @@ export function resetState() {
  * or the player is left without a video.
  */
 export function restorePreviewedVideo() {
+	state.previewGeneration++;
 	cancelHideTimer();
 	hideShield();
 	const video = getVideo();
@@ -336,7 +340,11 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 		overlay.style.display = "block";
 		positionOverlay(element, overlay);
 		video.pause();
+		const { previewGeneration } = state;
 		await seekVideo(video, timestamp);
+		// Restored while the seek was pending - on disable, navigation or the pointer leaving - so the video is back in
+		// the player and must not be played, nor the mini-player overlay suspended, on this preview's behalf.
+		if (previewGeneration !== state.previewGeneration) return;
 		state.restoreMiniPlayerOverlay ??= suspendMiniPlayerOverlay();
 		try {
 			await video.play();
