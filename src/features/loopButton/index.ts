@@ -1,8 +1,15 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, getFeatureButton, getFeatureButtonId, getFeatureIds, removeFeatureButton } from "@/src/features/buttonController";
+import {
+	addFeatureButton,
+	getFeatureButtonId,
+	removeFeatureButton,
+	updateFeatureButtonChecked,
+	updateFeatureButtonIcon,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type SingleButtonFeatureNames } from "@/src/types";
+import { type ButtonPlacement } from "@/src/types";
 
 import { metadata } from "./index.metadata";
 import { loopButtonClickListener } from "./utils";
@@ -13,40 +20,20 @@ function setupLoopObserver(placement: ButtonPlacement) {
 	const loopChangedHandler = (mutationList: MutationRecord[]) => {
 		const loopSVG = getFeatureIcon("loopButton", placement);
 		for (const mutation of mutationList) {
-			if (mutation.type === "attributes") {
-				const { attributeName, target } = mutation;
-				if (attributeName === "loop") {
-					const { loop } = target as HTMLVideoElement;
-					const featureName: SingleButtonFeatureNames = "loopButton";
-					// Get the feature menu
-					const featureMenu = document.querySelector<HTMLDivElement>("#yte-feature-menu");
-					// Check if the feature item already exists in the menu
-					const featureExistsInMenu =
-						featureMenu && featureMenu.querySelector<HTMLDivElement>(`#${getFeatureIds(featureName).featureMenuItemId}`) !== null;
-					if (featureExistsInMenu) {
-						const menuItem = getFeatureButton(featureName);
-						if (!menuItem) return;
-						menuItem.ariaChecked = loop ? "true" : "false";
-					}
-					const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(featureName)}`);
-					if (!button) return;
-					switch (placement) {
-						case "below_player":
-						case "player_controls_left":
-						case "player_controls_right": {
-							if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
-								button.firstChild?.replaceWith(loop ? loopSVG.on : loopSVG.off);
-							}
-							break;
-						}
-						case "feature_menu": {
-							if (loopSVG instanceof SVGSVGElement) {
-								button.firstChild?.replaceWith(loopSVG);
-							}
-							break;
-						}
-					}
-				}
+			if (mutation.type !== "attributes" || mutation.attributeName !== "loop") continue;
+			const { loop } = mutation.target as HTMLVideoElement;
+			// The loop can change without a click on the button, through YouTube's own Loop menu entry, so the controller
+			// is told the state: it keeps aria-checked, the menu item's checked class and the tracked record - which a
+			// relocated button is rebuilt from - together.
+			updateFeatureButtonChecked("loopButton", loop);
+			const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("loopButton")}`);
+			if (!button) continue;
+			updateFeatureButtonTitle(
+				"loopButton",
+				window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle[loop ? "on" : "off"])
+			);
+			if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
+				updateFeatureButtonIcon(button, loop ? loopSVG.on : loopSVG.off);
 			}
 		}
 	};
