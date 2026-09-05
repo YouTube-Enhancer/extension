@@ -16,7 +16,7 @@ export const getHeaderSelectors = () => {
 	const playlist =
 		playlistSelectors.find((selector) => {
 			const el = document.querySelector<HTMLElement>(selector);
-			return el?.clientWidth ?? 0 > 0;
+			return (el?.clientWidth ?? 0) > 0;
 		}) ?? NO_PADDING_HEADER_SELECTOR;
 	const watch =
 		isNewYouTubeVideoLayout() ?
