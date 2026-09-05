@@ -160,8 +160,10 @@ function turnAutoPlayOff(toggle: HTMLButtonElement): boolean {
 		return stableOffReads >= STABLE_OFF_READS;
 	}
 	stableOffReads = 0;
-	// Stop after a few dropped clicks so a toggle that never responds cannot be clicked forever.
-	if (toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS) return true;
+	// Stop clicking after a few dropped attempts so a toggle that never responds cannot be clicked forever, without
+	// calling the override done while autoplay is still on: that would end the work for the whole session, whereas
+	// the next video gets a fresh budget from onNavigate.
+	if (toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS) return false;
 	if (Date.now() - lastToggleClickAt >= TOGGLE_CLICK_INTERVAL) {
 		lastToggleClickAt = Date.now();
 		toggleClickAttempts++;
@@ -197,6 +199,10 @@ export default createFeature({
 		});
 	},
 	onNavigate: () => {
+		// Each video gets its own click budget and stability count; both are otherwise only cleared when the feature
+		// is switched off.
+		toggleClickAttempts = 0;
+		stableOffReads = 0;
 		void registry.playerManager.executeWithRetries(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
 			interval: 300,
 			maxAttempts: 30,
