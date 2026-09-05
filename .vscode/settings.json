@@ -2,9 +2,10 @@
 	"js/ts.tsdk.path": "node_modules/typescript/lib",
 	"i18n-ally.localesPaths": ["public/locales"],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always"
+		"source.fixAll.oxc": "always"
 	},
-	"eslint.codeActionsOnSave.mode": "all",
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.snippets.codeActions.enabled": true,
 	"js/ts.validate.enabled": true,
 	"js/ts.tsserver.experimental.enableProjectDiagnostics": true

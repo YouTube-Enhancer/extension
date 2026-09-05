@@ -1,4 +1,4 @@
-/* eslint perfectionist/sort-objects: "off" */
+/* eslint-disable perfectionist/sort-objects */
 
 import type { Nullable } from "@/src/types";
 

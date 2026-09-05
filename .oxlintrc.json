@@ -1,0 +1,251 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	// Generated from the previous eslint.config.mjs with `@oxlint/migrate --type-aware`, then tidied by hand.
+	// Every rule is listed explicitly to mirror what ESLint enforced, so oxlint's default "correctness" category is
+	// switched off instead of adding rules the project never had. Formatting is prettier's job (see the lint scripts).
+	"plugins": ["import", "promise", "typescript", "react"],
+	// ESLint plugins oxlint has no native equivalent for, run through its JS plugin loader. They still need the
+	// `eslint` package installed as a library (perfectionist pulls in @typescript-eslint/utils, which requires it).
+	"jsPlugins": ["eslint-plugin-perfectionist", "eslint-plugin-tailwindcss", "eslint-plugin-no-secrets"],
+	"categories": {
+		"correctness": "off"
+	},
+	"options": {
+		// Type-aware typescript rules run through oxlint-tsgolint.
+		"typeAware": true
+	},
+	"env": {
+		"builtin": true,
+		"es2026": true
+	},
+	"settings": {
+		"tailwindcss": {
+			"callees": ["cn"],
+			"config": "./tailwind.config.ts"
+		}
+	},
+	"ignorePatterns": ["**/watch.js", "dist/**/*", "releases/**/*"],
+	"rules": {
+		// eslint:recommended
+		"constructor-super": "error",
+		"for-direction": "error",
+		"getter-return": "error",
+		"no-async-promise-executor": "error",
+		"no-case-declarations": "error",
+		"no-class-assign": "error",
+		"no-compare-neg-zero": "error",
+		"no-cond-assign": "error",
+		"no-const-assign": "error",
+		"no-constant-binary-expression": "error",
+		"no-constant-condition": "error",
+		"no-control-regex": "error",
+		"no-debugger": "error",
+		"no-delete-var": "error",
+		"no-dupe-class-members": "error",
+		"no-dupe-else-if": "error",
+		"no-dupe-keys": "error",
+		"no-duplicate-case": "error",
+		"no-empty": "error",
+		"no-empty-character-class": "error",
+		"no-empty-pattern": "error",
+		"no-empty-static-block": "error",
+		"no-ex-assign": "error",
+		"no-extra-boolean-cast": "error",
+		"no-fallthrough": "error",
+		"no-func-assign": "error",
+		"no-global-assign": "error",
+		"no-import-assign": "error",
+		"no-invalid-regexp": "error",
+		"no-irregular-whitespace": "error",
+		"no-loss-of-precision": "error",
+		"no-misleading-character-class": "error",
+		"no-new-native-nonconstructor": "error",
+		"no-nonoctal-decimal-escape": "error",
+		"no-obj-calls": "error",
+		"no-prototype-builtins": "error",
+		"no-redeclare": "error",
+		"no-regex-spaces": "error",
+		"no-self-assign": "error",
+		"no-setter-return": "error",
+		"no-shadow-restricted-names": "error",
+		"no-sparse-arrays": "error",
+		"no-this-before-super": "error",
+		"no-unreachable": "error",
+		"no-unsafe-finally": "error",
+		"no-unsafe-negation": "error",
+		"no-unsafe-optional-chaining": "error",
+		"no-unused-labels": "error",
+		"no-unused-private-class-members": "error",
+		"no-unused-vars": "error",
+		"no-useless-backreference": "error",
+		"no-useless-catch": "error",
+		"no-useless-escape": "error",
+		"no-with": "error",
+		"require-yield": "error",
+		"use-isnan": "error",
+		"valid-typeof": "error",
+		// eslint-plugin-tailwindcss flat/recommended
+		"tailwindcss/classnames-order": "warn",
+		"tailwindcss/enforces-negative-arbitrary-values": "warn",
+		"tailwindcss/enforces-shorthand": "warn",
+		"tailwindcss/migration-from-tailwind-2": "warn",
+		"tailwindcss/no-custom-classname": "warn",
+		"tailwindcss/no-contradicting-classname": "error",
+		"tailwindcss/no-unnecessary-arbitrary-value": "warn",
+		// eslint-plugin-import recommended + typescript. `import/default` is off: oxlint's resolver does not see the
+		// default export of a `.d.ts` that uses `export =`, nor of Vite `?worker` imports, and tsc checks both anyway.
+		"import/namespace": "error",
+		"import/default": "off",
+		"import/no-named-as-default": "warn",
+		"import/no-named-as-default-member": "off",
+		"import/no-duplicates": "warn",
+		// eslint-plugin-promise flat/recommended
+		"promise/always-return": "error",
+		"promise/no-return-wrap": "error",
+		"promise/param-names": "error",
+		"promise/catch-or-return": "error",
+		"promise/no-nesting": "warn",
+		"promise/no-promise-in-callback": "warn",
+		"promise/no-callback-in-promise": "warn",
+		"promise/no-new-statics": "error",
+		"promise/no-return-in-finally": "warn",
+		"promise/valid-params": "warn",
+		// eslint-plugin-perfectionist recommended-natural
+		"perfectionist/sort-array-includes": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-classes": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-decorators": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-enums": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-export-attributes": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-exports": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-heritage-clauses": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-import-attributes": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-imports": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-interfaces": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-intersection-types": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-jsx-props": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-maps": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-modules": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-named-exports": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-named-imports": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-object-types": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-objects": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-sets": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-switch-case": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-union-types": ["error", { "type": "natural", "order": "asc" }],
+		"perfectionist/sort-variable-declarations": ["error", { "type": "natural", "order": "asc" }]
+	},
+	"overrides": [
+		{
+			"files": ["**/*.ts", "**/*.tsx"],
+			"env": {
+				"browser": true,
+				"node": true
+			},
+			"globals": {
+				"chrome": "readonly"
+			},
+			"rules": {
+				// typescript-eslint's eslint-recommended overrides: checks TypeScript itself performs.
+				"constructor-super": "off",
+				"getter-return": "off",
+				"no-class-assign": "off",
+				"no-const-assign": "off",
+				"no-dupe-class-members": "off",
+				"no-dupe-keys": "off",
+				"no-func-assign": "off",
+				"no-import-assign": "off",
+				"no-new-native-nonconstructor": "off",
+				"no-obj-calls": "off",
+				"no-redeclare": "off",
+				"no-setter-return": "off",
+				"no-this-before-super": "off",
+				"no-unreachable": "off",
+				"no-unsafe-negation": "off",
+				"no-var": "error",
+				"no-with": "off",
+				"prefer-const": ["error", { "destructuring": "any", "ignoreReadBeforeAssign": false }],
+				"prefer-rest-params": "error",
+				"prefer-spread": "error",
+				// typescript-eslint recommendedTypeChecked
+				"no-array-constructor": "error",
+				"no-implied-eval": "off",
+				"no-unused-expressions": "error",
+				"no-throw-literal": "off",
+				"prefer-promise-reject-errors": "off",
+				"require-await": "off",
+				"typescript/await-thenable": "error",
+				"typescript/ban-ts-comment": "error",
+				"typescript/explicit-module-boundary-types": "off",
+				"typescript/no-array-delete": "error",
+				"typescript/no-base-to-string": "error",
+				"typescript/no-duplicate-enum-values": "error",
+				"typescript/no-duplicate-type-constituents": "error",
+				"typescript/no-empty-object-type": "error",
+				"typescript/no-explicit-any": "off",
+				"typescript/no-extra-non-null-assertion": "error",
+				"typescript/no-floating-promises": "error",
+				"typescript/no-for-in-array": "error",
+				"typescript/no-implied-eval": "error",
+				"typescript/no-misused-new": "error",
+				"typescript/no-misused-promises": "error",
+				"typescript/no-namespace": "error",
+				"typescript/no-non-null-asserted-optional-chain": "error",
+				"typescript/no-redundant-type-constituents": "error",
+				"typescript/no-require-imports": "error",
+				"typescript/no-this-alias": "error",
+				"typescript/no-unnecessary-type-assertion": "error",
+				"typescript/no-unnecessary-type-constraint": "error",
+				"typescript/no-unsafe-argument": "error",
+				"typescript/no-unsafe-assignment": "error",
+				"typescript/no-unsafe-call": "error",
+				"typescript/no-unsafe-declaration-merging": "error",
+				"typescript/no-unsafe-enum-comparison": "error",
+				"typescript/no-unsafe-function-type": "error",
+				"typescript/no-unsafe-member-access": "error",
+				"typescript/no-unsafe-return": "error",
+				"typescript/no-unsafe-unary-minus": "error",
+				"typescript/no-wrapper-object-types": "error",
+				"typescript/only-throw-error": "error",
+				"typescript/prefer-as-const": "error",
+				"typescript/prefer-namespace-keyword": "error",
+				"typescript/prefer-promise-reject-errors": "error",
+				"typescript/require-await": "error",
+				"typescript/restrict-plus-operands": "error",
+				"typescript/restrict-template-expressions": "off",
+				"typescript/triple-slash-reference": "error",
+				"typescript/unbound-method": "error",
+				// Project rules
+				"import/first": "error",
+				"no-empty": ["error", { "allowEmptyCatch": true }],
+				"no-secrets/no-secrets": ["error", { "tolerance": 5 }],
+				"no-unused-vars": [
+					"error",
+					{
+						"args": "all",
+						"argsIgnorePattern": "^_",
+						"caughtErrors": "all",
+						"caughtErrorsIgnorePattern": "^_",
+						"destructuredArrayIgnorePattern": "^_",
+						"ignoreRestSiblings": true,
+						"varsIgnorePattern": "^_"
+					}
+				],
+				"no-useless-escape": "off",
+				"prefer-destructuring": ["error", { "array": true, "object": true }, { "enforceForRenamedProperties": true }],
+				"react/react-in-jsx-scope": "off",
+				"tailwindcss/classnames-order": "error",
+				"tailwindcss/no-custom-classname": "off"
+			}
+		},
+		{
+			"files": ["**/*.js", "**/*.mjs", "**/*.cjs"],
+			"env": {
+				"node": true
+			},
+			"rules": {
+				// eslint:recommended's no-undef only ever mattered for plain JS; TypeScript covers it in .ts files.
+				"no-undef": "error"
+			}
+		}
+	]
+}
