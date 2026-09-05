@@ -1,6 +1,7 @@
-// Run Innertube commands through YouTube's own command pipeline (ytd-app.resolveCommand).
-// YouTube then handles the request, the authentication, and the response actions,
-// which includes its own toasts.
+/**
+ * Runs Innertube commands through YouTube's own command pipeline, ytd-app.resolveCommand. YouTube then handles the
+ * request, the authentication and the response actions, including its own toasts.
+ */
 
 export type InnertubeCommand = Record<string, unknown>;
 

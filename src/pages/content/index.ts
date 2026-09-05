@@ -225,8 +225,10 @@ function getProp(obj: unknown, key: string): unknown {
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
 }
-// onScreenDisplay changes arrive per leaf path, so every field maps to the
-// same broadcast carrying the full fresh slice.
+/**
+ * onScreenDisplay changes arrive per leaf path, so every field maps to the same broadcast, which carries the full
+ * fresh slice.
+ */
 const buildOnScreenDisplayChange = ({ options }: { options: configuration }) => ({ onScreenDisplay: options.onScreenDisplay });
 const changeHandlers: {
 	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;

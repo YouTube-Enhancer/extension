@@ -73,11 +73,13 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	sendContentOnlyMessage("pageLoaded", undefined);
 
-	// The content script only forwards storage changes from "pageLoaded" on, and the options above were read
-	// well before that, so a setting changed while this page was setting up (a few seconds on a slow load) would
-	// otherwise be lost until the next load. A second read after the forwarding is on catches up on any such change.
-	// The baseline is the config the orchestrator last applied, not the options read above: a change the forwarding
-	// has already delivered by now is then seen as applied instead of being applied a second time.
+	/**
+	 * The content script only forwards storage changes after it receives "pageLoaded", and the options above were
+	 * read well before that. A setting changed while the page was still setting up (a few seconds on a slow load)
+	 * would otherwise be lost until the next load. This second read, taken once forwarding is on, catches up on any
+	 * such change. The baseline is the config the orchestrator last applied, not the options read above, so a change
+	 * the forwarding has already delivered counts as applied and is not applied twice.
+	 */
 	const {
 		data: { options: currentOptions }
 	} = await waitForSpecificMessage("options", "request_data", "content");

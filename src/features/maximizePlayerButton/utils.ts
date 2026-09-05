@@ -26,9 +26,11 @@ type HeaderState = {
 };
 
 async function changeMaximizeButtonState(maximized: boolean) {
-	// The player is maximized and minimized from outside the button too - Escape, navigation, YouTube's own size
-	// buttons - so the controller is told the state: it keeps aria-checked, the menu item's checked class and the
-	// tracked record - which a relocated button is rebuilt from - together.
+	/**
+	 * The player is maximized and minimized from outside the button too: Escape, navigation and YouTube's own size
+	 * buttons. The controller keeps aria-checked, the menu item's checked class and the tracked record (which a
+	 * relocated button is rebuilt from) in step, so it is told the new state.
+	 */
 	updateFeatureButtonChecked("maximizePlayerButton", maximized);
 	const button = getFeatureButton("maximizePlayerButton");
 	if (!button || !(button instanceof HTMLButtonElement)) return;

@@ -9,12 +9,16 @@ export async function getCurrentChannelId(): Promise<Nullable<string>> {
 		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
 		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
 		: null;
-	// Prefer the live player state — reflects the currently-loaded video and updates on SPA navigation,
-	// unlike ytInitialPlayerResponse which is only set for the first video loaded on the page.
+	/**
+	 * Prefer the live player state: it reflects the currently loaded video and updates on SPA navigation, unlike
+	 * ytInitialPlayerResponse, which is only set for the first video loaded on the page.
+	 */
 	if (playerContainer) {
 		try {
-			// The player's full response updates with every loaded video, so its videoDetails.channelId
-			// stays in lockstep with the video being played (unlike DOM links during SPA navigation).
+			/**
+			 * The player's full response updates with every loaded video, so its videoDetails.channelId stays in step
+			 * with the video being played, unlike DOM links during an SPA navigation.
+			 */
 			const playerResponse = playerContainer.getPlayerResponse?.() as undefined | { videoDetails?: { channelId?: string } };
 			const responseChannelId = playerResponse?.videoDetails?.channelId;
 			if (responseChannelId) return responseChannelId;
@@ -66,12 +70,16 @@ export async function resolveChannelIdFromLink(input: string): Promise<Nullable<
 		});
 		if (!response.ok) return null;
 		const html = await response.text();
-		// The canonical link is the page's own authoritative identity — on channel pages it points
-		// to /channel/UC... even for handle URLs, avoiding associated-channels false positives.
+		/**
+		 * The canonical link is the page's own authoritative identity. On channel pages it points to /channel/UC...
+		 * even for handle URLs, which avoids false positives from associated channels.
+		 */
 		const canonicalChannelId = html.match(/<link[^>]*rel="canonical"[^>]*href="https:\/\/www\.youtube\.com\/channel\/([\w-]+)"/)?.[1];
 		if (canonicalChannelId) return canonicalChannelId;
-		// externalId/browseId carry the main channel id on channel pages; the loose channelId match
-		// (videoDetails.channelId) is only reliable on watch/shorts pages, so keep it last.
+		/**
+		 * externalId and browseId carry the main channel id on channel pages. The loose channelId match,
+		 * videoDetails.channelId, is only reliable on watch and shorts pages, so it stays last.
+		 */
 		const extracted =
 			html.match(/"externalId":"(UC[\w-]+)"/)?.[1] ?? html.match(/"browseId":"(UC[\w-]+)"/)?.[1] ?? html.match(/"channelId":"(UC[\w-]+)"/)?.[1];
 		return extracted ?? null;

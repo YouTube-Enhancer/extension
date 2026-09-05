@@ -85,9 +85,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 	}
 
 	private createCanvas(): HTMLCanvasElement {
-		// Always build a fresh element. Reusing the canvas that a previous display left behind would
-		// keep its position offsets (e.g. a top-left `left`/`top` on a bottom-right display) and let
-		// the previous display's removal timer cut this one short.
+		/**
+		 * Always build a fresh element. Reusing the canvas a previous display left behind would keep its position
+		 * offsets, such as a top-left `left`/`top` on a bottom-right display, and let the previous display's removal
+		 * timer cut this one short.
+		 */
 		const { displayId } = this;
 		const canvas = document.createElement("canvas");
 		canvas.id = displayId;

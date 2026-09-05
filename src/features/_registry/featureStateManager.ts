@@ -110,10 +110,10 @@ class FeatureStateManager extends FeatureManagerBase {
 			{ fallback: undefined }
 		);
 
-		// Convert null (from safelyExecute error fallback) to undefined
-		// to prevent errors when spreading the result in hydrateState
-		// and to maintain consistency with expected return type where
-		// undefined means "no migration result"
+		/**
+		 * safelyExecute falls back to null on error. Return undefined instead: hydrateState spreads the result, and
+		 * undefined is its convention for "no migration result".
+		 */
 		return result === null ? undefined : result;
 	}
 	private shouldPersistState<K extends FeatureKeysWithState>(feature: FeatureBaseWithState<K>) {

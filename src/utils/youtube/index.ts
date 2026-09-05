@@ -1,6 +1,8 @@
-// One lazy Innertube client for the whole extension, and reads built on it.
-// Prefer YouTube's own command pipeline (src/utils/dom/nativeCommands.ts) for writes.
-// Use this client for reads, and as the fallback when the pipeline is unavailable.
+/**
+ * One lazy Innertube client for the whole extension, and the reads built on it. Use it for reads, and as the fallback
+ * when YouTube's own command pipeline (src/utils/dom/nativeCommands.ts) is unavailable; prefer the pipeline for
+ * writes.
+ */
 
 import type { Nullable } from "@/src/types";
 

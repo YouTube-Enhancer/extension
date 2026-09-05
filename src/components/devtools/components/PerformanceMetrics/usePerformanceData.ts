@@ -91,8 +91,10 @@ export function usePerformanceData(): {
 				});
 			}
 			const g = groups.get(phase)!;
-			// For root operations (depth 0), use duration which includes nested time
-			// For nested operations, use exclusiveDuration
+			/**
+			 * A root operation (depth 0) counts its full duration, nested time included; a nested operation counts
+			 * only its exclusive duration.
+			 */
 			const timeToAdd = m.depth === 0 ? m.duration : m.exclusiveDuration;
 			g.totalTime += timeToAdd;
 			g.count++;

@@ -44,8 +44,11 @@ async function setupSaveToWatchLaterButtons() {
 	const containerSelector = onWatchPage ? WATCH_CONTAINER_SELECTOR : `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
 	const rowButtons = createRowButtonController(isCurrent);
 
-	// YouTube can re-create a button host on a re-render, which silently drops listeners on the host.
-	// Capture phase, so a stopPropagation in YouTube's own handlers cannot swallow the click.
+	/**
+	 * The listener is delegated because YouTube can re-create a button host on a re-render, which silently drops
+	 * listeners attached to the host. It runs in the capture phase so a stopPropagation in YouTube's own handlers
+	 * cannot swallow the click.
+	 */
 	saveClickListener = (event) => {
 		const host = (event.target as Nullable<HTMLElement>)?.closest?.(`.${BUTTON_CLASS}`) as Nullable<YtButtonViewModelElement>;
 		if (!host) return;
@@ -64,8 +67,10 @@ async function setupSaveToWatchLaterButtons() {
 			host,
 			isCurrent,
 			onSuccess: () => {
-				// Removal is a mutation, and the next observer pass would re-add the button.
-				// Mark the video as saved first, so the passes skip it.
+				/**
+				 * Removing the button is a mutation, and the next observer pass would add it back. Mark the video as
+				 * saved first so the passes skip it.
+				 */
 				markLockupSaved(lockup);
 				host.remove();
 			},
@@ -137,10 +142,11 @@ export default createFeature({
 	},
 	onNavigate: async () => {
 		teardownMachinery();
-		// Keep the card buttons in place: YouTube destroys them with the old page, and a cached
-		// page comes back with working buttons, with no flash. The dedupe selector stops duplicates.
-		// The actions row is the exception. YouTube reuses it between watch pages, and the next
-		// video needs a fresh membership check.
+		/**
+		 * The card buttons stay in place: YouTube destroys them with the old page, and a cached page comes back with
+		 * working buttons and no flash, while the dedupe selector prevents duplicates. The actions row is the
+		 * exception: YouTube reuses it between watch pages, and the next video needs a fresh membership check.
+		 */
 		document.querySelector(`${ACTIONS_ROW_SELECTOR} .${BUTTON_CLASS}`)?.remove();
 		await setupSaveToWatchLaterButtons();
 	}

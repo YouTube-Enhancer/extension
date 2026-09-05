@@ -132,8 +132,11 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 				await Promise.all(promises);
 
-				// A newer run or a cleanup may have aborted this one while its tasks ran. Ending the run here would bump
-				// the generation a second time, and the newer run, still waiting for the player, would then drop its tasks.
+				/**
+				 * A newer run or a cleanup may have aborted this run while its tasks were executing. Finishing here
+				 * would bump the generation a second time, and the newer run, still waiting for the player, would
+				 * then give up on its tasks.
+				 */
 				if (state.aborted) {
 					resolve(state.taskResults);
 					return;
@@ -147,9 +150,11 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 					this.abortRetry(featureId);
 					resolve(state.taskResults);
 
-					// Installed after a failed run as well: a player that is still showing an ad or has not started
-					// gives the tasks nothing to act on, and the state change that ends that is the only signal
-					// that another attempt is worth making.
+					/**
+					 * The hook is installed after a failed run too. A player that is still showing an ad, or has not
+					 * started, gives the tasks nothing to act on, and the state change that ends that is the only
+					 * signal that another attempt is worthwhile.
+					 */
 					if (resolved.onPlayerStateChange) {
 						this.setupStateHook(featureId, () => {
 							void this.executeWithRetries(featureId, tasks, taskNames, {
@@ -237,8 +242,10 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		if (!player) return;
 
 		player.addEventListener("onStateChange", handler);
-		// An ad ending is not always a state change (the ad and the content both report "playing"), so the class
-		// YouTube keeps on the player while an ad shows is watched too; the tasks get their run once it clears.
+		/**
+		 * An ad ending is not always a state change, since the ad and the content both report "playing". The class
+		 * YouTube keeps on the player while an ad shows is watched as well, and the tasks run once it clears.
+		 */
 		let adWasShowing = player.classList.contains("ad-showing");
 		entry.adObserver = new MutationObserver(() => {
 			const adShowing = player.classList.contains("ad-showing");

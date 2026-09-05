@@ -59,9 +59,10 @@ function makePlayerSpeedTask(speed: number, channelSpeeds?: string): () => Promi
 		if (!playerContainer || !playerContainer.setPlaybackRate) return false;
 		const playerVideoData = await playerContainer.getVideoData();
 		if (playerVideoData.isLive) return true;
-		// After SPA navigation the player briefly reports the previous video's data.
-		// Retry until the player has switched to the video the URL points to instead of
-		// writing a possibly-stale speed onto the previous video.
+		/**
+		 * After an SPA navigation the player briefly reports the previous video's data. Retry until it has switched
+		 * to the video the URL points to, instead of writing a possibly stale speed onto the previous video.
+		 */
 		const urlVideoId = getUrlVideoId();
 		if (!urlVideoId || playerVideoData.video_id !== urlVideoId) return false;
 		// A manual adjustment on this video wins over enforcement until navigation.
@@ -152,8 +153,10 @@ function detachRateChangeListener() {
 function handleRateChange(video: HTMLVideoElement) {
 	const { playbackRate: rate } = video;
 	const urlVideoId = getUrlVideoId();
-	// Once a manual override is active, every change is recorded so restore-on-disable
-	// tracks the user's latest choice — including rates that match an enforced value.
+	/**
+	 * Once a manual override is active, every change is recorded so that restore-on-disable tracks the user's latest
+	 * choice, including rates that match an enforced value.
+	 */
 	if (!isManualOverrideActive(urlVideoId) && isOwnWrite(rate)) return;
 	markManualOverride(urlVideoId);
 	void recordExternalSpeed(rate);

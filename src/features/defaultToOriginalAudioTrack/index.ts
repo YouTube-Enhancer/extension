@@ -8,8 +8,10 @@ import { metadata } from "./index.metadata";
 import { findDefaultTrack, parseAudioTrack, type ParsedAudioTrack } from "./utils";
 
 let originalAudioTrack: Nullable<ParsedAudioTrack> = null;
-// The video the saved track was read from: an in-page navigation swaps the video without re-running onEnable, so a
-// track captured for the previous video must never be restored into the one that is playing now.
+/**
+ * The video the saved track was read from. An in-page navigation swaps the video without re-running onEnable, and a
+ * track captured for the previous video must never be restored into the one playing now.
+ */
 let originalAudioTrackVideoId: Nullable<string> = null;
 
 function clearOriginalAudioTrack() {

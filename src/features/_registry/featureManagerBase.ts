@@ -16,8 +16,10 @@ export abstract class FeatureManagerBase {
 	protected abstract getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState;
 
 	protected logErrorToTracker(operation: string, error: unknown): void {
-		// Try to get a feature ID from context if possible, otherwise use a generic identifier
-		// This is designed to be overridden by subclasses if they have a specific feature ID
+		/**
+		 * Subclasses with a specific feature ID override getFeatureIdForErrorLogging; the base returns a generic
+		 * identifier.
+		 */
 		const featureId = this.getFeatureIdForErrorLogging();
 
 		if (featurePerformanceTracker.isEnabled()) {

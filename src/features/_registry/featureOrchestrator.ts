@@ -14,8 +14,10 @@ import { resolveEnabled } from "./featureRegistryCore";
 export class FeatureOrchestrator extends FeatureManagerBase {
 	private enableAllPromise: Nullable<Promise<void>> = null;
 	private featureEnabledState = new Map<FeatureKeys, boolean>();
-	// The newest request that arrived for a feature while an update of it was in flight; it runs right after.
-	// Dropping it instead lost a setting changed while the page, or a navigation, was still being set up.
+	/**
+	 * The newest request that arrived for a feature while an update of it was in flight. It runs as soon as the
+	 * update finishes; dropping it lost settings changed while the page, or a navigation, was still being set up.
+	 */
 	private pendingUpdates = new Map<FeatureKeys, { config: configuration[FeatureKeys]; enabled: boolean }>();
 	private sortedFeaturesCache: Nullable<AnyFeatureBase[]> = null;
 	private sortedFeaturesCacheDirty = true;

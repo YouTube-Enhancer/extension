@@ -135,9 +135,10 @@ async function startContainerGeometryObserver() {
 	});
 	containerGeometryObserver.observe(player);
 	observedPlayerElement = player;
-	// Panels (live chat, description, ...) toggle via attributes on the watch
-	// element, so attribute mutations are a second sync trigger alongside the
-	// player's own resizes.
+	/**
+	 * Panels such as the live chat and the description toggle through attributes on the watch element, so attribute
+	 * mutations are a second sync trigger next to the player's own resizes.
+	 */
 	const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
 	if (watchElement) {
 		containerGeometryMutationObserver = new MutationObserver(() => {
@@ -228,8 +229,7 @@ function syncContainerGeometry() {
 	const playerRect = player.getBoundingClientRect();
 	if (playerRect.width === 0) return;
 	container.style.width = `${playerRect.width}px`;
-	// Derive the offset from where the container would sit with no margin, so
-	// parent padding and RTL flow don't skew the alignment.
+	// Measure from where the container sits with no margin, so parent padding and RTL flow do not skew the alignment.
 	const currentMarginLeft = parseFloat(container.style.marginLeft) || 0;
 	const naturalLeft = container.getBoundingClientRect().left - currentMarginLeft;
 	container.style.marginLeft = `${playerRect.left - naturalLeft}px`;
@@ -1022,8 +1022,10 @@ function updateMenuSize(menu: HTMLDivElement, panel: HTMLDivElement) {
 	window.dispatchEvent(new CustomEvent("yte-feature-menu-resized"));
 }
 
-// The tracked record is what a button is rebuilt from when it is relocated, so its checked state and label have
-// to follow the live button instead of staying on the values the button was added with.
+/**
+ * The tracked record is what a relocated button is rebuilt from, so its checked state and label have to follow the
+ * live button rather than stay on the values the button was added with.
+ */
 function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.checked = checked;

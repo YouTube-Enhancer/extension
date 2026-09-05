@@ -49,8 +49,10 @@ export function createTooltip({
 			const tooltip = makeTooltip();
 			const isMini = document.documentElement.classList.contains("yte-mini-player-active");
 			const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-			// Buttons that live outside the player (below it, in the playlist panel, ...) need the tooltip on the
-			// body, otherwise it is positioned against the player box it is not in.
+			/**
+			 * Buttons outside the player, below it or in the playlist panel, need the tooltip on the body; otherwise
+			 * it is positioned against a player box they are not in.
+			 */
 			const isButtonOutsidePlayer = !playerContainer?.contains(element);
 			if (isMini || isButtonOutsidePlayer) {
 				document.body.appendChild(tooltip);

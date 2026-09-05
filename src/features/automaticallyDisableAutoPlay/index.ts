@@ -6,24 +6,29 @@ import { isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
-// The autoplay state before we first overrode it, so it can be restored if the
-// feature is switched off.
+/** The autoplay state before the first override, restored when the feature is switched off. */
 let previousAutoPlayState: Nullable<boolean> = null;
-// Override YouTube's default autoplay only once per session; later videos keep
-// whatever the user chose.
+/** YouTube's default autoplay is overridden once per session; later videos keep whatever the user chose. */
 let hasOverriddenDefault = false;
-// When the toggle was last clicked and how often, so the two retry loops a navigation starts (onEnable and
-// onNavigate) cannot click in quick succession and toggle autoplay straight back on.
+/**
+ * When the toggle was last clicked, and how many times. The two retry loops a navigation starts, from onEnable and
+ * onNavigate, must not click in quick succession and toggle autoplay straight back on.
+ */
 let lastToggleClickAt = 0;
 let toggleClickAttempts = 0;
 const MAX_TOGGLE_CLICK_ATTEMPTS = 3;
 const TOGGLE_CLICK_INTERVAL = 1000;
-// YouTube re-initialises the toggle from the account's setting shortly after a navigation, which can undo an
-// override that had already taken, so "off" has to hold for this many reads (300 ms apart) before the work is done.
+/**
+ * YouTube re-initializes the toggle from the account setting shortly after a navigation, which can undo an override
+ * that had already taken. "Off" therefore has to hold for this many reads, 300 ms apart, before the work counts as
+ * done.
+ */
 let stableOffReads = 0;
 const STABLE_OFF_READS = 6;
-// A real click on the toggle is the user's choice, which ends the override for the session: without this the
-// stability check above would treat the user's click like a YouTube reset and switch autoplay off again.
+/**
+ * A real click on the toggle is the user's choice and ends the override for the session. Without this flag the
+ * stability check would treat the user's click like a YouTube reset and switch autoplay off again.
+ */
 let userChoseAutoPlay = false;
 let watchedToggle: Nullable<{ element: HTMLButtonElement; handler: (event: MouseEvent) => void }> = null;
 
@@ -90,15 +95,19 @@ function makeEnableTask(): () => boolean {
 			hasOverriddenDefault = true;
 			return true;
 		}
-		// aria-checked can briefly read a premature "false" just after playback starts; wait for a non-false
-		// value before trusting it. A "true" is what the user had, so it is remembered as soon as it shows.
+		/**
+		 * aria-checked can briefly read a premature "false" just after playback starts, so a "false" is only trusted
+		 * once it has settled. A "true" is what the user had, so it is remembered as soon as it shows.
+		 */
 		if (current) previousAutoPlayState ??= true;
 		else {
 			settleAttempts++;
 			if (settleAttempts < 10) return false;
 		}
-		// Only count the override as done once the toggle reports "off" and keeps reporting it: a click that
-		// was dropped, or a state YouTube resets a moment later, would otherwise end the work with autoplay on.
+		/**
+		 * The override only counts as done once the toggle reports "off" and keeps reporting it. A dropped click, or
+		 * a state that YouTube resets a moment later, would otherwise end the work with autoplay still on.
+		 */
 		if (!turnAutoPlayOff(toggle)) return false;
 		previousAutoPlayState ??= false;
 		hasOverriddenDefault = true;
@@ -107,16 +116,20 @@ function makeEnableTask(): () => boolean {
 }
 
 function makeNavigateTask(): () => boolean {
-	// Only override on the first session navigation; once the user has made their
-	// choice, later videos keep whatever they chose.
+	/**
+	 * Overrides only while the session's default has not been overridden yet; after that, later videos keep whatever
+	 * the user chose.
+	 */
 	return (): boolean => {
 		if (hasOverriddenDefault) return true;
 		const toggle = document.querySelector<HTMLButtonElement>(".ytp-autonav-toggle");
 		if (!toggle) return false;
 		watchToggleForUserClicks(toggle);
 		if (readAutoPlayState() === null) return false;
-		// Same as the enable task: a dropped click leaves autoplay on and YouTube may reset the toggle a moment
-		// after the navigation, so this keeps retrying until "off" holds instead of trusting the first reading.
+		/**
+		 * Same as the enable task: a dropped click leaves autoplay on, and YouTube may reset the toggle a moment
+		 * after the navigation, so this retries until "off" holds rather than trusting the first reading.
+		 */
 		return turnAutoPlayOff(toggle);
 	};
 }
@@ -160,9 +173,11 @@ function turnAutoPlayOff(toggle: HTMLButtonElement): boolean {
 		return stableOffReads >= STABLE_OFF_READS;
 	}
 	stableOffReads = 0;
-	// Stop clicking after a few dropped attempts so a toggle that never responds cannot be clicked forever, without
-	// calling the override done while autoplay is still on: that would end the work for the whole session, whereas
-	// the next video gets a fresh budget from onNavigate.
+	/**
+	 * After a few dropped attempts, stop clicking so a toggle that never responds is not clicked forever. That is not
+	 * success, though: reporting the override as done while autoplay is still on would end the work for the whole
+	 * session, whereas the next video gets a fresh budget from onNavigate.
+	 */
 	if (toggleClickAttempts >= MAX_TOGGLE_CLICK_ATTEMPTS) return false;
 	if (Date.now() - lastToggleClickAt >= TOGGLE_CLICK_INTERVAL) {
 		lastToggleClickAt = Date.now();
@@ -176,8 +191,10 @@ function turnAutoPlayOff(toggle: HTMLButtonElement): boolean {
 export default createFeature({
 	...metadata,
 	onConfigChange: (config) => {
-		// Switching the feature off should let it override again when re-enabled,
-		// including when that happens off a watch page where onDisable never runs.
+		/**
+		 * Switching the feature off lets it override again when it is re-enabled. This also covers a switch made off
+		 * a watch page, where onDisable never runs.
+		 */
 		if (!config.enabled) {
 			hasOverriddenDefault = false;
 			resetToggleClicks();
@@ -199,8 +216,7 @@ export default createFeature({
 		});
 	},
 	onNavigate: () => {
-		// Each video gets its own click budget and stability count; both are otherwise only cleared when the feature
-		// is switched off.
+		// Each video gets its own click budget and stability count; both otherwise reset only on disable.
 		toggleClickAttempts = 0;
 		stableOffReads = 0;
 		void registry.playerManager.executeWithRetries(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {

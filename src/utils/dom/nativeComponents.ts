@@ -1,7 +1,9 @@
-// YouTube's framework renders, themes, and animates yt-button-view-model elements. We only supply the props.
-// Do not attach listeners or long-lived state to a host: YouTube can re-create it on a
-// re-render, and only the props survive. Handle clicks with a delegated listener in the
-// feature. Transient visual state may use the buttonOverrides prop.
+/**
+ * YouTube's framework renders, themes and animates yt-button-view-model elements; this module only supplies the
+ * props. Do not attach listeners or long-lived state to a host: YouTube can re-create it on a re-render, and only the
+ * props survive. Handle clicks with a delegated listener in the feature, and use the buttonOverrides prop for
+ * transient visual state.
+ */
 
 import { findInObjectTree } from "@/src/utils/misc";
 
@@ -15,8 +17,10 @@ export type ButtonViewModelVariant = {
 // The custom svg must be monochrome.
 export type NativeButtonIcon = NativeIconName | { svg: string };
 
-// Icon names verified against YouTube's icon set. Extend the union when you verify more names.
-// A wrong name renders an empty button with no error.
+/**
+ * Icon names verified against YouTube's icon set. A wrong name renders an empty button with no error, so extend the
+ * union only with names you have verified.
+ */
 export type NativeIconName = "CHECK_CIRCLE_THICK" | "WATCH_LATER";
 
 export interface YtButtonViewModelElement extends HTMLElement {
@@ -59,11 +63,15 @@ export function createNativeButton({
 	variant?: Partial<ButtonViewModelVariant>;
 }): YtButtonViewModelElement {
 	const host = document.createElement("yt-button-view-model") as YtButtonViewModelElement;
-	// A custom icon works through a stylesheet keyed on a host class. Both survive a
-	// YouTube re-render: the stylesheet never leaves, and the classes prop re-applies the class.
+	/**
+	 * A custom icon works through a stylesheet keyed on a host class. Both survive a YouTube re-render: the
+	 * stylesheet never leaves, and the classes prop re-applies the class.
+	 */
 	const classes = typeof icon === "object" ? `${className} ${ensureCustomIconClass(icon.svg)}` : className;
-	// The classes prop puts the class on the host after render. Set it now as well,
-	// so the caller's selectors match in the frames before the first render.
+	/**
+	 * The classes prop puts the class on the host after the render. Setting it now as well lets the caller's
+	 * selectors match in the frames before the first render.
+	 */
 	host.className = classes;
 	host.rawProps = {
 		classes,
@@ -71,8 +79,10 @@ export function createNativeButton({
 			...FALLBACK_VARIANT,
 			...variant,
 			accessibilityText,
-			// A custom icon needs a placeholder name, so YouTube still renders the icon wrapper.
-			// The custom-icon stylesheet hides the placeholder and draws the custom svg.
+			/**
+			 * A custom icon needs a placeholder name so YouTube still renders the icon wrapper. The custom-icon
+			 * stylesheet hides the placeholder and draws the custom svg.
+			 */
 			iconName: typeof icon === "object" ? "WATCH_LATER" : icon,
 			tooltip
 		}
@@ -104,9 +114,11 @@ export function readLockupData(lockup: Element) {
 	return rawProps.data();
 }
 
-// Polymer applies scoped CSS through classes on the children of a host, e.g. "style-scope ytd-menu-renderer".
-// Read them from a sibling so a new element receives the same scoped styles and spacing.
-// The yte- filter keeps our own marker classes off the copy.
+/**
+ * Polymer applies scoped CSS through classes on a host's children, such as "style-scope ytd-menu-renderer". Reading
+ * them from a sibling gives a new element the same scoped styles and spacing. The yte- filter keeps our own marker
+ * classes off the copy.
+ */
 export function readScopeClasses(sibling: Element): string {
 	return [...sibling.classList].filter((name) => !name.startsWith("yte-")).join(" ");
 }
@@ -115,8 +127,10 @@ export function setNativeButtonBusy(host: YtButtonViewModelElement, busy: boolea
 	host.buttonOverrides = busy ? { state: "BUTTON_VIEW_MODEL_STATE_DISABLED" } : {};
 }
 
-// Wait for YouTube to register the component. On a slow load, it can register after us.
-// Resolve false after the timeout, so the caller can degrade instead of waiting forever.
+/**
+ * Waits for YouTube to register the component, which on a slow load can happen after us. Resolves false after the
+ * timeout so the caller can degrade instead of waiting forever.
+ */
 export function waitForNativeButtonComponent(timeout = 10000): Promise<boolean> {
 	if (isNativeButtonComponentAvailable()) return Promise.resolve(true);
 	return Promise.race([
@@ -155,8 +169,10 @@ function ensureCustomIconClass(svg: string): string {
 	return iconClass;
 }
 
-// Keep only the keys that have a value. A key with an undefined value wins in an object
-// spread and would wipe the defaults of the target.
+/**
+ * Keeps only the keys that have a value. A key set to undefined wins in an object spread and would wipe the target's
+ * defaults.
+ */
 function pickVariant(source: Partial<ButtonViewModelVariant>): Partial<ButtonViewModelVariant> {
 	const { buttonSize, state, style, type } = source;
 	return Object.fromEntries(Object.entries({ buttonSize, state, style, type }).filter(([, value]) => Boolean(value)));

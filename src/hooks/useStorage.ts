@@ -5,9 +5,6 @@ import browser from "webextension-polyfill";
 
 export type StorageArea = "local" | "sync";
 
-// custom hook to set chrome local/sync storage
-// should also set a listener on this specific key
-
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 
 /**
@@ -44,7 +41,8 @@ export async function setStorage<T>(key: string, value: T, area: StorageArea = "
 }
 
 /**
- * Returns a stateful value from storage, and a function to update it.
+ * Returns a stateful value backed by a key in the extension's local or sync storage, and a function to update it.
+ * The value follows changes made to that key elsewhere.
  */
 export function useStorage<T>(key: string, initialValue: T, area: StorageArea = "local"): [T, SetValue<T>] {
 	const [storedValue, setStoredValue] = useState<T>(initialValue);
@@ -75,8 +73,7 @@ export function useStorage<T>(key: string, initialValue: T, area: StorageArea = 
 			return newValue;
 		});
 	});
-	// Return a wrapped version of useState's setter function that ...
-	// ... persists the new value to storage.
+	// A wrapped useState setter that also persists the new value to storage.
 	const setValue: SetValue<T> = useCallback((value) => setValueRef.current?.(value), []);
 	return [storedValue, setValue];
 }

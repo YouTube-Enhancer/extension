@@ -22,9 +22,11 @@ function setupLoopObserver(placement: ButtonPlacement) {
 		for (const mutation of mutationList) {
 			if (mutation.type !== "attributes" || mutation.attributeName !== "loop") continue;
 			const { loop } = mutation.target as HTMLVideoElement;
-			// The loop can change without a click on the button, through YouTube's own Loop menu entry, so the controller
-			// is told the state: it keeps aria-checked, the menu item's checked class and the tracked record - which a
-			// relocated button is rebuilt from - together.
+			/**
+			 * The loop can change without a click on the button, through YouTube's own Loop menu entry. The
+			 * controller keeps aria-checked, the menu item's checked class and the tracked record (which a relocated
+			 * button is rebuilt from) in step, so it is told the new state.
+			 */
 			updateFeatureButtonChecked("loopButton", loop);
 			const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("loopButton")}`);
 			if (!button) continue;
