@@ -2,7 +2,13 @@ import type { Nullable, YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/typ
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { getFeatureButton, modifyIconForLightTheme, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import {
+	getFeatureButton,
+	modifyIconForLightTheme,
+	updateFeatureButtonChecked,
+	updateFeatureButtonIcon,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type ModifyElementAction } from "@/src/utils/dom/classList";
 import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
@@ -19,31 +25,20 @@ type HeaderState = {
 	visible: boolean;
 };
 
-async function changeMaximizeButtonToOff() {
+async function changeMaximizeButtonState(maximized: boolean) {
+	// The player is maximized and minimized from outside the button too - Escape, navigation, YouTube's own size
+	// buttons - so the controller is told the state: it keeps aria-checked, the menu item's checked class and the
+	// tracked record - which a relocated button is rebuilt from - together.
+	updateFeatureButtonChecked("maximizePlayerButton", maximized);
 	const button = getFeatureButton("maximizePlayerButton");
 	if (!button || !(button instanceof HTMLButtonElement)) return;
-	button.ariaChecked = "false";
 	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	if (icon && typeof icon === "object" && "off" in icon) {
-		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.off, true));
+	if (icon && typeof icon === "object" && "on" in icon && "off" in icon) {
+		updateFeatureButtonIcon(button, await modifyIconForLightTheme(maximized ? icon.on : icon.off, true));
 	}
 	updateFeatureButtonTitle(
 		"maximizePlayerButton",
-		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle.off)
-	);
-}
-
-async function changeMaximizeButtonToOn() {
-	const button = getFeatureButton("maximizePlayerButton");
-	if (!button || !(button instanceof HTMLButtonElement)) return;
-	button.ariaChecked = "true";
-	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	if (icon && typeof icon === "object" && "on" in icon) {
-		updateFeatureButtonIcon(button, await modifyIconForLightTheme(icon.on, true));
-	}
-	updateFeatureButtonTitle(
-		"maximizePlayerButton",
-		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle.on)
+		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"])
 	);
 }
 function clearHeaderTimeout() {
@@ -195,7 +190,7 @@ export async function maximizePlayer(timeout = 2500) {
 		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
 	if (!inTheaterMode) clickAndRestore(sizeElement);
 	adjustPlayer("add");
-	void changeMaximizeButtonToOn();
+	void changeMaximizeButtonState(true);
 	const { height } = header.getBoundingClientRect();
 	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
 	document.body.style.setProperty("--yte-header-height", `${height}px`);
@@ -216,7 +211,7 @@ export async function minimizePlayer() {
 	destroyPlayerController();
 	showHeader();
 	clearHeaderTimeout();
-	void changeMaximizeButtonToOff();
+	void changeMaximizeButtonState(false);
 }
 
 function adjustPlayer(action: ModifyElementAction) {
