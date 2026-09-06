@@ -11,6 +11,7 @@ import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { round } from "@/src/utils/math";
+import { isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
 
@@ -197,11 +198,13 @@ export default createFeature({
 	}
 });
 async function handleVideoChange(resumeType: VideoHistoryResumeType) {
-	// Get the player container element
-	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
-	// If player container is not available, return
+	// At start-up the player is not always in the document yet, and nothing runs this again until the next
+	// navigation, so it is waited for rather than looked up once.
+	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 15000);
 	if (!playerContainer) return;
-	const playerVideoData = await playerContainer.getVideoData();
+	// The first read of a page can still see an empty player, the video played before a navigation, or a
+	// pre-roll ad, whose id would become the history key; wait for the video the page is about instead.
+	const playerVideoData = currentVideoId ? await playerContainer.getVideoData() : await waitForPlayerVideoData(playerContainer);
 	// If the video is live return
 	if (playerVideoData.isLive) return;
 	const { author: rawAuthor } = playerVideoData;
@@ -284,6 +287,17 @@ function resetState() {
 	lastSavedTimestamp = 0;
 	hasMarkedWatched = false;
 	eventManager.removeEventListeners("videoHistory");
+}
+/** Resolves with the player's video data once it is the video the URL names and no ad is showing, or after `timeout`. */
+async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout = 15000) {
+	const start = Date.now();
+	for (;;) {
+		const data = await playerContainer.getVideoData();
+		const urlVideoId = isWatchPage() ? new URLSearchParams(window.location.search).get("v") : null;
+		const holdsPageVideo = !!data.video_id && (!urlVideoId || data.video_id === urlVideoId);
+		if ((holdsPageVideo && !playerContainer.classList.contains("ad-showing")) || Date.now() - start >= timeout) return data;
+		await new Promise((resolve) => setTimeout(resolve, 200));
+	}
 }
 async function waitForVideoChange(playerContainer: YouTubePlayerDiv, timeout = 5000): Promise<Nullable<VideoId>> {
 	const videoEl = await waitForElement<HTMLVideoElement>("video.video-stream.html5-main-video", timeout);
