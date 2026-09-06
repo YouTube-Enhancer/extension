@@ -12,12 +12,24 @@ import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
-import { clearManualOverride, isManualOverrideActive, isOwnWrite, markExtensionAppliedRate, markManualOverride } from "./manualOverride";
+import {
+	clearManualOverride,
+	installUserInputTracking,
+	isManualOverrideActive,
+	isOwnWrite,
+	markExtensionAppliedRate,
+	markManualOverride,
+	noteUserInput,
+	wasUserInputRecent
+} from "./manualOverride";
 import { parseChannelSpeeds } from "./utils";
 
 const speedValueRegex = /(\d+(?:\.\d+)?)/;
 
 export async function setPlayerSpeed(speed: number) {
+	// Only the extension's own speed controls call this, on the user's behalf: the change is the user's choice
+	// however the click reached the button, so enforcement stands down for it like for any manual change.
+	noteUserInput();
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
 	if (video) video.playbackRate = speed;
 	const playerContainer =
@@ -141,6 +153,11 @@ function setupPlaybackSpeedChangeListener() {
 	}
 }
 let lastRecordedSpeed: Nullable<number> = null;
+/** The speed configuration in force while the feature is enabled, for putting the rate back after YouTube resets it. */
+let enforcedConfig: Nullable<{ channelSpeeds?: string; speed: number }> = null;
+/** YouTube resets the rate a few times per video at most; anything past this is a fight not worth having. */
+const MAX_AUTOMATIC_REAPPLIES = 5;
+let automaticReapplies: { count: number; videoId: Nullable<string> } = { count: 0, videoId: null };
 
 function detachRateChangeListener() {
 	const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
@@ -156,8 +173,27 @@ function handleRateChange(video: HTMLVideoElement) {
 	 * choice, including rates that match an enforced value.
 	 */
 	if (!isManualOverrideActive(urlVideoId) && isOwnWrite(rate)) return;
+	// YouTube writes the rate itself when a video or an ad starts, with nobody touching the page. That is no
+	// choice of the user's, so the configured speed goes back on instead of enforcement standing down.
+	if (!isManualOverrideActive(urlVideoId) && !wasUserInputRecent() && enforcedConfig) {
+		reapplyEnforcedSpeed(urlVideoId);
+		return;
+	}
 	markManualOverride(urlVideoId);
 	void recordExternalSpeed(rate);
+}
+
+function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
+	if (!enforcedConfig) return;
+	if (automaticReapplies.videoId !== urlVideoId) automaticReapplies = { count: 0, videoId: urlVideoId };
+	if (automaticReapplies.count >= MAX_AUTOMATIC_REAPPLIES) return;
+	automaticReapplies.count++;
+	const { channelSpeeds, speed } = enforcedConfig;
+	void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["reapplySpeed"], {
+		maxAttempts: 5,
+		pageTypes: ["watch", "shorts"],
+		waitForLoaded: true
+	});
 }
 
 async function recordExternalSpeed(speed: number) {
@@ -191,6 +227,7 @@ export default createFeature({
 	...metadata,
 	onConfigChange: ({ channelSpeeds, enabled, speed }) => {
 		if (!enabled) return;
+		enforcedConfig = { channelSpeeds, speed };
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
 			onPlayerStateChange: true,
@@ -200,6 +237,7 @@ export default createFeature({
 		void updateEffectivePlaybackSpeedButtons(speed, channelSpeeds);
 	},
 	onDisable: () => {
+		enforcedConfig = null;
 		registry.playerManager.cleanup(metadata.id);
 		detachRateChangeListener();
 		clearManualOverride();
@@ -215,6 +253,8 @@ export default createFeature({
 	},
 	onEnable: ({ channelSpeeds, speed }) => {
 		browserColorLog(`Setting player speed to ${speed}`, "FgMagenta");
+		installUserInputTracking();
+		enforcedConfig = { channelSpeeds, speed };
 		void setupRateChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
@@ -229,6 +269,7 @@ export default createFeature({
 	onInit: setupPlaybackSpeedChangeListener,
 	onNavigate: ({ channelSpeeds, speed }) => {
 		browserColorLog(`Setting player speed to ${speed} (navigation)`, "FgMagenta");
+		enforcedConfig = { channelSpeeds, speed };
 		void setupRateChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
