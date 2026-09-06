@@ -143,6 +143,7 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		"number",
 		"select",
 		"slider",
+		"string-list",
 		"text-input"
 	] as const;
 	type ValidComponent = (typeof validComponents)[number];
@@ -154,6 +155,7 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		"featureMenu",
 		"globalVolume",
 		"hideShorts",
+		"keywordBlocklist",
 		"language",
 		"loopButton",
 		"maximizePlayerButton",
