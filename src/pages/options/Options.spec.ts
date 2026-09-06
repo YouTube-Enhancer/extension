@@ -88,6 +88,13 @@ async function readStoredKey(page: Page, key: string): Promise<unknown> {
 		return stored[storageKey] ?? null;
 	}, key);
 }
+/** Reads the keyword blocklist's newline-separated list out of storage as its lines. */
+async function readStoredKeywords(page: Page): Promise<string[]> {
+	return page.evaluate(async () => {
+		const { keywordBlocklist } = await chrome.storage.local.get<{ keywordBlocklist?: { keywords?: string } }>("keywordBlocklist");
+		return (keywordBlocklist?.keywords ?? "").split("\n").filter((line) => line.length > 0);
+	});
+}
 /** Writes a value that differs from the default so a reset/clear that silently does nothing is observable. */
 async function seedNonDefaultSettings(page: Page): Promise<void> {
 	await page.evaluate(
@@ -268,6 +275,66 @@ test.describe("Options", () => {
 		await expect(page.locator(`div[title="${disabledTooltip}"]`).first()).toBeAttached();
 		await setCheckbox(page, parentLabel, true);
 		await expect(qualitySelect).toBeEnabled();
+	});
+	test("should persist keyword blocklist rows added, edited and removed in the options UI", async ({ page }) => {
+		const locale = await loadLocale("en-US");
+		const enableLabel = translate(locale, "settings.sections.keywordBlocklist.enable.label");
+		const addButton = page.getByRole("button", { name: translate(locale, "settings.sections.keywordBlocklist.settings.keywords.add") });
+		const rows = page.getByLabel(translate(locale, "settings.sections.keywordBlocklist.settings.keywords.item"), { exact: true });
+		const removeButtons = page.getByRole("button", { name: translate(locale, "settings.sections.keywordBlocklist.settings.keywords.remove") });
+		// The list is a child of the feature toggle: off, it is disabled and says which setting to turn on.
+		await expect(addButton).toBeDisabled();
+		const disabledTooltip = translate(locale, "pages.options.extras.optionDisabled.singular").replace("{{OPTION}}", enableLabel);
+		await expect(page.locator(`div[title="${disabledTooltip}"]`).first()).toBeAttached();
+		await setCheckbox(page, enableLabel, true);
+		await expect(addButton).toBeEnabled();
+		await expect(rows).toHaveCount(0);
+		// Every keystroke commits: the list is stored as one keyword per line, blank rows left out.
+		await addButton.click();
+		await expect(rows).toHaveCount(1);
+		await rows.nth(0).fill("alpha");
+		await expect.poll(async () => readStoredKeywords(page)).toEqual(["alpha"]);
+		await addButton.click();
+		await rows.nth(1).fill("beta");
+		await expect.poll(async () => readStoredKeywords(page)).toEqual(["alpha", "beta"]);
+		await rows.nth(0).fill("gamma");
+		await expect.poll(async () => readStoredKeywords(page)).toEqual(["gamma", "beta"]);
+		await removeButtons.nth(0).click();
+		await expect.poll(async () => readStoredKeywords(page)).toEqual(["beta"]);
+		await page.reload();
+		await expect(rows).toHaveCount(1);
+		await expect(rows.nth(0)).toHaveValue("beta");
+	});
+	test("should cap the keyword blocklist at its maximum and hold the add button while a row is blank", async ({ page }) => {
+		const locale = await loadLocale("en-US");
+		const addButton = page.getByRole("button", { name: translate(locale, "settings.sections.keywordBlocklist.settings.keywords.add") });
+		const rows = page.getByLabel(translate(locale, "settings.sections.keywordBlocklist.settings.keywords.item"), { exact: true });
+		const removeButtons = page.getByRole("button", { name: translate(locale, "settings.sections.keywordBlocklist.settings.keywords.remove") });
+		// Seeded past the metadata's max of 100 straight into storage, the list renders the first 100 and no add button.
+		await page.evaluate(
+			async (lines) => {
+				await chrome.storage.local.set({ keywordBlocklist: { enabled: true, keywords: lines.join("\n") } });
+			},
+			Array.from({ length: 120 }, (_, index) => `keyword ${index + 1}`)
+		);
+		await page.reload();
+		await expect(rows).toHaveCount(100);
+		await expect(addButton).toBeDisabled();
+		// The first edit writes the list back at the cap, dropping the surplus from storage.
+		await rows.nth(0).fill("keyword one");
+		await expect.poll(async () => (await readStoredKeywords(page)).length).toBe(100);
+		expect((await readStoredKeywords(page))[0]).toBe("keyword one");
+		await removeButtons.nth(0).click();
+		await expect(rows).toHaveCount(99);
+		await expect(addButton).toBeEnabled();
+		// A blank row holds the add button until it is filled, and is not stored.
+		await addButton.click();
+		await expect(rows).toHaveCount(100);
+		await expect(addButton).toBeDisabled();
+		expect((await readStoredKeywords(page)).length).toBe(99);
+		await rows.nth(99).fill("keyword last");
+		await expect.poll(async () => (await readStoredKeywords(page)).length).toBe(100);
+		await expect(addButton).toBeDisabled();
 	});
 	test("should reveal deep dark colour pickers only for the Custom preset", async ({ page }) => {
 		const locale = await loadLocale("en-US");
