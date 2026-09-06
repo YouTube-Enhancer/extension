@@ -5,7 +5,7 @@ import eventManager from "@/src/events/EventManager";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { ensureReversalSticks, injectButton, pollForDataReady } from "./button";
-import { applyPlaylistPageReversal, applyReversal, waitForDataRefresh } from "./reversal";
+import { applyPlaylistPageReversal, applyReversal, reversePlaylistPage, waitForDataRefresh } from "./reversal";
 import { FEATURE_NAME, getPlaylistPageActionRow, isCurrentlyReversed, isPlaylistDataReady, PLAYLIST_PAGE_WAIT_SELECTOR } from "./utils";
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
@@ -41,7 +41,7 @@ async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	}
 
 	const { isReversed } = stateAPI.getState();
-	if (isReversed) applyPlaylistPageReversal();
+	if (isReversed) await reversePlaylistPage();
 	const row = await getPlaylistPageActionRow();
 	if (row) await injectButton(stateAPI, row);
 
