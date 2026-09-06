@@ -312,6 +312,7 @@ export type SettingConfig<F extends FeatureKeys> =
 	| (ObjectSettingConfig<F> & { id: StringPaths<F> })
 	| (SelectSettingConfig<F> & { id: StringPaths<F> })
 	| (SliderSettingConfig<F> & { id: NumberPaths<F> })
+	| (StringListSettingConfig<F> & { id: StringPaths<F> })
 	| (TextInputSettingConfig<F> & { id: StringPaths<F> });
 export type SettingId<F extends FeatureKeys> = PrefixedPath<F>;
 
@@ -323,6 +324,14 @@ export type SliderSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & 
 	max: number;
 	min: number;
 	step: number;
+};
+
+export type StringListSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
+	addLabel: TSelectFunc;
+	component: "string-list";
+	itemLabel: TSelectFunc;
+	max?: number;
+	removeLabel: TSelectFunc;
 };
 
 export type TextInputSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {

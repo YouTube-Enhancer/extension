@@ -4,8 +4,21 @@ type FuzzyMatchOptions = {
 	threshold?: number;
 };
 
+/** Splits a newline-separated list into trimmed, non-empty entries. */
+export function parseLineList(value: string | undefined): string[] {
+	return (value ?? "")
+		.split("\n")
+		.map((line) => line.trim())
+		.filter((line) => line.length > 0);
+}
+
 export function removeSpecialCharacters(value: string) {
 	return value.replace(/[<>:"|?*]/g, "");
+}
+
+/** Joins entries into the newline-separated form parsed by parseLineList. */
+export function serializeLineList(items: string[]): string {
+	return items.map((item) => item.trim()).join("\n");
 }
 
 export function unique(values: string[]) {

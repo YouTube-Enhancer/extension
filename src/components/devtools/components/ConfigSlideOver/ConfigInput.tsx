@@ -158,6 +158,21 @@ export default function ConfigInput<F extends FeatureKeys>({
 				</div>
 			);
 		}
+		case "string-list": {
+			const val = isString(currentValue) ? currentValue : "";
+			return (
+				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+					<label className="text-sm text-[#d4d4d4]">{label}</label>
+					<textarea
+						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
+						disabled={disabled}
+						onChange={(e) => onChange(setting.id, e.target.value)}
+						rows={4}
+						value={val}
+					/>
+				</div>
+			);
+		}
 		case "text-input": {
 			const val =
 				isString(currentValue) ? currentValue

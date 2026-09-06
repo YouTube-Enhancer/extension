@@ -6,10 +6,22 @@ import type { KeyValueListProps } from "@/src/components/Inputs/KeyValueList/Key
 import type { NumberInputProps } from "@/src/components/Inputs/Number/Number";
 import type { SelectProps } from "@/src/components/Inputs/Select/Select";
 import type { SliderProps } from "@/src/components/Inputs/Slider/Slider";
+import type { StringListProps } from "@/src/components/Inputs/StringList/StringList";
 import type { TextInputProps } from "@/src/components/Inputs/TextInput/TextInput";
 import type { configurationId, Nullable, TSelectorFunc } from "@/src/types";
 
-import { Checkbox, ColorPicker, CSSEditor, FileNameTemplate, KeyValueList, NumberInput, Select, Slider, TextInput } from "@/src/components/Inputs";
+import {
+	Checkbox,
+	ColorPicker,
+	CSSEditor,
+	FileNameTemplate,
+	KeyValueList,
+	NumberInput,
+	Select,
+	Slider,
+	StringList,
+	TextInput
+} from "@/src/components/Inputs";
 import { useSettings } from "@/src/components/Settings/Settings";
 import useSettingsFilter from "@/src/hooks/useSettingsFilter";
 import { textMatcher } from "@/src/utils/string";
@@ -35,6 +47,7 @@ export type SettingInputProps<ID extends configurationId> = (
 	| (NumberInputProps & { type: "number" })
 	| (SelectProps<ID> & { type: "select" })
 	| (SliderProps & { type: "slider" })
+	| (StringListProps & { type: "string-list" })
 	| (TextInputProps & { type: "text-input" })
 ) & {
 	alwaysVisible?: boolean;
@@ -212,6 +225,24 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			const { disabled, disabledReason, initialValue, max, min, onChange, step } = settingProps;
 			return (
 				<Slider disabled={disabled} disabledReason={disabledReason} initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />
+			);
+		}
+		case "string-list": {
+			const { addLabel, className, disabled, disabledReason, itemLabel, label, max, onChange, removeLabel, title, value } = settingProps;
+			return (
+				<StringList
+					addLabel={addLabel}
+					className={className}
+					disabled={disabled}
+					disabledReason={disabledReason}
+					itemLabel={itemLabel}
+					label={label}
+					max={max}
+					onChange={onChange}
+					removeLabel={removeLabel}
+					title={title}
+					value={value}
+				/>
 			);
 		}
 		case "text-input": {
