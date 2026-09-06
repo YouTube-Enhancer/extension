@@ -16,6 +16,8 @@ export const fixtureCapabilities = [
 	"dubbedAudio",
 	"endScreenCards",
 	"playlistManagementButtons",
+	// A chip bar above legacy rows, the only host the remove-all-watched button has: Watch Later, today.
+	"playlistChipBar",
 	"playlistLength",
 	"timestamps",
 	"videoHistory",
@@ -73,6 +75,11 @@ export const pageFixtures: Record<PageType, VideoFixture[]> = {
 		{
 			capabilities: ["playlistLength", "playlistManagementButtons"],
 			url: "https://www.youtube.com/playlist?list=PLA-lApStgDt8"
+		},
+		{
+			// The signed-in account's Watch Later: YouTube's older playlist header with a chip bar over legacy rows.
+			capabilities: ["playlistChipBar"],
+			url: "https://www.youtube.com/playlist?list=WL"
 		}
 	],
 	search: [
