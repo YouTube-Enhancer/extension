@@ -1,0 +1,10 @@
+[data-yte-keyword-blocked] {
+	& video,
+	& #video-preview {
+		visibility: hidden !important;
+	}
+}
+
+body.yte-hover-blocked ytd-video-preview {
+	display: none !important;
+}

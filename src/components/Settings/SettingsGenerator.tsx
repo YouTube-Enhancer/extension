@@ -306,6 +306,32 @@ export default function SettingsGenerator() {
 					/>
 				);
 			}
+			if (node.component === "string-list") {
+				const value = typeof currentValue === "string" ? currentValue : "";
+				const onChange = (newValue: string) => {
+					const event = { currentTarget: { value: newValue } } as ChangeEvent<HTMLInputElement>;
+					setValueOption(settingId)(event);
+				};
+				return (
+					<Setting
+						addLabel={node.addLabel(t)}
+						alwaysVisible={node.alwaysVisible}
+						disabled={isDisabled}
+						disabledReason={disabledReason}
+						featureId={featureId}
+						itemLabel={node.itemLabel(t)}
+						key={settingId}
+						label={node.label(t)}
+						max={node.max}
+						onChange={onChange}
+						parentSetting={parentSettingValue}
+						removeLabel={node.removeLabel(t)}
+						title={node.title(t)}
+						type="string-list"
+						value={value}
+					/>
+				);
+			}
 			if (node.component === "css-editor") {
 				const value = typeof currentValue === "string" ? currentValue : "";
 				const onChange = (newValue: string) => {

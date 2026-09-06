@@ -161,6 +161,11 @@
 							"on": "Zwiększenie głośności ({{value}} dB)"
 						}
 					}
+				},
+				"keywordBlocklist": {
+					"messages": {
+						"maskedTitle": "Blocked keyword"
+					}
 				}
 			}
 		},
@@ -739,6 +744,22 @@
 						"title": "Removes the Shorts section from the Subscriptions feed"
 					}
 				}
+			},
+			"keywordBlocklist": {
+				"enable": {
+					"label": "Enable keyword blocklist",
+					"title": "Masks the titles and thumbnails of videos whose title contains a blocked keyword"
+				},
+				"settings": {
+					"keywords": {
+						"label": "Blocked keywords",
+						"title": "Videos with any of these keywords in their title get their title and thumbnail masked",
+						"add": "Add keyword",
+						"item": "Keyword",
+						"remove": "Remove keyword"
+					}
+				},
+				"title": "Keyword blocklist settings"
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
