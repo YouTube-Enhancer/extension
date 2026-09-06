@@ -63,6 +63,12 @@ let fallbackScanHandle: Nullable<number> = null;
 export default createFeature({
 	...metadata,
 	onConfigChange: (config) => {
+		/**
+		 * The registry hands config changes to disabled features as well. A keyword edit made while the feature is
+		 * off is picked up by the next enable; acting on it here would mask cards on a page the feature is off for,
+		 * with a label onEnable has not resolved yet.
+		 */
+		if (!config.enabled) return;
 		syncConfig(config);
 		syncObserving();
 	},
