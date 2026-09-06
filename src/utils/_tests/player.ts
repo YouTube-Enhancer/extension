@@ -176,7 +176,11 @@ export async function getClosestQuality(
 export async function getCurrentSpeed(page: Page, pageType: PageType = "watch") {
 	if (pageType === "shorts") {
 		const videoSpeed = await page.evaluate(() => {
-			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+			// After moving to another short the outgoing reel's video element is still in the document, ahead of
+			// the active one, so the read is scoped to the active player.
+			const video =
+				document.querySelector<HTMLVideoElement>("div#shorts-player video.html5-main-video") ??
+				document.querySelector<HTMLVideoElement>("video.html5-main-video");
 			return video?.playbackRate ?? null;
 		});
 		if (videoSpeed !== null) return videoSpeed;
@@ -187,7 +191,10 @@ export async function getCurrentSpeed(page: Page, pageType: PageType = "watch") 
 export async function getCurrentVolume(page: Page, pageType: PageType = "watch") {
 	if (pageType === "shorts") {
 		const videoVolume = await page.evaluate(() => {
-			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+			// The outgoing reel's element fades its volume out while it is still in the document; see getCurrentSpeed.
+			const video =
+				document.querySelector<HTMLVideoElement>("div#shorts-player video.html5-main-video") ??
+				document.querySelector<HTMLVideoElement>("video.html5-main-video");
 			if (!video) return null;
 			return Math.round(video.volume * 100);
 		});

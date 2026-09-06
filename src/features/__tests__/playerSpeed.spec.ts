@@ -111,12 +111,11 @@ test.describe("playerSpeed", () => {
 		await setOption(page, "playerSpeed.speed", speed);
 		await enableFeature(page, "playerSpeed.enabled");
 		await expect.poll(async () => readVideoPlaybackRate(page), { timeout: 15000 }).toBe(speed);
-		const manualSpeed = 1.25;
-		// A rate the extension never wrote is recorded as a manual override, which suspends enforcement.
-		await page.evaluate((rate) => {
-			const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
-			if (video) video.playbackRate = rate;
-		}, manualSpeed);
+		// YouTube's "<" shortcut takes the rate down a step. A change that follows real input is recorded as a
+		// manual override, which suspends enforcement; one that comes out of nowhere is put back instead.
+		const manualSpeed = speed - 0.25;
+		await page.keyboard.press("Shift+Comma");
+		await expect.poll(async () => readVideoPlaybackRate(page), { timeout: 5000 }).toBe(manualSpeed);
 		await expectToStay(async () => readVideoPlaybackRate(page), manualSpeed, { durationMs: 5000, page });
 		// onDisable restores the speed the user last chose - the default 1 would mean the change was never recorded.
 		await disableFeature(page, "playerSpeed.enabled");

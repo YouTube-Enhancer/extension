@@ -63,6 +63,27 @@ async function createExtensionContext(browserName: string): Promise<{ context: B
 }
 
 async function getExtensionOrigin(context: BrowserContext): Promise<string> {
+	// The background service worker (and any page the extension opened on install) carries the id, so no
+	// YouTube load is needed to learn it; the load is only the fallback for a browser that offers neither.
+	const isExtensionUrl = (url: string) => url.startsWith("chrome-extension://") || url.startsWith("moz-extension://");
+	const known =
+		context
+			.pages()
+			.find((p) => isExtensionUrl(p.url()))
+			?.url() ??
+		context
+			.serviceWorkers()
+			.find((w) => isExtensionUrl(w.url()))
+			?.url();
+	// Node's URL reports an opaque ("null") origin for extension schemes, so the origin is assembled by hand.
+	const originOf = (url: string) => {
+		const { host, protocol } = new URL(url);
+		return `${protocol}//${host}`;
+	};
+	if (known) return originOf(known);
+	const worker = await context.waitForEvent("serviceworker", { predicate: (w) => isExtensionUrl(w.url()), timeout: 10_000 }).catch(() => null);
+	if (worker) return originOf(worker.url());
+
 	const page = context.pages()[0] ?? (await context.newPage());
 
 	await page.goto("https://www.youtube.com", { waitUntil: "domcontentloaded" });
