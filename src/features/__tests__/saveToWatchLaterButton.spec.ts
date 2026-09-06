@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
-import type { YtButtonViewModelElement, YtLockupViewModelElement } from "@/src/utils/dom/nativeComponents";
+import type { YtLockupViewModelElement } from "@/src/utils/dom/nativeComponents";
 
 import { metadata } from "@/src/features/saveToWatchLaterButton/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
@@ -11,12 +11,18 @@ import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPage, navigateToPageType, reloadPage, spaNavigateToRelatedVideo, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
+import {
+	WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR as ACTIONS_ROW_BUTTON_SELECTOR,
+	WATCH_LATER_BUTTON_CLASS as BUTTON_CLASS,
+	WATCH_LATER_BUTTON_SELECTOR as BUTTON_SELECTOR,
+	readActionsRowIcon,
+	WATCH_LATER_SAVED_ICON as SAVED_ICON,
+	settleActionsRowIcon,
+	WATCH_LATER_UNSAVED_ICON as UNSAVED_ICON
+} from "@/src/utils/_tests/watchLater";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
-const BUTTON_CLASS = "yte-save-to-watch-later-button";
-const BUTTON_SELECTOR = `.${BUTTON_CLASS}`;
-const ACTIONS_ROW_BUTTON_SELECTOR = `ytd-watch-metadata ytd-menu-renderer ${BUTTON_SELECTOR}`;
 // Mirrors the feature's own constants and container query (saveToWatchLaterButton/constants.ts, index.ts), so
 // the tests only look where the feature is allowed to place a button.
 const LOCKUP_SELECTOR = "yt-lockup-view-model";
@@ -24,9 +30,7 @@ const LOCKUP_MENU_WRAPPER_SELECTOR = "div.ytLockupMetadataViewModelMenuButton";
 const HOME_CONTAINER_SELECTOR = "ytd-two-column-browse-results-renderer[page-subtype='home']";
 // Marks the one card a test acts on, so later assertions cannot silently pass on a different card.
 const MARKED_LOCKUP_ATTRIBUTE = "data-yte-test-lockup";
-// The saved/unsaved state is carried by the icon and the label the feature puts on the native button.
-const SAVED_ICON = "CHECK_CIRCLE_THICK";
-const UNSAVED_ICON = "WATCH_LATER";
+// The saved/unsaved state is carried by the icon (see the watchLater harness) and the label on the native button.
 const SAVE_LABEL = "Save to Watch Later";
 const REMOVE_LABEL = "Remove from Watch Later";
 // YouTube's pipeline toasts the save itself; the feature only toasts the removal.
@@ -66,18 +70,6 @@ async function markCardForVideo(page: Page, videoId: string): Promise<void> {
 		}
 	);
 	expect(marked, `no feed card with a save button for video ${videoId}`).toBe(true);
-}
-
-/** Reads the icon prop the feature put on the actions-row button; a state change replaces the whole host. */
-async function readActionsRowIcon(page: Page): Promise<null | string> {
-	return page.evaluate((selector) => {
-		const host = document.querySelector<YtButtonViewModelElement>(selector);
-		// The component exposes its data through a getter; the feature's function also carries the properties.
-		const data: unknown = host?.rawProps?.data;
-		const resolved = (typeof data === "function" ? (data as () => unknown)() : data) as null | Record<string, unknown> | undefined;
-		const iconName: unknown = resolved?.iconName;
-		return typeof iconName === "string" ? iconName : null;
-	}, ACTIONS_ROW_BUTTON_SELECTOR);
 }
 
 /** Returns the video ids of the first `limit` feed cards that carry a save button. */
@@ -199,28 +191,6 @@ async function scrollFeedUntil(page: Page, predicate: () => Promise<boolean>, ti
 	}
 }
 
-/**
- * The actions-row button is inserted in the last known state and only corrected once `isVideoInPlaylist`
- * resolves. That round trip has no DOM completion signal, so wait for the icon to hold still instead.
- */
-async function settleActionsRowIcon(page: Page): Promise<string> {
-	let lastIcon: null | string = null;
-	let stableSamples = 0;
-	await expect
-		.poll(
-			async () => {
-				const icon = await readActionsRowIcon(page);
-				stableSamples = icon !== null && icon === lastIcon ? stableSamples + 1 : 0;
-				lastIcon = icon;
-				return stableSamples;
-			},
-			{ intervals: [500], timeout: 30000 }
-		)
-		.toBeGreaterThanOrEqual(10);
-	expect(lastIcon).not.toBeNull();
-	return lastIcon!;
-}
-
 test.describe("saveToWatchLaterButton", () => {
 	for (const pageType of testPages) {
 		test(`save button should appear when enabled on ${pageType}`, async ({ page }) => {
@@ -337,8 +307,14 @@ test.describe("saveToWatchLaterButton", () => {
 			await expect(page.locator(ACTIONS_ROW_BUTTON_SELECTOR)).toBeAttached({ timeout: 15000 });
 			const initialIcon = await settleActionsRowIcon(page);
 			if (initialIcon === UNSAVED_ICON) {
+				// YouTube's pipeline flips the icon before the request completes; a reload right then aborts the
+				// save, and the membership check after it finds nothing.
+				const saveRequest = page.waitForResponse((response) => response.url().includes("/youtubei/v1/browse/edit_playlist"), {
+					timeout: 20000
+				});
 				await clickActionsRowButton(page);
 				await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(SAVED_ICON);
+				expect((await saveRequest).ok()).toBe(true);
 			}
 			// A fresh load always inserts the button unsaved, so only the membership check can turn it saved.
 			await reloadPage(page, watch);
