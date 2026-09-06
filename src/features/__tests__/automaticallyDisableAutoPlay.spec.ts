@@ -93,7 +93,10 @@ test.describe("automaticallyDisableAutoPlay", () => {
 		// navigate task has to leave this choice alone.
 		await setAutoPlayState(page, true);
 		await spaNavigateToRelatedVideo(page);
-		// The navigate task gets 10 attempts at the default 500 ms interval, so watch longer than that window.
+		// YouTube rebuilds the toggle from the account's setting about a second after an in-page navigation, so it
+		// reads as on again only once that has happened. The navigate task then gets 10 attempts at the default
+		// 500 ms interval, so watch longer than that window.
+		await expect.poll(() => getAutoPlayState(page), { timeout: 10000 }).toBe(true);
 		await expectToStay(() => getAutoPlayState(page), true, { durationMs: 6000, intervalMs: 500, page });
 	});
 	test(`disables autoplay after an in-page navigation from ${channelVideosPage} onto a watch page`, async ({ page }) => {

@@ -102,13 +102,14 @@ test.describe("maximizePlayerButton", () => {
 		const menuItem = page.locator("#yte-feature-maximizePlayerButton-menuitem");
 		await expect(menuItem).toHaveAttribute("aria-checked", "false");
 		await clickFeatureMenuItem(page, watch, "yte-feature-maximizePlayerButton-menuitem");
-		await expect(page.locator("body")).toHaveAttribute("yte-maximized");
+		// maximizePlayer waits for the player to report itself loaded before it touches the body.
+		await expect(page.locator("body")).toHaveAttribute("yte-maximized", "", { timeout: 15000 });
 		await expect(menuItem).toHaveAttribute("aria-checked", "true");
 		// maximizePlayer clicks YouTube's own size button, and that click bubbles into the feature menu's
 		// click-outside listener, so the menu is closed again and the second toggle has to re-open it.
 		await expect(menuItem).toBeHidden();
 		await clickFeatureMenuItem(page, watch, "yte-feature-maximizePlayerButton-menuitem");
-		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized");
+		await expect(page.locator("body")).not.toHaveAttribute("yte-maximized", { timeout: 15000 });
 		await expect(menuItem).toHaveAttribute("aria-checked", "false");
 	});
 
