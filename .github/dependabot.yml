@@ -44,3 +44,7 @@ updates:
       - dependency-name: vite
         update-types:
           - "version-update:semver-major"
+      # 5.x requires vite 8; drop this once vite is on 8
+      - dependency-name: vite-plugin-css-injected-by-js
+        update-types:
+          - "version-update:semver-major"
