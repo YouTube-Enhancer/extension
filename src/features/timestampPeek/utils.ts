@@ -18,8 +18,14 @@ const state: {
 	}>;
 	overlayParent: Nullable<HTMLElement>;
 	placeholder: Nullable<HTMLDivElement>;
-	// Bumped whenever the video is given back to the player, so a preview still waiting on its seek stands down.
+	/** Bumped by every preview start and every restore, so a preview that was ended mid-way does not carry on. */
 	previewGeneration: number;
+	/**
+	 * Where playback goes back to once the preview ends. Captured when a preview starts from ordinary playback
+	 * and held until the restore, so re-entering the timestamp, or moving on to the next one while the preview
+	 * is up, does not replace it with the preview's own position.
+	 */
+	previewRestore: Nullable<{ time: number; wasPlaying: boolean }>;
 	restoreMiniPlayerOverlay: Nullable<() => void>;
 } = {
 	hideTimer: null,
@@ -27,6 +33,7 @@ const state: {
 	overlayParent: null,
 	placeholder: null,
 	previewGeneration: 0,
+	previewRestore: null,
 	restoreMiniPlayerOverlay: null
 };
 
@@ -75,30 +82,37 @@ export async function handleTimestampElementsHover() {
 export function handleTimestampHover(el: HTMLElement, timestamp: number) {
 	if (timestampsWithListeners.has(el)) return;
 	timestampsWithListeners.add(el);
-	let restoreTime: Nullable<number> = null;
-	let wasPlaying = false;
 	let committedByUser = false;
 	const hideAndRestore = async () => {
 		const video = getVideo();
 		if (!video) return;
+		const { previewRestore: restore } = state;
 		await previewTimestamp(el, timestamp, false);
 		if (committedByUser) {
 			hideShield();
 			return;
 		}
-		video.currentTime = restoreTime ?? 0;
-		if (!wasPlaying) video.pause();
+		video.currentTime = restore?.time ?? 0;
+		if (!restore?.wasPlaying) video.pause();
 		hideShield();
 	};
 	const mouseEnterHandler = async () => {
 		cancelHideTimer();
 		const video = getVideo();
 		if (!video) return;
-		({ currentTime: restoreTime } = video);
-		wasPlaying = !video.paused;
+		if (!state.previewRestore) {
+			const { currentTime: time, paused } = video;
+			state.previewRestore = { time, wasPlaying: !paused };
+		}
 		committedByUser = false;
-		await previewTimestamp(el, timestamp, true);
+		/**
+		 * The overlay's own listeners go on before the preview starts. The preview waits for its seek and its play to
+		 * go through, which a slow connection, or a position YouTube declines to serve, can hold up indefinitely, and
+		 * a click or a leave in the meantime has to be heard all the same. The listeners of the previous hover are
+		 * dropped first, so only this hover's state answers.
+		 */
 		const overlay = getOrCreateOverlay();
+		eventManager.removeEventListenersForTarget(overlay, "timestampPeek");
 		eventManager.addEventListener(overlay, "mouseenter", cancelHideTimer, "timestampPeek");
 		eventManager.addEventListener(
 			overlay,
@@ -141,6 +155,7 @@ export function handleTimestampHover(el: HTMLElement, timestamp: number) {
 			},
 			"timestampPeek"
 		);
+		await previewTimestamp(el, timestamp, true);
 	};
 
 	const commitHandler = (event: MouseEvent | PointerEvent) => {
@@ -189,6 +204,7 @@ export function resetState() {
 	state.originalVideoStyles = null;
 	state.overlayParent = null;
 	state.placeholder = null;
+	state.previewRestore = null;
 	state.restoreMiniPlayerOverlay?.();
 	state.restoreMiniPlayerOverlay = null;
 	timestampsWithListeners.clear();
@@ -216,6 +232,7 @@ export function restorePreviewedVideo() {
 	}
 	const overlay = document.getElementById("yte-timestamp-peek-overlay");
 	if (overlay) overlay.style.display = "none";
+	state.previewRestore = null;
 	state.restoreMiniPlayerOverlay?.();
 	state.restoreMiniPlayerOverlay = null;
 }
@@ -316,6 +333,7 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 	if (!video) return;
 	const overlay = getOrCreateOverlay();
 	if (show) {
+		const generation = ++state.previewGeneration;
 		const { style } = video;
 		state.originalVideoStyles = {
 			height: style.height,
@@ -340,14 +358,13 @@ async function previewTimestamp(element: HTMLElement, timestamp: number, show: b
 		overlay.style.display = "block";
 		positionOverlay(element, overlay);
 		video.pause();
-		const { previewGeneration } = state;
 		await seekVideo(video, timestamp);
 		/**
-		 * The preview was restored while the seek was pending, on disable, navigation or the pointer leaving. The
-		 * video is back in the player, so it must not be played, nor the mini-player overlay suspended, on this
-		 * preview's behalf.
+		 * The preview was ended while the seek was pending: by a leave, a click, a newer preview, disable or
+		 * navigation. The video is back in the player, so it must not be played, nor the mini-player overlay
+		 * suspended, on this preview's behalf.
 		 */
-		if (previewGeneration !== state.previewGeneration) return;
+		if (generation !== state.previewGeneration) return;
 		state.restoreMiniPlayerOverlay ??= suspendMiniPlayerOverlay();
 		try {
 			await video.play();
