@@ -1,3 +1,96 @@
+# [1.35.0](https://github.com/YouTube-Enhancer/extension/compare/v1.34.2...v1.35.0) (2026-09-06)
+
+
+### Bug Fixes
+
+* add livestream chat AI summary selector to Hide AI feature ([#1380](https://github.com/YouTube-Enhancer/extension/issues/1380)) ([4214323](https://github.com/YouTube-Enhancer/extension/commit/4214323906a2349ddf82904f5abd4022d795284f))
+* **audioEngine:** return the engine that was just created ([c8266db](https://github.com/YouTube-Enhancer/extension/commit/c8266dbaf1a7c31b46b54fb159f066da98ac0558))
+* **automaticallyDisableAutoPlay:** give each video its own click budget instead of ending the override ([64f229a](https://github.com/YouTube-Enhancer/extension/commit/64f229ae385196c43b573cfd27bf560df3d53e3d))
+* **automaticallyDisableAutoPlay:** only count a toggle click once autoplay reports off ([7a84a82](https://github.com/YouTube-Enhancer/extension/commit/7a84a825758aff9b9ed36c09f9e4b46f11935f22))
+* **automaticallyDisableAutoPlay:** switch autoplay off when YouTube folds the toggle away ([75125ec](https://github.com/YouTube-Enhancer/extension/commit/75125ec23b650a564720fdf8dacb83d9d55c5754))
+* **automaticTheaterMode:** end the theater task when the mode reads as desired, not on the click ([9478c65](https://github.com/YouTube-Enhancer/extension/commit/9478c656e4a200e9be299a9559fcf03667dc1129))
+* **buttonController:** keep the tracked checked state in step with external toggles ([c3e241f](https://github.com/YouTube-Enhancer/extension/commit/c3e241f6173536d12b80ac1ccacc9553d09ff14d))
+* **buttons:** keep toggle state across relocation, scope listener removal, own container ids ([4187de8](https://github.com/YouTube-Enhancer/extension/commit/4187de89d2916d6578081432c3474757ede7f5f4))
+* center below-player buttons on player instead of page width ([1736dcd](https://github.com/YouTube-Enhancer/extension/commit/1736dcd6bdaca05f76f983d97008e87d6676c194))
+* **closedCaptions:** force the caption state on navigation instead of toggling it ([c4e4817](https://github.com/YouTube-Enhancer/extension/commit/c4e481747eff60df43fccbb0af89253485efab69))
+* **closedCaptions:** keep trying the subtitles button until the player takes the click ([9212cd0](https://github.com/YouTube-Enhancer/extension/commit/9212cd05baae05da4de2572d0262dddb2c87aea7))
+* **closedCaptions:** track the captions state per video before restoring it on disable ([1124c29](https://github.com/YouTube-Enhancer/extension/commit/1124c290bcba5b306c211b7bdda51eafefdc6109))
+* **defaultToOriginalAudioTrack:** capture the original track per video ([a998e55](https://github.com/YouTube-Enhancer/extension/commit/a998e55291c258de68b998fe04b12b6405891b73))
+* **defaultToOriginalAudioTrack:** hand the player the track object, not its descriptor ([458f3f4](https://github.com/YouTube-Enhancer/extension/commit/458f3f4e63bf0729738b77b6a928a53e468572ec))
+* **embedded:** apply settings changed while a page's extension setup was still running ([6087ead](https://github.com/YouTube-Enhancer/extension/commit/6087ead8e96fd42191c2f0f2879756006e51daef))
+* **embedded:** catch up the on-screen display settings after page setup ([b56cc1e](https://github.com/YouTube-Enhancer/extension/commit/b56cc1e05c6eecea85b8891dcd8e92775d5f37ed))
+* **embedded:** run page setup once per load and harden watch page-type detection ([6dc31ed](https://github.com/YouTube-Enhancer/extension/commit/6dc31eddd66d34d80d1638047338b53862a20a9f))
+* ensure thumbnail overlay stays above video when player is maximized ([#1353](https://github.com/YouTube-Enhancer/extension/issues/1353)) ([c3a5b8b](https://github.com/YouTube-Enhancer/extension/commit/c3a5b8b6ec3228489f8b85475d4f0c22e5f3dd17))
+* **events:** remove listeners with the options they were registered with ([916da36](https://github.com/YouTube-Enhancer/extension/commit/916da36bb453ea6cdf97ca10139d2f2413cbcb89))
+* **globalVolume:** apply a changed volume while the feature is enabled ([7a4d682](https://github.com/YouTube-Enhancer/extension/commit/7a4d68269f57835b439e910327d5794fd66d5c9c))
+* **globalVolume:** apply the volume once the player has loaded ([0afd8e6](https://github.com/YouTube-Enhancer/extension/commit/0afd8e6c042609f8e36ceca3ce25167698e1a834)), closes [#movie_player](https://github.com/YouTube-Enhancer/extension/issues/movie_player)
+* **hideArtificialIntelligence:** hide the AI summary inside the live chat iframe ([5aae3f2](https://github.com/YouTube-Enhancer/extension/commit/5aae3f23e80a962fa1d9bc8ed516d3cfed005068))
+* **hideEndScreenCardsButton:** one checked-state convention for every placement ([6e2925b](https://github.com/YouTube-Enhancer/extension/commit/6e2925b855332fcb6aa22ccb9bff830bcae19dd7))
+* **hideLiveStreamChat:** always remove the hide class on disable ([d3dc483](https://github.com/YouTube-Enhancer/extension/commit/d3dc4833d00ae2d624a157666bd8650480ff2f88))
+* **hideLiveStreamChat:** read the live flag once the player has loaded the stream ([5529f49](https://github.com/YouTube-Enhancer/extension/commit/5529f49fa5a63fc54d584c30b75f071121c94adb)), closes [#movie_player](https://github.com/YouTube-Enhancer/extension/issues/movie_player)
+* **i18n:** honour the requested locale instead of returning the cached instance ([c94d410](https://github.com/YouTube-Enhancer/extension/commit/c94d4107e93ea0a4848469f63b50570b60ad1f58))
+* isolate button container pointer-events and scope gradient to visible controls ([#1316](https://github.com/YouTube-Enhancer/extension/issues/1316)) ([eff1286](https://github.com/YouTube-Enhancer/extension/commit/eff1286f34948163d4d39ddcbe05798f90ff1598))
+* **miniPlayer:** announce state changes from the controller so the button stays in sync ([ed2e95d](https://github.com/YouTube-Enhancer/extension/commit/ed2e95df2b2a9a777a79760d1950f25c13c62434))
+* **notifications:** identify a notification by its own id ([cc42430](https://github.com/YouTube-Enhancer/extension/commit/cc424300ffcaf7fdd3a1d081e624d071e31c2a4e))
+* **notifications:** remove a notification by what identifies it, not by object reference ([0ff20c7](https://github.com/YouTube-Enhancer/extension/commit/0ff20c73f831b036254c0e857b7c2f2e805ff113))
+* **openYouTubeSettingsOnHover:** invalidate a pending setup on disable ([71f6af9](https://github.com/YouTube-Enhancer/extension/commit/71f6af9f4d5a6d66153635732631a363b33c71c3))
+* **openYouTubeSettingsOnHover:** keep the settings menu open when a submenu is opened ([e204882](https://github.com/YouTube-Enhancer/extension/commit/e2048828b2e6a232c8a8a899da46bbb2f7750583))
+* **openYouTubeSettingsOnHover:** replace the hover listeners on navigation instead of stacking them ([d195dea](https://github.com/YouTube-Enhancer/extension/commit/d195dea343e29412415d1fe6929f2a7e936f08b2))
+* **osd:** create a fresh canvas for every on-screen display ([11a0a2c](https://github.com/YouTube-Enhancer/extension/commit/11a0a2cb3b6a668b50cc0a7c37156b928d53d04d))
+* **pipeline:** stop emitting preload links for the content-script build ([8bd5bab](https://github.com/YouTube-Enhancer/extension/commit/8bd5bab0d14bb846b981fddc355775dcfcc999fd))
+* **playbackSpeedButtons:** resolve the buttons after the options request ([a1f67b4](https://github.com/YouTube-Enhancer/extension/commit/a1f67b46c979ca2f6002ee58f100434ef4753ce0))
+* **playerManager:** stop an aborted retry run from invalidating its replacement ([724562d](https://github.com/YouTube-Enhancer/extension/commit/724562da349fe928e598eea8a243042b6b43e3b1))
+* **playerQuality:** detect manual quality changes through the requested quality ([69e2b9d](https://github.com/YouTube-Enhancer/extension/commit/69e2b9d256b644d63efd8f30a6d467150d7fc464))
+* **playerQuality:** enforce the quality once an ad ends or an unstarted player holds the video ([217bfdc](https://github.com/YouTube-Enhancer/extension/commit/217bfdcafe7f69daa30fdd8d5fba55648af4c9e3))
+* **playerQuality:** suspend enforcement when user manually changes quality ([3be1193](https://github.com/YouTube-Enhancer/extension/commit/3be1193c6493b633b0cf3ced7d4e2a347098a309))
+* **playlistLength:** compare the header width itself instead of a nullish fallback ([5018886](https://github.com/YouTube-Enhancer/extension/commit/5018886626f220600cc1fcbdf920f91b748ff14b))
+* **playlistManagementButtons:** abort stale setup after teardown ([e74f46f](https://github.com/YouTube-Enhancer/extension/commit/e74f46fee3db8aaf778123b3da39d423c9793b4a))
+* **removeRedirect:** disconnect the observer when the feature is disabled ([222d769](https://github.com/YouTube-Enhancer/extension/commit/222d769aee8607d541ebd11911c753c5fd3e1cdf))
+* resume AudioContext on visibility change for Firefox ([#1232](https://github.com/YouTube-Enhancer/extension/issues/1232)) ([f6c9910](https://github.com/YouTube-Enhancer/extension/commit/f6c9910e5d73d9fabd5c056ade81143572f2ac39))
+* **saveToWatchLaterButton:** abort stale setup after teardown ([dc5aa13](https://github.com/YouTube-Enhancer/extension/commit/dc5aa131c0032f5b97d32c8d72c974a11449ddcd))
+* **saveToWatchLaterButton:** wait for YouTube's component registration on slow loads ([6b33788](https://github.com/YouTube-Enhancer/extension/commit/6b3378879f75a863f71799086a31f2ba168152a0))
+* **scrollWheelController:** listen in the capture phase on the document and resolve the player per event ([f580d99](https://github.com/YouTube-Enhancer/extension/commit/f580d99d1c1c55c7bd491c759ba1efe0effed67d))
+* **scrollWheelController:** remove the volume listeners when the volume control is disabled ([8411e11](https://github.com/YouTube-Enhancer/extension/commit/8411e11846159688036160ef4ffaceb652788794))
+* **shareShortener:** clean every share dialog input instead of the first one found ([1427ffd](https://github.com/YouTube-Enhancer/extension/commit/1427ffd06bfd336f818d1802b2726e7f34cb4170))
+* sync maximize button state when player is maximized automatically ([8b1f97c](https://github.com/YouTube-Enhancer/extension/commit/8b1f97c34fd8c5e696b30c89cbc123edce463dae))
+* **timestampPeek:** give the video back to the player before the preview overlay is removed ([91eb533](https://github.com/YouTube-Enhancer/extension/commit/91eb53325a3f2a9b0d6c1a4c4528b29e8fa1711e))
+* **timestampPeek:** stand down a pending preview once the video is restored ([c8b8cc9](https://github.com/YouTube-Enhancer/extension/commit/c8b8cc91d602b9ff34bacfe37b419c23cdffe1f5))
+* **url:** ignore a stale live flag when the player still holds the previous video ([05e06eb](https://github.com/YouTube-Enhancer/extension/commit/05e06ebd4852e2810959acb790e35fb6d3d0710e))
+* **url:** wait for the player to report the navigated video before reading its live flag ([07f3142](https://github.com/YouTube-Enhancer/extension/commit/07f3142a587695398bb64fcf7dca5547c256174d))
+* video progress selector ([17ee84c](https://github.com/YouTube-Enhancer/extension/commit/17ee84cd176f320d5bea82c2ccce23c3a1a131e6))
+* **videoHistory:** run the navigation hook for the signature it receives ([e13892c](https://github.com/YouTube-Enhancer/extension/commit/e13892ce05e1efa8ea7fd0884b41e302f885ee68))
+
+
+### Features
+
+* add Catppuccin Mocha preset ([468c362](https://github.com/YouTube-Enhancer/extension/commit/468c3627009cbb4111f64faf68a8e9d44ebf316b))
+* broadcast on-screen display config changes to the page context ([a090a87](https://github.com/YouTube-Enhancer/extension/commit/a090a873bc9be3304b6c91bf12874d725d7b954e))
+* **saveToWatchLaterButton:** build the button from YouTube's native components ([9144384](https://github.com/YouTube-Enhancer/extension/commit/9144384cf4a8938c7593a60aae9767fbc0fec688))
+* **saveToWatchLaterButton:** confirm removals with a toast ([254bf48](https://github.com/YouTube-Enhancer/extension/commit/254bf48660e2baa75a7f7815e1d2cdb64fa47acb))
+* **saveToWatchLaterButton:** reuse YouTube's native watch-later icon ([a98da3e](https://github.com/YouTube-Enhancer/extension/commit/a98da3e120e8f8436dd5de769f59a8d9d7fd4c5f))
+* **saveToWatchLaterButton:** show save errors with YouTube's native toast ([4563776](https://github.com/YouTube-Enhancer/extension/commit/4563776d97a36b5a16fa876b4efa055156c3fb8f))
+* **saveToWatchLaterButton:** turn the actions-row button into a persistent toggle ([f020493](https://github.com/YouTube-Enhancer/extension/commit/f0204933d16d0978132a42ebb421c1d40a1a6149))
+* **scrollWheelController:** mark the body while the speed control is attached ([25e8e4e](https://github.com/YouTube-Enhancer/extension/commit/25e8e4ecde0cdceca3fde7bbec46fc4d3bf0849e))
+
+
+### Performance Improvements
+
+* coalesce queued scroll wheel steps into single player calls ([dddd27d](https://github.com/YouTube-Enhancer/extension/commit/dddd27d8d6daa3134a55adb372d335fa9ef80251))
+* push config slices to scroll wheel controller instead of refetching ([3550ca7](https://github.com/YouTube-Enhancer/extension/commit/3550ca76b47234d63c74cc16c8b689a5e04c514e))
+* skip options fetch in speed button tooltips when buttons absent ([901340f](https://github.com/YouTube-Enhancer/extension/commit/901340fcc121438920e8dbe8dd364db1c4849ba2))
+
+
+
+
+
+## Release Artifacts
+| File Name | SHA-256 Hash |
+| :--- | :---: |
+| youtube-enhancer-v1.35.0-Chrome.zip | 60bad98246ce7872ad5ffc6b44e1de6bf0da410bc97a5be036da9e80b2db7618 |
+| youtube-enhancer-v1.35.0-Chromium.zip | 60bad98246ce7872ad5ffc6b44e1de6bf0da410bc97a5be036da9e80b2db7618 |
+| youtube-enhancer-v1.35.0-Edge.zip | 60bad98246ce7872ad5ffc6b44e1de6bf0da410bc97a5be036da9e80b2db7618 |
+| youtube-enhancer-v1.35.0-Firefox.zip | 41831aea3739d5e5dce421d6c0dc8d754bca0330e21c28509d0a55fd53f643f6 |
+
 ## [1.34.2](https://github.com/YouTube-Enhancer/extension/compare/v1.34.1...v1.34.2) (2026-08-21)
 
 
