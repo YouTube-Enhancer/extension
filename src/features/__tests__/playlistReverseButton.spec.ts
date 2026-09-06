@@ -41,7 +41,10 @@ async function getPlaylistOrder(page: Parameters<typeof navigateToPageType>[0]):
 
 async function getPlaylistPageOrder(page: Parameters<typeof navigateToPageType>[0]): Promise<string[]> {
 	return await page.evaluate(() => {
-		const items = document.querySelectorAll<HTMLAnchorElement>("ytd-playlist-video-renderer a#thumbnail");
+		// Scoped to the list the feature reverses: an owned playlist also shows suggested videos in rows of the same kind below it.
+		const items = document.querySelectorAll<HTMLAnchorElement>(
+			"ytd-playlist-video-list-renderer div#contents > ytd-playlist-video-renderer a#thumbnail"
+		);
 		return Array.from(items).map((a) => {
 			const url = new URL(a.href);
 			return url.searchParams.get("v") ?? "";
@@ -61,6 +64,24 @@ async function getSelectedPanelPosition(page: Page): Promise<Nullable<{ index: n
 		if (!videoId) return null;
 		return { index, total: items.length, videoId };
 	});
+}
+
+/** Scrolls the playlist page's continuation trigger into view until every row is loaded, as a reader scrolling down would. */
+async function loadAllPlaylistRows(page: Page): Promise<void> {
+	await page.evaluate(async () => {
+		const rows = () => document.querySelectorAll("ytd-playlist-video-list-renderer ytd-playlist-video-renderer").length;
+		for (let round = 0; round < 50; round++) {
+			const trigger = document.querySelector<HTMLElement>("ytd-playlist-video-list-renderer div#contents > ytd-continuation-item-renderer");
+			if (!trigger) return;
+			const before = rows();
+			trigger.scrollIntoView({ block: "center" });
+			const start = Date.now();
+			while (rows() === before && document.querySelector("ytd-continuation-item-renderer") !== null && Date.now() - start < 10000) {
+				await new Promise((resolve) => setTimeout(resolve, 100));
+			}
+		}
+	});
+	await page.evaluate(() => window.scrollTo(0, 0));
 }
 
 async function readIsReversedState(page: Page): Promise<boolean | undefined> {
@@ -178,10 +199,12 @@ test.describe("playlistReverseButton", () => {
 				await enableFeature(page, "playlistReverseButton.enabled");
 				const button = page.locator("#yte-playlist-reverse-button");
 				await expect(button).toBeAttached({ timeout: 10000 });
+				// The whole list is loaded first, so the order captured here is the playlist's and not its first page.
+				await loadAllPlaylistRows(page);
 				const before = await getPlaylistPageOrder(page);
 				expect(before.length).toBeGreaterThan(1);
 				await button.click();
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual([...before].reverse());
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual([...before].reverse());
 				await expect
 					.poll(
 						async () => {
@@ -197,29 +220,32 @@ test.describe("playlistReverseButton", () => {
 				await enableFeature(page, "playlistReverseButton.enabled");
 				const button = page.locator("#yte-playlist-reverse-button");
 				await expect(button).toBeAttached({ timeout: 10000 });
+				await loadAllPlaylistRows(page);
 				const before = await getPlaylistPageOrder(page);
 				expect(before.length).toBeGreaterThan(1);
 				const reversed = [...before].reverse();
 				await button.click();
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual(reversed);
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual(reversed);
 				await disableFeature(page, "playlistReverseButton.enabled");
 				await expect(button).not.toBeAttached();
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual(before);
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual(before);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual(reversed);
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual(reversed);
 			});
 			test(`should persist reversed order after full page reload on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, playlistRequirements);
 				await enableFeature(page, "playlistReverseButton.enabled");
 				const button = page.locator("#yte-playlist-reverse-button");
 				await expect(button).toBeAttached({ timeout: 10000 });
+				await loadAllPlaylistRows(page);
 				const before = await getPlaylistPageOrder(page);
 				expect(before.length).toBeGreaterThan(1);
 				const reversed = [...before].reverse();
 				await button.click();
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual(reversed);
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual(reversed);
+				// After the reload the feature has to fetch every page itself before it can turn the list over.
 				await reloadPage(page, pageType);
-				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 15000 }).toEqual(reversed);
+				await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 30000 }).toEqual(reversed);
 			});
 		}
 	}
@@ -270,14 +296,22 @@ test.describe("playlistReverseButton", () => {
 		await enableFeature(page, "playlistReverseButton.enabled");
 		const button = page.locator("#yte-playlist-reverse-button");
 		await expect(button).toBeAttached({ timeout: 10000 });
-		const before = await getPlaylistPageOrder(page);
-		expect(before.length).toBeGreaterThan(1);
+		// Only the first page is loaded here on purpose: the feature has to fetch the rest before it reverses, so the
+		// reversed list is the whole playlist's and its first entries are ones the page had not shown yet.
+		const firstPage = await getPlaylistPageOrder(page);
+		expect(firstPage.length).toBeGreaterThan(1);
 		await button.click();
-		await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual([...before].reverse());
 		await expect.poll(async () => readIsReversedState(page), { timeout: 10000 }).toBe(true);
+		await expect
+			.poll(async () => page.locator("ytd-playlist-video-list-renderer ytd-continuation-item-renderer").count(), { timeout: 60000 })
+			.toBe(0);
+		await expect.poll(async () => (await getPlaylistPageOrder(page)).slice(-firstPage.length), { timeout: 20000 }).toEqual([...firstPage].reverse());
+		const reversedWhole = await getPlaylistPageOrder(page);
+		expect(reversedWhole.length).toBeGreaterThan(firstPage.length);
 		await button.click();
-		await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 10000 }).toEqual(before);
+		await expect.poll(async () => getPlaylistPageOrder(page), { timeout: 20000 }).toEqual([...reversedWhole].reverse());
 		await expect.poll(async () => readIsReversedState(page), { timeout: 10000 }).toBe(false);
+		expect((await getPlaylistPageOrder(page)).slice(0, firstPage.length)).toEqual(firstPage);
 	});
 
 	test(`reverse button is placed inside the playlist panel action row on ${watch}`, async ({ page }) => {
