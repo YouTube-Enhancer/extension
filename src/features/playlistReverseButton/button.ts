@@ -6,7 +6,7 @@ import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
 
-import { applyPlaylistPageReversal, applyReversal } from "./reversal";
+import { applyReversal, reversePlaylistPage } from "./reversal";
 import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isCurrentlyReversed, isPlaylistDataReady, poll } from "./utils";
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
@@ -77,7 +77,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 			if (isWatchPage()) {
 				applyReversal();
 			} else {
-				applyPlaylistPageReversal();
+				void reversePlaylistPage();
 			}
 
 			const label = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[newReversed ? "on" : "off"]);
