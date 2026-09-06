@@ -63,7 +63,8 @@ function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPre
 	if (!player?.getAvailableQualityData) return null;
 
 	const qualityData = player.getAvailableQualityData();
-	const matching = qualityData.filter((q) => q.quality === closestQuality);
+	// Entries without a format id cannot be requested by format; the level alone is applied then.
+	const matching = qualityData.filter((q) => q.quality === closestQuality && typeof q.formatId === "number");
 	if (!matching.length) return null;
 
 	if (matching.length === 1) {
@@ -322,6 +323,9 @@ function resetEnforcementState(): void {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
+		// The enable run leaves a player state hook behind. Left alone it re-runs enforcement on the next state
+		// change, which supersedes the restore run below before it has done anything, so it goes first.
+		registry.playerManager.cleanup(metadata.id);
 		detachQualityChangeListener();
 		void registry.playerManager.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
 			maxAttempts: 10,
