@@ -1,19 +1,22 @@
 import {
 	getPlaylistData,
 	getPlaylistPageData,
+	loadWholePlaylistPage,
 	type ManagerElement,
 	type PanelElement,
+	type PlaylistContentsItem,
 	poll,
 	reverseChildOrder,
 	type YtdPlayerElement
 } from "./utils";
 
+/** Reverses what the page holds, video entries only: a continuation entry stays last on the data side as in the DOM. */
 function applyPlaylistPageReversal(): boolean {
 	const result = getPlaylistPageData();
 	if (!result) return false;
 
 	const { contents } = result;
-	contents.reverse();
+	reversePlaylistContents(contents);
 
 	const listContainer = document.querySelector<HTMLElement>("ytd-playlist-video-list-renderer div#contents");
 	if (listContainer) reverseChildOrder(listContainer);
@@ -64,6 +67,19 @@ function applyReversal(): boolean {
 	return true;
 }
 
+function reversePlaylistContents(contents: PlaylistContentsItem[]): void {
+	const isContinuation = (item: PlaylistContentsItem) => "continuationItemRenderer" in item;
+	const videos = contents.filter((item) => !isContinuation(item)).reverse();
+	const continuations = contents.filter(isContinuation);
+	contents.splice(0, contents.length, ...videos, ...continuations);
+}
+
+/** The playlist page's reversal once every page of the playlist has been fetched, so the whole list turns over. */
+async function reversePlaylistPage(): Promise<boolean> {
+	await loadWholePlaylistPage();
+	return applyPlaylistPageReversal();
+}
+
 function waitForDataRefresh(prevIndex: number, timeout = 3000): Promise<boolean> {
 	return poll(
 		getPlaylistData,
@@ -73,4 +89,4 @@ function waitForDataRefresh(prevIndex: number, timeout = 3000): Promise<boolean>
 	).then((r) => r !== null);
 }
 
-export { applyPlaylistPageReversal, applyReversal, waitForDataRefresh };
+export { applyPlaylistPageReversal, applyReversal, reversePlaylistPage, waitForDataRefresh };

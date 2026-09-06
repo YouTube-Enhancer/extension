@@ -134,11 +134,49 @@ export async function poll<T>(fn: () => T, predicate: (result: T) => boolean, in
 }
 
 export function reverseChildOrder(container: HTMLElement): void {
-	const items = Array.from(container.children);
-	items.reverse();
-	for (const item of items) {
+	// The continuation item stays last: reversed to the top it would sit in view and fetch the next page at once.
+	const children = Array.from(container.children);
+	const rows = children.filter((child) => !isContinuationElement(child)).reverse();
+	const continuations = children.filter(isContinuationElement);
+	for (const item of [...rows, ...continuations]) {
 		container.appendChild(item);
 	}
+}
+
+const PLAYLIST_PAGE_CONTINUATION_SELECTOR = "ytd-playlist-video-list-renderer div#contents > ytd-continuation-item-renderer";
+const PLAYLIST_PAGE_ROW_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
+
+/**
+ * Fetches every page of the playlist. YouTube renders a hundred rows and fetches the next hundred once its
+ * continuation item scrolls into view, so reversing what is loaded would leave the rest to arrive below in
+ * forward order. The continuation item is scrolled into view until none is left, the scroll position is given
+ * back afterwards, and the rounds are capped so a playlist of thousands does not hold the page for long.
+ */
+export async function loadWholePlaylistPage(maxPages = 50): Promise<void> {
+	const { scrollX, scrollY } = window;
+	try {
+		for (let pages = 0; pages < maxPages; pages++) {
+			const continuation = document.querySelector<HTMLElement>(PLAYLIST_PAGE_CONTINUATION_SELECTOR);
+			if (!continuation) return;
+			const { length: rowsBefore } = document.querySelectorAll(PLAYLIST_PAGE_ROW_SELECTOR);
+			continuation.scrollIntoView({ block: "center" });
+			const loaded = await poll(
+				() =>
+					document.querySelectorAll(PLAYLIST_PAGE_ROW_SELECTOR).length > rowsBefore ||
+					document.querySelector(PLAYLIST_PAGE_CONTINUATION_SELECTOR) === null,
+				Boolean,
+				100,
+				10000
+			);
+			if (!loaded) return;
+		}
+	} finally {
+		window.scrollTo(scrollX, scrollY);
+	}
+}
+
+function isContinuationElement(element: Element): boolean {
+	return element.tagName === "YTD-CONTINUATION-ITEM-RENDERER";
 }
 
 export const FEATURE_NAME = "playlistReverseButton";
