@@ -204,28 +204,65 @@ test.describe("onScreenDisplay", () => {
 			.poll(async () => readDisplayPosition(page), { timeout: 5000 })
 			.toMatchObject({ bottom: `${chromeHeight}px`, left: "0px", right: "", top: "" });
 	});
-	test("offsets the display below the shorts player controls on shorts", async ({ page }) => {
+	test("offsets a top display below the shorts player's control bar on shorts", async ({ page }) => {
 		await setupVolumeControl(page, shorts);
 		await setOption(page, "onScreenDisplay.hideTime", LONG_HIDE_TIME);
-		const shortsControls = page.locator(".player-controls > ytd-shorts-player-controls");
-		// YouTube serves more than one shorts layout; the offset only exists for the one that renders this element,
-		// which is the same selector the display manager reads.
-		const hasShortsControls = await shortsControls
-			.waitFor({ state: "attached", timeout: 15000 })
-			.then(() => true)
-			.catch(() => false);
-		test.skip(!hasShortsControls, "this shorts layout does not render ytd-shorts-player-controls, so there is no control bar to offset");
+		// Play, mute, captions, menu and fullscreen sit in a bar over the top of the video, in the reel that holds the
+		// player. The bar is part of the layout YouTube serves, so it has to be there; a missing bar is a failure.
+		const barHeight = await page.evaluate(() => {
+			const bar = document.querySelector("#shorts-player")?.closest("ytd-reel-video-renderer")?.querySelector<HTMLElement>(".player-controls");
+			if (!bar) return null;
+			const style = getComputedStyle(bar);
+			return bar.offsetHeight + parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
+		});
+		expect(barHeight).toBeGreaterThan(0);
 		await dispatchWheelNotches(page, shorts, "up");
 		await expect(page.locator(OSD_SELECTOR)).toBeAttached({ timeout: 10000 });
-		// On shorts the top offset additionally clears the overlay controls, which only happens on this page type.
-		const shortsControlsHeight = await page.evaluate(() => {
-			const controls = document.querySelector<HTMLElement>(".player-controls > ytd-shorts-player-controls");
-			if (!controls) return null;
-			const style = getComputedStyle(controls);
-			return controls.offsetHeight + parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10);
-		});
-		expect(shortsControlsHeight).toBeGreaterThan(0);
-		await expect.poll(async () => readDisplayPosition(page), { timeout: 5000 }).toMatchObject({ left: "0px", top: `${shortsControlsHeight}px` });
+		await expect.poll(async () => readDisplayPosition(page), { timeout: 5000 }).toMatchObject({ left: "0px", top: `${barHeight}px` });
+	});
+	test("keeps a bottom display clear of the title block when it lies over the video on shorts", async ({ page }) => {
+		await setupVolumeControl(page, shorts);
+		await setOption(page, "onScreenDisplay.hideTime", LONG_HIDE_TIME);
+		await setOption(page, "onScreenDisplay.position", "bottom_left");
+		// The title block (channel, title, tags) sits beside the video when the window has the room, and over the
+		// bottom of the video when it has not. Beside, it takes nothing from the display's room; over the video the
+		// display has to clear it, by the manager's own rule: the block's box without its padding plus a 10 px gap.
+		const readTitleBlock = () =>
+			page.evaluate(() => {
+				const player = document.querySelector<HTMLElement>("#shorts-player");
+				const block = player
+					?.closest("ytd-reel-video-renderer")
+					?.querySelector<HTMLElement>(".ytReelPlayerOverlayViewModelMetadataContainerMetapanel");
+				if (!player || !block) return null;
+				const blockRect = block.getBoundingClientRect();
+				const videoRect = player.getBoundingClientRect();
+				const style = getComputedStyle(block);
+				const visualHeight =
+					block.offsetHeight -
+					(parseInt(style.marginTop, 10) + parseInt(style.marginBottom, 10) + parseInt(style.paddingTop, 10) + parseInt(style.paddingBottom, 10)) +
+					10;
+				return { overlaps: blockRect.right > videoRect.left && blockRect.left < videoRect.right, visualHeight };
+			});
+		const expectBottomOffset = async (offset: number) => {
+			await dispatchWheelNotches(page, shorts, "up");
+			await expect(page.locator(OSD_SELECTOR)).toBeAttached({ timeout: 10000 });
+			await expect.poll(async () => readDisplayPosition(page), { timeout: 5000 }).toMatchObject({ bottom: `${offset}px`, left: "0px", top: "" });
+		};
+		const initial = await readTitleBlock();
+		expect(initial).not.toBeNull();
+		test
+			.info()
+			.annotations.push({
+				description: initial!.overlaps ? "title block over the video at the default size" : "title block beside the video at the default size",
+				type: "note"
+			});
+		await expectBottomOffset(initial!.overlaps ? initial!.visualHeight : 0);
+		// A short window puts the block over the video (1280x800 does on this layout); the next display clears it.
+		await page.setViewportSize({ height: 800, width: 1280 });
+		await expect.poll(async () => (await readTitleBlock())?.overlaps, { timeout: 10000 }).toBe(true);
+		const overlaid = (await readTitleBlock())!;
+		expect(overlaid.visualHeight).toBeGreaterThan(0);
+		await expectBottomOffset(overlaid.visualHeight);
 	});
 	test("keeps the newest display when a previous display's hide timer fires on watch", async ({ page }) => {
 		await setupVolumeControl(page);
