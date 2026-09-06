@@ -241,12 +241,22 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		}
 		// Calculate font size based on canvas dimensions.
 		this.fontSize = clamp(Math.min(width, height) / 10, 48, 72);
-		// Find elements for positioning the canvas.
+		/**
+		 * Find elements for positioning the canvas. On shorts the reel that holds the player is the active one (the
+		 * current layout marks it with nothing else); its control bar (play, mute, captions, menu, fullscreen) lies
+		 * over the top of the video, and its title block lies over the bottom of the video whenever the window is
+		 * too short to place the block beside the video. The older selectors stay as fallbacks.
+		 */
+		const activeReel = isShortsPage() ? (document.querySelector("#shorts-player")?.closest("ytd-reel-video-renderer") ?? null) : null;
 		const bottomElement: Nullable<HTMLDivElement> =
+			activeReel?.querySelector<HTMLDivElement>(".ytReelPlayerOverlayViewModelMetadataContainerMetapanel") ??
 			document.querySelector<HTMLDivElement>(
 				"ytd-reel-video-renderer[is-active] ytd-reel-player-overlay-renderer div.ytd-reel-player-overlay-renderer div#overlay"
-			) ?? document.querySelector<HTMLDivElement>(".ytp-chrome-bottom");
-		const shortsTopControls = document.querySelector<HTMLDivElement>(".player-controls > ytd-shorts-player-controls");
+			) ??
+			document.querySelector<HTMLDivElement>(".ytp-chrome-bottom");
+		const shortsTopControls =
+			activeReel?.querySelector<HTMLDivElement>(".player-controls") ??
+			document.querySelector<HTMLDivElement>(".player-controls > ytd-shorts-player-controls");
 		let paddingTop = 0;
 		if (isShortsPage() && shortsTopControls) {
 			const shortsTopStyle = getComputedStyle(shortsTopControls);
@@ -265,7 +275,12 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 			const bottomRect = bottomElement.getBoundingClientRect();
 			const playerRect = this.options.playerContainer.getBoundingClientRect();
 			const horizontallyOverlaps = bottomRect.right > playerRect.left && bottomRect.left < playerRect.right;
-			paddingBottom = isShortsPage() && horizontallyOverlaps ? bottomVisualHeight : Math.round(bottomRect.bottom - bottomRect.top);
+			// Beside the video, the shorts title block takes nothing from the display's room.
+			paddingBottom =
+				isShortsPage() ?
+					horizontallyOverlaps ? bottomVisualHeight
+					:	0
+				:	Math.round(bottomRect.bottom - bottomRect.top);
 		}
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
