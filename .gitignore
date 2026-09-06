@@ -388,6 +388,9 @@ $RECYCLE.BIN/
 #generated manifest
 public/manifest.json
 
+# generated locale typings
+public/locales/en-US.json.d.ts
+
 releases/
 yarn.lock
 package-lock.json
