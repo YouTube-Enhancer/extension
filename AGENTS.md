@@ -120,12 +120,11 @@ Modules inside `src/features/` that are not features include:
 - `npm run build:client` - Build content scripts (`tsx src/pipeline/steps/buildContentScripts.ts`)
 - `npm run build:pre` / `npm run build:post` - Pre/post build steps
 - `npm run build:post-pipeline` - Post-build pipeline (`tsx src/pipeline/build.ts post`)
-- `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`)
+- `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand
 - `npm run lint` - Run linter (oxlint, then a prettier check of the code files)
 - `npm run lint:fix` - Run linter with auto-fix
-- `npm run lint:locales` - Lint locale files
 - `npm run lint:i18n` - Lint i18n constants
-- `npm run typecheck` - TypeScript type check (`tsc --noEmit -p tsconfig.json`)
+- `npm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
 - `npm run format` - Format code with prettier
 - `npm run test` - Run tests
 

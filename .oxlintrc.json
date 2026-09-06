@@ -24,7 +24,7 @@
 			"config": "./tailwind.config.ts"
 		}
 	},
-	"ignorePatterns": ["**/watch.js", "dist/**/*", "releases/**/*"],
+	"ignorePatterns": ["**/watch.js", "dist/**/*", "releases/**/*", "public/locales/en-US.json.d.ts"],
 	"rules": {
 		// eslint:recommended
 		"constructor-super": "error",
