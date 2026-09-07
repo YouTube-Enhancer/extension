@@ -3,17 +3,18 @@ import { expect, type Page } from "@playwright/test";
 import type { YouTubePlayerDiv } from "@/src/types";
 import type { YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
 
+import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, SAVED_ICON, UNSAVED_ICON } from "@/src/features/saveToWatchLaterButton/constants";
 import { enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPage, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 
 /** The class the saveToWatchLaterButton feature puts on every button it renders (buttons.ts). */
-export const WATCH_LATER_BUTTON_CLASS = "yte-save-to-watch-later-button";
+export const WATCH_LATER_BUTTON_CLASS = BUTTON_CLASS;
 export const WATCH_LATER_BUTTON_SELECTOR = `.${WATCH_LATER_BUTTON_CLASS}`;
 /** The native toggle the feature adds to the actions row of a watch page, the one surface that reads membership. */
-export const WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR = `ytd-watch-metadata ytd-menu-renderer ${WATCH_LATER_BUTTON_SELECTOR}`;
+export const WATCH_LATER_ACTIONS_ROW_BUTTON_SELECTOR = `${ACTIONS_ROW_SELECTOR} ${WATCH_LATER_BUTTON_SELECTOR}`;
 // The saved/unsaved state is carried by the icon the feature puts on the native button.
-export const WATCH_LATER_SAVED_ICON = "CHECK_CIRCLE_THICK";
-export const WATCH_LATER_UNSAVED_ICON = "WATCH_LATER";
+export const WATCH_LATER_SAVED_ICON = SAVED_ICON;
+export const WATCH_LATER_UNSAVED_ICON = UNSAVED_ICON;
 
 /**
  * Makes sure the video is in the signed-in account's Watch Later, through the extension's own actions-row toggle
