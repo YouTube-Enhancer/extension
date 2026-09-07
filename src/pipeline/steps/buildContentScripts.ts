@@ -4,6 +4,8 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/config/env";
 import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "@/utils/plugins/utils";
+// COVERAGE_BUILD=true keeps the bundles readable and gives them inline source maps, for a coverage run of the e2e suite.
+const COVERAGE_BUILD = process.env.COVERAGE_BUILD === "true";
 const contentScripts = [
 	{
 		content: resolve(process.cwd(), "src/pages/content/index.ts")
@@ -16,7 +18,7 @@ for (const contentScript of contentScripts) {
 	await build({
 		build: {
 			emptyOutDir: false,
-			minify: !DEV_MODE ? "esbuild" : false,
+			minify: !DEV_MODE && !COVERAGE_BUILD ? "esbuild" : false,
 			/**
 			 * The embedded script runs inside youtube.com, where Vite's preload links for dynamic imports resolve
 			 * against the page URL. Each import then fired a 404 at youtube.com/src/<chunk>.js before the real import
@@ -40,17 +42,17 @@ for (const contentScript of contentScripts) {
 					tryCatchDeoptimization: true
 				}
 			},
-			sourcemap: ENABLE_SOURCE_MAP
+			sourcemap: COVERAGE_BUILD ? "inline" : ENABLE_SOURCE_MAP
 		},
 		configFile: false,
 		esbuild: {
 			keepNames: true,
-			minifyIdentifiers: !DEV_MODE,
-			minifySyntax: !DEV_MODE,
-			minifyWhitespace: !DEV_MODE
+			minifyIdentifiers: !DEV_MODE && !COVERAGE_BUILD,
+			minifySyntax: !DEV_MODE && !COVERAGE_BUILD,
+			minifyWhitespace: !DEV_MODE && !COVERAGE_BUILD
 		},
 		mode: DEV_MODE ? "development" : "production",
-		plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
+		plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP && !COVERAGE_BUILD })],
 		publicDir: false,
 		resolve: {
 			alias: {

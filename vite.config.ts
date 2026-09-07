@@ -18,10 +18,13 @@ const pageInputs = {
 	:	{})
 };
 
+// COVERAGE_BUILD=true keeps the bundles readable and gives them inline source maps, for a coverage run of the e2e suite.
+const COVERAGE_BUILD = process.env.COVERAGE_BUILD === "true";
+
 export default defineConfig({
 	build: {
 		emptyOutDir: false,
-		minify: !DEV_MODE ? "esbuild" : false,
+		minify: !DEV_MODE && !COVERAGE_BUILD ? "esbuild" : false,
 		modulePreload: false,
 		outDir: resolve(outDir, "temp"),
 		rollupOptions: {
@@ -50,13 +53,13 @@ export default defineConfig({
 				tryCatchDeoptimization: true
 			}
 		},
-		sourcemap: ENABLE_SOURCE_MAP
+		sourcemap: COVERAGE_BUILD ? "inline" : ENABLE_SOURCE_MAP
 	},
 	esbuild: {
 		keepNames: true,
-		minifyIdentifiers: !DEV_MODE,
-		minifySyntax: !DEV_MODE,
-		minifyWhitespace: !DEV_MODE
+		minifyIdentifiers: !DEV_MODE && !COVERAGE_BUILD,
+		minifySyntax: !DEV_MODE && !COVERAGE_BUILD,
+		minifyWhitespace: !DEV_MODE && !COVERAGE_BUILD
 	},
 	mode: DEV_MODE ? "development" : "production",
 	plugins: [react(), bundleWorker()],
