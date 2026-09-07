@@ -3,5 +3,6 @@ import generateHideFeatureSelectors from "@/src/pipeline/steps/generateHideFeatu
 import generateManifests from "@/src/pipeline/steps/generateManifests";
 import makeReleaseZips from "@/src/pipeline/steps/makeReleaseZips";
 import updateReadmeFeatures from "@/src/pipeline/steps/updateReadmeFeatures";
+import validateFeatureMetadata from "@/src/pipeline/steps/validateFeatureMetadata";
 
-export { copyOutputs, generateHideFeatureSelectors, generateManifests, makeReleaseZips, updateReadmeFeatures };
+export { copyOutputs, generateHideFeatureSelectors, generateManifests, makeReleaseZips, updateReadmeFeatures, validateFeatureMetadata };
