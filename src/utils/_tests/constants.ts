@@ -1,12 +1,11 @@
 import type { PageType } from "@/src/features/_registry/types";
 import type { ButtonPlacement } from "@/src/types";
 
-import { buttonContainerId } from "@/src/features/buttonController/constants";
+import { buttonContainerId, playerControlsSelectors } from "@/src/features/buttonController/constants";
 
 export const placementSelectors = {
 	below_player: `#${buttonContainerId}`,
-	player_controls_left: ".ytp-left-controls",
-	player_controls_right: ".ytp-right-controls"
+	...playerControlsSelectors
 } as const;
 /**
  * Mirrors the PlayerStates enum from @types/youtube-player. The real `youtube-player` package is not a
