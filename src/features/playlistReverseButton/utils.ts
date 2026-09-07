@@ -2,17 +2,30 @@ import type { Nullable } from "@/src/types";
 
 import { createSVGElement } from "@/src/utils/dom/elements";
 import { PLAYLIST_PAGE_HEADER_SELECTORS, selectFirstWithWidth } from "@/src/utils/dom/selectors";
-import { isNewYouTubeVideoLayout } from "@/src/utils/url";
+import { isNewYouTubeVideoLayout, isPlaylistPage, isWatchPage } from "@/src/utils/url";
+
+/**
+ * Counts the feature's setups and cleanups. Work a setup leaves behind (the later push of a reversal, the checks that
+ * follow a setup, the answer to a data hand-over) compares the generation it started in with the current one and
+ * stands down when the feature has since been cleaned up or set up again.
+ */
+let setupGeneration = 0;
 
 export interface AutoplayData {
 	[key: string]: unknown;
 	sets: AutoplaySet[];
 }
+/**
+ * One of YouTube's autoplay sets, one per playback mode (NORMAL, LOOP, SHUFFLE, LOOP_SHUFFLE). The playlist manager
+ * navigates with `autoplayVideo` when a video ends and with the two button entries for the player's Next and
+ * Previous controls; an entry is absent when there is nowhere to go in that direction.
+ */
 export interface AutoplaySet {
 	[key: string]: unknown;
-	autoplayVideo: Record<string, unknown>;
-	nextButtonVideo: Record<string, unknown>;
-	previousButtonVideo: Record<string, unknown>;
+	autoplayVideo?: NavigationEndpoint;
+	mode?: string;
+	nextButtonVideo?: NavigationEndpoint;
+	previousButtonVideo?: NavigationEndpoint;
 }
 export interface BrowseElement extends HTMLElement {
 	data?: Record<string, unknown>;
@@ -21,6 +34,10 @@ export interface ManagerElement extends HTMLElement {
 	autoplayData?: AutoplayData;
 	setPlaylistData?(data: PlaylistData): void;
 }
+export interface NavigationEndpoint {
+	[key: string]: unknown;
+	watchEndpoint?: { [key: string]: unknown; index?: number; playlistId?: string; videoId?: string };
+}
 export interface PanelElement extends HTMLElement {
 	data?: PlaylistData;
 	updateData?(data: PlaylistData): void;
@@ -28,6 +45,7 @@ export interface PanelElement extends HTMLElement {
 export interface PlaylistContentsItem {
 	[key: string]: unknown;
 	playlistPanelVideoRenderer?: PlaylistItemRenderer;
+	playlistPanelVideoWrapperRenderer?: { primaryRenderer?: { playlistPanelVideoRenderer?: PlaylistItemRenderer } };
 	playlistVideoRenderer?: PlaylistItemRenderer;
 }
 export interface PlaylistData {
@@ -35,10 +53,15 @@ export interface PlaylistData {
 	contents: PlaylistContentsItem[];
 	currentIndex: number;
 	localCurrentIndex: number;
+	playlistId?: string;
 	totalVideos: number;
+	/** The extension's own note of where the loaded window starts in the playlist; see applyReversal. */
+	yteWindowOffset?: number;
 }
 export interface PlaylistItemRenderer {
-	navigationEndpoint?: { watchEndpoint?: { index?: number } };
+	navigationEndpoint?: NavigationEndpoint;
+	selected?: boolean;
+	videoId?: string;
 }
 export interface PlaylistPageDataContents {
 	contents?: {
@@ -70,8 +93,16 @@ export interface WatchFlexyElement extends HTMLElement {
 	data?: WatchFlexyData;
 	updatePageData_?(data: unknown): void;
 }
+/** The playlist data a watch page plays from, and the elements it lives in. */
+export interface WatchPlaylistData {
+	autoplay: AutoplayData;
+	manager: Nullable<ManagerElement>;
+	panel: Nullable<PanelElement>;
+	playlist: PlaylistData;
+	watchFlexy: WatchFlexyElement;
+}
 export interface YtdPlayerElement extends HTMLElement {
-	updatePlayerComponents?(...args: unknown[]): void;
+	updatePlayerComponents?(playlist: PlaylistData): void;
 	updatePlayerPlaylist_?(playlist: PlaylistData): void;
 }
 
@@ -100,18 +131,45 @@ export function getHeaderSelector(): string {
 		:	"#page-manager > ytd-watch-flexy #playlist #start-actions";
 }
 
-export function getPlaylistData(): Nullable<{ autoplay: AutoplayData; playlist: PlaylistData; watchFlexy: WatchFlexyElement }> {
+/**
+ * The playlist and autoplay data YouTube plays from on a watch page. The panel and the playlist manager are read
+ * first: YouTube hands them its own copy of the playlist whenever it reloads it (its response to a navigation, the
+ * rest of a long playlist, a queue or miniplayer change), and that copy never reaches the page's `data` again, so
+ * the page data alone can be a stale picture of what is playing. Nothing is returned without a list in the address,
+ * or for a panel left behind by another playlist.
+ */
+export function getPlaylistData(): Nullable<WatchPlaylistData> {
+	if (!isWatchPage()) return null;
+	const playlistId = new URLSearchParams(window.location.search).get("list");
+	if (!playlistId) return null;
 	const watchFlexy = document.querySelector<WatchFlexyElement>("ytd-watch-flexy, ytd-watch-grid");
 	if (!watchFlexy) return null;
-	const { data } = watchFlexy;
-	if (!data?.contents?.twoColumnWatchNextResults) return null;
-	const playlist = data.contents.twoColumnWatchNextResults.playlist?.playlist;
-	const autoplay = data.contents.twoColumnWatchNextResults.autoplay?.autoplay;
+	const results = watchFlexy.data?.contents?.twoColumnWatchNextResults;
+	const panel = getPlaylistPanel(watchFlexy);
+	const manager = document.querySelector<ManagerElement>("yt-playlist-manager");
+	const panelPlaylist = panel?.data;
+	const playlist =
+		panelPlaylist && Array.isArray(panelPlaylist.contents) && panelPlaylist.contents.length > 0 ? panelPlaylist : results?.playlist?.playlist;
+	const managerAutoplay = manager?.autoplayData;
+	const autoplay = managerAutoplay && Array.isArray(managerAutoplay.sets) ? managerAutoplay : results?.autoplay?.autoplay;
 	if (!playlist?.contents || !autoplay?.sets) return null;
-	return { autoplay, playlist, watchFlexy };
+	if (playlist.playlistId && playlist.playlistId !== playlistId) return null;
+	return { autoplay, manager, panel, playlist, watchFlexy };
+}
+
+/** The video renderer behind a playlist entry, whichever wrapper YouTube put it in; null for a continuation entry. */
+export function getPlaylistItem(item: Nullable<PlaylistContentsItem> | undefined): Nullable<PlaylistItemRenderer> {
+	if (!item) return null;
+	return (
+		item.playlistPanelVideoRenderer ??
+		item.playlistPanelVideoWrapperRenderer?.primaryRenderer?.playlistPanelVideoRenderer ??
+		item.playlistVideoRenderer ??
+		null
+	);
 }
 
 export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; contents: PlaylistContentsItem[] }> {
+	if (!isPlaylistPage()) return null;
 	const browse = document.querySelector<BrowseElement>("ytd-browse[page-subtype='playlist']");
 	if (!browse) return null;
 	const data = browse.data as PlaylistPageDataContents | undefined;
@@ -121,6 +179,48 @@ export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; content
 	const contents = videoList?.contents;
 	if (!contents || !Array.isArray(contents)) return null;
 	return { browse, contents };
+}
+
+/** The watch page's playlist panel: the one inside the page, not one the miniplayer or another layout keeps around. */
+export function getPlaylistPanel(watchFlexy: Nullable<HTMLElement> = null): Nullable<PanelElement> {
+	const root = watchFlexy ?? document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
+	return (
+		root?.querySelector<PanelElement>("ytd-playlist-panel-renderer#playlist") ?? document.querySelector<PanelElement>("ytd-playlist-panel-renderer")
+	);
+}
+
+/**
+ * Whether the loaded playlist runs backwards, judged by the playlist positions of its first and last video. Null when
+ * that cannot be told, for fewer than two videos or positions YouTube did not send: reversing is a toggle, so on a
+ * guess the list would be flipped the wrong way each time it is checked.
+ */
+export function getReversalState(): Nullable<boolean> {
+	const result = getPlaylistData();
+	if (result) return contentsAreReversed(result.playlist.contents);
+	const playlistResult = getPlaylistPageData();
+	if (playlistResult) return contentsAreReversed(playlistResult.contents);
+	return null;
+}
+
+export function isCurrentlyReversed(): boolean {
+	return getReversalState() === true;
+}
+
+/**
+ * Whether the watch page's playlist data belongs to the video in the address bar. After an in-page navigation the
+ * previous video's data stays in place until YouTube's response for the new one arrives, and reversing that would
+ * turn the wrong list over.
+ */
+export function isPlaylistDataCurrent(): boolean {
+	const videoId = new URLSearchParams(window.location.search).get("v");
+	if (!videoId) return true;
+	const result = getPlaylistData();
+	if (!result) return false;
+	const {
+		playlist: { contents, localCurrentIndex }
+	} = result;
+	const current = contents.map(getPlaylistItem).find((item) => item?.selected) ?? getPlaylistItem(contents[localCurrentIndex]);
+	return current?.videoId === videoId;
 }
 
 export async function poll<T>(fn: () => T, predicate: (result: T) => boolean, interval = 100, timeout = 3000): Promise<Nullable<T>> {
@@ -183,6 +283,25 @@ export const FEATURE_NAME = "playlistReverseButton";
 
 export const PLAYLIST_PAGE_WAIT_SELECTOR = "ytd-playlist-video-list-renderer";
 
+/**
+ * Whether these playlist entries run backwards, by the playlist positions of the first and last video; null when
+ * that cannot be told, for fewer than two videos or positions YouTube did not send.
+ */
+export function contentsAreReversed(contents: PlaylistContentsItem[]): Nullable<boolean> {
+	const positions = contents
+		.map((item) => getPlaylistItem(item)?.navigationEndpoint?.watchEndpoint?.index)
+		.filter((position): position is number => typeof position === "number");
+	if (positions.length < 2) return null;
+	const [first] = positions;
+	const last = positions.at(-1);
+	if (last === undefined || first === last) return null;
+	return first > last;
+}
+
+export function currentSetupGeneration(): number {
+	return setupGeneration;
+}
+
 export function findVisibleActionRow(): Nullable<HTMLElement> {
 	const header = findVisiblePlaylistPageHeader();
 	if (!header) return null;
@@ -205,26 +324,12 @@ export function getPlaylistPageActionRow(timeout = 5000): Promise<Nullable<HTMLE
 	return poll(findVisibleActionRow, (r) => r !== null, 100, timeout);
 }
 
-export function isCurrentlyReversed(): boolean {
-	const result = getPlaylistData();
-	if (result) return contentsAreReversed(result.playlist.contents);
-	const playlistResult = getPlaylistPageData();
-	if (playlistResult) return contentsAreReversed(playlistResult.contents);
-	return false;
-}
-
 export function isPlaylistDataReady(): boolean {
 	return getPlaylistData() !== null || getPlaylistPageData() !== null;
 }
 
-function contentsAreReversed(contents: PlaylistContentsItem[]): boolean {
-	if (contents.length < 2) return false;
-	const first = contents.at(0);
-	const last = contents.at(-1);
-	if (!first || !last) return false;
-	const getIndex = (item: PlaylistContentsItem): number =>
-		item.playlistPanelVideoRenderer?.navigationEndpoint?.watchEndpoint?.index ??
-		item.playlistVideoRenderer?.navigationEndpoint?.watchEndpoint?.index ??
-		0;
-	return getIndex(first) > getIndex(last);
+/** Marks a setup or a cleanup; see setupGeneration. */
+export function nextSetupGeneration(): number {
+	setupGeneration += 1;
+	return setupGeneration;
 }
