@@ -253,6 +253,7 @@
 						"title": "Настройки меню функций"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Настройки успешно экспортированы",
@@ -276,6 +277,15 @@
 					},
 					"title": "Язык"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Открыть страницу настроек при обновлении",
 					"title": "Открывает страницу настроек при установке обновления YouTube Enhancer"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Disable 'Global volume' to configure this option",
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Поиск настроек"
