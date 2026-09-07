@@ -12,10 +12,8 @@ import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_test
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-// "shorts" is dropped from the feature's includePages: the three executeWithRetries calls in index.ts pass no
-// pageTypes, so DEFAULT_CONFIG's ["watch", "live"] applies and isOnAllowedPage is false on /shorts - the shorts
-// branches never execute. Re-add it once the feature passes pageTypes: ["shorts", "watch"].
-const testPages = resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType !== "shorts");
+// The feature's pages, from its metadata: watch and shorts, each with its own player element.
+const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { home, watch } = pageTypeRecord;
 
 type AudioTrack = { id: string; isAutoDubbed: boolean };
@@ -71,9 +69,10 @@ async function getAudioTrackState(page: Page): Promise<{ availableIds: string[];
 /** Reads the ids of every audio track the current video offers, using the same descriptor shape the feature parses. */
 async function getAvailableAudioTrackIds(page: Page): Promise<string[]> {
 	return await page.evaluate(async () => {
+		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
 		const player = document.querySelector<
 			HTMLDivElement & { getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[] }
-		>("div#movie_player");
+		>(selector);
 		if (!player?.getAvailableAudioTracks) return [];
 		const parseId = (value: unknown): null | string => {
 			if (typeof value !== "object" || value === null || Array.isArray(value)) return null;
@@ -99,9 +98,8 @@ function getPlayerSelector(pageType: PageType) {
 /** Reads the video id the player itself reports, so an assertion can tell which video a track belongs to. */
 async function getPlayerVideoId(page: Page): Promise<null | string> {
 	return await page.evaluate(async () => {
-		const player = document.querySelector<HTMLDivElement & { getVideoData?: () => Promise<{ video_id?: string }> | { video_id?: string } }>(
-			"div#movie_player"
-		);
+		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
+		const player = document.querySelector<HTMLDivElement & { getVideoData?: () => Promise<{ video_id?: string }> | { video_id?: string } }>(selector);
 		if (!player?.getVideoData) return null;
 		const data = await player.getVideoData();
 		return data.video_id ?? null;
@@ -131,12 +129,13 @@ async function requireAutoDubbedStart(page: Page): Promise<void> {
 /** Selects the video's auto-dubbed track through the player API; false when the video offers none. */
 async function selectAutoDubbedTrack(page: Page): Promise<boolean> {
 	return await page.evaluate(async () => {
+		const selector = document.location.pathname.startsWith("/shorts") ? "#shorts-player" : "div#movie_player";
 		const player = document.querySelector<
 			HTMLDivElement & {
 				getAvailableAudioTracks?: () => Promise<Record<string, unknown>[]> | Record<string, unknown>[];
 				setAudioTrack?: (track: Record<string, unknown>) => unknown;
 			}
-		>("div#movie_player");
+		>(selector);
 		if (!player?.getAvailableAudioTracks || !player.setAudioTrack) return false;
 		const describesAutoDubbed = (value: unknown): boolean => {
 			if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
@@ -234,7 +233,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		});
 	}
 
-	// Watch only: the disabled path has no shorts-specific code beyond the player selector, and on /shorts the feature cannot run at all.
+	// Watch only: the disabled path has no shorts-specific code beyond the player selector.
 	test(`should not switch to original audio track when disabled on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await disableFeature(page, "defaultToOriginalAudioTrack.enabled");
@@ -244,8 +243,7 @@ test.describe("defaultToOriginalAudioTrack", () => {
 		await expectToStay(async () => isAutoDubbed(page), true, { durationMs: 3000, intervalMs: 500, page });
 	});
 
-	// Watch only: onNavigate takes the same code path on both pages the feature declares, and on /shorts the retry
-	// loop never runs at all (see the note on testPages above).
+	// Watch only: onNavigate takes the same code path on both pages the feature declares.
 	test(`should re-apply the original audio track after an in-page navigation on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["dubbedAudio"]);
 		await requireAutoDubbedStart(page);

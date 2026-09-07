@@ -7,6 +7,8 @@ import { expectFeatureButtonToBeIn, expectToStay } from "@/src/utils/_tests/asse
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { deepDarkCssID } from "@/src/utils/constants";
+import { DEEP_DARK_COLORS_ATTRIBUTE, DEEP_DARK_PRESET_ATTRIBUTE } from "@/src/utils/deep-dark-theme/dom";
 
 const { shorts, watch } = pageTypeRecord;
 const { below } = placementRecord;
@@ -25,31 +27,31 @@ test.describe("deepDarkCSS", () => {
 	test("should inject deep dark CSS on shorts", async ({ page }) => {
 		await navigateToPageType(page, shorts);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
 	});
 	test("should work on re-enable after disable on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
 		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 5000 }).toBe(0);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 5000 }).toBe(0);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
 	});
 	test("persists deep dark CSS after full page reload on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
 		await page.reload();
 		await navigateToPageType(page, watch);
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 15000 }).toBe(1);
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 15000 }).toBe(1);
 	});
 	test("applies every bundled preset on watch", async ({ page }) => {
 		test.setTimeout(180_000);
 		await navigateToPageType(page, watch);
 		await enableFeature(page, "deepDarkCSS.enabled");
-		await expect.poll(async () => await page.locator("#yte-deep-dark-css").count(), { timeout: 10000 }).toBe(1);
-		const initialContent = await page.locator("#yte-deep-dark-css").textContent();
+		await expect.poll(async () => await page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		const initialContent = await page.locator(`#${deepDarkCssID}`).textContent();
 		expect(initialContent).toContain("#00adee");
 		for (const preset of deepDarkPreset) {
 			if (preset === "Custom") continue;
@@ -57,7 +59,7 @@ test.describe("deepDarkCSS", () => {
 			expect(mainColor, `${preset} declares --main-color`).toBeTruthy();
 			await setOption(page, "deepDarkCSS.preset", preset);
 			await expect
-				.poll(async () => page.locator("#yte-deep-dark-css").textContent(), { timeout: 5000 })
+				.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 5000 })
 				.toMatch(new RegExp(`--main-color:\\s*${mainColor}`));
 		}
 	});
@@ -68,11 +70,46 @@ test.describe("deepDarkCSS", () => {
 		await setOption(page, "deepDarkCSS.colors.mainBackground", customBackground);
 		await enableFeature(page, "deepDarkCSS.enabled");
 		// The preset loop above skips "Custom", so getDeepDarkCustomThemeStyle is only exercised here.
-		await expect.poll(async () => page.locator("#yte-deep-dark-css").textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#ff00ff/);
-		expect(await page.locator("#yte-deep-dark-css").textContent()).toMatch(/--main-background:\s*#123456/);
+		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#ff00ff/);
+		expect(await page.locator(`#${deepDarkCssID}`).textContent()).toMatch(/--main-background:\s*#123456/);
 		await setOption(page, "deepDarkCSS.colors.mainColor", "#00ff88");
-		await expect.poll(async () => page.locator("#yte-deep-dark-css").textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#00ff88/);
-		expect(await page.locator("#yte-deep-dark-css").textContent()).not.toMatch(/--main-color:\s*#ff00ff/);
+		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(/--main-color:\s*#00ff88/);
+		expect(await page.locator(`#${deepDarkCssID}`).textContent()).not.toMatch(/--main-color:\s*#ff00ff/);
+	});
+	test("maps every Custom preset colour to its own variable in the injected CSS on watch", async ({ page }) => {
+		await navigateToPageType(page, watch);
+		await setOption(page, "deepDarkCSS.preset", "Custom");
+		await enableFeature(page, "deepDarkCSS.enabled");
+		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).count(), { timeout: 10000 }).toBe(1);
+		// Each key feeds one custom property; a key wired to the wrong variable, or dropped, would leave a stale value.
+		const colours = {
+			colorShadow: "#101010",
+			dimmerText: "#202020",
+			hoverBackground: "#303030",
+			mainBackground: "#404040",
+			mainColor: "#505050",
+			mainText: "#606060",
+			secondBackground: "#707070"
+		} as const;
+		for (const [key, colour] of Object.entries(colours)) {
+			await setOption(page, `deepDarkCSS.colors.${key}`, colour);
+		}
+		const expectations: [string, RegExp][] = [
+			["colorShadow", /--shadow:\s*0 1px 0\.5px #101010/],
+			["dimmerText", /--dimmer-text:\s*#202020/],
+			["hoverBackground", /--hover-background:\s*#303030/],
+			["mainBackground", /--main-background:\s*#404040/],
+			["mainColor", /--main-color:\s*#505050/],
+			["mainText", /--main-text:\s*#606060/],
+			["secondBackground", /--second-background:\s*#707070/]
+		];
+		await expect.poll(async () => page.locator(`#${deepDarkCssID}`).textContent(), { timeout: 10000 }).toMatch(expectations[6][1]);
+		const css = (await page.locator(`#${deepDarkCssID}`).textContent()) ?? "";
+		for (const [key, pattern] of expectations) {
+			expect(css, `${key} reaches the sheet`).toMatch(pattern);
+		}
+		// The data attribute carries the same colours for the button icon colouring.
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, /#707070/);
 	});
 	test("repaints the page background while enabled on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -89,15 +126,15 @@ test.describe("deepDarkCSS", () => {
 		await setOption(page, "deepDarkCSS.preset", "Deep-Dark");
 		await enableFeature(page, "deepDarkCSS.enabled");
 		// getDeepDarkData reads these attributes to resolve button colours, so they are the feature's second output.
-		await expect(page.locator("html")).toHaveAttribute("data-yte-deep-dark-preset", "Deep-Dark", { timeout: 10000 });
-		await expect(page.locator("html")).not.toHaveAttribute("data-yte-deep-dark-colors", /.*/);
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Deep-Dark", { timeout: 10000 });
+		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, /.*/);
 		await setOption(page, "deepDarkCSS.preset", "Custom");
 		await setOption(page, "deepDarkCSS.colors.mainColor", customMainColor);
-		await expect(page.locator("html")).toHaveAttribute("data-yte-deep-dark-preset", "Custom", { timeout: 10000 });
-		await expect(page.locator("html")).toHaveAttribute("data-yte-deep-dark-colors", new RegExp(customMainColor), { timeout: 10000 });
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, "Custom", { timeout: 10000 });
+		await expect(page.locator("html")).toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, new RegExp(customMainColor), { timeout: 10000 });
 		await disableFeature(page, "deepDarkCSS.enabled");
-		await expect(page.locator("html")).not.toHaveAttribute("data-yte-deep-dark-preset", /.*/, { timeout: 10000 });
-		await expect(page.locator("html")).not.toHaveAttribute("data-yte-deep-dark-colors", /.*/);
+		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_PRESET_ATTRIBUTE, /.*/, { timeout: 10000 });
+		await expect(page.locator("html")).not.toHaveAttribute(DEEP_DARK_COLORS_ATTRIBUTE, /.*/);
 	});
 	test("recolors below player button icons for light and dark backgrounds on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
@@ -115,13 +152,13 @@ test.describe("deepDarkCSS", () => {
 	});
 	test("does not inject deep dark CSS before it is enabled on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
-		await expectToStay(async () => page.locator("#yte-deep-dark-css").count(), 0, { page });
+		await expectToStay(async () => page.locator(`#${deepDarkCssID}`).count(), 0, { page });
 	});
 	test("does not inject deep dark CSS when the preset changes while disabled on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);
 		await disableFeature(page, "deepDarkCSS.enabled");
 		// onConfigChange runs for disabled features too; only the deepDarkCSSExists guard keeps the sheet out of the page.
 		await setOption(page, "deepDarkCSS.preset", "Dracula");
-		await expectToStay(async () => page.locator("#yte-deep-dark-css").count(), 0, { page });
+		await expectToStay(async () => page.locator(`#${deepDarkCssID}`).count(), 0, { page });
 	});
 });

@@ -250,12 +250,10 @@ test.describe("onScreenDisplay", () => {
 		};
 		const initial = await readTitleBlock();
 		expect(initial).not.toBeNull();
-		test
-			.info()
-			.annotations.push({
-				description: initial!.overlaps ? "title block over the video at the default size" : "title block beside the video at the default size",
-				type: "note"
-			});
+		test.info().annotations.push({
+			description: initial!.overlaps ? "title block over the video at the default size" : "title block beside the video at the default size",
+			type: "note"
+		});
 		await expectBottomOffset(initial!.overlaps ? initial!.visualHeight : 0);
 		// A short window puts the block over the video (1280x800 does on this layout); the next display clears it.
 		await page.setViewportSize({ height: 800, width: 1280 });

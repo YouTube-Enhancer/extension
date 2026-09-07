@@ -4,11 +4,13 @@ import { expect, test } from "playwright.config";
 
 import type { YtLockupViewModelElement } from "@/src/utils/dom/nativeComponents";
 
+import { LOCKUP_MENU_WRAPPER_SELECTOR, LOCKUP_SELECTOR } from "@/src/features/saveToWatchLaterButton/constants";
 import { metadata } from "@/src/features/saveToWatchLaterButton/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPage, navigateToPageType, reloadPage, spaNavigateToRelatedVideo, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 import {
@@ -23,18 +25,15 @@ import {
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 
-// Mirrors the feature's own constants and container query (saveToWatchLaterButton/constants.ts, index.ts), so
-// the tests only look where the feature is allowed to place a button.
-const LOCKUP_SELECTOR = "yt-lockup-view-model";
-const LOCKUP_MENU_WRAPPER_SELECTOR = "div.ytLockupMetadataViewModelMenuButton";
+// The feature builds its home page container query from the page subtype (index.ts); the tests only look there.
 const HOME_CONTAINER_SELECTOR = "ytd-two-column-browse-results-renderer[page-subtype='home']";
 // Marks the one card a test acts on, so later assertions cannot silently pass on a different card.
 const MARKED_LOCKUP_ATTRIBUTE = "data-yte-test-lockup";
 // The saved/unsaved state is carried by the icon (see the watchLater harness) and the label on the native button.
-const SAVE_LABEL = "Save to Watch Later";
-const REMOVE_LABEL = "Remove from Watch Later";
+const SAVE_LABEL = localeText("pages.content.features.saveToWatchLaterButton.extras.saveVideo");
+const REMOVE_LABEL = localeText("pages.content.features.saveToWatchLaterButton.extras.removeVideo");
 // YouTube's pipeline toasts the save itself; the feature only toasts the removal.
-const REMOVED_TOAST_TEXT = "Removed from Watch Later";
+const REMOVED_TOAST_TEXT = localeText("pages.content.features.saveToWatchLaterButton.extras.removedVideo");
 const { home, watch } = pageTypeRecord;
 
 async function clickActionsRowButton(page: Page): Promise<void> {
@@ -191,6 +190,14 @@ async function scrollFeedUntil(page: Page, predicate: () => Promise<boolean>, ti
 	}
 }
 
+/** Takes YouTube's command pipeline (ytd-app.resolveCommand) off the page, the way an older or changed page shell would. */
+async function withoutCommandPipeline(page: Page): Promise<void> {
+	await page.evaluate(() => {
+		const app = document.querySelector<HTMLElement & { resolveCommand?: unknown }>("ytd-app");
+		if (app) app.resolveCommand = undefined;
+	});
+}
+
 test.describe("saveToWatchLaterButton", () => {
 	for (const pageType of testPages) {
 		test(`save button should appear when enabled on ${pageType}`, async ({ page }) => {
@@ -297,6 +304,62 @@ test.describe("saveToWatchLaterButton", () => {
 				timeout: 10000
 			});
 			if (initialIcon === UNSAVED_ICON) await expectRemovedToast(page);
+		});
+
+		test("falls back to the Innertube client when YouTube's command pipeline is unavailable", async ({ page }) => {
+			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			test.setTimeout(120_000);
+			await navigateToPageType(page, watch);
+			await enableFeature(page, "saveToWatchLaterButton.enabled");
+			const actionsRowButton = page.locator(ACTIONS_ROW_BUTTON_SELECTOR);
+			await expect(actionsRowButton).toBeAttached({ timeout: 15000 });
+			const initialIcon = await settleActionsRowIcon(page);
+			expect([SAVED_ICON, UNSAVED_ICON], "the actions row button settled in an unknown state").toContain(initialIcon);
+			const flippedIcon = initialIcon === SAVED_ICON ? UNSAVED_ICON : SAVED_ICON;
+			// The feature hands an edit to ytd-app.resolveCommand first. Without it the request goes through the
+			// extension's own Innertube client, which still reaches the same endpoint.
+			await withoutCommandPipeline(page);
+			const editRequest = page.waitForResponse((response) => response.url().includes("/youtubei/v1/browse/edit_playlist"), { timeout: 20000 });
+			await clickActionsRowButton(page);
+			expect((await editRequest).ok()).toBe(true);
+			await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(flippedIcon);
+			// Back to the starting state through the same path, so the account is left as it was found.
+			const restoreRequest = page.waitForResponse((response) => response.url().includes("/youtubei/v1/browse/edit_playlist"), { timeout: 20000 });
+			await clickActionsRowButton(page);
+			expect((await restoreRequest).ok()).toBe(true);
+			await expect.poll(async () => readActionsRowIcon(page), { timeout: 15000 }).toBe(initialIcon);
+		});
+
+		test("reports a failed fallback save on the button itself", async ({ page }) => {
+			test.skip(!hasAuthState(), "requires YouTube login for Innertube API");
+			test.setTimeout(120_000);
+			await navigateToPageType(page, watch);
+			await enableFeature(page, "saveToWatchLaterButton.enabled");
+			const actionsRowButton = page.locator(ACTIONS_ROW_BUTTON_SELECTOR);
+			await expect(actionsRowButton).toBeAttached({ timeout: 15000 });
+			const initialIcon = await settleActionsRowIcon(page);
+			expect([SAVED_ICON, UNSAVED_ICON], "the actions row button settled in an unknown state").toContain(initialIcon);
+			// With YouTube's pipeline gone the edit goes through the Innertube client, and with the endpoint blocked that
+			// fails. The pipeline would have carried the error toast too, so the message lands in the extension's tooltip
+			// on the button, the button is released again and the state stays what it was.
+			await withoutCommandPipeline(page);
+			await page.route("**/youtubei/v1/browse/edit_playlist*", (route) => route.abort());
+			try {
+				await clickActionsRowButton(page);
+				const tooltip = page.locator("#yte-feature-saveToWatchLaterButton-tooltip");
+				await expect(tooltip).toBeAttached({ timeout: 15000 });
+				await expect(tooltip).toContainText(
+					localeText(
+						initialIcon === SAVED_ICON ?
+							"pages.content.features.saveToWatchLaterButton.extras.failedToRemoveVideo"
+						:	"pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo"
+					)
+				);
+				await expect(actionsRowButton.locator("button").first()).toBeEnabled({ timeout: 10000 });
+				expect(await readActionsRowIcon(page)).toBe(initialIcon);
+			} finally {
+				await page.unroute("**/youtubei/v1/browse/edit_playlist*");
+			}
 		});
 
 		test("actions row button shows the saved state for a video already in Watch Later", async ({ page }) => {
