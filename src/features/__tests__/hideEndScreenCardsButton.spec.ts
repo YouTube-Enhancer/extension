@@ -12,11 +12,12 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
-const hideLabel = "Hide end screen cards";
-const showLabel = "Show end screen cards";
+const hideLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off");
+const showLabel = localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.on");
 const { menu, right } = placementRecord;
 const { home, watch } = pageTypeRecord;
 

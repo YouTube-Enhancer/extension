@@ -12,13 +12,14 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
 const { left } = placementRecord;
 const { home, watch } = pageTypeRecord;
-const copiedToClipboardText = "Screenshot copied to clipboard";
+const copiedToClipboardText = localeText("pages.content.features.screenshotButton.extras.copiedToClipboard");
 /**
  * Asserts the saved screenshot matches the default filename template ("Screenshot-{video id}-{date}" with the
  * iso date format) and that its contents really are a PNG, which is the configured default format.
@@ -147,6 +148,69 @@ test.describe("screenshotButton", () => {
 		// between the click and the assertion cannot flake.
 		const dateAfterClick = formatDayMonthYear(new Date());
 		expect([`${videoId}_${dateBeforeClick}.png`, `${videoId}_${dateAfterClick}.png`]).toContain(download.suggestedFilename());
+	});
+
+	for (const { dateFormat, pattern } of [
+		{ dateFormat: "date", pattern: /^\d{4}-\d{2}-\d{2}$/ },
+		{ dateFormat: "dateTime", pattern: /^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$/ }
+	] as const) {
+		test(`should render the "${dateFormat}" date format into the file name on ${watch}`, async ({ page }) => {
+			await navigateToPageType(page, watch);
+			await enableFeature(page, "screenshotButton.button.enabled");
+			await setOption(page, "screenshotButton.saveAs", "file");
+			await setOption(page, "screenshotButton.filename", "{date}");
+			await setOption(page, "screenshotButton.dateFormat", dateFormat);
+			// The colon separator only shows on platforms whose file names allow it; here it proves the option is honoured
+			// without breaking the name, since the sanitiser turns it into an underscore on Windows.
+			await setOption(page, "screenshotButton.timestampSeparator", "colon");
+			await setOption(page, "screenshotButton.button.placement", left);
+			await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+			const downloadPromise = page.waitForEvent("download");
+			await clickFeatureButton(page, watch, "yte-feature-screenshotButton-button", left);
+			const download = await downloadPromise;
+			expect(download.suggestedFilename().replace(/\.png$/, "")).toMatch(pattern);
+		});
+	}
+
+	test(`should resolve the channel and chapter placeholders in the file name on ${watch}`, async ({ page }) => {
+		// The fixture with description timestamps is the one YouTube renders chapters for.
+		await navigateToPageType(page, watch, ["timestamps"]);
+		await enableFeature(page, "screenshotButton.button.enabled");
+		await setOption(page, "screenshotButton.saveAs", "file");
+		await setOption(page, "screenshotButton.filename", "{channel id}_{channel name}_{chapter name}");
+		await setOption(page, "screenshotButton.button.placement", left);
+		await expectFeatureButtonToBeTruthy(page, "yte-feature-screenshotButton-button");
+		// The values the feature resolves come from the player response and the chapter title the player shows.
+		const expected = await page.evaluate(async () => {
+			const player = document.querySelector("div#movie_player") as unknown as null | {
+				getPlayerResponse?: () => { videoDetails?: { author?: string; channelId?: string } };
+				getVideoData?: () => Promise<{ author?: string }>;
+			};
+			const response = player?.getPlayerResponse?.();
+			const chapter = Array.from(document.querySelectorAll<HTMLElement>(".ytp-chapter-title .ytp-chapter-title-content")).find(
+				(element) => element.offsetParent !== null
+			);
+			return {
+				channelId: response?.videoDetails?.channelId ?? "",
+				channelName: response?.videoDetails?.author ?? (await player?.getVideoData?.())?.author ?? "",
+				chapter: chapter?.textContent?.trim() ?? ""
+			};
+		});
+		expect(expected.channelId).toMatch(/^UC[\w-]{22}$/);
+		expect(expected.channelName).not.toBe("");
+		const downloadPromise = page.waitForEvent("download");
+		await clickFeatureButton(page, watch, "yte-feature-screenshotButton-button", left);
+		const download = await downloadPromise;
+		const name = download.suggestedFilename().replace(/\.png$/, "");
+		expect(name.startsWith(`${expected.channelId}_`)).toBe(true);
+		// Characters a file name cannot hold are replaced, so the channel and chapter are checked without them.
+		const sanitise = (value: string) => value.replace(/[\\/:*?"<>|]/g, "_");
+		expect(name).toContain(sanitise(expected.channelName));
+		if (expected.chapter) expect(name.endsWith(`_${sanitise(expected.chapter)}`)).toBe(true);
+		else
+			test
+				.info()
+				.annotations.push({ description: "the fixture showed no chapter title, so only the channel placeholders were checked", type: "note" });
 	});
 
 	test(`should save the screenshot in the selected format on ${watch}`, async ({ page }) => {

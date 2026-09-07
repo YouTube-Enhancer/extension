@@ -2,6 +2,8 @@ import type { Page } from "@playwright/test";
 
 import { expect, test } from "playwright.config";
 
+import type { FeatureKeys } from "@/src/features/_registry/types";
+
 import {
 	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
@@ -12,11 +14,21 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord, placementSelectors } from "@/src/utils/_tests/constants";
 import { clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { listFeatureButtons, loadAllFeatureMetadata } from "@/src/utils/_tests/metadata";
 import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 
 const { below, left, menu, right } = placementRecord;
 const { home, shorts, watch } = pageTypeRecord;
+const featureButtons = listFeatureButtons(await loadAllFeatureMetadata());
+/**
+ * What a feature needs beyond its switch before its button renders. The metadata does not carry a button's
+ * `shouldRender` condition, so the few that have one are named here, keyed on the feature so a rename is caught.
+ */
+const buttonPreconditions: Partial<Record<FeatureKeys, (page: Page) => Promise<void>>> = {
+	// The volume boost button only exists in per-video mode.
+	volumeBoost: async (page) => setOption(page, "volumeBoost.mode", "per_video")
+};
 
 test.describe("buttonController", () => {
 	test.describe("featureMenu", () => {
@@ -93,6 +105,14 @@ test.describe("buttonController", () => {
 			await page.mouse.move(0, 0);
 			await setOption(page, "featureMenu.openType", "hover");
 			await featureMenuButton.hover();
+			await expect(featureMenu).toBeVisible();
+			await page.mouse.move(0, 0);
+			await expect(featureMenu).not.toBeVisible();
+			// Back to click: the hover listeners have to be taken down again, or a hover would still open the menu.
+			await setOption(page, "featureMenu.openType", "click");
+			await featureMenuButton.hover();
+			await expectToStay(async () => await featureMenu.isVisible(), false, { durationMs: 1500, page });
+			await featureMenuButton.click();
 			await expect(featureMenu).toBeVisible();
 		});
 		test("feature menu should close when clicking outside the menu and its button", async ({ page }) => {
@@ -189,6 +209,23 @@ test.describe("buttonController", () => {
 				await toggleFullscreen(page, false);
 				await expectFeatureButtonToBeIn(page, "yte-feature-loopButton-button", left);
 			});
+			// Every button a feature declares carries a fullscreenPlacement key and hands it to the controller through
+			// the same path, so the key is exercised once per button here, from the metadata, rather than in each
+			// feature's own spec.
+			for (const button of featureButtons) {
+				test(`should honour the fullscreenPlacement of ${button.name}`, async ({ page }) => {
+					await navigateToPageType(page, watch);
+					await buttonPreconditions[button.featureId]?.(page);
+					await setOption(page, button.placementKey, left);
+					await setOption(page, button.fullscreenPlacementKey, right);
+					await enableFeature(page, button.enabledKey);
+					await expectFeatureButtonToBeIn(page, button.buttonId, left);
+					await toggleFullscreen(page, true);
+					await expectFeatureButtonToBeIn(page, button.buttonId, right);
+					await toggleFullscreen(page, false);
+					await expectFeatureButtonToBeIn(page, button.buttonId, left);
+				});
+			}
 		});
 		test.describe("normal", () => {
 			for (const placement of [left, right, below] as const) {

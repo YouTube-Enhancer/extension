@@ -12,6 +12,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { WHEEL_DELTA_PER_NOTCH } from "@/src/utils/_tests/player";
 import { readStoredOptions } from "@/src/utils/_tests/storage";
@@ -242,7 +243,9 @@ test.describe("volumeBoost", () => {
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-volumeBoostButton-button");
 			await wheelOverVolumeBoostButton(page, "up");
 			await expectStoredVolumeBoostAmount(page, 11);
-			await expectToggleButtonState(page, "yte-feature-volumeBoostButton-button", false, { title: "Volume boost off" });
+			await expectToggleButtonState(page, "yte-feature-volumeBoostButton-button", false, {
+				title: localeText("pages.content.features.volumeBoostButton.button.toggle.off")
+			});
 			await expectVolumeBoostToStayOff(page);
 		});
 
@@ -332,7 +335,9 @@ test.describe("volumeBoost", () => {
 			await expectToggleButtonState(page, "yte-feature-volumeBoostButton-button", true, { title: "Volume boost (10 dB)" });
 			await page.evaluate(() => document.getElementById("yte-feature-volumeBoostButton-button")?.click());
 			await expectVolumeBoostEnabled(page, false);
-			await expectToggleButtonState(page, "yte-feature-volumeBoostButton-button", false, { title: "Volume boost off" });
+			await expectToggleButtonState(page, "yte-feature-volumeBoostButton-button", false, {
+				title: localeText("pages.content.features.volumeBoostButton.button.toggle.off")
+			});
 		});
 	});
 
