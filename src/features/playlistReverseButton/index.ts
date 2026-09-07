@@ -1,18 +1,18 @@
 import "./index.css";
 
-import type { Nullable } from "@/src/types";
-
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { isWatchPage } from "@/src/utils/url";
 
 import { removeButton } from "./button";
 import { metadata } from "./index.metadata";
-import { applyPlaylistPageReversal, applyReversal } from "./reversal";
+import { applyPlaylistPageReversal, matchReversalToState } from "./reversal";
 import { disconnectResizeObserver, setupOnPlaylistPage, setupOnWatchPage, stopMiniPlayerCheck } from "./setup";
-import { FEATURE_NAME, getPlaylistData, isCurrentlyReversed } from "./utils";
+import { FEATURE_NAME, isCurrentlyReversed, nextSetupGeneration } from "./utils";
 
 function cleanup() {
+	// Work the last setup left behind stands down from here on; see setupGeneration.
+	nextSetupGeneration();
 	removeButton();
 	stopMiniPlayerCheck();
 	disconnectResizeObserver();
@@ -23,14 +23,13 @@ function cleanup() {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		if (isCurrentlyReversed()) {
-			if (isWatchPage()) {
-				applyReversal();
-			} else {
-				applyPlaylistPageReversal();
-			}
-		}
+		// Cleaning up first: the un-reversal hands YouTube the playlist again, and the listeners must not answer that.
 		cleanup();
+		if (isWatchPage()) {
+			matchReversalToState(false);
+		} else if (isCurrentlyReversed()) {
+			applyPlaylistPageReversal();
+		}
 	},
 	onEnable: async (_config, stateAPI) => {
 		if (isWatchPage()) {
@@ -40,13 +39,9 @@ export default createFeature({
 		}
 	},
 	onNavigate: async (_config, stateAPI) => {
-		let prevIndex: Nullable<number> = null;
-		if (isWatchPage()) {
-			prevIndex = getPlaylistData()?.playlist.currentIndex ?? null;
-		}
 		cleanup();
 		if (isWatchPage()) {
-			await setupOnWatchPage(stateAPI, prevIndex);
+			await setupOnWatchPage(stateAPI);
 		} else {
 			await setupOnPlaylistPage(stateAPI);
 		}

@@ -7,8 +7,8 @@ import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
 
 import { REVERSE_BUTTON_CONTAINER_ID, REVERSE_BUTTON_ID } from "./constants";
-import { applyReversal, reversePlaylistPage } from "./reversal";
-import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isCurrentlyReversed, isPlaylistDataReady, poll } from "./utils";
+import { reversePlaylistPage, toggleReversal } from "./reversal";
+import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isPlaylistDataReady, poll } from "./utils";
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
 
@@ -17,15 +17,31 @@ let reverseButtonContainer: Nullable<HTMLDivElement> = null;
 let headerContainerElement: Nullable<HTMLElement> = null;
 let tooltipUpdate: Nullable<() => void> = null;
 
-async function ensureReversalSticks(stateAPI: StateAPI, reversal: () => boolean, inject: () => Promise<void>, maxTime = 3000): Promise<void> {
+/** Puts the button back when a re-render of its header took it away; an attached button is left alone. */
+async function ensureButton(stateAPI: StateAPI, container?: HTMLElement | string): Promise<void> {
+	if (reverseButtonContainer?.isConnected) return;
+	await injectButton(stateAPI, container);
+}
+
+/**
+ * Keeps checking the order for a while after setup, for the data YouTube may still hand over on top of the
+ * feature's. `restore` is expected to change nothing when the order is already right, and the button is only looked
+ * at again when it did change something. The checks end early once `isActive` says the setup they belong to is over.
+ */
+async function ensureReversalSticks(
+	stateAPI: StateAPI,
+	restore: () => boolean,
+	inject: () => Promise<void>,
+	isActive: () => boolean,
+	maxTime = 3000
+): Promise<void> {
 	const start = Date.now();
 	while (Date.now() - start < maxTime) {
 		await new Promise((resolve) => setTimeout(resolve, 500));
+		if (!isActive()) return;
 		const { isReversed } = stateAPI.getState();
 		if (!isReversed) return;
-		if (isCurrentlyReversed()) continue;
-		reversal();
-		await inject();
+		if (restore()) await inject();
 	}
 }
 
@@ -76,7 +92,7 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 			stateAPI.setState((prev) => ({ ...prev, isReversed: newReversed }));
 
 			if (isWatchPage()) {
-				applyReversal();
+				toggleReversal(newReversed);
 			} else {
 				void reversePlaylistPage();
 			}
@@ -119,4 +135,4 @@ function removeButton() {
 	}
 }
 
-export { ensureReversalSticks, injectButton, insertButtonInto, pollForDataReady, removeButton };
+export { ensureButton, ensureReversalSticks, injectButton, insertButtonInto, pollForDataReady, removeButton };
