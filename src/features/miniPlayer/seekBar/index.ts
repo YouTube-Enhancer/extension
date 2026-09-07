@@ -1,5 +1,6 @@
 import type { Nullable } from "@/src/types";
 
+import { MINI_SEEK_BAR_CLASS } from "@/src/features/miniPlayer/constants";
 import { clamp } from "@/src/utils/math";
 
 import type { StoryboardRenderer, StoryboardSheet } from "./core";
@@ -57,16 +58,16 @@ export function attachMiniSeekBar({
 	const seekWindow = () => (videoElement ? computeSeekWindow(videoElement) : null);
 	const syncVisibility = () => {
 		const controlsVisible = !controlsHost.classList.contains("ytp-autohide");
-		barRoot.classList.toggle("yte-mini-player-progress--hidden", isBarHidden({ controlsVisible, forced, scrubbing }));
+		barRoot.classList.toggle(`${MINI_SEEK_BAR_CLASS}--hidden`, isBarHidden({ controlsVisible, forced, scrubbing }));
 	};
 	const forceShow = () => {
 		forced = true;
-		barRoot.classList.add("yte-mini-player-progress--force");
+		barRoot.classList.add(`${MINI_SEEK_BAR_CLASS}--force`);
 		syncVisibility();
 		if (hideTimeout) clearTimeout(hideTimeout);
 		hideTimeout = setTimeout(() => {
 			forced = false;
-			barRoot.classList.remove("yte-mini-player-progress--force");
+			barRoot.classList.remove(`${MINI_SEEK_BAR_CLASS}--force`);
 			syncVisibility();
 		}, FORCE_SHOW_DURATION_MS);
 	};
@@ -159,7 +160,7 @@ export function attachMiniSeekBar({
 	};
 	const onPointerDown = (event: PointerEvent) => {
 		scrubbing = true;
-		barRoot.classList.add("yte-mini-player-progress--scrubbing");
+		barRoot.classList.add(`${MINI_SEEK_BAR_CLASS}--scrubbing`);
 		barRoot.setPointerCapture(event.pointerId);
 		syncVisibility();
 		showHoverUI();
@@ -175,7 +176,7 @@ export function attachMiniSeekBar({
 	};
 	const onPointerUp = () => {
 		scrubbing = false;
-		barRoot.classList.remove("yte-mini-player-progress--scrubbing");
+		barRoot.classList.remove(`${MINI_SEEK_BAR_CLASS}--scrubbing`);
 		syncVisibility();
 		hideHoverUI();
 	};
@@ -194,7 +195,7 @@ export function attachMiniSeekBar({
 			nativeBar.style.display = previousDisplay;
 		});
 	}
-	host.querySelectorAll(".yte-mini-player-progress").forEach((stale) => stale.remove());
+	host.querySelectorAll(`.${MINI_SEEK_BAR_CLASS}`).forEach((stale) => stale.remove());
 	host.appendChild(barRoot);
 	disposers.push(() => barRoot.remove());
 	barRoot.addEventListener("pointerdown", onPointerDown);
@@ -234,25 +235,25 @@ export function attachMiniSeekBar({
 }
 function buildBarElements() {
 	const barRoot = document.createElement("div");
-	barRoot.className = "yte-mini-player-progress";
+	barRoot.className = MINI_SEEK_BAR_CLASS;
 	const barTrack = document.createElement("div");
-	barTrack.className = "yte-mini-player-progress__track";
+	barTrack.className = `${MINI_SEEK_BAR_CLASS}__track`;
 	const bufferedBar = document.createElement("div");
-	bufferedBar.className = "yte-mini-player-progress__loaded";
+	bufferedBar.className = `${MINI_SEEK_BAR_CLASS}__loaded`;
 	const playedBar = document.createElement("div");
-	playedBar.className = "yte-mini-player-progress__played";
+	playedBar.className = `${MINI_SEEK_BAR_CLASS}__played`;
 	const hoverRange = document.createElement("div");
-	hoverRange.className = "yte-mini-player-progress__hover";
+	hoverRange.className = `${MINI_SEEK_BAR_CLASS}__hover`;
 	hoverRange.style.display = "none";
 	const scrubKnob = document.createElement("div");
-	scrubKnob.className = "yte-mini-player-progress__knob";
+	scrubKnob.className = `${MINI_SEEK_BAR_CLASS}__knob`;
 	const previewBox = document.createElement("div");
-	previewBox.className = "yte-mini-player-progress__preview";
+	previewBox.className = `${MINI_SEEK_BAR_CLASS}__preview`;
 	previewBox.style.display = "none";
 	const previewThumbnail = document.createElement("div");
-	previewThumbnail.className = "yte-mini-player-progress__preview-thumb";
+	previewThumbnail.className = `${MINI_SEEK_BAR_CLASS}__preview-thumb`;
 	const previewTimestamp = document.createElement("div");
-	previewTimestamp.className = "yte-mini-player-progress__preview-time";
+	previewTimestamp.className = `${MINI_SEEK_BAR_CLASS}__preview-time`;
 	previewBox.appendChild(previewThumbnail);
 	previewBox.appendChild(previewTimestamp);
 	barTrack.appendChild(bufferedBar);
