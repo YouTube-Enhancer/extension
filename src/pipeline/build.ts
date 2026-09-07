@@ -7,7 +7,7 @@ import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
 import { emptyOutputFolder } from "@/src/utils/plugins/utils";
 
-import { copyOutputs, generateManifests, makeReleaseZips, updateReadmeFeatures } from "./steps";
+import { copyOutputs, generateManifests, makeReleaseZips, updateReadmeFeatures, validateFeatureMetadata } from "./steps";
 
 config();
 
@@ -43,6 +43,7 @@ export async function runPreBuildPipeline(): Promise<void> {
 	console.log("[Build Pipeline] Running pre-build steps...");
 	const start = Date.now();
 	await timedStep("Clearing output folder", () => emptyOutputFolder());
+	await timedStep("Validating feature metadata", () => validateFeatureMetadata());
 	await timedStep("Updating available locales", () => updateAvailableLocales());
 	const isDevelopment = process.env.NODE_ENV === "development";
 	const shouldBypass = process.env.BYPASS_LOCALE_CHECK === "true";
