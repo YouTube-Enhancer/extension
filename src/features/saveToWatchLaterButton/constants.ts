@@ -1,4 +1,7 @@
 export const BUTTON_CLASS = "yte-save-to-watch-later-button";
+// The native icon names that carry the saved state on the button.
+export const SAVED_ICON = "CHECK_CIRCLE_THICK";
+export const UNSAVED_ICON = "WATCH_LATER";
 export const LOCKUP_SELECTOR = "yt-lockup-view-model";
 // This class also appears in index.css. Keep both in sync.
 export const LOCKUP_MENU_WRAPPER_SELECTOR = "div.ytLockupMetadataViewModelMenuButton";

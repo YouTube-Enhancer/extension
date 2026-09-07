@@ -6,6 +6,7 @@ import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
 
+import { REVERSE_BUTTON_CONTAINER_ID, REVERSE_BUTTON_ID } from "./constants";
 import { applyReversal, reversePlaylistPage } from "./reversal";
 import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isCurrentlyReversed, isPlaylistDataReady, poll } from "./utils";
 
@@ -40,14 +41,14 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 
 	const { isReversed } = stateAPI.getState();
 	reverseButton = document.createElement("button");
-	reverseButton.id = "yte-playlist-reverse-button";
-	reverseButton.className = "yte-playlist-reverse-button";
+	reverseButton.id = REVERSE_BUTTON_ID;
+	reverseButton.className = REVERSE_BUTTON_ID;
 	const tooltipText = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]);
 	reverseButton.dataset.title = tooltipText;
 	reverseButton.appendChild(createReverseIcon());
 
 	reverseButtonContainer = document.createElement("div");
-	reverseButtonContainer.id = "yte-playlist-reverse-button-container";
+	reverseButtonContainer.id = REVERSE_BUTTON_CONTAINER_ID;
 	reverseButtonContainer.appendChild(reverseButton);
 
 	insertButtonInto(headerContainerElement);

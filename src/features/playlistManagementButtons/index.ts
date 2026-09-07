@@ -7,6 +7,13 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { getPlaylistId } from "@/src/features/playlistLength/utils";
 import { createActionButton } from "@/src/features/playlistManagementButtons/button";
+import {
+	CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR,
+	PLAYLIST_ITEM_SELECTOR,
+	REMOVE_ALL_BUTTON_ID,
+	REMOVE_BUTTON_CLASS,
+	RESET_BUTTON_CLASS
+} from "@/src/features/playlistManagementButtons/constants";
 import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -21,8 +28,6 @@ interface YTDPlaylistVideoRenderer extends HTMLElement {
 	};
 	playlistVideoId: string;
 }
-const PLAYLIST_ITEM_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
-const CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR = "chip-bar-view-model";
 
 let playlistObserver: Nullable<MutationObserver> = null;
 let preparePageDisposeListener: Nullable<(event: Event) => void> = null;
@@ -49,7 +54,7 @@ const cleanupPlaylistManagementButtons = () => {
 	}
 	const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 	playlistItems.forEach((item) => {
-		item.querySelectorAll(".yte-remove-button, .yte-reset-button").forEach((btn) => btn.remove());
+		item.querySelectorAll(`.${REMOVE_BUTTON_CLASS}, .${RESET_BUTTON_CLASS}`).forEach((btn) => btn.remove());
 	});
 };
 
@@ -79,13 +84,13 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					continue;
 				}
 
-				const removeButton = item.querySelector(".yte-remove-button");
-				const resetButton = item.querySelector(".yte-reset-button");
+				const removeButton = item.querySelector(`.${REMOVE_BUTTON_CLASS}`);
+				const resetButton = item.querySelector(`.${RESET_BUTTON_CLASS}`);
 				const hasWatchProgress = getWatchedPercentage(item) > 0;
 
 				if (enable_playlist_remove_button && !removeButton) {
 					const removeButton = await createActionButton({
-						className: "yte-remove-button yte-action-button-large",
+						className: `${REMOVE_BUTTON_CLASS} yte-action-button-large`,
 						featureName: "playlistManagementButtons",
 						icon: FaTrashAlt,
 						iconColor: IsDarkMode() ? "white" : "black",
@@ -101,7 +106,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo,
 						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removingVideo
 					});
-					if (item.querySelector(".yte-remove-button")) continue;
+					if (item.querySelector(`.${REMOVE_BUTTON_CLASS}`)) continue;
 					removeButton.style.verticalAlign = "top";
 					if (isStale()) return;
 					menu.prepend(removeButton);
@@ -109,7 +114,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 
 				if (enable_playlist_reset_button && !resetButton && hasWatchProgress) {
 					const resetButton = await createActionButton({
-						className: "yte-reset-button yte-action-button-large",
+						className: `${RESET_BUTTON_CLASS} yte-action-button-large`,
 						featureName: "playlistManagementButtons",
 						icon: FaUndoAlt,
 						iconColor: IsDarkMode() ? "white" : "black",
@@ -124,7 +129,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched,
 						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markingAsUnwatched
 					});
-					if (item.querySelector(".yte-reset-button")) continue;
+					if (item.querySelector(`.${RESET_BUTTON_CLASS}`)) continue;
 					resetButton.style.verticalAlign = "top";
 					if (enable_playlist_remove_button && removeButton) {
 						removeButton.prepend(resetButton);
@@ -173,15 +178,15 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			const { renderToString } = await import("react-dom/server");
 			if (isStale()) return;
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
-			const existingButton = document.getElementById("yte-remove-all-watched-button");
+			const existingButton = document.getElementById(REMOVE_ALL_BUTTON_ID);
 			if (existingButton) {
 				existingButton.innerHTML = trashIcon + text;
 				return;
 			}
 
 			const button = document.createElement("button");
-			button.id = "yte-remove-all-watched-button";
-			button.className = "yte-remove-all-watched-button";
+			button.id = REMOVE_ALL_BUTTON_ID;
+			button.className = REMOVE_ALL_BUTTON_ID;
 			button.innerHTML = trashIcon + text;
 			removeAllButton = button;
 

@@ -15,7 +15,7 @@ import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentVideoId } from "@/src/utils/url";
 import { isVideoInPlaylist } from "@/src/utils/youtube";
 
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, LOCKUP_MENU_WRAPPER_SELECTOR, LOCKUP_SELECTOR } from "./constants";
+import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, LOCKUP_MENU_WRAPPER_SELECTOR, LOCKUP_SELECTOR, SAVED_ICON, UNSAVED_ICON } from "./constants";
 import { performPlaylistEdit } from "./saveActions";
 
 // YouTube's renderer elements expose their props on a data property.
@@ -153,7 +153,7 @@ export function createSaveButton({
 	return createNativeButton({
 		accessibilityText: label,
 		className: scopeClasses ? `${BUTTON_CLASS} ${scopeClasses}` : BUTTON_CLASS,
-		icon: saved ? "CHECK_CIRCLE_THICK" : "WATCH_LATER",
+		icon: saved ? SAVED_ICON : UNSAVED_ICON,
 		tooltip: label,
 		variant
 	});

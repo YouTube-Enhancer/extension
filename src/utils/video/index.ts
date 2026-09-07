@@ -1,6 +1,7 @@
 const THUMBNAIL_OVERLAY_SELECTORS = ["ytd-thumbnail-overlay-resume-playback-renderer", "ytw-thumbnail-overlay-resume-playback-renderer"] as const;
 
-const THUMBNAIL_PROGRESS_BAR_SELECTORS = [
+/** Where YouTube draws a thumbnail's watch progress, across its renderer generations. Shared with the specs. */
+export const THUMBNAIL_PROGRESS_BAR_SELECTORS = [
 	".ytd-thumbnail-overlay-resume-playback-renderer #progress",
 	".ytThumbnailOverlayProgressBarHostWatchedProgressBarSegment",
 	".ytwThumbnailOverlayResumePlaybackRendererThumbnailOverlayResumePlaybackProgress"

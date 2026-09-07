@@ -12,7 +12,7 @@ import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
-import { buttonContainerId } from "./constants";
+import { buttonContainerId, playerControlsSelectors } from "./constants";
 import "./index.css";
 
 const menuId = "#yte-feature-menu";
@@ -89,9 +89,9 @@ async function getPlacementRoot(placement: ButtonPlacement) {
 		case "feature_menu":
 			return await waitForElement<HTMLDivElement>("#yte-feature-menu");
 		case "player_controls_left":
-			return await waitForElement<HTMLDivElement>(".ytp-left-controls");
+			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_left);
 		case "player_controls_right":
-			return await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
+			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
 	}
 }
 
@@ -105,8 +105,7 @@ function getPlacementSelector(placement: ButtonPlacement): string | undefined {
 		);
 	}
 	if (placement === "feature_menu") return "#yte-feature-menu";
-	if (placement === "player_controls_left") return ".ytp-left-controls";
-	if (placement === "player_controls_right") return ".ytp-right-controls";
+	if (placement === "player_controls_left" || placement === "player_controls_right") return playerControlsSelectors[placement];
 	return undefined;
 }
 
@@ -818,7 +817,7 @@ async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nulla
 }
 
 async function getOrCreateRightControlsContainer(): Promise<Nullable<HTMLDivElement>> {
-	const rightControls = await waitForElement<HTMLDivElement>(".ytp-right-controls", 15000);
+	const rightControls = await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
 	if (!rightControls) return null;
 	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);
 	if (!container) {

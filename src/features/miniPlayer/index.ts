@@ -6,11 +6,11 @@ import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import type { MiniPlayerOptions } from "./types";
 
+import { MINI_PLAYER_ACTIVE_CLASS, MINI_PLAYER_SENTINEL_ID } from "./constants";
 import { MiniPlayerController, readManualOverride, setManualOverride } from "./controller";
 import { metadata } from "./index.metadata";
 
 const MINI_PLAYER_STATE_EVENT = "yte-mini-player-state";
-const SENTINEL_ID = "yte-mini-player-sentinel";
 
 let miniPlayerController: Nullable<MiniPlayerController> = null;
 let cachedMiniPlayerDefaults: Nullable<MiniPlayerOptions> = null;
@@ -42,10 +42,10 @@ function ensureController(options: MiniPlayerOptions) {
 	return miniPlayerController;
 }
 function ensureSentinelBelowPlayer(playerElement: Element): HTMLDivElement {
-	let visibilitySentinel = document.getElementById(SENTINEL_ID) as Nullable<HTMLDivElement>;
+	let visibilitySentinel = document.getElementById(MINI_PLAYER_SENTINEL_ID) as Nullable<HTMLDivElement>;
 	if (!visibilitySentinel) {
 		visibilitySentinel = createStyledElement({
-			elementId: SENTINEL_ID,
+			elementId: MINI_PLAYER_SENTINEL_ID,
 			elementType: "div",
 			styles: {
 				height: "1px",
@@ -143,7 +143,7 @@ export const setMiniPlayerManual = async (checked: boolean) => {
 	}
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const isMiniPlayerActive = () => document.documentElement.classList.contains("yte-mini-player-active");
+export const isMiniPlayerActive = () => document.documentElement.classList.contains(MINI_PLAYER_ACTIVE_CLASS);
 /**
  * Temporarily hides the mini player overlay (e.g. while another feature
  * borrows the video element). Returns a restore function. Both directions are
@@ -171,7 +171,7 @@ export default createFeature({
 	},
 	onDisable: () => {
 		cleanupAutoObservers();
-		const sentinel = document.getElementById(SENTINEL_ID);
+		const sentinel = document.getElementById(MINI_PLAYER_SENTINEL_ID);
 		sentinel?.remove();
 		if (miniPlayerController) {
 			miniPlayerController.destroy();
@@ -185,7 +185,7 @@ export default createFeature({
 	},
 	onNavigate: async ({ defaultPosition, defaultSize }) => {
 		cleanupAutoObservers();
-		const sentinel = document.getElementById(SENTINEL_ID);
+		const sentinel = document.getElementById(MINI_PLAYER_SENTINEL_ID);
 		sentinel?.remove();
 
 		const wasManualActive = miniPlayerController?.isActive() ? readManualOverride() : false;
