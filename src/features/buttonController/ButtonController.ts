@@ -1,6 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import { getFeatureIcon, type GetIconType, type ToggleIcon } from "@/src/icons";
+import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
 import { type AllButtonNames, type ButtonPlacement, type FullscreenPlacement, type Nullable, type SingleButtonFeatureNames } from "@/src/types";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
@@ -466,13 +466,14 @@ export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HT
 	return document.querySelector(selector);
 }
 
-export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, isToggle = false, overrideColor?: boolean) {
+export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
 	const color = overrideColor ? "#FFFFFF" : undefined;
-	if (isToggle && typeof icon === "object" && "off" in icon && "on" in icon) {
-		await applyThemeToSvg(icon.on, color);
-		await applyThemeToSvg(icon.off, color);
-	} else if (icon instanceof SVGSVGElement) {
-		await applyThemeToSvg(icon, color);
+	const target: SVGSVGElement | ToggleIcon = icon;
+	if (isToggleIcon(target)) {
+		await applyThemeToSvg(target.on, color);
+		await applyThemeToSvg(target.off, color);
+	} else {
+		await applyThemeToSvg(target, color);
 	}
 	return icon;
 }
@@ -693,12 +694,12 @@ function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 // ─── Tracked button management ────────────────────────────────────
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
-	button.replaceChildren();
-	if (typeof icon === "object" && "on" in icon && "off" in icon) {
-		button.append(checked ? icon.on : icon.off);
-	} else if (icon instanceof SVGSVGElement) {
-		button.append(icon);
-	}
+	button.replaceChildren(
+		isToggleIcon(icon) ?
+			checked ? icon.on
+			:	icon.off
+		:	icon
+	);
 }
 
 async function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF") {
@@ -723,8 +724,14 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	const newState = !getChecked(button);
 	setChecked(button, newState);
 	updateTrackedButtonChecked(buttonName, newState);
-	if (typeof icon === "object" && "off" in icon && "on" in icon) updateFeatureButtonIcon(button, newState ? icon.on : icon.off);
-	else if (icon instanceof SVGSVGElement) updateFeatureButtonIcon(button, icon);
+	const currentIcon: SVGSVGElement | ToggleIcon = icon;
+	updateFeatureButtonIcon(
+		button,
+		isToggleIcon(currentIcon) ?
+			newState ? currentIcon.on
+			:	currentIcon.off
+		:	currentIcon
+	);
 	listener(newState);
 }
 
@@ -898,7 +905,7 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 		featureName,
 		id: `yte-feature-${buttonName}-tooltip`
 	});
-	icon = await modifyIconForLightTheme(icon, isToggle, placement !== "below_player");
+	icon = await modifyIconForLightTheme(icon, placement !== "below_player");
 	if (isToggle) {
 		setChecked(button, initialChecked);
 		appendIcon(button, icon, initialChecked);

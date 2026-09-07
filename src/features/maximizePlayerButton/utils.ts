@@ -35,9 +35,7 @@ async function changeMaximizeButtonState(maximized: boolean) {
 	const button = getFeatureButton("maximizePlayerButton");
 	if (!button || !(button instanceof HTMLButtonElement)) return;
 	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	if (icon && typeof icon === "object" && "on" in icon && "off" in icon) {
-		updateFeatureButtonIcon(button, await modifyIconForLightTheme(maximized ? icon.on : icon.off, true));
-	}
+	updateFeatureButtonIcon(button, await modifyIconForLightTheme(maximized ? icon.on : icon.off));
 	updateFeatureButtonTitle(
 		"maximizePlayerButton",
 		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"])
