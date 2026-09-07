@@ -79,3 +79,7 @@ Of the thirteen of 2026-09-05: the six failed cases (the playbackSpeedButtons co
 ## Passed this time but not in the previous run
 
 The six failures and two of the three flaky cases of 2026-09-05 (listed above under what the previous run's list turned into), and `hideLiveStreamChat › removes the hide when SPA-navigating from a live stream to a VOD`, which found a regular video beside the stream again. It skips with "no related VOD rendered next to this live stream" when the stream's list has none.
+
+## Added after the run: playlistReverseButton autoplay cases (2026-09-07, night)
+
+Five cases were added to `playlistReverseButton.spec.ts` for issue #1411 (the audit's 3.10 has the defect): natural autoplay from the playlist's last video, two fresh-page legs opened near the end of their video, the player's Next and Previous, YouTube handing forward data back, and Back through the history. All 21 cases of the spec pass on three workers without retries. Fixture note: the watch fixture video is the last of the 437 videos of its playlist and YouTube loads a window of 21 around it, which makes it the reporter's exact case. Harness note: a `nodemon` watcher left running in this worktree rebuilds on every source change, and a manual `npm run build` alongside it produced a manifest without the chunk list (see the audit's status entry of that night); wait for the watcher's build instead.
