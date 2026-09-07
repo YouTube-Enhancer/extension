@@ -138,7 +138,9 @@ export function migrateConfiguration(
 			switch (target) {
 				case "playlistManagementButtons":
 					if (typeof key === "string") {
-						if (key.includes("remove")) newConfig.playlistManagementButtons.removeButton.enabled = value;
+						// "enable_remove_all_watched_button" also contains "remove", so the remove-all flag is matched first.
+						if (key.includes("remove_all")) newConfig.playlistManagementButtons.removeAllButton.enabled = value;
+						else if (key.includes("remove")) newConfig.playlistManagementButtons.removeButton.enabled = value;
 						if (key.includes("reset")) newConfig.playlistManagementButtons.resetButton.enabled = value;
 						continue;
 					}
@@ -326,12 +328,10 @@ export function updateConfigAtPath<P extends Path<configuration>>(
 	type Segments = PathSegments<P>;
 	type Parent = ParentType<configuration, Segments>;
 	const keys = key.split(".") as unknown as Segments;
-	console.log("[DEBUG-BP] updateConfigAtPath", { keys });
 	const updatedState = structuredClone(state);
 	let parent: Parent = updatedState as Parent;
 	for (const k of keys.slice(0, -1)) {
 		if (typeof parent !== "object" || parent === null || !(k in parent)) {
-			console.log("[DEBUG-BP] path FAIL at segment:", k);
 			return state;
 		}
 		parent = parent[k as keyof Parent] as Parent;
