@@ -5,6 +5,7 @@ import eventManager from "@/src/events/EventManager";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { ensureReversalSticks, injectButton, pollForDataReady } from "./button";
+import { REVERSE_BUTTON_CONTAINER_ID } from "./constants";
 import { applyPlaylistPageReversal, applyReversal, reversePlaylistPage, waitForDataRefresh } from "./reversal";
 import { FEATURE_NAME, getPlaylistPageActionRow, isCurrentlyReversed, isPlaylistDataReady, PLAYLIST_PAGE_WAIT_SELECTOR } from "./utils";
 
@@ -56,11 +57,7 @@ async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	resizeObserver = new ResizeObserver(() => {
 		const { isReversed: currentlyReversed } = stateAPI.getState();
 		void getPlaylistPageActionRow().then((r) => {
-			if (
-				r &&
-				document.getElementById("yte-playlist-reverse-button-container") &&
-				!r.contains(document.getElementById("yte-playlist-reverse-button-container"))
-			) {
+			if (r && document.getElementById(REVERSE_BUTTON_CONTAINER_ID) && !r.contains(document.getElementById(REVERSE_BUTTON_CONTAINER_ID))) {
 				void injectButton(stateAPI, r);
 				if (currentlyReversed && !isCurrentlyReversed()) applyPlaylistPageReversal();
 			}

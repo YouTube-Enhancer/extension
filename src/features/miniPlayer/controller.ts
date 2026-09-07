@@ -5,6 +5,16 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { registry } from "@/src/features/_registry/featureRegistry";
+import {
+	MINI_PLAYER_ACTIVE_CLASS,
+	MINI_PLAYER_CLOSE_ID,
+	MINI_PLAYER_CONTENT_ID,
+	MINI_PLAYER_CONTROLS_ID,
+	MINI_PLAYER_DRAG_HANDLE_ID,
+	MINI_PLAYER_OVERLAY_ID,
+	MINI_PLAYER_PLACEHOLDER_ID,
+	MINI_PLAYER_RESIZE_ID
+} from "@/src/features/miniPlayer/constants";
 import { attachMiniSeekBar } from "@/src/features/miniPlayer/seekBar";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { clamp } from "@/src/utils/math";
@@ -228,7 +238,7 @@ export class MiniPlayerController {
 		this.restorePlayer();
 		if (this.overlayElement) this.overlayElement.style.display = "none";
 		this.isActiveState = false;
-		document.documentElement.classList.remove("yte-mini-player-active");
+		document.documentElement.classList.remove(MINI_PLAYER_ACTIVE_CLASS);
 		// close() and destroy() get here without going through setMiniPlayerManual, so the state change is announced here.
 		this.onStateChange?.(this.isActiveState);
 	}
@@ -242,23 +252,23 @@ export class MiniPlayerController {
 			this.applyInitialRect();
 			this.overlayElement.style.display = "block";
 			this.isActiveState = true;
-			document.documentElement.classList.add("yte-mini-player-active");
+			document.documentElement.classList.add(MINI_PLAYER_ACTIVE_CLASS);
 			this.onStateChange?.(this.isActiveState);
 		} catch (error) {
 			console.error("[miniPlayer] Failed to enable mini player, restoring player:", error);
 			this.restorePlayer();
 			if (this.overlayElement) this.overlayElement.style.display = "none";
 			this.isActiveState = false;
-			document.documentElement.classList.remove("yte-mini-player-active");
+			document.documentElement.classList.remove(MINI_PLAYER_ACTIVE_CLASS);
 			this.onStateChange?.(this.isActiveState);
 		}
 	}
 	private ensureOverlay() {
 		if (this.overlayElement) return;
-		document.querySelectorAll<HTMLDivElement>("#yte-mini-player-overlay").forEach((stale) => stale.remove());
+		document.querySelectorAll<HTMLDivElement>(`#${MINI_PLAYER_OVERLAY_ID}`).forEach((stale) => stale.remove());
 		const overlay = createStyledElement({
 			classlist: ["yte-mini-player"],
-			elementId: "yte-mini-player-overlay",
+			elementId: MINI_PLAYER_OVERLAY_ID,
 			elementType: "div",
 			styles: {
 				borderRadius: "12px",
@@ -271,17 +281,17 @@ export class MiniPlayerController {
 		});
 		const overlayControls = createStyledElement({
 			classlist: ["yte-mini-player-overlay"],
-			elementId: "yte-mini-player-controls",
+			elementId: MINI_PLAYER_CONTROLS_ID,
 			elementType: "div"
 		});
 		const dragHandle = createStyledElement({
 			classlist: ["yte-mini-player-drag-handle"],
-			elementId: "yte-mini-player-drag-handle",
+			elementId: MINI_PLAYER_DRAG_HANDLE_ID,
 			elementType: "div"
 		});
 		const closeBtn = createStyledElement({
 			classlist: ["yte-mini-player-close"],
-			elementId: "yte-mini-player-close",
+			elementId: MINI_PLAYER_CLOSE_ID,
 			elementType: "button"
 		});
 		closeBtn.textContent = "×";
@@ -295,7 +305,7 @@ export class MiniPlayerController {
 		};
 		const resizeHandle = createStyledElement({
 			classlist: ["yte-mini-player-resize-handle"],
-			elementId: "yte-mini-player-resize",
+			elementId: MINI_PLAYER_RESIZE_ID,
 			elementType: "div"
 		});
 		overlayControls.appendChild(dragHandle);
@@ -322,7 +332,7 @@ export class MiniPlayerController {
 		if (!this.playerPlaceholder) {
 			const { height, width } = player.getBoundingClientRect();
 			const placeholder = createStyledElement({
-				elementId: "yte-mini-player-placeholder",
+				elementId: MINI_PLAYER_PLACEHOLDER_ID,
 				elementType: "div",
 				styles: {
 					height: `${height}px`,
@@ -335,10 +345,10 @@ export class MiniPlayerController {
 		}
 		this.ensureOverlay();
 		if (!this.overlayElement) return false;
-		let content = this.overlayElement.querySelector<HTMLDivElement>("#yte-mini-player-content");
+		let content = this.overlayElement.querySelector<HTMLDivElement>(`#${MINI_PLAYER_CONTENT_ID}`);
 		if (!content) {
 			content = createStyledElement({
-				elementId: "yte-mini-player-content",
+				elementId: MINI_PLAYER_CONTENT_ID,
 				elementType: "div",
 				styles: {
 					inset: "0",
