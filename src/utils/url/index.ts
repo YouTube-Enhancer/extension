@@ -34,6 +34,9 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 		if (first?.startsWith("@")) {
 			if (second === undefined || second === "featured") return "channel_home";
 			if (second === "videos") return "channel_videos";
+			// The registry and the features that gate on them know these two pages; without this they were never detected.
+			if (second === "posts") return "channel_posts";
+			if (second === "streams") return "channel_streams";
 		}
 		if (first === "watch") {
 			/**
