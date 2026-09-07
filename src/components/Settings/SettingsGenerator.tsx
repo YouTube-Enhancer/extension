@@ -9,6 +9,7 @@ import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import {
+	type AttributionEntry,
 	type FeatureKeys,
 	type FeatureSettingNode,
 	isDividerNode,
@@ -26,6 +27,7 @@ type ConditionSetting = "equals" | "notEquals";
 const DEFAULT_SECTION: SettingsSectionId = "miscellaneous";
 
 type SectionData = {
+	attribution: AttributionEntry[];
 	featureMap: Map<number, FeatureKeys>;
 	sectionTitle?: TSelectFunc;
 	settings: SettingsEntry[];
@@ -61,9 +63,11 @@ export default function SettingsGenerator() {
 		for (const node of featureSettings) {
 			const sectionId = getSectionId(node) ?? DEFAULT_SECTION;
 			if (!sections[sectionId]) {
-				sections[sectionId] = { featureMap: new Map(), sectionTitle: undefined, settings: [] };
+				sections[sectionId] = { attribution: [], featureMap: new Map(), sectionTitle: undefined, settings: [] };
 			}
 			sections[sectionId].settings.push({ featureId: feature.id, node: node });
+			// A group's attribution belongs to its section: the flattening below keeps only the group's children.
+			if (isGroupNode(node) && node.attribution) sections[sectionId].attribution.push(...node.attribution);
 			if (sectionTitle) {
 				sections[sectionId].sectionTitle = sectionTitle;
 			} else if (sectionId === "miscellaneous" && !sections[sectionId].sectionTitle) {
@@ -109,14 +113,7 @@ export default function SettingsGenerator() {
 			if (node.attribution && node.attribution.length > 0) {
 				return (
 					<Fragment key={`group-${featureId}-${nodeIndex}`}>
-						<fieldset className={cn("flex flex-row gap-1")}>
-							{node.attribution.map((author, authorIndex) => (
-								<fieldset className={cn("flex flex-row gap-1")} key={authorIndex}>
-									<legend className="mb-1 text-lg sm:text-xl md:text-2xl">{author.label(t)}</legend>
-									<Link href={author.url}>{author.url.split("/").pop()}</Link>
-								</fieldset>
-							))}
-						</fieldset>
+						<SectionAttribution entries={node.attribution} />
 						{node.children.map((child, childIndex) => renderNode(child, featureId, childIndex))}
 					</Fragment>
 				);
@@ -361,11 +358,17 @@ export default function SettingsGenerator() {
 			{sectionKeys.map((sectionId) => {
 				const { [sectionId]: sectionData } = sections;
 				if (!sectionData) return null;
-				const { featureMap: sectionFeatureMap, sectionTitle: storedSectionTitle, settings: sectionSettingsList } = sectionData;
+				const {
+					attribution: sectionAttribution,
+					featureMap: sectionFeatureMap,
+					sectionTitle: storedSectionTitle,
+					settings: sectionSettingsList
+				} = sectionData;
 
 				return (
 					<SettingSection featureIds={Array.from(sectionFeatureMap.values())} key={sectionId} title={storedSectionTitle ? storedSectionTitle(t) : ""}>
 						<SettingTitle />
+						<SectionAttribution entries={sectionAttribution} />
 						{sectionSettingsList.map((entry, index: number) => {
 							return renderNode(entry.node as FeatureSettingNode<FeatureKeys>, entry.featureId, index);
 						})}
@@ -438,4 +441,22 @@ function getSectionId(node: unknown): SettingsSectionId | undefined {
 		}
 	}
 	return undefined;
+}
+
+/** The people a group of settings credits, each as a legend with a link to their page. */
+function SectionAttribution({ entries }: { entries: AttributionEntry[] }) {
+	const {
+		i18nInstance: { t }
+	} = useSettings();
+	if (entries.length === 0) return null;
+	return (
+		<fieldset className={cn("flex flex-row gap-1")}>
+			{entries.map((author, index) => (
+				<fieldset className={cn("flex flex-row gap-1")} key={index}>
+					<legend className="mb-1 text-lg sm:text-xl md:text-2xl">{author.label(t)}</legend>
+					<Link href={author.url}>{author.url.split("/").pop()}</Link>
+				</fieldset>
+			))}
+		</fieldset>
+	);
 }
