@@ -36,7 +36,10 @@ const NumberInput: React.FC<NumberInputProps> = ({
 	const inputElement = useRef<Nullable<HTMLInputElement>>(null);
 	const inputDiv = useRef<Nullable<HTMLDivElement>>(null);
 	const id = useId();
-	const { direction } = useSettings();
+	const {
+		direction,
+		i18nInstance: { t }
+	} = useSettings();
 	const [localValue, setLocalValue] = useState<string>(() => value.toString());
 	useEffect(() => {
 		setLocalValue(value.toString());
@@ -105,7 +108,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 						})}
 					>
 						<button
-							aria-label="Add one"
+							aria-label={t((tr) => tr.pages.options.extras.numberInput.stepUp)}
 							className={cn(buttonClasses, disabledButtonClasses)}
 							disabled={disabled}
 							onClick={() => updateNumber("up")}
@@ -117,7 +120,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 							<Arrow rotation="up" />
 						</button>
 						<button
-							aria-label="Subtract one"
+							aria-label={t((tr) => tr.pages.options.extras.numberInput.stepDown)}
 							className={cn(buttonClasses, disabledButtonClasses)}
 							disabled={disabled}
 							onClick={() => updateNumber("down")}

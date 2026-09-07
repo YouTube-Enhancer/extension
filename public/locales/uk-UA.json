@@ -253,6 +253,7 @@
 						"title": "Параметри меню"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Налаштування успішно експортовано",
@@ -276,6 +277,15 @@
 					},
 					"title": "Мова"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Відкривати сторінку налаштувань при оновленні",
 					"title": "Відкриває сторінку налаштувань, коли встановлена велика або менша версія YouTube Enhancer"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Вимкніть «Глобальна гучність» для налаштування цієї опції",
 						"screenshotButtonFileFormat": "Встановити тип збереження скріншота в файл 'Файл' або 'обидва' для налаштування цієї опції"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Пошук за параметром"

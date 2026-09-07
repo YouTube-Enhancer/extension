@@ -253,6 +253,7 @@
 						"title": "Feature menu instellingen"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Instellingen succesvol geëxporteerd",
@@ -276,6 +277,15 @@
 					},
 					"title": "Taal"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Open instellingenpagina bij bijwerken",
 					"title": "Opent de instellingenpagina wanneer een grote of kleine versie van YouTube Enhancer is geïnstalleerd"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Schakel 'Globaal volume' uit om deze optie te configureren",
 						"screenshotButtonFileFormat": "Stel schermafbeelding in op 'Bestand' of 'Gedeel' om deze optie te configureren"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Zoek naar instellingen"

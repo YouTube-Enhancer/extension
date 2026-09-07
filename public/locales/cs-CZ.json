@@ -253,6 +253,7 @@
 						"title": "Nastavení nabídky funkcí"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Nastavení úspěšně exportováno",
@@ -276,6 +277,15 @@
 					},
 					"title": "Jazyk"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Otevřít stránku nastavení při aktualizaci",
 					"title": "Otevře stránku s nastavením, když je nainstalována hlavní nebo menší verze YouTube Enhancer"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Zakažte 'Globální hlasitost' pro nastavení této volby",
 						"screenshotButtonFileFormat": "Pro nastavení této volby nastavte typ uložení snímku obrazovky na 'Soubor' nebo 'Both'"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Hledat nastavení"

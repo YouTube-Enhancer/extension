@@ -253,6 +253,7 @@
 						"title": "機能メニューの設定"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "設定を正常にエクスポートしました",
@@ -276,6 +277,15 @@
 					},
 					"title": "言語"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "更新時に設定ページを開く",
 					"title": "YouTube Enhancer のメジャーバージョンまたはマイナーバージョンがインストールされている場合、設定ページを開きます。"
@@ -296,6 +306,9 @@
 						"rememberVolume": "このオプションを設定するには「グローバルボリューム」を無効にしてください",
 						"screenshotButtonFileFormat": "このオプションを設定するには、スクリーンショットの保存タイプを「ファイル」または「両方」に設定します"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "設定を探す"

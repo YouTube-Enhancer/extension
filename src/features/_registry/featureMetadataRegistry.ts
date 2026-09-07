@@ -1,9 +1,9 @@
 import { z } from "zod/v4-mini";
 
-import type { FeatureKeys, FeatureMetadata } from "@/src/features/_registry/types";
-import type { AllButtonNames } from "@/src/types";
+import type { AllButtonNames, TSelectFunc } from "@/src/types";
 
 import { validateFeatureMetadata } from "@/src/features/_registry/featureMetadataValidation";
+import { type FeatureKeys, type FeatureMetadata, isGroupNode, isSettingNode } from "@/src/features/_registry/types";
 import { DEV_MODE } from "@/src/utils/config/env";
 
 class FeatureMetadataRegistry {
@@ -50,6 +50,23 @@ class FeatureMetadataRegistry {
 		const metadata = this.metadataMap.get(id) as FeatureMetadata<K> | undefined;
 		if (!metadata) return undefined;
 		return z.object(metadata.schemaInput);
+	}
+	/** The label of one setting of a feature, found by the setting's id anywhere in the feature's settings tree. */
+	getSettingLabel(featureId: FeatureKeys, settingId: string): TSelectFunc | undefined {
+		const metadata = this.metadataMap.get(featureId);
+		if (!metadata) return undefined;
+		const find = (nodes: readonly unknown[]): TSelectFunc | undefined => {
+			for (const node of nodes) {
+				if (isGroupNode(node)) {
+					const found = find(node.children);
+					if (found) return found;
+				} else if (isSettingNode(node) && node.id === settingId) {
+					return node.label;
+				}
+			}
+			return undefined;
+		};
+		return find(metadata.settings);
 	}
 	getStateSchema<K extends FeatureKeys>(id: K) {
 		const metadata = this.metadataMap.get(id) as FeatureMetadata<K> | undefined;

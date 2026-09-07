@@ -253,6 +253,7 @@
 						"title": "Inställningar för funktionsmenyn"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Inställningar har exporterats",
@@ -276,6 +277,15 @@
 					},
 					"title": "Språk"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Öppna inställningssidan vid uppdatering",
 					"title": "Öppnar inställningssidan när YouTube Enhancer har uppdaterats"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Inaktivera 'Global volym' för att konfigurera detta alternativ",
 						"screenshotButtonFileFormat": "Ställ in skärmbildens bildtyp till 'fil' eller 'båda' för att konfigurera detta alternativ"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Sök efter en inställning"
