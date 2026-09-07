@@ -8,6 +8,7 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/utils/_tests/captions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import {
@@ -22,8 +23,8 @@ import { resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const { watch } = pageTypeRecord;
 // The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
-const autoDisableLabel = "Automatically disable closed captions";
-const autoEnableLabel = "Automatically enable closed captions";
+const autoDisableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label");
+const autoEnableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyEnableClosedCaptions.enable.label");
 // The feature waits up to 30 s for the video to offer captions before it clicks, which a live stream can take
 // after an ad; the wait here has to outlast that.
 const enableTimeout = 35000;

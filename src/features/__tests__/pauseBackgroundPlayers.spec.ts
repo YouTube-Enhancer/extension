@@ -8,7 +8,7 @@ import { metadata } from "@/src/features/pauseBackgroundPlayers/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, PlayerStates } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { getValueFromYouTubePlayer, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -174,6 +174,26 @@ test.describe("pauseBackgroundPlayers", () => {
 		// shorts sits outside includePages, so a player starting there must never pause the watch tab.
 		await openAndPlayVideo(pageB, shorts);
 		await expectToStay(async () => getValueFromYouTubePlayer(pageA, "getPlayerState", watch), PlayerStates.PLAYING, { page: pageA });
+		await pageB.close();
+	});
+	test("should keep pausing other tabs after an in-page navigation on watch", async ({ context, page }) => {
+		test.setTimeout(120_000);
+		const pageA = page;
+		const pageB = await context.newPage();
+		await openAndPlayVideo(pageA, watch);
+		await enableFeature(pageA, "pauseBackgroundPlayers.enabled");
+		await openAndPlayVideo(pageB, watch);
+		await expectPlayerState(pageA, PlayerStates.PAUSED, watch);
+		// A related-video click is the one path that reaches onNavigate, which sets the monitoring up again on the
+		// player of the new video. YouTube keeps the video element across the switch, so the case is that the
+		// re-setup leaves the navigated tab a working sender rather than that it is the only thing making it one.
+		await pageA.bringToFront();
+		await spaNavigateToRelatedVideo(pageA);
+		await ensureVideoIsPlaying(pageB, watch);
+		await expectPlayerState(pageB, PlayerStates.PLAYING, watch);
+		await ensureVideoIsPlaying(pageA, watch);
+		await expectPlayerState(pageB, PlayerStates.PAUSED, watch);
+		await expectPlayerState(pageA, PlayerStates.PLAYING, watch);
 		await pageB.close();
 	});
 });

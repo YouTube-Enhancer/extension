@@ -9,6 +9,7 @@ import { metadata as rememberVolumeMetadata } from "@/src/features/rememberVolum
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, volume } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import { getCurrentVolume, setVolume } from "@/src/utils/_tests/player";
@@ -20,10 +21,10 @@ const { watch } = pageTypeRecord;
 // A second volume that differs from the shared `volume` constant, so an edit while the feature runs is observable.
 const updatedVolume = 40;
 // The rendered options labels and conflict copy the options case drives, from the locale entries the metadata uses.
-const globalVolumeAmountLabel = "Video start volume";
-const globalVolumeConflictReason = "Disable 'Remember last volume' to configure this option";
-const globalVolumeLabel = "Always start videos with this volume";
-const rememberVolumeLabel = "Remember last volume";
+const globalVolumeAmountLabel = localeText("settings.sections.globalVolume.settings.amount.label");
+const globalVolumeConflictReason = localeText("pages.options.extras.optionDisabled.specificOption.globalVolume");
+const globalVolumeLabel = localeText("settings.sections.globalVolume.enable.label");
+const rememberVolumeLabel = localeText("settings.sections.miscellaneous.settings.rememberVolume.enable.label");
 /** Reads the player's mute state, which no other helper exposes and which setPlayerVolume has to clear. */
 async function isPlayerMuted(page: Page): Promise<boolean | null> {
 	return await page.evaluate(async () => {

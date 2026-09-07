@@ -4,16 +4,26 @@ import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
-import { ambientModeMenuItemSelector, settingsPanelMenuSelector } from "@/src/utils/_tests/ambient";
+import { metadata } from "@/src/features/automaticallyDisableAmbientMode/index.metadata";
+import {
+	ambientModeMenuItemSelector,
+	describeShortsSheet,
+	readShortsAmbientState,
+	settingsPanelMenuSelector,
+	shortsOpenSheetSelector
+} from "@/src/utils/_tests/ambient";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, reloadPage, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
+import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
-// Narrowed from the feature's ["watch", "shorts"] pages: onEnable passes no pageTypes, so executeWithRetries falls back to ["watch", "live"] and isOnAllowedPage returns false on /shorts, so the shorts expansion never exercises the feature.
-const testPages: readonly PageType[] = [pageTypeRecord.watch];
-const { live, watch } = pageTypeRecord;
+// The feature's pages, from its metadata. The cases in the loop read ambient mode off the watch shell; shorts keeps it
+// behind the reel's "more" sheet and has its own cases at the end.
+const featurePages = resolvePageTypes(metadata.dependencies?.includePages);
+const { live, shorts, watch } = pageTypeRecord;
+const testPages: readonly PageType[] = featurePages.filter((pageType) => pageType !== shorts);
 
 /**
  * One attempt at driving ambient mode through the player settings menu, the same control the feature toggles.
@@ -312,4 +322,69 @@ test.describe("automaticallyDisableAmbientMode", () => {
 			{ durationMs: 5000, intervalMs: 500, page }
 		);
 	});
+
+	// The shorts page keeps ambient mode behind the reel's "more" sheet, which the feature opens out of sight, reads and
+	// closes again; these cases read it the same way, with a real click. As on watch, the row only exists in YouTube's
+	// dark theme. YouTube offers it on the reel a page loads on only, and its switch does not turn back on within a
+	// page session, so ambient mode cannot be switched on as a precondition and the restore on disable cannot be
+	// verified on shorts.
+	test.describe(`on ${shorts}`, () => {
+		test.skip(!featurePages.includes(shorts), "the feature does not declare shorts");
+		test(`should turn ambient mode off on ${shorts}`, async ({ page }) => {
+			await useDarkTheme(page);
+			await navigateToPageType(page, shorts, ["ambientMode"]);
+			const initialState = await readShortsAmbientState(page);
+			test.skip(initialState === null, `this reel's sheet offers no ambient mode row: ${await describeShortsSheet(page)}`);
+			test.skip(initialState === false, "ambient mode is already off on this reel and YouTube's switch does not turn it back on");
+			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
+			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+		});
+		test(`should turn ambient mode off again after a full page reload on ${shorts}`, async ({ page }) => {
+			await useDarkTheme(page);
+			await navigateToPageType(page, shorts, ["ambientMode"]);
+			test.skip(
+				(await readShortsAmbientState(page)) !== true,
+				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
+			);
+			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
+			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+			// A new document starts with ambient mode on again, so the state after the reload is the feature's doing; at
+			// start-up the sheet fills slowly and the feature retries, so this read gets longer.
+			await reloadPage(page, shorts);
+			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 40000 }).toBe(false);
+		});
+		test(`should leave the sheet closed and the popups usable after acting on ${shorts}`, async ({ page }) => {
+			const errors: string[] = [];
+			page.on("pageerror", (error) => errors.push(error.message));
+			await useDarkTheme(page);
+			await navigateToPageType(page, shorts, ["ambientMode"]);
+			test.skip(
+				(await readShortsAmbientState(page)) !== true,
+				`this reel's sheet offers no ambient mode row that is on: ${await describeShortsSheet(page)}`
+			);
+			await enableFeature(page, "automaticallyDisableAmbientMode.enabled");
+			await expect.poll(async () => readShortsAmbientState(page), { intervals: [1500], timeout: 20000 }).toBe(false);
+			// The next reel's sheet carries no ambient mode row, so the feature has to find that out and put the page
+			// back as it was: the popup container shown again and no sheet left open.
+			await goToNextReel(page);
+			await page.waitForTimeout(5000);
+			await expectToStay(async () => isPopupContainerShown(page), true, { durationMs: 3000, intervalMs: 500, page });
+			await expect(page.locator(shortsOpenSheetSelector)).toHaveCount(0);
+			// The sheet still opens and closes for the user.
+			await readShortsAmbientState(page);
+			await expect(page.locator(shortsOpenSheetSelector)).toHaveCount(0);
+			expect(errors, "the page raised errors").toEqual([]);
+		});
+	});
 });
+
+/** Moves to the next reel in-page through YouTube's own navigation button. */
+async function goToNextReel(page: Page): Promise<void> {
+	const before = page.url();
+	await page.locator("button[aria-label='Next video'], #navigation-button-down button").first().click();
+	await expect.poll(() => page.url(), { timeout: 15000 }).not.toBe(before);
+}
+/** Whether YouTube's popup container, which the feature hides while it works the sheet, is shown. */
+async function isPopupContainerShown(page: Page): Promise<boolean> {
+	return page.locator("ytd-popup-container").evaluate((element) => getComputedStyle(element).display !== "none");
+}

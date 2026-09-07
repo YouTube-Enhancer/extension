@@ -4,13 +4,14 @@ import { test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
 
+import { metadata } from "@/src/features/hideShorts/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { injectDynamicContentWhenPresent } from "@/src/utils/_tests/dom";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
 import { navigateToPageType, spaNavigateToFirstVideo, spaNavigateToHome } from "@/src/utils/_tests/navigation";
-import { loginRequiredPages } from "@/src/utils/_tests/utils";
+import { loginRequiredPages, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 import { hideFeatureSelectors } from "./__generated__/hideFeatureSelectors";
 
@@ -150,6 +151,17 @@ test.describe("hideShorts", () => {
 		});
 	}
 
+	// The channel section applies to every tab of a channel. The page-type detector only learned the posts and streams
+	// tabs on 2026-09-07, so each tab in the feature's scope is opened on its own.
+	for (const channelPage of resolvePageTypes(metadata.dependencies?.includePages).filter((pageType) => pageType.startsWith("channel_"))) {
+		test(`channel hiding applies on ${channelPage}`, async ({ page: pageObj }) => {
+			await navigateToPageType(pageObj, channelPage);
+			await enableFeature(pageObj, "hideShorts.channel.enabled");
+			await expectBodyWithClass(pageObj, hideFeatureSelectors.hideShortsChannel.bodyClass);
+			await disableFeature(pageObj, "hideShorts.channel.enabled");
+			await expectBodyWithoutClass(pageObj, hideFeatureSelectors.hideShortsChannel.bodyClass);
+		});
+	}
 	// The sub-key tests above only ever assert their own class, so a mis-keyed entry in shortsClassMap would pass them
 	// all as long as the intended class also happened to be written.
 	test(`enabling one sub-feature does not add the other five body classes`, async ({ page: pageObj }) => {

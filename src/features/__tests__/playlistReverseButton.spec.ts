@@ -6,10 +6,12 @@ import type { WatchFlexyElement } from "@/src/features/playlistReverseButton/uti
 import type { Nullable } from "@/src/types";
 import type { FixtureCapabilities } from "@/src/utils/_tests/navigation";
 
+import { REVERSE_BUTTON_CONTAINER_ID, REVERSE_BUTTON_ID } from "@/src/features/playlistReverseButton/constants";
 import { metadata } from "@/src/features/playlistReverseButton/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { readStoredOptions, readStoredState } from "@/src/utils/_tests/storage";
@@ -144,13 +146,13 @@ test.describe("playlistReverseButton", () => {
 			test(`reverse button should be present when enabled on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, ["playlistLength"]);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				await expect(page.locator("#yte-playlist-reverse-button")).toBeAttached({ timeout: 10000 });
-				await expect(page.locator("#yte-playlist-reverse-button-container")).toBeAttached({ timeout: 5000 });
+				await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
+				await expect(page.locator(`#${REVERSE_BUTTON_CONTAINER_ID}`)).toBeAttached({ timeout: 5000 });
 			});
 			test(`should reverse playlist order on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, ["playlistLength"]);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				const before = await getPlaylistOrder(page);
 				expect(before.length).toBeGreaterThan(1);
@@ -161,7 +163,7 @@ test.describe("playlistReverseButton", () => {
 			test(`should maintain reversed order after disable then re-enable on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, ["playlistLength"]);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				const before = await getPlaylistOrder(page);
 				expect(before.length).toBeGreaterThan(1);
@@ -170,7 +172,7 @@ test.describe("playlistReverseButton", () => {
 				await expect.poll(async () => getPlaylistOrder(page), { timeout: 10000 }).toEqual(reversed);
 				await disableFeature(page, "playlistReverseButton.enabled");
 				await expect(button).not.toBeAttached();
-				await expect(page.locator("#yte-playlist-reverse-button-container")).not.toBeAttached();
+				await expect(page.locator(`#${REVERSE_BUTTON_CONTAINER_ID}`)).not.toBeAttached();
 				await expect.poll(async () => getPlaylistOrder(page), { timeout: 10000 }).toEqual(before);
 				await enableFeature(page, "playlistReverseButton.enabled");
 				await expect.poll(async () => getPlaylistOrder(page), { timeout: 10000 }).toEqual(reversed);
@@ -178,7 +180,7 @@ test.describe("playlistReverseButton", () => {
 			test(`should persist reversed order after full page reload on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, ["playlistLength"]);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				const before = await getPlaylistOrder(page);
 				expect(before.length).toBeGreaterThan(1);
@@ -192,12 +194,12 @@ test.describe("playlistReverseButton", () => {
 			test(`reverse button should be present when enabled on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, playlistRequirements);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				await expect(page.locator("#yte-playlist-reverse-button")).toBeAttached({ timeout: 10000 });
+				await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
 			});
 			test(`should reverse playlist order on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, playlistRequirements);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				// The whole list is loaded first, so the order captured here is the playlist's and not its first page.
 				await loadAllPlaylistRows(page);
@@ -218,7 +220,7 @@ test.describe("playlistReverseButton", () => {
 			test(`should maintain reversed order after disable then re-enable on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, playlistRequirements);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				await loadAllPlaylistRows(page);
 				const before = await getPlaylistPageOrder(page);
@@ -235,7 +237,7 @@ test.describe("playlistReverseButton", () => {
 			test(`should persist reversed order after full page reload on ${pageType}`, async ({ page }) => {
 				await navigateToPageType(page, pageType, playlistRequirements);
 				await enableFeature(page, "playlistReverseButton.enabled");
-				const button = page.locator("#yte-playlist-reverse-button");
+				const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 				await expect(button).toBeAttached({ timeout: 10000 });
 				await loadAllPlaylistRows(page);
 				const before = await getPlaylistPageOrder(page);
@@ -253,7 +255,7 @@ test.describe("playlistReverseButton", () => {
 	test(`reversed order survives an in-page navigation to another playlist video on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		const button = page.locator("#yte-playlist-reverse-button");
+		const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 		await expect(button).toBeAttached({ timeout: 10000 });
 		const before = await getPlaylistOrder(page);
 		expect(before.length).toBeGreaterThan(1);
@@ -288,13 +290,13 @@ test.describe("playlistReverseButton", () => {
 		} = await readStoredOptions(page);
 		expect(enabled).toBe(true);
 		// Setup waits up to 5 s for the playlist panel and then polls another 3 s for playlist data before giving up.
-		await expectToStay(async () => page.locator("#yte-playlist-reverse-button").count(), 0, { durationMs: 10_000, page });
+		await expectToStay(async () => page.locator(`#${REVERSE_BUTTON_ID}`).count(), 0, { durationMs: 10_000, page });
 	});
 
 	test(`clicking the reverse button twice restores the original order on ${playlist}`, async ({ page }) => {
 		await navigateToPageType(page, playlist, playlistRequirements);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		const button = page.locator("#yte-playlist-reverse-button");
+		const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 		await expect(button).toBeAttached({ timeout: 10000 });
 		// Only the first page is loaded here on purpose: the feature has to fetch the rest before it reverses, so the
 		// reversed list is the whole playlist's and its first entries are ones the page had not shown yet.
@@ -317,7 +319,7 @@ test.describe("playlistReverseButton", () => {
 	test(`reverse button is placed inside the playlist panel action row on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		await expect(page.locator("#yte-playlist-reverse-button")).toBeAttached({ timeout: 10000 });
+		await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
 		await expect
 			.poll(
 				async () =>
@@ -331,13 +333,13 @@ test.describe("playlistReverseButton", () => {
 					}),
 				{ timeout: 10000 }
 			)
-			.toEqual({ containerId: "yte-playlist-reverse-button-container", inStartActions: true });
+			.toEqual({ containerId: REVERSE_BUTTON_CONTAINER_ID, inStartActions: true });
 	});
 
 	test(`reverse button is placed inside the playlist header action row on ${playlist}`, async ({ page }) => {
 		await navigateToPageType(page, playlist, playlistRequirements);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		await expect(page.locator("#yte-playlist-reverse-button")).toBeAttached({ timeout: 10000 });
+		await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
 		await expect
 			.poll(
 				async () =>
@@ -354,25 +356,25 @@ test.describe("playlistReverseButton", () => {
 					}),
 				{ timeout: 10000 }
 			)
-			.toEqual({ containerId: "yte-playlist-reverse-button-container", inHeader: true, inVisibleActionRow: true });
+			.toEqual({ containerId: REVERSE_BUTTON_CONTAINER_ID, inHeader: true, inVisibleActionRow: true });
 	});
 
 	test(`tooltip label toggles between the normal and reversed strings on ${playlist}`, async ({ page }) => {
 		await navigateToPageType(page, playlist, playlistRequirements);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		const button = page.locator("#yte-playlist-reverse-button");
+		const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 		await expect(button).toBeAttached({ timeout: 10000 });
 		const tooltip = page.locator("#yte-feature-playlistReverseButton-tooltip");
-		await expect(button).toHaveAttribute("data-title", "Normal order");
+		await expect(button).toHaveAttribute("data-title", localeText("pages.content.features.playlistReverseButton.extras.toggle.off"));
 		await button.dispatchEvent("mouseenter");
 		await expect(tooltip).toHaveText("Normal order");
 		await button.click();
-		await expect(button).toHaveAttribute("data-title", "Reversed order");
+		await expect(button).toHaveAttribute("data-title", localeText("pages.content.features.playlistReverseButton.extras.toggle.on"));
 		// The click handler removes the open tooltip, so it has to be re-opened to read the swapped label.
 		await button.dispatchEvent("mouseenter");
 		await expect(tooltip).toHaveText("Reversed order");
 		await button.click();
-		await expect(button).toHaveAttribute("data-title", "Normal order");
+		await expect(button).toHaveAttribute("data-title", localeText("pages.content.features.playlistReverseButton.extras.toggle.off"));
 		await button.dispatchEvent("mouseenter");
 		await expect(tooltip).toHaveText("Normal order");
 	});
@@ -380,7 +382,7 @@ test.describe("playlistReverseButton", () => {
 	test(`a below player feature button is not adopted into the reverse button's container on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		await expect(page.locator("#yte-playlist-reverse-button")).toBeAttached({ timeout: 10000 });
+		await expect(page.locator(`#${REVERSE_BUTTON_ID}`)).toBeAttached({ timeout: 10000 });
 		await setOption(page, "loopButton.button.placement", below);
 		await enableFeature(page, "loopButton.button.enabled");
 		await expect(page.locator("#yte-feature-loopButton-button")).toBeAttached({ timeout: 10000 });
@@ -401,7 +403,7 @@ test.describe("playlistReverseButton", () => {
 	test(`reversing keeps the playing video selected at the mirrored panel position on ${watch}`, async ({ page }) => {
 		await navigateToPageType(page, watch, ["playlistLength"]);
 		await enableFeature(page, "playlistReverseButton.enabled");
-		const button = page.locator("#yte-playlist-reverse-button");
+		const button = page.locator(`#${REVERSE_BUTTON_ID}`);
 		await expect(button).toBeAttached({ timeout: 10000 });
 		const before = await getPlaylistOrder(page);
 		expect(before.length).toBeGreaterThan(1);

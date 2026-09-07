@@ -13,6 +13,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const { left, menu, right } = placementRecord;
@@ -43,18 +44,24 @@ test.describe("loopButton", () => {
 			await enableFeature(page, "loopButton.button.enabled");
 			await setOption(page, "loopButton.button.placement", left);
 			await expectFeatureButtonToBeTruthy(page, "yte-feature-loopButton-button");
-			await expectToggleButtonState(page, "yte-feature-loopButton-button", false, { title: "Loop off" });
+			await expectToggleButtonState(page, "yte-feature-loopButton-button", false, {
+				title: localeText("pages.content.features.loopButton.button.toggle.off")
+			});
 			const offIcon = await getLoopButtonIcon(page);
 			expect(offIcon).toBeTruthy();
 			// Enable loop
 			await clickFeatureButton(page, pageType, "yte-feature-loopButton-button", left);
 			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", true);
-			await expectToggleButtonState(page, "yte-feature-loopButton-button", true, { title: "Loop on" });
+			await expectToggleButtonState(page, "yte-feature-loopButton-button", true, {
+				title: localeText("pages.content.features.loopButton.button.toggle.on")
+			});
 			await expect.poll(async () => await getLoopButtonIcon(page)).not.toBe(offIcon);
 			// Disable loop
 			await clickFeatureButton(page, pageType, "yte-feature-loopButton-button", left);
 			await expect(page.locator("div#movie_player video")).toHaveJSProperty("loop", false);
-			await expectToggleButtonState(page, "yte-feature-loopButton-button", false, { title: "Loop off" });
+			await expectToggleButtonState(page, "yte-feature-loopButton-button", false, {
+				title: localeText("pages.content.features.loopButton.button.toggle.off")
+			});
 			await expect.poll(async () => await getLoopButtonIcon(page)).toBe(offIcon);
 		});
 		test("loop button icon should follow the loop attribute when it is changed outside the extension", async ({ page }) => {

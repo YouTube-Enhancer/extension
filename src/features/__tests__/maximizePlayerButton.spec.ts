@@ -14,13 +14,14 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { ensurePlayerControlsVisible } from "@/src/utils/_tests/pageSetup";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
 const nonTargetPage = resolveNonTargetPage(metadata.dependencies);
-const maximizeOffTitle = "Maximize off";
-const maximizeOnTitle = "Maximize on";
+const maximizeOffTitle = localeText("pages.content.features.maximizePlayerButton.button.toggle.off");
+const maximizeOnTitle = localeText("pages.content.features.maximizePlayerButton.button.toggle.on");
 const { left, menu } = placementRecord;
 const { home, watch } = pageTypeRecord;
 test.describe("maximizePlayerButton", () => {

@@ -15,6 +15,7 @@ import {
 } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { freezeAndGetTime, getValueFromYouTubePlayer } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
@@ -129,14 +130,23 @@ test.describe("hideEndScreenCards", () => {
 		await enableFeature(page, "hideEndScreenCardsButton.button.enabled");
 		await setOption(page, "hideEndScreenCardsButton.button.placement", right);
 		await expectFeatureButtonToBeIn(page, buttonId, right);
-		await expect(page.locator(`#${buttonId}`)).toHaveAttribute("data-title", "Hide end screen cards");
+		await expect(page.locator(`#${buttonId}`)).toHaveAttribute(
+			"data-title",
+			localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off")
+		);
 		const iconWhileCardsShow = await getButtonIconMarkup(page);
 		// onConfigChange is the only hook that reacts to the setting changing underneath an already placed button.
 		await enableFeature(page, "hideEndScreenCards.enabled");
-		await expect(page.locator(`#${buttonId}`)).toHaveAttribute("data-title", "Show end screen cards");
+		await expect(page.locator(`#${buttonId}`)).toHaveAttribute(
+			"data-title",
+			localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.on")
+		);
 		expect(await getButtonIconMarkup(page)).not.toBe(iconWhileCardsShow);
 		await disableFeature(page, "hideEndScreenCards.enabled");
-		await expect(page.locator(`#${buttonId}`)).toHaveAttribute("data-title", "Hide end screen cards");
+		await expect(page.locator(`#${buttonId}`)).toHaveAttribute(
+			"data-title",
+			localeText("pages.content.features.hideEndScreenCardsButton.button.toggle.off")
+		);
 	});
 	test("keeps the button aria-checked in sync when the setting is toggled live on watch", async ({ page }) => {
 		await navigateToPageType(page, watch);

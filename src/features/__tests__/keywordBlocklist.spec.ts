@@ -4,20 +4,20 @@ import { expect, test } from "playwright.config";
 import type { PageType } from "@/src/features/_registry/types";
 
 import { BLOCKED_AVATAR_URL, isBlockedPlaceholderUrl } from "@/src/features/keywordBlocklist/blockedPlaceholder";
+import { BLOCKED_ATTRIBUTE, HOVER_BLOCKED_CLASS } from "@/src/features/keywordBlocklist/constants";
 import { normalizeForMatch } from "@/src/features/keywordBlocklist/utils";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { hasAuthState } from "@/src/utils/_tests/auth";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setFeatureValue } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { navigateToPageType, reloadPage, spaNavigateBack, spaNavigateToHome } from "@/src/utils/_tests/navigation";
 import { loginRequiredPages } from "@/src/utils/_tests/utils";
 
 const { channel_videos, home, search, watch } = pageTypeRecord;
 
-const BLOCKED_ATTRIBUTE = "data-yte-keyword-blocked";
-const HOVER_BLOCKED_CLASS = "yte-hover-blocked";
 /** The en-US `pages.content.features.keywordBlocklist.messages.maskedTitle` string the feature writes over a title. */
-const MASKED_TITLE = "Blocked keyword";
+const MASKED_TITLE = localeText("pages.content.features.keywordBlocklist.messages.maskedTitle");
 /** Marks a card the spec has read once, so later reads find the same element whatever the page re-orders. */
 const CARD_ID_ATTRIBUTE = "data-yte-test-card";
 /**

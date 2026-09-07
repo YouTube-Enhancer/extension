@@ -1,0 +1,7 @@
+{
+	"automaticallyDisableClosedCaptions": { "enabled": true },
+	"automaticallyEnableClosedCaptions": { "enabled": true },
+	"scrollWheelVolumeControl": { "enabled": true, "modifierKey": "ctrlKey" },
+	"scrollWheelSpeedControl": { "enabled": true, "modifierKey": "ctrlKey" },
+	"playerQuality": { "enabled": true, "quality": "auto" }
+}

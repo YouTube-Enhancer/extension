@@ -5,6 +5,7 @@ import { expectToStay } from "@/src/utils/_tests/assertions";
 import { navigateToCaptionedPage, spaNavigateToCaptionedVideo } from "@/src/utils/_tests/captions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
+import { localeText } from "@/src/utils/_tests/locale";
 import { reloadPage } from "@/src/utils/_tests/navigation";
 import { setCheckbox } from "@/src/utils/_tests/options";
 import { ensureCaptionsState, expectStableCaptionsState, getCaptionsState, waitForCaptionsAvailable } from "@/src/utils/_tests/player";
@@ -15,8 +16,8 @@ const { watch } = pageTypeRecord;
 // The feature watches the first 15 s of the video for captions YouTube turns on late; the wait has to outlast that.
 const disableTimeout = 20000;
 // The rendered options labels the conflict test drives; they come from the same locale entries the metadata points at.
-const autoDisableLabel = "Automatically disable closed captions";
-const autoEnableLabel = "Automatically enable closed captions";
+const autoDisableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label");
+const autoEnableLabel = localeText("settings.sections.miscellaneous.settings.automaticallyEnableClosedCaptions.enable.label");
 
 test.describe("automaticallyDisableClosedCaptions", () => {
 	for (const pageType of testPages) {

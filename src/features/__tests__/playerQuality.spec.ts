@@ -323,4 +323,80 @@ test.describe("playerQuality", () => {
 		await enableFeature(page, "playerQuality.enabled");
 		await expectCurrentQualityLevelToBeTruthy(page, watch, closestQuality);
 	});
+	test(`chooses between several formats of one level by frame rate and premium preference on ${watch}`, async ({ page }) => {
+		await navigateToPageType(page, watch);
+		// The player only exposes format ids in its quality data to a YouTube Premium account, and the test profile is
+		// not one (checked 2026-09-06 on six videos, 60 fps and premium ones included: no entry carried a formatId), so
+		// on this profile the choice between formats of one level never runs against the live site. The data is stubbed
+		// with real itags: 720p gets 136 at 30 fps and 298 at 60 fps marked premium, 480p a single 135, and the request
+		// the feature makes is captured. The real player is asked for the level alone, so playback is not disturbed by a
+		// format it does not have.
+		const formatsByLevel: Record<string, undefined | { formatId: number; premium: boolean }[]> = {
+			hd720: [
+				{ formatId: 136, premium: false },
+				{ formatId: 298, premium: true }
+			],
+			large: [{ formatId: 135, premium: false }]
+		};
+		const stubbed = await page.evaluate(
+			({ formatsByLevel }) => {
+				type QualityEntry = { formatId?: number; paygatedQualityDetails?: unknown; quality: string };
+				type PlayerWithQualityData = HTMLElement & {
+					getAvailableQualityData?: () => QualityEntry[];
+					setPlaybackQualityRange: (...args: unknown[]) => unknown;
+				};
+				const player = document.querySelector<PlayerWithQualityData>("div#movie_player");
+				if (!player?.getAvailableQualityData) return false;
+				const readQualityData = player.getAvailableQualityData.bind(player);
+				player.getAvailableQualityData = () =>
+					readQualityData().flatMap((entry) => {
+						const { [entry.quality]: formats } = formatsByLevel;
+						return formats ?
+								formats.map(({ formatId, premium }) => ({ ...entry, formatId, paygatedQualityDetails: premium ? {} : undefined }))
+							:	[entry];
+					});
+				const requests: unknown[][] = [];
+				(window as { yteQualityRequests?: unknown[][] }).yteQualityRequests = requests;
+				const setRange = player.setPlaybackQualityRange.bind(player);
+				player.setPlaybackQualityRange = (...args: unknown[]) => {
+					requests.push(args);
+					return setRange(args[0], args[1]);
+				};
+				return true;
+			},
+			{ formatsByLevel }
+		);
+		test.skip(!stubbed, "the player exposes no quality data to stub");
+		// The format id of the latest request that carried one; the restore on disable asks for the level only.
+		const readRequestedFormat = async () =>
+			page.evaluate(() => {
+				const requests = (window as { yteQualityRequests?: unknown[][] }).yteQualityRequests ?? [];
+				return (requests.filter((args) => args.length > 2).at(-1)?.[2] as number | undefined) ?? null;
+			});
+		await setOption(page, "playerQuality.quality", "hd720");
+		await setOption(page, "playerQuality.fallbackStrategy", fallbackStrategy);
+		await setOption(page, "playerQuality.fpsPreference", "higher");
+		await enableFeature(page, "playerQuality.enabled");
+		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(298);
+		// playerQuality has no onConfigChange, so each preference needs a fresh enable to be applied.
+		await disableFeature(page, "playerQuality.enabled");
+		await setOption(page, "playerQuality.fpsPreference", "lower");
+		await enableFeature(page, "playerQuality.enabled");
+		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(136);
+		await disableFeature(page, "playerQuality.enabled");
+		await setOption(page, "playerQuality.fpsPreference", "default");
+		await setOption(page, "playerQuality.preferPremium", true);
+		await enableFeature(page, "playerQuality.enabled");
+		// With no frame rate preference the premium format wins; without either preference the order is kept.
+		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(298);
+		await disableFeature(page, "playerQuality.enabled");
+		await setOption(page, "playerQuality.preferPremium", false);
+		await enableFeature(page, "playerQuality.enabled");
+		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(136);
+		// A level with a single format needs no choosing: that format is requested as it is.
+		await disableFeature(page, "playerQuality.enabled");
+		await setOption(page, "playerQuality.quality", "large");
+		await enableFeature(page, "playerQuality.enabled");
+		await expect.poll(readRequestedFormat, { timeout: 15000 }).toBe(135);
+	});
 });

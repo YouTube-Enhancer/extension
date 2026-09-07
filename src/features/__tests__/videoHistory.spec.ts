@@ -4,6 +4,7 @@ import { expect, test } from "playwright.config";
 
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
+import { OFFICIAL_ARTIST_BADGE_SELECTOR } from "@/src/features/videoHistory/constants";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
@@ -19,6 +20,22 @@ async function getCurrentTime(page: Page): Promise<number> {
 		const v = document.querySelector<HTMLVideoElement>("div#movie_player video");
 		return v?.currentTime ?? 0;
 	});
+}
+
+/**
+ * Whether the feature would leave this video alone: an official artist badge next to the channel name, or an
+ * auto-generated "Topic" channel, which it takes for an artist by name.
+ */
+async function isOfficialArtistVideo(page: Page): Promise<boolean> {
+	await page
+		.locator("#owner #upload-info #channel-name")
+		.waitFor({ state: "attached", timeout: 15000 })
+		.catch(() => {});
+	const author = await page.evaluate(async () => {
+		const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		return (await player?.getVideoData())?.author ?? "";
+	});
+	return author.endsWith(" - Topic") || (await page.locator(OFFICIAL_ARTIST_BADGE_SELECTOR).count()) > 0;
 }
 
 async function isVideoPaused(page: Page): Promise<boolean> {
@@ -152,6 +169,10 @@ test.describe("videoHistory", () => {
 		await spaNavigateToRelatedVideo(page);
 		expect(new URL(page.url()).searchParams.get("v")).not.toBe(previousVideoId);
 		await expect(page.locator("#resume-prompt")).not.toBeAttached();
+		// The feature leaves official artist channels alone (see the case below), and the related list often leads
+		// with music videos, so those are hopped over until a video the feature tracks comes up.
+		for (let hop = 0; hop < 4 && (await isOfficialArtistVideo(page)); hop++) await spaNavigateToRelatedVideo(page);
+		test.skip(await isOfficialArtistVideo(page), "every related video within four hops was from an official artist channel");
 		// A pre-roll can start right after the navigation, once the helper's own ad handling has finished, and
 		// nothing is written to the history while an ad holds the video element.
 		await pageSetup(page);
@@ -208,5 +229,17 @@ test.describe("videoHistory", () => {
 		await expectToStay(async () => page.locator("#resume-prompt").count(), 0, { page });
 		// With the listeners removed the stored timestamp must not advance either.
 		expect((await readStoredEntry(page))?.timestamp).toBe(storedTime);
+	});
+	test("does not track a video of an official artist channel", async ({ page }) => {
+		// The default watch fixture is a music video on a channel with the official artist badge; the feature leaves
+		// those alone, since resuming a song part-way is not what anyone wants.
+		await navigateToPageType(page, watch);
+		test.skip(!(await isOfficialArtistVideo(page)), "the watch fixture's channel carries no official artist badge right now");
+		await enableFeature(page, "videoHistory.enabled");
+		await setOption(page, "videoHistory.resumeType", "prompt");
+		await expect(page.locator("div#movie_player video")).toBeAttached();
+		await seekToQuarterDuration(page);
+		await expectToStay(async () => readStoredEntry(page), null, { durationMs: 8000, page });
+		await expect(page.locator("#resume-prompt")).not.toBeAttached();
 	});
 });

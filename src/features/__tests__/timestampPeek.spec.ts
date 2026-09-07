@@ -438,6 +438,45 @@ test.describe("timestampPeek", () => {
 		await expectToStay(async () => (await getVideoTime(page))! < parkedTime! - 1 && (await isVideoPlaying(page)), true, { page });
 	});
 
+	for (const { name, pointer } of [
+		{ name: "a modified click", pointer: { button: 0, ctrlKey: true } },
+		{ name: "a secondary button", pointer: { button: 2 } }
+	]) {
+		test(`should not commit the preview on ${name} on the timestamp link on ${watch}`, async ({ page }) => {
+			await setupWatchPage(page, watch);
+			await enableFeature(page, "timestampPeek.enabled");
+			await expandDescription(page);
+			const selector = timestampLinkSelector(page);
+			const { duration, timestamps } = await readTimestampLinks(page, selector);
+			expect(timestamps.length).toBeGreaterThan(0);
+			expect(duration).not.toBeNull();
+			const linkIndex = timestamps.indexOf(Math.min(...timestamps));
+			const { [linkIndex]: linkTimestamp } = timestamps;
+			const parkedTime = await page.evaluate(
+				({ duration, timestamp }) => {
+					const video = document.querySelector<HTMLVideoElement>("video.html5-main-video");
+					if (!video) return null;
+					video.pause();
+					const target = Math.min(duration - 2, timestamp + 60);
+					video.currentTime = target;
+					return target;
+				},
+				{ duration: duration!, timestamp: linkTimestamp }
+			);
+			expect(parkedTime).not.toBeNull();
+			await hoverTimestamp(page, selector, linkIndex);
+			await expectOverlayVisible(page);
+			await expect.poll(async () => getVideoTime(page), { timeout: 10000 }).toBeLessThan(parkedTime! - 2);
+			// A modified or secondary press is the browser's (open in a new tab, context menu), not a seek: the preview
+			// is not committed, so leaving the link restores the parked time and the pause.
+			await page.locator(selector).nth(linkIndex).dispatchEvent("pointerdown", pointer);
+			await page.mouse.move(0, 0);
+			await expect(page.locator(PLACEHOLDER)).not.toBeAttached({ timeout: 10000 });
+			await expect.poll(async () => getVideoTime(page), { timeout: 10000 }).toBeGreaterThan(parkedTime! - 1);
+			await expect.poll(async () => isVideoPlaying(page), { timeout: 10000 }).toBe(false);
+		});
+	}
+
 	test(`should ignore timestamps beyond the video duration and links to other videos on ${watch}`, async ({ page }) => {
 		await setupWatchPage(page, watch);
 		await enableFeature(page, "timestampPeek.enabled");
