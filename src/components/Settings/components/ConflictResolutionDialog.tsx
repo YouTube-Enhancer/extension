@@ -1,15 +1,11 @@
 import { useState } from "react";
 
-import type { configuration } from "@/src/types";
+import type { FeatureKeys } from "@/src/features/_registry/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
+import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { youtubePlayerQualityLabels, youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
-
-const modifierKeyOptions = [
-	{ label: "Ctrl", value: "ctrlKey" },
-	{ label: "Alt", value: "altKey" },
-	{ label: "Shift", value: "shiftKey" }
-] as const;
+import { type configuration, modifierKeys, type TSelectFunc } from "@/src/types";
 
 const qualityOptions = youtubePlayerQualityLevels
 	.map((level, i) => ({ label: youtubePlayerQualityLabels[i], value: level }))
@@ -208,12 +204,15 @@ function ConflictItem({
 	onSelectionChange: (feature: string) => void;
 	selectedFeature: string;
 }) {
+	const {
+		i18nInstance: { t }
+	} = useSettings();
 	if (conflict.type === "enabled") {
 		return (
 			<EnabledConflictItem
 				conflict={conflict}
-				featureALabel={getFeatureLabel(conflict.featureA)}
-				featureBLabel={getFeatureLabel(conflict.featureB)}
+				featureALabel={getFeatureLabel(conflict.featureA, t)}
+				featureBLabel={getFeatureLabel(conflict.featureB, t)}
 				onSelectionChange={onSelectionChange}
 				selectedFeature={selectedFeature}
 			/>
@@ -225,8 +224,8 @@ function ConflictItem({
 			<ModifierKeyConflictItem
 				conflict={conflict}
 				conflictId={conflictId}
-				featureALabel={getFeatureLabel(conflict.featureA)}
-				featureBLabel={getFeatureLabel(conflict.featureB)}
+				featureALabel={getFeatureLabel(conflict.featureA, t)}
+				featureBLabel={getFeatureLabel(conflict.featureB, t)}
 				isResolved={isResolved}
 				modifiedKey={modifiedKey}
 				onKeyChange={onKeyChange}
@@ -291,17 +290,10 @@ function EnabledConflictItem({
 	);
 }
 
-function getFeatureLabel(featureId: string): string {
-	const defaults: Record<string, string> = {
-		automaticallyDisableClosedCaptions: "Auto Disable Captions",
-		automaticallyEnableClosedCaptions: "Auto Enable Captions",
-		globalVolume: "Global Volume",
-		rememberVolume: "Remember Volume",
-		scrollWheelSpeedControl: "Scroll Wheel Speed Control",
-		scrollWheelVolumeControl: "Scroll Wheel Volume Control"
-	};
-
-	return defaults[featureId] ?? featureId;
+/** A feature's name as the settings page shows it: the label of its enable switch, from the same metadata. */
+function getFeatureLabel(featureId: string, t: Parameters<TSelectFunc>[0]): string {
+	const label = metadataRegistry.getSettingLabel(featureId as FeatureKeys, `${featureId}.enabled`);
+	return label ? label(t) : featureId;
 }
 
 function ModifierKeyConflictItem({
@@ -322,6 +314,7 @@ function ModifierKeyConflictItem({
 }) {
 	const { i18nInstance } = useSettings();
 	const { t } = i18nInstance;
+	const modifierKeyOptions = modifierKeys.map((key) => ({ label: t((tr) => tr.pages.options.extras.modifierKeys[key]), value: key }));
 
 	return (
 		<div

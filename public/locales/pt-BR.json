@@ -253,6 +253,7 @@
 						"title": "Configurações do menu de recursos"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Configurações exportadas com sucesso",
@@ -276,6 +277,15 @@
 					},
 					"title": "Idioma"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Abrir a página de configurações na atualização",
 					"title": "Abre a página de configurações quando uma versão maior ou menor do YouTube Enhancer é instalada"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Desativar 'Volume global' para configurar esta opção",
 						"screenshotButtonFileFormat": "Definir tipo de salvamento de captura de tela como 'Arquivo' ou 'Ambos' para configurar esta opção"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Buscar uma configuração"
