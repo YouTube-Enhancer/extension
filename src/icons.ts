@@ -3,6 +3,10 @@ import type { AllButtonNames, ButtonPlacement } from "@/src/types";
 import { createSVGElement } from "@/src/utils/dom/elements";
 export type BasicIcon = SVGSVGElement;
 export type ToggleIcon = { off: SVGSVGElement; on: SVGSVGElement };
+/** Whether an icon is the on/off pair a toggle button swaps between, rather than a single element. */
+export function isToggleIcon(icon: SVGSVGElement | ToggleIcon): icon is ToggleIcon {
+	return "on" in icon;
+}
 export const toggleFeatures = Object.keys({
 	hideEndScreenCardsButton: "",
 	loopButton: "",
