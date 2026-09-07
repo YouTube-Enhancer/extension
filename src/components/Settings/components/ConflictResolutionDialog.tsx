@@ -39,8 +39,8 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 	const [selections, setSelections] = useState<Record<string, string>>(() => {
 		const initial: Record<string, string> = {};
 		for (const conflict of conflicts) {
-			// eslint-disable-next-line prefer-destructuring
-			initial[getConflictId(conflict)] = conflict.featureA;
+			// The quality picker opens on its first option, so applying it untouched stores what the dialog shows.
+			initial[getConflictId(conflict)] = conflict.type === "autoQuality" ? qualityOptions[0].value : conflict.featureA;
 		}
 		return initial;
 	});
