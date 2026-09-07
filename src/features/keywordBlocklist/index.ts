@@ -6,6 +6,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { parseLineList } from "@/src/utils/string";
 
 import { BLOCKED_AVATAR_URL, BLOCKED_THUMBNAIL_URL, isBlockedPlaceholderUrl } from "./blockedPlaceholder";
+import { BLOCKED_ATTRIBUTE, HOVER_BLOCKED_CLASS } from "./constants";
 import { metadata } from "./index.metadata";
 import { createKeywordMatcher, normalizeWhitespace } from "./utils";
 
@@ -14,8 +15,6 @@ type ImageStash = { src: Nullable<string>; srcset: Nullable<string> };
 type KeywordBlocklistConfiguration = configuration["keywordBlocklist"];
 type TitleStash = { nodes: [Text, string][]; original: string };
 
-const BLOCKED_ATTRIBUTE = "data-yte-keyword-blocked";
-const HOVER_BLOCKED_CLASS = "yte-hover-blocked";
 const VIDEO_CONTAINER_SELECTOR =
 	"ytd-rich-item-renderer, ytd-video-renderer, ytd-grid-video-renderer, ytd-compact-video-renderer, ytd-channel-renderer, yt-lockup-view-model, ytm-shorts-lockup-view-model-v2, .ytp-ce-element, .ytp-videowall-still, ytd-playlist-panel-video-renderer, ytd-notification-renderer";
 // Every piece of text inside a container that is checked against the blocklist and masked when it matches.
