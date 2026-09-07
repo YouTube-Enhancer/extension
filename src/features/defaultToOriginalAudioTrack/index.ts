@@ -97,6 +97,7 @@ export default createFeature({
 	onDisable: () => {
 		void registry.playerManager.executeWithRetries("defaultToOriginalAudioTrack", [makeRestoreAudioTrackTask()], ["restoreAudio"], {
 			maxAttempts: 15,
+			pageTypes: ["watch", "shorts"],
 			waitForLoaded: true
 		});
 	},
@@ -105,7 +106,7 @@ export default createFeature({
 			"defaultToOriginalAudioTrack",
 			[makeSaveTrackTask(), makeSetDefaultAudioTrackTask()],
 			["saveTrack", "setDefault"],
-			{ maxAttempts: 15, waitForLoaded: true }
+			{ maxAttempts: 15, pageTypes: ["watch", "shorts"], waitForLoaded: true }
 		);
 	},
 	onNavigate: () => {
@@ -114,7 +115,7 @@ export default createFeature({
 			"defaultToOriginalAudioTrack",
 			[makeSaveTrackTask(), makeSetDefaultAudioTrackTask()],
 			["saveTrack", "setDefault"],
-			{ maxAttempts: 15, waitForLoaded: true }
+			{ maxAttempts: 15, pageTypes: ["watch", "shorts"], waitForLoaded: true }
 		);
 	}
 });
