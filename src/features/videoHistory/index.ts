@@ -13,6 +13,7 @@ import { browserColorLog } from "@/src/utils/logging";
 import { round } from "@/src/utils/math";
 import { isWatchPage } from "@/src/utils/url";
 
+import { OFFICIAL_ARTIST_BADGE_SELECTOR } from "./constants";
 import { metadata } from "./index.metadata";
 
 let animationFrameId: Nullable<number> = null;
@@ -203,25 +204,22 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 15000);
 	if (!playerContainer) return;
 	// The first read of a page can still see an empty player, the video played before a navigation, or a
-	// pre-roll ad, whose id would become the history key; wait for the video the page is about instead.
-	const playerVideoData = currentVideoId ? await playerContainer.getVideoData() : await waitForPlayerVideoData(playerContainer);
+	// pre-roll ad, whose id would become the history key; wait for the video the page is about instead. After an
+	// in-page navigation the same applies: the next id the player reports is the pre-roll's when one plays, and on
+	// a slow load still the previous video's, and nothing runs this again for the video that follows.
+	const playerVideoData = await waitForPlayerVideoData(playerContainer);
 	// If the video is live return
 	if (playerVideoData.isLive) return;
 	const { author: rawAuthor } = playerVideoData;
-	let videoId: VideoId;
-	if (currentVideoId) {
-		const nextVideoId = await waitForVideoChange(playerContainer);
-		if (!nextVideoId) return;
-		videoId = nextVideoId;
-	} else {
-		if (!playerVideoData.video_id) return;
-		videoId = createVideoId(playerVideoData.video_id);
-	}
+	if (!playerVideoData.video_id) return;
+	const videoId = createVideoId(playerVideoData.video_id);
 	if (currentVideoId === videoId) return;
 	currentVideoId = videoId;
 	resetState();
-	const videoElement = playerContainer.querySelector<HTMLVideoElement>("video.video-stream.html5-main-video");
-	if (!videoElement) return;
+	// Leaving a Mix for a plain watch page has YouTube rebuild the player, and the new video element lands a moment
+	// after the player already reports the new video, so it is waited for rather than looked up once.
+	const videoElement = await waitForElement<HTMLVideoElement>("div#movie_player video.video-stream.html5-main-video", 15000);
+	if (!videoElement || currentVideoId !== videoId) return;
 	const author = createAuthor(rawAuthor ?? "");
 	const [isArtist, duration] = await Promise.all([isOfficialArtist(videoId, author, { current: currentVideoId }), playerContainer.getDuration()]);
 	if (isArtist) return;
@@ -269,12 +267,11 @@ async function isOfficialArtist(
 		artistChannelCache.set(author, true);
 		return true;
 	}
-	await waitForElement("#owner #upload-info #channel-name", 50);
-	const isOfficialArtistChannel =
-		(await waitForElement(
-			"#owner #upload-info #channel-name svg path[d='M9.03 2.242 8.272 3H7.2A4.2 4.2 0 003 7.2v1.072l-.758.758a4.2 4.2 0 000 5.94l.758.758V16.8A4.2 4.2 0 007.2 21h1.072l.758.758a4.2 4.2 0 005.94 0l.758-.758H16.8a4.2 4.2 0 004.2-4.2v-1.072l.758-.758a4.2 4.2 0 000-5.94L21 8.272V7.2A4.2 4.2 0 0016.8 3h-1.072l-.758-.758a4.2 4.2 0 00-5.94 0Zm7.73 6.638a.5.5 0 01.241.427v1.743a.256.256 0 01-.386.219L14.001 9.7v4.55a2.75 2.75 0 11-2-2.646V6.888a.5.5 0 01.759-.428l4 2.42Z']",
-			50
-		)) !== null;
+	// On a fresh page the owner row renders after the player, and right after an in-page navigation it still names the
+	// previous video's channel, whose badge would be taken for this one's. The badge is only read once the row names
+	// the channel the player reports; a row that never does leaves the video tracked, the lesser error.
+	const ownerRowNamesChannel = await waitForOwnerRow(author, 3000);
+	const isOfficialArtistChannel = ownerRowNamesChannel && document.querySelector(OFFICIAL_ARTIST_BADGE_SELECTOR) !== null;
 	if (currentVideoIdRef.current !== videoId) return false;
 	artistChannelCache.set(author, isOfficialArtistChannel);
 	return isOfficialArtistChannel;
@@ -288,8 +285,18 @@ function resetState() {
 	hasMarkedWatched = false;
 	eventManager.removeEventListeners("videoHistory");
 }
+/** Resolves true once the owner row's channel name is `author`, or false after `timeout`. */
+async function waitForOwnerRow(author: string, timeout: number): Promise<boolean> {
+	const start = Date.now();
+	while (Date.now() - start < timeout) {
+		const channelName = document.querySelector("#owner #upload-info #channel-name")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+		if (author && channelName.includes(author)) return true;
+		await new Promise((resolve) => setTimeout(resolve, 100));
+	}
+	return false;
+}
 /** Resolves with the player's video data once it is the video the URL names and no ad is showing, or after `timeout`. */
-async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout = 15000) {
+async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout = 60000) {
 	const start = Date.now();
 	for (;;) {
 		const data = await playerContainer.getVideoData();
@@ -298,22 +305,4 @@ async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout
 		if ((holdsPageVideo && !playerContainer.classList.contains("ad-showing")) || Date.now() - start >= timeout) return data;
 		await new Promise((resolve) => setTimeout(resolve, 200));
 	}
-}
-async function waitForVideoChange(playerContainer: YouTubePlayerDiv, timeout = 5000): Promise<Nullable<VideoId>> {
-	const videoEl = await waitForElement<HTMLVideoElement>("video.video-stream.html5-main-video", timeout);
-	if (!videoEl) return null;
-	const start = Date.now();
-	let { currentSrc: lastSrc } = videoEl;
-	while (Date.now() - start < timeout) {
-		const { currentSrc } = videoEl;
-		if (currentSrc && currentSrc !== lastSrc) {
-			lastSrc = currentSrc;
-			const data = await playerContainer.getVideoData();
-			if (data.video_id && data.video_id !== currentVideoId) return createVideoId(data.video_id);
-		}
-		await new Promise((resolve) => setTimeout(resolve, 50));
-	}
-	const fallback = await playerContainer.getVideoData();
-	if (fallback.video_id && fallback.video_id !== currentVideoId) return createVideoId(fallback.video_id);
-	return null;
 }
