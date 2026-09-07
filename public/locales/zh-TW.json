@@ -253,6 +253,7 @@
 						"title": "功能選單設定"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "設定已成功匯出",
@@ -276,6 +277,15 @@
 					},
 					"title": "語言"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Open settings page on update",
 					"title": "Opens the settings page when a major or minor version of YouTube Enhancer is installed"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Disable 'Global volume' to configure this option",
 						"screenshotButtonFileFormat": "Set screenshot save type to 'File' or 'Both' to configure this option"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "搜尋設定"

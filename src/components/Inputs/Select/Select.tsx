@@ -8,6 +8,7 @@ import type { configuration, configurationId, PathValue } from "@/src/types";
 import { useComponentVisible } from "@/hooks";
 import Arrow from "@/src/components/Inputs/Number/Arrow";
 import Loader from "@/src/components/Loader";
+import { useSettings } from "@/src/components/Settings/Settings";
 import { cn } from "@/src/utils/style";
 
 export type SelectOption<Key extends configurationId> = {
@@ -46,6 +47,9 @@ const Select = <Key extends configurationId>({
 	selectedOption
 }: SelectProps<Key>) => {
 	const selectRef = useRef<HTMLDivElement>(null);
+	const {
+		i18nInstance: { t }
+	} = useSettings();
 	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } = useComponentVisible<HTMLDivElement>(selectRef, false);
 
 	const toggleSelect = () => {
@@ -98,7 +102,7 @@ const Select = <Key extends configurationId>({
 								</span>
 							</div>
 
-					:	<span className={cn("text-black dark:text-white", disabledButtonClasses)}>Select an option</span>}
+					:	<span className={cn("text-black dark:text-white", disabledButtonClasses)}>{t((tr) => tr.pages.options.extras.select.placeholder)}</span>}
 					<Arrow rotation={isSelectVisible ? "up" : "down"} />
 				</button>
 				{isSelectVisible && (

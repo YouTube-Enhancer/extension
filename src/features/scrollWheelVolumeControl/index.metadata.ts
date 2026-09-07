@@ -52,16 +52,13 @@ export const metadata = createFeatureMetadata({
 					id: "scrollWheelVolumeControl.modifierKey",
 					label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.label),
 					optionsFrom: () =>
-						modifierKeys.map((key) => {
-							const keyValue =
-								key === "altKey" ? "Alt"
-								: key === "ctrlKey" ? "Ctrl"
-								: "Shift";
-							return {
-								label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.extras.optionLabel, { KEY: keyValue }),
-								value: key
-							};
-						}),
+						modifierKeys.map((key) => ({
+							label: (t) =>
+								t((tr) => tr.settings.sections.scrollWheelVolumeControl.extras.optionLabel, {
+									KEY: t((tr) => tr.pages.options.extras.modifierKeys[key])
+								}),
+							value: key
+						})),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.scrollWheelVolumeControl.enable.label

@@ -77,8 +77,7 @@ export default createFeature({
 	},
 	onEnable: (config) => {
 		syncConfig(config);
-		maskedTitleText =
-			window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle) || "Blocked keyword";
+		maskedTitleText = window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle);
 		syncObserving();
 	},
 	onNavigate: () => {

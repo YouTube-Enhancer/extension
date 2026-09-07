@@ -253,6 +253,7 @@
 						"title": "Ustawienia menu funkcji"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Ustawienia zostały pomyślnie wyeksportowane",
@@ -276,6 +277,15 @@
 					},
 					"title": "Język"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Otwórz stronę ustawień przy aktualizacji",
 					"title": "Otwiera stronę ustawień, gdy zainstalowana jest główna lub mniejsza wersja wzmacniacza YouTube"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Wyłącz 'głośność globalną' aby skonfigurować tę opcję",
 						"screenshotButtonFileFormat": "Ustaw typ zapisu zrzutu ekranu na 'Plik' lub 'Both', aby skonfigurować tę opcję"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Szukaj ustawienia"

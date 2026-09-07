@@ -253,6 +253,7 @@
 						"title": "功能菜单设置"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "设置导出成功",
@@ -276,6 +277,15 @@
 					},
 					"title": "语言"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "在更新时打开设置页面",
 					"title": "当安装YouTube Enhancer的主要或次要版本时打开设置页面"
@@ -296,6 +306,9 @@
 						"rememberVolume": "禁用“全局音量”来配置此选项",
 						"screenshotButtonFileFormat": "将屏幕截图保存类型设置为“文件”或“全部”以配置此选项"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "搜索设置"
