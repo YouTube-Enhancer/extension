@@ -253,6 +253,7 @@
 						"title": "Özellik menüsü ayarları"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Ayarlar başarıyla dışa aktarıldı",
@@ -276,6 +277,15 @@
 					},
 					"title": "Dil"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Güncelleme sırasında ayarlar sayfasını açın",
 					"title": "YouTube Enhancer'ın ana veya alt sürümü yüklendiğinde ayarlar sayfasını açar"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Bu seçeneği yapılandırmak için 'Evrensel sesi' devre dışı bırakın",
 						"screenshotButtonFileFormat": "Bu seçeneği yapılandırabilmek için ekran görüntüsü kaydetme türünü ‘Dosya’ veya ‘Her İkisi’ olarak ayarlayın"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Bir ayar arayın"
