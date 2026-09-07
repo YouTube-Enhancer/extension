@@ -253,6 +253,7 @@
 						"title": "Impostazioni menu funzionalità"
 					}
 				},
+				"iconAlt": "YouTube Enhancer Icon",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Impostazioni esportate con successo",
@@ -276,6 +277,15 @@
 					},
 					"title": "Lingua"
 				},
+				"modifierKeys": {
+					"altKey": "Alt",
+					"ctrlKey": "Ctrl",
+					"shiftKey": "Shift"
+				},
+				"numberInput": {
+					"stepDown": "Subtract one",
+					"stepUp": "Add one"
+				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Apri la pagina delle impostazioni dopo l'aggiornamento",
 					"title": "Apre la pagina delle impostazioni quando è installata una versione più recente o antecedente di YouTube Enhancer"
@@ -296,6 +306,9 @@
 						"rememberVolume": "Disabilita 'Volume globale' per configurare questa opzione",
 						"screenshotButtonFileFormat": "Imposta il tipo di salvataggio della schermata su 'File' o 'Entrambi' per configurare questa opzione"
 					}
+				},
+				"select": {
+					"placeholder": "Select an option"
 				},
 				"settingSearch": {
 					"placeholder": "Cerca un'impostazione"
