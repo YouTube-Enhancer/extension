@@ -141,6 +141,10 @@ declare module "node_modules/@types/webextension-polyfill/namespaces/manifest.d.
 declare global {
 	interface DocumentEventMap {
 		"yt-navigate-start": CustomEvent<YouTubeNavigateStart>;
+		// Fired by the app once it has applied a navigation's page data.
+		"yt-page-data-updated": CustomEvent;
+		// Fired by the playlist manager whenever it is handed playlist data, its own or the extension's.
+		"yt-playlist-data-updated": CustomEvent;
 	}
 	interface ObjectConstructor {
 		entries<T>(o: { [K in keyof T]: T[K] }): [keyof T, T[keyof T]][];
