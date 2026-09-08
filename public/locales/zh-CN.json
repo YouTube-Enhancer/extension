@@ -253,7 +253,7 @@
 						"title": "功能菜单设置"
 					}
 				},
-				"iconAlt": "YouTube Enhancer Icon",
+				"iconAlt": "YouTube Enhancer 图标",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "设置导出成功",
@@ -278,13 +278,13 @@
 					"title": "语言"
 				},
 				"modifierKeys": {
-					"altKey": "Alt",
-					"ctrlKey": "Ctrl",
-					"shiftKey": "Shift"
+					"altKey": "Alt 键",
+					"ctrlKey": "Ctrl 键",
+					"shiftKey": "Shift 键"
 				},
 				"numberInput": {
-					"stepDown": "Subtract one",
-					"stepUp": "Add one"
+					"stepDown": "减少一个",
+					"stepUp": "添加一个"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "在更新时打开设置页面",
@@ -308,7 +308,7 @@
 					}
 				},
 				"select": {
-					"placeholder": "Select an option"
+					"placeholder": "选择一个选项"
 				},
 				"settingSearch": {
 					"placeholder": "搜索设置"
