@@ -1,7 +1,9 @@
+import type { Manifest } from "webextension-polyfill";
+
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import { manifestV2, manifestV3 } from "@/src/manifest";
+import { manifestV3, manifestV3Firefox } from "@/src/manifest";
 import terminalColorLog from "@/src/utils/logging";
 import { browsers, outDir } from "@/src/utils/plugins/utils";
 
@@ -11,7 +13,8 @@ export default function generateManifests(): void {
 		if (!existsSync(browserDir)) {
 			mkdirSync(browserDir, { recursive: true });
 		}
-		writeManifest(browser.type === "chrome" ? 3 : 2, browser.name);
+		const manifest = browser.type === "chrome" ? manifestV3 : manifestV3Firefox;
+		writeManifest(manifest, browser.name);
 	}
 }
 
@@ -23,28 +26,21 @@ function getChunkScriptPaths(): string[] {
 		.map((fileName) => `src/${fileName}`);
 }
 
-function writeManifest(version: 2 | 3, browserName: string): void {
+function writeManifest(manifest: Manifest.WebExtensionManifest, browserName: string): void {
 	const manifestPath = resolve(outDir, browserName, "manifest.json");
 	const chunkScriptPaths = getChunkScriptPaths();
+	const webAccessibleResources = (manifest.web_accessible_resources ?? []) as (string | { matches?: string[]; resources?: string[] })[];
 
-	if (version === 2) {
-		const manifest = {
-			...manifestV2,
-			web_accessible_resources: [...new Set([...(manifestV2.web_accessible_resources ?? []), ...chunkScriptPaths])]
-		};
-		writeFileSync(manifestPath, JSON.stringify(manifest));
-	} else {
-		const manifest = {
-			...manifestV3,
-			web_accessible_resources: (manifestV3.web_accessible_resources ?? []).map((entry) => {
-				if (typeof entry === "string") return entry;
-				return {
-					...entry,
-					resources: [...new Set([...(entry.resources ?? []), ...chunkScriptPaths])]
-				};
-			})
-		};
-		writeFileSync(manifestPath, JSON.stringify(manifest));
-	}
+	const resolved = {
+		...manifest,
+		web_accessible_resources: webAccessibleResources.map((entry) => {
+			if (typeof entry === "string") return entry;
+			return {
+				...entry,
+				resources: [...new Set([...(entry.resources ?? []), ...chunkScriptPaths])]
+			};
+		})
+	};
+	writeFileSync(manifestPath, JSON.stringify(resolved));
 	terminalColorLog(`Manifest file created: ${manifestPath}`, "success");
 }
