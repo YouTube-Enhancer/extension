@@ -46,7 +46,7 @@ export default defineConfig({
 			treeshake: {
 				moduleSideEffects: true,
 				preset: "smallest",
-				propertyReadSideEffects: true,
+				propertyReadSideEffects: false,
 				tryCatchDeoptimization: true
 			}
 		},
