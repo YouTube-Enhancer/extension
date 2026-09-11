@@ -340,7 +340,6 @@ function startObserving() {
 	observer.observe(document.body, {
 		attributeFilter: ["src", "srcset", "style"],
 		attributes: true,
-		characterData: true,
 		childList: true,
 		subtree: true
 	});
