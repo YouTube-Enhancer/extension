@@ -64,40 +64,20 @@ const manifestV3: Manifest.WebExtensionManifest = {
 	],
 	...devtoolsPage
 };
-const manifestV2: Manifest.WebExtensionManifest = {
-	author: pkg.author.name,
+const manifestV3Firefox: Manifest.WebExtensionManifest = {
+	...manifestV3,
 	background: {
-		page: "src/pages/background/index.html"
+		scripts: ["src/pages/background/index.js"]
 	},
-	browser_action: action,
 	browser_specific_settings: {
 		gecko: {
 			data_collection_permissions: {
 				required: ["none"]
 			},
 			id: "{c49b13b1-5dee-4345-925e-0c793377e3fa}",
-			strict_min_version: "140.0"
+			strict_min_version: "109.0"
 		}
-	},
-	content_scripts: [
-		{
-			css: ["contentStyle.css"],
-			js: ["src/pages/content/index.js"],
-			matches: YOUTUBE_MATCH_PATTERNS,
-			run_at: "document_start"
-		}
-	],
-	description: pkg.description,
-	icons,
-	manifest_version: 2,
-	name: pkg.displayName,
-	options_ui: {
-		page: "src/pages/options/index.html"
-	},
-	permissions: permissions.concat(hostPermissions),
-	version: pkg.version,
-	web_accessible_resources: resources,
-	...devtoolsPage
+	}
 };
 
-export { manifestV2, manifestV3 };
+export { manifestV3, manifestV3Firefox };
