@@ -275,6 +275,7 @@ export type configuration = {
 		videos: { enabled: boolean };
 	};
 	hideSidebarRecommendedVideos: { enabled: boolean };
+	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideTranslateComment: { enabled: boolean };
 	keywordBlocklist: { enabled: boolean; keywords: string };
 	language: AvailableLocales;

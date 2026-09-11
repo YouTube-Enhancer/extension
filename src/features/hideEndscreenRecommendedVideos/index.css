@@ -1,0 +1,8 @@
+body.yte-hide-endscreen-recommended-videos {
+	& div.ytp-fullscreen-grid {
+		display: none !important;
+	}
+	& .ytp-videowall-still {
+		display: none !important;
+	}
+}
