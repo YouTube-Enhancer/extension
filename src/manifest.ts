@@ -4,7 +4,7 @@ import pkg from "../package.json";
 import { availableLocales } from "./i18n/constants";
 import { DEV_MODE } from "./utils/config/env";
 import { YOUTUBE_MATCH_PATTERNS } from "./utils/url/constants";
-const permissions: Manifest.Permission[] = ["activeTab", "webRequest", "storage", "tabs", "scripting"];
+const permissions: Manifest.Permission[] = ["activeTab", "storage", "tabs", "scripting"];
 const hostPermissions: Manifest.MatchPattern[] = YOUTUBE_MATCH_PATTERNS;
 const baseResources = [
 	"contentStyle.css",
@@ -37,9 +37,9 @@ const manifestV3: Manifest.WebExtensionManifest = {
 		service_worker: "src/pages/background/index.js",
 		type: "module"
 	},
-	content_scripts: [
+		content_scripts: [
 		{
-			all_frames: true,
+			all_frames: false,
 			css: ["contentStyle.css"],
 			js: ["src/pages/content/index.js"],
 			matches: YOUTUBE_MATCH_PATTERNS,
