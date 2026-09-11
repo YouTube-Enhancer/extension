@@ -16,6 +16,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
+	private navigating = false;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
 	private replaceStateWrapper?: { original: typeof history.replaceState; wrapper: () => void };
@@ -58,12 +59,18 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	}
 
 	async handleNavigation(eventType: NavigationEventType) {
-		const signature = await this.getNavigationSignature();
-		if (!signature) return;
-		if (!this.updateNavigationSignature(signature)) return;
-		this.currentNavigationSignature = signature;
-		this.currentPage = getPageFromSignature(signature);
-		if (this.navigationCallback) await this.navigationCallback(signature, eventType);
+		if (this.navigating) return;
+		this.navigating = true;
+		try {
+			const signature = await this.getNavigationSignature();
+			if (!signature) return;
+			if (!this.updateNavigationSignature(signature)) return;
+			this.currentNavigationSignature = signature;
+			this.currentPage = getPageFromSignature(signature);
+			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
+		} finally {
+			this.navigating = false;
+		}
 	}
 	async initialize(callback: (signature: string, eventType: NavigationEventType) => Promise<void>) {
 		if (this.isInitialized) return;
