@@ -12,7 +12,7 @@
 					"button": {
 						"label": "Obsługa Mono audio",
 						"toggle": {
-							"on": "Mono → Stereo Output",
+							"on": "Wyjście Mono → Stereo",
 							"off": "Oryginalny dźwięk"
 						}
 					}
@@ -61,7 +61,7 @@
 				},
 				"keywordBlocklist": {
 					"messages": {
-						"maskedTitle": "Blocked keyword"
+						"maskedTitle": "Blokowane słowa"
 					}
 				},
 				"loopButton": {
@@ -119,7 +119,7 @@
 						"failedToRemoveVideo": "Nie udało się usunąć wideo",
 						"markAsUnwatched": "Oznacz jako nieobejrzane",
 						"markingAsUnwatched": "Oznaczanie jako nieobejrzane…",
-						"removeAllWatchedVideo": "Remove {{count}} watched video",
+						"removeAllWatchedVideo": "Usuń {{count}} obejrzanych filmów",
 						"removeAllWatchedVideos": "Remove {{count}} watched videos",
 						"removeVideo": "Usuń film",
 						"removingVideo": "Usuwanie wideo…",
@@ -130,13 +130,13 @@
 					"extras": {
 						"toggle": {
 							"off": "Normal order",
-							"on": "Reversed order"
+							"on": "Odwrócona kolejność"
 						}
 					}
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
+						"failedToRemoveVideo": "Nie udało się usunąć filmu z listy Do Obejrzenia",
 						"failedToSaveVideo": "Nie udało się zapisać filmu do obejrzenia później",
 						"removeVideo": "Remove from Watch Later",
 						"removedVideo": "Removed from Watch Later",
@@ -185,7 +185,7 @@
 					},
 					"reset": {
 						"title": "Resetuje wszystkie ustawienia do domyślnych, kliknij przycisk Potwierdź, aby zapisać zmiany",
-						"value": "Reset"
+						"value": "Resetuj"
 					}
 				},
 				"buttonPlacement": {
