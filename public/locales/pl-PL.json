@@ -120,16 +120,16 @@
 						"markAsUnwatched": "Oznacz jako nieobejrzane",
 						"markingAsUnwatched": "Oznaczanie jako nieobejrzane…",
 						"removeAllWatchedVideo": "Usuń {{count}} obejrzanych filmów",
-						"removeAllWatchedVideos": "Remove {{count}} watched videos",
+						"removeAllWatchedVideos": "Usuń {{count}} obejrzanych filmów",
 						"removeVideo": "Usuń film",
 						"removingVideo": "Usuwanie wideo…",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "Usuwanie obejrzanych filmów…"
 					}
 				},
 				"playlistReverseButton": {
 					"extras": {
 						"toggle": {
-							"off": "Normal order",
+							"off": "Normalna kolejność",
 							"on": "Odwrócona kolejność"
 						}
 					}
@@ -138,10 +138,10 @@
 					"extras": {
 						"failedToRemoveVideo": "Nie udało się usunąć filmu z listy Do Obejrzenia",
 						"failedToSaveVideo": "Nie udało się zapisać filmu do obejrzenia później",
-						"removeVideo": "Remove from Watch Later",
-						"removedVideo": "Removed from Watch Later",
+						"removeVideo": "Usuń z listy Do Obejrzenia",
+						"removedVideo": "Usunięto z listy Do Obejrzenia",
 						"saveVideo": "Zapisz aby obejrzeć później",
-						"unavailable": "Save to Watch Later button is unavailable due to a YouTube change"
+						"unavailable": "Przycisk Zapisz w Do Obejrzenia jest niedostępny z powodu zmiany wprowadzonej przez YouTube"
 					}
 				},
 				"screenshotButton": {
@@ -253,7 +253,7 @@
 						"title": "Ustawienia menu funkcji"
 					}
 				},
-				"iconAlt": "YouTube Enhancer Icon",
+				"iconAlt": "Ikona YouTube Enhancera",
 				"importExportSettings": {
 					"exportButton": {
 						"success": "Ustawienia zostały pomyślnie wyeksportowane",
@@ -283,8 +283,8 @@
 					"shiftKey": "Shift"
 				},
 				"numberInput": {
-					"stepDown": "Subtract one",
-					"stepUp": "Add one"
+					"stepDown": "Odejmij jeden",
+					"stepUp": "Dodaj jeden"
 				},
 				"openSettingsOnMajorOrMinorVersionChange": {
 					"label": "Otwórz stronę ustawień przy aktualizacji",
@@ -308,7 +308,7 @@
 					}
 				},
 				"select": {
-					"placeholder": "Select an option"
+					"placeholder": "Wybierz opcję"
 				},
 				"settingSearch": {
 					"placeholder": "Szukaj ustawienia"
@@ -333,8 +333,8 @@
 						"keepFirst": "Zachowaj {{FEATURE}}",
 						"keepSecond": "Zachowaj {{FEATURE}}",
 						"autoQualityConflict": {
-							"description": "The imported settings use \"Auto\" quality, which has been removed. Please choose a specific quality:",
-							"selectQuality": "Quality:"
+							"description": "Zaimportowane ustawienia wykorzystują opcję jakości \"Auto\", która została usunięta. Wybierz konkretną jakość:",
+							"selectQuality": "Jakość:"
 						},
 						"modifierKeyConflict": {
 							"description": "'{{FEATURE_A}}' i '{{FEATURE_B}}' nie można użyć tego samego klucza modyfikującego.",
@@ -548,8 +548,8 @@
 					},
 					"hideArtificialIntelligence": {
 						"enable": {
-							"label": "Hide AI",
-							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+							"label": "Ukryj AI",
+							"title": "Ukrywa funkcje oparte na AI, takie jak podsumowania wideo i „Zapytaj AI”"
 						}
 					},
 					"hideEndScreenCards": {
@@ -608,7 +608,7 @@
 					},
 					"hideScrollbar": {
 						"enable": {
-							"label": "Hide scrollbar",
+							"label": "Ukryj pasek przewijania",
 							"title": "Ukryj pasek przewijania stron"
 						}
 					},
@@ -620,8 +620,8 @@
 					},
 					"hideEndscreenRecommendedVideos": {
 						"enable": {
-							"label": "Hide recommended videos on endscreen",
-							"title": "Hides the suggested videos that appear on the endscreen"
+							"label": "Ukryj polecane filmy na ekranie końcowym",
+							"title": "Ukrywa sugerowane filmy wyświetlane na ekranie końcowym"
 						}
 					},
 					"hideTranslateComment": {
@@ -662,8 +662,8 @@
 					},
 					"playlistReverseButton": {
 						"enable": {
-							"label": "Reverse playlist button",
-							"title": "Adds a button to reverse the order of videos in playlists"
+							"label": "Przycisk odtwarzania playlisty od końca",
+							"title": "Dodaje przycisk umożliwiający odwrócenie kolejności odtwarzania filmów w playlistach"
 						}
 					},
 					"remainingTime": {
@@ -759,26 +759,26 @@
 						"title": "Usuwa filmy Skróty z rekomendacji na stronach zegarka"
 					},
 					"subscriptions": {
-						"label": "Hide on Subscriptions feed",
-						"title": "Removes the Shorts section from the Subscriptions feed"
+						"label": "Ukryj na karcie subskrypcji",
+						"title": "Usuwa sekcję Shorts z karty Subskrypcji"
 					}
 				}
 			},
 			"keywordBlocklist": {
 				"enable": {
-					"label": "Enable keyword blocklist",
-					"title": "Masks the titles and thumbnails of videos whose title contains a blocked keyword"
+					"label": "Włącz listę blokowanych słów",
+					"title": "Ukrywa tytuły i miniatury filmów, których tytuły zawierają zablokowane słowo kluczowe"
 				},
 				"settings": {
 					"keywords": {
-						"label": "Blocked keywords",
-						"title": "Videos with any of these keywords in their title get their title and thumbnail masked",
-						"add": "Add keyword",
-						"item": "Keyword",
-						"remove": "Remove keyword"
+						"label": "Zablokowane słowa kluczowe",
+						"title": "Filmy, których tytuł zawiera którekolwiek z tych słów kluczowych, mają ukryty tytuł i miniaturkę",
+						"add": "Dodaj słowo kluczowe",
+						"item": "Słowo kluczowe",
+						"remove": "Usuń słowo kluczowe"
 					}
 				},
-				"title": "Keyword blocklist settings"
+				"title": "Ustawienia listy blokowania słów kluczowych"
 			},
 			"onScreenDisplaySettings": {
 				"settings": {
@@ -807,7 +807,7 @@
 						"title": "Dostosuj przezroczystość wyświetlacza na ekranie"
 					},
 					"padding": {
-						"label": "Padding",
+						"label": "Odstęp",
 						"title": "Dostosuj odstępy wokół wyświetlacza na ekranie w pikselach. Dotyczy to w szczególności wyświetlacza na ekranie narożnym."
 					},
 					"position": {
@@ -846,18 +846,18 @@
 				"settings": {
 					"fpsPreference": {
 						"select": {
-							"label": "Frame rate preference",
+							"label": "Preferowana częstotliwość odświeżania",
 							"options": {
-								"default": "Default",
-								"higher": "Higher FPS",
-								"lower": "Lower FPS"
+								"default": "Domyślnie",
+								"higher": "Wyższa częstotliwość odświeżania",
+								"lower": "Niższa częstotliwość odświeżania"
 							},
-							"title": "Prefer higher or lower frame rate when multiple formats are available"
+							"title": "Wybierz wyższą lub niższą częstotliwość odświeżania, gdy jest kilka do wyboru"
 						}
 					},
 					"preferPremium": {
-						"label": "Prefer Premium enhanced bitrate",
-						"title": "Use Premium itags (356/721) when available. Requires YouTube Premium."
+						"label": "Wybierz opcję Bitrate Premium",
+						"title": "Używaj dostępnych tagów Premium (356/721). Wymagana jest subskrypcja YouTube Premium."
 					},
 					"quality": {
 						"select": {
@@ -899,11 +899,11 @@
 						}
 					},
 					"channelSpeeds": {
-						"add": "Add",
-						"channelId": "Channel ID",
-						"getChannelIdFromLink": "Get ID from link",
-						"label": "Per-channel playback speed",
-						"pasteLinkPlaceholder": "youtube.com/@channel or video link",
+						"add": "Dodaj",
+						"channelId": "ID Kanału",
+						"getChannelIdFromLink": "Pobierz ID z linku",
+						"label": "Szybkość odtwarzania dla Kanału",
+						"pasteLinkPlaceholder": "youtube.com/@nazwakanału lub link do filmu",
 						"remove": "Remove",
 						"speed": "Speed",
 						"title": "Sets a specific playback speed for videos from a channel"
