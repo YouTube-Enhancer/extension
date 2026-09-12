@@ -52,7 +52,7 @@
     "tailwindcss-multi": "^0.4.6",
     "vite-plugin-css-injected-by-js": "^4.0.1",
     "webextension-polyfill": "^0.12.0",
-    "youtubei.js": "^17.2.0"
+    "youtubei.js": "^18.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
@@ -94,5 +94,10 @@
     "vite": "^7.3.5",
     "zod": "^4.1.12",
     "zod-error": "^2.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "esbuild@0.28.2": true,
+    "@swc/core@1.15.11": true
   }
 }
