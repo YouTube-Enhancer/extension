@@ -85,7 +85,7 @@ function ensureContainerPosition() {
 async function getPlacementRoot(placement: ButtonPlacement) {
 	switch (placement) {
 		case "below_player":
-			return await waitForElement<HTMLDivElement>(`#${buttonContainerId}`);
+			return document.getElementById(buttonContainerId) as HTMLDivElement | null;
 		case "feature_menu":
 			return await waitForElement<HTMLDivElement>("#yte-feature-menu");
 		case "player_controls_left":

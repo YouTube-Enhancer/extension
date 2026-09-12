@@ -118,9 +118,13 @@ class FeatureButtonManager extends FeatureManagerBase {
 							if (fullscreenChanged && !moved && wasActive) {
 								updateTrackedButtonConfig(btn.name, nextFullscreenPlacement);
 							}
-							const buttonExists = await checkIfFeatureButtonExists(btn.name, nextPlacement ?? "feature_menu");
-							if (!buttonExists) {
+							if (!wasActive) {
 								await btn.add(config);
+							} else {
+								const buttonExists = await checkIfFeatureButtonExists(btn.name, nextPlacement ?? "feature_menu");
+								if (!buttonExists) {
+									await btn.add(config);
+								}
 							}
 						},
 						{
