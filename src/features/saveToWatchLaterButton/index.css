@@ -11,3 +11,14 @@ yt-lockup-view-model:has(.yte-save-to-watch-later-button)
 	.ytLockupMetadataViewModelTitle {
 	padding-right: 65px;
 }
+
+/* fixes to accomodate more than 1 button */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button)
+	.ytLockupMetadataViewModelMoveLockupOverflowMenuToBottomRight
+	.ytLockupMetadataViewModelMenuButton:after,
+yt-lockup-view-model:has(.yte-save-to-watch-later-button)
+	.ytLockupMetadataViewModelMoveLockupOverflowMenuToBottomRight
+	.ytLockupMetadataViewModelMenuButton:before {
+	inset: -9%;
+	border-radius: 30px;
+}
