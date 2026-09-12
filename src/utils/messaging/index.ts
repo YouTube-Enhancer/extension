@@ -9,6 +9,8 @@ import type {
 	SendDataMessage
 } from "@/src/types";
 
+export const MESSAGE_ORIGIN = "yte-messaging" as const;
+
 /**
  * Sends a message from the content
  * @param type - The type of the message to send.
@@ -24,14 +26,12 @@ export function sendContentMessage<T extends keyof MessageMappings, D>(
 	const message = {
 		action,
 		data,
+		origin: MESSAGE_ORIGIN,
 		source: "content",
 		type
 	};
 	return new Promise((resolve) => {
-		const provider = document.getElementById("yte-message-from-youtube");
-		if (!provider) return;
-		provider.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
+		window.postMessage(message, "*");
 		resolve();
 	});
 }
@@ -44,13 +44,11 @@ export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMap
 	const message: SendDataMessage<"send_data", "content", T, typeof data> = {
 		action: "send_data",
 		data,
+		origin: MESSAGE_ORIGIN,
 		source: "content",
 		type
 	};
-	const element = document.getElementById("yte-message-from-youtube");
-	if (!element) return;
-	element.textContent = JSON.stringify(message);
-	document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
+	window.postMessage(message, "*");
 }
 /**
  * Sends a content message to the background.
@@ -66,14 +64,12 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 	const message: ActionMessage<T, typeof data> = {
 		action: "request_action",
 		data,
+		origin: MESSAGE_ORIGIN,
 		source: "content",
 		type
 	};
 	return new Promise((resolve) => {
-		const provider = document.getElementById("yte-message-from-youtube");
-		if (!provider) return;
-		provider.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
+		window.postMessage(message, "*");
 		resolve();
 	});
 }
@@ -92,14 +88,12 @@ export function sendExtensionMessage<T extends keyof MessageMappings, D>(
 	const message = {
 		action,
 		data,
+		origin: MESSAGE_ORIGIN,
 		source: "extension",
 		type
 	};
 	return new Promise((resolve) => {
-		const provider = document.getElementById("yte-message-from-extension");
-		if (!provider) return;
-		provider.textContent = JSON.stringify(message);
-		document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
+		window.postMessage(message, "*");
 		resolve();
 	});
 }
@@ -115,14 +109,13 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 	const message: SendDataMessage<"send_data", "extension", T, typeof data> = {
 		action: "send_data",
 		data,
+		origin: MESSAGE_ORIGIN,
 		source: "extension",
 		type
 	};
-	const element = document.getElementById("yte-message-from-extension");
-	if (!element) return;
-	element.textContent = JSON.stringify(message);
-	document.dispatchEvent(new CustomEvent("yte-message-from-extension"));
-} /**
+	window.postMessage(message, "*");
+}
+/**
  * Waits for a specific message of the given type, action, source, and data.
  *
  * @param type - The type of the message to wait for.
@@ -136,13 +129,13 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 	source: S,
 	data?: D
 ): Promise<MessageMappings[T]["response"]> {
-	const requestMessage = { action, data, source, type };
+	const requestMessage = { action, data, origin: MESSAGE_ORIGIN, source, type };
 	return new Promise<MessageMappings[T]["response"]>((resolve) => {
-		const listener = () => {
-			const provider = document.getElementById("yte-message-from-extension");
-			if (!provider?.textContent) return;
+		const listener = (event: MessageEvent) => {
+			if (event.source !== window) return;
+			const response = event.data as Messages["response"];
+			if (response?.origin !== MESSAGE_ORIGIN) return;
 			try {
-				const response = JSON.parse(provider.textContent) as Messages["response"];
 				const matchesType = response?.type === type;
 				const matchesAction = response?.action === "data_response";
 				const matchesSource = response?.source === "extension";
@@ -155,17 +148,14 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 						Object.entries(data).every(([key, value]) => (key in response.data ? response.data[key] === value : false)));
 
 				if (matchesType && matchesAction && matchesSource && matchesData) {
-					document.removeEventListener("yte-message-from-extension", listener);
+					window.removeEventListener("message", listener);
 					resolve(response);
 				}
 			} catch {
-				// Ignore invalid JSON
+				// Ignore invalid messages
 			}
 		};
-		document.addEventListener("yte-message-from-extension", listener);
-		const provider = document.getElementById("yte-message-from-youtube");
-		if (!provider) return;
-		provider.textContent = JSON.stringify(requestMessage);
-		document.dispatchEvent(new CustomEvent("yte-message-from-youtube"));
+		window.addEventListener("message", listener);
+		window.postMessage(requestMessage, "*");
 	});
 }

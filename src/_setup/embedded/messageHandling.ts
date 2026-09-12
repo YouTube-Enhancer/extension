@@ -1,27 +1,21 @@
 import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 
 import { coreFeatures } from "./coreFeatures";
 
 export function setupMessageListener(): () => void {
-	const handler = (_event: Event) => {
-		const provider = document.querySelector("div#yte-message-from-extension");
-		if (!provider?.textContent) return;
-		let message: Nullable<ExtensionSendOnlyMessages | Messages["response"]> = null;
-		try {
-			message = JSON.parse(provider.textContent) as ExtensionSendOnlyMessages | Messages["response"];
-		} catch (error) {
-			console.error("[Embedded] Failed to parse incoming message:", error);
-			return;
-		}
-		if (!message) return;
+	const handler = (event: MessageEvent) => {
+		if (event.source !== window) return;
+		const message = event.data as Nullable<ExtensionSendOnlyMessages | Messages["response"]>;
+		if (message?.origin !== MESSAGE_ORIGIN) return;
 		void routeMessage(message);
 	};
 
-	document.addEventListener("yte-message-from-extension", handler);
-	return () => document.removeEventListener("yte-message-from-extension", handler);
+	window.addEventListener("message", handler);
+	return () => window.removeEventListener("message", handler);
 }
 
 async function routeMessage(message: ExtensionSendOnlyMessages | Messages["response"]) {

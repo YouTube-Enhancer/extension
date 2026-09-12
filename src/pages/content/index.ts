@@ -18,7 +18,7 @@ import {
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
-import { sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
+import { MESSAGE_ORIGIN, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
 import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
 
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
@@ -31,16 +31,6 @@ const defaultConfiguration = getDefaultConfiguration();
 const script = document.createElement("script");
 script.src = browser.runtime.getURL("src/pages/embedded/index.js");
 script.type = "module";
-function initializeCommunicationElement() {
-	let element = document.getElementById("yte-message-from-extension");
-	if (!element) {
-		element = document.createElement("div");
-		element.style.display = "none";
-		element.id = "yte-message-from-extension";
-		document.documentElement.appendChild(element);
-	}
-}
-initializeCommunicationElement();
 let embeddedScriptAppended = false;
 const appendEmbeddedScript = () => {
 	if (embeddedScriptAppended) return;
@@ -107,23 +97,15 @@ void (async () => {
 	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", { state })]);
 })();
 /**
- * Listens for the "yte-message-from-youtube" event and handles incoming messages from the YouTube page.
+ * Listens for messages from the embedded script via window.postMessage.
  *
  * @returns {void}
  */
-document.addEventListener("yte-message-from-youtube", () => {
+window.addEventListener("message", (event: MessageEvent) => {
+	if (event.source !== window) return;
+	const message = event.data as (ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"]);
+	if (message?.origin !== MESSAGE_ORIGIN) return;
 	void (async () => {
-		const provider = document.querySelector("#yte-message-from-youtube");
-		if (!provider) return;
-		const { textContent: stringifiedMessage } = provider;
-		if (!stringifiedMessage) return;
-		let message;
-		try {
-			message = JSON.parse(stringifiedMessage) as ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"];
-		} catch (error) {
-			console.error("[ContentScript] Failed to parse incoming message:", error);
-			return;
-		}
 		if (!message) return;
 		switch (message.action) {
 			case "request_action": {
