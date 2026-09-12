@@ -618,6 +618,12 @@
 							"title": "Versteckt die Seitenleiste, die Videos empfiehlt"
 						}
 					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
+						}
+					},
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Übersetzungs-Kommentar-Button ausblenden",
