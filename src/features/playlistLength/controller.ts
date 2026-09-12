@@ -139,10 +139,15 @@ export class PlaylistLengthController {
 			watchedTimeSeconds: newWatched
 		});
 	}
+	private hasPlaylist(): boolean {
+		if (this.config.pageType === "playlist") return true;
+		return new URLSearchParams(window.location.search).has("list");
+	}
 
 	private async initializeWithMethod(methodConfig: PlaylistLengthParameters): Promise<void> {
 		if (this.destroyed) return;
 		this.disconnectObservers();
+		if (!this.hasPlaylist()) return;
 
 		const headerSelector = this.getHeaderSelector();
 		let headerContents: Nullable<Element> = this.queryHeader(headerSelector);
