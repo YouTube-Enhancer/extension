@@ -221,6 +221,7 @@ export type ActionMessage<Type extends string, D = undefined> = Prettify<
 export type Author = Brand<string, "author">;
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
+	origin?: "yte-messaging";
 	source: S;
 	timestamp?: number;
 };
