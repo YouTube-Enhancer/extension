@@ -618,6 +618,12 @@
 							"title": "Приховує бічну панель, яка рекомендує відео"
 						}
 					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
+						}
+					},
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Приховати кнопку коментар з перекладом",
