@@ -618,6 +618,12 @@
 							"title": "Скрывает боковую панель, которая рекомендует видео"
 						}
 					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
+						}
+					},
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Спрятать кнопку 'Перевести на...'",
