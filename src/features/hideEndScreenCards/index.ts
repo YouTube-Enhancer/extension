@@ -6,7 +6,6 @@ import { getFeatureButton, updateFeatureButtonChecked, updateFeatureButtonIcon, 
 import { getEndScreenCardsButtonIcon, getEndScreenCardsButtonTitle } from "@/src/features/hideEndScreenCardsButton/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
-import { waitForAllElements } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import "./index.css";
@@ -31,14 +30,12 @@ export default createFeature({
 		updateHideEndScreenCardsButtonState(placement, hideEndScreenCardsIcon, cardsAreHidden);
 	},
 	onDisable: async () => {
-		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 		modifyElementClassList("remove", {
 			className: "yte-hide-end-screen-cards",
 			element: document.body
 		});
 	},
 	onEnable: async () => {
-		await waitForAllElements(["div#player", "div#player-container:has(#movie_player)"]);
 		modifyElementClassList("add", {
 			className: "yte-hide-end-screen-cards",
 			element: document.body
