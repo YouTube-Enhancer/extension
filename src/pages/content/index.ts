@@ -80,6 +80,15 @@ const getStoredSettings = async (): Promise<configuration> => {
 	});
 	return options;
 };
+let cachedSettings: configuration | null = null;
+const getCachedSettings = async (): Promise<configuration> => {
+	if (cachedSettings) return cachedSettings;
+	cachedSettings = await getStoredSettings();
+	return cachedSettings;
+};
+const invalidateSettingsCache = (): void => {
+	cachedSettings = null;
+};
 const getStoredState = async (): Promise<{
 	[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
 }> => {
@@ -135,7 +144,7 @@ document.addEventListener("yte-message-from-youtube", () => {
 						 *
 						 * @type {configuration}
 						 */
-						const options: configuration = await getStoredSettings();
+						const options: configuration = await getCachedSettings();
 						void sendExtensionMessage("options", "data_response", { options });
 						break;
 					}
@@ -271,7 +280,8 @@ function emitPathEvent<P extends keyof typeof changeHandlers>({
 const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
 	if (areaName !== "local") return;
 	const castedChanges = castStorageChanges(changes);
-	const options = await getStoredSettings();
+	invalidateSettingsCache();
+	const options = await getCachedSettings();
 	const featureUpdates = new Map<FeatureKeys, { configChanged: boolean; stateChanged: boolean }>();
 	handleConfigChanges(castedChanges, ({ newValue, oldValue, path }) => {
 		const rootKey = getRootKey(path);
