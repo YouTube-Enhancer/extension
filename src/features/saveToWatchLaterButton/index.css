@@ -4,7 +4,10 @@ yt-lockup-view-model:has(.yte-save-to-watch-later-button) .ytLockupMetadataViewM
 	display: flex;
 }
 
-/* 80px keeps the title clear of the two buttons. */
-yt-lockup-view-model:has(.yte-save-to-watch-later-button) h3 {
-	padding-right: 80px;
+/* 65px keeps the title clear of the two buttons. */
+yt-lockup-view-model:has(.yte-save-to-watch-later-button)
+	.ytLockupMetadataViewModelHasMenuButton
+	.ytLockupMetadataViewModelTextContainer:has(+ .ytLockupMetadataViewModelMenuButton:not(.ytLockupMetadataViewModelBottomRight))
+	.ytLockupMetadataViewModelTitle {
+	padding-right: 65px;
 }
