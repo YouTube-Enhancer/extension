@@ -618,6 +618,12 @@
 							"title": "Oculta a barra lateral de recomendação de vídeos"
 						}
 					},
+					"hideEndscreenRecommendedVideos": {
+						"enable": {
+							"label": "Hide recommended videos on endscreen",
+							"title": "Hides the suggested videos that appear on the endscreen"
+						}
+					},
 					"hideTranslateComment": {
 						"enable": {
 							"label": "Ocultar botão de traduzir comentário",
