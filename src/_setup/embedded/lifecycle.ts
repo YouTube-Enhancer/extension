@@ -24,13 +24,6 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 		return { dispose: () => {} };
 	}
 	ensureTrustedTypesPolicy();
-	let element = document.getElementById("yte-message-from-youtube");
-	if (!element) {
-		element = document.createElement("div");
-		element.style.display = "none";
-		element.id = "yte-message-from-youtube";
-		document.documentElement.appendChild(element);
-	}
 
 	const [
 		{
@@ -100,7 +93,6 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 			coreFeatures.destroy();
 			colorObserver.disconnect();
 			removeMessageListener();
-			element.remove();
 		}
 	};
 }
