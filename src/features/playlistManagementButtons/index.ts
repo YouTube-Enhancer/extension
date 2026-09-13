@@ -151,6 +151,11 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			const header = document.querySelector<HTMLElement>(CHIP_BAR_VIEW_MODEL_HEADER_SELECTOR);
 			if (!header) return;
 
+			const existingButton = document.getElementById(REMOVE_ALL_BUTTON_ID);
+			if (existingButton instanceof HTMLButtonElement && existingButton.disabled) {
+				return;
+			}
+
 			const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 			let watchedCount = 0;
 			playlistItems.forEach((item) => {
@@ -178,7 +183,6 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			const { renderToString } = await import("react-dom/server");
 			if (isStale()) return;
 			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
-			const existingButton = document.getElementById(REMOVE_ALL_BUTTON_ID);
 			if (existingButton) {
 				existingButton.innerHTML = trashIcon + text;
 				return;
@@ -191,11 +195,12 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			removeAllButton = button;
 
 			removeAllButton.onclick = async () => {
-				if (!removeAllButton) return;
+				const button = removeAllButton;
+				if (!button) return;
 
-				const { innerHTML: originalHTML, title: originalTitle } = removeAllButton;
-				removeAllButton.disabled = true;
-				removeAllButton.textContent = window.i18nextInstance.t(
+				const { title: originalTitle } = button;
+				button.disabled = true;
+				button.textContent = window.i18nextInstance.t(
 					(translations) => translations.pages.content.features.playlistManagementButtons.extras.removingWatchedVideos
 				);
 
@@ -215,9 +220,8 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				} catch (error) {
 					console.error("Failed to remove watched videos:", error);
 				} finally {
-					removeAllButton.disabled = false;
-					removeAllButton.innerHTML = originalHTML;
-					removeAllButton.title = originalTitle;
+					button.disabled = false;
+					button.title = originalTitle;
 					await addRemoveAllButton();
 				}
 			};
