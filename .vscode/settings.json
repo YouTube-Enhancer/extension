@@ -1,5 +1,6 @@
 {
-	"js/ts.tsdk.path": "node_modules/typescript/lib",
+	"js/ts.tsdk.path": "node_modules/typescript",
+	"js/ts.experimental.useTsgo": true,
 	"i18n-ally.localesPaths": ["public/locales"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll.oxc": "always"
