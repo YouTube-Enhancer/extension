@@ -14,12 +14,15 @@ import { isShortsPage, isWatchPage } from "@/src/utils/url";
 import { metadata } from "./index.metadata";
 import {
 	clearManualOverride,
+	clearSessionSpeed,
+	getSessionSpeed,
 	installUserInputTracking,
 	isManualOverrideActive,
 	isOwnWrite,
 	markExtensionAppliedRate,
 	markManualOverride,
 	noteUserInput,
+	setSessionSpeed,
 	wasUserInputRecent
 } from "./manualOverride";
 import { parseChannelSpeeds } from "./utils";
@@ -182,6 +185,7 @@ function handleRateChange(video: HTMLVideoElement) {
 		return;
 	}
 	markManualOverride(urlVideoId);
+	setSessionSpeed(rate);
 	void recordExternalSpeed(rate);
 }
 
@@ -230,6 +234,7 @@ export default createFeature({
 	onConfigChange: ({ channelSpeeds, enabled, speed }) => {
 		if (!enabled) return;
 		enforcedConfig = { channelSpeeds, speed };
+		clearSessionSpeed();
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
 			onPlayerStateChange: true,
@@ -243,6 +248,7 @@ export default createFeature({
 		registry.playerManager.cleanup(metadata.id);
 		detachRateChangeListener();
 		clearManualOverride();
+		clearSessionSpeed();
 		resetRecordedSpeed();
 		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
@@ -259,6 +265,7 @@ export default createFeature({
 		enforcedConfig = { channelSpeeds, speed };
 		void setupRateChangeListener();
 		clearManualOverride();
+		clearSessionSpeed();
 		resetRecordedSpeed();
 		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
@@ -270,18 +277,23 @@ export default createFeature({
 	},
 	onInit: setupPlaybackSpeedChangeListener,
 	onNavigate: ({ channelSpeeds, speed }) => {
-		browserColorLog(`Setting player speed to ${speed} (navigation)`, "FgMagenta");
-		enforcedConfig = { channelSpeeds, speed };
+		const sessionSpeed = getSessionSpeed();
+		const effectiveSpeed = sessionSpeed ?? speed;
+		browserColorLog(
+			`Setting player speed to ${effectiveSpeed} (navigation${sessionSpeed !== null ? ", session override" : ""})`,
+			"FgMagenta"
+		);
+		enforcedConfig = { channelSpeeds, speed: effectiveSpeed };
 		void setupRateChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
-		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
+		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(effectiveSpeed, channelSpeeds)], ["setSpeed"], {
 			maxAttempts: 10,
 			onPlayerStateChange: true,
 			pageTypes: ["watch", "shorts"],
 			waitForLoaded: true
 		});
-		void updateEffectivePlaybackSpeedButtons(speed, channelSpeeds);
+		void updateEffectivePlaybackSpeedButtons(effectiveSpeed, channelSpeeds);
 	},
 	persistState: true,
 	state: {
