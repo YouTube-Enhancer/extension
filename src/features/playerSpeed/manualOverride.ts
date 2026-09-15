@@ -12,10 +12,17 @@ let appliedRates: AppliedRateRecord[] = [];
 let overriddenVideoId: Nullable<string> = null;
 let lastUserInputAt = 0;
 let pointerHeld = false;
+let sessionSpeed: Nullable<number> = null;
 let userInputTracked = false;
 
 export function clearManualOverride(): void {
 	overriddenVideoId = null;
+}
+export function clearSessionSpeed(): void {
+	sessionSpeed = null;
+}
+export function getSessionSpeed(): Nullable<number> {
+	return sessionSpeed;
 }
 
 /**
@@ -80,6 +87,9 @@ export function markManualOverride(urlVideoId: Nullable<string>): void {
 /** Counts as input the user gave: for rate writes the extension's own controls make on the user's behalf. */
 export function noteUserInput(): void {
 	lastUserInputAt = Date.now();
+}
+export function setSessionSpeed(speed: number): void {
+	sessionSpeed = speed;
 }
 
 /** Whether the user pressed, clicked or scrolled recently enough for a rate change to be theirs (a held pointer counts). */
