@@ -620,8 +620,8 @@
 					},
 					"hideEndscreenRecommendedVideos": {
 						"enable": {
-							"label": "Hide recommended videos on endscreen",
-							"title": "Hides the suggested videos that appear on the endscreen"
+							"label": "在结束屏幕上隐藏推荐视频",
+							"title": "隐藏显示在结束屏幕上的推荐视频"
 						}
 					},
 					"hideTranslateComment": {
