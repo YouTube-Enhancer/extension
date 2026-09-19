@@ -1,6 +1,9 @@
 import type { Nullable } from "@/src/types";
 
 import { setupYouTubePage } from "@/src/_setup/embedded/lifecycle";
+import { registry } from "@/src/features/_registry/featureRegistry";
+import { DEV_MODE } from "@/src/utils/config/env";
+import { DEV_RELOAD_SOURCE, type DevWindowMessage, EMBEDDED_STYLE_ID, isDevWindowMessage } from "@/src/utils/dev/hotReload";
 import { browserColorLog } from "@/src/utils/logging";
 import { formatError } from "@/utils/format/error";
 
@@ -33,35 +36,72 @@ if (window.self === window.top) {
 	}
 }
 
-window.addEventListener("pagehide", () => {
+const onPageHide = () => {
 	cleanupHandle?.dispose();
 	cleanupHandle = null;
-});
-window.addEventListener("pageshow", () => {
+};
+const onPageShow = () => {
 	if (!cleanupHandle) {
 		initSetup();
 	}
-});
+};
+window.addEventListener("pagehide", onPageHide);
+window.addEventListener("pageshow", onPageShow);
 function isExtensionError(filename: string, stack?: Nullable<string>): boolean {
 	const origin = getExtensionOrigin();
 	if (!origin) return false;
 	return filename.startsWith(origin) || (stack ? stack.includes(origin) : false);
 }
-window.addEventListener("error", (event: ErrorEvent) => {
+const onError = (event: ErrorEvent) => {
 	if (!isExtensionError(event.filename, event.error instanceof Error ? event.error.stack : null)) return;
 	event.preventDefault();
 	const errorLine =
 		event.error instanceof Error && typeof event.error.stack === "string" ? event.error.stack : `${event.filename}:${event.lineno}:${event.colno}`;
 	const errorMessage = event.error instanceof Error ? formatError(event.error) : event.message || "Unknown error";
 	browserColorLog(`${errorMessage}\nAt: ${errorLine}`, "FgRed");
-});
+};
+window.addEventListener("error", onError);
 
-window.addEventListener("unhandledrejection", (event) => {
+const onUnhandledRejection = (event: PromiseRejectionEvent) => {
 	if (!isExtensionError("", event.reason instanceof Error ? event.reason.stack : null)) return;
 	event.preventDefault();
 	const errorLine = event.reason instanceof Error && event.reason?.stack ? event.reason.stack : "Stack trace not available";
 	browserColorLog(`Unhandled rejection: ${errorLine}`, "FgRed");
-});
+};
+window.addEventListener("unhandledrejection", onUnhandledRejection);
+
+if (DEV_MODE) {
+	/**
+	 * Hot reload: the content script asks this instance to step aside before it injects a rebuilt copy. Every feature
+	 * is disabled through its own lifecycle, then the page-level listeners and the injected style go, so the fresh
+	 * instance starts on a page that looks like a first load. The video keeps playing throughout.
+	 */
+	const onDevMessage = (event: MessageEvent) => {
+		if (event.source !== window || !isDevWindowMessage(event.data) || event.data.type !== "dispose") return;
+		window.removeEventListener("message", onDevMessage);
+		void disposeForHotReload();
+	};
+	window.addEventListener("message", onDevMessage);
+}
+
+async function disposeForHotReload(): Promise<void> {
+	try {
+		await registry.disableAll();
+	} catch (error) {
+		browserColorLog(`Hot reload: disableAll failed: ${formatError(error)}`, "FgRed");
+	}
+	cleanupHandle?.dispose();
+	cleanupHandle = null;
+	window.removeEventListener("pagehide", onPageHide);
+	window.removeEventListener("pageshow", onPageShow);
+	window.removeEventListener("error", onError);
+	window.removeEventListener("unhandledrejection", onUnhandledRejection);
+	document.getElementById(EMBEDDED_STYLE_ID)?.remove();
+	// The feature menu is created once per page and reused if found, so the replacement must build its own.
+	document.querySelector("#yte-feature-menu-button")?.remove();
+	document.querySelector("#yte-feature-menu")?.remove();
+	window.postMessage({ source: DEV_RELOAD_SOURCE, type: "disposed" } satisfies DevWindowMessage, "*");
+}
 
 // Lazy extension origin — computed on first error, avoids module-level webextension-polyfill import
 function getExtensionOrigin(): string {

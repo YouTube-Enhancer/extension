@@ -20,6 +20,9 @@ type pendingRequest = {
 const pendingRequests = new Map<string, pendingRequest>();
 
 let messageListenerSetup = false;
+let windowMessageListener: Nullable<(event: MessageEvent) => void> = null;
+let runtimeMessageListener: Nullable<(message: DevToolsMessages["request"], sender: unknown, sendResponse: (response: unknown) => void) => boolean> =
+	null;
 
 // Cleanup interval for pending requests (5 minutes)
 const PENDING_REQUEST_CLEANUP_INTERVAL = 5 * 60 * 1000;
@@ -108,7 +111,7 @@ export function setupContentScriptBridge() {
 	// Stop pending request cleanup when page is unloaded (handles tab/window close and navigation away)
 	window.addEventListener("beforeunload", stopPendingRequestCleanup);
 
-	chrome.runtime.onMessage.addListener((message: DevToolsMessages["request"], _sender, sendResponse) => {
+	runtimeMessageListener = (message: DevToolsMessages["request"], _sender, sendResponse) => {
 		if (window.self !== window.top) return false;
 
 		const typedMessage = message;
@@ -164,7 +167,21 @@ export function setupContentScriptBridge() {
 		}, 3000);
 
 		return true;
-	});
+	};
+	chrome.runtime.onMessage.addListener(runtimeMessageListener);
+}
+
+/** Undoes `setupContentScriptBridge`; the hot-reload takeover calls it so a replaced content script stops answering. */
+export function teardownContentScriptBridge() {
+	if (!contentBridgeListenerAdded) return;
+	contentBridgeListenerAdded = false;
+	messageListenerSetup = false;
+	stopPendingRequestCleanup();
+	window.removeEventListener("beforeunload", stopPendingRequestCleanup);
+	if (windowMessageListener) window.removeEventListener("message", windowMessageListener);
+	if (runtimeMessageListener) chrome.runtime.onMessage.removeListener(runtimeMessageListener);
+	windowMessageListener = null;
+	runtimeMessageListener = null;
 }
 
 function notifyInvalidation(keys: string[]): void {
@@ -205,7 +222,7 @@ function setupMessageListener() {
 		runtime: { id: extensionId }
 	} = chrome;
 
-	window.addEventListener("message", (event: MessageEvent) => {
+	windowMessageListener = (event: MessageEvent) => {
 		const rawData = event.data as { action?: string; data?: unknown; extensionId?: string; requestId?: string; source?: string };
 		if (!rawData) return;
 
@@ -251,7 +268,8 @@ function setupMessageListener() {
 
 		clearTimeout(pending.collectionTimer!);
 		pending.collectionTimer = setTimeout(() => resolveResponse(requestId), 200);
-	});
+	};
+	window.addEventListener("message", windowMessageListener);
 }
 
 // Start periodic cleanup of pending requests
