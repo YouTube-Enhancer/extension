@@ -15,6 +15,14 @@ function clickSizeButton(): boolean {
 	return true;
 }
 
+async function disableMaximizeIfEnabled() {
+	const maximizeFeature = registry.getFeature("automaticallyMaximizePlayer");
+	if (!maximizeFeature) return;
+	if (!registry.orchestrator.isFeatureEnabled("automaticallyMaximizePlayer")) return;
+	const config = registry.configManager.getLast("automaticallyMaximizePlayer");
+	await registry.lifecycleManager.disableFeature(maximizeFeature, config);
+}
+
 function isInTheaterMode(): boolean {
 	const isMaximized = document.body.getAttribute("yte-maximized") === "";
 	if (isMaximized) return false;
@@ -47,7 +55,8 @@ export default createFeature({
 			waitForLoaded: false
 		});
 	},
-	onEnable: () => {
+	onEnable: async () => {
+		await disableMaximizeIfEnabled();
 		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
 			interval: 300,
 			maxAttempts: 20,
