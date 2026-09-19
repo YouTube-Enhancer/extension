@@ -11,6 +11,7 @@ import terminalColorLog from "@/src/utils/logging";
 import { browsers, copyDirectorySync, emptyOutputFolder, outDir, publicDir, rootDir, srcDir } from "@/src/utils/plugins/utils";
 
 import { buildFinished, buildStarted, emitRebuild, newBuildId, type RebuildEvent } from "./devEvents";
+import { startHmrServer } from "./hmrServer";
 import { startHotReloadServer } from "./hotReloadServer";
 import { buildContentScripts } from "./steps/buildContentScripts";
 import generateLocaleTypes from "./steps/generateLocaleTypes";
@@ -23,6 +24,7 @@ import { timedStep } from "./utils";
 config();
 
 export type WatchOptions = {
+	hmr: boolean;
 	hotReload: boolean;
 	target: Browser["type"];
 };
@@ -36,7 +38,8 @@ export function parseWatchArgs(argv: string[]): WatchOptions {
 	if (target !== "chrome" && target !== "firefox") {
 		throw new Error(`Unknown --target "${target}"; use chrome or firefox`);
 	}
-	return { hotReload: !argv.includes("--no-hot-reload"), target };
+	/** Firefox has no localhost allowance in its extension-page policy, so the pages cannot be served there. */
+	return { hmr: !argv.includes("--no-hmr") && target === "chrome", hotReload: !argv.includes("--no-hot-reload"), target };
 }
 
 /**
@@ -44,10 +47,11 @@ export function parseWatchArgs(argv: string[]): WatchOptions {
  * instead of the full release pipeline. The release-only steps (locale checks, ZIPs, output copies) do not run here;
  * the README feature list still does, because it is a tracked file that must change with the feature that changes it.
  * With hot reload on, every rebuild is pushed to the loaded extension, which applies it without a page reload where
- * it can (see `hotReloadServer.ts`).
+ * it can (see `hotReloadServer.ts`). With HMR on, the React pages are served from a Vite dev server instead of the
+ * build (see `hmrServer.ts`).
  */
 export async function startWatch(argv: string[]): Promise<void> {
-	const { hotReload, target } = parseWatchArgs(argv);
+	const { hmr, hotReload, target } = parseWatchArgs(argv);
 	const browser = browsers.find((candidate) => candidate.type === target);
 	if (!browser) throw new Error(`No build target of type ${target}`);
 	const targetDir = resolve(outDir, browser.name);
@@ -59,9 +63,13 @@ export async function startWatch(argv: string[]): Promise<void> {
 	await timedStep("Updating available locales", () => updateAvailableLocales());
 	await timedStep("Generating locale types", () => generateLocaleTypes());
 	copyDirectorySync(publicDir, targetDir);
+
+	const hmrServer = hmr ? await startHmrServer() : null;
 	let manifestJson = "";
 	const writeManifest = () => {
-		const [json] = Object.values(generateManifests({ chunkDir, targets: [browser] }));
+		const [json] = Object.values(
+			generateManifests({ chunkDir, patch: hmrServer ? (manifest) => hmrServer.patchManifest(manifest) : undefined, targets: [browser] })
+		);
 		const changed = manifestJson !== "" && json !== manifestJson;
 		manifestJson = json;
 		return changed;
@@ -69,7 +77,8 @@ export async function startWatch(argv: string[]): Promise<void> {
 	writeManifest();
 	await updateReadmeFeatures();
 
-	const hotReloadServer = hotReload ? startHotReloadServer({ port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir }) : null;
+	const hotReloadServer =
+		hotReload ? startHotReloadServer({ announcePages: !hmr, port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir }) : null;
 	/** Tells the bundles which port this pipeline actually listens on (a number, so it is not inlined as a string); see `devReloadPort()`. */
 	const define = { __YTE_DEV_RELOAD_PORT__: (await hotReloadServer?.ready) ?? DEV_RELOAD_PORT };
 
@@ -86,7 +95,7 @@ export async function startWatch(argv: string[]): Promise<void> {
 		singleFileEmbedded: true,
 		watch: { buildDelay: WATCH_BUILD_DELAY_MS }
 	});
-	attach("pages", pagesWatcher);
+	attach("pages", pagesWatcher, () => hmrServer?.writeHtml(targetDir));
 	attach("content", contentWatcher);
 	attach("embedded", embeddedWatcher, () => {
 		if (writeManifest()) announce("manifest");
@@ -119,7 +128,7 @@ export async function startWatch(argv: string[]): Promise<void> {
 	const shutdown = async () => {
 		log("Stopping...");
 		for (const watcher of fsWatchers) watcher.close();
-		await Promise.all([pagesWatcher.close(), contentWatcher.close(), embeddedWatcher.close(), hotReloadServer?.close()]);
+		await Promise.all([pagesWatcher.close(), contentWatcher.close(), embeddedWatcher.close(), hotReloadServer?.close(), hmrServer?.close()]);
 		process.exit(0);
 	};
 	process.on("SIGINT", () => void shutdown());

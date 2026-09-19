@@ -29,7 +29,16 @@ const KEEPALIVE_MS = 20000;
  * ranges for Hyper-V that `netstat` does not show, so when the preferred port is refused a free one is used and the
  * watch pipeline compiles that port into the bundles.
  */
-export function startHotReloadServer({ port = DEV_RELOAD_PORT, targetDir }: { port?: number; targetDir: string }): HotReloadServer {
+export function startHotReloadServer({
+	announcePages = true,
+	port = DEV_RELOAD_PORT,
+	targetDir
+}: {
+	/** Off when the pages are served with HMR, which applies page changes itself. */
+	announcePages?: boolean;
+	port?: number;
+	targetDir: string;
+}): HotReloadServer {
 	let server: null | WebSocketServer = null;
 	let buildId = "0";
 	let backgroundDigest = digestEntryGraph(targetDir, BACKGROUND_ENTRY);
@@ -114,7 +123,7 @@ export function startHotReloadServer({ port = DEV_RELOAD_PORT, targetDir }: { po
 				backgroundDigest = nextBackground;
 				pagesDigest = nextPages;
 				if (backgroundChanged) return ["background"];
-				return pagesChanged ? ["pages"] : [];
+				return pagesChanged && announcePages ? ["pages"] : [];
 			}
 			case "public":
 				// Locale files are fetched by the embedded script, so a swap picks them up. contentStyle.css needs a tab reload.
