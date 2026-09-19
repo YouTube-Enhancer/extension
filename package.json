@@ -92,6 +92,11 @@
     "zod": "^4.1.12",
     "zod-error": "^2.0.0"
   },
+  "overrides": {
+    "eslint-plugin-perfectionist": {
+      "typescript": "$typescript"
+    }
+  },
   "allowScripts": {
     "esbuild@0.28.2": true,
     "@swc/core@1.16.2": true
