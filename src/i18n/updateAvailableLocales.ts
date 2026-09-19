@@ -1,14 +1,16 @@
-import { readdirSync, readFileSync, writeFileSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 
 import { i18nDir, publicDir } from "@/src/utils/plugins/utils";
-export default function updateAvailableLocales() {
+import { writeFormattedFile } from "@/src/utils/plugins/writeFormattedFile";
+export default async function updateAvailableLocales(): Promise<void> {
 	const availableLocales = readdirSync(`${publicDir}/locales`)
 		.filter((locale) => locale.endsWith(".json"))
-		.map((locale) => locale.replace(".json", ""));
+		.map((locale) => locale.replace(".json", ""))
+		.sort();
 	const availableLocalesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	const updatedAvailableLocalesFile = updateAvailableLocalesArray(availableLocalesFile, availableLocales);
 	if (updatedAvailableLocalesFile && updatedAvailableLocalesFile !== availableLocalesFile) {
-		writeFileSync(`${i18nDir}/constants.ts`, updatedAvailableLocalesFile);
+		await writeFormattedFile(`${i18nDir}/constants.ts`, updatedAvailableLocalesFile);
 	}
 }
 
