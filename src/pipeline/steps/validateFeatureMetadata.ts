@@ -1,25 +1,15 @@
-import { existsSync, readdirSync } from "fs";
-import { join, resolve } from "path";
-import { pathToFileURL } from "url";
-
-import type { FeatureKeys, FeatureMetadata } from "@/src/features/_registry/types";
-
 import { validateFeatureMetadata } from "@/src/features/_registry/featureMetadataValidation";
 
+import { loadFeatureMetadata } from "./loadFeatureMetadata";
+
 /**
- * Loads every feature's index.metadata.ts and runs the registry's validation over it, so a malformed entry fails the
- * build here rather than at load on every page: the extension itself only re-checks in development builds.
+ * Runs the registry's validation over every feature's metadata, so a malformed entry fails the build here rather than
+ * at load on every page: the extension itself only re-checks in development builds.
  */
 export default async function validateFeatureMetadataStep(): Promise<void> {
-	const featuresDir = resolve(process.cwd(), "src", "features");
-	const folders = readdirSync(featuresDir, { withFileTypes: true })
-		.filter((entry) => entry.isDirectory() && existsSync(join(featuresDir, entry.name, "index.metadata.ts")))
-		.map((entry) => entry.name)
-		.sort();
+	const features = await loadFeatureMetadata();
 	const failures: string[] = [];
-	for (const folder of folders) {
-		const modulePath = join(featuresDir, folder, "index.metadata.ts");
-		const { metadata } = (await import(pathToFileURL(modulePath).href)) as { metadata?: FeatureMetadata<FeatureKeys> };
+	for (const { folder, metadata } of features) {
 		if (!metadata) {
 			failures.push(`${folder}: index.metadata.ts exports no metadata`);
 			continue;
@@ -33,5 +23,5 @@ export default async function validateFeatureMetadataStep(): Promise<void> {
 	if (failures.length > 0) {
 		throw new Error(`Feature metadata validation failed:\n${failures.map((failure) => `  - ${failure}`).join("\n")}`);
 	}
-	console.log(`[Build Pipeline] Validated the metadata of ${folders.length} features`);
+	console.log(`[Build Pipeline] Validated the metadata of ${features.length} features`);
 }

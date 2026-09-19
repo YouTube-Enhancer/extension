@@ -34,6 +34,7 @@ export default defineConfig({
 		minify: !DEV_MODE ? "oxc" : false,
 		modulePreload: false,
 		outDir: resolve(outDir, "temp"),
+		reportCompressedSize: false,
 		rolldownOptions: {
 			input: pageInputs,
 			output: {
