@@ -2,8 +2,8 @@
 	"env": {
 		"NODE_ENV": "development"
 	},
-	"exec": "npm run build",
+	"exec": "tsx src/pipeline/build.ts",
 	"ext": "ts,tsx,css,html,json",
 	"ignore": ["src/**/*.spec.ts", "public/locales/en-US.json.d.ts", "src/i18n/constants.ts", "dist", "releases"],
-	"watch": ["src", "utils", "vite.config.ts", "public", "public/locales"]
+	"watch": ["src", "vite.config.ts", "public", "public/locales"]
 }

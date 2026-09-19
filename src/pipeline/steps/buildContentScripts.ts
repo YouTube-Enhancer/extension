@@ -1,5 +1,6 @@
 import { resolve } from "path";
-import { build } from "vite";
+import { pathToFileURL } from "url";
+import { build, type LogLevel } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/config/env";
@@ -28,54 +29,64 @@ const contentScripts = [
 		entry: "embedded"
 	}
 ];
-for (const { codeSplitting, entry } of contentScripts) {
-	await build({
-		build: {
-			emptyOutDir: false,
-			minify: !DEV_MODE ? "oxc" : false,
-			/**
-			 * The embedded script runs inside youtube.com, where Vite's preload links for dynamic imports resolve
-			 * against the page URL. Each import then fired a 404 at youtube.com/src/<chunk>.js before the real import
-			 * ran.
-			 */
-			modulePreload: false,
-			outDir: resolve(outDir, "temp"),
-			rolldownOptions: {
-				input: { [entry]: resolve(process.cwd(), `src/pages/${entry}/index.ts`) },
+
+export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } = {}): Promise<void> {
+	for (const { codeSplitting, entry } of contentScripts) {
+		await build({
+			build: {
+				emptyOutDir: false,
+				minify: !DEV_MODE ? "oxc" : false,
 				/**
-				 * File names stay hash-free so store reviewers can compare a rebuild with the uploaded package. Chunks
-				 * land in `src/*.js`, which the manifest step lists as web-accessible resources; the pages build keeps
-				 * its own chunks under `src/chunks/` so the two parallel builds never write the same file.
+				 * The embedded script runs inside youtube.com, where Vite's preload links for dynamic imports resolve
+				 * against the page URL. Each import then fired a 404 at youtube.com/src/<chunk>.js before the real import
+				 * ran.
 				 */
-				output: {
-					assetFileNames: "src/[name][extname]",
-					chunkFileNames: (chunk) => `src/${chunk.name}.js`,
-					codeSplitting,
-					entryFileNames: (chunk) => {
-						return `src/pages/${chunk.name}/index.js`;
+				modulePreload: false,
+				outDir: resolve(outDir, "temp"),
+				reportCompressedSize: false,
+				rolldownOptions: {
+					input: { [entry]: resolve(process.cwd(), `src/pages/${entry}/index.ts`) },
+					/**
+					 * File names stay hash-free so store reviewers can compare a rebuild with the uploaded package. Chunks
+					 * land in `src/*.js`, which the manifest step lists as web-accessible resources; the pages build keeps
+					 * its own chunks under `src/chunks/` so the two parallel builds never write the same file.
+					 */
+					output: {
+						assetFileNames: "src/[name][extname]",
+						chunkFileNames: (chunk) => `src/${chunk.name}.js`,
+						codeSplitting,
+						entryFileNames: (chunk) => {
+							return `src/pages/${chunk.name}/index.js`;
+						},
+						keepNames: true
 					},
-					keepNames: true
+					treeshake: {
+						moduleSideEffects: true,
+						unknownGlobalSideEffects: false
+					}
 				},
-				treeshake: {
-					moduleSideEffects: true,
-					unknownGlobalSideEffects: false
-				}
+				sourcemap: ENABLE_SOURCE_MAP
 			},
-			sourcemap: ENABLE_SOURCE_MAP
-		},
-		configFile: false,
-		mode: DEV_MODE ? "development" : "production",
-		plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
-		publicDir: false,
-		resolve: {
-			alias: {
-				"@/assets": assetsDir,
-				"@/components": componentsDir,
-				"@/hooks": hooksDir,
-				"@/pages": pagesDir,
-				"@/src": srcDir,
-				"@/utils": utilsDir
+			configFile: false,
+			logLevel,
+			mode: DEV_MODE ? "development" : "production",
+			plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
+			publicDir: false,
+			resolve: {
+				alias: {
+					"@/assets": assetsDir,
+					"@/components": componentsDir,
+					"@/hooks": hooksDir,
+					"@/pages": pagesDir,
+					"@/src": srcDir,
+					"@/utils": utilsDir
+				}
 			}
-		}
-	});
+		});
+	}
+}
+
+/** `npm run build:client` runs this file directly; the pipeline imports the function instead. */
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+	await buildContentScripts();
 }

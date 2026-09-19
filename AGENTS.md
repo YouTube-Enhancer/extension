@@ -115,12 +115,12 @@ Modules inside `src/features/` that are not features include:
 
 - `npm install` - Install dependencies
 - `npm run dev` - Development build with hot reloading (uses nodemon)
-- `npm run build` - Production build (runs `tsx src/pipeline/runBuilds.ts`)
-- `npm run build:main` - Vite build for main extension bundle
-- `npm run build:client` - Build content scripts (`tsx src/pipeline/steps/buildContentScripts.ts`)
-- `npm run build:pre` / `npm run build:post` - Pre/post build steps
-- `npm run build:post-pipeline` - Post-build pipeline (`tsx src/pipeline/build.ts post`)
-- `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand
+- `npm run build` - Full build in one process (`tsx src/pipeline/build.ts`): pre-build checks, both Vite bundles in parallel, then manifests, output copies, README feature list, locale types and release ZIPs (ZIPs are skipped in development builds)
+- `npm run build:pre` / `npm run build:bundle` / `npm run build:post` - The three pipeline stages on their own
+- `npm run build:main` - Vite build for the extension pages only
+- `npm run build:client` - Content and embedded script bundles only (`tsx src/pipeline/steps/buildContentScripts.ts`)
+- `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand. The build regenerates it only when `en-US.json` is newer
+- `npm run lint:readme` - Fails when README.md's feature list is stale; `npm run lint` runs it too. Every build regenerates the list, so commit README.md with a feature
 - `npm run lint` - Run linter (oxlint, then a prettier check of the code files)
 - `npm run lint:fix` - Run linter with auto-fix
 - `npm run lint:i18n` - Lint i18n constants
