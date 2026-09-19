@@ -1,10 +1,24 @@
 import { resolve } from "path";
 import { pathToFileURL } from "url";
-import { build, type LogLevel } from "vite";
+import { build, type LogLevel, type Rolldown } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/config/env";
 import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "@/utils/plugins/utils";
+
+export type ContentScriptBuildOptions = {
+	logLevel?: LogLevel;
+	/** Output folder. The release pipeline builds into `dist/temp`; the watch pipeline builds straight into its target. */
+	outDir?: string;
+	/**
+	 * Emit the embedded script as one file. The watch pipeline re-injects it into open YouTube tabs with a fresh query
+	 * string, and a document's ES module map would otherwise keep serving the old chunks by their unchanged URLs.
+	 */
+	singleFileEmbedded?: boolean;
+	/** Keep building on change; one watcher per bundle is returned in `contentScripts` order. */
+	watch?: Rolldown.WatcherOptions;
+};
+
 const contentScripts = [
 	{
 		/** The manifest loads the content script as a classic script, so it must stay one file without ES imports. */
@@ -30,9 +44,15 @@ const contentScripts = [
 	}
 ];
 
-export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } = {}): Promise<void> {
+export async function buildContentScripts({
+	logLevel,
+	outDir: targetDir = resolve(outDir, "temp"),
+	singleFileEmbedded = false,
+	watch
+}: ContentScriptBuildOptions = {}): Promise<Rolldown.RolldownWatcher[]> {
+	const watchers: Rolldown.RolldownWatcher[] = [];
 	for (const { codeSplitting, entry } of contentScripts) {
-		await build({
+		const result = await build({
 			build: {
 				emptyOutDir: false,
 				minify: !DEV_MODE ? "oxc" : false,
@@ -42,7 +62,7 @@ export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } 
 				 * ran.
 				 */
 				modulePreload: false,
-				outDir: resolve(outDir, "temp"),
+				outDir: targetDir,
 				reportCompressedSize: false,
 				rolldownOptions: {
 					input: { [entry]: resolve(process.cwd(), `src/pages/${entry}/index.ts`) },
@@ -54,7 +74,7 @@ export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } 
 					output: {
 						assetFileNames: "src/[name][extname]",
 						chunkFileNames: (chunk) => `src/${chunk.name}.js`,
-						codeSplitting,
+						codeSplitting: singleFileEmbedded && entry === "embedded" ? false : codeSplitting,
 						entryFileNames: (chunk) => {
 							return `src/pages/${chunk.name}/index.js`;
 						},
@@ -65,7 +85,8 @@ export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } 
 						unknownGlobalSideEffects: false
 					}
 				},
-				sourcemap: ENABLE_SOURCE_MAP
+				sourcemap: ENABLE_SOURCE_MAP,
+				watch: watch ?? null
 			},
 			configFile: false,
 			logLevel,
@@ -83,7 +104,9 @@ export async function buildContentScripts({ logLevel }: { logLevel?: LogLevel } 
 				}
 			}
 		});
+		if (watch) watchers.push(result as Rolldown.RolldownWatcher);
 	}
+	return watchers;
 }
 
 /** `npm run build:client` runs this file directly; the pipeline imports the function instead. */

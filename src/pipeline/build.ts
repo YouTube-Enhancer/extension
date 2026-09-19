@@ -1,6 +1,4 @@
-import { execFileSync } from "child_process";
 import { config } from "dotenv";
-import { existsSync, statSync } from "fs";
 import { resolve } from "path";
 import { build as viteBuild } from "vite";
 
@@ -13,6 +11,8 @@ import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 
 import { copyOutputs, generateManifests, makeReleaseZips, updateReadmeFeatures, validateFeatureMetadata } from "./steps";
 import { buildContentScripts } from "./steps/buildContentScripts";
+import generateLocaleTypes from "./steps/generateLocaleTypes";
+import { elapsedSince, timedStep } from "./utils";
 
 config();
 
@@ -87,21 +87,6 @@ export async function runPreBuildPipeline(): Promise<void> {
 	console.log(`[Build Pipeline] Pre-build complete! (${elapsedSince(start)}s total)`);
 }
 
-function elapsedSince(start: number): string {
-	return ((Date.now() - start) / 1000).toFixed(2);
-}
-
-/**
- * `public/locales/en-US.json.d.ts` is what `npm run typecheck` and the editor read; the bundles do not need it. It is
- * regenerated only when the source locale is newer, because `ts-json-as-const` is a CLI and costs a Node start.
- */
-function generateLocaleTypes(): void {
-	const source = resolve(rootDir, "public/locales/en-US.json");
-	const output = `${source}.d.ts`;
-	if (existsSync(output) && statSync(output).mtimeMs >= statSync(source).mtimeMs) return;
-	execFileSync(process.execPath, [resolve(rootDir, "node_modules/ts-json-as-const/index.js"), source], { stdio: "inherit" });
-}
-
 function localeCheckFailureMessage(details: string): string {
 	return [
 		"",
@@ -125,14 +110,6 @@ function localeCheckFailureMessage(details: string): string {
 		"=====================================================================================",
 		""
 	].join("\n");
-}
-
-async function timedStep<T>(name: string, fn: () => Promise<T> | T): Promise<T> {
-	const start = Date.now();
-	console.log(`[Build Pipeline] [Step] ${name}...`);
-	const result = await fn();
-	console.log(`[Build Pipeline] [Step] ${name} (${elapsedSince(start)}s)`);
-	return result;
 }
 
 void (async () => {
