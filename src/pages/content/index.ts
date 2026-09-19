@@ -18,46 +18,41 @@ import {
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
+import { DEV_RELOAD_SOURCE, type DevWindowMessage, isDevRuntimeMessage, isDevWindowMessage } from "@/src/utils/dev/hotReload";
 import { MESSAGE_ORIGIN, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
-import { setupContentScriptBridge } from "@/src/utils/messaging/devtools";
+import { setupContentScriptBridge, teardownContentScriptBridge } from "@/src/utils/messaging/devtools";
 
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
 const storage = browser.storage ?? chrome.storage;
 const defaultConfiguration = getDefaultConfiguration();
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
- * Also creates a hidden div element with a specific ID to receive messages from the extension.
  */
-const script = document.createElement("script");
-script.src = browser.runtime.getURL("src/pages/embedded/index.js");
-script.type = "module";
+const injectEmbeddedScript = (buildId?: string) => {
+	const script = document.createElement("script");
+	script.src = browser.runtime.getURL("src/pages/embedded/index.js") + (buildId ? `?b=${buildId}` : "");
+	script.type = "module";
+	document.documentElement.appendChild(script);
+};
 let embeddedScriptAppended = false;
 const appendEmbeddedScript = () => {
 	if (embeddedScriptAppended) return;
 	embeddedScriptAppended = true;
-	document.documentElement.appendChild(script);
+	injectEmbeddedScript();
 };
-if (document.readyState === "loading") {
-	document.addEventListener("readystatechange", () => {
-		if (document.readyState === "interactive") appendEmbeddedScript();
-	});
-} else {
-	appendEmbeddedScript();
-}
+const scheduleEmbeddedScript = () => {
+	if (document.readyState === "loading") {
+		document.addEventListener("readystatechange", () => {
+			if (document.readyState === "interactive") appendEmbeddedScript();
+		});
+	} else {
+		appendEmbeddedScript();
+	}
+};
 if (DEV_MODE) {
-	setupContentScriptBridge();
-	const seenKeys = new Set<string>();
-	storage.onChanged.addListener((changes, areaName) => {
-		if (areaName !== "local") return;
-		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
-		if (!keys.length) return;
-		for (const key of keys) {
-			if (seenKeys.has(key)) continue;
-			seenKeys.add(key);
-			setTimeout(() => seenKeys.delete(key), 2000);
-		}
-		void invalidateDevToolsCache(keys);
-	});
+	startDevelopmentMode();
+} else {
+	scheduleEmbeddedScript();
 }
 const getStoredSettings = async (): Promise<configuration> => {
 	const options: configuration = await new Promise((resolve) => {
@@ -96,14 +91,15 @@ void (async () => {
 	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
 	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", { state })]);
 })();
+const onPageHide = () => {
+	storage.onChanged.removeListener(storageListeners);
+};
 /**
  * Listens for messages from the embedded script via window.postMessage.
- *
- * @returns {void}
  */
-window.addEventListener("message", (event: MessageEvent) => {
+const onWindowMessage = (event: MessageEvent) => {
 	if (event.source !== window) return;
-	const message = event.data as (ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"]);
+	const message = event.data as ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"];
 	if (message?.origin !== MESSAGE_ORIGIN) return;
 	void (async () => {
 		if (!message) return;
@@ -151,9 +147,7 @@ window.addEventListener("message", (event: MessageEvent) => {
 					}
 					case "pageLoaded": {
 						storage.onChanged.addListener(storageListeners);
-						window.addEventListener("pagehide", () => {
-							storage.onChanged.removeListener(storageListeners);
-						});
+						window.addEventListener("pagehide", onPageHide);
 						break;
 					}
 					case "setVolumeBoostAmount": {
@@ -165,7 +159,84 @@ window.addEventListener("message", (event: MessageEvent) => {
 			}
 		}
 	})();
-});
+};
+window.addEventListener("message", onWindowMessage);
+/**
+ * Development only. Everything hot reload needs lives in this one function so that a production build, where the
+ * call above is dead, drops it and its imports entirely. It wires the devtools bridge, then the takeover protocol:
+ * when the background worker re-injects this script it first sets `__yteDevReinject`, so the new instance retires
+ * the older instances on the page (they hear the takeover on `window`, which works even after an extension reload
+ * has invalidated their `chrome.*` handles), asks the running embedded script to disable everything, and injects the
+ * rebuilt one under a fresh URL. A rebuilt embedded script alone arrives as a runtime message and is swapped the same
+ * way. The video keeps playing throughout.
+ */
+function startDevelopmentMode(): void {
+	const isReinjection = (globalThis as { __yteDevReinject?: boolean }).__yteDevReinject === true;
+	delete (globalThis as { __yteDevReinject?: boolean }).__yteDevReinject;
+	const instanceId = crypto.randomUUID();
+
+	const requestEmbeddedDispose = () =>
+		new Promise<void>((resolve) => {
+			const finish = () => {
+				clearTimeout(timeout);
+				window.removeEventListener("message", onDisposed);
+				resolve();
+			};
+			const onDisposed = (event: MessageEvent) => {
+				if (event.source === window && isDevWindowMessage(event.data) && event.data.type === "disposed") finish();
+			};
+			const timeout = setTimeout(finish, 2000);
+			window.addEventListener("message", onDisposed);
+			window.postMessage({ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies DevWindowMessage, "*");
+		});
+	const swapEmbeddedScript = async (buildId: string) => {
+		await requestEmbeddedDispose();
+		for (const oldScript of document.querySelectorAll('script[src*="src/pages/embedded/index.js"]')) oldScript.remove();
+		injectEmbeddedScript(buildId);
+	};
+	const devInvalidateListener = (changes: Record<string, unknown>, areaName: string) => {
+		if (areaName !== "local") return;
+		const keys = Object.keys(changes).filter((key) => key in defaultConfiguration);
+		if (!keys.length) return;
+		void invalidateDevToolsCache(keys);
+	};
+	const onDevRuntimeMessage = (message: unknown) => {
+		if (!isDevRuntimeMessage(message)) return false;
+		void swapEmbeddedScript(message.buildId);
+		return false;
+	};
+	const dispose = () => {
+		window.removeEventListener("message", onWindowMessage);
+		window.removeEventListener("message", onTakeoverMessage);
+		window.removeEventListener("pagehide", onPageHide);
+		try {
+			storage.onChanged.removeListener(storageListeners);
+			storage.onChanged.removeListener(devInvalidateListener);
+			chrome.runtime.onMessage.removeListener(onDevRuntimeMessage);
+			teardownContentScriptBridge();
+		} catch {
+			// Extension context invalidated: the listeners died with it.
+		}
+	};
+	const onTakeoverMessage = (event: MessageEvent) => {
+		if (event.source !== window || !isDevWindowMessage(event.data) || event.data.type !== "takeover") return;
+		if (event.data.instanceId === instanceId) return;
+		dispose();
+	};
+
+	setupContentScriptBridge();
+	storage.onChanged.addListener(devInvalidateListener);
+	window.addEventListener("message", onTakeoverMessage);
+	chrome.runtime.onMessage.addListener(onDevRuntimeMessage);
+
+	if (isReinjection) {
+		embeddedScriptAppended = true;
+		window.postMessage({ instanceId, source: DEV_RELOAD_SOURCE, type: "takeover" } satisfies DevWindowMessage, "*");
+		void swapEmbeddedScript(Date.now().toString(36));
+	} else {
+		scheduleEmbeddedScript();
+	}
+}
 const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
 	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
