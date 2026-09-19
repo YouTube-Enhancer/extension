@@ -1,11 +1,18 @@
 import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } from "@/src/types";
 
 import { setDefaultValues } from "@/src/defaults";
+import { DEV_MODE } from "@/src/utils/config/env";
 import { updateStoredSettings } from "@/src/utils/config/storage";
+import { reinjectContentScriptsAfterReload, startHotReloadClient } from "@/src/utils/dev/hotReloadClient";
 
 import { version } from "../../../package.json";
 
 const sentRequestIds = new Set<string>();
+
+if (DEV_MODE) {
+	startHotReloadClient();
+	void reinjectContentScriptsAfterReload();
+}
 
 chrome.runtime.onInstalled.addListener((details) => {
 	void (async () => {

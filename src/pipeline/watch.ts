@@ -6,9 +6,12 @@ import { type Rolldown, build as viteBuild } from "vite";
 import type { Browser } from "@/src/utils/plugins/utils";
 
 import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
+import { DEV_RELOAD_PORT } from "@/src/utils/dev/hotReload";
 import terminalColorLog from "@/src/utils/logging";
 import { browsers, copyDirectorySync, emptyOutputFolder, outDir, publicDir, rootDir, srcDir } from "@/src/utils/plugins/utils";
 
+import { buildFinished, buildStarted, emitRebuild, newBuildId, type RebuildEvent } from "./devEvents";
+import { startHotReloadServer } from "./hotReloadServer";
 import { buildContentScripts } from "./steps/buildContentScripts";
 import generateLocaleTypes from "./steps/generateLocaleTypes";
 import generateManifests from "./steps/generateManifests";
@@ -19,30 +22,13 @@ import { timedStep } from "./utils";
 
 config();
 
-export type BundleName = "content" | "embedded" | "pages";
-
-export type RebuildEvent = {
-	buildId: string;
-	bundle: BundleName;
-	durationMs: number;
-};
-
 export type WatchOptions = {
+	hotReload: boolean;
 	target: Browser["type"];
 };
 
-type RebuildListener = (event: RebuildEvent) => void;
-
 /** Editors often write a file twice per save; without a delay each write started its own rebuild. */
 export const WATCH_BUILD_DELAY_MS = 100;
-
-const rebuildListeners = new Set<RebuildListener>();
-
-/** Called after every completed rebuild, once the output on disk is consistent (manifest included). */
-export function onRebuild(listener: RebuildListener): () => void {
-	rebuildListeners.add(listener);
-	return () => rebuildListeners.delete(listener);
-}
 
 export function parseWatchArgs(argv: string[]): WatchOptions {
 	const targetIndex = argv.indexOf("--target");
@@ -50,16 +36,18 @@ export function parseWatchArgs(argv: string[]): WatchOptions {
 	if (target !== "chrome" && target !== "firefox") {
 		throw new Error(`Unknown --target "${target}"; use chrome or firefox`);
 	}
-	return { target };
+	return { hotReload: !argv.includes("--no-hot-reload"), target };
 }
 
 /**
  * Keeps both Vite builds running and writes straight into one browser folder, so a save costs an incremental rebuild
  * instead of the full release pipeline. The release-only steps (locale checks, ZIPs, output copies) do not run here;
  * the README feature list still does, because it is a tracked file that must change with the feature that changes it.
+ * With hot reload on, every rebuild is pushed to the loaded extension, which applies it without a page reload where
+ * it can (see `hotReloadServer.ts`).
  */
 export async function startWatch(argv: string[]): Promise<void> {
-	const { target } = parseWatchArgs(argv);
+	const { hotReload, target } = parseWatchArgs(argv);
 	const browser = browsers.find((candidate) => candidate.type === target);
 	if (!browser) throw new Error(`No build target of type ${target}`);
 	const targetDir = resolve(outDir, browser.name);
@@ -71,16 +59,28 @@ export async function startWatch(argv: string[]): Promise<void> {
 	await timedStep("Updating available locales", () => updateAvailableLocales());
 	await timedStep("Generating locale types", () => generateLocaleTypes());
 	copyDirectorySync(publicDir, targetDir);
-	const writeManifest = () => generateManifests({ chunkDir, targets: [browser] });
+	let manifestJson = "";
+	const writeManifest = () => {
+		const [json] = Object.values(generateManifests({ chunkDir, targets: [browser] }));
+		const changed = manifestJson !== "" && json !== manifestJson;
+		manifestJson = json;
+		return changed;
+	};
 	writeManifest();
 	await updateReadmeFeatures();
+
+	const hotReloadServer = hotReload ? startHotReloadServer({ port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir }) : null;
+	/** Tells the bundles which port this pipeline actually listens on (a number, so it is not inlined as a string); see `devReloadPort()`. */
+	const define = { __YTE_DEV_RELOAD_PORT__: (await hotReloadServer?.ready) ?? DEV_RELOAD_PORT };
 
 	const pagesWatcher = (await viteBuild({
 		build: { outDir: targetDir, watch: { buildDelay: WATCH_BUILD_DELAY_MS } },
 		configFile: resolve(rootDir, "vite.config.ts"),
+		define,
 		logLevel: "warn"
 	})) as Rolldown.RolldownWatcher;
 	const [contentWatcher, embeddedWatcher] = await buildContentScripts({
+		define,
 		logLevel: "warn",
 		outDir: targetDir,
 		singleFileEmbedded: true,
@@ -88,15 +88,18 @@ export async function startWatch(argv: string[]): Promise<void> {
 	});
 	attach("pages", pagesWatcher);
 	attach("content", contentWatcher);
-	attach("embedded", embeddedWatcher, writeManifest);
+	attach("embedded", embeddedWatcher, () => {
+		if (writeManifest()) announce("manifest");
+	});
 
 	const fsWatchers: FSWatcher[] = [
 		watchDirectory(publicDir, () => {
 			copyDirectorySync(publicDir, targetDir);
 			generateLocaleTypes();
-			writeManifest();
+			const manifestChanged = writeManifest();
 			void updateReadmeFeatures();
 			log("public/ copied (a new locale file needs a restart to be listed in the manifest)");
+			announce(manifestChanged ? "manifest" : "public");
 		}),
 		watchDirectory(
 			resolve(srcDir, "features"),
@@ -116,21 +119,29 @@ export async function startWatch(argv: string[]): Promise<void> {
 	const shutdown = async () => {
 		log("Stopping...");
 		for (const watcher of fsWatchers) watcher.close();
-		await Promise.all([pagesWatcher.close(), contentWatcher.close(), embeddedWatcher.close()]);
+		await Promise.all([pagesWatcher.close(), contentWatcher.close(), embeddedWatcher.close(), hotReloadServer?.close()]);
 		process.exit(0);
 	};
 	process.on("SIGINT", () => void shutdown());
 	process.on("SIGTERM", () => void shutdown());
 }
 
-function attach(bundle: BundleName, watcher: Rolldown.RolldownWatcher, afterBuild?: () => void): void {
+function announce(bundle: RebuildEvent["bundle"], durationMs = 0): void {
+	emitRebuild({ buildId: newBuildId(), bundle, durationMs });
+}
+
+function attach(bundle: "content" | "embedded" | "pages", watcher: Rolldown.RolldownWatcher, afterBuild?: () => void): void {
 	watcher.on("event", (event) => {
-		if (event.code === "BUNDLE_END") {
+		if (event.code === "BUNDLE_START") {
+			buildStarted();
+		} else if (event.code === "BUNDLE_END") {
 			afterBuild?.();
-			const rebuild: RebuildEvent = { buildId: newBuildId(), bundle, durationMs: Math.round(event.duration) };
-			log(`${bundle} built in ${rebuild.durationMs} ms`);
-			for (const listener of rebuildListeners) listener(rebuild);
+			const durationMs = Math.round(event.duration);
+			log(`${bundle} built in ${durationMs} ms`);
+			buildFinished();
+			announce(bundle, durationMs);
 		} else if (event.code === "ERROR") {
+			buildFinished();
 			terminalColorLog(`${bundle} build failed: ${event.error.message}`, "error");
 		}
 	});
@@ -138,10 +149,6 @@ function attach(bundle: BundleName, watcher: Rolldown.RolldownWatcher, afterBuil
 
 function log(message: string): void {
 	console.log(`[Dev] ${message}`);
-}
-
-function newBuildId(): string {
-	return Date.now().toString(36);
 }
 
 /** Recursive directory watch with a short debounce; Node's own watcher fires several events per save. */

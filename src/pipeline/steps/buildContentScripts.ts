@@ -4,9 +4,12 @@ import { build, type LogLevel, type Rolldown } from "vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/config/env";
+import { EMBEDDED_STYLE_ID } from "@/src/utils/dev/hotReload";
 import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "@/utils/plugins/utils";
 
 export type ContentScriptBuildOptions = {
+	/** Extra compile-time constants, e.g. the hot-reload port in watch mode. */
+	define?: Record<string, number | string>;
 	logLevel?: LogLevel;
 	/** Output folder. The release pipeline builds into `dist/temp`; the watch pipeline builds straight into its target. */
 	outDir?: string;
@@ -45,6 +48,7 @@ const contentScripts = [
 ];
 
 export async function buildContentScripts({
+	define,
 	logLevel,
 	outDir: targetDir = resolve(outDir, "temp"),
 	singleFileEmbedded = false,
@@ -89,9 +93,10 @@ export async function buildContentScripts({
 				watch: watch ?? null
 			},
 			configFile: false,
+			define,
 			logLevel,
 			mode: DEV_MODE ? "development" : "production",
-			plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
+			plugins: [cssInjectedByJsPlugin({ attributes: { id: EMBEDDED_STYLE_ID }, topExecutionPriority: !ENABLE_SOURCE_MAP })],
 			publicDir: false,
 			resolve: {
 				alias: {
