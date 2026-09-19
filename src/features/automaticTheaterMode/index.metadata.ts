@@ -10,6 +10,7 @@ export const metadata = createFeatureMetadata({
 	settings: [
 		{
 			component: "checkbox",
+			disabledWhen: [{ equals: true, feature: "automaticallyMaximizePlayer", setting: "automaticallyMaximizePlayer.enabled" }],
 			id: "automaticTheaterMode.enabled",
 			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticTheaterMode.enable.label),
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticTheaterMode.enable.title)
