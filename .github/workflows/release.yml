@@ -32,9 +32,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        # The lockfile is generated with --legacy-peer-deps: eslint-plugin-perfectionist's
-        # @typescript-eslint packages cap their typescript peer below 7, which the project is on.
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Run Semantic Release
         run: |
