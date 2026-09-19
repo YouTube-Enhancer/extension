@@ -5,30 +5,44 @@ import { resolve } from "path";
 
 import { manifestV3, manifestV3Firefox } from "@/src/manifest";
 import terminalColorLog from "@/src/utils/logging";
-import { browsers, outDir } from "@/src/utils/plugins/utils";
+import { type Browser, browsers, outDir } from "@/src/utils/plugins/utils";
 
-export default function generateManifests(): void {
-	for (const browser of browsers) {
+export type GenerateManifestsOptions = {
+	/** Folder whose top-level `*.js` files are listed as web-accessible chunks. Defaults to the temp build output. */
+	chunkDir?: string;
+	/** Applied to the manifest before it is written; the watch pipeline uses it for development-only entries. */
+	patch?: (manifest: Manifest.WebExtensionManifest) => Manifest.WebExtensionManifest;
+	targets?: Browser[];
+};
+
+/** Writes one manifest per target and returns the JSON written, keyed by target name. */
+export default function generateManifests({
+	chunkDir = resolve(outDir, "temp", "src"),
+	patch,
+	targets = browsers
+}: GenerateManifestsOptions = {}): Record<string, string> {
+	const written: Record<string, string> = {};
+	for (const browser of targets) {
 		const browserDir = resolve(outDir, browser.name);
 		if (!existsSync(browserDir)) {
 			mkdirSync(browserDir, { recursive: true });
 		}
 		const manifest = browser.type === "chrome" ? manifestV3 : manifestV3Firefox;
-		writeManifest(manifest, browser.name);
+		written[browser.name] = writeManifest(patch ? patch(manifest) : manifest, browser.name, chunkDir);
 	}
+	return written;
 }
 
-function getChunkScriptPaths(): string[] {
-	const srcDir = resolve(outDir, "temp", "src");
-	if (!existsSync(srcDir)) return [];
-	return readdirSync(srcDir)
+function getChunkScriptPaths(chunkDir: string): string[] {
+	if (!existsSync(chunkDir)) return [];
+	return readdirSync(chunkDir)
 		.filter((fileName) => fileName.endsWith(".js"))
 		.map((fileName) => `src/${fileName}`);
 }
 
-function writeManifest(manifest: Manifest.WebExtensionManifest, browserName: string): void {
+function writeManifest(manifest: Manifest.WebExtensionManifest, browserName: string, chunkDir: string): string {
 	const manifestPath = resolve(outDir, browserName, "manifest.json");
-	const chunkScriptPaths = getChunkScriptPaths();
+	const chunkScriptPaths = getChunkScriptPaths(chunkDir);
 	const webAccessibleResources = (manifest.web_accessible_resources ?? []) as (string | { matches?: string[]; resources?: string[] })[];
 
 	const resolved = {
@@ -41,6 +55,8 @@ function writeManifest(manifest: Manifest.WebExtensionManifest, browserName: str
 			};
 		})
 	};
-	writeFileSync(manifestPath, JSON.stringify(resolved));
+	const json = JSON.stringify(resolved);
+	writeFileSync(manifestPath, json);
 	terminalColorLog(`Manifest file created: ${manifestPath}`, "success");
+	return json;
 }

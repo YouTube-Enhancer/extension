@@ -114,7 +114,7 @@ Modules inside `src/features/` that are not features include:
 # Build and Dev Commands
 
 - `npm install` - Install dependencies
-- `npm run dev` - Development build with hot reloading (uses nodemon)
+- `npm run dev` - Watch mode (`tsx src/pipeline/dev.ts`): both Vite builds stay running and write straight into `dist/Chrome`, so a save costs an incremental rebuild; `npm run dev:firefox` targets `dist/Firefox`. Release-only steps are skipped; the README feature list is still regenerated. Adding a new locale file needs a restart
 - `npm run build` - Full build in one process (`tsx src/pipeline/build.ts`): pre-build checks, both Vite bundles in parallel, then manifests, output copies, README feature list, locale types and release ZIPs (ZIPs are skipped in development builds)
 - `npm run build:pre` / `npm run build:bundle` / `npm run build:post` - The three pipeline stages on their own
 - `npm run build:main` - Vite build for the extension pages only

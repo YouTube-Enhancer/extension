@@ -10,11 +10,11 @@ import type { AvailableLocales } from "@/src/i18n/constants";
  * it cannot. A relative path is the only form that loads there; the type-only import above is erased first.
  */
 import { outputFolderName } from "../constants.ts";
+export type Browser = ReturnType<typeof GetInstalledBrowsers>[number];
 export type LocaleFile = {
 	[key: string]: LocaleValue;
 };
 export type LocaleValue = string | { [key: string]: LocaleValue };
-type Browser = ReturnType<typeof GetInstalledBrowsers>[number];
 const getDirname = () => {
 	if (typeof import.meta !== "undefined" && import.meta.url) {
 		return dirname(fileURLToPath(import.meta.url));

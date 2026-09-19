@@ -18,6 +18,10 @@ export function createT(translations: TranslationRoot): TFunction {
 	} as TFunction;
 }
 
+export function elapsedSince(start: number): string {
+	return ((Date.now() - start) / 1000).toFixed(2);
+}
+
 export function safeResolve(fn: unknown, t: TFunction, opts?: Record<string, unknown>): string {
 	if (typeof fn !== "function") return "";
 	try {
@@ -26,4 +30,12 @@ export function safeResolve(fn: unknown, t: TFunction, opts?: Record<string, unk
 	} catch {
 		return "";
 	}
+}
+
+export async function timedStep<T>(name: string, fn: () => Promise<T> | T): Promise<T> {
+	const start = Date.now();
+	console.log(`[Build Pipeline] [Step] ${name}...`);
+	const result = await fn();
+	console.log(`[Build Pipeline] [Step] ${name} (${elapsedSince(start)}s)`);
+	return result;
 }
