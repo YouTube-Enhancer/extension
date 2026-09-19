@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { z } from "zod";
 import { generateErrorMessage } from "zod-error";
 
@@ -6,6 +6,7 @@ import type { CrowdinLanguageProgressResponse, TypeToZodSchema } from "@/src/typ
 
 import { formatError } from "@/src/utils/format/error";
 import { i18nDir } from "@/src/utils/plugins/utils";
+import { writeFormattedFile } from "@/src/utils/plugins/writeFormattedFile";
 
 import { type AvailableLocales } from "./constants";
 
@@ -57,9 +58,17 @@ export default async function updateLocalePercentages() {
 	const localePercentages = await getLocalePercentagesFromCrowdin();
 	if (!localePercentages) return;
 	const localePercentagesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
-	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, Object.fromEntries(localePercentages));
+	/** Keys are written sorted so the generated object already satisfies the lint rules; no fix pass runs after the build. */
+	const sortedPercentages = Object.fromEntries(
+		[...localePercentages].sort(([a], [b]) =>
+			a < b ? -1
+			: a > b ? 1
+			: 0
+		)
+	);
+	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, sortedPercentages);
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
-		writeFileSync(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);
+		await writeFormattedFile(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);
 	}
 }
 async function getLocalePercentagesFromCrowdin() {
