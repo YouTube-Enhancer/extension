@@ -6,17 +6,33 @@ import { DEV_MODE, ENABLE_SOURCE_MAP } from "@/src/utils/config/env";
 import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "@/utils/plugins/utils";
 const contentScripts = [
 	{
-		content: resolve(process.cwd(), "src/pages/content/index.ts")
+		/** The manifest loads the content script as a classic script, so it must stay one file without ES imports. */
+		codeSplitting: false,
+		entry: "content"
 	},
 	{
-		embedded: resolve(process.cwd(), "src/pages/embedded/index.ts")
+		codeSplitting: {
+			/**
+			 * Every feature chunk imports its own `index.metadata.ts`, which the eagerly loaded metadata registry imports
+			 * as well. Left to itself, Rolldown emits one tiny chunk per such shared module; this keeps all feature
+			 * metadata in one chunk, as the entry already loads it.
+			 */
+			groups: [{ name: "featureMetadata", test: /[\\/]index\.metadata\.ts$/ }],
+			/**
+			 * Keep the metadata modules' own imports (schemas, constants such as the deep-dark presets) in the same chunk.
+			 * With this off, Rolldown split those constants into a chunk that also imported this one, and the metadata ran
+			 * before the constants existed ("Cannot convert undefined or null to object" from zod's enum).
+			 */
+			includeDependenciesRecursively: true
+		},
+		entry: "embedded"
 	}
-] as const;
-for (const contentScript of contentScripts) {
+];
+for (const { codeSplitting, entry } of contentScripts) {
 	await build({
 		build: {
 			emptyOutDir: false,
-			minify: !DEV_MODE ? "esbuild" : false,
+			minify: !DEV_MODE ? "oxc" : false,
 			/**
 			 * The embedded script runs inside youtube.com, where Vite's preload links for dynamic imports resolve
 			 * against the page URL. Each import then fired a 404 at youtube.com/src/<chunk>.js before the real import
@@ -24,31 +40,30 @@ for (const contentScript of contentScripts) {
 			 */
 			modulePreload: false,
 			outDir: resolve(outDir, "temp"),
-			rollupOptions: {
-				input: contentScript,
+			rolldownOptions: {
+				input: { [entry]: resolve(process.cwd(), `src/pages/${entry}/index.ts`) },
+				/**
+				 * File names stay hash-free so store reviewers can compare a rebuild with the uploaded package. Chunks
+				 * land in `src/*.js`, which the manifest step lists as web-accessible resources; the pages build keeps
+				 * its own chunks under `src/chunks/` so the two parallel builds never write the same file.
+				 */
 				output: {
-					assetFileNames: (chunk) => `src/${chunk.name}`,
+					assetFileNames: "src/[name][extname]",
 					chunkFileNames: (chunk) => `src/${chunk.name}.js`,
+					codeSplitting,
 					entryFileNames: (chunk) => {
 						return `src/pages/${chunk.name}/index.js`;
-					}
+					},
+					keepNames: true
 				},
 				treeshake: {
 					moduleSideEffects: true,
-					preset: "smallest",
-					propertyReadSideEffects: true,
-					tryCatchDeoptimization: true
+					unknownGlobalSideEffects: false
 				}
 			},
 			sourcemap: ENABLE_SOURCE_MAP
 		},
 		configFile: false,
-		esbuild: {
-			keepNames: true,
-			minifyIdentifiers: !DEV_MODE,
-			minifySyntax: !DEV_MODE,
-			minifyWhitespace: !DEV_MODE
-		},
 		mode: DEV_MODE ? "development" : "production",
 		plugins: [cssInjectedByJsPlugin({ topExecutionPriority: !ENABLE_SOURCE_MAP })],
 		publicDir: false,
