@@ -50,12 +50,6 @@
 						}
 					}
 				},
-				"hideNextButton": {
-					"enable": {
-						"label": "Hide next button",
-						"title": "Hides the next video button from the player controls"
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "최종 화면 숨기기",
@@ -376,18 +370,18 @@
 	},
 	"settings": {
 		"sections": {
-			"customCSS": {
-				"customFontFamily": {
-					"enable": {
-						"label": "Custom font family",
-						"title": "Changes the font family used across YouTube"
-					},
-					"fontFamily": {
-						"label": "Font family",
-						"title": "The CSS font-family value to apply"
-					},
-					"title": "Custom font family settings"
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
 				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
+			"customCSS": {
 				"enable": {
 					"label": "CSS 커스텀 활성화",
 					"title": "커스텀 CSS를 적용할 수 있습니다."
@@ -589,16 +583,16 @@
 							"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨깁니다."
 						}
 					},
-					"hideNextButton": {
-						"enable": {
-							"label": "Hide next button",
-							"title": "Hides the next video button from the player controls"
-						}
-					},
 					"hideEndScreenCardsButton": {
 						"enable": {
 							"label": "최종 화면 숨기기 버튼",
 							"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨기거나 표시합니다."
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
@@ -617,6 +611,12 @@
 						"enable": {
 							"label": "Hide fullscreen button",
 							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
