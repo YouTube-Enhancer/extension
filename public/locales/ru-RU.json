@@ -123,7 +123,7 @@
 						"removeAllWatchedVideos": "Удалить {{count}} просмотренных видео",
 						"removeVideo": "Удалить видео",
 						"removingVideo": "Удаляется видео…",
-						"removingWatchedVideos": "Removing watched videos…"
+						"removingWatchedVideos": "Удаляю просмотренные видео…"
 					}
 				},
 				"playlistReverseButton": {
@@ -136,7 +136,7 @@
 				},
 				"saveToWatchLaterButton": {
 					"extras": {
-						"failedToRemoveVideo": "Failed to remove video from Watch Later",
+						"failedToRemoveVideo": "Не удалось удалить видео из «Смотреть позже»",
 						"failedToSaveVideo": "Не удалось сохранить видео в Смотреть позже",
 						"removeVideo": "Remove from Watch Later",
 						"removedVideo": "Removed from Watch Later",
