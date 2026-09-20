@@ -377,6 +377,17 @@
 	"settings": {
 		"sections": {
 			"customCSS": {
+				"customFontFamily": {
+					"enable": {
+						"label": "Custom font family",
+						"title": "Changes the font family used across YouTube"
+					},
+					"fontFamily": {
+						"label": "Font family",
+						"title": "The CSS font-family value to apply"
+					},
+					"title": "Custom font family settings"
+				},
 				"enable": {
 					"label": "カスタムCSSを可能にする",
 					"title": "ページに適用するカスタムCSSを可能にする"
@@ -588,22 +599,6 @@
 						"enable": {
 							"label": "終了画面のカードボタンを非表示にする",
 							"title": "終了画面でボタンなカードを見せるか隠すに追加する"
-						}
-					},
-					"customFontFamily": {
-						"enable": {
-							"label": "Custom font family",
-							"title": "Changes the font family used across YouTube"
-						},
-						"fontFamily": {
-							"label": "Font family",
-							"title": "The CSS font-family value to apply"
-						}
-					},
-					"sharpCorners": {
-						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
