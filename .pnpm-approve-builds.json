@@ -1,1 +1,4 @@
-{"esbuild":true,"@swc/core":true}
+{
+  "esbuild": true,
+  "@swc/core": true
+}
