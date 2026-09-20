@@ -34,10 +34,10 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 71 features
+## 🎛️ Features • 77 features
 
 <details>
-<summary>Miscellaneous • 42 features</summary>
+<summary>Miscellaneous • 48 features (1 settings)</summary>
 
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
@@ -48,23 +48,29 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Automatically Show More Videos On End Screen**: Automatically shows more videos on end screen when you load a video
 - **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
 - **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
+- **⚠️ Missing_label (custom Font Family.enabled)**: ⚠️ missing_title (customFontFamily.enabled) ⚠️ [missing_label, missing_title]
 - **Default To Original Audio Track**: Always defaults to the original audio track
 - **Flip Video Horizontally Button**: Adds a button to flip the video horizontally
 - **Flip Video Vertically Button**: Adds a button to flip the video vertically
 - **Hide AI**: Hides AI-powered features, such as video summaries and Ask AI
+- **Hide Autoplay Button**: Hides the autoplay toggle button from the player controls
 - **Hide End Screen Cards**: Hides the cards at the end of the video
 - **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
 - **Hide Recommended Videos On Endscreen**: Hides the suggested videos that appear on the endscreen
+- **Hide Fullscreen Button**: Hides the fullscreen button from the player controls
 - **Hide Live Stream Chat**: Hides the live stream chat
 - **Hide Member-only Videos**: Hides videos that only members can watch
+- **Hide Next Button**: Hides the next video button from the player controls
 - **Hide Official Artist Videos**: Hides official artist videos from the home page
 - **Hide Paid Promotion Banner**: Hides the banner that appears when you watch a video that has a paid promotion
 - **Hide Playables**: Hides all playables
+- **Hide Playlist Recommendations**: Hides recommended videos and playlists on playlist pages
 - **Hide Playlists From The Home Page**: Removes playlists from the home page
 - **Hide Posts**: Hides posts from the home page
 - **Hide Scrollbar**: Hides the page scrollbar
 - **Hide Recommended Videos**: Hides the sidebar that recommends videos
 - **Hide Translate Comment Button**: Hides 'Translate to Language' button under comments
+- **Hide Video Duration**: Hides the duration overlay on video thumbnails
 - **Loop Button**: Adds a button to the feature menu to loop the video you're watching
 - **Maximize Player Button**: Adds a button to the feature menu to maximize the player
 - **Mono To Stereo Button**: Adds a button to convert mono audio to stereo. Stereo tracks remain unchanged.
@@ -81,6 +87,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Shorts Auto Scroll**: Automatically scrolls to the next short
 - **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
 - **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
+- **⚠️ Missing_label (custom Font Family.font Family)**: ⚠️ missing_title (customFontFamily.fontFamily) ⚠️ [missing_label, missing_title]
 </details>
 
 <details>

@@ -369,6 +369,17 @@
 	"settings": {
 		"sections": {
 			"customCSS": {
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
 				"enable": {
 					"label": "Custom CSS",
 					"title": "Enables custom CSS to be applied to the page"
