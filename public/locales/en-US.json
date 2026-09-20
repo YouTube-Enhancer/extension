@@ -570,6 +570,12 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
 					"hideNextButton": {
 						"enable": {
 							"label": "Hide next button",
