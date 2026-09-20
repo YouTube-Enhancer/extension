@@ -279,6 +279,7 @@ export type configuration = {
 	};
 	hideSidebarRecommendedVideos: { enabled: boolean };
 	hideEndscreenRecommendedVideos: { enabled: boolean };
+	hideFullscreenButton: { enabled: boolean };
 	hideTranslateComment: { enabled: boolean };
 	keywordBlocklist: { enabled: boolean; keywords: string };
 	language: AvailableLocales;
