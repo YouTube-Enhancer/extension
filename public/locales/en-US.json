@@ -570,6 +570,12 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+						}
+					},
 					"hidePlaylistRecommendations": {
 						"enable": {
 							"label": "Hide playlist recommendations",
