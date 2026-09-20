@@ -50,12 +50,6 @@
 						}
 					}
 				},
-				"hideNextButton": {
-					"enable": {
-						"label": "Hide next button",
-						"title": "Hides the next video button from the player controls"
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Скрыть заставки следующих видео",
@@ -376,18 +370,18 @@
 	},
 	"settings": {
 		"sections": {
-			"customCSS": {
-				"customFontFamily": {
-					"enable": {
-						"label": "Custom font family",
-						"title": "Changes the font family used across YouTube"
-					},
-					"fontFamily": {
-						"label": "Font family",
-						"title": "The CSS font-family value to apply"
-					},
-					"title": "Custom font family settings"
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
 				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
+			"customCSS": {
 				"enable": {
 					"label": "Включить пользовательский CSS",
 					"title": "Включает пользовательские настройки CSS для применения к странице"
@@ -589,16 +583,16 @@
 							"title": "Скрывает заставки следующих (предлагаемых) видео в конце ролика"
 						}
 					},
-					"hideNextButton": {
-						"enable": {
-							"label": "Hide next button",
-							"title": "Hides the next video button from the player controls"
-						}
-					},
 					"hideEndScreenCardsButton": {
 						"enable": {
 							"label": "Кнопка «Скрыть заставки следующих видео»",
 							"title": "Добавляет кнопку для скрытия/отображения заставок следующих видео в конце ролика"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
@@ -617,6 +611,12 @@
 						"enable": {
 							"label": "Hide fullscreen button",
 							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
