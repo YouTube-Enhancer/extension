@@ -1,0 +1,7 @@
+body.yte-hide-video-duration {
+	ytd-thumbnail-overlay-time-status-renderer,
+	.thumbnail-overlay-badge-shape,
+	.ytThumbnailBottomOverlayViewModelBadgeContainer {
+		display: none !important;
+	}
+}
