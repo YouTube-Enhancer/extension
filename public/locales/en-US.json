@@ -188,6 +188,14 @@
 						"value": "Reset"
 					}
 				},
+				"donateCta": {
+					"label": "Support",
+					"description": "YouTube Enhancer is free and open source. Donations are optional and help keep up with YouTube's changes.",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "Cash App",
+					"venmo": "Venmo"
+				},
 				"buttonPlacement": {
 					"select": {
 						"buttonNames": {
