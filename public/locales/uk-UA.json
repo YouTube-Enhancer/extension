@@ -377,6 +377,17 @@
 	"settings": {
 		"sections": {
 			"customCSS": {
+				"customFontFamily": {
+					"enable": {
+						"label": "Custom font family",
+						"title": "Changes the font family used across YouTube"
+					},
+					"fontFamily": {
+						"label": "Font family",
+						"title": "The CSS font-family value to apply"
+					},
+					"title": "Custom font family settings"
+				},
 				"enable": {
 					"label": "Увімкнути користувацький CSS",
 					"title": "Дозволяє використовувати користувацький CSS для сторінки"
@@ -588,22 +599,6 @@
 						"enable": {
 							"label": "Приховати кнопку з екранними картами",
 							"title": "Додає кнопку для відображення/приховання карт в кінці відео"
-						}
-					},
-					"customFontFamily": {
-						"enable": {
-							"label": "Custom font family",
-							"title": "Changes the font family used across YouTube"
-						},
-						"fontFamily": {
-							"label": "Font family",
-							"title": "The CSS font-family value to apply"
-						}
-					},
-					"sharpCorners": {
-						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
