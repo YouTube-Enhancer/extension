@@ -552,6 +552,12 @@
 							"title": "Hides AI-powered features, such as video summaries and Ask AI"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideEndScreenCards": {
 						"enable": {
 							"label": "Hide end screen cards",
