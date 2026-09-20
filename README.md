@@ -34,10 +34,10 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 77 features
+## 🎛️ Features • 78 features
 
 <details>
-<summary>Miscellaneous • 48 features</summary>
+<summary>Miscellaneous • 49 features (1 settings)</summary>
 
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
@@ -48,6 +48,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Automatically Show More Videos On End Screen**: Automatically shows more videos on end screen when you load a video
 - **Block Number Key Seeking**: Prevents pressing 0-9 from jumping to a percentage of the video
 - **Copy Video URL With Timestamp Button**: Copies video URL with timestamp (?t=123)
+- **Custom Font Family**: Changes the font family used across YouTube
 - **Default To Original Audio Track**: Always defaults to the original audio track
 - **Flip Video Horizontally Button**: Adds a button to flip the video horizontally
 - **Flip Video Vertically Button**: Adds a button to flip the video vertically
@@ -87,6 +88,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Shorts Auto Scroll**: Automatically scrolls to the next short
 - **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
 - **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
+- **Font Family**: The CSS font-family value to apply
 </details>
 
 <details>

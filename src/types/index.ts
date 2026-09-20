@@ -240,6 +240,7 @@ export type configuration = {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
 	};
 	customCSS: { code: string; enabled: boolean };
+	customFontFamily: { enabled: boolean; fontFamily: string };
 	deepDarkCSS: { colors: DeepDarkCustomThemeColors; enabled: boolean; preset: DeepDarkPreset };
 	defaultToOriginalAudioTrack: { enabled: boolean };
 	featureMenu: { openType: FeatureMenuOpenType };
