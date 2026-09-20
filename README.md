@@ -34,10 +34,10 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 76 features
+## 🎛️ Features • 77 features
 
 <details>
-<summary>Miscellaneous • 47 features</summary>
+<summary>Miscellaneous • 48 features</summary>
 
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
@@ -83,6 +83,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Restore Fullscreen Scrolling**: Restores scrolling in fullscreen mode
 - **Enable Save To Watch Later Button**: Adds a button to Home and Subscriptions videos to save the video to the 'Watch Later' playlist
 - **Shorten You Tube Video Share Link**: Shortens YouTube video share link (youtu.be) by stripping si/feature parameters from it
+- **Sharp Corners**: Removes border-radius from YouTube elements for a sharp corners look
 - **Shorts Auto Scroll**: Automatically scrolls to the next short
 - **Skip "Video Is Paused. Continue Watching?"**: Skips the idle dialog that pauses video playback
 - **Timestamp Preview**: Preview the video by hovering over a timestamp. Click the preview to start playback from that moment.
