@@ -189,11 +189,11 @@
 					}
 				},
 				"donateCta": {
-					"label": "Support",
-					"description": "YouTube Enhancer is free and open source. Donations are optional and help keep up with YouTube's changes.",
+					"label": "支持",
+					"description": "YouTube Enhancer 是免费和开源的。捐赠是可选的，有助于跟上YouTube的更改。",
 					"kofi": "Ko-fi",
 					"paypal": "PayPal",
-					"cashApp": "Cash App",
+					"cashApp": "现金应用",
 					"venmo": "Venmo"
 				},
 				"buttonPlacement": {
@@ -372,14 +372,14 @@
 		"sections": {
 			"customFontFamily": {
 				"enable": {
-					"label": "Custom font family",
-					"title": "Changes the font family used across YouTube"
+					"label": "自定义字体家族",
+					"title": "更改整个YouTube使用的字体家族"
 				},
 				"fontFamily": {
-					"label": "Font family",
-					"title": "The CSS font-family value to apply"
+					"label": "字体家族",
+					"title": "要应用的 CSS 字体家族值"
 				},
-				"title": "Custom font family settings"
+				"title": "自定义字体家族设置"
 			},
 			"customCSS": {
 				"enable": {
@@ -573,8 +573,8 @@
 					},
 					"hideAutoplayButton": {
 						"enable": {
-							"label": "Hide autoplay button",
-							"title": "Hides the autoplay toggle button from the player controls"
+							"label": "隐藏自动播放按钮",
+							"title": "从播放器控制中隐藏自动切换按钮"
 						}
 					},
 					"hideEndScreenCards": {
@@ -591,32 +591,32 @@
 					},
 					"sharpCorners": {
 						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+							"label": "尖角",
+							"title": "移除来自YouTube元素的边框半径，让您看到一个尖锐的角度"
 						}
 					},
 					"hidePlaylistRecommendations": {
 						"enable": {
-							"label": "Hide playlist recommendations",
-							"title": "Hides recommended videos and playlists on playlist pages"
+							"label": "隐藏播放列表建议",
+							"title": "在播放列表页面隐藏推荐的视频和播放列表"
 						}
 					},
 					"hideVideoDuration": {
 						"enable": {
-							"label": "Hide video duration",
-							"title": "Hides the duration overlay on video thumbnails"
+							"label": "隐藏视频时长",
+							"title": "隐藏视频缩略图上的时长显示"
 						}
 					},
 					"hideFullscreenButton": {
 						"enable": {
-							"label": "Hide fullscreen button",
-							"title": "Hides the fullscreen button from the player controls"
+							"label": "隐藏全屏按钮",
+							"title": "从播放器控制中隐藏全屏按钮"
 						}
 					},
 					"hideNextButton": {
 						"enable": {
-							"label": "Hide next button",
-							"title": "Hides the next video button from the player controls"
+							"label": "隐藏下一个按钮",
+							"title": "从播放器控制中隐藏下一个视频按钮"
 						}
 					},
 					"hideLiveStreamChat": {
