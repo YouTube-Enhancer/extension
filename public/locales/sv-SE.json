@@ -188,6 +188,14 @@
 						"value": "Återställ"
 					}
 				},
+				"donateCta": {
+					"label": "Support",
+					"description": "YouTube Enhancer is free and open source. Donations are optional and help keep up with YouTube's changes.",
+					"kofi": "Ko-fi",
+					"paypal": "PayPal",
+					"cashApp": "Cash App",
+					"venmo": "Venmo"
+				},
 				"buttonPlacement": {
 					"select": {
 						"buttonNames": {
@@ -374,16 +382,6 @@
 				},
 				"title": "Anpassade CSS-inställningar"
 			},
-			"customFontFamily": {
-				"enable": {
-					"label": "Custom font family",
-					"title": "Changes the font family used across YouTube"
-				},
-				"fontFamily": {
-					"label": "Font family",
-					"title": "The CSS font-family value to apply"
-				}
-			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Djupt mörkt tema",
@@ -556,22 +554,16 @@
 							"title": "Använd alltid originalljudspåret som standard"
 						}
 					},
-					"hideAutoplayButton": {
-						"enable": {
-							"label": "Hide autoplay button",
-							"title": "Hides the autoplay toggle button from the player controls"
-						}
-					},
 					"hideArtificialIntelligence": {
 						"enable": {
 							"label": "Dölj AI",
 							"title": "Döljer AI-drivna funktioner, såsom videosammanfattningar och Ask AI"
 						}
 					},
-					"hideAskForVideos": {
+					"hideAutoplayButton": {
 						"enable": {
-							"label": "Hide 'Ask for videos'",
-							"title": "Hides the 'Ask for videos any way you like' prompt in search results"
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
 						}
 					},
 					"hideEndScreenCards": {
@@ -586,22 +578,44 @@
 							"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
 						}
 					},
-					"hideDuplicateChapterTitle": {
-						"enable": {
-							"label": "Hide duplicate chapter title",
-							"title": "Hides the duplicate chapter title that appears truncated in the chapter list"
-						}
-					},
-					"hideFullscreenButton": {
-						"enable": {
-							"label": "Hide fullscreen button",
-							"title": "Hides the fullscreen button from the player controls"
-						}
-					},
 					"hideNextButton": {
 						"enable": {
 							"label": "Hide next button",
 							"title": "Hides the next video button from the player controls"
+						}
+					},
+					"hideFullscreenButton": {
+						"hideVideoDuration": {
+							"hidePlaylistRecommendations": {
+								"sharpCorners": {
+									"customFontFamily": {
+										"enable": {
+											"label": "Custom font family",
+											"title": "Changes the font family used across YouTube"
+										},
+										"fontFamily": {
+											"label": "Font family",
+											"title": "The CSS font-family value to apply"
+										}
+									},
+									"enable": {
+										"label": "Sharp corners",
+										"title": "Removes border-radius from YouTube elements for a sharp corners look"
+									}
+								},
+								"enable": {
+									"label": "Hide playlist recommendations",
+									"title": "Hides recommended videos and playlists on playlist pages"
+								}
+							},
+							"enable": {
+								"label": "Hide video duration",
+								"title": "Hides the duration overlay on video thumbnails"
+							}
+						},
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
@@ -640,18 +654,6 @@
 							"title": "Döljer spel"
 						}
 					},
-					"hidePlayButtonTooltip": {
-						"enable": {
-							"label": "Hide play button tooltip",
-							"title": "Hides the tooltip that appears when hovering over the play button"
-						}
-					},
-					"hidePlaylistRecommendations": {
-						"enable": {
-							"label": "Hide playlist recommendations",
-							"title": "Hides recommended videos at the bottom of playlists"
-						}
-					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Dölj spellistor från startsidan",
@@ -662,12 +664,6 @@
 						"enable": {
 							"label": "Dölj rullningslisten",
 							"title": "Döljer sidornas rullningsfält"
-						}
-					},
-					"hideVideoDuration": {
-						"enable": {
-							"label": "Hide video duration",
-							"title": "Hides the duration overlay on video thumbnails"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -758,12 +754,6 @@
 						"enable": {
 							"label": "Förkorta YouTube-videons delningslänk",
 							"title": "Förkortar YouTube-videons delningslänk (youtu.be) genom att ta bort funktionsparametrar från den"
-						}
-					},
-					"sharpCorners": {
-						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"shortsAutoScroll": {
