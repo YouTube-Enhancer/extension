@@ -281,6 +281,7 @@ export type configuration = {
 	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideFullscreenButton: { enabled: boolean };
 	hideTranslateComment: { enabled: boolean };
+	hideVideoDuration: { enabled: boolean };
 	keywordBlocklist: { enabled: boolean; keywords: string };
 	language: AvailableLocales;
 	loopButton: {
