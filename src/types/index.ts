@@ -262,6 +262,7 @@ export type configuration = {
 	};
 	hideLiveStreamChat: { enabled: boolean };
 	hideMembersOnlyVideos: { enabled: boolean };
+	hideNextButton: { enabled: boolean };
 	hideOfficialArtistVideosFromHomePage: { enabled: boolean };
 	hidePaidPromotionBanner: { enabled: boolean };
 	hidePlayables: { enabled: boolean };
