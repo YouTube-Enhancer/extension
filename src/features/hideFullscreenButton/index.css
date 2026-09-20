@@ -1,0 +1,5 @@
+body.yte-hide-fullscreen-button {
+	.ytp-fullscreen-button {
+		display: none !important;
+	}
+}
