@@ -50,6 +50,12 @@
 						}
 					}
 				},
+				"hideNextButton": {
+					"enable": {
+						"label": "Hide next button",
+						"title": "Hides the next video button from the player controls"
+					}
+				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Dölj slutskärmskort",
@@ -572,47 +578,47 @@
 							"title": "Döljer korten i slutet av videon"
 						}
 					},
-					"hideEndScreenCardsButton": {
-						"enable": {
-							"label": "Dölj knappen för slutskärmskort",
-							"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
-						}
-					},
 					"hideNextButton": {
 						"enable": {
 							"label": "Hide next button",
 							"title": "Hides the next video button from the player controls"
 						}
 					},
-					"hideFullscreenButton": {
-						"hideVideoDuration": {
-							"hidePlaylistRecommendations": {
-								"sharpCorners": {
-									"customFontFamily": {
-										"enable": {
-											"label": "Custom font family",
-											"title": "Changes the font family used across YouTube"
-										},
-										"fontFamily": {
-											"label": "Font family",
-											"title": "The CSS font-family value to apply"
-										}
-									},
-									"enable": {
-										"label": "Sharp corners",
-										"title": "Removes border-radius from YouTube elements for a sharp corners look"
-									}
-								},
-								"enable": {
-									"label": "Hide playlist recommendations",
-									"title": "Hides recommended videos and playlists on playlist pages"
-								}
-							},
-							"enable": {
-								"label": "Hide video duration",
-								"title": "Hides the duration overlay on video thumbnails"
-							}
+					"hideEndScreenCardsButton": {
+						"enable": {
+							"label": "Dölj knappen för slutskärmskort",
+							"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
+						}
+					},
+					"customFontFamily": {
+						"enable": {
+							"label": "Custom font family",
+							"title": "Changes the font family used across YouTube"
 						},
+						"fontFamily": {
+							"label": "Font family",
+							"title": "The CSS font-family value to apply"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos and playlists on playlist pages"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
+						}
+					},
+					"hideFullscreenButton": {
 						"enable": {
 							"label": "Hide fullscreen button",
 							"title": "Hides the fullscreen button from the player controls"
