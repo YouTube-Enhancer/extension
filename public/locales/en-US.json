@@ -582,6 +582,16 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"customFontFamily": {
+						"enable": {
+							"label": "Custom font family",
+							"title": "Changes the font family used across YouTube"
+						},
+						"fontFamily": {
+							"label": "Font family",
+							"title": "The CSS font-family value to apply"
+						}
+					},
 					"sharpCorners": {
 						"enable": {
 							"label": "Sharp corners",
