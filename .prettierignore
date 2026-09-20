@@ -4,6 +4,5 @@ dist
 CHANGELOG.md
 README.md
 package.json
-package-lock.json
-yarn.lock
+pnpm-lock.yaml
 public/locales/en-US.json.d.ts

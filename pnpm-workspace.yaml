@@ -1,0 +1,33 @@
+# pnpm settings. Since pnpm 11 all settings live here (not in .npmrc or a "pnpm" field in package.json).
+
+# Install the native binaries for both Windows and Linux (plus whatever platform runs the install), so one
+# node_modules serves a Windows shell and WSL alike. Run `pnpm install` from Windows: its junctions are readable
+# from WSL, while symlinks created by pnpm inside WSL on a /mnt/c path cannot be followed by Windows
+# (scripts/preinstall.js enforces this through the pnpm:devPreinstall hook).
+supportedArchitectures:
+  os:
+    - current
+    - win32
+    - linux
+  cpu:
+    - current
+    - x64
+  libc:
+    - glibc
+
+# pnpm 12 checks node_modules before every `pnpm run` / `pnpm exec` and reinstalls when it looks stale. That state is
+# keyed by the absolute project path, so from WSL a Windows-made node_modules always looks stale and every run would
+# turn into an install. Run `pnpm install` yourself after changing package.json.
+verifyDepsBeforeRun: false
+
+# Dependencies whose install scripts may run. pnpm refuses to install when a dependency with an unlisted build
+# script appears; add it here after reviewing what the script does.
+allowBuilds:
+  "@swc/core": true
+  esbuild: true
+
+# TypeScript 7 is used on purpose although typescript-eslint (pulled in by eslint-plugin-perfectionist) caps its
+# typescript peer below 6.1; this silences that one unmet-peer warning without installing a second TypeScript.
+peerDependencyRules:
+  allowedVersions:
+    typescript: "7"

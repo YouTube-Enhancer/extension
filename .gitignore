@@ -392,8 +392,11 @@ public/manifest.json
 public/locales/en-US.json.d.ts
 
 releases/
+# lockfiles of other package managers (this project uses pnpm-lock.yaml)
 yarn.lock
 package-lock.json
+bun.lock
+bun.lockb
 /test-results/
 /playwright-report/
 /blob-report/

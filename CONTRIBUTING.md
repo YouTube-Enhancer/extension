@@ -54,8 +54,8 @@ PRs opened against `main` will be asked to retarget `dev`.
 ## ⚡ Quick Start (TL;DR)
 
 1. Check out `dev` and branch from it: `git checkout dev && git checkout -b feature/your-feature-name`
-2. Install dependencies: `npm install`
-3. Start dev server: `npm run dev`
+2. Install dependencies: `pnpm install`
+3. Start dev server: `pnpm run dev`
 4. Create a feature in `src/features/myNewFeature/`:
    - `index.metadata.ts` → schema + settings UI + i18n
    - `index.ts` → lifecycle + logic
@@ -68,9 +68,9 @@ PRs opened against `main` will be asked to retarget `dev`.
 
 ## 🛠️ Development Setup
 
-1. **Prerequisites:** Node.js and npm/yarn installed
-2. **Install dependencies:** `npm install`
-3. **Run dev server:** `npm run dev` (hot reload enabled)
+1. **Prerequisites:** Node.js 24 and pnpm installed (`corepack enable` is enough; the version pinned in `package.json` is used automatically)
+2. **Install dependencies:** `pnpm install`
+3. **Run dev server:** `pnpm run dev` (hot reload enabled)
 4. **Testing:**
    Automated testing is planned. For now, all testing is **manual verification**.
    Your feature must be validated across multiple YouTube states (watch, live, navigation, etc.).
@@ -83,8 +83,8 @@ Before new code gets merged into the repository, automated lint tests verify the
 
 It is recommended to test your code before committing by running:
 
-1. Lint check: `npm run lint`
-2. Fix lint errors: `npm run lint:fix`
+1. Lint check: `pnpm run lint`
+2. Fix lint errors: `pnpm run lint:fix`
 
 > You won't need to do this if you use a [supported editor](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode), as the process is automated.
 
