@@ -1,0 +1,5 @@
+body.yte-hide-next-button {
+	.ytp-next-button {
+		display: none !important;
+	}
+}
