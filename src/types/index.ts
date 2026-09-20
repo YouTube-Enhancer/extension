@@ -353,6 +353,7 @@ export type configuration = {
 	scrollWheelSpeedControl: { enabled: boolean; modifierKey: ModifierKey; steps: number };
 	scrollWheelVolumeControl: { enabled: boolean; holdModifierKey: boolean; holdRightClick: boolean; modifierKey: ModifierKey; steps: number };
 	shareShortener: { enabled: boolean };
+	sharpCorners: { enabled: boolean };
 	shortsAutoScroll: { enabled: boolean };
 	skipContinueWatching: { enabled: boolean };
 	timestampPeek: { enabled: boolean };
