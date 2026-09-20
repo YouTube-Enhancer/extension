@@ -374,6 +374,16 @@
 				},
 				"title": "Niestandardowe ustawienia CSS"
 			},
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				}
+			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Motyw Deep Dark",
@@ -546,10 +556,22 @@
 							"title": "Zawsze domyślnie dla oryginalnej ścieżki audio"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideArtificialIntelligence": {
 						"enable": {
 							"label": "Ukryj AI",
 							"title": "Ukrywa funkcje oparte na AI, takie jak podsumowania wideo i „Zapytaj AI”"
+						}
+					},
+					"hideAskForVideos": {
+						"enable": {
+							"label": "Hide 'Ask for videos'",
+							"title": "Hides the 'Ask for videos any way you like' prompt in search results"
 						}
 					},
 					"hideEndScreenCards": {
@@ -562,6 +584,24 @@
 						"enable": {
 							"label": "Ukryj przycisk na ekranie końcowym",
 							"title": "Dodaje przycisk, aby pokazać/ukryć karty na końcu wideo"
+						}
+					},
+					"hideDuplicateChapterTitle": {
+						"enable": {
+							"label": "Hide duplicate chapter title",
+							"title": "Hides the duplicate chapter title that appears truncated in the chapter list"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
@@ -600,6 +640,18 @@
 							"title": "Ukrywa wszystkie gry"
 						}
 					},
+					"hidePlayButtonTooltip": {
+						"enable": {
+							"label": "Hide play button tooltip",
+							"title": "Hides the tooltip that appears when hovering over the play button"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos at the bottom of playlists"
+						}
+					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Ukryj listy odtwarzania na stronie głównej",
@@ -610,6 +662,12 @@
 						"enable": {
 							"label": "Ukryj pasek przewijania",
 							"title": "Ukryj pasek przewijania stron"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -700,6 +758,12 @@
 						"enable": {
 							"label": "Skróć link udostępniania wideo na YouTube",
 							"title": "Skróć łącze udostępniania wideo z YouTube (youtu.be), usuwając z niego parametry si/funkcji"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"shortsAutoScroll": {
