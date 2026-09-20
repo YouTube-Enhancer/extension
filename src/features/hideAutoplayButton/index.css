@@ -1,0 +1,5 @@
+body.yte-hide-autoplay-button {
+	.ytp-autonav-toggle {
+		display: none !important;
+	}
+}

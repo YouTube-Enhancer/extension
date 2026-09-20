@@ -255,6 +255,7 @@ export type configuration = {
 		volume: number;
 	};
 	hideArtificialIntelligence: { enabled: boolean };
+	hideAutoplayButton: { enabled: boolean };
 	hideEndScreenCards: { enabled: boolean };
 	hideEndScreenCardsButton: {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
