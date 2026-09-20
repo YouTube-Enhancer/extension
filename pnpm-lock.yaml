@@ -15,37 +15,37 @@ importers:
         specifier: ^4.8.0-rc.3
         version: 4.8.0-rc.3(monaco-editor@0.56.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@tanstack/react-query':
-        specifier: ^5.90.5
+        specifier: ^5.103.1
         version: 5.103.1(react@19.3.0)
       dotenv:
-        specifier: ^17.2.3
+        specifier: ^17.4.2
         version: 17.4.2
       fuse.js:
-        specifier: ^7.3.0
+        specifier: ^7.5.0
         version: 7.5.0
       i18next:
-        specifier: ^26.0.4
+        specifier: ^26.4.2
         version: 26.4.2(typescript@7.0.2)
       monaco-editor:
         specifier: 0.56.0
         version: 0.56.0
       react:
-        specifier: ^19.2.0
+        specifier: ^19.3.0
         version: 19.3.0
       react-colorful:
-        specifier: ^5.6.1
+        specifier: ^5.8.1
         version: 5.8.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react-dom:
-        specifier: ^19.2.0
+        specifier: ^19.3.0
         version: 19.3.0(react@19.3.0)
       react-icons:
-        specifier: ^5.5.0
+        specifier: ^5.7.0
         version: 5.7.0(react@19.3.0)
       react-is:
-        specifier: ^19.2.8
+        specifier: ^19.3.0
         version: 19.3.0
       recharts:
-        specifier: ^3.8.1
+        specifier: ^3.10.1
         version: 3.10.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react-is@19.3.0)(react@19.3.0)(redux@5.0.1)
       safe-units:
         specifier: ^2.0.1
@@ -82,19 +82,19 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       '@types/chrome':
-        specifier: ^0.2.7
+        specifier: ^0.2.9
         version: 0.2.9
       '@types/node':
-        specifier: ^25.0.9
+        specifier: ^25.9.8
         version: 25.9.8
       '@types/react':
-        specifier: ^19.2.2
+        specifier: ^19.3.0
         version: 19.3.0
       '@types/react-dom':
-        specifier: ^19.2.2
+        specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
       '@types/webextension-polyfill':
-        specifier: ^0.12.5
+        specifier: ^0.12.6
         version: 0.12.6
       '@types/ws':
         specifier: ^8.18.1
@@ -109,55 +109,55 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1
       autoprefixer:
-        specifier: ^10.4.21
+        specifier: ^10.6.1
         version: 10.6.1(postcss@8.5.28)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
       concurrently:
-        specifier: ^9.2.3
+        specifier: ^9.2.4
         version: 9.2.4
       eslint:
-        specifier: ^10.0.0
+        specifier: ^10.11.0
         version: 10.11.0(jiti@1.21.7)(supports-color@8.1.1)
       eslint-plugin-no-secrets:
-        specifier: ^2.2.1
+        specifier: ^2.3.3
         version: 2.3.3(eslint@10.11.0(jiti@1.21.7)(supports-color@8.1.1))
       eslint-plugin-perfectionist:
-        specifier: ^5.0.0
+        specifier: ^5.11.1
         version: 5.11.1(eslint@10.11.0(jiti@1.21.7)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@7.0.2)
       eslint-plugin-tailwindcss:
-        specifier: ^3.18.2
+        specifier: ^3.18.3
         version: 3.18.3(tailwindcss@3.4.19(tsx@4.23.13))
       fs-extra:
-        specifier: ^11.3.2
+        specifier: ^11.4.0
         version: 11.4.0
       get-installed-browsers:
         specifier: ^0.1.7
         version: 0.1.7
       oxlint:
-        specifier: ^1.81.0
+        specifier: ^1.83.0
         version: 1.83.0(oxlint-tsgolint@7.0.2002)
       oxlint-tsgolint:
-        specifier: ^7.0.2001
+        specifier: ^7.0.2002
         version: 7.0.2002
       postcss:
-        specifier: ^8.5.6
+        specifier: ^8.5.28
         version: 8.5.28
       postcss-safe-parser:
-        specifier: ^7.0.1
+        specifier: ^7.1.0
         version: 7.1.0(postcss@8.5.28)
       prettier:
-        specifier: ^3.6.2
+        specifier: ^3.9.8
         version: 3.9.8
       semantic-release:
         specifier: ^25.0.9
         version: 25.0.9(supports-color@8.1.1)(typescript@7.0.2)
       tailwind-merge:
-        specifier: ^3.3.1
+        specifier: ^3.7.0
         version: 3.7.0
       tailwindcss:
-        specifier: ^3.4.18
+        specifier: ^3.4.19
         version: 3.4.19(tsx@4.23.13)
       ts-json-as-const:
         specifier: ^1.0.7
@@ -166,10 +166,10 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.16.2)(@types/node@25.9.8)(typescript@7.0.2)
       tsx:
-        specifier: ^4.21.0
+        specifier: ^4.23.13
         version: 4.23.13
       typescript:
-        specifier: '7.0'
+        specifier: ~7.0.2
         version: 7.0.2
       vite:
         specifier: ^8.3.0
@@ -178,7 +178,7 @@ importers:
         specifier: ^8.21.3
         version: 8.21.3
       zod:
-        specifier: ^4.1.12
+        specifier: ^4.6.5
         version: 4.6.5
       zod-error:
         specifier: ^2.0.0
