@@ -266,6 +266,7 @@ export type configuration = {
 	hideOfficialArtistVideosFromHomePage: { enabled: boolean };
 	hidePaidPromotionBanner: { enabled: boolean };
 	hidePlayables: { enabled: boolean };
+	hidePlaylistRecommendations: { enabled: boolean };
 	hidePlaylistRecommendationsFromHomePage: { enabled: boolean };
 	hidePosts: { enabled: boolean };
 	hideScrollBar: { enabled: boolean };
