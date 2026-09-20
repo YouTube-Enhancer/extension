@@ -374,6 +374,16 @@
 				},
 				"title": "Custom CSS settings"
 			},
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				}
+			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "선택한 테마 사용",
@@ -546,10 +556,22 @@
 							"title": "Always defaults to the original audio track"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideArtificialIntelligence": {
 						"enable": {
 							"label": "Hide AI",
 							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+						}
+					},
+					"hideAskForVideos": {
+						"enable": {
+							"label": "Hide 'Ask for videos'",
+							"title": "Hides the 'Ask for videos any way you like' prompt in search results"
 						}
 					},
 					"hideEndScreenCards": {
@@ -562,6 +584,24 @@
 						"enable": {
 							"label": "최종 화면 숨기기 버튼",
 							"title": "동영상 마지막에 등장하는 추천 동영상 카드들을 숨기거나 표시합니다."
+						}
+					},
+					"hideDuplicateChapterTitle": {
+						"enable": {
+							"label": "Hide duplicate chapter title",
+							"title": "Hides the duplicate chapter title that appears truncated in the chapter list"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
@@ -600,6 +640,18 @@
 							"title": "Hides all playables"
 						}
 					},
+					"hidePlayButtonTooltip": {
+						"enable": {
+							"label": "Hide play button tooltip",
+							"title": "Hides the tooltip that appears when hovering over the play button"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos at the bottom of playlists"
+						}
+					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Hide playlists from the home page",
@@ -610,6 +662,12 @@
 						"enable": {
 							"label": "스크롤바 숨기기",
 							"title": "스크롤바를 숨깁니다. 깔끔한 느낌을 받으시려면 키세요"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -700,6 +758,12 @@
 						"enable": {
 							"label": "유튜브 동영상 공유 링크 짧게하기",
 							"title": "si/feature 매개 변수를 제거하여 유튜브 동영상 공유 링크를 단축(youtu.be)"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"shortsAutoScroll": {
