@@ -374,6 +374,16 @@
 				},
 				"title": "Özel CSS Ayarları"
 			},
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
+				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				}
+			},
 			"deepDarkCSS": {
 				"enable": {
 					"label": "Seçilen temayı etkinleştir",
@@ -546,10 +556,22 @@
 							"title": "Her zaman varsayılan olarak orijinal ses parçasına dön"
 						}
 					},
+					"hideAutoplayButton": {
+						"enable": {
+							"label": "Hide autoplay button",
+							"title": "Hides the autoplay toggle button from the player controls"
+						}
+					},
 					"hideArtificialIntelligence": {
 						"enable": {
 							"label": "Hide AI",
 							"title": "Hides AI-powered features, such as video summaries and Ask AI"
+						}
+					},
+					"hideAskForVideos": {
+						"enable": {
+							"label": "Hide 'Ask for videos'",
+							"title": "Hides the 'Ask for videos any way you like' prompt in search results"
 						}
 					},
 					"hideEndScreenCards": {
@@ -562,6 +584,24 @@
 						"enable": {
 							"label": "Bitiş ekranı kartlarını gizleme düğmesi",
 							"title": "Video'nun sonuna bitiş ekranı kartlarını gizlemek/göstermek için bir düğme ekler"
+						}
+					},
+					"hideDuplicateChapterTitle": {
+						"enable": {
+							"label": "Hide duplicate chapter title",
+							"title": "Hides the duplicate chapter title that appears truncated in the chapter list"
+						}
+					},
+					"hideFullscreenButton": {
+						"enable": {
+							"label": "Hide fullscreen button",
+							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
@@ -600,6 +640,18 @@
 							"title": "Tüm oynatılabilir öğeleri gizle"
 						}
 					},
+					"hidePlayButtonTooltip": {
+						"enable": {
+							"label": "Hide play button tooltip",
+							"title": "Hides the tooltip that appears when hovering over the play button"
+						}
+					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos at the bottom of playlists"
+						}
+					},
 					"hidePlaylistRecommendationsFromHomePage": {
 						"enable": {
 							"label": "Ana sayfadaki oynatma listelerini gizle",
@@ -610,6 +662,12 @@
 						"enable": {
 							"label": "Kaydırma çubuğu gizlemeyi etkinleştir",
 							"title": "Sayfa kaydırma çubuğunu gizler"
+						}
+					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
 						}
 					},
 					"hideSidebarRecommendedVideos": {
@@ -700,6 +758,12 @@
 						"enable": {
 							"label": "YouTube video paylaşım bağlantısını kısalt",
 							"title": "YouTube video paylaşım bağlantısını (youtu.be) si/feature parametrelerini çıkararak kısaltır"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"shortsAutoScroll": {
