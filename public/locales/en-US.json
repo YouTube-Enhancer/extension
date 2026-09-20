@@ -50,6 +50,12 @@
 						}
 					}
 				},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
+						}
+					},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Hide end screen cards",
@@ -562,6 +568,12 @@
 						"enable": {
 							"label": "Hide end screen cards",
 							"title": "Hides the cards at the end of the video"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideEndScreenCardsButton": {
