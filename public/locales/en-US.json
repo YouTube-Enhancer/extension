@@ -570,6 +570,12 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"hidePlaylistRecommendations": {
+						"enable": {
+							"label": "Hide playlist recommendations",
+							"title": "Hides recommended videos and playlists on playlist pages"
+						}
+					},
 					"hideVideoDuration": {
 						"enable": {
 							"label": "Hide video duration",
