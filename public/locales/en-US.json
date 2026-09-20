@@ -570,6 +570,12 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
+						}
+					},
 					"hideLiveStreamChat": {
 						"enable": {
 							"label": "Hide live stream chat",
