@@ -1,0 +1,6 @@
+body.yte-hide-playlist-recommendations {
+	ytd-two-column-browse-results-renderer[page-subtype="playlist"] ytd-item-section-renderer[is-playlist-video-container],
+	ytd-two-column-browse-results-renderer[page-subtype="playlist"] ytd-item-section-header-renderer[title-style="ITEM_SECTION_HEADER_TITLE_STYLE_PLAYLIST_RECOMMENDATIONS"] {
+		display: none !important;
+	}
+}
