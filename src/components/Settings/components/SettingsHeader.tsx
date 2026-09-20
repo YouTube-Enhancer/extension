@@ -1,3 +1,4 @@
+import DonateCta from "@/src/components/Settings/components/DonateCta";
 import SettingSearch from "@/src/components/Settings/components/SettingSearch";
 import { useSettings } from "@/src/components/Settings/Settings";
 
@@ -12,6 +13,7 @@ export default function SettingHeader() {
 				YouTube Enhancer
 				<small className="light text-xs sm:text-sm md:text-base">v{chrome.runtime.getManifest().version}</small>
 			</h1>
+			<DonateCta />
 			<SettingSearch />
 		</div>
 	);
