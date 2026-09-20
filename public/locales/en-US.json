@@ -570,6 +570,12 @@
 							"title": "Adds a button to show/hide the cards at the end of the video"
 						}
 					},
+					"hideVideoDuration": {
+						"enable": {
+							"label": "Hide video duration",
+							"title": "Hides the duration overlay on video thumbnails"
+						}
+					},
 					"hideFullscreenButton": {
 						"enable": {
 							"label": "Hide fullscreen button",
