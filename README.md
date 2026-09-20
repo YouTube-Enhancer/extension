@@ -34,10 +34,10 @@ The YouTube Enhancer Extension is a powerful browser extension designed to enhan
 YouTube Enhancer is a browser extension that aims to improve your YouTube experience by providing a set of customizable features and enhancements. Whether you want to fine-tune your video settings, improve navigation, or simplify common tasks, this extension has you covered.
 <!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->
 
-## 🎛️ Features • 71 features
+## 🎛️ Features • 72 features
 
 <details>
-<summary>Miscellaneous • 42 features</summary>
+<summary>Miscellaneous • 43 features</summary>
 
 - **Automatic Theater Mode**: Automatically enables theater mode when you load a video
 - **Automatically Disable Ambient Mode**: Automatically disables ambient mode when you load a video
@@ -52,6 +52,7 @@ YouTube Enhancer is a browser extension that aims to improve your YouTube experi
 - **Flip Video Horizontally Button**: Adds a button to flip the video horizontally
 - **Flip Video Vertically Button**: Adds a button to flip the video vertically
 - **Hide AI**: Hides AI-powered features, such as video summaries and Ask AI
+- **Hide Autoplay Button**: Hides the autoplay toggle button from the player controls
 - **Hide End Screen Cards**: Hides the cards at the end of the video
 - **Hide End Screen Cards Button**: Adds a button to show/hide the cards at the end of the video
 - **Hide Recommended Videos On Endscreen**: Hides the suggested videos that appear on the endscreen
