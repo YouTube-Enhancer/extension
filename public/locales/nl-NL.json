@@ -377,6 +377,17 @@
 	"settings": {
 		"sections": {
 			"customCSS": {
+				"customFontFamily": {
+					"enable": {
+						"label": "Custom font family",
+						"title": "Changes the font family used across YouTube"
+					},
+					"fontFamily": {
+						"label": "Font family",
+						"title": "The CSS font-family value to apply"
+					},
+					"title": "Custom font family settings"
+				},
 				"enable": {
 					"label": "Aangepaste CSS inschakelen",
 					"title": "Maakt het mogelijk aangepaste CSS toe te passen op de pagina"
@@ -588,22 +599,6 @@
 						"enable": {
 							"label": "Eindscherm elementen verbergen knop",
 							"title": "Voegt een knop toe die de eindscherm elementen toont/verbergt"
-						}
-					},
-					"customFontFamily": {
-						"enable": {
-							"label": "Custom font family",
-							"title": "Changes the font family used across YouTube"
-						},
-						"fontFamily": {
-							"label": "Font family",
-							"title": "The CSS font-family value to apply"
-						}
-					},
-					"sharpCorners": {
-						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
