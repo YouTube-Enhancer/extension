@@ -50,12 +50,6 @@
 						}
 					}
 				},
-				"hideNextButton": {
-					"enable": {
-						"label": "Hide next button",
-						"title": "Hides the next video button from the player controls"
-					}
-				},
 				"hideEndScreenCardsButton": {
 					"button": {
 						"label": "Dölj slutskärmskort",
@@ -376,18 +370,18 @@
 	},
 	"settings": {
 		"sections": {
-			"customCSS": {
-				"customFontFamily": {
-					"enable": {
-						"label": "Custom font family",
-						"title": "Changes the font family used across YouTube"
-					},
-					"fontFamily": {
-						"label": "Font family",
-						"title": "The CSS font-family value to apply"
-					},
-					"title": "Custom font family settings"
+			"customFontFamily": {
+				"enable": {
+					"label": "Custom font family",
+					"title": "Changes the font family used across YouTube"
 				},
+				"fontFamily": {
+					"label": "Font family",
+					"title": "The CSS font-family value to apply"
+				},
+				"title": "Custom font family settings"
+			},
+			"customCSS": {
 				"enable": {
 					"label": "Anpassad CSS",
 					"title": "Aktiverar anpassad CSS som ska användas på sidan"
@@ -589,16 +583,16 @@
 							"title": "Döljer korten i slutet av videon"
 						}
 					},
-					"hideNextButton": {
-						"enable": {
-							"label": "Hide next button",
-							"title": "Hides the next video button from the player controls"
-						}
-					},
 					"hideEndScreenCardsButton": {
 						"enable": {
 							"label": "Dölj knappen för slutskärmskort",
 							"title": "Lägger till en knapp för att visa/dölja korten i slutet av videon"
+						}
+					},
+					"sharpCorners": {
+						"enable": {
+							"label": "Sharp corners",
+							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
@@ -617,6 +611,12 @@
 						"enable": {
 							"label": "Hide fullscreen button",
 							"title": "Hides the fullscreen button from the player controls"
+						}
+					},
+					"hideNextButton": {
+						"enable": {
+							"label": "Hide next button",
+							"title": "Hides the next video button from the player controls"
 						}
 					},
 					"hideLiveStreamChat": {
