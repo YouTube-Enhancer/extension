@@ -377,6 +377,17 @@
 	"settings": {
 		"sections": {
 			"customCSS": {
+				"customFontFamily": {
+					"enable": {
+						"label": "Custom font family",
+						"title": "Changes the font family used across YouTube"
+					},
+					"fontFamily": {
+						"label": "Font family",
+						"title": "The CSS font-family value to apply"
+					},
+					"title": "Custom font family settings"
+				},
 				"enable": {
 					"label": "Habilitar CSS personalizado",
 					"title": "Permite aplicar CSS personalizado a la página"
@@ -588,22 +599,6 @@
 						"enable": {
 							"label": "Botón para ocultar las tarjetas de pantalla final",
 							"title": "Añade un botón para mostrar/ocultar las tarjetas al final del vídeo"
-						}
-					},
-					"customFontFamily": {
-						"enable": {
-							"label": "Custom font family",
-							"title": "Changes the font family used across YouTube"
-						},
-						"fontFamily": {
-							"label": "Font family",
-							"title": "The CSS font-family value to apply"
-						}
-					},
-					"sharpCorners": {
-						"enable": {
-							"label": "Sharp corners",
-							"title": "Removes border-radius from YouTube elements for a sharp corners look"
 						}
 					},
 					"hidePlaylistRecommendations": {
