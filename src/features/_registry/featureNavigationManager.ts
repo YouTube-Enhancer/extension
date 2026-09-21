@@ -13,10 +13,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private currentNavigationSignature: Nullable<string> = null;
 	private currentPage: Nullable<string> = null;
 	private isInitialized = false;
+	private navigating = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
 	private navigationPatched = false;
-	private navigating = false;
 	// Store original history methods and their wrappers for proper cleanup
 	private pushStateWrapper?: { original: typeof history.pushState; wrapper: () => void };
 	private replaceStateWrapper?: { original: typeof history.replaceState; wrapper: () => void };
