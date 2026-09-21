@@ -261,6 +261,7 @@ export type configuration = {
 	hideEndScreenCardsButton: {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
 	};
+	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideLiveStreamChat: { enabled: boolean };
 	hideMembersOnlyVideos: { enabled: boolean };
 	hideNextButton: { enabled: boolean };
