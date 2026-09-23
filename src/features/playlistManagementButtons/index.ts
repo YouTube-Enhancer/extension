@@ -99,7 +99,7 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(playlistId, setVideoId);
+							await removeFromPlaylist(playlistId, [setVideoId]);
 							await addRemoveAllButton();
 						},
 						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToRemoveVideo,
@@ -208,14 +208,18 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 					const playlistId = getPlaylistId()!;
 					const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 
+					const setVideoIds: string[] = [];
 					for (const item of playlistItems) {
 						const progressWidth = getWatchedPercentage(item);
 						if (progressWidth === 100) {
 							const {
 								data: { setVideoId }
 							} = item as YTDPlaylistVideoRenderer;
-							await removeFromPlaylist(playlistId, setVideoId);
+							setVideoIds.push(setVideoId);
 						}
+					}
+					if (setVideoIds.length > 0) {
+						await removeFromPlaylist(playlistId, setVideoIds);
 					}
 				} catch (error) {
 					console.error("Failed to remove watched videos:", error);
