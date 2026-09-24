@@ -425,22 +425,23 @@ export async function enableFeatureMenuButton() {
 			}
 		}
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	await waitForAllElements([menuId, menuButtonId]);
-
-	cleanupFeatureMenuListeners = () => {
-		window.removeEventListener("resize", updateMenuPosition);
-		window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-		resizeObserver.disconnect();
-	};
-	const listenersCleanup = setupFeatureMenuEventListeners(openType);
-	const origCleanup = cleanupFeatureMenuListeners;
-	cleanupFeatureMenuListeners = () => {
-		window.removeEventListener("resize", updateMenuPosition);
-		window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-		resizeObserver.disconnect();
-		listenersCleanup();
-		origCleanup?.();
-	};
+	void waitForAllElements([menuId, menuButtonId]).then(() => {
+		cleanupFeatureMenuListeners = () => {
+			window.removeEventListener("resize", updateMenuPosition);
+			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
+			resizeObserver.disconnect();
+		};
+		const listenersCleanup = setupFeatureMenuEventListeners(openType);
+		const origCleanup = cleanupFeatureMenuListeners;
+		cleanupFeatureMenuListeners = () => {
+			window.removeEventListener("resize", updateMenuPosition);
+			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
+			resizeObserver.disconnect();
+			listenersCleanup();
+			origCleanup?.();
+		};
+		return undefined;
+	});
 }
 
 export function getEffectivePlacement(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement): ButtonPlacement {
