@@ -7,15 +7,35 @@ type WaitMode = "optional" | "required";
 /**
  * Wait for all elements to appear in the document.
  *
+ * Resolves as soon as every selector matches, or after exhausting retries.
+ * The MutationObserver catches fast-appearing elements; the retry loop catches
+ * elements that arrive slowly (e.g. after YouTube SPA routing settles).
+ *
  * @param selectors - Array of CSS selectors for the elements to wait for.
- * @param timeout - Max time (ms) to wait before giving up. Default: 15s.
- * @returns Promise that resolves with an array of the matching elements.
+ * @param timeout   - ms to wait between retries. Default: 5000.
+ * @param retries   - How many additional attempts after the first check. Default: 5.
+ *                    Total max wait = timeout × (retries + 1) = 30 s with defaults.
+ * @returns Promise that resolves with a (possibly sparse) array of the matching elements.
  */
-export async function waitForAllElements(selectors: Selector[], timeout = 15000): Promise<Element[]> {
+export async function waitForAllElements(selectors: Selector[], timeout = 5000, retries = 5): Promise<Element[]> {
 	browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const foundElements: Element[] = [];
-		const observer = new MutationObserver(() => {
+		let resolved = false;
+
+		const finish = () => {
+			if (resolved) return;
+			resolved = true;
+			observer.disconnect();
+			clearTimeout(retryTimer);
+			const missing = selectors.filter((_, i) => !foundElements[i]);
+			if (missing.length) {
+				console.warn(`[waitForAllElements] Gave up after ${retries + 1} attempts — missing: ${missing.join(", ")}`);
+			}
+			resolve(foundElements);
+		};
+
+		const check = () => {
 			for (let i = 0; i < selectors.length; i++) {
 				if (!foundElements[i]) {
 					const el = document.querySelector(selectors[i]);
@@ -23,31 +43,31 @@ export async function waitForAllElements(selectors: Selector[], timeout = 15000)
 				}
 			}
 			if (foundElements.length === selectors.length && foundElements.every(Boolean)) {
-				observer.disconnect();
-				resolve(foundElements);
+				finish();
 			}
-		});
+		};
 
+		const observer = new MutationObserver(check);
 		observer.observe(document.body, { childList: true, subtree: true });
 
-		// Check immediately in case elements are already present
-		for (let i = 0; i < selectors.length; i++) {
-			if (!foundElements[i]) {
-				const el = document.querySelector(selectors[i]);
-				if (el) foundElements[i] = el;
-			}
-		}
-		if (foundElements.length === selectors.length && foundElements.every(Boolean)) {
-			observer.disconnect();
-			resolve(foundElements);
-		}
+		let retryTimer: ReturnType<typeof setTimeout>;
+		let attempts = 0;
 
-		setTimeout(() => {
-			observer.disconnect();
-			const missing = selectors.filter((_, i) => !foundElements[i]);
-			if (missing.length) reject(new Error(`Timeout: Missing selectors: ${missing.join(", ")}`));
-			else resolve(foundElements);
-		}, timeout);
+		const scheduleRetry = () => {
+			if (attempts >= retries || resolved) {
+				finish();
+				return;
+			}
+			attempts++;
+			retryTimer = setTimeout(() => {
+				check();
+				if (!resolved) scheduleRetry();
+			}, timeout);
+		};
+
+		// Immediate check
+		check();
+		if (!resolved) scheduleRetry();
 	});
 }
 export function waitForElement<T extends Element>(selector: string, mode?: WaitMode): Promise<Nullable<T>>;
