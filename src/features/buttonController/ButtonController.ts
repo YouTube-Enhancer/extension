@@ -77,7 +77,14 @@ function ensureContainerPosition() {
 		if (columns) parent.insertBefore(container, columns);
 	} else {
 		const player = expectedParent?.querySelector("#player");
-		if (player) player.insertAdjacentElement("afterend", container);
+		if (player) {
+			player.insertAdjacentElement("afterend", container);
+		} else {
+			requestAnimationFrame(() => {
+				ensureContainerPosition();
+			});
+			return;
+		}
 	}
 	syncContainerGeometry();
 }
@@ -170,10 +177,17 @@ async function startTheaterModeObserver() {
 	if (theaterModeObserver) return;
 	const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 	if (!sizeButton) return;
-	theaterModeObserver = new MutationObserver(() => {
-		ensureContainerPosition();
-	});
+	const scheduleReposition = () => {
+		requestAnimationFrame(() => {
+			ensureContainerPosition();
+		});
+	};
+	theaterModeObserver = new MutationObserver(scheduleReposition);
 	theaterModeObserver.observe(sizeButton, { attributeFilter: ["class"], attributes: true, childList: true, subtree: true });
+	const watchElement = document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
+	if (watchElement) {
+		theaterModeObserver.observe(watchElement, { attributeFilter: ["theater"], attributes: true });
+	}
 	theaterNavigationHandler = () => {
 		stopTheaterModeObserver();
 		stopContainerGeometryObserver();
