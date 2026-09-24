@@ -38,16 +38,18 @@ function setTimestampObserver(observer: MutationObserver) {
 	timestampElementObserver = observer;
 }
 
-async function setupTimestampPeek() {
-	await waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]);
-	const videoHref = getVideoHref();
-	if (!videoHref) return;
-	eventManager.removeEventListeners("timestampPeek");
-	document.addEventListener("yt-navigate-start", navigateStartHandler);
-	cleanupTimestampObserver();
-	await handleTimestampElementsHover();
-	const obs = await observeTimestampElements();
-	if (obs) setTimestampObserver(obs);
+function setupTimestampPeek() {
+	void waitForAllElements(["#movie_player", "#player-container", "#player-container-outer"]).then(async () => {
+		const videoHref = getVideoHref();
+		if (!videoHref) return;
+		eventManager.removeEventListeners("timestampPeek");
+		document.addEventListener("yt-navigate-start", navigateStartHandler);
+		cleanupTimestampObserver();
+		await handleTimestampElementsHover();
+		const obs = await observeTimestampElements();
+		if (obs) setTimestampObserver(obs);
+		return undefined;
+	});
 }
 
 export default createFeature({
