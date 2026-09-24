@@ -279,10 +279,7 @@ export default createFeature({
 	onNavigate: ({ channelSpeeds, speed }) => {
 		const sessionSpeed = getSessionSpeed();
 		const effectiveSpeed = sessionSpeed ?? speed;
-		browserColorLog(
-			`Setting player speed to ${effectiveSpeed} (navigation${sessionSpeed !== null ? ", session override" : ""})`,
-			"FgMagenta"
-		);
+		browserColorLog(`Setting player speed to ${effectiveSpeed} (navigation${sessionSpeed !== null ? ", session override" : ""})`, "FgMagenta");
 		enforcedConfig = { channelSpeeds, speed: effectiveSpeed };
 		void setupRateChangeListener();
 		clearManualOverride();
