@@ -257,14 +257,7 @@ export type KeyValueListSettingConfig<F extends FeatureKeys> = BaseSettingConfig
 export type MustContainEnabled<T> = ContainsEnabled<T> extends true ? T : never;
 
 export type NavigationType =
-	| `history`
-	| `home`
-	| `library`
-	| `playlist:${string}`
-	| `shorts:${string}`
-	| `subscriptions`
-	| `watch:${string}`
-	| (string & {});
+	`history` | `home` | `library` | `playlist:${string}` | `shorts:${string}` | `subscriptions` | `watch:${string}` | (string & {});
 
 export type NonFeatureKeys = Exclude<configurationKeys, CoreFeatureKeys | FeatureKeys>;
 
