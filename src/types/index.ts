@@ -262,6 +262,8 @@ export type configuration = {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
 	};
 	hideEndscreenRecommendedVideos: { enabled: boolean };
+	hideEndscreenRecommendedVideos: { enabled: boolean };
+	hideFullscreenButton: { enabled: boolean };
 	hideLiveStreamChat: { enabled: boolean };
 	hideMembersOnlyVideos: { enabled: boolean };
 	hideNextButton: { enabled: boolean };
@@ -281,8 +283,6 @@ export type configuration = {
 		videos: { enabled: boolean };
 	};
 	hideSidebarRecommendedVideos: { enabled: boolean };
-	hideEndscreenRecommendedVideos: { enabled: boolean };
-	hideFullscreenButton: { enabled: boolean };
 	hideTranslateComment: { enabled: boolean };
 	hideVideoDuration: { enabled: boolean };
 	keywordBlocklist: { enabled: boolean; keywords: string };
