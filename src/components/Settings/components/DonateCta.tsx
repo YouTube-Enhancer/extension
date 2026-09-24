@@ -70,7 +70,7 @@ export default function DonateCta() {
 					</p>
 					<div className="grid gap-3 sm:grid-cols-4">
 						{donationOptions.map((option) => {
-							const Icon = option.icon;
+							const { icon: Icon } = option;
 							return (
 								<a
 									className={cn(

@@ -37,7 +37,7 @@ const manifestV3: Manifest.WebExtensionManifest = {
 		service_worker: "src/pages/background/index.js",
 		type: "module"
 	},
-		content_scripts: [
+	content_scripts: [
 		{
 			all_frames: false,
 			css: ["contentStyle.css"],

@@ -29,13 +29,13 @@ export default createFeature({
 		const cardsAreHidden = enabled;
 		updateHideEndScreenCardsButtonState(placement, hideEndScreenCardsIcon, cardsAreHidden);
 	},
-	onDisable: async () => {
+	onDisable: () => {
 		modifyElementClassList("remove", {
 			className: "yte-hide-end-screen-cards",
 			element: document.body
 		});
 	},
-	onEnable: async () => {
+	onEnable: () => {
 		modifyElementClassList("add", {
 			className: "yte-hide-end-screen-cards",
 			element: document.body

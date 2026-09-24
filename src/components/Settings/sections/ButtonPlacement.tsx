@@ -89,8 +89,7 @@ function getFullscreenPlacementPath(
 	const featureId = metadataRegistry.getButtonFeature(buttonName)!;
 	const configPath = metadataRegistry.getButtonConfigPath(buttonName)!;
 	return `${featureId}.${configPath}.fullscreenPlacement` as
-		| (`${string}.button.fullscreenPlacement` & Path<configuration>)
-		| (`${string}.buttons.${string}.fullscreenPlacement` & Path<configuration>);
+		(`${string}.button.fullscreenPlacement` & Path<configuration>) | (`${string}.buttons.${string}.fullscreenPlacement` & Path<configuration>);
 }
 function getPlacementPath(
 	buttonName: AllButtonNames
@@ -98,6 +97,5 @@ function getPlacementPath(
 	const featureId = metadataRegistry.getButtonFeature(buttonName)!;
 	const configPath = metadataRegistry.getButtonConfigPath(buttonName)!;
 	return `${featureId}.${configPath}.placement` as
-		| (`${string}.button.placement` & Path<configuration>)
-		| (`${string}.buttons.${string}.placement` & Path<configuration>);
+		(`${string}.button.placement` & Path<configuration>) | (`${string}.buttons.${string}.placement` & Path<configuration>);
 }
