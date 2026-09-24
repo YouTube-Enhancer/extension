@@ -401,3 +401,6 @@ package-lock.json
 /playwright-data/
 /playwright-downloads/
 .VSCodeCounter/
+
+# zvec-grep workspace index
+.zvec-grep/
