@@ -15,13 +15,12 @@ import {
 	youtubePlayerMaxSpeed,
 	youtubePlayerMinSpeed
 } from "@/src/types";
-import { getOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
-import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { type ModifyElementAction, modifyElementClassList } from "@/src/utils/dom/classList";
 import { preventScroll } from "@/src/utils/dom/events";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { clamp, round, toDivisible } from "@/src/utils/math";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
+import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { createWheelStepper, type WheelStepper } from "./stepper";
@@ -116,7 +115,8 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	const { speed: speedConfig } = controlConfigs;
 	const snapshotOptions = optionsSnapshot?.data.options;
 	if (!speedConfig || !snapshotOptions) return;
-	const onScreenDisplay = getOnScreenDisplayConfig() ?? snapshotOptions.onScreenDisplay;
+	const onScreenDisplay = getOSDConfig(snapshotOptions.onScreenDisplay);
+	if (!onScreenDisplay) return;
 	let {
 		playbackSpeedButtons: { speed: speedPerClick }
 	} = snapshotOptions;
@@ -129,12 +129,12 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	if (newSpeed === videoElement.playbackRate) return;
 	await setPlayerSpeed(newSpeed);
 	await updatePlaybackSpeedButtonTooltips(newSpeed, speedPerClick);
-	showOnScreenDisplay(onScreenDisplay, runtime.playerContainer, { max: youtubePlayerMaxSpeed, type: "speed", value: newSpeed });
+	showOSD(onScreenDisplay, runtime.playerContainer, { max: youtubePlayerMaxSpeed, type: "speed", value: newSpeed }, "text");
 }
 
 async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const { volume: volumeConfig } = controlConfigs;
-	const onScreenDisplay = getOnScreenDisplayConfig() ?? optionsSnapshot?.data.options.onScreenDisplay;
+	const onScreenDisplay = getOSDConfig(optionsSnapshot?.data.options.onScreenDisplay);
 	if (!volumeConfig || !onScreenDisplay) return;
 	const { playerContainer } = runtime;
 	if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;
@@ -142,7 +142,7 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const newVolume = clamp(toDivisible(volume + steps * volumeConfig.steps, volumeConfig.steps), 0, 100);
 	await playerContainer.setVolume(newVolume);
 	if (isMuted) await playerContainer.unMute();
-	showOnScreenDisplay(onScreenDisplay, playerContainer, { max: 100, type: "volume", value: newVolume });
+	showOSD(onScreenDisplay, playerContainer, { max: 100, type: "volume", value: newVolume });
 }
 
 /**
@@ -283,27 +283,6 @@ function rebuildDispatchConfig() {
 		volumeHoldRightClick: volumeConfig.holdRightClick,
 		volumeModifierKey: volumeConfig.modifierKey
 	};
-}
-
-function showOnScreenDisplay(
-	onScreenDisplay: OptionsData["data"]["options"]["onScreenDisplay"],
-	playerContainer: YouTubePlayerDiv,
-	displayValue: { max: number; type: "speed" | "volume"; value: number }
-) {
-	const { color, hideTime, opacity, padding, position, type } = onScreenDisplay;
-	new OnScreenDisplayManager(
-		{
-			displayColor: color,
-			displayHideTime: hideTime,
-			displayOpacity: opacity,
-			displayPadding: padding,
-			displayPosition: position,
-			displayType: type,
-			playerContainer
-		},
-		"yte-osd",
-		displayValue
-	);
 }
 
 function toggleContextMenuVisibility(action: ModifyElementAction) {
