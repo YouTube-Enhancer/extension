@@ -262,7 +262,6 @@ export type configuration = {
 		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
 	};
 	hideEndscreenRecommendedVideos: { enabled: boolean };
-	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideFullscreenButton: { enabled: boolean };
 	hideLiveStreamChat: { enabled: boolean };
 	hideMembersOnlyVideos: { enabled: boolean };
