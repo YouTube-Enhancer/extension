@@ -1,6 +1,5 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
+import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type Nullable } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
@@ -134,11 +133,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "screenshotButton",
-			remove: async (placement) => {
-				await removeFeatureButton("screenshotButton", placement);
-				eventManager.removeEventListeners("screenshotButton");
-			}
+			name: "screenshotButton"
 		}
 	]
 });

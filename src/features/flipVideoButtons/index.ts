@@ -1,5 +1,5 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
+import { addFeatureButton } from "@/src/features/buttonController";
 import { flipVideoVertical } from "@/src/features/flipVideoButtons/utils";
 import { getFeatureIcon } from "@/src/icons";
 
@@ -26,10 +26,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "flipVideoHorizontalButton",
-			remove: async (placement) => {
-				await removeFeatureButton("flipVideoHorizontalButton", placement);
-			}
+			name: "flipVideoHorizontalButton"
 		},
 		{
 			add: async ({
@@ -48,10 +45,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "flipVideoVerticalButton",
-			remove: async (placement) => {
-				await removeFeatureButton("flipVideoVerticalButton", placement);
-			}
+			name: "flipVideoVerticalButton"
 		}
 	]
 });

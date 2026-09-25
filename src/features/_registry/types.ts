@@ -116,11 +116,18 @@ export type FeatureButton<K extends FeatureKeys = FeatureKeys> = {
 	 */
 	name: K extends FeatureKeysWithButtons ? ButtonsForFeature<K> : never;
 	/**
-	 * Removes a button from the feature
+	 * Optional custom cleanup beyond the default (removeFeatureButton + removeEventListeners).
+	 * Runs after the default cleanup.
+	 * @param {ButtonPlacement} placement - The placement of the button being removed.
+	 * @returns A promise that resolves when custom cleanup has finished.
+	 */
+	onRemove?: (placement?: ButtonPlacement) => MaybePromise<void>;
+	/**
+	 * Overrides the default remove behavior entirely.
 	 * @param {ButtonPlacement} placement - The placement of the button to remove.
 	 * @returns A promise that resolves when the button has been removed.
 	 */
-	remove: (placement?: ButtonPlacement) => Promise<void>;
+	remove?: (placement?: ButtonPlacement) => Promise<void>;
 	/**
 	 * Checks if the feature should render a button
 	 * @param {configuration[K]} config - The configuration to check.

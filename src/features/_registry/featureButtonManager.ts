@@ -1,7 +1,8 @@
 import type { AnyFeatureBase, ButtonTrackedState, FeatureButton, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
-import { checkIfFeatureButtonExists, updateTrackedButtonConfig } from "@/src/features/buttonController";
+import eventManager from "@/src/events/EventManager";
+import { checkIfFeatureButtonExists, removeFeatureButton, updateTrackedButtonConfig } from "@/src/features/buttonController";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
@@ -102,7 +103,13 @@ class FeatureButtonManager extends FeatureManagerBase {
 						id,
 						"buttons:remove",
 						async () => {
-							await btn.remove(prevState.placement);
+							if (btn.remove) {
+								await btn.remove(prevState.placement);
+							} else {
+								await removeFeatureButton(btn.name, prevState.placement);
+								eventManager.removeEventListeners(id);
+								await btn.onRemove?.(prevState.placement);
+							}
 						},
 						{
 							shouldRethrow: true
