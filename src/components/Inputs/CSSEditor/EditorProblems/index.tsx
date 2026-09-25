@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 
 import type { TFunction } from "@/src/pipeline/utils";
+import type { Nullable } from "@/src/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
-import { type Nullable } from "@/src/types";
 import { type editor, MarkerSeverity } from "@/src/utils/monaco";
 import { cn } from "@/src/utils/style";
 

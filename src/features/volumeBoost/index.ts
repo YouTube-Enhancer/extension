@@ -1,8 +1,9 @@
+import type { YouTubePlayerDiv } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, getFeatureButton, getFeatureIds, getFeatureMenuItem, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type YouTubePlayerDiv } from "@/src/types";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";

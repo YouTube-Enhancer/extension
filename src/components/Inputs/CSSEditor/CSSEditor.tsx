@@ -1,11 +1,12 @@
-import { type Monaco } from "@monaco-editor/react";
+import type { Monaco } from "@monaco-editor/react";
+
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
 
 import type { TFunction } from "@/src/pipeline/utils";
+import type { Nullable } from "@/src/types";
+import type { editor } from "@/src/utils/monaco";
 
 import useDebounceFn from "@/src/hooks/useDebounce";
-import { type Nullable } from "@/src/types";
-import { type editor } from "@/src/utils/monaco";
 import { cn } from "@/src/utils/style";
 
 import { editorOptions } from "./editorOptions";

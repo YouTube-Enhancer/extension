@@ -1,3 +1,5 @@
+import type { ButtonPlacement, Nullable } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import {
 	addFeatureButton,
@@ -8,7 +10,6 @@ import {
 } from "@/src/features/buttonController";
 import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type Nullable } from "@/src/types";
 
 import { metadata } from "./index.metadata";
 

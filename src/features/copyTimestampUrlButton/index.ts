@@ -1,7 +1,8 @@
+import type { ButtonPlacement } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 
 import { metadata } from "./index.metadata";

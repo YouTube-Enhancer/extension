@@ -1,5 +1,6 @@
+import type { Nullable } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { type Nullable } from "@/src/types";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";

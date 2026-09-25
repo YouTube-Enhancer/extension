@@ -99,6 +99,7 @@
 		"import/no-named-as-default": "warn",
 		"import/no-named-as-default-member": "off",
 		"import/no-duplicates": "warn",
+		"import/consistent-type-specifier-style": ["error", "prefer-top-level-if-only-type-imports"],
 		// eslint-plugin-promise flat/recommended
 		"promise/always-return": "error",
 		"promise/no-return-wrap": "error",
@@ -215,6 +216,7 @@
 				"typescript/triple-slash-reference": "error",
 				"typescript/unbound-method": "error",
 				// Project rules
+				"typescript/consistent-type-imports": ["error", { "disallowTypeAnnotations": false }],
 				"import/first": "error",
 				"no-empty": ["error", { "allowEmptyCatch": true }],
 				"no-secrets/no-secrets": ["error", { "tolerance": 5 }],

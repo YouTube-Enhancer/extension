@@ -1,6 +1,7 @@
+import type { Nullable } from "@/src/types";
+
 import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { type Nullable } from "@/src/types";
 import { browserColorLog } from "@/src/utils/logging";
 
 import { metadata } from "./index.metadata";

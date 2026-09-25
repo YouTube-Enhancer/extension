@@ -1,7 +1,8 @@
+import type { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
+
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "@/src/features/deepDarkCSS/utils";
 import { resolveContrastColor } from "@/src/utils/color";
-import { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 export function fallback(isDarkMode: boolean) {
