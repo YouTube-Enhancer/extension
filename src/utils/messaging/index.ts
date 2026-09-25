@@ -122,15 +122,25 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
  * @param action - The action of the message.
  * @param source - The source of the message.
  * @param data - Optional message data.
+ * @param options - Optional settings: timeout in ms (default 30s), AbortSignal for cancellation.
  */
 export function waitForSpecificMessage<T extends keyof MessageMappings, S extends MessageSource, D>(
 	type: T,
 	action: MessageMappings[T]["request"]["action"],
 	source: S,
-	data?: D
+	data?: D,
+	options?: { signal?: AbortSignal; timeout?: number }
 ): Promise<MessageMappings[T]["response"]> {
+	const { signal, timeout = 30_000 } = options ?? {};
 	const requestMessage = { action, data, origin: MESSAGE_ORIGIN, source, type };
-	return new Promise<MessageMappings[T]["response"]>((resolve) => {
+	return new Promise<MessageMappings[T]["response"]>((resolve, reject) => {
+		if (signal?.aborted) {
+			reject(new Error("Aborted", { cause: signal.reason }));
+			return;
+		}
+
+		let timer: ReturnType<typeof setTimeout> | undefined;
+
 		const listener = (event: MessageEvent) => {
 			if (event.source !== window) return;
 			const response = event.data as Messages["response"];
@@ -148,13 +158,34 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 						Object.entries(data).every(([key, value]) => (key in response.data ? response.data[key] === value : false)));
 
 				if (matchesType && matchesAction && matchesSource && matchesData) {
-					window.removeEventListener("message", listener);
+					cleanup();
 					resolve(response);
 				}
 			} catch {
 				// Ignore invalid messages
 			}
 		};
+
+		const cleanup = () => {
+			window.removeEventListener("message", listener);
+			if (timer !== undefined) clearTimeout(timer);
+			signal?.removeEventListener("abort", onAbort);
+		};
+
+		const onAbort = () => {
+			cleanup();
+			reject(new Error("Aborted", { cause: signal!.reason }));
+		};
+
+		if (signal) signal.addEventListener("abort", onAbort, { once: true });
+
+		if (timeout !== Infinity) {
+			timer = setTimeout(() => {
+				cleanup();
+				reject(new Error(`waitForSpecificMessage timed out after ${timeout}ms waiting for "${String(type)}"`));
+			}, timeout);
+		}
+
 		window.addEventListener("message", listener);
 		window.postMessage(requestMessage, "*");
 	});
