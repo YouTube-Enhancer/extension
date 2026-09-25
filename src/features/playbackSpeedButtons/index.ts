@@ -3,37 +3,17 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, checkIfFeatureButtonExists, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv, youtubePlayerMinSpeed } from "@/src/types";
-import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
+import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { round } from "@/src/utils/math";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
+import { getOSDConfig, showOSD } from "@/src/utils/osd";
+import { calculateAdjustedSpeed, getMinSpeed } from "@/src/utils/speed";
 
 import { metadata } from "./index.metadata";
 
 let currentPlaybackSpeed = 1;
 const maxSpeed = 16;
-export function calculatePlaybackButtonSpeed(speed: number, playbackSpeedPerClick: number, direction: "decrease" | "increase") {
-	if (!isFinite(speed) || !isFinite(playbackSpeedPerClick) || playbackSpeedPerClick <= 0) return isFinite(speed) ? speed : 1;
-	const minSpeed = getMinSpeed(playbackSpeedPerClick);
-	const calculatedSpeed =
-		speed >= maxSpeed && direction == "increase" ? maxSpeed
-		: (speed <= minSpeed || speed - playbackSpeedPerClick <= 0) && direction == "decrease" ? minSpeed
-		: direction == "decrease" ? speed - playbackSpeedPerClick
-		: speed + playbackSpeedPerClick;
-	return round(calculatedSpeed, 2);
-}
-
-export function getMinSpeed(playbackSpeedPerClick: number) {
-	return (
-		playbackSpeedPerClick == 0.25 ? 0.25
-		: playbackSpeedPerClick >= 0.01 && playbackSpeedPerClick <= 0.09 ? 0.07
-		: playbackSpeedPerClick == 0.1 ? 0.01
-		: playbackSpeedPerClick == 1 ? 1
-		: youtubePlayerMinSpeed
-	);
-}
 export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: number, playbackSpeedPerClick: number) {
 	if (!isFinite(currentPlaybackSpeed) || !isFinite(playbackSpeedPerClick) || playbackSpeedPerClick <= 0) return;
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
@@ -57,7 +37,7 @@ export async function updatePlaybackSpeedButtonTooltips(currentPlaybackSpeed: nu
 		// Resolved after the options request: a relocation or navigation that ran meanwhile has replaced the button.
 		const button = getFeatureButton(buttonName);
 		if (!button) continue;
-		const speed = calculatePlaybackButtonSpeed(currentPlaybackSpeed, playbackSpeedPerClick, direction);
+		const speed = calculateAdjustedSpeed(currentPlaybackSpeed, playbackSpeedPerClick, direction);
 		const { update } = createTooltip({
 			direction: placement === "below_player" ? "down" : "up",
 			element: button,
@@ -91,7 +71,7 @@ async function addPlaybackSpeedButton(
 	await addFeatureButton(
 		buttonName,
 		placement,
-		getPlaybackButtonTitle(buttonName, currentPlaybackSpeed, minSpeed, calculatePlaybackButtonSpeed(currentPlaybackSpeed, speed, direction)),
+		getPlaybackButtonTitle(buttonName, currentPlaybackSpeed, minSpeed, calculateAdjustedSpeed(currentPlaybackSpeed, speed, direction)),
 		getFeatureIcon(buttonName, placement),
 		playbackSpeedButtonClickListener(speed, direction),
 		false,
@@ -124,47 +104,18 @@ function playbackSpeedButtonClickListener(playbackSpeedPerClick: number, directi
 		void (async () => {
 			const videoElement = document.querySelector<HTMLVideoElement>("video");
 			if (!videoElement) return;
-			const minSpeed = getMinSpeed(playbackSpeedPerClick);
-			const adjustmentAmount = direction === "increase" ? playbackSpeedPerClick : -playbackSpeedPerClick;
 			try {
 				({ playbackRate: currentPlaybackSpeed } = videoElement);
-				if (
-					!isFinite(currentPlaybackSpeed) ||
-					!isFinite(currentPlaybackSpeed + adjustmentAmount) ||
-					currentPlaybackSpeed + adjustmentAmount > maxSpeed ||
-					currentPlaybackSpeed + adjustmentAmount < minSpeed ||
-					currentPlaybackSpeed + adjustmentAmount <= 0
-				)
-					return;
+				const newSpeed = calculateAdjustedSpeed(currentPlaybackSpeed, playbackSpeedPerClick, direction);
+				if (newSpeed === currentPlaybackSpeed) return;
 				const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 				if (!playerContainer) return;
-				const {
-					data: {
-						options: {
-							onScreenDisplay: { color, hideTime, opacity, padding, position }
-						}
-					}
-				} = await waitForSpecificMessage("options", "request_data", "content");
-				new OnScreenDisplayManager(
-					{
-						displayColor: color,
-						displayHideTime: hideTime,
-						displayOpacity: opacity,
-						displayPadding: padding,
-						displayPosition: position,
-						displayType: "text", // TODO: support for line/round? currently buggy
-						playerContainer: playerContainer
-					},
-					"yte-osd",
-					{
-						max: maxSpeed,
-						type: "speed",
-						value: round(currentPlaybackSpeed + adjustmentAmount, 2)
-					}
-				);
-				const speed = round(currentPlaybackSpeed + adjustmentAmount, 2);
-				await setPlayerSpeed(speed);
-				await updatePlaybackSpeedButtonTooltips(speed, playbackSpeedPerClick);
+				const onScreenDisplay = getOSDConfig();
+				if (onScreenDisplay) {
+					showOSD(onScreenDisplay, playerContainer, { max: maxSpeed, type: "speed", value: newSpeed }, "text");
+				}
+				await setPlayerSpeed(newSpeed);
+				await updatePlaybackSpeedButtonTooltips(newSpeed, playbackSpeedPerClick);
 			} catch (error) {
 				console.error("[playbackSpeedButtons] Failed to set player speed:", error);
 			}

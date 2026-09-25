@@ -3,11 +3,11 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, getFeatureButton, getFeatureIds, getFeatureMenuItem, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv } from "@/src/types";
-import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
 import { clampDb, STEP_DB } from "@/src/utils/misc";
+import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { isLivePage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -25,7 +25,6 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	const {
 		data: {
 			options: {
-				onScreenDisplay: { color, hideTime, opacity, padding, position },
 				volumeBoost: { amount }
 			}
 		}
@@ -34,23 +33,10 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>(isWatchPage() || isLivePage() ? "div#movie_player" : "div#shorts-player");
 	if (!playerContainer) return;
-	new OnScreenDisplayManager(
-		{
-			displayColor: color,
-			displayHideTime: hideTime,
-			displayOpacity: opacity,
-			displayPadding: padding,
-			displayPosition: position,
-			displayType: "text",
-			playerContainer
-		},
-		"yte-osd",
-		{
-			max: Infinity,
-			type: "volume_boost_db",
-			value: newValue
-		}
-	);
+	const onScreenDisplay = getOSDConfig();
+	if (onScreenDisplay) {
+		showOSD(onScreenDisplay, playerContainer, { max: Infinity, type: "volume_boost_db", value: newValue });
+	}
 	updateVolumeBoostFeatureMenuLabel(newValue);
 	updateFeatureButtonTitle(
 		"volumeBoostButton",
