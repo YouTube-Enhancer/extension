@@ -128,7 +128,7 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	const newSpeed = round(clamp(videoElement.playbackRate + steps * speedConfig.steps, youtubePlayerMinSpeed, youtubePlayerMaxSpeed), 2);
 	if (newSpeed === videoElement.playbackRate) return;
 	await setPlayerSpeed(newSpeed);
-	await updatePlaybackSpeedButtonTooltips(newSpeed, speedPerClick);
+	updatePlaybackSpeedButtonTooltips(newSpeed, speedPerClick);
 	showOSD(onScreenDisplay, runtime.playerContainer, { max: youtubePlayerMaxSpeed, type: "speed", value: newSpeed }, "text");
 }
 
