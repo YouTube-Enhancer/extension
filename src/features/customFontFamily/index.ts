@@ -1,5 +1,4 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import { metadata } from "./index.metadata";
 
@@ -23,31 +22,17 @@ function removeFont() {
 
 export default createFeature({
 	...metadata,
-	onConfigChange: async ({ enabled }) => {
+	onConfigChange: ({ enabled, fontFamily }) => {
 		if (!enabled) {
 			removeFont();
 			return;
 		}
-		const {
-			data: {
-				options: {
-					customFontFamily: { fontFamily }
-				}
-			}
-		} = await waitForSpecificMessage("options", "request_data", "content");
 		applyFont(fontFamily);
 	},
 	onDisable: () => {
 		removeFont();
 	},
-	onEnable: async () => {
-		const {
-			data: {
-				options: {
-					customFontFamily: { fontFamily }
-				}
-			}
-		} = await waitForSpecificMessage("options", "request_data", "content");
+	onEnable: ({ fontFamily }) => {
 		applyFont(fontFamily);
 	}
 });
