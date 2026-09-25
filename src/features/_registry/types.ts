@@ -12,7 +12,6 @@ import type {
 	ButtonPlacement,
 	configuration,
 	configurationKeys,
-	FullscreenPlacement,
 	MaybePromise,
 	Nullable,
 	Path,
@@ -40,10 +39,6 @@ export type ButtonTrackedState = {
 	 * Indicates whether the button is enabled.
 	 */
 	enabled: boolean;
-	/**
-	 * The fullscreen placement of the button.
-	 */
-	fullscreenPlacement: FullscreenPlacement;
 	/**
 	 * Indicates whether the button has been initialized.
 	 */

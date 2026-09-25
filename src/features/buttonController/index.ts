@@ -13,6 +13,7 @@ export {
 	getFeatureMenuItem,
 	getFeatureMenuItemIcon,
 	getFeatureMenuItemLabel,
+	getTrackedButtonFullscreenPlacement,
 	modifyIconForLightTheme,
 	removeButton,
 	removeButton as removeFeatureButton,

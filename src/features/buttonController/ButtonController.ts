@@ -135,6 +135,10 @@ export function getFeatureButton(buttonName: AllButtonNames) {
 	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 }
 
+export function getTrackedButtonFullscreenPlacement(buttonName: AllButtonNames): FullscreenPlacement | undefined {
+	return trackedButtons.get(buttonName)?.fullscreenPlacement;
+}
+
 export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
 	const color = overrideColor ? "#FFFFFF" : undefined;
 	const target: SVGSVGElement | ToggleIcon = icon;
