@@ -2,10 +2,10 @@ import type { AllButtonNames, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { getFeatureMenuConfig } from "@/src/ui/featureMenuConfigStore";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
@@ -143,13 +143,8 @@ export async function enableFeatureMenuButton() {
 	window.addEventListener("resize", updateMenuPosition);
 	window.addEventListener("yte-feature-menu-resized", updateMenuPosition);
 
-	const {
-		data: {
-			options: {
-				featureMenu: { openType }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	const featureMenuConfig = getFeatureMenuConfig();
+	const openType = featureMenuConfig?.openType ?? "click";
 	void waitForAllElements([menuId, menuButtonId]).then(() => {
 		cleanupFeatureMenuListeners = () => {
 			window.removeEventListener("resize", updateMenuPosition);
