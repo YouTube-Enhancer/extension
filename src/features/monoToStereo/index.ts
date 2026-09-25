@@ -1,6 +1,5 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 
 import { metadata } from "./index.metadata";
@@ -32,11 +31,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "monoToStereoButton",
-			remove: async (placement) => {
-				await removeFeatureButton("monoToStereoButton", placement);
-				eventManager.removeEventListeners("monoToStereoButton");
-			}
+			name: "monoToStereoButton"
 		}
 	]
 });
