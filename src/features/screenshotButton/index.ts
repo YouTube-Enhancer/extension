@@ -1,7 +1,8 @@
+import type { Nullable } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type Nullable } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { defaultScreenshotFilenameTemplate, formatScreenshotDate, resolveFilenameTemplate } from "@/src/utils/format/filenameTemplate";
 import { waitForSpecificMessage } from "@/src/utils/messaging";

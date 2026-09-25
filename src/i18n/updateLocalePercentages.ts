@@ -8,7 +8,7 @@ import { formatError } from "@/src/utils/format/error";
 import { i18nDir } from "@/src/utils/plugins/utils";
 import { writeFormattedFile } from "@/src/utils/plugins/writeFormattedFile";
 
-import { type AvailableLocales } from "./constants";
+import type { AvailableLocales } from "./constants";
 
 const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProgressResponse> = z.object({
 	data: z.array(
