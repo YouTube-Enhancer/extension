@@ -16,12 +16,9 @@ import {
 	getEffectivePlacement,
 	getPlacementSelector,
 	isFullscreen,
-	isFullscreenObserverActive,
 	placeButton,
-	setFullscreenObserverActive,
-	startFullscreenObserver,
-	stopContainerGeometryObserver,
-	stopFullscreenObserver
+	startPlacementTracking,
+	stopPlacementTracking
 } from "./containerTracking";
 import {
 	addFeatureItemToMenu,
@@ -389,22 +386,15 @@ function trackButton(
 		listener,
 		placement
 	});
-	if (!isFullscreenObserverActive()) {
-		setFullscreenObserverActive(true);
-		startFullscreenObserver(() => {
-			void handleFullscreenChange();
-		});
-	}
+	startPlacementTracking(() => {
+		void handleFullscreenChange();
+	});
 }
 
 function untrackButton(buttonName: AllButtonNames) {
 	trackedButtons.delete(buttonName);
 	if (trackedButtons.size === 0) {
-		stopContainerGeometryObserver();
-		if (isFullscreenObserverActive()) {
-			setFullscreenObserverActive(false);
-			stopFullscreenObserver();
-		}
+		stopPlacementTracking();
 	}
 }
 
