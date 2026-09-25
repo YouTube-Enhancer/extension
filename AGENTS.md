@@ -75,10 +75,14 @@ New functionality must be added as modules in the `src/features/` directory foll
 
 Modules inside `src/features/` that are not features include:
 
-- UI helpers (e.g., `featureMenu`, `buttonPlacement`)
-- Placement/positioning utilities (e.g., `buttonPlacement`)
-- Shared logic used across features
-  These modules do not have registration in the feature registry and are not independently toggleable.
+- `src/features/buttonController/` - Button lifecycle management, split into:
+  - `ButtonController.ts` - Button CRUD, tracked state, theme helpers
+  - `containerTracking.ts` - Fullscreen/theater/geometry observers, container creation
+  - `featureMenu.ts` - Menu DOM, event listeners, item management
+- `src/features/featureMenu/` - Feature menu helpers
+- `src/features/_registry/` - Feature registry system including `createCssToggleFeature` factory
+
+These modules do not have registration in the feature registry and are not independently toggleable.
 
 ## Developer Rules
 
@@ -100,8 +104,31 @@ Modules inside `src/features/` that are not features include:
 ### Where to Put Shared Logic:
 
 - Use `src/utils/` for general utilities
-- Use `src/features/buttonPlacement/` for button-related helpers
+- Use `src/features/buttonController/` for button-related helpers
 - Use `src/features/featureMenu/` for menu-related helpers
+
+## CSS Toggle Features
+
+Features that only toggle a CSS class on `document.body` should use the `createCssToggleFeature` factory:
+
+```ts
+import "./index.css";
+import { metadata } from "./index.metadata";
+import { createCssToggleFeature } from "@/src/features/_registry/createCssToggleFeature";
+export default createCssToggleFeature(metadata);
+```
+
+The factory derives the CSS class from the feature ID (`yte-` + camelCase→kebab-case). Each feature still needs its own `index.css` and `index.metadata.ts` files.
+
+## Button Features
+
+Button features define a `buttons` array with `add` and optional `remove`/`onRemove` callbacks:
+
+- `add(config)` - Required. Adds the button via `addFeatureButton`.
+- `remove(placement)` - Optional. Overrides the default remove entirely.
+- `onRemove(placement)` - Optional. Runs after the default remove for extra cleanup.
+
+**Default remove behavior** (when `remove` is omitted): calls `removeFeatureButton(name, placement)` then `eventManager.removeEventListeners(featureId)`. Most features need no custom remove.
 
 # Runtime Lifecycle
 
