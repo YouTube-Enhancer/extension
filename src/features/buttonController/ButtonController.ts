@@ -146,6 +146,7 @@ export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIc
 	return icon;
 }
 
+export async function removeButton(buttonName: AllButtonNames, placement?: ButtonPlacement): Promise<void>;
 export async function removeButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;

@@ -1,4 +1,3 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
@@ -36,10 +35,6 @@ export default createFeature({
 				);
 			},
 			name: "openTranscriptButton",
-			remove: async (placement) => {
-				await removeFeatureButton("openTranscriptButton", placement);
-				eventManager.removeEventListeners("openTranscriptButton");
-			},
 			shouldRender: async () => {
 				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150, "optional");
 				return !!transcriptButton;

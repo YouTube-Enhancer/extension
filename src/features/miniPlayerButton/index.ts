@@ -1,9 +1,7 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import {
 	addFeatureButton,
 	getFeatureButton,
-	removeFeatureButton,
 	updateFeatureButtonChecked,
 	updateFeatureButtonIcon,
 	updateFeatureButtonTitle
@@ -67,9 +65,7 @@ export default createFeature({
 				document.addEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
 			},
 			name: "miniPlayerButton",
-			remove: async (placement) => {
-				await removeFeatureButton("miniPlayerButton", placement);
-				eventManager.removeEventListeners("miniPlayerButton");
+			onRemove: () => {
 				currentPlacement = null;
 				document.removeEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
 			}

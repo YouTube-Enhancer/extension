@@ -1,8 +1,7 @@
 import "./index.css";
 
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, getFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { addFeatureButton, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 
@@ -53,11 +52,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "maximizePlayerButton",
-			remove: async (placement) => {
-				await removeFeatureButton("maximizePlayerButton", placement);
-				eventManager.removeEventListeners("maximizePlayerButton");
-			}
+			name: "maximizePlayerButton"
 		}
 	],
 	state: {

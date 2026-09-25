@@ -1,6 +1,5 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
+import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
@@ -48,11 +47,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "copyTimestampUrlButton",
-			remove: async (placement) => {
-				await removeFeatureButton("copyTimestampUrlButton", placement);
-				eventManager.removeEventListeners("copyTimestampUrlButton");
-			}
+			name: "copyTimestampUrlButton"
 		}
 	]
 });

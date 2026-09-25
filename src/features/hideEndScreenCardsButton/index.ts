@@ -1,7 +1,6 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { addFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type ButtonPlacement, type YouTubePlayerDiv } from "@/src/types";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -48,11 +47,7 @@ export default createFeature({
 					fullscreenPlacement
 				);
 			},
-			name: "hideEndScreenCardsButton",
-			remove: async (placement) => {
-				await removeFeatureButton("hideEndScreenCardsButton", placement);
-				eventManager.removeEventListeners("hideEndScreenCardsButton");
-			}
+			name: "hideEndScreenCardsButton"
 		}
 	]
 });

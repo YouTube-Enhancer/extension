@@ -1,13 +1,6 @@
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
-import {
-	addFeatureButton,
-	getFeatureButton,
-	getFeatureIds,
-	getFeatureMenuItem,
-	removeFeatureButton,
-	updateFeatureButtonTitle
-} from "@/src/features/buttonController";
+import { addFeatureButton, getFeatureButton, getFeatureIds, getFeatureMenuItem, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { type YouTubePlayerDiv } from "@/src/types";
 import OnScreenDisplayManager from "@/src/ui/OnScreenDisplayManager";
@@ -132,10 +125,6 @@ export default createFeature({
 				);
 			},
 			name: "volumeBoostButton",
-			remove: async (placement) => {
-				await removeFeatureButton("volumeBoostButton", placement);
-				eventManager.removeEventListeners("volumeBoostButton");
-			},
 			shouldRender: ({ mode }) => mode === "per_video"
 		}
 	],
