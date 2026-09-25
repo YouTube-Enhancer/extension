@@ -2,7 +2,12 @@ import type { AnyFeatureBase, ButtonTrackedState, FeatureButton, FeatureKeys, Fe
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { checkIfFeatureButtonExists, removeFeatureButton, updateTrackedButtonConfig } from "@/src/features/buttonController";
+import {
+	checkIfFeatureButtonExists,
+	getTrackedButtonFullscreenPlacement,
+	removeFeatureButton,
+	updateTrackedButtonConfig
+} from "@/src/features/buttonController";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
@@ -90,13 +95,13 @@ class FeatureButtonManager extends FeatureManagerBase {
 			try {
 				const prevState = stateMap[btn.name] ?? {
 					enabled: false,
-					fullscreenPlacement: "same",
 					initialized: false,
 					placement: undefined
 				};
 				const wasActive = prevState.initialized && prevState.enabled;
 				const moved = prevState.placement !== nextPlacement;
-				const fullscreenChanged = prevState.fullscreenPlacement !== nextFullscreenPlacement;
+				const prevFullscreenPlacement = getTrackedButtonFullscreenPlacement(btn.name) ?? "same";
+				const fullscreenChanged = prevFullscreenPlacement !== nextFullscreenPlacement;
 
 				if (wasActive && (!isActive || moved)) {
 					await this.safelyExecute(
@@ -140,7 +145,7 @@ class FeatureButtonManager extends FeatureManagerBase {
 					);
 				}
 
-				stateMap[btn.name] = { enabled: isActive, fullscreenPlacement: nextFullscreenPlacement, initialized: true, placement: nextPlacement };
+				stateMap[btn.name] = { enabled: isActive, initialized: true, placement: nextPlacement };
 			} finally {
 				// Remove the lock when done
 				this.updatingButtonStates.delete(lockKey);
