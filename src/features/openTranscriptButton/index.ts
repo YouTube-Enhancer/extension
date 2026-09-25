@@ -19,7 +19,7 @@ export default createFeature({
 				const transcriptButton = await waitForElement("ytd-video-description-transcript-section-renderer button", 150, "optional");
 				const transcriptButtonMenuItem = getFeatureButton("openTranscriptButton");
 				// If the transcript button is not found and the "openTranscriptButton" menu item exists, remove the transcript button menu item
-				if (!transcriptButton && transcriptButtonMenuItem) await removeFeatureButton("openTranscriptButton");
+				if (!transcriptButton && transcriptButtonMenuItem) removeFeatureButton("openTranscriptButton");
 				// If the transcript button isn't found return
 				if (!transcriptButton) return;
 				// If the transcript button is found and the "openTranscriptButton" menu item does not exist, add the transcript button menu item

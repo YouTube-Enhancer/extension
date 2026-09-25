@@ -2,11 +2,12 @@ import type { YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { addFeatureButton, getFeatureButton, getFeatureIds, getFeatureMenuItem, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
+import { sendContentOnlyMessage } from "@/src/utils/messaging";
 import { clampDb, STEP_DB } from "@/src/utils/misc";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { isLivePage, isWatchPage } from "@/src/utils/url";
@@ -23,13 +24,7 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	// Apply modifiers: Shift = 2.5x, Ctrl = 5x
 	if (event.shiftKey) delta *= 2.5;
 	if (event.ctrlKey) delta *= 5;
-	const {
-		data: {
-			options: {
-				volumeBoost: { amount }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+	const { amount } = featureConfigManager.getLast("volumeBoost");
 	const newValue = clampDb(amount + delta);
 	sendContentOnlyMessage("setVolumeBoostAmount", newValue);
 	const playerContainer = await waitForElement<YouTubePlayerDiv>(isWatchPage() || isLivePage() ? "div#movie_player" : "div#shorts-player");
@@ -68,32 +63,25 @@ export default createFeature({
 					:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
 					getFeatureIcon("volumeBoostButton", placement),
 					(checked) => {
-						void (async () => {
-							const {
-								data: {
-									options: { volumeBoost }
-								}
-							} = await waitForSpecificMessage("options", "request_data", "content");
-							isVolumeBoostEnabled = !!checked;
-							if (checked) {
-								const { amount } = volumeBoost;
-								applyVolumeBoostDb(amount);
-								updateFeatureButtonTitle(
-									"volumeBoostButton",
-									window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
-										value: amount
-									})
-								);
-							} else {
-								const engine = getAudioEngine();
-								if (!engine) return;
-								engine.volumeGain.gain.value = 1;
-								updateFeatureButtonTitle(
-									"volumeBoostButton",
-									window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
-								);
-							}
-						})();
+						isVolumeBoostEnabled = !!checked;
+						if (checked) {
+							const { amount } = featureConfigManager.getLast("volumeBoost");
+							applyVolumeBoostDb(amount);
+							updateFeatureButtonTitle(
+								"volumeBoostButton",
+								window.i18nextInstance.t((translations) => translations.pages.content.features.volumeBoostButton.button.toggle.on, {
+									value: amount
+								})
+							);
+						} else {
+							const engine = getAudioEngine();
+							if (!engine) return;
+							engine.volumeGain.gain.value = 1;
+							updateFeatureButtonTitle(
+								"volumeBoostButton",
+								window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
+							);
+						}
 					},
 					true,
 					false,

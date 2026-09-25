@@ -1,11 +1,11 @@
 import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { defaultScreenshotFilenameTemplate, formatScreenshotDate, resolveFilenameTemplate } from "@/src/utils/format/filenameTemplate";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import { metadata } from "./index.metadata";
 import { buildScreenshotFilenameContext } from "./utils";
@@ -25,19 +25,13 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 		context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 		// Wait for the options message and get the format from it
 		const {
-			data: {
-				options: {
-					screenshotButton: {
-						dateFormat = "iso",
-						filename = defaultScreenshotFilenameTemplate,
-						format,
-						saveAs,
-						timestampFormat = "auto",
-						timestampSeparator = "auto"
-					}
-				}
-			}
-		} = await waitForSpecificMessage("options", "request_data", "content");
+			dateFormat = "iso",
+			filename = defaultScreenshotFilenameTemplate,
+			format,
+			saveAs,
+			timestampFormat = "auto",
+			timestampSeparator = "auto"
+		} = featureConfigManager.getLast("screenshotButton");
 
 		const copyToClipboard = async () => {
 			const screenshotButton = getFeatureButton("screenshotButton");

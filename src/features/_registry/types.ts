@@ -127,7 +127,7 @@ export type FeatureButton<K extends FeatureKeys = FeatureKeys> = {
 	 * @param {ButtonPlacement} placement - The placement of the button to remove.
 	 * @returns A promise that resolves when the button has been removed.
 	 */
-	remove?: (placement?: ButtonPlacement) => Promise<void>;
+	remove?: (placement?: ButtonPlacement) => MaybePromise<void>;
 	/**
 	 * Checks if the feature should render a button
 	 * @param {configuration[K]} config - The configuration to check.

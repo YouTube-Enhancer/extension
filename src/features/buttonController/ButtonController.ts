@@ -1,13 +1,13 @@
 import type { AllButtonNames, ButtonPlacement, FullscreenPlacement, SingleButtonFeatureNames } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import type { ListenerType } from "./types";
 
@@ -100,7 +100,7 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 		case "player_controls_left":
 		case "player_controls_right": {
 			const featureButton = getFeatureButton(buttonName);
-			if (featureButton) await removeButton(buttonName);
+			if (featureButton) removeButton(buttonName);
 			const button = await makeFeatureButton(
 				buttonName,
 				effectivePlacement,
@@ -147,16 +147,13 @@ export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIc
 	return icon;
 }
 
-export async function removeButton(buttonName: AllButtonNames, placement?: ButtonPlacement): Promise<void>;
-export async function removeButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
+export function removeButton(buttonName: AllButtonNames, placement?: ButtonPlacement): void;
+export function removeButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;
 	untrackButton(buttonName);
 	if (placement === undefined) {
-		const {
-			data: { options }
-		} = await waitForSpecificMessage("options", "request_data", "content");
-		const { [featureName]: featureConfig } = options;
+		const featureConfig = featureConfigManager.getLast(featureName);
 		if (typeof featureConfig === "object" && featureConfig !== null) {
 			if ("buttons" in featureConfig) {
 				placement = featureConfig.buttons?.[buttonName as keyof typeof featureConfig.buttons]?.placement;
