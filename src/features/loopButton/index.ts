@@ -1,9 +1,7 @@
-import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import {
 	addFeatureButton,
 	getFeatureButtonId,
-	removeFeatureButton,
 	updateFeatureButtonChecked,
 	updateFeatureButtonIcon,
 	updateFeatureButtonTitle
@@ -64,11 +62,7 @@ export default createFeature({
 				);
 				setupLoopObserver(placement);
 			},
-			name: "loopButton",
-			remove: async (placement) => {
-				await removeFeatureButton("loopButton", placement);
-				eventManager.removeEventListeners("loopButton");
-			}
+			name: "loopButton"
 		}
 	],
 	onNavigate: ({ button: { placement } }) => {
