@@ -1,11 +1,11 @@
 import type { VideoHistoryEntry, VideoHistoryResumeType } from "@/src/features/videoHistory/types";
+import type { Author, Brand, Nullable, VideoId, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { formatTime } from "@/src/features/remainingTime/utils";
 import { getVideoHistory, setVideoHistory } from "@/src/features/videoHistory/utils";
-import { type Author, type Brand, type Nullable, type VideoId, type YouTubePlayerDiv } from "@/src/types";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
