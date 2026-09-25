@@ -1,4 +1,5 @@
-import { type Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
+
 import multi from "tailwindcss-multi";
 export default {
 	content: ["./src/**/*.{js,ts,jsx,tsx}"],

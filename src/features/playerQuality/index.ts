@@ -1,6 +1,7 @@
+import type { Nullable, YouTubePlayerDiv } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { type Nullable, type YouTubePlayerDiv } from "@/src/types";
 import { browserColorLog } from "@/src/utils/logging";
 import { lookupItag } from "@/src/utils/player/itagDb";
 import { chooseClosestQuality } from "@/src/utils/player/quality";

@@ -1,4 +1,5 @@
 import type { Nullable, YouTubeNavigateStart, YouTubePlayerDiv } from "@/src/types";
+import type { ModifyElementAction } from "@/src/utils/dom/classList";
 
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
@@ -10,7 +11,6 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type ModifyElementAction } from "@/src/utils/dom/classList";
 import { waitForElement, waitForPlayerLoaded } from "@/src/utils/dom/wait";
 import { isNewYouTubeVideoLayout } from "@/src/utils/url";
 const maximizePlayerButtonStateAPI = registry.stateManager.getStateAPI("maximizePlayerButton");

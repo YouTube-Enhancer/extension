@@ -1,8 +1,9 @@
+import type { ButtonPlacement, YouTubePlayerDiv } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { addFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type YouTubePlayerDiv } from "@/src/types";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import { metadata } from "./index.metadata";
