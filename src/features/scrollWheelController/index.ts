@@ -8,7 +8,6 @@ import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedB
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import {
 	type configuration,
-	type MessageMappings,
 	type ModifierKey,
 	type Nullable,
 	type YouTubePlayerDiv,
@@ -19,7 +18,6 @@ import { type ModifyElementAction, modifyElementClassList } from "@/src/utils/do
 import { preventScroll } from "@/src/utils/dom/events";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { clamp, round, toDivisible } from "@/src/utils/math";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { getOSDConfig, showOSD } from "@/src/utils/osd";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
@@ -44,14 +42,8 @@ type DispatchConfig = {
 	volumeHoldRightClick: boolean;
 	volumeModifierKey: ModifierKey;
 };
-type OptionsData = MessageMappings["options"]["response"];
 
 const CONTEXT_MENU_HIDE_TIMEOUT = 100;
-/**
- * The snapshot only seeds the cross-feature fallbacks and the disabled-speed yield rule. A short TTL lets the two
- * feature enables of one navigation share a single fetch.
- */
-const SNAPSHOT_TTL_MS = 1000;
 const controlFeatureIds: Record<ScrollWheelControlType, FeatureKeys> = {
 	speed: "scrollWheelSpeedControl",
 	volume: "scrollWheelVolumeControl"
@@ -59,9 +51,6 @@ const controlFeatureIds: Record<ScrollWheelControlType, FeatureKeys> = {
 const activeControls = new Map<ScrollWheelControlType, ControlRuntime>();
 const controlConfigs: { [K in ScrollWheelControlType]: Nullable<ControlConfigMap[K]> } = { speed: null, volume: null };
 let dispatchConfig: Nullable<DispatchConfig> = null;
-let optionsSnapshot: Nullable<OptionsData> = null;
-let optionsSnapshotFetch: Nullable<Promise<OptionsData>> = null;
-let optionsSnapshotTime = 0;
 let suppressContextMenu = false;
 
 export function disableScrollWheelControl(type: ScrollWheelControlType) {
@@ -80,7 +69,6 @@ export function disableScrollWheelControl(type: ScrollWheelControlType) {
 export async function enableScrollWheelControl<T extends ScrollWheelControlType>(type: T, config: ControlConfigMap[T]) {
 	controlConfigs[type] = config;
 	rebuildDispatchConfig();
-	await ensureOptionsSnapshot();
 	const playerContainer = await findPlayerContainer(type);
 	if (!playerContainer) {
 		disableScrollWheelControl(type);
@@ -113,16 +101,15 @@ export function updateScrollWheelConfig<T extends ScrollWheelControlType>(type: 
 
 async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	const { speed: speedConfig } = controlConfigs;
-	const snapshotOptions = optionsSnapshot?.data.options;
-	if (!speedConfig || !snapshotOptions) return;
-	const onScreenDisplay = getOSDConfig(snapshotOptions.onScreenDisplay);
+	if (!speedConfig) return;
+	const onScreenDisplay = getOSDConfig();
 	if (!onScreenDisplay) return;
-	let {
-		playbackSpeedButtons: { speed: speedPerClick }
-	} = snapshotOptions;
+	let speedPerClick: number;
 	try {
 		({ speed: speedPerClick } = featureConfigManager.getLast("playbackSpeedButtons"));
-	} catch {}
+	} catch {
+		return;
+	}
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
 	const newSpeed = round(clamp(videoElement.playbackRate + steps * speedConfig.steps, youtubePlayerMinSpeed, youtubePlayerMaxSpeed), 2);
@@ -134,7 +121,7 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 
 async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const { volume: volumeConfig } = controlConfigs;
-	const onScreenDisplay = getOSDConfig(optionsSnapshot?.data.options.onScreenDisplay);
+	const onScreenDisplay = getOSDConfig();
 	if (!volumeConfig || !onScreenDisplay) return;
 	const { playerContainer } = runtime;
 	if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;
@@ -152,21 +139,6 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
  */
 function attachWheelListener() {
 	eventManager.addEventListener(document, "wheel", onWheel, "scrollWheelController", { capture: true, passive: false });
-}
-
-async function ensureOptionsSnapshot() {
-	if (optionsSnapshot && Date.now() - optionsSnapshotTime < SNAPSHOT_TTL_MS) return;
-	optionsSnapshotFetch ??= waitForSpecificMessage("options", "request_data", "content")
-		.then((data) => {
-			optionsSnapshot = data;
-			optionsSnapshotTime = Date.now();
-			rebuildDispatchConfig();
-			return data;
-		})
-		.finally(() => {
-			optionsSnapshotFetch = null;
-		});
-	await optionsSnapshotFetch;
 }
 
 async function findPlayerContainer(type: ScrollWheelControlType): Promise<Nullable<YouTubePlayerDiv>> {
@@ -270,8 +242,24 @@ function queueSteps(type: ScrollWheelControlType, wheelSteps: number) {
 }
 
 function rebuildDispatchConfig() {
-	const speedConfig = controlConfigs.speed ?? optionsSnapshot?.data.options.scrollWheelSpeedControl;
-	const volumeConfig = controlConfigs.volume ?? optionsSnapshot?.data.options.scrollWheelVolumeControl;
+	const speedConfig =
+		controlConfigs.speed ??
+		(() => {
+			try {
+				return featureConfigManager.getLast("scrollWheelSpeedControl");
+			} catch {
+				return null;
+			}
+		})();
+	const volumeConfig =
+		controlConfigs.volume ??
+		(() => {
+			try {
+				return featureConfigManager.getLast("scrollWheelVolumeControl");
+			} catch {
+				return null;
+			}
+		})();
 	if (!speedConfig || !volumeConfig) {
 		dispatchConfig = null;
 		return;
