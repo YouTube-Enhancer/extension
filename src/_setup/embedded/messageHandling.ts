@@ -1,6 +1,7 @@
 import type { ExtensionSendOnlyMessages, Messages, Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
+import { setFeatureMenuConfig } from "@/src/ui/featureMenuConfigStore";
 import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
@@ -27,6 +28,7 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 			await registry.updateFeatureEnabledState(message.data.id, message.data.enabled, message.data.config);
 			break;
 		case "featureMenuOpenTypeChange":
+			setFeatureMenuConfig({ openType: message.data.featureMenuOpenType });
 			coreFeatures.handleConfigChange("featureMenu", { featureMenuOpenType: message.data.featureMenuOpenType });
 			break;
 		case "languageChange":

@@ -4,6 +4,8 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { i18nService } from "@/src/i18n";
+import { setDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
+import { setFeatureMenuConfig } from "@/src/ui/featureMenuConfigStore";
 import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
@@ -35,10 +37,12 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
 	setOnScreenDisplayConfig(options.onScreenDisplay);
+	setFeatureMenuConfig(options.featureMenu);
+	setDeepDarkCSSConfig(options.deepDarkCSS);
 
 	await registerAllFeatures(state);
 
-	await getButtonColor();
+	getButtonColor();
 	const colorObserver = new MutationObserver(() => {
 		buttonColorCache.clear();
 	});
@@ -52,6 +56,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 			data: { options: navOptions }
 		} = await waitForSpecificMessage("options", "request_data", "content");
 		setOnScreenDisplayConfig(navOptions.onScreenDisplay);
+		setFeatureMenuConfig(navOptions.featureMenu);
+		setDeepDarkCSSConfig(navOptions.deepDarkCSS);
 		await registry.enableAll(navOptions);
 	});
 
@@ -78,6 +84,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	} = await waitForSpecificMessage("options", "request_data", "content");
 	// The on-screen display is a core feature outside the registry, so the loop below does not cover its settings.
 	setOnScreenDisplayConfig(currentOptions.onScreenDisplay);
+	setFeatureMenuConfig(currentOptions.featureMenu);
+	setDeepDarkCSSConfig(currentOptions.deepDarkCSS);
 	for (const feature of registry.getAll()) {
 		const { id } = feature;
 		const { [id]: current } = currentOptions;
