@@ -2,13 +2,13 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
 import { browserColorLog } from "@/src/utils/logging";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 import { isShortsPage, isWatchPage } from "@/src/utils/url";
 
 import { metadata } from "./index.metadata";
@@ -47,15 +47,8 @@ export async function setPlayerSpeed(speed: number) {
 	if (video) video.playbackRate = speed;
 }
 
-async function getPlaybackSpeedPerClick() {
-	const {
-		data: {
-			options: {
-				playbackSpeedButtons: { speed }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	return speed;
+function getPlaybackSpeedPerClick() {
+	return featureConfigManager.getLast("playbackSpeedButtons").speed;
 }
 /**
  * Returns the video id of the video that the current URL points to, or null when not on watch/shorts.
@@ -202,12 +195,12 @@ function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 	});
 }
 
-async function recordExternalSpeed(speed: number) {
+function recordExternalSpeed(speed: number) {
 	if (speed === lastRecordedSpeed) return;
 	lastRecordedSpeed = speed;
 	const stateAPI = registry.stateManager.getStateAPI(metadata.id);
 	stateAPI.setState((prev) => ({ ...prev, playbackSpeed: speed }));
-	await updatePlaybackSpeedButtons(speed);
+	updatePlaybackSpeedButtons(speed);
 }
 
 function resetRecordedSpeed() {
@@ -222,11 +215,11 @@ async function setupRateChangeListener() {
 }
 async function updateEffectivePlaybackSpeedButtons(speed: number, channelSpeeds?: string) {
 	const channelId = await getCurrentChannelId();
-	await updatePlaybackSpeedButtons(resolveEffectiveSpeed(speed, channelSpeeds, channelId));
+	updatePlaybackSpeedButtons(resolveEffectiveSpeed(speed, channelSpeeds, channelId));
 }
-async function updatePlaybackSpeedButtons(currentSpeed: number) {
-	const playbackSpeedPerClick = await getPlaybackSpeedPerClick();
-	await updatePlaybackSpeedButtonTooltips(currentSpeed, playbackSpeedPerClick);
+function updatePlaybackSpeedButtons(currentSpeed: number) {
+	const playbackSpeedPerClick = getPlaybackSpeedPerClick();
+	updatePlaybackSpeedButtonTooltips(currentSpeed, playbackSpeedPerClick);
 }
 
 export default createFeature({
@@ -297,6 +290,6 @@ export default createFeature({
 		playbackSpeed: 1
 	}
 });
-async function updateSpeedButtons(playerSpeed: number) {
-	await updatePlaybackSpeedButtons(playerSpeed);
+function updateSpeedButtons(playerSpeed: number) {
+	updatePlaybackSpeedButtons(playerSpeed);
 }

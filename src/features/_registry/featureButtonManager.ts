@@ -106,7 +106,7 @@ class FeatureButtonManager extends FeatureManagerBase {
 							if (btn.remove) {
 								await btn.remove(prevState.placement);
 							} else {
-								await removeFeatureButton(btn.name, prevState.placement);
+								removeFeatureButton(btn.name, prevState.placement);
 								eventManager.removeEventListeners(id);
 								await btn.onRemove?.(prevState.placement);
 							}
