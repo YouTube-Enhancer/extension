@@ -1,9 +1,9 @@
 import type { Nullable } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { waitForElement } from "@/src/utils/dom/wait";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 import type { MiniPlayerOptions } from "./types";
 
@@ -115,27 +115,21 @@ async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 	});
 	commentsMutationObserver.observe(document.documentElement, { childList: true, subtree: true });
 }
-async function getEnabledController(): Promise<Nullable<MiniPlayerController>> {
-	const {
-		data: {
-			options: {
-				miniPlayer: { defaultPosition, defaultSize }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+function getEnabledController(): Nullable<MiniPlayerController> {
+	const { defaultPosition, defaultSize } = featureConfigManager.getLast("miniPlayer");
 	return ensureController({
 		defaultPosition,
 		defaultSize
 	});
 }
-export const toggleMiniPlayerManual = async () => {
-	const miniPlayer = await getEnabledController();
+export const toggleMiniPlayerManual = () => {
+	const miniPlayer = getEnabledController();
 	if (!miniPlayer) return;
 	miniPlayer.toggleManual();
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const setMiniPlayerManual = async (checked: boolean) => {
-	const miniPlayer = await getEnabledController();
+export const setMiniPlayerManual = (checked: boolean) => {
+	const miniPlayer = getEnabledController();
 	if (!miniPlayer) return;
 	if (checked) {
 		if (!miniPlayer.isActive()) miniPlayer.toggleManual();
