@@ -27,6 +27,7 @@ export type WheelStepper = {
  * @returns The stepper; `feed` it wheel events, `cancel` it on teardown.
  */
 export function createWheelStepper(onSteps: (steps: number) => void): WheelStepper {
+	resetWheelCalibration();
 	let accumulated = 0;
 	let flushTimer: Nullable<ReturnType<typeof setTimeout>> = null;
 	let lastApplyTime = 0;
@@ -77,14 +78,22 @@ export function createWheelStepper(onSteps: (steps: number) => void): WheelStepp
 	};
 }
 
+let notchPixels: null | number = null;
+
+export function resetWheelCalibration() {
+	notchPixels = null;
+}
+
 function normalizeWheelDelta(event: WheelEvent): number {
-	switch (event.deltaMode) {
-		// Firefox reports lines (3 per notch) rather than pixels.
-		case WheelEvent.DOM_DELTA_LINE:
-			return event.deltaY * (DELTA_PER_STEP / 3);
-		case WheelEvent.DOM_DELTA_PAGE:
-			return event.deltaY * DELTA_PER_STEP;
-		default:
-			return event.deltaY;
+	const { deltaY: raw } = event;
+	if (raw === 0) return 0;
+	const abs = Math.abs(raw);
+	// Calibrate on the first non-zero event so one mouse notch always equals
+	// DELTA_PER_STEP regardless of the browser's deltaMode or lines-per-notch.
+	if (notchPixels === null || abs > notchPixels * 2) {
+		// The >2x guard avoids recalibrating on trackpad sub-events while
+		// still catching the first real notch from any device.
+		notchPixels = abs;
 	}
+	return (raw / notchPixels) * DELTA_PER_STEP;
 }
