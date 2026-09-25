@@ -25,7 +25,7 @@ type HeaderState = {
 	visible: boolean;
 };
 
-async function changeMaximizeButtonState(maximized: boolean) {
+function changeMaximizeButtonState(maximized: boolean) {
 	/**
 	 * The player is maximized and minimized from outside the button too: Escape, navigation and YouTube's own size
 	 * buttons. The controller keeps aria-checked, the menu item's checked class and the tracked record (which a
@@ -35,7 +35,7 @@ async function changeMaximizeButtonState(maximized: boolean) {
 	const button = getFeatureButton("maximizePlayerButton");
 	if (!button || !(button instanceof HTMLButtonElement)) return;
 	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	updateFeatureButtonIcon(button, await modifyIconForLightTheme(maximized ? icon.on : icon.off));
+	updateFeatureButtonIcon(button, modifyIconForLightTheme(maximized ? icon.on : icon.off));
 	updateFeatureButtonTitle(
 		"maximizePlayerButton",
 		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"])

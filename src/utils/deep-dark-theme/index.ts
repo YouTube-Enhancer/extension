@@ -23,7 +23,7 @@ type ButtonColorCache = {
 	set(value: string): void;
 };
 
-export async function getButtonColor() {
+export function getButtonColor() {
 	const cached = buttonColorCache.get();
 	if (cached !== undefined) return cached;
 	const isDarkMode = IsDarkMode();
@@ -35,7 +35,7 @@ export async function getButtonColor() {
 		return result;
 	}
 	if (deepDarkCSSExists()) {
-		const result = await resolveFromCSS();
+		const result = resolveFromCSS();
 		buttonColorCache.set(result);
 		return result;
 	}

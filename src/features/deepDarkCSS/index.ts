@@ -1,6 +1,8 @@
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { updateButtonsIconColor } from "@/src/features/buttonController";
+import { setDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
 import { deepDarkCssID } from "@/src/utils/constants";
 import { buttonColorCache } from "@/src/utils/deep-dark-theme";
 import { clearDeepDarkData, setDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
@@ -11,6 +13,7 @@ import { createDeepDarkCSSElement, deepDarkCSSExists, getDeepDarkCustomThemeStyl
 export default createFeature({
 	...metadata,
 	onConfigChange: ({ colors, preset }) => {
+		setDeepDarkCSSConfig({ colors, enabled: true, preset });
 		if (deepDarkCSSExists()) {
 			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
 		}
@@ -19,6 +22,8 @@ export default createFeature({
 		updateButtonsIconColor();
 	},
 	onDisable: () => {
+		const config = featureConfigManager.getLast("deepDarkCSS");
+		setDeepDarkCSSConfig({ ...config, enabled: false });
 		const deepDarkThemeStyleElement = document.querySelector<HTMLStyleElement>(`#${deepDarkCssID}`);
 		if (!deepDarkThemeStyleElement) return;
 		deepDarkThemeStyleElement.remove();
@@ -27,6 +32,7 @@ export default createFeature({
 		updateButtonsIconColor();
 	},
 	onEnable: ({ colors, preset }) => {
+		setDeepDarkCSSConfig({ colors, enabled: true, preset });
 		if (deepDarkCSSExists()) {
 			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
 		} else {
