@@ -1,26 +1,58 @@
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
-import { type AllButtonNames, type ButtonPlacement, type FullscreenPlacement, type Nullable, type SingleButtonFeatureNames } from "@/src/types";
+import { type AllButtonNames, type ButtonPlacement, type FullscreenPlacement, type SingleButtonFeatureNames } from "@/src/types";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
-import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
-import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
+import { createStyledElement } from "@/src/utils/dom/elements";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
-import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
+import { waitForElement } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
-import { isNewYouTubeVideoLayout, isWatchPage } from "@/src/utils/url";
 
-import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
+import type { ListenerType } from "./types";
 
-import { buttonContainerId, playerControlsSelectors } from "./constants";
+import { buttonContainerId } from "./constants";
+import {
+	getEffectivePlacement,
+	getPlacementSelector,
+	isFullscreen,
+	isFullscreenObserverActive,
+	placeButton,
+	setFullscreenObserverActive,
+	startFullscreenObserver,
+	stopContainerGeometryObserver,
+	stopFullscreenObserver
+} from "./containerTracking";
+import {
+	addFeatureItemToMenu,
+	enableFeatureMenuButton,
+	getFeatureIds,
+	getFeatureMenuItem,
+	removeFeatureItemFromMenu,
+	setOnMenuItemClick
+} from "./featureMenu";
 import "./index.css";
 
-const menuId = "#yte-feature-menu";
-const menuButtonId = "#yte-feature-menu-button";
-const panelId = "#yte-panel-menu";
-const itemHeight = 40;
-const menuPadding = 16;
+// ─── Re-exports from sub-modules ──────────────────────────────────
+
 export { buttonContainerId };
+export { getEffectivePlacement, getPlacementRoot } from "./containerTracking";
+export {
+	addFeatureItemToMenu,
+	featuresInMenu,
+	getFeatureIds,
+	getFeatureMenuItem,
+	getFeatureMenuItemIcon,
+	getFeatureMenuItemLabel,
+	removeFeatureItemFromMenu
+} from "./featureMenu";
+export {
+	enableFeatureMenu,
+	enableFeatureMenuButton,
+	getFeatureButtonId,
+	setupFeatureMenuEventListeners,
+	updateFeatureMenuTitle
+} from "./featureMenu";
+export type { ListenerType } from "./types";
 
 // ─── Module-level state ───────────────────────────────────────────
 
@@ -35,222 +67,15 @@ type TrackedButtonInfo = {
 	placement: ButtonPlacement;
 };
 const trackedButtons = new Map<AllButtonNames, TrackedButtonInfo>();
-export const featuresInMenu = new Set<AllButtonNames>();
 
-let fullscreenObserverActive = false;
-let fullscreenObserver: Nullable<MutationObserver> = null;
-let fullscreenDomHandler: Nullable<() => void> = null;
+// ─── Wire up callback seam ────────────────────────────────────────
 
-let theaterModeObserver: Nullable<MutationObserver> = null;
-let theaterNavigationHandler: Nullable<() => void> = null;
+setOnMenuItemClick((buttonName, checked) => {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.checked = checked;
+});
 
-let buttonContainerElement: Nullable<HTMLDivElement> = null;
-let containerGeometryMutationObserver: Nullable<MutationObserver> = null;
-let containerGeometryObserver: Nullable<ResizeObserver> = null;
-let containerGeometryResizeHandler: Nullable<() => void> = null;
-let observedPlayerElement: Nullable<HTMLDivElement> = null;
-
-let cleanupFeatureMenuListeners: Nullable<() => void> = null;
-let featureMenuCssInjected = false;
-
-// ─── Fullscreen helpers ───────────────────────────────────────────
-
-function ensureContainerPosition() {
-	const container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-	if (!container) return;
-	const inTheaterMode = isInTheaterMode();
-	const { parentElement: currentParent } = container;
-	if (!currentParent) return;
-	const isNewLayout = isNewYouTubeVideoLayout();
-	const expectedParent =
-		inTheaterMode ?
-			isNewLayout ? document.querySelector("ytd-watch-grid")
-			:	document.querySelector("ytd-watch-flexy")
-		:	document.querySelector("div#primary > div#primary-inner");
-	if (currentParent === expectedParent) {
-		syncContainerGeometry();
-		return;
-	}
-	if (inTheaterMode) {
-		const parent = expectedParent as HTMLElement;
-		const columns = parent?.querySelector("#columns");
-		if (columns) parent.insertBefore(container, columns);
-	} else {
-		const player = expectedParent?.querySelector("#player");
-		if (player) {
-			player.insertAdjacentElement("afterend", container);
-		} else {
-			requestAnimationFrame(() => {
-				ensureContainerPosition();
-			});
-			return;
-		}
-	}
-	syncContainerGeometry();
-}
-
-async function getPlacementRoot(placement: ButtonPlacement) {
-	switch (placement) {
-		case "below_player":
-			return document.getElementById(buttonContainerId) as HTMLDivElement | null;
-		case "feature_menu":
-			return await waitForElement<HTMLDivElement>("#yte-feature-menu");
-		case "player_controls_left":
-			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_left);
-		case "player_controls_right":
-			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
-	}
-}
-
-function getPlacementSelector(placement: ButtonPlacement): string | undefined {
-	if (placement === "below_player") {
-		return (
-			isInTheaterMode() ?
-				isNewYouTubeVideoLayout() ? "ytd-watch-grid"
-				:	"ytd-watch-flexy"
-			:	"div#primary > div#primary-inner > div#player"
-		);
-	}
-	if (placement === "feature_menu") return "#yte-feature-menu";
-	if (placement === "player_controls_left" || placement === "player_controls_right") return playerControlsSelectors[placement];
-	return undefined;
-}
-
-function internalIsFullscreen(): boolean {
-	return !!document.fullscreenElement || document.querySelector("ytd-app[fullscreen]") !== null;
-}
-
-// ─── Theater helpers ──────────────────────────────────────────────
-
-function isInTheaterMode(): boolean {
-	const inTheaterMode =
-		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
-	return inTheaterMode;
-}
-
-function onFullscreenChange() {
-	fullscreenDomHandler?.();
-}
-
-async function startContainerGeometryObserver() {
-	if (containerGeometryObserver) return;
-	const player = await waitForElement<HTMLDivElement>("#movie_player", 15000);
-	if (!player || containerGeometryObserver) return;
-	containerGeometryObserver = new ResizeObserver(() => {
-		requestAnimationFrame(syncContainerGeometry);
-	});
-	containerGeometryObserver.observe(player);
-	observedPlayerElement = player;
-	/**
-	 * Panels such as the live chat and the description toggle through attributes on the watch element, so attribute
-	 * mutations are a second sync trigger next to the player's own resizes.
-	 */
-	const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
-	if (watchElement) {
-		containerGeometryMutationObserver = new MutationObserver(() => {
-			requestAnimationFrame(syncContainerGeometry);
-		});
-		containerGeometryMutationObserver.observe(watchElement, { attributes: true });
-	}
-	containerGeometryResizeHandler = () => syncContainerGeometry();
-	window.addEventListener("resize", containerGeometryResizeHandler);
-	syncContainerGeometry();
-}
-
-function startFullscreenObserver(callback: () => void) {
-	fullscreenDomHandler = callback;
-	const target = document.querySelector("ytd-app");
-	if (target) {
-		fullscreenObserver = new MutationObserver((mutations) => {
-			for (const mutation of mutations) {
-				if (mutation.type === "attributes" && mutation.attributeName === "fullscreen") {
-					callback();
-				}
-			}
-		});
-		fullscreenObserver.observe(target, { attributeFilter: ["fullscreen"], attributes: true });
-	}
-	document.addEventListener("fullscreenchange", onFullscreenChange, { passive: true });
-}
-
-async function startTheaterModeObserver() {
-	if (theaterModeObserver) return;
-	const sizeButton = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
-	if (!sizeButton) return;
-	const scheduleReposition = () => {
-		requestAnimationFrame(() => {
-			ensureContainerPosition();
-		});
-	};
-	theaterModeObserver = new MutationObserver(scheduleReposition);
-	theaterModeObserver.observe(sizeButton, { attributeFilter: ["class"], attributes: true, childList: true, subtree: true });
-	const watchElement = document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
-	if (watchElement) {
-		theaterModeObserver.observe(watchElement, { attributeFilter: ["theater"], attributes: true });
-	}
-	theaterNavigationHandler = () => {
-		stopTheaterModeObserver();
-		stopContainerGeometryObserver();
-	};
-	document.addEventListener("yt-navigate-start", theaterNavigationHandler);
-}
-
-// ─── Placement selector ───────────────────────────────────────────
-
-function stopContainerGeometryObserver() {
-	containerGeometryObserver?.disconnect();
-	containerGeometryObserver = null;
-	containerGeometryMutationObserver?.disconnect();
-	containerGeometryMutationObserver = null;
-	observedPlayerElement = null;
-	if (containerGeometryResizeHandler) {
-		window.removeEventListener("resize", containerGeometryResizeHandler);
-		containerGeometryResizeHandler = null;
-	}
-}
-
-function stopFullscreenObserver() {
-	fullscreenObserver?.disconnect();
-	fullscreenObserver = null;
-	document.removeEventListener("fullscreenchange", onFullscreenChange);
-	fullscreenDomHandler = null;
-}
-
-// ─── Placement root lookup ────────────────────────────────────────
-
-function stopTheaterModeObserver() {
-	if (theaterNavigationHandler) {
-		document.removeEventListener("yt-navigate-start", theaterNavigationHandler);
-		theaterNavigationHandler = null;
-	}
-	theaterModeObserver?.disconnect();
-	theaterModeObserver = null;
-}
-
-function syncContainerGeometry() {
-	const container = buttonContainerElement;
-	if (!container?.isConnected) return;
-	if (internalIsFullscreen()) return;
-	const player = document.querySelector<HTMLDivElement>("#movie_player");
-	if (!player) return;
-	if (observedPlayerElement !== player && containerGeometryObserver) {
-		// YouTube replaced the player element; re-anchor the observer.
-		containerGeometryObserver.disconnect();
-		containerGeometryObserver.observe(player);
-		observedPlayerElement = player;
-	}
-	const playerRect = player.getBoundingClientRect();
-	if (playerRect.width === 0) return;
-	container.style.width = `${playerRect.width}px`;
-	// Measure from where the container sits with no margin, so parent padding and RTL flow do not skew the alignment.
-	const currentMarginLeft = parseFloat(container.style.marginLeft) || 0;
-	const naturalLeft = container.getBoundingClientRect().left - currentMarginLeft;
-	container.style.marginLeft = `${playerRect.left - naturalLeft}px`;
-}
-
-// ─── DOM creation (container / button / menu) ─────────────────────
-
-const rightControlsContainerId = "yte-right-controls-container";
+// ─── Exported functions ───────────────────────────────────────────
 
 export async function addButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
 	buttonName: Name,
@@ -297,188 +122,16 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 	trackButton(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked);
 }
 
-export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
-	buttonName: Name,
-	label: string,
-	icon: BasicIcon,
-	listener: ListenerType<Toggle>,
-	isToggle: boolean,
-	initialChecked = false
-) {
-	const featureName = metadataRegistry.getButtonFeature(buttonName);
-	if (!featureName) return;
-	featuresInMenu.add(buttonName);
-	await waitForElement(menuId);
-	const featureMenu = getMenu();
-	if (!featureMenu) return;
-	const panel = getMenuPanel(featureMenu);
-	if (!panel) return;
-	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(buttonName);
-	let menuItem = panel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
-	if (menuItem) {
-		const labelEl = menuItem.querySelector<HTMLDivElement>(`#${featureMenuItemLabelId}`);
-		if (labelEl) labelEl.textContent = label;
-		eventManager.removeEventListener(menuItem, "click", featureName);
-		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem!, listener, isToggle), featureName);
-		return;
-	}
-	menuItem = document.createElement("div");
-	menuItem.className = "ytp-menuitem";
-	menuItem.id = featureMenuItemId;
-	menuItem.style.height = `${itemHeight}px`;
-	menuItem.setAttribute("role", "menuitemcheckbox");
-	const menuItemIcon = document.createElement("div");
-	menuItemIcon.id = featureMenuItemIconId;
-	menuItemIcon.className = "ytp-menuitem-icon";
-	menuItemIcon.appendChild(icon);
-	menuItem.appendChild(menuItemIcon);
-	const menuItemLabel = document.createElement("div");
-	menuItemLabel.className = "ytp-menuitem-label";
-	menuItemLabel.textContent = label;
-	menuItemLabel.id = featureMenuItemLabelId;
-	menuItem.appendChild(menuItemLabel);
-	const menuItemContent = document.createElement("div");
-	menuItemContent.className = "ytp-menuitem-content";
-	menuItem.appendChild(menuItemContent);
-	if (isToggle) {
-		const menuItemToggle = document.createElement("div");
-		menuItemToggle.className = "ytp-menuitem-toggle-checkbox";
-		menuItemContent.appendChild(menuItemToggle);
-		setMenuItemChecked(menuItem, initialChecked);
-	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem, listener, isToggle), featureName);
-	panel.appendChild(menuItem);
-	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
-	if (featureMenuButton) {
-		featureMenuButton.style.display = "flex";
-		featureMenuButton.style.visibility = "visible";
-	}
-	updateMenuSize(featureMenu, panel);
-}
-
 export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): Promise<boolean> {
+	const { getPlacementRoot } = await import("./containerTracking");
 	const root = await getPlacementRoot(placement);
 	if (!root) return false;
 	if (placement === "feature_menu") return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
-	return root.querySelectorAll(`#${getFeatureButtonId(buttonName)}`).length > 0;
-}
-
-export async function enableFeatureMenu() {
-	await enableFeatureMenuButton();
-}
-
-// ─── Button DOM creation ──────────────────────────────────────────
-
-export async function enableFeatureMenuButton() {
-	if (!isWatchPage()) return;
-	if (document.querySelector(menuButtonId)) return;
-	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
-	if (!featureMenuCssInjected) {
-		featureMenuCssInjected = true;
-		const style = document.createElement("style");
-		style.textContent = `body:not(:has(.ytp-delhi-modern)) #yte-feature-menu-button{justify-content:center;align-items:center}`;
-		document.head.appendChild(style);
-	}
-
-	const existingMenu = document.querySelector<HTMLDivElement>(menuId);
-	const featureMenu = existingMenu ?? createFeatureMenuDom();
-
-	const featureMenuButton = createStyledElement({
-		classlist: ["ytp-button"],
-		elementId: "yte-feature-menu-button",
-		elementType: "button",
-		styles: { display: "none", visibility: "hidden" }
-	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
-	featureMenuButton.appendChild(makeFeatureMenuIcon());
-
-	const container = await getOrCreateRightControlsContainer();
-	if (!container) return;
-	container.insertAdjacentElement("afterend", featureMenuButton);
-
-	const playerContainer = await waitForElement<HTMLDivElement>("#movie_player");
-	if (!playerContainer) return;
-	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-
-	const updateMenuPosition = () => {
-		const buttonRect = featureMenuButton.getBoundingClientRect();
-		const playerRect = playerContainer.getBoundingClientRect();
-		const { offsetWidth: menuWidth } = featureMenu;
-		const buttonCenterX = buttonRect.x - playerRect.x + buttonRect.width / 2;
-		const anchorRatio = 0.6556;
-		const anchorOffset = menuWidth * anchorRatio;
-		const left = buttonCenterX - anchorOffset;
-		featureMenu.style.left = `${left}px`;
-	};
-	updateMenuPosition();
-	const resizeObserver = new ResizeObserver(() => {
-		requestAnimationFrame(updateMenuPosition);
-	});
-	resizeObserver.observe(playerContainer);
-	window.addEventListener("resize", updateMenuPosition);
-	window.addEventListener("yte-feature-menu-resized", updateMenuPosition);
-
-	const {
-		data: {
-			options: {
-				featureMenu: { openType }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
-	void waitForAllElements([menuId, menuButtonId]).then(() => {
-		cleanupFeatureMenuListeners = () => {
-			window.removeEventListener("resize", updateMenuPosition);
-			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-			resizeObserver.disconnect();
-		};
-		const listenersCleanup = setupFeatureMenuEventListeners(openType);
-		const origCleanup = cleanupFeatureMenuListeners;
-		cleanupFeatureMenuListeners = () => {
-			window.removeEventListener("resize", updateMenuPosition);
-			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-			resizeObserver.disconnect();
-			listenersCleanup();
-			origCleanup?.();
-		};
-		return undefined;
-	});
-}
-
-export function getEffectivePlacement(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement): ButtonPlacement {
-	return internalIsFullscreen() && fullscreenPlacement !== "same" ? fullscreenPlacement : placement;
+	return root.querySelectorAll(`#${getFeatureButtonIdForButton(buttonName)}`).length > 0;
 }
 
 export function getFeatureButton(buttonName: AllButtonNames) {
-	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
-}
-
-export function getFeatureButtonId(buttonName: AllButtonNames) {
-	return `yte-feature-${buttonName}-button` as const;
-}
-
-export function getFeatureIds(buttonName: AllButtonNames) {
-	return {
-		featureMenuItemIconId: `yte-${buttonName}-icon`,
-		featureMenuItemId: `yte-feature-${buttonName}-menuitem`,
-		featureMenuItemLabelId: `yte-${buttonName}-label`
-	} as const;
-}
-
-export function getFeatureMenuItem(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector = `#yte-feature-${buttonName}-menuitem` as const;
-	return document.querySelector(`#yte-panel-menu > ${selector}`);
-}
-
-// ─── Menu item helpers ────────────────────────────────────────────
-
-export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector = `#yte-${buttonName}-icon` as const;
-	return document.querySelector(selector);
-}
-
-export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
-	const selector = `#yte-${buttonName}-label` as const;
-	return document.querySelector(selector);
+	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 }
 
 export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
@@ -514,7 +167,7 @@ export async function removeButton<Name extends AllButtonNames>(buttonName: Name
 		case "below_player":
 		case "player_controls_left":
 		case "player_controls_right": {
-			const buttons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+			const buttons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 			if (buttons.length === 0) return;
 			buttons.forEach((button) => button.remove());
 			removeTooltip(`yte-feature-${featureName as SingleButtonFeatureNames}-tooltip`);
@@ -527,129 +180,6 @@ export async function removeButton<Name extends AllButtonNames>(buttonName: Name
 	}
 }
 
-export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
-	featuresInMenu.delete(buttonName);
-	const featureMenu = getMenu();
-	if (!featureMenu) return;
-	const featureMenuPanel = getMenuPanel(featureMenu);
-	if (!featureMenuPanel) return;
-	const { featureMenuItemId } = getFeatureIds(buttonName);
-	const featureMenuItem = featureMenuPanel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
-	if (!featureMenuItem) return;
-	featureMenuItem.remove();
-	updateMenuSize(featureMenu, featureMenuPanel);
-
-	if (featureMenuPanel.childElementCount === 0) {
-		featureMenu.style.visibility = "hidden";
-		const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
-		if (featureMenuButton) featureMenuButton.style.display = "none";
-	}
-}
-
-export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType): () => void {
-	eventManager.removeEventListeners("featureMenu");
-	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
-	const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
-	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
-	const featureMenu = document.querySelector<HTMLDivElement>(menuId);
-	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
-	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton) return () => {};
-	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
-		element: featureMenuButton,
-		featureName: "featureMenu",
-		id: "yte-feature-featureMenu-tooltip"
-	});
-
-	let menuVisible = false;
-	let observer: Nullable<MutationObserver> = null;
-
-	const hideYouTubeSettings = () => {
-		const settingsMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
-		if (settingsMenu && settingsMenu.style.display !== "none") settingsButton.click();
-	};
-	const showFeatureMenu = () => {
-		if (menuVisible) return;
-		menuVisible = true;
-		adjustAdsContainerStyles(true);
-		bottomControls.style.opacity = "1";
-		featureMenu.style.visibility = "visible";
-	};
-	const hideFeatureMenu = () => {
-		if (!menuVisible) return;
-		menuVisible = false;
-		adjustAdsContainerStyles(false);
-		featureMenu.style.visibility = "hidden";
-		bottomControls.style.opacity = "";
-	};
-	const clickOutsideListener = (event: Event) => {
-		const target = event.target as Node;
-		if (featureMenuButton.contains(target) || featureMenu.contains(target)) return;
-		hideFeatureMenu();
-	};
-
-	switch (featureMenuOpenType) {
-		case "click":
-			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "click", () => (menuVisible ? hideFeatureMenu() : showFeatureMenu()), "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
-			break;
-		case "hover": {
-			let hideTimer: Nullable<number> = null;
-			const cancelHide = () => {
-				if (hideTimer) {
-					clearTimeout(hideTimer);
-					hideTimer = null;
-				}
-			};
-			const scheduleHide = () => {
-				cancelHide();
-				hideTimer = window.setTimeout(() => {
-					removeFeatureMenuTooltip();
-					hideFeatureMenu();
-				}, 80);
-			};
-			const show = () => {
-				cancelHide();
-				hideYouTubeSettings();
-				showFeatureMenuTooltip();
-				showFeatureMenu();
-			};
-			eventManager.addEventListener(featureMenuButton, "pointerenter", show, "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "pointerleave", scheduleHide, "featureMenu");
-			eventManager.addEventListener(featureMenu, "pointerenter", cancelHide, "featureMenu");
-			eventManager.addEventListener(featureMenu, "pointerleave", scheduleHide, "featureMenu");
-			eventManager.addEventListener(playerContainer, "pointerleave", scheduleHide, "featureMenu");
-			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
-			break;
-		}
-	}
-
-	observer = new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			if (mutation.type !== "childList") continue;
-			for (const node of Array.from(mutation.addedNodes)) {
-				if (!(node instanceof HTMLElement)) continue;
-				if (node.classList.contains("video-ads") && node.classList.contains("ytp-ad-module")) {
-					adjustAdsContainerStyles(menuVisible);
-				}
-			}
-		}
-	});
-
-	observer.observe(playerContainer, { childList: true, subtree: true });
-
-	return () => {
-		eventManager.removeEventListeners("featureMenu");
-		if (observer) {
-			observer.disconnect();
-			observer = null;
-		}
-	};
-}
-
-// ─── Public API ───────────────────────────────────────────────────
-
 export function updateButtonsIconColor() {
 	const container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
 	if (!container) return;
@@ -660,15 +190,14 @@ export function updateButtonsIconColor() {
 	}
 }
 
-/**
- * Sets a toggle's checked state from outside the controller, for a feature whose state can change without a click on
- * its button. The tracked record follows, since it is what a relocated button is rebuilt from.
- */
 export function updateFeatureButtonChecked(buttonName: AllButtonNames, checked: boolean) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 	if (button) setChecked(button, checked);
 	const menuItem = getFeatureMenuItem(buttonName);
-	if (menuItem) setMenuItemChecked(menuItem, checked);
+	if (menuItem) {
+		menuItem.setAttribute("aria-checked", String(checked));
+		menuItem.classList.toggle("ytp-menuitem-checked", checked);
+	}
 	updateTrackedButtonChecked(buttonName, checked);
 }
 
@@ -677,19 +206,13 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 }
 
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 	if (button) {
 		button.dataset.title = title;
-		// The tracked label is what a relocated button is rebuilt from, so it has to follow the button's title.
 		updateTrackedButtonLabel(buttonName, title);
 		const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
 		if (tooltip) tooltip.textContent = title;
 	}
-}
-
-export function updateFeatureMenuTitle(title: string) {
-	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
-	if (featureMenuButton) featureMenuButton.dataset.title = title;
 }
 
 export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreenPlacement: FullscreenPlacement) {
@@ -699,14 +222,7 @@ export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreen
 	}
 }
 
-function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsSpan = document.querySelector<HTMLSpanElement>("div.video-ads.ytp-ad-module span.ytp-ad-preview-container");
-	if (!adsSpan) return;
-	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
-	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";
-}
-
-// ─── Tracked button management ────────────────────────────────────
+// ─── Private helpers ──────────────────────────────────────────────
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
 	button.replaceChildren(
@@ -750,119 +266,22 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	listener(newState);
 }
 
-// ─── Fullscreen handler ───────────────────────────────────────────
-
-function createFeatureMenuDom() {
-	const featureMenu = createStyledElement({
-		classlist: ["ytp-popup", "ytp-settings-menu"],
-		elementId: "yte-feature-menu",
-		elementType: "div",
-		styles: { display: "block", visibility: "hidden", zIndex: "2050" }
-	});
-	const featureMenuPanel = createStyledElement({
-		classlist: ["ytp-panel"],
-		elementId: "yte-feature-menu-panel",
-		elementType: "div",
-		styles: { display: "contents" }
-	});
-	featureMenu.appendChild(featureMenuPanel);
-	const featureMenuPanelMenu = createStyledElement({
-		classlist: ["ytp-panel-menu"],
-		elementId: "yte-panel-menu",
-		elementType: "div"
-	});
-	featureMenuPanel.appendChild(featureMenuPanelMenu);
-	return featureMenu;
-}
-
-// ─── Button creation + placement ──────────────────────────────────
-
-function featureMenuClickListener<Toggle extends boolean>(
-	buttonName: AllButtonNames,
-	menuItem: HTMLDivElement,
-	listener: ListenerType<Toggle>,
-	isToggle: boolean
-) {
-	if (!isToggle) return listener();
-	const newState = !getMenuItemChecked(menuItem);
-	setMenuItemChecked(menuItem, newState);
-	updateTrackedButtonChecked(buttonName, newState);
-	listener(newState);
-}
-
 function getChecked(button: HTMLButtonElement) {
 	return button.getAttribute("aria-checked") === "true";
 }
 
-function getMenu(): Nullable<HTMLDivElement> {
-	return document.querySelector<HTMLDivElement>(menuId);
-}
-
-// ─── Menu item management ─────────────────────────────────────────
-
-function getMenuItemChecked(item: HTMLDivElement) {
-	return item.getAttribute("aria-checked") === "true";
-}
-
-function getMenuPanel(menu: HTMLDivElement): Nullable<HTMLDivElement> {
-	return menu.querySelector<HTMLDivElement>(panelId);
-}
-
-async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nullable<HTMLDivElement>> {
-	let container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-	if (container) {
-		buttonContainerElement = container;
-		return container;
-	}
-	container = createStyledElement({
-		elementId: buttonContainerId,
-		elementType: "div",
-		styles: { display: "flex", height: "48px", justifyContent: "center" }
-	});
-	buttonContainerElement = container;
-	if (inTheaterMode) {
-		const isNewLayout = isNewYouTubeVideoLayout();
-		const parent = isNewLayout ? document.querySelector<HTMLElement>("ytd-watch-grid") : document.querySelector<HTMLElement>("ytd-watch-flexy");
-		if (!parent) return null;
-		const columns = parent.querySelector("#columns");
-		if (columns) {
-			parent.insertBefore(container, columns);
-			return container;
-		}
-		parent.append(container);
-		return container;
-	}
-	const player = await waitForElement<HTMLDivElement>("div#primary > div#primary-inner > div#player");
-	if (!player) return null;
-	player.insertAdjacentElement("afterend", container);
-	return container;
-}
-
-async function getOrCreateRightControlsContainer(): Promise<Nullable<HTMLDivElement>> {
-	const rightControls = await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
-	if (!rightControls) return null;
-	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);
-	if (!container) {
-		container = createStyledElement({
-			elementId: rightControlsContainerId,
-			elementType: "div",
-			styles: { alignItems: "center", display: "flex" }
-		});
-		const leftSide = rightControls.querySelector<HTMLDivElement>(".ytp-right-controls-left");
-		if (leftSide) leftSide.insertAdjacentElement("beforebegin", container);
-		else rightControls.prepend(container);
-	}
-	return container;
+function getFeatureButtonIdForButton(buttonName: AllButtonNames) {
+	return `yte-feature-${buttonName}-button` as const;
 }
 
 async function handleFullscreenChange() {
-	const inFullscreen = internalIsFullscreen();
+	const inFullscreen = isFullscreen();
 	for (const [buttonName, info] of trackedButtons) {
 		const effectivePlacement = inFullscreen && info.fullscreenPlacement !== "same" ? info.fullscreenPlacement : info.placement;
 		if (effectivePlacement === info.currentEffectivePlacement) continue;
 
 		if (info.currentEffectivePlacement !== "feature_menu") {
-			const oldButton = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+			const oldButton = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 			if (oldButton) {
 				oldButton.remove();
 				const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
@@ -899,7 +318,7 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) throw new Error(`No feature found for button "${buttonName}"`);
-	const existingButtons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonId(buttonName)}`);
+	const existingButtons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 	if (existingButtons.length > 0) {
 		existingButtons.forEach((btn) => btn.remove());
 	}
@@ -910,7 +329,7 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 			: placement === "player_controls_right" ? "yte-button-player-controls-right"
 			: "yte-button-player-controls-left"
 		],
-		elementId: getFeatureButtonId(buttonName),
+		elementId: getFeatureButtonIdForButton(buttonName),
 		elementType: "button"
 	});
 	button.dataset.title = label;
@@ -942,59 +361,8 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 	return button;
 }
 
-// ─── Utility exports ──────────────────────────────────────────────
-
-function makeFeatureMenuIcon() {
-	return createSVGElement(
-		"svg",
-		{ fill: "white", height: "24px", viewBox: "0 0 24 24", width: "24px" },
-		createSVGElement("path", {
-			d: "M 3.1273593,7.5636797 H 7.5636797 V 3.1273593 H 3.1273593 Z M 9.7818397,20.872641 H 14.21816 V 16.43632 H 9.7818397 Z m -6.6544804,0 H 7.5636797 V 16.43632 H 3.1273593 Z m 0,-6.654481 H 7.5636797 V 9.7818397 H 3.1273593 Z m 6.6544804,0 H 14.21816 V 9.7818397 H 9.7818397 Z M 16.43632,3.1273593 v 4.4363204 h 4.436321 V 3.1273593 Z M 9.7818397,7.5636797 H 14.21816 V 3.1273593 H 9.7818397 Z M 16.43632,14.21816 h 4.436321 V 9.7818397 H 16.43632 Z m 0,6.654481 h 4.436321 V 16.43632 H 16.43632 Z",
-			fill: "white"
-		})
-	);
-}
-
-async function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonPlacement, "feature_menu">) {
-	switch (placement) {
-		case "below_player": {
-			const inTheaterMode = isInTheaterMode();
-			const container = await getOrCreateButtonContainer(inTheaterMode);
-			if (!container) return;
-			await startTheaterModeObserver();
-			await startContainerGeometryObserver();
-			const existingInContainer = container.querySelectorAll(`#${button.id}`);
-			existingInContainer.forEach((b) => b.remove());
-			container.append(button);
-			break;
-		}
-		case "player_controls_left": {
-			const leftControls = await waitForElement<HTMLDivElement>(".ytp-left-controls");
-			if (!leftControls) return;
-			const existingInContainer = leftControls.querySelectorAll(`#${button.id}`);
-			existingInContainer.forEach((b) => b.remove());
-			const timeDisplay = leftControls.querySelector<HTMLDivElement>(".ytp-time-display");
-			if (timeDisplay) timeDisplay.insertAdjacentElement("beforebegin", button);
-			break;
-		}
-		case "player_controls_right": {
-			const container = await getOrCreateRightControlsContainer();
-			if (!container) return;
-			const existingInContainer = container.querySelectorAll(`#${button.id}`);
-			existingInContainer.forEach((b) => b.remove());
-			container.append(button);
-			break;
-		}
-	}
-}
-
 function setChecked(button: HTMLButtonElement, value: boolean) {
 	button.setAttribute("aria-checked", String(value));
-}
-
-function setMenuItemChecked(item: HTMLDivElement, value: boolean) {
-	item.setAttribute("aria-checked", String(value));
-	item.classList.toggle("ytp-menuitem-checked", value);
 }
 
 function trackButton(
@@ -1018,8 +386,8 @@ function trackButton(
 		listener,
 		placement
 	});
-	if (!fullscreenObserverActive) {
-		fullscreenObserverActive = true;
+	if (!isFullscreenObserverActive()) {
+		setFullscreenObserverActive(true);
 		startFullscreenObserver(() => {
 			void handleFullscreenChange();
 		});
@@ -1030,23 +398,13 @@ function untrackButton(buttonName: AllButtonNames) {
 	trackedButtons.delete(buttonName);
 	if (trackedButtons.size === 0) {
 		stopContainerGeometryObserver();
-		if (fullscreenObserverActive) {
-			fullscreenObserverActive = false;
+		if (isFullscreenObserverActive()) {
+			setFullscreenObserverActive(false);
 			stopFullscreenObserver();
 		}
 	}
 }
 
-function updateMenuSize(menu: HTMLDivElement, panel: HTMLDivElement) {
-	menu.style.height = `${itemHeight * panel.childElementCount + menuPadding}px`;
-	menu.style.width = "fit-content";
-	window.dispatchEvent(new CustomEvent("yte-feature-menu-resized"));
-}
-
-/**
- * The tracked record is what a relocated button is rebuilt from, so its checked state and label have to follow the
- * live button rather than stay on the values the button was added with.
- */
 function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.checked = checked;
@@ -1056,5 +414,3 @@ function updateTrackedButtonLabel(buttonName: AllButtonNames, label: string) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.label = label;
 }
-
-export type { ListenerType } from "./types";
