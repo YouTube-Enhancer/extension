@@ -2,8 +2,8 @@ import type { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "@/src/features/deepDarkCSS/utils";
+import { getDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
 import { resolveContrastColor } from "@/src/utils/color";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 export function fallback(isDarkMode: boolean) {
 	return isDarkMode ? "#FFFFFF" : "#000000";
@@ -19,14 +19,10 @@ export function resolveDeepDarkColors(data: ReturnType<typeof getDeepDarkData>) 
 	}
 }
 
-export async function resolveFromCSS(): Promise<string> {
-	const {
-		data: {
-			options: {
-				deepDarkCSS: { colors, preset }
-			}
-		}
-	} = await waitForSpecificMessage("options", "request_data", "content");
+export function resolveFromCSS(): string {
+	const config = getDeepDarkCSSConfig();
+	if (!config) return "#FFFFFF";
+	const { colors, preset } = config;
 	const resolved = preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset];
 	return resolveContrastColor(resolved);
 }

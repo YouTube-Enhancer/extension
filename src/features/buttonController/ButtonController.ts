@@ -101,7 +101,7 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 		case "player_controls_right": {
 			const featureButton = getFeatureButton(buttonName);
 			if (featureButton) removeButton(buttonName);
-			const button = await makeFeatureButton(
+			const button = makeFeatureButton(
 				buttonName,
 				effectivePlacement,
 				label,
@@ -135,14 +135,14 @@ export function getFeatureButton(buttonName: AllButtonNames) {
 	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
 }
 
-export async function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
+export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
 	const color = overrideColor ? "#FFFFFF" : undefined;
 	const target: SVGSVGElement | ToggleIcon = icon;
 	if (isToggleIcon(target)) {
-		await applyThemeToSvg(target.on, color);
-		await applyThemeToSvg(target.off, color);
+		applyThemeToSvg(target.on, color);
+		applyThemeToSvg(target.off, color);
 	} else {
-		await applyThemeToSvg(target, color);
+		applyThemeToSvg(target, color);
 	}
 	return icon;
 }
@@ -232,8 +232,8 @@ function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon,
 	);
 }
 
-async function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF") {
-	const color = forceColor ?? (await getButtonColor());
+function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF") {
+	const color = forceColor ?? getButtonColor();
 	if (svg.hasAttribute("fill") && svg.getAttribute("fill") !== "none") svg.setAttribute("fill", color);
 	if (svg.hasAttribute("stroke") && svg.getAttribute("stroke") !== "none") svg.setAttribute("stroke", color);
 	const elements = svg.querySelectorAll("[fill]:not([fill='none']), [stroke]:not([stroke='none'])");
@@ -292,7 +292,7 @@ async function handleFullscreenChange() {
 
 		if (effectivePlacement !== "feature_menu") {
 			const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
-			const button = await makeFeatureButton(buttonName, effectivePlacement, info.label, placementIcon, info.listener, info.isToggle, info.checked);
+			const button = makeFeatureButton(buttonName, effectivePlacement, info.label, placementIcon, info.listener, info.isToggle, info.checked);
 			await placeButton(button, effectivePlacement);
 		} else {
 			const menuIcon = getFeatureIcon(buttonName, "feature_menu");
@@ -305,7 +305,7 @@ async function handleFullscreenChange() {
 	}
 }
 
-async function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
+function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
 	buttonName: Name,
 	placement: Placement,
 	label: string,
@@ -338,7 +338,7 @@ async function makeFeatureButton<Name extends AllButtonNames, Placement extends 
 		featureName,
 		id: `yte-feature-${buttonName}-tooltip`
 	});
-	icon = await modifyIconForLightTheme(icon, placement !== "below_player");
+	icon = modifyIconForLightTheme(icon, placement !== "below_player");
 	if (isToggle) {
 		setChecked(button, initialChecked);
 		appendIcon(button, icon, initialChecked);
