@@ -141,10 +141,6 @@ export function isFullscreen(): boolean {
 	return !!document.fullscreenElement || document.querySelector("ytd-app[fullscreen]") !== null;
 }
 
-export function isFullscreenObserverActive() {
-	return fullscreenObserverActive;
-}
-
 export function isInTheaterMode(): boolean {
 	return (
 		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false
@@ -184,45 +180,11 @@ export async function placeButton(button: HTMLButtonElement, placement: Exclude<
 	}
 }
 
-export function setFullscreenObserverActive(value: boolean) {
-	fullscreenObserverActive = value;
-}
-
-export async function startContainerGeometryObserver() {
-	if (containerGeometryObserver) return;
-	const player = await waitForElement<HTMLDivElement>("#movie_player", 15000);
-	if (!player || containerGeometryObserver) return;
-	containerGeometryObserver = new ResizeObserver(() => {
-		requestAnimationFrame(syncContainerGeometry);
-	});
-	containerGeometryObserver.observe(player);
-	observedPlayerElement = player;
-	const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
-	if (watchElement) {
-		containerGeometryMutationObserver = new MutationObserver(() => {
-			requestAnimationFrame(syncContainerGeometry);
-		});
-		containerGeometryMutationObserver.observe(watchElement, { attributes: true });
+export function startPlacementTracking(onFullscreenChange: () => void) {
+	if (!fullscreenObserverActive) {
+		fullscreenObserverActive = true;
+		startFullscreenObserver(onFullscreenChange);
 	}
-	containerGeometryResizeHandler = () => syncContainerGeometry();
-	window.addEventListener("resize", containerGeometryResizeHandler);
-	syncContainerGeometry();
-}
-
-export function startFullscreenObserver(callback: () => void) {
-	fullscreenDomHandler = callback;
-	const target = document.querySelector("ytd-app");
-	if (target) {
-		fullscreenObserver = new MutationObserver((mutations) => {
-			for (const mutation of mutations) {
-				if (mutation.type === "attributes" && mutation.attributeName === "fullscreen") {
-					callback();
-				}
-			}
-		});
-		fullscreenObserver.observe(target, { attributeFilter: ["fullscreen"], attributes: true });
-	}
-	document.addEventListener("fullscreenchange", onFullscreenChange, { passive: true });
 }
 
 export async function startTheaterModeObserver() {
@@ -247,24 +209,12 @@ export async function startTheaterModeObserver() {
 	document.addEventListener("yt-navigate-start", theaterNavigationHandler);
 }
 
-export function stopContainerGeometryObserver() {
-	containerGeometryObserver?.disconnect();
-	containerGeometryObserver = null;
-	containerGeometryMutationObserver?.disconnect();
-	containerGeometryMutationObserver = null;
-	observedPlayerElement = null;
-	if (containerGeometryResizeHandler) {
-		window.removeEventListener("resize", containerGeometryResizeHandler);
-		containerGeometryResizeHandler = null;
+export function stopPlacementTracking() {
+	stopContainerGeometryObserver();
+	if (fullscreenObserverActive) {
+		fullscreenObserverActive = false;
+		stopFullscreenObserver();
 	}
-}
-
-export function stopFullscreenObserver() {
-	fullscreenObserver?.disconnect();
-	fullscreenObserver = null;
-	document.removeEventListener("fullscreenchange", onFullscreenChange);
-	fullscreenDomHandler = null;
-	fullscreenObserverActive = false;
 }
 
 export function stopTheaterModeObserver() {
@@ -280,6 +230,63 @@ export function stopTheaterModeObserver() {
 
 function onFullscreenChange() {
 	fullscreenDomHandler?.();
+}
+
+async function startContainerGeometryObserver() {
+	if (containerGeometryObserver) return;
+	const player = await waitForElement<HTMLDivElement>("#movie_player", 15000);
+	if (!player || containerGeometryObserver) return;
+	containerGeometryObserver = new ResizeObserver(() => {
+		requestAnimationFrame(syncContainerGeometry);
+	});
+	containerGeometryObserver.observe(player);
+	observedPlayerElement = player;
+	const watchElement = document.querySelector("ytd-watch-flexy, ytd-watch-grid");
+	if (watchElement) {
+		containerGeometryMutationObserver = new MutationObserver(() => {
+			requestAnimationFrame(syncContainerGeometry);
+		});
+		containerGeometryMutationObserver.observe(watchElement, { attributes: true });
+	}
+	containerGeometryResizeHandler = () => syncContainerGeometry();
+	window.addEventListener("resize", containerGeometryResizeHandler);
+	syncContainerGeometry();
+}
+
+function startFullscreenObserver(callback: () => void) {
+	fullscreenDomHandler = callback;
+	const target = document.querySelector("ytd-app");
+	if (target) {
+		fullscreenObserver = new MutationObserver((mutations) => {
+			for (const mutation of mutations) {
+				if (mutation.type === "attributes" && mutation.attributeName === "fullscreen") {
+					callback();
+				}
+			}
+		});
+		fullscreenObserver.observe(target, { attributeFilter: ["fullscreen"], attributes: true });
+	}
+	document.addEventListener("fullscreenchange", onFullscreenChange, { passive: true });
+}
+
+function stopContainerGeometryObserver() {
+	containerGeometryObserver?.disconnect();
+	containerGeometryObserver = null;
+	containerGeometryMutationObserver?.disconnect();
+	containerGeometryMutationObserver = null;
+	observedPlayerElement = null;
+	if (containerGeometryResizeHandler) {
+		window.removeEventListener("resize", containerGeometryResizeHandler);
+		containerGeometryResizeHandler = null;
+	}
+}
+
+function stopFullscreenObserver() {
+	fullscreenObserver?.disconnect();
+	fullscreenObserver = null;
+	document.removeEventListener("fullscreenchange", onFullscreenChange);
+	fullscreenDomHandler = null;
+	fullscreenObserverActive = false;
 }
 
 function syncContainerGeometry() {
