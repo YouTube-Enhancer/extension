@@ -1,13 +1,12 @@
 import type { Nullable } from "@/src/types";
 
-import { setupYouTubePage } from "@/src/_setup/embedded/lifecycle";
-import { registry } from "@/src/features/_registry/featureRegistry";
+import { type CleanupHandle, setupYouTubePage } from "@/src/_setup/embedded/lifecycle";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { DEV_RELOAD_SOURCE, type DevWindowMessage, EMBEDDED_STYLE_ID, isDevWindowMessage } from "@/src/utils/dev/hotReload";
 import { browserColorLog } from "@/src/utils/logging";
 import { formatError } from "@/utils/format/error";
 
-let cleanupHandle: Nullable<{ dispose(): void }> = null;
+let cleanupHandle: Nullable<CleanupHandle> = null;
 let setupInProgress = false;
 
 function initSetup() {
@@ -37,7 +36,7 @@ if (window.self === window.top) {
 }
 
 const onPageHide = () => {
-	cleanupHandle?.dispose();
+	void cleanupHandle?.dispose();
 	cleanupHandle = null;
 };
 const onPageShow = () => {
@@ -85,12 +84,7 @@ if (DEV_MODE) {
 }
 
 async function disposeForHotReload(): Promise<void> {
-	try {
-		await registry.disableAll();
-	} catch (error) {
-		browserColorLog(`Hot reload: disableAll failed: ${formatError(error)}`, "FgRed");
-	}
-	cleanupHandle?.dispose();
+	await cleanupHandle?.dispose({ disableFeatures: true });
 	cleanupHandle = null;
 	window.removeEventListener("pagehide", onPageHide);
 	window.removeEventListener("pageshow", onPageShow);

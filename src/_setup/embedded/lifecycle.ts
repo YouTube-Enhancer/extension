@@ -18,12 +18,12 @@ import { coreFeatures } from "./coreFeatures";
 import { setupMessageListener } from "./messageHandling";
 
 export interface CleanupHandle {
-	dispose(): void;
+	dispose(options?: { disableFeatures?: boolean }): Promise<void>;
 }
 
 export async function setupYouTubePage(): Promise<CleanupHandle> {
 	if (!isSupportedYouTubeHostname(window.location.hostname)) {
-		return { dispose: () => {} };
+		return { dispose: async () => {} };
 	}
 	ensureTrustedTypesPolicy();
 
@@ -95,7 +95,14 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	}
 
 	return {
-		dispose() {
+		async dispose(options?: { disableFeatures?: boolean }) {
+			if (options?.disableFeatures) {
+				try {
+					await registry.disableAll();
+				} catch (error) {
+					console.error("Teardown: disableAll failed:", error);
+				}
+			}
 			registry.destroyNavigationListener();
 			eventManager.removeAllEventListeners();
 			coreFeatures.destroy();
