@@ -1,3 +1,5 @@
+import type { ButtonPlacement } from "@/src/types";
+
 import { createFeature } from "@/src/features/_registry/createFeature";
 import {
 	addFeatureButton,
@@ -7,7 +9,6 @@ import {
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement } from "@/src/types";
 
 import { metadata } from "./index.metadata";
 import { loopButtonClickListener } from "./utils";

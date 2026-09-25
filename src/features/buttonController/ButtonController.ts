@@ -1,7 +1,8 @@
+import type { AllButtonNames, ButtonPlacement, FullscreenPlacement, SingleButtonFeatureNames } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
-import { type AllButtonNames, type ButtonPlacement, type FullscreenPlacement, type SingleButtonFeatureNames } from "@/src/types";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";

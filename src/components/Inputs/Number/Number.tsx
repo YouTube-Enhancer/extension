@@ -3,9 +3,10 @@ import type { ChangeEvent } from "react";
 
 import React, { useEffect, useId, useRef, useState } from "react";
 
+import type { Nullable } from "@/src/types";
+
 import { useSettings } from "@/src/components/Settings/Settings";
 import useDebounceFn from "@/src/hooks/useDebounce";
-import { type Nullable } from "@/src/types";
 import { cn } from "@/src/utils/style";
 
 import Arrow from "./Arrow";

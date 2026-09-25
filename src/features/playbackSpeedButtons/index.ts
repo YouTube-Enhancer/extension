@@ -1,9 +1,10 @@
+import type { ButtonPlacement, FullscreenPlacement, YouTubePlayerDiv } from "@/src/types";
+
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { addFeatureButton, checkIfFeatureButtonExists, getFeatureButton, removeFeatureButton } from "@/src/features/buttonController";
 import { setPlayerSpeed } from "@/src/features/playerSpeed";
 import { getFeatureIcon } from "@/src/icons";
-import { type ButtonPlacement, type FullscreenPlacement, type YouTubePlayerDiv } from "@/src/types";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { waitForSpecificMessage } from "@/src/utils/messaging";

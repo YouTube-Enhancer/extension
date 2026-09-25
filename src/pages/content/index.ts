@@ -1,20 +1,20 @@
 import browser from "webextension-polyfill";
 
 import type { CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, FeatureState, NonFeatureKeys } from "@/src/features/_registry/types";
+import type {
+	configuration,
+	ContentSendOnlyMessages,
+	ContentToBackgroundSendOnlyMessages,
+	ExtensionSendOnlyMessageMappings,
+	Messages,
+	Path,
+	PathValue,
+	StorageChanges
+} from "@/src/types";
 
 import { invalidateDevToolsCache } from "@/src/components/devtools/hooks/useDevToolsQuery";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
-import {
-	type configuration,
-	type ContentSendOnlyMessages,
-	type ContentToBackgroundSendOnlyMessages,
-	type ExtensionSendOnlyMessageMappings,
-	type Messages,
-	type Path,
-	type PathValue,
-	type StorageChanges
-} from "@/src/types";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";

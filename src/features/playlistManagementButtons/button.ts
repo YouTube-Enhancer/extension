@@ -3,11 +3,12 @@ import type { IconType } from "react-icons";
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
 
-import type { TSelectorFunc } from "@/src/types";
+import type { FeatureName } from "@/src/events/EventManager";
 
 import "./button.css";
 
-import { type FeatureName } from "@/src/events/EventManager";
+import type { TSelectorFunc } from "@/src/types";
+
 import { createTooltip } from "@/src/utils/dom/tooltip";
 
 interface ActionButtonConfig {
