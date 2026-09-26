@@ -134,13 +134,13 @@ Button features define a `buttons` array with `add` and optional `remove`/`onRem
 
 Features should use name-based controller APIs instead of reaching into the DOM directly:
 
-| Prefer | Instead of | Why |
-|---|---|---|
-| `updateFeatureButtonIconByName(name, icon)` | `getFeatureButton(name)` → `updateFeatureButtonIcon(el, icon)` | No DOM lookup needed |
-| `updateFeatureMenuItemLabel(name, text)` | `getFeatureIds(name)` → `document.getElementById(id).textContent = ...` | Encapsulates menu DOM |
-| `getTrackedButtonChecked(name)` | `getFeatureMenuItem(name)?.ariaChecked === "true"` | Reads from tracked state, not DOM |
-| `updateFeatureButtonChecked(name, checked)` | Direct `setAttribute("aria-checked", ...)` | Syncs DOM + tracked state |
-| `hasFeaturesInMenu()` | `featuresInMenu.size > 0` | No mutable Set export |
+| Prefer                                      | Instead of                                                              | Why                               |
+| ------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------- |
+| `updateFeatureButtonIconByName(name, icon)` | `getFeatureButton(name)` → `updateFeatureButtonIcon(el, icon)`          | No DOM lookup needed              |
+| `updateFeatureMenuItemLabel(name, text)`    | `getFeatureIds(name)` → `document.getElementById(id).textContent = ...` | Encapsulates menu DOM             |
+| `getTrackedButtonChecked(name)`             | `getFeatureMenuItem(name)?.ariaChecked === "true"`                      | Reads from tracked state, not DOM |
+| `updateFeatureButtonChecked(name, checked)` | Direct `setAttribute("aria-checked", ...)`                              | Syncs DOM + tracked state         |
+| `hasFeaturesInMenu()`                       | `featuresInMenu.size > 0`                                               | No mutable Set export             |
 
 # Runtime Lifecycle
 
