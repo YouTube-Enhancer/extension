@@ -46,6 +46,7 @@ export abstract class FeatureManagerBase {
 		operation: string,
 		fn: () => Promise<T>,
 		options: {
+			concurrencyGroup?: number;
 			fallback?: T;
 			shouldRethrow?: boolean;
 			subPhase?: string;
@@ -63,7 +64,7 @@ export abstract class FeatureManagerBase {
 		if (options.trackTiming !== false) {
 			// Delegate to performance tracker for timing and error handling
 			try {
-				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase);
+				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase, { concurrencyGroup: options.concurrencyGroup });
 			} catch (error) {
 				// Error already recorded by track(). Honor shouldRethrow/fallback.
 				if (options.shouldRethrow) {
