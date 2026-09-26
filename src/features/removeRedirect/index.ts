@@ -2,56 +2,44 @@ import type { Nullable } from "@/src/types";
 
 import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
 import { createFeature } from "@/src/features/_registry/createFeature";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 
 import { metadata } from "./index.metadata";
 
 const REDIRECT_PREFIX = "https://www.youtube.com/redirect?";
 
-let redirectObserver: Nullable<MutationObserver> = null;
+let unsubscribeBus: Nullable<() => void> = null;
 
 export default createFeature({
 	...metadata,
 	onDisable: () => {
 		browserColorLog(`Disabling removeRedirect`, "FgMagenta");
-		disconnectObserver();
+		unsubscribeBus?.();
+		unsubscribeBus = null;
 	},
 	onEnable: () => {
 		browserColorLog(`Enabling removeRedirect`, "FgMagenta");
-		// Never leave a previous observer running: it would keep unwrapping links a later disable cannot stop.
-		disconnectObserver();
+		unsubscribeBus?.();
 		processDocument();
-		redirectObserver = new MutationObserver((mutations: MutationRecord[]) => {
-			for (const mutation of mutations) {
-				if (mutation.type !== "childList") continue;
-				mutation.addedNodes.forEach((node: Nullable<Node>) => {
-					if (node) processNode(node);
-				});
+		unsubscribeBus = subscribe("[href]", (elements) => {
+			for (const el of elements) {
+				unwrapRedirect(el);
 			}
 		});
-		redirectObserver.observe(document.body, {
-			childList: true,
-			subtree: true
+		cleanupRegistry.add("removeRedirect", () => {
+			unsubscribeBus?.();
+			unsubscribeBus = null;
 		});
-		cleanupRegistry.add("removeRedirect", disconnectObserver);
 	}
 });
 
-function disconnectObserver(): void {
-	if (!redirectObserver) return;
-	redirectObserver.disconnect();
-	redirectObserver = null;
-}
 function processDocument(): void {
 	document.querySelectorAll("[href]").forEach((link) => {
 		unwrapRedirect(link);
 	});
 }
-function processNode(node: Node): void {
-	if (!(node instanceof Element)) return;
-	if (node.hasAttribute("href")) unwrapRedirect(node);
-	node.querySelectorAll<HTMLElement>("[href]").forEach((link: HTMLElement) => unwrapRedirect(link));
-}
+
 function unwrapRedirect(el: Element): void {
 	const href: Nullable<string> = el.getAttribute("href");
 	if (!href || !href.startsWith(REDIRECT_PREFIX)) return;

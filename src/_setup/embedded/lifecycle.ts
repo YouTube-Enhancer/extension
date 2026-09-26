@@ -7,6 +7,7 @@ import { i18nService } from "@/src/i18n";
 import { setCoreConfigs } from "@/src/ui/coreConfigStore";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
+import { disconnect as disconnectMutationBus } from "@/src/utils/dom/observers/domMutationBus";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
 import { setupDevToolsListener } from "@/src/utils/messaging/devtools.embedded";
 import { ensureTrustedTypesPolicy } from "@/src/utils/security/trustedTypes";
@@ -109,6 +110,7 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 			eventManager.removeAllEventListeners();
 			coreFeatures.destroy();
 			colorObserver.disconnect();
+			disconnectMutationBus();
 			removeMessageListener();
 		}
 	};

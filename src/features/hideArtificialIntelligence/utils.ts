@@ -2,6 +2,7 @@ import type { Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { cleanupRegistry } from "@/src/features/_registry/cleanupRegistry";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 
 /** Debounced so the top level observer does not run a document query for every YouTube DOM mutation. */
 const ATTACH_DEBOUNCE_MS = 100;
@@ -21,7 +22,7 @@ ytd-engagement-panel-section-list-renderer[target-id="PAyouchat"] {
 const FEATURE_NAME = "hideArtificialIntelligence";
 
 let attachTimeout: Nullable<ReturnType<typeof setTimeout>> = null;
-let chatFrameObserver: Nullable<MutationObserver> = null;
+let unsubscribeBus: Nullable<() => void> = null;
 let cleanupRegistered = false;
 
 /**
@@ -104,12 +105,10 @@ function scheduleAttach(): void {
 }
 
 function startChatFrameObserver(): void {
-	if (chatFrameObserver) return;
-	const { documentElement } = document;
-	if (!documentElement) return;
-	// The chat frame is inserted long after the watch page settles and is re-created on every SPA navigation.
-	chatFrameObserver = new MutationObserver(scheduleAttach);
-	chatFrameObserver.observe(documentElement, { childList: true, subtree: true });
+	if (unsubscribeBus) return;
+	unsubscribeBus = subscribe(CHAT_FRAME_SELECTOR, () => {
+		scheduleAttach();
+	});
 }
 
 function stopChatFrameObserver(): void {
@@ -117,6 +116,6 @@ function stopChatFrameObserver(): void {
 		clearTimeout(attachTimeout);
 		attachTimeout = null;
 	}
-	chatFrameObserver?.disconnect();
-	chatFrameObserver = null;
+	unsubscribeBus?.();
+	unsubscribeBus = null;
 }
