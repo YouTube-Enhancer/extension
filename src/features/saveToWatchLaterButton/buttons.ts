@@ -15,7 +15,17 @@ import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentVideoId } from "@/src/utils/url";
 import { isVideoInPlaylist } from "@/src/utils/youtube";
 
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, LOCKUP_MENU_WRAPPER_SELECTOR, LOCKUP_SELECTOR, SAVED_ICON, UNSAVED_ICON } from "./constants";
+import {
+	ACTIONS_ROW_SELECTOR,
+	BUTTON_CLASS,
+	LOCKUP_MENU_WRAPPER_SELECTOR,
+	LOCKUP_SELECTOR,
+	SAVED_ICON,
+	SEARCH_MENU_SLOT_SELECTOR,
+	SEARCH_ROW_SELECTOR,
+	SEARCH_ROW_THUMBNAIL_SELECTOR,
+	UNSAVED_ICON
+} from "./constants";
 import { performPlaylistEdit } from "./saveActions";
 
 // YouTube's renderer elements expose their props on a data property.
@@ -23,21 +33,24 @@ interface PolymerDataElement extends Element {
 	data?: unknown;
 }
 
+// The search rows sit in a narrow action menu, so the button gets a filled shape to read as a button, not an icon.
+const SEARCH_ROW_VARIANT = { type: "BUTTON_VIEW_MODEL_TYPE_TONAL" };
+
 /**
- * Lockups to skip on later passes: confirmed non-videos such as mixes and playlists, and videos already saved. A
- * lockup with no readable data is not added, since its data can hydrate on a later pass.
+ * Rows to skip on later passes: confirmed non-videos such as mixes and playlists, and videos already saved. A row
+ * with no readable id is not added, since the id can hydrate on a later pass.
  */
-let skippedLockups = new WeakSet<Element>();
+let skippedRows = new WeakSet<Element>();
 let warnedSelectorDrift = false;
 
 export function addLockupButtons(container: Element) {
 	const videos = container.querySelectorAll(`${LOCKUP_SELECTOR}:not(:has(.${BUTTON_CLASS}))`);
 	for (const video of videos) {
-		if (skippedLockups.has(video)) continue;
+		if (skippedRows.has(video)) continue;
 		const data = readLockupData(video);
 		if (!data) continue;
 		if (!isSaveableVideoData(data)) {
-			skippedLockups.add(video);
+			skippedRows.add(video);
 			continue;
 		}
 
@@ -50,6 +63,24 @@ export function addLockupButtons(container: Element) {
 
 		const host = createSaveButton({ variant: findButtonVariantInData(data.metadata) });
 		menuWrapper.insertBefore(host, nativeMenuButton);
+	}
+}
+
+/**
+ * The lockups are a view-model component, but a search row is still a legacy Polymer renderer: the id comes from its
+ * data, and the menu slot is keyed on ids instead of classes.
+ */
+export function addSearchRowButtons(container: Element) {
+	const rows = container.querySelectorAll(`${SEARCH_ROW_SELECTOR}:not(:has(.${BUTTON_CLASS}))`);
+	for (const row of rows) {
+		if (skippedRows.has(row) || !readSearchRowVideoId(row)) continue;
+
+		const menuSlot = row.querySelector(SEARCH_MENU_SLOT_SELECTOR);
+		if (!menuSlot) {
+			warnSelectorDriftOnce();
+			continue;
+		}
+		menuSlot.appendChild(createSaveButton({ variant: SEARCH_ROW_VARIANT }));
 	}
 }
 
@@ -159,12 +190,25 @@ export function createSaveButton({
 	});
 }
 
-export function markLockupSaved(lockup: Element) {
-	skippedLockups.add(lockup);
+export function markRowSaved(row: Element) {
+	skippedRows.add(row);
 }
 
-export function resetCardState() {
-	skippedLockups = new WeakSet<Element>();
+/**
+ * The lockups are a view-model component, but a search row is still a legacy Polymer renderer: no id attribute, and
+ * a menu slot keyed on ids instead of classes.
+ */
+export function readSearchRowVideoId(row: Element) {
+	// A search row is a video by definition, so the id only has to be a non-empty string.
+	const { videoId } = ((row as PolymerDataElement).data ?? {}) as { videoId?: unknown };
+	if (typeof videoId === "string" && videoId) return videoId;
+	// Fall back to the thumbnail link, which every search row has.
+	const href = row.querySelector<HTMLAnchorElement>(SEARCH_ROW_THUMBNAIL_SELECTOR)?.getAttribute("href");
+	return new URLSearchParams(href?.split("?")[1] ?? "").get("v");
+}
+
+export function resetRowState() {
+	skippedRows = new WeakSet<Element>();
 	warnedSelectorDrift = false;
 }
 
@@ -178,5 +222,5 @@ function isSaveableVideoData(data: NonNullable<ReturnType<typeof readLockupData>
 function warnSelectorDriftOnce() {
 	if (warnedSelectorDrift) return;
 	warnedSelectorDrift = true;
-	browserColorLog("A saveable video card has no menu button wrapper. YouTube may have changed its layout.", "warning");
+	browserColorLog("A saveable video has no place to put the Watch Later button. YouTube may have changed its layout.", "warning");
 }
