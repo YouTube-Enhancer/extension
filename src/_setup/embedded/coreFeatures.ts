@@ -2,7 +2,7 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 import type { Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { enableFeatureMenu, featuresInMenu, setupFeatureMenuEventListeners, updateFeatureMenuTitle } from "@/src/features/buttonController";
+import { enableFeatureMenu, hasFeaturesInMenu, setupFeatureMenuEventListeners, updateFeatureMenuTitle } from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
 
@@ -34,7 +34,7 @@ export const coreFeatures = {
 		} = window;
 		await registry.disableAll();
 		await registry.enableAll(options);
-		if (featuresInMenu.size > 0) {
+		if (hasFeaturesInMenu()) {
 			updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
 		}
 	},
