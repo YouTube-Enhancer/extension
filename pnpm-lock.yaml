@@ -60,8 +60,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0
       youtubei.js:
-        specifier: ^18.0.0
-        version: 18.0.0
+        specifier: ^18.1.0
+        version: 18.1.0
     devDependencies:
       '@semantic-release/changelog':
         specifier: ^6.0.3
@@ -82,8 +82,8 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0
       '@types/chrome':
-        specifier: ^0.2.9
-        version: 0.2.9
+        specifier: ^0.3.0
+        version: 0.3.0
       '@types/node':
         specifier: ^25.9.8
         version: 25.9.8
@@ -1027,8 +1027,8 @@ packages:
   '@types/archiver@7.0.0':
     resolution: {integrity: sha512-/3vwGwx9n+mCQdYZ2IKGGHEFL30I96UgBlk8EtRDDFQ9uxM1l4O5Ci6r00EMAkiDaTqD9DQ6nVrWRICnBPtzzg==}
 
-  '@types/chrome@0.2.9':
-    resolution: {integrity: sha512-6rXrDPkkWv4D2Q23HqT+iED4voODU5CpOSc2VFgKyecSFItuEsIBvz9CY6jUQ3dd+Q7zo1bnCE9pKRMtkYut5g==}
+  '@types/chrome@0.3.0':
+    resolution: {integrity: sha512-HPAMKyJwUnNJdVsxgypwvIStlwRhhaLnxgEwKIB99oOcffJrC4UMeD5xseVoBwDinSkr690DCBaAtSYdK6M1qw==}
 
   '@types/d3-array@3.2.2':
     resolution: {integrity: sha512-hOLWVbm7uRza0BYXpIIW5pxfrKe0W+D5lrFiAEYR+pb6w3N2SwSMaJbXdUfSEv+dT4MfHBLtn5js0LAWaO6otw==}
@@ -3463,8 +3463,8 @@ packages:
     resolution: {integrity: sha512-xYqdZFUK/VYazNl/oCDYN+3WloWQwMfZxBoiNt6qNyk+xfOdi598muWE42rNZFp1kNOiqW936q5RhUdnpqElSg==}
     engines: {node: '>=18'}
 
-  youtubei.js@18.0.0:
-    resolution: {integrity: sha512-7Tztl5QzNL4nIhiAxa4P/0C8cDDsUe0j4iaUeNiaA+ZfSe/l+HkHxXyoWlQXNW7IPi2n6AW23ysVMJLDh+AwWQ==}
+  youtubei.js@18.1.0:
+    resolution: {integrity: sha512-4Goo3ZeO6/kE8Mq67eC8Z9K1rijeqRwyKxf/YM4lqf8bB4r/s8JC0V3YFx7+l/AJR3LnAsulTsiIj+AFe0cduA==}
 
   zip-stream@6.0.1:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
@@ -4143,7 +4143,7 @@ snapshots:
     dependencies:
       '@types/readdir-glob': 1.1.5
 
-  '@types/chrome@0.2.9':
+  '@types/chrome@0.3.0':
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.16
@@ -6431,7 +6431,7 @@ snapshots:
 
   yoctocolors@2.2.0: {}
 
-  youtubei.js@18.0.0:
+  youtubei.js@18.1.0:
     dependencies:
       '@bufbuild/protobuf': 2.15.0
       fflate: 0.8.3
