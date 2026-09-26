@@ -4,10 +4,9 @@ import type { ModifyElementAction } from "@/src/utils/dom/classList";
 import eventManager from "@/src/events/EventManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import {
-	getFeatureButton,
 	modifyIconForLightTheme,
 	updateFeatureButtonChecked,
-	updateFeatureButtonIcon,
+	updateFeatureButtonIconByName,
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
@@ -32,10 +31,8 @@ function changeMaximizeButtonState(maximized: boolean) {
 	 * relocated button is rebuilt from) in step, so it is told the new state.
 	 */
 	updateFeatureButtonChecked("maximizePlayerButton", maximized);
-	const button = getFeatureButton("maximizePlayerButton");
-	if (!button || !(button instanceof HTMLButtonElement)) return;
 	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	updateFeatureButtonIcon(button, modifyIconForLightTheme(maximized ? icon.on : icon.off));
+	updateFeatureButtonIconByName("maximizePlayerButton", modifyIconForLightTheme(maximized ? icon.on : icon.off));
 	updateFeatureButtonTitle(
 		"maximizePlayerButton",
 		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"])

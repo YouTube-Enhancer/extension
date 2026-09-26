@@ -3,7 +3,13 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
-import { addFeatureButton, getFeatureButton, getFeatureIds, getFeatureMenuItem, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import {
+	addFeatureButton,
+	getFeatureButton,
+	getTrackedButtonChecked,
+	updateFeatureButtonTitle,
+	updateFeatureMenuItemLabel
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { getAudioEngine } from "@/src/utils/audioEngine";
 import { waitForElement } from "@/src/utils/dom/wait";
@@ -44,10 +50,10 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	applyVolumeBoostDb(newValue);
 }
 function updateVolumeBoostFeatureMenuLabel(value: number) {
-	const { featureMenuItemLabelId } = getFeatureIds("volumeBoostButton");
-	const labelEl = document.getElementById(featureMenuItemLabelId);
-	if (!labelEl) return;
-	labelEl.textContent = window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value });
+	updateFeatureMenuItemLabel(
+		"volumeBoostButton",
+		window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value })
+	);
 }
 
 export default createFeature({
@@ -107,10 +113,7 @@ export default createFeature({
 		if (!enabled) return;
 		if (mode === "global") applyVolumeBoostDb(amount);
 		else {
-			const volumeBoostButton = getFeatureMenuItem("volumeBoostButton") ?? getFeatureButton("volumeBoostButton");
-			if (!volumeBoostButton) return;
-			const volumeBoostForVideoEnabled = volumeBoostButton.ariaChecked === "true";
-			if (volumeBoostForVideoEnabled) applyVolumeBoostDb(amount);
+			if (getTrackedButtonChecked("volumeBoostButton")) applyVolumeBoostDb(amount);
 		}
 	},
 	onDisable: () => {
