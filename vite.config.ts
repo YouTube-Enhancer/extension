@@ -44,7 +44,18 @@ export default defineConfig({
 					groups: [
 						{ name: "featureMetadataRegistry", test: /featureMetadataRegistry/ },
 						{
-							name: (id) => `vendor/${id.replace(/\\/g, "/").split("node_modules/")[1].split("/")[0]}`,
+							name: (id) => {
+								const normalised = id.replace(/\\/g, "/");
+								const parts = normalised.split("node_modules/");
+								const [firstSegment = ""] = parts[1]?.split("/") ?? [];
+								// pnpm stores packages under node_modules/.pnpm/<name>@<version>/node_modules/<name>
+								// so the real package name is in the segment after the second "node_modules/"
+								if (firstSegment === ".pnpm") {
+									const [realPkg = firstSegment] = parts[2]?.split("/") ?? [];
+									return `vendor/${realPkg}`;
+								}
+								return `vendor/${firstSegment}`;
+							},
 							test: /node_modules/
 						}
 					],
