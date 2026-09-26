@@ -2,6 +2,7 @@ import type { YouTubePlayer } from "youtube-player/dist/types";
 
 import type { Nullable, Selector } from "@/src/types";
 
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { browserColorLog } from "@/src/utils/logging";
 type WaitMode = "optional" | "required";
 /**
@@ -77,6 +78,10 @@ export function waitForElement<T extends Element>(selector: string, parent: Pare
 /**
  * Wait for an element to be present in the DOM.
  *
+ * Uses the DOM Mutation Bus internally — a single shared MutationObserver on
+ * document.body, deduplicated across all call sites. Observed node: always
+ * document.body. Detached subtrees are not supported.
+ *
  * @param {selector} string selector
  * @param {arg2} number | ParentNode | WaitMode = document
  * @param {arg3} number | WaitMode = 2500
@@ -115,20 +120,25 @@ export function waitForElement<T extends Element>(
 	return new Promise((resolve) => {
 		const existing = parent.querySelector<T>(selector);
 		if (existing) return resolve(existing);
+
 		let resolved = false;
 		const finish = (el: Nullable<T>) => {
 			if (resolved) return;
 			resolved = true;
-			observer.disconnect();
+			unsubscribe();
 			resolve(el);
 		};
-		const observer = new MutationObserver(() => {
-			const el = parent.querySelector<T>(selector);
-			if (el) finish(el);
-		});
-		observer.observe(parent, { childList: true, subtree: true });
+
+		const unsubscribe = subscribe(
+			selector,
+			(elements) => {
+				const match = elements.find((el) => parent.contains(el)) as T | undefined;
+				if (match) finish(match);
+			},
+			{ parent }
+		);
+
 		setTimeout(() => {
-			observer.disconnect();
 			if (mode === "required") {
 				console.warn(`[waitForElement] Timeout after ${timeout}ms — element not found: ${selector}`);
 			}
