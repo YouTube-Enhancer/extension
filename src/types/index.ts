@@ -501,12 +501,8 @@ export type DevToolsRequestDataMessage<Type extends string, D = undefined, S ext
 >;
 
 export type ExtensionSendOnlyMessageMappings = {
-	featureConfigChange: DataResponseMessage<"featureConfigChange", { config: configuration[FeatureKeys]; id: FeatureKeys }>;
-	featureEnabledStateChange: DataResponseMessage<
-		"featureEnabledStateChange",
-		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }
-	>;
 	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
+	featureUpdate: DataResponseMessage<"featureUpdate", { config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
 	onScreenDisplayConfigChange: DataResponseMessage<"onScreenDisplayConfigChange", { onScreenDisplay: configuration["onScreenDisplay"] }>;
 };

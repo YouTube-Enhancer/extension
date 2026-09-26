@@ -4,9 +4,7 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { i18nService } from "@/src/i18n";
-import { setDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
-import { setFeatureMenuConfig } from "@/src/ui/featureMenuConfigStore";
-import { setOnScreenDisplayConfig } from "@/src/ui/onScreenDisplayConfigStore";
+import { setCoreConfigs } from "@/src/ui/coreConfigStore";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { buttonColorCache, getButtonColor } from "@/src/utils/deep-dark-theme/index";
 import { sendContentOnlyMessage, waitForSpecificMessage } from "@/src/utils/messaging";
@@ -36,9 +34,11 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
-	setOnScreenDisplayConfig(options.onScreenDisplay);
-	setFeatureMenuConfig(options.featureMenu);
-	setDeepDarkCSSConfig(options.deepDarkCSS);
+	setCoreConfigs({
+		deepDarkCSS: options.deepDarkCSS,
+		featureMenu: options.featureMenu,
+		onScreenDisplay: options.onScreenDisplay
+	});
 
 	await registerAllFeatures(state);
 
@@ -55,9 +55,11 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 		const {
 			data: { options: navOptions }
 		} = await waitForSpecificMessage("options", "request_data", "content");
-		setOnScreenDisplayConfig(navOptions.onScreenDisplay);
-		setFeatureMenuConfig(navOptions.featureMenu);
-		setDeepDarkCSSConfig(navOptions.deepDarkCSS);
+		setCoreConfigs({
+			deepDarkCSS: navOptions.deepDarkCSS,
+			featureMenu: navOptions.featureMenu,
+			onScreenDisplay: navOptions.onScreenDisplay
+		});
 		await registry.enableAll(navOptions);
 	});
 
@@ -82,16 +84,16 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	const {
 		data: { options: currentOptions }
 	} = await waitForSpecificMessage("options", "request_data", "content");
-	// The on-screen display is a core feature outside the registry, so the loop below does not cover its settings.
-	setOnScreenDisplayConfig(currentOptions.onScreenDisplay);
-	setFeatureMenuConfig(currentOptions.featureMenu);
-	setDeepDarkCSSConfig(currentOptions.deepDarkCSS);
+	setCoreConfigs({
+		deepDarkCSS: currentOptions.deepDarkCSS,
+		featureMenu: currentOptions.featureMenu,
+		onScreenDisplay: currentOptions.onScreenDisplay
+	});
 	for (const feature of registry.getAll()) {
 		const { id } = feature;
 		const { [id]: current } = currentOptions;
 		if (!current || !featureConfigManager.hasChanged(featureConfigManager.getLast(id), current)) continue;
-		await registry.notifyConfigChange(id, current);
-		await registry.updateFeatureEnabledState(id, resolveEnabled(current), current);
+		await registry.reconcileFeature(id, current, resolveEnabled(current));
 	}
 
 	return {
