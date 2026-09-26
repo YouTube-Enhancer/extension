@@ -131,6 +131,11 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		});
 	}
 
+	async reconcileFeature<K extends FeatureKeys>(id: K, config: configuration[K], enabled: boolean) {
+		await this.notifyConfigChange(id, config);
+		await this.updateFeatureEnabledState(id, enabled, config);
+	}
+
 	setFeatureEnabled(id: FeatureKeys, enabled: boolean): void {
 		this.sortedFeaturesCacheDirty = true;
 		this.featureEnabledState.set(id, enabled);

@@ -358,14 +358,8 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 	});
 	for (const [feature, update] of featureUpdates) {
 		const { [feature]: config } = options;
-		if (update.configChanged) {
-			sendExtensionOnlyMessage("featureConfigChange", {
-				config,
-				id: feature
-			});
-		}
-		if (update.stateChanged) {
-			sendExtensionOnlyMessage("featureEnabledStateChange", {
+		if (update.configChanged || update.stateChanged) {
+			sendExtensionOnlyMessage("featureUpdate", {
 				config,
 				enabled: resolveEnabled(config),
 				id: feature

@@ -2,7 +2,7 @@ import type { getDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
 import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { getDeepDarkCustomThemeStyle } from "@/src/features/deepDarkCSS/utils";
-import { getDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
+import { getDeepDarkCSSConfig } from "@/src/ui/coreConfigStore";
 import { resolveContrastColor } from "@/src/utils/color";
 
 export function fallback(isDarkMode: boolean) {
