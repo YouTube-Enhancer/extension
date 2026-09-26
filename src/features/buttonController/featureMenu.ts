@@ -10,6 +10,7 @@ import { isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
+import { updateTrackedButtonChecked } from "./ButtonController";
 import { getOrCreateRightControlsContainer } from "./containerTracking";
 
 const menuId = "#yte-feature-menu";
@@ -20,14 +21,10 @@ const menuPadding = 16;
 
 // ─── Module-level state ───────────────────────────────────────────
 
-export const featuresInMenu = new Set<AllButtonNames>();
+const featuresInMenu = new Set<AllButtonNames>();
 
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
-
-// ─── Callback seam ────────────────────────────────────────────────
-
-let onMenuItemClick: ((buttonName: AllButtonNames, checked: boolean) => void) | null = null;
 
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
@@ -186,11 +183,15 @@ export function getFeatureMenuItemIcon(buttonName: AllButtonNames): Nullable<HTM
 	return document.querySelector(selector);
 }
 
-// ─── ID helpers ───────────────────────────────────────────────────
-
 export function getFeatureMenuItemLabel(buttonName: AllButtonNames): Nullable<HTMLDivElement> {
 	const selector = `#yte-${buttonName}-label` as const;
 	return document.querySelector(selector);
+}
+
+// ─── ID helpers ───────────────────────────────────────────────────
+
+export function hasFeaturesInMenu(): boolean {
+	return featuresInMenu.size > 0;
 }
 
 export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
@@ -213,10 +214,6 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 }
 
 // ─── DOM queries ──────────────────────────────────────────────────
-
-export function setOnMenuItemClick(callback: (buttonName: AllButtonNames, checked: boolean) => void) {
-	onMenuItemClick = callback;
-}
 
 export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType): () => void {
 	eventManager.removeEventListeners("featureMenu");
@@ -368,7 +365,7 @@ function featureMenuClickListener<Toggle extends boolean>(
 	if (!isToggle) return listener();
 	const newState = !getMenuItemChecked(menuItem);
 	setMenuItemChecked(menuItem, newState);
-	onMenuItemClick?.(buttonName, newState);
+	updateTrackedButtonChecked(buttonName, newState);
 	listener(newState);
 }
 

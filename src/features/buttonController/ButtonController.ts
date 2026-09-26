@@ -20,14 +20,7 @@ import {
 	startPlacementTracking,
 	stopPlacementTracking
 } from "./containerTracking";
-import {
-	addFeatureItemToMenu,
-	enableFeatureMenuButton,
-	getFeatureIds,
-	getFeatureMenuItem,
-	removeFeatureItemFromMenu,
-	setOnMenuItemClick
-} from "./featureMenu";
+import { addFeatureItemToMenu, enableFeatureMenuButton, getFeatureIds, getFeatureMenuItem, removeFeatureItemFromMenu } from "./featureMenu";
 import "./index.css";
 
 // ─── Re-exports from sub-modules ──────────────────────────────────
@@ -36,11 +29,11 @@ export { buttonContainerId };
 export { getEffectivePlacement, getPlacementRoot } from "./containerTracking";
 export {
 	addFeatureItemToMenu,
-	featuresInMenu,
 	getFeatureIds,
 	getFeatureMenuItem,
 	getFeatureMenuItemIcon,
 	getFeatureMenuItemLabel,
+	hasFeaturesInMenu,
 	removeFeatureItemFromMenu
 } from "./featureMenu";
 export {
@@ -65,13 +58,6 @@ type TrackedButtonInfo = {
 	placement: ButtonPlacement;
 };
 const trackedButtons = new Map<AllButtonNames, TrackedButtonInfo>();
-
-// ─── Wire up callback seam ────────────────────────────────────────
-
-setOnMenuItemClick((buttonName, checked) => {
-	const info = trackedButtons.get(buttonName);
-	if (info) info.checked = checked;
-});
 
 // ─── Exported functions ───────────────────────────────────────────
 
@@ -128,8 +114,13 @@ export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, pla
 	return root.querySelectorAll(`#${getFeatureButtonIdForButton(buttonName)}`).length > 0;
 }
 
+/** Returns the button or menu item element. Prefer name-based APIs (e.g. `updateFeatureButtonIconByName`) when possible. */
 export function getFeatureButton(buttonName: AllButtonNames) {
 	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+}
+
+export function getTrackedButtonChecked(buttonName: AllButtonNames): boolean | undefined {
+	return trackedButtons.get(buttonName)?.checked;
 }
 
 export function getTrackedButtonFullscreenPlacement(buttonName: AllButtonNames): FullscreenPlacement | undefined {
@@ -201,8 +192,14 @@ export function updateFeatureButtonChecked(buttonName: AllButtonNames, checked: 
 	updateTrackedButtonChecked(buttonName, checked);
 }
 
+/** Updates a button's icon by element reference. Prefer {@link updateFeatureButtonIconByName} when you have a button name. */
 export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElement) {
 	button.replaceChildren(icon);
+}
+
+export function updateFeatureButtonIconByName(buttonName: AllButtonNames, icon: SVGElement) {
+	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	if (button) button.replaceChildren(icon);
 }
 
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
@@ -215,14 +212,27 @@ export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: stri
 	}
 }
 
+export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: string) {
+	const menuItem = getFeatureMenuItem(buttonName);
+	if (!menuItem) return;
+	const { featureMenuItemLabelId } = getFeatureIds(buttonName);
+	const labelEl = menuItem.querySelector<HTMLDivElement>(`#${featureMenuItemLabelId}`);
+	if (labelEl) labelEl.textContent = label;
+}
+
+export function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.checked = checked;
+}
+
+// ─── Private helpers ──────────────────────────────────────────────
+
 export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreenPlacement: FullscreenPlacement) {
 	const info = trackedButtons.get(buttonName);
 	if (info) {
 		info.fullscreenPlacement = fullscreenPlacement;
 	}
 }
-
-// ─── Private helpers ──────────────────────────────────────────────
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
 	button.replaceChildren(
@@ -396,11 +406,6 @@ function untrackButton(buttonName: AllButtonNames) {
 	if (trackedButtons.size === 0) {
 		stopPlacementTracking();
 	}
-}
-
-function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
-	const info = trackedButtons.get(buttonName);
-	if (info) info.checked = checked;
 }
 
 function updateTrackedButtonLabel(buttonName: AllButtonNames, label: string) {
