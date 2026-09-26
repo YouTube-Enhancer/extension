@@ -54,9 +54,12 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 					const featureConfig = options[feature.id] ?? feature.defaults;
 					featureConfigManager.setLast(feature.id, featureConfig);
 				}
-				for (const feature of featuresByPriority) {
+
+				// Run all features in parallel — each gets concurrencyGroup 0
+				const CONCURRENCY_GROUP = 0;
+				const enablePromises = featuresByPriority.map(async (feature) => {
 					const { [feature.id]: featureConfig } = options;
-					if (!featureConfig) continue;
+					if (!featureConfig) return;
 					await this.registry.lifecycleManager.initFeature(feature, featureConfig);
 					const enabledResult = await this.safelyExecute<boolean>(
 						feature.id,
@@ -64,13 +67,16 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 						async () => {
 							return Promise.resolve(resolveEnabled(featureConfig));
 						},
-						{ fallback: false, shouldRethrow: true }
+						{ concurrencyGroup: CONCURRENCY_GROUP, fallback: false, shouldRethrow: true }
 					);
 					const enabled = enabledResult ?? false;
 					await this.safelyExecute(feature.id, "init", async () => await this.updateFeatureEnabledState(feature.id, enabled, featureConfig), {
+						concurrencyGroup: CONCURRENCY_GROUP,
 						subPhase: "enable"
 					});
-				}
+				});
+
+				await Promise.allSettled(enablePromises);
 
 				this.perf.logSummary("enableAll");
 			} finally {

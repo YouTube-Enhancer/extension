@@ -13,6 +13,8 @@ export type FeatureError = {
 export type FeatureMetric = {
 	// Enhanced debugging context
 	callStack?: string;
+	/** Group ID for parallel execution. Features in different groups run concurrently. */
+	concurrencyGroup?: number;
 	depth: number;
 	duration: number;
 	errorContext?: Nullable<{
@@ -47,7 +49,8 @@ interface TrackOptions {
 class FeaturePerformanceTracker {
 	private activeContextId = 0;
 	private contexts = new Map<number, TrackContext>();
-	private contextStack: number[] = [];
+	/** Per-feature context stacks. Each feature gets its own isolated stack so concurrent features don't interfere. */
+	private contextStacks = new Map<PerfId, number[]>();
 	private enabled = DEV_MODE;
 	private errors: FeatureError[] = [];
 	private MAX_METRICS = 50000;
@@ -107,9 +110,19 @@ class FeaturePerformanceTracker {
 
 		if (!enabled || !metrics.length) return;
 
-		// For total, sum only the root-level (depth 0) operations - they include all nested time
+		// Calculate wall-clock time from concurrency groups:
+		// Features in the same group run sequentially (sum durations).
+		// Features in different groups run in parallel (take max within each group, then sum across groups).
 		const rootMetrics = metrics.filter((m) => m.depth === 0);
-		const total = rootMetrics.reduce((sum, m) => sum + m.duration, 0);
+		const groups = new Map<number, number>();
+		for (const m of rootMetrics) {
+			const group = m.concurrencyGroup ?? 0;
+			const current = groups.get(group) ?? 0;
+			// For parallel groups, take max; for sequential groups (or no group), take sum
+			// Since all features use the same group in parallel mode, we take max within each group
+			groups.set(group, Math.max(current, m.duration));
+		}
+		const total = Array.from(groups.values()).reduce((sum, groupDuration) => sum + groupDuration, 0);
 		const byPhase: Record<string, FeatureMetric[]> = {};
 
 		for (const m of metrics) (byPhase[m.phase] ??= []).push(m);
@@ -153,10 +166,19 @@ class FeaturePerformanceTracker {
 		console.warn(`[FeaturePerf] Error in ${String(id)} during ${operation}:`, error);
 	}
 
-	async track<T>(id: PerfId, phase: Phase, fn: () => MaybePromise<T>, subPhase?: SubPhase, options?: TrackOptions): Promise<T> {
-		const { contexts, contextStack, enabled, MAX_METRICS, metrics } = this;
+	async track<T>(
+		id: PerfId,
+		phase: Phase,
+		fn: () => MaybePromise<T>,
+		subPhase?: SubPhase,
+		options?: TrackOptions & { concurrencyGroup?: number }
+	): Promise<T> {
+		const { contexts, enabled, MAX_METRICS, metrics } = this;
 
 		if (!enabled) return await fn();
+
+		// Each feature gets its own isolated stack — concurrent features don't interfere
+		const stack = this.getStack(id);
 
 		const contextId = ++this.activeContextId;
 		const start = performance.now();
@@ -164,14 +186,14 @@ class FeaturePerformanceTracker {
 		const stackTrace = DEV_MODE ? new Error().stack?.split("\n").slice(1, 4).join("\n") : undefined;
 
 		// Determine effective parent — only same-feature context qualifies
-		const stackTopId = contextStack.length > 0 ? contextStack[contextStack.length - 1] : null;
+		const stackTopId = stack.length > 0 ? stack[stack.length - 1] : null;
 		const stackTopContext = stackTopId ? contexts.get(stackTopId) : null;
 		const parentContextId = stackTopContext && stackTopContext.id === id ? stackTopId : null;
 		const depth = parentContextId ? stackTopContext!.depth + 1 : 0;
 
-		const { length: savedStackLen } = contextStack;
+		const { length: savedStackLen } = stack;
 
-		contextStack.push(contextId);
+		stack.push(contextId);
 		contexts.set(contextId, {
 			childDuration: 0,
 			contextId,
@@ -190,9 +212,9 @@ class FeaturePerformanceTracker {
 			const end = performance.now();
 			const duration = end - start;
 
-			// Restore stack to the length it was on entry (handles out-of-order concurrent completion)
-			while (contextStack.length > savedStackLen) {
-				contextStack.pop();
+			// Restore this feature's stack to the length it was on entry
+			while (stack.length > savedStackLen) {
+				stack.pop();
 			}
 
 			const context = contexts.get(contextId);
@@ -209,7 +231,7 @@ class FeaturePerformanceTracker {
 				}
 				const exclusiveDuration = duration - childDuration;
 
-				this.record(id, label, duration, exclusiveDuration, contextDepth, { callStack: stackTrace });
+				this.record(id, label, duration, exclusiveDuration, contextDepth, { callStack: stackTrace, concurrencyGroup: options?.concurrencyGroup });
 				contexts.delete(contextId);
 			}
 
@@ -227,7 +249,7 @@ class FeaturePerformanceTracker {
 	 * Removes contexts that haven't been accessed in the last 5 minutes
 	 */
 	private cleanupOldContexts(): void {
-		const { contexts, contextStack, enabled } = this;
+		const { contexts, contextStacks, enabled } = this;
 
 		if (!enabled) return;
 
@@ -235,11 +257,25 @@ class FeaturePerformanceTracker {
 		const contextsToDelete: number[] = [];
 
 		for (const [contextId, context] of contexts.entries()) {
-			if (context.start < fiveMinutesAgo && !contextStack.includes(contextId)) contextsToDelete.push(contextId);
+			if (context.start >= fiveMinutesAgo) continue;
+			// Check if this context is on any feature's stack
+			const stack = contextStacks.get(context.id);
+			if (stack && stack.includes(contextId)) continue;
+			contextsToDelete.push(contextId);
 		}
 		for (const contextId of contextsToDelete) {
 			contexts.delete(contextId);
 		}
+	}
+
+	/** Get or create the context stack for a specific feature. */
+	private getStack(id: PerfId): number[] {
+		let stack = this.contextStacks.get(id);
+		if (!stack) {
+			stack = [];
+			this.contextStacks.set(id, stack);
+		}
+		return stack;
 	}
 
 	private record(
@@ -248,11 +284,12 @@ class FeaturePerformanceTracker {
 		duration: number,
 		exclusiveDuration: number,
 		depth: number,
-		context?: { callStack?: string; errorContext?: Nullable<{ error: unknown; featureId: PerfId; operation: string }> }
+		context?: { callStack?: string; concurrencyGroup?: number; errorContext?: Nullable<{ error: unknown; featureId: PerfId; operation: string }> }
 	) {
 		const { metrics } = this;
 
 		metrics.push({
+			concurrencyGroup: context?.concurrencyGroup,
 			depth,
 			duration,
 			exclusiveDuration,
