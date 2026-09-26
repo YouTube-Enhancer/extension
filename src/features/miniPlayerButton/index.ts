@@ -3,9 +3,8 @@ import type { ButtonPlacement, Nullable } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import {
 	addFeatureButton,
-	getFeatureButton,
 	updateFeatureButtonChecked,
-	updateFeatureButtonIcon,
+	updateFeatureButtonIconByName,
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
 import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
@@ -27,11 +26,9 @@ function syncMiniPlayerButtonUI(active: boolean) {
 		"miniPlayerButton",
 		window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"])
 	);
-	const btn = getFeatureButton("miniPlayerButton");
-	if (!(btn instanceof HTMLButtonElement)) return;
 	const icon = getFeatureIcon("miniPlayerButton", "below_player");
 	if (typeof icon === "object" && icon && "on" in icon && "off" in icon) {
-		updateFeatureButtonIcon(btn, active ? icon.on : icon.off);
+		updateFeatureButtonIconByName("miniPlayerButton", active ? icon.on : icon.off);
 	}
 }
 function yteMiniPlayerStateHandler(e: unknown) {
