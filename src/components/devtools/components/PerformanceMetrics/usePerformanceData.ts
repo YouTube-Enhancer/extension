@@ -109,12 +109,6 @@ export function usePerformanceData(): {
 				});
 			}
 			const g = groups.get(phase)!;
-			/**
-			 * A root operation (depth 0) counts its full duration, nested time included; a nested operation counts
-			 * only its exclusive duration.
-			 */
-			const timeToAdd = m.depth === 0 ? m.duration : m.exclusiveDuration;
-			g.totalTime += timeToAdd;
 			g.count++;
 			g.metrics.push(m);
 			if (m.exclusiveDuration > g.slowestMetric.duration) {
@@ -124,6 +118,24 @@ export function usePerformanceData(): {
 
 		const result = Array.from(groups.values());
 		for (const g of result) {
+			// Compute wall-clock time: features run in parallel, so within each concurrency group
+			// take the max duration across features, then sum across concurrency groups.
+			const concurrencyGroups = new Map<number, Map<string, number>>();
+			for (const m of g.metrics) {
+				const concurrencyGroup = m.concurrencyGroup ?? 0;
+				if (!concurrencyGroups.has(concurrencyGroup)) {
+					concurrencyGroups.set(concurrencyGroup, new Map());
+				}
+				const featureMap = concurrencyGroups.get(concurrencyGroup)!;
+				const featureId = String(m.id);
+				const time = m.depth === 0 ? m.duration : m.exclusiveDuration;
+				featureMap.set(featureId, Math.max(featureMap.get(featureId) ?? 0, time));
+			}
+			let wallClock = 0;
+			for (const featureMap of concurrencyGroups.values()) {
+				wallClock += Math.max(...featureMap.values(), 0);
+			}
+			g.totalTime = wallClock;
 			g.avgTime = g.count > 0 ? g.totalTime / g.count : 0;
 			g.metrics.sort((a, b) => b.exclusiveDuration - a.exclusiveDuration);
 		}
