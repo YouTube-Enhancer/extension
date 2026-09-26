@@ -8,8 +8,15 @@ import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentPageType, getCurrentVideoId } from "@/src/utils/url";
 
-import { addLockupButtons, createRowButtonController, markLockupSaved, resetCardState } from "./buttons";
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, IGNORED_MUTATION_ROOTS, LOCKUP_SELECTOR, WATCH_CONTAINER_SELECTOR } from "./constants";
+import { addLockupButtons, addSearchRowButtons, createRowButtonController, markRowSaved, readSearchRowVideoId, resetRowState } from "./buttons";
+import {
+	ACTIONS_ROW_SELECTOR,
+	BUTTON_CLASS,
+	IGNORED_MUTATION_ROOTS,
+	LOCKUP_SELECTOR,
+	SEARCH_ROW_SELECTOR,
+	WATCH_CONTAINER_SELECTOR
+} from "./constants";
 import { metadata } from "./index.metadata";
 import { inFlightSaves, performPlaylistEdit } from "./saveActions";
 import "./index.css";
@@ -41,7 +48,11 @@ async function setupSaveToWatchLaterButtons() {
 	if (!isCurrent()) return;
 
 	const onWatchPage = pageType === "watch";
-	const containerSelector = onWatchPage ? WATCH_CONTAINER_SELECTOR : `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
+	// The results list of a search page does not carry the page subtype the generic selector keys on.
+	const containerSelector =
+		onWatchPage ? WATCH_CONTAINER_SELECTOR
+		: pageType === "search" ? "ytd-section-list-renderer"
+		: `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
 	const rowButtons = createRowButtonController(isCurrent);
 
 	/**
@@ -54,14 +65,14 @@ async function setupSaveToWatchLaterButtons() {
 		if (!host) return;
 
 		// The actions-row button toggles. The card buttons save and go away.
-		const lockup = host.closest(LOCKUP_SELECTOR);
-		if (!lockup) {
+		const row = host.closest(LOCKUP_SELECTOR) ?? host.closest(SEARCH_ROW_SELECTOR);
+		if (!row) {
 			const videoId = getCurrentVideoId();
 			if (videoId) rowButtons.toggle(host, videoId);
 			return;
 		}
 
-		const videoId = readLockupData(lockup)?.contentId;
+		const videoId = row.matches(SEARCH_ROW_SELECTOR) ? readSearchRowVideoId(row) : readLockupData(row)?.contentId;
 		if (!videoId) return;
 		performPlaylistEdit({
 			host,
@@ -71,7 +82,7 @@ async function setupSaveToWatchLaterButtons() {
 				 * Removing the button is a mutation, and the next observer pass would add it back. Mark the video as
 				 * saved first so the passes skip it.
 				 */
-				markLockupSaved(lockup);
+				markRowSaved(row);
 				host.remove();
 			},
 			removing: false,
@@ -83,6 +94,7 @@ async function setupSaveToWatchLaterButtons() {
 	function addButtons(container: Element) {
 		if (!isCurrent()) return;
 		addLockupButtons(container);
+		if (pageType === "search") addSearchRowButtons(container);
 		if (onWatchPage) void rowButtons.ensureButton();
 	}
 
@@ -133,7 +145,7 @@ export default createFeature({
 		document.querySelectorAll(`.${BUTTON_CLASS}`).forEach((saveButton) => {
 			saveButton.remove();
 		});
-		resetCardState();
+		resetRowState();
 		inFlightSaves.clear();
 		warnedUnavailable = false;
 	},
