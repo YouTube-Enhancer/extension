@@ -10,7 +10,7 @@ import { isWatchPage } from "@/src/utils/url";
 
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
-import { updateTrackedButtonChecked } from "./ButtonController";
+import { updateTrackedButtonChecked } from "./buttonState";
 import { getOrCreateRightControlsContainer } from "./containerTracking";
 
 const menuId = "#yte-feature-menu";
