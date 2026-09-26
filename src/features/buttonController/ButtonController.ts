@@ -11,22 +11,29 @@ import { waitForElement } from "@/src/utils/dom/wait";
 
 import type { ListenerType } from "./types";
 
+import {
+	trackButton as trackButtonState,
+	trackedButtons,
+	untrackButton as untrackButtonState,
+	updateTrackedButtonChecked,
+	updateTrackedButtonLabel
+} from "./buttonState";
 import { buttonContainerId } from "./constants";
 import {
 	getEffectivePlacement,
+	getPlacementRoot,
 	getPlacementSelector,
-	isFullscreen,
 	placeButton,
 	startPlacementTracking,
 	stopPlacementTracking
 } from "./containerTracking";
 import { addFeatureItemToMenu, enableFeatureMenuButton, getFeatureIds, getFeatureMenuItem, removeFeatureItemFromMenu } from "./featureMenu";
+import { isFullscreen } from "./placementTransition";
 import "./index.css";
 
 // ─── Re-exports from sub-modules ──────────────────────────────────
 
 export { buttonContainerId };
-export { getEffectivePlacement, getPlacementRoot } from "./containerTracking";
 export {
 	addFeatureItemToMenu,
 	getFeatureIds,
@@ -44,20 +51,6 @@ export {
 	updateFeatureMenuTitle
 } from "./featureMenu";
 export type { ListenerType } from "./types";
-
-// ─── Module-level state ───────────────────────────────────────────
-
-type TrackedButtonInfo = {
-	checked: boolean;
-	currentEffectivePlacement: ButtonPlacement;
-	fullscreenPlacement: FullscreenPlacement;
-	icon: SVGSVGElement | ToggleIcon;
-	isToggle: boolean;
-	label: string;
-	listener: ListenerType<boolean>;
-	placement: ButtonPlacement;
-};
-const trackedButtons = new Map<AllButtonNames, TrackedButtonInfo>();
 
 // ─── Exported functions ───────────────────────────────────────────
 
@@ -107,7 +100,6 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 }
 
 export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): Promise<boolean> {
-	const { getPlacementRoot } = await import("./containerTracking");
 	const root = await getPlacementRoot(placement);
 	if (!root) return false;
 	if (placement === "feature_menu") return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
@@ -117,14 +109,6 @@ export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, pla
 /** Returns the button or menu item element. Prefer name-based APIs (e.g. `updateFeatureButtonIconByName`) when possible. */
 export function getFeatureButton(buttonName: AllButtonNames) {
 	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
-}
-
-export function getTrackedButtonChecked(buttonName: AllButtonNames): boolean | undefined {
-	return trackedButtons.get(buttonName)?.checked;
-}
-
-export function getTrackedButtonFullscreenPlacement(buttonName: AllButtonNames): FullscreenPlacement | undefined {
-	return trackedButtons.get(buttonName)?.fullscreenPlacement;
 }
 
 export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
@@ -143,7 +127,10 @@ export function removeButton(buttonName: AllButtonNames, placement?: ButtonPlace
 export function removeButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;
-	untrackButton(buttonName);
+	untrackButtonState(buttonName);
+	if (trackedButtons.size === 0) {
+		stopPlacementTracking();
+	}
 	if (placement === undefined) {
 		const featureConfig = featureConfigManager.getLast(featureName);
 		if (typeof featureConfig === "object" && featureConfig !== null) {
@@ -220,19 +207,7 @@ export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: st
 	if (labelEl) labelEl.textContent = label;
 }
 
-export function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: boolean) {
-	const info = trackedButtons.get(buttonName);
-	if (info) info.checked = checked;
-}
-
 // ─── Private helpers ──────────────────────────────────────────────
-
-export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreenPlacement: FullscreenPlacement) {
-	const info = trackedButtons.get(buttonName);
-	if (info) {
-		info.fullscreenPlacement = fullscreenPlacement;
-	}
-}
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
 	button.replaceChildren(
@@ -286,6 +261,7 @@ function getFeatureButtonIdForButton(buttonName: AllButtonNames) {
 
 async function handleFullscreenChange() {
 	const inFullscreen = isFullscreen();
+	const repositionPromises: Promise<void>[] = [];
 	for (const [buttonName, info] of trackedButtons) {
 		const effectivePlacement = inFullscreen && info.fullscreenPlacement !== "same" ? info.fullscreenPlacement : info.placement;
 		if (effectivePlacement === info.currentEffectivePlacement) continue;
@@ -304,16 +280,17 @@ async function handleFullscreenChange() {
 		if (effectivePlacement !== "feature_menu") {
 			const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
 			const button = makeFeatureButton(buttonName, effectivePlacement, info.label, placementIcon, info.listener, info.isToggle, info.checked);
-			await placeButton(button, effectivePlacement);
+			repositionPromises.push(placeButton(button, effectivePlacement));
 		} else {
 			const menuIcon = getFeatureIcon(buttonName, "feature_menu");
 			if (menuIcon instanceof SVGSVGElement) {
-				await addFeatureItemToMenu(buttonName, info.label, menuIcon, info.listener, info.isToggle, info.checked);
+				repositionPromises.push(addFeatureItemToMenu(buttonName, info.label, menuIcon, info.listener, info.isToggle, info.checked));
 			}
 		}
 
 		info.currentEffectivePlacement = effectivePlacement;
 	}
+	await Promise.all(repositionPromises);
 }
 
 function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
@@ -386,29 +363,8 @@ function trackButton(
 	initialChecked: boolean
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
-	trackedButtons.set(buttonName, {
-		checked: initialChecked,
-		currentEffectivePlacement: effectivePlacement,
-		fullscreenPlacement,
-		icon,
-		isToggle,
-		label,
-		listener,
-		placement
-	});
+	trackButtonState(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, effectivePlacement);
 	startPlacementTracking(() => {
 		void handleFullscreenChange();
 	});
-}
-
-function untrackButton(buttonName: AllButtonNames) {
-	trackedButtons.delete(buttonName);
-	if (trackedButtons.size === 0) {
-		stopPlacementTracking();
-	}
-}
-
-function updateTrackedButtonLabel(buttonName: AllButtonNames, label: string) {
-	const info = trackedButtons.get(buttonName);
-	if (info) info.label = label;
 }

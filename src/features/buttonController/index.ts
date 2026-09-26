@@ -5,15 +5,12 @@ export {
 	checkIfFeatureButtonExists,
 	enableFeatureMenu,
 	enableFeatureMenuButton,
-	getEffectivePlacement,
 	getFeatureButton,
 	getFeatureButtonId,
 	getFeatureIds,
 	getFeatureMenuItem,
 	getFeatureMenuItemIcon,
 	getFeatureMenuItemLabel,
-	getTrackedButtonChecked,
-	getTrackedButtonFullscreenPlacement,
 	hasFeaturesInMenu,
 	modifyIconForLightTheme,
 	removeButton,
@@ -26,9 +23,7 @@ export {
 	updateFeatureButtonIconByName,
 	updateFeatureButtonTitle,
 	updateFeatureMenuItemLabel,
-	updateFeatureMenuTitle,
-	updateTrackedButtonChecked,
-	updateTrackedButtonConfig
+	updateFeatureMenuTitle
 } from "./ButtonController";
 
 export type { FeatureMenuOpenType, ListenerType } from "./types";

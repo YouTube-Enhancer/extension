@@ -2,12 +2,8 @@ import type { AnyFeatureBase, ButtonTrackedState, FeatureButton, FeatureKeys, Fe
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import {
-	checkIfFeatureButtonExists,
-	getTrackedButtonFullscreenPlacement,
-	removeFeatureButton,
-	updateTrackedButtonConfig
-} from "@/src/features/buttonController";
+import { checkIfFeatureButtonExists, removeFeatureButton } from "@/src/features/buttonController";
+import { getTrackedButtonFullscreenPlacement, updateTrackedButtonConfig } from "@/src/features/buttonController/buttonState";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
