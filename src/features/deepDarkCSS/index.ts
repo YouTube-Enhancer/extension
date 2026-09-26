@@ -2,7 +2,7 @@ import { deepDarkPresets } from "@/src/deepDarkPresets";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { updateButtonsIconColor } from "@/src/features/buttonController";
-import { setDeepDarkCSSConfig } from "@/src/ui/deepDarkCSSConfigStore";
+import { setDeepDarkCSSConfig } from "@/src/ui/coreConfigStore";
 import { deepDarkCssID } from "@/src/utils/constants";
 import { buttonColorCache } from "@/src/utils/deep-dark-theme";
 import { clearDeepDarkData, setDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
