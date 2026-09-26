@@ -1,6 +1,7 @@
 import type { Nullable, VideoDetails } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { playlistItemsSelector, selectFirstWithWidth } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -24,11 +25,11 @@ export class PlaylistLengthController {
 	private cachedDuration: Nullable<{ playlistId: string; totalTimeSeconds: number }> = null;
 	private config: PlaylistLengthParameters;
 	private destroyed = false;
-	private documentObserver: Nullable<MutationObserver> = null;
 	private lastPlaylistLength: Nullable<number> = null;
 	private lastUpdate: Nullable<{ total: number; watched: number }> = null;
 	private resizeObserver: Nullable<ResizeObserver> = null;
 	private ui: Nullable<{ element: HTMLDivElement; update: (state: VideoTimeState) => void }> = null;
+	private unsubscribeBus: Nullable<() => void> = null;
 	private updateTimeout: Nullable<number> = null;
 
 	constructor(config: PlaylistLengthParameters) {
@@ -40,8 +41,8 @@ export class PlaylistLengthController {
 
 		eventManager.removeEventListeners("playlistLength");
 
-		this.documentObserver?.disconnect();
-		this.documentObserver = null;
+		this.unsubscribeBus?.();
+		this.unsubscribeBus = null;
 
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = null;
@@ -84,8 +85,8 @@ export class PlaylistLengthController {
 	}
 
 	private disconnectObservers(): void {
-		this.documentObserver?.disconnect();
-		this.documentObserver = null;
+		this.unsubscribeBus?.();
+		this.unsubscribeBus = null;
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = null;
 	}
@@ -207,11 +208,9 @@ export class PlaylistLengthController {
 	private setupObservers(methodConfig: PlaylistLengthParameters, videoElement: Nullable<HTMLVideoElement>): void {
 		this.disconnectObservers();
 
-		const documentObserver = new MutationObserver(() => {
+		this.unsubscribeBus = subscribe("*", () => {
 			this.debouncedUpdate(methodConfig);
 		});
-		documentObserver.observe(document.documentElement, { childList: true, subtree: true });
-		this.documentObserver = documentObserver;
 
 		const resizeObserver = new ResizeObserver(() => {
 			void this.handleUpdate(methodConfig);

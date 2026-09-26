@@ -5,6 +5,7 @@ import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { registry } from "@/src/features/_registry/featureRegistry";
 import { updatePlaybackSpeedButtonTooltips } from "@/src/features/playbackSpeedButtons";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { settingsPanelMenuSelector } from "@/src/utils/dom/selectors";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getCurrentChannelId } from "@/src/utils/getChannelId";
@@ -92,14 +93,14 @@ function resolveEffectiveSpeed(speed: number, channelSpeeds: string | undefined,
 	return Number.isFinite(entry) ? entry : speed;
 }
 function setupPlaybackSpeedChangeListener() {
-	const documentObserver = new MutationObserver(() => {
-		const menu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
-		if (menu) {
-			documentObserver.disconnect();
-			setupMenuObserver(menu);
-		}
-	});
-	documentObserver.observe(document.body, { childList: true, subtree: true });
+	subscribe(
+		settingsPanelMenuSelector,
+		(elements) => {
+			const menu = elements[0] as HTMLDivElement;
+			if (menu) setupMenuObserver(menu);
+		},
+		{ once: true }
+	);
 	function setupMenuObserver(settingsPanelMenu: HTMLDivElement) {
 		let lastSpeed: Nullable<number> = null;
 		const updateStoredSpeed = (speed: number) => {

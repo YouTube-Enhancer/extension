@@ -3,6 +3,7 @@ import type { Nullable } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
 import { createStyledElement } from "@/src/utils/dom/elements";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { waitForElement } from "@/src/utils/dom/wait";
 
 import type { MiniPlayerOptions } from "./types";
@@ -17,15 +18,15 @@ let miniPlayerController: Nullable<MiniPlayerController> = null;
 let cachedMiniPlayerDefaults: Nullable<MiniPlayerOptions> = null;
 
 let visibilityObserver: Nullable<IntersectionObserver> = null;
-let commentsMutationObserver: Nullable<MutationObserver> = null;
+let unsubscribeCommentsBus: Nullable<() => void> = null;
 
 let lastEmittedActiveState: Nullable<boolean> = null;
 
 function cleanupAutoObservers() {
 	visibilityObserver?.disconnect();
 	visibilityObserver = null;
-	commentsMutationObserver?.disconnect();
-	commentsMutationObserver = null;
+	unsubscribeCommentsBus?.();
+	unsubscribeCommentsBus = null;
 }
 function emitMiniPlayerState(active: boolean) {
 	if (lastEmittedActiveState === active) return;
@@ -106,14 +107,16 @@ async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 		attachObserver(commentsElement);
 		return;
 	}
-	commentsMutationObserver = new MutationObserver(() => {
-		const foundComments = getCommentsElement();
-		if (!foundComments) return;
-		commentsMutationObserver?.disconnect();
-		commentsMutationObserver = null;
-		attachObserver(foundComments);
-	});
-	commentsMutationObserver.observe(document.documentElement, { childList: true, subtree: true });
+	unsubscribeCommentsBus = subscribe(
+		"ytd-comments, #comments",
+		([foundComments]) => {
+			if (!foundComments) return;
+			unsubscribeCommentsBus?.();
+			unsubscribeCommentsBus = null;
+			attachObserver(foundComments);
+		},
+		{ once: true }
+	);
 }
 function getEnabledController(): Nullable<MiniPlayerController> {
 	const { defaultPosition, defaultSize } = featureConfigManager.getLast("miniPlayer");

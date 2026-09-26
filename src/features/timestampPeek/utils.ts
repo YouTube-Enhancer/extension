@@ -3,6 +3,7 @@ import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { suspendMiniPlayerOverlay } from "@/src/features/miniPlayer";
 import { createStyledElement } from "@/src/utils/dom/elements";
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { timestampElementSelector } from "@/src/utils/dom/selectors";
 
 const timestampsWithListeners = new Set<HTMLElement>();
@@ -176,27 +177,19 @@ export function handleTimestampHover(el: HTMLElement, timestamp: number) {
 	eventManager.addEventListener(el, "pointerdown", (e) => void commitHandler(e as MouseEvent), "timestampPeek");
 }
 
-export async function observeTimestampElements(): Promise<Nullable<MutationObserver>> {
+export async function observeTimestampElements(): Promise<Nullable<() => void>> {
 	const href = getVideoHref();
 	if (!href) return null;
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return null;
 	const videoLength = await playerContainer.getDuration();
-	const observer = new MutationObserver((mutations) => {
-		for (const { addedNodes } of mutations) {
-			for (const node of addedNodes) {
-				if (!(node instanceof HTMLElement)) continue;
-				processNode(node, href, videoLength);
-				node.querySelectorAll<HTMLElement>(`${timestampElementSelector}[href^='${href}']`).forEach((child) => processNode(child, href, videoLength));
-			}
+	const selector = `${timestampElementSelector}[href^='${href}']`;
+	const unsubscribe = subscribe(selector, (elements) => {
+		for (const el of elements) {
+			processNode(el as HTMLElement, href, videoLength);
 		}
 	});
-	observer.observe(document.body, {
-		childList: true,
-		subtree: true
-	});
-
-	return observer;
+	return unsubscribe;
 }
 
 export function resetState() {
