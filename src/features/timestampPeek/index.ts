@@ -14,7 +14,7 @@ import { waitForAllElements } from "@/src/utils/dom/wait";
 import "./index.css";
 import { metadata } from "./index.metadata";
 
-let timestampElementObserver: Nullable<MutationObserver> = null;
+let unsubscribeTimestampBus: Nullable<() => void> = null;
 const navigateStartHandler = () => {
 	restorePreviewedVideo();
 	eventManager.removeEventListeners("timestampPeek");
@@ -29,13 +29,8 @@ const navigateStartHandler = () => {
 };
 
 function cleanupTimestampObserver() {
-	timestampElementObserver?.disconnect();
-	timestampElementObserver = null;
-}
-
-function setTimestampObserver(observer: MutationObserver) {
-	timestampElementObserver?.disconnect();
-	timestampElementObserver = observer;
+	unsubscribeTimestampBus?.();
+	unsubscribeTimestampBus = null;
 }
 
 function setupTimestampPeek() {
@@ -46,8 +41,8 @@ function setupTimestampPeek() {
 		document.addEventListener("yt-navigate-start", navigateStartHandler);
 		cleanupTimestampObserver();
 		await handleTimestampElementsHover();
-		const obs = await observeTimestampElements();
-		if (obs) setTimestampObserver(obs);
+		const unsub = await observeTimestampElements();
+		if (unsub) unsubscribeTimestampBus = unsub;
 		return undefined;
 	});
 }
