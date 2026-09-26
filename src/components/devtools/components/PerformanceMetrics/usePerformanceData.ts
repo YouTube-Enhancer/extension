@@ -62,17 +62,35 @@ export function usePerformanceData(): {
 		if (metrics.length === 0) return { avg: 0, max: 0, min: 0 };
 		// For stats, use duration for depth 0 (includes nested), exclusive for nested
 		const durations = filteredMetrics.map((m) => (m.depth === 0 ? m.duration : m.exclusiveDuration));
+		// Calculate wall-clock time for avg using concurrency groups
+		const rootMetrics = filteredMetrics.filter((m) => m.depth === 0);
+		const groups = new Map<number, number>();
+		for (const m of rootMetrics) {
+			const group = m.concurrencyGroup ?? 0;
+			const current = groups.get(group) ?? 0;
+			groups.set(group, Math.max(current, m.duration));
+		}
+		const wallClockTotal = Array.from(groups.values()).reduce((sum, d) => sum + d, 0);
+		const groupCount = groups.size || 1;
 		return {
-			avg: durations.reduce((a, b) => a + b, 0) / durations.length,
+			avg: wallClockTotal / groupCount,
 			max: Math.max(...durations),
 			min: Math.min(...durations)
 		};
 	}, [filteredMetrics, metrics.length]);
 
 	const totalTime = useMemo(() => {
-		// Sum only root-level (depth 0) operations - they include all nested time
+		// Calculate wall-clock time from concurrency groups:
+		// Features in the same group run sequentially (sum durations).
+		// Features in different groups run in parallel (take max within each group, then sum across groups).
 		const rootMetrics = filteredMetrics.filter((m) => m.depth === 0);
-		return rootMetrics.reduce((sum, m) => sum + m.duration, 0);
+		const groups = new Map<number, number>();
+		for (const m of rootMetrics) {
+			const group = m.concurrencyGroup ?? 0;
+			const current = groups.get(group) ?? 0;
+			groups.set(group, Math.max(current, m.duration));
+		}
+		return Array.from(groups.values()).reduce((sum, groupDuration) => sum + groupDuration, 0);
 	}, [filteredMetrics]);
 
 	const phaseBreakdown = useMemo((): PhaseGroup[] => {
