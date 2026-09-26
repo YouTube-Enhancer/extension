@@ -63,7 +63,11 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				const features = registry.getAll();
 				const configs = {} as { [K in FeatureKeys]?: configuration[K] };
 				for (const feature of features) {
-					(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = registry.configManager.getLast(feature.id) ?? feature.defaults;
+					try {
+						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = registry.configManager.getLast(feature.id);
+					} catch {
+						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = feature.defaults;
+					}
 				}
 
 				return {
@@ -85,7 +89,14 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 
 			case "devtools_get_feature_config": {
 				const feature = registry.getFeature(message.data.id);
-				const config = feature ? (registry.configManager.getLast(message.data.id) ?? feature.defaults) : undefined;
+				let config: configuration[FeatureKeys] | undefined;
+				if (feature) {
+					try {
+						config = registry.configManager.getLast(message.data.id);
+					} catch {
+						config = feature.defaults;
+					}
+				}
 
 				return {
 					...messageBase,
@@ -264,13 +275,29 @@ export const setupDevToolsListener = () => {
 		if (!type || !requestId || !extensionId || tabId === undefined) return;
 		void (async () => {
 			const data = rawData as DevToolsMessages["request"];
-			const response = await handleDevToolsMessage(data, tabId, extensionId);
-			if (!response) return;
+			try {
+				const response = await handleDevToolsMessage(data, tabId, extensionId);
+				if (!response) return;
 
-			const serializedResponse = JSON.parse(JSON.stringify(response));
-			const messageToSend = Object.assign({}, serializedResponse, { source: "injected" as const });
+				const serializedResponse = JSON.parse(JSON.stringify(response));
+				const messageToSend = Object.assign({}, serializedResponse, { source: "injected" as const });
 
-			window.postMessage(messageToSend, "*");
+				window.postMessage(messageToSend, "*");
+			} catch (error) {
+				console.error("[DevTools InjectedScript] Error handling devtools message:", error);
+				window.postMessage(
+					{
+						action: "data_response",
+						data: null,
+						extensionId,
+						requestId: data.requestId,
+						source: "injected",
+						tabId,
+						type: data.type
+					},
+					"*"
+				);
+			}
 		})();
 	});
 };
