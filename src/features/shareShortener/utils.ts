@@ -1,8 +1,10 @@
 import type { Nullable } from "@/src/types";
 
+import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
+
 const regexp: RegExp = new RegExp("(\\?|&)(si|feature|pp)=[^&]*", "g");
 let intervalId: Nullable<NodeJS.Timeout> = null;
-let inputObserver: Nullable<MutationObserver> = null;
+let unsubscribeBus: Nullable<() => void> = null;
 export function cleanSearchPage(url: string) {
 	if (!url.match(/https?:\/\/(?:www\.)?youtube\.com\/results\?search\_query\=.+/gm)) return;
 	const allElements = Array.from(document.querySelectorAll("*"));
@@ -15,23 +17,24 @@ export function cleanSearchPage(url: string) {
 }
 
 export function observeShareURLInput() {
-	const observer = new MutationObserver(() => {
-		const shareInput = document.querySelector<HTMLInputElement>("#share-url");
-		if (shareInput && shareInput.value.match(regexp)) {
-			shareInput.value = cleanUrl(shareInput.value);
-			observer.disconnect();
-			cleanAndUpdateUrl();
-		}
-	});
-
-	observer.observe(document.body, { childList: true, subtree: true });
+	unsubscribeBus = subscribe(
+		"#share-url",
+		(elements) => {
+			const shareInput = elements[0] as HTMLInputElement;
+			if (shareInput && shareInput.value.match(regexp)) {
+				shareInput.value = cleanUrl(shareInput.value);
+				unsubscribeBus?.();
+				unsubscribeBus = null;
+				cleanAndUpdateUrl();
+			}
+		},
+		{ once: true }
+	);
 }
 
 export function removeObserver() {
-	if (inputObserver) {
-		inputObserver.disconnect();
-		inputObserver = null;
-	}
+	unsubscribeBus?.();
+	unsubscribeBus = null;
 	if (intervalId) {
 		clearInterval(intervalId);
 		intervalId = null;
