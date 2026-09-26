@@ -3,7 +3,7 @@ import type { ButtonPlacement } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
-import { getFeatureButton, updateFeatureButtonChecked, updateFeatureButtonIcon, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import { updateFeatureButtonChecked, updateFeatureButtonIconByName, updateFeatureButtonTitle } from "@/src/features/buttonController";
 import { getEndScreenCardsButtonIcon, getEndScreenCardsButtonTitle } from "@/src/features/hideEndScreenCardsButton/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
@@ -43,8 +43,7 @@ const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: Button
 	 */
 	updateFeatureButtonChecked("hideEndScreenCardsButton", cardsAreHidden);
 	if (hideEndScreenCardsPlacement === "feature_menu") return;
-	const hideEndScreenCardsButton = getFeatureButton("hideEndScreenCardsButton");
-	if (!hideEndScreenCardsButton || !(hideEndScreenCardsButton instanceof HTMLButtonElement)) return;
-	updateFeatureButtonIcon(hideEndScreenCardsButton, getEndScreenCardsButtonIcon(icons, cardsAreHidden));
+	const icon = getEndScreenCardsButtonIcon(icons, cardsAreHidden);
+	if (icon instanceof SVGSVGElement) updateFeatureButtonIconByName("hideEndScreenCardsButton", icon);
 	updateFeatureButtonTitle("hideEndScreenCardsButton", getEndScreenCardsButtonTitle(cardsAreHidden));
 };
