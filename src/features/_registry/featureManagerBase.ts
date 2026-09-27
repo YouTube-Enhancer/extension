@@ -90,4 +90,35 @@ export abstract class FeatureManagerBase {
 			}
 		}
 	}
+
+	/**
+	 * Synchronous variant of {@link safelyExecute} for operations that don't need async.
+	 * Avoids Promise allocation and microtask scheduling overhead.
+	 * Use for pure synchronous checks (dependency resolution, config comparison, etc.).
+	 */
+	protected safelyExecuteSync<T>(
+		id: PerfId,
+		operation: string,
+		fn: () => T,
+		options: {
+			fallback?: T;
+			shouldRethrow?: boolean;
+			subPhase?: string;
+		} = {}
+	): Nullable<T> {
+		const [, baseSubPhase] = operation.split(":");
+		const subPhaseFromOperation = baseSubPhase as SubPhase | undefined;
+		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
+
+		try {
+			return fn();
+		} catch (error) {
+			const operationString = finalSubPhase ? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}` : operation;
+			this.perf.recordError(id, operationString, error);
+			if (options.shouldRethrow) {
+				throw error;
+			}
+			return options.fallback ?? null;
+		}
+	}
 }
