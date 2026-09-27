@@ -210,11 +210,12 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	// navigation, so it is waited for rather than looked up once.
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player", 15000);
 	if (!playerContainer) return;
-	// The first read of a page can still see an empty player, the video played before a navigation, or a
-	// pre-roll ad, whose id would become the history key; wait for the video the page is about instead. After an
-	// in-page navigation the same applies: the next id the player reports is the pre-roll's when one plays, and on
-	// a slow load still the previous video's, and nothing runs this again for the video that follows.
-	const playerVideoData = await waitForPlayerVideoData(playerContainer);
+	// The video element and video data wait are independent once the player container exists, so run
+	// them in parallel to avoid adding the video element wait to the critical path.
+	const [playerVideoData, videoElement] = await Promise.all([
+		waitForPlayerVideoData(playerContainer),
+		waitForElement<HTMLVideoElement>("div#movie_player video.video-stream.html5-main-video", 15000)
+	]);
 	// If the video is live return
 	if (playerVideoData.isLive) return;
 	const { author: rawAuthor } = playerVideoData;
@@ -225,7 +226,6 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	resetState();
 	// Leaving a Mix for a plain watch page has YouTube rebuild the player, and the new video element lands a moment
 	// after the player already reports the new video, so it is waited for rather than looked up once.
-	const videoElement = await waitForElement<HTMLVideoElement>("div#movie_player video.video-stream.html5-main-video", 15000);
 	if (!videoElement || currentVideoId !== videoId) return;
 	const author = createAuthor(rawAuthor ?? "");
 	const [isArtist, duration] = await Promise.all([isOfficialArtist(videoId, author, { current: currentVideoId }), playerContainer.getDuration()]);
