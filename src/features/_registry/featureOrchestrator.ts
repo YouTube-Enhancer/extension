@@ -50,41 +50,14 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		this.enableAllPromise = (async () => {
 			try {
 				const featuresByPriority = this.getFeaturesSortedByPriority();
-				for (const feature of featuresByPriority) {
-					const featureConfig = options[feature.id] ?? feature.defaults;
-					featureConfigManager.setLast(feature.id, featureConfig);
-				}
+				this.cacheFeatureConfigs(featuresByPriority, options);
 
 				// Phase 1: Sequential — resolve enabled state and place buttons per feature.
 				// This ensures buttons from the same feature are adjacent in the DOM.
-				const featureStates: { config: configuration[FeatureKeys]; enabled: boolean; feature: AnyFeatureBase }[] = [];
-				for (const feature of featuresByPriority) {
-					const { [feature.id]: featureConfig } = options;
-					if (!featureConfig) continue;
-					await this.registry.lifecycleManager.initFeature(feature, featureConfig);
-					const enabledResult = this.safelyExecuteSync<boolean>(feature.id, "init:dependencies", () => resolveEnabled(featureConfig), {
-						fallback: false,
-						shouldRethrow: true
-					});
-					const enabled = enabledResult ?? false;
-					featureStates.push({ config: featureConfig, enabled, feature });
-					await this.updateFeatureEnabledState(feature.id, enabled, featureConfig);
-				}
+				const featureStates = await this.phaseInitAndButtons(featuresByPriority, options);
 
 				// Phase 2: Parallel — run lifecycle hooks for all features concurrently.
-				const CONCURRENCY_GROUP = 0;
-				const lifecyclePromises = featureStates.map(({ config, enabled, feature }) =>
-					this.safelyExecute(
-						feature.id,
-						"init",
-						async () => await this.updateFeatureEnabledState(feature.id, enabled, config, { skipButtons: true }),
-						{
-							concurrencyGroup: CONCURRENCY_GROUP,
-							subPhase: "enable"
-						}
-					)
-				);
-				await Promise.allSettled(lifecyclePromises);
+				await this.phaseLifecycleHooks(featureStates);
 
 				this.perf.logSummary("enableAll");
 			} finally {
@@ -133,10 +106,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				fallback: false
 			}) ?? false;
 		const canEnable = resolved && depsMet;
-		if (!this.registry.hasButtons(feature, id)) return;
-		await this.safelyExecute<void>(id, "config:buttons", async () => {
-			await featureButtonManager.handleButtonPlacement(feature, config, canEnable);
-		});
+		await this.applyButtonPlacement(feature, id, config, canEnable);
 	}
 
 	async reconcileFeature<K extends FeatureKeys>(id: K, config: configuration[K], enabled: boolean) {
@@ -158,33 +128,13 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		}
 		this.updatingFeatures.add(id);
 		try {
-			const prevEnabled = this.featureEnabledState.get(id) ?? false;
-			const prevConfig = featureConfigManager.getLast(id);
-			const depsMet =
-				this.safelyExecuteSync<boolean>(id, "enable", () => featureNavigationManager.areDependenciesMet(feature), {
-					subPhase: "dependencies"
-				}) ?? false;
-			const canEnable = enabled && depsMet;
-			const hasEnabledChanged = prevEnabled !== canEnable;
-			const hasConfigChanged =
-				this.safelyExecuteSync<boolean>(id, "config", () => featureConfigManager.hasChanged(prevConfig, config), {
-					subPhase: "dependencies"
-				}) ?? false;
-			if (!hasEnabledChanged && !hasConfigChanged) return;
-			this.featureEnabledState.set(id, canEnable);
-			if (!options?.skipButtons && this.registry.hasButtons(feature, id)) {
-				await this.safelyExecute(id, "enable", async () => featureButtonManager.handleButtonPlacement(feature, config, canEnable), {
-					subPhase: "buttons"
-				});
+			const state = this.resolveFeatureState(id, feature, enabled, config);
+			if (!state.hasChanged) return;
+			this.featureEnabledState.set(id, state.canEnable);
+			if (!options?.skipButtons) {
+				await this.applyButtonPlacement(feature, id, config, state.canEnable);
 			}
-			if (canEnable && !prevEnabled) {
-				await this.safelyExecute(id, "enable", async () => this.registry.lifecycleManager.enableFeature(feature, config), { subPhase: "lifecycle" });
-			}
-			if (!canEnable && prevEnabled) {
-				await this.safelyExecute(id, "disable", async () => this.registry.lifecycleManager.disableFeature(feature, config), {
-					subPhase: "lifecycle"
-				});
-			}
+			await this.executeLifecycleTransition(feature, id, config, state.canEnable, state.prevEnabled);
 		} finally {
 			this.updatingFeatures.delete(id);
 			const pending = this.pendingUpdates.get(id);
@@ -206,15 +156,86 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			await this.safelyExecute(id, "navigate", async () => this.registry.lifecycleManager.navigateFeature(feature, config, navigationType), {
 				subPhase: "lifecycle"
 			});
-			if (this.registry.hasButtons(feature, id)) {
-				await this.safelyExecute(id, "navigate", async () => featureButtonManager.handleButtonPlacement(feature, config, true), {
-					subPhase: "buttons"
-				});
-			}
+			await this.applyButtonPlacement(feature, id, config, true);
 		}
 	}
 
 	protected override getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
 		return "featureOrchestrator" as FeatureKeys;
+	}
+
+	private applyButtonPlacement<K extends FeatureKeys>(feature: AnyFeatureBase, id: K, config: configuration[K], canEnable: boolean) {
+		if (!this.registry.hasButtons(feature, id)) return;
+		return this.safelyExecute(id, "enable", async () => featureButtonManager.handleButtonPlacement(feature, config, canEnable), {
+			subPhase: "buttons"
+		});
+	}
+
+	private cacheFeatureConfigs(features: AnyFeatureBase[], options: Partial<configuration>) {
+		for (const feature of features) {
+			const featureConfig = options[feature.id] ?? feature.defaults;
+			featureConfigManager.setLast(feature.id, featureConfig);
+		}
+	}
+
+	private async executeLifecycleTransition<K extends FeatureKeys>(
+		feature: AnyFeatureBase,
+		id: K,
+		config: configuration[K],
+		canEnable: boolean,
+		prevEnabled: boolean
+	) {
+		if (canEnable && !prevEnabled) {
+			await this.safelyExecute(id, "enable", async () => this.registry.lifecycleManager.enableFeature(feature, config), { subPhase: "lifecycle" });
+		}
+		if (!canEnable && prevEnabled) {
+			await this.safelyExecute(id, "disable", async () => this.registry.lifecycleManager.disableFeature(feature, config), {
+				subPhase: "lifecycle"
+			});
+		}
+	}
+
+	private async phaseInitAndButtons(features: AnyFeatureBase[], options: Partial<configuration>) {
+		const featureStates: { config: configuration[FeatureKeys]; enabled: boolean; feature: AnyFeatureBase }[] = [];
+		for (const feature of features) {
+			const { [feature.id]: featureConfig } = options;
+			if (!featureConfig) continue;
+			await this.registry.lifecycleManager.initFeature(feature, featureConfig);
+			const enabledResult = this.safelyExecuteSync<boolean>(feature.id, "init:dependencies", () => resolveEnabled(featureConfig), {
+				fallback: false,
+				shouldRethrow: true
+			});
+			const enabled = enabledResult ?? false;
+			featureStates.push({ config: featureConfig, enabled, feature });
+			await this.updateFeatureEnabledState(feature.id, enabled, featureConfig);
+		}
+		return featureStates;
+	}
+
+	private async phaseLifecycleHooks(featureStates: { config: configuration[FeatureKeys]; enabled: boolean; feature: AnyFeatureBase }[]) {
+		const CONCURRENCY_GROUP = 0;
+		const lifecyclePromises = featureStates.map(({ config, enabled, feature }) =>
+			this.safelyExecute(feature.id, "init", async () => await this.updateFeatureEnabledState(feature.id, enabled, config, { skipButtons: true }), {
+				concurrencyGroup: CONCURRENCY_GROUP,
+				subPhase: "enable"
+			})
+		);
+		await Promise.allSettled(lifecyclePromises);
+	}
+
+	private resolveFeatureState<K extends FeatureKeys>(id: K, feature: AnyFeatureBase, enabled: boolean, config: configuration[K]) {
+		const prevEnabled = this.featureEnabledState.get(id) ?? false;
+		const prevConfig = featureConfigManager.getLast(id);
+		const depsMet =
+			this.safelyExecuteSync<boolean>(id, "enable", () => featureNavigationManager.areDependenciesMet(feature), {
+				subPhase: "dependencies"
+			}) ?? false;
+		const canEnable = enabled && depsMet;
+		const hasEnabledChanged = prevEnabled !== canEnable;
+		const hasConfigChanged =
+			this.safelyExecuteSync<boolean>(id, "config", () => featureConfigManager.hasChanged(prevConfig, config), {
+				subPhase: "dependencies"
+			}) ?? false;
+		return { canEnable, hasChanged: hasEnabledChanged || hasConfigChanged, prevEnabled };
 	}
 }
