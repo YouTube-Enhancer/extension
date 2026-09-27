@@ -55,15 +55,12 @@ if (DEV_MODE) {
 	scheduleEmbeddedScript();
 }
 const getStoredSettings = async (): Promise<configuration> => {
-	const options: configuration = await new Promise((resolve) => {
-		void storage.local.get(null).then((settings) => {
-			const storedSettings = Object.keys(settings)
-				.filter((key) => Object.keys(defaultConfiguration).includes(key))
-				.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
-			return resolve(deepMerge(defaultConfiguration, storedSettings) as configuration);
-		});
-	});
-	return options;
+	const configKeys = Object.keys(defaultConfiguration);
+	const settings = await storage.local.get(configKeys);
+	const storedSettings = Object.keys(settings)
+		.filter((key) => configKeys.includes(key))
+		.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
+	return deepMerge(defaultConfiguration, storedSettings) as configuration;
 };
 let cachedSettings: configuration | null = null;
 const getCachedSettings = async (): Promise<configuration> => {
