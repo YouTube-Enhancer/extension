@@ -61,14 +61,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 					const { [feature.id]: featureConfig } = options;
 					if (!featureConfig) return;
 					await this.registry.lifecycleManager.initFeature(feature, featureConfig);
-					const enabledResult = await this.safelyExecute<boolean>(
-						feature.id,
-						"init:dependencies",
-						async () => {
-							return Promise.resolve(resolveEnabled(featureConfig));
-						},
-						{ concurrencyGroup: CONCURRENCY_GROUP, fallback: false, shouldRethrow: true }
-					);
+					const enabledResult = this.safelyExecuteSync<boolean>(feature.id, "init:dependencies", () => resolveEnabled(featureConfig), {
+						fallback: false,
+						shouldRethrow: true
+					});
 					const enabled = enabledResult ?? false;
 					await this.safelyExecute(feature.id, "init", async () => await this.updateFeatureEnabledState(feature.id, enabled, featureConfig), {
 						concurrencyGroup: CONCURRENCY_GROUP,
@@ -113,23 +109,13 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			await this.registry.lifecycleManager.configChange(feature, config);
 		});
 		const depsMet =
-			(await this.safelyExecute<boolean>(
-				id,
-				"config:dependencies",
-				async () => Promise.resolve(featureNavigationManager.areDependenciesMet(feature)),
-				{
-					fallback: false
-				}
-			)) ?? false;
+			this.safelyExecuteSync<boolean>(id, "config:dependencies", () => featureNavigationManager.areDependenciesMet(feature), {
+				fallback: false
+			}) ?? false;
 		const resolved =
-			(await this.safelyExecute<boolean>(
-				id,
-				"config:dependencies",
-				async () => {
-					return Promise.resolve(resolveEnabled(config));
-				},
-				{ fallback: false }
-			)) ?? false;
+			this.safelyExecuteSync<boolean>(id, "config:dependencies", () => resolveEnabled(config), {
+				fallback: false
+			}) ?? false;
 		const canEnable = resolved && depsMet;
 		if (!this.registry.hasButtons(feature, id)) return;
 		await this.safelyExecute<void>(id, "config:buttons", async () => {
@@ -159,15 +145,15 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			const prevEnabled = this.featureEnabledState.get(id) ?? false;
 			const prevConfig = featureConfigManager.getLast(id);
 			const depsMet =
-				(await this.safelyExecute<boolean>(id, "enable", async () => Promise.resolve(featureNavigationManager.areDependenciesMet(feature)), {
+				this.safelyExecuteSync<boolean>(id, "enable", () => featureNavigationManager.areDependenciesMet(feature), {
 					subPhase: "dependencies"
-				})) ?? false;
+				}) ?? false;
 			const canEnable = enabled && depsMet;
 			const hasEnabledChanged = prevEnabled !== canEnable;
 			const hasConfigChanged =
-				(await this.safelyExecute<boolean>(id, "config", async () => Promise.resolve(featureConfigManager.hasChanged(prevConfig, config)), {
+				this.safelyExecuteSync<boolean>(id, "config", () => featureConfigManager.hasChanged(prevConfig, config), {
 					subPhase: "dependencies"
-				})) ?? false;
+				}) ?? false;
 			if (!hasEnabledChanged && !hasConfigChanged) return;
 			this.featureEnabledState.set(id, canEnable);
 			if (this.registry.hasButtons(feature, id)) {
@@ -197,8 +183,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
 		const config = featureConfigManager.getLast(id) ?? feature.defaults;
-		const isEnabled =
-			(await this.safelyExecute<boolean>(id, "navigate", async () => Promise.resolve(resolveEnabled(config)), { subPhase: "dependencies" })) ?? false;
+		const isEnabled = this.safelyExecuteSync<boolean>(id, "navigate", () => resolveEnabled(config), { subPhase: "dependencies" }) ?? false;
 		await this.updateFeatureEnabledState(id, isEnabled, config);
 		const isActive = this.featureEnabledState.get(id);
 		if (isActive) {
