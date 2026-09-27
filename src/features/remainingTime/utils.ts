@@ -8,9 +8,8 @@ export async function calculateRemainingTime({
 }) {
 	// Get the player speed (playback rate)
 	const { playbackRate } = videoElement;
-	// Get the current time and duration of the video
-	const currentTime = await playerContainer.getCurrentTime();
-	const duration = await playerContainer.getDuration();
+	// Get the current time and duration of the video in parallel
+	const [currentTime, duration] = await Promise.all([playerContainer.getCurrentTime(), playerContainer.getDuration()]);
 	// Calculate the remaining time in seconds
 	const remainingTimeInSeconds = (duration - currentTime) / playbackRate;
 	// Format the remaining time
