@@ -20,6 +20,7 @@ import {
 } from "./buttonState";
 import { buttonContainerId } from "./constants";
 import {
+	getCachedContainer,
 	getEffectivePlacement,
 	getPlacementRoot,
 	getPlacementSelector,
@@ -67,7 +68,7 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
 	const selector = getPlacementSelector(effectivePlacement);
 	await enableFeatureMenuButton();
-	if (selector) {
+	if (selector && !getCachedContainer(effectivePlacement)) {
 		const element = await waitForElement(selector);
 		if (!element) return;
 	}

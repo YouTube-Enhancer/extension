@@ -95,6 +95,10 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		return this.sortedFeaturesCache;
 	}
 
+	invalidateButtonCache() {
+		featureButtonManager.invalidateCache();
+	}
+
 	isFeatureEnabled(id: FeatureKeys): boolean {
 		return this.featureEnabledState.get(id) ?? false;
 	}
