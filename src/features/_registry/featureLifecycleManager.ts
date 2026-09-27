@@ -70,6 +70,19 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 		);
 	}
 
+	async languageChange(feature: AnyFeatureBase) {
+		if (!hasOnLanguageChange(feature)) return;
+		await this.safelyExecute<void>(
+			feature.id,
+			"onLanguageChange",
+			async () => {
+				if (hasState(feature)) return await feature.onLanguageChange(this.stateManager.getStateAPI(feature.id));
+				await feature.onLanguageChange();
+			},
+			{ shouldRethrow: true }
+		);
+	}
+
 	async navigateFeature<K extends FeatureKeys>(feature: AnyFeatureBase, config: configuration[K], navigationType: string) {
 		if (!hasOnNavigate(feature)) return;
 		await this.safelyExecute<void>(
@@ -92,6 +105,7 @@ const hasOnInit = hasMethod("onInit");
 const hasOnEnable = hasMethod("onEnable");
 const hasOnDisable = hasMethod("onDisable");
 const hasOnConfigChange = hasMethod("onConfigChange");
+const hasOnLanguageChange = hasMethod("onLanguageChange");
 const hasOnNavigate = hasMethod("onNavigate");
 type FunctionKeys<T> = {
 	[K in keyof T]-?: NonNullable<T[K]> extends (...args: any[]) => any ? K : never;

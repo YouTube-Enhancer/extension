@@ -12,6 +12,7 @@ export type TrackedButtonInfo = {
 	icon: SVGSVGElement | ToggleIcon;
 	isToggle: boolean;
 	label: string;
+	labelResolver?: () => string;
 	listener: ListenerType<boolean>;
 	placement: ButtonPlacement;
 };
@@ -37,7 +38,8 @@ export function trackButton(
 	listener: ListenerType<boolean>,
 	isToggle: boolean,
 	initialChecked: boolean,
-	effectivePlacement: ButtonPlacement
+	effectivePlacement: ButtonPlacement,
+	labelResolver?: () => string
 ) {
 	trackedButtons.set(buttonName, {
 		checked: initialChecked,
@@ -46,6 +48,7 @@ export function trackButton(
 		icon,
 		isToggle,
 		label,
+		labelResolver,
 		listener,
 		placement
 	});
@@ -70,4 +73,9 @@ export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreen
 export function updateTrackedButtonLabel(buttonName: AllButtonNames, label: string) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.label = label;
+}
+
+export function updateTrackedButtonLabelResolver(buttonName: AllButtonNames, labelResolver: () => string) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.labelResolver = labelResolver;
 }

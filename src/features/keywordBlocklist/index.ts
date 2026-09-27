@@ -80,6 +80,9 @@ export default createFeature({
 		maskedTitleText = window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle);
 		syncObserving();
 	},
+	onLanguageChange: () => {
+		maskedTitleText = window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle);
+	},
 	onNavigate: () => {
 		if (observer) scheduleScan();
 	}

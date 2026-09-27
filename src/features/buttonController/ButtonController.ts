@@ -63,7 +63,8 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 	listener: ListenerType<Toggle>,
 	isToggle: boolean,
 	initialChecked: boolean = false,
-	fullscreenPlacement: FullscreenPlacement
+	fullscreenPlacement: FullscreenPlacement,
+	labelResolver?: () => string
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
 	const selector = getPlacementSelector(effectivePlacement);
@@ -97,7 +98,7 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 			break;
 		}
 	}
-	trackButton(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked);
+	trackButton(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, labelResolver);
 }
 
 export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): Promise<boolean> {
@@ -122,6 +123,27 @@ export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(ic
 		applyThemeToSvg(target, color);
 	}
 	return icon;
+}
+
+export function refreshAllLabels() {
+	for (const [buttonName, info] of trackedButtons) {
+		if (!info.labelResolver) continue;
+		const newLabel = info.labelResolver();
+		if (newLabel === info.label) continue;
+		info.label = newLabel;
+		const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+		if (button) {
+			button.dataset.title = newLabel;
+			const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
+			if (tooltip) tooltip.textContent = newLabel;
+		}
+		const menuItem = getFeatureMenuItem(buttonName);
+		if (menuItem) {
+			const { featureMenuItemLabelId } = getFeatureIds(buttonName);
+			const labelEl = menuItem.querySelector<HTMLDivElement>(`#${featureMenuItemLabelId}`);
+			if (labelEl) labelEl.textContent = newLabel;
+		}
+	}
 }
 
 export function removeButton(buttonName: AllButtonNames, placement?: ButtonPlacement): void;
@@ -361,10 +383,11 @@ function trackButton(
 	icon: SVGSVGElement | ToggleIcon,
 	listener: ListenerType<boolean>,
 	isToggle: boolean,
-	initialChecked: boolean
+	initialChecked: boolean,
+	labelResolver?: () => string
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
-	trackButtonState(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, effectivePlacement);
+	trackButtonState(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, effectivePlacement, labelResolver);
 	startPlacementTracking(() => {
 		void handleFullscreenChange();
 	});

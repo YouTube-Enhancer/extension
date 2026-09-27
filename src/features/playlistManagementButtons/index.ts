@@ -266,6 +266,10 @@ export default createFeature({
 	},
 	onDisable: cleanupPlaylistManagementButtons,
 	onEnable: setupPlaylistManagementButtons,
+	onLanguageChange: () => {
+		cleanupPlaylistManagementButtons();
+		setupPlaylistManagementButtons(registry.configManager.getLast("playlistManagementButtons"));
+	},
 	onNavigate: () => {
 		cleanupPlaylistManagementButtons();
 		setupPlaylistManagementButtons(registry.configManager.getLast("playlistManagementButtons"));

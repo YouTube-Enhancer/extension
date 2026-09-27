@@ -38,6 +38,14 @@ export default createFeature({
 			await setupOnPlaylistPage(stateAPI);
 		}
 	},
+	onLanguageChange: async (stateAPI) => {
+		cleanup();
+		if (isWatchPage()) {
+			await setupOnWatchPage(stateAPI);
+		} else {
+			await setupOnPlaylistPage(stateAPI);
+		}
+	},
 	onNavigate: async (_config, stateAPI) => {
 		cleanup();
 		if (isWatchPage()) {
