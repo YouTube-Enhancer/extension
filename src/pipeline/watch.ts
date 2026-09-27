@@ -82,8 +82,9 @@ export async function startWatch(argv: string[]): Promise<void> {
 	/** Tells the bundles which port this pipeline actually listens on (a number, so it is not inlined as a string); see `devReloadPort()`. */
 	const define = { __YTE_DEV_RELOAD_PORT__: (await hotReloadServer?.ready) ?? DEV_RELOAD_PORT };
 
+	const watchOptions = { buildDelay: WATCH_BUILD_DELAY_MS, chokidar: { ignored: "**/.zvec-grep/**" } };
 	const pagesWatcher = (await viteBuild({
-		build: { outDir: targetDir, watch: { buildDelay: WATCH_BUILD_DELAY_MS } },
+		build: { outDir: targetDir, watch: watchOptions },
 		configFile: resolve(rootDir, "vite.config.ts"),
 		define,
 		logLevel: "warn"
@@ -93,7 +94,7 @@ export async function startWatch(argv: string[]): Promise<void> {
 		logLevel: "warn",
 		outDir: targetDir,
 		singleFileEmbedded: true,
-		watch: { buildDelay: WATCH_BUILD_DELAY_MS }
+		watch: watchOptions
 	});
 	attach("pages", pagesWatcher, () => hmrServer?.writeHtml(targetDir));
 	attach("content", contentWatcher);
