@@ -2,9 +2,14 @@ import type { AvailableLocales } from "@/src/i18n/constants";
 import type { Nullable } from "@/src/types";
 
 import { registry } from "@/src/features/_registry/featureRegistry";
-import { enableFeatureMenu, hasFeaturesInMenu, setupFeatureMenuEventListeners, updateFeatureMenuTitle } from "@/src/features/buttonController";
+import {
+	enableFeatureMenu,
+	hasFeaturesInMenu,
+	refreshAllLabels,
+	setupFeatureMenuEventListeners,
+	updateFeatureMenuTitle
+} from "@/src/features/buttonController";
 import { i18nService } from "@/src/i18n";
-import { waitForSpecificMessage } from "@/src/utils/messaging";
 
 let cleanupListeners: Nullable<() => void> = null;
 
@@ -26,14 +31,11 @@ export const coreFeatures = {
 
 	async handleLanguageChange(language: AvailableLocales) {
 		window.i18nextInstance = await i18nService(language);
-		const {
-			data: { options }
-		} = await waitForSpecificMessage("options", "request_data", "content");
+		refreshAllLabels();
+		await registry.notifyLanguageChange();
 		const {
 			i18nextInstance: { t }
 		} = window;
-		await registry.disableAll();
-		await registry.enableAll(options);
 		if (hasFeaturesInMenu()) {
 			updateFeatureMenuTitle(t((tr) => tr.pages.content.features.featureMenu.button.label));
 		}

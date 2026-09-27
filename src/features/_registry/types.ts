@@ -107,6 +107,12 @@ export type FeatureButton<K extends FeatureKeys = FeatureKeys> = {
 	 */
 	add: (options: configuration[K]) => Promise<void>;
 	/**
+	 * Optional label resolver for dynamic language updates.
+	 * When provided, the button label will automatically update when the UI language changes.
+	 * @returns The current translated label string.
+	 */
+	labelResolver?: () => string;
+	/**
 	 * The name of the feature this button belongs to
 	 */
 	name: K extends FeatureKeysWithButtons ? ButtonsForFeature<K> : never;
@@ -405,6 +411,12 @@ type FeatureWithoutStateBranch<K extends FeatureKeys> = {
 	 */
 	onInit?: (config: configuration[K]) => MaybePromise<void>;
 	/**
+	 * Called when the UI language changes. Use this to refresh any cached translated strings.
+	 * Most features call `window.i18nextInstance.t(...)` inline and don't need this hook.
+	 * Only implement this if the feature caches translated text in a variable.
+	 */
+	onLanguageChange?: () => MaybePromise<void>;
+	/**
 	 * Optional navigation callback
 	 * @param config The configuration with the new values
 	 * @param navigationType The navigation signature/type (e.g., "watch:VIDEO_ID", "playlist:PLAYLIST_ID")
@@ -449,6 +461,12 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	 * @returns A promise that resolves when the feature has finished initialization
 	 */
 	onInit?: (config: configuration[K], stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
+	/**
+	 * Called when the UI language changes. Use this to refresh any cached translated strings.
+	 * Most features call `window.i18nextInstance.t(...)` inline and don't need this hook.
+	 * Only implement this if the feature caches translated text in a variable or bakes it into DOM during setup.
+	 */
+	onLanguageChange?: (stateAPI: FeatureStateAPI<K>) => MaybePromise<void>;
 	/**
 	 * Optional navigation callback
 	 * @param config The configuration with the new values
