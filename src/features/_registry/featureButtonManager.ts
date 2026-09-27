@@ -4,6 +4,7 @@ import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } fr
 import eventManager from "@/src/events/EventManager";
 import { checkIfFeatureButtonExists, removeFeatureButton } from "@/src/features/buttonController";
 import { getTrackedButtonFullscreenPlacement, updateTrackedButtonConfig } from "@/src/features/buttonController/buttonState";
+import { invalidateContainerCache } from "@/src/features/buttonController/containerTracking";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
@@ -37,6 +38,10 @@ class FeatureButtonManager extends FeatureManagerBase {
 				nextBtnCfg?.fullscreenPlacement ?? "same"
 			);
 		}
+	}
+
+	invalidateCache() {
+		invalidateContainerCache();
 	}
 
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {

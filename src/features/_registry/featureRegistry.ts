@@ -45,6 +45,7 @@ export class FeatureRegistry extends FeatureManagerBase {
 		await this.navigationManager.initialize(async (navigationType, eventType) => {
 			this.playerManager.cleanup();
 			await this.safelyExecute<void>("navigationCallback", "navigate", () => cb(navigationType, eventType), { subPhase: "callback" });
+			this.orchestrator.invalidateButtonCache();
 			for (const feature of this.orchestrator.getFeaturesSortedByPriority()) {
 				await this.orchestrator.updateFeatureOnNavigation(feature.id, navigationType);
 			}

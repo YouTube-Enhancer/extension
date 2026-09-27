@@ -10,8 +10,14 @@ import { isFullscreen, isInTheaterMode, placementTransition } from "./placementT
 // ─── Module-level state ───────────────────────────────────────────
 
 const rightControlsContainerId = "yte-right-controls-container";
+/** Cache of resolved placement containers, keyed by placement type. Invalidated on navigation. */
+const containerCache = new Map<ButtonPlacement, HTMLElement>();
 
 // ─── Exported functions ───────────────────────────────────────────
+
+export function getCachedContainer(placement: ButtonPlacement): HTMLElement | undefined {
+	return containerCache.get(placement);
+}
 
 export function getEffectivePlacement(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement): ButtonPlacement {
 	return isFullscreen() && fullscreenPlacement !== "same" ? fullscreenPlacement : placement;
@@ -89,6 +95,10 @@ export function getPlacementSelector(placement: ButtonPlacement): string | undef
 	return undefined;
 }
 
+export function invalidateContainerCache() {
+	containerCache.clear();
+}
+
 export async function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonPlacement, "feature_menu">) {
 	switch (placement) {
 		case "below_player": {
@@ -102,7 +112,11 @@ export async function placeButton(button: HTMLButtonElement, placement: Exclude<
 			break;
 		}
 		case "player_controls_left": {
-			const leftControls = await waitForElement<HTMLDivElement>(".ytp-left-controls");
+			let leftControls = containerCache.get(placement) as HTMLDivElement | undefined;
+			if (!leftControls) {
+				leftControls = (await waitForElement<HTMLDivElement>(".ytp-left-controls")) ?? undefined;
+				if (leftControls) containerCache.set(placement, leftControls);
+			}
 			if (!leftControls) return;
 			const existingInContainer = leftControls.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
@@ -113,6 +127,7 @@ export async function placeButton(button: HTMLButtonElement, placement: Exclude<
 		case "player_controls_right": {
 			const container = await getOrCreateRightControlsContainer();
 			if (!container) return;
+			containerCache.set(placement, container);
 			const existingInContainer = container.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
 			container.append(button);
