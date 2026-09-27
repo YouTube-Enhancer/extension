@@ -6,8 +6,6 @@ import type {
 	FeatureStateAPI,
 	FeatureStateKeys
 } from "@/src/features/_registry/types";
-import type { MiniPlayerRect } from "@/src/features/miniPlayer/controller";
-import type { VideoHistoryStorage } from "@/src/features/videoHistory/types";
 
 import { sendContentOnlyMessage } from "@/src/utils/messaging";
 
@@ -46,7 +44,7 @@ class FeatureStateManager extends FeatureManagerBase {
 		const defaultState = this.cloneInitialState(feature);
 		const persistState = this.shouldPersistState(feature);
 		const validatedStorageState = persistState ? this.validateState(feature, state) : undefined;
-		const migrated = persistState ? await this.migrateFromLocalStorage(feature.id) : undefined;
+		const migrated = persistState && feature.migrateFromLocalStorage ? await feature.migrateFromLocalStorage() : undefined;
 		// Merge priority: defaults (lowest) < migrated legacy state < storage (highest - last wins)
 		const merged = {
 			...defaultState,
@@ -72,49 +70,6 @@ class FeatureStateManager extends FeatureManagerBase {
 	}
 	private emitStateUpdate<K extends FeatureKeysWithState>(id: K, state: FeatureState[`state:${K}`]) {
 		sendContentOnlyMessage("featureStateUpdate", { id, state });
-	}
-	private async migrateFromLocalStorage<K extends FeatureKeysWithState>(id: K): Promise<FeatureState[`state:${K}`] | undefined> {
-		const result = await this.safelyExecute(
-			id,
-			"migrateFromLocalStorage",
-			// eslint-disable-next-line @typescript-eslint/require-await
-			async () => {
-				switch (id) {
-					case "miniPlayer": {
-						const rectRaw = localStorage.getItem("yte_mini_player_state");
-						const manualRaw = localStorage.getItem("yte_mini_player_manual_override");
-						if (!rectRaw && !manualRaw) return undefined;
-						return {
-							manualOverride: manualRaw ? Boolean(JSON.parse(manualRaw)) : false,
-							rect: rectRaw ? (JSON.parse(rectRaw) as MiniPlayerRect) : null
-						} as FeatureState[`state:${K}`];
-					}
-					case "playerSpeed": {
-						const speed = localStorage.getItem("playerSpeed");
-						if (!speed) return undefined;
-						return {
-							playbackSpeed: Number(speed)
-						} as FeatureState[`state:${K}`];
-					}
-					case "videoHistory": {
-						const raw = localStorage.getItem("videoHistory");
-						if (!raw) return undefined;
-						return {
-							storage: JSON.parse(raw) as VideoHistoryStorage
-						} as FeatureState[`state:${K}`];
-					}
-					default:
-						return undefined;
-				}
-			},
-			{ fallback: undefined }
-		);
-
-		/**
-		 * safelyExecute falls back to null on error. Return undefined instead: hydrateState spreads the result, and
-		 * undefined is its convention for "no migration result".
-		 */
-		return result === null ? undefined : result;
 	}
 	private shouldPersistState<K extends FeatureKeysWithState>(feature: FeatureBaseWithState<K>) {
 		return feature.persistState ?? false;

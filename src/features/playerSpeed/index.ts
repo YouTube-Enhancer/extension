@@ -225,6 +225,13 @@ function updatePlaybackSpeedButtons(currentSpeed: number) {
 
 export default createFeature({
 	...metadata,
+	migrateFromLocalStorage: () => {
+		const speed = localStorage.getItem("playerSpeed");
+		if (!speed) return undefined;
+		return {
+			playbackSpeed: Number(speed)
+		};
+	},
 	onConfigChange: ({ channelSpeeds, enabled, speed }) => {
 		if (!enabled) return;
 		enforcedConfig = { channelSpeeds, speed };

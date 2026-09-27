@@ -6,6 +6,7 @@ import { createStyledElement } from "@/src/utils/dom/elements";
 import { subscribe } from "@/src/utils/dom/observers/domMutationBus";
 import { waitForElement } from "@/src/utils/dom/wait";
 
+import type { MiniPlayerRect } from "./controller";
 import type { MiniPlayerOptions } from "./types";
 
 import { MINI_PLAYER_ACTIVE_CLASS, MINI_PLAYER_SENTINEL_ID } from "./constants";
@@ -164,6 +165,15 @@ async function setupMiniPlayer(defaultPosition: MiniPlayerOptions["defaultPositi
 
 export default createFeature({
 	...metadata,
+	migrateFromLocalStorage: () => {
+		const rectRaw = localStorage.getItem("yte_mini_player_state");
+		const manualRaw = localStorage.getItem("yte_mini_player_manual_override");
+		if (!rectRaw && !manualRaw) return undefined;
+		return {
+			manualOverride: manualRaw ? Boolean(JSON.parse(manualRaw)) : false,
+			rect: rectRaw ? (JSON.parse(rectRaw) as MiniPlayerRect) : null
+		};
+	},
 	onConfigChange: ({ defaultPosition, defaultSize }) => {
 		setCommentsMiniPlayerDefaults({ defaultPosition, defaultSize });
 	},

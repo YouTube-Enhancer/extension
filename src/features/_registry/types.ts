@@ -416,6 +416,12 @@ type FeatureWithoutStateBranch<K extends FeatureKeys> = {
 
 type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	/**
+	 * Optional migration from legacy localStorage keys. Called during state hydration when persistState is true.
+	 * Features that migrated from localStorage to the state system should implement this to preserve user data.
+	 * @returns Merged legacy state, or undefined if no legacy data exists
+	 */
+	migrateFromLocalStorage?: () => MaybePromise<Partial<FeatureState[`state:${K}`]> | undefined>;
+	/**
 	 * React to config changes
 	 * @param config The configuration with the new values
 	 * @param stateAPI The feature state API
