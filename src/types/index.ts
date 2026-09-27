@@ -142,6 +142,9 @@ export type DeepDarkCustomThemeColors = {
 	mainText: string;
 	secondBackground: string;
 };
+export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
+export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
+export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
 export type FeatureToMultiButtonMap = {
 	[K in MultiButtonFeatureNames]: {
 		[Button in keyof EnUS["pages"]["content"]["features"][K]["buttons"]]: "";
@@ -158,43 +161,6 @@ export type SnakeToCamel<S extends string> = S extends `${infer T}_${infer U}` ?
 export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type TSelectFunc = (t: i18nInstanceType["t"]) => string;
 export type TSelectorFunc = Parameters<TFunction<"en-US">>[0];
-const featureToMultiButtonMapEntries = {
-	forwardRewindButtons: {
-		forwardButton: "",
-		rewindButton: ""
-	},
-	playbackSpeedButtons: {
-		decreasePlaybackSpeedButton: "",
-		increasePlaybackSpeedButton: ""
-	}
-} satisfies FeatureToMultiButtonMap;
-export const featureToMultiButtonsMap = new Map(
-	Object.keys(featureToMultiButtonMapEntries).map((key) => [
-		key,
-
-		Object.keys(featureToMultiButtonMapEntries[key]) as KeysOfUnion<FeatureToMultiButtonMap[typeof key]>[]
-	])
-);
-export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
-export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
-export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
-export const buttonNames = Object.keys({
-	copyTimestampUrlButton: "",
-	decreasePlaybackSpeedButton: "",
-	flipVideoHorizontalButton: "",
-	flipVideoVerticalButton: "",
-	forwardButton: "",
-	hideEndScreenCardsButton: "",
-	increasePlaybackSpeedButton: "",
-	loopButton: "",
-	maximizePlayerButton: "",
-	miniPlayerButton: "",
-	monoToStereoButton: "",
-	openTranscriptButton: "",
-	rewindButton: "",
-	screenshotButton: "",
-	volumeBoostButton: ""
-} satisfies Record<AllButtonNames, "">);
 export const buttonNameToSettingName = {
 	copyTimestampUrlButton: "copyTimestampUrlButton",
 	decreasePlaybackSpeedButton: "playbackSpeedButtons",
