@@ -3,7 +3,11 @@ import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } fr
 
 import eventManager from "@/src/events/EventManager";
 import { checkIfFeatureButtonExists, removeFeatureButton } from "@/src/features/buttonController";
-import { getTrackedButtonFullscreenPlacement, updateTrackedButtonConfig } from "@/src/features/buttonController/buttonState";
+import {
+	getTrackedButtonFullscreenPlacement,
+	updateTrackedButtonConfig,
+	updateTrackedButtonLabelResolver
+} from "@/src/features/buttonController/buttonState";
 import { invalidateContainerCache } from "@/src/features/buttonController/containerTracking";
 
 import { FeatureManagerBase } from "./featureManagerBase";
@@ -138,6 +142,9 @@ class FeatureButtonManager extends FeatureManagerBase {
 								if (!buttonExists) {
 									await btn.add(config);
 								}
+							}
+							if (btn.labelResolver) {
+								updateTrackedButtonLabelResolver(btn.name, btn.labelResolver);
 							}
 						},
 						{

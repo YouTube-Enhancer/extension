@@ -13,6 +13,7 @@ export {
 	getFeatureMenuItemLabel,
 	hasFeaturesInMenu,
 	modifyIconForLightTheme,
+	refreshAllLabels,
 	removeButton,
 	removeButton as removeFeatureButton,
 	removeFeatureItemFromMenu,

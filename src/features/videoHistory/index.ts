@@ -191,6 +191,12 @@ export default createFeature({
 		document.getElementById(promptId)?.remove();
 		resetState();
 	},
+	onLanguageChange: () => {
+		const resumeButton = document.getElementById(resumeButtonId);
+		if (resumeButton) {
+			resumeButton.textContent = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumeButton);
+		}
+	},
 	/**
 	 * onNavigate receives the navigation signature, such as "watch:VIDEO_ID", rather than a "start" or "finish" event
 	 * type, and the registry runs it once per navigation. Both halves therefore happen here: the prompt of the video

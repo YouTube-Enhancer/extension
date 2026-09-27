@@ -54,6 +54,13 @@ export class FeatureRegistry extends FeatureManagerBase {
 	async notifyConfigChange<K extends FeatureKeys>(id: K, config: configuration[K]) {
 		await this.orchestrator.notifyConfigChange(id, config);
 	}
+
+	async notifyLanguageChange() {
+		for (const feature of this.getAll()) {
+			await this.lifecycleManager.languageChange(feature);
+		}
+	}
+
 	async reconcileFeature<K extends FeatureKeys>(id: K, config: configuration[K], enabled: boolean) {
 		await this.orchestrator.reconcileFeature(id, config, enabled);
 	}
