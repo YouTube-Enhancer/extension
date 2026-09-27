@@ -1,7 +1,7 @@
 import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
-import { getCurrentPageType } from "@/src/utils/url";
+import { getCurrentPageType, invalidatePageTypeCache } from "@/src/utils/url";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 
@@ -233,6 +233,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		if (this.navigating) return;
 		this.navigating = true;
 		try {
+			invalidatePageTypeCache();
 			const signature = await this.getNavigationSignature();
 			if (!signature) return;
 			if (!this.updateNavigationSignature(signature)) return;

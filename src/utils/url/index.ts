@@ -5,6 +5,8 @@ import { waitForElement } from "@/src/utils/dom/wait";
 
 import { isSupportedYouTubeHostname } from "./constants";
 
+let cachedPageType: Nullable<PageType> = null;
+
 export function extractSectionsFromYouTubeURL(url: string): string[] {
 	let parsed: URL;
 	try {
@@ -17,6 +19,7 @@ export function extractSectionsFromYouTubeURL(url: string): string[] {
 }
 
 export async function getCurrentPageType(): Promise<Nullable<PageType>> {
+	if (cachedPageType) return cachedPageType;
 	try {
 		if (typeof window === "undefined" || typeof document === "undefined") {
 			return null;
@@ -26,17 +29,17 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 		if (first === undefined) {
 			return window.location.pathname === "/" ? "home" : null;
 		}
-		if (first === "results") return "search";
-		if (first === "playlist") return "playlist";
-		if (first === "shorts") return "shorts";
-		if (first === "live") return "live";
-		if (first === "feed" && second === "subscriptions") return "subscriptions";
+		if (first === "results") return (cachedPageType = "search");
+		if (first === "playlist") return (cachedPageType = "playlist");
+		if (first === "shorts") return (cachedPageType = "shorts");
+		if (first === "live") return (cachedPageType = "live");
+		if (first === "feed" && second === "subscriptions") return (cachedPageType = "subscriptions");
 		if (first?.startsWith("@")) {
-			if (second === undefined || second === "featured") return "channel_home";
-			if (second === "videos") return "channel_videos";
+			if (second === undefined || second === "featured") return (cachedPageType = "channel_home");
+			if (second === "videos") return (cachedPageType = "channel_videos");
 			// The registry and the features that gate on them know these two pages; without this they were never detected.
-			if (second === "posts") return "channel_posts";
-			if (second === "streams") return "channel_streams";
+			if (second === "posts") return (cachedPageType = "channel_posts");
+			if (second === "streams") return (cachedPageType = "channel_streams");
 		}
 		if (first === "watch") {
 			/**
@@ -58,10 +61,10 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 						playerData = await player.getVideoData();
 					}
 					// Past the wait the data can still be the previous video's, and its live flag must not make a watch page "live".
-					if (playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId)) return "live";
+					if (playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId)) return (cachedPageType = "live");
 				}
 			} catch {}
-			return "watch";
+			return (cachedPageType = "watch");
 		}
 		return null;
 	} catch {
@@ -75,6 +78,10 @@ export function getCurrentVideoId(): Nullable<string> {
 
 export function getLayoutType(): "legacy" | "modern" {
 	return isModernYouTubeVideoLayout() ? "modern" : "legacy";
+}
+
+export function invalidatePageTypeCache() {
+	cachedPageType = null;
 }
 
 export function isChannelHomePage() {
@@ -96,6 +103,7 @@ export function isHomePage() {
 }
 
 export function isLivePage() {
+	if (cachedPageType) return cachedPageType === "live";
 	const [firstSection] = extractSectionsFromYouTubeURL(window.location.href);
 	return firstSection === "live";
 }
