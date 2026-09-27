@@ -4,14 +4,6 @@ import { maximizePlayer, minimizePlayer } from "@/src/features/maximizePlayerBut
 
 import { metadata } from "./index.metadata";
 
-async function disableTheaterIfEnabled() {
-	const theaterFeature = registry.getFeature("automaticTheaterMode");
-	if (!theaterFeature) return;
-	if (!registry.orchestrator.isFeatureEnabled("automaticTheaterMode")) return;
-	const config = registry.configManager.getLast("automaticTheaterMode");
-	await registry.lifecycleManager.disableFeature(theaterFeature, config);
-}
-
 function makeMaximizeTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		await maximizePlayer(2000);
@@ -22,8 +14,7 @@ function makeMaximizeTask(): () => Promise<boolean> {
 export default createFeature({
 	...metadata,
 	onDisable: () => minimizePlayer(),
-	onEnable: async () => {
-		await disableTheaterIfEnabled();
+	onEnable: () => {
 		void registry.playerManager.executeWithRetries("automaticallyMaximizePlayer", [makeMaximizeTask()], ["maximize"], {
 			maxAttempts: 15,
 			overallTimeout: 20000,

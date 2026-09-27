@@ -185,11 +185,13 @@ export async function maximizePlayer(timeout = 2500) {
 	await waitForPlayerLoaded(moviePlayer);
 	const inTheaterMode =
 		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
-	if (!inTheaterMode) clickAndRestore(sizeElement);
+	const theaterConfig = registry.configManager.getLast("automaticTheaterMode");
+	const theaterEnabled = "enabled" in theaterConfig && theaterConfig.enabled;
+	if (!inTheaterMode && !theaterEnabled) clickAndRestore(sizeElement);
 	adjustPlayer("add");
 	void changeMaximizeButtonState(true);
 	const { height } = header.getBoundingClientRect();
-	document.body.setAttribute("yte-size-button-state", inTheaterMode ? "theater" : "default");
+	document.body.setAttribute("yte-size-button-state", inTheaterMode || theaterEnabled ? "theater" : "default");
 	document.body.style.setProperty("--yte-header-height", `${height}px`);
 	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
 	window.addEventListener("resize", handleResize);
