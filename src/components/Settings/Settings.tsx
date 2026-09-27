@@ -24,6 +24,7 @@ import { type i18nInstanceType, i18nService } from "@/src/i18n";
 import { localeDirection } from "@/src/i18n/constants";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { deepMerge, parseStoredValue, updateConfigAtPath } from "@/src/utils/config/utils";
+import { deepEqual } from "@/src/utils/deepEqual";
 import { getPathValue } from "@/src/utils/misc";
 
 import Setting from "./components/Setting";
@@ -196,7 +197,7 @@ async function fetchSettings() {
 }
 async function setSettings(newSettings: configuration) {
 	const current = await getSettings();
-	if (JSON.stringify(current) === JSON.stringify(newSettings)) return;
+	if (deepEqual(current, newSettings)) return;
 	await browser.storage.local.set(Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value])));
 }
 

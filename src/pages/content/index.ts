@@ -18,6 +18,7 @@ import { isFeatureKey, resolveEnabled } from "@/src/features/_registry/featureRe
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
+import { deepEqual } from "@/src/utils/deepEqual";
 import { DEV_RELOAD_SOURCE, type DevWindowMessage, isDevRuntimeMessage, isDevWindowMessage } from "@/src/utils/dev/hotReload";
 import { MESSAGE_ORIGIN, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
 import { setupContentScriptBridge, teardownContentScriptBridge } from "@/src/utils/messaging/devtools";
@@ -86,7 +87,7 @@ const getStoredState = async (): Promise<{
 };
 void (async () => {
 	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
-	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", { state })]);
+	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", state)]);
 })();
 const onPageHide = () => {
 	storage.onChanged.removeListener(storageListeners);
@@ -239,20 +240,6 @@ const storageListeners = (changes: StorageChanges<configuration>, areaName: stri
 	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
-};
-const deepEqual = (a: unknown, b: unknown): boolean => {
-	if (a === b) return true;
-	if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) {
-		return false;
-	}
-	const keysA = Object.keys(a);
-	const keysB = Object.keys(b);
-	if (keysA.length !== keysB.length) return false;
-	for (const key of keysA) {
-		if (!keysB.includes(key)) return false;
-		if (!deepEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key])) return false;
-	}
-	return true;
 };
 const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
 	if (change?.newValue === undefined || change?.oldValue === undefined) return false;
