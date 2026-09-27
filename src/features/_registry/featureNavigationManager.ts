@@ -9,9 +9,12 @@ export type NavigationEventType = "finish" | "popstate" | "start" | "updated";
 
 type NavigationSignature = `${string}${"" | `:${string}`}`;
 
+const NAVIGATION_DEBOUNCE_MS = 100;
+
 export class FeatureNavigationManager extends FeatureManagerBase {
 	private currentNavigationSignature: Nullable<string> = null;
 	private currentPage: Nullable<string> = null;
+	private debounceTimer: Nullable<ReturnType<typeof setTimeout>> = null;
 	private isInitialized = false;
 	private navigating = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
@@ -38,6 +41,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	destroyListener() {
 		const { navigationListeners, pushStateWrapper, replaceStateWrapper } = this;
 		if (!navigationListeners.popstate) return;
+		if (this.debounceTimer !== null) {
+			clearTimeout(this.debounceTimer);
+			this.debounceTimer = null;
+		}
 		window.removeEventListener("popstate", navigationListeners.popstate);
 		window.removeEventListener("yt-navigate-start", navigationListeners.start);
 		window.removeEventListener("yt-navigate-finish", navigationListeners.finish);
@@ -58,20 +65,15 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.replaceStateWrapper = undefined;
 	}
 
-	async handleNavigation(eventType: NavigationEventType) {
+	handleNavigation(eventType: NavigationEventType) {
 		if (this.navigating) return;
-		this.navigating = true;
-		try {
-			const signature = await this.getNavigationSignature();
-			if (!signature) return;
-			if (!this.updateNavigationSignature(signature)) return;
-			this.currentNavigationSignature = signature;
-			this.currentPage = getPageFromSignature(signature);
-			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
-		} finally {
-			this.navigating = false;
-		}
+		if (this.debounceTimer !== null) clearTimeout(this.debounceTimer);
+		this.debounceTimer = setTimeout(() => {
+			this.debounceTimer = null;
+			void this.processNavigation(eventType);
+		}, NAVIGATION_DEBOUNCE_MS);
 	}
+
 	async initialize(callback: (signature: string, eventType: NavigationEventType) => Promise<void>) {
 		if (this.isInitialized) return;
 		const signature = await this.getNavigationSignature();
@@ -82,9 +84,11 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.setupNavigationListener();
 		this.isInitialized = true;
 	}
+
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {
 		return "navigationManager" as FeatureKeys;
 	}
+
 	private async getNavigationSignature(): Promise<Nullable<NavigationSignature>> {
 		const pageType = await getCurrentPageType();
 		if (!pageType) return null;
@@ -225,17 +229,30 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		}
 	}
 
+	private async processNavigation(eventType: NavigationEventType) {
+		if (this.navigating) return;
+		this.navigating = true;
+		try {
+			const signature = await this.getNavigationSignature();
+			if (!signature) return;
+			if (!this.updateNavigationSignature(signature)) return;
+			this.currentNavigationSignature = signature;
+			this.currentPage = getPageFromSignature(signature);
+			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
+		} catch (error) {
+			this.logErrorToTracker("navigation handler", error);
+		} finally {
+			this.navigating = false;
+		}
+	}
+
 	private setupNavigationListener() {
 		if (this.navigationPatched) return;
 		this.navigationPatched = true;
 
 		const createRunner = (eventType: NavigationEventType) => {
 			return () => {
-				void (async () => {
-					await this.safelyExecute(this.getFeatureIdForErrorLogging(), "navigation handler", async () => {
-						await this.handleNavigation(eventType);
-					});
-				})();
+				this.handleNavigation(eventType);
 			};
 		};
 
