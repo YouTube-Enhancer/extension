@@ -140,6 +140,11 @@ export default createFeature({
 	onEnable: async () => {
 		await setupSaveToWatchLaterButtons();
 	},
+	onLanguageChange: async () => {
+		teardownMachinery();
+		document.querySelector(`${ACTIONS_ROW_SELECTOR} .${BUTTON_CLASS}`)?.remove();
+		await setupSaveToWatchLaterButtons();
+	},
 	onNavigate: async () => {
 		teardownMachinery();
 		/**

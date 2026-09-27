@@ -38,6 +38,10 @@ export default createFeature({
 	onEnable: async (config) => {
 		await setupPlaylistLength(config);
 	},
+	onLanguageChange: async () => {
+		cleanupPlaylistLength();
+		await setupPlaylistLength(registry.configManager.getLast("playlistLength"));
+	},
 	onNavigate: async () => {
 		cleanupPlaylistLength();
 		await setupPlaylistLength(registry.configManager.getLast("playlistLength"));
