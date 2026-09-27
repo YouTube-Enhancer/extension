@@ -55,24 +55,36 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 					featureConfigManager.setLast(feature.id, featureConfig);
 				}
 
-				// Run all features in parallel — each gets concurrencyGroup 0
-				const CONCURRENCY_GROUP = 0;
-				const enablePromises = featuresByPriority.map(async (feature) => {
+				// Phase 1: Sequential — resolve enabled state and place buttons per feature.
+				// This ensures buttons from the same feature are adjacent in the DOM.
+				const featureStates: { config: configuration[FeatureKeys]; enabled: boolean; feature: AnyFeatureBase }[] = [];
+				for (const feature of featuresByPriority) {
 					const { [feature.id]: featureConfig } = options;
-					if (!featureConfig) return;
+					if (!featureConfig) continue;
 					await this.registry.lifecycleManager.initFeature(feature, featureConfig);
 					const enabledResult = this.safelyExecuteSync<boolean>(feature.id, "init:dependencies", () => resolveEnabled(featureConfig), {
 						fallback: false,
 						shouldRethrow: true
 					});
 					const enabled = enabledResult ?? false;
-					await this.safelyExecute(feature.id, "init", async () => await this.updateFeatureEnabledState(feature.id, enabled, featureConfig), {
-						concurrencyGroup: CONCURRENCY_GROUP,
-						subPhase: "enable"
-					});
-				});
+					featureStates.push({ config: featureConfig, enabled, feature });
+					await this.updateFeatureEnabledState(feature.id, enabled, featureConfig);
+				}
 
-				await Promise.allSettled(enablePromises);
+				// Phase 2: Parallel — run lifecycle hooks for all features concurrently.
+				const CONCURRENCY_GROUP = 0;
+				const lifecyclePromises = featureStates.map(({ config, enabled, feature }) =>
+					this.safelyExecute(
+						feature.id,
+						"init",
+						async () => await this.updateFeatureEnabledState(feature.id, enabled, config, { skipButtons: true }),
+						{
+							concurrencyGroup: CONCURRENCY_GROUP,
+							subPhase: "enable"
+						}
+					)
+				);
+				await Promise.allSettled(lifecyclePromises);
 
 				this.perf.logSummary("enableAll");
 			} finally {
@@ -137,7 +149,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		this.featureEnabledState.set(id, enabled);
 	}
 
-	async updateFeatureEnabledState<K extends FeatureKeys>(id: K, enabled: boolean, config: configuration[K]) {
+	async updateFeatureEnabledState<K extends FeatureKeys>(id: K, enabled: boolean, config: configuration[K], options?: { skipButtons?: boolean }) {
 		const feature = this.registry.getFeature(id);
 		if (!feature) return;
 		if (this.updatingFeatures.has(id)) {
@@ -160,7 +172,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 				}) ?? false;
 			if (!hasEnabledChanged && !hasConfigChanged) return;
 			this.featureEnabledState.set(id, canEnable);
-			if (this.registry.hasButtons(feature, id)) {
+			if (!options?.skipButtons && this.registry.hasButtons(feature, id)) {
 				await this.safelyExecute(id, "enable", async () => featureButtonManager.handleButtonPlacement(feature, config, canEnable), {
 					subPhase: "buttons"
 				});
@@ -178,7 +190,7 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 			const pending = this.pendingUpdates.get(id);
 			if (pending) {
 				this.pendingUpdates.delete(id);
-				await this.updateFeatureEnabledState(id, pending.enabled, pending.config as configuration[K]);
+				await this.updateFeatureEnabledState(id, pending.enabled, pending.config as configuration[K], options);
 			}
 		}
 	}
