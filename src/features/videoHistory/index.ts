@@ -1,4 +1,4 @@
-import type { VideoHistoryEntry, VideoHistoryResumeType } from "@/src/features/videoHistory/types";
+import type { VideoHistoryEntry, VideoHistoryResumeType, VideoHistoryStorage } from "@/src/features/videoHistory/types";
 import type { Author, Brand, Nullable, VideoId, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
@@ -169,6 +169,13 @@ function createVideoId(id: string): VideoId {
 }
 export default createFeature({
 	...metadata,
+	migrateFromLocalStorage: () => {
+		const raw = localStorage.getItem("videoHistory");
+		if (!raw) return undefined;
+		return {
+			storage: JSON.parse(raw) as VideoHistoryStorage
+		};
+	},
 	onDisable: () => {
 		eventManager.removeEventListeners("videoHistory");
 		document.getElementById(promptId)?.remove();
