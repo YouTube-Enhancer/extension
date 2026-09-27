@@ -99,6 +99,11 @@ export default defineConfig({
 			"monaco-editor/esm": resolve(import.meta.dirname, "node_modules/monaco-editor/esm")
 		}
 	},
+	server: {
+		watch: {
+			ignored: "**/.zvec-grep/**"
+		}
+	},
 	/** The Monaco `?worker` imports are bundled by Vite itself into one module worker each, under fixed names. */
 	worker: {
 		format: "es",
