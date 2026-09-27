@@ -24,7 +24,9 @@ export function deepMerge(target: Record<string, unknown>, source: Record<string
 		if (Object.prototype.hasOwnProperty.call(source, key)) {
 			const { [key]: targetValue } = merged;
 			const { [key]: sourceValue } = source;
-			if (targetValue && typeof targetValue === "object") {
+			if (Array.isArray(sourceValue)) {
+				merged[key] = sourceValue;
+			} else if (targetValue && typeof targetValue === "object" && !Array.isArray(targetValue)) {
 				merged[key] = deepMerge(targetValue as Record<string, unknown>, sourceValue as Record<string, unknown>);
 			} else {
 				merged[key] = sourceValue;
