@@ -41,7 +41,8 @@
 		"playwright.config.ts",
 		"tailwind.config.ts",
 		"postcss.config.cjs",
-		"src/features/__tests__"
+		"src/features/__tests__",
+		"src/utils/_tests"
 	],
 	"exclude": ["node_modules", "dist", "releases"]
 }
