@@ -39,9 +39,11 @@ async function setupHoverListeners() {
 	if (!settingsMenu) return;
 	// Get the player element
 	const playerContainer =
-		isWatchPage() || isLivePage() ?
-			await waitForElement<HTMLDivElement>(isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy")
-		:	null;
+		isWatchPage() || isLivePage()
+			? await waitForElement<HTMLDivElement>(
+					isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
+				)
+			: null;
 	// If player element is not available, return
 	if (!playerContainer) return;
 	if (generation !== setupGeneration) return;

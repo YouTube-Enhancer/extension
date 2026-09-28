@@ -62,9 +62,9 @@ export function migrateConfiguration(
 ): configuration {
 	const newConfig: configuration = structuredClone(defaultConfiguration);
 	const oldPlacementMap =
-		typeof oldConfig.button_placements === "object" && oldConfig.button_placements !== null ?
-			(oldConfig.button_placements as Record<string, ButtonPlacement>)
-		:	undefined;
+		typeof oldConfig.button_placements === "object" && oldConfig.button_placements !== null
+			? (oldConfig.button_placements as Record<string, ButtonPlacement>)
+			: undefined;
 
 	const enableKeyMap: Record<string, keyof configuration> = {
 		enable_automatic_theater_mode: "automaticTheaterMode",

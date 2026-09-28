@@ -126,9 +126,9 @@ export function createReverseIcon() {
 }
 
 export function getHeaderSelector(): string {
-	return isNewYouTubeVideoLayout() ?
-			"#page-manager > ytd-watch-grid #playlist #start-actions"
-		:	"#page-manager > ytd-watch-flexy #playlist #start-actions";
+	return isNewYouTubeVideoLayout()
+		? "#page-manager > ytd-watch-grid #playlist #start-actions"
+		: "#page-manager > ytd-watch-flexy #playlist #start-actions";
 }
 
 /**

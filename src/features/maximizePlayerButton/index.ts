@@ -17,11 +17,11 @@ export default createFeature({
 				await addFeatureButton(
 					"maximizePlayerButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
-					:	window.i18nextInstance.t(
-							(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
-						),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+						: window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
+							),
 					getFeatureIcon("maximizePlayerButton", placement),
 					(checked) => {
 						if (checked === undefined) return;

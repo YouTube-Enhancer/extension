@@ -189,9 +189,7 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 								title={getChannelIdFromLinkLabel}
 								type="button"
 							>
-								{isResolvingLink ?
-									<Loader className="size-4" />
-								:	getChannelIdFromLinkLabel}
+								{isResolvingLink ? <Loader className="size-4" /> : getChannelIdFromLinkLabel}
 							</button>
 						)}
 					</div>

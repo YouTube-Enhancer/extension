@@ -10,12 +10,12 @@ const pageInputs = {
 	background: resolve(pagesDir, "background", "index.html"),
 	options: resolve(pagesDir, "options", "index.html"),
 	popup: resolve(pagesDir, "popup", "index.html"),
-	...(DEV_MODE ?
-		{
-			devtools: resolve(pagesDir, "devtools", "index.html"),
-			devtools_panel: resolve(pagesDir, "devtools", "panel.html")
-		}
-	:	{})
+	...(DEV_MODE
+		? {
+				devtools: resolve(pagesDir, "devtools", "index.html"),
+				devtools_panel: resolve(pagesDir, "devtools", "panel.html")
+			}
+		: {})
 };
 
 /**

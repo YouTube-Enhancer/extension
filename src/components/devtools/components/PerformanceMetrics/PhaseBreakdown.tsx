@@ -14,9 +14,10 @@ type PhaseBreakdownProps = {
 export default function PhaseBreakdown({ expandedPhases, phaseBreakdown, togglePhase, totalTime }: PhaseBreakdownProps): JSX.Element {
 	return (
 		<div className="space-y-2">
-			{phaseBreakdown.length === 0 ?
+			{phaseBreakdown.length === 0 ? (
 				<div className="py-8 text-center text-[#6b6b6b]">No metrics recorded</div>
-			:	phaseBreakdown.map((group) => {
+			) : (
+				phaseBreakdown.map((group) => {
 					const isExpanded = expandedPhases.has(group.phase);
 					const barWidth = totalTime > 0 ? (group.totalTime / totalTime) * 100 : 0;
 					return (
@@ -61,7 +62,7 @@ export default function PhaseBreakdown({ expandedPhases, phaseBreakdown, toggleP
 						</div>
 					);
 				})
-			}
+			)}
 		</div>
 	);
 }

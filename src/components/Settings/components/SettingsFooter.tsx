@@ -228,7 +228,7 @@ export default function SettingsFooter() {
 				type="button"
 				value={t((translations) => translations.pages.options.extras.importExportSettings.exportButton.value)}
 			/>
-			{notifications.filter((n) => n.action === "reset_settings").length > 0 ?
+			{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
 				<input
 					className="danger p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 					id="confirm_button"
@@ -247,7 +247,8 @@ export default function SettingsFooter() {
 					type="button"
 					value={t((translations) => translations.pages.options.extras.bottomButtons.confirm.value)}
 				/>
-			:	<input
+			) : (
+				<input
 					className="warning p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 					id="reset_button"
 					onClick={resetOptions}
@@ -255,7 +256,7 @@ export default function SettingsFooter() {
 					type="button"
 					value={t((translations) => translations.pages.options.extras.bottomButtons.reset.value)}
 				/>
-			}
+			)}
 			<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />
 			{conflicts.length > 0 && pendingSettings && (
 				<ConflictResolutionDialog

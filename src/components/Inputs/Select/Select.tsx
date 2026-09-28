@@ -86,23 +86,26 @@ const Select = <Key extends configurationId>({
 					onClick={toggleSelect}
 					type="button"
 				>
-					{loading ?
+					{loading ? (
 						<Loader className={"size-4"} />
-					: selectedOption ?
-						options.find((option) => option.value === selectedOption)?.element ?
+					) : selectedOption ? (
+						options.find((option) => option.value === selectedOption)?.element ? (
 							<div className="flex w-full items-center justify-between pr-4">
 								<span className={cn("text-black dark:text-white", disabledButtonClasses)}>
 									{options.find((option) => option.value === selectedOption)?.label}
 								</span>
 								{options.find((option) => option.value === selectedOption)?.element}
 							</div>
-						:	<div className="flex w-full items-center justify-between pr-2">
+						) : (
+							<div className="flex w-full items-center justify-between pr-2">
 								<span className={cn("text-black dark:text-white", disabledButtonClasses)}>
 									{options.find((option) => option.value === selectedOption)?.label}
 								</span>
 							</div>
-
-					:	<span className={cn("text-black dark:text-white", disabledButtonClasses)}>{t((tr) => tr.pages.options.extras.select.placeholder)}</span>}
+						)
+					) : (
+						<span className={cn("text-black dark:text-white", disabledButtonClasses)}>{t((tr) => tr.pages.options.extras.select.placeholder)}</span>
+					)}
 					<Arrow rotation={isSelectVisible ? "up" : "down"} />
 				</button>
 				{isSelectVisible && (

@@ -276,11 +276,7 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 			const playerRect = this.options.playerContainer.getBoundingClientRect();
 			const horizontallyOverlaps = bottomRect.right > playerRect.left && bottomRect.left < playerRect.right;
 			// Beside the video, the shorts title block takes nothing from the display's room.
-			paddingBottom =
-				isShortsPage() ?
-					horizontallyOverlaps ? bottomVisualHeight
-					:	0
-				:	Math.round(bottomRect.bottom - bottomRect.top);
+			paddingBottom = isShortsPage() ? (horizontallyOverlaps ? bottomVisualHeight : 0) : Math.round(bottomRect.bottom - bottomRect.top);
 		}
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
