@@ -1,10 +1,16 @@
-import type { AnyFeatureBase, ButtonTrackedState, FeatureButton, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type { AnyFeatureBase, FeatureButton, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { checkIfFeatureButtonExists, removeFeatureButton } from "@/src/features/buttonController";
 import {
+	getTrackedButtonEnabled,
 	getTrackedButtonFullscreenPlacement,
+	getTrackedButtonInitialized,
+	getTrackedButtonPlacement,
+	setTrackedButtonEnabled,
+	setTrackedButtonInitialized,
+	setTrackedButtonPlacement,
 	updateTrackedButtonConfig,
 	updateTrackedButtonLabelResolver
 } from "@/src/features/buttonController/buttonState";
@@ -13,7 +19,6 @@ import { invalidateContainerCache } from "@/src/features/buttonController/contai
 import { FeatureManagerBase } from "./featureManagerBase";
 
 class FeatureButtonManager extends FeatureManagerBase {
-	private buttonState = new Map<FeatureKeys, Record<string, ButtonTrackedState>>();
 	private updatingButtonStates = new Map<string, Promise<void>>();
 
 	constructor() {
@@ -26,21 +31,11 @@ class FeatureButtonManager extends FeatureManagerBase {
 		canEnable: boolean
 	) {
 		if (!feature.buttons?.length) return;
-		if (!this.buttonState.has(feature.id)) this.buttonState.set(feature.id, {});
-		const featureBtnState = this.buttonState.get(feature.id)!;
 
 		for (const btn of feature.buttons) {
 			const nextBtnCfg = this.getButtonConfig(config, btn.name);
 			const isActive = await this.computeButtonActive(btn, config, canEnable, nextBtnCfg);
-			await this.updateButtonPlacement(
-				feature.id,
-				btn,
-				featureBtnState,
-				config,
-				isActive,
-				nextBtnCfg?.placement,
-				nextBtnCfg?.fullscreenPlacement ?? "same"
-			);
+			await this.updateButtonPlacement(feature.id, btn, config, isActive, nextBtnCfg?.placement, nextBtnCfg?.fullscreenPlacement ?? "same");
 		}
 	}
 
@@ -81,30 +76,22 @@ class FeatureButtonManager extends FeatureManagerBase {
 	private async updateButtonPlacement<K extends FeatureKeys>(
 		id: K,
 		btn: FeatureButton<K>,
-		stateMap: Record<string, ButtonTrackedState>,
 		config: configuration[K],
 		isActive: boolean,
 		nextPlacement?: ButtonPlacement,
 		nextFullscreenPlacement: FullscreenPlacement = "same"
 	) {
-		// Create a lock key for this specific button to prevent concurrent updates
 		const lockKey = `${id}:${btn.name}`;
 
-		// Wait for any existing update on this button to complete
 		if (this.updatingButtonStates.has(lockKey)) {
 			await this.updatingButtonStates.get(lockKey)!;
 		}
 
-		// Create a promise for this update operation
 		const updatePromise = (async () => {
 			try {
-				const prevState = stateMap[btn.name] ?? {
-					enabled: false,
-					initialized: false,
-					placement: undefined
-				};
-				const wasActive = prevState.initialized && prevState.enabled;
-				const moved = prevState.placement !== nextPlacement;
+				const wasActive = getTrackedButtonInitialized(btn.name) && getTrackedButtonEnabled(btn.name);
+				const prevPlacement = getTrackedButtonPlacement(btn.name);
+				const moved = prevPlacement !== nextPlacement;
 				const prevFullscreenPlacement = getTrackedButtonFullscreenPlacement(btn.name) ?? "same";
 				const fullscreenChanged = prevFullscreenPlacement !== nextFullscreenPlacement;
 
@@ -114,11 +101,11 @@ class FeatureButtonManager extends FeatureManagerBase {
 						"buttons:remove",
 						async () => {
 							if (btn.remove) {
-								await btn.remove(prevState.placement);
+								await btn.remove(prevPlacement);
 							} else {
-								removeFeatureButton(btn.name, prevState.placement);
+								removeFeatureButton(btn.name, prevPlacement);
 								eventManager.removeEventListeners(id);
-								await btn.onRemove?.(prevState.placement);
+								await btn.onRemove?.(prevPlacement);
 							}
 						},
 						{
@@ -153,17 +140,15 @@ class FeatureButtonManager extends FeatureManagerBase {
 					);
 				}
 
-				stateMap[btn.name] = { enabled: isActive, initialized: true, placement: nextPlacement };
+				setTrackedButtonEnabled(btn.name, isActive);
+				setTrackedButtonInitialized(btn.name, true);
+				if (nextPlacement) setTrackedButtonPlacement(btn.name, nextPlacement);
 			} finally {
-				// Remove the lock when done
 				this.updatingButtonStates.delete(lockKey);
 			}
 		})();
 
-		// Store the promise so future updates wait for this one
 		this.updatingButtonStates.set(lockKey, updatePromise);
-
-		// Wait for this update to complete
 		await updatePromise;
 	}
 }

@@ -8,8 +8,11 @@ import type { ListenerType } from "./types";
 export type TrackedButtonInfo = {
 	checked: boolean;
 	currentEffectivePlacement: ButtonPlacement;
+	currentPlacement?: ButtonPlacement;
+	enabled: boolean;
 	fullscreenPlacement: FullscreenPlacement;
 	icon: SVGSVGElement | ToggleIcon;
+	initialized: boolean;
 	isToggle: boolean;
 	label: string;
 	labelResolver?: () => string;
@@ -25,8 +28,35 @@ export function getTrackedButtonChecked(buttonName: AllButtonNames): boolean | u
 	return trackedButtons.get(buttonName)?.checked;
 }
 
+export function getTrackedButtonEnabled(buttonName: AllButtonNames): boolean {
+	return trackedButtons.get(buttonName)?.enabled ?? false;
+}
+
 export function getTrackedButtonFullscreenPlacement(buttonName: AllButtonNames): FullscreenPlacement | undefined {
 	return trackedButtons.get(buttonName)?.fullscreenPlacement;
+}
+
+export function getTrackedButtonInitialized(buttonName: AllButtonNames): boolean {
+	return trackedButtons.get(buttonName)?.initialized ?? false;
+}
+
+export function getTrackedButtonPlacement(buttonName: AllButtonNames): ButtonPlacement | undefined {
+	return trackedButtons.get(buttonName)?.currentPlacement;
+}
+
+export function setTrackedButtonEnabled(buttonName: AllButtonNames, enabled: boolean) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.enabled = enabled;
+}
+
+export function setTrackedButtonInitialized(buttonName: AllButtonNames, initialized: boolean) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.initialized = initialized;
+}
+
+export function setTrackedButtonPlacement(buttonName: AllButtonNames, placement: ButtonPlacement) {
+	const info = trackedButtons.get(buttonName);
+	if (info) info.currentPlacement = placement;
 }
 
 export function trackButton(
@@ -44,8 +74,10 @@ export function trackButton(
 	trackedButtons.set(buttonName, {
 		checked: initialChecked,
 		currentEffectivePlacement: effectivePlacement,
+		enabled: false,
 		fullscreenPlacement,
 		icon,
+		initialized: false,
 		isToggle,
 		label,
 		labelResolver,
