@@ -7,7 +7,7 @@ interface HideSelectorEntry {
 	selectors: string[];
 }
 
-export default async function generateHideFeatureSelectors(): Promise<void> {
+export default function generateHideFeatureSelectors(): void {
 	const featuresDir = resolve(process.cwd(), "src/features");
 	const outputDir = resolve(featuresDir, "__tests__", "__generated__");
 	const outputFile = resolve(outputDir, "hideFeatureSelectors.ts");

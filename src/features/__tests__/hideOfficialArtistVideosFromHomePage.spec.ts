@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test";
+import type { Page } from '@playwright/test';
 import { expect, test } from "playwright.config";
 
 import { metadata } from "@/src/features/hideOfficialArtistVideosFromHomePage/index.metadata";
