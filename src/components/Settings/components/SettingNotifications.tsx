@@ -43,20 +43,21 @@ function ToastNotification({ i18nInstance: { t }, notification }: { i18nInstance
 			})}
 			key={key}
 		>
-			{notification.action ?
-				notification.action === "reset_settings" ?
+			{notification.action ? (
+				notification.action === "reset_settings" ? (
 					<>
 						{message.split("\n").map((line) => (
 							<p key={line.replace(/ /g, "_")}>{line}</p>
 						))}
 						<NotificationCloseButton notification={notification} />
 					</>
-				:	null
-			:	<>
+				) : null
+			) : (
+				<>
 					{message}
 					<NotificationCloseButton notification={notification} />
 				</>
-			}
+			)}
 			<div
 				className="absolute bottom-0 left-0 h-1 rounded-b bg-[#0086ff]"
 				id={`${notification.type}_notification_${message.split(/s /).join("_")}_progress_bar`}

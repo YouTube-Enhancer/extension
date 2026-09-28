@@ -52,9 +52,9 @@ export default createFeature({
 				await addFeatureButton(
 					"loopButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.label)
-					:	window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle.off),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.label)
+						: window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle.off),
 					getFeatureIcon("loopButton", placement),
 					loopButtonClickListener,
 					true,

@@ -83,12 +83,7 @@ export async function getPlacementRoot(placement: ButtonPlacement) {
 
 export function getPlacementSelector(placement: ButtonPlacement): string | undefined {
 	if (placement === "below_player") {
-		return (
-			isInTheaterMode() ?
-				isNewYouTubeVideoLayout() ? "ytd-watch-grid"
-				:	"ytd-watch-flexy"
-			:	"div#primary > div#primary-inner > div#player"
-		);
+		return isInTheaterMode() ? (isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy") : "div#primary > div#primary-inner > div#player";
 	}
 	if (placement === "feature_menu") return "#yte-feature-menu";
 	if (placement === "player_controls_left" || placement === "player_controls_right") return playerControlsSelectors[placement];

@@ -9,15 +9,15 @@ export const NO_PADDING_HEADER_SELECTOR = "yt-page-header-view-model.ytPageHeade
 export const PLAYLIST_PAGE_HEADER_SELECTORS = [IMMERSIVE_HEADER_SELECTOR, NO_PADDING_HEADER_SELECTOR, CINEMATIC_HEADER_SELECTOR] as const;
 
 export const getCommentsPanelSelector = () =>
-	isNewYouTubeVideoLayout() ?
-		"ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section'] ytd-item-section-renderer[section-identifier='comment-item-section']"
-	:	"ytd-comments.ytd-watch-flexy ytd-item-section-renderer[section-identifier='comment-item-section']";
+	isNewYouTubeVideoLayout()
+		? "ytd-engagement-panel-section-list-renderer[target-id='engagement-panel-comments-section'] ytd-item-section-renderer[section-identifier='comment-item-section']"
+		: "ytd-comments.ytd-watch-flexy ytd-item-section-renderer[section-identifier='comment-item-section']";
 const NEW_LAYOUT_PLAYLIST_SELECTOR = "yt-item-section-renderer div#contents";
 const OLD_LAYOUT_PLAYLIST_SELECTOR = "ytd-playlist-video-list-renderer div#contents";
 export const playlistItemsSelector = () =>
-	isWatchPage() ?
-		"ytd-playlist-panel-renderer:not([hidden]) div#container div#items"
-	:	`${OLD_LAYOUT_PLAYLIST_SELECTOR}, ${NEW_LAYOUT_PLAYLIST_SELECTOR}`;
+	isWatchPage()
+		? "ytd-playlist-panel-renderer:not([hidden]) div#container div#items"
+		: `${OLD_LAYOUT_PLAYLIST_SELECTOR}, ${NEW_LAYOUT_PLAYLIST_SELECTOR}`;
 export const selectFirstWithWidth = (...selectors: string[]): Nullable<HTMLElement> => {
 	for (const selector of selectors) {
 		const elements = document.querySelectorAll<HTMLElement>(selector);

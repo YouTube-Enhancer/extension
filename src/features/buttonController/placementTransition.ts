@@ -46,11 +46,11 @@ class PlacementTransition {
 		const { parentElement: currentParent } = container;
 		if (!currentParent) return;
 		const isNewLayout = isNewYouTubeVideoLayout();
-		const expectedParent =
-			inTheaterMode ?
-				isNewLayout ? document.querySelector("ytd-watch-grid")
-				:	document.querySelector("ytd-watch-flexy")
-			:	document.querySelector("div#primary > div#primary-inner");
+		const expectedParent = inTheaterMode
+			? isNewLayout
+				? document.querySelector("ytd-watch-grid")
+				: document.querySelector("ytd-watch-flexy")
+			: document.querySelector("div#primary > div#primary-inner");
 		if (currentParent === expectedParent) {
 			this.syncContainerGeometry();
 			return;

@@ -7,16 +7,14 @@ import { object, string } from "zod";
 import type { NewTranslationStruct, OldTranslationStruct } from "@/src/i18n/types";
 import type { Nullable } from "@/src/types";
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | Nullable<number> | string | undefined ?
-		undefined extends T[K] ?
-			ZodOptional<ZodType<Exclude<T[K], undefined>>>
-		:	ZodType<T[K]>
-	:	ZodObject<TypeToZod<T[K]>>;
+	[K in keyof T]: T[K] extends boolean | Nullable<number> | string | undefined
+		? undefined extends T[K]
+			? ZodOptional<ZodType<Exclude<T[K], undefined>>>
+			: ZodType<T[K]>
+		: ZodObject<TypeToZod<T[K]>>;
 };
 type TypeToZodSchema<T> = ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? ZodArray<ZodType<T[K][number]>>
-	: T[K] extends object ? ZodObject<TypeToZod<T[K]>>
-	: ZodType<T[K]>;
+	[K in keyof T]: T[K] extends any[] ? ZodArray<ZodType<T[K][number]>> : T[K] extends object ? ZodObject<TypeToZod<T[K]>> : ZodType<T[K]>;
 }>;
 // @ts-expect-error Old translation schema doesn't need to be updated
 export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = object({
@@ -1079,14 +1077,15 @@ function processFile(filePath: string, options: CliOptions, folderOutPath?: stri
 		return false;
 	}
 	const migrated = migrate(parsed.data);
-	const outputPath =
-		options.outPath ?
-			fs.lstatSync(options.outPath).isDirectory() ?
-				path.join(options.outPath, path.basename(filePath))
-			:	options.outPath
-		: folderOutPath ? path.join(folderOutPath, path.basename(filePath))
-		: options.replace ? filePath
-		: filePath.replace(/\.json$/, ".new.json");
+	const outputPath = options.outPath
+		? fs.lstatSync(options.outPath).isDirectory()
+			? path.join(options.outPath, path.basename(filePath))
+			: options.outPath
+		: folderOutPath
+			? path.join(folderOutPath, path.basename(filePath))
+			: options.replace
+				? filePath
+				: filePath.replace(/\.json$/, ".new.json");
 
 	if (options.dryRun) {
 		console.log(`✔ Dry run successful: ${filePath}`);

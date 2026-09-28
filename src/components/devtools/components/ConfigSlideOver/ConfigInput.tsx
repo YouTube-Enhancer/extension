@@ -114,11 +114,13 @@ export default function ConfigInput<F extends FeatureKeys>({
 		}
 		case "select": {
 			const options = setting.optionsFrom ? setting.optionsFrom() : (setting.options ?? []);
-			const val =
-				isString(currentValue) ? currentValue
-				: isNumber(currentValue) ? String(currentValue)
-				: isBoolean(currentValue) ? String(currentValue)
-				: "";
+			const val = isString(currentValue)
+				? currentValue
+				: isNumber(currentValue)
+					? String(currentValue)
+					: isBoolean(currentValue)
+						? String(currentValue)
+						: "";
 			return (
 				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
@@ -174,11 +176,13 @@ export default function ConfigInput<F extends FeatureKeys>({
 			);
 		}
 		case "text-input": {
-			const val =
-				isString(currentValue) ? currentValue
-				: isNumber(currentValue) ? String(currentValue)
-				: isBoolean(currentValue) ? String(currentValue)
-				: "";
+			const val = isString(currentValue)
+				? currentValue
+				: isNumber(currentValue)
+					? String(currentValue)
+					: isBoolean(currentValue)
+						? String(currentValue)
+						: "";
 			return (
 				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>

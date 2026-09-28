@@ -38,9 +38,9 @@ export default createFeature({
 				await addFeatureButton(
 					"hideEndScreenCardsButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.label)
-					:	getEndScreenCardsButtonTitle(endScreenCardsAreHidden),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.label)
+						: getEndScreenCardsButtonTitle(endScreenCardsAreHidden),
 					icon,
 					(checked) => handleButtonClick(placement, checked),
 					true,

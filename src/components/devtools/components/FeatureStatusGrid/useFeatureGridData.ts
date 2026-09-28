@@ -71,13 +71,12 @@ export function useFeatureGridData() {
 			const subFeaturePaths = getEnabledPathsFromMetadata(settings as FeatureSettingNode<FeatureKeys>[], id);
 			const hasNested = subFeaturePaths.length > 1;
 			const hasConfigSettings = hasAnyConfigurableSettings(settings) || hasButtonPlacement(config);
-			const finalSubFeatures =
-				hasNested ?
-					subFeaturePaths.map((sf) => ({
+			const finalSubFeatures = hasNested
+				? subFeaturePaths.map((sf) => ({
 						...sf,
 						enabled: config ? Boolean(getPathValue(config, sf.path.replace(`${id}.`, "") as Path<configuration[FeatureKeys]>)) : false
 					}))
-				:	getSubFeatures(config);
+				: getSubFeatures(config);
 			return {
 				config: config ?? null,
 				enabled: config ? resolveEnabled(config) : false,

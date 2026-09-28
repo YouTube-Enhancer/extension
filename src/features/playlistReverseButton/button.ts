@@ -47,9 +47,9 @@ async function ensureReversalSticks(
 
 async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string) {
 	const resolvedContainer =
-		typeof container === "string" || container === undefined ?
-			await waitForElement<HTMLElement>(container ?? getHeaderSelector(), 5000, "optional")
-		:	container;
+		typeof container === "string" || container === undefined
+			? await waitForElement<HTMLElement>(container ?? getHeaderSelector(), 5000, "optional")
+			: container;
 	if (!resolvedContainer) return;
 
 	removeButton();

@@ -29,9 +29,11 @@ async function applyVolumeTask(volume: number): Promise<boolean> {
 }
 function getPlayerContainer(): Nullable<YouTubePlayerDiv> {
 	const container: Nullable<YouTubePlayerDiv> =
-		isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player")
-		: null;
+		isWatchPage() || isLivePage()
+			? document.querySelector<YouTubePlayerDiv>("#movie_player")
+			: isShortsPage()
+				? document.querySelector<YouTubePlayerDiv>("#shorts-player")
+				: null;
 	if (!container?.getVolume || !container.setVolume) return null;
 	return container;
 }

@@ -50,9 +50,10 @@ export default function DependencyGraph(): JSX.Element {
 				<div className="space-y-2">
 					<h3 className="text-sm font-medium text-[#6b6b6b]">Features with Dependencies</h3>
 					<div className="max-h-96 space-y-1 overflow-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] p-2">
-						{featuresWithDependencies.length === 0 ?
+						{featuresWithDependencies.length === 0 ? (
 							<p className="p-2 text-sm text-[#6b6b6b]">No features with page dependencies</p>
-						:	featuresWithDependencies.map((feature) => (
+						) : (
+							featuresWithDependencies.map((feature) => (
 								<button
 									className={cn(
 										"w-full rounded p-2 text-left transition-colors",
@@ -64,7 +65,7 @@ export default function DependencyGraph(): JSX.Element {
 									<p className="font-medium">{feature.id}</p>
 								</button>
 							))
-						}
+						)}
 					</div>
 				</div>
 
@@ -86,7 +87,7 @@ export default function DependencyGraph(): JSX.Element {
 								<div className="space-y-2">
 									<div>
 										<p className="text-xs text-[#6b6b6b]">Include Pages</p>
-										{selectedFeatureData.includePages && selectedFeatureData.includePages.length > 0 ?
+										{selectedFeatureData.includePages && selectedFeatureData.includePages.length > 0 ? (
 											<div className="mt-1 flex flex-wrap gap-1">
 												{selectedFeatureData.includePages.map((page: PageType) => (
 													<span className="rounded bg-[#4ec9b0] px-2 py-0.5 text-xs text-[#1e1e1e]" key={page}>
@@ -94,11 +95,13 @@ export default function DependencyGraph(): JSX.Element {
 													</span>
 												))}
 											</div>
-										:	<p className="text-sm text-[#969696]">All pages</p>}
+										) : (
+											<p className="text-sm text-[#969696]">All pages</p>
+										)}
 									</div>
 									<div>
 										<p className="text-xs text-[#6b6b6b]">Exclude Pages</p>
-										{selectedFeatureData.excludePages && selectedFeatureData.excludePages.length > 0 ?
+										{selectedFeatureData.excludePages && selectedFeatureData.excludePages.length > 0 ? (
 											<div className="mt-1 flex flex-wrap gap-1">
 												{selectedFeatureData.excludePages.map((page: PageType) => (
 													<span className="rounded bg-[#ce9178] px-2 py-0.5 text-xs text-[#1e1e1e]" key={page}>
@@ -106,7 +109,9 @@ export default function DependencyGraph(): JSX.Element {
 													</span>
 												))}
 											</div>
-										:	<p className="text-sm text-[#969696]">None</p>}
+										) : (
+											<p className="text-sm text-[#969696]">None</p>
+										)}
 									</div>
 								</div>
 							</div>

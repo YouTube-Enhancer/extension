@@ -29,8 +29,9 @@ function getUrlVideoId(): Nullable<string> {
 function makeRestoreAudioTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		if (!originalAudioTrack) return true;
-		const playerContainer =
-			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
+			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		if (!playerContainer || !playerContainer.setAudioTrack || !playerContainer.getVideoData) return false;
 		const { video_id: playerVideoId } = await playerContainer.getVideoData();
 		const videoId = resolvePlayerVideoId(playerVideoId);
@@ -48,8 +49,9 @@ function makeRestoreAudioTrackTask(): () => Promise<boolean> {
 
 function makeSaveTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
-		const playerContainer =
-			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
+			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		if (!playerContainer || !playerContainer.getAudioTrack || !playerContainer.getVideoData) return false;
 		// Read the id and the track together so both describe the same moment.
 		const [{ video_id: playerVideoId }, currentTrack] = await Promise.all([playerContainer.getVideoData(), playerContainer.getAudioTrack()]);
@@ -67,8 +69,9 @@ function makeSaveTrackTask(): () => Promise<boolean> {
 
 function makeSetDefaultAudioTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
-		const playerContainer =
-			isShortsPage() ? document.querySelector<YouTubePlayerDiv>("#shorts-player") : document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
+			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
 		if (!playerContainer || !playerContainer.getAvailableAudioTracks) return false;
 		const audioTracks = await playerContainer.getAvailableAudioTracks();
 		const defaultAudioTrack = findDefaultTrack(audioTracks);

@@ -33,9 +33,9 @@ export default function DevToolsPanel(): JSX.Element {
 						<button
 							className={cn(
 								"px-4 py-2 text-sm transition-colors",
-								activeTab === tab.id ?
-									"border-b-2 border-[#007acc] bg-[#2d2d2d] text-[#ffffff]"
-								:	"text-[#969696] hover:bg-[#2d2d2d] hover:text-[#ffffff]"
+								activeTab === tab.id
+									? "border-b-2 border-[#007acc] bg-[#2d2d2d] text-[#ffffff]"
+									: "text-[#969696] hover:bg-[#2d2d2d] hover:text-[#ffffff]"
 							)}
 							key={tab.id}
 							onClick={() => setActiveTab(tab.id)}

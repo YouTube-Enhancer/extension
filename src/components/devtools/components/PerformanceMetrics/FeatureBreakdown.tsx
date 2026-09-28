@@ -14,9 +14,10 @@ type FeatureBreakdownProps = {
 export default function FeatureBreakdown({ expandedFeatures, featureBreakdown, toggleFeature, totalTime }: FeatureBreakdownProps): JSX.Element {
 	return (
 		<div className="space-y-2">
-			{featureBreakdown.length === 0 ?
+			{featureBreakdown.length === 0 ? (
 				<div className="py-8 text-center text-[#6b6b6b]">No metrics recorded</div>
-			:	featureBreakdown.map((group) => {
+			) : (
+				featureBreakdown.map((group) => {
 					const isExpanded = expandedFeatures.has(group.id);
 					const barWidth = totalTime > 0 ? (group.totalTime / totalTime) * 100 : 0;
 					return (
@@ -69,7 +70,7 @@ export default function FeatureBreakdown({ expandedFeatures, featureBreakdown, t
 						</div>
 					);
 				})
-			}
+			)}
 		</div>
 	);
 }

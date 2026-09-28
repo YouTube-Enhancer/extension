@@ -15,8 +15,9 @@ const baseResources = [
 	"src/pages/embedded/index.js",
 	...availableLocales.map((locale) => `/locales/${locale}.json`)
 ];
-const devtoolsResources =
-	DEV_MODE ? ["src/pages/devtools/index.js", "src/pages/devtools/index.css", "src/pages/devtools/panel.js", "src/pages/devtools/panel.html"] : [];
+const devtoolsResources = DEV_MODE
+	? ["src/pages/devtools/index.js", "src/pages/devtools/index.css", "src/pages/devtools/panel.js", "src/pages/devtools/panel.html"]
+	: [];
 const resources = [...baseResources, ...devtoolsResources];
 const icons = {
 	"16": "/icons/icon_16.png",

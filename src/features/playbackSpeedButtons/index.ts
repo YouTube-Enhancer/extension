@@ -83,11 +83,11 @@ function getPlaybackButtonTitle(
 ) {
 	return window.i18nextInstance.t(
 		(translations) =>
-			currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton" ?
-				translations.pages.content.features.playbackSpeedButtons.extras.increaseLimit
-			: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton" ?
-				translations.pages.content.features.playbackSpeedButtons.extras.decreaseLimit
-			:	translations.pages.content.features.playbackSpeedButtons.buttons[buttonName].label,
+			currentPlaybackSpeed == maxSpeed && buttonName == "increasePlaybackSpeedButton"
+				? translations.pages.content.features.playbackSpeedButtons.extras.increaseLimit
+				: currentPlaybackSpeed == minSpeed && buttonName == "decreasePlaybackSpeedButton"
+					? translations.pages.content.features.playbackSpeedButtons.extras.decreaseLimit
+					: translations.pages.content.features.playbackSpeedButtons.buttons[buttonName].label,
 		{
 			SPEED: speed
 		}

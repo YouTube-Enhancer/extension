@@ -59,9 +59,7 @@ export default function DonateCta() {
 					<MdFavorite size={14} />
 					{t((translations) => translations.pages.options.extras.donateCta.label)}
 				</span>
-				{expanded ?
-					<MdExpandLess size={16} />
-				:	<MdExpandMore size={16} />}
+				{expanded ? <MdExpandLess size={16} /> : <MdExpandMore size={16} />}
 			</button>
 			{expanded && (
 				<div className="overflow-hidden px-2 pb-2 pt-1">

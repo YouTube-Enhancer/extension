@@ -59,13 +59,7 @@ export default async function updateLocalePercentages() {
 	if (!localePercentages) return;
 	const localePercentagesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	/** Keys are written sorted so the generated object already satisfies the lint rules; no fix pass runs after the build. */
-	const sortedPercentages = Object.fromEntries(
-		[...localePercentages].sort(([a], [b]) =>
-			a < b ? -1
-			: a > b ? 1
-			: 0
-		)
-	);
+	const sortedPercentages = Object.fromEntries([...localePercentages].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
 	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, sortedPercentages);
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
 		await writeFormattedFile(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);

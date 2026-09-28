@@ -46,11 +46,11 @@ export default createFeature({
 				await addFeatureButton(
 					"miniPlayerButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
-					:	window.i18nextInstance.t(
-							(translations) => translations.pages.content.features.miniPlayerButton.button.toggle[miniPlayerActive ? "on" : "off"]
-						),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
+						: window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.miniPlayerButton.button.toggle[miniPlayerActive ? "on" : "off"]
+							),
 					getFeatureIcon("miniPlayerButton", placement),
 					(checked) => {
 						if (typeof checked === "boolean") void setMiniPlayerManual(checked);

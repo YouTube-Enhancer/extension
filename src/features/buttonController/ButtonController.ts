@@ -233,12 +233,7 @@ export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: st
 // ─── Private helpers ──────────────────────────────────────────────
 
 function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
-	button.replaceChildren(
-		isToggleIcon(icon) ?
-			checked ? icon.on
-			:	icon.off
-		:	icon
-	);
+	button.replaceChildren(isToggleIcon(icon) ? (checked ? icon.on : icon.off) : icon);
 }
 
 function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF") {
@@ -264,13 +259,7 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	setChecked(button, newState);
 	updateTrackedButtonChecked(buttonName, newState);
 	const currentIcon: SVGSVGElement | ToggleIcon = icon;
-	updateFeatureButtonIcon(
-		button,
-		isToggleIcon(currentIcon) ?
-			newState ? currentIcon.on
-			:	currentIcon.off
-		:	currentIcon
-	);
+	updateFeatureButtonIcon(button, isToggleIcon(currentIcon) ? (newState ? currentIcon.on : currentIcon.off) : currentIcon);
 	listener(newState);
 }
 
@@ -335,9 +324,11 @@ function makeFeatureButton<Name extends AllButtonNames, Placement extends Button
 	const button = createStyledElement({
 		classlist: [
 			"ytp-button",
-			placement === "below_player" ? "yte-button-below-player"
-			: placement === "player_controls_right" ? "yte-button-player-controls-right"
-			: "yte-button-player-controls-left"
+			placement === "below_player"
+				? "yte-button-below-player"
+				: placement === "player_controls_right"
+					? "yte-button-player-controls-right"
+					: "yte-button-player-controls-left"
 		],
 		elementId: getFeatureButtonIdForButton(buttonName),
 		elementType: "button"
