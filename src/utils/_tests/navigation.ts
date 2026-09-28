@@ -6,6 +6,7 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import { hasAmbientModeMenuItem } from "@/src/utils/_tests/ambient";
 import { ensurePlayerControlsVisible, pageSetup } from "@/src/utils/_tests/pageSetup";
 import { ensureCaptionsState, getCaptionsState, waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
+import { MESSAGE_ORIGIN } from "@/src/utils/messaging";
 
 export const fixtureCapabilities = [
 	"ambientMode",
@@ -207,7 +208,7 @@ export async function spaNavigateBack(page: Page, pageType: PageType): Promise<v
 	const before = page.url();
 	await page.goBack();
 	await page.waitForURL((url) => url.toString() !== before, { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	if (["live", "shorts", "watch"].includes(pageType)) {
 		await waitForYoutubePlayerReady(page, pageType);
 		// See spaNavigateToRelatedVideo: let a pre-roll ad start before pageSetup looks for one.
@@ -247,7 +248,7 @@ export async function spaNavigateToFirstVideo(page: Page): Promise<void> {
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.pathname === "/watch", { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "watch");
 	// A pre-roll ad starts a moment after the player reports the new video; give it that moment so the ad
 	// handling in pageSetup sees it instead of the test running into it.
@@ -269,7 +270,7 @@ export async function spaNavigateToHome(page: Page): Promise<void> {
 		await logo.evaluate((el) => (el as HTMLElement).click());
 	});
 	await page.waitForURL((url) => url.pathname === "/", { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await expect(page.locator("ytd-rich-grid-renderer, ytd-two-column-browse-results-renderer").first()).toBeAttached({ timeout: 15_000 });
 	await pageSetup(page);
 }
@@ -303,7 +304,7 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 		await page.locator("#movie_player .ytp-next-button").evaluate((el) => (el as HTMLButtonElement).click());
 	}
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "watch");
 	// A pre-roll ad starts a moment after the player reports the new video; give it that moment so the ad
 	// handling in pageSetup sees it instead of the test running into it.
@@ -313,14 +314,36 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
 /**
  * Waits until the extension has finished its initial setup on the current page.
  *
- * The content script only forwards storage changes once the embedded script reports the page as
- * loaded (it marks this by setting `yte-ready` on the root element). Config changes sent before
- * that point are silently dropped, so every helper that navigates must wait for the marker.
+ * The content script sends options/state via window.postMessage once ready. Config changes
+ * sent before that point are silently dropped, so every helper that navigates must wait.
  */
 export async function waitForExtensionReady(page: Page): Promise<void> {
-	await expect(page.locator("div#yte-message-from-youtube")).toBeAttached();
-	await expect(page.locator("div#yte-message-from-extension")).toBeAttached();
-	await expect(page.locator("html[yte-ready]")).toBeAttached({ timeout: 30_000 });
+	// Wait for the extension content script to be ready by requesting options.
+	// The content script sends options/state on load via window.postMessage.
+	await expect
+		.poll(
+			async () => {
+				return page.evaluate((origin) => {
+					return new Promise<boolean>((resolve) => {
+						const timeout = setTimeout(() => resolve(false), 5_000);
+						const handler = (event: MessageEvent) => {
+							if (event.source !== window) return;
+							const msg = event.data as { action?: string; origin?: string; type?: string; };
+							if (msg?.origin !== origin) return;
+							if (msg.type === "options" && msg.action === "data_response") {
+								clearTimeout(timeout);
+								window.removeEventListener("message", handler);
+								resolve(true);
+							}
+						};
+						window.addEventListener("message", handler);
+						window.postMessage({ action: "request_data", data: undefined, origin, sequence: 0, source: "content", type: "options" }, "*");
+					});
+				}, MESSAGE_ORIGIN);
+			},
+			{ intervals: [500, 1000, 2000], timeout: 30_000 }
+		)
+		.toBeTruthy();
 }
 async function finishLiveVideoSetup(page: Page): Promise<void> {
 	await waitForExtensionReady(page);
