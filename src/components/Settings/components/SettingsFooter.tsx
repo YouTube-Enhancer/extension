@@ -15,7 +15,7 @@ import { getConfigurationImportSchema } from "@/src/utils/config/importSchema";
 import { updateStoredSettings } from "@/src/utils/config/storage";
 import { deepMerge, isLegacyConfiguration, migrateConfiguration, parseStoredValue } from "@/src/utils/config/utils";
 import { formatDateForFileName } from "@/src/utils/format/date";
-import { numberConstraints, validateNumbers } from "@/src/validation";
+import { getNumberConstraints, validateNumbers } from "@/src/validation";
 
 type Conflict = {
 	featureA: string;
@@ -87,7 +87,7 @@ export default function SettingsFooter() {
 				}
 				// Validate number constraints
 				try {
-					validateNumbers(castSettings, numberConstraints);
+					validateNumbers(castSettings, getNumberConstraints());
 				} catch (numError) {
 					window.alert((numError as Error).message);
 					return;
