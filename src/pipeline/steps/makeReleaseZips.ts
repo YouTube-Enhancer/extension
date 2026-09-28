@@ -1,4 +1,4 @@
-import archiver from "archiver";
+import { ZipArchive } from "archiver";
 import { createWriteStream, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
@@ -23,7 +23,7 @@ export default async function makeReleaseZips(): Promise<void> {
 
 			const releaseZipStream = createWriteStream(releaseZipPath);
 
-			const releaseZip = archiver("zip", {
+			const releaseZip = new ZipArchive({
 				zlib: { level: 9 }
 			});
 
