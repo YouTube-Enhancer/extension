@@ -16,9 +16,11 @@ async function restoreVolume(stateAPI: FeatureStateAPI<"rememberVolume">) {
 	const IsShortsPage = isShortsPage();
 	// Get the player container element
 	const playerContainer =
-		IsWatchPage || IsLivePage ? await waitForElement<YouTubePlayerDiv>("div#movie_player")
-		: IsShortsPage ? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+		IsWatchPage || IsLivePage
+			? await waitForElement<YouTubePlayerDiv>("div#movie_player")
+			: IsShortsPage
+				? await waitForElement<YouTubePlayerDiv>("div#shorts-player")
+				: null;
 	// If player container is not available, return
 	if (!playerContainer) return;
 	// If setVolume method is not available in the player container, return

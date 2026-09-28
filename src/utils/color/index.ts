@@ -37,13 +37,13 @@ function hexToRgb(hex: string) {
 	});
 
 	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return result ?
-			{
+	return result
+		? {
 				b: parseInt(result[3], 16),
 				g: parseInt(result[2], 16),
 				r: parseInt(result[1], 16)
 			}
-		:	null;
+		: null;
 }
 function parseMainBackgroundColor(text: string) {
 	const match = text.match(/--main-background:\s*([^;]+);/);

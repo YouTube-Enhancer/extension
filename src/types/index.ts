@@ -27,18 +27,18 @@ export type AnyFunction = (...args: any[]) => void;
 export type Brand<T, U> = T & { __brand: U };
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-export type ExtractButtonFeatureNames<T> =
-	T extends `pages.content.features.${infer FeatureName}.button.label` ? FeatureName
-	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label` ? FeatureName
-	: never;
-export type ExtractButtonNames<T> =
-	T extends `pages.content.features.${infer ButtonName}.button.label` ? ButtonName
-	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label` ? ButtonName
-	: never;
+export type ExtractButtonFeatureNames<T> = T extends `pages.content.features.${infer FeatureName}.button.label`
+	? FeatureName
+	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label`
+		? FeatureName
+		: never;
+export type ExtractButtonNames<T> = T extends `pages.content.features.${infer ButtonName}.button.label`
+	? ButtonName
+	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label`
+		? ButtonName
+		: never;
 export type FilterKeysByValueType<O extends object, ValueType> = {
-	[K in keyof O]: O[K] extends ValueType ? K
-	: O[K] extends Record<string, ValueType> ? K
-	: never;
+	[K in keyof O]: O[K] extends ValueType ? K : O[K] extends Record<string, ValueType> ? K : never;
 }[keyof O];
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
@@ -46,65 +46,77 @@ export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 // #region Utility types
 export type Nullable<T> = null | T;
 export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodMiniType }> = Override & {
-	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[] ? ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>
-	: Omit<Input, Omitted>[K] extends object ? ZodOptionalType<ZodMiniObject<TypeToZod<Omit<Input, Omitted>[K]>>>
-	: ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>;
+	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[]
+		? ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>
+		: Omit<Input, Omitted>[K] extends object
+			? ZodOptionalType<ZodMiniObject<TypeToZod<Omit<Input, Omitted>[K]>>>
+			: ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>;
 };
-export type ParentType<T, Segments extends readonly PropertyKey[]> =
-	Segments extends readonly [...infer Rest extends readonly PropertyKey[], infer _Last] ? Traverse<T, Rest> : never;
-export type Path<T, Prefix extends string = ""> =
-	T extends Primitive ? never
-	: T extends readonly (infer U)[] ?
-		Path<U, Prefix extends "" ? `${number}` : `${Prefix}.${number}`> | (Prefix extends "" ? `${number}` : `${Prefix}.${number}`)
-	:	{
-			[K in Extract<keyof T, string>]: T[K] extends Primitive ?
-				Prefix extends "" ?
-					K
-				:	`${Prefix}.${K}`
-			: T[K] extends readonly (infer U)[] ? Path<U, Prefix extends "" ? `${K}.${number}` : `${Prefix}.${K}.${number}`>
-			: Path<T[K], Prefix extends "" ? K : `${Prefix}.${K}`>;
-		}[Extract<keyof T, string>];
+export type ParentType<T, Segments extends readonly PropertyKey[]> = Segments extends readonly [
+	...infer Rest extends readonly PropertyKey[],
+	infer _Last
+]
+	? Traverse<T, Rest>
+	: never;
+export type Path<T, Prefix extends string = ""> = T extends Primitive
+	? never
+	: T extends readonly (infer U)[]
+		? Path<U, Prefix extends "" ? `${number}` : `${Prefix}.${number}`> | (Prefix extends "" ? `${number}` : `${Prefix}.${number}`)
+		: {
+				[K in Extract<keyof T, string>]: T[K] extends Primitive
+					? Prefix extends ""
+						? K
+						: `${Prefix}.${K}`
+					: T[K] extends readonly (infer U)[]
+						? Path<U, Prefix extends "" ? `${K}.${number}` : `${Prefix}.${K}.${number}`>
+						: Path<T[K], Prefix extends "" ? K : `${Prefix}.${K}`>;
+			}[Extract<keyof T, string>];
 export type PathSegments<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, ...PathSegments<Tail>] : [P];
-export type PathValue<T, P extends string> =
-	P extends `${infer Head}.${infer Tail}` ?
-		Head extends keyof T ? PathValue<T[Head], Tail>
-		: Head extends `${number}` ?
-			T extends readonly (infer U)[] ?
-				PathValue<U, Tail>
-			:	never
-		:	never
-	: P extends keyof T ? T[P]
-	: P extends `${number}` ?
-		T extends readonly (infer U)[] ?
-			U
-		:	never
-	:	never;
+export type PathValue<T, P extends string> = P extends `${infer Head}.${infer Tail}`
+	? Head extends keyof T
+		? PathValue<T[Head], Tail>
+		: Head extends `${number}`
+			? T extends readonly (infer U)[]
+				? PathValue<U, Tail>
+				: never
+			: never
+	: P extends keyof T
+		? T[P]
+		: P extends `${number}`
+			? T extends readonly (infer U)[]
+				? U
+				: never
+			: never;
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type Traverse<T, Segments extends readonly PropertyKey[]> =
-	Segments extends readonly [infer K, ...infer Rest extends readonly PropertyKey[]] ?
-		K extends keyof T ?
-			Traverse<T[K], Rest>
-		:	never
-	:	T;
+export type Traverse<T, Segments extends readonly PropertyKey[]> = Segments extends readonly [infer K, ...infer Rest extends readonly PropertyKey[]]
+	? K extends keyof T
+		? Traverse<T[K], Rest>
+		: never
+	: T;
 export type TypeToPartialZodSchema<
 	Input,
 	Omitted extends keyof Input = never,
 	Override extends { [Key in Omitted]: ZodMiniType } = never,
 	Omit = false
 > = ZodMiniObject<
-	Omit extends true ? OmitAndOverride<Input, Omitted, Override>
-	:	{
-			[K in keyof Input]: Input[K] extends any[] ? ZodOptionalType<ZodMiniType<Input[K]>>
-			: Input[K] extends object ? ZodOptionalType<ZodMiniObject<TypeToZod<Input[K]>>>
-			: ZodOptionalType<ZodMiniType<Input[K]>>;
-		}
+	Omit extends true
+		? OmitAndOverride<Input, Omitted, Override>
+		: {
+				[K in keyof Input]: Input[K] extends any[]
+					? ZodOptionalType<ZodMiniType<Input[K]>>
+					: Input[K] extends object
+						? ZodOptionalType<ZodMiniObject<TypeToZod<Input[K]>>>
+						: ZodOptionalType<ZodMiniType<Input[K]>>;
+			}
 >;
 export type TypeToZodSchema<T> = ZodMiniObject<{
-	[K in keyof T]: T[K] extends any[] ? ZodMiniArray<ZodMiniType<T[K][number]>>
-	: T[K] extends object ? ZodMiniObject<TypeToZod<T[K]>>
-	: ZodMiniType<T[K]>;
+	[K in keyof T]: T[K] extends any[]
+		? ZodMiniArray<ZodMiniType<T[K][number]>>
+		: T[K] extends object
+			? ZodMiniObject<TypeToZod<T[K]>>
+			: ZodMiniType<T[K]>;
 }>;
 export type WithId<S extends string> = `#${S}`;
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -112,11 +124,11 @@ export type ZodOptionalType<T extends ZodMiniType> = ZodMiniOptional<T>;
 type Primitive = bigint | boolean | Nullable<number> | string | symbol | undefined;
 // Taken from https://github.com/colinhacks/zod/issues/53#issuecomment-1681090113
 type TypeToZod<T> = {
-	[K in keyof T]: T[K] extends boolean | Nullable<number> | string | undefined ?
-		undefined extends T[K] ?
-			ZodMiniOptional<ZodMiniType<Exclude<T[K], undefined>>>
-		:	ZodMiniType<T[K]>
-	:	ZodMiniObject<TypeToZod<T[K]>>;
+	[K in keyof T]: T[K] extends boolean | Nullable<number> | string | undefined
+		? undefined extends T[K]
+			? ZodMiniOptional<ZodMiniType<Exclude<T[K], undefined>>>
+			: ZodMiniType<T[K]>
+		: ZodMiniObject<TypeToZod<T[K]>>;
 };
 // #endregion Utility types
 // #region Constants

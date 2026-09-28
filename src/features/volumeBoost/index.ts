@@ -37,9 +37,9 @@ async function handleVolumeBoostScroll(event: WheelEvent) {
 	updateVolumeBoostFeatureMenuLabel(newValue);
 	updateFeatureButtonTitle(
 		"volumeBoostButton",
-		!isVolumeBoostEnabled ?
-			window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
-		:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.on, { value: newValue })
+		!isVolumeBoostEnabled
+			? window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off)
+			: window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.on, { value: newValue })
 	);
 	if (!isVolumeBoostEnabled) return;
 	applyVolumeBoostDb(newValue);
@@ -59,9 +59,9 @@ export default createFeature({
 				await addFeatureButton(
 					"volumeBoostButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: amount })
-					:	window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: amount })
+						: window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle.off),
 					getFeatureIcon("volumeBoostButton", placement),
 					(checked) => {
 						isVolumeBoostEnabled = !!checked;

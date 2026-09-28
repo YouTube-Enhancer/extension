@@ -34,10 +34,11 @@ export async function setPlayerSpeed(speed: number) {
 	// Only the extension's own speed controls call this, on the user's behalf: the change is the user's choice
 	// however the click reached the button, so enforcement stands down for it like for any manual change.
 	noteUserInput();
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
 	if (!playerContainer) return;
 	if (!playerContainer.setPlaybackRate) return;
 	const playerVideoData = await playerContainer.getVideoData();
@@ -61,10 +62,11 @@ function getUrlVideoId(): Nullable<string> {
 }
 function makePlayerSpeedTask(speed: number, channelSpeeds?: string): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
-		const playerContainer =
-			isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-			: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-			: null;
+		const playerContainer = isWatchPage()
+			? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+			: isShortsPage()
+				? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+				: null;
 		if (!playerContainer || !playerContainer.setPlaybackRate) return false;
 		const playerVideoData = await playerContainer.getVideoData();
 		if (playerVideoData.isLive) return true;

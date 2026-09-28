@@ -111,11 +111,11 @@ function detachQualityChangeListener(): void {
 }
 
 function getPlayer(): Nullable<YouTubePlayerDiv> {
-	return (
-		isWatchPage() || isLivePage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null
-	);
+	return isWatchPage() || isLivePage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
 }
 
 /**

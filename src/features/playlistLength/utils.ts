@@ -18,10 +18,9 @@ export const getHeaderSelectors = () => {
 			const el = document.querySelector<HTMLElement>(selector);
 			return (el?.clientWidth ?? 0) > 0;
 		}) ?? NO_PADDING_HEADER_SELECTOR;
-	const watch =
-		isNewYouTubeVideoLayout() ?
-			"#page-manager > ytd-watch-grid #playlist #header-contents"
-		:	"#page-manager > ytd-watch-flexy #playlist #header-contents";
+	const watch = isNewYouTubeVideoLayout()
+		? "#page-manager > ytd-watch-grid #playlist #header-contents"
+		: "#page-manager > ytd-watch-flexy #playlist #header-contents";
 
 	return { playlist, watch } as const satisfies { playlist: string; watch: string };
 };
@@ -85,12 +84,7 @@ export function createPlaylistLengthUIElement(
 			}),
 			...conditionalStyles({
 				condition: pageType === "playlist",
-				marginTop:
-					getPlaylistId() === "WL" ?
-						window.matchMedia("(max-width: 1080px)").matches ?
-							"16px"
-						:	"0px"
-					:	"24px",
+				marginTop: getPlaylistId() === "WL" ? (window.matchMedia("(max-width: 1080px)").matches ? "16px" : "0px") : "24px",
 				width: "99%"
 			})
 		}

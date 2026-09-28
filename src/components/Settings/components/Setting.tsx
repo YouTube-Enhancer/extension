@@ -67,34 +67,34 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 		filter === "" ||
 		matchesText(settingProps.featureId ?? "") ||
 		[settingProps.title, settingProps.label].some((text) => matchesText(text ?? ""));
-	return shouldSettingBeVisible ?
-			<div
-				className="mx-2 mb-1"
-				title={(() => {
-					const { disabled, disabledReason, parentSetting, type: settingType } = settingProps;
-					if ((settingType !== "checkbox" && !disabled) || !parentSetting) {
-						return settingProps.title;
-					}
-					if (disabledReason) {
-						return disabledReason;
-					}
-					if (parentSetting.type === "singular") {
-						return t((translations) => translations.pages.options.extras.optionDisabled.singular, {
-							OPTION: t(parentSetting.value)
-						});
-					}
-					if (parentSetting.type === "specificOption") {
-						return t(parentSetting.value);
-					}
-					const options = parentSetting.value
-						.map((option) => `'${t(option)}'`)
-						.join(t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].separator));
-					return t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].label, { OPTIONS: options });
-				})()}
-			>
-				<SettingInput {...settingProps} />
-			</div>
-		:	null;
+	return shouldSettingBeVisible ? (
+		<div
+			className="mx-2 mb-1"
+			title={(() => {
+				const { disabled, disabledReason, parentSetting, type: settingType } = settingProps;
+				if ((settingType !== "checkbox" && !disabled) || !parentSetting) {
+					return settingProps.title;
+				}
+				if (disabledReason) {
+					return disabledReason;
+				}
+				if (parentSetting.type === "singular") {
+					return t((translations) => translations.pages.options.extras.optionDisabled.singular, {
+						OPTION: t(parentSetting.value)
+					});
+				}
+				if (parentSetting.type === "specificOption") {
+					return t(parentSetting.value);
+				}
+				const options = parentSetting.value
+					.map((option) => `'${t(option)}'`)
+					.join(t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].separator));
+				return t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].label, { OPTIONS: options });
+			})()}
+		>
+			<SettingInput {...settingProps} />
+		</div>
+	) : null;
 }
 function SettingInput<ID extends configurationId>(settingProps: SettingInputProps<ID>) {
 	const { type } = settingProps;

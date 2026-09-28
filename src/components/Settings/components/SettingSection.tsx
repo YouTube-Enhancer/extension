@@ -19,9 +19,9 @@ export default function SettingSection({ children, className = "", featureIds = 
 			const { featureId, label, title } = child.props ?? {};
 			return matchesText(featureId ?? "") || matchesText(label ?? "") || matchesText(title ?? "");
 		});
-	return shouldSectionBeVisible ?
-			<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
-				{children}
-			</SectionTitleProvider>
-		:	null;
+	return shouldSectionBeVisible ? (
+		<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
+			{children}
+		</SectionTitleProvider>
+	) : null;
 }

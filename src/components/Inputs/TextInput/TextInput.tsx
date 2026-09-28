@@ -74,9 +74,7 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReas
 							}}
 							type="button"
 						>
-							{showPassword ?
-								<IoMdEye size={18} />
-							:	<IoMdEyeOff size={18} />}
+							{showPassword ? <IoMdEye size={18} /> : <IoMdEyeOff size={18} />}
 						</button>
 					)}
 					<input
