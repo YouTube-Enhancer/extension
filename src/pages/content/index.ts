@@ -101,6 +101,7 @@ const onWindowMessage = (event: MessageEvent) => {
 	if (message?.origin !== MESSAGE_ORIGIN) return;
 	void (async () => {
 		if (!message) return;
+		const { requestId } = message as { requestId?: string };
 		switch (message.action) {
 			case "request_action": {
 				await browser.runtime.sendMessage(message);
@@ -109,9 +110,14 @@ const onWindowMessage = (event: MessageEvent) => {
 			case "request_data": {
 				switch (message.type) {
 					case "extensionURL": {
-						void sendExtensionMessage("extensionURL", "data_response", {
-							extensionURL: browser.runtime.getURL("")
-						});
+						void sendExtensionMessage(
+							"extensionURL",
+							"data_response",
+							{
+								extensionURL: browser.runtime.getURL("")
+							},
+							requestId
+						);
 						break;
 					}
 					case "options": {
@@ -121,12 +127,12 @@ const onWindowMessage = (event: MessageEvent) => {
 						 * @type {configuration}
 						 */
 						const options: configuration = await getCachedSettings();
-						void sendExtensionMessage("options", "data_response", { options });
+						void sendExtensionMessage("options", "data_response", { options }, requestId);
 						break;
 					}
 					case "state": {
 						const state = await getStoredState();
-						void sendExtensionMessage("state", "data_response", state);
+						void sendExtensionMessage("state", "data_response", state, requestId);
 						break;
 					}
 				}
