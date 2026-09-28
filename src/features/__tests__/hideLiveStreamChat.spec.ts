@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+
 import { expect, test } from "playwright.config";
 
 import type { YouTubePlayerDiv } from "@/src/types";
@@ -7,7 +8,8 @@ import { metadata } from "@/src/features/hideLiveStreamChat/index.metadata";
 import { expectBodyWithClass, expectBodyWithoutClass, expectElementsHidden, expectElementsNotHidden } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, waitForExtensionReady } from 
+"@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -55,7 +57,7 @@ async function spaNavigateToRelatedVod(page: Page): Promise<void> {
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.searchParams.get("v") !== before, { timeout: 30000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, watch);
 	// The gate only leaves `live` when the destination really is a VOD, so make that a precondition of the test.
 	await expect.poll(async () => isPlayingLive(page), { timeout: 15000 }).toBe(false);

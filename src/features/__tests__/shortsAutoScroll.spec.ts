@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+
 import { expect, test } from "playwright.config";
 
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
@@ -7,7 +8,7 @@ import { metadata } from "@/src/features/shortsAutoScroll/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature } from "@/src/utils/_tests/features";
-import { navigateToPageType, reloadPage, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToHome, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const testPages = resolvePageTypes(metadata.dependencies?.includePages);
@@ -76,7 +77,7 @@ async function simulateProgressThenRestart(page: Page, fraction: number): Promis
 async function spaNavigateBackToShorts(page: Page): Promise<void> {
 	await page.goBack();
 	await page.waitForURL(/\/shorts\//, { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await expect(page.locator("#shorts-player video")).toBeAttached({ timeout: 30_000 });
 }
 test.describe("shortsAutoScroll", () => {

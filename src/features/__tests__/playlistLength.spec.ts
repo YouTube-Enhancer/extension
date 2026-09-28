@@ -8,7 +8,7 @@ import { metadata } from "@/src/features/playlistLength/index.metadata";
 import { expectToStay } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord } from "@/src/utils/_tests/constants";
 import { disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 import { resolveNonTargetPage, resolvePageTypes } from "@/src/utils/_tests/utils";
 
 const pageTypes = resolvePageTypes(metadata.dependencies?.includePages);
@@ -87,7 +87,7 @@ async function spaNavigateToFirstPlaylistVideo(page: Page): Promise<void> {
 	await link.evaluate((el) => el.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.pathname === "/watch", { timeout: 30000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 }
 function toSeconds(value: string): number {
 	return value.split(":").reduce((acc, part) => acc * 60 + Number(part), 0);

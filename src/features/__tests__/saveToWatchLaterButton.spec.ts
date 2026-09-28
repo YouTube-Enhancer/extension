@@ -257,7 +257,7 @@ test.describe("saveToWatchLaterButton", () => {
 		await channelLink.evaluate((el) => el.scrollIntoView({ block: "center" }));
 		await channelLink.click();
 		await page.waitForURL((url) => url.pathname.startsWith("/@"), { timeout: 30000 });
-		await expect(page.locator("html[yte-ready]")).toBeAttached();
+		await waitForExtensionReady(page);
 		await expectToStay(async () => page.locator(BUTTON_SELECTOR).count(), 0, { page });
 	});
 

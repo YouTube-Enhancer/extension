@@ -9,7 +9,8 @@ import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 import { pageTypeRecord, placementSelectors } from "@/src/utils/_tests/constants";
 import { loadDefaultConfig, setOption } from "@/src/utils/_tests/features";
 import { toggleFullscreen } from "@/src/utils/_tests/fullscreen";
-import { navigateToPageType, reloadPage, spaNavigateToFirstVideo, spaNavigateToHome, spaNavigateToRelatedVideo } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, reloadPage, spaNavigateToFirstVideo, 
+spaNavigateToHome, spaNavigateToRelatedVideo, waitForExtensionReady } from "@/src/utils/_tests/navigation";
 
 /**
  * Every feature at once. The per-feature specs prove each feature does its job; these cases prove that the whole
@@ -65,7 +66,7 @@ test.describe("every feature", () => {
 	test(`every feature enabled on ${watch} survives an in-page round trip through home and a full disable`, async ({ page }) => {
 		test.setTimeout(300_000);
 		const { errors, switches } = await enableEverythingOn(page, watch);
-		await expect(page.locator("html[yte-ready]")).toBeAttached();
+		await waitForExtensionReady(page);
 		// Home has no player: every player-bound feature has to stand down, and the page-gated ones have to disable.
 		await spaNavigateToHome(page);
 		await page.waitForTimeout(SETTLE_MS);

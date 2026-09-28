@@ -146,7 +146,7 @@ async function playToEndAndAwaitAutoplay(page: Page, videoId: string): Promise<v
 		)
 		.toBe("moved on");
 	await page.waitForURL((url) => url.searchParams.get("v") !== videoId, { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await waitForPlayerToReport(page, new URL(page.url()).searchParams.get("v") ?? "");
 	await pageSetup(page);
 }
@@ -226,7 +226,7 @@ async function spaNavigateToOtherPlaylistVideo(page: Page): Promise<void> {
 	await link.evaluate((element) => element.scrollIntoView({ block: "center" }));
 	await link.click();
 	await page.waitForURL((url) => url.searchParams.get("v") !== videoId, { timeout: 30_000 });
-	await expect(page.locator("html[yte-ready]")).toBeAttached();
+	await waitForExtensionReady(page);
 	await waitForYoutubePlayerReady(page, "watch");
 }
 
@@ -504,7 +504,7 @@ test.describe("playlistReverseButton", () => {
 		const landed = new URL(page.url());
 		expect(landed.searchParams.get("v")).toBe(expectedNext);
 		expect(landed.searchParams.get("list")).toBe(playlistId);
-		await expect(page.locator("html[yte-ready]")).toBeAttached();
+		await waitForExtensionReady(page);
 		await waitForPlayerToReport(page, expectedNext);
 		await pageSetup(page);
 		await expect.poll(async () => (await readLivePlaylist(page))?.selectedVideoId, { timeout: 20000 }).toBe(expectedNext);

@@ -6,7 +6,8 @@ import { metadata } from "@/src/features/openTranscriptButton/index.metadata";
 import { expectFeatureButtonToBeFalsy, expectFeatureButtonToBeTruthy, expectFeatureMenuItemToBeTruthy } from "@/src/utils/_tests/assertions";
 import { pageTypeRecord, placementRecord } from "@/src/utils/_tests/constants";
 import { clickFeatureButton, clickFeatureMenuItem, disableFeature, enableFeature, setOption } from "@/src/utils/_tests/features";
-import { navigateToPageType, spaNavigateToHome } from "@/src/utils/_tests/navigation";
+import { navigateToPageType, spaNavigateToHome, waitForExtensionReady } from 
+"@/src/utils/_tests/navigation";
 import { waitForYoutubePlayerReady } from "@/src/utils/_tests/player";
 import { resolvePageTypes } from "@/src/utils/_tests/utils";
 
@@ -97,7 +98,7 @@ test.describe("openTranscriptButton", () => {
 		await expectFeatureButtonToBeFalsy(page, "yte-feature-openTranscriptButton-button");
 		await page.goBack();
 		await page.waitForURL((url) => url.pathname === "/watch", { timeout: 30_000 });
-		await expect(page.locator("html[yte-ready]")).toBeAttached();
+		await waitForExtensionReady(page);
 		await waitForYoutubePlayerReady(page, watch);
 		await expectFeatureButtonToBeTruthy(page, "yte-feature-openTranscriptButton-button");
 		// The button has to work again, not just exist: a stale listener left behind by the navigation would
