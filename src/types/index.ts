@@ -187,8 +187,12 @@ export type ActionMessage<Type extends string, D = undefined> = Prettify<
 export type Author = Brand<string, "author">;
 export type BaseMessage<T extends MessageAction, S extends MessageSource> = {
 	action: T;
+	extensionId?: string;
 	origin?: "yte-messaging";
+	requestId?: string;
+	sequence?: number;
 	source: S;
+	tabId?: number;
 	timestamp?: number;
 };
 // #endregion Extension Messaging Types
@@ -388,23 +392,51 @@ export type CrowdinLanguageProgressResponse = {
 		offset: number;
 	};
 };
-export type DataResponseMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"data_response", "extension"> & {
+export type DataResponseMessage<Type extends string, D = undefined, S extends MessageSource = "extension"> = Prettify<
+	BaseMessage<"data_response", S> & {
 		data: D;
 		type: Type;
 	}
 >;
 export type DevToolsDataResponseMessage<Type extends DevToolsMessageType, D = undefined> = Prettify<
-	BaseMessage<"data_response", "extension"> & {
-		data: D;
+	DataResponseMessage<Type, D> & {
 		extensionId: string;
 		requestId: string;
 		tabId: number;
-		type: Type;
 	}
 >;
 
-export type DevToolsMessageMappings = {
+export type DevToolsMessageMappings = Pick<MessageMappings, DevToolsMessageType>;
+export type DevToolsMessages = DevToolsMessageMappings[keyof DevToolsMessageMappings];
+export type DevToolsMessageType = {
+	[K in keyof MessageMappings]: K extends `devtools_${string}` ? K : never;
+}[keyof MessageMappings];
+export type DevToolsRequestDataMessage<Type extends string, D = undefined, S extends MessageSource = "devtools"> = Prettify<
+	RequestDataMessage<Type, D, S> & {
+		extensionId: string;
+		requestId: string;
+		tabId: number;
+		timestamp: number;
+	}
+>;
+
+export type ExtensionSendOnlyMessageMappings = {
+	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
+	featureUpdate: DataResponseMessage<"featureUpdate", { config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }>;
+	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
+	onScreenDisplayConfigChange: DataResponseMessage<"onScreenDisplayConfigChange", { onScreenDisplay: configuration["onScreenDisplay"] }>;
+};
+export type ExtensionSendOnlyMessages = ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
+
+export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
+	[K in keyof T]: Extract<T[K], { source: S }>;
+};
+export type MaybePromise<T> = Promise<T> | T;
+// #endregion Constants
+// #region Extension Messaging Types
+export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
+
+export type MessageMappings = Prettify<{
 	devtools_clear_performance_metrics: {
 		request: DevToolsRequestDataMessage<"devtools_clear_performance_metrics">;
 		response: DevToolsDataResponseMessage<"devtools_clear_performance_metrics", { cleared: boolean }>;
@@ -452,37 +484,6 @@ export type DevToolsMessageMappings = {
 		request: DevToolsRequestDataMessage<"devtools_update_feature_config", { id: FeatureKeys; path: string; value: unknown }>;
 		response: DevToolsDataResponseMessage<"devtools_update_feature_config", { config?: configuration[FeatureKeys]; id: FeatureKeys }>;
 	};
-};
-export type DevToolsMessages = DevToolsMessageMappings[keyof DevToolsMessageMappings];
-export type DevToolsMessageType = keyof DevToolsMessageMappings;
-export type DevToolsRequestDataMessage<Type extends string, D = undefined, S extends MessageSource = "devtools"> = Prettify<
-	BaseMessage<"request_data", S> & {
-		data: D;
-		extensionId: string;
-		requestId: string;
-		tabId: number;
-		timestamp: number;
-		type: Type;
-	}
->;
-
-export type ExtensionSendOnlyMessageMappings = {
-	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
-	featureUpdate: DataResponseMessage<"featureUpdate", { config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }>;
-	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
-	onScreenDisplayConfigChange: DataResponseMessage<"onScreenDisplayConfigChange", { onScreenDisplay: configuration["onScreenDisplay"] }>;
-};
-export type ExtensionSendOnlyMessages = ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
-
-export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
-	[K in keyof T]: Extract<T[K], { source: S }>;
-};
-export type MaybePromise<T> = Promise<T> | T;
-// #endregion Constants
-// #region Extension Messaging Types
-export type MessageAction = "data_response" | "request_action" | "request_data" | "send_data";
-
-export type MessageMappings = Prettify<{
 	extensionURL: {
 		request: RequestDataMessage<"extensionURL">;
 		response: DataResponseMessage<"extensionURL", { extensionURL: string }>;
@@ -510,8 +511,8 @@ export type Notification = {
 export type NotificationAction = "reset_settings" | undefined;
 export type NotificationType = "error" | "info" | "success" | "warning";
 
-export type RequestDataMessage<Type extends string, D = undefined> = Prettify<
-	BaseMessage<"request_data", "content"> & {
+export type RequestDataMessage<Type extends string, D = undefined, S extends MessageSource = "content"> = Prettify<
+	BaseMessage<"request_data", S> & {
 		data: D;
 		type: Type;
 	}
