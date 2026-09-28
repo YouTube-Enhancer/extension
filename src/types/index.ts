@@ -189,6 +189,7 @@ export type DeepDarkCustomThemeColors = {
 	mainText: string;
 	secondBackground: string;
 };
+export type FeatureButtonId = `yte-feature-${AllButtonNames}-button`;
 export type FeatureMenuItemIconId = `yte-${AllButtonNames}-icon`;
 export type FeatureMenuItemId = `yte-feature-${AllButtonNames}-menuitem`;
 export type FeatureMenuItemLabelId = `yte-${AllButtonNames}-label`;
