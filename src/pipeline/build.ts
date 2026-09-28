@@ -9,13 +9,7 @@ import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import updateLocalePercentages from "@/src/i18n/updateLocalePercentages";
 import { emptyOutputFolder, rootDir } from "@/src/utils/plugins/utils";
 
-import {
-	copyOutputs,
-	generateManifests,
-	makeReleaseZips,
-	updateReadmeFeatures,
-	validateFeatureMetadata
-} from "./steps";
+import { copyOutputs, generateHideFeatureSelectors, generateManifests, makeReleaseZips, updateReadmeFeatures, validateFeatureMetadata } from "./steps";
 import { buildContentScripts } from "./steps/buildContentScripts";
 import generateLocaleTypes from "./steps/generateLocaleTypes";
 import { elapsedSince, timedStep } from "./utils";
@@ -23,7 +17,7 @@ import { elapsedSince, timedStep } from "./utils";
 config();
 
 /**
- * The whole pipeline runs in this one process. It used to be four `pnpm run` steps that spawned four more, plus three
+ * The whole pipeline runs in this one process. It used to be four `npm run` steps that spawned four more, plus three
  * `tsx` starts, which cost about 15 s of process start-up per build on Windows before any work happened.
  */
 const command = process.argv[2] || "all";
@@ -33,9 +27,7 @@ export async function runBundles(): Promise<void> {
 	console.log("[Build Pipeline] Bundling pages and content scripts in parallel...");
 	const start = Date.now();
 	await Promise.all([
-		timedStep("Pages bundle", () =>
-			viteBuild({ configFile: resolve(rootDir, "vite.config.ts"), logLevel: "warn" })
-		),
+		timedStep("Pages bundle", () => viteBuild({ configFile: resolve(rootDir, "vite.config.ts"), logLevel: "warn" })),
 		timedStep("Content-script bundles", () => buildContentScripts({ logLevel: "warn" }))
 	]);
 	console.log(`[Build Pipeline] Bundling complete! (${elapsedSince(start)}s total)`);
@@ -50,6 +42,7 @@ export async function runPostBuildPipeline(retries = 3): Promise<void> {
 		try {
 			await timedStep("Generating manifests", () => generateManifests());
 			await timedStep("Copying outputs", () => copyOutputs());
+			await timedStep("Generating hide feature selectors", () => generateHideFeatureSelectors());
 			await timedStep("Updating README features", () => updateReadmeFeatures());
 			await timedStep("Generating locale types", () => generateLocaleTypes());
 			if (isDevelopment) {
@@ -81,7 +74,7 @@ export async function runPreBuildPipeline(): Promise<void> {
 
 	if (!isDevelopment && !shouldBypass) {
 		try {
-			await checkLocalesForMissingKeys();
+			checkLocalesForMissingKeys();
 		} catch (error) {
 			const details = error instanceof Error ? error.message : String(error);
 			console.error(localeCheckFailureMessage(details));
@@ -111,9 +104,9 @@ function localeCheckFailureMessage(details: string): string {
 		"    BYPASS_LOCALE_CHECK=true",
 		"",
 		"Examples:",
-		"    Unix:   BYPASS_LOCALE_CHECK=true pnpm run build",
-		"    cmd:    set BYPASS_LOCALE_CHECK=true && pnpm run build",
-		"    Powershell: $env:BYPASS_LOCALE_CHECK = 'true'; pnpm run build",
+		"    Unix:   BYPASS_LOCALE_CHECK=true npm run build",
+		"    cmd:    set BYPASS_LOCALE_CHECK=true && npm run build",
+		"    Powershell: $env:BYPASS_LOCALE_CHECK = 'true'; npm run build",
 		"",
 		"=====================================================================================",
 		""
@@ -125,9 +118,7 @@ void (async () => {
 		const start = Date.now();
 		switch (command) {
 			case "all": {
-				console.log(
-					`[Build Pipeline] Running full ${isDevelopment ? "development" : "production"} build...`
-				);
+				console.log(`[Build Pipeline] Running full ${isDevelopment ? "development" : "production"} build...`);
 				await runPreBuildPipeline();
 				await runBundles();
 				await runPostBuildPipeline();
