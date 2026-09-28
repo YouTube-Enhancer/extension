@@ -49,7 +49,15 @@ export default createFeature({
 					},
 					true,
 					isPlayerMaximized,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const maximized = document.body.getAttribute("yte-maximized") === "";
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+							: window.i18nextInstance.t(
+									(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"]
+								);
+					}
 				);
 			},
 			name: "maximizePlayerButton"

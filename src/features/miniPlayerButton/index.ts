@@ -58,7 +58,13 @@ export default createFeature({
 					},
 					true,
 					miniPlayerActive,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const active = isMiniPlayerActive();
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
+							: window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"]);
+					}
 				);
 				document.addEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);
 			},

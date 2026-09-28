@@ -267,8 +267,43 @@ export default createFeature({
 	onDisable: cleanupPlaylistManagementButtons,
 	onEnable: setupPlaylistManagementButtons,
 	onLanguageChange: () => {
-		cleanupPlaylistManagementButtons();
-		setupPlaylistManagementButtons(registry.configManager.getLast("playlistManagementButtons"));
+		if (removeAllButton) {
+			const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
+			let watchedCount = 0;
+			playlistItems.forEach((item) => {
+				if (getWatchedPercentage(item) === 100) watchedCount++;
+			});
+			if (watchedCount === 0) {
+				removeAllButton.remove();
+			} else {
+				const text = window.i18nextInstance.t(
+					(translations) =>
+						translations.pages.content.features.playlistManagementButtons.extras[
+							watchedCount === 1 ? "removeAllWatchedVideo" : "removeAllWatchedVideos"
+						],
+					{ count: watchedCount }
+				);
+				void import("react-dom/server").then(({ renderToString }) => {
+					const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
+					if (removeAllButton) removeAllButton.innerHTML = trashIcon + text;
+					return;
+				});
+			}
+		}
+		for (const item of document.querySelectorAll<HTMLElement>(PLAYLIST_ITEM_SELECTOR)) {
+			const removeBtn = item.querySelector(`.${REMOVE_BUTTON_CLASS}`);
+			const resetBtn = item.querySelector(`.${RESET_BUTTON_CLASS}`);
+			if (removeBtn instanceof HTMLElement) {
+				removeBtn.title = window.i18nextInstance.t(
+					(translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo
+				);
+			}
+			if (resetBtn instanceof HTMLElement) {
+				resetBtn.title = window.i18nextInstance.t(
+					(translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched
+				);
+			}
+		}
 	},
 	onNavigate: () => {
 		cleanupPlaylistManagementButtons();

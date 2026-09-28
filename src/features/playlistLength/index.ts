@@ -38,9 +38,11 @@ export default createFeature({
 	onEnable: async (config) => {
 		await setupPlaylistLength(config);
 	},
-	onLanguageChange: async () => {
-		cleanupPlaylistLength();
-		await setupPlaylistLength(registry.configManager.getLast("playlistLength"));
+	onLanguageChange: () => {
+		const element = controller?.getUiElement();
+		if (element) {
+			element.title = window.i18nextInstance.t((translations) => translations.pages.content.features.playlistLength.title);
+		}
 	},
 	onNavigate: async () => {
 		cleanupPlaylistLength();

@@ -33,7 +33,8 @@ export default createFeature({
 					transcriptButtonClickerListener,
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => window.i18nextInstance.t((translations) => translations.pages.content.features.openTranscriptButton.button.label)
 				);
 			},
 			name: "openTranscriptButton",

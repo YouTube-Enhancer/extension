@@ -4,7 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { isWatchPage } from "@/src/utils/url";
 
-import { removeButton } from "./button";
+import { refreshTooltip, removeButton } from "./button";
 import { metadata } from "./index.metadata";
 import { applyPlaylistPageReversal, matchReversalToState } from "./reversal";
 import { disconnectResizeObserver, setupOnPlaylistPage, setupOnWatchPage, stopMiniPlayerCheck } from "./setup";
@@ -38,13 +38,8 @@ export default createFeature({
 			await setupOnPlaylistPage(stateAPI);
 		}
 	},
-	onLanguageChange: async (stateAPI) => {
-		cleanup();
-		if (isWatchPage()) {
-			await setupOnWatchPage(stateAPI);
-		} else {
-			await setupOnPlaylistPage(stateAPI);
-		}
+	onLanguageChange: () => {
+		refreshTooltip();
 	},
 	onNavigate: async (_config, stateAPI) => {
 		cleanup();

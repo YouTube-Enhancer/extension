@@ -22,6 +22,7 @@ let currentVideoId: Nullable<string> = null;
 let lastSave = 0;
 let lastSavedTimestamp = 0;
 let hasMarkedWatched = false;
+let closeTooltipUpdate: Nullable<() => void> = null;
 const artistChannelCache = new Map<string, boolean>();
 const progressBarId = "resume-prompt-progress-bar";
 const closeButtonId = "resume-prompt-close-button";
@@ -143,12 +144,13 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 	if (!document.getElementById(closeButtonId)) fragment.appendChild(closeButton);
 	fragment.appendChild(resumeButton);
 	prompt.appendChild(fragment);
-	const { listener: tooltipListener } = createTooltip({
+	const { listener: tooltipListener, update: tooltipUpdate } = createTooltip({
 		element: closeButton,
 		featureName: "videoHistory",
-		id: "yte-feature-videoHistory-tooltip",
-		text: window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumePromptClose)
+		id: "yte-feature-videoHistory-tooltip"
 	});
+	closeTooltipUpdate = tooltipUpdate;
+	closeButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumePromptClose);
 	eventManager.removeEventListener(closeButton, "mouseover", "videoHistory");
 	eventManager.addEventListener(closeButton, "mouseover", tooltipListener, "videoHistory");
 	const closeListener = () => hidePrompt();
@@ -195,6 +197,13 @@ export default createFeature({
 		const resumeButton = document.getElementById(resumeButtonId);
 		if (resumeButton) {
 			resumeButton.textContent = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumeButton);
+		}
+		const closeButton = document.getElementById(closeButtonId);
+		if (closeButton) {
+			closeButton.dataset.title = window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.videoHistory.extras.resumePromptClose
+			);
+			closeTooltipUpdate?.();
 		}
 	},
 	/**

@@ -53,9 +53,9 @@ export async function createActionButton({
 			const { listener } = createTooltip({
 				element: button,
 				featureName,
-				id: `yte-feature-${featureName}-tooltip`,
-				text: `${window.i18nextInstance.t(translationError)}: ${error instanceof Error ? error.message : String(error)}`
+				id: `yte-feature-${featureName}-tooltip`
 			});
+			button.dataset.title = `${window.i18nextInstance.t(translationError)}: ${error instanceof Error ? error.message : String(error)}`;
 			listener();
 		} finally {
 			button.disabled = false;

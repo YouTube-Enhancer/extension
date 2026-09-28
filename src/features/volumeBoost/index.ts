@@ -86,7 +86,15 @@ export default createFeature({
 					},
 					true,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const { amount: currentAmount } = featureConfigManager.getLast("volumeBoost");
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.label, { value: currentAmount })
+							: window.i18nextInstance.t((t) => t.pages.content.features.volumeBoostButton.button.toggle[isVolumeBoostEnabled ? "on" : "off"], {
+									value: currentAmount
+								});
+					}
 				);
 				const volumeBoostButton = getFeatureButton("volumeBoostButton");
 				if (!volumeBoostButton) return;

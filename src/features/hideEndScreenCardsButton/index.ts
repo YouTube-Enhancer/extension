@@ -45,7 +45,13 @@ export default createFeature({
 					(checked) => handleButtonClick(placement, checked),
 					true,
 					endScreenCardsAreHidden,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const hidden = document.querySelector("body.yte-hide-end-screen-cards") !== null;
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.label)
+							: getEndScreenCardsButtonTitle(hidden);
+					}
 				);
 			},
 			name: "hideEndScreenCardsButton"

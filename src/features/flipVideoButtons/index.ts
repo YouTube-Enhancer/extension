@@ -23,7 +23,8 @@ export default createFeature({
 					() => flipVideoHorizontal(),
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoHorizontalButton.button.label)
 				);
 			},
 			name: "flipVideoHorizontalButton"
@@ -42,7 +43,8 @@ export default createFeature({
 					() => flipVideoVertical(),
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoVerticalButton.button.label)
 				);
 			},
 			name: "flipVideoVerticalButton"

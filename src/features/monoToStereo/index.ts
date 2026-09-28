@@ -28,7 +28,13 @@ export default createFeature({
 					},
 					true,
 					isMonoStereoEnabled(),
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const enabled = isMonoStereoEnabled();
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.label)
+							: window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[enabled ? "on" : "off"]);
+					}
 				);
 			},
 			name: "monoToStereoButton"

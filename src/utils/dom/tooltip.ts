@@ -4,26 +4,25 @@ import eventManager, { type FeatureName } from "@/src/events/EventManager";
 import { isModernYouTubeVideoLayout } from "@/src/utils/url";
 /**
  * Creates a tooltip element and adds it to the element or a parent element.
+ * The tooltip text is read from `element.dataset.title` on creation and on each hover.
+ * Update `element.dataset.title` to change the tooltip text (e.g. on language change).
  *
  * @param {direction: "down" | "left" | "right" | "up"} The direction of the tooltip.
  * @param {element: HTMLElement} The element that the tooltip is attached to.
  * @param {featureName: FeatureName} The feature name of the tooltip.
  * @param {id: `yte-feature-${AllButtonNames | Exclude<FeatureName, SingleButtonNames>}-tooltip} The id of the tooltip element.
- * @param {text: string} The text content of the tooltip element.
- * @returns {tooltip: HTMLElement} The created tooltip element.
+ * @returns {{ listener: () => void; remove: () => void; update: () => void }} Controls for the tooltip.
  */
 export function createTooltip({
 	direction = "up",
 	element,
 	featureName,
-	id,
-	text
+	id
 }: {
 	direction?: "down" | "left" | "right" | "up";
 	element: HTMLElement;
 	featureName: FeatureName;
 	id: `yte-feature-${AllButtonNames | Exclude<FeatureName, SingleButtonNames>}-tooltip`;
-	text?: string;
 }) {
 	function makeTooltip() {
 		const isMiniPlayer = document.documentElement.classList.contains("yte-mini-player-active");
@@ -34,7 +33,7 @@ export function createTooltip({
 				visibility: "hidden",
 				zIndex: isMiniPlayer ? "2147483647" : "99999"
 			},
-			text: text ?? element.dataset.title ?? ""
+			text: element.dataset.title ?? ""
 		});
 
 		const mouseLeaveListener = () => tooltip.remove();
