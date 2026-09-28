@@ -64,9 +64,9 @@ function showSaveError(host: HTMLElement, error: unknown, removing: boolean) {
 		const { listener, remove } = createTooltip({
 			element: host,
 			featureName: "saveToWatchLaterButton",
-			id: "yte-feature-saveToWatchLaterButton-tooltip",
-			text: message
+			id: "yte-feature-saveToWatchLaterButton-tooltip"
 		});
+		host.dataset.title = message;
 		listener();
 		// The tooltip removes itself on mouseleave. Remove it as well when the pointer never entered.
 		window.setTimeout(remove, 5000);

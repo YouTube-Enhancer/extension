@@ -59,6 +59,10 @@ export class PlaylistLengthController {
 		this.lastPlaylistLength = null;
 	}
 
+	getUiElement(): Nullable<HTMLDivElement> {
+		return this.ui?.element ?? null;
+	}
+
 	async initialize(): Promise<void> {
 		if (this.destroyed) return;
 
