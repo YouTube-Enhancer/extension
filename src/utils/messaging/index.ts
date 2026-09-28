@@ -9,7 +9,12 @@ import type {
 	SendDataMessage
 } from "@/src/types";
 
+export { createMessageBus, MessageBus } from "./bus";
+export type { MessageHandler } from "./bus";
+
 export const MESSAGE_ORIGIN = "yte-messaging" as const;
+
+let messageSequence = 0;
 
 /**
  * Sends a message from the content
@@ -27,6 +32,7 @@ export function sendContentMessage<T extends keyof MessageMappings, D>(
 		action,
 		data,
 		origin: MESSAGE_ORIGIN,
+		sequence: ++messageSequence,
 		source: "content",
 		type
 	};
@@ -45,6 +51,7 @@ export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMap
 		action: "send_data",
 		data,
 		origin: MESSAGE_ORIGIN,
+		sequence: ++messageSequence,
 		source: "content",
 		type
 	};
@@ -65,6 +72,7 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 		action: "request_action",
 		data,
 		origin: MESSAGE_ORIGIN,
+		sequence: ++messageSequence,
 		source: "content",
 		type
 	};
@@ -83,12 +91,15 @@ export function sendContentToBackgroundMessage<T extends keyof ContentToBackgrou
 export function sendExtensionMessage<T extends keyof MessageMappings, D>(
 	type: T,
 	action: MessageMappings[keyof MessageMappings]["response"]["action"],
-	data?: D
+	data?: D,
+	requestId?: string
 ): Promise<void> {
 	const message = {
 		action,
 		data,
 		origin: MESSAGE_ORIGIN,
+		requestId,
+		sequence: ++messageSequence,
 		source: "extension",
 		type
 	};
@@ -110,6 +121,7 @@ export function sendExtensionOnlyMessage<T extends keyof ExtensionSendOnlyMessag
 		action: "send_data",
 		data,
 		origin: MESSAGE_ORIGIN,
+		sequence: ++messageSequence,
 		source: "extension",
 		type
 	};
@@ -137,7 +149,8 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 	options?: { signal?: AbortSignal; timeout?: number }
 ): Promise<MessageMappings[T]["response"]> {
 	const { signal, timeout = 30_000 } = options ?? {};
-	const requestMessage = { action, data, origin: MESSAGE_ORIGIN, source, type };
+	const requestId = crypto.randomUUID();
+	const requestMessage = { action, data, origin: MESSAGE_ORIGIN, requestId, sequence: ++messageSequence, source, type };
 	return new Promise<MessageMappings[T]["response"]>((resolve, reject) => {
 		if (signal?.aborted) {
 			reject(new Error("Aborted", { cause: signal.reason }));
@@ -151,9 +164,10 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 			const response = event.data as Messages["response"];
 			if (response?.origin !== MESSAGE_ORIGIN) return;
 			try {
-				const matchesType = response?.type === type;
 				const matchesAction = response?.action === "data_response";
 				const matchesSource = response?.source === "extension";
+				const matchesRequestId = response.requestId === requestId;
+				const matchesType = response?.type === type;
 				const matchesData =
 					!data ||
 					(typeof data === "object" &&
@@ -162,7 +176,8 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 						response.data !== null &&
 						Object.entries(data).every(([key, value]) => (key in response.data ? response.data[key] === value : false)));
 
-				if (matchesType && matchesAction && matchesSource && matchesData) {
+				// Always require action+source match; requestId or type both work for matching
+				if (matchesAction && matchesSource && (matchesRequestId || matchesType) && matchesData) {
 					cleanup();
 					resolve(response);
 				}
