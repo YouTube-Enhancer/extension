@@ -146,9 +146,9 @@ export function createSaveButton({
 	variant: Partial<ButtonViewModelVariant>;
 }) {
 	const label = window.i18nextInstance.t((translations) =>
-		saved ?
-			translations.pages.content.features.saveToWatchLaterButton.extras.removeVideo
-		:	translations.pages.content.features.saveToWatchLaterButton.extras.saveVideo
+		saved
+			? translations.pages.content.features.saveToWatchLaterButton.extras.removeVideo
+			: translations.pages.content.features.saveToWatchLaterButton.extras.saveVideo
 	);
 	return createNativeButton({
 		accessibilityText: label,

@@ -77,8 +77,9 @@ export async function startWatch(argv: string[]): Promise<void> {
 	writeManifest();
 	await updateReadmeFeatures();
 
-	const hotReloadServer =
-		hotReload ? startHotReloadServer({ announcePages: !hmr, port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir }) : null;
+	const hotReloadServer = hotReload
+		? startHotReloadServer({ announcePages: !hmr, port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir })
+		: null;
 	/** Tells the bundles which port this pipeline actually listens on (a number, so it is not inlined as a string); see `devReloadPort()`. */
 	const define = { __YTE_DEV_RELOAD_PORT__: (await hotReloadServer?.ready) ?? DEV_RELOAD_PORT };
 

@@ -13,9 +13,9 @@ export default createFeature({
 				await addFeatureButton(
 					"monoToStereoButton",
 					placement,
-					placement === "feature_menu" ?
-						window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.label)
-					:	window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[isMonoStereoEnabled() ? "on" : "off"]),
+					placement === "feature_menu"
+						? window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.label)
+						: window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[isMonoStereoEnabled() ? "on" : "off"]),
 					getFeatureIcon("monoToStereoButton", placement),
 					(checked) => {
 						if (checked) enableMonoToStereo();

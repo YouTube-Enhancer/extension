@@ -5,10 +5,11 @@ import { isShortsPage, isWatchPage } from "@/src/utils/url";
 const channelIdRegex = /^UC[\w-]{22}$/;
 
 export async function getCurrentChannelId(): Promise<Nullable<string>> {
-	const playerContainer =
-		isWatchPage() ? document.querySelector<YouTubePlayerDiv>("div#movie_player")
-		: isShortsPage() ? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
-		: null;
+	const playerContainer = isWatchPage()
+		? document.querySelector<YouTubePlayerDiv>("div#movie_player")
+		: isShortsPage()
+			? document.querySelector<YouTubePlayerDiv>("div#shorts-player")
+			: null;
 	/**
 	 * Prefer the live player state: it reflects the currently loaded video and updates on SPA navigation, unlike
 	 * ytInitialPlayerResponse, which is only set for the first video loaded on the page.

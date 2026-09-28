@@ -55,9 +55,9 @@ export function performPlaylistEdit({
 
 function showSaveError(host: HTMLElement, error: unknown, removing: boolean) {
 	const message = `${window.i18nextInstance.t((translations) =>
-		removing ?
-			translations.pages.content.features.saveToWatchLaterButton.extras.failedToRemoveVideo
-		:	translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo
+		removing
+			? translations.pages.content.features.saveToWatchLaterButton.extras.failedToRemoveVideo
+			: translations.pages.content.features.saveToWatchLaterButton.extras.failedToSaveVideo
 	)}: ${error instanceof Error ? error.message : String(error)}`;
 	// This branch runs when the command pipeline was unavailable, so the toast can fail too.
 	if (!dispatchNativeCommand(buildToastCommand(message))) {

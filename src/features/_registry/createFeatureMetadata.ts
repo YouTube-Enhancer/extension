@@ -15,13 +15,12 @@ export function createFeatureMetadata<K extends FeatureKeys>(
 ): FeatureMetadata<K> {
 	const defaults = extractDefaults(input.config);
 	const schemaInput = extractSchemaInput(input.config);
-	const button =
-		input.button ?
-			{
+	const button = input.button
+		? {
 				names: Array.isArray(input.button) ? input.button : [input.button],
 				path: "button" in input.config ? ("button" as const) : ("buttons" as const)
 			}
-		:	undefined;
+		: undefined;
 	if (input.state) {
 		const { config, state, ...rest } = input;
 		return {

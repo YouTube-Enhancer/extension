@@ -42,10 +42,11 @@ export type CoreFeatureKeys = (typeof coreFeatureKeys)[number];
 export type DividerNode = {
 	type: "divider";
 };
-export type FeatureBase<K extends FeatureKeys> =
-	K extends FeatureKeysWithState ? FeatureBaseWithState<K>
-	: K extends Exclude<FeatureKeys, FeatureKeysWithState> ? FeatureBaseWithoutState<K>
-	: never;
+export type FeatureBase<K extends FeatureKeys> = K extends FeatureKeysWithState
+	? FeatureBaseWithState<K>
+	: K extends Exclude<FeatureKeys, FeatureKeysWithState>
+		? FeatureBaseWithoutState<K>
+		: never;
 export type FeatureBaseWithoutState<K extends Exclude<FeatureKeys, FeatureKeysWithState>> = FeatureMetadataBase<K> &
 	FeatureMetadataWithoutState<K> &
 	FeatureWithoutStateBranch<K> & {
@@ -139,9 +140,9 @@ export type FeatureKeysWithButtons = (typeof buttonNameToSettingName)[keyof type
 export type FeatureKeysWithState = {
 	[K in keyof FeatureState]: FeatureKeyFromStateKey<K>;
 }[keyof FeatureState];
-export type FeatureMetadata<K extends FeatureKeys> =
-	K extends FeatureKeysWithState ? FeatureMetadataWithState<Extract<K, FeatureKeysWithState>>
-	:	FeatureMetadataWithoutState<Exclude<K, FeatureKeysWithState>>;
+export type FeatureMetadata<K extends FeatureKeys> = K extends FeatureKeysWithState
+	? FeatureMetadataWithState<Extract<K, FeatureKeysWithState>>
+	: FeatureMetadataWithoutState<Exclude<K, FeatureKeysWithState>>;
 export type FeatureMetadataBase<K extends FeatureKeys> = {
 	/**
 	 * Optional button mappings (only features with buttons)
@@ -251,7 +252,14 @@ export type KeyValueListSettingConfig<F extends FeatureKeys> = BaseSettingConfig
 export type MustContainEnabled<T> = ContainsEnabled<T> extends true ? T : never;
 
 export type NavigationType =
-	`history` | `home` | `library` | `playlist:${string}` | `shorts:${string}` | `subscriptions` | `watch:${string}` | (string & {});
+	| `history`
+	| `home`
+	| `library`
+	| `playlist:${string}`
+	| `shorts:${string}`
+	| `subscriptions`
+	| `watch:${string}`
+	| (string & {});
 
 export type NonFeatureKeys = Exclude<configurationKeys, CoreFeatureKeys | FeatureKeys>;
 
@@ -355,19 +363,22 @@ type ConditionRule<K extends FeatureKeys, P extends PrefixedPath<K>> = {
 
 type ContainsEnabled<T> =
 	// Direct enabled property
-	T extends { enabled: boolean } ? true
-	: // Single-button wrapper
-	T extends { button: { enabled: boolean } } ? true
-	: // Multi-button wrapper
-	T extends { buttons: Record<string, { enabled: boolean }> } ? true
-	: // Recurse into other objects
-	T extends object ?
-		{
-			[K in keyof T]: ContainsEnabled<T[K]>;
-		}[keyof T] extends true ?
-			true
-		:	false
-	:	false;
+	T extends { enabled: boolean }
+		? true
+		: // Single-button wrapper
+			T extends { button: { enabled: boolean } }
+			? true
+			: // Multi-button wrapper
+				T extends { buttons: Record<string, { enabled: boolean }> }
+				? true
+				: // Recurse into other objects
+					T extends object
+					? {
+							[K in keyof T]: ContainsEnabled<T[K]>;
+						}[keyof T] extends true
+						? true
+						: false
+					: false;
 type DynamicParentSetting<F extends configurationKeys> = (settings: configuration[F]) => Nullable<parentSetting>;
 type FeatureKeyFromStateKey<K extends FeatureStateKeys> = K extends `state:${infer V}` ? V : never;
 

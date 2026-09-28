@@ -11,9 +11,10 @@ type ErrorsListProps = {
 export default function ErrorsList({ errors }: ErrorsListProps): JSX.Element {
 	return (
 		<div className="space-y-2">
-			{errors.length === 0 ?
+			{errors.length === 0 ? (
 				<div className="py-8 text-center text-[#4ec9b0]">No errors recorded</div>
-			:	errors.map((error, index) => (
+			) : (
+				errors.map((error, index) => (
 					<div className="rounded border border-[#ce9178] bg-[#3d2a2a] p-3" key={index}>
 						<div className="flex items-center gap-3">
 							<span className="font-medium text-[#ce9178]">{error.id}</span>
@@ -25,7 +26,7 @@ export default function ErrorsList({ errors }: ErrorsListProps): JSX.Element {
 						</details>
 					</div>
 				))
-			}
+			)}
 		</div>
 	);
 }

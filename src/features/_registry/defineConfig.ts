@@ -16,9 +16,7 @@ export type Field<out T, out D extends T = T> = {
 };
 
 export type InferType<T extends ConfigShape> = {
-	[K in keyof T]: T[K] extends Field<infer V> ? V
-	: T[K] extends ConfigShape ? InferType<T[K]>
-	: never;
+	[K in keyof T]: T[K] extends Field<infer V> ? V : T[K] extends ConfigShape ? InferType<T[K]> : never;
 };
 
 export function extractDefaults<T extends ConfigShape>(shape: T): InferType<T> {
