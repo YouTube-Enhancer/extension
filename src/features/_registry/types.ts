@@ -34,20 +34,6 @@ export type ButtonsForFeature<F extends FeatureKeys> = {
 	[K in keyof typeof buttonNameToSettingName]: (typeof buttonNameToSettingName)[K] extends F ? K : never;
 }[keyof typeof buttonNameToSettingName];
 
-export type ButtonTrackedState = {
-	/**
-	 * Indicates whether the button is enabled.
-	 */
-	enabled: boolean;
-	/**
-	 * Indicates whether the button has been initialized.
-	 */
-	initialized: boolean;
-	/**
-	 * The placement of the button.
-	 */
-	placement?: ButtonPlacement;
-};
 export type ColorPickerSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
 	component: "color-picker";
 };
