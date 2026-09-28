@@ -1,9 +1,0 @@
-node_modules
-dist
-.all-contributorsrc
-CHANGELOG.md
-README.md
-package.json
-package-lock.json
-yarn.lock
-public/locales/en-US.json.d.ts

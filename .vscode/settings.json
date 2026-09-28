@@ -6,7 +6,7 @@
 		"source.fixAll.oxc": "always"
 	},
 	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.defaultFormatter": "oxc.oxc-vscode",
 	"editor.snippets.codeActions.enabled": true,
 	"js/ts.validate.enabled": true,
 	"js/ts.tsserver.experimental.enableProjectDiagnostics": true
