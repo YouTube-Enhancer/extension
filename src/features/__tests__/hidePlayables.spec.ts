@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+
 import { expect, test } from "playwright.config";
 
 import type { PageType } from "@/src/features/_registry/types";
