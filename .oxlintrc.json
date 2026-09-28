@@ -2,7 +2,7 @@
 	"$schema": "./node_modules/oxlint/configuration_schema.json",
 	// Generated from the previous eslint.config.mjs with `@oxlint/migrate --type-aware`, then tidied by hand.
 	// Every rule is listed explicitly to mirror what ESLint enforced, so oxlint's default "correctness" category is
-	// switched off instead of adding rules the project never had. Formatting is prettier's job (see the lint scripts).
+	// switched off instead of adding rules the project never had. Formatting is oxfmt's job (see the lint scripts).
 	"plugins": ["import", "promise", "typescript", "react"],
 	// ESLint plugins oxlint has no native equivalent for, run through its JS plugin loader. They still need the
 	// `eslint` package installed as a library (perfectionist pulls in @typescript-eslint/utils, which requires it).
