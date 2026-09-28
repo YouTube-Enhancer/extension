@@ -40,9 +40,11 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				direction: "up",
 				element: screenshotButton,
 				featureName: "screenshotButton",
-				id: "yte-feature-screenshotButton-tooltip",
-				text: window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.extras.copiedToClipboard)
+				id: "yte-feature-screenshotButton-tooltip"
 			});
+			screenshotButton.dataset.title = window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.screenshotButton.extras.copiedToClipboard
+			);
 			listener();
 			try {
 				const mimeType = "image/png";
@@ -125,7 +127,8 @@ export default createFeature({
 					screenshotButtonClickListener,
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label)
 				);
 			},
 			name: "screenshotButton"

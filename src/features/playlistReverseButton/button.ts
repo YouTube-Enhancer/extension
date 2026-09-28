@@ -17,6 +17,29 @@ let reverseButtonContainer: Nullable<HTMLDivElement> = null;
 let headerContainerElement: Nullable<HTMLElement> = null;
 let tooltipUpdate: Nullable<() => void> = null;
 
+// ─── Exported functions ───────────────────────────────────────────
+
+export function refreshTooltip() {
+	if (!reverseButton) return;
+	const isReversed = document.querySelector<HTMLButtonElement>(`#${REVERSE_BUTTON_ID}`)?.getAttribute("aria-checked") === "true";
+	reverseButton.dataset.title = window.i18nextInstance.t(
+		(tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]
+	);
+	tooltipUpdate?.();
+}
+
+export function removeButton() {
+	reverseButton = null;
+	tooltipUpdate = null;
+	headerContainerElement = null;
+	if (reverseButtonContainer) {
+		reverseButtonContainer.remove();
+		reverseButtonContainer = null;
+	}
+}
+
+// ─── Private functions ────────────────────────────────────────────
+
 /** Puts the button back when a re-render of its header took it away; an attached button is left alone. */
 async function ensureButton(stateAPI: StateAPI, container?: HTMLElement | string): Promise<void> {
 	if (reverseButtonContainer?.isConnected) return;
@@ -125,14 +148,4 @@ function pollForDataReady(timeout = 3000): Promise<boolean> {
 	return poll(isPlaylistDataReady, Boolean, 100, timeout).then((r) => r ?? false);
 }
 
-function removeButton() {
-	reverseButton = null;
-	tooltipUpdate = null;
-	headerContainerElement = null;
-	if (reverseButtonContainer) {
-		reverseButtonContainer.remove();
-		reverseButtonContainer = null;
-	}
-}
-
-export { ensureButton, ensureReversalSticks, injectButton, insertButtonInto, pollForDataReady, removeButton };
+export { ensureButton, ensureReversalSticks, injectButton, insertButtonInto, pollForDataReady };
