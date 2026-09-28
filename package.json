@@ -41,7 +41,7 @@
     "dotenv": "^17.2.3",
     "fuse.js": "^7.3.0",
     "i18next": "^26.4.2",
-    "monaco-editor": "0.56.0",
+    "monaco-editor": "0.57.0",
     "react": "^19.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^19.2.0",
