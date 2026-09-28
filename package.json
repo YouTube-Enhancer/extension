@@ -43,7 +43,7 @@
     "dotenv": "^18.0.4",
     "fuse.js": "^7.5.0",
     "i18next": "^26.4.2",
-    "monaco-editor": "0.56.0",
+    "monaco-editor": "0.57.0",
     "playwright-webextext": "^0.0.5",
     "react": "^19.3.0",
     "react-colorful": "^5.8.1",
