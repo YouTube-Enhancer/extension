@@ -140,10 +140,19 @@ export default createFeature({
 	onEnable: async () => {
 		await setupSaveToWatchLaterButtons();
 	},
-	onLanguageChange: async () => {
-		teardownMachinery();
-		document.querySelector(`${ACTIONS_ROW_SELECTOR} .${BUTTON_CLASS}`)?.remove();
-		await setupSaveToWatchLaterButtons();
+	onLanguageChange: () => {
+		for (const btn of document.querySelectorAll<YtButtonViewModelElement>(`.${BUTTON_CLASS}`)) {
+			const isSaved = btn.getAttribute("aria-label")?.includes("Remove") ?? false;
+			const label = window.i18nextInstance.t((translations) =>
+				isSaved
+					? translations.pages.content.features.saveToWatchLaterButton.extras.removeVideo
+					: translations.pages.content.features.saveToWatchLaterButton.extras.saveVideo
+			);
+			btn.setAttribute("aria-label", label);
+			btn.setAttribute("title", label);
+			const tooltip = btn.querySelector(".ytp-tooltip-content");
+			if (tooltip) tooltip.textContent = label;
+		}
 	},
 	onNavigate: async () => {
 		teardownMachinery();

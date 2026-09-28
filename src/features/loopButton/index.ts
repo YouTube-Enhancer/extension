@@ -59,7 +59,13 @@ export default createFeature({
 					loopButtonClickListener,
 					true,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() => {
+						const looping = document.querySelector<HTMLVideoElement>("video.html5-main-video")?.loop ?? false;
+						return placement === "feature_menu"
+							? window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.label)
+							: window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle[looping ? "on" : "off"]);
+					}
 				);
 				setupLoopObserver(placement);
 			},

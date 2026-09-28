@@ -71,7 +71,13 @@ async function addPlaybackSpeedButton(
 		playbackSpeedButtonClickListener(speed, direction),
 		false,
 		false,
-		fullscreenPlacement
+		fullscreenPlacement,
+		() => {
+			const video = document.querySelector<HTMLVideoElement>("video");
+			const curSpeed = video?.playbackRate ?? 1;
+			const min = getMinSpeed(speed);
+			return getPlaybackButtonTitle(buttonName, curSpeed, min, calculateAdjustedSpeed(curSpeed, speed, direction));
+		}
 	);
 }
 

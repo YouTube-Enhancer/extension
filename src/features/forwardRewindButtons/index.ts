@@ -40,7 +40,11 @@ export default createFeature({
 					() => void speedButtonListener("backward"),
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() =>
+						window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
+							TIME: Measure.of(time, seconds).toString()
+						})
 				);
 			},
 			name: "rewindButton",
@@ -73,7 +77,11 @@ export default createFeature({
 					() => void speedButtonListener("forward"),
 					false,
 					false,
-					fullscreenPlacement
+					fullscreenPlacement,
+					() =>
+						window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
+							TIME: Measure.of(time, seconds).toString()
+						})
 				);
 			},
 			name: "forwardButton",
