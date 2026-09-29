@@ -398,6 +398,7 @@ package-lock.json
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/playwright/.auth-profile/
 /playwright-data/
 /playwright-downloads/
 .VSCodeCounter/
