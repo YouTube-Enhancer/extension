@@ -26,6 +26,7 @@ import { setupContentScriptBridge, teardownContentScriptBridge } from "@/src/uti
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
 const storage = browser.storage ?? chrome.storage;
 const defaultConfiguration = getDefaultConfiguration();
+const defaultConfigKeys = Object.keys(defaultConfiguration);
 /**
  * Adds a script element to the document's root element, which loads a JavaScript file from the extension's runtime URL.
  */
@@ -56,11 +57,11 @@ if (DEV_MODE) {
 	scheduleEmbeddedScript();
 }
 const getStoredSettings = async (): Promise<configuration> => {
-	const configKeys = Object.keys(defaultConfiguration);
-	const settings = await storage.local.get(configKeys);
+	const settings = await storage.local.get(defaultConfigKeys);
 	const storedSettings = Object.keys(settings)
-		.filter((key) => configKeys.includes(key))
+		.filter((key) => defaultConfigKeys.includes(key))
 		.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
+	if (Object.keys(storedSettings).length === 0) return defaultConfiguration;
 	return deepMerge(defaultConfiguration, storedSettings) as configuration;
 };
 let cachedSettings: configuration | null = null;
