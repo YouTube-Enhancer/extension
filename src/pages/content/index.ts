@@ -247,10 +247,6 @@ const storageListeners = (changes: StorageChanges<configuration>, areaName: stri
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
 };
-const isValidChange = (change?: { newValue?: unknown; oldValue?: unknown }) => {
-	if (change?.newValue === undefined || change?.oldValue === undefined) return false;
-	return !deepEqual(change.oldValue, change.newValue);
-};
 const castStorageChanges = (changes: StorageChanges<configuration>) => {
 	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
 	for (const [key, change] of Object.entries(changes)) {
@@ -372,9 +368,6 @@ function handleConfigChanges(
 	for (const rootKey of Object.keys(changes)) {
 		const { [rootKey]: change } = changes;
 		if (!change) continue;
-
-		// skip changes that are structurally equal
-		if (!isValidChange({ newValue: change.newValue, oldValue: change.oldValue })) continue;
 
 		const walk = (oldObj: unknown, newObj: unknown, path: string): void => {
 			if (deepEqual(oldObj, newObj)) return;
