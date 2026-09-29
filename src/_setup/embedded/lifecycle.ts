@@ -44,8 +44,13 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	await registerAllFeatures(state);
 
 	getButtonColor();
+	let colorDebounce: ReturnType<typeof setTimeout> | null = null;
 	const colorObserver = new MutationObserver(() => {
-		buttonColorCache.clear();
+		if (colorDebounce) clearTimeout(colorDebounce);
+		colorDebounce = setTimeout(() => {
+			buttonColorCache.clear();
+			colorDebounce = null;
+		}, 200);
 	});
 	colorObserver.observe(document.documentElement, {
 		attributeFilter: ["dark"],
