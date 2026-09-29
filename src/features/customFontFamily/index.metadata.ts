@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 		fontFamily: field(z.string(), "Arial, sans-serif")
 	},
 	id: "customFontFamily",
+	loadPhase: 0,
 	settings: [
 		{
 			component: "checkbox",

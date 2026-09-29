@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") } },
 	dependencies: { includePages: ["watch", "live"] },
 	id: "monoToStereoButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

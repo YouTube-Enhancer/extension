@@ -15,6 +15,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayerButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

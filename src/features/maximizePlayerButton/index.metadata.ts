@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "feature_menu") } },
 	dependencies: { includePages: ["watch", "live"] },
 	id: "maximizePlayerButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

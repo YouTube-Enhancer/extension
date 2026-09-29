@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") }, speed: field(z.number(), 0.25) },
 	dependencies: { includePages: ["watch"] },
 	id: "playbackSpeedButtons",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

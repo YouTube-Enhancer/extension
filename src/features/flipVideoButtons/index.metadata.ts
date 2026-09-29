@@ -14,6 +14,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "flipVideoButtons",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

@@ -14,6 +14,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "scrollWheelVolumeControl",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.title),
 	settings: [
 		{

@@ -14,6 +14,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "home", "search", "channel_home", "channel_videos", "channel_posts", "channel_streams", "subscriptions"] },
 	id: "hideShorts",
+	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.hideShorts.title),
 	settings: [
 		{

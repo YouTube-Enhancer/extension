@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["home"] },
 	id: "hidePlaylistRecommendationsFromHomePage",
+	loadPhase: 2,
 	settings: [
 		{
 			component: "checkbox",

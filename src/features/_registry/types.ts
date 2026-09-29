@@ -171,6 +171,13 @@ export type FeatureMetadataBase<K extends FeatureKeys> = {
 	 */
 	priority?: number;
 	/**
+	 * When to import and register this feature during startup.
+	 * - 0 (default): Import immediately — global features, player controls, visual essentials
+	 * - 1: Import after first paint — watch-page buttons, common hide features
+	 * - 2: Import when idle — complex DOM observers, rare features, page-gated non-buttons
+	 */
+	loadPhase?: 0 | 1 | 2;
+	/**
 	 * The shape of the configuration input.
 	 * @remarks This means that the configuration input must have the exact same keys as the defaults.
 	 */

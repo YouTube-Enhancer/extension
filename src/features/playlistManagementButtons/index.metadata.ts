@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["playlist"] },
 	id: "playlistManagementButtons",
+	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.title),
 	settings: [
 		{

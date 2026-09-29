@@ -15,7 +15,7 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	private currentNavigationSignature: Nullable<string> = null;
 	private currentPage: Nullable<string> = null;
 	private debounceTimer: Nullable<ReturnType<typeof setTimeout>> = null;
-	private isInitialized = false;
+	private _initialized = false;
 	private navigating = false;
 	private navigationCallback?: (signature: string, eventType: NavigationEventType) => Promise<void>;
 	private navigationListeners: Record<string, () => void> = {};
@@ -65,6 +65,10 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 		this.replaceStateWrapper = undefined;
 	}
 
+	isInitialized(): boolean {
+		return this._initialized;
+	}
+
 	handleNavigation(eventType: NavigationEventType) {
 		if (this.navigating) return;
 		if (this.debounceTimer !== null) clearTimeout(this.debounceTimer);
@@ -75,14 +79,14 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 	}
 
 	async initialize(callback: (signature: string, eventType: NavigationEventType) => Promise<void>) {
-		if (this.isInitialized) return;
+		if (this._initialized) return;
 		const signature = await this.getNavigationSignature();
 		if (!signature) return;
 		this.currentNavigationSignature = signature;
 		this.currentPage = getPageFromSignature(signature);
 		this.navigationCallback = callback;
 		this.setupNavigationListener();
-		this.isInitialized = true;
+		this._initialized = true;
 	}
 
 	protected getFeatureIdForErrorLogging(): FeatureKeys | FeatureKeysWithState {

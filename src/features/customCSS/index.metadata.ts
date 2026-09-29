@@ -6,6 +6,7 @@ import { field } from "@/src/features/_registry/defineConfig";
 export const metadata = createFeatureMetadata({
 	config: { code: field(z.string(), ""), enabled: field(z.boolean(), false) },
 	id: "customCSS",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.customCSS.title),
 	settings: [
 		{

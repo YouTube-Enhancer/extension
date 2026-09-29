@@ -11,6 +11,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch"] },
 	id: "loopButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

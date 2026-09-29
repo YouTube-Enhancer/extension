@@ -8,6 +8,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false), resumeType: field(z.enum(videoHistoryResumeTypes), "prompt") },
 	dependencies: { includePages: ["watch"] },
 	id: "videoHistory",
+	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.videoHistory.title),
 	settings: [
 		{

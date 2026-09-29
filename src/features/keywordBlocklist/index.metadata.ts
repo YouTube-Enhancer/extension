@@ -6,6 +6,7 @@ import { field } from "@/src/features/_registry/defineConfig";
 export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false), keywords: field(z.string(), "") },
 	id: "keywordBlocklist",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.keywordBlocklist.title),
 	settings: [
 		{

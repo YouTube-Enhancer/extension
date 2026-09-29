@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") }, time: field(z.number(), 5) },
 	dependencies: { includePages: ["watch"] },
 	id: "forwardRewindButtons",
+	loadPhase: 1,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.forwardRewindButtons.title),
 	settings: [
 		{

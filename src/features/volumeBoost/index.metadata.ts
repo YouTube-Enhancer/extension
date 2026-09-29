@@ -24,6 +24,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "volumeBoost",
+	loadPhase: 1,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.volumeBoost.title),
 	settings: [
 		{
