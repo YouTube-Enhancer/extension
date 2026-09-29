@@ -1,4 +1,5 @@
-import { cp, existsSync, mkdir, readFile, readdir, rm } from "fs/promises";
+import { cp, mkdir, readFile, readdir, rm } from "fs/promises";
+import { existsSync } from "fs";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
