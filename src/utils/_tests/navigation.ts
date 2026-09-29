@@ -318,32 +318,7 @@ export async function spaNavigateToRelatedVideo(page: Page): Promise<void> {
  * sent before that point are silently dropped, so every helper that navigates must wait.
  */
 export async function waitForExtensionReady(page: Page): Promise<void> {
-	// Wait for the extension content script to be ready by requesting options.
-	// The content script sends options/state on load via window.postMessage.
-	await expect
-		.poll(
-			async () => {
-				return page.evaluate((origin) => {
-					return new Promise<boolean>((resolve) => {
-						const timeout = setTimeout(() => resolve(false), 5_000);
-						const handler = (event: MessageEvent) => {
-							if (event.source !== window) return;
-							const msg = event.data as { action?: string; origin?: string; type?: string; };
-							if (msg?.origin !== origin) return;
-							if (msg.type === "options" && msg.action === "data_response") {
-								clearTimeout(timeout);
-								window.removeEventListener("message", handler);
-								resolve(true);
-							}
-						};
-						window.addEventListener("message", handler);
-						window.postMessage({ action: "request_data", data: undefined, origin, sequence: 0, source: "content", type: "options" }, "*");
-					});
-				}, MESSAGE_ORIGIN);
-			},
-			{ intervals: [500, 1000, 2000], timeout: 30_000 }
-		)
-		.toBeTruthy();
+	await expect(page.locator("html[yte-ready]")).toBeAttached({ timeout: 30_000 });
 }
 async function finishLiveVideoSetup(page: Page): Promise<void> {
 	await waitForExtensionReady(page);
