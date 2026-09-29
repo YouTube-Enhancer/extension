@@ -48,6 +48,7 @@ interface TrackOptions {
 
 class FeaturePerformanceTracker {
 	private activeContextId = 0;
+	private captureStackTraces = false;
 	private contexts = new Map<number, TrackContext>();
 	/** Per-feature context stacks. Each feature gets its own isolated stack so concurrent features don't interfere. */
 	private contextStacks = new Map<PerfId, number[]>();
@@ -104,6 +105,10 @@ class FeaturePerformanceTracker {
 		const { enabled } = this;
 
 		return enabled;
+	}
+	/** Toggle stack trace capture. Off by default even in DEV_MODE to avoid ~345 Error allocations per page load. */
+	setCaptureStackTraces(capture: boolean): void {
+		this.captureStackTraces = capture;
 	}
 	logSummary(str?: string) {
 		const { enabled, metrics } = this;
@@ -183,7 +188,9 @@ class FeaturePerformanceTracker {
 		const contextId = ++this.activeContextId;
 		const start = performance.now();
 		const label: PhaseLabel = subPhase ? `${phase}:${subPhase}` : phase;
-		const stackTrace = DEV_MODE ? new Error().stack?.split("\n").slice(1, 4).join("\n") : undefined;
+		const stackTrace = this.captureStackTraces
+			? new Error().stack?.split("\n").slice(1, 4).join("\n")
+			: undefined;
 
 		// Determine effective parent — only same-feature context qualifies
 		const stackTopId = stack.length > 0 ? stack[stack.length - 1] : null;
