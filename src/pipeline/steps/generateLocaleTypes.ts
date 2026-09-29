@@ -5,7 +5,7 @@ import { resolve } from "path";
 import { rootDir } from "@/src/utils/plugins/utils";
 
 /**
- * `public/locales/en-US.json.d.ts` is what `npm run typecheck` and the editor read; the bundles do not need it. It is
+ * `public/locales/en-US.json.d.ts` is what `pnpm run typecheck` and the editor read; the bundles do not need it. It is
  * regenerated only when the source locale is newer, because `ts-json-as-const` is a CLI and costs a Node start.
  */
 export default function generateLocaleTypes(): void {
