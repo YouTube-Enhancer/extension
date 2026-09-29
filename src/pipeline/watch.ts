@@ -8,7 +8,7 @@ import type { Browser } from "@/src/utils/plugins/utils";
 import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import { DEV_RELOAD_PORT } from "@/src/utils/dev/hotReload";
 import terminalColorLog from "@/src/utils/logging";
-import { browsers, copyDirectorySync, emptyOutputFolder, outDir, publicDir, rootDir, srcDir } from "@/src/utils/plugins/utils";
+import { browsers, copyDirectory, emptyOutputFolder, outDir, publicDir, rootDir, srcDir } from "@/src/utils/plugins/utils";
 
 import { buildFinished, buildStarted, emitRebuild, newBuildId, type RebuildEvent } from "./devEvents";
 import { startHmrServer } from "./hmrServer";
@@ -62,7 +62,7 @@ export async function startWatch(argv: string[]): Promise<void> {
 	await timedStep("Validating feature metadata", () => validateFeatureMetadata());
 	await timedStep("Updating available locales", () => updateAvailableLocales());
 	await timedStep("Generating locale types", () => generateLocaleTypes());
-	copyDirectorySync(publicDir, targetDir);
+	await copyDirectory(publicDir, targetDir);
 
 	const hmrServer = hmr ? await startHmrServer() : null;
 	let manifestJson = "";
@@ -104,8 +104,8 @@ export async function startWatch(argv: string[]): Promise<void> {
 	});
 
 	const fsWatchers: FSWatcher[] = [
-		watchDirectory(publicDir, () => {
-			copyDirectorySync(publicDir, targetDir);
+		watchDirectory(publicDir, async () => {
+			await copyDirectory(publicDir, targetDir);
 			generateLocaleTypes();
 			const manifestChanged = writeManifest();
 			void updateReadmeFeatures();
