@@ -11,7 +11,7 @@ import type { FeatureButton } from "./types";
 
 import { FeatureManagerBase } from "./featureManagerBase";
 import { FeatureOrchestrator } from "./featureOrchestrator";
-import { hasState, isFeature } from "./featureRegistryCore";
+import { hasState, isFeature, resolveEnabled } from "./featureRegistryCore";
 import { featureStateManager } from "./featureStateManager";
 
 export class FeatureRegistry extends FeatureManagerBase {
@@ -78,6 +78,12 @@ export class FeatureRegistry extends FeatureManagerBase {
 			if (state !== null && state !== undefined) {
 				featureStateManager.updateFeatureState(feature.id, state);
 			}
+		}
+		// Late-registered feature (Phase 1/2): enable if registry already initialized
+		if (this.navigationManager.isInitialized()) {
+			const config = featureConfigManager.getLast(feature.id) ?? feature.defaults;
+			const enabled = resolveEnabled(config);
+			await this.orchestrator.updateFeatureEnabledState(feature.id, enabled, config);
 		}
 	}
 	setSchema<K extends FeatureKeys>(id: K) {

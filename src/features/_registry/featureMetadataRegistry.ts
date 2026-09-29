@@ -39,6 +39,21 @@ class FeatureMetadataRegistry {
 		}
 		return result;
 	}
+	/**
+	 * Groups feature IDs by their load phase (0, 1, or 2).
+	 * Used by autoRegister to stagger dynamic imports across phases.
+	 */
+	getFeaturesByLoadPhase(): Map<0 | 1 | 2, FeatureKeys[]> {
+		const phases = new Map<0 | 1 | 2, FeatureKeys[]>([
+			[0, []],
+			[1, []],
+			[2, []]
+		]);
+		for (const metadata of this.metadataMap.values()) {
+			phases.get(metadata.loadPhase ?? 0)!.push(metadata.id);
+		}
+		return phases;
+	}
 	getImportSchemaShape() {
 		const shape: Record<string, any> = {};
 		for (const { id, schemaInput } of this.metadataMap.values()) {

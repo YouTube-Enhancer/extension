@@ -29,6 +29,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "shorts", "live"] },
 	id: "playerQuality",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playerQuality.title),
 	settings: [
 		{

@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["live"] },
 	id: "hideLiveStreamChat",
+	loadPhase: 2,
 	settings: [
 		{
 			component: "checkbox",
