@@ -110,6 +110,10 @@ class FeaturePerformanceTracker {
 
 		return enabled;
 	}
+	/** Toggle stack trace capture. Off by default even in DEV_MODE to avoid ~345 Error allocations per page load. */
+	setCaptureStackTraces(capture: boolean): void {
+		this.captureStackTraces = capture;
+	}
 	logSummary(str?: string) {
 		const { enabled, metrics } = this;
 
