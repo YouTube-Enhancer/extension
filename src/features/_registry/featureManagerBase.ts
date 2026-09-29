@@ -53,10 +53,10 @@ export abstract class FeatureManagerBase {
 			trackTiming?: boolean;
 		} = {}
 	): Promise<Nullable<T>> {
-		// Parse operation string to extract phase and subPhase
-		const [basePhase, baseSubPhase] = operation.split(":");
-		const phase = basePhase as Phase;
-		const subPhaseFromOperation = baseSubPhase as SubPhase | undefined;
+		// Fast path: avoid split allocation when no colon present (common case)
+		const colonIndex = operation.indexOf(":");
+		const phase = (colonIndex === -1 ? operation : operation.substring(0, colonIndex)) as Phase;
+		const subPhaseFromOperation = (colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)) as SubPhase | undefined;
 
 		// Use options.subPhase if provided, otherwise use subPhase from operation string
 		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
@@ -85,7 +85,6 @@ export abstract class FeatureManagerBase {
 				if (options.shouldRethrow) {
 					throw error;
 				}
-
 				return options.fallback ?? null;
 			}
 		}
@@ -106,8 +105,8 @@ export abstract class FeatureManagerBase {
 			subPhase?: string;
 		} = {}
 	): Nullable<T> {
-		const [, baseSubPhase] = operation.split(":");
-		const subPhaseFromOperation = baseSubPhase as SubPhase | undefined;
+		const colonIndex = operation.indexOf(":");
+		const subPhaseFromOperation = (colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)) as SubPhase | undefined;
 		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
 
 		try {
