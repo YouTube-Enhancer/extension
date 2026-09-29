@@ -31,7 +31,7 @@ type RenderedReadme = {
 const startMarker = "<!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->";
 const endMarker = "<!-- YOUTUBE-ENHANCER-FEATURES-LIST:END -->";
 
-/** True when the committed README already matches what the metadata generates. Used by `npm run lint:readme`. */
+/** True when the committed README already matches what the metadata generates. Used by `pnpm run lint:readme`. */
 export async function isReadmeUpToDate(): Promise<boolean> {
 	const rendered = await renderReadme();
 	return !rendered || rendered.next === rendered.current;
