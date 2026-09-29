@@ -120,6 +120,7 @@ void (async () => {
 })();
 const onPageHide = () => {
 	storage.onChanged.removeListener(storageListeners);
+	document.documentElement.removeAttribute("yte-ready");
 };
 /**
  * Listens for messages from the embedded script via window.postMessage.
@@ -184,6 +185,7 @@ const onWindowMessage = (event: MessageEvent) => {
 					case "pageLoaded": {
 						storage.onChanged.addListener(storageListeners);
 						window.addEventListener("pagehide", onPageHide);
+						document.documentElement.setAttribute("yte-ready", "");
 						break;
 					}
 					case "setVolumeBoostAmount": {
