@@ -114,7 +114,7 @@ export async function buildContentScripts({
 	return watchers;
 }
 
-/** `npm run build:client` runs this file directly; the pipeline imports the function instead. */
+/** `pnpm run build:client` runs this file directly; the pipeline imports the function instead. */
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
 	await buildContentScripts();
 }

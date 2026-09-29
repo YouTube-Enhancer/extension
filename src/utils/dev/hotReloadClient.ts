@@ -53,7 +53,7 @@ async function connect(): Promise<void> {
 	socket.onclose = () => {
 		if (!announcedDisconnect) {
 			announcedDisconnect = true;
-			console.log("[Dev] Watch pipeline not reachable; retrying in the background (is `npm run dev` running?)");
+			console.log("[Dev] Watch pipeline not reachable; retrying in the background (is `pnpm run dev` running?)");
 		}
 		setTimeout(() => void connect(), reconnectDelay);
 		reconnectDelay = Math.min(reconnectDelay * 2, RECONNECT_MAX_MS);

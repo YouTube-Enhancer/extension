@@ -164,22 +164,22 @@ Features access configuration through three mechanisms, in order of preference:
 
 # Build and Dev Commands
 
-- `npm install` - Install dependencies
-- `npm run dev` - Watch mode with hot reload and HMR (`tsx src/pipeline/dev.ts`): both Vite builds stay running and write straight into `dist/Chrome` (`npm run dev:firefox` targets `dist/Firefox`). A WebSocket (preferred port 40251, a free one if Windows reserves it; the bound port is written to dev-reload.json in the output folder, which the worker reads on every connection attempt, and a ping every 20 s keeps the worker alive) tells the loaded development build what changed: an embedded-script change is swapped inside open YouTube tabs without a page reload (features are disabled and re-enabled in place), a content-script change is re-injected, and a background or manifest change reloads the extension. The options, popup and devtools pages are served from a Vite dev server (preferred port 40252) with React Fast Refresh, so a component edit applies in place; the manifest written in this mode allows that origin in `content_security_policy.extension_pages`, and Monaco's workers are created from the extension's own build. Chrome only; `--no-hmr` falls back to reloading the pages, `--no-hot-reload` turns the channel off. Release-only steps are skipped; the README feature list is still regenerated. Adding a new locale file needs a restart
-- `npm run build` - Full build in one process (`tsx src/pipeline/build.ts`): pre-build checks, both Vite bundles in parallel, then manifests, output copies, README feature list, locale types and release ZIPs (ZIPs are skipped in development builds)
-- `npm run build:pre` / `npm run build:bundle` / `npm run build:post` - The three pipeline stages on their own
-- `npm run build:main` - Vite build for the extension pages only
-- `npm run build:client` - Content and embedded script bundles only (`tsx src/pipeline/steps/buildContentScripts.ts`)
-- `npm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand. The build regenerates it only when `en-US.json` is newer
-- `npm run lint:readme` - Fails when README.md's feature list is stale; `npm run lint` runs it too. Every build regenerates the list, so commit README.md with a feature
-- `npm run lint` - Run linter (oxlint, then a prettier check of the code files)
-- `npm run lint:fix` - Run linter with auto-fix
-- `npm run lint:i18n` - Lint i18n constants
-- `npm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
-- `npm run format` - Format code with prettier
-- `npm run test` - Run tests
+- `pnpm install` - Install dependencies
+- `pnpm run dev` - Watch mode with hot reload and HMR (`tsx src/pipeline/dev.ts`): both Vite builds stay running and write straight into `dist/Chrome` (`pnpm run dev:firefox` targets `dist/Firefox`). A WebSocket (preferred port 40251, a free one if Windows reserves it; the bound port is written to dev-reload.json in the output folder, which the worker reads on every connection attempt, and a ping every 20 s keeps the worker alive) tells the loaded development build what changed: an embedded-script change is swapped inside open YouTube tabs without a page reload (features are disabled and re-enabled in place), a content-script change is re-injected, and a background or manifest change reloads the extension. The options, popup and devtools pages are served from a Vite dev server (preferred port 40252) with React Fast Refresh, so a component edit applies in place; the manifest written in this mode allows that origin in `content_security_policy.extension_pages`, and Monaco's workers are created from the extension's own build. Chrome only; `--no-hmr` falls back to reloading the pages, `--no-hot-reload` turns the channel off. Release-only steps are skipped; the README feature list is still regenerated. Adding a new locale file needs a restart
+- `pnpm run build` - Full build in one process (`tsx src/pipeline/build.ts`): pre-build checks, both Vite bundles in parallel, then manifests, output copies, README feature list, locale types and release ZIPs (ZIPs are skipped in development builds)
+- `pnpm run build:pre` / `pnpm run build:bundle` / `pnpm run build:post` - The three pipeline stages on their own
+- `pnpm run build:main` - Vite build for the extension pages only
+- `pnpm run build:client` - Content and embedded script bundles only (`tsx src/pipeline/steps/buildContentScripts.ts`)
+- `pnpm run build:locales` - Generate locale type definitions (`node node_modules/ts-json-as-const/index.js public/locales/en-US.json`). The output, `public/locales/en-US.json.d.ts`, is a generated file: it is gitignored and excluded from oxlint and prettier, so never edit or lint it by hand. The build regenerates it only when `en-US.json` is newer
+- `pnpm run lint:readme` - Fails when README.md's feature list is stale; `pnpm run lint` runs it too. Every build regenerates the list, so commit README.md with a feature
+- `pnpm run lint` - Run linter (oxlint, then a prettier check of the code files)
+- `pnpm run lint:fix` - Run linter with auto-fix
+- `pnpm run lint:i18n` - Lint i18n constants
+- `pnpm run typecheck` - Regenerate the locale type definitions, then TypeScript type check (`tsc --noEmit -p tsconfig.json`)
+- `pnpm run format` - Format code with prettier
+- `pnpm run test` - Run tests
 
-**Note:** Always use `npm run typecheck` instead of calling `tsc` directly. Use `npm run lint` and `npm run lint:fix` for linting.
+**Note:** Always use `pnpm run typecheck` instead of calling `tsc` directly. Use `pnpm run lint` and `pnpm run lint:fix` for linting.
 
 # Code Conventions
 
