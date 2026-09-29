@@ -238,7 +238,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 			if (!signature) return;
 			if (!this.updateNavigationSignature(signature)) return;
 			this.currentNavigationSignature = signature;
-			this.currentPage = getPageFromSignature(signature);
 			if (this.navigationCallback) await this.navigationCallback(signature, eventType);
 		} catch (error) {
 			this.logErrorToTracker("navigation handler", error);
@@ -294,5 +293,6 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 }
 export const featureNavigationManager = new FeatureNavigationManager();
 function getPageFromSignature(signature: string) {
-	return signature.split(":")[0];
+	const colonIndex = signature.indexOf(":");
+	return colonIndex === -1 ? signature : signature.substring(0, colonIndex);
 }
