@@ -293,7 +293,7 @@ To build the YouTube Enhancer extension from scratch, follow these steps. We'll 
 
 Before you begin, ensure you have the following software installed on your system:
 
-- **Node.js and npm:** If you don't have Node.js and npm (Node Package Manager) installed, you can download and install them from the official website: [Node.js Downloads](https://nodejs.org/en/download/).
+- **Node.js and pnpm:** If you don't have Node.js and pnpm installed, you can download and install them from the official website: [Node.js Downloads](https://nodejs.org/en/download/). Then enable pnpm: `corepack enable`
 
 - **Git:** If you don't have Git installed, download and install it from [Git Downloads](https://git-scm.com/downloads).
 
@@ -318,7 +318,7 @@ cd youtube-enhancer
 Inside the project folder, run the following command to install the required dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 5. Build the Extension
@@ -326,7 +326,7 @@ npm install
 After the installation is complete, build the extension using the following command:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 This command will bundle the extension's code and assets into a 'dist' directory.

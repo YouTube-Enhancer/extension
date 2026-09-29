@@ -18,7 +18,7 @@ try {
 
 	// Run build
 	console.log("🏗  Running build...");
-	execSync("npm run build", { stdio: "inherit" });
+	execSync("pnpm run build", { stdio: "inherit" });
 } catch (err) {
 	console.error("❌ Failed to update version and build:", err);
 	process.exit(1);

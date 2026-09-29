@@ -17,7 +17,7 @@ import { elapsedSince, timedStep } from "./utils";
 config();
 
 /**
- * The whole pipeline runs in this one process. It used to be four `npm run` steps that spawned four more, plus three
+ * The whole pipeline runs in this one process. It used to be four `pnpm run` steps that spawned four more, plus three
  * `tsx` starts, which cost about 15 s of process start-up per build on Windows before any work happened.
  */
 const command = process.argv[2] || "all";
@@ -103,9 +103,9 @@ function localeCheckFailureMessage(details: string): string {
 		"    BYPASS_LOCALE_CHECK=true",
 		"",
 		"Examples:",
-		"    Unix:   BYPASS_LOCALE_CHECK=true npm run build",
-		"    cmd:    set BYPASS_LOCALE_CHECK=true && npm run build",
-		"    Powershell: $env:BYPASS_LOCALE_CHECK = 'true'; npm run build",
+		"    Unix:   BYPASS_LOCALE_CHECK=true pnpm run build",
+		"    cmd:    set BYPASS_LOCALE_CHECK=true && pnpm run build",
+		"    Powershell: $env:BYPASS_LOCALE_CHECK = 'true'; pnpm run build",
 		"",
 		"=====================================================================================",
 		""
