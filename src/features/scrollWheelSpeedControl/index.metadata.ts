@@ -8,6 +8,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false), modifierKey: field(z.enum(modifierKeys), "altKey"), steps: field(z.number(), 0.25) },
 	dependencies: { includePages: ["watch", "shorts"] },
 	id: "scrollWheelSpeedControl",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.title),
 	settings: [
 		{

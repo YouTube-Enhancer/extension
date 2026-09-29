@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false), volume: field(z.number(), 25) },
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "globalVolume",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.globalVolume.title),
 	settings: [
 		{

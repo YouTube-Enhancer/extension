@@ -13,6 +13,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "playlist"] },
 	id: "playlistLength",
+	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.playlistLength.title),
 	settings: [
 		{

@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["watch"] },
 	id: "hideAutoplayButton",
+	loadPhase: 2,
 	settings: [
 		{
 			component: "checkbox",
