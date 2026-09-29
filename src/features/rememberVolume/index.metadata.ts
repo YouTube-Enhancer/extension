@@ -7,6 +7,7 @@ export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
 	dependencies: { includePages: ["watch", "live", "shorts"] },
 	id: "rememberVolume",
+	loadPhase: 0,
 	settings: [
 		{
 			component: "checkbox",

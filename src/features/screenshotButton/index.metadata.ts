@@ -25,6 +25,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "screenshotButton",
+	loadPhase: 1,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.screenshotButton.title),
 	settings: [
 		{

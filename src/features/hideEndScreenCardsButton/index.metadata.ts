@@ -9,6 +9,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") } },
 	dependencies: { includePages: ["watch"] },
 	id: "hideEndScreenCardsButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

@@ -6,6 +6,7 @@ export const metadata = createFeatureMetadata({
 	config: { button: buttonField },
 	dependencies: { includePages: ["watch"] },
 	id: "openTranscriptButton",
+	loadPhase: 1,
 	settings: [
 		{
 			component: "checkbox",

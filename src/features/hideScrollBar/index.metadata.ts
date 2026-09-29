@@ -6,6 +6,7 @@ import { field } from "@/src/features/_registry/defineConfig";
 export const metadata = createFeatureMetadata({
 	config: { enabled: field(z.boolean(), false) },
 	id: "hideScrollBar",
+	loadPhase: 0,
 	settings: [
 		{
 			component: "checkbox",

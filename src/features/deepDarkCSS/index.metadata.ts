@@ -19,6 +19,7 @@ export const metadata = createFeatureMetadata({
 		preset: field(z.enum(deepDarkPreset), "Deep-Dark")
 	},
 	id: "deepDarkCSS",
+	loadPhase: 0,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.deepDarkCSS.title),
 	settings: [
 		{

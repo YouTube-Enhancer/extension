@@ -21,6 +21,7 @@ export const metadata = createFeatureMetadata({
 	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "miniPlayer",
+	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.miniPlayer.title),
 	settings: [
 		{
