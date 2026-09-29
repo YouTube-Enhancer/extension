@@ -1,27 +1,29 @@
-import { existsSync, rmSync } from "fs";
+import { existsSync } from "fs";
 import { resolve } from "path";
 
 import terminalColorLog from "@/src/utils/logging";
-import { browsers, copyDirectorySync, outDir, publicDir } from "@/src/utils/plugins/utils";
+import { browsers, copyDirectory, outDir, publicDir } from "@/src/utils/plugins/utils";
 
-export default function copyOutputs(): void {
+export default async function copyOutputs(): Promise<void> {
 	for (const browser of browsers) {
 		const target = resolve(outDir, browser.name);
 
 		if (existsSync(publicDir)) {
-			copyDirectorySync(publicDir, target);
+			await copyDirectory(publicDir, target);
 			terminalColorLog(`Public directory copied: ${target}`, "success");
 		}
 
 		const tempDir = resolve(outDir, "temp");
 		if (existsSync(tempDir)) {
-			copyDirectorySync(tempDir, target);
+			await copyDirectory(tempDir, target);
 			terminalColorLog(`Temp directory copied: ${target}`, "success");
 		}
 	}
 
-	if (existsSync(resolve(outDir, "temp"))) {
-		rmSync(resolve(outDir, "temp"), { recursive: true });
+	const tempDir = resolve(outDir, "temp");
+	if (existsSync(tempDir)) {
+		const { rm } = await import("fs/promises");
+		await rm(tempDir, { recursive: true });
 		terminalColorLog("Temp directory deleted", "success");
 	}
 }

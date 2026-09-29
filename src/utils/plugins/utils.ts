@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync } from "fs";
+import { cp, existsSync, mkdir, readFile, readdir, rm } from "fs/promises";
 import { GetInstalledBrowsers } from "get-installed-browsers";
 import { dirname, join, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -50,40 +50,19 @@ function pickBuildTargets(installed: Browser[]): Browser[] {
 	return targets;
 }
 export const browsers = pickBuildTargets(GetInstalledBrowsers());
-export function copyDirectorySync(sourceDir: string, targetDir: string) {
-	// Create the target directory if it doesn't exist
-	if (!existsSync(targetDir)) {
-		mkdirSync(targetDir, { recursive: true });
-	}
-
-	// Get a list of all files and subdirectories in the source directory
-	const items = readdirSync(sourceDir);
-
-	for (const item of items) {
-		const sourcePath = join(sourceDir, item);
-		const targetPath = join(targetDir, item);
-
-		// Check if the current item is a directory
-		if (statSync(sourcePath).isDirectory()) {
-			// Recursively copy the subdirectory
-			copyDirectorySync(sourcePath, targetPath);
-		} else {
-			// Copy the file
-			copyFileSync(sourcePath, targetPath);
-		}
-	}
+export async function copyDirectory(sourceDir: string, targetDir: string) {
+	await cp(sourceDir, targetDir, { recursive: true });
 }
+export const copyDirectorySync = copyDirectory;
 
 /**
  * Clears everything in the output folder, `temp` included: `copyOutputs` copies whatever `temp` holds, so files left
  * there by an interrupted or manual build (development devtools pages in a production build, for example) would
  * otherwise end up in the packaged output.
  */
-export const emptyOutputFolder = () => {
+export const emptyOutputFolder = async () => {
 	if (!existsSync(outDir)) return;
-	for (const file of readdirSync(outDir)) {
-		rmSync(resolve(outDir, file), { force: true, recursive: true });
-	}
+	await rm(outDir, { recursive: true, force: true });
 };
 export function flattenLocaleValues(localeFile: LocaleFile, parentKey = ""): { keys: string[]; values: string[] } {
 	let values: string[] = [];
@@ -106,7 +85,7 @@ export function flattenLocaleValues(localeFile: LocaleFile, parentKey = ""): { k
 
 	return { keys, values };
 }
-export function getLocaleFile(locale: AvailableLocales): LocaleFile {
-	const localeFile = readFileSync(`${publicDir}/locales/${locale}.json`, "utf-8");
+export async function getLocaleFile(locale: AvailableLocales): Promise<LocaleFile> {
+	const localeFile = await readFile(`${publicDir}/locales/${locale}.json`, "utf-8");
 	return JSON.parse(localeFile) as LocaleFile;
 }

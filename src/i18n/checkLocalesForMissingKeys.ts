@@ -2,15 +2,16 @@ import type EnUS from "@/public/locales/en-US.json.d";
 
 import { availableLocales } from "@/src/i18n/constants";
 import { flattenLocaleValues, getLocaleFile, type LocaleFile } from "@/src/utils/plugins/utils";
-export default function checkLocalesForMissingKeys() {
-	const englishFile = getLocaleFile("en-US");
-	const missingKeys = availableLocales
-		.filter((availableLocales) => availableLocales !== "en-US")
-		.map((locale) => {
-			const localeFile = getLocaleFile(locale);
-			return checkForMissingKeys(englishFile, localeFile);
-		})
-		.filter(Boolean);
+export default async function checkLocalesForMissingKeys() {
+	const englishFile = await getLocaleFile("en-US");
+	const missingKeys = await Promise.all(
+		availableLocales
+			.filter((availableLocales) => availableLocales !== "en-US")
+			.map(async (locale) => {
+				const localeFile = await getLocaleFile(locale);
+				return checkForMissingKeys(englishFile, localeFile);
+			})
+	).then((results) => results.filter(Boolean));
 	if (missingKeys.length) {
 		throw new Error(missingKeys.join("\n\n"));
 	}
