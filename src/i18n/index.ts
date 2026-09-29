@@ -2,6 +2,7 @@ import { createInstance } from "i18next";
 
 import { type AvailableLocales, availableLocales } from "@/src/i18n/constants";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
+import { DEV_MODE } from "@/src/utils/config/env";
 export type i18nInstanceType = ReturnType<typeof createInstance>;
 type Translations = typeof import("../../public/locales/en-US.json");
 
@@ -53,7 +54,7 @@ async function createLocaleInstance(locale: AvailableLocales): Promise<i18nInsta
 		const i18nextInstance = createInstance();
 		void i18nextInstance.init(
 			{
-				debug: true,
+				debug: DEV_MODE,
 				fallbackLng: "en-US",
 				interpolation: {
 					escapeValue: false
