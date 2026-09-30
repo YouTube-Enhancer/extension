@@ -10,57 +10,63 @@ import { writeFormattedFile } from "@/src/utils/plugins/writeFormattedFile";
 
 import type { AvailableLocales } from "./constants";
 
-const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProgressResponse> = z.object({
-	data: z.array(
-		z.object({
-			data: z.object({
-				approvalProgress: z.number(),
-				language: z.object({
-					androidCode: z.string(),
-					dialectOf: z.string().nullable(),
-					editorCode: z.string(),
-					id: z.string(),
-					locale: z.string(),
-					name: z.string(),
-					osxCode: z.string(),
-					osxLocale: z.string(),
-					pluralCategoryNames: z.array(z.string()),
-					pluralExamples: z.array(z.string()),
-					pluralRules: z.string(),
-					textDirection: z.string(),
-					threeLettersCode: z.string(),
-					twoLettersCode: z.string()
-				}),
-				languageId: z.string(),
-				phrases: z.object({
-					approved: z.number(),
-					preTranslateAppliedTo: z.number(),
-					total: z.number(),
-					translated: z.number()
-				}),
-				translationProgress: z.number(),
-				words: z.object({
-					approved: z.number(),
-					preTranslateAppliedTo: z.number(),
-					total: z.number(),
-					translated: z.number()
+const crowdinLanguageProgressResponseSchema: TypeToZodSchema<CrowdinLanguageProgressResponse> =
+	z.object({
+		data: z.array(
+			z.object({
+				data: z.object({
+					approvalProgress: z.number(),
+					language: z.object({
+						androidCode: z.string(),
+						dialectOf: z.string().nullable(),
+						editorCode: z.string(),
+						id: z.string(),
+						locale: z.string(),
+						name: z.string(),
+						osxCode: z.string(),
+						osxLocale: z.string(),
+						pluralCategoryNames: z.array(z.string()),
+						pluralExamples: z.array(z.string()),
+						pluralRules: z.string(),
+						textDirection: z.string(),
+						threeLettersCode: z.string(),
+						twoLettersCode: z.string()
+					}),
+					languageId: z.string(),
+					phrases: z.object({
+						approved: z.number(),
+						preTranslateAppliedTo: z.number(),
+						total: z.number(),
+						translated: z.number()
+					}),
+					translationProgress: z.number(),
+					words: z.object({
+						approved: z.number(),
+						preTranslateAppliedTo: z.number(),
+						total: z.number(),
+						translated: z.number()
+					})
 				})
 			})
+		),
+		pagination: z.object({
+			limit: z.number(),
+			offset: z.number()
 		})
-	),
-	pagination: z.object({
-		limit: z.number(),
-		offset: z.number()
-	})
-});
+	});
 
 export default async function updateLocalePercentages() {
 	const localePercentages = await getLocalePercentagesFromCrowdin();
 	if (!localePercentages) return;
 	const localePercentagesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
 	/** Keys are written sorted so the generated object already satisfies the lint rules; no fix pass runs after the build. */
-	const sortedPercentages = Object.fromEntries([...localePercentages].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
-	const updatedLocalePercentagesFile = updateLocalePercentageObject(localePercentagesFile, sortedPercentages);
+	const sortedPercentages = Object.fromEntries(
+		[...localePercentages].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+	);
+	const updatedLocalePercentagesFile = updateLocalePercentageObject(
+		localePercentagesFile,
+		sortedPercentages
+	);
 	if (updatedLocalePercentagesFile && updatedLocalePercentagesFile !== localePercentagesFile) {
 		await writeFormattedFile(`${i18nDir}/constants.ts`, updatedLocalePercentagesFile);
 	}
@@ -74,7 +80,8 @@ async function getLocalePercentagesFromCrowdin() {
 		});
 		const data = await response.text();
 		const json = JSON.parse(data);
-		const crowdinLanguageProgressResponseParsed = crowdinLanguageProgressResponseSchema.safeParse(json);
+		const crowdinLanguageProgressResponseParsed =
+			crowdinLanguageProgressResponseSchema.safeParse(json);
 		if (crowdinLanguageProgressResponseParsed.success) {
 			const { data } = json as CrowdinLanguageProgressResponse;
 			const localePercentages = new Map<AvailableLocales, number>([
@@ -91,7 +98,9 @@ async function getLocalePercentagesFromCrowdin() {
 			return localePercentages;
 		} else if (!crowdinLanguageProgressResponseParsed.success) {
 			const { error } = crowdinLanguageProgressResponseParsed;
-			throw new Error(`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`);
+			throw new Error(
+				`Failed to get locale percentages from Crowdin\n\n${generateErrorMessage(error.issues)}`
+			);
 		}
 	} catch (error) {
 		throw new Error(formatError(error), {
@@ -100,7 +109,9 @@ async function getLocalePercentagesFromCrowdin() {
 	}
 }
 function updateLocalePercentageObject(code: string, updatedObject: Record<string, number>) {
-	const match = code.match(/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/);
+	const match = code.match(
+		/export\s+const\s+localePercentages\s*:\s*Record<AvailableLocales,\s*number>\s*=\s*({[^}]+});/
+	);
 	if (match) {
 		const [, oldObjectPart] = match;
 		const newObjectPart = JSON.stringify(updatedObject, null, "\t");

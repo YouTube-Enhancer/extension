@@ -18,7 +18,10 @@ export default function DebugOverlay({ isActive, onToggle }: DebugOverlayProps):
 			<div className="flex items-center justify-between">
 				<h3 className="text-lg font-medium text-[#d4d4d4]">Debug Overlay</h3>
 				<button
-					className={cn("rounded px-3 py-1.5 text-sm font-medium", isActive ? "bg-[#4ec9b0] text-[#1e1e1e]" : "bg-[#2d2d2d] text-[#d4d4d4]")}
+					className={cn(
+						"rounded px-3 py-1.5 text-sm font-medium",
+						isActive ? "bg-[#4ec9b0] text-[#1e1e1e]" : "bg-[#2d2d2d] text-[#d4d4d4]"
+					)}
 					onClick={onToggle}
 				>
 					{isActive ? "Active" : "Inactive"}
@@ -27,7 +30,12 @@ export default function DebugOverlay({ isActive, onToggle }: DebugOverlayProps):
 
 			<div className="space-y-2">
 				<label className="flex items-center gap-2 text-sm text-[#d4d4d4]">
-					<input checked={showTiming} className="size-4 accent-[#007acc]" onChange={(e) => setShowTiming(e.target.checked)} type="checkbox" />
+					<input
+						checked={showTiming}
+						className="size-4 accent-[#007acc]"
+						onChange={(e) => setShowTiming(e.target.checked)}
+						type="checkbox"
+					/>
 					Show execution timing indicators
 				</label>
 				<label className="flex items-center gap-2 text-sm text-[#d4d4d4]">
@@ -50,12 +58,17 @@ export default function DebugOverlay({ isActive, onToggle }: DebugOverlayProps):
 							<span className="font-bold">5</span>
 						</div>
 					)}
-					{showTiming && <div className="absolute bottom-2 left-2 rounded bg-[#4ec9b0] px-2 py-1 text-xs text-[#1e1e1e]">+12ms</div>}
+					{showTiming && (
+						<div className="absolute bottom-2 left-2 rounded bg-[#4ec9b0] px-2 py-1 text-xs text-[#1e1e1e]">
+							+12ms
+						</div>
+					)}
 				</div>
 			</div>
 
 			<p className="text-xs text-[#6b6b6b]">
-				The debug overlay will inject visual indicators into the YouTube page showing active features and execution timings.
+				The debug overlay will inject visual indicators into the YouTube page showing active
+				features and execution timings.
 			</p>
 		</div>
 	);

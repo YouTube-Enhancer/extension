@@ -56,12 +56,17 @@ export async function getCurrentPageType(): Promise<Nullable<PageType>> {
 					 */
 					const urlVideoId = new URLSearchParams(window.location.search).get("v");
 					let playerData = await player.getVideoData();
-					for (let attempt = 0; attempt < 20 && urlVideoId && playerData?.video_id !== urlVideoId; attempt++) {
+					for (
+						let attempt = 0;
+						attempt < 20 && urlVideoId && playerData?.video_id !== urlVideoId;
+						attempt++
+					) {
 						await new Promise((resolve) => setTimeout(resolve, 250));
 						playerData = await player.getVideoData();
 					}
 					// Past the wait the data can still be the previous video's, and its live flag must not make a watch page "live".
-					if (playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId)) return (cachedPageType = "live");
+					if (playerData?.isLive && (!urlVideoId || playerData.video_id === urlVideoId))
+						return (cachedPageType = "live");
 				}
 			} catch {}
 			return (cachedPageType = "watch");

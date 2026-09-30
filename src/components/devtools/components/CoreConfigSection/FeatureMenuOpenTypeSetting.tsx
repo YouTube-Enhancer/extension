@@ -6,7 +6,11 @@ interface Props {
 	value: string;
 }
 
-export default function FeatureMenuOpenTypeSetting({ onChange, options, value }: Props): JSX.Element {
+export default function FeatureMenuOpenTypeSetting({
+	onChange,
+	options,
+	value
+}: Props): JSX.Element {
 	return (
 		<div className="flex flex-col gap-2">
 			<label className="text-sm font-medium text-[#d4d4d4]">Feature Menu Open Type</label>

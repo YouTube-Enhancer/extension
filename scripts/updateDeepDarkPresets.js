@@ -4,7 +4,8 @@ import path from "path";
 import postcss from "postcss";
 import safeParser from "postcss-safe-parser";
 
-const SOURCE_URL = "https://raw.githubusercontent.com/RaitaroH/YouTube-DeepDark/master/YouTubeDeepDarkMaterial.user.css";
+const SOURCE_URL =
+	"https://raw.githubusercontent.com/RaitaroH/YouTube-DeepDark/master/YouTubeDeepDarkMaterial.user.css";
 
 const OUTPUT_FILE = path.resolve("src/deepDarkPresets.ts");
 
@@ -166,7 +167,8 @@ function fetchText(url) {
 	return new Promise((resolve, reject) => {
 		https
 			.get(url, (res) => {
-				if (!res.statusCode || res.statusCode >= 400) return reject(new Error(`Request failed: ${res.statusCode}`));
+				if (!res.statusCode || res.statusCode >= 400)
+					return reject(new Error(`Request failed: ${res.statusCode}`));
 				let data = "";
 				res.on("data", (c) => (data += c));
 				res.on("end", () => resolve(data));

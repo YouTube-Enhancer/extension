@@ -56,7 +56,9 @@ export abstract class FeatureManagerBase {
 		// Fast path: avoid split allocation when no colon present (common case)
 		const colonIndex = operation.indexOf(":");
 		const phase = (colonIndex === -1 ? operation : operation.substring(0, colonIndex)) as Phase;
-		const subPhaseFromOperation = (colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)) as SubPhase | undefined;
+		const subPhaseFromOperation = (
+			colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)
+		) as SubPhase | undefined;
 
 		// Use options.subPhase if provided, otherwise use subPhase from operation string
 		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
@@ -64,7 +66,9 @@ export abstract class FeatureManagerBase {
 		if (options.trackTiming !== false) {
 			// Delegate to performance tracker for timing and error handling
 			try {
-				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase, { concurrencyGroup: options.concurrencyGroup });
+				return await this.perf.track<T>(id, phase, fn, finalSubPhase as SubPhase, {
+					concurrencyGroup: options.concurrencyGroup
+				});
 			} catch (error) {
 				// Error already recorded by track(). Honor shouldRethrow/fallback.
 				if (options.shouldRethrow) {
@@ -78,7 +82,9 @@ export abstract class FeatureManagerBase {
 				return await fn();
 			} catch (error) {
 				// Construct operation string for error recording
-				const operationString = finalSubPhase ? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}` : operation;
+				const operationString = finalSubPhase
+					? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}`
+					: operation;
 
 				this.perf.recordError(id, operationString, error);
 
@@ -106,13 +112,17 @@ export abstract class FeatureManagerBase {
 		} = {}
 	): Nullable<T> {
 		const colonIndex = operation.indexOf(":");
-		const subPhaseFromOperation = (colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)) as SubPhase | undefined;
+		const subPhaseFromOperation = (
+			colonIndex === -1 ? undefined : operation.substring(colonIndex + 1)
+		) as SubPhase | undefined;
 		const finalSubPhase = options.subPhase ?? subPhaseFromOperation;
 
 		try {
 			return fn();
 		} catch (error) {
-			const operationString = finalSubPhase ? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}` : operation;
+			const operationString = finalSubPhase
+				? `${operation}${options.subPhase ? "" : `:${finalSubPhase}`}`
+				: operation;
 			this.perf.recordError(id, operationString, error);
 			if (options.shouldRethrow) {
 				throw error;

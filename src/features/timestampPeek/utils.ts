@@ -40,9 +40,11 @@ const state: {
 
 const getVideo = () => document.querySelector<HTMLVideoElement>("video.html5-main-video");
 
-const getOverlay = () => document.getElementById("yte-timestamp-peek-overlay") as Nullable<HTMLDivElement>;
+const getOverlay = () =>
+	document.getElementById("yte-timestamp-peek-overlay") as Nullable<HTMLDivElement>;
 
-const getShield = () => document.getElementById("yte-timestamp-peek-hover-shield") as Nullable<HTMLDivElement>;
+const getShield = () =>
+	document.getElementById("yte-timestamp-peek-hover-shield") as Nullable<HTMLDivElement>;
 
 export function getTimestampFromString(href: string) {
 	const tParam = new URLSearchParams(href).get("t") ?? "0";
@@ -63,7 +65,9 @@ export async function handleTimestampElementsHover() {
 	const playerContainer = document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const videoLength = await playerContainer.getDuration();
-	const timestampLinks = document.querySelectorAll<HTMLElement>(`${timestampElementSelector}[href^='${href}']`);
+	const timestampLinks = document.querySelectorAll<HTMLElement>(
+		`${timestampElementSelector}[href^='${href}']`
+	);
 	timestampLinks.forEach((el) => {
 		const ts = getTimestampFromString(el.getAttribute("href")!);
 		if (!isValidTimestamp(ts, videoLength)) return;
@@ -174,7 +178,12 @@ export function handleTimestampHover(el: HTMLElement, timestamp: number) {
 	};
 	eventManager.addEventListener(el, "mouseenter", () => void mouseEnterHandler(), "timestampPeek");
 	eventManager.addEventListener(el, "mouseleave", mouseLeaveHandler, "timestampPeek");
-	eventManager.addEventListener(el, "pointerdown", (e) => void commitHandler(e as MouseEvent), "timestampPeek");
+	eventManager.addEventListener(
+		el,
+		"pointerdown",
+		(e) => void commitHandler(e as MouseEvent),
+		"timestampPeek"
+	);
 }
 
 export async function observeTimestampElements(): Promise<Nullable<() => void>> {

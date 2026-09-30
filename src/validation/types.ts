@@ -22,5 +22,13 @@ type NumbersOnly<T> = T extends number
 			>
 		: never;
 type RemoveEmpty<T> = {
-	[K in keyof T as NonNullable<T[K]> extends never ? never : T[K] extends object ? (IsEmptyObject<T[K]> extends true ? never : K) : K]: T[K];
+	[
+		K in keyof T as NonNullable<T[K]> extends never
+			? never
+			: T[K] extends object
+				? IsEmptyObject<T[K]> extends true
+					? never
+					: K
+				: K
+	]: T[K];
 };

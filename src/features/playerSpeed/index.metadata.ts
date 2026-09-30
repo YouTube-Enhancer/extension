@@ -5,7 +5,11 @@ import { field } from "@/src/features/_registry/defineConfig";
 import { youtubePlayerMaxSpeed, youtubePlayerMinSpeed, youtubePlayerSpeedStep } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	config: { channelSpeeds: field(z.string(), ""), enabled: field(z.boolean(), false), speed: field(z.number(), 1) },
+	config: {
+		channelSpeeds: field(z.string(), ""),
+		enabled: field(z.boolean(), false),
+		speed: field(z.number(), 1)
+	},
 	dependencies: { includePages: ["watch", "shorts"] },
 	id: "playerSpeed",
 	loadPhase: 0,
@@ -35,10 +39,12 @@ export const metadata = createFeatureMetadata({
 				},
 				{
 					addLabel: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.add),
-					channelIdLabel: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.channelId),
+					channelIdLabel: (t) =>
+						t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.channelId),
 					component: "key-value-list",
 					disabledWhen: [{ equals: false, setting: "playerSpeed.enabled" }],
-					getChannelIdFromLinkLabel: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.getChannelIdFromLink),
+					getChannelIdFromLinkLabel: (t) =>
+						t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.getChannelIdFromLink),
 					id: "playerSpeed.channelSpeeds",
 					label: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.label),
 					max: youtubePlayerMaxSpeed,
@@ -47,9 +53,12 @@ export const metadata = createFeatureMetadata({
 						type: "singular",
 						value: (tr) => tr.settings.sections.playerSpeed.enable.label
 					},
-					pasteLinkPlaceholder: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.pasteLinkPlaceholder),
-					removeLabel: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.remove),
-					speedLabel: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.speed),
+					pasteLinkPlaceholder: (t) =>
+						t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.pasteLinkPlaceholder),
+					removeLabel: (t) =>
+						t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.remove),
+					speedLabel: (t) =>
+						t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.speed),
 					step: youtubePlayerSpeedStep,
 					title: (t) => t((tr) => tr.settings.sections.playerSpeed.settings.channelSpeeds.title)
 				}

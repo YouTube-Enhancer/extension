@@ -1,4 +1,9 @@
-import type { AllButtonNames, ButtonPlacement, FullscreenPlacement, SingleButtonFeatureNames } from "@/src/types";
+import type {
+	AllButtonNames,
+	ButtonPlacement,
+	FullscreenPlacement,
+	SingleButtonFeatureNames
+} from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
@@ -28,7 +33,13 @@ import {
 	startPlacementTracking,
 	stopPlacementTracking
 } from "./containerTracking";
-import { addFeatureItemToMenu, enableFeatureMenuButton, getFeatureIds, getFeatureMenuItem, removeFeatureItemFromMenu } from "./featureMenu";
+import {
+	addFeatureItemToMenu,
+	enableFeatureMenuButton,
+	getFeatureIds,
+	getFeatureMenuItem,
+	removeFeatureItemFromMenu
+} from "./featureMenu";
 import { isFullscreen } from "./placementTransition";
 import "./index.css";
 
@@ -55,7 +66,12 @@ export type { ListenerType } from "./types";
 
 // ─── Exported functions ───────────────────────────────────────────
 
-export async function addButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Label extends string, Toggle extends boolean>(
+export async function addButton<
+	Name extends AllButtonNames,
+	Placement extends ButtonPlacement,
+	Label extends string,
+	Toggle extends boolean
+>(
 	buttonName: Name,
 	placement: Placement,
 	label: Label,
@@ -94,26 +110,47 @@ export async function addButton<Name extends AllButtonNames, Placement extends B
 		case "feature_menu": {
 			const featureMenuItem = getFeatureMenuItem(buttonName);
 			if (featureMenuItem) removeFeatureItemFromMenu(buttonName);
-			if (icon instanceof SVGSVGElement) await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle, initialChecked);
+			if (icon instanceof SVGSVGElement)
+				await addFeatureItemToMenu(buttonName, label, icon, listener, isToggle, initialChecked);
 			break;
 		}
 	}
-	trackButton(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, labelResolver);
+	trackButton(
+		buttonName,
+		placement,
+		fullscreenPlacement,
+		label,
+		icon,
+		listener,
+		isToggle,
+		initialChecked,
+		labelResolver
+	);
 }
 
-export async function checkIfFeatureButtonExists(buttonName: AllButtonNames, placement: ButtonPlacement): Promise<boolean> {
+export async function checkIfFeatureButtonExists(
+	buttonName: AllButtonNames,
+	placement: ButtonPlacement
+): Promise<boolean> {
 	const root = await getPlacementRoot(placement);
 	if (!root) return false;
-	if (placement === "feature_menu") return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
+	if (placement === "feature_menu")
+		return root.querySelector(`#${getFeatureIds(buttonName).featureMenuItemId}`) !== null;
 	return root.querySelectorAll(`#${getFeatureButtonIdForButton(buttonName)}`).length > 0;
 }
 
 /** Returns the button or menu item element. Prefer name-based APIs (e.g. `updateFeatureButtonIconByName`) when possible. */
 export function getFeatureButton(buttonName: AllButtonNames) {
-	return getFeatureMenuItem(buttonName) ?? document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	return (
+		getFeatureMenuItem(buttonName) ??
+		document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`)
+	);
 }
 
-export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(icon: T, overrideColor?: boolean) {
+export function modifyIconForLightTheme<T extends SVGSVGElement | ToggleIcon>(
+	icon: T,
+	overrideColor?: boolean
+) {
 	const color = overrideColor ? "#FFFFFF" : undefined;
 	const target: SVGSVGElement | ToggleIcon = icon;
 	if (isToggleIcon(target)) {
@@ -131,7 +168,9 @@ export function refreshAllLabels() {
 		const newLabel = info.labelResolver();
 		if (newLabel === info.label) continue;
 		info.label = newLabel;
-		const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+		const button = document.querySelector<HTMLButtonElement>(
+			`#${getFeatureButtonIdForButton(buttonName)}`
+		);
 		if (button) {
 			button.dataset.title = newLabel;
 			const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
@@ -147,7 +186,10 @@ export function refreshAllLabels() {
 }
 
 export function removeButton(buttonName: AllButtonNames, placement?: ButtonPlacement): void;
-export function removeButton<Name extends AllButtonNames>(buttonName: Name, placement?: ButtonPlacement) {
+export function removeButton<Name extends AllButtonNames>(
+	buttonName: Name,
+	placement?: ButtonPlacement
+) {
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) return;
 	untrackButtonState(buttonName);
@@ -158,7 +200,8 @@ export function removeButton<Name extends AllButtonNames>(buttonName: Name, plac
 		const featureConfig = featureConfigManager.getLast(featureName);
 		if (typeof featureConfig === "object" && featureConfig !== null) {
 			if ("buttons" in featureConfig) {
-				placement = featureConfig.buttons?.[buttonName as keyof typeof featureConfig.buttons]?.placement;
+				placement =
+					featureConfig.buttons?.[buttonName as keyof typeof featureConfig.buttons]?.placement;
 			} else if ("button" in featureConfig) {
 				placement = featureConfig.button?.placement;
 			}
@@ -168,7 +211,9 @@ export function removeButton<Name extends AllButtonNames>(buttonName: Name, plac
 		case "below_player":
 		case "player_controls_left":
 		case "player_controls_right": {
-			const buttons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+			const buttons = document.querySelectorAll<HTMLButtonElement>(
+				`#${getFeatureButtonIdForButton(buttonName)}`
+			);
 			if (buttons.length === 0) return;
 			buttons.forEach((button) => button.remove());
 			removeTooltip(`yte-feature-${featureName as SingleButtonFeatureNames}-tooltip`);
@@ -192,7 +237,9 @@ export function updateButtonsIconColor() {
 }
 
 export function updateFeatureButtonChecked(buttonName: AllButtonNames, checked: boolean) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	const button = document.querySelector<HTMLButtonElement>(
+		`#${getFeatureButtonIdForButton(buttonName)}`
+	);
 	if (button) setChecked(button, checked);
 	const menuItem = getFeatureMenuItem(buttonName);
 	if (menuItem) {
@@ -208,12 +255,16 @@ export function updateFeatureButtonIcon(button: HTMLButtonElement, icon: SVGElem
 }
 
 export function updateFeatureButtonIconByName(buttonName: AllButtonNames, icon: SVGElement) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	const button = document.querySelector<HTMLButtonElement>(
+		`#${getFeatureButtonIdForButton(buttonName)}`
+	);
 	if (button) button.replaceChildren(icon);
 }
 
 export function updateFeatureButtonTitle(buttonName: AllButtonNames, title: string) {
-	const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	const button = document.querySelector<HTMLButtonElement>(
+		`#${getFeatureButtonIdForButton(buttonName)}`
+	);
 	if (button) {
 		button.dataset.title = title;
 		updateTrackedButtonLabel(buttonName, title);
@@ -232,14 +283,20 @@ export function updateFeatureMenuItemLabel(buttonName: AllButtonNames, label: st
 
 // ─── Private helpers ──────────────────────────────────────────────
 
-function appendIcon(button: HTMLButtonElement, icon: SVGSVGElement | ToggleIcon, checked?: boolean) {
+function appendIcon(
+	button: HTMLButtonElement,
+	icon: SVGSVGElement | ToggleIcon,
+	checked?: boolean
+) {
 	button.replaceChildren(isToggleIcon(icon) ? (checked ? icon.on : icon.off) : icon);
 }
 
 function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF") {
 	const color = forceColor ?? getButtonColor();
-	if (svg.hasAttribute("fill") && svg.getAttribute("fill") !== "none") svg.setAttribute("fill", color);
-	if (svg.hasAttribute("stroke") && svg.getAttribute("stroke") !== "none") svg.setAttribute("stroke", color);
+	if (svg.hasAttribute("fill") && svg.getAttribute("fill") !== "none")
+		svg.setAttribute("fill", color);
+	if (svg.hasAttribute("stroke") && svg.getAttribute("stroke") !== "none")
+		svg.setAttribute("stroke", color);
 	const elements = svg.querySelectorAll("[fill]:not([fill='none']), [stroke]:not([stroke='none'])");
 	for (const el of elements) {
 		if (el.hasAttribute("fill")) el.setAttribute("fill", color);
@@ -247,7 +304,11 @@ function applyThemeToSvg(svg: SVGSVGElement, forceColor?: "#000000" | "#FFFFFF")
 	}
 }
 
-function buttonClickListener<Placement extends ButtonPlacement, Name extends AllButtonNames, Toggle extends boolean>(
+function buttonClickListener<
+	Placement extends ButtonPlacement,
+	Name extends AllButtonNames,
+	Toggle extends boolean
+>(
 	buttonName: Name,
 	button: HTMLButtonElement,
 	icon: GetIconType<Name, Placement>,
@@ -259,7 +320,10 @@ function buttonClickListener<Placement extends ButtonPlacement, Name extends All
 	setChecked(button, newState);
 	updateTrackedButtonChecked(buttonName, newState);
 	const currentIcon: SVGSVGElement | ToggleIcon = icon;
-	updateFeatureButtonIcon(button, isToggleIcon(currentIcon) ? (newState ? currentIcon.on : currentIcon.off) : currentIcon);
+	updateFeatureButtonIcon(
+		button,
+		isToggleIcon(currentIcon) ? (newState ? currentIcon.on : currentIcon.off) : currentIcon
+	);
 	listener(newState);
 }
 
@@ -275,11 +339,16 @@ async function handleFullscreenChange() {
 	const inFullscreen = isFullscreen();
 	const repositionPromises: Promise<void>[] = [];
 	for (const [buttonName, info] of trackedButtons) {
-		const effectivePlacement = inFullscreen && info.fullscreenPlacement !== "same" ? info.fullscreenPlacement : info.placement;
+		const effectivePlacement =
+			inFullscreen && info.fullscreenPlacement !== "same"
+				? info.fullscreenPlacement
+				: info.placement;
 		if (effectivePlacement === info.currentEffectivePlacement) continue;
 
 		if (info.currentEffectivePlacement !== "feature_menu") {
-			const oldButton = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+			const oldButton = document.querySelector<HTMLButtonElement>(
+				`#${getFeatureButtonIdForButton(buttonName)}`
+			);
 			if (oldButton) {
 				oldButton.remove();
 				const tooltip = document.getElementById(`yte-feature-${buttonName}-tooltip`);
@@ -291,12 +360,29 @@ async function handleFullscreenChange() {
 
 		if (effectivePlacement !== "feature_menu") {
 			const placementIcon = getFeatureIcon(buttonName, effectivePlacement);
-			const button = makeFeatureButton(buttonName, effectivePlacement, info.label, placementIcon, info.listener, info.isToggle, info.checked);
+			const button = makeFeatureButton(
+				buttonName,
+				effectivePlacement,
+				info.label,
+				placementIcon,
+				info.listener,
+				info.isToggle,
+				info.checked
+			);
 			repositionPromises.push(placeButton(button, effectivePlacement));
 		} else {
 			const menuIcon = getFeatureIcon(buttonName, "feature_menu");
 			if (menuIcon instanceof SVGSVGElement) {
-				repositionPromises.push(addFeatureItemToMenu(buttonName, info.label, menuIcon, info.listener, info.isToggle, info.checked));
+				repositionPromises.push(
+					addFeatureItemToMenu(
+						buttonName,
+						info.label,
+						menuIcon,
+						info.listener,
+						info.isToggle,
+						info.checked
+					)
+				);
 			}
 		}
 
@@ -305,7 +391,11 @@ async function handleFullscreenChange() {
 	await Promise.all(repositionPromises);
 }
 
-function makeFeatureButton<Name extends AllButtonNames, Placement extends ButtonPlacement, Toggle extends boolean>(
+function makeFeatureButton<
+	Name extends AllButtonNames,
+	Placement extends ButtonPlacement,
+	Toggle extends boolean
+>(
 	buttonName: Name,
 	placement: Placement,
 	label: string,
@@ -314,10 +404,13 @@ function makeFeatureButton<Name extends AllButtonNames, Placement extends Button
 	isToggle: boolean,
 	initialChecked = false
 ) {
-	if (placement === "feature_menu") throw new Error("Cannot make a feature button for the feature menu");
+	if (placement === "feature_menu")
+		throw new Error("Cannot make a feature button for the feature menu");
 	const featureName = metadataRegistry.getButtonFeature(buttonName);
 	if (!featureName) throw new Error(`No feature found for button "${buttonName}"`);
-	const existingButtons = document.querySelectorAll<HTMLButtonElement>(`#${getFeatureButtonIdForButton(buttonName)}`);
+	const existingButtons = document.querySelectorAll<HTMLButtonElement>(
+		`#${getFeatureButtonIdForButton(buttonName)}`
+	);
 	if (existingButtons.length > 0) {
 		existingButtons.forEach((btn) => btn.remove());
 	}
@@ -378,7 +471,18 @@ function trackButton(
 	labelResolver?: () => string
 ) {
 	const effectivePlacement = getEffectivePlacement(placement, fullscreenPlacement);
-	trackButtonState(buttonName, placement, fullscreenPlacement, label, icon, listener, isToggle, initialChecked, effectivePlacement, labelResolver);
+	trackButtonState(
+		buttonName,
+		placement,
+		fullscreenPlacement,
+		label,
+		icon,
+		listener,
+		isToggle,
+		initialChecked,
+		effectivePlacement,
+		labelResolver
+	);
 	startPlacementTracking(() => {
 		void handleFullscreenChange();
 	});

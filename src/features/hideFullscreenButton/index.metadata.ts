@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideFullscreenButton.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideFullscreenButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideFullscreenButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideFullscreenButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideFullscreenButton.enable.title)
 		}
 	]
 });

@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "blockNumberKeySeeking.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.blockNumberKeySeeking.enable.title)
 		}
 	]
 });

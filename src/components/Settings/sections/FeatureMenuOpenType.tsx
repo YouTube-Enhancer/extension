@@ -13,23 +13,42 @@ export default function FeatureMenuOpenTypeSection() {
 	} = useSettings();
 	const featureMenuAvailable = hasAnyFeatureMenuButton(settings);
 	return (
-		<SettingSection title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}>
+		<SettingSection
+			title={t((translations) => translations.pages.options.extras.featureMenu.openType.title)}
+		>
 			<SettingTitle />
 			<Setting
 				disabled={!featureMenuAvailable}
 				id="featureMenu.openType"
-				label={t((translations) => translations.pages.options.extras.featureMenu.openType.select.label)}
+				label={t(
+					(translations) => translations.pages.options.extras.featureMenu.openType.select.label
+				)}
 				onChange={setValueOption("featureMenu.openType")}
 				options={[
-					{ label: t((translations) => translations.pages.options.extras.featureMenu.openType.select.options.hover), value: "hover" },
-					{ label: t((translations) => translations.pages.options.extras.featureMenu.openType.select.options.click), value: "click" }
+					{
+						label: t(
+							(translations) =>
+								translations.pages.options.extras.featureMenu.openType.select.options.hover
+						),
+						value: "hover"
+					},
+					{
+						label: t(
+							(translations) =>
+								translations.pages.options.extras.featureMenu.openType.select.options.click
+						),
+						value: "click"
+					}
 				]}
 				parentSetting={{
 					type: "specificOption",
-					value: (translations) => translations.pages.options.extras.optionDisabled.specificOption.featureMenu
+					value: (translations) =>
+						translations.pages.options.extras.optionDisabled.specificOption.featureMenu
 				}}
 				selectedOption={getSelectedOption("featureMenu.openType")}
-				title={t((translations) => translations.pages.options.extras.featureMenu.openType.select.title)}
+				title={t(
+					(translations) => translations.pages.options.extras.featureMenu.openType.select.title
+				)}
 				type="select"
 			/>
 		</SettingSection>

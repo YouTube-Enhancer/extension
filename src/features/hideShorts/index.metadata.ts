@@ -12,7 +12,18 @@ export const metadata = createFeatureMetadata({
 		subscriptions: { enabled: field(z.boolean(), false) },
 		videos: { enabled: field(z.boolean(), false) }
 	},
-	dependencies: { includePages: ["watch", "home", "search", "channel_home", "channel_videos", "channel_posts", "channel_streams", "subscriptions"] },
+	dependencies: {
+		includePages: [
+			"watch",
+			"home",
+			"search",
+			"channel_home",
+			"channel_videos",
+			"channel_posts",
+			"channel_streams",
+			"subscriptions"
+		]
+	},
 	id: "hideShorts",
 	loadPhase: 2,
 	sectionTitle: (t) => t((tr) => tr.settings.sections.hideShorts.title),

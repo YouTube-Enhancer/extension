@@ -5,4 +5,6 @@ export type SettingsFilterContextProps = {
 	setFilter: Dispatch<SetStateAction<string>>;
 };
 
-export const SettingsFilterContext = createContext<SettingsFilterContextProps | undefined>(undefined);
+export const SettingsFilterContext = createContext<SettingsFilterContextProps | undefined>(
+	undefined
+);

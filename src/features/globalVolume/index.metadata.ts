@@ -14,8 +14,11 @@ export const metadata = createFeatureMetadata({
 			children: [
 				{
 					component: "checkbox",
-					disabledReason: (t) => t((tr) => tr.pages.options.extras.optionDisabled.specificOption.globalVolume),
-					disabledWhen: [{ equals: true, feature: "rememberVolume", setting: "rememberVolume.enabled" }],
+					disabledReason: (t) =>
+						t((tr) => tr.pages.options.extras.optionDisabled.specificOption.globalVolume),
+					disabledWhen: [
+						{ equals: true, feature: "rememberVolume", setting: "rememberVolume.enabled" }
+					],
 					id: "globalVolume.enabled",
 					label: (t) => t((tr) => tr.settings.sections.globalVolume.enable.label),
 					title: (t) => t((tr) => tr.settings.sections.globalVolume.enable.title)

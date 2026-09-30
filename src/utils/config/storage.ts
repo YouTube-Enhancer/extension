@@ -4,7 +4,11 @@ import type { configuration } from "@/src/types";
 
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
-import { isLegacyConfiguration, migrateConfiguration, parseStoredValue } from "@/src/utils/config/utils";
+import {
+	isLegacyConfiguration,
+	migrateConfiguration,
+	parseStoredValue
+} from "@/src/utils/config/utils";
 /**
  * Sets the modified settings in the browser storage.
  * @param {Partial<configuration>} settings The modified settings to be stored.
@@ -43,11 +47,16 @@ export async function updateStoredSettings() {
 			}
 		}
 
-		const playerQuality = (settings as Record<string, unknown>).playerQuality as Record<string, unknown> | undefined;
+		const playerQuality = (settings as Record<string, unknown>).playerQuality as
+			| Record<string, unknown>
+			| undefined;
 		if (playerQuality?.quality === "auto") {
 			playerQuality.quality = "hd1080";
 		}
-		const validKeys = new Set([...Object.keys(defaultConfiguration), ...metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const)]);
+		const validKeys = new Set([
+			...Object.keys(defaultConfiguration),
+			...metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const)
+		]);
 		const removedKeys = rawKeys.filter((key) => !validKeys.has(key));
 
 		if (removedKeys.length > 0) {

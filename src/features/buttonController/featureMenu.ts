@@ -42,13 +42,19 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 	if (!featureMenu) return;
 	const panel = getMenuPanel(featureMenu);
 	if (!panel) return;
-	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } = getFeatureIds(buttonName);
+	const { featureMenuItemIconId, featureMenuItemId, featureMenuItemLabelId } =
+		getFeatureIds(buttonName);
 	let menuItem = panel.querySelector<HTMLDivElement>(`#${featureMenuItemId}`);
 	if (menuItem) {
 		const labelEl = menuItem.querySelector<HTMLDivElement>(`#${featureMenuItemLabelId}`);
 		if (labelEl) labelEl.textContent = label;
 		eventManager.removeEventListener(menuItem, "click", featureName);
-		eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem!, listener, isToggle), featureName);
+		eventManager.addEventListener(
+			menuItem,
+			"click",
+			() => featureMenuClickListener(buttonName, menuItem!, listener, isToggle),
+			featureName
+		);
 		return;
 	}
 	menuItem = document.createElement("div");
@@ -75,7 +81,12 @@ export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle e
 		menuItemContent.appendChild(menuItemToggle);
 		setMenuItemChecked(menuItem, initialChecked);
 	}
-	eventManager.addEventListener(menuItem, "click", () => featureMenuClickListener(buttonName, menuItem, listener, isToggle), featureName);
+	eventManager.addEventListener(
+		menuItem,
+		"click",
+		() => featureMenuClickListener(buttonName, menuItem, listener, isToggle),
+		featureName
+	);
 	panel.appendChild(menuItem);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
 	if (featureMenuButton) {
@@ -111,7 +122,9 @@ export async function enableFeatureMenuButton() {
 		elementType: "button",
 		styles: { display: "none", visibility: "hidden" }
 	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.featureMenu.button.label);
+	featureMenuButton.dataset.title = window.i18nextInstance.t(
+		(translations) => translations.pages.content.features.featureMenu.button.label
+	);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
 
 	const container = await getOrCreateRightControlsContainer();
@@ -215,14 +228,17 @@ export function removeFeatureItemFromMenu(buttonName: AllButtonNames) {
 
 // ─── DOM queries ──────────────────────────────────────────────────
 
-export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuOpenType): () => void {
+export function setupFeatureMenuEventListeners(
+	featureMenuOpenType: FeatureMenuOpenType
+): () => void {
 	eventManager.removeEventListeners("featureMenu");
 	const settingsButton = document.querySelector<HTMLButtonElement>("button.ytp-settings-button");
 	const playerContainer = document.querySelector<HTMLDivElement>("#movie_player");
 	const bottomControls = document.querySelector<HTMLDivElement>("div.ytp-chrome-bottom");
 	const featureMenu = document.querySelector<HTMLDivElement>(menuId);
 	const featureMenuButton = document.querySelector<HTMLButtonElement>(menuButtonId);
-	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton) return () => {};
+	if (!settingsButton || !playerContainer || !bottomControls || !featureMenu || !featureMenuButton)
+		return () => {};
 	const { listener: showFeatureMenuTooltip, remove: removeFeatureMenuTooltip } = createTooltip({
 		element: featureMenuButton,
 		featureName: "featureMenu",
@@ -258,10 +274,30 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 
 	switch (featureMenuOpenType) {
 		case "click":
-			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "click", () => (menuVisible ? hideFeatureMenu() : showFeatureMenu()), "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "mouseleave", removeFeatureMenuTooltip, "featureMenu");
-			eventManager.addEventListener(featureMenuButton, "mouseover", showFeatureMenuTooltip, "featureMenu");
+			eventManager.addEventListener(
+				document.documentElement,
+				"click",
+				clickOutsideListener,
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				featureMenuButton,
+				"click",
+				() => (menuVisible ? hideFeatureMenu() : showFeatureMenu()),
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				featureMenuButton,
+				"mouseleave",
+				removeFeatureMenuTooltip,
+				"featureMenu"
+			);
+			eventManager.addEventListener(
+				featureMenuButton,
+				"mouseover",
+				showFeatureMenuTooltip,
+				"featureMenu"
+			);
 			break;
 		case "hover": {
 			let hideTimer: Nullable<number> = null;
@@ -289,7 +325,12 @@ export function setupFeatureMenuEventListeners(featureMenuOpenType: FeatureMenuO
 			eventManager.addEventListener(featureMenu, "pointerenter", cancelHide, "featureMenu");
 			eventManager.addEventListener(featureMenu, "pointerleave", scheduleHide, "featureMenu");
 			eventManager.addEventListener(playerContainer, "pointerleave", scheduleHide, "featureMenu");
-			eventManager.addEventListener(document.documentElement, "click", clickOutsideListener, "featureMenu");
+			eventManager.addEventListener(
+				document.documentElement,
+				"click",
+				clickOutsideListener,
+				"featureMenu"
+			);
 			break;
 		}
 	}
@@ -325,7 +366,9 @@ export function updateFeatureMenuTitle(title: string) {
 // ─── Menu item click handler ──────────────────────────────────────
 
 function adjustAdsContainerStyles(featureMenuOpen: boolean) {
-	const adsSpan = document.querySelector<HTMLSpanElement>("div.video-ads.ytp-ad-module span.ytp-ad-preview-container");
+	const adsSpan = document.querySelector<HTMLSpanElement>(
+		"div.video-ads.ytp-ad-module span.ytp-ad-preview-container"
+	);
 	if (!adsSpan) return;
 	adsSpan.style.opacity = featureMenuOpen ? "0.4" : "";
 	adsSpan.style.zIndex = featureMenuOpen ? "36" : "";

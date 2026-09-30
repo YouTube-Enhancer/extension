@@ -5,7 +5,14 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 const coreConfiguration = {
 	featureMenu: { openType: "click" },
 	language: "en-US",
-	onScreenDisplay: { color: "white", hideTime: 750, opacity: 75, padding: 5, position: "center", type: "text" },
+	onScreenDisplay: {
+		color: "white",
+		hideTime: 750,
+		opacity: 75,
+		padding: 5,
+		position: "center",
+		type: "text"
+	},
 	openSettingsOnMajorOrMinorVersionChange: true,
 	youtubeDataApiV3Key: ""
 } as const satisfies Pick<configuration, CoreFeatureKeys | NonFeatureKeys>;

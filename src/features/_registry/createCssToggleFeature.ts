@@ -2,7 +2,10 @@ import type { FeatureBase, FeatureKeys, FeatureMetadata } from "@/src/features/_
 
 import { modifyElementClassList } from "@/src/utils/dom/classList";
 
-export function createCssToggleFeature<K extends FeatureKeys>(metadata: FeatureMetadata<K>, options?: { className?: string }): FeatureBase<K> {
+export function createCssToggleFeature<K extends FeatureKeys>(
+	metadata: FeatureMetadata<K>,
+	options?: { className?: string }
+): FeatureBase<K> {
 	const className = options?.className ?? `yte-${camelToKebab(metadata.id)}`;
 	return {
 		...metadata,

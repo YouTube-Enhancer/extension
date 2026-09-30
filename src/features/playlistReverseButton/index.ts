@@ -7,7 +7,12 @@ import { isWatchPage } from "@/src/utils/url";
 import { refreshTooltip, removeButton } from "./button";
 import { metadata } from "./index.metadata";
 import { applyPlaylistPageReversal, matchReversalToState } from "./reversal";
-import { disconnectResizeObserver, setupOnPlaylistPage, setupOnWatchPage, stopMiniPlayerCheck } from "./setup";
+import {
+	disconnectResizeObserver,
+	setupOnPlaylistPage,
+	setupOnWatchPage,
+	stopMiniPlayerCheck
+} from "./setup";
 import { FEATURE_NAME, isCurrentlyReversed, nextSetupGeneration } from "./utils";
 
 function cleanup() {

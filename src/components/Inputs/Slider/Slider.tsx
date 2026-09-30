@@ -12,7 +12,15 @@ export type SliderProps = {
 	step: number;
 };
 
-const Slider: React.FC<SliderProps> = ({ disabled, disabledReason, initialValue, max, min, onChange, step }) => {
+const Slider: React.FC<SliderProps> = ({
+	disabled,
+	disabledReason,
+	initialValue,
+	max,
+	min,
+	onChange,
+	step
+}) => {
 	const [value, setValue] = useState(initialValue ?? 1);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,11 +28,16 @@ const Slider: React.FC<SliderProps> = ({ disabled, disabledReason, initialValue,
 		setValue(newValue);
 		onChange(event);
 	};
-	const disabledSliderClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
+	const disabledSliderClasses = {
+		"dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled
+	};
 	return (
 		<div className="flex flex-col">
 			<input
-				className={cn("slider-thumb h-3 w-full appearance-none rounded bg-gray-300 outline-none", disabledSliderClasses)}
+				className={cn(
+					"slider-thumb h-3 w-full appearance-none rounded bg-gray-300 outline-none",
+					disabledSliderClasses
+				)}
 				max={max}
 				min={min}
 				onChange={handleChange}
@@ -33,7 +46,9 @@ const Slider: React.FC<SliderProps> = ({ disabled, disabledReason, initialValue,
 				value={value}
 			/>
 			{disabled && disabledReason && (
-				<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">{disabledReason}</span>
+				<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
+					{disabledReason}
+				</span>
 			)}
 		</div>
 	);

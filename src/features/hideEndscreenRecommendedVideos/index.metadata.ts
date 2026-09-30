@@ -12,8 +12,16 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideEndscreenRecommendedVideos.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndscreenRecommendedVideos.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndscreenRecommendedVideos.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hideEndscreenRecommendedVideos.enable.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hideEndscreenRecommendedVideos.enable.title
+				)
 		}
 	]
 });

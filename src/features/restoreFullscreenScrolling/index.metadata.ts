@@ -12,8 +12,16 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "restoreFullscreenScrolling.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.restoreFullscreenScrolling.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.restoreFullscreenScrolling.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.restoreFullscreenScrolling.enable.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.restoreFullscreenScrolling.enable.title
+				)
 		}
 	]
 });

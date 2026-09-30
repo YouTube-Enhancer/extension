@@ -63,7 +63,11 @@ export async function buildScreenshotFilenameContext(
 		channelName,
 		chapterName: extractChapterName(playerResponseData, videoElement.currentTime),
 		...staticContext,
-		videoTimestamp: formatScreenshotTimestamp(videoElement.currentTime, timestampFormat, timestampSeparator)
+		videoTimestamp: formatScreenshotTimestamp(
+			videoElement.currentTime,
+			timestampFormat,
+			timestampSeparator
+		)
 	};
 }
 
@@ -75,7 +79,10 @@ function extractChannelId(data: ScreenshotWindow["ytInitialPlayerResponse"] | un
 	return hrefChannelId ?? "";
 }
 
-function extractChapterName(data: ScreenshotWindow["ytInitialPlayerResponse"] | undefined, currentTimeSeconds: number): string {
+function extractChapterName(
+	data: ScreenshotWindow["ytInitialPlayerResponse"] | undefined,
+	currentTimeSeconds: number
+): string {
 	// Prefer the chapter title the player actually shows (honors SponsorBlock overrides)
 	const chapterName = extractChapterNameFromDom();
 	if (chapterName) return chapterName;
@@ -83,7 +90,9 @@ function extractChapterName(data: ScreenshotWindow["ytInitialPlayerResponse"] | 
 }
 
 function extractChapterNameFromDom(): string {
-	const elements = Array.from(document.querySelectorAll<HTMLElement>(".ytp-chapter-title .ytp-chapter-title-content"));
+	const elements = Array.from(
+		document.querySelectorAll<HTMLElement>(".ytp-chapter-title .ytp-chapter-title-content")
+	);
 	for (const element of elements) {
 		// Skip the hidden aria-live duplicate that YouTube keeps in the DOM
 		if (element.offsetParent === null || getComputedStyle(element).display === "none") continue;
@@ -93,7 +102,10 @@ function extractChapterNameFromDom(): string {
 	return "";
 }
 
-function extractChapterNameFromPlayerResponse(data: ScreenshotWindow["ytInitialPlayerResponse"] | undefined, currentTimeSeconds: number): string {
+function extractChapterNameFromPlayerResponse(
+	data: ScreenshotWindow["ytInitialPlayerResponse"] | undefined,
+	currentTimeSeconds: number
+): string {
 	const chapters =
 		data?.playerOverlays?.playerOverlayRenderer?.decoratedPlayerBarRenderer?.playerBarRenderer?.multiMarkersPlayerBarRenderer?.markerMap
 			?.flatMap((marker) => marker?.value?.chaptersRenderer?.chapters ?? [])
@@ -101,7 +113,9 @@ function extractChapterNameFromPlayerResponse(data: ScreenshotWindow["ytInitialP
 			.filter((chapter): chapter is NonNullable<typeof chapter> => Boolean(chapter));
 	if (!chapters || chapters.length === 0) return "";
 	const currentMillis = currentTimeSeconds * 1000;
-	const currentChapter = [...chapters].reverse().find((chapter) => (chapter.timeRangeStartMillis ?? Number.POSITIVE_INFINITY) <= currentMillis);
+	const currentChapter = [...chapters]
+		.reverse()
+		.find((chapter) => (chapter.timeRangeStartMillis ?? Number.POSITIVE_INFINITY) <= currentMillis);
 	if (!currentChapter) return "";
 	return currentChapter.title?.runs?.map((run) => run?.text ?? "").join("") ?? "";
 }

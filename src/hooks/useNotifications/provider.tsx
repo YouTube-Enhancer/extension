@@ -25,7 +25,11 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 	}, []);
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const notificationIsEqual = (a: Notification, b: Notification) => {
-		return a.type === b.type && i18nInstance?.t(a.message) === i18nInstance?.t(b.message) && a.action === b.action;
+		return (
+			a.type === b.type &&
+			i18nInstance?.t(a.message) === i18nInstance?.t(b.message) &&
+			a.action === b.action
+		);
 	};
 	const createNotification: CreateNotification = (type, message, action) => {
 		const removeNotificationAfterMs = action && action === "reset_settings" ? 15_000 : 2_500;
@@ -39,7 +43,10 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 		} satisfies Notification;
 		return notification;
 	};
-	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (notification, removeAfterMs) => {
+	const scheduleNotificationRemoval: ScheduleNotificationRemoval = (
+		notification,
+		removeAfterMs
+	) => {
 		if (removeAfterMs) {
 			setTimeout(() => {
 				removeNotification(notification);
@@ -60,7 +67,9 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 	 */
 	const isSameNotification = (a: Notification, b: Notification) => a.id === b.id;
 	const removeNotification: RemoveNotification = (notification) => {
-		setNotifications((notifications) => notifications.filter((candidate) => !isSameNotification(candidate, notification)));
+		setNotifications((notifications) =>
+			notifications.filter((candidate) => !isSameNotification(candidate, notification))
+		);
 	};
 	useEffect(() => {
 		let animationFrameId: Nullable<number> = null;
@@ -70,7 +79,10 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 				if (prevNotifications.length === 0) return prevNotifications;
 				return prevNotifications.reduce((acc: Notification[], notification) => {
 					const elapsed = now - (notification.timestamp ?? now);
-					const progress = Math.max(100 - (elapsed / (notification.removeAfterMs ?? 3000)) * 100, 0);
+					const progress = Math.max(
+						100 - (elapsed / (notification.removeAfterMs ?? 3000)) * 100,
+						0
+					);
 					if (progress > 0) {
 						acc.push({ ...notification, progress });
 					}
@@ -84,6 +96,12 @@ export const NotificationsProvider = ({ children }: NotificationProviderProps) =
 			if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
 		};
 	}, []);
-	const contextValue = { addNotification, notifications, removeNotification } satisfies NotificationsContextProps;
-	return <NotificationsContext.Provider value={contextValue}>{children}</NotificationsContext.Provider>;
+	const contextValue = {
+		addNotification,
+		notifications,
+		removeNotification
+	} satisfies NotificationsContextProps;
+	return (
+		<NotificationsContext.Provider value={contextValue}>{children}</NotificationsContext.Provider>
+	);
 };

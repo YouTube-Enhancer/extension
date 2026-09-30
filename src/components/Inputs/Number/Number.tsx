@@ -77,7 +77,10 @@ const NumberInput: React.FC<NumberInputProps> = ({
 	const buttonClasses =
 		"flex h-1/2 w-full cursor-default justify-center p-1 items-center text-black hover:bg-[rgba(24,26,27,0.5)] dark:bg-[#23272a] dark:text-white transition-colors duration-100 ease-linear" satisfies ClassValue;
 	return (
-		<div className={cn("relative flex flex-row items-baseline justify-between gap-4", className)} ref={inputDiv}>
+		<div
+			className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}
+			ref={inputDiv}
+		>
 			<label className="mb-1" htmlFor={id}>
 				{label}
 			</label>

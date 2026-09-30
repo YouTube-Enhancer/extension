@@ -17,7 +17,9 @@ import ConfigInput from "./ConfigInput";
 import { useConfigSettings } from "./useConfigSettings";
 import { getSettingConfigs } from "./utils";
 
-type MultiButtonConfig = { buttons?: Record<string, { fullscreenPlacement?: string; placement?: string }> };
+type MultiButtonConfig = {
+	buttons?: Record<string, { fullscreenPlacement?: string; placement?: string }>;
+};
 
 export type { ConfigInputProps, ConfigSlideOverProps, SettingItem } from "./types";
 
@@ -39,7 +41,10 @@ export default function ConfigSlideOver<F extends FeatureKeys>({
 			return featureConfigUpdateQuery(id, path, value).queryFn();
 		},
 		onError: (_error: unknown) => {
-			console.error("[ConfigSlideOver] Mutation failed to save config:", { error: _error, featureId });
+			console.error("[ConfigSlideOver] Mutation failed to save config:", {
+				error: _error,
+				featureId
+			});
 			addNotification("error", () => "Failed to save config");
 		},
 		onSuccess: () => {
@@ -66,12 +71,17 @@ export default function ConfigSlideOver<F extends FeatureKeys>({
 			<div className="relative w-full max-w-md overflow-y-auto bg-[#1e1e1e] p-4 shadow-xl">
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-lg font-medium text-[#d4d4d4]">{featureId} Config</h2>
-					<button className="rounded p-1 text-[#6b6b6b] hover:bg-[#3c3c3c] hover:text-[#d4d4d4]" onClick={onClose}>
+					<button
+						className="rounded p-1 text-[#6b6b6b] hover:bg-[#3c3c3c] hover:text-[#d4d4d4]"
+						onClick={onClose}
+					>
 						×
 					</button>
 				</div>
 
-				{showSettings.length === 0 && !hasButtonPlacement(currentConfig) && <DevToolsEmpty message="No configurable options" />}
+				{showSettings.length === 0 && !hasButtonPlacement(currentConfig) && (
+					<DevToolsEmpty message="No configurable options" />
+				)}
 
 				{showSettings.length > 0 && (
 					<div className="space-y-4">
@@ -91,7 +101,11 @@ export default function ConfigSlideOver<F extends FeatureKeys>({
 				{hasButtonPlacement(currentConfig) && (
 					<div className="mt-6 border-t border-[#3c3c3c] pt-4">
 						<h3 className="mb-3 text-sm font-medium text-[#d4d4d4]">Button Placement</h3>
-						<ButtonPlacementSelector config={currentConfig} featureId={featureId} onChange={handleSettingChange} />
+						<ButtonPlacementSelector
+							config={currentConfig}
+							featureId={featureId}
+							onChange={handleSettingChange}
+						/>
 					</div>
 				)}
 			</div>
@@ -109,10 +123,30 @@ function ButtonPlacementSelector({
 }): Nullable<JSX.Element> {
 	const t = useDevToolsTranslations();
 	const placementOptions = [
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.value), value: "below_player" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.value), value: "feature_menu" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.value), value: "player_controls_left" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.value), value: "player_controls_right" }
+		{
+			label: () =>
+				t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.value),
+			value: "below_player"
+		},
+		{
+			label: () =>
+				t((tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.value),
+			value: "feature_menu"
+		},
+		{
+			label: () =>
+				t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.value
+				),
+			value: "player_controls_left"
+		},
+		{
+			label: () =>
+				t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.value
+				),
+			value: "player_controls_right"
+		}
 	];
 	const fullscreenPlacementOptions = fullscreenPlacements.map((p) => ({
 		label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options[p].value),
@@ -123,7 +157,9 @@ function ButtonPlacementSelector({
 		return (
 			<div className="flex flex-col gap-2">
 				<div className="flex items-center gap-3">
-					<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}</span>
+					<span className="shrink-0 text-xs text-[#969696]">
+						{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}
+					</span>
 					<select
 						className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
 						onChange={(e) => onChange(`${featureId}.button.placement`, e.target.value)}
@@ -135,7 +171,9 @@ function ButtonPlacementSelector({
 							</option>
 						))}
 					</select>
-					<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}</span>
+					<span className="shrink-0 text-xs text-[#969696]">
+						{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}
+					</span>
 					<select
 						className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
 						onChange={(e) => onChange(`${featureId}.button.fullscreenPlacement`, e.target.value)}
@@ -162,10 +200,14 @@ function ButtonPlacementSelector({
 						<div className="flex flex-col gap-2" key={name}>
 							<label className="text-xs text-[#969696]">{formatButtonName(name)}</label>
 							<div className="flex items-center gap-3">
-								<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}</span>
+								<span className="shrink-0 text-xs text-[#969696]">
+									{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}
+								</span>
 								<select
 									className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
-									onChange={(e) => onChange(`${featureId}.buttons.${name}.placement`, e.target.value)}
+									onChange={(e) =>
+										onChange(`${featureId}.buttons.${name}.placement`, e.target.value)
+									}
 									value={cfg?.placement ?? "player_controls_right"}
 								>
 									{placementOptions.map((opt) => (
@@ -174,10 +216,14 @@ function ButtonPlacementSelector({
 										</option>
 									))}
 								</select>
-								<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}</span>
+								<span className="shrink-0 text-xs text-[#969696]">
+									{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}
+								</span>
 								<select
 									className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
-									onChange={(e) => onChange(`${featureId}.buttons.${name}.fullscreenPlacement`, e.target.value)}
+									onChange={(e) =>
+										onChange(`${featureId}.buttons.${name}.fullscreenPlacement`, e.target.value)
+									}
 									value={cfg?.fullscreenPlacement ?? "player_controls_right"}
 								>
 									{fullscreenPlacementOptions.map((opt) => (

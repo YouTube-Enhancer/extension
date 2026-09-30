@@ -10,7 +10,12 @@ import { coreConfigQuery } from "@/components/devtools/hooks/useDevToolsQuery";
 import { useDevToolsTranslations } from "@/src/components/devtools/hooks/useDevToolsTranslations";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { useNotifications } from "@/src/hooks";
-import { type AllButtonNames, type configuration, fullscreenPlacements, type Nullable } from "@/src/types";
+import {
+	type AllButtonNames,
+	type configuration,
+	fullscreenPlacements,
+	type Nullable
+} from "@/src/types";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 type ButtonConfig = {
@@ -25,7 +30,15 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 	const t = useDevToolsTranslations();
 
 	const updateMutation = useMutation({
-		async mutationFn({ featureId, path, value }: { featureId: FeatureKeys; path: string; value: string }) {
+		async mutationFn({
+			featureId,
+			path,
+			value
+		}: {
+			featureId: FeatureKeys;
+			path: string;
+			value: string;
+		}) {
 			await sendDevToolsMessage("devtools_update_feature_config", { id: featureId, path, value });
 		},
 		onError: () => {
@@ -46,10 +59,30 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 	if (isPending) return <DevToolsLoader message="Loading button placements..." />;
 
 	const placementOptions = [
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.value), value: "below_player" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.value), value: "feature_menu" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.value), value: "player_controls_left" },
-		{ label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.value), value: "player_controls_right" }
+		{
+			label: () =>
+				t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.value),
+			value: "below_player"
+		},
+		{
+			label: () =>
+				t((tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.value),
+			value: "feature_menu"
+		},
+		{
+			label: () =>
+				t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.value
+				),
+			value: "player_controls_left"
+		},
+		{
+			label: () =>
+				t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.value
+				),
+			value: "player_controls_right"
+		}
 	];
 	const fullscreenPlacementOptions = fullscreenPlacements.map((p) => ({
 		label: () => t((tr) => tr.pages.options.extras.buttonPlacement.select.options[p].value),
@@ -58,7 +91,9 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 
 	return (
 		<div className="flex flex-col gap-4 rounded border border-[#3c3c3c] p-4">
-			<h3 className="text-sm font-medium text-[#d4d4d4]">{t((tr) => tr.pages.options.extras.buttonPlacement.title)}</h3>
+			<h3 className="text-sm font-medium text-[#d4d4d4]">
+				{t((tr) => tr.pages.options.extras.buttonPlacement.title)}
+			</h3>
 			{metadataRegistry.getAllButtonNames().map((buttonName) => {
 				const info = getButtonPlacementInfo(buttonName);
 				const fullscreenInfo = getFullscreenPlacementInfo(buttonName);
@@ -72,31 +107,41 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 
 				if (featureConfig?.button) {
 					currentPlacement = featureConfig.button.placement ?? "player_controls_right";
-					currentFullscreenPlacement = featureConfig.button.fullscreenPlacement ?? "player_controls_right";
+					currentFullscreenPlacement =
+						featureConfig.button.fullscreenPlacement ?? "player_controls_right";
 					isEnabled = featureConfig.button.enabled ?? false;
 				} else if (featureConfig?.buttons && buttonName in featureConfig.buttons) {
-					currentPlacement = featureConfig.buttons[buttonName]?.placement ?? "player_controls_right";
-					currentFullscreenPlacement = featureConfig.buttons[buttonName]?.fullscreenPlacement ?? "player_controls_right";
+					currentPlacement =
+						featureConfig.buttons[buttonName]?.placement ?? "player_controls_right";
+					currentFullscreenPlacement =
+						featureConfig.buttons[buttonName]?.fullscreenPlacement ?? "player_controls_right";
 					isEnabled = featureConfig.buttons[buttonName]?.enabled ?? false;
 				}
 
-				const buttonLabel = t((tr) => tr.pages.options.extras.buttonPlacement.select.buttonNames[buttonName]);
+				const buttonLabel = t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.buttonNames[buttonName]
+				);
 				const placementText = getPlacementDescription(currentPlacement, t);
 				const title = t((tr) => tr.pages.options.extras.buttonPlacement.select.title, {
 					BUTTON_NAME: buttonLabel.toLowerCase(),
 					PLACEMENT: placementText
 				});
 				const fullscreenPlacementText = getPlacementDescription(currentFullscreenPlacement, t);
-				const fullscreenTitle = t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenTitle, {
-					BUTTON_NAME: buttonLabel.toLowerCase(),
-					PLACEMENT: fullscreenPlacementText
-				});
+				const fullscreenTitle = t(
+					(tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenTitle,
+					{
+						BUTTON_NAME: buttonLabel.toLowerCase(),
+						PLACEMENT: fullscreenPlacementText
+					}
+				);
 
 				return (
 					<div className="flex flex-col gap-2" key={buttonName}>
 						<div className="mb-1 text-xs text-[#969696]">{buttonLabel}</div>
 						<div className="flex items-center gap-3">
-							<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}</span>
+							<span className="shrink-0 text-xs text-[#969696]">
+								{t((tr) => tr.pages.options.extras.buttonPlacement.select.normalLabel)}
+							</span>
 							<select
 								className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
 								disabled={!isEnabled}
@@ -110,11 +155,15 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 									</option>
 								))}
 							</select>
-							<span className="shrink-0 text-xs text-[#969696]">{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}</span>
+							<span className="shrink-0 text-xs text-[#969696]">
+								{t((tr) => tr.pages.options.extras.buttonPlacement.select.fullscreenLabel)}
+							</span>
 							<select
 								className="w-auto rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
 								disabled={!isEnabled}
-								onChange={(e) => handleChange(fullscreenInfo.featureId, fullscreenInfo.path, e.target.value)}
+								onChange={(e) =>
+									handleChange(fullscreenInfo.featureId, fullscreenInfo.path, e.target.value)
+								}
 								title={fullscreenTitle}
 								value={currentFullscreenPlacement}
 							>
@@ -125,7 +174,9 @@ export default function ButtonPlacementSetting({ config }: { config: configurati
 								))}
 							</select>
 						</div>
-						{!isEnabled && <span className="text-xs text-[#6b6b6b]">Enable the feature to change placement</span>}
+						{!isEnabled && (
+							<span className="text-xs text-[#6b6b6b]">Enable the feature to change placement</span>
+						)}
 					</div>
 				);
 			})}
@@ -154,13 +205,23 @@ function getFullscreenPlacementInfo(buttonName: AllButtonNames) {
 function getPlacementDescription(placement: string, t: i18nInstanceType["t"]): string {
 	switch (placement) {
 		case "below_player":
-			return t((tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.placement);
+			return t(
+				(tr) => tr.pages.options.extras.buttonPlacement.select.options.below_player.placement
+			);
 		case "feature_menu":
-			return t((tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.placement);
+			return t(
+				(tr) => tr.pages.options.extras.buttonPlacement.select.options.feature_menu.placement
+			);
 		case "player_controls_left":
-			return t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.placement);
+			return t(
+				(tr) =>
+					tr.pages.options.extras.buttonPlacement.select.options.player_controls_left.placement
+			);
 		case "player_controls_right":
-			return t((tr) => tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.placement);
+			return t(
+				(tr) =>
+					tr.pages.options.extras.buttonPlacement.select.options.player_controls_right.placement
+			);
 		default:
 			return "";
 	}

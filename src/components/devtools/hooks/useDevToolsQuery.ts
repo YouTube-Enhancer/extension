@@ -1,5 +1,14 @@
-import type { FeatureError, FeatureMetric } from "@/src/features/_registry/featurePerformanceTracker";
-import type { AnyFeatureBase, CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, NonFeatureKeys } from "@/src/features/_registry/types";
+import type {
+	FeatureError,
+	FeatureMetric
+} from "@/src/features/_registry/featurePerformanceTracker";
+import type {
+	AnyFeatureBase,
+	CoreFeatureKeys,
+	FeatureKeys,
+	FeatureKeysWithState,
+	NonFeatureKeys
+} from "@/src/features/_registry/types";
 import type { configuration, Nullable } from "@/src/types";
 
 import { onDevToolsCacheInvalidate, sendDevToolsMessage } from "@/src/utils/messaging/devtools";
@@ -54,7 +63,11 @@ export function featureConfigUpdateQuery(id: FeatureKeys, path: string, value: u
 	return {
 		gcTime: 0,
 		queryFn: async () => {
-			const response = await sendDevToolsMessage("devtools_update_feature_config", { id, path, value });
+			const response = await sendDevToolsMessage("devtools_update_feature_config", {
+				id,
+				path,
+				value
+			});
 			return response.data;
 		},
 		queryKey: ["devtools", "configUpdate", id, path] as const,
@@ -121,21 +134,24 @@ export function setupDevToolsMessageListener(): void {
 	if (messageListenerAdded) return;
 	messageListenerAdded = true;
 
-	window.addEventListener("message", (event: MessageEvent<{ queryKey?: [string, ...string[]]; type?: string }>) => {
-		const { data } = event;
-		if (data.type !== "invalidate-devtools-query") return;
-		if (!Array.isArray(data.queryKey)) return;
+	window.addEventListener(
+		"message",
+		(event: MessageEvent<{ queryKey?: [string, ...string[]]; type?: string }>) => {
+			const { data } = event;
+			if (data.type !== "invalidate-devtools-query") return;
+			if (!Array.isArray(data.queryKey)) return;
 
-		const {
-			queryKey: [ns]
-		} = data;
-		if (ns !== "devtools") return;
+			const {
+				queryKey: [ns]
+			} = data;
+			if (ns !== "devtools") return;
 
-		if (invalidateListener) {
-			invalidateListener();
-			invalidateListener = null;
+			if (invalidateListener) {
+				invalidateListener();
+				invalidateListener = null;
+			}
 		}
-	});
+	);
 }
 
 export function useDevToolsCacheSync(): void {
@@ -144,10 +160,19 @@ export function useDevToolsCacheSync(): void {
 	invalidateListener = onDevToolsCacheInvalidate((keys: string[]) => {
 		for (const key of keys) {
 			if (key === "*" || key === "all") {
-				window.postMessage({ queryKey: ["devtools", "configs"], type: "invalidate-devtools-query" }, "*");
-				window.postMessage({ queryKey: ["devtools", "featureList"], type: "invalidate-devtools-query" }, "*");
+				window.postMessage(
+					{ queryKey: ["devtools", "configs"], type: "invalidate-devtools-query" },
+					"*"
+				);
+				window.postMessage(
+					{ queryKey: ["devtools", "featureList"], type: "invalidate-devtools-query" },
+					"*"
+				);
 			} else {
-				window.postMessage({ queryKey: ["devtools", "configs", key], type: "invalidate-devtools-query" }, "*");
+				window.postMessage(
+					{ queryKey: ["devtools", "configs", key], type: "invalidate-devtools-query" },
+					"*"
+				);
 			}
 		}
 	});

@@ -19,27 +19,37 @@ export default createFeature({
 				if (!playerContainer) return;
 				const videoData = await playerContainer.getVideoData();
 				if (videoData.isLive) return;
-				const endScreenCardsAreHidden = document.querySelector("body.yte-hide-end-screen-cards") !== null;
+				const endScreenCardsAreHidden =
+					document.querySelector("body.yte-hide-end-screen-cards") !== null;
 				// checked === true means the cards are hidden, for every placement.
 				const handleButtonClick = (placement: ButtonPlacement, checked?: boolean) => {
 					if (checked === undefined) return;
 					const cardsAreHidden = checked;
 					// The feature menu item keeps its static label; only the player placements are labelled by state.
 					if (placement !== "feature_menu") {
-						updateFeatureButtonTitle("hideEndScreenCardsButton", getEndScreenCardsButtonTitle(cardsAreHidden));
+						updateFeatureButtonTitle(
+							"hideEndScreenCardsButton",
+							getEndScreenCardsButtonTitle(cardsAreHidden)
+						);
 					}
 					void (async () => {
-						await registry.updateFeatureEnabledState("hideEndScreenCards", cardsAreHidden, { enabled: cardsAreHidden });
+						await registry.updateFeatureEnabledState("hideEndScreenCards", cardsAreHidden, {
+							enabled: cardsAreHidden
+						});
 					})();
 				};
 				const featureIcon = getFeatureIcon("hideEndScreenCardsButton", placement);
 				// The feature menu is given a single icon at runtime, even though the icon type is the toggle pair.
-				const icon = featureIcon instanceof SVGSVGElement ? featureIcon : toCheckedStateIcons(featureIcon);
+				const icon =
+					featureIcon instanceof SVGSVGElement ? featureIcon : toCheckedStateIcons(featureIcon);
 				await addFeatureButton(
 					"hideEndScreenCardsButton",
 					placement,
 					placement === "feature_menu"
-						? window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.label)
+						? window.i18nextInstance.t(
+								(translations) =>
+									translations.pages.content.features.hideEndScreenCardsButton.button.label
+							)
 						: getEndScreenCardsButtonTitle(endScreenCardsAreHidden),
 					icon,
 					(checked) => handleButtonClick(placement, checked),
@@ -49,7 +59,10 @@ export default createFeature({
 					() => {
 						const hidden = document.querySelector("body.yte-hide-end-screen-cards") !== null;
 						return placement === "feature_menu"
-							? window.i18nextInstance.t((translations) => translations.pages.content.features.hideEndScreenCardsButton.button.label)
+							? window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.hideEndScreenCardsButton.button.label
+								)
 							: getEndScreenCardsButtonTitle(hidden);
 					}
 				);

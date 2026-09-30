@@ -31,8 +31,16 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "checkbox": {
 			const val = isBoolean(currentValue) ? currentValue : false;
 			return (
-				<label className={cn("flex items-center gap-2", disabled && "opacity-50")} title={disabledReason ?? ""}>
-					<input checked={val} disabled={disabled} onChange={(e) => onChange(setting.id, e.target.checked)} type="checkbox" />
+				<label
+					className={cn("flex items-center gap-2", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
+					<input
+						checked={val}
+						disabled={disabled}
+						onChange={(e) => onChange(setting.id, e.target.checked)}
+						type="checkbox"
+					/>
 					<span className="text-sm text-[#d4d4d4]">{label}</span>
 				</label>
 			);
@@ -40,10 +48,17 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "color-picker": {
 			const val = isString(currentValue) ? currentValue : "#000000";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<div className="flex flex-col gap-1 rounded border border-[#3c3c3c] bg-[#2d2d2d] p-2">
-						<HexAlphaColorPicker color={val} onChange={(color) => onChange(setting.id, color)} style={{ height: "120px", width: "100%" }} />
+						<HexAlphaColorPicker
+							color={val}
+							onChange={(color) => onChange(setting.id, color)}
+							style={{ height: "120px", width: "100%" }}
+						/>
 						<HexColorInput
 							alpha
 							className="w-full rounded border border-[#3c3c3c] bg-[#1e1e1e] px-2 py-1 text-[#d4d4d4]"
@@ -58,16 +73,27 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "css-editor": {
 			const val = isString(currentValue) ? currentValue : "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
-					<CSSEditor disabled={disabled} onChange={(value) => onChange(setting.id, value)} t={t} value={val} />
+					<CSSEditor
+						disabled={disabled}
+						onChange={(value) => onChange(setting.id, value)}
+						t={t}
+						value={val}
+					/>
 				</div>
 			);
 		}
 		case "file-name-template": {
 			const val = isString(currentValue) ? currentValue : "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<input
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
@@ -82,7 +108,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "key-value-list": {
 			const val = isString(currentValue) ? currentValue : "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<textarea
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
@@ -97,7 +126,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "number": {
 			const val = isNumber(currentValue) ? currentValue : 1;
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<input
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
@@ -122,7 +154,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 						? String(currentValue)
 						: "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<select
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
@@ -142,7 +177,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "slider": {
 			const val = isNumber(currentValue) ? currentValue : 0;
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="flex justify-between text-sm text-[#d4d4d4]">
 						<span>{label}</span>
 						<span>{String(val)}</span>
@@ -163,7 +201,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 		case "string-list": {
 			const val = isString(currentValue) ? currentValue : "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<textarea
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
@@ -184,7 +225,10 @@ export default function ConfigInput<F extends FeatureKeys>({
 						? String(currentValue)
 						: "";
 			return (
-				<div className={cn("flex flex-col gap-1", disabled && "opacity-50")} title={disabledReason ?? ""}>
+				<div
+					className={cn("flex flex-col gap-1", disabled && "opacity-50")}
+					title={disabledReason ?? ""}
+				>
 					<label className="text-sm text-[#d4d4d4]">{label}</label>
 					<input
 						className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"

@@ -10,7 +10,9 @@ interface YtdWatchElement extends Element {
 let youthereDataChanged_: () => void;
 
 function patchContinueWatching() {
-	const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+	const ytdWatchElement = document.querySelector<YtdWatchElement>(
+		isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+	);
 	if (ytdWatchElement) {
 		ytdWatchElement.youthereDataChanged_ = function () {};
 	}
@@ -19,14 +21,18 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		browserColorLog("Disabling skipContinueWatching", "FgMagenta");
-		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+		const ytdWatchElement = document.querySelector<YtdWatchElement>(
+			isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+		);
 		if (ytdWatchElement) {
 			ytdWatchElement.youthereDataChanged_ = youthereDataChanged_;
 		}
 	},
 	onEnable: () => {
 		browserColorLog("Enabling skipContinueWatching", "FgMagenta");
-		const ytdWatchElement = document.querySelector<YtdWatchElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+		const ytdWatchElement = document.querySelector<YtdWatchElement>(
+			isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+		);
 		if (ytdWatchElement) {
 			({ youthereDataChanged_ } = ytdWatchElement);
 		}

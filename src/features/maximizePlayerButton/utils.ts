@@ -32,10 +32,18 @@ function changeMaximizeButtonState(maximized: boolean) {
 	 */
 	updateFeatureButtonChecked("maximizePlayerButton", maximized);
 	const icon = getFeatureIcon("maximizePlayerButton", "player_controls_left");
-	updateFeatureButtonIconByName("maximizePlayerButton", modifyIconForLightTheme(maximized ? icon.on : icon.off));
+	updateFeatureButtonIconByName(
+		"maximizePlayerButton",
+		modifyIconForLightTheme(maximized ? icon.on : icon.off)
+	);
 	updateFeatureButtonTitle(
 		"maximizePlayerButton",
-		window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"])
+		window.i18nextInstance.t(
+			(translations) =>
+				translations.pages.content.features.maximizePlayerButton.button.toggle[
+					maximized ? "on" : "off"
+				]
+		)
 	);
 }
 function clearHeaderTimeout() {
@@ -166,7 +174,11 @@ const navigateStartHandler = (e: CustomEvent<YouTubeNavigateStart>) => {
 	void minimizePlayer();
 };
 const onKeyDown = (e: KeyboardEvent) => {
-	if (!["Escape", "t"].includes(e.key) || (e.target as Nullable<HTMLElement>)?.closest("input, textarea, [contenteditable='true']")) return;
+	if (
+		!["Escape", "t"].includes(e.key) ||
+		(e.target as Nullable<HTMLElement>)?.closest("input, textarea, [contenteditable='true']")
+	)
+		return;
 	const state = getPlayerControllerState();
 	if (!state.listenersAttached) return;
 	e.preventDefault();
@@ -184,14 +196,21 @@ export async function maximizePlayer(timeout = 2500) {
 	if (!moviePlayer) return;
 	await waitForPlayerLoaded(moviePlayer);
 	const inTheaterMode =
-		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false;
+		document
+			.querySelector<HTMLButtonElement>(
+				isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+			)
+			?.hasAttribute("theater") ?? false;
 	const theaterConfig = registry.configManager.getLast("automaticTheaterMode");
 	const theaterEnabled = "enabled" in theaterConfig && theaterConfig.enabled;
 	if (!inTheaterMode && !theaterEnabled) clickAndRestore(sizeElement);
 	adjustPlayer("add");
 	void changeMaximizeButtonState(true);
 	const { height } = header.getBoundingClientRect();
-	document.body.setAttribute("yte-size-button-state", inTheaterMode || theaterEnabled ? "theater" : "default");
+	document.body.setAttribute(
+		"yte-size-button-state",
+		inTheaterMode || theaterEnabled ? "theater" : "default"
+	);
 	document.body.style.setProperty("--yte-header-height", `${height}px`);
 	document.body.style.setProperty("--yte-video-height", `${window.innerHeight}px`);
 	window.addEventListener("resize", handleResize);
@@ -204,7 +223,8 @@ export async function minimizePlayer() {
 	const sizeElement = await waitForElement<HTMLButtonElement>("button.ytp-size-button");
 	if (lastState === "default" && sizeElement) {
 		const autoTheaterConfig = registry.configManager.getLast("automaticTheaterMode");
-		if (!("enabled" in autoTheaterConfig) || !autoTheaterConfig.enabled) clickAndRestore(sizeElement);
+		if (!("enabled" in autoTheaterConfig) || !autoTheaterConfig.enabled)
+			clickAndRestore(sizeElement);
 	}
 	adjustPlayer("remove");
 	destroyPlayerController();

@@ -8,9 +8,23 @@ import type { Browser } from "@/src/utils/plugins/utils";
 import updateAvailableLocales from "@/src/i18n/updateAvailableLocales";
 import { DEV_RELOAD_PORT } from "@/src/utils/dev/hotReload";
 import terminalColorLog from "@/src/utils/logging";
-import { browsers, copyDirectory, emptyOutputFolder, outDir, publicDir, rootDir, srcDir } from "@/src/utils/plugins/utils";
+import {
+	browsers,
+	copyDirectory,
+	emptyOutputFolder,
+	outDir,
+	publicDir,
+	rootDir,
+	srcDir
+} from "@/src/utils/plugins/utils";
 
-import { buildFinished, buildStarted, emitRebuild, newBuildId, type RebuildEvent } from "./devEvents";
+import {
+	buildFinished,
+	buildStarted,
+	emitRebuild,
+	newBuildId,
+	type RebuildEvent
+} from "./devEvents";
 import { startHmrServer } from "./hmrServer";
 import { startHotReloadServer } from "./hotReloadServer";
 import { buildContentScripts } from "./steps/buildContentScripts";
@@ -39,7 +53,11 @@ export function parseWatchArgs(argv: string[]): WatchOptions {
 		throw new Error(`Unknown --target "${target}"; use chrome or firefox`);
 	}
 	/** Firefox has no localhost allowance in its extension-page policy, so the pages cannot be served there. */
-	return { hmr: !argv.includes("--no-hmr") && target === "chrome", hotReload: !argv.includes("--no-hot-reload"), target };
+	return {
+		hmr: !argv.includes("--no-hmr") && target === "chrome",
+		hotReload: !argv.includes("--no-hot-reload"),
+		target
+	};
 }
 
 /**
@@ -68,7 +86,11 @@ export async function startWatch(argv: string[]): Promise<void> {
 	let manifestJson = "";
 	const writeManifest = () => {
 		const [json] = Object.values(
-			generateManifests({ chunkDir, patch: hmrServer ? (manifest) => hmrServer.patchManifest(manifest) : undefined, targets: [browser] })
+			generateManifests({
+				chunkDir,
+				patch: hmrServer ? (manifest) => hmrServer.patchManifest(manifest) : undefined,
+				targets: [browser]
+			})
 		);
 		const changed = manifestJson !== "" && json !== manifestJson;
 		manifestJson = json;
@@ -78,12 +100,19 @@ export async function startWatch(argv: string[]): Promise<void> {
 	await updateReadmeFeatures();
 
 	const hotReloadServer = hotReload
-		? startHotReloadServer({ announcePages: !hmr, port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT, targetDir })
+		? startHotReloadServer({
+				announcePages: !hmr,
+				port: Number(process.env.YTE_DEV_RELOAD_PORT) || DEV_RELOAD_PORT,
+				targetDir
+			})
 		: null;
 	/** Tells the bundles which port this pipeline actually listens on (a number, so it is not inlined as a string); see `devReloadPort()`. */
 	const define = { __YTE_DEV_RELOAD_PORT__: (await hotReloadServer?.ready) ?? DEV_RELOAD_PORT };
 
-	const watchOptions = { buildDelay: WATCH_BUILD_DELAY_MS, chokidar: { ignored: "**/.zvec-grep/**" } };
+	const watchOptions = {
+		buildDelay: WATCH_BUILD_DELAY_MS,
+		chokidar: { ignored: "**/.zvec-grep/**" }
+	};
 	const pagesWatcher = (await viteBuild({
 		build: { outDir: targetDir, watch: watchOptions },
 		configFile: resolve(rootDir, "vite.config.ts"),
@@ -120,7 +149,10 @@ export async function startWatch(argv: string[]): Promise<void> {
 					await validateFeatureMetadata();
 					await updateReadmeFeatures();
 				} catch (error) {
-					terminalColorLog(`Feature metadata: ${error instanceof Error ? error.message : String(error)}`, "error");
+					terminalColorLog(
+						`Feature metadata: ${error instanceof Error ? error.message : String(error)}`,
+						"error"
+					);
 				}
 			},
 			(file) => file.endsWith("index.metadata.ts")
@@ -130,7 +162,13 @@ export async function startWatch(argv: string[]): Promise<void> {
 	const shutdown = async () => {
 		log("Stopping...");
 		for (const watcher of fsWatchers) watcher.close();
-		await Promise.all([pagesWatcher.close(), contentWatcher.close(), embeddedWatcher.close(), hotReloadServer?.close(), hmrServer?.close()]);
+		await Promise.all([
+			pagesWatcher.close(),
+			contentWatcher.close(),
+			embeddedWatcher.close(),
+			hotReloadServer?.close(),
+			hmrServer?.close()
+		]);
 		process.exit(0);
 	};
 	process.on("SIGINT", () => void shutdown());
@@ -141,7 +179,11 @@ function announce(bundle: RebuildEvent["bundle"], durationMs = 0): void {
 	emitRebuild({ buildId: newBuildId(), bundle, durationMs });
 }
 
-function attach(bundle: "content" | "embedded" | "pages", watcher: Rolldown.RolldownWatcher, afterBuild?: () => void): void {
+function attach(
+	bundle: "content" | "embedded" | "pages",
+	watcher: Rolldown.RolldownWatcher,
+	afterBuild?: () => void
+): void {
 	watcher.on("event", (event) => {
 		if (event.code === "BUNDLE_START") {
 			buildStarted();
@@ -163,7 +205,11 @@ function log(message: string): void {
 }
 
 /** Recursive directory watch with a short debounce; Node's own watcher fires several events per save. */
-function watchDirectory(directory: string, onChange: () => Promise<void> | void, filter: (file: string) => boolean = () => true): FSWatcher {
+function watchDirectory(
+	directory: string,
+	onChange: () => Promise<void> | void,
+	filter: (file: string) => boolean = () => true
+): FSWatcher {
 	let timer: NodeJS.Timeout | undefined;
 	return watchFs(directory, { recursive: true }, (_eventType, fileName) => {
 		if (fileName && !filter(String(fileName).replace(/\\/g, "/"))) return;

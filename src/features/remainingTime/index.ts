@@ -53,7 +53,9 @@ async function setupRemainingTime() {
 	]);
 	// If video element is not available, return
 	if (!videoElement) return;
-	const timeDisplay = playerContainer.querySelector<HTMLDivElement>(".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents");
+	const timeDisplay = playerContainer.querySelector<HTMLDivElement>(
+		".ytp-time-display > .ytp-time-wrapper > .ytp-time-contents"
+	);
 	if (!timeDisplay) return;
 	const [playerVideoData, remainingTime] = await Promise.all([
 		playerContainer.getVideoData(),
@@ -72,5 +74,10 @@ async function setupRemainingTime() {
 			return span;
 		})();
 	el.textContent = remainingTime;
-	eventManager.addEventListener(videoElement, "timeupdate", playerTimeUpdateListener, "remainingTime");
+	eventManager.addEventListener(
+		videoElement,
+		"timeupdate",
+		playerTimeUpdateListener,
+		"remainingTime"
+	);
 }

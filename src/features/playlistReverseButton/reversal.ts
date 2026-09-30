@@ -30,7 +30,9 @@ function applyPlaylistPageReversal(): boolean {
 	const { contents } = result;
 	reversePlaylistContents(contents);
 
-	const listContainer = document.querySelector<HTMLElement>("ytd-playlist-video-list-renderer div#contents");
+	const listContainer = document.querySelector<HTMLElement>(
+		"ytd-playlist-video-list-renderer div#contents"
+	);
 	if (listContainer) reverseChildOrder(listContainer);
 
 	return true;
@@ -50,12 +52,19 @@ function applyReversal(): boolean {
 	// YouTube may load only a window of a long playlist and numbers the position as the window's offset plus the
 	// position within it. Reversed, the position is the one within the window: that is what the playlist manager
 	// compares with the window's size to tell whether there is a next video. Turned back, YouTube's numbering returns.
-	const windowOffset = playlist.yteWindowOffset ?? Math.max(0, playlist.currentIndex - playlist.localCurrentIndex);
+	const windowOffset =
+		playlist.yteWindowOffset ?? Math.max(0, playlist.currentIndex - playlist.localCurrentIndex);
 	playlist.yteWindowOffset = windowOffset;
 	playlist.contents.reverse();
 	playlist.localCurrentIndex = playlist.contents.length - 1 - playlist.localCurrentIndex;
-	playlist.currentIndex = reversing ? playlist.localCurrentIndex : windowOffset + playlist.localCurrentIndex;
-	rebuildAutoplaySets(autoplay, playlist, windowOffset === 0 && playlist.contents.length >= playlist.totalVideos);
+	playlist.currentIndex = reversing
+		? playlist.localCurrentIndex
+		: windowOffset + playlist.localCurrentIndex;
+	rebuildAutoplaySets(
+		autoplay,
+		playlist,
+		windowOffset === 0 && playlist.contents.length >= playlist.totalVideos
+	);
 
 	// The panel and the page only re-render from an object they have not seen, and the playlist read here is usually
 	// the panel's own, so what is handed out is a copy; the copy is what the next read finds in the panel.
@@ -69,7 +78,9 @@ function applyReversal(): boolean {
 	setTimeout(() => {
 		if (generation !== currentSetupGeneration()) return;
 		pushPlaylistData(manager, panel, rendered, autoplay);
-		const activeItem = document.querySelector<HTMLElement>("ytd-playlist-panel-video-renderer[selected], ytd-playlist-video-renderer[selected]");
+		const activeItem = document.querySelector<HTMLElement>(
+			"ytd-playlist-panel-video-renderer[selected], ytd-playlist-video-renderer[selected]"
+		);
 		activeItem?.scrollIntoView({ block: "nearest" });
 	}, 100);
 
@@ -88,7 +99,12 @@ function matchReversalToState(isReversed: boolean): boolean {
 }
 
 /** Hands the playlist to everything that plays from it: the panel, the playlist manager behind autoplay and the Next and Previous controls, and the player's own playlist. */
-function pushPlaylistData(manager: Nullable<ManagerElement>, panel: Nullable<PanelElement>, playlist: PlaylistData, autoplay: AutoplayData): void {
+function pushPlaylistData(
+	manager: Nullable<ManagerElement>,
+	panel: Nullable<PanelElement>,
+	playlist: PlaylistData,
+	autoplay: AutoplayData
+): void {
 	if (panel) {
 		panel.data = playlist;
 		panel.updateData?.(playlist);
@@ -110,7 +126,11 @@ function pushPlaylistData(manager: Nullable<ManagerElement>, panel: Nullable<Pan
  * of the new order. The loop set wraps around only when the whole playlist is loaded: with a window of it, the ends
  * of the window are not the ends of the playlist. The shuffle sets are left alone: their order is YouTube's random one.
  */
-function rebuildAutoplaySets(autoplay: AutoplayData, playlist: PlaylistData, wholePlaylistLoaded: boolean): void {
+function rebuildAutoplaySets(
+	autoplay: AutoplayData,
+	playlist: PlaylistData,
+	wholePlaylistLoaded: boolean
+): void {
 	const { contents, localCurrentIndex } = playlist;
 	const { length: count } = contents;
 	const endpointAt = (position: number): Nullable<NavigationEndpoint> => {
@@ -148,7 +168,11 @@ async function reversePlaylistPage(): Promise<boolean> {
 	return applyPlaylistPageReversal();
 }
 
-function setAutoplayEndpoint(set: AutoplaySet, key: AutoplayEndpointKey, endpoint: Nullable<NavigationEndpoint>): void {
+function setAutoplayEndpoint(
+	set: AutoplaySet,
+	key: AutoplayEndpointKey,
+	endpoint: Nullable<NavigationEndpoint>
+): void {
 	if (endpoint) set[key] = endpoint;
 	else delete set[key];
 }
@@ -157,7 +181,11 @@ function setAutoplayEndpoint(set: AutoplaySet, key: AutoplayEndpointKey, endpoin
  * Points the page's own data at the same playlist and autoplay objects and hands the page a fresh copy of it: the
  * page only re-renders from a new object, and the copy is what a later read of the page data sees.
  */
-function syncWatchPageData(watchFlexy: WatchFlexyElement, playlist: PlaylistData, autoplay: AutoplayData): void {
+function syncWatchPageData(
+	watchFlexy: WatchFlexyElement,
+	playlist: PlaylistData,
+	autoplay: AutoplayData
+): void {
 	const results = watchFlexy.data?.contents?.twoColumnWatchNextResults;
 	if (!results) return;
 	if (results.playlist) results.playlist.playlist = playlist;
@@ -173,4 +201,10 @@ function toggleReversal(isReversed: boolean): boolean {
 	return getReversalState() === null ? applyReversal() : matchReversalToState(isReversed);
 }
 
-export { applyPlaylistPageReversal, applyReversal, matchReversalToState, reversePlaylistPage, toggleReversal };
+export {
+	applyPlaylistPageReversal,
+	applyReversal,
+	matchReversalToState,
+	reversePlaylistPage,
+	toggleReversal
+};

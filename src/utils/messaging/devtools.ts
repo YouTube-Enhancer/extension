@@ -1,6 +1,12 @@
 import browser from "webextension-polyfill";
 
-import type { DevToolsMessageMappings, DevToolsMessages, DevToolsMessageType, DevToolsRequestDataMessage, Nullable } from "@/src/types";
+import type {
+	DevToolsMessageMappings,
+	DevToolsMessages,
+	DevToolsMessageType,
+	DevToolsRequestDataMessage,
+	Nullable
+} from "@/src/types";
 
 let contentBridgeListenerAdded = false;
 
@@ -21,8 +27,13 @@ const pendingRequests = new Map<string, pendingRequest>();
 
 let messageListenerSetup = false;
 let windowMessageListener: Nullable<(event: MessageEvent) => void> = null;
-let runtimeMessageListener: Nullable<(message: DevToolsMessages["request"], sender: unknown, sendResponse: (response: unknown) => void) => boolean> =
-	null;
+let runtimeMessageListener: Nullable<
+	(
+		message: DevToolsMessages["request"],
+		sender: unknown,
+		sendResponse: (response: unknown) => void
+	) => boolean
+> = null;
 
 // Cleanup interval for pending requests (5 minutes)
 const PENDING_REQUEST_CLEANUP_INTERVAL = 5 * 60 * 1000;
@@ -41,7 +52,14 @@ export function onDevToolsCacheInvalidate(callback: (keys: string[]) => void): (
 export async function sendDevToolsMessage<T extends DevToolsMessageType>(
 	messageType: T,
 	data: DevToolsMessageMappings[T]["request"] extends { data: infer D } ? D : undefined
-): Promise<DevToolsMessageMappings[T]["response"] & { action: "data_response"; requestId: string; source: "extension"; type: T }> {
+): Promise<
+	DevToolsMessageMappings[T]["response"] & {
+		action: "data_response";
+		requestId: string;
+		source: "extension";
+		type: T;
+	}
+> {
 	const requestId = crypto.randomUUID();
 	const timestamp = Date.now();
 
@@ -131,7 +149,14 @@ export function setupContentScriptBridge() {
 					source: "devtools"
 				})
 				.then(() => {
-					return sendResponse({ action: "data_response", data: { ok: true }, requestId, source: "content", tabId: 0, type });
+					return sendResponse({
+						action: "data_response",
+						data: { ok: true },
+						requestId,
+						source: "content",
+						tabId: 0,
+						type
+					});
 				});
 			return true;
 		}
@@ -152,7 +177,15 @@ export function setupContentScriptBridge() {
 
 		pendingRequests.set(requestId, {
 			collectionTimer: null,
-			reject: () => sendResponse({ action: "data_response", data: null, requestId, source: "content", tabId: 0, type }),
+			reject: () =>
+				sendResponse({
+					action: "data_response",
+					data: null,
+					requestId,
+					source: "content",
+					tabId: 0,
+					type
+				}),
 			resolve: resolveFn,
 			responses: [],
 			startTime: Date.now()
@@ -223,7 +256,13 @@ function setupMessageListener() {
 	} = chrome;
 
 	windowMessageListener = (event: MessageEvent) => {
-		const rawData = event.data as { action?: string; data?: unknown; extensionId?: string; requestId?: string; source?: string };
+		const rawData = event.data as {
+			action?: string;
+			data?: unknown;
+			extensionId?: string;
+			requestId?: string;
+			source?: string;
+		};
 		if (!rawData) return;
 
 		if (rawData.action === "request_storage_update" && rawData.source === "injected") {
@@ -231,7 +270,10 @@ function setupMessageListener() {
 				try {
 					await browser.storage.local.set(rawData.data as Record<string, unknown>);
 				} catch (error) {
-					console.error("[DevTools ContentScript] Failed to persist storage update from injected script:", error);
+					console.error(
+						"[DevTools ContentScript] Failed to persist storage update from injected script:",
+						error
+					);
 				}
 			})();
 		}
@@ -246,7 +288,13 @@ function setupMessageListener() {
 		const pending = pendingRequests.get(requestId);
 		if (!pending) return;
 
-		const typedData = rawData as { data: unknown; requestId: string; source: string; tabId: number; type: string };
+		const typedData = rawData as {
+			data: unknown;
+			requestId: string;
+			source: string;
+			tabId: number;
+			type: string;
+		};
 
 		const isDuplicate = pending.responses.some(
 			(existing) =>

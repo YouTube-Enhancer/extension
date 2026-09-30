@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "remainingTime.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.remainingTime.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.remainingTime.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.remainingTime.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.remainingTime.enable.title)
 		}
 	]
 });

@@ -26,7 +26,9 @@ type StoryboardWindow = {
 		};
 	};
 };
-export function discoverStoryboardRenderer(pollTimeoutMs = 500): Promise<Nullable<StoryboardRenderer>> {
+export function discoverStoryboardRenderer(
+	pollTimeoutMs = 500
+): Promise<Nullable<StoryboardRenderer>> {
 	const start = performance.now();
 	return new Promise((resolve) => {
 		const check = () => {
@@ -57,8 +59,10 @@ export function subscribeMediaChanged(callback: () => void): () => void {
 }
 function rendererFromPageGlobals(): Nullable<StoryboardRenderer> {
 	const spec =
-		(window as StoryboardWindow).ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer?.spec ??
-		(window as StoryboardWindow).ytplayer?.config?.args?.raw_player_response?.storyboards?.playerStoryboardSpecRenderer?.spec ??
+		(window as StoryboardWindow).ytInitialPlayerResponse?.storyboards?.playerStoryboardSpecRenderer
+			?.spec ??
+		(window as StoryboardWindow).ytplayer?.config?.args?.raw_player_response?.storyboards
+			?.playerStoryboardSpecRenderer?.spec ??
 		null;
 	return spec ? { spec } : null;
 }

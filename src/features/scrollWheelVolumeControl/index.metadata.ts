@@ -29,29 +29,37 @@ export const metadata = createFeatureMetadata({
 					component: "checkbox",
 					disabledWhen: [{ equals: false, setting: "scrollWheelVolumeControl.enabled" }],
 					id: "scrollWheelVolumeControl.holdRightClick",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.label),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.scrollWheelVolumeControl.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdRightClick.title)
 				},
 				{
 					component: "checkbox",
 					disabledWhen: [{ equals: false, setting: "scrollWheelVolumeControl.enabled" }],
 					id: "scrollWheelVolumeControl.holdModifierKey",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.label),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.scrollWheelVolumeControl.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.title)
 				},
 				{
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "scrollWheelVolumeControl.holdModifierKey" }],
 					id: "scrollWheelVolumeControl.modifierKey",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.label),
+					label: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.label
+						),
 					optionsFrom: () =>
 						modifierKeys.map((key) => ({
 							label: (t) =>
@@ -64,13 +72,18 @@ export const metadata = createFeatureMetadata({
 						type: "singular",
 						value: (tr) => tr.settings.sections.scrollWheelVolumeControl.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.title)
+					title: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.scrollWheelVolumeControl.settings.holdModifierKey.select.title
+						)
 				},
 				{
 					component: "number",
 					disabledWhen: [{ equals: false, setting: "scrollWheelVolumeControl.enabled" }],
 					id: "scrollWheelVolumeControl.steps",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.label),
 					max: 100,
 					min: 1,
 					parentSetting: {
@@ -78,7 +91,8 @@ export const metadata = createFeatureMetadata({
 						value: (tr) => tr.settings.sections.scrollWheelVolumeControl.enable.label
 					},
 					step: 1,
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelVolumeControl.settings.adjustmentSteps.title)
 				}
 			],
 			section: "scrollWheelVolumeControl",

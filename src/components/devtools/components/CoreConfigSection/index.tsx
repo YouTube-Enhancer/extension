@@ -41,7 +41,8 @@ export default function CoreConfigSection(): JSX.Element {
 	};
 
 	if (isPending) return <DevToolsLoader message="Loading core settings..." />;
-	if (isError || !data?.config) return <div className="p-4 text-red-400">Failed to load core settings</div>;
+	if (isError || !data?.config)
+		return <div className="p-4 text-red-400">Failed to load core settings</div>;
 
 	const { config } = data;
 
@@ -55,13 +56,22 @@ export default function CoreConfigSection(): JSX.Element {
 				]}
 				value={config.featureMenu?.openType ?? "click"}
 			/>
-			<LanguageSetting onChange={(v) => handleChange("language", v)} value={config.language ?? "en-US"} />
-			<OnScreenDisplaySettings config={config.onScreenDisplay} onChange={(v) => handleChange("onScreenDisplay", v)} />
+			<LanguageSetting
+				onChange={(v) => handleChange("language", v)}
+				value={config.language ?? "en-US"}
+			/>
+			<OnScreenDisplaySettings
+				config={config.onScreenDisplay}
+				onChange={(v) => handleChange("onScreenDisplay", v)}
+			/>
 			<VersionToggleSetting
 				onChange={(v) => handleChange("openSettingsOnMajorOrMinorVersionChange", v)}
 				value={config.openSettingsOnMajorOrMinorVersionChange ?? true}
 			/>
-			<ApiKeySetting onChange={(v) => handleChange("youtubeDataApiV3Key", v)} value={config.youtubeDataApiV3Key ?? ""} />
+			<ApiKeySetting
+				onChange={(v) => handleChange("youtubeDataApiV3Key", v)}
+				value={config.youtubeDataApiV3Key ?? ""}
+			/>
 			<ButtonPlacementSetting config={config} />
 		</div>
 	);

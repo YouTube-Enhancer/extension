@@ -17,7 +17,14 @@ interface Props {
 }
 
 export default function OnScreenDisplaySettings({ config, onChange }: Props): JSX.Element {
-	const osd = config ?? { color: "white", hideTime: 750, opacity: 75, padding: 5, position: "center", type: "text" };
+	const osd = config ?? {
+		color: "white",
+		hideTime: 750,
+		opacity: 75,
+		padding: 5,
+		position: "center",
+		type: "text"
+	};
 
 	return (
 		<div className="flex flex-col gap-4 rounded border border-[#3c3c3c] p-4">
@@ -42,7 +49,9 @@ export default function OnScreenDisplaySettings({ config, onChange }: Props): JS
 				<label className="text-xs text-[#969696]">Position</label>
 				<select
 					className="w-full rounded border border-[#3c3c3c] bg-[#2d2d2d] px-2 py-1 text-[#d4d4d4]"
-					onChange={(e) => onChange({ ...osd, position: e.target.value as OnScreenDisplayPosition })}
+					onChange={(e) =>
+						onChange({ ...osd, position: e.target.value as OnScreenDisplayPosition })
+					}
 					value={osd.position}
 				>
 					{onScreenDisplayPositions.map((p) => (
@@ -58,7 +67,10 @@ export default function OnScreenDisplaySettings({ config, onChange }: Props): JS
 				<div className="flex flex-wrap gap-2">
 					{onScreenDisplayColors.map((c) => (
 						<button
-							className={cn("size-6 rounded-full border-2", osd.color === c ? "border-[#007acc]" : "border-transparent")}
+							className={cn(
+								"size-6 rounded-full border-2",
+								osd.color === c ? "border-[#007acc]" : "border-transparent"
+							)}
 							key={c}
 							onClick={() => onChange({ ...osd, color: c })}
 							style={{ backgroundColor: c }}
