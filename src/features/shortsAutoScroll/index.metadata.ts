@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "shortsAutoScroll.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.shortsAutoScroll.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.shortsAutoScroll.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.shortsAutoScroll.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.shortsAutoScroll.enable.title)
 		}
 	]
 });

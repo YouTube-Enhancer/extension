@@ -5,7 +5,10 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import type { Nullable } from "@/src/types";
 
 import useDebounceFn from "@/src/hooks/useDebounce";
-import { extractInvalidPlaceholders, screenshotFilenamePlaceholders } from "@/src/utils/format/filenameTemplate";
+import {
+	extractInvalidPlaceholders,
+	screenshotFilenamePlaceholders
+} from "@/src/utils/format/filenameTemplate";
 import { cn } from "@/src/utils/style";
 
 export type FileNameTemplateProps = {
@@ -37,7 +40,9 @@ const FileNameTemplate: React.FC<FileNameTemplateProps> = ({
 	const localValueRef = useRef(value);
 	const id = useId();
 	const [localValue, setLocalValue] = useState(value);
-	const [invalidPlaceholders, setInvalidPlaceholders] = useState<string[]>(() => extractInvalidPlaceholders(value));
+	const [invalidPlaceholders, setInvalidPlaceholders] = useState<string[]>(() =>
+		extractInvalidPlaceholders(value)
+	);
 	const syncLocalValue = (nextValue: string) => {
 		localValueRef.current = nextValue;
 		setLocalValue(nextValue);
@@ -75,7 +80,9 @@ const FileNameTemplate: React.FC<FileNameTemplateProps> = ({
 			}
 		});
 	};
-	const disabledInputClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
+	const disabledInputClasses = {
+		"dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled
+	};
 	return (
 		<div className={cn("relative flex flex-col", className)} title={title}>
 			<div className="flex flex-row items-baseline justify-between gap-4">
@@ -106,7 +113,9 @@ const FileNameTemplate: React.FC<FileNameTemplateProps> = ({
 					{error} {invalidPlaceholders.join(", ")}
 				</span>
 			)}
-			<span className="mt-1 cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">{hint}</span>
+			<span className="mt-1 cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
+				{hint}
+			</span>
 			<span className="mt-1 cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
 				{placeholdersLabel}
 			</span>

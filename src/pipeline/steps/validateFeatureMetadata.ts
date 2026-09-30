@@ -21,7 +21,9 @@ export default async function validateFeatureMetadataStep(): Promise<void> {
 		}
 	}
 	if (failures.length > 0) {
-		throw new Error(`Feature metadata validation failed:\n${failures.map((failure) => `  - ${failure}`).join("\n")}`);
+		throw new Error(
+			`Feature metadata validation failed:\n${failures.map((failure) => `  - ${failure}`).join("\n")}`
+		);
 	}
 	console.log(`[Build Pipeline] Validated the metadata of ${features.length} features`);
 }

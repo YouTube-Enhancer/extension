@@ -21,7 +21,9 @@ export function validateFeatureMetadata<K extends FeatureKeys>(metadata: Feature
 
 /** The fields of a zod object schema, looking through optional and similar wrappers; undefined for a leaf. */
 function objectShape(schema: unknown): Record<string, unknown> | undefined {
-	let current = schema as undefined | { def?: { innerType?: unknown; shape?: Record<string, unknown> } };
+	let current = schema as
+		| undefined
+		| { def?: { innerType?: unknown; shape?: Record<string, unknown> } };
 	for (let depth = 0; current?.def && depth < 8; depth++) {
 		if (current.def.shape) return current.def.shape;
 		current = current.def.innerType as typeof current;
@@ -43,7 +45,11 @@ function parseZodError(error: unknown): ValidationError[] {
 }
 
 /** Whether `id`, the feature id followed by the path of a setting inside its config, names a field of `schemaInput`. */
-function settingPathExists(schemaInput: Record<string, unknown>, id: string, featureId: string): boolean {
+function settingPathExists(
+	schemaInput: Record<string, unknown>,
+	id: string,
+	featureId: string
+): boolean {
 	const [head, ...rest] = id.split(".");
 	if (head !== featureId || rest.length === 0) return false;
 	let shape: Record<string, unknown> | undefined = schemaInput;
@@ -75,7 +81,9 @@ function validateSettingsIds<K extends FeatureKeys>(metadata: FeatureMetadata<K>
 			}
 		} else if (n.id && typeof n.id === "string") {
 			if (!settingPathExists(metadata.schemaInput, n.id, metadata.id)) {
-				throw new Error(`Setting ID "${n.id}" in feature "${metadata.id}" does not exist in schemaInput`);
+				throw new Error(
+					`Setting ID "${n.id}" in feature "${metadata.id}" does not exist in schemaInput`
+				);
 			}
 		}
 	}
@@ -148,15 +156,21 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		} = setting as Record<string, unknown>;
 
 		if (!validComponents.includes(comp as ValidComponent)) {
-			throw new Error(`Setting at "${path}" in feature "${metadata.id}" has invalid component: ${comp}`);
+			throw new Error(
+				`Setting at "${path}" in feature "${metadata.id}" has invalid component: ${comp}`
+			);
 		}
 
 		if (typeof label !== "function") {
-			throw new Error(`Setting at "${path}" in feature "${metadata.id}" must have a label function`);
+			throw new Error(
+				`Setting at "${path}" in feature "${metadata.id}" must have a label function`
+			);
 		}
 
 		if (typeof title !== "function") {
-			throw new Error(`Setting at "${path}" in feature "${metadata.id}" must have a title function`);
+			throw new Error(
+				`Setting at "${path}" in feature "${metadata.id}" must have a title function`
+			);
 		}
 
 		if (id && typeof id !== "string") {
@@ -165,16 +179,22 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 
 		if (sect !== undefined) {
 			if (typeof sect !== "string") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" section must be a string`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" section must be a string`
+				);
 			}
 			if (!validSectionIds.includes(sect as (typeof validSectionIds)[number])) {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" has invalid section: ${sect}`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" has invalid section: ${sect}`
+				);
 			}
 		}
 
 		if (disabledWhen !== undefined) {
 			if (!Array.isArray(disabledWhen)) {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" disabledWhen must be an array`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" disabledWhen must be an array`
+				);
 			}
 			for (const condition of disabledWhen) {
 				validateSettingCondition(condition, path, "disabledWhen");
@@ -183,7 +203,9 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 
 		if (visibleWhen !== undefined) {
 			if (!Array.isArray(visibleWhen)) {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" visibleWhen must be an array`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" visibleWhen must be an array`
+				);
 			}
 			for (const condition of visibleWhen) {
 				validateSettingCondition(condition, path, "visibleWhen");
@@ -192,22 +214,32 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 
 		if (comp === "number" || comp === "slider") {
 			if (typeof max !== "number") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have max number`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have max number`
+				);
 			}
 			if (typeof min !== "number") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have min number`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have min number`
+				);
 			}
 			if (typeof step !== "number") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have step number`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" component "${comp}" must have step number`
+				);
 			}
 		}
 
 		if (comp === "text-input" && inpType !== undefined) {
 			if (typeof inpType !== "string") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" input_type must be a string`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" input_type must be a string`
+				);
 			}
 			if (inpType !== "password" && inpType !== "text") {
-				throw new Error(`Setting at "${path}" in feature "${metadata.id}" text-input has invalid input_type: ${inpType}`);
+				throw new Error(
+					`Setting at "${path}" in feature "${metadata.id}" text-input has invalid input_type: ${inpType}`
+				);
 			}
 		}
 
@@ -216,40 +248,64 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		}
 	}
 
-	function validateSettingCondition(condition: unknown, settingPath: string, conditionType: string): void {
+	function validateSettingCondition(
+		condition: unknown,
+		settingPath: string,
+		conditionType: string
+	): void {
 		if (!condition || typeof condition !== "object") {
-			throw new Error(`Condition in ${conditionType} at "${settingPath}" in feature "${metadata.id}" is not an object`);
+			throw new Error(
+				`Condition in ${conditionType} at "${settingPath}" in feature "${metadata.id}" is not an object`
+			);
 		}
 		const c = condition as Record<string, unknown>;
 		if (typeof c.setting !== "string") {
-			throw new Error(`Condition in ${conditionType} at "${settingPath}" in feature "${metadata.id}" must have a setting string`);
+			throw new Error(
+				`Condition in ${conditionType} at "${settingPath}" in feature "${metadata.id}" must have a setting string`
+			);
 		}
 	}
 
-	function validateParentSetting(parentSetting: unknown, settingPath: string, featureId: string): void {
+	function validateParentSetting(
+		parentSetting: unknown,
+		settingPath: string,
+		featureId: string
+	): void {
 		if (typeof parentSetting === "function") return;
 
 		if (!parentSetting || typeof parentSetting !== "object") {
-			throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" is not an object or function`);
+			throw new Error(
+				`ParentSetting at "${settingPath}" in feature "${featureId}" is not an object or function`
+			);
 		}
 
 		const { type, value } = parentSetting as Record<string, unknown>;
 		if (type === undefined) {
-			throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" must have a type`);
+			throw new Error(
+				`ParentSetting at "${settingPath}" in feature "${featureId}" must have a type`
+			);
 		}
 		if (typeof type !== "string") {
-			throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" type must be a string`);
+			throw new Error(
+				`ParentSetting at "${settingPath}" in feature "${featureId}" type must be a string`
+			);
 		}
 		if (type === "singular" || type === "specificOption") {
 			if (typeof value !== "function") {
-				throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" ${type} type must have a value function`);
+				throw new Error(
+					`ParentSetting at "${settingPath}" in feature "${featureId}" ${type} type must have a value function`
+				);
 			}
 		} else if (type === "either" || type === "plural") {
 			if (!Array.isArray(value)) {
-				throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" ${type} type must have a value array`);
+				throw new Error(
+					`ParentSetting at "${settingPath}" in feature "${featureId}" ${type} type must have a value array`
+				);
 			}
 		} else {
-			throw new Error(`ParentSetting at "${settingPath}" in feature "${featureId}" has invalid type: ${type}`);
+			throw new Error(
+				`ParentSetting at "${settingPath}" in feature "${featureId}" has invalid type: ${type}`
+			);
 		}
 	}
 
@@ -278,7 +334,9 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 		if (n.type === "divider") return;
 		if (n.type === "text") {
 			if (typeof n.content !== "function") {
-				throw new Error(`Text node at "${path}" in feature "${metadata.id}" must have content function`);
+				throw new Error(
+					`Text node at "${path}" in feature "${metadata.id}" must have content function`
+				);
 			}
 			return;
 		}
@@ -299,11 +357,15 @@ function validateSettingsStructure<K extends FeatureKeys>(metadata: FeatureMetad
 }
 
 function validateStateSchemaInput<K extends FeatureKeys>(metadata: FeatureMetadata<K>): void {
-	const { stateSchemaInput } = metadata as FeatureMetadata<K> & { stateSchemaInput?: Record<string, unknown> };
+	const { stateSchemaInput } = metadata as FeatureMetadata<K> & {
+		stateSchemaInput?: Record<string, unknown>;
+	};
 	if (!stateSchemaInput) return;
 	try {
 		z.object(stateSchemaInput);
 	} catch (e) {
-		throw new Error(`Feature "${metadata.id}" stateSchemaInput is not a valid Zod shape: ${(e as Error).message}`);
+		throw new Error(
+			`Feature "${metadata.id}" stateSchemaInput is not a valid Zod shape: ${(e as Error).message}`
+		);
 	}
 }

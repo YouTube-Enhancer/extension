@@ -2,7 +2,9 @@ import type { FeatureKeys, FeatureSettingNode, SettingNode } from "@/src/feature
 
 import { isGroupNode, isSettingNode } from "@/src/features/_registry/types";
 
-export function getSettingConfigs<F extends FeatureKeys>(settings: FeatureSettingNode<F>[]): SettingNode<F>[] {
+export function getSettingConfigs<F extends FeatureKeys>(
+	settings: FeatureSettingNode<F>[]
+): SettingNode<F>[] {
 	const configs: SettingNode<F>[] = [];
 
 	for (const node of settings) {

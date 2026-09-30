@@ -13,12 +13,32 @@ export const metadata = createFeatureMetadata({
 			component: "checkbox",
 			disabledReason: (t) =>
 				t((tr) => tr.pages.options.notifications.error.optionConflict, {
-					OPTION: t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label)
+					OPTION: t(
+						(tr) =>
+							tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable
+								.label
+					)
 				}),
-			disabledWhen: [{ equals: true, feature: "automaticallyEnableClosedCaptions", setting: "automaticallyEnableClosedCaptions.enabled" }],
+			disabledWhen: [
+				{
+					equals: true,
+					feature: "automaticallyEnableClosedCaptions",
+					setting: "automaticallyEnableClosedCaptions.enabled"
+				}
+			],
 			id: "automaticallyDisableClosedCaptions.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable
+							.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.automaticallyDisableClosedCaptions.enable
+							.title
+				)
 		}
 	]
 });

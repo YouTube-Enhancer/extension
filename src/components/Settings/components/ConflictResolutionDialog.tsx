@@ -4,7 +4,10 @@ import type { FeatureKeys } from "@/src/features/_registry/types";
 
 import { useSettings } from "@/src/components/Settings/Settings";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
-import { youtubePlayerQualityLabels, youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
+import {
+	youtubePlayerQualityLabels,
+	youtubePlayerQualityLevels
+} from "@/src/features/playerQuality/types";
 import { type configuration, modifierKeys, type TSelectFunc } from "@/src/types";
 
 const qualityOptions = youtubePlayerQualityLevels
@@ -26,7 +29,12 @@ type Props = {
 	pendingSettings: configuration;
 };
 
-export default function ConflictResolutionDialog({ conflicts, onCancel, onResolve, pendingSettings }: Props) {
+export default function ConflictResolutionDialog({
+	conflicts,
+	onCancel,
+	onResolve,
+	pendingSettings
+}: Props) {
 	const { i18nInstance } = useSettings();
 	const { t } = i18nInstance;
 
@@ -36,7 +44,8 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 		const initial: Record<string, string> = {};
 		for (const conflict of conflicts) {
 			// The quality picker opens on its first option, so applying it untouched stores what the dialog shows.
-			initial[getConflictId(conflict)] = conflict.type === "autoQuality" ? qualityOptions[0].value : conflict.featureA;
+			initial[getConflictId(conflict)] =
+				conflict.type === "autoQuality" ? qualityOptions[0].value : conflict.featureA;
 		}
 		return initial;
 	});
@@ -81,11 +90,17 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 				const featureToKeep = selections[conflictId] ?? conflict.featureA;
 
 				if (conflict.featureA === "globalVolume" || conflict.featureA === "rememberVolume") {
-					(resolved.globalVolume as { enabled: boolean }).enabled = featureToKeep === "globalVolume";
+					(resolved.globalVolume as { enabled: boolean }).enabled =
+						featureToKeep === "globalVolume";
 					resolved.rememberVolume.enabled = featureToKeep === "rememberVolume";
-				} else if (conflict.featureA === "automaticallyDisableClosedCaptions" || conflict.featureA === "automaticallyEnableClosedCaptions") {
-					resolved.automaticallyDisableClosedCaptions.enabled = featureToKeep === "automaticallyDisableClosedCaptions";
-					resolved.automaticallyEnableClosedCaptions.enabled = featureToKeep === "automaticallyEnableClosedCaptions";
+				} else if (
+					conflict.featureA === "automaticallyDisableClosedCaptions" ||
+					conflict.featureA === "automaticallyEnableClosedCaptions"
+				) {
+					resolved.automaticallyDisableClosedCaptions.enabled =
+						featureToKeep === "automaticallyDisableClosedCaptions";
+					resolved.automaticallyEnableClosedCaptions.enabled =
+						featureToKeep === "automaticallyEnableClosedCaptions";
 				}
 			} else if (conflict.type === "modifierKey") {
 				const { [conflictId]: newKey } = modifiedKeys;
@@ -106,7 +121,9 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 			<div className="max-h-[80vh] w-full max-w-lg overflow-auto rounded-lg border border-gray-300 bg-[#f5f5f5] p-6 shadow-xl dark:multi-['border-gray-700;bg-[#181a1b]']">
-				<h2 className="mb-4 text-xl font-bold text-black dark:text-white">{t((tr) => tr.pages.options.notifications.error.importConflict.title)}</h2>
+				<h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+					{t((tr) => tr.pages.options.notifications.error.importConflict.title)}
+				</h2>
 				<div className="mb-6 space-y-4">
 					{conflicts.map((conflict, index) => (
 						<ConflictItem
@@ -115,8 +132,12 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 							isResolved={isConflictResolved(conflict)}
 							key={index}
 							modifiedKey={modifiedKeys[getConflictId(conflict)] ?? conflict.key}
-							onKeyChange={(key) => setModifiedKeys((prev) => ({ ...prev, [getConflictId(conflict)]: key }))}
-							onSelectionChange={(feature) => setSelections((prev) => ({ ...prev, [getConflictId(conflict)]: feature }))}
+							onKeyChange={(key) =>
+								setModifiedKeys((prev) => ({ ...prev, [getConflictId(conflict)]: key }))
+							}
+							onSelectionChange={(feature) =>
+								setSelections((prev) => ({ ...prev, [getConflictId(conflict)]: feature }))
+							}
 							selectedFeature={selections[getConflictId(conflict)] ?? conflict.featureA}
 						/>
 					))}
@@ -130,7 +151,9 @@ export default function ConflictResolutionDialog({ conflicts, onCancel, onResolv
 					</button>
 					<button
 						className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-							allConflictsResolved ? "bg-blue-600 text-white hover:bg-blue-700" : "cursor-not-allowed bg-gray-400 text-gray-200"
+							allConflictsResolved
+								? "bg-blue-600 text-white hover:bg-blue-700"
+								: "cursor-not-allowed bg-gray-400 text-gray-200"
 						}`}
 						disabled={!allConflictsResolved}
 						onClick={handleApply}
@@ -165,11 +188,17 @@ function AutoQualityConflictItem({
 			className={`rounded-lg border p-4 ${isResolved ? "border-green-500 bg-white dark:border-green-600 dark:bg-[#23272a]" : "border-red-500 bg-white dark:border-red-600 dark:bg-[#23272a]"}`}
 		>
 			<p className="mb-3 text-sm text-black dark:text-white">
-				{t((tr) => tr.pages.options.notifications.error.importConflict.autoQualityConflict.description)}
+				{t(
+					(tr) =>
+						tr.pages.options.notifications.error.importConflict.autoQualityConflict.description
+				)}
 			</p>
 			<div className="flex items-center gap-2">
 				<span className="text-sm text-black dark:text-white">
-					{t((tr) => tr.pages.options.notifications.error.importConflict.autoQualityConflict.selectQuality)}
+					{t(
+						(tr) =>
+							tr.pages.options.notifications.error.importConflict.autoQualityConflict.selectQuality
+					)}
 				</span>
 				<select
 					className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-black dark:multi-['border-gray-700;bg-[#2f3335];text-white']"
@@ -234,7 +263,13 @@ function ConflictItem({
 	}
 
 	if (conflict.type === "autoQuality") {
-		return <AutoQualityConflictItem isResolved={isResolved} onSelectionChange={onSelectionChange} selectedQuality={selectedFeature} />;
+		return (
+			<AutoQualityConflictItem
+				isResolved={isResolved}
+				onSelectionChange={onSelectionChange}
+				selectedQuality={selectedFeature}
+			/>
+		);
 	}
 
 	return null;
@@ -259,10 +294,13 @@ function EnabledConflictItem({
 	return (
 		<div className="rounded-lg border border-gray-300 bg-white p-4 dark:multi-['border-gray-700;bg-[#23272a]']">
 			<p className="mb-3 text-sm text-black dark:text-white">
-				{t((tr) => tr.pages.options.notifications.error.importConflict.enabledConflict.description, {
-					FEATURE_A: featureALabel,
-					FEATURE_B: featureBLabel
-				})}
+				{t(
+					(tr) => tr.pages.options.notifications.error.importConflict.enabledConflict.description,
+					{
+						FEATURE_A: featureALabel,
+						FEATURE_B: featureBLabel
+					}
+				)}
 			</p>
 			<div className="flex flex-col gap-2">
 				<label className="flex cursor-pointer items-center gap-2">
@@ -314,17 +352,24 @@ function ModifierKeyConflictItem({
 }) {
 	const { i18nInstance } = useSettings();
 	const { t } = i18nInstance;
-	const modifierKeyOptions = modifierKeys.map((key) => ({ label: t((tr) => tr.pages.options.extras.modifierKeys[key]), value: key }));
+	const modifierKeyOptions = modifierKeys.map((key) => ({
+		label: t((tr) => tr.pages.options.extras.modifierKeys[key]),
+		value: key
+	}));
 
 	return (
 		<div
 			className={`rounded-lg border p-4 ${isResolved ? "border-green-500 bg-white dark:border-green-600 dark:bg-[#23272a]" : "border-red-500 bg-white dark:border-red-600 dark:bg-[#23272a]"}`}
 		>
 			<p className="mb-3 text-sm text-black dark:text-white">
-				{t((tr) => tr.pages.options.notifications.error.importConflict.modifierKeyConflict.description, {
-					FEATURE_A: featureALabel,
-					FEATURE_B: featureBLabel
-				})}
+				{t(
+					(tr) =>
+						tr.pages.options.notifications.error.importConflict.modifierKeyConflict.description,
+					{
+						FEATURE_A: featureALabel,
+						FEATURE_B: featureBLabel
+					}
+				)}
 			</p>
 			<div className="mb-3 flex flex-col gap-2">
 				<span className="text-xs font-medium text-black dark:text-white">{featureALabel}</span>
@@ -332,7 +377,10 @@ function ModifierKeyConflictItem({
 			</div>
 			<div className="flex items-center gap-2">
 				<span className="text-sm text-black dark:text-white">
-					{t((tr) => tr.pages.options.notifications.error.importConflict.modifierKeyConflict.selectNewKey)}
+					{t(
+						(tr) =>
+							tr.pages.options.notifications.error.importConflict.modifierKeyConflict.selectNewKey
+					)}
 				</span>
 				<select
 					className="rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-black dark:multi-['border-gray-700;bg-[#2f3335];text-white']"

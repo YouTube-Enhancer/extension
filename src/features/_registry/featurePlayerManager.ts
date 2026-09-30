@@ -64,7 +64,12 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		}
 	}
 
-	async executeWithRetries(featureId: FeatureKeys, tasks: PlayerTask[], taskNames: string[], config?: PlayerRetryConfig): Promise<boolean[]> {
+	async executeWithRetries(
+		featureId: FeatureKeys,
+		tasks: PlayerTask[],
+		taskNames: string[],
+		config?: PlayerRetryConfig
+	): Promise<boolean[]> {
 		const resolved: Required<PlayerRetryConfig> = { ...DEFAULT_CONFIG, ...config };
 
 		this.abortRetry(featureId);
@@ -210,7 +215,9 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
 		entry.adObserver?.disconnect();
-		const player = document.querySelector<YouTubePlayerDiv>(isShortsPage() ? "div#shorts-player" : "div#movie_player");
+		const player = document.querySelector<YouTubePlayerDiv>(
+			isShortsPage() ? "div#shorts-player" : "div#movie_player"
+		);
 		if (player) {
 			player.removeEventListener("onStateChange", entry.handler);
 		}
@@ -238,7 +245,9 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 
 		this.stateHooks.set(featureId, entry);
 
-		const player = document.querySelector<YouTubePlayerDiv>(isShortsPage() ? "div#shorts-player" : "div#movie_player");
+		const player = document.querySelector<YouTubePlayerDiv>(
+			isShortsPage() ? "div#shorts-player" : "div#movie_player"
+		);
 		if (!player) return;
 
 		player.addEventListener("onStateChange", handler);

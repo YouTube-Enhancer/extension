@@ -13,13 +13,18 @@ import { restorePlayerVolume, setPlayerVolume } from "./utils";
  * initialization, which reads YouTube's stored volume back.
  */
 function applyVolume(volume: number) {
-	void registry.playerManager.executeWithRetries("globalVolume", [() => applyVolumeTask(volume)], ["applyVolume"], {
-		interval: 500,
-		maxAttempts: 6,
-		overallTimeout: 15_000,
-		pageTypes: ["live", "shorts", "watch"],
-		waitForLoaded: true
-	});
+	void registry.playerManager.executeWithRetries(
+		"globalVolume",
+		[() => applyVolumeTask(volume)],
+		["applyVolume"],
+		{
+			interval: 500,
+			maxAttempts: 6,
+			overallTimeout: 15_000,
+			pageTypes: ["live", "shorts", "watch"],
+			waitForLoaded: true
+		}
+	);
 }
 async function applyVolumeTask(volume: number): Promise<boolean> {
 	const playerContainer = getPlayerContainer();

@@ -12,12 +12,17 @@ let captionsWhereEnabled = false;
 
 function enableCaptions() {
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
-	void registry.playerManager.executeWithRetries("automaticallyEnableClosedCaptions", [enableCaptionsTask], ["enableCaptions"], {
-		interval: 500,
-		maxAttempts: 120,
-		overallTimeout: 60_000,
-		waitForLoaded: true
-	});
+	void registry.playerManager.executeWithRetries(
+		"automaticallyEnableClosedCaptions",
+		[enableCaptionsTask],
+		["enableCaptions"],
+		{
+			interval: 500,
+			maxAttempts: 120,
+			overallTimeout: 60_000,
+			waitForLoaded: true
+		}
+	);
 }
 
 /**
@@ -61,7 +66,9 @@ export default createFeature({
 	onEnable: async () => {
 		// Get the player element
 		const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
-		const subtitlesButton = document.querySelector<HTMLButtonElement>("button.ytp-subtitles-button");
+		const subtitlesButton = document.querySelector<HTMLButtonElement>(
+			"button.ytp-subtitles-button"
+		);
 		// If player element or subtitles button is not available, return
 		if (!playerContainer || !subtitlesButton) return;
 		captionsWhereEnabled = subtitlesButton.getAttribute("aria-pressed") === "true";

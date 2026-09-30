@@ -18,7 +18,9 @@ let loaded: Promise<LoadedFeatureMetadata[]> | undefined;
  * two seconds per build. The result is cached so the validation and README steps share one load; `fresh` replaces the
  * cache by importing the files again with a new query string, which the watch pipeline does after a metadata edit.
  */
-export function loadFeatureMetadata({ fresh = false }: { fresh?: boolean } = {}): Promise<LoadedFeatureMetadata[]> {
+export function loadFeatureMetadata({ fresh = false }: { fresh?: boolean } = {}): Promise<
+	LoadedFeatureMetadata[]
+> {
 	if (fresh || !loaded) loaded = load(fresh ? `?t=${Date.now()}` : "");
 	return loaded;
 }
@@ -26,13 +28,18 @@ export function loadFeatureMetadata({ fresh = false }: { fresh?: boolean } = {})
 async function load(query: string): Promise<LoadedFeatureMetadata[]> {
 	const featuresDir = resolve(process.cwd(), "src", "features");
 	const folders = readdirSync(featuresDir, { withFileTypes: true })
-		.filter((entry) => entry.isDirectory() && existsSync(join(featuresDir, entry.name, "index.metadata.ts")))
+		.filter(
+			(entry) =>
+				entry.isDirectory() && existsSync(join(featuresDir, entry.name, "index.metadata.ts"))
+		)
 		.map((entry) => entry.name)
 		.sort();
 	const features: LoadedFeatureMetadata[] = [];
 	for (const folder of folders) {
 		const modulePath = join(featuresDir, folder, "index.metadata.ts");
-		const { metadata } = (await import(pathToFileURL(modulePath).href + query)) as { metadata?: FeatureMetadata<FeatureKeys> };
+		const { metadata } = (await import(pathToFileURL(modulePath).href + query)) as {
+			metadata?: FeatureMetadata<FeatureKeys>;
+		};
 		features.push({ folder, metadata });
 	}
 	return features;

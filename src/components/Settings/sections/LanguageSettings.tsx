@@ -11,7 +11,9 @@ import SettingTitle from "@/src/components/Settings/components/SettingTitle";
 import { useSettings } from "@/src/components/Settings/Settings";
 import { availableLocales, localePercentages } from "@/src/i18n/constants";
 
-type Action = { payload: boolean; type: "SET_LOADING" } | { payload: SelectOption<"language">[]; type: "SET_LANGUAGES" };
+type Action =
+	| { payload: boolean; type: "SET_LOADING" }
+	| { payload: SelectOption<"language">[]; type: "SET_LANGUAGES" };
 type State = {
 	languageOptions: SelectOption<"language">[];
 	languagesLoading: boolean;
@@ -72,7 +74,10 @@ async function getLanguageOptions() {
 	const results = await Promise.allSettled(promises);
 
 	const languageOptions: SelectOption<"language">[] = results
-		.filter((result): result is PromiseFulfilledResult<SelectOption<"language">> => result.status === "fulfilled")
+		.filter(
+			(result): result is PromiseFulfilledResult<SelectOption<"language">> =>
+				result.status === "fulfilled"
+		)
 		.map((result) => result.value);
 
 	return languageOptions;

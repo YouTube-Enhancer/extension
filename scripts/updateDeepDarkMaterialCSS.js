@@ -4,7 +4,8 @@ import path from "path";
 import postcss from "postcss";
 import safeParser from "postcss-safe-parser";
 
-const SOURCE_URL = "https://raw.githubusercontent.com/RaitaroH/YouTube-DeepDark/master/YouTubeDeepDarkMaterial.user.css";
+const SOURCE_URL =
+	"https://raw.githubusercontent.com/RaitaroH/YouTube-DeepDark/master/YouTubeDeepDarkMaterial.user.css";
 const OUTPUT_FILE = path.resolve("src/deepDarkMaterialCSS.ts");
 
 /**
@@ -19,8 +20,12 @@ async function build() {
 	console.log("Extracting version and variables...");
 	const version = extractVersion(header);
 	const vars = parseStylusVars(header);
-	const checkboxVars = Object.fromEntries(vars.filter(isCheckbox).map((v) => [v.name, v.value.trim()]));
-	const valueVars = Object.fromEntries(vars.filter((v) => !isCheckbox(v)).map((v) => [v.name, v.value]));
+	const checkboxVars = Object.fromEntries(
+		vars.filter(isCheckbox).map((v) => [v.name, v.value.trim()])
+	);
+	const valueVars = Object.fromEntries(
+		vars.filter((v) => !isCheckbox(v)).map((v) => [v.name, v.value])
+	);
 	console.log("Cleaning CSS and removing Stylus root conditionals...");
 	const cleanedCSS = removeStylusRootConditionals(body);
 	console.log("Extracting :root and redirect sections from -moz-document...");
@@ -88,7 +93,8 @@ function fetchText(url) {
 	return new Promise((resolve, reject) => {
 		https
 			.get(url, (res) => {
-				if (!res.statusCode || res.statusCode >= 400) return reject(new Error(`Request failed: ${res.statusCode}`));
+				if (!res.statusCode || res.statusCode >= 400)
+					return reject(new Error(`Request failed: ${res.statusCode}`));
 				let data = "";
 				res.on("data", (c) => (data += c));
 				res.on("end", () => resolve(data));
@@ -178,7 +184,11 @@ function parseStylusVars(header) {
 function processMozRule(rule, checkboxVars) {
 	rule.walk((node) => {
 		if (node.type === "comment" && node.text.trim() === "Main color variables") node.remove();
-		if (node.type === "rule" && node.selector === ":root" && node.nodes?.every((n) => n.type === "decl" && n.prop.startsWith("--"))) {
+		if (
+			node.type === "rule" &&
+			node.selector === ":root" &&
+			node.nodes?.every((n) => n.type === "decl" && n.prop.startsWith("--"))
+		) {
 			node.remove();
 		}
 	});
@@ -236,7 +246,9 @@ function replaceVars(css, vars) {
  */
 function splitUserStyleHeader(css) {
 	const m = css.match(/\/\*\s*==UserStyle==[\s\S]*?==\/UserStyle==\s*\*\//i);
-	return m ? { body: css.slice(m.index + m[0].length).trimStart(), header: m[0] } : { body: css, header: "" };
+	return m
+		? { body: css.slice(m.index + m[0].length).trimStart(), header: m[0] }
+		: { body: css, header: "" };
 }
 
 build().catch((e) => {

@@ -6,7 +6,9 @@ import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	button: "hideEndScreenCardsButton",
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") } },
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") }
+	},
 	dependencies: { includePages: ["watch"] },
 	id: "hideEndScreenCardsButton",
 	loadPhase: 1,
@@ -14,8 +16,12 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideEndScreenCardsButton.button.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCardsButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCardsButton.enable.title)
+			label: (t) =>
+				t(
+					(tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCardsButton.enable.label
+				),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCardsButton.enable.title)
 		}
 	]
 });

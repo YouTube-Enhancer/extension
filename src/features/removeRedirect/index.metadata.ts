@@ -11,8 +11,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "removeRedirect.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.removeRedirect.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.removeRedirect.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.removeRedirect.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.removeRedirect.enable.title)
 		}
 	]
 });

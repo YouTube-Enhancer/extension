@@ -17,7 +17,11 @@ export function getNumberConstraints(): ConstraintTree {
 	return constraints;
 }
 
-export function validateNumbers<T extends Record<string, unknown>>(obj: T, constraints: ConstraintTree, path: (number | string)[] = []): void {
+export function validateNumbers<T extends Record<string, unknown>>(
+	obj: T,
+	constraints: ConstraintTree,
+	path: (number | string)[] = []
+): void {
 	const EPSILON = 1e-8;
 	for (const key in constraints) {
 		if (!Object.prototype.hasOwnProperty.call(constraints, key)) continue;
@@ -64,7 +68,15 @@ function extractConstraints(node: unknown, constraints: ConstraintTree): void {
 	setNestedPath(constraints, pathParts, { max, min, step });
 }
 
-function hasNumericConstraints(node: unknown): node is { component: "number" | "slider"; id: string; max?: number; min?: number; step?: number } {
+function hasNumericConstraints(
+	node: unknown
+): node is {
+	component: "number" | "slider";
+	id: string;
+	max?: number;
+	min?: number;
+	step?: number;
+} {
 	if (typeof node !== "object" || node === null) return false;
 	if (!("component" in node)) return false;
 	const { component } = node;
@@ -72,7 +84,11 @@ function hasNumericConstraints(node: unknown): node is { component: "number" | "
 }
 
 function isConstraintTree(value: unknown): value is ConstraintTree {
-	return typeof value === "object" && value !== null && !("min" in value || "max" in value || "step" in value);
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		!("min" in value || "max" in value || "step" in value)
+	);
 }
 
 function setNestedPath(obj: Record<string, unknown>, pathParts: string[], value: unknown): void {

@@ -12,8 +12,16 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "openYouTubeSettingsOnHover.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.openYouTubeSettingsOnHover.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.openYouTubeSettingsOnHover.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.openYouTubeSettingsOnHover.enable.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.openYouTubeSettingsOnHover.enable.title
+				)
 		}
 	]
 });

@@ -64,7 +64,8 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				const configs = {} as { [K in FeatureKeys]?: configuration[K] };
 				for (const feature of features) {
 					try {
-						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = registry.configManager.getLast(feature.id);
+						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] =
+							registry.configManager.getLast(feature.id);
 					} catch {
 						(configs as Record<string, configuration[FeatureKeys]>)[feature.id] = feature.defaults;
 					}
@@ -216,7 +217,10 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				return {
 					...messageBase,
 					data: {
-						config: { ...defaults, [path]: value } as Pick<configuration, CoreFeatureKeys | NonFeatureKeys>
+						config: { ...defaults, [path]: value } as Pick<
+							configuration,
+							CoreFeatureKeys | NonFeatureKeys
+						>
 					}
 				};
 			}
@@ -230,7 +234,11 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				} = await waitForSpecificMessage("options", "request_data", "extension");
 				let updatedConfig: Nullable<configuration> = null;
 				try {
-					updatedConfig = updateConfigAtPath(options, path as Path<configuration>, value as PathValue<configuration, Path<configuration>>);
+					updatedConfig = updateConfigAtPath(
+						options,
+						path as Path<configuration>,
+						value as PathValue<configuration, Path<configuration>>
+					);
 					window.postMessage(
 						{
 							action: "request_storage_update",
@@ -240,7 +248,12 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 						"*"
 					);
 				} catch (error) {
-					console.error("[DevTools InjectedScript] Failed to update feature config path:", { error, id, path, value });
+					console.error("[DevTools InjectedScript] Failed to update feature config path:", {
+						error,
+						id,
+						path,
+						value
+					});
 					// Still return a response to avoid hanging the DevTools request
 					return {
 						...messageBase,
@@ -260,7 +273,12 @@ const handleDevToolsMessage = async <T extends DevToolsMessageType>(
 				};
 			}
 		}
-	})()) satisfies Nullable<DevToolsDataResponseMessage<DevToolsMessageType, DevToolsMessageMappings[DevToolsMessageType]["response"]["data"]>>;
+	})()) satisfies Nullable<
+		DevToolsDataResponseMessage<
+			DevToolsMessageType,
+			DevToolsMessageMappings[DevToolsMessageType]["response"]["data"]
+		>
+	>;
 };
 
 export const setupDevToolsListener = () => {
@@ -268,7 +286,14 @@ export const setupDevToolsListener = () => {
 	devToolsListenerAdded = true;
 
 	window.addEventListener("message", (event: MessageEvent) => {
-		const rawData = event.data as { action?: string; extensionId?: string; requestId?: string; source?: string; tabId?: number; type?: string };
+		const rawData = event.data as {
+			action?: string;
+			extensionId?: string;
+			requestId?: string;
+			source?: string;
+			tabId?: number;
+			type?: string;
+		};
 		if (!rawData || rawData.source !== "content_script") return;
 
 		const { extensionId, requestId, tabId, type } = rawData;
@@ -280,7 +305,9 @@ export const setupDevToolsListener = () => {
 				if (!response) return;
 
 				const serializedResponse = JSON.parse(JSON.stringify(response));
-				const messageToSend = Object.assign({}, serializedResponse, { source: "injected" as const });
+				const messageToSend = Object.assign({}, serializedResponse, {
+					source: "injected" as const
+				});
 
 				window.postMessage(messageToSend, "*");
 			} catch (error) {

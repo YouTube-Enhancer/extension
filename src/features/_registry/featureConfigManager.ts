@@ -12,7 +12,10 @@ class FeatureConfigManager {
 		return cfg as configuration[K];
 	}
 
-	hasChanged<K extends FeatureKeys>(prev: configuration[K] | undefined, next: configuration[K]): boolean {
+	hasChanged<K extends FeatureKeys>(
+		prev: configuration[K] | undefined,
+		next: configuration[K]
+	): boolean {
 		return !deepEqual(prev, next);
 	}
 

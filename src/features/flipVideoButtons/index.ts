@@ -18,13 +18,20 @@ export default createFeature({
 				await addFeatureButton(
 					"flipVideoHorizontalButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoHorizontalButton.button.label),
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.flipVideoHorizontalButton.button.label
+					),
 					getFeatureIcon("flipVideoHorizontalButton", placement),
 					() => flipVideoHorizontal(),
 					false,
 					false,
 					fullscreenPlacement,
-					() => window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoHorizontalButton.button.label)
+					() =>
+						window.i18nextInstance.t(
+							(translations) =>
+								translations.pages.content.features.flipVideoHorizontalButton.button.label
+						)
 				);
 			},
 			name: "flipVideoHorizontalButton"
@@ -38,13 +45,20 @@ export default createFeature({
 				await addFeatureButton(
 					"flipVideoVerticalButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoVerticalButton.button.label),
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.flipVideoVerticalButton.button.label
+					),
 					getFeatureIcon("flipVideoVerticalButton", placement),
 					() => flipVideoVertical(),
 					false,
 					false,
 					fullscreenPlacement,
-					() => window.i18nextInstance.t((translations) => translations.pages.content.features.flipVideoVerticalButton.button.label)
+					() =>
+						window.i18nextInstance.t(
+							(translations) =>
+								translations.pages.content.features.flipVideoVerticalButton.button.label
+						)
 				);
 			},
 			name: "flipVideoVerticalButton"

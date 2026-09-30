@@ -14,8 +14,15 @@ export default createFeature({
 					"monoToStereoButton",
 					placement,
 					placement === "feature_menu"
-						? window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.label)
-						: window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[isMonoStereoEnabled() ? "on" : "off"]),
+						? window.i18nextInstance.t(
+								(t) => t.pages.content.features.monoToStereoButton.button.label
+							)
+						: window.i18nextInstance.t(
+								(t) =>
+									t.pages.content.features.monoToStereoButton.button.toggle[
+										isMonoStereoEnabled() ? "on" : "off"
+									]
+							),
 					getFeatureIcon("monoToStereoButton", placement),
 					(checked) => {
 						if (checked) enableMonoToStereo();
@@ -23,7 +30,12 @@ export default createFeature({
 
 						updateFeatureButtonTitle(
 							"monoToStereoButton",
-							window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[isMonoStereoEnabled() ? "on" : "off"])
+							window.i18nextInstance.t(
+								(t) =>
+									t.pages.content.features.monoToStereoButton.button.toggle[
+										isMonoStereoEnabled() ? "on" : "off"
+									]
+							)
 						);
 					},
 					true,
@@ -32,8 +44,15 @@ export default createFeature({
 					() => {
 						const enabled = isMonoStereoEnabled();
 						return placement === "feature_menu"
-							? window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.label)
-							: window.i18nextInstance.t((t) => t.pages.content.features.monoToStereoButton.button.toggle[enabled ? "on" : "off"]);
+							? window.i18nextInstance.t(
+									(t) => t.pages.content.features.monoToStereoButton.button.label
+								)
+							: window.i18nextInstance.t(
+									(t) =>
+										t.pages.content.features.monoToStereoButton.button.toggle[
+											enabled ? "on" : "off"
+										]
+								);
 					}
 				);
 			},

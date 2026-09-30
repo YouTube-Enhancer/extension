@@ -12,8 +12,16 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hidePlaylistRecommendations.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePlaylistRecommendations.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hidePlaylistRecommendations.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hidePlaylistRecommendations.enable.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hidePlaylistRecommendations.enable.title
+				)
 		}
 	]
 });

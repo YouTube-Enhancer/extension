@@ -6,7 +6,10 @@ import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	button: ["forwardButton", "rewindButton"],
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") }, time: field(z.number(), 5) },
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") },
+		time: field(z.number(), 5)
+	},
 	dependencies: { includePages: ["watch"] },
 	id: "forwardRewindButtons",
 	loadPhase: 1,

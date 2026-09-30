@@ -6,7 +6,9 @@ export const SettingsFilterProvider = (context: { children: ReactElement | React
 	const [filter, setFilter] = useState("");
 
 	return (
-		<SettingsFilterContext.Provider value={{ filter, setFilter } satisfies SettingsFilterContextProps}>
+		<SettingsFilterContext.Provider
+			value={{ filter, setFilter } satisfies SettingsFilterContextProps}
+		>
 			{context.children}
 		</SettingsFilterContext.Provider>
 	);

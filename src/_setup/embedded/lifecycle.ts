@@ -31,7 +31,10 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 			data: { options }
 		},
 		{ data: state }
-	] = await Promise.all([waitForSpecificMessage("options", "request_data", "content"), waitForSpecificMessage("state", "request_data", "extension")]);
+	] = await Promise.all([
+		waitForSpecificMessage("options", "request_data", "content"),
+		waitForSpecificMessage("state", "request_data", "extension")
+	]);
 
 	window.i18nextInstance = await i18nService(options.language ?? "en-US");
 
@@ -98,7 +101,8 @@ export async function setupYouTubePage(): Promise<CleanupHandle> {
 	for (const feature of registry.getAll()) {
 		const { id } = feature;
 		const { [id]: current } = currentOptions;
-		if (!current || !featureConfigManager.hasChanged(featureConfigManager.getLast(id), current)) continue;
+		if (!current || !featureConfigManager.hasChanged(featureConfigManager.getLast(id), current))
+			continue;
 		await registry.reconcileFeature(id, current, resolveEnabled(current));
 	}
 

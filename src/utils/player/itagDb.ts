@@ -109,7 +109,14 @@ export const ITAG_DB: Record<number, ItagEntry> = {
 	380: { codec: "AC-3", type: "audio", bitrate: 384, note: "Dolby Digital 5.1" },
 
 	// HLS Premium
-	616: { codec: "VP9", type: "video", res: "1080p", fps: 30, premium: true, note: "HLS/M3U8 delivery" }
+	616: {
+		codec: "VP9",
+		type: "video",
+		res: "1080p",
+		fps: 30,
+		premium: true,
+		note: "HLS/M3U8 delivery"
+	}
 };
 
 export function lookupItag(itag: number): Nullable<ItagEntry> {

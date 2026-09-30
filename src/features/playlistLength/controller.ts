@@ -97,11 +97,19 @@ export class PlaylistLengthController {
 
 	private async fetchData(methodConfig: PlaylistLengthParameters): Promise<VideoTimeState> {
 		const { pageType, playlistLengthGetMethod, playlistWatchTimeGetMethod } = methodConfig;
-		const playlistItems = pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+		const playlistItems =
+			pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
 		const playlistItemsVideoDetails = getPlaylistItemsVideoDetails(playlistItems);
 
-		const totalTimeSeconds = await this.resolveTotalDuration(playlistLengthGetMethod, playlistItemsVideoDetails);
-		const watchedTimeSeconds = calculateWatchedTime(pageType, playlistItemsVideoDetails, playlistWatchTimeGetMethod);
+		const totalTimeSeconds = await this.resolveTotalDuration(
+			playlistLengthGetMethod,
+			playlistItemsVideoDetails
+		);
+		const watchedTimeSeconds = calculateWatchedTime(
+			pageType,
+			playlistItemsVideoDetails,
+			playlistWatchTimeGetMethod
+		);
 		return { totalTimeSeconds, watchedTimeSeconds };
 	}
 
@@ -117,7 +125,10 @@ export class PlaylistLengthController {
 		const playerSpeed = videoElement?.playbackRate ?? 1;
 
 		if (methodConfig.playlistLengthGetMethod === "api") {
-			const playlistItems = methodConfig.pageType === "watch" ? getPlaylistItemsFromWatchPage() : getPlaylistItemsFromPlaylistPage();
+			const playlistItems =
+				methodConfig.pageType === "watch"
+					? getPlaylistItemsFromWatchPage()
+					: getPlaylistItemsFromPlaylistPage();
 			const { length: currentLength } = playlistItems;
 
 			if (this.lastPlaylistLength === null) {
@@ -134,7 +145,11 @@ export class PlaylistLengthController {
 		const newTotal = Math.floor(data.totalTimeSeconds / playerSpeed);
 		const newWatched = Math.floor(data.watchedTimeSeconds / playerSpeed);
 
-		if (this.lastUpdate && this.lastUpdate.total === newTotal && this.lastUpdate.watched === newWatched) {
+		if (
+			this.lastUpdate &&
+			this.lastUpdate.total === newTotal &&
+			this.lastUpdate.watched === newWatched
+		) {
 			return;
 		}
 
@@ -192,7 +207,10 @@ export class PlaylistLengthController {
 		return selectFirstWithWidth(selector);
 	}
 
-	private async resolveTotalDuration(method: PlaylistLengthGetMethod, videoDetails: VideoDetails[]): Promise<number> {
+	private async resolveTotalDuration(
+		method: PlaylistLengthGetMethod,
+		videoDetails: VideoDetails[]
+	): Promise<number> {
 		if (method === "html") {
 			return videoDetails.reduce((total, video) => total + video.duration, 0);
 		}
@@ -209,7 +227,10 @@ export class PlaylistLengthController {
 		return totalTimeSeconds;
 	}
 
-	private setupObservers(methodConfig: PlaylistLengthParameters, videoElement: Nullable<HTMLVideoElement>): void {
+	private setupObservers(
+		methodConfig: PlaylistLengthParameters,
+		videoElement: Nullable<HTMLVideoElement>
+	): void {
 		this.disconnectObservers();
 
 		this.unsubscribeBus = subscribe("*", () => {
@@ -223,7 +244,12 @@ export class PlaylistLengthController {
 		this.resizeObserver = resizeObserver;
 
 		if (videoElement) {
-			eventManager.addEventListener(videoElement, "timeupdate", () => void this.handleUpdate(methodConfig), "playlistLength");
+			eventManager.addEventListener(
+				videoElement,
+				"timeupdate",
+				() => void this.handleUpdate(methodConfig),
+				"playlistLength"
+			);
 		}
 	}
 }

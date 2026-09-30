@@ -19,20 +19,50 @@ export const metadata = createFeatureMetadata({
 				{
 					component: "checkbox",
 					id: "playlistManagementButtons.removeButton.enabled",
-					label: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable.label),
-					title: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable.title)
+					label: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable
+									.label
+						),
+					title: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.removeVideoButton.enable
+									.title
+						)
 				},
 				{
 					component: "checkbox",
 					id: "playlistManagementButtons.resetButton.enabled",
-					label: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.label),
-					title: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable.title)
+					label: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable
+									.label
+						),
+					title: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.markAsUnwatchedButton.enable
+									.title
+						)
 				},
 				{
 					component: "checkbox",
 					id: "playlistManagementButtons.removeAllButton.enabled",
-					label: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton.enable.label),
-					title: (t) => t((tr) => tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton.enable.title)
+					label: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton
+									.enable.label
+						),
+					title: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playlistManagementButtons.settings.removeAllWatchedVideosButton
+									.enable.title
+						)
 				}
 			],
 			section: "playlistManagementButtons",

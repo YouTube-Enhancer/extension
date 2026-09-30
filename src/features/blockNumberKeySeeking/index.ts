@@ -7,7 +7,11 @@ import { metadata } from "./index.metadata";
 const keydownHandler = (event: KeyboardEvent): void => {
 	const target = event.target as Nullable<HTMLElement>;
 	// Ignore typing in inputs / textareas / contenteditable
-	if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
+	if (
+		target &&
+		(target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)
+	)
+		return;
 	// Top-row numbers 0–9
 	if (/^[0-9]$/.test(event.key)) {
 		event.stopImmediatePropagation();

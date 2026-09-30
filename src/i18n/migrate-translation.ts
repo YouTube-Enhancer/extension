@@ -14,7 +14,11 @@ type TypeToZod<T> = {
 		: ZodObject<TypeToZod<T[K]>>;
 };
 type TypeToZodSchema<T> = ZodObject<{
-	[K in keyof T]: T[K] extends any[] ? ZodArray<ZodType<T[K][number]>> : T[K] extends object ? ZodObject<TypeToZod<T[K]>> : ZodType<T[K]>;
+	[K in keyof T]: T[K] extends any[]
+		? ZodArray<ZodType<T[K][number]>>
+		: T[K] extends object
+			? ZodObject<TypeToZod<T[K]>>
+			: ZodType<T[K]>;
 }>;
 // @ts-expect-error Old translation schema doesn't need to be updated
 export const OldTranslationSchema: TypeToZodSchema<OldTranslationStruct> = object({

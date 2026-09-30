@@ -12,8 +12,16 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "defaultToOriginalAudioTrack.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.defaultToOriginalAudioTrack.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.defaultToOriginalAudioTrack.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.defaultToOriginalAudioTrack.enable.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.defaultToOriginalAudioTrack.enable.title
+				)
 		}
 	]
 });

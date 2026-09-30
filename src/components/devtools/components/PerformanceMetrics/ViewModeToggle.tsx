@@ -10,7 +10,11 @@ type ViewModeToggleProps = {
 	viewMode: ViewMode;
 };
 
-export default function ViewModeToggle({ errorCount, onViewModeChange, viewMode }: ViewModeToggleProps): JSX.Element {
+export default function ViewModeToggle({
+	errorCount,
+	onViewModeChange,
+	viewMode
+}: ViewModeToggleProps): JSX.Element {
 	const modes: { id: ViewMode; label: string }[] = [
 		{ id: "summary", label: "Summary" },
 		{ id: "slowest", label: "Slowest" },
@@ -26,7 +30,9 @@ export default function ViewModeToggle({ errorCount, onViewModeChange, viewMode 
 				<button
 					className={cn(
 						"rounded px-3 py-1.5 text-sm",
-						viewMode === mode.id ? "bg-[#007acc] text-white" : "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
+						viewMode === mode.id
+							? "bg-[#007acc] text-white"
+							: "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
 					)}
 					key={mode.id}
 					onClick={() => onViewModeChange(mode.id)}

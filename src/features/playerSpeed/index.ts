@@ -88,7 +88,11 @@ function makePlayerSpeedTask(speed: number, channelSpeeds?: string): () => Promi
 		return true;
 	};
 }
-function resolveEffectiveSpeed(speed: number, channelSpeeds: string | undefined, channelId: Nullable<string>): number {
+function resolveEffectiveSpeed(
+	speed: number,
+	channelSpeeds: string | undefined,
+	channelId: Nullable<string>
+): number {
 	if (!channelId) return speed;
 	const entry = parseChannelSpeeds(channelSpeeds).get(channelId);
 	if (entry === undefined) return speed;
@@ -127,26 +131,48 @@ function setupPlaybackSpeedChangeListener() {
 			if (speed !== null) updateStoredSpeed(speed);
 		};
 		const panelObserver = new MutationObserver(() => {
-			const speedPanel = settingsPanelMenu.querySelector<HTMLDivElement>(".ytp-variable-speed-panel-content");
+			const speedPanel = settingsPanelMenu.querySelector<HTMLDivElement>(
+				".ytp-variable-speed-panel-content"
+			);
 			if (!speedPanel) return;
 			// Slider
-			const slider = speedPanel.querySelector<HTMLInputElement>(".ytp-input-slider.ytp-speedslider");
+			const slider = speedPanel.querySelector<HTMLInputElement>(
+				".ytp-input-slider.ytp-speedslider"
+			);
 			if (slider) {
 				eventManager.removeEventListener(slider, "input", metadata.id);
-				eventManager.addEventListener(slider, "input", () => handleSliderChange(slider), metadata.id);
+				eventManager.addEventListener(
+					slider,
+					"input",
+					() => handleSliderChange(slider),
+					metadata.id
+				);
 			}
 			// Preset buttons
-			const presets = speedPanel.querySelectorAll<HTMLButtonElement>(".ytp-variable-speed-panel-preset-button");
+			const presets = speedPanel.querySelectorAll<HTMLButtonElement>(
+				".ytp-variable-speed-panel-preset-button"
+			);
 			presets.forEach((preset) => {
 				eventManager.removeEventListener(preset, "click", metadata.id);
-				eventManager.addEventListener(preset, "click", () => handlePresetClick(preset), metadata.id);
+				eventManager.addEventListener(
+					preset,
+					"click",
+					() => handlePresetClick(preset),
+					metadata.id
+				);
 			});
 			// Display span (catch programmatic updates)
-			const displaySpan = speedPanel.querySelector<HTMLSpanElement>(".ytp-variable-speed-panel-display span, .ytp-speedslider-text");
+			const displaySpan = speedPanel.querySelector<HTMLSpanElement>(
+				".ytp-variable-speed-panel-display span, .ytp-speedslider-text"
+			);
 			const speed = parseSpeed(displaySpan?.textContent ?? null);
 			if (speed !== null) updateStoredSpeed(speed);
 		});
-		panelObserver.observe(settingsPanelMenu, { characterData: true, childList: true, subtree: true });
+		panelObserver.observe(settingsPanelMenu, {
+			characterData: true,
+			childList: true,
+			subtree: true
+		});
 		// Reset lastSpeed when menu closes
 		new MutationObserver(() => {
 			if (settingsPanelMenu.style.display === "none") lastSpeed = null;
@@ -187,15 +213,21 @@ function handleRateChange(video: HTMLVideoElement) {
 
 function reapplyEnforcedSpeed(urlVideoId: Nullable<string>) {
 	if (!enforcedConfig) return;
-	if (automaticReapplies.videoId !== urlVideoId) automaticReapplies = { count: 0, videoId: urlVideoId };
+	if (automaticReapplies.videoId !== urlVideoId)
+		automaticReapplies = { count: 0, videoId: urlVideoId };
 	if (automaticReapplies.count >= MAX_AUTOMATIC_REAPPLIES) return;
 	automaticReapplies.count++;
 	const { channelSpeeds, speed } = enforcedConfig;
-	void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["reapplySpeed"], {
-		maxAttempts: 5,
-		pageTypes: ["watch", "shorts"],
-		waitForLoaded: true
-	});
+	void registry.playerManager.executeWithRetries(
+		metadata.id,
+		[makePlayerSpeedTask(speed, channelSpeeds)],
+		["reapplySpeed"],
+		{
+			maxAttempts: 5,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		}
+	);
 }
 
 function recordExternalSpeed(speed: number) {
@@ -238,12 +270,17 @@ export default createFeature({
 		if (!enabled) return;
 		enforcedConfig = { channelSpeeds, speed };
 		clearSessionSpeed();
-		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
-			maxAttempts: 10,
-			onPlayerStateChange: true,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makePlayerSpeedTask(speed, channelSpeeds)],
+			["setSpeed"],
+			{
+				maxAttempts: 10,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: true
+			}
+		);
 		void updateEffectivePlaybackSpeedButtons(speed, channelSpeeds);
 	},
 	onDisable: () => {
@@ -255,11 +292,16 @@ export default createFeature({
 		resetRecordedSpeed();
 		const speed = registry.stateManager.getStateAPI(metadata.id).getState()?.playbackSpeed ?? 1;
 		browserColorLog(`Restoring player speed to ${speed}`, "FgMagenta");
-		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed)], ["restoreSpeed"], {
-			maxAttempts: 10,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makePlayerSpeedTask(speed)],
+			["restoreSpeed"],
+			{
+				maxAttempts: 10,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: true
+			}
+		);
 		void updatePlaybackSpeedButtons(speed);
 	},
 	onEnable: ({ channelSpeeds, speed }) => {
@@ -270,29 +312,42 @@ export default createFeature({
 		clearManualOverride();
 		clearSessionSpeed();
 		resetRecordedSpeed();
-		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(speed, channelSpeeds)], ["setSpeed"], {
-			maxAttempts: 10,
-			onPlayerStateChange: true,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makePlayerSpeedTask(speed, channelSpeeds)],
+			["setSpeed"],
+			{
+				maxAttempts: 10,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: true
+			}
+		);
 		void updateEffectivePlaybackSpeedButtons(speed, channelSpeeds);
 	},
 	onInit: setupPlaybackSpeedChangeListener,
 	onNavigate: ({ channelSpeeds, speed }) => {
 		const sessionSpeed = getSessionSpeed();
 		const effectiveSpeed = sessionSpeed ?? speed;
-		browserColorLog(`Setting player speed to ${effectiveSpeed} (navigation${sessionSpeed !== null ? ", session override" : ""})`, "FgMagenta");
+		browserColorLog(
+			`Setting player speed to ${effectiveSpeed} (navigation${sessionSpeed !== null ? ", session override" : ""})`,
+			"FgMagenta"
+		);
 		enforcedConfig = { channelSpeeds, speed: effectiveSpeed };
 		void setupRateChangeListener();
 		clearManualOverride();
 		resetRecordedSpeed();
-		void registry.playerManager.executeWithRetries(metadata.id, [makePlayerSpeedTask(effectiveSpeed, channelSpeeds)], ["setSpeed"], {
-			maxAttempts: 10,
-			onPlayerStateChange: true,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makePlayerSpeedTask(effectiveSpeed, channelSpeeds)],
+			["setSpeed"],
+			{
+				maxAttempts: 10,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: true
+			}
+		);
 		void updateEffectivePlaybackSpeedButtons(effectiveSpeed, channelSpeeds);
 	},
 	persistState: true,

@@ -6,7 +6,9 @@ import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	button: "maximizePlayerButton",
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "feature_menu") } },
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "feature_menu") }
+	},
 	dependencies: { includePages: ["watch", "live"] },
 	id: "maximizePlayerButton",
 	loadPhase: 1,
@@ -14,8 +16,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "maximizePlayerButton.button.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.maximizePlayerButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.maximizePlayerButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.maximizePlayerButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.maximizePlayerButton.enable.title)
 		}
 	],
 	state: {

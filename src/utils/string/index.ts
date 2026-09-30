@@ -30,7 +30,11 @@ const DEFAULT_OPTIONS: FuzzyMatchOptions = {
 	threshold: 0.2
 };
 
-export function fuzzyIncludes(text: string, search: string, threshold = DEFAULT_OPTIONS.threshold): boolean {
+export function fuzzyIncludes(
+	text: string,
+	search: string,
+	threshold = DEFAULT_OPTIONS.threshold
+): boolean {
 	if (!text || !search) return false;
 	const textLower = text.toLowerCase();
 	const searchLower = search.toLowerCase();

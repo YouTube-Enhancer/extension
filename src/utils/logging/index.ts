@@ -20,7 +20,10 @@ export function colorizeTerminalLog(message: string, type: ColorType = "FgBlack"
 }
 
 export default function terminalColorLog(message: string, type?: ColorType) {
-	console.log(colorizeTerminalLog(`[${getFormattedTimestamp()}] [YouTube Enhancer]`, "FgCyan"), colorizeTerminalLog(message, type));
+	console.log(
+		colorizeTerminalLog(`[${getFormattedTimestamp()}] [YouTube Enhancer]`, "FgCyan"),
+		colorizeTerminalLog(message, type)
+	);
 }
 
 /**
@@ -30,7 +33,10 @@ export default function terminalColorLog(message: string, type?: ColorType) {
  * @param type - The type of the log message.
  * @returns An object containing the colorized message and its styling.
  */
-function colorizeLog(message: string, type: ColorType = "FgBlack"): { message: string; styling: string[] } {
+function colorizeLog(
+	message: string,
+	type: ColorType = "FgBlack"
+): { message: string; styling: string[] } {
 	const style = getColor(type);
 	return {
 		message: `%c${message}%c`,

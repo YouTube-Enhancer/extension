@@ -32,7 +32,12 @@ export async function setDefaultValues(): Promise<configuration> {
 			storedValue = defaultValue;
 		}
 		// Deep merge objects
-		if (typeof storedValue === "object" && storedValue !== null && typeof defaultValue === "object" && defaultValue !== null) {
+		if (
+			typeof storedValue === "object" &&
+			storedValue !== null &&
+			typeof defaultValue === "object" &&
+			defaultValue !== null
+		) {
 			storedValue = deepMerge(defaultValue, storedValue as Record<string, unknown>);
 		}
 		// Queue instead of writing immediately
@@ -46,10 +51,18 @@ export async function setDefaultValues(): Promise<configuration> {
 	return finalSettings;
 }
 
-function setPartialSetting<K extends keyof configuration>(obj: Partial<configuration>, key: K, value: configuration[K]) {
+function setPartialSetting<K extends keyof configuration>(
+	obj: Partial<configuration>,
+	key: K,
+	value: configuration[K]
+) {
 	obj[key] = value;
 }
-function setSetting<K extends keyof configuration>(obj: configuration, key: K, value: configuration[K]) {
+function setSetting<K extends keyof configuration>(
+	obj: configuration,
+	key: K,
+	value: configuration[K]
+) {
 	obj[key] = value;
 }
 

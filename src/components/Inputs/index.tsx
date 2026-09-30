@@ -10,4 +10,16 @@ import { Select } from "./Select";
 import { Slider } from "./Slider";
 import { StringList } from "./StringList";
 import { TextInput } from "./TextInput";
-export { Checkbox, ColorPicker, CSSEditor, FileNameTemplate, KeyValueList, NumberInput, Select, type SelectOption, Slider, StringList, TextInput };
+export {
+	Checkbox,
+	ColorPicker,
+	CSSEditor,
+	FileNameTemplate,
+	KeyValueList,
+	NumberInput,
+	Select,
+	type SelectOption,
+	Slider,
+	StringList,
+	TextInput
+};

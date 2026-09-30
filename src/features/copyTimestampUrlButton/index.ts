@@ -22,11 +22,15 @@ const getCopyTimestampUrlButtonClickListener = (placement: ButtonPlacement) => {
 			featureName: "copyTimestampUrlButton",
 			id: "yte-feature-copyTimestampUrlButton-tooltip"
 		});
-		button.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.extras.copied);
+		button.dataset.title = window.i18nextInstance.t(
+			(translations) => translations.pages.content.features.copyTimestampUrlButton.extras.copied
+		);
 		update();
 		setTimeout(() => {
 			remove();
-			button.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.button.label);
+			button.dataset.title = window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.copyTimestampUrlButton.button.label
+			);
 			update();
 		}, 1000);
 	};
@@ -36,17 +40,25 @@ export default createFeature({
 	buttons: [
 		{
 			add: async ({ button: { fullscreenPlacement, placement } }) => {
-				const copyTimestampUrlButtonClickListener = getCopyTimestampUrlButtonClickListener(placement);
+				const copyTimestampUrlButtonClickListener =
+					getCopyTimestampUrlButtonClickListener(placement);
 				await addFeatureButton(
 					"copyTimestampUrlButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.button.label),
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.copyTimestampUrlButton.button.label
+					),
 					getFeatureIcon("copyTimestampUrlButton", placement),
 					copyTimestampUrlButtonClickListener,
 					false,
 					false,
 					fullscreenPlacement,
-					() => window.i18nextInstance.t((translations) => translations.pages.content.features.copyTimestampUrlButton.button.label)
+					() =>
+						window.i18nextInstance.t(
+							(translations) =>
+								translations.pages.content.features.copyTimestampUrlButton.button.label
+						)
 				);
 			},
 			name: "copyTimestampUrlButton"

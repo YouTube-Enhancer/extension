@@ -28,8 +28,17 @@ type ScrollPosition = {
 };
 
 // TODO: add share custom css button with integration with yt-enhancer.dev
-const Editor = React.lazy(() => import("@monaco-editor/react").then((module) => ({ default: module.Editor })));
-const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReason, onChange, t, value }) => {
+const Editor = React.lazy(() =>
+	import("@monaco-editor/react").then((module) => ({ default: module.Editor }))
+);
+const CSSEditor: React.FC<CSSEditorProps> = ({
+	className,
+	disabled,
+	disabledReason,
+	onChange,
+	t,
+	value
+}) => {
 	const editorRef = useRef<Nullable<editor.IStandaloneCodeEditor>>(null);
 	const monacoRef = useRef<Nullable<Monaco>>(null);
 	const editorProblemsRef = useRef<Nullable<HTMLDivElement>>(null);
@@ -102,19 +111,23 @@ const CSSEditor: React.FC<CSSEditorProps> = ({ className, disabled, disabledReas
 		if (!state.isExpanded) window.scrollTo(state.pageScroll.x, state.pageScroll.y);
 	}, [state.isExpanded, state.pageScroll]);
 	useEffect(() => {
-		const onResize = () => dispatch({ payload: document.documentElement.clientHeight, type: "SET_VIEWPORT_HEIGHT" });
+		const onResize = () =>
+			dispatch({ payload: document.documentElement.clientHeight, type: "SET_VIEWPORT_HEIGHT" });
 		window.addEventListener("resize", onResize);
 		return () => window.removeEventListener("resize", onResize);
 	}, []);
 	return (
 		<div
 			className={cn(className, {
-				"fixed top-0 left-0 z-[1000] w-screen h-screen bg-[#23272a] flex flex-col": state.isExpanded,
+				"fixed top-0 left-0 z-[1000] w-screen h-screen bg-[#23272a] flex flex-col":
+					state.isExpanded,
 				"w-full flex flex-col": !state.isExpanded
 			})}
 		>
 			{disabled && disabledReason && (
-				<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">{disabledReason}</span>
+				<span className="cursor-default whitespace-normal break-words text-xs leading-tight text-gray-500 dark:text-gray-300">
+					{disabledReason}
+				</span>
 			)}
 			<ExpandButton
 				isExpanded={state.isExpanded}

@@ -19,7 +19,9 @@ import type {
 	TSelectFunc
 } from "@/src/types";
 export const coreFeatureKeys = ["featureMenu", "onScreenDisplay"] as const;
-export type AnyFeatureBase = FeatureBaseWithoutState<Exclude<FeatureKeys, FeatureKeysWithState>> | FeatureBaseWithState<FeatureKeysWithState>;
+export type AnyFeatureBase =
+	| FeatureBaseWithoutState<Exclude<FeatureKeys, FeatureKeysWithState>>
+	| FeatureBaseWithState<FeatureKeysWithState>;
 
 export type AttributionEntry = {
 	label: TSelectFunc;
@@ -31,7 +33,9 @@ export type BooleanSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> &
 };
 
 export type ButtonsForFeature<F extends FeatureKeys> = {
-	[K in keyof typeof buttonNameToSettingName]: (typeof buttonNameToSettingName)[K] extends F ? K : never;
+	[K in keyof typeof buttonNameToSettingName]: (typeof buttonNameToSettingName)[K] extends F
+		? K
+		: never;
 }[keyof typeof buttonNameToSettingName];
 
 export type ColorPickerSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
@@ -47,25 +51,26 @@ export type FeatureBase<K extends FeatureKeys> = K extends FeatureKeysWithState
 	: K extends Exclude<FeatureKeys, FeatureKeysWithState>
 		? FeatureBaseWithoutState<K>
 		: never;
-export type FeatureBaseWithoutState<K extends Exclude<FeatureKeys, FeatureKeysWithState>> = FeatureMetadataBase<K> &
-	FeatureMetadataWithoutState<K> &
-	FeatureWithoutStateBranch<K> & {
-		/**
-		 * Optional buttons the feature can add/remove
-		 * @remarks Only features with buttons can define this
-		 */
-		buttons?: K extends FeatureKeysWithButtons ? FeatureButton<K>[] : never;
-		/**
-		 * Schema for validation (used to build validation schema dynamically)
-		 * @param config The configuration to validate
-		 * @returns A promise that resolves when the validation has finished
-		 */
-		schema?: z.ZodMiniObject<ZodShapeExact<MustContainEnabled<configuration[K]>>>;
-		/**
-		 * Not allowed for feature without state
-		 */
-		stateSchema?: never;
-	};
+export type FeatureBaseWithoutState<K extends Exclude<FeatureKeys, FeatureKeysWithState>> =
+	FeatureMetadataBase<K> &
+		FeatureMetadataWithoutState<K> &
+		FeatureWithoutStateBranch<K> & {
+			/**
+			 * Optional buttons the feature can add/remove
+			 * @remarks Only features with buttons can define this
+			 */
+			buttons?: K extends FeatureKeysWithButtons ? FeatureButton<K>[] : never;
+			/**
+			 * Schema for validation (used to build validation schema dynamically)
+			 * @param config The configuration to validate
+			 * @returns A promise that resolves when the validation has finished
+			 */
+			schema?: z.ZodMiniObject<ZodShapeExact<MustContainEnabled<configuration[K]>>>;
+			/**
+			 * Not allowed for feature without state
+			 */
+			stateSchema?: never;
+		};
 export type FeatureBaseWithState<K extends FeatureKeysWithState> = FeatureMetadataBase<K> &
 	FeatureMetadataWithState<K> &
 	FeatureWithStateBranch<K> & {
@@ -136,7 +141,8 @@ export type FeatureDependencies = {
 export type FeatureKeys = {
 	[K in configurationKeys]: ContainsEnabled<configuration[K]> extends true ? K : never;
 }[configurationKeys];
-export type FeatureKeysWithButtons = (typeof buttonNameToSettingName)[keyof typeof buttonNameToSettingName];
+export type FeatureKeysWithButtons =
+	(typeof buttonNameToSettingName)[keyof typeof buttonNameToSettingName];
 export type FeatureKeysWithState = {
 	[K in keyof FeatureState]: FeatureKeyFromStateKey<K>;
 }[keyof FeatureState];
@@ -206,7 +212,11 @@ export type FeatureMetadataWithState<K extends FeatureKeysWithState> = FeatureMe
 	 */
 	stateSchemaInput: ZodShapeExact<FeatureState[`state:${K}`]>;
 };
-export type FeatureSettingNode<F extends FeatureKeys> = DividerNode | GroupNode<F> | SettingNode<F> | TextNode;
+export type FeatureSettingNode<F extends FeatureKeys> =
+	| DividerNode
+	| GroupNode<F>
+	| SettingNode<F>
+	| TextNode;
 export type FeatureSettingsSection<F extends FeatureKeys> = FeatureSettingNode<F>[];
 
 export type FeatureState = {
@@ -296,7 +306,9 @@ export const pageTypes = [
 ] as const;
 export type PageType = (typeof pageTypes)[number];
 
-export type PrefixedPath<K extends FeatureKeys> = K extends K ? `${K}.${Path<configuration[K]>}` : never;
+export type PrefixedPath<K extends FeatureKeys> = K extends K
+	? `${K}.${Path<configuration[K]>}`
+	: never;
 export type SelectSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & {
 	component: "select";
 	options?: { label: TSelectFunc; value: PathValue<configuration, SettingId<F>> }[];
@@ -304,7 +316,9 @@ export type SelectSettingConfig<F extends FeatureKeys> = BaseSettingConfig<F> & 
 };
 export type SettingComponent<F extends FeatureKeys> = SettingNode<F>["component"];
 
-export type SettingCondition<F extends FeatureKeys> = SettingConditionWithFeature | SettingConditionWithoutFeature<F>;
+export type SettingCondition<F extends FeatureKeys> =
+	| SettingConditionWithFeature
+	| SettingConditionWithoutFeature<F>;
 export type SettingConfig<F extends FeatureKeys> =
 	| (BooleanSettingConfig<F> & { id: BooleanPaths<F> })
 	| (ColorPickerSettingConfig<F> & { id: StringPaths<F> })
@@ -386,7 +400,9 @@ type ContainsEnabled<T> =
 						? true
 						: false
 					: false;
-type DynamicParentSetting<F extends configurationKeys> = (settings: configuration[F]) => Nullable<parentSetting>;
+type DynamicParentSetting<F extends configurationKeys> = (
+	settings: configuration[F]
+) => Nullable<parentSetting>;
 type FeatureKeyFromStateKey<K extends FeatureStateKeys> = K extends `state:${infer V}` ? V : never;
 
 type FeatureWithoutStateBranch<K extends FeatureKeys> = {
@@ -478,7 +494,11 @@ type FeatureWithStateBranch<K extends FeatureKeysWithState> = {
 	 * @param navigationType The navigation signature/type (e.g., "watch:VIDEO_ID", "playlist:PLAYLIST_ID")
 	 * @returns A promise that resolves when the feature has handled the navigation change
 	 */
-	onNavigate?: (config: configuration[K], stateAPI: FeatureStateAPI<K>, navigationType: NavigationType) => MaybePromise<void>;
+	onNavigate?: (
+		config: configuration[K],
+		stateAPI: FeatureStateAPI<K>,
+		navigationType: NavigationType
+	) => MaybePromise<void>;
 	/**
 	 * Whether state should be persisted to browser storage
 	 * @default false
@@ -527,5 +547,9 @@ export function isTextNode(node: unknown): node is TextNode {
 	return hasType(node) && node.type === "text";
 }
 function hasType(value: unknown): value is { type?: string } {
-	return typeof value === "object" && value !== null && (!("type" in value) || typeof value.type === "string");
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		(!("type" in value) || typeof value.type === "string")
+	);
 }

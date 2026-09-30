@@ -14,41 +14,35 @@ type EditorProblemsProps = {
 	problems: editor.IMarker[];
 	t?: TFunction;
 };
-const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ className, editor, problems, t: tProp }, ref) => {
-	const t = tProp ?? useSettings().i18nInstance.t;
-	const getIcon = (severity: MarkerSeverity) => {
-		switch (severity) {
-			case MarkerSeverity.Error:
-				return "error";
-			case MarkerSeverity.Hint:
-				return "hint";
-			case MarkerSeverity.Info:
-				return "info";
-			case MarkerSeverity.Warning:
-				return "warning";
-			default:
-				return "";
-		}
-	};
-	return (
-		<div className={cn("bg-[#1e1e1e]", className)} ref={ref}>
-			{problems.length === 0 && <div className="center p-1">{t((translations) => translations.settings.sections.customCSS.extras.noProblems)}</div>}
-			{problems.map((problem) => (
-				<div
-					className="center hover:bg-[#2e2e2e'] flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc]"
-					key={`${problem.startLineNumber}-${problem.startColumn}-${problem.code && typeof problem.code === "object" && "value" in problem.code ? problem.code.value : problem.code}`}
-					onClick={() => {
-						if (!editor) return;
-						editor.focus();
-						editor.revealLine(problem.startLineNumber);
-						editor.setPosition({
-							column: problem.startColumn,
-							lineNumber: problem.startLineNumber
-						});
-					}}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							e.preventDefault();
+const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(
+	({ className, editor, problems, t: tProp }, ref) => {
+		const t = tProp ?? useSettings().i18nInstance.t;
+		const getIcon = (severity: MarkerSeverity) => {
+			switch (severity) {
+				case MarkerSeverity.Error:
+					return "error";
+				case MarkerSeverity.Hint:
+					return "hint";
+				case MarkerSeverity.Info:
+					return "info";
+				case MarkerSeverity.Warning:
+					return "warning";
+				default:
+					return "";
+			}
+		};
+		return (
+			<div className={cn("bg-[#1e1e1e]", className)} ref={ref}>
+				{problems.length === 0 && (
+					<div className="center p-1">
+						{t((translations) => translations.settings.sections.customCSS.extras.noProblems)}
+					</div>
+				)}
+				{problems.map((problem) => (
+					<div
+						className="center hover:bg-[#2e2e2e'] flex max-h-6 cursor-pointer gap-1 text-[13px] text-[#cccccc]"
+						key={`${problem.startLineNumber}-${problem.startColumn}-${problem.code && typeof problem.code === "object" && "value" in problem.code ? problem.code.value : problem.code}`}
+						onClick={() => {
 							if (!editor) return;
 							editor.focus();
 							editor.revealLine(problem.startLineNumber);
@@ -56,36 +50,52 @@ const EditorProblems = forwardRef<HTMLDivElement, EditorProblemsProps>(({ classN
 								column: problem.startColumn,
 								lineNumber: problem.startLineNumber
 							});
-						}
-					}}
-					role="button"
-					tabIndex={0}
-				>
-					<div className={`marker-icon ${getIcon(problem.severity)}`}>
-						<div className={`codicon codicon-${getIcon(problem.severity)}`} />
-					</div>
-					<div className="marker-message-details-container">
-						<div className="marker-message-line details-container">
-							<div className="marker-message">
-								<span>{problem.message}</span>
+						}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								e.preventDefault();
+								if (!editor) return;
+								editor.focus();
+								editor.revealLine(problem.startLineNumber);
+								editor.setPosition({
+									column: problem.startColumn,
+									lineNumber: problem.startLineNumber
+								});
+							}
+						}}
+						role="button"
+						tabIndex={0}
+					>
+						<div className={`marker-icon ${getIcon(problem.severity)}`}>
+							<div className={`codicon codicon-${getIcon(problem.severity)}`} />
+						</div>
+						<div className="marker-message-details-container">
+							<div className="marker-message-line details-container">
+								<div className="marker-message">
+									<span>{problem.message}</span>
+								</div>
+								{problem.source && (
+									<>
+										<div className="marker-source">
+											<span>{problem.source}</span>
+										</div>
+										<div className="marker-code">
+											<span>
+												{problem.code && typeof problem.code === "string"
+													? `(${problem.code})`
+													: ""}
+											</span>
+										</div>
+									</>
+								)}
+								<span className="marker-line">{`[Ln ${problem.startLineNumber}, Col ${problem.startColumn}]`}</span>
 							</div>
-							{problem.source && (
-								<>
-									<div className="marker-source">
-										<span>{problem.source}</span>
-									</div>
-									<div className="marker-code">
-										<span>{problem.code && typeof problem.code === "string" ? `(${problem.code})` : ""}</span>
-									</div>
-								</>
-							)}
-							<span className="marker-line">{`[Ln ${problem.startLineNumber}, Col ${problem.startColumn}]`}</span>
 						</div>
 					</div>
-				</div>
-			))}
-		</div>
-	);
-});
+				))}
+			</div>
+		);
+	}
+);
 EditorProblems.displayName = "EditorProblems";
 export default EditorProblems;

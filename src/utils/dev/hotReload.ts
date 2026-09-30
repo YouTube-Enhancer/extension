@@ -31,13 +31,20 @@ export const DEV_RELOAD_SOURCE = "yte-dev-reload" as const;
 export const EMBEDDED_STYLE_ID = "yte-embedded-style";
 
 /** Sent by the background worker to a content script through `chrome.tabs.sendMessage`. */
-export type DevRuntimeMessage = { buildId: string; source: typeof DEV_RELOAD_SOURCE; type: "reload-embedded" };
+export type DevRuntimeMessage = {
+	buildId: string;
+	source: typeof DEV_RELOAD_SOURCE;
+	type: "reload-embedded";
+};
 
 /**
  * Sent by the watch pipeline over the WebSocket. `ping` carries nothing; Chrome ends an idle extension service
  * worker after about 30 s and only WebSocket traffic counts as activity, so the pipeline pings every 20 s.
  */
-export type DevServerMessage = { buildId: string; targets: RebuildTarget[]; type: "rebuild" } | { buildId: string; type: "hello" } | { type: "ping" };
+export type DevServerMessage =
+	| { buildId: string; targets: RebuildTarget[]; type: "rebuild" }
+	| { buildId: string; type: "hello" }
+	| { type: "ping" };
 
 /**
  * Posted on the page's `window`, which every content-script instance and the embedded script can see regardless of
@@ -56,9 +63,16 @@ export function isDevRuntimeMessage(data: unknown): data is DevRuntimeMessage {
 }
 
 export function isDevWindowMessage(data: unknown): data is DevWindowMessage {
-	return hasDevSource(data) && (data.type === "takeover" || data.type === "dispose" || data.type === "disposed");
+	return (
+		hasDevSource(data) &&
+		(data.type === "takeover" || data.type === "dispose" || data.type === "disposed")
+	);
 }
 
 function hasDevSource(data: unknown): data is { source: typeof DEV_RELOAD_SOURCE; type: string } {
-	return typeof data === "object" && data !== null && (data as { source?: unknown }).source === DEV_RELOAD_SOURCE;
+	return (
+		typeof data === "object" &&
+		data !== null &&
+		(data as { source?: unknown }).source === DEV_RELOAD_SOURCE
+	);
 }

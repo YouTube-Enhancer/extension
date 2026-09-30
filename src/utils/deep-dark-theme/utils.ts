@@ -23,6 +23,7 @@ export function resolveFromCSS(): string {
 	const config = getDeepDarkCSSConfig();
 	if (!config) return "#FFFFFF";
 	const { colors, preset } = config;
-	const resolved = preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset];
+	const resolved =
+		preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset];
 	return resolveContrastColor(resolved);
 }

@@ -5,8 +5,19 @@ import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlay
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";
 import type { VolumeBoostMode } from "@/src/features/volumeBoost/types";
 import type { AvailableLocales } from "@/src/i18n/constants";
-import type { ButtonPlacement, configuration, ParentType, Path, PathSegments, PathValue } from "@/src/types";
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType } from "@/src/ui/OnScreenDisplayManager/types";
+import type {
+	ButtonPlacement,
+	configuration,
+	ParentType,
+	Path,
+	PathSegments,
+	PathValue
+} from "@/src/types";
+import type {
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType
+} from "@/src/ui/OnScreenDisplayManager/types";
 
 const HIDE_SHORTS_SECTIONS = Object.keys({
 	channel: "",
@@ -17,7 +28,10 @@ const HIDE_SHORTS_SECTIONS = Object.keys({
 	videos: ""
 } satisfies Record<ShortsSection, "">);
 
-export function deepMerge(target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> {
+export function deepMerge(
+	target: Record<string, unknown>,
+	source: Record<string, unknown>
+): Record<string, unknown> {
 	const merged: Record<string, unknown> = { ...target };
 
 	for (const key in source) {
@@ -27,7 +41,10 @@ export function deepMerge(target: Record<string, unknown>, source: Record<string
 			if (Array.isArray(sourceValue)) {
 				merged[key] = sourceValue;
 			} else if (targetValue && typeof targetValue === "object" && !Array.isArray(targetValue)) {
-				merged[key] = deepMerge(targetValue as Record<string, unknown>, sourceValue as Record<string, unknown>);
+				merged[key] = deepMerge(
+					targetValue as Record<string, unknown>,
+					sourceValue as Record<string, unknown>
+				);
 			} else {
 				merged[key] = sourceValue;
 			}
@@ -141,9 +158,12 @@ export function migrateConfiguration(
 				case "playlistManagementButtons":
 					if (typeof key === "string") {
 						// "enable_remove_all_watched_button" also contains "remove", so the remove-all flag is matched first.
-						if (key.includes("remove_all")) newConfig.playlistManagementButtons.removeAllButton.enabled = value;
-						else if (key.includes("remove")) newConfig.playlistManagementButtons.removeButton.enabled = value;
-						if (key.includes("reset")) newConfig.playlistManagementButtons.resetButton.enabled = value;
+						if (key.includes("remove_all"))
+							newConfig.playlistManagementButtons.removeAllButton.enabled = value;
+						else if (key.includes("remove"))
+							newConfig.playlistManagementButtons.removeButton.enabled = value;
+						if (key.includes("reset"))
+							newConfig.playlistManagementButtons.resetButton.enabled = value;
 						continue;
 					}
 					break;
@@ -159,10 +179,20 @@ export function migrateConfiguration(
 				default: {
 					if ("buttons" in targetValue && typeof targetValue.buttons === "object") {
 						for (const [buttonKey, newButton] of Object.entries(targetValue.buttons)) {
-							if (typeof newButton === "object" && newButton !== null && "enabled" in newButton && typeof newButton.enabled === "boolean") {
+							if (
+								typeof newButton === "object" &&
+								newButton !== null &&
+								"enabled" in newButton &&
+								typeof newButton.enabled === "boolean"
+							) {
 								newButton.enabled = value;
 							}
-							if (typeof newButton === "object" && newButton !== null && "placement" in newButton && oldPlacementMap?.[buttonKey]) {
+							if (
+								typeof newButton === "object" &&
+								newButton !== null &&
+								"placement" in newButton &&
+								oldPlacementMap?.[buttonKey]
+							) {
 								const { [buttonKey]: oldPlacement } = oldPlacementMap;
 								newButton.placement = oldPlacement;
 							}
@@ -236,23 +266,28 @@ export function migrateConfiguration(
 				newConfig.playerQuality.quality = value as typeof newConfig.playerQuality.quality;
 				break;
 			case "player_quality_fallback_strategy":
-				newConfig.playerQuality.fallbackStrategy = value as typeof newConfig.playerQuality.fallbackStrategy;
+				newConfig.playerQuality.fallbackStrategy =
+					value as typeof newConfig.playerQuality.fallbackStrategy;
 				break;
 			case "player_speed":
 				newConfig.playerSpeed.speed = Number(value);
 				break;
 			case "playlist_length_get_method":
-				newConfig.playlistLength.lengthGetMethod = value as typeof newConfig.playlistLength.lengthGetMethod;
+				newConfig.playlistLength.lengthGetMethod =
+					value as typeof newConfig.playlistLength.lengthGetMethod;
 				break;
 			case "playlist_watch_time_get_method":
-				newConfig.playlistLength.watchTimeGetMethod = value as typeof newConfig.playlistLength.watchTimeGetMethod;
+				newConfig.playlistLength.watchTimeGetMethod =
+					value as typeof newConfig.playlistLength.watchTimeGetMethod;
 				break;
 			case "rememberedVolumes":
 				if (typeof value === "object" && value !== null) {
 					const volumes = value as Record<string, unknown>;
 					rawStorage["state:rememberVolume"] = {
-						shortsPageVolume: typeof volumes.shortsPageVolume === "number" ? volumes.shortsPageVolume : 25,
-						watchPageVolume: typeof volumes.watchPageVolume === "number" ? volumes.watchPageVolume : 25
+						shortsPageVolume:
+							typeof volumes.shortsPageVolume === "number" ? volumes.shortsPageVolume : 25,
+						watchPageVolume:
+							typeof volumes.watchPageVolume === "number" ? volumes.watchPageVolume : 25
 					};
 				}
 				break;
@@ -263,7 +298,8 @@ export function migrateConfiguration(
 				newConfig.screenshotButton.saveAs = value as typeof newConfig.screenshotButton.saveAs;
 				break;
 			case "scroll_wheel_speed_control_modifier_key":
-				newConfig.scrollWheelSpeedControl.modifierKey = value as typeof newConfig.scrollWheelSpeedControl.modifierKey;
+				newConfig.scrollWheelSpeedControl.modifierKey =
+					value as typeof newConfig.scrollWheelSpeedControl.modifierKey;
 				break;
 			case "scroll_wheel_volume_control_hold_modifier_key":
 				newConfig.scrollWheelVolumeControl.holdModifierKey = Boolean(value);
@@ -272,7 +308,8 @@ export function migrateConfiguration(
 				newConfig.scrollWheelVolumeControl.holdRightClick = Boolean(value);
 				break;
 			case "scroll_wheel_volume_control_modifier_key":
-				newConfig.scrollWheelVolumeControl.modifierKey = value as typeof newConfig.scrollWheelVolumeControl.modifierKey;
+				newConfig.scrollWheelVolumeControl.modifierKey =
+					value as typeof newConfig.scrollWheelVolumeControl.modifierKey;
 				break;
 			case "speed_adjustment_steps":
 				newConfig.scrollWheelSpeedControl.steps = Number(value);
@@ -308,7 +345,11 @@ export function parseStoredValue(value: string) {
 		if (typeof parsedValue === "object" && parsedValue !== null) {
 			return convertNumericStrings(parsedValue as Record<string, unknown>);
 		}
-		if (typeof parsedValue === "string" && !isNaN(Number(parsedValue)) && parsedValue.trim() !== "") {
+		if (
+			typeof parsedValue === "string" &&
+			!isNaN(Number(parsedValue)) &&
+			parsedValue.trim() !== ""
+		) {
 			return Number(parsedValue);
 		}
 	} catch {

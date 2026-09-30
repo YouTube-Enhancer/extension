@@ -15,10 +15,12 @@ let listenersAttached = false;
 
 const PauseBackgroundPlayers = () => {
 	if (document.hidden) {
-		const isInVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
+		const isInVideoPiP =
+			"pictureInPictureElement" in document && !!document.pictureInPictureElement;
 		const isInDocumentPiP =
 			"documentPictureInPicture" in window &&
-			!!(window as Window & { documentPictureInPicture?: { window: Nullable<Window> } }).documentPictureInPicture?.window;
+			!!(window as Window & { documentPictureInPicture?: { window: Nullable<Window> } })
+				.documentPictureInPicture?.window;
 		if (!isInVideoPiP && !isInDocumentPiP) return;
 	}
 	sendContentToBackgroundMessage("pauseBackgroundPlayers").catch((error) => {
@@ -54,7 +56,8 @@ export default createFeature({
 });
 
 function setupPlayerMonitoring() {
-	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm)) return;
+	if (window.location.href.match(/^https?:\/\/(?:www\.)?youtube\.com(\/?|\/channel\/.+|\/\@.+)$/gm))
+		return;
 	browserColorLog("Enabling pauseBackgroundPlayers", "FgMagenta");
 	const videoPlayerContainer = document.querySelector<HTMLVideoElement>(".html5-main-video");
 	if (!videoPlayerContainer) return;
@@ -62,7 +65,12 @@ function setupPlayerMonitoring() {
 	function detectPlaying() {
 		if (videoPlayerContainer && !listenersAttached) {
 			listenersAttached = true;
-			eventManager.addEventListener(videoPlayerContainer, "playing", PauseBackgroundPlayers, FEATURE_ID);
+			eventManager.addEventListener(
+				videoPlayerContainer,
+				"playing",
+				PauseBackgroundPlayers,
+				FEATURE_ID
+			);
 		}
 	}
 

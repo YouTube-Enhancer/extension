@@ -111,7 +111,11 @@ declare module "youtube-player/dist/types" {
 		loadModule(moduleName: string): void;
 		setAudioTrack(audioTrack: audioTrack): Promise<void>;
 		setPlaybackQuality(suggestedQuality: string): Promise<void>;
-		setPlaybackQualityRange(suggestedQuality: string, rangeQuality?: string, formatId?: number): Promise<void>;
+		setPlaybackQualityRange(
+			suggestedQuality: string,
+			rangeQuality?: string,
+			formatId?: number
+		): Promise<void>;
 		unloadModule(moduleName: string): void;
 	}
 }

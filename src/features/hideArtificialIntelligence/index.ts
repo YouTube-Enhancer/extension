@@ -1,7 +1,10 @@
 import "./index.css";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { applyChatFrameHide, removeChatFrameHide } from "@/src/features/hideArtificialIntelligence/utils";
+import {
+	applyChatFrameHide,
+	removeChatFrameHide
+} from "@/src/features/hideArtificialIntelligence/utils";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
 
 import { metadata } from "./index.metadata";

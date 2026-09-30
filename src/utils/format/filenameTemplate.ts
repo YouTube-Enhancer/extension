@@ -41,7 +41,11 @@ export const defaultScreenshotFilenameTemplate = "Screenshot-{video id}-{date}";
 export const screenshotDateFormats = ["iso", "date", "dateTime", "dayMonthYear"] as const;
 export type ScreenshotDateFormat = (typeof screenshotDateFormats)[number];
 
-export const screenshotTimestampFormats = ["auto", "hhmmss", "mmss"] as const satisfies readonly VideoTimestampFormat[];
+export const screenshotTimestampFormats = [
+	"auto",
+	"hhmmss",
+	"mmss"
+] as const satisfies readonly VideoTimestampFormat[];
 export type ScreenshotTimestampFormat = (typeof screenshotTimestampFormats)[number];
 
 export const screenshotTimestampSeparators = ["auto", "colon", "hyphen"] as const;
@@ -111,7 +115,10 @@ export function removeInvalidPlaceholders(template: string): string {
  * value could not be determined resolve to an empty string. Returns null if the resulting
  * name is empty.
  */
-export function resolveFilenameTemplate(template: string, context: ScreenshotFilenameContext): Nullable<string> {
+export function resolveFilenameTemplate(
+	template: string,
+	context: ScreenshotFilenameContext
+): Nullable<string> {
 	let name = template;
 	for (const placeholder of screenshotFilenamePlaceholders) {
 		name = name.split(placeholder).join(context[placeholderToContextKey[placeholder]] ?? "");
@@ -130,7 +137,9 @@ export function resolveFilenameTemplate(template: string, context: ScreenshotFil
  */
 export function sanitizeFilename(name: string): string {
 	// eslint-disable-next-line no-control-regex
-	const forbidden = isWindowsPlatform() ? /[\\/:*?"<>|\u0000-\u001f]/g : /[\\/*?"<>|\u0000-\u001f]/g;
+	const forbidden = isWindowsPlatform()
+		? /[\\/:*?"<>|\u0000-\u001f]/g
+		: /[\\/*?"<>|\u0000-\u001f]/g;
 	return name.replace(forbidden, "_");
 }
 

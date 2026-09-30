@@ -1,5 +1,9 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { disableScrollWheelControl, enableScrollWheelControl, updateScrollWheelConfig } from "@/src/features/scrollWheelController";
+import {
+	disableScrollWheelControl,
+	enableScrollWheelControl,
+	updateScrollWheelConfig
+} from "@/src/features/scrollWheelController";
 
 import "./index.css";
 import { metadata } from "./index.metadata";

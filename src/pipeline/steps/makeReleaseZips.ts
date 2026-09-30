@@ -19,7 +19,10 @@ export default async function makeReleaseZips(): Promise<void> {
 				mkdirSync(browserReleaseDir, { recursive: true });
 			}
 
-			const releaseZipPath = resolve(browserReleaseDir, `${pkg.name}-v${pkg.version}-${browser.name}.zip`);
+			const releaseZipPath = resolve(
+				browserReleaseDir,
+				`${pkg.name}-v${pkg.version}-${browser.name}.zip`
+			);
 
 			const releaseZipStream = createWriteStream(releaseZipPath);
 

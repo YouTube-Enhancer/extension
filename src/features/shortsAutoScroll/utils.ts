@@ -3,7 +3,11 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 
 export const setupAutoScroll = (playerContainer: YouTubePlayerDiv, video: HTMLVideoElement) => {
-	if (!("getProgressState" in playerContainer) || ("getProgressState" in playerContainer && typeof playerContainer.getProgressState !== "function"))
+	if (
+		!("getProgressState" in playerContainer) ||
+		("getProgressState" in playerContainer &&
+			typeof playerContainer.getProgressState !== "function")
+	)
 		return;
 	let hasTriggered = false;
 	let wasNearEnd = false;
@@ -24,7 +28,9 @@ export const setupAutoScroll = (playerContainer: YouTubePlayerDiv, video: HTMLVi
 		if (wasNearEnd && currentTime < 0.3) {
 			hasTriggered = true;
 			wasNearEnd = false;
-			const nextButton = document.querySelector<HTMLDivElement>("#navigation-button-down > ytd-button-renderer > yt-button-shape > button");
+			const nextButton = document.querySelector<HTMLDivElement>(
+				"#navigation-button-down > ytd-button-renderer > yt-button-shape > button"
+			);
 			if (!nextButton) return;
 			// Click the next button
 			nextButton.click();

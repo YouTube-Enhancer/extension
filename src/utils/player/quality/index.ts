@@ -1,6 +1,10 @@
 import type { Nullable } from "@/src/types";
 
-import { type PlayerQualityFallbackStrategy, type YoutubePlayerQualityLevel, youtubePlayerQualityLevels } from "@/src/features/playerQuality/types";
+import {
+	type PlayerQualityFallbackStrategy,
+	type YoutubePlayerQualityLevel,
+	youtubePlayerQualityLevels
+} from "@/src/features/playerQuality/types";
 
 export function chooseClosestQuality(
 	selectedQuality: YoutubePlayerQualityLevel,

@@ -11,11 +11,14 @@ export const metadata = createFeatureMetadata({
 	settings: [
 		{
 			component: "checkbox",
-			disabledReason: (t) => t((tr) => tr.pages.options.extras.optionDisabled.specificOption.rememberVolume),
+			disabledReason: (t) =>
+				t((tr) => tr.pages.options.extras.optionDisabled.specificOption.rememberVolume),
 			disabledWhen: [{ equals: true, feature: "globalVolume", setting: "globalVolume.enabled" }],
 			id: "rememberVolume.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.rememberVolume.enable.title)
 		}
 	],
 	state: { shortsPageVolume: field(z.number(), 100), watchPageVolume: field(z.number(), 100) }

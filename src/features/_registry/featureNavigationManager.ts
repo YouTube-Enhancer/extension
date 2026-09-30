@@ -1,4 +1,8 @@
-import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type {
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureKeysWithState
+} from "@/src/features/_registry/types";
 import type { Nullable } from "@/src/types";
 
 import { getCurrentPageType, invalidatePageTypeCache } from "@/src/utils/url";
@@ -209,7 +213,8 @@ export class FeatureNavigationManager extends FeatureManagerBase {
 				 */
 				if (searchQuery) {
 					// Truncate very long queries to prevent extremely long signatures
-					const truncatedQuery = searchQuery.length > 50 ? searchQuery.substring(0, 50) + "..." : searchQuery;
+					const truncatedQuery =
+						searchQuery.length > 50 ? searchQuery.substring(0, 50) + "..." : searchQuery;
 					return `search:${truncatedQuery}`;
 				}
 				return "search:unknown";

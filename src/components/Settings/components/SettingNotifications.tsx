@@ -17,7 +17,9 @@ export default function SettingsNotifications() {
 				const { t } = i18nInstance;
 				const message: string = t(notification.message);
 				const key = [notification.type, notification.action, message].filter(Boolean).join("_");
-				return <ToastNotification i18nInstance={i18nInstance} key={key} notification={notification} />;
+				return (
+					<ToastNotification i18nInstance={i18nInstance} key={key} notification={notification} />
+				);
 			})}
 		</div>
 	);
@@ -25,12 +27,21 @@ export default function SettingsNotifications() {
 function NotificationCloseButton({ notification }: { notification: Notification }) {
 	const { removeNotification } = useNotifications();
 	return (
-		<button className="absolute -top-px right-[5px] text-base font-normal" onClick={() => removeNotification(notification)}>
+		<button
+			className="absolute -top-px right-[5px] text-base font-normal"
+			onClick={() => removeNotification(notification)}
+		>
 			&times;
 		</button>
 	);
 }
-function ToastNotification({ i18nInstance: { t }, notification }: { i18nInstance: i18nInstanceType; notification: Notification }) {
+function ToastNotification({
+	i18nInstance: { t },
+	notification
+}: {
+	i18nInstance: i18nInstanceType;
+	notification: Notification;
+}) {
 	const message: string = t(notification.message);
 	const key = [notification.type, notification.action, message].filter(Boolean).join("_");
 	return (

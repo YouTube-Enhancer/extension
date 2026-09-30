@@ -12,21 +12,34 @@ export default function YouTubeDataApiKeySection() {
 		setValueOption
 	} = useSettings();
 	return (
-		<SettingSection title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.title)}>
+		<SettingSection
+			title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.title)}
+		>
 			<SettingTitle />
 			<Setting
 				disabled={false}
 				input_type="password"
-				label={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label)}
+				label={t(
+					(translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.label
+				)}
 				onChange={setValueOption("youtubeDataApiV3Key")}
 				parentSetting={null}
-				title={t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title)}
+				title={t(
+					(translations) => translations.pages.options.extras.youtubeDataApiV3Key.input.title
+				)}
 				type="text-input"
 				value={settings.youtubeDataApiV3Key}
 			/>
 			<fieldset className={cn("flex flex-row gap-1")}>
-				<Link className="ml-2" href="https://developers.google.com/youtube/v3/getting-started" target="_blank">
-					{t((translations) => translations.pages.options.extras.youtubeDataApiV3Key.getApiKeyLinkText)}
+				<Link
+					className="ml-2"
+					href="https://developers.google.com/youtube/v3/getting-started"
+					target="_blank"
+				>
+					{t(
+						(translations) =>
+							translations.pages.options.extras.youtubeDataApiV3Key.getApiKeyLinkText
+					)}
 				</Link>
 			</fieldset>
 		</SettingSection>

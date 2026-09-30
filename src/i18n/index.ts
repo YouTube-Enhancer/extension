@@ -14,7 +14,8 @@ type Translations = typeof import("../../public/locales/en-US.json");
 const i18nInstances = new Map<AvailableLocales, Promise<i18nInstanceType>>();
 
 export async function i18nService(locale: AvailableLocales = "en-US") {
-	if (!availableLocales.includes(locale)) throw new Error(`The locale '${locale}' is not available`);
+	if (!availableLocales.includes(locale))
+		throw new Error(`The locale '${locale}' is not available`);
 	const cachedInstance = i18nInstances.get(locale);
 	// Fast path: an instance for this exact locale was already created.
 	if (cachedInstance) {
@@ -78,7 +79,11 @@ async function getExtensionURL(): Promise<string> {
 	} = window;
 	const isYouTube = hostname === "youtube.com" || hostname.endsWith(".youtube.com");
 	if (!isYouTube) return chrome.runtime.getURL("");
-	const extensionURLResponse = await waitForSpecificMessage("extensionURL", "request_data", "content");
+	const extensionURLResponse = await waitForSpecificMessage(
+		"extensionURL",
+		"request_data",
+		"content"
+	);
 	if (!extensionURLResponse) throw new Error("Failed to get extension URL");
 	const {
 		data: { extensionURL }

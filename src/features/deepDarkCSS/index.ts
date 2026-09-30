@@ -8,14 +8,21 @@ import { buttonColorCache } from "@/src/utils/deep-dark-theme";
 import { clearDeepDarkData, setDeepDarkData } from "@/src/utils/deep-dark-theme/dom";
 
 import { metadata } from "./index.metadata";
-import { createDeepDarkCSSElement, deepDarkCSSExists, getDeepDarkCustomThemeStyle, updateDeepDarkCSS } from "./utils";
+import {
+	createDeepDarkCSSElement,
+	deepDarkCSSExists,
+	getDeepDarkCustomThemeStyle,
+	updateDeepDarkCSS
+} from "./utils";
 
 export default createFeature({
 	...metadata,
 	onConfigChange: ({ colors, preset }) => {
 		setDeepDarkCSSConfig({ colors, enabled: true, preset });
 		if (deepDarkCSSExists()) {
-			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+			updateDeepDarkCSS(
+				preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]
+			);
 		}
 		setDeepDarkData(preset, colors);
 		buttonColorCache.clear();
@@ -34,9 +41,13 @@ export default createFeature({
 	onEnable: ({ colors, preset }) => {
 		setDeepDarkCSSConfig({ colors, enabled: true, preset });
 		if (deepDarkCSSExists()) {
-			updateDeepDarkCSS(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+			updateDeepDarkCSS(
+				preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]
+			);
 		} else {
-			const deepDarkThemeStyleElement = createDeepDarkCSSElement(preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]);
+			const deepDarkThemeStyleElement = createDeepDarkCSSElement(
+				preset === "Custom" ? getDeepDarkCustomThemeStyle(colors) : deepDarkPresets[preset]
+			);
 			document.head.appendChild(deepDarkThemeStyleElement);
 		}
 		setDeepDarkData(preset, colors);

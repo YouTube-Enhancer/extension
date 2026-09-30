@@ -6,7 +6,9 @@ import { clamp, round } from "@/src/utils/math";
 import { calculateCanvasPosition } from "@/src/utils/style";
 import { isShortsPage } from "@/src/utils/url";
 
-export const ensurePlayerContainerExists = (playerContainer: Nullable<YouTubePlayerDiv>): playerContainer is YouTubePlayerDiv => {
+export const ensurePlayerContainerExists = (
+	playerContainer: Nullable<YouTubePlayerDiv>
+): playerContainer is YouTubePlayerDiv => {
 	if (!playerContainer) {
 		throw new Error("Player container not found");
 	}
@@ -206,7 +208,11 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 
 	private getExistingCanvas(): Nullable<HTMLCanvasElement> {
 		if (!ensurePlayerContainerExists(this.options.playerContainer)) return null;
-		return this.options.playerContainer.parentElement?.parentElement?.querySelector(`canvas#${this.displayId}`) ?? null;
+		return (
+			this.options.playerContainer.parentElement?.parentElement?.querySelector(
+				`canvas#${this.displayId}`
+			) ?? null
+		);
 	}
 
 	private handleError(message: string) {
@@ -247,9 +253,13 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		 * over the top of the video, and its title block lies over the bottom of the video whenever the window is
 		 * too short to place the block beside the video. The older selectors stay as fallbacks.
 		 */
-		const activeReel = isShortsPage() ? (document.querySelector("#shorts-player")?.closest("ytd-reel-video-renderer") ?? null) : null;
+		const activeReel = isShortsPage()
+			? (document.querySelector("#shorts-player")?.closest("ytd-reel-video-renderer") ?? null)
+			: null;
 		const bottomElement: Nullable<HTMLDivElement> =
-			activeReel?.querySelector<HTMLDivElement>(".ytReelPlayerOverlayViewModelMetadataContainerMetapanel") ??
+			activeReel?.querySelector<HTMLDivElement>(
+				".ytReelPlayerOverlayViewModelMetadataContainerMetapanel"
+			) ??
 			document.querySelector<HTMLDivElement>(
 				"ytd-reel-video-renderer[is-active] ytd-reel-player-overlay-renderer div.ytd-reel-player-overlay-renderer div#overlay"
 			) ??
@@ -260,7 +270,10 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 		let paddingTop = 0;
 		if (isShortsPage() && shortsTopControls) {
 			const shortsTopStyle = getComputedStyle(shortsTopControls);
-			paddingTop = shortsTopControls.offsetHeight + parseInt(shortsTopStyle.marginTop, 10) + parseInt(shortsTopStyle.marginBottom, 10);
+			paddingTop =
+				shortsTopControls.offsetHeight +
+				parseInt(shortsTopStyle.marginTop, 10) +
+				parseInt(shortsTopStyle.marginBottom, 10);
 		}
 		let paddingBottom = 0;
 		if (bottomElement) {
@@ -274,13 +287,23 @@ export default class OnScreenDisplayManager<V extends ValueType> {
 				10;
 			const bottomRect = bottomElement.getBoundingClientRect();
 			const playerRect = this.options.playerContainer.getBoundingClientRect();
-			const horizontallyOverlaps = bottomRect.right > playerRect.left && bottomRect.left < playerRect.right;
+			const horizontallyOverlaps =
+				bottomRect.right > playerRect.left && bottomRect.left < playerRect.right;
 			// Beside the video, the shorts title block takes nothing from the display's room.
-			paddingBottom = isShortsPage() ? (horizontallyOverlaps ? bottomVisualHeight : 0) : Math.round(bottomRect.bottom - bottomRect.top);
+			paddingBottom = isShortsPage()
+				? horizontallyOverlaps
+					? bottomVisualHeight
+					: 0
+				: Math.round(bottomRect.bottom - bottomRect.top);
 		}
 		// Position the canvas based on options.
 		Object.assign(this.canvas.style, {
-			...calculateCanvasPosition(this.options.displayPosition, this.options.displayPadding, paddingTop, paddingBottom)
+			...calculateCanvasPosition(
+				this.options.displayPosition,
+				this.options.displayPadding,
+				paddingTop,
+				paddingBottom
+			)
 		});
 	}
 

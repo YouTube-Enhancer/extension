@@ -10,11 +10,16 @@ export default function SettingSearch() {
 	const { t } = i18nInstance;
 	const inputRef = useRef<HTMLInputElement>(null);
 	return (
-		<div className="relative my-2 w-full rounded-md border border-gray-300 bg-white dark:multi-['border-gray-700;bg-[#23272a]']" dir={direction}>
+		<div
+			className="relative my-2 w-full rounded-md border border-gray-300 bg-white dark:multi-['border-gray-700;bg-[#23272a]']"
+			dir={direction}
+		>
 			<input
 				className="w-full border-none bg-transparent px-3 py-2 text-black placeholder:multi-['text-[hsl(0,0%,70%)];text-xs;sm:text-sm;md:text-base'] focus:outline-none dark:text-white"
 				onChange={(e: ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
-				placeholder={t((translations) => translations.pages.options.extras.settingSearch.placeholder)}
+				placeholder={t(
+					(translations) => translations.pages.options.extras.settingSearch.placeholder
+				)}
 				ref={inputRef}
 				type="text"
 				value={filter}

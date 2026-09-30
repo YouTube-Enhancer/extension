@@ -5,7 +5,11 @@ import { field } from "@/src/features/_registry/defineConfig";
 import { modifierKeys } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
-	config: { enabled: field(z.boolean(), false), modifierKey: field(z.enum(modifierKeys), "altKey"), steps: field(z.number(), 0.25) },
+	config: {
+		enabled: field(z.boolean(), false),
+		modifierKey: field(z.enum(modifierKeys), "altKey"),
+		steps: field(z.number(), 0.25)
+	},
 	dependencies: { includePages: ["watch", "shorts"] },
 	id: "scrollWheelSpeedControl",
 	loadPhase: 0,
@@ -23,7 +27,10 @@ export const metadata = createFeatureMetadata({
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "scrollWheelSpeedControl.enabled" }],
 					id: "scrollWheelSpeedControl.modifierKey",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.label),
+					label: (t) =>
+						t(
+							(tr) => tr.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.label
+						),
 					optionsFrom: () =>
 						modifierKeys.map((key) => ({
 							label: (t) =>
@@ -36,13 +43,17 @@ export const metadata = createFeatureMetadata({
 						type: "singular",
 						value: (tr) => tr.settings.sections.scrollWheelSpeedControl.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.title)
+					title: (t) =>
+						t(
+							(tr) => tr.settings.sections.scrollWheelSpeedControl.settings.modifierKey.select.title
+						)
 				},
 				{
 					component: "number",
 					disabledWhen: [{ equals: false, setting: "scrollWheelSpeedControl.enabled" }],
 					id: "scrollWheelSpeedControl.steps",
-					label: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.label),
 					max: 1,
 					min: 0.05,
 					parentSetting: {
@@ -50,7 +61,8 @@ export const metadata = createFeatureMetadata({
 						value: (tr) => tr.settings.sections.scrollWheelSpeedControl.enable.label
 					},
 					step: 0.05,
-					title: (t) => t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.scrollWheelSpeedControl.settings.adjustmentSteps.title)
 				}
 			],
 			section: "scrollWheelSpeedControl",

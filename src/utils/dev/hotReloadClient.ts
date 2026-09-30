@@ -1,4 +1,10 @@
-import { DEV_RELOAD_PORT_FILE, DEV_RELOAD_SOURCE, devReloadPort, type DevRuntimeMessage, type DevServerMessage } from "@/src/utils/dev/hotReload";
+import {
+	DEV_RELOAD_PORT_FILE,
+	DEV_RELOAD_SOURCE,
+	devReloadPort,
+	type DevRuntimeMessage,
+	type DevServerMessage
+} from "@/src/utils/dev/hotReload";
 import { YOUTUBE_MATCH_PATTERNS } from "@/src/utils/url/constants";
 
 /**
@@ -53,7 +59,9 @@ async function connect(): Promise<void> {
 	socket.onclose = () => {
 		if (!announcedDisconnect) {
 			announcedDisconnect = true;
-			console.log("[Dev] Watch pipeline not reachable; retrying in the background (is `pnpm run dev` running?)");
+			console.log(
+				"[Dev] Watch pipeline not reachable; retrying in the background (is `pnpm run dev` running?)"
+			);
 		}
 		setTimeout(() => void connect(), reconnectDelay);
 		reconnectDelay = Math.min(reconnectDelay * 2, RECONNECT_MAX_MS);
@@ -130,5 +138,7 @@ async function reloadExtensionPages(): Promise<void> {
 }
 
 function youTubeTabs(): Promise<chrome.tabs.Tab[]> {
-	return chrome.tabs.query({ url: YOUTUBE_MATCH_PATTERNS }).then((tabs) => tabs.filter((tab) => tab.id !== undefined && !tab.discarded));
+	return chrome.tabs
+		.query({ url: YOUTUBE_MATCH_PATTERNS })
+		.then((tabs) => tabs.filter((tab) => tab.id !== undefined && !tab.discarded));
 }

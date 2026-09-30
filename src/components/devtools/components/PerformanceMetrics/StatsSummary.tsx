@@ -28,7 +28,9 @@ export default function StatsSummary({
 					<button
 						className={cn(
 							"rounded px-3 py-1.5 text-sm",
-							!autoRefreshPaused ? "bg-[#4ec9b0] text-[#1e1e1e]" : "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
+							!autoRefreshPaused
+								? "bg-[#4ec9b0] text-[#1e1e1e]"
+								: "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
 						)}
 						onClick={onToggleAutoRefresh}
 					>

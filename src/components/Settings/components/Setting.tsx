@@ -88,8 +88,17 @@ export default function Setting<ID extends configurationId>(settingProps: Settin
 				}
 				const options = parentSetting.value
 					.map((option) => `'${t(option)}'`)
-					.join(t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].separator));
-				return t((translations) => translations.pages.options.extras.optionDisabled[parentSetting.type].label, { OPTIONS: options });
+					.join(
+						t(
+							(translations) =>
+								translations.pages.options.extras.optionDisabled[parentSetting.type].separator
+						)
+					);
+				return t(
+					(translations) =>
+						translations.pages.options.extras.optionDisabled[parentSetting.type].label,
+					{ OPTIONS: options }
+				);
 			})()}
 		>
 			<SettingInput {...settingProps} />
@@ -129,10 +138,29 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 		}
 		case "css-editor": {
 			const { className, disabled, disabledReason, onChange, value } = settingProps;
-			return <CSSEditor className={className} disabled={disabled} disabledReason={disabledReason} onChange={onChange} value={value} />;
+			return (
+				<CSSEditor
+					className={className}
+					disabled={disabled}
+					disabledReason={disabledReason}
+					onChange={onChange}
+					value={value}
+				/>
+			);
 		}
 		case "file-name-template": {
-			const { className, disabled, disabledReason, error, hint, label, onChange, placeholdersLabel, title, value } = settingProps;
+			const {
+				className,
+				disabled,
+				disabledReason,
+				error,
+				hint,
+				label,
+				onChange,
+				placeholdersLabel,
+				title,
+				value
+			} = settingProps;
 			return (
 				<FileNameTemplate
 					className={className}
@@ -189,7 +217,8 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			);
 		}
 		case "number": {
-			const { className, disabled, disabledReason, label, max, min, onChange, step, value } = settingProps;
+			const { className, disabled, disabledReason, label, max, min, onChange, step, value } =
+				settingProps;
 			return (
 				<NumberInput
 					className={className}
@@ -205,7 +234,18 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			);
 		}
 		case "select": {
-			const { className, disabled, disabledReason, id, label, loading, onChange, options, selectedOption, title } = settingProps;
+			const {
+				className,
+				disabled,
+				disabledReason,
+				id,
+				label,
+				loading,
+				onChange,
+				options,
+				selectedOption,
+				title
+			} = settingProps;
 			return (
 				<Select
 					className={className}
@@ -224,11 +264,31 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 		case "slider": {
 			const { disabled, disabledReason, initialValue, max, min, onChange, step } = settingProps;
 			return (
-				<Slider disabled={disabled} disabledReason={disabledReason} initialValue={initialValue} max={max} min={min} onChange={onChange} step={step} />
+				<Slider
+					disabled={disabled}
+					disabledReason={disabledReason}
+					initialValue={initialValue}
+					max={max}
+					min={min}
+					onChange={onChange}
+					step={step}
+				/>
 			);
 		}
 		case "string-list": {
-			const { addLabel, className, disabled, disabledReason, itemLabel, label, max, onChange, removeLabel, title, value } = settingProps;
+			const {
+				addLabel,
+				className,
+				disabled,
+				disabledReason,
+				itemLabel,
+				label,
+				max,
+				onChange,
+				removeLabel,
+				title,
+				value
+			} = settingProps;
 			return (
 				<StringList
 					addLabel={addLabel}
@@ -246,7 +306,8 @@ function SettingInput<ID extends configurationId>(settingProps: SettingInputProp
 			);
 		}
 		case "text-input": {
-			const { className, disabled, disabledReason, input_type, label, onChange, title, value } = settingProps;
+			const { className, disabled, disabledReason, input_type, label, onChange, title, value } =
+				settingProps;
 			return (
 				<TextInput
 					className={className}

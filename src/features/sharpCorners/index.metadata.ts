@@ -11,7 +11,8 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "sharpCorners.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.sharpCorners.enable.label),
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.sharpCorners.enable.label),
 			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.sharpCorners.enable.title)
 		}
 	]

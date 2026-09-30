@@ -56,7 +56,13 @@ export function buildStoryboardTileUrl(sheet: StoryboardSheet, imageIndex: numbe
 	}
 	return url;
 }
-export function computeSeekWindow({ duration, seekable }: { duration: number; seekable: Nullable<TimeRangesLike> }): Nullable<SeekWindow> {
+export function computeSeekWindow({
+	duration,
+	seekable
+}: {
+	duration: number;
+	seekable: Nullable<TimeRangesLike>;
+}): Nullable<SeekWindow> {
 	if (Number.isFinite(duration) && duration > 0) {
 		return { end: duration, start: 0 };
 	}
@@ -74,12 +80,16 @@ export function formatTime(seconds: number): string {
 	const hh = Math.floor(s / 3600);
 	const mm = Math.floor((s % 3600) / 60);
 	const ss = s % 60;
-	return hh > 0 ? `${hh}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}` : `${mm}:${String(ss).padStart(2, "0")}`;
+	return hh > 0
+		? `${hh}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`
+		: `${mm}:${String(ss).padStart(2, "0")}`;
 }
 export function isBarHidden({ controlsVisible, forced, scrubbing }: BarVisibilityInput): boolean {
 	return !controlsVisible && !forced && !scrubbing;
 }
-export function parseStoryboardSheet(renderer: Nullable<StoryboardRenderer>): Nullable<StoryboardSheet> {
+export function parseStoryboardSheet(
+	renderer: Nullable<StoryboardRenderer>
+): Nullable<StoryboardSheet> {
 	if (!renderer?.spec) return null;
 	try {
 		const parts = renderer.spec.split("|");
@@ -147,6 +157,9 @@ export function timeToRatio(window: SeekWindow, time: number): number {
 	return clamp((time - window.start) / range, 0, 1);
 }
 function preferredStoryboardLevel(renderer: StoryboardRenderer): number {
-	const recommended = renderer.highResolutionRecommendedLevel ?? renderer.recommendedLevel ?? renderer.fineScrubbingRecommendedLevel;
+	const recommended =
+		renderer.highResolutionRecommendedLevel ??
+		renderer.recommendedLevel ??
+		renderer.fineScrubbingRecommendedLevel;
 	return Number.isFinite(recommended) ? (recommended as number) : 3;
 }

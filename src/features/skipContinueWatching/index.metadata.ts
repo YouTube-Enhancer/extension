@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "skipContinueWatching.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.skipContinueWatching.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.skipContinueWatching.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.skipContinueWatching.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.skipContinueWatching.enable.title)
 		}
 	]
 });

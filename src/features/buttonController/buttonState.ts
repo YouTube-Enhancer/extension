@@ -32,7 +32,9 @@ export function getTrackedButtonEnabled(buttonName: AllButtonNames): boolean {
 	return trackedButtons.get(buttonName)?.enabled ?? false;
 }
 
-export function getTrackedButtonFullscreenPlacement(buttonName: AllButtonNames): FullscreenPlacement | undefined {
+export function getTrackedButtonFullscreenPlacement(
+	buttonName: AllButtonNames
+): FullscreenPlacement | undefined {
 	return trackedButtons.get(buttonName)?.fullscreenPlacement;
 }
 
@@ -95,7 +97,10 @@ export function updateTrackedButtonChecked(buttonName: AllButtonNames, checked: 
 	if (info) info.checked = checked;
 }
 
-export function updateTrackedButtonConfig(buttonName: AllButtonNames, fullscreenPlacement: FullscreenPlacement) {
+export function updateTrackedButtonConfig(
+	buttonName: AllButtonNames,
+	fullscreenPlacement: FullscreenPlacement
+) {
 	const info = trackedButtons.get(buttonName);
 	if (info) {
 		info.fullscreenPlacement = fullscreenPlacement;
@@ -107,7 +112,10 @@ export function updateTrackedButtonLabel(buttonName: AllButtonNames, label: stri
 	if (info) info.label = label;
 }
 
-export function updateTrackedButtonLabelResolver(buttonName: AllButtonNames, labelResolver: () => string) {
+export function updateTrackedButtonLabelResolver(
+	buttonName: AllButtonNames,
+	labelResolver: () => string
+) {
 	const info = trackedButtons.get(buttonName);
 	if (info) info.labelResolver = labelResolver;
 }

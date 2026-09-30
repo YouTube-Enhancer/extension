@@ -8,7 +8,13 @@ import { isWatchPage } from "@/src/utils/url";
 
 import { REVERSE_BUTTON_CONTAINER_ID, REVERSE_BUTTON_ID } from "./constants";
 import { reversePlaylistPage, toggleReversal } from "./reversal";
-import { createReverseIcon, FEATURE_NAME, getHeaderSelector, isPlaylistDataReady, poll } from "./utils";
+import {
+	createReverseIcon,
+	FEATURE_NAME,
+	getHeaderSelector,
+	isPlaylistDataReady,
+	poll
+} from "./utils";
 
 type StateAPI = FeatureStateAPI<"playlistReverseButton">;
 
@@ -21,7 +27,10 @@ let tooltipUpdate: Nullable<() => void> = null;
 
 export function refreshTooltip() {
 	if (!reverseButton) return;
-	const isReversed = document.querySelector<HTMLButtonElement>(`#${REVERSE_BUTTON_ID}`)?.getAttribute("aria-checked") === "true";
+	const isReversed =
+		document
+			.querySelector<HTMLButtonElement>(`#${REVERSE_BUTTON_ID}`)
+			?.getAttribute("aria-checked") === "true";
 	reverseButton.dataset.title = window.i18nextInstance.t(
 		(tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]
 	);
@@ -82,7 +91,9 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 	reverseButton = document.createElement("button");
 	reverseButton.id = REVERSE_BUTTON_ID;
 	reverseButton.className = REVERSE_BUTTON_ID;
-	const tooltipText = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]);
+	const tooltipText = window.i18nextInstance.t(
+		(tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[isReversed ? "on" : "off"]
+	);
 	reverseButton.dataset.title = tooltipText;
 	reverseButton.appendChild(createReverseIcon());
 
@@ -120,13 +131,20 @@ async function injectButton(stateAPI: StateAPI, container?: HTMLElement | string
 				void reversePlaylistPage();
 			}
 
-			const label = window.i18nextInstance.t((tr) => tr.pages.content.features.playlistReverseButton.extras.toggle[newReversed ? "on" : "off"]);
+			const label = window.i18nextInstance.t(
+				(tr) =>
+					tr.pages.content.features.playlistReverseButton.extras.toggle[newReversed ? "on" : "off"]
+			);
 			reverseButton!.dataset.title = label;
 			tooltipUpdate?.();
 			removeTooltipFn();
 
 			requestAnimationFrame(() => {
-				if (reverseButtonContainer && !reverseButtonContainer.isConnected && headerContainerElement) {
+				if (
+					reverseButtonContainer &&
+					!reverseButtonContainer.isConnected &&
+					headerContainerElement
+				) {
 					insertButtonInto(headerContainerElement);
 				}
 			});

@@ -5,7 +5,10 @@ import { isGroupNode, isSettingNode } from "@/src/features/_registry/types";
 
 import type { SubFeatureInfo } from "./types";
 
-export function getEnabledPathFromMetadata<F extends FeatureKeys>(settings: FeatureSettingNode<F>[], featureId: string): Nullable<string> {
+export function getEnabledPathFromMetadata<F extends FeatureKeys>(
+	settings: FeatureSettingNode<F>[],
+	featureId: string
+): Nullable<string> {
 	for (const node of settings) {
 		if (isSettingNode(node) && String(node.id).endsWith(".enabled")) {
 			return node.id;
@@ -18,7 +21,10 @@ export function getEnabledPathFromMetadata<F extends FeatureKeys>(settings: Feat
 	return null;
 }
 
-export function getEnabledPathsFromMetadata<F extends FeatureKeys>(settings: FeatureSettingNode<F>[], featureId: string): SubFeatureInfo[] {
+export function getEnabledPathsFromMetadata<F extends FeatureKeys>(
+	settings: FeatureSettingNode<F>[],
+	featureId: string
+): SubFeatureInfo[] {
 	const result: SubFeatureInfo[] = [];
 	for (const node of settings) {
 		if (isSettingNode(node) && String(node.id).endsWith(".enabled")) {

@@ -20,14 +20,18 @@ export async function getCurrentChannelId(): Promise<Nullable<string>> {
 			 * The player's full response updates with every loaded video, so its videoDetails.channelId stays in step
 			 * with the video being played, unlike DOM links during an SPA navigation.
 			 */
-			const playerResponse = playerContainer.getPlayerResponse?.() as undefined | { videoDetails?: { channelId?: string } };
+			const playerResponse = playerContainer.getPlayerResponse?.() as
+				| undefined
+				| { videoDetails?: { channelId?: string } };
 			const responseChannelId = playerResponse?.videoDetails?.channelId;
 			if (responseChannelId) return responseChannelId;
 		} catch {
 			// fall through to DOM-based fallbacks
 		}
 		try {
-			const { channel_id: liveChannelId } = (await playerContainer.getVideoData()) as { channel_id?: string };
+			const { channel_id: liveChannelId } = (await playerContainer.getVideoData()) as {
+				channel_id?: string;
+			};
 			if (liveChannelId) return liveChannelId;
 		} catch {
 			// fall through to DOM-based fallbacks
@@ -36,8 +40,9 @@ export async function getCurrentChannelId(): Promise<Nullable<string>> {
 	const ownerLink = document.querySelector<HTMLAnchorElement>("a[href*='/channel/']");
 	const hrefChannelId = ownerLink?.href.match(/\/channel\/([\w-]+)/)?.[1];
 	if (hrefChannelId) return hrefChannelId;
-	const playerResponseChannelId = (window as { ytInitialPlayerResponse?: { videoDetails?: { channelId?: string } } }).ytInitialPlayerResponse
-		?.videoDetails?.channelId;
+	const playerResponseChannelId = (
+		window as { ytInitialPlayerResponse?: { videoDetails?: { channelId?: string } } }
+	).ytInitialPlayerResponse?.videoDetails?.channelId;
 	return playerResponseChannelId ?? null;
 }
 
@@ -64,7 +69,10 @@ export async function resolveChannelIdFromLink(input: string): Promise<Nullable<
 	if (channelPath) return channelPath[1];
 	try {
 		// youtu.be is not covered by host permissions, so normalize to a watch URL first
-		const fetchUrl = url.hostname === "youtu.be" ? `https://www.youtube.com/watch?v=${url.pathname.slice(1)}` : url.href;
+		const fetchUrl =
+			url.hostname === "youtu.be"
+				? `https://www.youtube.com/watch?v=${url.pathname.slice(1)}`
+				: url.href;
 		const response = await fetch(fetchUrl, {
 			credentials: "omit",
 			headers: { "Accept-Language": "en" }
@@ -75,14 +83,18 @@ export async function resolveChannelIdFromLink(input: string): Promise<Nullable<
 		 * The canonical link is the page's own authoritative identity. On channel pages it points to /channel/UC...
 		 * even for handle URLs, which avoids false positives from associated channels.
 		 */
-		const canonicalChannelId = html.match(/<link[^>]*rel="canonical"[^>]*href="https:\/\/www\.youtube\.com\/channel\/([\w-]+)"/)?.[1];
+		const canonicalChannelId = html.match(
+			/<link[^>]*rel="canonical"[^>]*href="https:\/\/www\.youtube\.com\/channel\/([\w-]+)"/
+		)?.[1];
 		if (canonicalChannelId) return canonicalChannelId;
 		/**
 		 * externalId and browseId carry the main channel id on channel pages. The loose channelId match,
 		 * videoDetails.channelId, is only reliable on watch and shorts pages, so it stays last.
 		 */
 		const extracted =
-			html.match(/"externalId":"(UC[\w-]+)"/)?.[1] ?? html.match(/"browseId":"(UC[\w-]+)"/)?.[1] ?? html.match(/"channelId":"(UC[\w-]+)"/)?.[1];
+			html.match(/"externalId":"(UC[\w-]+)"/)?.[1] ??
+			html.match(/"browseId":"(UC[\w-]+)"/)?.[1] ??
+			html.match(/"channelId":"(UC[\w-]+)"/)?.[1];
 		return extracted ?? null;
 	} catch {
 		return null;

@@ -29,7 +29,10 @@ function isAmbientEnabled(): boolean {
  * is nothing to do, except at start-up, where YouTube fills the sheet before it adds the row: `rowMayComeLate` lets
  * the first few such sheets count as not ready yet.
  */
-function makeAmbientToggleTask(desiredState: boolean, { rowMayComeLate = false } = {}): () => boolean | Promise<boolean> {
+function makeAmbientToggleTask(
+	desiredState: boolean,
+	{ rowMayComeLate = false } = {}
+): () => boolean | Promise<boolean> {
 	let sheetsWithoutRow = 0;
 	const acceptMissingRow = () => !rowMayComeLate || ++sheetsWithoutRow > 5;
 	return () => {
@@ -40,7 +43,10 @@ function makeAmbientToggleTask(desiredState: boolean, { rowMayComeLate = false }
 }
 
 /** Polls `read` every 50 ms until it returns a value, or gives up after `timeout`. */
-async function pollFor<T>(read: () => Nullable<T> | undefined, timeout: number): Promise<Nullable<T>> {
+async function pollFor<T>(
+	read: () => Nullable<T> | undefined,
+	timeout: number
+): Promise<Nullable<T>> {
 	const start = Date.now();
 	for (;;) {
 		const value = read();
@@ -56,7 +62,10 @@ async function pollFor<T>(read: () => Nullable<T> | undefined, timeout: number):
  * be, and closed again. YouTube offers the switch in the dark theme only, on the reel a page loads on and not on the
  * reels scrolled to after it, so a sheet without it means there is nothing to do once `acceptMissingRow` says so.
  */
-async function toggleShortsAmbientMode(desiredState: boolean, acceptMissingRow: () => boolean): Promise<boolean> {
+async function toggleShortsAmbientMode(
+	desiredState: boolean,
+	acceptMissingRow: () => boolean
+): Promise<boolean> {
 	if (!document.documentElement.hasAttribute("dark")) return true;
 	const menuButton = document.querySelector<HTMLButtonElement>(shortsMenuButtonSelector);
 	const popupContainer = document.querySelector<HTMLElement>("ytd-popup-container");
@@ -78,7 +87,9 @@ async function toggleShortsAmbientMode(desiredState: boolean, acceptMissingRow: 
 			if (document.querySelector(shortsOpenSheetSelector)) menuButton.click();
 			return false;
 		}
-		const ambientModeSwitch = sheet.querySelector(shortsAmbientModeItemSelector)?.querySelector<HTMLElement>(shortsAmbientSwitchSelector);
+		const ambientModeSwitch = sheet
+			.querySelector(shortsAmbientModeItemSelector)
+			?.querySelector<HTMLElement>(shortsAmbientSwitchSelector);
 		if (!ambientModeSwitch) {
 			menuButton.click();
 			return acceptMissingRow();
@@ -133,12 +144,17 @@ export default createFeature({
 	...metadata,
 	onDisable: () => {
 		if (!ambientModeWasEnabled) return;
-		void registry.playerManager.executeWithRetries("automaticallyDisableAmbientMode", [makeAmbientToggleTask(true)], ["restoreAmbient"], {
-			interval: 500,
-			maxAttempts: 20,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: false
-		});
+		void registry.playerManager.executeWithRetries(
+			"automaticallyDisableAmbientMode",
+			[makeAmbientToggleTask(true)],
+			["restoreAmbient"],
+			{
+				interval: 500,
+				maxAttempts: 20,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: false
+			}
+		);
 	},
 	onEnable: () => {
 		// onEnable also runs at page start-up, where a shorts sheet can fill before it carries the ambient row.
@@ -155,11 +171,16 @@ export default createFeature({
 		);
 	},
 	onNavigate: () => {
-		void registry.playerManager.executeWithRetries("automaticallyDisableAmbientMode", [makeAmbientToggleTask(false)], ["disableAmbient"], {
-			interval: 500,
-			maxAttempts: 20,
-			pageTypes: ["watch", "shorts"],
-			waitForLoaded: false
-		});
+		void registry.playerManager.executeWithRetries(
+			"automaticallyDisableAmbientMode",
+			[makeAmbientToggleTask(false)],
+			["disableAmbient"],
+			{
+				interval: 500,
+				maxAttempts: 20,
+				pageTypes: ["watch", "shorts"],
+				waitForLoaded: false
+			}
+		);
 	}
 });

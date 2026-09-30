@@ -8,7 +8,10 @@ export default async function updateAvailableLocales(): Promise<void> {
 		.map((locale) => locale.replace(".json", ""))
 		.sort();
 	const availableLocalesFile = readFileSync(`${i18nDir}/constants.ts`, "utf-8");
-	const updatedAvailableLocalesFile = updateAvailableLocalesArray(availableLocalesFile, availableLocales);
+	const updatedAvailableLocalesFile = updateAvailableLocalesArray(
+		availableLocalesFile,
+		availableLocales
+	);
 	if (updatedAvailableLocalesFile && updatedAvailableLocalesFile !== availableLocalesFile) {
 		await writeFormattedFile(`${i18nDir}/constants.ts`, updatedAvailableLocalesFile);
 	}

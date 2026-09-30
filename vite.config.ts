@@ -4,7 +4,15 @@ import { defineConfig } from "vite";
 
 import { DEV_MODE, ENABLE_SOURCE_MAP } from "./src/utils/config/env.ts";
 import stripMonacoWorkerFallbacks from "./src/utils/plugins/strip-monaco-worker-fallbacks.ts";
-import { assetsDir, componentsDir, hooksDir, outDir, pagesDir, srcDir, utilsDir } from "./src/utils/plugins/utils.ts";
+import {
+	assetsDir,
+	componentsDir,
+	hooksDir,
+	outDir,
+	pagesDir,
+	srcDir,
+	utilsDir
+} from "./src/utils/plugins/utils.ts";
 
 const pageInputs = {
 	background: resolve(pagesDir, "background", "index.html"),

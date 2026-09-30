@@ -38,14 +38,18 @@ function ensureController(options: MiniPlayerOptions) {
 	const defaults = cachedMiniPlayerDefaults ?? options;
 	if (!miniPlayerController) {
 		// The controller announces every activation itself, so paths that bypass setMiniPlayerManual (the overlay close button) still sync the button.
-		miniPlayerController = new MiniPlayerController(defaults, { onStateChange: emitMiniPlayerState });
+		miniPlayerController = new MiniPlayerController(defaults, {
+			onStateChange: emitMiniPlayerState
+		});
 	} else {
 		miniPlayerController.setDefaults(defaults);
 	}
 	return miniPlayerController;
 }
 function ensureSentinelBelowPlayer(playerElement: Element): HTMLDivElement {
-	let visibilitySentinel = document.getElementById(MINI_PLAYER_SENTINEL_ID) as Nullable<HTMLDivElement>;
+	let visibilitySentinel = document.getElementById(
+		MINI_PLAYER_SENTINEL_ID
+	) as Nullable<HTMLDivElement>;
 	if (!visibilitySentinel) {
 		visibilitySentinel = createStyledElement({
 			elementId: MINI_PLAYER_SENTINEL_ID,
@@ -60,7 +64,8 @@ function ensureSentinelBelowPlayer(playerElement: Element): HTMLDivElement {
 	const { parentElement } = playerElement;
 	if (!parentElement) return visibilitySentinel;
 	const { nextSibling } = playerElement;
-	if (nextSibling !== visibilitySentinel) parentElement.insertBefore(visibilitySentinel, nextSibling);
+	if (nextSibling !== visibilitySentinel)
+		parentElement.insertBefore(visibilitySentinel, nextSibling);
 	return visibilitySentinel;
 }
 function getCommentsElement(): Nullable<Element> {
@@ -68,7 +73,12 @@ function getCommentsElement(): Nullable<Element> {
 }
 function isElementVisible(element: Element) {
 	const bounds = (element as HTMLElement).getBoundingClientRect();
-	return bounds.bottom > 0 && bounds.right > 0 && bounds.top < window.innerHeight && bounds.left < window.innerWidth;
+	return (
+		bounds.bottom > 0 &&
+		bounds.right > 0 &&
+		bounds.top < window.innerHeight &&
+		bounds.left < window.innerWidth
+	);
 }
 export const setCommentsMiniPlayerDefaults = (defaults: MiniPlayerOptions) => {
 	cachedMiniPlayerDefaults = defaults;
@@ -76,7 +86,9 @@ export const setCommentsMiniPlayerDefaults = (defaults: MiniPlayerOptions) => {
 };
 async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 	cleanupAutoObservers();
-	const playerElement = (await waitForElement<Element>("#player", 15000)) ?? (await waitForElement<Element>("#player-container", 15000));
+	const playerElement =
+		(await waitForElement<Element>("#player", 15000)) ??
+		(await waitForElement<Element>("#player-container", 15000));
 	if (!playerElement) return;
 	const visibilitySentinel = ensureSentinelBelowPlayer(playerElement);
 	const attachObserver = (commentsElement: Element) => {
@@ -94,7 +106,9 @@ async function attachCommentsAutoMiniPlayer(miniPlayer: MiniPlayerController) {
 			miniPlayer.setAutoActive(shouldAutoActivate);
 			emitMiniPlayerState(miniPlayer.isActive());
 		};
-		visibilityObserver = new IntersectionObserver(evaluateVisibility, { threshold: [0, 0.01, 0.05, 0.1] });
+		visibilityObserver = new IntersectionObserver(evaluateVisibility, {
+			threshold: [0, 0.01, 0.05, 0.1]
+		});
 		visibilityObserver.observe(visibilitySentinel);
 		visibilityObserver.observe(commentsElement);
 		visibilityObserver.observe(playerElement);
@@ -142,7 +156,8 @@ export const setMiniPlayerManual = (checked: boolean) => {
 	}
 	emitMiniPlayerState(miniPlayer.isActive());
 };
-export const isMiniPlayerActive = () => document.documentElement.classList.contains(MINI_PLAYER_ACTIVE_CLASS);
+export const isMiniPlayerActive = () =>
+	document.documentElement.classList.contains(MINI_PLAYER_ACTIVE_CLASS);
 /**
  * Temporarily hides the mini player overlay (e.g. while another feature
  * borrows the video element). Returns a restore function. Both directions are
@@ -154,7 +169,10 @@ export const suspendMiniPlayerOverlay = (): (() => void) => {
 	return () => miniPlayerController?.setOverlayHidden(false);
 };
 
-async function setupMiniPlayer(defaultPosition: MiniPlayerOptions["defaultPosition"], defaultSize: MiniPlayerOptions["defaultSize"]) {
+async function setupMiniPlayer(
+	defaultPosition: MiniPlayerOptions["defaultPosition"],
+	defaultSize: MiniPlayerOptions["defaultSize"]
+) {
 	const miniPlayer = ensureController({
 		defaultPosition,
 		defaultSize

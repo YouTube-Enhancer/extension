@@ -12,5 +12,9 @@ export default function generateLocaleTypes(): void {
 	const source = resolve(rootDir, "public/locales/en-US.json");
 	const output = `${source}.d.ts`;
 	if (existsSync(output) && statSync(output).mtimeMs >= statSync(source).mtimeMs) return;
-	execFileSync(process.execPath, [resolve(rootDir, "node_modules/ts-json-as-const/index.js"), source], { stdio: "inherit" });
+	execFileSync(
+		process.execPath,
+		[resolve(rootDir, "node_modules/ts-json-as-const/index.js"), source],
+		{ stdio: "inherit" }
+	);
 }

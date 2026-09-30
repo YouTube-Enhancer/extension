@@ -21,7 +21,9 @@ export function getColor(type: ColorType, terminal = false) {
  * @param messages - Array of log messages with their styling.
  * @returns An array containing the combined message and its styling.
  */
-export function groupMessages(messages: { message: string; styling: string[] }[]): Array<string | string[]> {
+export function groupMessages(
+	messages: { message: string; styling: string[] }[]
+): Array<string | string[]> {
 	const message = messages.map((m) => m.message).join(" ");
 	const styling = messages.map((m) => m.styling).flat();
 	return [message, ...styling];

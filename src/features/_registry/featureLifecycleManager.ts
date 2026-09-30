@@ -1,4 +1,8 @@
-import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type {
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureKeysWithState
+} from "@/src/features/_registry/types";
 import type { configuration } from "@/src/types";
 
 import { hasState } from "@/src/features/_registry/featureRegistryCore";
@@ -23,7 +27,11 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			feature.id,
 			"onConfigChange",
 			async () => {
-				if (hasState(feature)) return await feature.onConfigChange(this.configManager.getLast(feature.id), this.stateManager.getStateAPI(feature.id));
+				if (hasState(feature))
+					return await feature.onConfigChange(
+						this.configManager.getLast(feature.id),
+						this.stateManager.getStateAPI(feature.id)
+					);
 				await feature.onConfigChange(config);
 			},
 			{ shouldRethrow: true }
@@ -36,7 +44,11 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			feature.id,
 			"onDisable",
 			async () => {
-				if (hasState(feature)) return await feature.onDisable(this.configManager.getLast(feature.id), this.stateManager.getStateAPI(feature.id));
+				if (hasState(feature))
+					return await feature.onDisable(
+						this.configManager.getLast(feature.id),
+						this.stateManager.getStateAPI(feature.id)
+					);
 				await feature.onDisable(config);
 			},
 			{ shouldRethrow: true }
@@ -50,7 +62,11 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			feature.id,
 			"onEnable",
 			async () => {
-				if (hasState(feature)) return await feature.onEnable(this.configManager.getLast(feature.id), this.stateManager.getStateAPI(feature.id));
+				if (hasState(feature))
+					return await feature.onEnable(
+						this.configManager.getLast(feature.id),
+						this.stateManager.getStateAPI(feature.id)
+					);
 				await feature.onEnable(config);
 			},
 			{ shouldRethrow: true }
@@ -63,7 +79,11 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			feature.id,
 			"onInit",
 			async () => {
-				if (hasState(feature)) return await feature.onInit(this.configManager.getLast(feature.id), this.stateManager.getStateAPI(feature.id));
+				if (hasState(feature))
+					return await feature.onInit(
+						this.configManager.getLast(feature.id),
+						this.stateManager.getStateAPI(feature.id)
+					);
 				await feature.onInit(config);
 			},
 			{ shouldRethrow: true }
@@ -76,21 +96,30 @@ export class FeatureLifecycleManager extends FeatureManagerBase {
 			feature.id,
 			"onLanguageChange",
 			async () => {
-				if (hasState(feature)) return await feature.onLanguageChange(this.stateManager.getStateAPI(feature.id));
+				if (hasState(feature))
+					return await feature.onLanguageChange(this.stateManager.getStateAPI(feature.id));
 				await feature.onLanguageChange();
 			},
 			{ shouldRethrow: true }
 		);
 	}
 
-	async navigateFeature<K extends FeatureKeys>(feature: AnyFeatureBase, config: configuration[K], navigationType: string) {
+	async navigateFeature<K extends FeatureKeys>(
+		feature: AnyFeatureBase,
+		config: configuration[K],
+		navigationType: string
+	) {
 		if (!hasOnNavigate(feature)) return;
 		await this.safelyExecute<void>(
 			feature.id,
 			"onNavigate",
 			async () => {
 				if (hasState(feature))
-					return await feature.onNavigate(this.configManager.getLast(feature.id), this.stateManager.getStateAPI(feature.id), navigationType);
+					return await feature.onNavigate(
+						this.configManager.getLast(feature.id),
+						this.stateManager.getStateAPI(feature.id),
+						navigationType
+					);
 				await feature.onNavigate(config, navigationType);
 			},
 			{ shouldRethrow: true }
@@ -110,7 +139,8 @@ const hasOnNavigate = hasMethod("onNavigate");
 type FunctionKeys<T> = {
 	[K in keyof T]-?: NonNullable<T[K]> extends (...args: any[]) => any ? K : never;
 }[keyof T];
-type MethodType<T, K extends keyof T> = NonNullable<T[K]> extends (...args: infer A) => infer R ? (...args: A) => R : never;
+type MethodType<T, K extends keyof T> =
+	NonNullable<T[K]> extends (...args: infer A) => infer R ? (...args: A) => R : never;
 function hasMethod<K extends FunctionKeys<AnyFeatureBase>>(method: K) {
 	return function (feature: AnyFeatureBase): feature is AnyFeatureBase & {
 		[P in K]-?: MethodType<AnyFeatureBase, K>;

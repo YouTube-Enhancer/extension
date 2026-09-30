@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideLiveStreamChat.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideLiveStreamChat.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideLiveStreamChat.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideLiveStreamChat.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideLiveStreamChat.enable.title)
 		}
 	]
 });

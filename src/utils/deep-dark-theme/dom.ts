@@ -11,13 +11,18 @@ export function clearDeepDarkData() {
 }
 export function getDeepDarkData() {
 	const { documentElement } = document;
-	const preset = documentElement.getAttribute(DEEP_DARK_PRESET_ATTRIBUTE) as Nullable<DeepDarkPreset>;
+	const preset = documentElement.getAttribute(
+		DEEP_DARK_PRESET_ATTRIBUTE
+	) as Nullable<DeepDarkPreset>;
 	if (!preset) return null;
 	const colorsStr = documentElement.getAttribute(DEEP_DARK_COLORS_ATTRIBUTE);
 	const colors = colorsStr ? (JSON.parse(colorsStr) as DeepDarkCustomThemeColors) : null;
 	return { colors, preset };
 }
-export function setDeepDarkData(preset: DeepDarkPreset, colors: Nullable<DeepDarkCustomThemeColors>) {
+export function setDeepDarkData(
+	preset: DeepDarkPreset,
+	colors: Nullable<DeepDarkCustomThemeColors>
+) {
 	document.documentElement.dataset.yteDeepDarkPreset = preset;
 	if (colors && preset === "Custom") {
 		document.documentElement.dataset.yteDeepDarkColors = JSON.stringify(colors);

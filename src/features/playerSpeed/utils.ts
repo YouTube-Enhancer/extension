@@ -15,5 +15,10 @@ export function parseChannelSpeeds(value: string | undefined): Map<string, numbe
 }
 
 export function serializeChannelSpeeds(entries: ChannelSpeedEntry[]): string {
-	return entries.map(({ id, speed }) => `${id.trim()}:${Number.isFinite(speed) ? Math.round(speed * 10000) / 10000 : ""}`).join("\n");
+	return entries
+		.map(
+			({ id, speed }) =>
+				`${id.trim()}:${Number.isFinite(speed) ? Math.round(speed * 10000) / 10000 : ""}`
+		)
+		.join("\n");
 }

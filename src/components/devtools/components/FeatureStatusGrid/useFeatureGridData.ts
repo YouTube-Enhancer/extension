@@ -1,10 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
-import type { AnyFeatureBase, FeatureKeys, FeatureSettingNode } from "@/src/features/_registry/types";
+import type {
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureSettingNode
+} from "@/src/features/_registry/types";
 import type { configuration, Path, PathValue } from "@/src/types";
 
-import { type AllConfigsData, allConfigsQuery, featureListQuery } from "@/components/devtools/hooks/useDevToolsQuery";
+import {
+	type AllConfigsData,
+	allConfigsQuery,
+	featureListQuery
+} from "@/components/devtools/hooks/useDevToolsQuery";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { resolveEnabled } from "@/src/features/_registry/featureRegistryCore";
 import { updateConfigAtPath } from "@/src/utils/config/utils";
@@ -14,7 +22,13 @@ import { textMatcher } from "@/src/utils/string";
 
 import type { FeatureInfo, FilterType } from "./types";
 
-import { getEnabledPathFromMetadata, getEnabledPathsFromMetadata, getSubFeatures, hasAnyConfigurableSettings, hasButtonPlacement } from "./utils";
+import {
+	getEnabledPathFromMetadata,
+	getEnabledPathsFromMetadata,
+	getSubFeatures,
+	hasAnyConfigurableSettings,
+	hasButtonPlacement
+} from "./utils";
 
 export function useFeatureGridData() {
 	const queryClient = useQueryClient();
@@ -38,7 +52,15 @@ export function useFeatureGridData() {
 	const configsQuery = useQuery(allConfigsQuery);
 
 	const toggleMutation = useMutation({
-		mutationFn: async ({ enabled, id, path }: { enabled: boolean; id: FeatureKeys; path: string }) => {
+		mutationFn: async ({
+			enabled,
+			id,
+			path
+		}: {
+			enabled: boolean;
+			id: FeatureKeys;
+			path: string;
+		}) => {
 			const response = await sendDevToolsMessage("devtools_toggle_feature", { enabled, id, path });
 			return response.data;
 		},
@@ -67,14 +89,27 @@ export function useFeatureGridData() {
 			const { [id]: config } = configs;
 			const metadata = metadataRegistry.get(id);
 			const settings = metadata?.settings ?? [];
-			const enabledPath = getEnabledPathFromMetadata(settings as FeatureSettingNode<FeatureKeys>[], id);
-			const subFeaturePaths = getEnabledPathsFromMetadata(settings as FeatureSettingNode<FeatureKeys>[], id);
+			const enabledPath = getEnabledPathFromMetadata(
+				settings as FeatureSettingNode<FeatureKeys>[],
+				id
+			);
+			const subFeaturePaths = getEnabledPathsFromMetadata(
+				settings as FeatureSettingNode<FeatureKeys>[],
+				id
+			);
 			const hasNested = subFeaturePaths.length > 1;
 			const hasConfigSettings = hasAnyConfigurableSettings(settings) || hasButtonPlacement(config);
 			const finalSubFeatures = hasNested
 				? subFeaturePaths.map((sf) => ({
 						...sf,
-						enabled: config ? Boolean(getPathValue(config, sf.path.replace(`${id}.`, "") as Path<configuration[FeatureKeys]>)) : false
+						enabled: config
+							? Boolean(
+									getPathValue(
+										config,
+										sf.path.replace(`${id}.`, "") as Path<configuration[FeatureKeys]>
+									)
+								)
+							: false
 					}))
 				: getSubFeatures(config);
 			return {
@@ -107,7 +142,8 @@ export function useFeatureGridData() {
 	const filteredFeatures = useMemo(() => {
 		const matchesText = textMatcher(searchTerm);
 		return features.filter(({ enabled, id, subFeatures }) => {
-			const matchesSearch = matchesText(id) || subFeatures?.some((sf) => matchesText(sf.key)) || false;
+			const matchesSearch =
+				matchesText(id) || subFeatures?.some((sf) => matchesText(sf.key)) || false;
 			if (filter === "enabled") return matchesSearch && enabled;
 			if (filter === "disabled") return matchesSearch && !enabled;
 			return matchesSearch;
@@ -120,7 +156,12 @@ export function useFeatureGridData() {
 		try {
 			await toggleMutation.mutateAsync({ enabled: newEnabled, id, path: fullPath });
 		} catch (err) {
-			console.error("[FeatureGrid] Failed to toggle feature:", { enabled: newEnabled, error: err, id, path: fullPath });
+			console.error("[FeatureGrid] Failed to toggle feature:", {
+				enabled: newEnabled,
+				error: err,
+				id,
+				path: fullPath
+			});
 		}
 	};
 
@@ -130,7 +171,12 @@ export function useFeatureGridData() {
 		try {
 			await toggleMutation.mutateAsync({ enabled: newEnabled, id, path: fullPath });
 		} catch (err) {
-			console.error("[FeatureGrid] Failed to toggle sub-feature:", { enabled: newEnabled, error: err, id, path: fullPath });
+			console.error("[FeatureGrid] Failed to toggle sub-feature:", {
+				enabled: newEnabled,
+				error: err,
+				id,
+				path: fullPath
+			});
 		}
 	};
 

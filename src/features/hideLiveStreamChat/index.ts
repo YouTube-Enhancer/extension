@@ -34,12 +34,17 @@ export default createFeature({
  * hide for good on a stream that is live; the task keeps asking until the data belongs to the page's video.
  */
 function applyLiveChatVisibility() {
-	void registry.playerManager.executeWithRetries("hideLiveStreamChat", [applyLiveChatVisibilityTask], ["applyLiveChatVisibility"], {
-		interval: 500,
-		maxAttempts: 40,
-		overallTimeout: 20_000,
-		waitForLoaded: true
-	});
+	void registry.playerManager.executeWithRetries(
+		"hideLiveStreamChat",
+		[applyLiveChatVisibilityTask],
+		["applyLiveChatVisibility"],
+		{
+			interval: 500,
+			maxAttempts: 40,
+			overallTimeout: 20_000,
+			waitForLoaded: true
+		}
+	);
 }
 async function applyLiveChatVisibilityTask(): Promise<boolean> {
 	const player = document.querySelector<YouTubePlayerDiv>("div#movie_player");

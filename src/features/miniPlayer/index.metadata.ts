@@ -8,10 +8,11 @@ import { miniPlayerPositions, miniPlayerSizes } from "@/src/features/miniPlayer/
 
 type PositionKeys = SnakeToCamel<(typeof miniPlayerPositions)[number]>;
 
-const positionOptions: { key: PositionKeys; value: (typeof miniPlayerPositions)[number] }[] = miniPlayerPositions.map((value) => ({
-	key: value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as PositionKeys,
-	value
-}));
+const positionOptions: { key: PositionKeys; value: (typeof miniPlayerPositions)[number] }[] =
+	miniPlayerPositions.map((value) => ({
+		key: value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as PositionKeys,
+		value
+	}));
 
 export const metadata = createFeatureMetadata({
 	config: {
@@ -36,18 +37,26 @@ export const metadata = createFeatureMetadata({
 					component: "select",
 					disabledWhen: [
 						{ equals: false, setting: "miniPlayer.enabled" },
-						{ equals: false, feature: "miniPlayerButton", setting: "miniPlayerButton.button.enabled" }
+						{
+							equals: false,
+							feature: "miniPlayerButton",
+							setting: "miniPlayerButton.button.enabled"
+						}
 					],
 					id: "miniPlayer.defaultPosition",
 					label: (t) => t((tr) => tr.settings.sections.miniPlayer.settings.position.select.label),
 					optionsFrom: () =>
 						positionOptions.map(({ key, value }) => ({
-							label: (t) => t((tr) => tr.settings.sections.miniPlayer.settings.position.select.options[key]),
+							label: (t) =>
+								t((tr) => tr.settings.sections.miniPlayer.settings.position.select.options[key]),
 							value
 						})),
 					parentSetting: {
 						type: "either",
-						value: [(tr) => tr.settings.sections.miniPlayer.enable.label, (tr) => tr.settings.sections.miniPlayer.button.label]
+						value: [
+							(tr) => tr.settings.sections.miniPlayer.enable.label,
+							(tr) => tr.settings.sections.miniPlayer.button.label
+						]
 					},
 					title: (t) => t((tr) => tr.settings.sections.miniPlayer.settings.position.select.title)
 				},
@@ -55,14 +64,21 @@ export const metadata = createFeatureMetadata({
 					component: "select",
 					disabledWhen: [
 						{ equals: false, setting: "miniPlayer.enabled" },
-						{ equals: false, feature: "miniPlayerButton", setting: "miniPlayerButton.button.enabled" }
+						{
+							equals: false,
+							feature: "miniPlayerButton",
+							setting: "miniPlayerButton.button.enabled"
+						}
 					],
 					id: "miniPlayer.defaultSize",
 					label: (t) => t((tr) => tr.settings.sections.miniPlayer.settings.size.label),
 					optionsFrom: () => miniPlayerSizes.map((value) => ({ label: () => value, value })),
 					parentSetting: {
 						type: "either",
-						value: [(tr) => tr.settings.sections.miniPlayer.enable.label, (tr) => tr.settings.sections.miniPlayer.button.label]
+						value: [
+							(tr) => tr.settings.sections.miniPlayer.enable.label,
+							(tr) => tr.settings.sections.miniPlayer.button.label
+						]
 					},
 					title: (t) => t((tr) => tr.settings.sections.miniPlayer.settings.size.title)
 				}
@@ -73,6 +89,9 @@ export const metadata = createFeatureMetadata({
 	],
 	state: {
 		manualOverride: field(z.boolean(), false),
-		rect: field(z.nullable(z.object({ height: z.number(), width: z.number(), x: z.number(), y: z.number() })), null)
+		rect: field(
+			z.nullable(z.object({ height: z.number(), width: z.number(), x: z.number(), y: z.number() })),
+			null
+		)
 	}
 });

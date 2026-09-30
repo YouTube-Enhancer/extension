@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideNextButton.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideNextButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideNextButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideNextButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideNextButton.enable.title)
 		}
 	]
 });

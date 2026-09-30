@@ -30,10 +30,14 @@ const STABLE_OFF_READS = 6;
  * stability check would treat the user's click like a YouTube reset and switch autoplay off again.
  */
 let userChoseAutoPlay = false;
-let watchedToggle: Nullable<{ element: HTMLButtonElement; handler: (event: MouseEvent) => void }> = null;
+let watchedToggle: Nullable<{ element: HTMLButtonElement; handler: (event: MouseEvent) => void }> =
+	null;
 
 // The toggle's own click handler calls these on the player; they are not part of the public player API.
-type AutonavPlayer = YouTubePlayerDiv & { setAutonav?: (enabled: boolean) => void; setAutonavState?: (state: number) => void };
+type AutonavPlayer = YouTubePlayerDiv & {
+	setAutonav?: (enabled: boolean) => void;
+	setAutonavState?: (state: number) => void;
+};
 function unwatchToggle(): void {
 	if (!watchedToggle) return;
 	watchedToggle.element.removeEventListener("click", watchedToggle.handler, { capture: true });
@@ -155,7 +159,8 @@ function setAutoPlayThroughPlayer(enabled: boolean): boolean {
 	const player = document.querySelector<AutonavPlayer>("#movie_player");
 	if (!player) return false;
 	if (typeof player.setAutonav === "function") player.setAutonav(enabled);
-	else if (typeof player.setAutonavState === "function") player.setAutonavState(enabled ? AUTONAV_STATE_ON : AUTONAV_STATE_OFF);
+	else if (typeof player.setAutonavState === "function")
+		player.setAutonavState(enabled ? AUTONAV_STATE_ON : AUTONAV_STATE_OFF);
 	else return false;
 	return true;
 }
@@ -202,27 +207,42 @@ export default createFeature({
 	},
 	onDisable: () => {
 		unwatchToggle();
-		void registry.playerManager.executeWithRetries(metadata.id, [makeDisableTask()], ["disableAutoPlay"], {
-			interval: 300,
-			maxAttempts: 24,
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeDisableTask()],
+			["disableAutoPlay"],
+			{
+				interval: 300,
+				maxAttempts: 24,
+				waitForLoaded: true
+			}
+		);
 	},
 	onEnable: () => {
-		void registry.playerManager.executeWithRetries(metadata.id, [makeEnableTask()], ["enableAutoPlay"], {
-			interval: 300,
-			maxAttempts: 30,
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeEnableTask()],
+			["enableAutoPlay"],
+			{
+				interval: 300,
+				maxAttempts: 30,
+				waitForLoaded: true
+			}
+		);
 	},
 	onNavigate: () => {
 		// Each video gets its own click budget and stability count; both otherwise reset only on disable.
 		toggleClickAttempts = 0;
 		stableOffReads = 0;
-		void registry.playerManager.executeWithRetries(metadata.id, [makeNavigateTask()], ["navigateAutoPlay"], {
-			interval: 300,
-			maxAttempts: 30,
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeNavigateTask()],
+			["navigateAutoPlay"],
+			{
+				interval: 300,
+				maxAttempts: 30,
+				waitForLoaded: true
+			}
+		);
 	}
 });

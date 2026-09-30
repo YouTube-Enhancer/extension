@@ -4,7 +4,9 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 
 const featureKeys = metadataRegistry.getAll().map((m) => m.id) as FeatureKeys[];
 
-export function hasState(feature: AnyFeatureBase): feature is AnyFeatureBase & { state: NonNullable<AnyFeatureBase["state"]> } {
+export function hasState(
+	feature: AnyFeatureBase
+): feature is AnyFeatureBase & { state: NonNullable<AnyFeatureBase["state"]> } {
 	return "state" in feature && feature.state !== undefined;
 }
 export function isFeature(feature: unknown): feature is FeatureBase<FeatureKeys> {
@@ -13,13 +15,19 @@ export function isFeature(feature: unknown): feature is FeatureBase<FeatureKeys>
 		return false;
 	}
 	if (!("id" in feature && "defaults" in feature && "schemaInput" in feature)) {
-		console.warn("Feature check failed: missing required properties ('id', 'defaults', 'schemaInput')", feature);
+		console.warn(
+			"Feature check failed: missing required properties ('id', 'defaults', 'schemaInput')",
+			feature
+		);
 		return false;
 	}
 	const hasEnable = "onEnable" in feature;
 	const hasDisable = "onDisable" in feature;
 	if (hasEnable !== hasDisable) {
-		console.warn("Feature check failed: must have both onEnable and onDisable, or neither", feature);
+		console.warn(
+			"Feature check failed: must have both onEnable and onDisable, or neither",
+			feature
+		);
 		return false;
 	}
 	if (hasEnable) {
@@ -44,7 +52,8 @@ export function isFeatureKey(key: string): key is FeatureKeys {
 export function resolveEnabled(config: unknown, visited = new WeakSet()): boolean {
 	if (!config || typeof config !== "object" || visited.has(config)) return false;
 	visited.add(config);
-	if ("enabled" in config && typeof (config as { enabled?: unknown }).enabled === "boolean") return (config as { enabled: boolean }).enabled;
+	if ("enabled" in config && typeof (config as { enabled?: unknown }).enabled === "boolean")
+		return (config as { enabled: boolean }).enabled;
 	for (const value of Object.values(config as Record<string, unknown>)) {
 		if (value && typeof value === "object") {
 			if (resolveEnabled(value, visited)) return true;

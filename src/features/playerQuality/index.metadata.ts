@@ -45,7 +45,10 @@ export const metadata = createFeatureMetadata({
 					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
 					id: "playerQuality.quality",
 					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.quality.select.label),
-					optionsFrom: () => [...youtubePlayerQualityLevelsNoAuto].reverse().map((value) => ({ label: () => qualityLabels[value] ?? value, value })),
+					optionsFrom: () =>
+						[...youtubePlayerQualityLevelsNoAuto]
+							.reverse()
+							.map((value) => ({ label: () => qualityLabels[value] ?? value, value })),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
@@ -56,33 +59,52 @@ export const metadata = createFeatureMetadata({
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
 					id: "playerQuality.fallbackStrategy",
-					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.label),
+					label: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.label
+						),
 					optionsFrom: () =>
 						PlayerQualityFallbackStrategy.map((value) => ({
-							label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.options[value]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select
+											.options[value]
+								),
 							value
 						})),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.title)
+					title: (t) =>
+						t(
+							(tr) =>
+								tr.settings.sections.playerQuality.settings.qualityFallbackStrategy.select.title
+						)
 				},
 				{
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "playerQuality.enabled" }],
 					id: "playerQuality.fpsPreference",
-					label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.label),
 					optionsFrom: () =>
 						FpsPreference.map((value) => ({
-							label: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.options[value]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.playerQuality.settings.fpsPreference.select.options[value]
+								),
 							value
 						})),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.playerQuality.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.playerQuality.settings.fpsPreference.select.title)
 				},
 				{
 					component: "checkbox",

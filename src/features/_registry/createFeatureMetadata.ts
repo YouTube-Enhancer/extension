@@ -1,5 +1,10 @@
 import type { ConfigShape, ConfigShapeFrom } from "@/src/features/_registry/defineConfig";
-import type { FeatureKeys, FeatureMetadata, FeatureMetadataBase, MustContainEnabled } from "@/src/features/_registry/types";
+import type {
+	FeatureKeys,
+	FeatureMetadata,
+	FeatureMetadataBase,
+	MustContainEnabled
+} from "@/src/features/_registry/types";
 import type { AllButtonNames, configuration } from "@/src/types";
 
 import { extractDefaults, extractSchemaInput } from "@/src/features/_registry/defineConfig";

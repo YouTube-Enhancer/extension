@@ -90,7 +90,9 @@ export default function DonateCta() {
 									target="_blank"
 								>
 									<Icon aria-hidden className={option.iconClassName} />
-									{t((translations) => translations.pages.options.extras.donateCta[option.labelKey])}
+									{t(
+										(translations) => translations.pages.options.extras.donateCta[option.labelKey]
+									)}
 								</a>
 							);
 						})}
@@ -139,7 +141,10 @@ function PaypalMark(props: SVGProps<SVGSVGElement>) {
 				d="M44.284 23.7A12.894 12.894 0 0 1 31.53 34.5h-5.206L24.157 48H14.89l1.483-9 1.75-11.178.367-2.322h7.497c7.773 0 12.927-6.576 12.927-12.15 3.825 1.974 6.055 5.963 5.37 10.35z"
 				fill="#E6E6E6"
 			/>
-			<path d="M38.914 13.35C37.31 12.511 35.365 12 33.248 12h-12.64L18.49 25.5h7.497c7.773 0 12.927-6.576 12.927-12.15z" fill="#D2D6E0" />
+			<path
+				d="M38.914 13.35C37.31 12.511 35.365 12 33.248 12h-12.64L18.49 25.5h7.497c7.773 0 12.927-6.576 12.927-12.15z"
+				fill="#D2D6E0"
+			/>
 		</svg>
 	);
 }
@@ -156,7 +161,15 @@ function VenmoMark(props: SVGProps<SVGSVGElement>) {
 					<path d={VENMO_V} fill="#000000" transform="translate(5.3 -26.6) scale(3.2)" />
 				</mask>
 			</defs>
-			<rect fill="#FFFFFF" height="23" mask="url(#venmo-mark-v)" rx="5.2" width="23" x="0.5" y="0.5" />
+			<rect
+				fill="#FFFFFF"
+				height="23"
+				mask="url(#venmo-mark-v)"
+				rx="5.2"
+				width="23"
+				x="0.5"
+				y="0.5"
+			/>
 		</svg>
 	);
 }

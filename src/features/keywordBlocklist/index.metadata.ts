@@ -29,7 +29,8 @@ export const metadata = createFeatureMetadata({
 						type: "singular",
 						value: (tr) => tr.settings.sections.keywordBlocklist.enable.label
 					},
-					removeLabel: (t) => t((tr) => tr.settings.sections.keywordBlocklist.settings.keywords.remove),
+					removeLabel: (t) =>
+						t((tr) => tr.settings.sections.keywordBlocklist.settings.keywords.remove),
 					title: (t) => t((tr) => tr.settings.sections.keywordBlocklist.settings.keywords.title)
 				}
 			],

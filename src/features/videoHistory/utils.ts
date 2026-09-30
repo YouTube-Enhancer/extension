@@ -6,7 +6,12 @@ export function getVideoHistory(stateAPI: FeatureStateAPI<"videoHistory">): Vide
 	return stateAPI.getState()?.storage ?? {};
 }
 
-export function setVideoHistory(id: string, timestamp: number, status: VideoHistoryStatus, stateAPI: FeatureStateAPI<"videoHistory">) {
+export function setVideoHistory(
+	id: string,
+	timestamp: number,
+	status: VideoHistoryStatus,
+	stateAPI: FeatureStateAPI<"videoHistory">
+) {
 	stateAPI.setState((prev) => ({
 		storage: {
 			...prev?.storage,

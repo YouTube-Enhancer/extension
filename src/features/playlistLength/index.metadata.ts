@@ -28,7 +28,8 @@ export const metadata = createFeatureMetadata({
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "playlistLength.enabled" }],
 					id: "playlistLength.lengthGetMethod",
-					label: (t) => t((tr) => tr.settings.sections.playlistLength.settings.wayToGetLength.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.playlistLength.settings.wayToGetLength.select.label),
 					optionsFrom: () =>
 						playlistLengthGetMethod.map((value) => ({
 							label: () => value.toUpperCase(),
@@ -38,23 +39,32 @@ export const metadata = createFeatureMetadata({
 						type: "singular",
 						value: (tr) => tr.settings.sections.playlistLength.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.playlistLength.settings.wayToGetLength.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.playlistLength.settings.wayToGetLength.select.title)
 				},
 				{
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "playlistLength.enabled" }],
 					id: "playlistLength.watchTimeGetMethod",
-					label: (t) => t((tr) => tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.label),
 					optionsFrom: () =>
 						playlistWatchTimeGetMethod.map((value) => ({
-							label: (t) => t((tr) => tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.options[value]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.options[
+											value
+										]
+								),
 							value
 						})),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.playlistLength.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.playlistLength.settings.wayToGetWatchTime.select.title)
 				}
 			],
 			section: "playlistLength",

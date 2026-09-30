@@ -17,7 +17,17 @@ type FeatureDependencyInfo = {
 	includePages?: readonly PageType[];
 };
 
-const PAGE_TYPES: PageType[] = ["channel_home", "channel_videos", "home", "live", "playlist", "search", "shorts", "subscriptions", "watch"];
+const PAGE_TYPES: PageType[] = [
+	"channel_home",
+	"channel_videos",
+	"home",
+	"live",
+	"playlist",
+	"search",
+	"shorts",
+	"subscriptions",
+	"watch"
+];
 
 export default function DependencyGraph(): JSX.Element {
 	const { data: featuresData, isLoading } = useQuery(featureListQuery);
@@ -57,7 +67,9 @@ export default function DependencyGraph(): JSX.Element {
 								<button
 									className={cn(
 										"w-full rounded p-2 text-left transition-colors",
-										selectedFeature === feature.id ? "bg-[#007acc] text-white" : "bg-[#252526] text-[#d4d4d4] hover:bg-[#2a2d2e]"
+										selectedFeature === feature.id
+											? "bg-[#007acc] text-white"
+											: "bg-[#252526] text-[#d4d4d4] hover:bg-[#2a2d2e]"
 									)}
 									key={feature.id}
 									onClick={() => setSelectedFeature(feature.id)}
@@ -73,7 +85,10 @@ export default function DependencyGraph(): JSX.Element {
 					<h3 className="text-sm font-medium text-[#6b6b6b]">Page Types</h3>
 					<div className="grid grid-cols-3 gap-2">
 						{PAGE_TYPES.map((page: PageType) => (
-							<div className="rounded border border-[#3c3c3c] bg-[#2d2d2d] p-2 text-center text-xs text-[#6b6b6b]" key={page}>
+							<div
+								className="rounded border border-[#3c3c3c] bg-[#2d2d2d] p-2 text-center text-xs text-[#6b6b6b]"
+								key={page}
+							>
 								{page}
 							</div>
 						))}
@@ -87,10 +102,14 @@ export default function DependencyGraph(): JSX.Element {
 								<div className="space-y-2">
 									<div>
 										<p className="text-xs text-[#6b6b6b]">Include Pages</p>
-										{selectedFeatureData.includePages && selectedFeatureData.includePages.length > 0 ? (
+										{selectedFeatureData.includePages &&
+										selectedFeatureData.includePages.length > 0 ? (
 											<div className="mt-1 flex flex-wrap gap-1">
 												{selectedFeatureData.includePages.map((page: PageType) => (
-													<span className="rounded bg-[#4ec9b0] px-2 py-0.5 text-xs text-[#1e1e1e]" key={page}>
+													<span
+														className="rounded bg-[#4ec9b0] px-2 py-0.5 text-xs text-[#1e1e1e]"
+														key={page}
+													>
 														{page}
 													</span>
 												))}
@@ -101,10 +120,14 @@ export default function DependencyGraph(): JSX.Element {
 									</div>
 									<div>
 										<p className="text-xs text-[#6b6b6b]">Exclude Pages</p>
-										{selectedFeatureData.excludePages && selectedFeatureData.excludePages.length > 0 ? (
+										{selectedFeatureData.excludePages &&
+										selectedFeatureData.excludePages.length > 0 ? (
 											<div className="mt-1 flex flex-wrap gap-1">
 												{selectedFeatureData.excludePages.map((page: PageType) => (
-													<span className="rounded bg-[#ce9178] px-2 py-0.5 text-xs text-[#1e1e1e]" key={page}>
+													<span
+														className="rounded bg-[#ce9178] px-2 py-0.5 text-xs text-[#1e1e1e]"
+														key={page}
+													>
 														{page}
 													</span>
 												))}
@@ -121,7 +144,10 @@ export default function DependencyGraph(): JSX.Element {
 			</div>
 
 			<div className="flex justify-end pt-2">
-				<button className="rounded bg-[#2d2d2d] px-3 py-1.5 text-sm text-[#d4d4d4] hover:bg-[#3c3c3c]" onClick={() => setSelectedFeature(null)}>
+				<button
+					className="rounded bg-[#2d2d2d] px-3 py-1.5 text-sm text-[#d4d4d4] hover:bg-[#3c3c3c]"
+					onClick={() => setSelectedFeature(null)}
+				>
 					Clear Selection
 				</button>
 			</div>

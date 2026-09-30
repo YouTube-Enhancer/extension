@@ -26,10 +26,25 @@ export function modifyElementClassList(action: ModifyElementAction, elementPair:
  * @param classNameOrPairs Either ElementClassPair[] or a class name string.
  * @param selectors Optional selectors/elements depending on overload.
  */
-export function modifyElementsClassList(action: ModifyElementAction, elements: ElementClassPair[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, selectors: string[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: Nullable<Element>[]): void;
-export function modifyElementsClassList(action: ModifyElementAction, className: string, elements: NodeListOf<Element>): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	elements: ElementClassPair[]
+): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	className: string,
+	selectors: string[]
+): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	className: string,
+	elements: Nullable<Element>[]
+): void;
+export function modifyElementsClassList(
+	action: ModifyElementAction,
+	className: string,
+	elements: NodeListOf<Element>
+): void;
 export function modifyElementsClassList(
 	action: ModifyElementAction,
 	classNameOrPairs: ElementClassPair[] | string,

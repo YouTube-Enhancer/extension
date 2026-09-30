@@ -36,7 +36,9 @@ export async function createActionButton({
 }: ActionButtonConfig): Promise<HTMLButtonElement> {
 	const { renderToString } = await import("react-dom/server");
 	const button = document.createElement("button");
-	button.innerHTML = renderToString(React.createElement(icon, { color: iconColor, size: iconSize }));
+	button.innerHTML = renderToString(
+		React.createElement(icon, { color: iconColor, size: iconSize })
+	);
 	button.className = className + " yte-action-button";
 	button.title = window.i18nextInstance.t(translationHover);
 

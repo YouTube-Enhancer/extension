@@ -13,14 +13,25 @@ export type CheckboxProps = {
 	title: string;
 };
 
-const Checkbox: React.FC<CheckboxProps> = ({ checked, className, disabled = false, disabledReason, label, onChange, title }) => {
+const Checkbox: React.FC<CheckboxProps> = ({
+	checked,
+	className,
+	disabled = false,
+	disabledReason,
+	label,
+	onChange,
+	title
+}) => {
 	const { direction } = useSettings();
 	const id = useId();
 	return (
 		<div className={cn("flex items-start", className)} title={title}>
 			<input
 				checked={checked}
-				className={cn("form-checkbox mt-0.5 size-3.5 text-indigo-600 transition duration-150 ease-in-out", { "!cursor-not-allowed": disabled })}
+				className={cn(
+					"form-checkbox mt-0.5 size-3.5 text-indigo-600 transition duration-150 ease-in-out",
+					{ "!cursor-not-allowed": disabled }
+				)}
 				disabled={disabled}
 				id={id}
 				onChange={onChange}

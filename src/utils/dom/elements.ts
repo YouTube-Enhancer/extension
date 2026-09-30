@@ -23,7 +23,9 @@ export function createStyledElement<ID extends string, K extends keyof HTMLEleme
 	// Check if the element already exists
 	const elementExists = document.getElementById(elementId) !== null;
 	// If the element exists, use it, otherwise create a new element
-	const element = (elementExists ? document.getElementById(elementId) : document.createElement(elementType)) as HTMLElementTagNameMap[K];
+	const element = (
+		elementExists ? document.getElementById(elementId) : document.createElement(elementType)
+	) as HTMLElementTagNameMap[K];
 	// If the element was newly created, set its id
 	if (!element.id) element.id = elementId;
 	// Apply the styles to the element

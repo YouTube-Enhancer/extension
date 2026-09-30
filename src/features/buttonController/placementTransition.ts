@@ -144,7 +144,10 @@ class PlacementTransition {
 					}
 				}
 			});
-			this.fullscreenObserver.observe(target, { attributeFilter: ["fullscreen"], attributes: true });
+			this.fullscreenObserver.observe(target, {
+				attributeFilter: ["fullscreen"],
+				attributes: true
+			});
 		}
 		document.addEventListener("fullscreenchange", this.onFullscreenChange, { passive: true });
 	}
@@ -159,10 +162,18 @@ class PlacementTransition {
 			});
 		};
 		this.theaterModeObserver = new MutationObserver(scheduleReposition);
-		this.theaterModeObserver.observe(sizeButton, { attributeFilter: ["class"], attributes: true, childList: true, subtree: true });
+		this.theaterModeObserver.observe(sizeButton, {
+			attributeFilter: ["class"],
+			attributes: true,
+			childList: true,
+			subtree: true
+		});
 		const watchElement = document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
 		if (watchElement) {
-			this.theaterModeObserver.observe(watchElement, { attributeFilter: ["theater"], attributes: true });
+			this.theaterModeObserver.observe(watchElement, {
+				attributeFilter: ["theater"],
+				attributes: true
+			});
 		}
 		document.addEventListener("yt-navigate-start", this.onNavigationStart);
 	}
@@ -210,6 +221,10 @@ export function isFullscreen(): boolean {
 
 export function isInTheaterMode(): boolean {
 	return (
-		document.querySelector<HTMLButtonElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy")?.hasAttribute("theater") ?? false
+		document
+			.querySelector<HTMLButtonElement>(
+				isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+			)
+			?.hasAttribute("theater") ?? false
 	);
 }

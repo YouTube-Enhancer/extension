@@ -40,7 +40,9 @@ export default function FeatureCard({
 		>
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-2">
-					{feature.hasNestedEnabled && <span className="text-sm text-[#d4d4d4]">{isExpanded ? "▼" : "▶"}</span>}
+					{feature.hasNestedEnabled && (
+						<span className="text-sm text-[#d4d4d4]">{isExpanded ? "▼" : "▶"}</span>
+					)}
 					<p className="font-medium text-[#d4d4d4]">
 						{feature.id}
 						{feature.hasNestedEnabled && ` (${enabledCount}/${totalCount})`}
@@ -71,7 +73,10 @@ export default function FeatureCard({
 					)}
 					{!feature.hasNestedEnabled && (
 						<button
-							className={cn("rounded px-2 py-1 text-xs font-medium", feature.enabled ? "bg-[#ce9178] text-[#1e1e1e]" : "bg-[#4ec9b0] text-[#1e1e1e]")}
+							className={cn(
+								"rounded px-2 py-1 text-xs font-medium",
+								feature.enabled ? "bg-[#ce9178] text-[#1e1e1e]" : "bg-[#4ec9b0] text-[#1e1e1e]"
+							)}
 							disabled={isTogglePending}
 							onClick={(e) => {
 								e.stopPropagation();
@@ -86,10 +91,16 @@ export default function FeatureCard({
 			{feature.hasNestedEnabled && isExpanded && (
 				<div className="mt-3 space-y-2 pl-4">
 					{feature.subFeatures?.map((sub) => (
-						<div className="flex items-center justify-between rounded bg-[#252525] p-2" key={sub.key}>
+						<div
+							className="flex items-center justify-between rounded bg-[#252525] p-2"
+							key={sub.key}
+						>
 							<span className="text-sm text-[#d4d4d4]">• {sub.key}</span>
 							<button
-								className={cn("rounded px-2 py-0.5 text-xs font-medium", sub.enabled ? "bg-[#ce9178] text-[#1e1e1e]" : "bg-[#4ec9b0] text-[#1e1e1e]")}
+								className={cn(
+									"rounded px-2 py-0.5 text-xs font-medium",
+									sub.enabled ? "bg-[#ce9178] text-[#1e1e1e]" : "bg-[#4ec9b0] text-[#1e1e1e]"
+								)}
 								disabled={isTogglePending}
 								onClick={(e) => {
 									e.stopPropagation();

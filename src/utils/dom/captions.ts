@@ -9,7 +9,10 @@ import type { YouTubePlayerDiv } from "@/src/types";
  * section says nothing and the click is simply tried. The captions module's own track list is not consulted:
  * after an in-page navigation it can still be the previous video's for a while.
  */
-export function captionsAvailable(playerContainer: YouTubePlayerDiv, subtitlesButton: HTMLButtonElement): boolean {
+export function captionsAvailable(
+	playerContainer: YouTubePlayerDiv,
+	subtitlesButton: HTMLButtonElement
+): boolean {
 	if (subtitlesButton.style.display === "none") return false;
 	try {
 		const response = playerContainer.getPlayerResponse();

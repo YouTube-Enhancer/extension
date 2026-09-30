@@ -17,7 +17,10 @@ export class MessageBus {
 
 	constructor(private source: MessageSource) {}
 
-	on<T extends keyof MessageMappings>(type: T, handler: MessageHandler<MessageMappings[T]["request"] & { requestId?: string }>): () => void {
+	on<T extends keyof MessageMappings>(
+		type: T,
+		handler: MessageHandler<MessageMappings[T]["request"] & { requestId?: string }>
+	): () => void {
 		const typeStr = type as string;
 		if (!this.listeners.has(typeStr)) {
 			this.listeners.set(typeStr, new Set());
@@ -94,7 +97,11 @@ export class MessageBus {
 			if (timeout !== Infinity) {
 				timer = setTimeout(() => {
 					cleanup();
-					reject(new Error(`MessageBus.request timed out after ${timeout}ms waiting for "${String(type)}"`));
+					reject(
+						new Error(
+							`MessageBus.request timed out after ${timeout}ms waiting for "${String(type)}"`
+						)
+					);
 				}, timeout);
 			}
 
@@ -103,11 +110,12 @@ export class MessageBus {
 		});
 	}
 
-	send<T extends keyof ContentSendOnlyMessageMappings | keyof ContentToBackgroundSendOnlyMessageMappings | keyof ExtensionSendOnlyMessageMappings>(
-		type: T,
-		data: unknown,
-		action: "request_action" | "send_data" = "send_data"
-	): void {
+	send<
+		T extends
+			| keyof ContentSendOnlyMessageMappings
+			| keyof ContentToBackgroundSendOnlyMessageMappings
+			| keyof ExtensionSendOnlyMessageMappings
+	>(type: T, data: unknown, action: "request_action" | "send_data" = "send_data"): void {
 		const seq = ++this.sequence;
 		const message = {
 			action,

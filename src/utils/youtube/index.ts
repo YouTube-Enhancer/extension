@@ -16,8 +16,17 @@ export function getInnertubeClient() {
 
 export async function isVideoInPlaylist(videoId: string, playlistId: string): Promise<boolean> {
 	const youtube = await getInnertubeClient();
-	const response = await youtube.actions.execute("/playlist/get_add_to_playlist", { parse: false, videoIds: [videoId] });
-	return findInObjectTree(response.data, (node) => (node.playlistId === playlistId ? node.containsSelectedVideos === "ALL" : null), 12) ?? false;
+	const response = await youtube.actions.execute("/playlist/get_add_to_playlist", {
+		parse: false,
+		videoIds: [videoId]
+	});
+	return (
+		findInObjectTree(
+			response.data,
+			(node) => (node.playlistId === playlistId ? node.containsSelectedVideos === "ALL" : null),
+			12
+		) ?? false
+	);
 }
 
 async function createInnertubeClient() {

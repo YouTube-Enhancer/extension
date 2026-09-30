@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "playlistReverseButton.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.playlistReverseButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.playlistReverseButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.playlistReverseButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.playlistReverseButton.enable.title)
 		}
 	],
 	state: { isReversed: field(z.boolean(), false) }

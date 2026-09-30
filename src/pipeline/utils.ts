@@ -25,7 +25,9 @@ export function elapsedSince(start: number): string {
 export function safeResolve(fn: unknown, t: TFunction, opts?: Record<string, unknown>): string {
 	if (typeof fn !== "function") return "";
 	try {
-		const result = opts ? (fn as (t: TFunction, opts: Record<string, unknown>) => unknown)(t, opts) : (fn as (t: TFunction) => unknown)(t);
+		const result = opts
+			? (fn as (t: TFunction, opts: Record<string, unknown>) => unknown)(t, opts)
+			: (fn as (t: TFunction) => unknown)(t);
 		return typeof result === "string" ? result : "";
 	} catch {
 		return "";

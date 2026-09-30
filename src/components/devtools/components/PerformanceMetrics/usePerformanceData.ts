@@ -2,9 +2,15 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Fuse from "fuse.js";
 import { useMemo, useState } from "react";
 
-import type { FeatureError, FeatureMetric } from "@/src/features/_registry/featurePerformanceTracker";
+import type {
+	FeatureError,
+	FeatureMetric
+} from "@/src/features/_registry/featurePerformanceTracker";
 
-import { type PerformanceMetricsData, performanceMetricsQuery } from "@/components/devtools/hooks/useDevToolsQuery";
+import {
+	type PerformanceMetricsData,
+	performanceMetricsQuery
+} from "@/components/devtools/hooks/useDevToolsQuery";
 import { sendDevToolsMessage } from "@/src/utils/messaging/devtools";
 
 import type { ChartType, FeatureGroup, FeatureSlowest, PhaseGroup, Stats, ViewMode } from "./types";
@@ -61,7 +67,9 @@ export function usePerformanceData(): {
 	const stats = useMemo((): Stats => {
 		if (metrics.length === 0) return { avg: 0, max: 0, min: 0 };
 		// For stats, use duration for depth 0 (includes nested), exclusive for nested
-		const durations = filteredMetrics.map((m) => (m.depth === 0 ? m.duration : m.exclusiveDuration));
+		const durations = filteredMetrics.map((m) =>
+			m.depth === 0 ? m.duration : m.exclusiveDuration
+		);
 		// Calculate wall-clock time for avg using concurrency groups
 		const rootMetrics = filteredMetrics.filter((m) => m.depth === 0);
 		const groups = new Map<number, number>();
@@ -220,10 +228,15 @@ export function usePerformanceData(): {
 		}
 		const result: FeatureSlowest[] = [];
 		for (const [featureId, metrics] of featureMap) {
-			const slowest = metrics.reduce((slowest, m) => (m.exclusiveDuration > slowest.exclusiveDuration ? m : slowest), metrics[0]);
+			const slowest = metrics.reduce(
+				(slowest, m) => (m.exclusiveDuration > slowest.exclusiveDuration ? m : slowest),
+				metrics[0]
+			);
 			result.push({ featureId, metrics, slowestMetric: slowest });
 		}
-		return result.sort((a, b) => b.slowestMetric.exclusiveDuration - a.slowestMetric.exclusiveDuration).slice(0, 10);
+		return result
+			.sort((a, b) => b.slowestMetric.exclusiveDuration - a.slowestMetric.exclusiveDuration)
+			.slice(0, 10);
 	}, [filteredMetrics]);
 
 	const togglePhase = (phase: string) => {

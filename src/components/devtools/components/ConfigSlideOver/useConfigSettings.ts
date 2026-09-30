@@ -43,7 +43,9 @@ export function useConfigSettings<F extends FeatureKeys>(
 	}, [metadata, featureId, currentConfig]);
 
 	const handleChange = (_id: string, _value: unknown) => {
-		setSettings((prev: SettingItem<F>[]) => prev.map((s: SettingItem<F>) => (s.id === _id ? { ...s, currentValue: _value } : s)));
+		setSettings((prev: SettingItem<F>[]) =>
+			prev.map((s: SettingItem<F>) => (s.id === _id ? { ...s, currentValue: _value } : s))
+		);
 	};
 
 	return { handleChange, settings };

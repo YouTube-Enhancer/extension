@@ -1,7 +1,10 @@
 // The settings menu entries the feature toggles, keyed on page and player layout. Shared with the specs. On shorts
 // the entry is a row of the reel's "more" sheet, a list item today and a paper item in the older sheet, listed as
 // two plain selectors because the test runner's selector engine does not take :is().
-export const ambientModePathSelectors: Record<"shorts" | "watch", Record<"legacy" | "modern", string>> = {
+export const ambientModePathSelectors: Record<
+	"shorts" | "watch",
+	Record<"legacy" | "modern", string>
+> = {
 	shorts: {
 		legacy:
 			"tp-yt-paper-item:has(svg path[d='M21 7v10H3V7h18m1-1H2v12h20V6zM11.5 2v3h1V2h-1zm1 17h-1v3h1v-3zM3.79 3 6 5.21l.71-.71L4.5 2.29 3.79 3zm2.92 16.5L6 18.79 3.79 21l.71.71 2.21-2.21zM19.5 2.29 17.29 4.5l.71.71L20.21 3l-.71-.71zm0 19.42.71-.71L18 18.79l-.71.71 2.21 2.21z']), yt-list-item-view-model:has(svg path[d='M21 7v10H3V7h18m1-1H2v12h20V6zM11.5 2v3h1V2h-1zm1 17h-1v3h1v-3zM3.79 3 6 5.21l.71-.71L4.5 2.29 3.79 3zm2.92 16.5L6 18.79 3.79 21l.71.71 2.21-2.21zM19.5 2.29 17.29 4.5l.71.71L20.21 3l-.71-.71zm0 19.42.71-.71L18 18.79l-.71.71 2.21 2.21z'])",
@@ -16,11 +19,14 @@ export const ambientModePathSelectors: Record<"shorts" | "watch", Record<"legacy
 	}
 };
 /** The shorts page's ambient mode row, whichever icon set the sheet carries. */
-export const shortsAmbientModeItemSelector = Object.values(ambientModePathSelectors.shorts).join(", ");
+export const shortsAmbientModeItemSelector = Object.values(ambientModePathSelectors.shorts).join(
+	", "
+);
 /** The switch inside that row: YouTube's current switch button, or the toggle of the older sheet. */
 export const shortsAmbientSwitchSelector = "button[role='switch'], tp-yt-paper-toggle-button";
 /** The "more" button of the shorts player, which opens the sheet. */
 export const shortsMenuButtonSelector = "div#menu-button button";
 /** A sheet that is open, and the rows YouTube fills it with a moment after the button is pressed. */
-export const shortsOpenSheetSelector = "ytd-popup-container tp-yt-iron-dropdown:not([aria-hidden='true']):not([style*='display: none'])";
+export const shortsOpenSheetSelector =
+	"ytd-popup-container tp-yt-iron-dropdown:not([aria-hidden='true']):not([style*='display: none'])";
 export const shortsSheetItemSelector = "yt-list-item-view-model, tp-yt-paper-item";

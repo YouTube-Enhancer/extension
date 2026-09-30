@@ -53,8 +53,14 @@ export default function PerformanceMetrics(): JSX.Element {
 
 	return (
 		<div className="space-y-4">
-			{viewMode !== "summary" && <SearchBar onSearchChange={setSearchTerm} searchTerm={searchTerm} />}
-			<ViewModeToggle errorCount={errors.length} onViewModeChange={setViewMode} viewMode={viewMode} />
+			{viewMode !== "summary" && (
+				<SearchBar onSearchChange={setSearchTerm} searchTerm={searchTerm} />
+			)}
+			<ViewModeToggle
+				errorCount={errors.length}
+				onViewModeChange={setViewMode}
+				viewMode={viewMode}
+			/>
 
 			{viewMode === "summary" && (
 				<StatsSummary
@@ -68,13 +74,22 @@ export default function PerformanceMetrics(): JSX.Element {
 			)}
 
 			{viewMode === "slowest" && (
-				<SlowestList expandedFeatures={expandedFeatures} slowestByFeature={slowestByFeature} toggleFeature={toggleExpandedFeatures} />
+				<SlowestList
+					expandedFeatures={expandedFeatures}
+					slowestByFeature={slowestByFeature}
+					toggleFeature={toggleExpandedFeatures}
+				/>
 			)}
 
 			{viewMode === "errors" && <ErrorsList errors={errors} />}
 
 			{viewMode === "by-phase" && (
-				<PhaseBreakdown expandedPhases={expandedPhases} phaseBreakdown={phaseBreakdown} togglePhase={toggleExpandedPhases} totalTime={totalTime} />
+				<PhaseBreakdown
+					expandedPhases={expandedPhases}
+					phaseBreakdown={phaseBreakdown}
+					togglePhase={toggleExpandedPhases}
+					totalTime={totalTime}
+				/>
 			)}
 
 			{viewMode === "by-feature" && (
@@ -97,11 +112,20 @@ export default function PerformanceMetrics(): JSX.Element {
 			)}
 
 			<div className="flex justify-end gap-2 pt-2">
-				<button className={cn("rounded px-3 py-1.5 text-sm", "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]")} onClick={handleClear}>
+				<button
+					className={cn(
+						"rounded px-3 py-1.5 text-sm",
+						"bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
+					)}
+					onClick={handleClear}
+				>
 					Clear Metrics
 				</button>
 				<button
-					className={cn("rounded px-3 py-1.5 text-sm", "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]")}
+					className={cn(
+						"rounded px-3 py-1.5 text-sm",
+						"bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
+					)}
 					onClick={() => {
 						void refetch();
 					}}

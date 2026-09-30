@@ -41,7 +41,9 @@ async function setupHoverListeners() {
 	const playerContainer =
 		isWatchPage() || isLivePage()
 			? await waitForElement<HTMLDivElement>(
-					isNewYouTubeVideoLayout() ? "div#player-container.ytd-watch-grid" : "div#player-container.ytd-watch-flexy"
+					isNewYouTubeVideoLayout()
+						? "div#player-container.ytd-watch-grid"
+						: "div#player-container.ytd-watch-flexy"
 				)
 			: null;
 	// If player element is not available, return
@@ -60,7 +62,13 @@ async function setupHoverListeners() {
 	};
 	const pointerIsOver = (element: Element) => {
 		const rect = element.getBoundingClientRect();
-		return rect.width > 0 && pointer.x >= rect.left && pointer.x <= rect.right && pointer.y >= rect.top && pointer.y <= rect.bottom;
+		return (
+			rect.width > 0 &&
+			pointer.x >= rect.left &&
+			pointer.x <= rect.right &&
+			pointer.y >= rect.top &&
+			pointer.y <= rect.bottom
+		);
 	};
 	let hideTimeout: Nullable<ReturnType<typeof setTimeout>> = null;
 	const cancelHide = () => {
@@ -86,10 +94,30 @@ async function setupHoverListeners() {
 		hideTimeout = setTimeout(hideSettings, 50);
 	};
 	eventManager.addEventListener(document, "mousemove", trackPointer, "openYouTubeSettingsOnHover");
-	eventManager.addEventListener(settingsButton, "mouseenter", showSettings, "openYouTubeSettingsOnHover");
-	eventManager.addEventListener(settingsButton, "mouseleave", scheduleHide, "openYouTubeSettingsOnHover");
-	eventManager.addEventListener(settingsMenu, "mouseenter", cancelHide, "openYouTubeSettingsOnHover");
-	eventManager.addEventListener(settingsMenu, "mouseleave", scheduleHide, "openYouTubeSettingsOnHover");
+	eventManager.addEventListener(
+		settingsButton,
+		"mouseenter",
+		showSettings,
+		"openYouTubeSettingsOnHover"
+	);
+	eventManager.addEventListener(
+		settingsButton,
+		"mouseleave",
+		scheduleHide,
+		"openYouTubeSettingsOnHover"
+	);
+	eventManager.addEventListener(
+		settingsMenu,
+		"mouseenter",
+		cancelHide,
+		"openYouTubeSettingsOnHover"
+	);
+	eventManager.addEventListener(
+		settingsMenu,
+		"mouseleave",
+		scheduleHide,
+		"openYouTubeSettingsOnHover"
+	);
 	// A click inside the menu is the user working the menu; YouTube closes it itself when a choice calls for that.
 	eventManager.addEventListener(settingsMenu, "click", cancelHide, "openYouTubeSettingsOnHover");
 }

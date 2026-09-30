@@ -81,7 +81,15 @@ export function removeTooltip(id: `yte-feature-${FeatureName}-tooltip`) {
 	if (!tooltip) return;
 	tooltip.remove();
 }
-function createTooltipElement<T extends Record<string, unknown>>({ id, styles, text }: { id: string; styles: T; text: string }) {
+function createTooltipElement<T extends Record<string, unknown>>({
+	id,
+	styles,
+	text
+}: {
+	id: string;
+	styles: T;
+	text: string;
+}) {
 	const tooltip = document.createElement("div");
 	tooltip.id = id;
 	tooltip.className = "yte-button-tooltip ytp-tooltip ytp-bottom";
@@ -89,7 +97,11 @@ function createTooltipElement<T extends Record<string, unknown>>({ id, styles, t
 	Object.assign(tooltip.style, styles);
 	return tooltip;
 }
-function positionTooltip(params: { direction: "down" | "left" | "right" | "up"; element: HTMLElement; tooltip: HTMLElement }) {
+function positionTooltip(params: {
+	direction: "down" | "left" | "right" | "up";
+	element: HTMLElement;
+	tooltip: HTMLElement;
+}) {
 	const { direction, element, tooltip } = params;
 	const rect = element.getBoundingClientRect();
 	const tooltipRect = tooltip.getBoundingClientRect();

@@ -22,7 +22,9 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 	switch (message.type) {
 		case "featureMenuOpenTypeChange":
 			setFeatureMenuConfig({ openType: message.data.featureMenuOpenType });
-			coreFeatures.handleConfigChange("featureMenu", { featureMenuOpenType: message.data.featureMenuOpenType });
+			coreFeatures.handleConfigChange("featureMenu", {
+				featureMenuOpenType: message.data.featureMenuOpenType
+			});
 			break;
 		case "featureUpdate":
 			await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
