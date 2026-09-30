@@ -20,7 +20,7 @@ export async function registerAllFeatures(initialState?: Record<FeatureKeysWithS
 
 	// Build lookup: featureId → import function
 	const moduleById = new Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>>();
-	for (const [path, importFn] of Object.entries(allModules) as [string, () => Promise<{ default?: AnyFeatureBase }>][] ) {
+	for (const [path, importFn] of Object.entries(allModules) as [string, () => Promise<{ default?: AnyFeatureBase }>][]) {
 		const match = path.match(/\/src\/features\/([^/]+)\//);
 		if (match) moduleById.set(match[1] as FeatureKeys, importFn);
 	}

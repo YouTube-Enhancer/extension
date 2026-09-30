@@ -188,9 +188,7 @@ class FeaturePerformanceTracker {
 		const contextId = ++this.activeContextId;
 		const start = performance.now();
 		const label: PhaseLabel = subPhase ? `${phase}:${subPhase}` : phase;
-		const stackTrace = this.captureStackTraces
-			? new Error().stack?.split("\n").slice(1, 4).join("\n")
-			: undefined;
+		const stackTrace = this.captureStackTraces ? new Error().stack?.split("\n").slice(1, 4).join("\n") : undefined;
 
 		// Determine effective parent — only same-feature context qualifies
 		const stackTopId = stack.length > 0 ? stack[stack.length - 1] : null;
