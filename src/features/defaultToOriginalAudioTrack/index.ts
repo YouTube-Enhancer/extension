@@ -19,6 +19,12 @@ function clearOriginalAudioTrack() {
 	originalAudioTrackVideoId = null;
 }
 
+function getPlayerContainer(): Nullable<YouTubePlayerDiv> {
+	return isShortsPage()
+		? document.querySelector<YouTubePlayerDiv>("#shorts-player")
+		: document.querySelector<YouTubePlayerDiv>("div#movie_player");
+}
+
 /** Returns the video id the URL points at, on watch (?v=), shorts and live pages alike. */
 function getUrlVideoId(): Nullable<string> {
 	const [section, videoId] = extractSectionsFromYouTubeURL(window.location.href);
@@ -26,66 +32,70 @@ function getUrlVideoId(): Nullable<string> {
 	return getCurrentVideoId();
 }
 
+/** Restores the track the user was on before the feature switched it away. */
 function makeRestoreAudioTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
 		if (!originalAudioTrack) return true;
-		const playerContainer = isShortsPage()
-			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
-			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		if (!playerContainer || !playerContainer.setAudioTrack || !playerContainer.getVideoData)
-			return false;
-		const { video_id: playerVideoId } = await playerContainer.getVideoData();
-		const videoId = resolvePlayerVideoId(playerVideoId);
-		if (!videoId) return false;
-		// The saved track belongs to another video, so this player has nothing of its own to get back.
-		if (videoId !== originalAudioTrackVideoId) {
+		const playerContainer = getPlayerContainer();
+		if (!playerContainer || !playerContainer.setAudioTrack || !playerContainer.getVideoData) return false;
+		try {
+			const { video_id: playerVideoId } = await playerContainer.getVideoData();
+			const videoId = resolvePlayerVideoId(playerVideoId);
+			if (!videoId) return false;
+			// The saved track belongs to another video, so this player has nothing of its own to get back.
+			if (videoId !== originalAudioTrackVideoId) {
+				clearOriginalAudioTrack();
+				return true;
+			}
+			await playerContainer.setAudioTrack(originalAudioTrack.track);
 			clearOriginalAudioTrack();
 			return true;
+		} catch {
+			return false;
 		}
-		await playerContainer.setAudioTrack(originalAudioTrack.track);
-		clearOriginalAudioTrack();
-		return true;
 	};
 }
 
+/** Snapshots the current audio track so it can be restored later if the feature is disabled. */
 function makeSaveTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
-		const playerContainer = isShortsPage()
-			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
-			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
-		if (!playerContainer || !playerContainer.getAudioTrack || !playerContainer.getVideoData)
+		const playerContainer = getPlayerContainer();
+		if (!playerContainer || !playerContainer.getAudioTrack || !playerContainer.getVideoData) return false;
+		try {
+			// Read the id and the track together so both describe the same moment.
+			const [{ video_id: playerVideoId }, currentTrack] = await Promise.all([playerContainer.getVideoData(), playerContainer.getAudioTrack()]);
+			const videoId = resolvePlayerVideoId(playerVideoId);
+			if (!videoId) return false;
+			// Keep the track already saved for this video, replace one saved for any other.
+			if (originalAudioTrack && originalAudioTrackVideoId === videoId) return true;
+			const currentAudioTrack = parseAudioTrack(currentTrack);
+			if (!currentAudioTrack) return false;
+			originalAudioTrack = currentAudioTrack;
+			originalAudioTrackVideoId = videoId;
+			return true;
+		} catch {
 			return false;
-		// Read the id and the track together so both describe the same moment.
-		const [{ video_id: playerVideoId }, currentTrack] = await Promise.all([
-			playerContainer.getVideoData(),
-			playerContainer.getAudioTrack()
-		]);
-		const videoId = resolvePlayerVideoId(playerVideoId);
-		if (!videoId) return false;
-		// Keep the track already saved for this video, replace one saved for any other.
-		if (originalAudioTrack && originalAudioTrackVideoId === videoId) return true;
-		const currentAudioTrack = parseAudioTrack(currentTrack);
-		if (!currentAudioTrack) return false;
-		originalAudioTrack = currentAudioTrack;
-		originalAudioTrackVideoId = videoId;
-		return true;
+		}
 	};
 }
 
+/** Switches the player to the original (non-auto-dubbed) audio track. */
 function makeSetDefaultAudioTrackTask(): () => Promise<boolean> {
 	return async (): Promise<boolean> => {
-		const playerContainer = isShortsPage()
-			? document.querySelector<YouTubePlayerDiv>("#shorts-player")
-			: document.querySelector<YouTubePlayerDiv>("div#movie_player");
+		const playerContainer = getPlayerContainer();
 		if (!playerContainer || !playerContainer.getAvailableAudioTracks) return false;
-		const audioTracks = await playerContainer.getAvailableAudioTracks();
-		const defaultAudioTrack = findDefaultTrack(audioTracks);
-		if (!defaultAudioTrack) return false;
-		const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
-		if (!currentAudioTrack) return false;
-		if (defaultAudioTrack.track.id === currentAudioTrack.track.id) return true;
-		await playerContainer.setAudioTrack(defaultAudioTrack.track);
-		return true;
+		try {
+			const audioTracks = await playerContainer.getAvailableAudioTracks();
+			const defaultAudioTrack = findDefaultTrack(audioTracks);
+			if (!defaultAudioTrack) return false;
+			const currentAudioTrack = parseAudioTrack(await playerContainer.getAudioTrack());
+			if (!currentAudioTrack) return false;
+			if (defaultAudioTrack.track.id === currentAudioTrack.track.id) return true;
+			await playerContainer.setAudioTrack(defaultAudioTrack.track);
+			return true;
+		} catch {
+			return false;
+		}
 	};
 }
 
@@ -103,16 +113,11 @@ function resolvePlayerVideoId(playerVideoId: Nullable<string>): Nullable<string>
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.playerManager.executeWithRetries(
-			"defaultToOriginalAudioTrack",
-			[makeRestoreAudioTrackTask()],
-			["restoreAudio"],
-			{
-				maxAttempts: 15,
-				pageTypes: ["watch", "shorts"],
-				waitForLoaded: true
-			}
-		);
+		void registry.playerManager.executeWithRetries("defaultToOriginalAudioTrack", [makeRestoreAudioTrackTask()], ["restoreAudio"], {
+			maxAttempts: 15,
+			pageTypes: ["watch", "shorts"],
+			waitForLoaded: true
+		});
 	},
 	onEnable: () => {
 		void registry.playerManager.executeWithRetries(
