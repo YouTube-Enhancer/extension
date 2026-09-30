@@ -45,7 +45,9 @@ export interface PanelElement extends HTMLElement {
 export interface PlaylistContentsItem {
 	[key: string]: unknown;
 	playlistPanelVideoRenderer?: PlaylistItemRenderer;
-	playlistPanelVideoWrapperRenderer?: { primaryRenderer?: { playlistPanelVideoRenderer?: PlaylistItemRenderer } };
+	playlistPanelVideoWrapperRenderer?: {
+		primaryRenderer?: { playlistPanelVideoRenderer?: PlaylistItemRenderer };
+	};
 	playlistVideoRenderer?: PlaylistItemRenderer;
 }
 export interface PlaylistData {
@@ -87,7 +89,12 @@ export interface PlaylistPageDataContents {
 	};
 }
 export interface WatchFlexyData {
-	contents?: { twoColumnWatchNextResults?: { autoplay?: { autoplay?: AutoplayData }; playlist?: { playlist?: PlaylistData } } };
+	contents?: {
+		twoColumnWatchNextResults?: {
+			autoplay?: { autoplay?: AutoplayData };
+			playlist?: { playlist?: PlaylistData };
+		};
+	};
 }
 export interface WatchFlexyElement extends HTMLElement {
 	data?: WatchFlexyData;
@@ -149,16 +156,23 @@ export function getPlaylistData(): Nullable<WatchPlaylistData> {
 	const manager = document.querySelector<ManagerElement>("yt-playlist-manager");
 	const panelPlaylist = panel?.data;
 	const playlist =
-		panelPlaylist && Array.isArray(panelPlaylist.contents) && panelPlaylist.contents.length > 0 ? panelPlaylist : results?.playlist?.playlist;
+		panelPlaylist && Array.isArray(panelPlaylist.contents) && panelPlaylist.contents.length > 0
+			? panelPlaylist
+			: results?.playlist?.playlist;
 	const managerAutoplay = manager?.autoplayData;
-	const autoplay = managerAutoplay && Array.isArray(managerAutoplay.sets) ? managerAutoplay : results?.autoplay?.autoplay;
+	const autoplay =
+		managerAutoplay && Array.isArray(managerAutoplay.sets)
+			? managerAutoplay
+			: results?.autoplay?.autoplay;
 	if (!playlist?.contents || !autoplay?.sets) return null;
 	if (playlist.playlistId && playlist.playlistId !== playlistId) return null;
 	return { autoplay, manager, panel, playlist, watchFlexy };
 }
 
 /** The video renderer behind a playlist entry, whichever wrapper YouTube put it in; null for a continuation entry. */
-export function getPlaylistItem(item: Nullable<PlaylistContentsItem> | undefined): Nullable<PlaylistItemRenderer> {
+export function getPlaylistItem(
+	item: Nullable<PlaylistContentsItem> | undefined
+): Nullable<PlaylistItemRenderer> {
 	if (!item) return null;
 	return (
 		item.playlistPanelVideoRenderer ??
@@ -168,7 +182,10 @@ export function getPlaylistItem(item: Nullable<PlaylistContentsItem> | undefined
 	);
 }
 
-export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; contents: PlaylistContentsItem[] }> {
+export function getPlaylistPageData(): Nullable<{
+	browse: BrowseElement;
+	contents: PlaylistContentsItem[];
+}> {
 	if (!isPlaylistPage()) return null;
 	const browse = document.querySelector<BrowseElement>("ytd-browse[page-subtype='playlist']");
 	if (!browse) return null;
@@ -185,7 +202,8 @@ export function getPlaylistPageData(): Nullable<{ browse: BrowseElement; content
 export function getPlaylistPanel(watchFlexy: Nullable<HTMLElement> = null): Nullable<PanelElement> {
 	const root = watchFlexy ?? document.querySelector<HTMLElement>("ytd-watch-flexy, ytd-watch-grid");
 	return (
-		root?.querySelector<PanelElement>("ytd-playlist-panel-renderer#playlist") ?? document.querySelector<PanelElement>("ytd-playlist-panel-renderer")
+		root?.querySelector<PanelElement>("ytd-playlist-panel-renderer#playlist") ??
+		document.querySelector<PanelElement>("ytd-playlist-panel-renderer")
 	);
 }
 
@@ -219,11 +237,18 @@ export function isPlaylistDataCurrent(): boolean {
 	const {
 		playlist: { contents, localCurrentIndex }
 	} = result;
-	const current = contents.map(getPlaylistItem).find((item) => item?.selected) ?? getPlaylistItem(contents[localCurrentIndex]);
+	const current =
+		contents.map(getPlaylistItem).find((item) => item?.selected) ??
+		getPlaylistItem(contents[localCurrentIndex]);
 	return current?.videoId === videoId;
 }
 
-export async function poll<T>(fn: () => T, predicate: (result: T) => boolean, interval = 100, timeout = 3000): Promise<Nullable<T>> {
+export async function poll<T>(
+	fn: () => T,
+	predicate: (result: T) => boolean,
+	interval = 100,
+	timeout = 3000
+): Promise<Nullable<T>> {
 	const start = Date.now();
 	while (Date.now() - start < timeout) {
 		const result = fn();
@@ -243,7 +268,8 @@ export function reverseChildOrder(container: HTMLElement): void {
 	}
 }
 
-const PLAYLIST_PAGE_CONTINUATION_SELECTOR = "ytd-playlist-video-list-renderer div#contents > ytd-continuation-item-renderer";
+const PLAYLIST_PAGE_CONTINUATION_SELECTOR =
+	"ytd-playlist-video-list-renderer div#contents > ytd-continuation-item-renderer";
 const PLAYLIST_PAGE_ROW_SELECTOR = "ytd-playlist-video-list-renderer ytd-playlist-video-renderer";
 
 /**

@@ -18,7 +18,11 @@ export type EventManager = {
 
 	removeAllEventListeners: (exclude?: FeatureName[]) => void;
 
-	removeEventListener: (target: AcceptedTarget, eventName: string, featureName: FeatureName) => void;
+	removeEventListener: (
+		target: AcceptedTarget,
+		eventName: string,
+		featureName: FeatureName
+	) => void;
 
 	removeEventListeners: (featureName: FeatureName) => void;
 
@@ -33,7 +37,10 @@ type AcceptedEventMap = DocumentEventMap & HTMLElementEventMap & WindowEventMap;
 
 type AcceptedTarget = Document | HTMLElement | Window;
 
-type ButtonNameEvents = "flipVideoHorizontalButton" | "flipVideoVerticalButton" | "volumeBoostButton";
+type ButtonNameEvents =
+	| "flipVideoHorizontalButton"
+	| "flipVideoVerticalButton"
+	| "volumeBoostButton";
 
 type CoreFeatureEvents = "featureMenu" | "scrollWheelController";
 
@@ -44,7 +51,9 @@ const eventManager: EventManager = {
 	// Adds a listener for the event on the target under the feature name, unless that callback is already registered.
 	addEventListener: function (target, eventName, callback, featureName, options) {
 		// Get the map of listeners for the feature, or create it if it doesn't exist
-		const targetListeners = this.listeners.get(featureName) || new Map<AcceptedTarget, Map<string, EventListenerInfo[]>>();
+		const targetListeners =
+			this.listeners.get(featureName) ||
+			new Map<AcceptedTarget, Map<string, EventListenerInfo[]>>();
 		// Get the map of listeners for the target element, or create it if it doesn't exist
 		const eventListeners = targetListeners.get(target) || new Map<string, EventListenerInfo[]>();
 		// Get any existing listeners for the event, or create an empty array if it doesn't exist

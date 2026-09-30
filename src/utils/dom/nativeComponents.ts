@@ -67,7 +67,8 @@ export function createNativeButton({
 	 * A custom icon works through a stylesheet keyed on a host class. Both survive a YouTube re-render: the
 	 * stylesheet never leaves, and the classes prop re-applies the class.
 	 */
-	const classes = typeof icon === "object" ? `${className} ${ensureCustomIconClass(icon.svg)}` : className;
+	const classes =
+		typeof icon === "object" ? `${className} ${ensureCustomIconClass(icon.svg)}` : className;
 	/**
 	 * The classes prop puts the class on the host after the render. Setting it now as well lets the caller's
 	 * selectors match in the frames before the first render.
@@ -97,7 +98,9 @@ export function findButtonVariantInData(root: unknown): Partial<ButtonViewModelV
 			root,
 			(node) => {
 				const buttonViewModel = node.buttonViewModel as Partial<ButtonViewModelVariant> | undefined;
-				return buttonViewModel && (buttonViewModel.style || buttonViewModel.type) ? pickVariant(buttonViewModel) : null;
+				return buttonViewModel && (buttonViewModel.style || buttonViewModel.type)
+					? pickVariant(buttonViewModel)
+					: null;
 			},
 			8
 		) ?? {}
@@ -175,5 +178,7 @@ function ensureCustomIconClass(svg: string): string {
  */
 function pickVariant(source: Partial<ButtonViewModelVariant>): Partial<ButtonViewModelVariant> {
 	const { buttonSize, state, style, type } = source;
-	return Object.fromEntries(Object.entries({ buttonSize, state, style, type }).filter(([, value]) => Boolean(value)));
+	return Object.fromEntries(
+		Object.entries({ buttonSize, state, style, type }).filter(([, value]) => Boolean(value))
+	);
 }

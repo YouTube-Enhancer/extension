@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "shareShortener.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.shareShortener.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.shareShortener.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.shareShortener.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.shareShortener.enable.title)
 		}
 	]
 });

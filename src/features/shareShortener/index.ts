@@ -1,5 +1,9 @@
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { cleanSearchPage, observeShareURLInput, removeObserver } from "@/src/features/shareShortener/utils";
+import {
+	cleanSearchPage,
+	observeShareURLInput,
+	removeObserver
+} from "@/src/features/shareShortener/utils";
 
 import { metadata } from "./index.metadata";
 

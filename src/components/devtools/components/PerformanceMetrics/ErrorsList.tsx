@@ -21,8 +21,12 @@ export default function ErrorsList({ errors }: ErrorsListProps): JSX.Element {
 							<span className="text-xs text-[#6b6b6b]">{error.operation}</span>
 						</div>
 						<details className="mt-2">
-							<summary className="cursor-pointer text-xs text-[#ce9178] hover:text-[#d4d4d4]">Error Details</summary>
-							<pre className="mt-1 overflow-x-auto whitespace-pre-wrap text-xs text-[#d4d4d4]">{formatError(error.error)}</pre>
+							<summary className="cursor-pointer text-xs text-[#ce9178] hover:text-[#d4d4d4]">
+								Error Details
+							</summary>
+							<pre className="mt-1 overflow-x-auto whitespace-pre-wrap text-xs text-[#d4d4d4]">
+								{formatError(error.error)}
+							</pre>
 						</details>
 					</div>
 				))

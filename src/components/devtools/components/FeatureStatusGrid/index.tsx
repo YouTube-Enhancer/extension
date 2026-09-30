@@ -84,7 +84,9 @@ export default function FeatureStatusGrid(): JSX.Element {
 						key={feature.id}
 						onConfigClick={handleConfigClick}
 						onStateClick={handleStateClick}
-						onSubToggle={(path, currentEnabled) => handleSubToggle(feature.id, path, currentEnabled)}
+						onSubToggle={(path, currentEnabled) =>
+							handleSubToggle(feature.id, path, currentEnabled)
+						}
 						onToggle={(path, currentEnabled) => handleToggle(feature.id, path, currentEnabled)}
 						onToggleExpand={() => toggleExpanded(feature.id)}
 					/>
@@ -107,7 +109,11 @@ export default function FeatureStatusGrid(): JSX.Element {
 				/>
 			)}
 
-			<StateSlideOver featureId={stateFeatureId} isOpen={!!stateFeatureId} onClose={() => setStateFeatureId(null)} />
+			<StateSlideOver
+				featureId={stateFeatureId}
+				isOpen={!!stateFeatureId}
+				onClose={() => setStateFeatureId(null)}
+			/>
 		</div>
 	);
 }

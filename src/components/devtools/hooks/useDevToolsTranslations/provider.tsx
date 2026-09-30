@@ -22,7 +22,10 @@ export function DevtoolsTranslationsProvider({ children }: Props) {
 		queryKey: ["devtools_translations"]
 	});
 	if (isLoading) return <DevToolsLoader message="Loading translations..." />;
-	if (isError) return <DevToolsLoader message="Failed to load translations. Check the console for details." />;
+	if (isError)
+		return <DevToolsLoader message="Failed to load translations. Check the console for details." />;
 	if (!t) return null;
-	return <DevtoolsTranslationContext.Provider value={t}>{children}</DevtoolsTranslationContext.Provider>;
+	return (
+		<DevtoolsTranslationContext.Provider value={t}>{children}</DevtoolsTranslationContext.Provider>
+	);
 }

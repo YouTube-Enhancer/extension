@@ -28,7 +28,11 @@ export default function generateManifests({
 			mkdirSync(browserDir, { recursive: true });
 		}
 		const manifest = browser.type === "chrome" ? manifestV3 : manifestV3Firefox;
-		written[browser.name] = writeManifest(patch ? patch(manifest) : manifest, browser.name, chunkDir);
+		written[browser.name] = writeManifest(
+			patch ? patch(manifest) : manifest,
+			browser.name,
+			chunkDir
+		);
 	}
 	return written;
 }
@@ -40,10 +44,17 @@ function getChunkScriptPaths(chunkDir: string): string[] {
 		.map((fileName) => `src/${fileName}`);
 }
 
-function writeManifest(manifest: Manifest.WebExtensionManifest, browserName: string, chunkDir: string): string {
+function writeManifest(
+	manifest: Manifest.WebExtensionManifest,
+	browserName: string,
+	chunkDir: string
+): string {
 	const manifestPath = resolve(outDir, browserName, "manifest.json");
 	const chunkScriptPaths = getChunkScriptPaths(chunkDir);
-	const webAccessibleResources = (manifest.web_accessible_resources ?? []) as (string | { matches?: string[]; resources?: string[] })[];
+	const webAccessibleResources = (manifest.web_accessible_resources ?? []) as (
+		| string
+		| { matches?: string[]; resources?: string[] }
+	)[];
 
 	const resolved = {
 		...manifest,

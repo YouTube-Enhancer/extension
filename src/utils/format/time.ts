@@ -25,7 +25,10 @@ export function formatDuration(seconds: number): string {
 	// Combine the formatted values into a single string
 	return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
-export function formatVideoTimestamp(seconds: number, format: VideoTimestampFormat = "auto"): string {
+export function formatVideoTimestamp(
+	seconds: number,
+	format: VideoTimestampFormat = "auto"
+): string {
 	const totalSeconds = Math.max(0, Math.floor(seconds));
 	const hours = Math.floor(totalSeconds / 3600);
 	const minutes = Math.floor((totalSeconds % 3600) / 60);

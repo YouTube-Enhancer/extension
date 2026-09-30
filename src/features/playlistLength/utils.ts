@@ -1,10 +1,17 @@
 import type PlaylistVideo from "youtubei.js/dist/src/parser/classes/PlaylistVideo";
 
-import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
+import type {
+	PlaylistLengthGetMethod,
+	PlaylistWatchTimeGetMethod
+} from "@/src/features/playlistLength/types";
 import type { Nullable, VideoDetails } from "@/src/types";
 
 import { createStyledElement } from "@/src/utils/dom/elements";
-import { NO_PADDING_HEADER_SELECTOR, PLAYLIST_PAGE_HEADER_SELECTORS, selectFirstWithWidth } from "@/src/utils/dom/selectors";
+import {
+	NO_PADDING_HEADER_SELECTOR,
+	PLAYLIST_PAGE_HEADER_SELECTORS,
+	selectFirstWithWidth
+} from "@/src/utils/dom/selectors";
 import { waitForAllElements } from "@/src/utils/dom/wait";
 import { formatDuration, timeStringToSeconds } from "@/src/utils/format/time";
 import { conditionalStyles } from "@/src/utils/style";
@@ -32,10 +39,14 @@ export type PlaylistLengthParameters = {
 export type VideoTimeState = { totalTimeSeconds: number; watchedTimeSeconds: number };
 type PageType = "playlist" | "watch";
 
-export async function appendPlaylistLengthUIElement(playlistLengthUIElement: HTMLDivElement): Promise<boolean> {
+export async function appendPlaylistLengthUIElement(
+	playlistLengthUIElement: HTMLDivElement
+): Promise<boolean> {
 	const { playlist, watch } = getHeaderSelectors();
 	await waitForAllElements([isWatchPage() ? watch : playlist]);
-	const headerContents = isWatchPage() ? document.querySelector(watch) : selectFirstWithWidth(playlist);
+	const headerContents = isWatchPage()
+		? document.querySelector(watch)
+		: selectFirstWithWidth(playlist);
 	if (!headerContents) return false;
 	document.querySelector("#yte-playlist-length-ui")?.remove();
 	headerContents.append(playlistLengthUIElement);
@@ -47,10 +58,13 @@ export function calculateWatchedTime(
 	playlistWatchTimeGetMethod: PlaylistWatchTimeGetMethod
 ): number {
 	if (pageType === "watch") {
-		const playlistItemsWithoutCurrentVideo = playlistItemsVideoDetails.filter((video) => video.videoId !== getCurrentVideoId());
+		const playlistItemsWithoutCurrentVideo = playlistItemsVideoDetails.filter(
+			(video) => video.videoId !== getCurrentVideoId()
+		);
 		return (
 			playlistItemsWithoutCurrentVideo.reduce(
-				(total, video) => total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration),
+				(total, video) =>
+					total + (playlistWatchTimeGetMethod === "youtube" ? video.progress : video.duration),
 				0
 			) + getCurrentVideoTime()
 		);
@@ -84,7 +98,12 @@ export function createPlaylistLengthUIElement(
 			}),
 			...conditionalStyles({
 				condition: pageType === "playlist",
-				marginTop: getPlaylistId() === "WL" ? (window.matchMedia("(max-width: 1080px)").matches ? "16px" : "0px") : "24px",
+				marginTop:
+					getPlaylistId() === "WL"
+						? window.matchMedia("(max-width: 1080px)").matches
+							? "16px"
+							: "0px"
+						: "24px",
 				width: "99%"
 			})
 		}
@@ -99,7 +118,10 @@ export function createPlaylistLengthUIElement(
 		elementType: "div",
 		styles: {
 			bottom: "15px",
-			color: pageType === "watch" ? "var(--yt-sys-color-baseline--text-primary)" : "var(--yt-sys-color-baseline--overlay-text-primary)",
+			color:
+				pageType === "watch"
+					? "var(--yt-sys-color-baseline--text-primary)"
+					: "var(--yt-sys-color-baseline--overlay-text-primary)",
 			fontSize: "15px",
 			marginLeft: "19px",
 			position: "absolute"
@@ -114,7 +136,10 @@ export function createPlaylistLengthUIElement(
 			border: "1px solid var(--yt-sys-color-baseline--outline)",
 			borderRadius: "6px",
 			bottom: "0px",
-			color: pageType === "watch" ? "var(--yt-sys-color-baseline--text-primary)" : "var(--yt-sys-color-baseline--overlay-text-primary)",
+			color:
+				pageType === "watch"
+					? "var(--yt-sys-color-baseline--text-primary)"
+					: "var(--yt-sys-color-baseline--overlay-text-primary)",
 			fontSize: "15px",
 			padding: "4px 8px",
 			position: "absolute",
@@ -132,7 +157,9 @@ export function createPlaylistLengthUIElement(
 		videoTimeDisplay.textContent = `${formatDuration(safeWatched)} / ${formatDuration(safeTotal)} (- ${formatDuration(safeTotal - safeWatched)})`;
 		percentageWatched.textContent = `${watchedPercentage}%`;
 	};
-	wrapper.title = window.i18nextInstance.t((translations) => translations.pages.content.features.playlistLength.title);
+	wrapper.title = window.i18nextInstance.t(
+		(translations) => translations.pages.content.features.playlistLength.title
+	);
 	updateElement(initialState);
 	return {
 		element: wrapper,
@@ -178,7 +205,10 @@ export function getPlaylistId(): Nullable<string> {
 }
 
 export function getPlaylistItemsFromPlaylistPage(): HTMLElement[] {
-	const selectors = ["ytd-playlist-video-list-renderer div#contents", "yt-item-section-renderer div#contents"];
+	const selectors = [
+		"ytd-playlist-video-list-renderer div#contents",
+		"yt-item-section-renderer div#contents"
+	];
 	for (const selector of selectors) {
 		const el = document.querySelector(selector);
 		if (el) {
@@ -191,7 +221,9 @@ export function getPlaylistItemsFromPlaylistPage(): HTMLElement[] {
 }
 
 export function getPlaylistItemsFromWatchPage(): HTMLElement[] {
-	const selector = isNewYouTubeVideoLayout() ? "#page-manager > ytd-watch-grid #playlist #items" : "#page-manager > ytd-watch-flexy #playlist #items";
+	const selector = isNewYouTubeVideoLayout()
+		? "#page-manager > ytd-watch-grid #playlist #items"
+		: "#page-manager > ytd-watch-flexy #playlist #items";
 	const el = document.querySelector(selector);
 	return el ? (Array.from(el.children) as HTMLElement[]) : [];
 }

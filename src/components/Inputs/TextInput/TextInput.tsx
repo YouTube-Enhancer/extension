@@ -19,7 +19,16 @@ export type TextInputProps = {
 	value: string;
 };
 
-const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReason, input_type, label, onChange, title, value }) => {
+const TextInput: React.FC<TextInputProps> = ({
+	className,
+	disabled,
+	disabledReason,
+	input_type,
+	label,
+	onChange,
+	title,
+	value
+}) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const inputRef = useRef<Nullable<HTMLInputElement>>(null);
 	const id = useId();
@@ -46,10 +55,16 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReas
 			}
 		});
 	};
-	const disabledInputClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled };
+	const disabledInputClasses = {
+		"dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled
+	};
 	const resolvedType = input_type === "password" && showPassword ? "text" : input_type;
 	return (
-		<div aria-valuetext={value} className={cn("relative flex flex-row items-center justify-between gap-4", className)} title={title}>
+		<div
+			aria-valuetext={value}
+			className={cn("relative flex flex-row items-center justify-between gap-4", className)}
+			title={title}
+		>
 			<label htmlFor={id}>{label}</label>
 			<div className="flex flex-col">
 				<div
@@ -66,7 +81,10 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReas
 				>
 					{input_type === "password" && (
 						<button
-							className={cn("text-black hover:text-black dark:text-white dark:hover:text-white", disabledInputClasses)}
+							className={cn(
+								"text-black hover:text-black dark:text-white dark:hover:text-white",
+								disabledInputClasses
+							)}
 							disabled={disabled}
 							onClick={(e) => {
 								e.stopPropagation();
@@ -78,7 +96,10 @@ const TextInput: React.FC<TextInputProps> = ({ className, disabled, disabledReas
 						</button>
 					)}
 					<input
-						className={cn("!m-0 h-fit w-[118px] bg-transparent !p-0 !text-sm focus:outline-none", disabledInputClasses)}
+						className={cn(
+							"!m-0 h-fit w-[118px] bg-transparent !p-0 !text-sm focus:outline-none",
+							disabledInputClasses
+						)}
 						disabled={disabled}
 						id={id}
 						onChange={handleInputChange}

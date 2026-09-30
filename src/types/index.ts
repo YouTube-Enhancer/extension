@@ -14,29 +14,46 @@ import type {
 } from "@/src/features/_registry/types";
 import type { FeatureMenuOpenType } from "@/src/features/buttonController/types";
 import type { MiniPlayerPosition, MiniPlayerSize } from "@/src/features/miniPlayer/types";
-import type { FpsPreference, PlayerQualityFallbackStrategy, YoutubePlayerQualityLevel } from "@/src/features/playerQuality/types";
-import type { PlaylistLengthGetMethod, PlaylistWatchTimeGetMethod } from "@/src/features/playlistLength/types";
+import type {
+	FpsPreference,
+	PlayerQualityFallbackStrategy,
+	YoutubePlayerQualityLevel
+} from "@/src/features/playerQuality/types";
+import type {
+	PlaylistLengthGetMethod,
+	PlaylistWatchTimeGetMethod
+} from "@/src/features/playlistLength/types";
 import type { ScreenshotFormat, ScreenshotType } from "@/src/features/screenshotButton/types";
 import type { VideoHistoryResumeType } from "@/src/features/videoHistory/types";
 import type { VolumeBoostMode } from "@/src/features/volumeBoost/types";
 import type { i18nInstanceType } from "@/src/i18n";
 import type { AvailableLocales } from "@/src/i18n/constants";
-import type { OnScreenDisplayColor, OnScreenDisplayPosition, OnScreenDisplayType } from "@/src/ui/OnScreenDisplayManager/types";
-import type { ScreenshotDateFormat, ScreenshotTimestampFormat, ScreenshotTimestampSeparator } from "@/src/utils/format/filenameTemplate";
+import type {
+	OnScreenDisplayColor,
+	OnScreenDisplayPosition,
+	OnScreenDisplayType
+} from "@/src/ui/OnScreenDisplayManager/types";
+import type {
+	ScreenshotDateFormat,
+	ScreenshotTimestampFormat,
+	ScreenshotTimestampSeparator
+} from "@/src/utils/format/filenameTemplate";
 export type AnyFunction = (...args: any[]) => void;
 export type Brand<T, U> = T & { __brand: U };
 export type DeepPartial<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 export type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-export type ExtractButtonFeatureNames<T> = T extends `pages.content.features.${infer FeatureName}.button.label`
-	? FeatureName
-	: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label`
+export type ExtractButtonFeatureNames<T> =
+	T extends `pages.content.features.${infer FeatureName}.button.label`
 		? FeatureName
-		: never;
-export type ExtractButtonNames<T> = T extends `pages.content.features.${infer ButtonName}.button.label`
-	? ButtonName
-	: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label`
+		: T extends `pages.content.features.${infer FeatureName}.buttons.${string}.label`
+			? FeatureName
+			: never;
+export type ExtractButtonNames<T> =
+	T extends `pages.content.features.${infer ButtonName}.button.label`
 		? ButtonName
-		: never;
+		: T extends `pages.content.features.${string}.buttons.${infer ButtonName}.label`
+			? ButtonName
+			: never;
 export type FilterKeysByValueType<O extends object, ValueType> = {
 	[K in keyof O]: O[K] extends ValueType ? K : O[K] extends Record<string, ValueType> ? K : never;
 }[keyof O];
@@ -45,7 +62,11 @@ export type NonNullable<T> = T extends Nullable<T> ? Exclude<T, null> : T;
 export type NonNullableObject<T> = { [K in keyof T]: NonNullable<T[K]> };
 // #region Utility types
 export type Nullable<T> = null | T;
-export type OmitAndOverride<Input, Omitted extends keyof Input, Override extends { [Key in Omitted]: ZodMiniType }> = Override & {
+export type OmitAndOverride<
+	Input,
+	Omitted extends keyof Input,
+	Override extends { [Key in Omitted]: ZodMiniType }
+> = Override & {
 	[K in keyof Omit<Input, Omitted>]: Omit<Input, Omitted>[K] extends any[]
 		? ZodOptionalType<ZodMiniType<Omit<Input, Omitted>[K]>>
 		: Omit<Input, Omitted>[K] extends object
@@ -61,7 +82,9 @@ export type ParentType<T, Segments extends readonly PropertyKey[]> = Segments ex
 export type Path<T, Prefix extends string = ""> = T extends Primitive
 	? never
 	: T extends readonly (infer U)[]
-		? Path<U, Prefix extends "" ? `${number}` : `${Prefix}.${number}`> | (Prefix extends "" ? `${number}` : `${Prefix}.${number}`)
+		?
+				| Path<U, Prefix extends "" ? `${number}` : `${Prefix}.${number}`>
+				| (Prefix extends "" ? `${number}` : `${Prefix}.${number}`)
 		: {
 				[K in Extract<keyof T, string>]: T[K] extends Primitive
 					? Prefix extends ""
@@ -71,7 +94,9 @@ export type Path<T, Prefix extends string = ""> = T extends Primitive
 						? Path<U, Prefix extends "" ? `${K}.${number}` : `${Prefix}.${K}.${number}`>
 						: Path<T[K], Prefix extends "" ? K : `${Prefix}.${K}`>;
 			}[Extract<keyof T, string>];
-export type PathSegments<P extends string> = P extends `${infer Head}.${infer Tail}` ? [Head, ...PathSegments<Tail>] : [P];
+export type PathSegments<P extends string> = P extends `${infer Head}.${infer Tail}`
+	? [Head, ...PathSegments<Tail>]
+	: [P];
 export type PathValue<T, P extends string> = P extends `${infer Head}.${infer Tail}`
 	? Head extends keyof T
 		? PathValue<T[Head], Tail>
@@ -90,7 +115,10 @@ export type PathValue<T, P extends string> = P extends `${infer Head}.${infer Ta
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 };
-export type Traverse<T, Segments extends readonly PropertyKey[]> = Segments extends readonly [infer K, ...infer Rest extends readonly PropertyKey[]]
+export type Traverse<T, Segments extends readonly PropertyKey[]> = Segments extends readonly [
+	infer K,
+	...infer Rest extends readonly PropertyKey[]
+]
 	? K extends keyof T
 		? Traverse<T[K], Rest>
 		: never
@@ -137,13 +165,20 @@ export const youtubePlayerMinSpeed = 0.07;
 export const youtubePlayerSpeedStep = 0.01;
 export const modifierKeys = ["altKey", "ctrlKey", "shiftKey"] as const;
 export type ModifierKey = (typeof modifierKeys)[number];
-export const buttonPlacements = ["below_player", "feature_menu", "player_controls_left", "player_controls_right"] as const;
+export const buttonPlacements = [
+	"below_player",
+	"feature_menu",
+	"player_controls_left",
+	"player_controls_right"
+] as const;
 export type AllButtonNames = Exclude<ExtractButtonNames<TOptionsKeys>, "featureMenu">;
 export type ButtonPlacement = (typeof buttonPlacements)[number];
 export type FullscreenPlacement = "same" | Exclude<ButtonPlacement, "below_player">;
 export const fullscreenPlacements = [
 	"same" as const,
-	...buttonPlacements.filter((p): p is Exclude<ButtonPlacement, "below_player"> => p !== "below_player")
+	...buttonPlacements.filter(
+		(p): p is Exclude<ButtonPlacement, "below_player"> => p !== "below_player"
+	)
 ] satisfies readonly FullscreenPlacement[];
 export type DeepDarkCustomThemeColors = {
 	colorShadow: string;
@@ -162,14 +197,18 @@ export type FeatureToMultiButtonMap = {
 		[Button in keyof EnUS["pages"]["content"]["features"][K]["buttons"]]: "";
 	};
 };
-export type MultiButtonFeatureNames = ExtractButtonFeatureNames<`pages.content.features.${string}.buttons.${string}.label` & TOptionsKeys>;
+export type MultiButtonFeatureNames = ExtractButtonFeatureNames<
+	`pages.content.features.${string}.buttons.${string}.label` & TOptionsKeys
+>;
 export type MultiButtonNames = Exclude<AllButtonNames, SingleButtonFeatureNames>;
 export type SingleButtonFeatureNames = Exclude<
 	ExtractButtonFeatureNames<`pages.content.features.${string}.button.label` & TOptionsKeys>,
 	"featureMenu"
 >;
 export type SingleButtonNames = Exclude<AllButtonNames, MultiButtonNames>;
-export type SnakeToCamel<S extends string> = S extends `${infer T}_${infer U}` ? `${T}${Capitalize<SnakeToCamel<U>>}` : S;
+export type SnakeToCamel<S extends string> = S extends `${infer T}_${infer U}`
+	? `${T}${Capitalize<SnakeToCamel<U>>}`
+	: S;
 export type TOptionsKeys = ParseKeys<"en-US", TOptions, undefined>;
 export type TSelectFunc = (t: i18nInstanceType["t"]) => string;
 export type TSelectorFunc = Parameters<TFunction<"en-US">>[0];
@@ -219,7 +258,11 @@ export type configuration = {
 	automaticTheaterMode: { enabled: boolean };
 	blockNumberKeySeeking: { enabled: boolean };
 	copyTimestampUrlButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	customCSS: { code: string; enabled: boolean };
 	customFontFamily: { enabled: boolean; fontFamily: string };
@@ -228,11 +271,26 @@ export type configuration = {
 	featureMenu: { openType: FeatureMenuOpenType };
 	flipVideoButtons: {
 		buttons: {
-			flipVideoHorizontalButton: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
-			flipVideoVerticalButton: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+			flipVideoHorizontalButton: {
+				enabled: boolean;
+				fullscreenPlacement: FullscreenPlacement;
+				placement: ButtonPlacement;
+			};
+			flipVideoVerticalButton: {
+				enabled: boolean;
+				fullscreenPlacement: FullscreenPlacement;
+				placement: ButtonPlacement;
+			};
 		};
 	};
-	forwardRewindButtons: { button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement }; time: number };
+	forwardRewindButtons: {
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
+		time: number;
+	};
 	globalVolume: {
 		enabled: boolean;
 		volume: number;
@@ -241,7 +299,11 @@ export type configuration = {
 	hideAutoplayButton: { enabled: boolean };
 	hideEndScreenCards: { enabled: boolean };
 	hideEndScreenCardsButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	hideEndscreenRecommendedVideos: { enabled: boolean };
 	hideFullscreenButton: { enabled: boolean };
@@ -269,10 +331,18 @@ export type configuration = {
 	keywordBlocklist: { enabled: boolean; keywords: string };
 	language: AvailableLocales;
 	loopButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	maximizePlayerButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	miniPlayer: {
 		defaultPosition: MiniPlayerPosition;
@@ -280,10 +350,18 @@ export type configuration = {
 		enabled: boolean;
 	};
 	miniPlayerButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	monoToStereoButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	onScreenDisplay: {
 		color: OnScreenDisplayColor;
@@ -295,11 +373,22 @@ export type configuration = {
 	};
 	openSettingsOnMajorOrMinorVersionChange: boolean;
 	openTranscriptButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 	};
 	openYouTubeSettingsOnHover: { enabled: boolean };
 	pauseBackgroundPlayers: { enabled: boolean };
-	playbackSpeedButtons: { button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement }; speed: number };
+	playbackSpeedButtons: {
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
+		speed: number;
+	};
 	playerQuality: {
 		enabled: boolean;
 		fallbackStrategy: PlayerQualityFallbackStrategy;
@@ -312,7 +401,11 @@ export type configuration = {
 		enabled: boolean;
 		speed: number;
 	};
-	playlistLength: { enabled: boolean; lengthGetMethod: PlaylistLengthGetMethod; watchTimeGetMethod: PlaylistWatchTimeGetMethod };
+	playlistLength: {
+		enabled: boolean;
+		lengthGetMethod: PlaylistLengthGetMethod;
+		watchTimeGetMethod: PlaylistWatchTimeGetMethod;
+	};
 	playlistManagementButtons: {
 		removeAllButton: { enabled: boolean };
 		removeButton: { enabled: boolean };
@@ -325,7 +418,11 @@ export type configuration = {
 	restoreFullscreenScrolling: { enabled: boolean };
 	saveToWatchLaterButton: { enabled: boolean };
 	screenshotButton: {
-		button: { enabled: boolean; fullscreenPlacement: FullscreenPlacement; placement: ButtonPlacement };
+		button: {
+			enabled: boolean;
+			fullscreenPlacement: FullscreenPlacement;
+			placement: ButtonPlacement;
+		};
 		dateFormat: ScreenshotDateFormat;
 		filename: string;
 		format: ScreenshotFormat;
@@ -334,7 +431,13 @@ export type configuration = {
 		timestampSeparator: ScreenshotTimestampSeparator;
 	};
 	scrollWheelSpeedControl: { enabled: boolean; modifierKey: ModifierKey; steps: number };
-	scrollWheelVolumeControl: { enabled: boolean; holdModifierKey: boolean; holdRightClick: boolean; modifierKey: ModifierKey; steps: number };
+	scrollWheelVolumeControl: {
+		enabled: boolean;
+		holdModifierKey: boolean;
+		holdRightClick: boolean;
+		modifierKey: ModifierKey;
+		steps: number;
+	};
 	shareShortener: { enabled: boolean };
 	sharpCorners: { enabled: boolean };
 	shortsAutoScroll: { enabled: boolean };
@@ -354,15 +457,22 @@ export type configurationId = Path<configuration>;
 export type configurationKeys = keyof configuration;
 export type ContentSendOnlyMessageMappings = {
 	backgroundPlayers: SendDataMessage<"send_data", "content", "backgroundPlayers">;
-	featureStateUpdate: SendDataMessage<"send_data", "content", "featureStateUpdate", { id: FeatureKeys; state: unknown }>;
+	featureStateUpdate: SendDataMessage<
+		"send_data",
+		"content",
+		"featureStateUpdate",
+		{ id: FeatureKeys; state: unknown }
+	>;
 	pageLoaded: SendDataMessage<"send_data", "content", "pageLoaded">;
 	setVolumeBoostAmount: SendDataMessage<"send_data", "content", "setVolumeBoostAmount", number>;
 };
-export type ContentSendOnlyMessages = ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
+export type ContentSendOnlyMessages =
+	ContentSendOnlyMessageMappings[keyof ContentSendOnlyMessageMappings];
 export type ContentToBackgroundSendOnlyMessageMappings = {
 	pauseBackgroundPlayers: ActionMessage<"pauseBackgroundPlayers">;
 };
-export type ContentToBackgroundSendOnlyMessages = ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings];
+export type ContentToBackgroundSendOnlyMessages =
+	ContentToBackgroundSendOnlyMessageMappings[keyof ContentToBackgroundSendOnlyMessageMappings];
 export type CrowdinLanguageProgressResponse = {
 	data: {
 		data: {
@@ -404,7 +514,11 @@ export type CrowdinLanguageProgressResponse = {
 		offset: number;
 	};
 };
-export type DataResponseMessage<Type extends string, D = undefined, S extends MessageSource = "extension"> = Prettify<
+export type DataResponseMessage<
+	Type extends string,
+	D = undefined,
+	S extends MessageSource = "extension"
+> = Prettify<
 	BaseMessage<"data_response", S> & {
 		data: D;
 		type: Type;
@@ -423,7 +537,11 @@ export type DevToolsMessages = DevToolsMessageMappings[keyof DevToolsMessageMapp
 export type DevToolsMessageType = {
 	[K in keyof MessageMappings]: K extends `devtools_${string}` ? K : never;
 }[keyof MessageMappings];
-export type DevToolsRequestDataMessage<Type extends string, D = undefined, S extends MessageSource = "devtools"> = Prettify<
+export type DevToolsRequestDataMessage<
+	Type extends string,
+	D = undefined,
+	S extends MessageSource = "devtools"
+> = Prettify<
 	RequestDataMessage<Type, D, S> & {
 		extensionId: string;
 		requestId: string;
@@ -433,12 +551,22 @@ export type DevToolsRequestDataMessage<Type extends string, D = undefined, S ext
 >;
 
 export type ExtensionSendOnlyMessageMappings = {
-	featureMenuOpenTypeChange: DataResponseMessage<"featureMenuOpenTypeChange", { featureMenuOpenType: FeatureMenuOpenType }>;
-	featureUpdate: DataResponseMessage<"featureUpdate", { config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }>;
+	featureMenuOpenTypeChange: DataResponseMessage<
+		"featureMenuOpenTypeChange",
+		{ featureMenuOpenType: FeatureMenuOpenType }
+	>;
+	featureUpdate: DataResponseMessage<
+		"featureUpdate",
+		{ config: configuration[FeatureKeys]; enabled: boolean; id: FeatureKeys }
+	>;
 	languageChange: DataResponseMessage<"languageChange", { language: AvailableLocales }>;
-	onScreenDisplayConfigChange: DataResponseMessage<"onScreenDisplayConfigChange", { onScreenDisplay: configuration["onScreenDisplay"] }>;
+	onScreenDisplayConfigChange: DataResponseMessage<
+		"onScreenDisplayConfigChange",
+		{ onScreenDisplay: configuration["onScreenDisplay"] }
+	>;
 };
-export type ExtensionSendOnlyMessages = ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
+export type ExtensionSendOnlyMessages =
+	ExtensionSendOnlyMessageMappings[keyof ExtensionSendOnlyMessageMappings];
 
 export type FilterMessagesBySource<T extends Messages, S extends MessageSource> = {
 	[K in keyof T]: Extract<T[K], { source: S }>;
@@ -451,11 +579,17 @@ export type MessageAction = "data_response" | "request_action" | "request_data" 
 export type MessageMappings = Prettify<{
 	devtools_clear_performance_metrics: {
 		request: DevToolsRequestDataMessage<"devtools_clear_performance_metrics">;
-		response: DevToolsDataResponseMessage<"devtools_clear_performance_metrics", { cleared: boolean }>;
+		response: DevToolsDataResponseMessage<
+			"devtools_clear_performance_metrics",
+			{ cleared: boolean }
+		>;
 	};
 	devtools_get_all_feature_configs: {
 		request: DevToolsRequestDataMessage<"devtools_get_all_feature_configs">;
-		response: DevToolsDataResponseMessage<"devtools_get_all_feature_configs", { configs: { [K in FeatureKeys]?: configuration[K] } }>;
+		response: DevToolsDataResponseMessage<
+			"devtools_get_all_feature_configs",
+			{ configs: { [K in FeatureKeys]?: configuration[K] } }
+		>;
 	};
 	devtools_get_core_config: {
 		request: DevToolsRequestDataMessage<"devtools_get_core_config">;
@@ -463,7 +597,10 @@ export type MessageMappings = Prettify<{
 	};
 	devtools_get_feature_config: {
 		request: DevToolsRequestDataMessage<"devtools_get_feature_config", { id: FeatureKeys }>;
-		response: DevToolsDataResponseMessage<"devtools_get_feature_config", { config?: configuration[FeatureKeys]; id: FeatureKeys }>;
+		response: DevToolsDataResponseMessage<
+			"devtools_get_feature_config",
+			{ config?: configuration[FeatureKeys]; id: FeatureKeys }
+		>;
 	};
 	devtools_get_feature_state: {
 		request: DevToolsRequestDataMessage<"devtools_get_feature_state", { id: FeatureKeysWithState }>;
@@ -478,23 +615,44 @@ export type MessageMappings = Prettify<{
 	};
 	devtools_get_performance_metrics: {
 		request: DevToolsRequestDataMessage<"devtools_get_performance_metrics">;
-		response: DevToolsDataResponseMessage<"devtools_get_performance_metrics", { errors: unknown[]; metrics: unknown[] }>;
+		response: DevToolsDataResponseMessage<
+			"devtools_get_performance_metrics",
+			{ errors: unknown[]; metrics: unknown[] }
+		>;
 	};
 	devtools_invalidate_cache: {
 		request: DevToolsRequestDataMessage<"devtools_invalidate_cache", { keys: string[] }>;
 		response: DevToolsDataResponseMessage<"devtools_invalidate_cache", { ok: boolean }>;
 	};
 	devtools_toggle_feature: {
-		request: DevToolsRequestDataMessage<"devtools_toggle_feature", { enabled: boolean; id: FeatureKeys; path: string }>;
-		response: DevToolsDataResponseMessage<"devtools_toggle_feature", { enabled: boolean; id: FeatureKeys }>;
+		request: DevToolsRequestDataMessage<
+			"devtools_toggle_feature",
+			{ enabled: boolean; id: FeatureKeys; path: string }
+		>;
+		response: DevToolsDataResponseMessage<
+			"devtools_toggle_feature",
+			{ enabled: boolean; id: FeatureKeys }
+		>;
 	};
 	devtools_update_core_config: {
-		request: DevToolsRequestDataMessage<"devtools_update_core_config", { path: CoreFeatureKeys | NonFeatureKeys; value: unknown }>;
-		response: DevToolsDataResponseMessage<"devtools_update_core_config", { config: Pick<configuration, CoreFeatureKeys | NonFeatureKeys> }>;
+		request: DevToolsRequestDataMessage<
+			"devtools_update_core_config",
+			{ path: CoreFeatureKeys | NonFeatureKeys; value: unknown }
+		>;
+		response: DevToolsDataResponseMessage<
+			"devtools_update_core_config",
+			{ config: Pick<configuration, CoreFeatureKeys | NonFeatureKeys> }
+		>;
 	};
 	devtools_update_feature_config: {
-		request: DevToolsRequestDataMessage<"devtools_update_feature_config", { id: FeatureKeys; path: string; value: unknown }>;
-		response: DevToolsDataResponseMessage<"devtools_update_feature_config", { config?: configuration[FeatureKeys]; id: FeatureKeys }>;
+		request: DevToolsRequestDataMessage<
+			"devtools_update_feature_config",
+			{ id: FeatureKeys; path: string; value: unknown }
+		>;
+		response: DevToolsDataResponseMessage<
+			"devtools_update_feature_config",
+			{ config?: configuration[FeatureKeys]; id: FeatureKeys }
+		>;
 	};
 	extensionURL: {
 		request: RequestDataMessage<"extensionURL">;
@@ -506,7 +664,10 @@ export type MessageMappings = Prettify<{
 	};
 	state: {
 		request: RequestDataMessage<"state">;
-		response: DataResponseMessage<"state", { [K in FeatureKeysWithState]: FeatureState[`state:${K}`] }>;
+		response: DataResponseMessage<
+			"state",
+			{ [K in FeatureKeysWithState]: FeatureState[`state:${K}`] }
+		>;
 	};
 }>;
 export type Messages = MessageMappings[keyof MessageMappings];
@@ -523,7 +684,11 @@ export type Notification = {
 export type NotificationAction = "reset_settings" | undefined;
 export type NotificationType = "error" | "info" | "success" | "warning";
 
-export type RequestDataMessage<Type extends string, D = undefined, S extends MessageSource = "content"> = Prettify<
+export type RequestDataMessage<
+	Type extends string,
+	D = undefined,
+	S extends MessageSource = "content"
+> = Prettify<
 	BaseMessage<"request_data", S> & {
 		data: D;
 		type: Type;
@@ -531,7 +696,12 @@ export type RequestDataMessage<Type extends string, D = undefined, S extends Mes
 >;
 
 export type Selector = string;
-export type SendDataMessage<T extends MessageAction, S extends MessageSource, Type extends string, D = undefined> = Prettify<
+export type SendDataMessage<
+	T extends MessageAction,
+	S extends MessageSource,
+	Type extends string,
+	D = undefined
+> = Prettify<
 	BaseMessage<T, S> & {
 		data: D;
 		type: Type;

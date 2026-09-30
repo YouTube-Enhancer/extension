@@ -16,8 +16,14 @@ type StateSlideOverProps = {
 	onClose: () => void;
 };
 
-export default function StateSlideOver({ featureId, isOpen, onClose }: StateSlideOverProps): Nullable<JSX.Element> {
-	const { data: stateData, isLoading } = useQuery(featureStateQuery(featureId as FeatureKeysWithState));
+export default function StateSlideOver({
+	featureId,
+	isOpen,
+	onClose
+}: StateSlideOverProps): Nullable<JSX.Element> {
+	const { data: stateData, isLoading } = useQuery(
+		featureStateQuery(featureId as FeatureKeysWithState)
+	);
 
 	if (!isOpen || !featureId) return null;
 
@@ -29,12 +35,17 @@ export default function StateSlideOver({ featureId, isOpen, onClose }: StateSlid
 			<div className="relative w-full max-w-lg overflow-y-auto bg-[#1e1e1e] p-4 shadow-xl">
 				<div className="mb-4 flex items-center justify-between">
 					<h2 className="text-lg font-medium text-[#d4d4d4]">{featureId} State</h2>
-					<button className="rounded p-1 text-[#6b6b6b] hover:bg-[#3c3c3c] hover:text-[#d4d4d4]" onClick={onClose}>
+					<button
+						className="rounded p-1 text-[#6b6b6b] hover:bg-[#3c3c3c] hover:text-[#d4d4d4]"
+						onClick={onClose}
+					>
 						×
 					</button>
 				</div>
 
-				<span className="mb-2 inline-block rounded bg-[#3c3c3c] px-2 py-1 text-xs text-[#9cdcfe]">Read-only</span>
+				<span className="mb-2 inline-block rounded bg-[#3c3c3c] px-2 py-1 text-xs text-[#9cdcfe]">
+					Read-only
+				</span>
 
 				{isLoading && <DevToolsLoader message="Loading state..." />}
 

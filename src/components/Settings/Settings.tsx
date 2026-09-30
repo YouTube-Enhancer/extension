@@ -1,6 +1,11 @@
 import type { ChangeEvent } from "react";
 
-import { useMutation, type UseMutationResult, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+	useMutation,
+	type UseMutationResult,
+	useQuery,
+	useQueryClient
+} from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import browser from "webextension-polyfill";
 
@@ -38,10 +43,14 @@ type SettingsContextProps = {
 		key: K & (PathValue<configuration, K> extends string ? K : never)
 	) => PathValue<configuration, K>;
 	i18nInstance: i18nInstanceType;
-	setCheckboxOption: <K extends BooleanPath<configuration>>(key: K) => ({ currentTarget }: ChangeEvent<HTMLInputElement>) => void;
+	setCheckboxOption: <K extends BooleanPath<configuration>>(
+		key: K
+	) => ({ currentTarget }: ChangeEvent<HTMLInputElement>) => void;
 	settings: configuration;
 	settingsMutate: UseMutationResult<void, Error, configuration, unknown>;
-	setValueOption: <K extends Path<configuration>>(key: K) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+	setValueOption: <K extends Path<configuration>>(
+		key: K
+	) => ({ currentTarget }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };
 type StringPath<T> = {
 	[P in Path<T>]: PathValue<T, P> extends string ? P : never;
@@ -52,8 +61,13 @@ export function getSettings(): Promise<configuration> {
 		void browser.storage.local.get(null).then((settings) => {
 			try {
 				const storedSettings: Partial<configuration> = Object.keys(settings)
-					.filter((key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key))
-					.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {});
+					.filter(
+						(key) => typeof key === "string" && Object.keys(defaultConfiguration).includes(key)
+					)
+					.reduce(
+						(acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }),
+						{}
+					);
 				const mergedSettings = deepMerge(defaultConfiguration, storedSettings) as configuration;
 				return resolve(mergedSettings);
 			} catch (error) {
@@ -83,7 +97,10 @@ export default function Settings() {
 			});
 			const now = Date.now();
 			if (now - lastToastTime > 2000) {
-				addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
+				addNotification(
+					"success",
+					(translations) => translations.pages.options.notifications.success.saved
+				);
 				setLastToastTime(now);
 			}
 		}
@@ -115,7 +132,10 @@ export default function Settings() {
 		key: P,
 		extractValue: (e: ChangeEvent<HTMLInputElement>) => boolean
 	): (event: ChangeEvent<HTMLInputElement>) => void;
-	function createOptionSetter<P extends Path<configuration>, E>(key: P, extractValue: (e: E) => PathValue<configuration, P>) {
+	function createOptionSetter<P extends Path<configuration>, E>(
+		key: P,
+		extractValue: (e: E) => PathValue<configuration, P>
+	) {
 		return (event: E) => {
 			if (!settingsRef.current) return;
 			const nextValue = extractValue(event);
@@ -165,10 +185,16 @@ export default function Settings() {
 					<Setting
 						checked={settings.openSettingsOnMajorOrMinorVersionChange?.toString() === "true"}
 						featureId="global"
-						label={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label)}
+						label={t(
+							(translations) =>
+								translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.label
+						)}
 						onChange={setCheckboxOption("openSettingsOnMajorOrMinorVersionChange")}
 						parentSetting={null}
-						title={t((translations) => translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title)}
+						title={t(
+							(translations) =>
+								translations.pages.options.extras.openSettingsOnMajorOrMinorVersionChange.title
+						)}
 						type="checkbox"
 					/>
 					<LanguageSettingsSection />
@@ -198,7 +224,9 @@ async function fetchSettings() {
 async function setSettings(newSettings: configuration) {
 	const current = await getSettings();
 	if (deepEqual(current, newSettings)) return;
-	await browser.storage.local.set(Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value])));
+	await browser.storage.local.set(
+		Object.fromEntries(Object.entries(newSettings).map(([key, value]) => [key, value]))
+	);
 }
 
 export const SettingsContext = createContext<SettingsContextProps | undefined>(undefined);

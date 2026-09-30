@@ -5,8 +5,22 @@ import { clamp } from "@/src/utils/math";
 
 import type { StoryboardRenderer, StoryboardSheet } from "./core";
 
-import { computeSeekWindow, formatTime, isBarHidden, parseStoryboardSheet, ratioToTime, storyboardTileAt, timeToRatio } from "./core";
-import { discoverStoryboardRenderer, findControlsHost, findNativeProgressBar, findVideoElement, subscribeMediaChanged } from "./youtubePage";
+import {
+	computeSeekWindow,
+	formatTime,
+	isBarHidden,
+	parseStoryboardSheet,
+	ratioToTime,
+	storyboardTileAt,
+	timeToRatio
+} from "./core";
+import {
+	discoverStoryboardRenderer,
+	findControlsHost,
+	findNativeProgressBar,
+	findVideoElement,
+	subscribeMediaChanged
+} from "./youtubePage";
 
 /**
  * Custom seek bar with storyboard hover previews for the mini player.
@@ -45,7 +59,16 @@ export function attachMiniSeekBar({
 	storyboards = discoverStoryboardRenderer
 }: MiniSeekBarOptions): MiniSeekBar {
 	const controlsHost = findControlsHost(playerElement);
-	const { barRoot, bufferedBar, hoverRange, playedBar, previewBox, previewThumbnail, previewTimestamp, scrubKnob } = buildBarElements();
+	const {
+		barRoot,
+		bufferedBar,
+		hoverRange,
+		playedBar,
+		previewBox,
+		previewThumbnail,
+		previewTimestamp,
+		scrubKnob
+	} = buildBarElements();
 	const disposers: (() => void)[] = [];
 	let destroyed = false;
 	let forced = false;
@@ -58,7 +81,10 @@ export function attachMiniSeekBar({
 	const seekWindow = () => (videoElement ? computeSeekWindow(videoElement) : null);
 	const syncVisibility = () => {
 		const controlsVisible = !controlsHost.classList.contains("ytp-autohide");
-		barRoot.classList.toggle(`${MINI_SEEK_BAR_CLASS}--hidden`, isBarHidden({ controlsVisible, forced, scrubbing }));
+		barRoot.classList.toggle(
+			`${MINI_SEEK_BAR_CLASS}--hidden`,
+			isBarHidden({ controlsVisible, forced, scrubbing })
+		);
 	};
 	const forceShow = () => {
 		forced = true;
@@ -120,7 +146,10 @@ export function attachMiniSeekBar({
 		if (!window) return;
 		const bounds = barRoot.getBoundingClientRect();
 		const barOffsetX = clamp(clientX - bounds.left, 0, bounds.width);
-		videoElement.currentTime = ratioToTime(window, bounds.width > 0 ? barOffsetX / bounds.width : 0);
+		videoElement.currentTime = ratioToTime(
+			window,
+			bounds.width > 0 ? barOffsetX / bounds.width : 0
+		);
 	};
 	const refreshStoryboard = () => {
 		const generation = ++storyboardGeneration;
@@ -262,5 +291,14 @@ function buildBarElements() {
 	barTrack.appendChild(scrubKnob);
 	barRoot.appendChild(barTrack);
 	barRoot.appendChild(previewBox);
-	return { barRoot, bufferedBar, hoverRange, playedBar, previewBox, previewThumbnail, previewTimestamp, scrubKnob };
+	return {
+		barRoot,
+		bufferedBar,
+		hoverRange,
+		playedBar,
+		previewBox,
+		previewThumbnail,
+		previewTimestamp,
+		scrubKnob
+	};
 }

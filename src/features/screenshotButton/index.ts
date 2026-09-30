@@ -5,7 +5,11 @@ import { featureConfigManager } from "@/src/features/_registry/featureConfigMana
 import { addFeatureButton, getFeatureButton } from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { createTooltip } from "@/src/utils/dom/tooltip";
-import { defaultScreenshotFilenameTemplate, formatScreenshotDate, resolveFilenameTemplate } from "@/src/utils/format/filenameTemplate";
+import {
+	defaultScreenshotFilenameTemplate,
+	formatScreenshotDate,
+	resolveFilenameTemplate
+} from "@/src/utils/format/filenameTemplate";
 
 import { metadata } from "./index.metadata";
 import { buildScreenshotFilenameContext } from "./utils";
@@ -43,12 +47,15 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				id: "yte-feature-screenshotButton-tooltip"
 			});
 			screenshotButton.dataset.title = window.i18nextInstance.t(
-				(translations) => translations.pages.content.features.screenshotButton.extras.copiedToClipboard
+				(translations) =>
+					translations.pages.content.features.screenshotButton.extras.copiedToClipboard
 			);
 			listener();
 			try {
 				const mimeType = "image/png";
-				const blob = await new Promise<Nullable<Blob>>((resolve) => canvas.toBlob(resolve, mimeType));
+				const blob = await new Promise<Nullable<Blob>>((resolve) =>
+					canvas.toBlob(resolve, mimeType)
+				);
 				if (blob) {
 					const clipboardImage = new ClipboardItem({ [mimeType]: blob });
 					await navigator.clipboard.write([clipboardImage]);
@@ -83,7 +90,9 @@ async function takeScreenshot(videoElement: HTMLVideoElement) {
 				resolveFilenameTemplate(filename, context) ??
 				resolveFilenameTemplate(defaultScreenshotFilenameTemplate, context) ??
 				`Screenshot-${videoId}-${context.date}`;
-			const downloadName = name.toLowerCase().endsWith(`.${format.toLowerCase()}`) ? name : `${name}.${format}`;
+			const downloadName = name.toLowerCase().endsWith(`.${format.toLowerCase()}`)
+				? name
+				: `${name}.${format}`;
 			const a = document.createElement("a");
 			a.href = URL.createObjectURL(blob);
 			a.download = downloadName;
@@ -122,13 +131,18 @@ export default createFeature({
 				await addFeatureButton(
 					"screenshotButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label),
+					window.i18nextInstance.t(
+						(translations) => translations.pages.content.features.screenshotButton.button.label
+					),
 					getFeatureIcon("screenshotButton", placement),
 					screenshotButtonClickListener,
 					false,
 					false,
 					fullscreenPlacement,
-					() => window.i18nextInstance.t((translations) => translations.pages.content.features.screenshotButton.button.label)
+					() =>
+						window.i18nextInstance.t(
+							(translations) => translations.pages.content.features.screenshotButton.button.label
+						)
 				);
 			},
 			name: "screenshotButton"

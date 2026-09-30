@@ -1,5 +1,10 @@
 import type { AllConfigsData } from "@/components/devtools/hooks/useDevToolsQuery";
-import type { FeatureKeys, SettingConfig, SettingId, SettingNode } from "@/src/features/_registry/types";
+import type {
+	FeatureKeys,
+	SettingConfig,
+	SettingId,
+	SettingNode
+} from "@/src/features/_registry/types";
 import type { configuration, Nullable } from "@/src/types";
 
 export type ConfigInputProps<F extends FeatureKeys> = {

@@ -3,8 +3,13 @@ import { round } from "@/src/utils/math";
 
 const maxSpeed = 16;
 
-export function calculateAdjustedSpeed(currentSpeed: number, perClick: number, direction: "decrease" | "increase"): number {
-	if (!isFinite(currentSpeed) || !isFinite(perClick) || perClick <= 0) return isFinite(currentSpeed) ? currentSpeed : 1;
+export function calculateAdjustedSpeed(
+	currentSpeed: number,
+	perClick: number,
+	direction: "decrease" | "increase"
+): number {
+	if (!isFinite(currentSpeed) || !isFinite(perClick) || perClick <= 0)
+		return isFinite(currentSpeed) ? currentSpeed : 1;
 	const minSpeed = getMinSpeed(perClick);
 	const adjusted =
 		currentSpeed >= maxSpeed && direction === "increase"

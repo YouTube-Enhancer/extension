@@ -47,7 +47,9 @@ const PAGES = [
  * from the watch build. Chrome only: Manifest V3's `extension_pages` policy accepts a localhost script source, which
  * is what makes loading from the server possible at all.
  */
-export async function startHmrServer({ port = DEV_SERVER_PORT }: { port?: number } = {}): Promise<HmrServer> {
+export async function startHmrServer({
+	port = DEV_SERVER_PORT
+}: { port?: number } = {}): Promise<HmrServer> {
 	const bound = await findFreePort(port);
 	const origin = `http://127.0.0.1:${bound}`;
 	const server = await createServer({
@@ -56,7 +58,13 @@ export async function startHmrServer({ port = DEV_SERVER_PORT }: { port?: number
 		logLevel: "warn",
 		optimizeDeps: { entries: PAGES.map(({ file, page }) => `src/pages/${page}/${file}`) },
 		plugins: [extensionServedWorkers(), reactPreamblePlugin()],
-		server: { cors: true, hmr: { host: "127.0.0.1", port: bound, protocol: "ws" }, host: "127.0.0.1", port: bound, strictPort: true }
+		server: {
+			cors: true,
+			hmr: { host: "127.0.0.1", port: bound, protocol: "ws" },
+			host: "127.0.0.1",
+			port: bound,
+			strictPort: true
+		}
 	});
 	await server.listen();
 	console.log(`[Dev] Pages served with HMR from ${origin}`);
@@ -69,7 +77,9 @@ export async function startHmrServer({ port = DEV_SERVER_PORT }: { port?: number
 		patchManifest(manifest) {
 			return {
 				...manifest,
-				content_security_policy: { extension_pages: `script-src 'self' ${origin}; object-src 'self'` }
+				content_security_policy: {
+					extension_pages: `script-src 'self' ${origin}; object-src 'self'`
+				}
 			};
 		},
 		writeHtml(targetDir) {
@@ -77,15 +87,20 @@ export async function startHmrServer({ port = DEV_SERVER_PORT }: { port?: number
 				const source = resolve(pagesDir, page, file);
 				if (!existsSync(source)) continue;
 				const base = `/src/pages/${page}/`;
-				const toServer = (reference: string) => (reference.startsWith(".") ? origin + posix.normalize(posix.join(base, reference)) : reference);
+				const toServer = (reference: string) =>
+					reference.startsWith(".")
+						? origin + posix.normalize(posix.join(base, reference))
+						: reference;
 				const html = readFileSync(source, "utf8")
 					.replace(
 						/(<script\b[^>]*\bsrc=")([^"]+)(")/g,
-						(_match, before: string, reference: string, after: string) => before + toServer(reference) + after
+						(_match, before: string, reference: string, after: string) =>
+							before + toServer(reference) + after
 					)
 					.replace(
 						/(<link\b[^>]*\bhref=")([^"]+)(")/g,
-						(_match, before: string, reference: string, after: string) => before + toServer(reference) + after
+						(_match, before: string, reference: string, after: string) =>
+							before + toServer(reference) + after
 					)
 					.replace(
 						/<head>/i,

@@ -1,4 +1,9 @@
-import type { AnyFeatureBase, FeatureButton, FeatureKeys, FeatureKeysWithState } from "@/src/features/_registry/types";
+import type {
+	AnyFeatureBase,
+	FeatureButton,
+	FeatureKeys,
+	FeatureKeysWithState
+} from "@/src/features/_registry/types";
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
@@ -35,7 +40,14 @@ class FeatureButtonManager extends FeatureManagerBase {
 		for (const btn of feature.buttons) {
 			const nextBtnCfg = this.getButtonConfig(config, btn.name);
 			const isActive = await this.computeButtonActive(btn, config, canEnable, nextBtnCfg);
-			await this.updateButtonPlacement(feature.id, btn, config, isActive, nextBtnCfg?.placement, nextBtnCfg?.fullscreenPlacement ?? "same");
+			await this.updateButtonPlacement(
+				feature.id,
+				btn,
+				config,
+				isActive,
+				nextBtnCfg?.placement,
+				nextBtnCfg?.fullscreenPlacement ?? "same"
+			);
 		}
 	}
 
@@ -51,25 +63,53 @@ class FeatureButtonManager extends FeatureManagerBase {
 		btn: FeatureButton<K>,
 		config: configuration[K],
 		canEnable: boolean,
-		nextBtnCfg: Nullable<{ enabled?: boolean; fullscreenPlacement?: FullscreenPlacement; placement?: string }>
+		nextBtnCfg: Nullable<{
+			enabled?: boolean;
+			fullscreenPlacement?: FullscreenPlacement;
+			placement?: string;
+		}>
 	): Promise<boolean> {
-		const passesCondition = typeof btn.shouldRender === "function" ? await btn.shouldRender(config) : true;
+		const passesCondition =
+			typeof btn.shouldRender === "function" ? await btn.shouldRender(config) : true;
 		return canEnable && (nextBtnCfg?.enabled ?? true) && passesCondition;
 	}
 
 	private getButtonConfig<K extends FeatureKeys>(
 		cfg: configuration[K] | undefined,
 		name: string
-	): Nullable<{ enabled?: boolean; fullscreenPlacement?: FullscreenPlacement; placement?: ButtonPlacement }> {
+	): Nullable<{
+		enabled?: boolean;
+		fullscreenPlacement?: FullscreenPlacement;
+		placement?: ButtonPlacement;
+	}> {
 		if (!cfg) return null;
 		if ("buttons" in cfg) {
 			const {
 				buttons: { [name]: btnCfg }
-			} = cfg as { buttons: Record<string, { enabled?: boolean; fullscreenPlacement?: FullscreenPlacement; placement?: ButtonPlacement }> };
+			} = cfg as {
+				buttons: Record<
+					string,
+					{
+						enabled?: boolean;
+						fullscreenPlacement?: FullscreenPlacement;
+						placement?: ButtonPlacement;
+					}
+				>;
+			};
 			return btnCfg ?? null;
 		}
 		if ("button" in cfg)
-			return (cfg as { button?: { enabled?: boolean; fullscreenPlacement?: FullscreenPlacement; placement?: ButtonPlacement } }).button ?? null;
+			return (
+				(
+					cfg as {
+						button?: {
+							enabled?: boolean;
+							fullscreenPlacement?: FullscreenPlacement;
+							placement?: ButtonPlacement;
+						};
+					}
+				).button ?? null
+			);
 		return null;
 	}
 
@@ -89,7 +129,8 @@ class FeatureButtonManager extends FeatureManagerBase {
 
 		const updatePromise = (async () => {
 			try {
-				const wasActive = getTrackedButtonInitialized(btn.name) && getTrackedButtonEnabled(btn.name);
+				const wasActive =
+					getTrackedButtonInitialized(btn.name) && getTrackedButtonEnabled(btn.name);
 				const prevPlacement = getTrackedButtonPlacement(btn.name);
 				const moved = prevPlacement !== nextPlacement;
 				const prevFullscreenPlacement = getTrackedButtonFullscreenPlacement(btn.name) ?? "same";
@@ -125,7 +166,10 @@ class FeatureButtonManager extends FeatureManagerBase {
 							if (!wasActive) {
 								await btn.add(config);
 							} else {
-								const buttonExists = await checkIfFeatureButtonExists(btn.name, nextPlacement ?? "feature_menu");
+								const buttonExists = await checkIfFeatureButtonExists(
+									btn.name,
+									nextPlacement ?? "feature_menu"
+								);
 								if (!buttonExists) {
 									await btn.add(config);
 								}

@@ -1,4 +1,8 @@
-import type { VideoHistoryEntry, VideoHistoryResumeType, VideoHistoryStorage } from "@/src/features/videoHistory/types";
+import type {
+	VideoHistoryEntry,
+	VideoHistoryResumeType,
+	VideoHistoryStorage
+} from "@/src/features/videoHistory/types";
 import type { Author, Brand, Nullable, VideoId, YouTubePlayerDiv } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
@@ -35,7 +39,10 @@ function createAuthor(author: string): Author {
 	if (!author) throw new Error("Invalid author");
 	return author as Author;
 }
-function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContainer: YouTubePlayerDiv) {
+function createResumePrompt(
+	videoHistoryEntry: VideoHistoryEntry,
+	playerContainer: YouTubePlayerDiv
+) {
 	const prompt = createStyledElement({
 		elementId: promptId,
 		elementType: "div",
@@ -100,7 +107,9 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 			verticalAlign: "middle"
 		}
 	});
-	resumeButton.textContent = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumeButton);
+	resumeButton.textContent = window.i18nextInstance.t(
+		(translations) => translations.pages.content.features.videoHistory.extras.resumeButton
+	);
 	function startCountdown() {
 		if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
 		prompt.style.display = "block";
@@ -150,7 +159,9 @@ function createResumePrompt(videoHistoryEntry: VideoHistoryEntry, playerContaine
 		id: "yte-feature-videoHistory-tooltip"
 	});
 	closeTooltipUpdate = tooltipUpdate;
-	closeButton.dataset.title = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumePromptClose);
+	closeButton.dataset.title = window.i18nextInstance.t(
+		(translations) => translations.pages.content.features.videoHistory.extras.resumePromptClose
+	);
 	eventManager.removeEventListener(closeButton, "mouseover", "videoHistory");
 	eventManager.addEventListener(closeButton, "mouseover", tooltipListener, "videoHistory");
 	const closeListener = () => hidePrompt();
@@ -196,7 +207,9 @@ export default createFeature({
 	onLanguageChange: () => {
 		const resumeButton = document.getElementById(resumeButtonId);
 		if (resumeButton) {
-			resumeButton.textContent = window.i18nextInstance.t((translations) => translations.pages.content.features.videoHistory.extras.resumeButton);
+			resumeButton.textContent = window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.videoHistory.extras.resumeButton
+			);
 		}
 		const closeButton = document.getElementById(closeButtonId);
 		if (closeButton) {
@@ -243,10 +256,19 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 	// after the player already reports the new video, so it is waited for rather than looked up once.
 	if (!videoElement || currentVideoId !== videoId) return;
 	const author = createAuthor(rawAuthor ?? "");
-	const [isArtist, duration] = await Promise.all([isOfficialArtist(videoId, author, { current: currentVideoId }), playerContainer.getDuration()]);
+	const [isArtist, duration] = await Promise.all([
+		isOfficialArtist(videoId, author, { current: currentVideoId }),
+		playerContainer.getDuration()
+	]);
 	if (isArtist) return;
-	const { [videoId]: video_history_entry } = getVideoHistory(registry.stateManager.getStateAPI("videoHistory"));
-	if (video_history_entry && video_history_entry.status === "watching" && video_history_entry.timestamp > 0) {
+	const { [videoId]: video_history_entry } = getVideoHistory(
+		registry.stateManager.getStateAPI("videoHistory")
+	);
+	if (
+		video_history_entry &&
+		video_history_entry.status === "watching" &&
+		video_history_entry.timestamp > 0
+	) {
 		({ timestamp: lastSavedTimestamp } = video_history_entry);
 		if (resumeType === "automatic") {
 			if (video_history_entry.timestamp >= duration) return;
@@ -268,11 +290,31 @@ async function handleVideoChange(resumeType: VideoHistoryResumeType) {
 		const isWatched = duration - currentTime < END_TOLERANCE;
 		if (isWatched && hasMarkedWatched) return;
 		if (isWatched) hasMarkedWatched = true;
-		setVideoHistory(videoId, currentTime, isWatched ? "watched" : "watching", registry.stateManager.getStateAPI("videoHistory"));
+		setVideoHistory(
+			videoId,
+			currentTime,
+			isWatched ? "watched" : "watching",
+			registry.stateManager.getStateAPI("videoHistory")
+		);
 	};
-	eventManager.addEventListener(videoElement, "timeupdate", () => void videoPlayerTimeUpdateListener(), "videoHistory");
-	eventManager.addEventListener(videoElement, "pause", () => void videoPlayerTimeUpdateListener(), "videoHistory");
-	eventManager.addEventListener(videoElement, "ended", () => void videoPlayerTimeUpdateListener(), "videoHistory");
+	eventManager.addEventListener(
+		videoElement,
+		"timeupdate",
+		() => void videoPlayerTimeUpdateListener(),
+		"videoHistory"
+	);
+	eventManager.addEventListener(
+		videoElement,
+		"pause",
+		() => void videoPlayerTimeUpdateListener(),
+		"videoHistory"
+	);
+	eventManager.addEventListener(
+		videoElement,
+		"ended",
+		() => void videoPlayerTimeUpdateListener(),
+		"videoHistory"
+	);
 }
 function isLikelyArtistChannel(author: string): boolean {
 	return author.endsWith(" - Topic");
@@ -293,7 +335,8 @@ async function isOfficialArtist(
 	// previous video's channel, whose badge would be taken for this one's. The badge is only read once the row names
 	// the channel the player reports; a row that never does leaves the video tracked, the lesser error.
 	const ownerRowNamesChannel = await waitForOwnerRow(author, 3000);
-	const isOfficialArtistChannel = ownerRowNamesChannel && document.querySelector(OFFICIAL_ARTIST_BADGE_SELECTOR) !== null;
+	const isOfficialArtistChannel =
+		ownerRowNamesChannel && document.querySelector(OFFICIAL_ARTIST_BADGE_SELECTOR) !== null;
 	if (currentVideoIdRef.current !== videoId) return false;
 	artistChannelCache.set(author, isOfficialArtistChannel);
 	return isOfficialArtistChannel;
@@ -311,7 +354,11 @@ function resetState() {
 async function waitForOwnerRow(author: string, timeout: number): Promise<boolean> {
 	const start = Date.now();
 	while (Date.now() - start < timeout) {
-		const channelName = document.querySelector("#owner #upload-info #channel-name")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+		const channelName =
+			document
+				.querySelector("#owner #upload-info #channel-name")
+				?.textContent?.replace(/\s+/g, " ")
+				.trim() ?? "";
 		if (author && channelName.includes(author)) return true;
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
@@ -324,7 +371,11 @@ async function waitForPlayerVideoData(playerContainer: YouTubePlayerDiv, timeout
 		const data = await playerContainer.getVideoData();
 		const urlVideoId = isWatchPage() ? new URLSearchParams(window.location.search).get("v") : null;
 		const holdsPageVideo = !!data.video_id && (!urlVideoId || data.video_id === urlVideoId);
-		if ((holdsPageVideo && !playerContainer.classList.contains("ad-showing")) || Date.now() - start >= timeout) return data;
+		if (
+			(holdsPageVideo && !playerContainer.classList.contains("ad-showing")) ||
+			Date.now() - start >= timeout
+		)
+			return data;
 		await new Promise((resolve) => setTimeout(resolve, 200));
 	}
 }

@@ -80,7 +80,11 @@ async function setupOnPlaylistPage(stateAPI: StateAPI) {
 	resizeObserver = new ResizeObserver(() => {
 		const { isReversed: currentlyReversed } = stateAPI.getState();
 		void getPlaylistPageActionRow().then((r) => {
-			if (r && document.getElementById(REVERSE_BUTTON_CONTAINER_ID) && !r.contains(document.getElementById(REVERSE_BUTTON_CONTAINER_ID))) {
+			if (
+				r &&
+				document.getElementById(REVERSE_BUTTON_CONTAINER_ID) &&
+				!r.contains(document.getElementById(REVERSE_BUTTON_CONTAINER_ID))
+			) {
 				void injectButton(stateAPI, r);
 				if (currentlyReversed && getReversalState() === false) applyPlaylistPageReversal();
 			}
@@ -101,7 +105,12 @@ async function setupOnWatchPage(stateAPI: StateAPI) {
 
 	// After an in-page navigation the previous video's data stays in place until YouTube's response arrives, and the
 	// player has usually switched by the time this runs, so the data is trusted by the video it names, not by timing.
-	const current = await poll(() => isPlaylistDataReady() && isPlaylistDataCurrent(), Boolean, 100, 5000);
+	const current = await poll(
+		() => isPlaylistDataReady() && isPlaylistDataCurrent(),
+		Boolean,
+		100,
+		5000
+	);
 	if (current) matchReversalToState(stateAPI.getState().isReversed);
 	await injectButton(stateAPI);
 	setupNativeMiniPlayerDetection(stateAPI);
@@ -133,7 +142,9 @@ function setupReversalMaintenance(stateAPI: StateAPI, generation: number) {
 			if (generation !== currentSetupGeneration()) return;
 			if (!isWatchPage() || !stateAPI.getState().isReversed || !isPlaylistDataCurrent()) return;
 			const now = Date.now();
-			maintenanceRestores = maintenanceRestores.filter((time) => now - time < MAINTENANCE_RESTORE_WINDOW);
+			maintenanceRestores = maintenanceRestores.filter(
+				(time) => now - time < MAINTENANCE_RESTORE_WINDOW
+			);
 			if (maintenanceRestores.length >= MAINTENANCE_RESTORE_LIMIT) return;
 			if (!matchReversalToState(true)) return;
 			maintenanceRestores.push(now);

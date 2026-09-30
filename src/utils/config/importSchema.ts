@@ -3,7 +3,11 @@ import { z } from "zod/v4-mini";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { featureMenuOpenTypes } from "@/src/features/buttonController/types";
 import { availableLocales } from "@/src/i18n/constants";
-import { onScreenDisplayColors, onScreenDisplayPositions, onScreenDisplayTypes } from "@/src/ui/OnScreenDisplayManager/types";
+import {
+	onScreenDisplayColors,
+	onScreenDisplayPositions,
+	onScreenDisplayTypes
+} from "@/src/ui/OnScreenDisplayManager/types";
 
 const coreConfigurationImportSchema = {
 	featureMenu: z.optional(z.object({ openType: z.enum(featureMenuOpenTypes) })),

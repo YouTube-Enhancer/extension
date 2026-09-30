@@ -68,7 +68,10 @@ export class MiniPlayerController {
 	}
 	setDefaults(
 		defaults: MiniPlayerOptions,
-		{ applyIfNoSavedState = true, forceApply = false }: { applyIfNoSavedState?: boolean; forceApply?: boolean } = {}
+		{
+			applyIfNoSavedState = true,
+			forceApply = false
+		}: { applyIfNoSavedState?: boolean; forceApply?: boolean } = {}
 	) {
 		this.options = { ...this.options, ...defaults };
 		if (!this.isActiveState) return;
@@ -265,7 +268,9 @@ export class MiniPlayerController {
 	}
 	private ensureOverlay() {
 		if (this.overlayElement) return;
-		document.querySelectorAll<HTMLDivElement>(`#${MINI_PLAYER_OVERLAY_ID}`).forEach((stale) => stale.remove());
+		document
+			.querySelectorAll<HTMLDivElement>(`#${MINI_PLAYER_OVERLAY_ID}`)
+			.forEach((stale) => stale.remove());
 		const overlay = createStyledElement({
 			classlist: ["yte-mini-player"],
 			elementId: MINI_PLAYER_OVERLAY_ID,
@@ -372,7 +377,11 @@ export class MiniPlayerController {
 		if (detachedPlayer) {
 			try {
 				const { originalPlayerParent, playerPlaceholder } = this;
-				if (originalPlayerParent && playerPlaceholder && originalPlayerParent.contains(playerPlaceholder)) {
+				if (
+					originalPlayerParent &&
+					playerPlaceholder &&
+					originalPlayerParent.contains(playerPlaceholder)
+				) {
 					originalPlayerParent.insertBefore(detachedPlayer, playerPlaceholder);
 				} else {
 					const fallbackContainer =
@@ -383,7 +392,8 @@ export class MiniPlayerController {
 						fallbackContainer.appendChild(detachedPlayer);
 					}
 				}
-				if (!detachedPlayer.isConnected) console.error("[miniPlayer] Player could not be reattached to the page after restore");
+				if (!detachedPlayer.isConnected)
+					console.error("[miniPlayer] Player could not be reattached to the page after restore");
 				detachedPlayer.style.width = "";
 				detachedPlayer.style.height = "";
 				detachedPlayer.style.position = "";
@@ -447,7 +457,12 @@ function readSavedState(): Nullable<MiniPlayerRect> {
 	try {
 		const { rect: savedRect } = stateAPI.getState();
 		if (!savedRect) return null;
-		if (!Number.isFinite(savedRect.x) || !Number.isFinite(savedRect.y) || !Number.isFinite(savedRect.width) || !Number.isFinite(savedRect.height))
+		if (
+			!Number.isFinite(savedRect.x) ||
+			!Number.isFinite(savedRect.y) ||
+			!Number.isFinite(savedRect.width) ||
+			!Number.isFinite(savedRect.height)
+		)
 			return null;
 		return savedRect;
 	} catch {

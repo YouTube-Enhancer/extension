@@ -3,7 +3,10 @@ import type { ContentToBackgroundSendOnlyMessages, DevToolsMessages, Nullable } 
 import { setDefaultValues } from "@/src/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { updateStoredSettings } from "@/src/utils/config/storage";
-import { reinjectContentScriptsAfterReload, startHotReloadClient } from "@/src/utils/dev/hotReloadClient";
+import {
+	reinjectContentScriptsAfterReload,
+	startHotReloadClient
+} from "@/src/utils/dev/hotReloadClient";
 
 import { version } from "../../../package.json";
 
@@ -56,90 +59,118 @@ function isNewMinorVersion(oldVersion: VersionString, newVersion: VersionString)
 	const [, newMinorVersion] = newVersion.split(".");
 	return oldMinorVersion !== newMinorVersion;
 }
-chrome.runtime.onMessage.addListener((message: ContentToBackgroundSendOnlyMessages | DevToolsMessages["request"], sender, sendResponse) => {
-	const { source, type } = message;
+chrome.runtime.onMessage.addListener(
+	(
+		message: ContentToBackgroundSendOnlyMessages | DevToolsMessages["request"],
+		sender,
+		sendResponse
+	) => {
+		const { source, type } = message;
 
-	if (source === "devtools" && typeof type === "string" && type.startsWith("devtools_")) {
-		const { requestId, tabId } = message;
-		if (type === "devtools_invalidate_cache") {
-			const data = message;
+		if (source === "devtools" && typeof type === "string" && type.startsWith("devtools_")) {
+			const { requestId, tabId } = message;
+			if (type === "devtools_invalidate_cache") {
+				const data = message;
+				chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
+					for (const tab of tabs) {
+						if (tab.id === undefined) continue;
+						void chrome.tabs.sendMessage(tab.id, {
+							action: "invalidate_cache",
+							data: { keys: data.data?.keys },
+							source: "background"
+						});
+					}
+
+					sendResponse({
+						action: "data_response",
+						data: { ok: true },
+						requestId,
+						source: "background",
+						tabId: 0,
+						type
+					});
+				});
+				return true;
+			}
+
+			// Deduplicate: skip if we already sent this requestId
+			if (requestId && sentRequestIds.has(requestId)) return true;
+			if (requestId) sentRequestIds.add(requestId);
+
 			chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
-				for (const tab of tabs) {
-					if (tab.id === undefined) continue;
-					void chrome.tabs.sendMessage(tab.id, {
-						action: "invalidate_cache",
-						data: { keys: data.data?.keys },
-						source: "background"
+				const targetTab = tabId !== undefined ? tabs.find((t) => t.id === tabId) : tabs[0];
+				if (!targetTab?.id) {
+					return sendResponse({
+						action: "data_response",
+						data: null,
+						requestId: requestId ?? "",
+						source: "background",
+						tabId: 0,
+						type
 					});
 				}
-
-				sendResponse({ action: "data_response", data: { ok: true }, requestId, source: "background", tabId: 0, type });
+				return chrome.tabs.sendMessage(targetTab.id, message, (response: unknown) => {
+					sendResponse(response);
+				});
 			});
 			return true;
 		}
 
-		// Deduplicate: skip if we already sent this requestId
-		if (requestId && sentRequestIds.has(requestId)) return true;
-		if (requestId) sentRequestIds.add(requestId);
-
-		chrome.tabs.query({ url: "https://*.youtube.com/*" }, (tabs) => {
-			const targetTab = tabId !== undefined ? tabs.find((t) => t.id === tabId) : tabs[0];
-			if (!targetTab?.id) {
-				return sendResponse({ action: "data_response", data: null, requestId: requestId ?? "", source: "background", tabId: 0, type });
-			}
-			return chrome.tabs.sendMessage(targetTab.id, message, (response: unknown) => {
-				sendResponse(response);
-			});
-		});
-		return true;
-	}
-
-	// Handle regular background messages
-	const typedMessage = message as ContentToBackgroundSendOnlyMessages;
-	switch (typedMessage.type) {
-		case "pauseBackgroundPlayers": {
-			const senderTabId = sender.tab?.id;
-			chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
-				for (const tab of tabs) {
-					if (tab.id === senderTabId) continue;
-					if (tab.id !== undefined) {
-						chrome.scripting.executeScript(
-							{
-								func: () => {
-									const hasVideoPiP = "pictureInPictureElement" in document && !!document.pictureInPictureElement;
-									const hasDocumentPiP =
-										"documentPictureInPicture" in window &&
-										!!(window as Window & { documentPictureInPicture?: { window: Nullable<Window> } }).documentPictureInPicture?.window;
-									if (hasVideoPiP || hasDocumentPiP) return;
-									const videos = document.querySelectorAll("video");
-									videos.forEach((video) => {
-										if (!video.paused) {
-											video.pause();
-										}
-									});
-									const audios = document.querySelectorAll("audio");
-									audios.forEach((audio) => {
-										if (!audio.paused) {
-											audio.pause();
-										}
-									});
+		// Handle regular background messages
+		const typedMessage = message as ContentToBackgroundSendOnlyMessages;
+		switch (typedMessage.type) {
+			case "pauseBackgroundPlayers": {
+				const senderTabId = sender.tab?.id;
+				chrome.tabs.query({ url: "https://www.youtube.com/*" }, (tabs) => {
+					for (const tab of tabs) {
+						if (tab.id === senderTabId) continue;
+						if (tab.id !== undefined) {
+							chrome.scripting.executeScript(
+								{
+									func: () => {
+										const hasVideoPiP =
+											"pictureInPictureElement" in document && !!document.pictureInPictureElement;
+										const hasDocumentPiP =
+											"documentPictureInPicture" in window &&
+											!!(
+												window as Window & {
+													documentPictureInPicture?: { window: Nullable<Window> };
+												}
+											).documentPictureInPicture?.window;
+										if (hasVideoPiP || hasDocumentPiP) return;
+										const videos = document.querySelectorAll("video");
+										videos.forEach((video) => {
+											if (!video.paused) {
+												video.pause();
+											}
+										});
+										const audios = document.querySelectorAll("audio");
+										audios.forEach((audio) => {
+											if (!audio.paused) {
+												audio.pause();
+											}
+										});
+									},
+									target: { tabId: tab.id }
 								},
-								target: { tabId: tab.id }
-							},
-							(results) => {
-								if (chrome.runtime.lastError) {
-									console.error(chrome.runtime.lastError.message);
-								} else {
-									if (results[0].result) {
-										console.log("[Background] Paused audios in tab:", { results: results[0].result, tabId: tab.id });
+								(results) => {
+									if (chrome.runtime.lastError) {
+										console.error(chrome.runtime.lastError.message);
+									} else {
+										if (results[0].result) {
+											console.log("[Background] Paused audios in tab:", {
+												results: results[0].result,
+												tabId: tab.id
+											});
+										}
 									}
 								}
-							}
-						);
+							);
+						}
 					}
-				}
-			});
-			break;
+				});
+				break;
+			}
 		}
 	}
-});
+);

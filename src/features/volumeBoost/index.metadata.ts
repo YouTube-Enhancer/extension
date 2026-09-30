@@ -9,7 +9,9 @@ import { buttonPlacements } from "@/src/types";
 
 type ModeKeys = SnakeToCamel<(typeof volumeBoostModes)[number]>;
 
-const modeKeys: ModeKeys[] = volumeBoostModes.map((value) => value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as ModeKeys);
+const modeKeys: ModeKeys[] = volumeBoostModes.map(
+	(value) => value.replace(/_([a-z])/g, (_: string, c: string) => c.toUpperCase()) as ModeKeys
+);
 
 export const metadata = createFeatureMetadata({
 	button: "volumeBoostButton",
@@ -42,7 +44,8 @@ export const metadata = createFeatureMetadata({
 					label: (t) => t((tr) => tr.settings.sections.volumeBoost.settings.mode.select.label),
 					optionsFrom: () =>
 						modeKeys.map((key, index) => ({
-							label: (t) => t((tr) => tr.settings.sections.volumeBoost.settings.mode.select.options[key]),
+							label: (t) =>
+								t((tr) => tr.settings.sections.volumeBoost.settings.mode.select.options[key]),
 							value: volumeBoostModes[index]
 						})),
 					parentSetting: {

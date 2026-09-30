@@ -79,14 +79,21 @@ const StringList: React.FC<StringListProps> = ({
 	};
 
 	return (
-		<div className={cn("relative flex flex-row items-start justify-between gap-4", className)} title={title}>
+		<div
+			className={cn("relative flex flex-row items-start justify-between gap-4", className)}
+			title={title}
+		>
 			<label id={labelId}>{label}</label>
 			<div aria-labelledby={labelId} className="flex w-72 flex-col gap-2" role="group">
 				{items.map((item, index) => (
 					<div className="flex w-full flex-row items-center gap-1" key={index}>
 						<input
 							aria-label={itemLabel}
-							className={cn("!m-0 min-w-0 flex-1 !p-2 !text-sm", inputClass, disabled && disabledInputClass)}
+							className={cn(
+								"!m-0 min-w-0 flex-1 !p-2 !text-sm",
+								inputClass,
+								disabled && disabledInputClass
+							)}
 							disabled={disabled}
 							onChange={(event) => handleChange(index, event.currentTarget.value)}
 							placeholder={itemLabel}

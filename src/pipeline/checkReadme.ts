@@ -10,7 +10,9 @@ void (async () => {
 			console.log("[Build Pipeline] README.md feature list is up to date");
 			return;
 		}
-		console.error("[Build Pipeline] README.md feature list is stale. Run `pnpm run build` and commit README.md.");
+		console.error(
+			"[Build Pipeline] README.md feature list is stale. Run `pnpm run build` and commit README.md."
+		);
 		process.exit(1);
 	} catch (error) {
 		console.error("[Build Pipeline] README check failed:", error);

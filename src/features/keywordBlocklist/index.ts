@@ -5,7 +5,11 @@ import type { configuration, Nullable } from "@/src/types";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { parseLineList } from "@/src/utils/string";
 
-import { BLOCKED_AVATAR_URL, BLOCKED_THUMBNAIL_URL, isBlockedPlaceholderUrl } from "./blockedPlaceholder";
+import {
+	BLOCKED_AVATAR_URL,
+	BLOCKED_THUMBNAIL_URL,
+	isBlockedPlaceholderUrl
+} from "./blockedPlaceholder";
 import { BLOCKED_ATTRIBUTE, HOVER_BLOCKED_CLASS } from "./constants";
 import { metadata } from "./index.metadata";
 import { createKeywordMatcher, normalizeWhitespace } from "./utils";
@@ -35,7 +39,8 @@ const TEXT_TARGET_SELECTOR = [
 	"ytd-channel-renderer #subscribers",
 	"ytd-channel-renderer #description"
 ].join(", ");
-const AVATAR_SELECTOR = "yt-decorated-avatar-view-model, yt-avatar-shape, ad-avatar-view-model, yt-avatar-stack-view-model, #avatar";
+const AVATAR_SELECTOR =
+	"yt-decorated-avatar-view-model, yt-avatar-shape, ad-avatar-view-model, yt-avatar-stack-view-model, #avatar";
 const AVATAR_IMAGE_CLASS = "ytSpecAvatarShapeImage";
 const EXCLUDED_IMAGE_SELECTOR = "img.ytMiniGameCardViewModelThumbnailImage";
 const HEADING_SELECTOR = "h1, h2, h3, h4";
@@ -77,11 +82,15 @@ export default createFeature({
 	},
 	onEnable: (config) => {
 		syncConfig(config);
-		maskedTitleText = window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle);
+		maskedTitleText = window.i18nextInstance.t(
+			(translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle
+		);
 		syncObserving();
 	},
 	onLanguageChange: () => {
-		maskedTitleText = window.i18nextInstance.t((translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle);
+		maskedTitleText = window.i18nextInstance.t(
+			(translations) => translations.pages.content.features.keywordBlocklist.messages.maskedTitle
+		);
 	},
 	onNavigate: () => {
 		if (observer) scheduleScan();
@@ -112,7 +121,9 @@ function collectTextNodes(element: HTMLElement): Text[] {
 function getTextTargets(container: HTMLElement): HTMLElement[] {
 	const candidates = Array.from(container.querySelectorAll<HTMLElement>(TEXT_TARGET_SELECTOR));
 	// Nested matches share text nodes, so only the innermost element of each chain is masked.
-	return candidates.filter((candidate) => !candidates.some((other) => other !== candidate && candidate.contains(other)));
+	return candidates.filter(
+		(candidate) => !candidates.some((other) => other !== candidate && candidate.contains(other))
+	);
 }
 
 function getTitleHosts(titleElement: HTMLElement): Element[] {
@@ -154,7 +165,11 @@ function isRelevantMutation(record: MutationRecord): boolean {
 	if (targetElement?.closest(VIDEO_CONTAINER_SELECTOR)) return true;
 	if (type !== "childList") return false;
 	for (const node of addedNodes) {
-		if (node instanceof Element && (node.matches(VIDEO_CONTAINER_SELECTOR) || node.querySelector(VIDEO_CONTAINER_SELECTOR) !== null)) {
+		if (
+			node instanceof Element &&
+			(node.matches(VIDEO_CONTAINER_SELECTOR) ||
+				node.querySelector(VIDEO_CONTAINER_SELECTOR) !== null)
+		) {
 			return true;
 		}
 	}
@@ -169,7 +184,11 @@ function maskBackgroundImage(element: HTMLElement) {
 	style.backgroundImage = MASKED_BACKGROUND_IMAGE;
 }
 
-function maskContainer(container: HTMLElement, targets: HTMLElement[], matched: Map<HTMLElement, string>) {
+function maskContainer(
+	container: HTMLElement,
+	targets: HTMLElement[],
+	matched: Map<HTMLElement, string>
+) {
 	container.setAttribute(BLOCKED_ATTRIBUTE, "");
 	for (const target of targets) {
 		const originalTitle = matched.get(target);
@@ -201,7 +220,10 @@ function maskTitle(titleElement: HTMLElement, originalTitle: string) {
 	if (titleStashes.has(titleElement)) return;
 	const nodes = collectTextNodes(titleElement);
 	if (nodes.length === 0) return;
-	titleStashes.set(titleElement, { nodes: nodes.map((node) => [node, node.data]), original: originalTitle });
+	titleStashes.set(titleElement, {
+		nodes: nodes.map((node) => [node, node.data]),
+		original: originalTitle
+	});
 	nodes.forEach((node, index) => {
 		node.data = index === 0 ? maskedTitleText : "";
 	});
@@ -317,7 +339,8 @@ function restoreTitleAttributes(titleElement: HTMLElement) {
 		attributeStashes.delete(host);
 		const { ariaLabel, title } = stash;
 		if (title !== null && !host.hasAttribute("title")) host.setAttribute("title", title);
-		if (ariaLabel !== null && !host.hasAttribute("aria-label")) host.setAttribute("aria-label", ariaLabel);
+		if (ariaLabel !== null && !host.hasAttribute("aria-label"))
+			host.setAttribute("aria-label", ariaLabel);
 	}
 }
 

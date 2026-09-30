@@ -49,14 +49,20 @@ const controlFeatureIds: Record<ScrollWheelControlType, FeatureKeys> = {
 	volume: "scrollWheelVolumeControl"
 };
 const activeControls = new Map<ScrollWheelControlType, ControlRuntime>();
-const controlConfigs: { [K in ScrollWheelControlType]: Nullable<ControlConfigMap[K]> } = { speed: null, volume: null };
+const controlConfigs: { [K in ScrollWheelControlType]: Nullable<ControlConfigMap[K]> } = {
+	speed: null,
+	volume: null
+};
 let dispatchConfig: Nullable<DispatchConfig> = null;
 let suppressContextMenu = false;
 
 export function disableScrollWheelControl(type: ScrollWheelControlType) {
 	activeControls.get(type)?.stepper.cancel();
 	activeControls.delete(type);
-	modifyElementClassList("remove", { className: `yte-scroll-wheel-${type}-control`, element: document.body });
+	modifyElementClassList("remove", {
+		className: `yte-scroll-wheel-${type}-control`,
+		element: document.body
+	});
 	if (type === "volume") {
 		toggleContextMenuVisibility("remove");
 		suppressContextMenu = false;
@@ -66,7 +72,10 @@ export function disableScrollWheelControl(type: ScrollWheelControlType) {
 	if (activeControls.size === 0) eventManager.removeEventListeners("scrollWheelController");
 }
 
-export async function enableScrollWheelControl<T extends ScrollWheelControlType>(type: T, config: ControlConfigMap[T]) {
+export async function enableScrollWheelControl<T extends ScrollWheelControlType>(
+	type: T,
+	config: ControlConfigMap[T]
+) {
 	controlConfigs[type] = config;
 	rebuildDispatchConfig();
 	const playerContainer = await findPlayerContainer(type);
@@ -87,14 +96,30 @@ export async function enableScrollWheelControl<T extends ScrollWheelControlType>
 	}
 	attachWheelListener();
 	// Marks the body while a control is attached; the volume class also drives the context-menu CSS.
-	modifyElementClassList("add", { className: `yte-scroll-wheel-${type}-control`, element: document.body });
+	modifyElementClassList("add", {
+		className: `yte-scroll-wheel-${type}-control`,
+		element: document.body
+	});
 	if (type === "volume") {
-		eventManager.addEventListener(document.documentElement, "contextmenu", onContextMenu, "scrollWheelController");
-		eventManager.addEventListener(document.documentElement, "mouseup", onMouseUp, "scrollWheelController");
+		eventManager.addEventListener(
+			document.documentElement,
+			"contextmenu",
+			onContextMenu,
+			"scrollWheelController"
+		);
+		eventManager.addEventListener(
+			document.documentElement,
+			"mouseup",
+			onMouseUp,
+			"scrollWheelController"
+		);
 	}
 }
 
-export function updateScrollWheelConfig<T extends ScrollWheelControlType>(type: T, config: ControlConfigMap[T]) {
+export function updateScrollWheelConfig<T extends ScrollWheelControlType>(
+	type: T,
+	config: ControlConfigMap[T]
+) {
 	controlConfigs[type] = config;
 	rebuildDispatchConfig();
 }
@@ -112,11 +137,23 @@ async function applySpeedSteps(runtime: ControlRuntime, steps: number) {
 	}
 	const videoElement = document.querySelector<HTMLVideoElement>("video");
 	if (!videoElement) return;
-	const newSpeed = round(clamp(videoElement.playbackRate + steps * speedConfig.steps, youtubePlayerMinSpeed, youtubePlayerMaxSpeed), 2);
+	const newSpeed = round(
+		clamp(
+			videoElement.playbackRate + steps * speedConfig.steps,
+			youtubePlayerMinSpeed,
+			youtubePlayerMaxSpeed
+		),
+		2
+	);
 	if (newSpeed === videoElement.playbackRate) return;
 	await setPlayerSpeed(newSpeed);
 	updatePlaybackSpeedButtonTooltips(newSpeed, speedPerClick);
-	showOSD(onScreenDisplay, runtime.playerContainer, { max: youtubePlayerMaxSpeed, type: "speed", value: newSpeed }, "text");
+	showOSD(
+		onScreenDisplay,
+		runtime.playerContainer,
+		{ max: youtubePlayerMaxSpeed, type: "speed", value: newSpeed },
+		"text"
+	);
 }
 
 async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
@@ -124,9 +161,22 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
 	const onScreenDisplay = getOSDConfig();
 	if (!volumeConfig || !onScreenDisplay) return;
 	const { playerContainer } = runtime;
-	if (!playerContainer.getVolume || !playerContainer.setVolume || !playerContainer.isMuted || !playerContainer.unMute) return;
-	const [volume, isMuted] = await Promise.all([playerContainer.getVolume(), playerContainer.isMuted()]);
-	const newVolume = clamp(toDivisible(volume + steps * volumeConfig.steps, volumeConfig.steps), 0, 100);
+	if (
+		!playerContainer.getVolume ||
+		!playerContainer.setVolume ||
+		!playerContainer.isMuted ||
+		!playerContainer.unMute
+	)
+		return;
+	const [volume, isMuted] = await Promise.all([
+		playerContainer.getVolume(),
+		playerContainer.isMuted()
+	]);
+	const newVolume = clamp(
+		toDivisible(volume + steps * volumeConfig.steps, volumeConfig.steps),
+		0,
+		100
+	);
 	await playerContainer.setVolume(newVolume);
 	if (isMuted) await playerContainer.unMute();
 	showOSD(onScreenDisplay, playerContainer, { max: 100, type: "volume", value: newVolume });
@@ -138,21 +188,31 @@ async function applyVolumeSteps(runtime: ControlRuntime, steps: number) {
  * which it does on shorts after an in-page navigation - because the player is resolved for every event.
  */
 function attachWheelListener() {
-	eventManager.addEventListener(document, "wheel", onWheel, "scrollWheelController", { capture: true, passive: false });
+	eventManager.addEventListener(document, "wheel", onWheel, "scrollWheelController", {
+		capture: true,
+		passive: false
+	});
 }
 
-async function findPlayerContainer(type: ScrollWheelControlType): Promise<Nullable<YouTubePlayerDiv>> {
+async function findPlayerContainer(
+	type: ScrollWheelControlType
+): Promise<Nullable<YouTubePlayerDiv>> {
 	let playerContainer: Nullable<YouTubePlayerDiv> = null;
 	const findPlayerTask = (): boolean => {
 		const element = queryPlayerContainer(type);
 		if (element) playerContainer = element;
 		return playerContainer !== null;
 	};
-	await registry.playerManager.executeWithRetries(controlFeatureIds[type], [findPlayerTask], ["find player"], {
-		maxAttempts: 15,
-		pageTypes: type === "volume" ? ["watch", "live", "shorts"] : ["watch", "shorts"],
-		waitForLoaded: false
-	});
+	await registry.playerManager.executeWithRetries(
+		controlFeatureIds[type],
+		[findPlayerTask],
+		["find player"],
+		{
+			maxAttempts: 15,
+			pageTypes: type === "volume" ? ["watch", "live", "shorts"] : ["watch", "shorts"],
+			waitForLoaded: false
+		}
+	);
 	return playerContainer;
 }
 
@@ -176,13 +236,23 @@ function onMouseUp(event: MouseEvent) {
 
 function onWheel(event: WheelEvent) {
 	if (!dispatchConfig) return;
-	const { speedEnabled, speedModifierKey, volumeHoldModifierKey, volumeHoldRightClick, volumeModifierKey } = dispatchConfig;
+	const {
+		speedEnabled,
+		speedModifierKey,
+		volumeHoldModifierKey,
+		volumeHoldRightClick,
+		volumeModifierKey
+	} = dispatchConfig;
 	let type: Nullable<ScrollWheelControlType> = null;
 	if (speedEnabled && event[speedModifierKey]) {
 		// The volume control always yields to the speed control's modifier.
 		if (!activeControls.has("speed")) return;
 		type = "speed";
-	} else if (activeControls.has("volume") && (!volumeHoldModifierKey || event[volumeModifierKey]) && (!volumeHoldRightClick || event.buttons === 2)) {
+	} else if (
+		activeControls.has("volume") &&
+		(!volumeHoldModifierKey || event[volumeModifierKey]) &&
+		(!volumeHoldRightClick || event.buttons === 2)
+	) {
 		type = "volume";
 	}
 	if (!type) return;
@@ -196,7 +266,8 @@ function onWheel(event: WheelEvent) {
 	const playerContainer = queryPlayerContainer(type);
 	if (!playerContainer || !wheelAreaAround(playerContainer).contains(target as Node)) return;
 	runtime.playerContainer = playerContainer;
-	if (target instanceof HTMLElement && target.id === getFeatureButtonId("volumeBoostButton")) return;
+	if (target instanceof HTMLElement && target.id === getFeatureButtonId("volumeBoostButton"))
+		return;
 	const settingsPanelMenu = document.querySelector<HTMLDivElement>(settingsPanelMenuSelector);
 	if (settingsPanelMenu?.contains(target as Node)) return;
 	if (type === "volume" && volumeHoldRightClick) {
@@ -209,7 +280,8 @@ function onWheel(event: WheelEvent) {
 
 /** The player element a control of this type drives on the current page, or null when the page has none. */
 function queryPlayerContainer(type: ScrollWheelControlType): Nullable<YouTubePlayerDiv> {
-	if (isWatchPage() || (type === "volume" && isLivePage())) return document.querySelector<YouTubePlayerDiv>("div#movie_player");
+	if (isWatchPage() || (type === "volume" && isLivePage()))
+		return document.querySelector<YouTubePlayerDiv>("div#movie_player");
 	if (isShortsPage()) return document.querySelector<YouTubePlayerDiv>("div#shorts-player");
 	return null;
 }
@@ -282,10 +354,15 @@ function toggleContextMenuVisibility(action: ModifyElementAction) {
  * box does not include, so the outermost of them around the player counts as well.
  */
 function wheelAreaAround(playerContainer: YouTubePlayerDiv): HTMLElement {
-	return playerContainer.closest<HTMLElement>("div#player") ?? playerContainer.closest<HTMLElement>("#player-container") ?? playerContainer;
+	return (
+		playerContainer.closest<HTMLElement>("div#player") ??
+		playerContainer.closest<HTMLElement>("#player-container") ??
+		playerContainer
+	);
 }
 
 function wheelAreaOf(type: ScrollWheelControlType): Nullable<HTMLElement> {
-	const playerContainer = queryPlayerContainer(type) ?? activeControls.get(type)?.playerContainer ?? null;
+	const playerContainer =
+		queryPlayerContainer(type) ?? activeControls.get(type)?.playerContainer ?? null;
 	return playerContainer ? wheelAreaAround(playerContainer) : null;
 }

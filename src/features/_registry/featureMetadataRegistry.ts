@@ -3,7 +3,12 @@ import { z } from "zod/v4-mini";
 import type { AllButtonNames, TSelectFunc } from "@/src/types";
 
 import { validateFeatureMetadata } from "@/src/features/_registry/featureMetadataValidation";
-import { type FeatureKeys, type FeatureMetadata, isGroupNode, isSettingNode } from "@/src/features/_registry/types";
+import {
+	type FeatureKeys,
+	type FeatureMetadata,
+	isGroupNode,
+	isSettingNode
+} from "@/src/features/_registry/types";
 import { DEV_MODE } from "@/src/utils/config/env";
 
 class FeatureMetadataRegistry {
@@ -86,7 +91,9 @@ class FeatureMetadataRegistry {
 	getStateSchema<K extends FeatureKeys>(id: K) {
 		const metadata = this.metadataMap.get(id) as FeatureMetadata<K> | undefined;
 		if (!metadata) return undefined;
-		const { stateSchemaInput } = metadata as FeatureMetadata<K> & { stateSchemaInput?: Record<string, unknown> };
+		const { stateSchemaInput } = metadata as FeatureMetadata<K> & {
+			stateSchemaInput?: Record<string, unknown>;
+		};
 		if (!stateSchemaInput) return undefined;
 		return z.object(stateSchemaInput);
 	}
@@ -106,7 +113,10 @@ class FeatureMetadataRegistry {
 
 export const metadataRegistry = new FeatureMetadataRegistry();
 
-const modules = import.meta.glob<{ metadata: FeatureMetadata<any> }>("/src/features/*/index.metadata.ts", { eager: true });
+const modules = import.meta.glob<{ metadata: FeatureMetadata<any> }>(
+	"/src/features/*/index.metadata.ts",
+	{ eager: true }
+);
 
 for (const path in modules) {
 	try {

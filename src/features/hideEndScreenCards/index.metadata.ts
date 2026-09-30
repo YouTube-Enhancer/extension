@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideEndScreenCards.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCards.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCards.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCards.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideEndScreenCards.enable.title)
 		}
 	]
 });

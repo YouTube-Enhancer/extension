@@ -1,4 +1,9 @@
-import type { AnyFeatureBase, FeatureKeys, FeatureKeysWithState, FeatureState } from "@/src/features/_registry/types";
+import type {
+	AnyFeatureBase,
+	FeatureKeys,
+	FeatureKeysWithState,
+	FeatureState
+} from "@/src/features/_registry/types";
 
 import { waitForIdle } from "@/src/utils/dom/idle";
 import { waitForSpecificMessage } from "@/src/utils/messaging";
@@ -14,13 +19,19 @@ import { registry } from "./featureRegistry";
  *   - Phase 1: After first paint (watch-page buttons, hide features)
  *   - Phase 2: When idle (complex observers, rare features)
  */
-export async function registerAllFeatures(initialState?: Record<FeatureKeysWithState, FeatureState[`state:${FeatureKeysWithState}`]>) {
+export async function registerAllFeatures(
+	initialState?: Record<FeatureKeysWithState, FeatureState[`state:${FeatureKeysWithState}`]>
+) {
 	const allModules = import.meta.glob<{ default?: AnyFeatureBase }>("/src/features/*/index.ts");
-	const state = initialState ?? (await waitForSpecificMessage("state", "request_data", "extension")).data;
+	const state =
+		initialState ?? (await waitForSpecificMessage("state", "request_data", "extension")).data;
 
 	// Build lookup: featureId → import function
 	const moduleById = new Map<FeatureKeys, () => Promise<{ default?: AnyFeatureBase }>>();
-	for (const [path, importFn] of Object.entries(allModules) as [string, () => Promise<{ default?: AnyFeatureBase }>][]) {
+	for (const [path, importFn] of Object.entries(allModules) as [
+		string,
+		() => Promise<{ default?: AnyFeatureBase }>
+	][]) {
 		const match = path.match(/\/src\/features\/([^/]+)\//);
 		if (match) moduleById.set(match[1] as FeatureKeys, importFn);
 	}

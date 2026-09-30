@@ -1,6 +1,7 @@
 import type { Plugin } from "vite";
 
-const workerManagerFile = /monaco-editor\/esm\/vs\/languages\/features\/(?:css|html|json|typescript)\/workerManager\.js$/;
+const workerManagerFile =
+	/monaco-editor\/esm\/vs\/languages\/features\/(?:css|html|json|typescript)\/workerManager\.js$/;
 const workerFallback =
 	/createWorker:\s*\(\)\s*=>\s*new Worker\(new URL\((['"])[a-z]+\.worker\.js\1,\s*import\.meta\.url\),\s*\{\s*type:\s*(['"])module\2\s*\}\)/;
 
@@ -21,10 +22,15 @@ export default function stripMonacoWorkerFallbacks(): Plugin {
 			const [file] = id.replace(/\\/g, "/").split("?");
 			if (!workerManagerFile.test(file)) return null;
 			if (!workerFallback.test(code)) {
-				this.error(`Monaco's worker fallback in ${file} no longer matches; update strip-monaco-worker-fallbacks.ts`);
+				this.error(
+					`Monaco's worker fallback in ${file} no longer matches; update strip-monaco-worker-fallbacks.ts`
+				);
 			}
 			return {
-				code: code.replace(workerFallback, 'createWorker: () => { throw new Error("MonacoEnvironment.getWorker must provide this worker"); }'),
+				code: code.replace(
+					workerFallback,
+					'createWorker: () => { throw new Error("MonacoEnvironment.getWorker must provide this worker"); }'
+				),
 				map: { mappings: "" }
 			};
 		}

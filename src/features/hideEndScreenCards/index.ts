@@ -3,8 +3,15 @@ import type { ButtonPlacement } from "@/src/types";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
-import { updateFeatureButtonChecked, updateFeatureButtonIconByName, updateFeatureButtonTitle } from "@/src/features/buttonController";
-import { getEndScreenCardsButtonIcon, getEndScreenCardsButtonTitle } from "@/src/features/hideEndScreenCardsButton/utils";
+import {
+	updateFeatureButtonChecked,
+	updateFeatureButtonIconByName,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
+import {
+	getEndScreenCardsButtonIcon,
+	getEndScreenCardsButtonTitle
+} from "@/src/features/hideEndScreenCardsButton/utils";
 import { getFeatureIcon } from "@/src/icons";
 import { modifyElementClassList } from "@/src/utils/dom/classList";
 
@@ -36,7 +43,11 @@ export default createFeature({
 		});
 	}
 });
-const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: ButtonPlacement, icons: ToggleIcon, cardsAreHidden: boolean) => {
+const updateHideEndScreenCardsButtonState = (
+	hideEndScreenCardsPlacement: ButtonPlacement,
+	icons: ToggleIcon,
+	cardsAreHidden: boolean
+) => {
 	/**
 	 * The controller keeps aria-checked, the menu item's checked class and the tracked record (which a relocated
 	 * button is rebuilt from) in step, so an external toggle goes through it instead of writing the attribute itself.
@@ -44,6 +55,10 @@ const updateHideEndScreenCardsButtonState = (hideEndScreenCardsPlacement: Button
 	updateFeatureButtonChecked("hideEndScreenCardsButton", cardsAreHidden);
 	if (hideEndScreenCardsPlacement === "feature_menu") return;
 	const icon = getEndScreenCardsButtonIcon(icons, cardsAreHidden);
-	if (icon instanceof SVGSVGElement) updateFeatureButtonIconByName("hideEndScreenCardsButton", icon);
-	updateFeatureButtonTitle("hideEndScreenCardsButton", getEndScreenCardsButtonTitle(cardsAreHidden));
+	if (icon instanceof SVGSVGElement)
+		updateFeatureButtonIconByName("hideEndScreenCardsButton", icon);
+	updateFeatureButtonTitle(
+		"hideEndScreenCardsButton",
+		getEndScreenCardsButtonTitle(cardsAreHidden)
+	);
 };

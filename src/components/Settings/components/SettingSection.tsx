@@ -9,18 +9,29 @@ interface SettingSectionProps {
 	title: string;
 }
 
-export default function SettingSection({ children, className = "", featureIds = [], title: sectionTitle }: SettingSectionProps) {
+export default function SettingSection({
+	children,
+	className = "",
+	featureIds = [],
+	title: sectionTitle
+}: SettingSectionProps) {
 	const { filter } = useSettingsFilter();
 	const matchesText = textMatcher(filter);
 	const shouldSectionBeVisible =
 		filter === "" ||
 		featureIds.some((id) => matchesText(id)) ||
-		(children as React.ReactElement<{ featureId?: string; label?: string; title?: string }>[]).some((child) => {
-			const { featureId, label, title } = child.props ?? {};
-			return matchesText(featureId ?? "") || matchesText(label ?? "") || matchesText(title ?? "");
-		});
+		(children as React.ReactElement<{ featureId?: string; label?: string; title?: string }>[]).some(
+			(child) => {
+				const { featureId, label, title } = child.props ?? {};
+				return matchesText(featureId ?? "") || matchesText(label ?? "") || matchesText(title ?? "");
+			}
+		);
 	return shouldSectionBeVisible ? (
-		<SectionTitleProvider className={className} shouldBeVisible={shouldSectionBeVisible} title={sectionTitle}>
+		<SectionTitleProvider
+			className={className}
+			shouldBeVisible={shouldSectionBeVisible}
+			title={sectionTitle}
+		>
 			{children}
 		</SectionTitleProvider>
 	) : null;

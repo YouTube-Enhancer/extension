@@ -20,13 +20,23 @@ export type ColorPickerProps = {
 	value: string;
 };
 
-const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, disabledReason, label, onChange, value }) => {
-	const handleColorChange = useDebounceFn((value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>), 200);
-	const colorPickerRef = useRef(null);
-	const { isComponentVisible: isColorPickerVisible, setIsComponentVisible: setIsColorPickerVisible } = useComponentVisible<HTMLDivElement>(
-		colorPickerRef,
-		false
+const ColorPicker: React.FC<ColorPickerProps> = ({
+	className,
+	disabled,
+	disabledReason,
+	label,
+	onChange,
+	value
+}) => {
+	const handleColorChange = useDebounceFn(
+		(value: string) => onChange({ currentTarget: { value } } as ChangeEvent<HTMLInputElement>),
+		200
 	);
+	const colorPickerRef = useRef(null);
+	const {
+		isComponentVisible: isColorPickerVisible,
+		setIsComponentVisible: setIsColorPickerVisible
+	} = useComponentVisible<HTMLDivElement>(colorPickerRef, false);
 	const togglePickerVisibility = () => setIsColorPickerVisible(!isColorPickerVisible);
 	useClickOutside(colorPickerRef, () => (isColorPickerVisible ? togglePickerVisibility() : void 0));
 	const disabledPickerClasses = {
@@ -34,7 +44,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ className, disabled, disabled
 		"cursor-pointer": !disabled
 	} satisfies ClassValue;
 	return (
-		<div aria-valuetext={value} className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}>
+		<div
+			aria-valuetext={value}
+			className={cn("relative flex flex-row items-baseline justify-between gap-4", className)}
+		>
 			<label
 				style={{
 					transform: "translateY(-10px)"

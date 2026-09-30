@@ -46,7 +46,10 @@ function pickBuildTargets(installed: Browser[]): Browser[] {
 	for (const type of ["chrome", "firefox"] as const) {
 		const preferredName = type === "chrome" ? "Chrome" : "Firefox";
 		const candidates = installed.filter((browser) => browser.type === type);
-		targets.push(candidates.find((browser) => browser.name === preferredName) ?? candidates[0] ?? { name: preferredName, path: "", type });
+		targets.push(
+			candidates.find((browser) => browser.name === preferredName) ??
+				candidates[0] ?? { name: preferredName, path: "", type }
+		);
 	}
 	return targets;
 }
@@ -65,7 +68,10 @@ export const emptyOutputFolder = async () => {
 	if (!existsSync(outDir)) return;
 	await rm(outDir, { recursive: true, force: true });
 };
-export function flattenLocaleValues(localeFile: LocaleFile, parentKey = ""): { keys: string[]; values: string[] } {
+export function flattenLocaleValues(
+	localeFile: LocaleFile,
+	parentKey = ""
+): { keys: string[]; values: string[] } {
 	let values: string[] = [];
 	let keys: string[] = [];
 	for (const key in localeFile) {

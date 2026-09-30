@@ -36,13 +36,21 @@ export function getAudioEngine(video?: HTMLMediaElement): Nullable<AudioEngine> 
 	volumeGain.connect(context.destination);
 	setupVisibilityResume(context);
 
-	const createdEngine: AudioEngine = { context, input: source, monoEnabled: false, source, volumeGain };
+	const createdEngine: AudioEngine = {
+		context,
+		input: source,
+		monoEnabled: false,
+		source,
+		volumeGain
+	};
 	window.engine = createdEngine;
 	return createdEngine;
 }
 
 function createAudioContext(): AudioContext {
-	return window.AudioContext ? new AudioContext() : new (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext();
+	return window.AudioContext
+		? new AudioContext()
+		: new (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext();
 }
 
 function setupVisibilityResume(context: AudioContext): void {
