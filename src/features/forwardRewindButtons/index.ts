@@ -5,7 +5,12 @@ import type { YouTubePlayerDiv } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { featureConfigManager } from "@/src/features/_registry/featureConfigManager";
-import { addFeatureButton, getFeatureButton, removeFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import {
+	addFeatureButton,
+	getFeatureButton,
+	removeFeatureButton,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -33,18 +38,26 @@ export default createFeature({
 				await addFeatureButton(
 					"rewindButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
-						TIME: Measure.of(time, seconds).toString()
-					}),
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label,
+						{
+							TIME: Measure.of(time, seconds).toString()
+						}
+					),
 					getFeatureIcon("rewindButton", placement),
 					() => void speedButtonListener("backward"),
 					false,
 					false,
 					fullscreenPlacement,
 					() =>
-						window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
-							TIME: Measure.of(time, seconds).toString()
-						})
+						window.i18nextInstance.t(
+							(translations) =>
+								translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label,
+							{
+								TIME: Measure.of(time, seconds).toString()
+							}
+						)
 				);
 			},
 			name: "rewindButton",
@@ -70,18 +83,27 @@ export default createFeature({
 				await addFeatureButton(
 					"forwardButton",
 					placement,
-					window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
-						TIME: Measure.of(time, seconds).toString()
-					}),
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label,
+						{
+							TIME: Measure.of(time, seconds).toString()
+						}
+					),
 					getFeatureIcon("forwardButton", placement),
 					() => void speedButtonListener("forward"),
 					false,
 					false,
 					fullscreenPlacement,
 					() =>
-						window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
-							TIME: Measure.of(time, seconds).toString()
-						})
+						window.i18nextInstance.t(
+							(translations) =>
+								translations.pages.content.features.forwardRewindButtons.buttons.forwardButton
+									.label,
+							{
+								TIME: Measure.of(time, seconds).toString()
+							}
+						)
 				);
 			},
 			name: "forwardButton",
@@ -99,15 +121,23 @@ export default createFeature({
 	onConfigChange: ({ time }) => {
 		updateFeatureButtonTitle(
 			"forwardButton",
-			window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label, {
-				TIME: Measure.of(time, seconds).toString()
-			})
+			window.i18nextInstance.t(
+				(translations) =>
+					translations.pages.content.features.forwardRewindButtons.buttons.forwardButton.label,
+				{
+					TIME: Measure.of(time, seconds).toString()
+				}
+			)
 		);
 		updateFeatureButtonTitle(
 			"rewindButton",
-			window.i18nextInstance.t((translations) => translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label, {
-				TIME: Measure.of(time, seconds).toString()
-			})
+			window.i18nextInstance.t(
+				(translations) =>
+					translations.pages.content.features.forwardRewindButtons.buttons.rewindButton.label,
+				{
+					TIME: Measure.of(time, seconds).toString()
+				}
+			)
 		);
 	}
 });

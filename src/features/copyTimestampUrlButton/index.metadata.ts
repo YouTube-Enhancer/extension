@@ -6,7 +6,9 @@ import { buttonPlacements } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	button: "copyTimestampUrlButton",
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") } },
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_right") }
+	},
 	dependencies: { includePages: ["watch"] },
 	id: "copyTimestampUrlButton",
 	loadPhase: 1,
@@ -14,8 +16,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "copyTimestampUrlButton.button.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.copyTimestampUrlButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.copyTimestampUrlButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.copyTimestampUrlButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.copyTimestampUrlButton.enable.title)
 		}
 	]
 });

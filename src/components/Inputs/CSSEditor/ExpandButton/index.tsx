@@ -10,22 +10,29 @@ type ExpandButtonProps = {
 	onToggle: () => void;
 	t?: TFunction;
 };
-const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(({ isExpanded, onToggle, t: tProp }, ref) => {
-	const t = tProp ?? useSettings().i18nInstance.t;
-	const buttonValue = t((translations) =>
-		isExpanded ? translations.settings.sections.customCSS.extras.collapse : translations.settings.sections.customCSS.extras.expand
-	);
-	return (
-		<input
-			className={cn("my-2 flex self-start rounded-md bg-[rgba(43,43,43,1)] p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(43,43,43,0.5)]", {
-				"ml-2": isExpanded
-			})}
-			onClick={onToggle}
-			ref={ref}
-			type="button"
-			value={buttonValue}
-		/>
-	);
-});
+const ExpandButton = forwardRef<HTMLInputElement, ExpandButtonProps>(
+	({ isExpanded, onToggle, t: tProp }, ref) => {
+		const t = tProp ?? useSettings().i18nInstance.t;
+		const buttonValue = t((translations) =>
+			isExpanded
+				? translations.settings.sections.customCSS.extras.collapse
+				: translations.settings.sections.customCSS.extras.expand
+		);
+		return (
+			<input
+				className={cn(
+					"my-2 flex self-start rounded-md bg-[rgba(43,43,43,1)] p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(43,43,43,0.5)]",
+					{
+						"ml-2": isExpanded
+					}
+				)}
+				onClick={onToggle}
+				ref={ref}
+				type="button"
+				value={buttonValue}
+			/>
+		);
+	}
+);
 ExpandButton.displayName = "ExpandButton";
 export default ExpandButton;

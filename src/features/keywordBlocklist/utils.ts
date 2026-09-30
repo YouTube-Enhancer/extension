@@ -1,5 +1,7 @@
 export function createKeywordMatcher(keywords: string[]): (title: string) => boolean {
-	const normalizedKeywords = Array.from(new Set(keywords.map(normalizeForMatch).filter((keyword) => keyword.length > 0)));
+	const normalizedKeywords = Array.from(
+		new Set(keywords.map(normalizeForMatch).filter((keyword) => keyword.length > 0))
+	);
 	if (normalizedKeywords.length === 0) return () => false;
 	return (title: string) => {
 		const normalizedTitle = normalizeForMatch(title);

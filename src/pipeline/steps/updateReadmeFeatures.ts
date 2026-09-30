@@ -1,7 +1,12 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import type { FeatureKeys, FeatureMetadata, FeatureSettingNode, SettingConfig } from "@/src/features/_registry/types";
+import type {
+	FeatureKeys,
+	FeatureMetadata,
+	FeatureSettingNode,
+	SettingConfig
+} from "@/src/features/_registry/types";
 import type { Nullable, TSelectFunc } from "@/src/types";
 
 import { isGroupNode, isSettingNode } from "@/src/features/_registry/types";
@@ -28,7 +33,8 @@ type RenderedReadme = {
 	path: string;
 };
 
-const startMarker = "<!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->";
+const startMarker =
+	"<!-- YOUTUBE-ENHANCER-FEATURES-LIST:START - Do not remove or modify this section -->";
 const endMarker = "<!-- YOUTUBE-ENHANCER-FEATURES-LIST:END -->";
 
 /** True when the committed README already matches what the metadata generates. Used by `pnpm run lint:readme`. */
@@ -52,25 +58,36 @@ export default async function updateReadmeFeatures(): Promise<void> {
 	terminalColorLog("README.md features generated successfully", "success");
 }
 
-function extractOptions<F extends FeatureKeys>(node: SettingConfig<F>, t: TFunction): string[] | undefined {
-	const nodeWithOptions = node as unknown as { optionsFrom?: () => { label: TSelectFunc; value: string }[] };
+function extractOptions<F extends FeatureKeys>(
+	node: SettingConfig<F>,
+	t: TFunction
+): string[] | undefined {
+	const nodeWithOptions = node as unknown as {
+		optionsFrom?: () => { label: TSelectFunc; value: string }[];
+	};
 	const { optionsFrom } = nodeWithOptions;
 	if (typeof optionsFrom !== "function") return undefined;
 	try {
 		const opts = optionsFrom();
 		if (!Array.isArray(opts)) return undefined;
-		return opts.map((opt: { label: TSelectFunc; value: string }) => safeResolve(opt.label, t)).filter(Boolean);
+		return opts
+			.map((opt: { label: TSelectFunc; value: string }) => safeResolve(opt.label, t))
+			.filter(Boolean);
 	} catch {
 		return undefined;
 	}
 }
 
-function extractSettings<F extends FeatureKeys>(metadata: FeatureMetadata<F>, t: TFunction): FeatureData[] {
+function extractSettings<F extends FeatureKeys>(
+	metadata: FeatureMetadata<F>,
+	t: TFunction
+): FeatureData[] {
 	const results: FeatureData[] = [];
 
 	const walk = (node: FeatureSettingNode<F>, section: string) => {
 		if (isGroupNode<F>(node)) {
-			const nextSection = "section" in node && typeof node.section === "string" ? node.section : section;
+			const nextSection =
+				"section" in node && typeof node.section === "string" ? node.section : section;
 			for (const child of node.children) {
 				walk(child, nextSection);
 			}
@@ -78,8 +95,13 @@ function extractSettings<F extends FeatureKeys>(metadata: FeatureMetadata<F>, t:
 		}
 
 		if (isSettingNode<F>(node)) {
-			const resolvedSection = typeof node.section === "string" && node.section.length > 0 ? node.section : sectionFallback(section);
-			const isCustomCssCode = metadata.id === "customCSS" && (String(node.id) === "code" || String(node.id).endsWith(".code"));
+			const resolvedSection =
+				typeof node.section === "string" && node.section.length > 0
+					? node.section
+					: sectionFallback(section);
+			const isCustomCssCode =
+				metadata.id === "customCSS" &&
+				(String(node.id) === "code" || String(node.id).endsWith(".code"));
 
 			if (isCustomCssCode) {
 				results.push({
@@ -157,19 +179,30 @@ function renderFeatureList(metadata: FeatureMetadata<FeatureKeys>[], t: TFunctio
 	for (const section of sortedSections) {
 		const features = sectionMap.get(section)!;
 		const sortedFeatures = sortSettingsByComponent(features);
-		const { length: sectionFeatureCount } = sortedFeatures.filter((f) => f.component === "checkbox");
-		const { length: sectionSettingsCount } = sortedFeatures.filter((f) => f.component !== "checkbox");
+		const { length: sectionFeatureCount } = sortedFeatures.filter(
+			(f) => f.component === "checkbox"
+		);
+		const { length: sectionSettingsCount } = sortedFeatures.filter(
+			(f) => f.component !== "checkbox"
+		);
 		const settingsBadge = sectionSettingsCount > 0 ? ` (${sectionSettingsCount} settings)` : "";
-		const sectionTitle = sectionFeatureCount > 1 ? `${toTitleCase(section)} • ${sectionFeatureCount} features${settingsBadge}` : toTitleCase(section);
+		const sectionTitle =
+			sectionFeatureCount > 1
+				? `${toTitleCase(section)} • ${sectionFeatureCount} features${settingsBadge}`
+				: toTitleCase(section);
 		markdown += `<details>\n<summary>${sectionTitle}</summary>\n\n`;
 
 		for (const feature of sortedFeatures) {
 			const isCustomCssCode = feature.id === "customCSS" && feature.settingId === "code";
 			const label = isCustomCssCode && feature.missingLabel ? "CSS Code" : feature.label;
-			const title = isCustomCssCode && feature.missingTitle ? "Custom CSS code input" : feature.title;
+			const title =
+				isCustomCssCode && feature.missingTitle ? "Custom CSS code input" : feature.title;
 			const missingLabel = isCustomCssCode ? false : feature.missingLabel;
 			const missingTitle = isCustomCssCode ? false : feature.missingTitle;
-			const flags = [missingLabel ? "missing_label" : "", missingTitle ? "missing_title" : ""].filter(Boolean);
+			const flags = [
+				missingLabel ? "missing_label" : "",
+				missingTitle ? "missing_title" : ""
+			].filter(Boolean);
 			const debug = flags.length ? ` ⚠️ [${flags.join(", ")}]` : "";
 			const titleCasedLabel = toTitleCase(label).replace(/\(d B\)/g, "(dB)");
 			let line = `- **${titleCasedLabel}**: ${title}${debug}`;
@@ -201,11 +234,17 @@ async function renderReadme(): Promise<Nullable<RenderedReadme>> {
 
 	const translations = JSON.parse(readFileSync(localesPath, "utf-8")) as TranslationRoot;
 	const t = createT(translations);
-	const metadata = (await loadFeatureMetadata()).flatMap(({ metadata }) => (metadata ? [metadata] : []));
+	const metadata = (await loadFeatureMetadata()).flatMap(({ metadata }) =>
+		metadata ? [metadata] : []
+	);
 	const markdown = renderFeatureList(metadata, t);
 
 	const insertionStart = startIndex + startMarker.length;
-	const next = readmeContent.substring(0, insertionStart) + "\n\n" + markdown + readmeContent.substring(endIndex);
+	const next =
+		readmeContent.substring(0, insertionStart) +
+		"\n\n" +
+		markdown +
+		readmeContent.substring(endIndex);
 	return { current: readmeContent, next, path: readmePath };
 }
 

@@ -11,8 +11,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideVideoDuration.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideVideoDuration.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideVideoDuration.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideVideoDuration.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.hideVideoDuration.enable.title)
 		}
 	]
 });

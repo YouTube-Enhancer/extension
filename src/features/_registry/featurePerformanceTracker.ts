@@ -59,14 +59,18 @@ class FeaturePerformanceTracker {
 
 	constructor() {
 		if (DEV_MODE) {
-			(window as unknown as Window & { featurePerformanceTracker: FeaturePerformanceTracker }).featurePerformanceTracker = this;
+			(
+				window as unknown as Window & { featurePerformanceTracker: FeaturePerformanceTracker }
+			).featurePerformanceTracker = this;
 		}
 	}
 	static serializeError(error: unknown, depth = 0): unknown {
 		if (depth > 5) return String(error);
 		if (error instanceof Error) {
 			return {
-				cause: error.cause ? FeaturePerformanceTracker.serializeError(error.cause, depth + 1) : undefined,
+				cause: error.cause
+					? FeaturePerformanceTracker.serializeError(error.cause, depth + 1)
+					: undefined,
 				message: error.message,
 				name: error.name,
 				stack: error.stack
@@ -127,7 +131,10 @@ class FeaturePerformanceTracker {
 			// Since all features use the same group in parallel mode, we take max within each group
 			groups.set(group, Math.max(current, m.duration));
 		}
-		const total = Array.from(groups.values()).reduce((sum, groupDuration) => sum + groupDuration, 0);
+		const total = Array.from(groups.values()).reduce(
+			(sum, groupDuration) => sum + groupDuration,
+			0
+		);
 		const byPhase: Record<string, FeatureMetric[]> = {};
 
 		for (const m of metrics) (byPhase[m.phase] ??= []).push(m);
@@ -140,7 +147,9 @@ class FeaturePerformanceTracker {
 			const hasChildren = phaseChildren > 0.01;
 			const childInfo = hasChildren ? ` (${phaseChildren.toFixed(2)}ms children)` : "";
 
-			console.log(`- ${phase}: ${phaseMetrics.length} calls, ${phaseExclusive.toFixed(2)}ms excl.${childInfo}`);
+			console.log(
+				`- ${phase}: ${phaseMetrics.length} calls, ${phaseExclusive.toFixed(2)}ms excl.${childInfo}`
+			);
 		}
 		console.table(this.getSlowest(10));
 		console.groupEnd();
@@ -188,7 +197,9 @@ class FeaturePerformanceTracker {
 		const contextId = ++this.activeContextId;
 		const start = performance.now();
 		const label: PhaseLabel = subPhase ? `${phase}:${subPhase}` : phase;
-		const stackTrace = this.captureStackTraces ? new Error().stack?.split("\n").slice(1, 4).join("\n") : undefined;
+		const stackTrace = this.captureStackTraces
+			? new Error().stack?.split("\n").slice(1, 4).join("\n")
+			: undefined;
 
 		// Determine effective parent — only same-feature context qualifies
 		const stackTopId = stack.length > 0 ? stack[stack.length - 1] : null;
@@ -225,7 +236,11 @@ class FeaturePerformanceTracker {
 			const context = contexts.get(contextId);
 
 			if (context) {
-				const { childDuration, depth: contextDepth, parentContextId: contextParentContextId } = context;
+				const {
+					childDuration,
+					depth: contextDepth,
+					parentContextId: contextParentContextId
+				} = context;
 
 				if (contextParentContextId) {
 					const parentContext = contexts.get(contextParentContextId);
@@ -236,7 +251,10 @@ class FeaturePerformanceTracker {
 				}
 				const exclusiveDuration = duration - childDuration;
 
-				this.record(id, label, duration, exclusiveDuration, contextDepth, { callStack: stackTrace, concurrencyGroup: options?.concurrencyGroup });
+				this.record(id, label, duration, exclusiveDuration, contextDepth, {
+					callStack: stackTrace,
+					concurrencyGroup: options?.concurrencyGroup
+				});
 				contexts.delete(contextId);
 			}
 
@@ -289,7 +307,11 @@ class FeaturePerformanceTracker {
 		duration: number,
 		exclusiveDuration: number,
 		depth: number,
-		context?: { callStack?: string; concurrencyGroup?: number; errorContext?: Nullable<{ error: unknown; featureId: PerfId; operation: string }> }
+		context?: {
+			callStack?: string;
+			concurrencyGroup?: number;
+			errorContext?: Nullable<{ error: unknown; featureId: PerfId; operation: string }>;
+		}
 	) {
 		const { metrics } = this;
 

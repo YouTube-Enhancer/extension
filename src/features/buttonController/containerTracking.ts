@@ -19,11 +19,16 @@ export function getCachedContainer(placement: ButtonPlacement): HTMLElement | un
 	return containerCache.get(placement);
 }
 
-export function getEffectivePlacement(placement: ButtonPlacement, fullscreenPlacement: FullscreenPlacement): ButtonPlacement {
+export function getEffectivePlacement(
+	placement: ButtonPlacement,
+	fullscreenPlacement: FullscreenPlacement
+): ButtonPlacement {
 	return isFullscreen() && fullscreenPlacement !== "same" ? fullscreenPlacement : placement;
 }
 
-export async function getOrCreateButtonContainer(inTheaterMode: boolean): Promise<Nullable<HTMLDivElement>> {
+export async function getOrCreateButtonContainer(
+	inTheaterMode: boolean
+): Promise<Nullable<HTMLDivElement>> {
 	let container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
 	if (container) {
 		return container;
@@ -35,7 +40,9 @@ export async function getOrCreateButtonContainer(inTheaterMode: boolean): Promis
 	});
 	if (inTheaterMode) {
 		const isNewLayout = isNewYouTubeVideoLayout();
-		const parent = isNewLayout ? document.querySelector<HTMLElement>("ytd-watch-grid") : document.querySelector<HTMLElement>("ytd-watch-flexy");
+		const parent = isNewLayout
+			? document.querySelector<HTMLElement>("ytd-watch-grid")
+			: document.querySelector<HTMLElement>("ytd-watch-flexy");
 		if (!parent) return null;
 		const columns = parent.querySelector("#columns");
 		if (columns) {
@@ -45,14 +52,19 @@ export async function getOrCreateButtonContainer(inTheaterMode: boolean): Promis
 		parent.append(container);
 		return container;
 	}
-	const player = await waitForElement<HTMLDivElement>("div#primary > div#primary-inner > div#player");
+	const player = await waitForElement<HTMLDivElement>(
+		"div#primary > div#primary-inner > div#player"
+	);
 	if (!player) return null;
 	player.insertAdjacentElement("afterend", container);
 	return container;
 }
 
 export async function getOrCreateRightControlsContainer(): Promise<Nullable<HTMLDivElement>> {
-	const rightControls = await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
+	const rightControls = await waitForElement<HTMLDivElement>(
+		playerControlsSelectors.player_controls_right,
+		15000
+	);
 	if (!rightControls) return null;
 	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);
 	if (!container) {
@@ -77,16 +89,24 @@ export async function getPlacementRoot(placement: ButtonPlacement) {
 		case "player_controls_left":
 			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_left);
 		case "player_controls_right":
-			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_right, 15000);
+			return await waitForElement<HTMLDivElement>(
+				playerControlsSelectors.player_controls_right,
+				15000
+			);
 	}
 }
 
 export function getPlacementSelector(placement: ButtonPlacement): string | undefined {
 	if (placement === "below_player") {
-		return isInTheaterMode() ? (isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy") : "div#primary > div#primary-inner > div#player";
+		return isInTheaterMode()
+			? isNewYouTubeVideoLayout()
+				? "ytd-watch-grid"
+				: "ytd-watch-flexy"
+			: "div#primary > div#primary-inner > div#player";
 	}
 	if (placement === "feature_menu") return "#yte-feature-menu";
-	if (placement === "player_controls_left" || placement === "player_controls_right") return playerControlsSelectors[placement];
+	if (placement === "player_controls_left" || placement === "player_controls_right")
+		return playerControlsSelectors[placement];
 	return undefined;
 }
 
@@ -94,7 +114,10 @@ export function invalidateContainerCache() {
 	containerCache.clear();
 }
 
-export async function placeButton(button: HTMLButtonElement, placement: Exclude<ButtonPlacement, "feature_menu">) {
+export async function placeButton(
+	button: HTMLButtonElement,
+	placement: Exclude<ButtonPlacement, "feature_menu">
+) {
 	switch (placement) {
 		case "below_player": {
 			const inTheaterMode = isInTheaterMode();

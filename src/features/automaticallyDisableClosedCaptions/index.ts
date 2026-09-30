@@ -26,12 +26,17 @@ function disableCaptions() {
 	captionsWhereEnabled = false;
 	quietAttempts = 0;
 	// A pre-roll ad can run for the better part of a minute; the attempts have to outlast it.
-	void registry.playerManager.executeWithRetries("automaticallyDisableClosedCaptions", [disableCaptionsTask], ["disableCaptions"], {
-		interval: 500,
-		maxAttempts: 120,
-		overallTimeout: 60_000,
-		waitForLoaded: true
-	});
+	void registry.playerManager.executeWithRetries(
+		"automaticallyDisableClosedCaptions",
+		[disableCaptionsTask],
+		["disableCaptions"],
+		{
+			interval: 500,
+			maxAttempts: 120,
+			overallTimeout: 60_000,
+			waitForLoaded: true
+		}
+	);
 }
 
 /**

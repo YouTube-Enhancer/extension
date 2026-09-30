@@ -38,7 +38,9 @@ export default function ChartsContainer({
 					<button
 						className={cn(
 							"rounded px-3 py-1.5 text-sm",
-							chartType === type.id ? "bg-[#007acc] text-white" : "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
+							chartType === type.id
+								? "bg-[#007acc] text-white"
+								: "bg-[#2d2d2d] text-[#d4d4d4] hover:bg-[#3c3c3c]"
 						)}
 						key={type.id}
 						onClick={() => setChartType(type.id)}

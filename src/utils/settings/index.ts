@@ -7,7 +7,10 @@ export function isButtonSelectDisabled(buttonName: AllButtonNames, settings: con
 	if (!settingName) return true;
 	switch (buttonName) {
 		case "volumeBoostButton": {
-			return settings.volumeBoost.mode === "global" || (settings[settingName] as { enabled?: boolean }).enabled === false;
+			return (
+				settings.volumeBoost.mode === "global" ||
+				(settings[settingName] as { enabled?: boolean }).enabled === false
+			);
 		}
 		default: {
 			const { [settingName]: featureSetting } = settings;

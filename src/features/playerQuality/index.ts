@@ -7,7 +7,12 @@ import { lookupItag } from "@/src/utils/player/itagDb";
 import { chooseClosestQuality } from "@/src/utils/player/quality";
 import { isLivePage, isShortsPage, isWatchPage } from "@/src/utils/url";
 
-import type { FpsPreference, PlayerQualityFallbackStrategy, PlayerQualityRequestApi, YoutubePlayerQualityLevel } from "./types";
+import type {
+	FpsPreference,
+	PlayerQualityFallbackStrategy,
+	PlayerQualityRequestApi,
+	YoutubePlayerQualityLevel
+} from "./types";
 
 import { metadata } from "./index.metadata";
 
@@ -56,16 +61,27 @@ function attachQualityChangeListener(player: YouTubePlayerDiv): void {
  * feature is placing its own request.
  */
 function canDetectForeignQuality(): boolean {
-	return enforcement.verifiedOnce && !enforcement.overrideDetected && !enforcement.pendingOwnApply && !isAdShowing();
+	return (
+		enforcement.verifiedOnce &&
+		!enforcement.overrideDetected &&
+		!enforcement.pendingOwnApply &&
+		!isAdShowing()
+	);
 }
 
-function chooseBestFormat(closestQuality: string, preferPremium: boolean, fpsPreference: FpsPreference): Nullable<number> {
+function chooseBestFormat(
+	closestQuality: string,
+	preferPremium: boolean,
+	fpsPreference: FpsPreference
+): Nullable<number> {
 	const player = getPlayer();
 	if (!player?.getAvailableQualityData) return null;
 
 	const qualityData = player.getAvailableQualityData();
 	// Entries without a format id cannot be requested by format; the level alone is applied then.
-	const matching = qualityData.filter((q) => q.quality === closestQuality && typeof q.formatId === "number");
+	const matching = qualityData.filter(
+		(q) => q.quality === closestQuality && typeof q.formatId === "number"
+	);
 	if (!matching.length) return null;
 
 	if (matching.length === 1) {
@@ -134,7 +150,12 @@ async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
 	 * buffering its way to a newly requested quality.
 	 */
 	if (hasForeignQualityRequest(player)) return true;
-	if (!enforcement.appliedQuality || !canDetectForeignQuality() || Date.now() < enforcement.settleUntil) return false;
+	if (
+		!enforcement.appliedQuality ||
+		!canDetectForeignQuality() ||
+		Date.now() < enforcement.settleUntil
+	)
+		return false;
 
 	const stats = player.getVideoStats();
 	if (enforcement.appliedFormatId != null && typeof stats?.fmt === "number") {
@@ -142,7 +163,11 @@ async function hasForeignQuality(player: YouTubePlayerDiv): Promise<boolean> {
 	}
 
 	const playbackQuality = await player.getPlaybackQuality();
-	return !!playbackQuality && playbackQuality !== "unknown" && playbackQuality !== enforcement.appliedQuality;
+	return (
+		!!playbackQuality &&
+		playbackQuality !== "unknown" &&
+		playbackQuality !== enforcement.appliedQuality
+	);
 }
 
 /**
@@ -186,9 +211,11 @@ function makeApplyQualityTasks(
 		 * quality range set on it takes effect when playback starts. It is only trusted once it holds the video the
 		 * page is on, so a player still carrying the previous video after a navigation waits for a later attempt.
 		 */
-		if ((!currentQuality || currentQuality === "unknown") && !playerHoldsCurrentVideo(player)) return false;
+		if ((!currentQuality || currentQuality === "unknown") && !playerHoldsCurrentVideo(player))
+			return false;
 
-		const availableLevels = (await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
+		const availableLevels =
+			(await player.getAvailableQualityLevels()) as YoutubePlayerQualityLevel[];
 		if (!availableLevels.length) return false;
 
 		if (!quality || quality === "auto") return true;
@@ -229,7 +256,8 @@ function makeApplyQualityTasks(
 			 * baseline, so the verify task records one once the level is seen playing.
 			 */
 			const requestedQuality = readRequestedQuality(player);
-			enforcement.requestedQuality = requestedQuality && requestedQuality !== "auto" ? requestedQuality : null;
+			enforcement.requestedQuality =
+				requestedQuality && requestedQuality !== "auto" ? requestedQuality : null;
 		} finally {
 			enforcement.pendingOwnApply = false;
 			enforcement.settleUntil = Date.now() + OWN_SWITCH_SETTLE_MS;
@@ -281,7 +309,10 @@ function makeRestoreQualityTask(): () => Promise<boolean> {
 function markManualOverride(): void {
 	if (enforcement.overrideDetected) return;
 	enforcement.overrideDetected = true;
-	browserColorLog("Manual quality change detected - suspending enforcement until navigation or config change", "FgYellow");
+	browserColorLog(
+		"Manual quality change detected - suspending enforcement until navigation or config change",
+		"FgYellow"
+	);
 	registry.playerManager.cleanup(metadata.id);
 }
 
@@ -292,7 +323,9 @@ function markManualOverride(): void {
  */
 /** Whether the player reports the video the page is on, rather than the one it played before a navigation. */
 function playerHoldsCurrentVideo(player: YouTubePlayerDiv): boolean {
-	const { getVideoData } = player as unknown as { getVideoData?: () => undefined | { video_id?: string } };
+	const { getVideoData } = player as unknown as {
+		getVideoData?: () => undefined | { video_id?: string };
+	};
 	if (typeof getVideoData !== "function") return false;
 	const videoId = getVideoData.call(player)?.video_id;
 	if (!videoId) return false;
@@ -304,7 +337,11 @@ function readRequestedQuality(player: YouTubePlayerDiv): Nullable<string> {
 	if (typeof getPreferredQuality !== "function") return null;
 	try {
 		const requestedQuality: unknown = getPreferredQuality.call(player);
-		return typeof requestedQuality === "string" && requestedQuality !== "" && requestedQuality !== "unknown" ? requestedQuality : null;
+		return typeof requestedQuality === "string" &&
+			requestedQuality !== "" &&
+			requestedQuality !== "unknown"
+			? requestedQuality
+			: null;
 	} catch {
 		return null;
 	}
@@ -328,11 +365,16 @@ export default createFeature({
 		// change, which supersedes the restore run below before it has done anything, so it goes first.
 		registry.playerManager.cleanup(metadata.id);
 		detachQualityChangeListener();
-		void registry.playerManager.executeWithRetries(metadata.id, [makeRestoreQualityTask()], ["restoreQuality"], {
-			maxAttempts: 10,
-			pageTypes: ["watch", "live", "shorts"],
-			waitForLoaded: true
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeRestoreQualityTask()],
+			["restoreQuality"],
+			{
+				maxAttempts: 10,
+				pageTypes: ["watch", "live", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	},
 	onEnable: async ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		resetEnforcementState();
@@ -340,22 +382,42 @@ export default createFeature({
 		if (player && player.getPlaybackQuality) {
 			currentQuality = (await player.getPlaybackQuality()) as YoutubePlayerQualityLevel;
 		}
-		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
-		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
-			maxAttempts: 30,
-			onPlayerStateChange: true,
-			pageTypes: ["watch", "live", "shorts"],
-			waitForLoaded: true
-		});
+		const [applyTask, verifyTask] = makeApplyQualityTasks(
+			fallbackStrategy,
+			quality,
+			preferPremium ?? false,
+			fpsPreference ?? "default"
+		);
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[applyTask, verifyTask],
+			["applyQuality", "verifyQuality"],
+			{
+				maxAttempts: 30,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "live", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	},
 	onNavigate: ({ fallbackStrategy, fpsPreference, preferPremium, quality }) => {
 		resetEnforcementState();
-		const [applyTask, verifyTask] = makeApplyQualityTasks(fallbackStrategy, quality, preferPremium ?? false, fpsPreference ?? "default");
-		void registry.playerManager.executeWithRetries(metadata.id, [applyTask, verifyTask], ["applyQuality", "verifyQuality"], {
-			maxAttempts: 30,
-			onPlayerStateChange: true,
-			pageTypes: ["watch", "live", "shorts"],
-			waitForLoaded: true
-		});
+		const [applyTask, verifyTask] = makeApplyQualityTasks(
+			fallbackStrategy,
+			quality,
+			preferPremium ?? false,
+			fpsPreference ?? "default"
+		);
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[applyTask, verifyTask],
+			["applyQuality", "verifyQuality"],
+			{
+				maxAttempts: 30,
+				onPlayerStateChange: true,
+				pageTypes: ["watch", "live", "shorts"],
+				waitForLoaded: true
+			}
+		);
 	}
 });

@@ -2,7 +2,10 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/src/utils/style";
 
-type LinkProps = React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement> & {
+type LinkProps = React.DetailedHTMLProps<
+	React.AnchorHTMLAttributes<HTMLAnchorElement>,
+	HTMLAnchorElement
+> & {
 	children: ReactNode;
 	className?: string;
 };

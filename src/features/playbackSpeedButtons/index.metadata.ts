@@ -6,7 +6,10 @@ import { buttonPlacements, youtubePlayerSpeedStep } from "@/src/types";
 
 export const metadata = createFeatureMetadata({
 	button: ["decreasePlaybackSpeedButton", "increasePlaybackSpeedButton"],
-	config: { button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") }, speed: field(z.number(), 0.25) },
+	config: {
+		button: { ...buttonField, placement: field(z.enum(buttonPlacements), "player_controls_left") },
+		speed: field(z.number(), 0.25)
+	},
 	dependencies: { includePages: ["watch"] },
 	id: "playbackSpeedButtons",
 	loadPhase: 1,

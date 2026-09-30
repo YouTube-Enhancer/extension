@@ -15,7 +15,14 @@ import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentVideoId } from "@/src/utils/url";
 import { isVideoInPlaylist } from "@/src/utils/youtube";
 
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, LOCKUP_MENU_WRAPPER_SELECTOR, LOCKUP_SELECTOR, SAVED_ICON, UNSAVED_ICON } from "./constants";
+import {
+	ACTIONS_ROW_SELECTOR,
+	BUTTON_CLASS,
+	LOCKUP_MENU_WRAPPER_SELECTOR,
+	LOCKUP_SELECTOR,
+	SAVED_ICON,
+	UNSAVED_ICON
+} from "./constants";
 import { performPlaylistEdit } from "./saveActions";
 
 // YouTube's renderer elements expose their props on a data property.
@@ -60,15 +67,22 @@ export function createRowButtonController(isCurrent: () => boolean) {
 	const rowSaved = new Map<string, boolean>();
 	let pending = false;
 
-	function buildButton(saved: boolean): Nullable<{ host: YtButtonViewModelElement; sibling: YtButtonViewModelElement }> {
+	function buildButton(
+		saved: boolean
+	): Nullable<{ host: YtButtonViewModelElement; sibling: YtButtonViewModelElement }> {
 		const menuRenderer = document.querySelector<PolymerDataElement>(ACTIONS_ROW_SELECTOR);
-		const sibling = menuRenderer?.querySelector<YtButtonViewModelElement>(`yt-button-view-model:not(.${BUTTON_CLASS})`);
+		const sibling = menuRenderer?.querySelector<YtButtonViewModelElement>(
+			`yt-button-view-model:not(.${BUTTON_CLASS})`
+		);
 		if (!sibling?.parentElement) return null;
 		const host = createSaveButton({
 			saved,
 			scopeClasses: readScopeClasses(sibling),
 			// The renderer data overrides the tonal default.
-			variant: { type: "BUTTON_VIEW_MODEL_TYPE_TONAL", ...findButtonVariantInData(menuRenderer?.data) }
+			variant: {
+				type: "BUTTON_VIEW_MODEL_TYPE_TONAL",
+				...findButtonVariantInData(menuRenderer?.data)
+			}
 		});
 		return { host, sibling };
 	}
@@ -99,7 +113,10 @@ export function createRowButtonController(isCurrent: () => boolean) {
 				if (rowSaved.has(videoId)) return;
 				if (membershipCheck?.videoId !== videoId) {
 					// When the check is not possible, keep the unsaved state.
-					membershipCheck = { inWatchLater: isVideoInPlaylist(videoId, "WL").catch(() => false), videoId };
+					membershipCheck = {
+						inWatchLater: isVideoInPlaylist(videoId, "WL").catch(() => false),
+						videoId
+					};
 				}
 				const inWatchLater = await membershipCheck.inWatchLater;
 				// A click can settle the state while the check awaited. The click wins.
@@ -124,7 +141,10 @@ export function createRowButtonController(isCurrent: () => boolean) {
 					if (saved) {
 						dispatchNativeCommand(
 							buildToastCommand(
-								window.i18nextInstance.t((translations) => translations.pages.content.features.saveToWatchLaterButton.extras.removedVideo)
+								window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.saveToWatchLaterButton.extras.removedVideo
+								)
 							)
 						);
 					}
@@ -178,5 +198,8 @@ function isSaveableVideoData(data: NonNullable<ReturnType<typeof readLockupData>
 function warnSelectorDriftOnce() {
 	if (warnedSelectorDrift) return;
 	warnedSelectorDrift = true;
-	browserColorLog("A saveable video card has no menu button wrapper. YouTube may have changed its layout.", "warning");
+	browserColorLog(
+		"A saveable video card has no menu button wrapper. YouTube may have changed its layout.",
+		"warning"
+	);
 }

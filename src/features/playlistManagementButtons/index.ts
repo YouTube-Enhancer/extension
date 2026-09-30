@@ -14,7 +14,10 @@ import {
 	REMOVE_BUTTON_CLASS,
 	RESET_BUTTON_CLASS
 } from "@/src/features/playlistManagementButtons/constants";
-import { removeFromHistory, removeFromPlaylist } from "@/src/features/playlistManagementButtons/utils";
+import {
+	removeFromHistory,
+	removeFromPlaylist
+} from "@/src/features/playlistManagementButtons/utils";
 import { IsDarkMode } from "@/src/utils/dom/state";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { getThumbnailOverlay, getWatchedPercentage } from "@/src/utils/video";
@@ -54,7 +57,9 @@ const cleanupPlaylistManagementButtons = () => {
 	}
 	const playlistItems = document.querySelectorAll(PLAYLIST_ITEM_SELECTOR);
 	playlistItems.forEach((item) => {
-		item.querySelectorAll(`.${REMOVE_BUTTON_CLASS}, .${RESET_BUTTON_CLASS}`).forEach((btn) => btn.remove());
+		item
+			.querySelectorAll(`.${REMOVE_BUTTON_CLASS}, .${RESET_BUTTON_CLASS}`)
+			.forEach((btn) => btn.remove());
 	});
 };
 
@@ -70,14 +75,22 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 	};
 	document.addEventListener("yt-action", preparePageDisposeListener);
 	void (async () => {
-		if (!(await waitForElement("ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)", 2500, "optional"))) {
+		if (
+			!(await waitForElement(
+				"ytd-playlist-video-list-renderer #sort-filter-menu:not(:empty)",
+				2500,
+				"optional"
+			))
+		) {
 			return;
 		}
 		if (isStale()) return;
 
 		async function addButtonToPlaylistItems() {
 			if (isStale()) return;
-			const playlistItems = document.querySelectorAll(`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`);
+			const playlistItems = document.querySelectorAll(
+				`${PLAYLIST_ITEM_SELECTOR}:has(ytd-thumbnail-overlay-time-status-renderer)`
+			);
 			for (const item of playlistItems) {
 				const menu = item.querySelector("#menu");
 				if (!menu) {
@@ -102,9 +115,13 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							await removeFromPlaylist(playlistId, setVideoId);
 							await addRemoveAllButton();
 						},
-						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToRemoveVideo,
-						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo,
-						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.removingVideo
+						translationError: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras
+								.failedToRemoveVideo,
+						translationHover: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras.removeVideo,
+						translationProcessing: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras.removingVideo
 					});
 					if (item.querySelector(`.${REMOVE_BUTTON_CLASS}`)) continue;
 					removeButton.style.verticalAlign = "top";
@@ -125,9 +142,14 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 							resetButton.remove();
 							await addRemoveAllButton();
 						},
-						translationError: (translations) => translations.pages.content.features.playlistManagementButtons.extras.failedToMarkAsUnwatched,
-						translationHover: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched,
-						translationProcessing: (translations) => translations.pages.content.features.playlistManagementButtons.extras.markingAsUnwatched
+						translationError: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras
+								.failedToMarkAsUnwatched,
+						translationHover: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched,
+						translationProcessing: (translations) =>
+							translations.pages.content.features.playlistManagementButtons.extras
+								.markingAsUnwatched
 					});
 					if (item.querySelector(`.${RESET_BUTTON_CLASS}`)) continue;
 					resetButton.style.verticalAlign = "top";
@@ -182,7 +204,12 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 			);
 			const { renderToString } = await import("react-dom/server");
 			if (isStale()) return;
-			const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
+			const trashIcon = renderToString(
+				React.createElement(FaTrashAlt, {
+					size: 12,
+					style: { marginRight: "12px", verticalAlign: "middle" }
+				})
+			);
 			if (existingButton) {
 				existingButton.innerHTML = trashIcon + text;
 				return;
@@ -201,7 +228,9 @@ function setupPlaylistManagementButtons(config: configuration["playlistManagemen
 				const { title: originalTitle } = button;
 				button.disabled = true;
 				button.textContent = window.i18nextInstance.t(
-					(translations) => translations.pages.content.features.playlistManagementButtons.extras.removingWatchedVideos
+					(translations) =>
+						translations.pages.content.features.playlistManagementButtons.extras
+							.removingWatchedVideos
 				);
 
 				try {
@@ -284,7 +313,12 @@ export default createFeature({
 					{ count: watchedCount }
 				);
 				void import("react-dom/server").then(({ renderToString }) => {
-					const trashIcon = renderToString(React.createElement(FaTrashAlt, { size: 12, style: { marginRight: "12px", verticalAlign: "middle" } }));
+					const trashIcon = renderToString(
+						React.createElement(FaTrashAlt, {
+							size: 12,
+							style: { marginRight: "12px", verticalAlign: "middle" }
+						})
+					);
 					if (removeAllButton) removeAllButton.innerHTML = trashIcon + text;
 					return;
 				});
@@ -295,12 +329,14 @@ export default createFeature({
 			const resetBtn = item.querySelector(`.${RESET_BUTTON_CLASS}`);
 			if (removeBtn instanceof HTMLElement) {
 				removeBtn.title = window.i18nextInstance.t(
-					(translations) => translations.pages.content.features.playlistManagementButtons.extras.removeVideo
+					(translations) =>
+						translations.pages.content.features.playlistManagementButtons.extras.removeVideo
 				);
 			}
 			if (resetBtn instanceof HTMLElement) {
 				resetBtn.title = window.i18nextInstance.t(
-					(translations) => translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched
+					(translations) =>
+						translations.pages.content.features.playlistManagementButtons.extras.markAsUnwatched
 				);
 			}
 		}

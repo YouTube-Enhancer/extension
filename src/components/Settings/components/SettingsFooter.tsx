@@ -13,7 +13,12 @@ import { useNotifications } from "@/src/hooks";
 import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { getConfigurationImportSchema } from "@/src/utils/config/importSchema";
 import { updateStoredSettings } from "@/src/utils/config/storage";
-import { deepMerge, isLegacyConfiguration, migrateConfiguration, parseStoredValue } from "@/src/utils/config/utils";
+import {
+	deepMerge,
+	isLegacyConfiguration,
+	migrateConfiguration,
+	parseStoredValue
+} from "@/src/utils/config/utils";
 import { formatDateForFileName } from "@/src/utils/format/date";
 import { getNumberConstraints, validateNumbers } from "@/src/validation";
 
@@ -81,7 +86,12 @@ export default function SettingsFooter() {
 				if (!result.success) {
 					const errorMessage = generateErrorMessage(result.error.issues);
 					window.alert(
-						t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.validation, { ERROR_MESSAGE: errorMessage })
+						t(
+							(translations) =>
+								translations.pages.options.extras.importExportSettings.importButton.error
+									.validation,
+							{ ERROR_MESSAGE: errorMessage }
+						)
 					);
 					return;
 				}
@@ -104,8 +114,12 @@ export default function SettingsFooter() {
 
 				// Store validated settings
 				const validKeys = new Set(Object.keys(defaultConfiguration));
-				const filteredConfig = Object.fromEntries(Object.entries(castSettings).filter(([key]) => validKeys.has(key)));
-				const stateKeys = metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const);
+				const filteredConfig = Object.fromEntries(
+					Object.entries(castSettings).filter(([key]) => validKeys.has(key))
+				);
+				const stateKeys = metadataRegistry
+					.getAll()
+					.map((feature) => `state:${feature.id}` as const);
 				const filteredState = Object.fromEntries(
 					Object.entries(stateEntries).filter(([key]) => {
 						return stateKeys.includes(key as string);
@@ -117,25 +131,43 @@ export default function SettingsFooter() {
 				});
 				await refreshSettings();
 				// Show a success notification.
-				addNotification("success", (translations) => translations.pages.options.extras.importExportSettings.importButton.success);
+				addNotification(
+					"success",
+					(translations) =>
+						translations.pages.options.extras.importExportSettings.importButton.success
+				);
 			} catch (_) {
 				// Handle any import errors.
-				window.alert(t((translations) => translations.pages.options.extras.importExportSettings.importButton.error.unknown));
+				window.alert(
+					t(
+						(translations) =>
+							translations.pages.options.extras.importExportSettings.importButton.error.unknown
+					)
+				);
 			} finally {
 				if (settingsImportRef.current) settingsImportRef.current.value = "";
 			}
 		})();
 	};
 	function resetOptions() {
-		addNotification("info", (translations) => translations.pages.options.notifications.info.reset, "reset_settings");
+		addNotification(
+			"info",
+			(translations) => translations.pages.options.notifications.info.reset,
+			"reset_settings"
+		);
 	}
 	function clearData() {
 		void (async () => {
-			const userHasConfirmed = window.confirm(t((translations) => translations.pages.options.extras.clearData.confirmAlert));
+			const userHasConfirmed = window.confirm(
+				t((translations) => translations.pages.options.extras.clearData.confirmAlert)
+			);
 			if (userHasConfirmed) {
 				void browser.storage.local.set(defaultConfiguration);
 				await refreshSettings();
-				addNotification("success", (translations) => translations.pages.options.extras.clearData.allDataDeleted);
+				addNotification(
+					"success",
+					(translations) => translations.pages.options.extras.clearData.allDataDeleted
+				);
 			}
 		})();
 	}
@@ -165,7 +197,10 @@ export default function SettingsFooter() {
 			);
 			const stateKeys = metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const);
 			const storedState = await browser.storage.local.get(stateKeys);
-			const exportableState: FeatureState = stateKeys.reduce((acc, key) => Object.assign(acc, { [key]: storedState[key] }), {} as FeatureState);
+			const exportableState: FeatureState = stateKeys.reduce(
+				(acc, key) => Object.assign(acc, { [key]: storedState[key] }),
+				{} as FeatureState
+			);
 			const exportableSettingsWithState = { ...exportableSettings, ...exportableState };
 			// Get the current date and time, and format it for use in the filename.
 			const timestamp = formatDateForFileName(new Date());
@@ -184,7 +219,11 @@ export default function SettingsFooter() {
 			// Click the link to download the file.
 			a.click();
 			// Show a success notification.
-			addNotification("success", (translations) => translations.pages.options.extras.importExportSettings.exportButton.success);
+			addNotification(
+				"success",
+				(translations) =>
+					translations.pages.options.extras.importExportSettings.exportButton.success
+			);
 		}
 	};
 	const openInNewTab = (path: string) => {
@@ -205,9 +244,15 @@ export default function SettingsFooter() {
 				className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 				id="import_settings_button"
 				onClick={importSettings}
-				title={t((translations) => translations.pages.options.extras.importExportSettings.importButton.title)}
+				title={t(
+					(translations) =>
+						translations.pages.options.extras.importExportSettings.importButton.title
+				)}
 				type="button"
-				value={t((translations) => translations.pages.options.extras.importExportSettings.importButton.value)}
+				value={t(
+					(translations) =>
+						translations.pages.options.extras.importExportSettings.importButton.value
+				)}
 			/>
 			{isPopup && (
 				<button
@@ -224,9 +269,15 @@ export default function SettingsFooter() {
 				className="accent p-2 text-sm sm:text-base md:text-lg dark:hover:bg-[rgba(24,26,27,0.5)]"
 				id="export_settings_button"
 				onClick={() => void exportSettings()}
-				title={t((translations) => translations.pages.options.extras.importExportSettings.exportButton.title)}
+				title={t(
+					(translations) =>
+						translations.pages.options.extras.importExportSettings.exportButton.title
+				)}
 				type="button"
-				value={t((translations) => translations.pages.options.extras.importExportSettings.exportButton.value)}
+				value={t(
+					(translations) =>
+						translations.pages.options.extras.importExportSettings.exportButton.value
+				)}
 			/>
 			{notifications.filter((n) => n.action === "reset_settings").length > 0 ? (
 				<input
@@ -240,7 +291,10 @@ export default function SettingsFooter() {
 							}
 							void browser.storage.local.set(defaultConfiguration);
 							await refreshSettings();
-							addNotification("success", (translations) => translations.pages.options.notifications.success.saved);
+							addNotification(
+								"success",
+								(translations) => translations.pages.options.notifications.success.saved
+							);
 						})();
 					}}
 					title={t((translations) => translations.pages.options.extras.bottomButtons.confirm.title)}
@@ -257,7 +311,14 @@ export default function SettingsFooter() {
 					value={t((translations) => translations.pages.options.extras.bottomButtons.reset.value)}
 				/>
 			)}
-			<input accept=".json" hidden={true} id="import_settings_input" onChange={settingsImportChange} ref={settingsImportRef} type="file" />
+			<input
+				accept=".json"
+				hidden={true}
+				id="import_settings_input"
+				onChange={settingsImportChange}
+				ref={settingsImportRef}
+				type="file"
+			/>
 			{conflicts.length > 0 && pendingSettings && (
 				<ConflictResolutionDialog
 					conflicts={conflicts}
@@ -269,8 +330,12 @@ export default function SettingsFooter() {
 					onResolve={(resolvedConfig) => {
 						void (async () => {
 							const validKeys = new Set(Object.keys(defaultConfiguration));
-							const filteredConfig = Object.fromEntries(Object.entries(resolvedConfig).filter(([key]) => validKeys.has(key)));
-							const stateKeys = metadataRegistry.getAll().map((feature) => `state:${feature.id}` as const);
+							const filteredConfig = Object.fromEntries(
+								Object.entries(resolvedConfig).filter(([key]) => validKeys.has(key))
+							);
+							const stateKeys = metadataRegistry
+								.getAll()
+								.map((feature) => `state:${feature.id}` as const);
 							const filteredState = Object.fromEntries(
 								Object.entries(pendingStateEntriesRef.current).filter(([key]) => {
 									return stateKeys.includes(key as string);
@@ -293,7 +358,10 @@ export default function SettingsFooter() {
 	);
 }
 
-function detectConflicts(settings: configuration): { conflicts: Conflict[]; resolved: configuration } {
+function detectConflicts(settings: configuration): {
+	conflicts: Conflict[];
+	resolved: configuration;
+} {
 	const conflicts: Conflict[] = [];
 	const resolved = { ...settings };
 
@@ -301,8 +369,15 @@ function detectConflicts(settings: configuration): { conflicts: Conflict[]; reso
 		conflicts.push({ featureA: "globalVolume", featureB: "rememberVolume", type: "enabled" });
 	}
 
-	if (resolved.automaticallyDisableClosedCaptions?.enabled && resolved.automaticallyEnableClosedCaptions?.enabled) {
-		conflicts.push({ featureA: "automaticallyDisableClosedCaptions", featureB: "automaticallyEnableClosedCaptions", type: "enabled" });
+	if (
+		resolved.automaticallyDisableClosedCaptions?.enabled &&
+		resolved.automaticallyEnableClosedCaptions?.enabled
+	) {
+		conflicts.push({
+			featureA: "automaticallyDisableClosedCaptions",
+			featureB: "automaticallyEnableClosedCaptions",
+			type: "enabled"
+		});
 	}
 
 	if (

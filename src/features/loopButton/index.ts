@@ -27,11 +27,16 @@ function setupLoopObserver(placement: ButtonPlacement) {
 			 * button is rebuilt from) in step, so it is told the new state.
 			 */
 			updateFeatureButtonChecked("loopButton", loop);
-			const button = document.querySelector<HTMLButtonElement>(`#${getFeatureButtonId("loopButton")}`);
+			const button = document.querySelector<HTMLButtonElement>(
+				`#${getFeatureButtonId("loopButton")}`
+			);
 			if (!button) continue;
 			updateFeatureButtonTitle(
 				"loopButton",
-				window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle[loop ? "on" : "off"])
+				window.i18nextInstance.t(
+					(translations) =>
+						translations.pages.content.features.loopButton.button.toggle[loop ? "on" : "off"]
+				)
 			);
 			if (typeof loopSVG === "object" && "off" in loopSVG && "on" in loopSVG) {
 				updateFeatureButtonIcon(button, loop ? loopSVG.on : loopSVG.off);
@@ -53,18 +58,30 @@ export default createFeature({
 					"loopButton",
 					placement,
 					placement === "feature_menu"
-						? window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.label)
-						: window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle.off),
+						? window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.loopButton.button.label
+							)
+						: window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.loopButton.button.toggle.off
+							),
 					getFeatureIcon("loopButton", placement),
 					loopButtonClickListener,
 					true,
 					false,
 					fullscreenPlacement,
 					() => {
-						const looping = document.querySelector<HTMLVideoElement>("video.html5-main-video")?.loop ?? false;
+						const looping =
+							document.querySelector<HTMLVideoElement>("video.html5-main-video")?.loop ?? false;
 						return placement === "feature_menu"
-							? window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.label)
-							: window.i18nextInstance.t((translations) => translations.pages.content.features.loopButton.button.toggle[looping ? "on" : "off"]);
+							? window.i18nextInstance.t(
+									(translations) => translations.pages.content.features.loopButton.button.label
+								)
+							: window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.loopButton.button.toggle[
+											looping ? "on" : "off"
+										]
+								);
 					}
 				);
 				setupLoopObserver(placement);

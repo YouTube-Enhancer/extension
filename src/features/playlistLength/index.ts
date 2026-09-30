@@ -41,7 +41,9 @@ export default createFeature({
 	onLanguageChange: () => {
 		const element = controller?.getUiElement();
 		if (element) {
-			element.title = window.i18nextInstance.t((translations) => translations.pages.content.features.playlistLength.title);
+			element.title = window.i18nextInstance.t(
+				(translations) => translations.pages.content.features.playlistLength.title
+			);
 		}
 	},
 	onNavigate: async () => {

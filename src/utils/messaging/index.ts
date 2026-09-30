@@ -46,7 +46,10 @@ export function sendContentMessage<T extends keyof MessageMappings, D>(
  * @param type - The type of the message to send.
  * @param data - The message data.
  */
-export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMappings>(type: T, data: ContentSendOnlyMessageMappings[T]["data"]) {
+export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMappings>(
+	type: T,
+	data: ContentSendOnlyMessageMappings[T]["data"]
+) {
 	const message: SendDataMessage<"send_data", "content", T, typeof data> = {
 		action: "send_data",
 		data,
@@ -64,10 +67,9 @@ export function sendContentOnlyMessage<T extends keyof ContentSendOnlyMessageMap
  * @param {ContentToBackgroundSendOnlyMessageMappings[T]["data"]} data - The data of the content message.
  * @return {Promise<void>} A promise that resolves when the message is sent.
  */
-export function sendContentToBackgroundMessage<T extends keyof ContentToBackgroundSendOnlyMessageMappings>(
-	type: T,
-	data?: ContentToBackgroundSendOnlyMessageMappings[T]["data"]
-): Promise<void> {
+export function sendContentToBackgroundMessage<
+	T extends keyof ContentToBackgroundSendOnlyMessageMappings
+>(type: T, data?: ContentToBackgroundSendOnlyMessageMappings[T]["data"]): Promise<void> {
 	const message: ActionMessage<T, typeof data> = {
 		action: "request_action",
 		data,
@@ -150,7 +152,15 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 ): Promise<MessageMappings[T]["response"]> {
 	const { signal, timeout = 30_000 } = options ?? {};
 	const requestId = crypto.randomUUID();
-	const requestMessage = { action, data, origin: MESSAGE_ORIGIN, requestId, sequence: ++messageSequence, source, type };
+	const requestMessage = {
+		action,
+		data,
+		origin: MESSAGE_ORIGIN,
+		requestId,
+		sequence: ++messageSequence,
+		source,
+		type
+	};
 	return new Promise<MessageMappings[T]["response"]>((resolve, reject) => {
 		if (signal?.aborted) {
 			reject(new Error("Aborted", { cause: signal.reason }));
@@ -174,7 +184,9 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 						typeof response.data === "object" &&
 						data !== null &&
 						response.data !== null &&
-						Object.entries(data).every(([key, value]) => (key in response.data ? response.data[key] === value : false)));
+						Object.entries(data).every(([key, value]) =>
+							key in response.data ? response.data[key] === value : false
+						));
 
 				// Always require action+source match; requestId or type both work for matching
 				if (matchesAction && matchesSource && (matchesRequestId || matchesType) && matchesData) {
@@ -202,7 +214,11 @@ export function waitForSpecificMessage<T extends keyof MessageMappings, S extend
 		if (timeout !== Infinity) {
 			timer = setTimeout(() => {
 				cleanup();
-				reject(new Error(`waitForSpecificMessage timed out after ${timeout}ms waiting for "${String(type)}"`));
+				reject(
+					new Error(
+						`waitForSpecificMessage timed out after ${timeout}ms waiting for "${String(type)}"`
+					)
+				);
 			}, timeout);
 		}
 

@@ -6,7 +6,9 @@ import { buttonPlacements, fullscreenPlacements } from "@/src/types";
 export type ConfigShape = { [key: string]: Field<unknown, unknown> | {} };
 
 export type ConfigShapeFrom<T extends Record<string, unknown>> = {
-	[P in keyof T & string]: T[P] extends Record<string, unknown> ? ConfigShapeFrom<Extract<T[P], Record<string, unknown>>> : Field<T[P], T[P]>;
+	[P in keyof T & string]: T[P] extends Record<string, unknown>
+		? ConfigShapeFrom<Extract<T[P], Record<string, unknown>>>
+		: Field<T[P], T[P]>;
 };
 
 export type Field<out T, out D extends T = T> = {
@@ -16,7 +18,11 @@ export type Field<out T, out D extends T = T> = {
 };
 
 export type InferType<T extends ConfigShape> = {
-	[K in keyof T]: T[K] extends Field<infer V> ? V : T[K] extends ConfigShape ? InferType<T[K]> : never;
+	[K in keyof T]: T[K] extends Field<infer V>
+		? V
+		: T[K] extends ConfigShape
+			? InferType<T[K]>
+			: never;
 };
 
 export function extractDefaults<T extends ConfigShape>(shape: T): InferType<T> {
@@ -32,7 +38,9 @@ export function extractDefaults<T extends ConfigShape>(shape: T): InferType<T> {
 	return result as InferType<T>;
 }
 
-export function extractSchemaInput<T extends ConfigShape>(shape: T): Record<string, z.ZodMiniType<unknown>> {
+export function extractSchemaInput<T extends ConfigShape>(
+	shape: T
+): Record<string, z.ZodMiniType<unknown>> {
 	const result: Record<string, z.ZodMiniType<unknown>> = {};
 	for (const [key, value] of Object.entries(shape as Record<string, unknown>)) {
 		if (isField(value)) {

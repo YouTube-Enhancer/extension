@@ -53,7 +53,8 @@ export const metadata = createFeatureMetadata({
 						if (enabled && saveAs === "clipboard") {
 							return {
 								type: "specificOption",
-								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+								value: (tr) =>
+									tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
 							};
 						}
 						return {
@@ -70,17 +71,25 @@ export const metadata = createFeatureMetadata({
 						{ equals: "clipboard", setting: "screenshotButton.saveAs" }
 					],
 					id: "screenshotButton.dateFormat",
-					label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.dateFormat.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.dateFormat.select.label),
 					optionsFrom: () =>
 						screenshotDateFormats.map((dateFormat) => ({
-							label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.dateFormat.select.options[dateFormat]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.screenshotButton.settings.dateFormat.select.options[
+											dateFormat
+										]
+								),
 							value: dateFormat
 						})),
 					parentSetting: ({ button: { enabled }, saveAs }) => {
 						if (enabled && saveAs === "clipboard") {
 							return {
 								type: "specificOption",
-								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+								value: (tr) =>
+									tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
 							};
 						}
 						return {
@@ -88,7 +97,8 @@ export const metadata = createFeatureMetadata({
 							value: (tr) => tr.settings.sections.screenshotButton.enable.label
 						};
 					},
-					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.dateFormat.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.dateFormat.select.title)
 				},
 				{
 					component: "select",
@@ -97,17 +107,25 @@ export const metadata = createFeatureMetadata({
 						{ equals: "clipboard", setting: "screenshotButton.saveAs" }
 					],
 					id: "screenshotButton.timestampFormat",
-					label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.label),
 					optionsFrom: () =>
 						screenshotTimestampFormats.map((timestampFormat) => ({
-							label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.options[timestampFormat]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.screenshotButton.settings.timestampFormat.select.options[
+											timestampFormat
+										]
+								),
 							value: timestampFormat
 						})),
 					parentSetting: ({ button: { enabled }, saveAs }) => {
 						if (enabled && saveAs === "clipboard") {
 							return {
 								type: "specificOption",
-								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+								value: (tr) =>
+									tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
 							};
 						}
 						return {
@@ -115,7 +133,8 @@ export const metadata = createFeatureMetadata({
 							value: (tr) => tr.settings.sections.screenshotButton.enable.label
 						};
 					},
-					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.timestampFormat.select.title)
 				},
 				{
 					component: "select",
@@ -124,17 +143,26 @@ export const metadata = createFeatureMetadata({
 						{ equals: "clipboard", setting: "screenshotButton.saveAs" }
 					],
 					id: "screenshotButton.timestampSeparator",
-					label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.label),
+					label: (t) =>
+						t(
+							(tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.label
+						),
 					optionsFrom: () =>
 						screenshotTimestampSeparators.map((timestampSeparator) => ({
-							label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.options[timestampSeparator]),
+							label: (t) =>
+								t(
+									(tr) =>
+										tr.settings.sections.screenshotButton.settings.timestampSeparator.select
+											.options[timestampSeparator]
+								),
 							value: timestampSeparator
 						})),
 					parentSetting: ({ button: { enabled }, saveAs }) => {
 						if (enabled && saveAs === "clipboard") {
 							return {
 								type: "specificOption",
-								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+								value: (tr) =>
+									tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
 							};
 						}
 						return {
@@ -142,7 +170,10 @@ export const metadata = createFeatureMetadata({
 							value: (tr) => tr.settings.sections.screenshotButton.enable.label
 						};
 					},
-					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.title)
+					title: (t) =>
+						t(
+							(tr) => tr.settings.sections.screenshotButton.settings.timestampSeparator.select.title
+						)
 				},
 				{
 					component: "file-name-template",
@@ -158,7 +189,8 @@ export const metadata = createFeatureMetadata({
 						if (enabled && saveAs === "clipboard") {
 							return {
 								type: "specificOption",
-								value: (tr) => tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
+								value: (tr) =>
+									tr.pages.options.extras.optionDisabled.specificOption.screenshotButtonFileFormat
 							};
 						}
 						return {
@@ -166,24 +198,30 @@ export const metadata = createFeatureMetadata({
 							value: (tr) => tr.settings.sections.screenshotButton.enable.label
 						};
 					},
-					placeholdersLabel: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.filename.placeholdersLabel),
+					placeholdersLabel: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.filename.placeholdersLabel),
 					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.filename.title)
 				},
 				{
 					component: "select",
 					disabledWhen: [{ equals: false, setting: "screenshotButton.button.enabled" }],
 					id: "screenshotButton.saveAs",
-					label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.label),
+					label: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.label),
 					optionsFrom: () =>
 						screenshotTypes.map((type) => ({
-							label: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.options[type]),
+							label: (t) =>
+								t(
+									(tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.options[type]
+								),
 							value: type
 						})),
 					parentSetting: {
 						type: "singular",
 						value: (tr) => tr.settings.sections.screenshotButton.enable.label
 					},
-					title: (t) => t((tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.title)
+					title: (t) =>
+						t((tr) => tr.settings.sections.screenshotButton.settings.saveAs.select.title)
 				}
 			],
 			section: "screenshotButton",

@@ -3,13 +3,28 @@ import type { Nullable } from "@/src/types";
 import eventManager from "@/src/events/EventManager";
 import { createFeature } from "@/src/features/_registry/createFeature";
 import { buildToastCommand, dispatchNativeCommand } from "@/src/utils/dom/nativeCommands";
-import { readLockupData, waitForNativeButtonComponent, type YtButtonViewModelElement } from "@/src/utils/dom/nativeComponents";
+import {
+	readLockupData,
+	waitForNativeButtonComponent,
+	type YtButtonViewModelElement
+} from "@/src/utils/dom/nativeComponents";
 import { waitForElement } from "@/src/utils/dom/wait";
 import { browserColorLog } from "@/src/utils/logging";
 import { getCurrentPageType, getCurrentVideoId } from "@/src/utils/url";
 
-import { addLockupButtons, createRowButtonController, markLockupSaved, resetCardState } from "./buttons";
-import { ACTIONS_ROW_SELECTOR, BUTTON_CLASS, IGNORED_MUTATION_ROOTS, LOCKUP_SELECTOR, WATCH_CONTAINER_SELECTOR } from "./constants";
+import {
+	addLockupButtons,
+	createRowButtonController,
+	markLockupSaved,
+	resetCardState
+} from "./buttons";
+import {
+	ACTIONS_ROW_SELECTOR,
+	BUTTON_CLASS,
+	IGNORED_MUTATION_ROOTS,
+	LOCKUP_SELECTOR,
+	WATCH_CONTAINER_SELECTOR
+} from "./constants";
 import { metadata } from "./index.metadata";
 import { inFlightSaves, performPlaylistEdit } from "./saveActions";
 import "./index.css";
@@ -28,9 +43,17 @@ async function setupSaveToWatchLaterButtons() {
 	if (!(await waitForNativeButtonComponent())) {
 		if (!warnedUnavailable && isCurrent()) {
 			warnedUnavailable = true;
-			browserColorLog("yt-button-view-model is not registered. YouTube may have changed its components.", "warning");
+			browserColorLog(
+				"yt-button-view-model is not registered. YouTube may have changed its components.",
+				"warning"
+			);
 			dispatchNativeCommand(
-				buildToastCommand(window.i18nextInstance.t((translations) => translations.pages.content.features.saveToWatchLaterButton.extras.unavailable))
+				buildToastCommand(
+					window.i18nextInstance.t(
+						(translations) =>
+							translations.pages.content.features.saveToWatchLaterButton.extras.unavailable
+					)
+				)
 			);
 		}
 		return;
@@ -41,7 +64,9 @@ async function setupSaveToWatchLaterButtons() {
 	if (!isCurrent()) return;
 
 	const onWatchPage = pageType === "watch";
-	const containerSelector = onWatchPage ? WATCH_CONTAINER_SELECTOR : `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
+	const containerSelector = onWatchPage
+		? WATCH_CONTAINER_SELECTOR
+		: `ytd-two-column-browse-results-renderer[page-subtype='${pageType}']`;
 	const rowButtons = createRowButtonController(isCurrent);
 
 	/**
@@ -50,7 +75,9 @@ async function setupSaveToWatchLaterButtons() {
 	 * cannot swallow the click.
 	 */
 	saveClickListener = (event) => {
-		const host = (event.target as Nullable<HTMLElement>)?.closest?.(`.${BUTTON_CLASS}`) as Nullable<YtButtonViewModelElement>;
+		const host = (event.target as Nullable<HTMLElement>)?.closest?.(
+			`.${BUTTON_CLASS}`
+		) as Nullable<YtButtonViewModelElement>;
 		if (!host) return;
 
 		// The actions-row button toggles. The card buttons save and go away.
@@ -94,7 +121,8 @@ async function setupSaveToWatchLaterButtons() {
 		let passScheduled = false;
 		videosObserver = new MutationObserver((records) => {
 			const relevant = records.some((record) => {
-				const target = record.target instanceof Element ? record.target : record.target.parentElement;
+				const target =
+					record.target instanceof Element ? record.target : record.target.parentElement;
 				return !target?.closest(IGNORED_MUTATION_ROOTS);
 			});
 			if (!relevant || passScheduled) return;

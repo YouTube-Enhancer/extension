@@ -50,7 +50,8 @@ const Select = <Key extends configurationId>({
 	const {
 		i18nInstance: { t }
 	} = useSettings();
-	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } = useComponentVisible<HTMLDivElement>(selectRef, false);
+	const { isComponentVisible: isSelectVisible, setIsComponentVisible: setIsSelectVisible } =
+		useComponentVisible<HTMLDivElement>(selectRef, false);
 
 	const toggleSelect = () => {
 		setIsSelectVisible(!isSelectVisible);
@@ -61,7 +62,9 @@ const Select = <Key extends configurationId>({
 		onChange({ currentTarget: { value: option } } as ChangeEvent<HTMLSelectElement>);
 	};
 
-	const disabledButtonClasses = { "dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled } satisfies ClassValue;
+	const disabledButtonClasses = {
+		"dark:!text-[#4b5563] !text-[#4b5563] cursor-not-allowed": disabled
+	} satisfies ClassValue;
 	return (
 		<div
 			aria-valuetext={selectedOption}
@@ -104,7 +107,9 @@ const Select = <Key extends configurationId>({
 							</div>
 						)
 					) : (
-						<span className={cn("text-black dark:text-white", disabledButtonClasses)}>{t((tr) => tr.pages.options.extras.select.placeholder)}</span>
+						<span className={cn("text-black dark:text-white", disabledButtonClasses)}>
+							{t((tr) => tr.pages.options.extras.select.placeholder)}
+						</span>
 					)}
 					<Arrow rotation={isSelectVisible ? "up" : "down"} />
 				</button>

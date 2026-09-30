@@ -50,7 +50,8 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 	value = ""
 }) => {
 	const id = useId();
-	const entriesFromValue = (value: string) => Array.from(parseChannelSpeeds(value), ([entryId, speed]) => ({ id: entryId, speed }));
+	const entriesFromValue = (value: string) =>
+		Array.from(parseChannelSpeeds(value), ([entryId, speed]) => ({ id: entryId, speed }));
 	const [entries, setEntries] = useState<ChannelSpeedEntry[]>(() => entriesFromValue(value));
 	const lastEmitted = useRef<string>(value);
 	const inputClass =
@@ -122,14 +123,21 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 	};
 
 	return (
-		<div className={cn("relative flex flex-row items-start justify-between gap-4", className)} title={title}>
+		<div
+			className={cn("relative flex flex-row items-start justify-between gap-4", className)}
+			title={title}
+		>
 			<label htmlFor={id}>{label}</label>
 			<div className="flex w-72 flex-col gap-2">
 				{entries.map((entry, index) => (
 					<div className="flex w-full flex-row items-center gap-1" key={index}>
 						<input
 							aria-label={channelIdLabel}
-							className={cn("!m-0 min-w-0 flex-1 !p-2 !text-sm", inputClass, disabled && disabledInputClass)}
+							className={cn(
+								"!m-0 min-w-0 flex-1 !p-2 !text-sm",
+								inputClass,
+								disabled && disabledInputClass
+							)}
 							disabled={disabled}
 							onChange={(event) => handleIdChange(index, event.currentTarget.value)}
 							placeholder={channelIdLabel}
@@ -137,7 +145,11 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 						/>
 						<input
 							aria-label={speedLabel}
-							className={cn("!m-0 w-16 shrink-0 !p-2 !text-sm", inputClass, disabled && disabledInputClass)}
+							className={cn(
+								"!m-0 w-16 shrink-0 !p-2 !text-sm",
+								inputClass,
+								disabled && disabledInputClass
+							)}
 							disabled={disabled}
 							max={max}
 							min={min}
@@ -162,7 +174,12 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 					</div>
 				))}
 				<div className="flex flex-row items-center gap-2">
-					<button className={cn(buttonClass, "cursor-pointer", disabled && disabledInputClass)} disabled={disabled} onClick={handleAdd} type="button">
+					<button
+						className={cn(buttonClass, "cursor-pointer", disabled && disabledInputClass)}
+						disabled={disabled}
+						onClick={handleAdd}
+						type="button"
+					>
 						{"+ "}
 						{addLabel}
 					</button>
@@ -171,7 +188,11 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 					<div className="flex w-full flex-row items-center gap-1">
 						<input
 							aria-label={pasteLinkPlaceholder}
-							className={cn("!m-0 min-w-0 flex-1 !p-2 !text-sm", inputClass, disabled && disabledInputClass)}
+							className={cn(
+								"!m-0 min-w-0 flex-1 !p-2 !text-sm",
+								inputClass,
+								disabled && disabledInputClass
+							)}
 							disabled={disabled || isResolvingLink}
 							onChange={(event) => setPasteLinkInput(event.currentTarget.value)}
 							onKeyDown={(event) => {
@@ -183,7 +204,11 @@ const KeyValueList: React.FC<KeyValueListProps> = ({
 						{getChannelIdFromLinkLabel && (
 							<button
 								aria-label={getChannelIdFromLinkLabel}
-								className={cn(buttonClass, "shrink-0 cursor-pointer", disabled && disabledInputClass)}
+								className={cn(
+									buttonClass,
+									"shrink-0 cursor-pointer",
+									disabled && disabledInputClass
+								)}
 								disabled={disabled || isResolvingLink}
 								onClick={() => void handlePasteLink()}
 								title={getChannelIdFromLinkLabel}

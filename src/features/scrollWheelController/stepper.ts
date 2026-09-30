@@ -46,7 +46,11 @@ export function createWheelStepper(onSteps: (steps: number) => void): WheelStepp
 		}, delay);
 	};
 	const apply = (now: number) => {
-		const steps = clamp(Math.trunc(accumulated / DELTA_PER_STEP), -MAX_STEPS_PER_APPLY, MAX_STEPS_PER_APPLY);
+		const steps = clamp(
+			Math.trunc(accumulated / DELTA_PER_STEP),
+			-MAX_STEPS_PER_APPLY,
+			MAX_STEPS_PER_APPLY
+		);
 		if (steps === 0) return;
 		accumulated -= steps * DELTA_PER_STEP;
 		lastApplyTime = now;

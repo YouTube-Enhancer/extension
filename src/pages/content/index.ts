@@ -1,6 +1,12 @@
 import browser from "webextension-polyfill";
 
-import type { CoreFeatureKeys, FeatureKeys, FeatureKeysWithState, FeatureState, NonFeatureKeys } from "@/src/features/_registry/types";
+import type {
+	CoreFeatureKeys,
+	FeatureKeys,
+	FeatureKeysWithState,
+	FeatureState,
+	NonFeatureKeys
+} from "@/src/features/_registry/types";
 import type {
 	configuration,
 	ContentSendOnlyMessages,
@@ -19,9 +25,21 @@ import { getDefaultConfiguration } from "@/src/utils/config/defaults";
 import { DEV_MODE } from "@/src/utils/config/env";
 import { deepMerge, parseStoredValue } from "@/src/utils/config/utils";
 import { deepEqual } from "@/src/utils/deepEqual";
-import { DEV_RELOAD_SOURCE, type DevWindowMessage, isDevRuntimeMessage, isDevWindowMessage } from "@/src/utils/dev/hotReload";
-import { MESSAGE_ORIGIN, sendExtensionMessage, sendExtensionOnlyMessage } from "@/src/utils/messaging";
-import { setupContentScriptBridge, teardownContentScriptBridge } from "@/src/utils/messaging/devtools";
+import {
+	DEV_RELOAD_SOURCE,
+	type DevWindowMessage,
+	isDevRuntimeMessage,
+	isDevWindowMessage
+} from "@/src/utils/dev/hotReload";
+import {
+	MESSAGE_ORIGIN,
+	sendExtensionMessage,
+	sendExtensionOnlyMessage
+} from "@/src/utils/messaging";
+import {
+	setupContentScriptBridge,
+	teardownContentScriptBridge
+} from "@/src/utils/messaging/devtools";
 
 // Polyfill may return Chrome's native (partial) browser API which can lack storage.
 const storage = browser.storage ?? chrome.storage;
@@ -32,7 +50,8 @@ const defaultConfigKeys = Object.keys(defaultConfiguration);
  */
 const injectEmbeddedScript = (buildId?: string) => {
 	const script = document.createElement("script");
-	script.src = browser.runtime.getURL("src/pages/embedded/index.js") + (buildId ? `?b=${buildId}` : "");
+	script.src =
+		browser.runtime.getURL("src/pages/embedded/index.js") + (buildId ? `?b=${buildId}` : "");
 	script.type = "module";
 	document.documentElement.appendChild(script);
 };
@@ -60,7 +79,10 @@ const getStoredSettings = async (): Promise<configuration> => {
 	const settings = await storage.local.get(defaultConfigKeys);
 	const storedSettings = Object.keys(settings)
 		.filter((key) => defaultConfigKeys.includes(key))
-		.reduce((acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }), {}) as configuration;
+		.reduce(
+			(acc, key) => Object.assign(acc, { [key]: parseStoredValue(settings[key] as string) }),
+			{}
+		) as configuration;
 	if (Object.keys(storedSettings).length === 0) return defaultConfiguration;
 	return deepMerge(defaultConfiguration, storedSettings) as configuration;
 };
@@ -81,14 +103,20 @@ const getStoredState = async (): Promise<{
 		.filter((feature) => "stateSchemaInput" in feature)
 		.map((feature) => `state:${feature.id}` as const);
 	const result = await storage.local.get(stateKeys);
-	const state = stateKeys.reduce((acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }), {}) as {
+	const state = stateKeys.reduce(
+		(acc, key) => Object.assign(acc, { [key.replace("state:", "")]: result[key] }),
+		{}
+	) as {
 		[K in FeatureKeysWithState]: FeatureState[`state:${K}`];
 	};
 	return state;
 };
 void (async () => {
 	const [options, state] = await Promise.all([getStoredSettings(), getStoredState()]);
-	await Promise.all([sendExtensionMessage("options", "data_response", { options }), sendExtensionMessage("state", "data_response", state)]);
+	await Promise.all([
+		sendExtensionMessage("options", "data_response", { options }),
+		sendExtensionMessage("state", "data_response", state)
+	]);
 })();
 const onPageHide = () => {
 	storage.onChanged.removeListener(storageListeners);
@@ -98,7 +126,10 @@ const onPageHide = () => {
  */
 const onWindowMessage = (event: MessageEvent) => {
 	if (event.source !== window) return;
-	const message = event.data as ContentSendOnlyMessages | ContentToBackgroundSendOnlyMessages | Messages["request"];
+	const message = event.data as
+		| ContentSendOnlyMessages
+		| ContentToBackgroundSendOnlyMessages
+		| Messages["request"];
 	if (message?.origin !== MESSAGE_ORIGIN) return;
 	void (async () => {
 		if (!message) return;
@@ -156,8 +187,12 @@ const onWindowMessage = (event: MessageEvent) => {
 						break;
 					}
 					case "setVolumeBoostAmount": {
-						const { volumeBoost: existingVolumeBoost } = (await storage.local.get("volumeBoost")) as configuration;
-						void storage.local.set({ volumeBoost: { ...existingVolumeBoost, amount: message.data } });
+						const { volumeBoost: existingVolumeBoost } = (await storage.local.get(
+							"volumeBoost"
+						)) as configuration;
+						void storage.local.set({
+							volumeBoost: { ...existingVolumeBoost, amount: message.data }
+						});
 						break;
 					}
 				}
@@ -188,15 +223,24 @@ function startDevelopmentMode(): void {
 				resolve();
 			};
 			const onDisposed = (event: MessageEvent) => {
-				if (event.source === window && isDevWindowMessage(event.data) && event.data.type === "disposed") finish();
+				if (
+					event.source === window &&
+					isDevWindowMessage(event.data) &&
+					event.data.type === "disposed"
+				)
+					finish();
 			};
 			const timeout = setTimeout(finish, 2000);
 			window.addEventListener("message", onDisposed);
-			window.postMessage({ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies DevWindowMessage, "*");
+			window.postMessage(
+				{ source: DEV_RELOAD_SOURCE, type: "dispose" } satisfies DevWindowMessage,
+				"*"
+			);
 		});
 	const swapEmbeddedScript = async (buildId: string) => {
 		await requestEmbeddedDispose();
-		for (const oldScript of document.querySelectorAll('script[src*="src/pages/embedded/index.js"]')) oldScript.remove();
+		for (const oldScript of document.querySelectorAll('script[src*="src/pages/embedded/index.js"]'))
+			oldScript.remove();
 		injectEmbeddedScript(buildId);
 	};
 	const devInvalidateListener = (changes: Record<string, unknown>, areaName: string) => {
@@ -224,7 +268,12 @@ function startDevelopmentMode(): void {
 		}
 	};
 	const onTakeoverMessage = (event: MessageEvent) => {
-		if (event.source !== window || !isDevWindowMessage(event.data) || event.data.type !== "takeover") return;
+		if (
+			event.source !== window ||
+			!isDevWindowMessage(event.data) ||
+			event.data.type !== "takeover"
+		)
+			return;
 		if (event.data.instanceId === instanceId) return;
 		dispose();
 	};
@@ -236,7 +285,10 @@ function startDevelopmentMode(): void {
 
 	if (isReinjection) {
 		embeddedScriptAppended = true;
-		window.postMessage({ instanceId, source: DEV_RELOAD_SOURCE, type: "takeover" } satisfies DevWindowMessage, "*");
+		window.postMessage(
+			{ instanceId, source: DEV_RELOAD_SOURCE, type: "takeover" } satisfies DevWindowMessage,
+			"*"
+		);
 		void swapEmbeddedScript(Date.now().toString(36));
 	} else {
 		scheduleEmbeddedScript();
@@ -244,12 +296,16 @@ function startDevelopmentMode(): void {
 }
 const storageListeners = (changes: StorageChanges<configuration>, areaName: string) => {
 	if (areaName !== "local") return;
-	const changeKeys = Object.keys(changes).filter((key): key is keyof configuration => key in defaultConfiguration);
+	const changeKeys = Object.keys(changes).filter(
+		(key): key is keyof configuration => key in defaultConfiguration
+	);
 	if (!changeKeys.length) return;
 	void storageChangeHandler(changes, areaName);
 };
 const castStorageChanges = (changes: StorageChanges<configuration>) => {
-	const result: Partial<{ [K in keyof configuration]: { newValue?: unknown; oldValue?: unknown } }> = {};
+	const result: Partial<{
+		[K in keyof configuration]: { newValue?: unknown; oldValue?: unknown };
+	}> = {};
 	for (const [key, change] of Object.entries(changes)) {
 		if (key in defaultConfiguration) {
 			const typedKey = key;
@@ -278,9 +334,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  * onScreenDisplay changes arrive per leaf path, so every field maps to the same broadcast, which carries the full
  * fresh slice.
  */
-const buildOnScreenDisplayChange = ({ options }: { options: configuration }) => ({ onScreenDisplay: options.onScreenDisplay });
+const buildOnScreenDisplayChange = ({ options }: { options: configuration }) => ({
+	onScreenDisplay: options.onScreenDisplay
+});
 const changeHandlers: {
-	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<P, keyof ExtensionSendOnlyMessageMappings>;
+	[P in Path<Pick<configuration, CoreFeatureKeys | NonFeatureKeys>>]?: PathEvent<
+		P,
+		keyof ExtensionSendOnlyMessageMappings
+	>;
 } = {
 	"featureMenu.openType": {
 		build: ({ newValue }) => ({
@@ -294,12 +355,30 @@ const changeHandlers: {
 		}),
 		event: "languageChange"
 	},
-	"onScreenDisplay.color": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
-	"onScreenDisplay.hideTime": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
-	"onScreenDisplay.opacity": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
-	"onScreenDisplay.padding": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
-	"onScreenDisplay.position": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" },
-	"onScreenDisplay.type": { build: buildOnScreenDisplayChange, event: "onScreenDisplayConfigChange" }
+	"onScreenDisplay.color": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	},
+	"onScreenDisplay.hideTime": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	},
+	"onScreenDisplay.opacity": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	},
+	"onScreenDisplay.padding": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	},
+	"onScreenDisplay.position": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	},
+	"onScreenDisplay.type": {
+		build: buildOnScreenDisplayChange,
+		event: "onScreenDisplayConfigChange"
+	}
 };
 function emitPathEvent<P extends keyof typeof changeHandlers>({
 	newValue,
@@ -332,7 +411,10 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 				featureUpdates.set(rootKey, entry);
 			}
 			entry.configChanged = true;
-			if ((path.endsWith(".enabled") && typeof newValue === "boolean") || path.endsWith(".placement")) {
+			if (
+				(path.endsWith(".enabled") && typeof newValue === "boolean") ||
+				path.endsWith(".placement")
+			) {
 				entry.stateChanged = true;
 			}
 		}
@@ -387,7 +469,10 @@ function handleConfigChanges(
 			}
 
 			// combine keys to handle added/removed properties
-			const keys = new Set([...Object.keys(newObj as Record<string, unknown>), ...Object.keys(oldObj as Record<string, unknown>)]);
+			const keys = new Set([
+				...Object.keys(newObj as Record<string, unknown>),
+				...Object.keys(oldObj as Record<string, unknown>)
+			]);
 
 			for (const key of keys) {
 				walk(getProp(oldObj, key), getProp(newObj, key), `${path}.${key}`);

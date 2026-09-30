@@ -7,7 +7,11 @@ import {
 	updateFeatureButtonIconByName,
 	updateFeatureButtonTitle
 } from "@/src/features/buttonController";
-import { isMiniPlayerActive, setMiniPlayerManual, toggleMiniPlayerManual } from "@/src/features/miniPlayer";
+import {
+	isMiniPlayerActive,
+	setMiniPlayerManual,
+	toggleMiniPlayerManual
+} from "@/src/features/miniPlayer";
 import { getFeatureIcon } from "@/src/icons";
 
 import { metadata } from "./index.metadata";
@@ -24,7 +28,10 @@ function syncMiniPlayerButtonUI(active: boolean) {
 	if (currentPlacement === "feature_menu") return;
 	updateFeatureButtonTitle(
 		"miniPlayerButton",
-		window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"])
+		window.i18nextInstance.t(
+			(translations) =>
+				translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"]
+		)
 	);
 	const icon = getFeatureIcon("miniPlayerButton", "below_player");
 	if (typeof icon === "object" && icon && "on" in icon && "off" in icon) {
@@ -47,9 +54,14 @@ export default createFeature({
 					"miniPlayerButton",
 					placement,
 					placement === "feature_menu"
-						? window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
+						? window.i18nextInstance.t(
+								(translations) => translations.pages.content.features.miniPlayerButton.button.label
+							)
 						: window.i18nextInstance.t(
-								(translations) => translations.pages.content.features.miniPlayerButton.button.toggle[miniPlayerActive ? "on" : "off"]
+								(translations) =>
+									translations.pages.content.features.miniPlayerButton.button.toggle[
+										miniPlayerActive ? "on" : "off"
+									]
 							),
 					getFeatureIcon("miniPlayerButton", placement),
 					(checked) => {
@@ -62,8 +74,16 @@ export default createFeature({
 					() => {
 						const active = isMiniPlayerActive();
 						return placement === "feature_menu"
-							? window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.label)
-							: window.i18nextInstance.t((translations) => translations.pages.content.features.miniPlayerButton.button.toggle[active ? "on" : "off"]);
+							? window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.miniPlayerButton.button.label
+								)
+							: window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.miniPlayerButton.button.toggle[
+											active ? "on" : "off"
+										]
+								);
 					}
 				);
 				document.addEventListener("yte-mini-player-state", yteMiniPlayerStateHandler);

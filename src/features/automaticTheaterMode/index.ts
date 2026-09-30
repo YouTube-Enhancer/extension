@@ -26,7 +26,9 @@ async function disableMaximizeIfEnabled() {
 function isInTheaterMode(): boolean {
 	const isMaximized = document.body.getAttribute("yte-maximized") === "";
 	if (isMaximized) return false;
-	const container = document.querySelector<HTMLElement>(isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy");
+	const container = document.querySelector<HTMLElement>(
+		isNewYouTubeVideoLayout() ? "ytd-watch-grid" : "ytd-watch-flexy"
+	);
 	return container?.hasAttribute("theater") ?? false;
 }
 
@@ -49,25 +51,40 @@ function makeTheaterTask(desired: boolean) {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(false)], ["disableTheater"], {
-			interval: 300,
-			maxAttempts: 20,
-			waitForLoaded: false
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeTheaterTask(false)],
+			["disableTheater"],
+			{
+				interval: 300,
+				maxAttempts: 20,
+				waitForLoaded: false
+			}
+		);
 	},
 	onEnable: async () => {
 		await disableMaximizeIfEnabled();
-		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
-			interval: 300,
-			maxAttempts: 20,
-			waitForLoaded: false
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeTheaterTask(true)],
+			["enableTheater"],
+			{
+				interval: 300,
+				maxAttempts: 20,
+				waitForLoaded: false
+			}
+		);
 	},
 	onNavigate: () => {
-		void registry.playerManager.executeWithRetries(metadata.id, [makeTheaterTask(true)], ["enableTheater"], {
-			interval: 300,
-			maxAttempts: 20,
-			waitForLoaded: false
-		});
+		void registry.playerManager.executeWithRetries(
+			metadata.id,
+			[makeTheaterTask(true)],
+			["enableTheater"],
+			{
+				interval: 300,
+				maxAttempts: 20,
+				waitForLoaded: false
+			}
+		);
 	}
 });

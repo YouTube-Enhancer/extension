@@ -1,7 +1,11 @@
 import "./index.css";
 
 import { createFeature } from "@/src/features/_registry/createFeature";
-import { addFeatureButton, getFeatureButton, updateFeatureButtonTitle } from "@/src/features/buttonController";
+import {
+	addFeatureButton,
+	getFeatureButton,
+	updateFeatureButtonTitle
+} from "@/src/features/buttonController";
 import { getFeatureIcon } from "@/src/icons";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 
@@ -18,9 +22,15 @@ export default createFeature({
 					"maximizePlayerButton",
 					placement,
 					placement === "feature_menu"
-						? window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+						? window.i18nextInstance.t(
+								(translations) =>
+									translations.pages.content.features.maximizePlayerButton.button.label
+							)
 						: window.i18nextInstance.t(
-								(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[isPlayerMaximized ? "on" : "off"]
+								(translations) =>
+									translations.pages.content.features.maximizePlayerButton.button.toggle[
+										isPlayerMaximized ? "on" : "off"
+									]
 							),
 					getFeatureIcon("maximizePlayerButton", placement),
 					(checked) => {
@@ -37,7 +47,10 @@ export default createFeature({
 						updateFeatureButtonTitle(
 							"maximizePlayerButton",
 							window.i18nextInstance.t(
-								(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[checked ? "on" : "off"]
+								(translations) =>
+									translations.pages.content.features.maximizePlayerButton.button.toggle[
+										checked ? "on" : "off"
+									]
 							)
 						);
 						if (checked) {
@@ -53,9 +66,15 @@ export default createFeature({
 					() => {
 						const maximized = document.body.getAttribute("yte-maximized") === "";
 						return placement === "feature_menu"
-							? window.i18nextInstance.t((translations) => translations.pages.content.features.maximizePlayerButton.button.label)
+							? window.i18nextInstance.t(
+									(translations) =>
+										translations.pages.content.features.maximizePlayerButton.button.label
+								)
 							: window.i18nextInstance.t(
-									(translations) => translations.pages.content.features.maximizePlayerButton.button.toggle[maximized ? "on" : "off"]
+									(translations) =>
+										translations.pages.content.features.maximizePlayerButton.button.toggle[
+											maximized ? "on" : "off"
+										]
 								);
 					}
 				);

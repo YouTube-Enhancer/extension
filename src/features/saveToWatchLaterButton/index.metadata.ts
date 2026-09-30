@@ -12,8 +12,10 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "saveToWatchLaterButton.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.saveToWatchLaterButton.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.saveToWatchLaterButton.enable.title)
+			label: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.saveToWatchLaterButton.enable.label),
+			title: (t) =>
+				t((tr) => tr.settings.sections.miscellaneous.settings.saveToWatchLaterButton.enable.title)
 		}
 	]
 });

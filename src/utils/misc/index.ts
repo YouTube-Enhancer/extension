@@ -10,7 +10,11 @@ export function dbToLinear(db: number) {
 }
 
 // The matcher returns null to reject a node. Arrays count as objects.
-export function findInObjectTree<T>(root: unknown, matcher: (node: Record<string, unknown>) => Nullable<T>, maxDepth = 10): Nullable<T> {
+export function findInObjectTree<T>(
+	root: unknown,
+	matcher: (node: Record<string, unknown>) => Nullable<T>,
+	maxDepth = 10
+): Nullable<T> {
 	if (!root || typeof root !== "object" || maxDepth < 0) return null;
 	const matched = matcher(root as Record<string, unknown>);
 	if (matched !== null && matched !== undefined) return matched;

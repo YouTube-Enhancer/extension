@@ -18,7 +18,11 @@ type WaitMode = "optional" | "required";
  *                    Total max wait = timeout × (retries + 1) = 30 s with defaults.
  * @returns Promise that resolves with a (possibly sparse) array of the matching elements.
  */
-export async function waitForAllElements(selectors: Selector[], timeout = 5000, retries = 5): Promise<Element[]> {
+export async function waitForAllElements(
+	selectors: Selector[],
+	timeout = 5000,
+	retries = 5
+): Promise<Element[]> {
 	browserColorLog(`Waiting for ${selectors.join(", ")}`, "FgMagenta");
 	return new Promise((resolve) => {
 		const foundElements: Element[] = [];
@@ -31,7 +35,9 @@ export async function waitForAllElements(selectors: Selector[], timeout = 5000, 
 			clearTimeout(retryTimer);
 			const missing = selectors.filter((_, i) => !foundElements[i]);
 			if (missing.length) {
-				console.warn(`[waitForAllElements] Gave up after ${retries + 1} attempts — missing: ${missing.join(", ")}`);
+				console.warn(
+					`[waitForAllElements] Gave up after ${retries + 1} attempts — missing: ${missing.join(", ")}`
+				);
 			}
 			resolve(foundElements);
 		};
@@ -71,10 +77,26 @@ export async function waitForAllElements(selectors: Selector[], timeout = 5000, 
 		if (!resolved) scheduleRetry();
 	});
 }
-export function waitForElement<T extends Element>(selector: string, mode?: WaitMode): Promise<Nullable<T>>;
-export function waitForElement<T extends Element>(selector: string, timeout: number, mode?: WaitMode): Promise<Nullable<T>>;
-export function waitForElement<T extends Element>(selector: string, parent: ParentNode, mode?: WaitMode): Promise<Nullable<T>>;
-export function waitForElement<T extends Element>(selector: string, parent: ParentNode, timeout: number, mode?: WaitMode): Promise<Nullable<T>>;
+export function waitForElement<T extends Element>(
+	selector: string,
+	mode?: WaitMode
+): Promise<Nullable<T>>;
+export function waitForElement<T extends Element>(
+	selector: string,
+	timeout: number,
+	mode?: WaitMode
+): Promise<Nullable<T>>;
+export function waitForElement<T extends Element>(
+	selector: string,
+	parent: ParentNode,
+	mode?: WaitMode
+): Promise<Nullable<T>>;
+export function waitForElement<T extends Element>(
+	selector: string,
+	parent: ParentNode,
+	timeout: number,
+	mode?: WaitMode
+): Promise<Nullable<T>>;
 /**
  * Wait for an element to be present in the DOM.
  *
@@ -140,7 +162,9 @@ export function waitForElement<T extends Element>(
 
 		setTimeout(() => {
 			if (mode === "required") {
-				console.warn(`[waitForElement] Timeout after ${timeout}ms — element not found: ${selector}`);
+				console.warn(
+					`[waitForElement] Timeout after ${timeout}ms — element not found: ${selector}`
+				);
 			}
 			finish(null);
 		}, timeout);
@@ -159,7 +183,10 @@ export function waitForElement<T extends Element>(
  *
  * @throws If the player is null/undefined or fails to become ready within the timeout
  */
-export async function waitForPlayerLoaded(player: Nullable<YouTubePlayer>, timeout = 10000): Promise<YouTubePlayer> {
+export async function waitForPlayerLoaded(
+	player: Nullable<YouTubePlayer>,
+	timeout = 10000
+): Promise<YouTubePlayer> {
 	if (!player) {
 		throw new Error("Player does not exist");
 	}

@@ -4,4 +4,10 @@ import LanguageSettingsSection from "@/src/components/Settings/sections/Language
 import OnScreenDisplaySection from "@/src/components/Settings/sections/OnScreenDisplay";
 import YouTubeDataApiKeySection from "@/src/components/Settings/sections/YouTubeDataApiKey";
 
-export { ButtonPlacementSection, FeatureMenuOpenTypeSection, LanguageSettingsSection, OnScreenDisplaySection, YouTubeDataApiKeySection };
+export {
+	ButtonPlacementSection,
+	FeatureMenuOpenTypeSection,
+	LanguageSettingsSection,
+	OnScreenDisplaySection,
+	YouTubeDataApiKeySection
+};

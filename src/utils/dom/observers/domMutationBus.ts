@@ -126,14 +126,19 @@ function onMutations(records: MutationRecord[]): void {
 		if (!matches || matches.length === 0) continue;
 
 		for (const subscriber of subscribers) {
-			const filteredMatches = subscriber.parent ? matches.filter((el) => subscriber.parent!.contains(el)) : matches;
+			const filteredMatches = subscriber.parent
+				? matches.filter((el) => subscriber.parent!.contains(el))
+				: matches;
 
 			if (filteredMatches.length === 0) continue;
 
 			try {
 				subscriber.callback(filteredMatches);
 			} catch (error) {
-				console.error(`[domMutationBus] Subscriber callback error for selector "${selector}":`, error);
+				console.error(
+					`[domMutationBus] Subscriber callback error for selector "${selector}":`,
+					error
+				);
 			}
 
 			if (subscriber.once) {
@@ -160,7 +165,11 @@ function onMutations(records: MutationRecord[]): void {
  *                   `{ parent: el }` to only deliver descendants of `el`.
  * @returns An {@link Unsubscribe} function. Call it to remove the subscription.
  */
-function subscribe(selector: string, callback: (elements: Element[]) => void, options?: SubscribeOptions): Unsubscribe {
+function subscribe(
+	selector: string,
+	callback: (elements: Element[]) => void,
+	options?: SubscribeOptions
+): Unsubscribe {
 	const subscriber: Subscriber = {
 		callback,
 		once: options?.once,

@@ -21,12 +21,19 @@ export type FeatureIconMap = {
 		shared_icon_position: IconType<ButtonName>;
 	};
 };
-export type GetIconType<Name extends AllButtonNames, Placement extends ButtonPlacement> = FeatureIconMap[Name][GetPlacementKey<Placement>];
-export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu" ? "feature_menu" : "shared_icon_position";
+export type GetIconType<
+	Name extends AllButtonNames,
+	Placement extends ButtonPlacement
+> = FeatureIconMap[Name][GetPlacementKey<Placement>];
+export type GetPlacementKey<Placement extends ButtonPlacement> = Placement extends "feature_menu"
+	? "feature_menu"
+	: "shared_icon_position";
 export type IconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIcon : BasicIcon;
 export type ToggleFeatures = (typeof toggleFeatures)[number];
 type BasicIconFactory = () => BasicIcon;
-type FactoryIconType<T extends AllButtonNames> = T extends ToggleFeatures ? ToggleIconFactory : BasicIconFactory;
+type FactoryIconType<T extends AllButtonNames> = T extends ToggleFeatures
+	? ToggleIconFactory
+	: BasicIconFactory;
 type FeatureIconFactoryMap = {
 	[ButtonName in AllButtonNames]: {
 		feature_menu: BasicIconFactory;
@@ -528,7 +535,10 @@ export const featureIcons = {
 } satisfies FeatureIconFactoryMap;
 
 const iconCache = new Map<string, BasicIcon | ToggleIcon>();
-export function getFeatureIcon<Name extends AllButtonNames>(featureName: Name, placement: ButtonPlacement): IconType<Name> {
+export function getFeatureIcon<Name extends AllButtonNames>(
+	featureName: Name,
+	placement: ButtonPlacement
+): IconType<Name> {
 	const placementKey = placement !== "feature_menu" ? "shared_icon_position" : "feature_menu";
 	const cacheKey = `${featureName}:${placementKey}`;
 	const cached = iconCache.get(cacheKey);
@@ -536,7 +546,10 @@ export function getFeatureIcon<Name extends AllButtonNames>(featureName: Name, p
 	const {
 		[featureName]: { [placementKey]: iconFactory }
 	} = featureIcons;
-	const icon: BasicIcon | ToggleIcon = typeof iconFactory === "function" ? iconFactory() : { off: iconFactory.off(), on: iconFactory.on() };
+	const icon: BasicIcon | ToggleIcon =
+		typeof iconFactory === "function"
+			? iconFactory()
+			: { off: iconFactory.off(), on: iconFactory.on() };
 	iconCache.set(cacheKey, icon);
 	return icon as IconType<Name>;
 }

@@ -12,8 +12,18 @@ export const metadata = createFeatureMetadata({
 		{
 			component: "checkbox",
 			id: "hideOfficialArtistVideosFromHomePage.enabled",
-			label: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable.label),
-			title: (t) => t((tr) => tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable.title)
+			label: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable
+							.label
+				),
+			title: (t) =>
+				t(
+					(tr) =>
+						tr.settings.sections.miscellaneous.settings.hideOfficialArtistVideosFromHomePage.enable
+							.title
+				)
 		}
 	]
 });

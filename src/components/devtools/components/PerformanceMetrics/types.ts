@@ -1,4 +1,7 @@
-import type { FeatureError, FeatureMetric } from "@/src/features/_registry/featurePerformanceTracker";
+import type {
+	FeatureError,
+	FeatureMetric
+} from "@/src/features/_registry/featurePerformanceTracker";
 
 export type ChartType = "bar-feature" | "bar-phase" | "donut" | "timeline";
 

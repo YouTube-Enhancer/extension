@@ -1,6 +1,20 @@
 // Taken from https://github.com/wooorm/svg-element-attributes/blob/main/index.js and exported as const for typesafety
 export const svgElementAttributes = {
-	"*": ["about", "class", "content", "datatype", "id", "lang", "property", "rel", "resource", "rev", "style", "tabindex", "typeof"],
+	"*": [
+		"about",
+		"class",
+		"content",
+		"datatype",
+		"id",
+		"lang",
+		"property",
+		"rel",
+		"resource",
+		"rev",
+		"style",
+		"tabindex",
+		"typeof"
+	],
 	a: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -609,7 +623,14 @@ export const svgElementAttributes = {
 		"writing-mode"
 	],
 	"color-profile": ["local", "name", "rendering-intent"],
-	cursor: ["externalResourcesRequired", "requiredExtensions", "requiredFeatures", "systemLanguage", "x", "y"],
+	cursor: [
+		"externalResourcesRequired",
+		"requiredExtensions",
+		"requiredFeatures",
+		"systemLanguage",
+		"x",
+		"y"
+	],
 	defs: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -676,8 +697,22 @@ export const svgElementAttributes = {
 		"word-spacing",
 		"writing-mode"
 	],
-	desc: ["requiredExtensions", "requiredFeatures", "requiredFonts", "requiredFormats", "systemLanguage"],
-	discard: ["begin", "href", "requiredExtensions", "requiredFeatures", "requiredFonts", "requiredFormats", "systemLanguage"],
+	desc: [
+		"requiredExtensions",
+		"requiredFeatures",
+		"requiredFonts",
+		"requiredFormats",
+		"systemLanguage"
+	],
+	discard: [
+		"begin",
+		"href",
+		"requiredExtensions",
+		"requiredFeatures",
+		"requiredFonts",
+		"requiredFormats",
+		"systemLanguage"
+	],
 	ellipse: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -1746,7 +1781,16 @@ export const svgElementAttributes = {
 		"x",
 		"y"
 	],
-	feSpotLight: ["limitingConeAngle", "pointsAtX", "pointsAtY", "pointsAtZ", "specularExponent", "x", "y", "z"],
+	feSpotLight: [
+		"limitingConeAngle",
+		"pointsAtX",
+		"pointsAtY",
+		"pointsAtZ",
+		"specularExponent",
+		"x",
+		"y",
+		"z"
+	],
 	feTile: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -2751,7 +2795,13 @@ export const svgElementAttributes = {
 		"x",
 		"y"
 	],
-	metadata: ["requiredExtensions", "requiredFeatures", "requiredFonts", "requiredFormats", "systemLanguage"],
+	metadata: [
+		"requiredExtensions",
+		"requiredFeatures",
+		"requiredFonts",
+		"requiredFormats",
+		"systemLanguage"
+	],
 	"missing-glyph": [
 		"alignment-baseline",
 		"baseline-shift",
@@ -3140,7 +3190,13 @@ export const svgElementAttributes = {
 		"word-spacing",
 		"writing-mode"
 	],
-	prefetch: ["bandwidth", "mediaCharacterEncoding", "mediaContentEncodings", "mediaSize", "mediaTime"],
+	prefetch: [
+		"bandwidth",
+		"mediaCharacterEncoding",
+		"mediaContentEncodings",
+		"mediaSize",
+		"mediaTime"
+	],
 	radialGradient: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -3632,7 +3688,13 @@ export const svgElementAttributes = {
 		"x",
 		"y"
 	],
-	tbreak: ["requiredExtensions", "requiredFeatures", "requiredFonts", "requiredFormats", "systemLanguage"],
+	tbreak: [
+		"requiredExtensions",
+		"requiredFeatures",
+		"requiredFonts",
+		"requiredFormats",
+		"systemLanguage"
+	],
 	text: [
 		"alignment-baseline",
 		"baseline-shift",
@@ -3819,7 +3881,13 @@ export const svgElementAttributes = {
 		"word-spacing",
 		"writing-mode"
 	],
-	title: ["requiredExtensions", "requiredFeatures", "requiredFonts", "requiredFormats", "systemLanguage"],
+	title: [
+		"requiredExtensions",
+		"requiredFeatures",
+		"requiredFonts",
+		"requiredFormats",
+		"systemLanguage"
+	],
 	tref: [
 		"alignment-baseline",
 		"baseline-shift",

@@ -63,15 +63,22 @@ export default function SettingsGenerator() {
 		for (const node of featureSettings) {
 			const sectionId = getSectionId(node) ?? DEFAULT_SECTION;
 			if (!sections[sectionId]) {
-				sections[sectionId] = { attribution: [], featureMap: new Map(), sectionTitle: undefined, settings: [] };
+				sections[sectionId] = {
+					attribution: [],
+					featureMap: new Map(),
+					sectionTitle: undefined,
+					settings: []
+				};
 			}
 			sections[sectionId].settings.push({ featureId: feature.id, node: node });
 			// A group's attribution belongs to its section: the flattening below keeps only the group's children.
-			if (isGroupNode(node) && node.attribution) sections[sectionId].attribution.push(...node.attribution);
+			if (isGroupNode(node) && node.attribution)
+				sections[sectionId].attribution.push(...node.attribution);
 			if (sectionTitle) {
 				sections[sectionId].sectionTitle = sectionTitle;
 			} else if (sectionId === "miscellaneous" && !sections[sectionId].sectionTitle) {
-				sections[sectionId].sectionTitle = (tr) => tr((tr) => tr.settings.sections.miscellaneous.title);
+				sections[sectionId].sectionTitle = (tr) =>
+					tr((tr) => tr.settings.sections.miscellaneous.title);
 			}
 		}
 	}
@@ -98,13 +105,25 @@ export default function SettingsGenerator() {
 	if (sectionKeys.length === 0) {
 		return null;
 	}
-	const renderNode = <F extends FeatureKeys>(node: FeatureSettingNode<F>, featureId: F, nodeIndex: number): React.ReactNode => {
+	const renderNode = <F extends FeatureKeys>(
+		node: FeatureSettingNode<F>,
+		featureId: F,
+		nodeIndex: number
+	): React.ReactNode => {
 		if (isDividerNode(node)) {
-			return <hr className="my-2 border-gray-300 dark:border-gray-600" key={`divider-${featureId}-${nodeIndex}`} />;
+			return (
+				<hr
+					className="my-2 border-gray-300 dark:border-gray-600"
+					key={`divider-${featureId}-${nodeIndex}`}
+				/>
+			);
 		}
 		if (isTextNode(node)) {
 			return (
-				<p className="mx-2 text-sm text-gray-600 dark:text-gray-400" key={`text-${featureId}-${nodeIndex}`}>
+				<p
+					className="mx-2 text-sm text-gray-600 dark:text-gray-400"
+					key={`text-${featureId}-${nodeIndex}`}
+				>
 					{node.content(t)}
 				</p>
 			);
@@ -366,11 +385,19 @@ export default function SettingsGenerator() {
 				} = sectionData;
 
 				return (
-					<SettingSection featureIds={Array.from(sectionFeatureMap.values())} key={sectionId} title={storedSectionTitle ? storedSectionTitle(t) : ""}>
+					<SettingSection
+						featureIds={Array.from(sectionFeatureMap.values())}
+						key={sectionId}
+						title={storedSectionTitle ? storedSectionTitle(t) : ""}
+					>
 						<SettingTitle />
 						<SectionAttribution entries={sectionAttribution} />
 						{sectionSettingsList.map((entry, index: number) => {
-							return renderNode(entry.node as FeatureSettingNode<FeatureKeys>, entry.featureId, index);
+							return renderNode(
+								entry.node as FeatureSettingNode<FeatureKeys>,
+								entry.featureId,
+								index
+							);
 						})}
 					</SettingSection>
 				);
@@ -379,7 +406,10 @@ export default function SettingsGenerator() {
 	);
 }
 
-function evaluateCondition<F extends FeatureKeys>(condition: SettingCondition<F>, settings: configuration): boolean {
+function evaluateCondition<F extends FeatureKeys>(
+	condition: SettingCondition<F>,
+	settings: configuration
+): boolean {
 	const { setting: settingPath } = condition;
 	const actualValue = getPathValue(settings, settingPath);
 	const checkValue = condition.equals ?? condition.notEquals;
@@ -390,7 +420,9 @@ function evaluateCondition<F extends FeatureKeys>(condition: SettingCondition<F>
 	return actualValue !== checkValue;
 }
 
-function flattenSettingsByComponent<F extends FeatureKeys>(entries: SettingsEntry[]): SettingsEntry[] {
+function flattenSettingsByComponent<F extends FeatureKeys>(
+	entries: SettingsEntry[]
+): SettingsEntry[] {
 	const byComponent: Partial<Record<"other" | SettingComponent<F>, SettingsEntry[]>> = {};
 	for (const entry of entries) {
 		const { node } = entry;
