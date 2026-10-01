@@ -27,7 +27,12 @@ async function routeMessage(message: ExtensionSendOnlyMessages | Messages["respo
 			});
 			break;
 		case "featureUpdate":
-			await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
+			try {
+				await registry.reconcileFeature(message.data.id, message.data.config, message.data.enabled);
+			} finally {
+				// Signal to E2E tests that this feature update cycle is complete.
+				document.documentElement.setAttribute("yte-config-processing", "");
+			}
 			break;
 		case "languageChange":
 			await coreFeatures.handleLanguageChange(message.data.language);

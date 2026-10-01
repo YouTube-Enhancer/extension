@@ -277,6 +277,7 @@ export const { describe, expect } = test;
 export default defineConfig({
 	forbidOnly: isCI,
 	fullyParallel: true,
+	globalSetup: "./tests/globalSetup.ts",
 	globalTimeout: isCI ? 4_800_000 : undefined,
 	projects: [
 		{

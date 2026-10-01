@@ -42,7 +42,8 @@
 		"tailwind.config.ts",
 		"postcss.config.cjs",
 		"src/features/__tests__",
-		"src/utils/_tests"
+		"src/utils/_tests",
+		"tests/globalSetup.ts"
 	],
 	"exclude": ["node_modules", "dist", "releases"]
 }
