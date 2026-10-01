@@ -14,6 +14,7 @@ class PlacementTransition {
 	private containerGeometryMutationObserver: Nullable<MutationObserver> = null;
 	private containerGeometryObserver: Nullable<ResizeObserver> = null;
 	private containerGeometryResizeHandler: Nullable<() => void> = null;
+	private containerTrackingActive = false;
 
 	// Fullscreen
 	private fullscreenDomHandler: Nullable<() => void> = null;
@@ -27,16 +28,22 @@ class PlacementTransition {
 
 	// ─── Public lifecycle ───────────────────────────────────────────
 
-	activate(_containerElement: HTMLDivElement, onFullscreenChange: () => void) {
-		this.startFullscreenObserver(onFullscreenChange);
+	activateContainerTracking() {
+		if (this.containerTrackingActive) return;
+		this.containerTrackingActive = true;
 		void this.startTheaterModeObserver();
 		void this.startContainerGeometryObserver();
+	}
+
+	activateFullscreenTracking(onFullscreenChange: () => void) {
+		this.startFullscreenObserver(onFullscreenChange);
 	}
 
 	deactivate() {
 		this.stopTheaterModeObserver();
 		this.stopContainerGeometryObserver();
 		this.stopFullscreenObserver();
+		this.containerTrackingActive = false;
 	}
 
 	ensureContainerPosition() {
@@ -73,7 +80,7 @@ class PlacementTransition {
 		this.syncContainerGeometry();
 	}
 
-	isActive(): boolean {
+	isFullscreenTrackingActive(): boolean {
 		return this.fullscreenObserverActive;
 	}
 
