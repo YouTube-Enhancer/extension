@@ -56,10 +56,14 @@ export default function DonateCta() {
 				type="button"
 			>
 				<span className="flex items-center gap-1.5 text-[var(--foreground-light)]">
-					<MdFavorite size={14} />
+					<MdFavorite className="text-pink-500" size={16} />
 					{t((translations) => translations.pages.options.extras.donateCta.label)}
 				</span>
-				{expanded ? <MdExpandLess size={16} /> : <MdExpandMore size={16} />}
+				{expanded ? (
+					<MdExpandLess className="text-black dark:text-white" size={16} />
+				) : (
+					<MdExpandMore className="text-black dark:text-white" size={16} />
+				)}
 			</button>
 			{expanded && (
 				<div className="overflow-hidden px-2 pb-2 pt-1">
