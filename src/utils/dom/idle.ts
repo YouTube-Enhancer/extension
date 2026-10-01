@@ -7,7 +7,7 @@
 export function waitForIdle(timeout = 0): Promise<void> {
 	return new Promise((resolve) => {
 		if ("requestIdleCallback" in window) {
-			window.requestIdleCallback(() => resolve(), { timeout });
+			window.requestIdleCallback(() => resolve(), { timeout: timeout || 100 });
 		} else {
 			requestAnimationFrame(() => setTimeout(resolve, timeout || 16));
 		}
