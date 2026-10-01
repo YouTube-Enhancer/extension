@@ -61,13 +61,24 @@ export async function enableFeature(page: Page, feature: FilterKeysByValueType<c
 	await setFeatureValue(page, feature, true);
 }
 export async function setFeatureValue<K extends Path<configuration>>(page: Page, key: K, value: PathValue<configuration, K>) {
+	// Clear the signal attribute so we can detect the next one.
+	await page.evaluate(() => document.documentElement.removeAttribute("yte-config-processing"));
 	await sendYouTubeMessage(page, {
 		action: "send_data",
 		data: { key, value },
 		source: "content",
 		type: "test_setConfigValue"
 	});
-	await page.waitForTimeout(500);
+	// Wait for the extension to signal that it finished processing the config
+	// change and running feature lifecycle methods. Poll instead of waitFor
+	// because Playwright considers the <html> element hidden.
+	await page.waitForFunction(
+		() => document.documentElement.hasAttribute("yte-config-processing"),
+		undefined,
+		{ timeout: 10_000 }
+	);
+	// Small settle delay after the signal fires.
+	await page.waitForTimeout(50);
 }
 /**
  * Sets a configuration option for the extension.
