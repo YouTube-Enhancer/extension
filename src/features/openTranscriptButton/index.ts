@@ -56,7 +56,7 @@ export default createFeature({
 			shouldRender: async () => {
 				const transcriptButton = await waitForElement(
 					"ytd-video-description-transcript-section-renderer button",
-					150,
+					3000,
 					"optional"
 				);
 				return !!transcriptButton;
