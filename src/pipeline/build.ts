@@ -74,7 +74,7 @@ export async function runPreBuildPipeline(): Promise<void> {
 
 	if (!isDevelopment && !shouldBypass) {
 		try {
-			checkLocalesForMissingKeys();
+			await checkLocalesForMissingKeys();
 		} catch (error) {
 			const details = error instanceof Error ? error.message : String(error);
 			console.error(localeCheckFailureMessage(details));
