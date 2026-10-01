@@ -123,7 +123,7 @@ export async function placeButton(
 			const inTheaterMode = isInTheaterMode();
 			const container = await getOrCreateButtonContainer(inTheaterMode);
 			if (!container) return;
-			placementTransition.activate(container, () => {});
+			placementTransition.activateContainerTracking();
 			const existingInContainer = container.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
 			container.append(button);
@@ -155,11 +155,8 @@ export async function placeButton(
 }
 
 export function startPlacementTracking(onFullscreenChange: () => void) {
-	if (!placementTransition.isActive()) {
-		const container = document.querySelector<HTMLDivElement>(`#${buttonContainerId}`);
-		if (container) {
-			placementTransition.activate(container, onFullscreenChange);
-		}
+	if (!placementTransition.isFullscreenTrackingActive()) {
+		placementTransition.activateFullscreenTracking(onFullscreenChange);
 	}
 }
 
