@@ -6,7 +6,7 @@ import "./index.css";
 import { metadata } from "./index.metadata";
 
 function addFullscreenScrollClasses() {
-	void waitForAllElements(["ytd-watch-flexy", "ytd-app"]).then(() => {
+	void waitForAllElements(["ytd-watch-flexy", "ytd-app"], 10000, 3).then(() => {
 		modifyElementsClassList("add", getFullscreenScrollPairs());
 		return undefined;
 	});
@@ -28,7 +28,7 @@ function getFullscreenScrollPairs(): ElementClassPair[] {
 export default createFeature({
 	...metadata,
 	onDisable: () => {
-		void waitForAllElements(["ytd-watch-flexy", "ytd-app"]).then(() => {
+		void waitForAllElements(["ytd-watch-flexy", "ytd-app"], 10000, 3).then(() => {
 			modifyElementsClassList("remove", getFullscreenScrollPairs());
 			return undefined;
 		});
