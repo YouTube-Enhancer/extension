@@ -248,19 +248,18 @@ function adjustPlayer(action: ModifyElementAction) {
 function attachRuntimeListeners() {
 	const state = getPlayerControllerState();
 	if (state.listenersAttached) return;
-	const pip = document.querySelector<HTMLButtonElement>("button.ytp-pip-button");
-	const size = document.querySelector<HTMLButtonElement>("button.ytp-size-button");
-	const mini = document.querySelector<HTMLButtonElement>("button.ytp-miniplayer-button");
-	[pip, size, mini].forEach((el) => {
-		if (!el) return;
-		eventManager.addEventListener(el, "click", handleUserClick, "maximizePlayerButton");
-	});
+	// Delegated from document: YouTube replaces the player control buttons when the player layout
+	// changes (theater/fullscreen toggles re-render the controls), which orphans per-element click
+	// listeners and leaves the extension unable to react to its own runtime exit paths.
+	eventManager.addEventListener(document, "click", handleRuntimeButtonClick, "maximizePlayerButton");
 	document.addEventListener("keydown", onKeyDown, true);
 	setPlayerControllerState((prev) => ({
 		...prev,
 		listenersAttached: true
 	}));
 }
+const playerControlButtonsSelector =
+	"button.ytp-size-button, button.ytp-pip-button, button.ytp-miniplayer-button";
 
 function clickAndRestore(sizeElement: HTMLButtonElement) {
 	const original = {
@@ -285,4 +284,9 @@ function clickAndRestore(sizeElement: HTMLButtonElement) {
 		newButton.setAttribute("data-tooltip-title", original.tooltipTitle);
 		setProgrammaticClick(false);
 	}, 50);
+}
+function handleRuntimeButtonClick(event: MouseEvent) {
+	if (!(event.target instanceof Element) || !event.target.closest(playerControlButtonsSelector))
+		return;
+	handleUserClick();
 }
