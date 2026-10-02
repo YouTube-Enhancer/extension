@@ -275,6 +275,9 @@ export const optionsTest = base.extend<OptionsFixtures>({
 });
 export const { describe, expect } = test;
 export default defineConfig({
+	// Bare expects default to Playwright's 5s, which live YouTube pages under
+	// full-suite load routinely exceed; 10s matches the real render times.
+	expect: { timeout: 10_000 },
 	forbidOnly: isCI,
 	fullyParallel: true,
 	globalSetup: "./tests/globalSetup.ts",
