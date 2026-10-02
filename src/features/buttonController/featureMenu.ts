@@ -4,6 +4,7 @@ import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
 import { getFeatureMenuConfig } from "@/src/ui/coreConfigStore";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
+import { subscribe as onDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -11,6 +12,7 @@ import { isWatchPage } from "@/src/utils/url";
 import type { BasicIcon, FeatureMenuOpenType, ListenerType } from "./types";
 
 import { updateTrackedButtonChecked } from "./buttonState";
+import { playerControlsSelectors } from "./constants";
 import { getOrCreateRightControlsContainer } from "./containerTracking";
 
 const menuId = "#yte-feature-menu";
@@ -25,6 +27,7 @@ const featuresInMenu = new Set<AllButtonNames>();
 
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
+let menuRetryPending = false;
 
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
@@ -105,6 +108,23 @@ export async function enableFeatureMenu() {
 export async function enableFeatureMenuButton() {
 	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
+	// The menu button lives in the player controls. When the controls are absent (a
+	// stripped page, or controls that render very late), waiting here would block
+	// every button feature's reconcile for the full wait duration, and a reconcile
+	// pays that cost twice. Defer a single retry until the controls render.
+	if (!document.querySelector(playerControlsSelectors.player_controls_right)) {
+		if (menuRetryPending) return;
+		menuRetryPending = true;
+		onDomMutations(
+			playerControlsSelectors.player_controls_right,
+			() => {
+				menuRetryPending = false;
+				void enableFeatureMenuButton();
+			},
+			{ once: true }
+		);
+		return;
+	}
 	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
 	if (!featureMenuCssInjected) {
 		featureMenuCssInjected = true;
