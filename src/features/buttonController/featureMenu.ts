@@ -2,9 +2,9 @@ import type { AllButtonNames, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
 import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegistry";
+import { featurePlayerManager } from "@/src/features/_registry/featurePlayerManager";
 import { getFeatureMenuConfig } from "@/src/ui/coreConfigStore";
 import { createStyledElement, createSVGElement } from "@/src/utils/dom/elements";
-import { subscribe as onDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { createTooltip } from "@/src/utils/dom/tooltip";
 import { waitForAllElements, waitForElement } from "@/src/utils/dom/wait";
 import { isWatchPage } from "@/src/utils/url";
@@ -27,7 +27,6 @@ const featuresInMenu = new Set<AllButtonNames>();
 
 let cleanupFeatureMenuListeners: Nullable<() => void> = null;
 let featureMenuCssInjected = false;
-let menuRetryPending = false;
 
 export async function addFeatureItemToMenu<Name extends AllButtonNames, Toggle extends boolean>(
 	buttonName: Name,
@@ -108,90 +107,20 @@ export async function enableFeatureMenu() {
 export async function enableFeatureMenuButton() {
 	if (!isWatchPage()) return;
 	if (document.querySelector(menuButtonId)) return;
+	if (document.querySelector(playerControlsSelectors.player_controls_right)) {
+		await createFeatureMenuButton();
+		return;
+	}
 	// The menu button lives in the player controls. When the controls are absent (a
 	// stripped page, or controls that render very late), waiting here would block
 	// every button feature's reconcile for the full wait duration, and a reconcile
-	// pays that cost twice. Defer a single retry until the controls render.
-	if (!document.querySelector(playerControlsSelectors.player_controls_right)) {
-		if (menuRetryPending) return;
-		menuRetryPending = true;
-		onDomMutations(
-			playerControlsSelectors.player_controls_right,
-			() => {
-				menuRetryPending = false;
-				void enableFeatureMenuButton();
-			},
-			{ once: true }
-		);
-		return;
-	}
-	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
-	if (!featureMenuCssInjected) {
-		featureMenuCssInjected = true;
-		const style = document.createElement("style");
-		style.textContent = `body:not(:has(.ytp-delhi-modern)) #yte-feature-menu-button{justify-content:center;align-items:center}`;
-		document.head.appendChild(style);
-	}
-
-	const existingMenu = document.querySelector<HTMLDivElement>(menuId);
-	const featureMenu = existingMenu ?? createFeatureMenuDom();
-
-	const featureMenuButton = createStyledElement({
-		classlist: ["ytp-button"],
-		elementId: "yte-feature-menu-button",
-		elementType: "button",
-		styles: { display: "none", visibility: "hidden" }
-	});
-	featureMenuButton.dataset.title = window.i18nextInstance.t(
-		(translations) => translations.pages.content.features.featureMenu.button.label
+	// pays that cost twice. Retry creation through the player manager instead.
+	void featurePlayerManager.executeWithRetries(
+		"featureMenu",
+		[createFeatureMenuButton],
+		["create-feature-menu-button"],
+		{ waitForLoaded: true }
 	);
-	featureMenuButton.appendChild(makeFeatureMenuIcon());
-
-	const container = await getOrCreateRightControlsContainer();
-	if (!container) return;
-	container.insertAdjacentElement("afterend", featureMenuButton);
-
-	const playerContainer = await waitForElement<HTMLDivElement>("#movie_player");
-	if (!playerContainer) return;
-	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
-
-	const updateMenuPosition = () => {
-		const buttonRect = featureMenuButton.getBoundingClientRect();
-		const playerRect = playerContainer.getBoundingClientRect();
-		const { offsetWidth: menuWidth } = featureMenu;
-		const buttonCenterX = buttonRect.x - playerRect.x + buttonRect.width / 2;
-		const anchorRatio = 0.6556;
-		const anchorOffset = menuWidth * anchorRatio;
-		const left = buttonCenterX - anchorOffset;
-		featureMenu.style.left = `${left}px`;
-	};
-	updateMenuPosition();
-	const resizeObserver = new ResizeObserver(() => {
-		requestAnimationFrame(updateMenuPosition);
-	});
-	resizeObserver.observe(playerContainer);
-	window.addEventListener("resize", updateMenuPosition);
-	window.addEventListener("yte-feature-menu-resized", updateMenuPosition);
-
-	const featureMenuConfig = getFeatureMenuConfig();
-	const openType = featureMenuConfig?.openType ?? "click";
-	void waitForAllElements([menuId, menuButtonId]).then(() => {
-		cleanupFeatureMenuListeners = () => {
-			window.removeEventListener("resize", updateMenuPosition);
-			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-			resizeObserver.disconnect();
-		};
-		const listenersCleanup = setupFeatureMenuEventListeners(openType);
-		const origCleanup = cleanupFeatureMenuListeners;
-		cleanupFeatureMenuListeners = () => {
-			window.removeEventListener("resize", updateMenuPosition);
-			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
-			resizeObserver.disconnect();
-			listenersCleanup();
-			origCleanup?.();
-		};
-		return undefined;
-	});
 }
 
 export function getFeatureButtonId(buttonName: AllButtonNames) {
@@ -395,6 +324,78 @@ function adjustAdsContainerStyles(featureMenuOpen: boolean) {
 }
 
 // ─── Menu item management ─────────────────────────────────────────
+
+async function createFeatureMenuButton(): Promise<boolean> {
+	if (document.querySelector(menuButtonId)) return true;
+	if (cleanupFeatureMenuListeners) cleanupFeatureMenuListeners();
+	if (!featureMenuCssInjected) {
+		featureMenuCssInjected = true;
+		const style = document.createElement("style");
+		style.textContent = `body:not(:has(.ytp-delhi-modern)) #yte-feature-menu-button{justify-content:center;align-items:center}`;
+		document.head.appendChild(style);
+	}
+
+	const existingMenu = document.querySelector<HTMLDivElement>(menuId);
+	const featureMenu = existingMenu ?? createFeatureMenuDom();
+
+	const featureMenuButton = createStyledElement({
+		classlist: ["ytp-button"],
+		elementId: "yte-feature-menu-button",
+		elementType: "button",
+		styles: { display: "none", visibility: "hidden" }
+	});
+	featureMenuButton.dataset.title = window.i18nextInstance.t(
+		(translations) => translations.pages.content.features.featureMenu.button.label
+	);
+	featureMenuButton.appendChild(makeFeatureMenuIcon());
+
+	const container = await getOrCreateRightControlsContainer();
+	if (!container) return false;
+	container.insertAdjacentElement("afterend", featureMenuButton);
+
+	const playerContainer = await waitForElement<HTMLDivElement>("#movie_player");
+	if (!playerContainer) return false;
+	playerContainer.insertAdjacentElement("afterbegin", featureMenu);
+
+	const updateMenuPosition = () => {
+		const buttonRect = featureMenuButton.getBoundingClientRect();
+		const playerRect = playerContainer.getBoundingClientRect();
+		const { offsetWidth: menuWidth } = featureMenu;
+		const buttonCenterX = buttonRect.x - playerRect.x + buttonRect.width / 2;
+		const anchorRatio = 0.6556;
+		const anchorOffset = menuWidth * anchorRatio;
+		const left = buttonCenterX - anchorOffset;
+		featureMenu.style.left = `${left}px`;
+	};
+	updateMenuPosition();
+	const resizeObserver = new ResizeObserver(() => {
+		requestAnimationFrame(updateMenuPosition);
+	});
+	resizeObserver.observe(playerContainer);
+	window.addEventListener("resize", updateMenuPosition);
+	window.addEventListener("yte-feature-menu-resized", updateMenuPosition);
+
+	const featureMenuConfig = getFeatureMenuConfig();
+	const openType = featureMenuConfig?.openType ?? "click";
+	void waitForAllElements([menuId, menuButtonId]).then(() => {
+		cleanupFeatureMenuListeners = () => {
+			window.removeEventListener("resize", updateMenuPosition);
+			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
+			resizeObserver.disconnect();
+		};
+		const listenersCleanup = setupFeatureMenuEventListeners(openType);
+		const origCleanup = cleanupFeatureMenuListeners;
+		cleanupFeatureMenuListeners = () => {
+			window.removeEventListener("resize", updateMenuPosition);
+			window.removeEventListener("yte-feature-menu-resized", updateMenuPosition);
+			resizeObserver.disconnect();
+			listenersCleanup();
+			origCleanup?.();
+		};
+		return undefined;
+	});
+	return document.querySelector(menuButtonId) !== null;
+}
 
 function createFeatureMenuDom() {
 	const featureMenu = createStyledElement({
