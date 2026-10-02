@@ -76,7 +76,7 @@
     "eslint-plugin-tailwindcss": "3.18.2",
     "fs-extra": "^11.4.0",
     "get-installed-browsers": "^0.1.7",
-    "oxfmt": "^0.64.0",
+    "oxfmt": "^0.70.0",
     "oxlint": "^1.83.0",
     "oxlint-tsgolint": "^7.0.2002",
     "postcss": "^8.5.28",
