@@ -52,7 +52,7 @@ importers:
         version: 0.4.6
       vite-plugin-css-injected-by-js:
         specifier: ^5.0.2
-        version: 5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
+        version: 5.0.2(vite@8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
       webextension-polyfill:
         specifier: ^0.12.0
         version: 0.12.0
@@ -82,8 +82,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0
       '@types/node':
-        specifier: ^25.9.8
-        version: 25.9.8
+        specifier: ^26.6.3
+        version: 26.6.3
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -101,7 +101,7 @@ importers:
         version: 5.5.11
       '@vitejs/plugin-react-swc':
         specifier: ^4.3.3
-        version: 4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
+        version: 4.3.3(vite@8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))
       archiver:
         specifier: ^8.0.0
         version: 8.0.0
@@ -164,7 +164,7 @@ importers:
         version: 1.0.7(typescript@7.0.2)
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.16.2)(@types/node@25.9.8)(typescript@7.0.2)
+        version: 10.9.2(@swc/core@1.16.2)(@types/node@26.6.3)(typescript@7.0.2)
       tsx:
         specifier: ^4.23.13
         version: 4.23.13
@@ -173,7 +173,7 @@ importers:
         version: 7.0.2
       vite:
         specifier: ^8.3.0
-        version: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+        version: 8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
       ws:
         specifier: ^8.21.3
         version: 8.21.3
@@ -1192,8 +1192,8 @@ packages:
   '@types/node@20.19.43':
     resolution: {integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==}
 
-  '@types/node@25.9.8':
-    resolution: {integrity: sha512-VfMrScDmMhUJQmd5hArdQnFvK0OIeD36uN2Va1FcpYaLB/BgkgM8Ulc50XtYISPMz7APJ30+N0T5EM0jlcdfRw==}
+  '@types/node@26.6.3':
+    resolution: {integrity: sha512-dsqMQQoeTLqu9wynDD00q573mNzso3IdQOAfHRJqLCcmCFPoGo9A1bDpUcv/9tnKpErQWv9uKeGfl37EIS02Yg==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -3325,8 +3325,8 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici-types@7.24.6:
-    resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
   undici@6.28.1:
     resolution: {integrity: sha512-zWpdTVD54H48CIybL0rWQ3ukpb9d23wM7eH5RtfdmeP70cWHNjtfo7P4vZX+5CoDcO53J4Pu5uXp7lNfjc6DRA==}
@@ -4247,7 +4247,7 @@ snapshots:
 
   '@types/archiver@8.0.0':
     dependencies:
-      '@types/node': 25.9.8
+      '@types/node': 26.6.3
       '@types/readdir-glob': 1.1.5
 
   '@types/chrome@0.3.0':
@@ -4297,9 +4297,9 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@25.9.8':
+  '@types/node@26.6.3':
     dependencies:
-      undici-types: 7.24.6
+      undici-types: 8.9.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -4313,7 +4313,7 @@ snapshots:
 
   '@types/readdir-glob@1.1.5':
     dependencies:
-      '@types/node': 25.9.8
+      '@types/node': 26.6.3
 
   '@types/trusted-types@2.0.7':
     optional: true
@@ -4324,7 +4324,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 25.9.8
+      '@types/node': 26.6.3
 
   '@types/youtube-player@5.5.11': {}
 
@@ -4439,11 +4439,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitejs/plugin-react-swc@4.3.3(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))':
+  '@vitejs/plugin-react-swc@4.3.3(vite@8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       '@swc/core': 1.16.2
-      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+      vite: 8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -6258,14 +6258,14 @@ snapshots:
       stringify-object: 4.0.1
       typescript: 7.0.2
 
-  ts-node@10.9.2(@swc/core@1.16.2)(@types/node@25.9.8)(typescript@7.0.2):
+  ts-node@10.9.2(@swc/core@1.16.2)(@types/node@26.6.3)(typescript@7.0.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.13
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 25.9.8
+      '@types/node': 26.6.3
       acorn: 8.18.0
       acorn-walk: 8.3.5
       arg: 4.1.3
@@ -6330,7 +6330,7 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.24.6: {}
+  undici-types@8.9.0: {}
 
   undici@6.28.1: {}
 
@@ -6394,11 +6394,11 @@ snapshots:
       d3-time: 3.1.0
       d3-timer: 3.0.1
 
-  vite-plugin-css-injected-by-js@5.0.2(vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)):
+  vite-plugin-css-injected-by-js@5.0.2(vite@8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)):
     dependencies:
-      vite: 8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
+      vite: 8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13)
 
-  vite@8.3.0(@types/node@25.9.8)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13):
+  vite@8.3.0(@types/node@26.6.3)(esbuild@0.28.2)(jiti@1.21.7)(tsx@4.23.13):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -6406,7 +6406,7 @@ snapshots:
       rolldown: 1.2.9
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 25.9.8
+      '@types/node': 26.6.3
       esbuild: 0.28.2
       fsevents: 2.3.3
       jiti: 1.21.7
