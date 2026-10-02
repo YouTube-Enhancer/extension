@@ -213,7 +213,25 @@ const onWindowMessage = (event: MessageEvent) => {
 							current = current[segment] as Record<string, unknown>;
 						}
 						current[keys.at(-1)!] = value;
+						const dispatchedBefore = dispatchedFeatureUpdates;
+						const settled = new Promise<void>((resolve) => {
+							testConfigWriteSettled = resolve;
+						});
 						await storage.local.set(config);
+						// An identical value fires no storage event, so storageChangeHandler never
+						// runs; treat the write as settled after a short grace period.
+						const fallback = setTimeout(() => {
+							testConfigWriteSettled?.();
+							testConfigWriteSettled = null;
+						}, 250);
+						await settled;
+						clearTimeout(fallback);
+						// featureUpdates are reconciled by the embedded script, which signals
+						// completion itself. When the write dispatched none there is nothing to
+						// reconcile, so the signal is set here.
+						if (dispatchedFeatureUpdates === dispatchedBefore) {
+							document.documentElement.setAttribute("yte-config-processing", "");
+						}
 						break;
 					}
 				}
@@ -417,6 +435,10 @@ function emitPathEvent<P extends keyof typeof changeHandlers>({
 
 	sendExtensionOnlyMessage(def.event, def.build({ newValue, oldValue, options, path }));
 }
+/** Feature updates dispatched to the embedded script; lets the test config-write handler detect writes that produced nothing to reconcile. */
+let dispatchedFeatureUpdates = 0;
+/** Resolves the in-flight test_setConfigValue write once storage has settled. */
+let testConfigWriteSettled: (() => void) | null = null;
 const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: string) => {
 	if (areaName !== "local") return;
 	const castedChanges = castStorageChanges(changes);
@@ -454,8 +476,11 @@ const storageChangeHandler = async (changes: StorageChanges<unknown>, areaName: 
 				enabled: resolveEnabled(config),
 				id: feature
 			});
+			dispatchedFeatureUpdates += 1;
 		}
 	}
+	testConfigWriteSettled?.();
+	testConfigWriteSettled = null;
 };
 type ConfigPathChange<P extends keyof typeof changeHandlers> = {
 	newValue: PathValue<configuration, P>;
