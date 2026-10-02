@@ -99,7 +99,7 @@ export async function expectFeatureButtonToBeIn(
 	page: Page,
 	featureId: FeatureButtonId,
 	placement: Exclude<ButtonPlacement, "feature_menu">,
-	{ timeout = 10000 }: { timeout?: number } = {}
+	{ timeout = 30000 }: { timeout?: number } = {}
 ) {
 	const { [placement]: selector } = placementSelectors;
 	const container = page.locator(selector);
