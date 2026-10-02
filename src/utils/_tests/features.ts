@@ -99,7 +99,7 @@ export async function setFeatureValue<K extends Path<configuration>>(
 		undefined,
 		{ polling: 100, timeout: 30_000 }
 	);
-	await page.waitForTimeout(50);
+	await page.waitForTimeout(250);
 }
 /**
  * Sets a configuration option for the extension.
