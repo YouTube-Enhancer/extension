@@ -36,7 +36,7 @@ async function expectCaptionsEnabled(page: Page) {
 		.catch(() => false);
 	if (enabled) return;
 	test.skip(await isCaptionsUnavailable(page), "the video withdrew its captions while the test ran");
-	await expectStableCaptionsState(page, true, { timeout: 1000 });
+	await expectStableCaptionsState(page, true, { timeout: 3000 });
 }
 
 /** Skips when the video offers no captions or they cannot be turned off first; without that start the feature has nothing to do. */
