@@ -11,6 +11,7 @@ import { metadataRegistry } from "@/src/features/_registry/featureMetadataRegist
 import { getFeatureIcon, type GetIconType, isToggleIcon, type ToggleIcon } from "@/src/icons";
 import { getButtonColor } from "@/src/utils/deep-dark-theme";
 import { createStyledElement } from "@/src/utils/dom/elements";
+import { subscribe as onDomMutations } from "@/src/utils/dom/observers/domMutationBus";
 import { createTooltip, removeTooltip } from "@/src/utils/dom/tooltip";
 import { waitForElement } from "@/src/utils/dom/wait";
 
@@ -87,7 +88,30 @@ export async function addButton<
 	await enableFeatureMenuButton();
 	if (selector && !getCachedContainer(effectivePlacement)) {
 		const element = await waitForElement(selector);
-		if (!element) return;
+		if (!element) {
+			// The placement target has not rendered yet. This is common when the feature is
+			// enabled during page setup on live streams, whose player controls appear late.
+			// Place the button as soon as the target shows up instead of giving up until the
+			// next config change, which never comes when the stored config is already current.
+			onDomMutations(
+				selector,
+				() => {
+					void addButton(
+						buttonName,
+						placement,
+						label,
+						icon,
+						listener,
+						isToggle,
+						initialChecked,
+						fullscreenPlacement,
+						labelResolver
+					);
+				},
+				{ once: true }
+			);
+			return;
+		}
 	}
 	switch (effectivePlacement) {
 		case "below_player":
