@@ -1,7 +1,14 @@
 import type { Page } from "@playwright/test";
 
 import type { PageType } from "@/src/features/_registry/types";
-import type { ButtonPlacement, configuration, FeatureButtonId, FeatureMenuItemId, Path, PathValue } from "@/src/types";
+import type {
+	ButtonPlacement,
+	configuration,
+	FeatureButtonId,
+	FeatureMenuItemId,
+	Path,
+	PathValue
+} from "@/src/types";
 import type { FilterKeysByValueType } from "@/src/utils/_tests/types";
 
 import { expectFeatureButtonToBeIn } from "@/src/utils/_tests/assertions";
@@ -25,7 +32,11 @@ export async function clickFeatureButton(
 		if (el) el.click();
 	}, featureId);
 }
-export async function clickFeatureMenuItem(page: Page, pageType: PageType, featureId: FeatureMenuItemId) {
+export async function clickFeatureMenuItem(
+	page: Page,
+	pageType: PageType,
+	featureId: FeatureMenuItemId
+) {
 	await ensurePlayerControlsVisible(page, pageType);
 
 	const menuButton = page.locator("#yte-feature-menu-button");
@@ -45,7 +56,10 @@ export async function clickFeatureMenuItem(page: Page, pageType: PageType, featu
  * @param page - The active Playwright page instance.
  * @param feature - The boolean feature key to disable.
  */
-export async function disableFeature(page: Page, feature: FilterKeysByValueType<configuration, boolean>) {
+export async function disableFeature(
+	page: Page,
+	feature: FilterKeysByValueType<configuration, boolean>
+) {
 	await setFeatureValue(page, feature, false);
 }
 /**
@@ -57,20 +71,35 @@ export async function disableFeature(page: Page, feature: FilterKeysByValueType<
  * @param page - The active Playwright page instance.
  * @param feature - The boolean feature key to enable.
  */
-export async function enableFeature(page: Page, feature: FilterKeysByValueType<configuration, boolean>) {
+export async function enableFeature(
+	page: Page,
+	feature: FilterKeysByValueType<configuration, boolean>
+) {
 	await setFeatureValue(page, feature, true);
 }
-export async function setFeatureValue<K extends Path<configuration>>(page: Page, key: K, value: PathValue<configuration, K>) {
+export async function setFeatureValue<K extends Path<configuration>>(
+	page: Page,
+	key: K,
+	value: PathValue<configuration, K>
+) {
+	// Clear the signal so the wait observes this write's processing cycle. The embedded
+	// script sets it after reconciling a featureUpdate; the content script sets it when
+	// the write produced nothing to reconcile (an identical value fires no storage event).
+	await page.evaluate(() => document.documentElement.removeAttribute("yte-config-processing"));
 	await sendYouTubeMessage(page, {
 		action: "send_data",
 		data: { key, value },
 		source: "content",
 		type: "test_setConfigValue"
 	});
-	// The extension processes config changes asynchronously through a chain of
-	// message passing and storage events. 1000ms gives the lifecycle time to
-	// complete; the yte-config-processing signal was unreliable on this branch.
-	await page.waitForTimeout(1000);
+	// Interval polling instead of Playwright's rAF default, which can stall on throttled
+	// background pages under full-suite load.
+	await page.waitForFunction(
+		() => document.documentElement.hasAttribute("yte-config-processing"),
+		undefined,
+		{ polling: 100, timeout: 30_000 }
+	);
+	await page.waitForTimeout(50);
 }
 /**
  * Sets a configuration option for the extension.
@@ -86,7 +115,11 @@ export async function setFeatureValue<K extends Path<configuration>>(page: Page,
  * @param id - The configuration option path to update.
  * @param value - The value to assign to the configuration option.
  */
-export async function setOption<P extends Page, K extends Path<configuration>, V extends PathValue<configuration, K>>(page: P, id: K, value: V) {
+export async function setOption<
+	P extends Page,
+	K extends Path<configuration>,
+	V extends PathValue<configuration, K>
+>(page: P, id: K, value: V) {
 	await setFeatureValue(page, id, value);
 }
 let _cachedDefaultConfig: configuration | null = null;
@@ -100,7 +133,9 @@ export async function loadDefaultConfig(): Promise<configuration> {
 	});
 	try {
 		await server.pluginContainer.buildStart({});
-		const mod = (await server.ssrLoadModule("/src/utils/config/defaults.ts")) as { getDefaultConfiguration: () => configuration };
+		const mod = (await server.ssrLoadModule("/src/utils/config/defaults.ts")) as {
+			getDefaultConfiguration: () => configuration;
+		};
 		_cachedDefaultConfig = mod.getDefaultConfiguration();
 		return _cachedDefaultConfig;
 	} finally {
