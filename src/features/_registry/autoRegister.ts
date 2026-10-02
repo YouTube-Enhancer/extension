@@ -38,6 +38,18 @@ export async function registerAllFeatures(
 
 	const phases = metadataRegistry.getFeaturesByLoadPhase();
 
+	// The glob keys modules by directory name, but phases are keyed by feature id. A directory whose
+	// name differs from its feature id would be silently skipped at import time, so list every
+	// mismatch here instead of letting the feature fail to register with no trace.
+	for (const { id } of metadataRegistry.getAll()) {
+		if (!moduleById.has(id)) {
+			console.warn(
+				`[features] Feature "${id}" has no src/features/${id}/ directory. ` +
+					"The directory name must match the feature id, or the feature will never register."
+			);
+		}
+	}
+
 	// Phase 0: Import immediately
 	const phase0 = phases.get(0) ?? [];
 	await Promise.all(phase0.map((id) => importFeature(id, moduleById, state)));
