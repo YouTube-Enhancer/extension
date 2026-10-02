@@ -4,7 +4,7 @@ import { expect, test } from "playwright.config";
 
 import type { FeatureMenuItemId } from "@/src/types";
 
-import { metadata } from "@/src/features/monoToStereo/index.metadata";
+import { metadata } from "@/src/features/monoToStereoButton/index.metadata";
 import {
 	expectFeatureButtonToBeFalsy,
 	expectFeatureButtonToBeIn,
