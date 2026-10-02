@@ -76,7 +76,7 @@ async function addPlaybackSpeedButton(
 	const playerContainer = await waitForElement<YouTubePlayerDiv>("div#movie_player");
 	if (!playerContainer) return;
 	const playerVideoData = await playerContainer.getVideoData();
-	if (playerVideoData.isLive && (await checkIfFeatureButtonExists(buttonName, placement))) {
+	if (playerVideoData.isLive && checkIfFeatureButtonExists(buttonName, placement)) {
 		removeFeatureButton(buttonName, placement);
 		eventManager.removeEventListeners("playbackSpeedButtons");
 	}

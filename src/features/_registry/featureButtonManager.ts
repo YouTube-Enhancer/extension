@@ -170,7 +170,7 @@ class FeatureButtonManager extends FeatureManagerBase {
 							if (!wasActive) {
 								await btn.add(config);
 							} else {
-								const buttonExists = await checkIfFeatureButtonExists(
+								const buttonExists = checkIfFeatureButtonExists(
 									btn.name,
 									nextPlacement ?? "feature_menu"
 								);

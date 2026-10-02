@@ -349,7 +349,7 @@ async function createFeatureMenuButton(): Promise<boolean> {
 	);
 	featureMenuButton.appendChild(makeFeatureMenuIcon());
 
-	const container = await getOrCreateRightControlsContainer();
+	const container = getOrCreateRightControlsContainer();
 	if (!container) return false;
 	container.insertAdjacentElement("afterend", featureMenuButton);
 
