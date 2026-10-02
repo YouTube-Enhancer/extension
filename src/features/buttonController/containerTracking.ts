@@ -139,7 +139,10 @@ export async function placeButton(
 			const existingInContainer = leftControls.querySelectorAll(`#${button.id}`);
 			existingInContainer.forEach((b) => b.remove());
 			const timeDisplay = leftControls.querySelector<HTMLDivElement>(".ytp-time-display");
+			// Live players can render the controls without a time display; never drop the
+			// button silently, fall back to the start of the controls.
 			if (timeDisplay) timeDisplay.insertAdjacentElement("beforebegin", button);
+			else leftControls.prepend(button);
 			break;
 		}
 		case "player_controls_right": {

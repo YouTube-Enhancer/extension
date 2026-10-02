@@ -146,7 +146,16 @@ export class FeatureOrchestrator extends FeatureManagerBase {
 		this.updatingFeatures.add(id);
 		try {
 			const state = this.resolveFeatureState(id, feature, enabled, config);
-			if (!state.hasChanged) return;
+			if (!state.hasChanged) {
+				// The config is unchanged, but the DOM may not be: the player controls re-render
+				// on live streams and can destroy an already-placed button. Placement verification
+				// still runs so the button is re-added instead of staying lost until the next
+				// config change.
+				if (state.canEnable && !options?.skipButtons) {
+					await this.applyButtonPlacement(feature, id, config, state.canEnable);
+				}
+				return;
+			}
 			this.featureEnabledState.set(id, state.canEnable);
 			if (!options?.skipButtons) {
 				await this.applyButtonPlacement(feature, id, config, state.canEnable);

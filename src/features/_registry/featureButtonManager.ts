@@ -7,7 +7,11 @@ import type {
 import type { ButtonPlacement, configuration, FullscreenPlacement, Nullable } from "@/src/types";
 
 import eventManager from "@/src/events/EventManager";
-import { checkIfFeatureButtonExists, removeFeatureButton } from "@/src/features/buttonController";
+import {
+	checkIfFeatureButtonExists,
+	getFeatureButton,
+	removeFeatureButton
+} from "@/src/features/buttonController";
 import {
 	getTrackedButtonEnabled,
 	getTrackedButtonFullscreenPlacement,
@@ -184,7 +188,12 @@ class FeatureButtonManager extends FeatureManagerBase {
 					);
 				}
 
-				setTrackedButtonEnabled(btn.name, isActive);
+				// The placement target can fail to render (player controls appear late on live
+				// streams) or be destroyed by a player re-render. Only mark the button active
+				// when it actually landed in the DOM, so a later reconcile retries the
+				// placement instead of trusting state that claims a button nobody can see.
+				const landed = isActive && !!getFeatureButton(btn.name);
+				setTrackedButtonEnabled(btn.name, landed);
 				setTrackedButtonInitialized(btn.name, true);
 				if (nextPlacement) setTrackedButtonPlacement(btn.name, nextPlacement);
 			} finally {
