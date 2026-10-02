@@ -194,7 +194,9 @@ export default createFeature({
 		document.getElementById(promptId)?.remove();
 		resetState();
 	},
-	onEnable: async ({ resumeType }) => handleVideoChange(resumeType),
+	onEnable: ({ resumeType }) => {
+		queueVideoChange(resumeType);
+	},
 	onInit: () => {
 		if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
 		animationFrameId = null;
@@ -224,9 +226,9 @@ export default createFeature({
 	 * type, and the registry runs it once per navigation. Both halves therefore happen here: the prompt of the video
 	 * being left is dropped, then the video being entered is picked up.
 	 */
-	onNavigate: async ({ resumeType }) => {
+	onNavigate: ({ resumeType }) => {
 		document.getElementById(promptId)?.remove();
-		await handleVideoChange(resumeType);
+		queueVideoChange(resumeType);
 	},
 	persistState: true,
 	state: {
@@ -341,6 +343,30 @@ async function isOfficialArtist(
 	artistChannelCache.set(author, isOfficialArtistChannel);
 	return isOfficialArtistChannel;
 }
+/**
+ * handleVideoChange waits up to 15s for the player, which freezes every config
+ * write behind this feature's reconcile on pages that have no player. Run it as
+ * a player-manager retry task instead: the wait happens in the background and
+ * expires harmlessly when the player never appears.
+ */
+function queueVideoChange(resumeType: VideoHistoryResumeType): void {
+	const task = async () => {
+		if (!document.querySelector("div#movie_player")) return false;
+		try {
+			await handleVideoChange(resumeType);
+		} catch (error) {
+			console.warn("videoHistory: handleVideoChange failed", error);
+		}
+		return true;
+	};
+	void registry.playerManager.executeWithRetries(
+		"videoHistory",
+		[task],
+		["video-change"],
+		{ waitForLoaded: true }
+	);
+}
+
 function resetState() {
 	if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
 	animationFrameId = null;
