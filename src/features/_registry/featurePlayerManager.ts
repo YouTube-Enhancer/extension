@@ -1,4 +1,9 @@
-import type { FeatureKeys, FeatureKeysWithState, PageType } from "@/src/features/_registry/types";
+import type {
+	CoreFeatureKeys,
+	FeatureKeys,
+	FeatureKeysWithState,
+	PageType
+} from "@/src/features/_registry/types";
 import type { Nullable, YouTubePlayerDiv } from "@/src/types";
 
 import { FeatureManagerBase } from "@/src/features/_registry/featureManagerBase";
@@ -13,6 +18,9 @@ export type PlayerRetryConfig = {
 	pageTypes?: PageType[];
 	waitForLoaded?: boolean;
 };
+
+/** Retry runs are keyed by feature id; core features (featureMenu) use the same machinery. */
+export type PlayerRetryKey = CoreFeatureKeys | FeatureKeys;
 
 export type PlayerTask = () => boolean | Promise<boolean>;
 
@@ -29,7 +37,7 @@ type ActiveRetryState = {
 type PlayerStateHookEntry = {
 	adObserver: Nullable<MutationObserver>;
 	cooldownId: Nullable<ReturnType<typeof setTimeout>>;
-	featureId: FeatureKeys;
+	featureId: PlayerRetryKey;
 	handler: () => void;
 	lastRun: number;
 	trigger: () => void;
@@ -45,12 +53,12 @@ const DEFAULT_CONFIG: Required<PlayerRetryConfig> = {
 };
 
 export class FeaturePlayerManager extends FeatureManagerBase {
-	private activeRetries = new Map<FeatureKeys, ActiveRetryState>();
+	private activeRetries = new Map<PlayerRetryKey, ActiveRetryState>();
 	// Bumped by every abort; a run still waiting for the player compares against it before it registers.
-	private runGenerations = new Map<FeatureKeys, number>();
-	private stateHooks = new Map<FeatureKeys, PlayerStateHookEntry>();
+	private runGenerations = new Map<PlayerRetryKey, number>();
+	private stateHooks = new Map<PlayerRetryKey, PlayerStateHookEntry>();
 
-	cleanup(featureId?: FeatureKeys): void {
+	cleanup(featureId?: PlayerRetryKey): void {
 		if (featureId) {
 			this.abortRetry(featureId);
 			this.removeStateHook(featureId);
@@ -65,7 +73,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 	}
 
 	async executeWithRetries(
-		featureId: FeatureKeys,
+		featureId: PlayerRetryKey,
 		tasks: PlayerTask[],
 		taskNames: string[],
 		config?: PlayerRetryConfig
@@ -184,7 +192,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		return "playerManager" as FeatureKeys;
 	}
 
-	private abortRetry(featureId: FeatureKeys): void {
+	private abortRetry(featureId: PlayerRetryKey): void {
 		this.runGenerations.set(featureId, (this.runGenerations.get(featureId) ?? 0) + 1);
 		const state = this.activeRetries.get(featureId);
 		if (!state) return;
@@ -210,7 +218,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		});
 	}
 
-	private removeStateHook(featureId: FeatureKeys): void {
+	private removeStateHook(featureId: PlayerRetryKey): void {
 		const entry = this.stateHooks.get(featureId);
 		if (!entry) return;
 		if (entry.cooldownId) clearTimeout(entry.cooldownId);
@@ -224,7 +232,7 @@ export class FeaturePlayerManager extends FeatureManagerBase {
 		this.stateHooks.delete(featureId);
 	}
 
-	private setupStateHook(featureId: FeatureKeys, trigger: () => void): void {
+	private setupStateHook(featureId: PlayerRetryKey, trigger: () => void): void {
 		this.removeStateHook(featureId);
 
 		const handler = (): void => {
