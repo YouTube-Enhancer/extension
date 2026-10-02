@@ -60,10 +60,11 @@ export async function getOrCreateButtonContainer(
 	return container;
 }
 
-export async function getOrCreateRightControlsContainer(): Promise<Nullable<HTMLDivElement>> {
-	const rightControls = await waitForElement<HTMLDivElement>(
-		playerControlsSelectors.player_controls_right,
-		15000
+export function getOrCreateRightControlsContainer(): Nullable<HTMLDivElement> {
+	// Probe synchronously: a stripped page has no controls and must not burn the
+	// full wait budget; live pages render controls late, and callers defer.
+	const rightControls = document.querySelector<HTMLDivElement>(
+		playerControlsSelectors.player_controls_right
 	);
 	if (!rightControls) return null;
 	let container = rightControls.querySelector<HTMLDivElement>(`#${rightControlsContainerId}`);
@@ -80,19 +81,18 @@ export async function getOrCreateRightControlsContainer(): Promise<Nullable<HTML
 	return container;
 }
 
-export async function getPlacementRoot(placement: ButtonPlacement) {
+export function getPlacementRoot(placement: ButtonPlacement) {
+	// Synchronous probe: placement targets that have not rendered are handled by
+	// the mutation-bus deferral in addButton, not by waiting inline.
 	switch (placement) {
 		case "below_player":
 			return document.getElementById(buttonContainerId) as HTMLDivElement | null;
 		case "feature_menu":
-			return await waitForElement<HTMLDivElement>("#yte-feature-menu");
+			return document.querySelector<HTMLDivElement>("#yte-feature-menu");
 		case "player_controls_left":
-			return await waitForElement<HTMLDivElement>(playerControlsSelectors.player_controls_left);
+			return document.querySelector<HTMLDivElement>(playerControlsSelectors.player_controls_left);
 		case "player_controls_right":
-			return await waitForElement<HTMLDivElement>(
-				playerControlsSelectors.player_controls_right,
-				15000
-			);
+			return document.querySelector<HTMLDivElement>(playerControlsSelectors.player_controls_right);
 	}
 }
 
@@ -132,7 +132,7 @@ export async function placeButton(
 		case "player_controls_left": {
 			let leftControls = containerCache.get(placement) as HTMLDivElement | undefined;
 			if (!leftControls) {
-				leftControls = (await waitForElement<HTMLDivElement>(".ytp-left-controls")) ?? undefined;
+				leftControls = document.querySelector<HTMLDivElement>(".ytp-left-controls") ?? undefined;
 				if (leftControls) containerCache.set(placement, leftControls);
 			}
 			if (!leftControls) return;
@@ -146,7 +146,7 @@ export async function placeButton(
 			break;
 		}
 		case "player_controls_right": {
-			const container = await getOrCreateRightControlsContainer();
+			const container = getOrCreateRightControlsContainer();
 			if (!container) return;
 			containerCache.set(placement, container);
 			const existingInContainer = container.querySelectorAll(`#${button.id}`);
